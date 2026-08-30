@@ -228,7 +228,9 @@ export class VagabondChatCard {
         if (value !== 0) {
           // If we have a stored operator (like "-"), use it. Otherwise assume "+" for positive numbers.
           const displayOp = previousOperator || (value >= 0 ? '+' : '');
-          parts.push(`<span class="roll-modifier">${displayOp}${Math.abs(value)}</span>`);
+          const flavor = term.options?.flavor;
+          const titleAttr = flavor ? ` title="${flavor}"` : '';
+          parts.push(`<span class="roll-modifier"${titleAttr}>${displayOp}${Math.abs(value)}</span>`);
         }
         previousOperator = '';
       }
@@ -268,6 +270,15 @@ export class VagabondChatCard {
            // Pass TRUE so it ignores Fav/Hind images and adds 'die-type-damage' class
            // Pass the damage type key so weakness dice show the type icon overlay
            this.data.damage.diceDisplay = this.constructor.formatRollWithDice(this.data.damage.roll, true, this.data.damage.typeKey || null);
+
+           // Flanked preview badge — informational only (not added to damage.total):
+           // the actual +2 is applied per-target at apply time (see damage-helper.mjs
+           // _computeFinalDamage), since a multi-target/Cleave roll can hit both a
+           // flanked and a non-flanked target off the same rolled total.
+           if (this.data.damage.flankedBonus > 0) {
+             const flankedLabel = game.i18n.localize('VAGABOND.StatusConditions.Flanked');
+             this.data.damage.diceDisplay += ` <span class="roll-modifier flanked-bonus-preview" title="${flankedLabel}"><i class="fas fa-people-arrows"></i>+${this.data.damage.flankedBonus}</span>`;
+           }
       }
 
       this.data.config = CONFIG.VAGABOND;
@@ -292,7 +303,7 @@ export class VagabondChatCard {
       if (this.data.actor) {
         msgData.flags = {
             vagabond: {
-                actorId: this.data.actor.id,
+                actorId: this.data.actor.uuid,
                 itemId: this.data.item?.id || null,
                 targetsAtRollTime: this.data.targetsAtRollTime || [],
                 ...(this.data.rerollData ? { rerollData: this.data.rerollData } : {})
@@ -454,10 +465,28 @@ export class VagabondChatCard {
           // Restorative types (healing/recover/recharge) get an Apply button, never save buttons
           const isRestorativeCard = VagabondDamageHelper.isRestorativeDamageType(damageType);
 
+          // Flanked bonus — only the first target is consulted (same convention as
+          // item.mjs rollAttack's incomingAttacksModifier peek). Folded into the
+          // displayed total (targets are already known at roll time, so there's no
+          // need to wait for Apply) — but NOT into damageRoll.total itself, so the
+          // save/apply buttons below still carry the raw roll and the real per-target
+          // addition in _computeFinalDamage (damage-helper.mjs) stays the single
+          // source of truth for the actual HP math.
+          if (!isRestorativeCard && targetsAtRollTime?.length) {
+            const { TargetHelper } = await import('./target-helper.mjs');
+            const firstTarget = TargetHelper.resolveTargets(targetsAtRollTime)[0];
+            if (firstTarget?.actor?.statuses?.has('flanked')) {
+              const bonus = CONFIG.VAGABOND?.homebrew?.derivations?.flankedDamageBonus ?? 2;
+              card.data.damage.flankedBonus = bonus;
+              card.data.damage.total += bonus;
+              card.data.damage.baseTotal += bonus;
+            }
+          }
+
           const effectiveWeaknessPreRolled = weaknessPreRolled || (damageRoll?._weaknessPreRolled ?? false);
           let btns = isRestorativeCard
-            ? VagabondDamageHelper.createApplyDamageButton(damageRoll.total, key, actor.id, item?.id, targetsAtRollTime, actionIndex)
-            : VagabondDamageHelper.createSaveButtons(damageRoll.total, damageType, damageRoll, actor.id, item?.id, attackType, targetsAtRollTime, actionIndex, rollData?.isCritical ?? false, statusSaveTypes, critStatBonus, effectiveWeaknessPreRolled);
+            ? VagabondDamageHelper.createApplyDamageButton(damageRoll.total, key, actor.uuid, item?.id, targetsAtRollTime, actionIndex)
+            : VagabondDamageHelper.createSaveButtons(damageRoll.total, damageType, damageRoll, actor.uuid, item?.id, attackType, targetsAtRollTime, actionIndex, rollData?.isCritical ?? false, statusSaveTypes, critStatBonus, effectiveWeaknessPreRolled);
 
           card.addFooterAction(btns);
 
@@ -479,7 +508,7 @@ export class VagabondChatCard {
                statKey = rollData.manaSkill.stat;
            }
 
-           const btn = VagabondDamageHelper.createDamageButton(actor.id, item.id, formula, {
+           const btn = VagabondDamageHelper.createDamageButton(actor.uuid, item.id, formula, {
                type: item.type,
                isCritical: rollData.isCritical,
                damageType,
@@ -803,7 +832,9 @@ export class VagabondChatCard {
       let propertyDetails = null;
       if (weapon.system.properties?.length > 0) {
           const propList = [];
-          const isCleaveSplit = weapon.system.properties.includes('Cleave') && targetsAtRollTime.length >= 2;
+          // Cleave is "active" (highlighted) whenever it actually reached 2+ Targets —
+          // the die itself was already stepped down at roll time (see roll-handler.mjs).
+          const isCleaveActive = weapon.system.properties.includes('Cleave') && targetsAtRollTime.length >= 2;
           weapon.system.properties.forEach(prop => {
               const configKeys = Object.keys(CONFIG.VAGABOND.weaponProperties);
               const realKey = configKeys.find(k => k.toLowerCase() === prop.toLowerCase()) || prop;
@@ -811,7 +842,7 @@ export class VagabondChatCard {
               const hintKey = `VAGABOND.Weapon.PropertyHints.${realKey}`;
               const hint = game.i18n.localize(hintKey);
 
-              const isActive = isCleaveSplit && realKey === 'Cleave';
+              const isActive = isCleaveActive && realKey === 'Cleave';
               tags.push({ label: label, cssClass: 'tag-property', active: isActive });
               propList.push({ name: label, hint: (hint !== hintKey) ? hint : '' });
           });
@@ -840,14 +871,14 @@ export class VagabondChatCard {
           });
       }
 
-      // Entangle property: show Grapple button on hit
+      // Grapple property: show Grapple button on hit
       const footerActions = [];
-      const hasEntangle = weapon.system.properties?.some(p => p.toLowerCase() === 'entangle');
-      if (attackResult.isHit && hasEntangle) {
+      const hasGrapple = weapon.system.properties?.some(p => p.toLowerCase() === 'grapple');
+      if (attackResult.isHit && hasGrapple) {
           const targetsJson = JSON.stringify(targetsAtRollTime).replace(/"/g, '&quot;');
           footerActions.push(
               `<button class="vagabond-grapple-button"
-                  data-actor-id="${actor.id}"
+                  data-actor-id="${actor.uuid}"
                   data-item-id="${weapon.id}"
                   data-targets="${targetsJson}">
                   <i class="fa-solid fa-hand-holding-hand"></i> ${game.i18n.localize('VAGABOND.Grapple.Button')}
@@ -1095,12 +1126,12 @@ export class VagabondChatCard {
 
             if (showFlat) {
                 footerActions.push(VagabondDamageHelper.createNPCDamageButton(
-                    actor.id, actionIndex, action.flatDamage, 'flat', rawType, dTypeLabel, attackType, targetsAtRollTime
+                    actor.uuid, actionIndex, action.flatDamage, 'flat', rawType, dTypeLabel, attackType, targetsAtRollTime
                 ));
             }
             if (showRoll) {
                 footerActions.push(VagabondDamageHelper.createNPCDamageButton(
-                    actor.id, actionIndex, action.rollDamage, 'roll', rawType, dTypeLabel, attackType, targetsAtRollTime
+                    actor.uuid, actionIndex, action.rollDamage, 'roll', rawType, dTypeLabel, attackType, targetsAtRollTime
                 ));
             }
         }
@@ -1109,7 +1140,7 @@ export class VagabondChatCard {
     } else {
         // No damage — this card IS the only card, so save reminder buttons must live here.
         footerActions.push(VagabondDamageHelper.createSaveReminderButtons(
-          attackType, targetsAtRollTime, actor.id, null, actionIndex, reminderStatusSaveTypes
+          attackType, targetsAtRollTime, actor.uuid, null, actionIndex, reminderStatusSaveTypes
         ));
     }
 
@@ -1268,7 +1299,7 @@ export class VagabondChatCard {
 
       footerActions.push(
         VagabondDamageHelper.createItemDamageButton(
-          actor.id,
+          actor.uuid,
           item.id,
           damageAmount,
           damageType,
@@ -1838,6 +1869,9 @@ export class VagabondChatCard {
     type = 'damage',
     rawAmount,
     armorReduction = 0,
+    shieldReduction = 0,
+    shieldRoll = null,
+    flankedBonus = 0,
     finalAmount = 0,
     damageType = null,
     previousValue = 0,
@@ -1865,6 +1899,18 @@ export class VagabondChatCard {
       let calcHTML = `<div class="save-damage-calculation">
         <div class="damage-formula-line">
           <span class="damage-component" title="Damage"><i class="fa-solid fa-dice"></i> ${raw}</span>`;
+
+      if (flankedBonus > 0) {
+        calcHTML += `
+          <span class="damage-operator">+</span>
+          <span class="damage-component" title="${game.i18n.localize('VAGABOND.StatusConditions.Flanked')}"><i class="fas fa-people-arrows"></i> ${flankedBonus}</span>`;
+      }
+
+      if (shieldReduction > 0) {
+        calcHTML += `
+          <span class="damage-operator">-</span>
+          <span class="damage-component" title="${game.i18n.localize('VAGABOND.Chat.ShieldDefense')} (${shieldRoll?.formula ?? shieldReduction})"><i class="fas fa-shield-halved"></i> ${shieldReduction}</span>`;
+      }
 
       if (armorReduction > 0) {
         calcHTML += `
@@ -1924,6 +1970,10 @@ export class VagabondChatCard {
 
     if (sourceIcon) card.data.icon = sourceIcon;
     if (sourceName) card.data.standardTags = [{ label: sourceName, cssClass: 'tag-source' }];
+    // Attach the shield's own Roll (not just its total) so it rides in the
+    // ChatMessage's `rolls` array — gives it a Dice So Nice animation and the
+    // native hover-to-see-the-die tooltip, same as any other roll in chat.
+    if (shieldRoll) card.data.roll = shieldRoll;
 
     return card.send();
   }
@@ -1945,10 +1995,17 @@ export class VagabondChatCard {
     // Get the status ID from the effect
     const statusId = effect.statuses?.first() || effect.flags?.core?.statusId;
 
+    // Flanking/Flanked carry a per-application description naming the actual
+    // tokens involved (built by FlankingHelper) — flagged with vagabond.flankInfo.
+    // That live text wins over the generic i18n string.
+    if (effect.flags?.vagabond?.flankInfo && effect.description) {
+      fullDescription = effect.description;
+    }
+
     // Prefer the localized StatusConditionDescriptions entry. The ActiveEffect's own
     // `description` field is populated (English, from CONFIG.statusEffects) whenever
     // Foundry creates the status via toggleStatusEffect, so it must NOT be checked first.
-    if (statusId) {
+    if (!fullDescription && statusId) {
       const pascalId = statusId.charAt(0).toUpperCase() + statusId.slice(1);
       const localizedKey = `VAGABOND.StatusConditionDescriptions.${pascalId}`;
       const localized = game.i18n.localize(localizedKey);

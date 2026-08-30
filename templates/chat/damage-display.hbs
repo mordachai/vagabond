@@ -1,5 +1,5 @@
 {{! damage-display.hbs }}
-<div class="damage-section{{#if damage.critStatBonus}} attack-crit-toggle{{/if}}"{{#if damage.critStatBonus}} data-crit-active="true" data-actor-id="{{actor.id}}"{{/if}}>
+<div class="damage-section{{#if damage.critStatBonus}} attack-crit-toggle{{/if}}"{{#if damage.critStatBonus}} data-crit-active="true" data-actor-id="{{actor.uuid}}"{{/if}}>
     {{!-- 1. Black Arrow Header --}}
     <div class="damage-header-container">
         <div class="damage-header-arrow" title="{{damage.formula}}">

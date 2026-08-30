@@ -565,6 +565,24 @@
         </fieldset>
 
         <fieldset class="hb-fieldset">
+          <legend>{{localize "VAGABOND.HomebrewSettings.Fields.CombatLegend"}}</legend>
+          <div class="hb-form-group">
+            <label for="hb-deriv-flanked-bonus">{{localize "VAGABOND.HomebrewSettings.Fields.FlankedDamageBonus"}}</label>
+            <input
+              id="hb-deriv-flanked-bonus"
+              type="number"
+              class="hb-deriv-number"
+              data-field="derivations.flankedDamageBonus"
+              value="{{config.derivations.flankedDamageBonus}}"
+              min="0"
+              max="20"
+              step="1"
+            >
+            <p class="hb-hint">{{localize "VAGABOND.HomebrewSettings.Fields.FlankedDamageBonusHint"}}</p>
+          </div>
+        </fieldset>
+
+        <fieldset class="hb-fieldset">
           <legend>{{localize "VAGABOND.HomebrewSettings.Fields.StatsDisplayLegend"}}</legend>
           <div class="hb-form-group">
             <label>{{localize "VAGABOND.HomebrewSettings.Fields.Layout"}}</label>

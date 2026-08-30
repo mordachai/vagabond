@@ -121,4 +121,26 @@ export class TargetHelper {
 
     return targets.some(target => target.sceneId !== game.scenes.current.id);
   }
+
+  /**
+   * Resolves an actor reference stored on a chat-card button. Accepts a full UUID
+   * (correctly scoped to one specific unlinked token instance, e.g.
+   * "Scene.x.Token.y.Actor.z") or a legacy bare world-actor id (older chat messages).
+   * fromUuidSync is tried first so per-token state (statuses, HP) resolves to the
+   * exact token that acted — game.actors.get() alone always returns the shared
+   * base actor for unlinked tokens, silently losing that token's own Active Effects
+   * (e.g. a Flanked/Vulnerable status applied to only one of several duplicate NPCs).
+   * @param {string} ref - Actor UUID or bare actor id
+   * @returns {Actor|null}
+   */
+  static resolveActorRef(ref) {
+    if (!ref) return null;
+    try {
+      const doc = fromUuidSync(ref);
+      if (doc) return doc;
+    } catch (_e) {
+      // Malformed ref — fall through to the legacy lookup
+    }
+    return game.actors.get(ref) ?? null;
+  }
 }

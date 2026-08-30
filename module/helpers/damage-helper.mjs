@@ -1,4 +1,5 @@
 import { VagabondDamagePipeline } from './damage-pipeline.mjs';
+import { TargetHelper } from './target-helper.mjs';
 
 /**
  * Universal Damage Helper
@@ -149,7 +150,7 @@ export class VagabondDamageHelper {
     const damageFormula = button.dataset.damageFormula;
     const context = JSON.parse(button.dataset.context.replace(/&quot;/g, '"'));
 
-    const actor = game.actors.get(actorId);
+    const actor = TargetHelper.resolveActorRef(actorId);
     if (!actor) {
       ui.notifications.error('Actor not found!');
       return;
@@ -390,7 +391,7 @@ export class VagabondDamageHelper {
     const damageTypeLabel = button.dataset.damageTypeLabel || damageType;
     const attackType = button.dataset.attackType || 'melee';
 
-    const actor = game.actors.get(actorId);
+    const actor = TargetHelper.resolveActorRef(actorId);
     if (!actor) {
       ui.notifications.error('Actor not found!');
       return;
@@ -545,7 +546,7 @@ export class VagabondDamageHelper {
     const damageTypeLabel = button.dataset.damageTypeLabel || damageType;
     const attackType = button.dataset.attackType || 'melee';
 
-    const actor = game.actors.get(actorId);
+    const actor = TargetHelper.resolveActorRef(actorId);
     if (!actor) {
       ui.notifications.error('NPC not found!');
       return;
@@ -844,6 +845,15 @@ export class VagabondDamageHelper {
   }
 
   static _computeFinalDamage(actor, damage, damageType, attackingWeapon = null, opts = {}) {
+    // Flanked: flat damage bonus applied before Armor/Immune/Weak math (RAW: "takes
+    // an extra 2 damage from attacks"). Single choke point — every damage-application
+    // path (save, Apply Direct, NPC damage, Shield reduction) routes through here.
+    let flankedBonus = 0;
+    if (damage > 0 && actor.statuses?.has('flanked')) {
+      flankedBonus = CONFIG.VAGABOND?.homebrew?.derivations?.flankedDamageBonus ?? 2;
+      damage += flankedBonus;
+    }
+
     // Normalize damage type for lookup
     const normalizedType = damageType.toLowerCase();
 
@@ -851,7 +861,7 @@ export class VagabondDamageHelper {
     if (normalizedType === '-') {
       const armorRating = actor.system.armor || 0;
       const final = Math.max(0, damage - armorRating);
-      return { final, armorReduction: damage - final, berserkReduction: 0, path: 'typeless' };
+      return { final, armorReduction: damage - final, berserkReduction: 0, flankedBonus, path: 'typeless' };
     }
 
     // Get immunities and weaknesses arrays (for NPCs and from equipped armor)
@@ -882,7 +892,7 @@ export class VagabondDamageHelper {
       // Check if NPC is weak to this metal type
       if (weaknesses.includes(weaponMetal)) {
         // Material weakness: Ignore armor and immunities, damage goes through
-        return { final: finalDamage, armorReduction: 0, berserkReduction: 0, path: 'material' };
+        return { final: finalDamage, armorReduction: 0, berserkReduction: 0, flankedBonus, path: 'material' };
       }
     }
 
@@ -890,12 +900,12 @@ export class VagabondDamageHelper {
     // (Extra die is handled at roll/apply time, not here — armor/immunity just bypassed.
     //  Weak targets also skip the berserk reduction: weakness bypasses all reductions.)
     if (weaknesses.includes(normalizedType)) {
-      return { final: finalDamage, armorReduction: 0, berserkReduction: 0, path: 'weak' };
+      return { final: finalDamage, armorReduction: 0, berserkReduction: 0, flankedBonus, path: 'weak' };
     }
 
     // RAW: Immune - Unharmed by the damage type
     if (immunities.includes(normalizedType)) {
-      return { final: 0, armorReduction: 0, berserkReduction: 0, path: 'immune' };
+      return { final: 0, armorReduction: 0, berserkReduction: 0, flankedBonus: 0, path: 'immune' };
     }
 
     // RAW: Armor - Subtracted from ALL incoming damage
@@ -920,7 +930,7 @@ export class VagabondDamageHelper {
       }
     }
 
-    return { final: finalDamage, armorReduction, berserkReduction, path: 'normal' };
+    return { final: finalDamage, armorReduction, berserkReduction, flankedBonus, path: 'normal' };
   }
 
   /** @see VagabondDamagePipeline.extractDieSize */
@@ -953,12 +963,12 @@ export class VagabondDamageHelper {
         </div>
         <div class="defend-content">
           <p>
-            <strong>${game.i18n.localize('VAGABOND.DefendMechanics.DodgeTitle')}:</strong>
-            ${game.i18n.localize('VAGABOND.DefendMechanics.DodgeDescription')}
+            <strong>${game.i18n.localize('VAGABOND.DefendMechanics.ReflexTitle')}:</strong>
+            ${game.i18n.localize('VAGABOND.DefendMechanics.ReflexDescription')}
           </p>
           <p>
-            <strong>${game.i18n.localize('VAGABOND.DefendMechanics.BlockTitle')}:</strong>
-            ${game.i18n.localize('VAGABOND.DefendMechanics.BlockDescription')}
+            <strong>${game.i18n.localize('VAGABOND.DefendMechanics.ShieldTitle')}:</strong>
+            ${game.i18n.localize('VAGABOND.DefendMechanics.ShieldDescription')}
           </p>
           <p>
             <strong>${game.i18n.localize('VAGABOND.DefendMechanics.CritTitle')}:</strong>
@@ -987,7 +997,7 @@ export class VagabondDamageHelper {
     // Pre-init fallback: classic triple
     return [
       { key: 'reflex', label: game.i18n?.localize('VAGABOND.Saves.Reflex.name') ?? 'Reflex', icon: 'fas fa-running' },
-      { key: 'endure', label: game.i18n?.localize('VAGABOND.Saves.Endure.name') ?? 'Endure', icon: 'fas fa-shield-alt' },
+      { key: 'endure', label: game.i18n?.localize('VAGABOND.Saves.Endure.name') ?? 'Endure', icon: 'fas fa-hand-fist' },
       { key: 'will',   label: game.i18n?.localize('VAGABOND.Saves.Will.name') ?? 'Will',     icon: 'fas fa-brain' },
     ];
   }
@@ -1078,7 +1088,25 @@ export class VagabondDamageHelper {
             </button>`;
     }).join('');
 
-    // LAYOUT: Two rows. Top: Apply Direct. Bottom: Saves.
+    // Shield button — only when at least one targeted actor has an equipped
+    // Defense-property weapon. Rolls that weapon's die and subtracts it from the
+    // incoming damage (no save, no d20) — see handleShieldDefense.
+    const shieldEligible = this._anyTargetHasDefenseWeapon(targetsAtRollTime);
+    const shieldLabel = game.i18n.localize('VAGABOND.Chat.ShieldDefense');
+    const shieldButton = shieldEligible ? `
+            <button class="vagabond-shield-defense-button"
+              data-damage-amount="${damageAmount}"
+              data-damage-type="${damageType}"
+              data-actor-id="${actorId}"
+              data-item-id="${itemId || ''}"
+              data-action-index="${actionIndex ?? ''}"
+              data-attack-was-crit="${attackWasCrit}"
+              data-weakness-pre-rolled="${weaknessPreRolled}"
+              data-targets="${targetsJson}"${critAttrs}>
+              <i class="fas fa-shield-halved"></i> ${shieldLabel}
+            </button>` : '';
+
+    // LAYOUT: Two rows. Top: Apply Direct. Bottom: Saves + Shield.
     return `
       <div class="vagabond-save-buttons-container">
         <div class="save-buttons-top">
@@ -1095,10 +1123,23 @@ export class VagabondDamageHelper {
             </button>
         </div>
 
-        <div class="save-buttons-row">${saveButtons}
+        <div class="save-buttons-row">${saveButtons}${shieldButton}
         </div>
       </div>
     `;
+  }
+
+  /**
+   * Whether any of the stored targets has an equipped Defense-property weapon —
+   * gates the Shield button on the save-buttons row.
+   * @param {Array<Object>} targetsAtRollTime - Stored target data (TargetHelper shape)
+   * @returns {boolean}
+   * @private
+   */
+  static _anyTargetHasDefenseWeapon(targetsAtRollTime) {
+    if (!targetsAtRollTime?.length) return false;
+    const tokens = this._resolveStoredTargets(targetsAtRollTime);
+    return tokens.some(t => t.actor && this._hasEquippedDefenseWeapon(t.actor));
   }
 
   /**
@@ -1250,12 +1291,6 @@ export class VagabondDamageHelper {
     const actorsToRoll = this._resolveSaveActors(button);
     if (!actorsToRoll) return;
 
-    // Determine Cleave split before iterating
-    const _saveSourceActor = actorId ? game.actors.get(actorId) : null;
-    const _saveSourceItem = _saveSourceActor?.items.get(itemId);
-    const _hasCleave = _saveSourceItem?.system?.properties?.includes('Cleave') ?? false;
-    const _saveTargetCount = actorsToRoll.length;
-
     // Roll save for each actor
     for (let _saveIdx = 0; _saveIdx < actorsToRoll.length; _saveIdx++) {
       const targetActor = actorsToRoll[_saveIdx];
@@ -1273,15 +1308,12 @@ export class VagabondDamageHelper {
         continue;
       }
 
-      // Cleave splits the incoming damage across all targets
-      let effectiveDamageAmount = damageAmount;
-      if (_hasCleave && _saveTargetCount > 1) {
-        const base = Math.floor(damageAmount / _saveTargetCount);
-        effectiveDamageAmount = base + (_saveIdx < (damageAmount % _saveTargetCount) ? 1 : 0);
-      }
+      // Cleave no longer splits damage — every Target takes the full rolled amount
+      // (the die itself was already stepped down at roll time, see roll-handler.mjs).
+      const effectiveDamageAmount = damageAmount;
 
       // Full save outcome (hinder, attacker modifier, resistance vote, roll, crit)
-      const sourceActor = actorId ? game.actors.get(actorId) : null;
+      const sourceActor = TargetHelper.resolveActorRef(actorId);
       const { saveRoll, difficulty, isSuccess, isCritical, isHindered } = await this._computeSaveOutcome(
         targetActor, saveType, attackType, sourceActor,
         { sourceItem: sourceActor?.items.get(itemId), actionIdx, attackWasCrit },
@@ -1293,13 +1325,7 @@ export class VagabondDamageHelper {
       let damageAfterSave = effectiveDamageAmount;
       let saveReduction = 0;
       if (isSuccess) {
-        if (_hasCleave && _saveTargetCount > 1 && damageAmount > 0) {
-          // Proportionally scale the save reduction to match the Cleave split
-          const fullAfterSave = this._removeHighestDie(rollTermsData);
-          damageAfterSave = Math.floor(effectiveDamageAmount * (fullAfterSave / damageAmount));
-        } else {
-          damageAfterSave = this._removeHighestDie(rollTermsData);
-        }
+        damageAfterSave = this._removeHighestDie(rollTermsData);
         saveReduction = effectiveDamageAmount - damageAfterSave;
       }
 
@@ -1313,8 +1339,8 @@ export class VagabondDamageHelper {
         targetActor, damageAfterSave, damageType, sourceItem, { rolledDiceCount }
       );
       const baseAfterFinal = damageBreakdown.final;
-      // Immunity zeroes the damage without armor being involved — don't label it as armor
-      const armorReduction = damageBreakdown.path === 'immune' ? 0 : damageAfterSave - baseAfterFinal;
+      const armorReduction = damageBreakdown.armorReduction;
+      const flankedBonus = damageBreakdown.flankedBonus;
       // RAW: Weak — bypass Armor/Immune + deal an extra damage die
       let finalDamage = baseAfterFinal;
       const weaknessPreRolledSave = button.dataset.weaknessPreRolled === 'true';
@@ -1374,7 +1400,8 @@ export class VagabondDamageHelper {
         damageType,
         autoApply,
         autoApply ? null : statusContext,  // embed context only for manual-apply cards
-        damageBreakdown.path
+        damageBreakdown.path,
+        flankedBonus
       );
       // Luck is managed by the save-crit-toggle — do not auto-grant here
 
@@ -1442,7 +1469,7 @@ export class VagabondDamageHelper {
       }
 
       // Full save outcome (hinder, attacker modifier, resistance vote, roll, crit)
-      const sourceActor = actorId ? game.actors.get(actorId) : null;
+      const sourceActor = TargetHelper.resolveActorRef(actorId);
       const { saveRoll, difficulty, isSuccess, isCritical, isHindered } = await this._computeSaveOutcome(
         targetActor, saveType, attackType, sourceActor,
         { sourceItem: sourceActor?.items.get(itemId), actionIdx },
@@ -1498,13 +1525,122 @@ export class VagabondDamageHelper {
   }
 
   /**
-   * Check if actor has equipped shield with Shield property
-   * @param {Actor} actor - The defending actor
-   * @returns {boolean} True if shield equipped with Shield property
+   * Check if actor has an equipped weapon with the Defense property (offers the
+   * "Shield" button on the save-buttons row — see createSaveButtons/handleShieldDefense).
+   * @param {Actor} actor
+   * @returns {boolean}
    * @private
    */
-  static _hasEquippedShield(actor) {
-    return CONFIG.VAGABOND.defenseRuleHelpers.hasEquippedShield(actor);
+  static _hasEquippedDefenseWeapon(actor) {
+    return CONFIG.VAGABOND.defenseRuleHelpers.hasEquippedWeaponWithProperty(actor, 'Defense');
+  }
+
+  /**
+   * Handle the "Shield" button — Defense weapon property. No save, no d20: roll the
+   * weapon's damage die and subtract it from the incoming damage before Armor/Immune/
+   * Weak math. Only applies to targets that actually have a Defense weapon equipped;
+   * others are skipped. Otherwise mirrors handleApplyDirect (bypasses saves, applies
+   * on-hit statuses unconditionally).
+   * @param {HTMLElement} button - The clicked Shield button
+   */
+  static async handleShieldDefense(button) {
+    const damageAmount = parseInt(button.dataset.damageAmount);
+    const damageType = button.dataset.damageType;
+    const actorId = button.dataset.actorId;
+    const itemId = button.dataset.itemId;
+    const actionIndexRaw = button.dataset.actionIndex;
+    const actionIdx = (actionIndexRaw !== '' && actionIndexRaw != null) ? parseInt(actionIndexRaw) : null;
+
+    const sourceActor = TargetHelper.resolveActorRef(actorId);
+    const sourceItem = sourceActor?.items.get(itemId);
+
+    const storedTargets = this._getTargetsFromButton(button);
+    if (storedTargets.length === 0) {
+      ui.notifications.warn('No tokens targeted. Please target at least one token.');
+      return;
+    }
+    const targetedTokens = this._resolveStoredTargets(storedTargets);
+    if (targetedTokens.length === 0) {
+      ui.notifications.warn('None of the targeted tokens could be found on this scene.');
+      return;
+    }
+
+    const { VagabondChatCard } = await import('./chat-card.mjs');
+    const { StatusHelper } = await import('./status-helper.mjs');
+
+    for (const target of targetedTokens) {
+      const targetActor = target.actor;
+      if (!targetActor) continue;
+
+      const shieldWeapon = CONFIG.VAGABOND.defenseRuleHelpers.equippedWeaponWithProperty(targetActor, 'Defense');
+      if (!shieldWeapon) continue; // Only targets carrying a Defense weapon can use it
+
+      const shieldFormula = shieldWeapon.system.currentDamage;
+      let shieldReduction = 0;
+      let shieldRoll = null;
+      if (shieldFormula?.trim()) {
+        shieldRoll = new Roll(shieldFormula, targetActor.getRollData());
+        await shieldRoll.evaluate();
+        shieldReduction = shieldRoll.total;
+      }
+
+      const reducedDamage = Math.max(0, damageAmount - shieldReduction);
+
+      const breakdown = this.calculateFinalDamageDetailed(targetActor, reducedDamage, damageType, sourceItem);
+      let finalDamage = breakdown.final;
+      const weaknessPreRolled = button.dataset.weaknessPreRolled === 'true';
+      if (!weaknessPreRolled && this._isWeakTo(targetActor, damageType, sourceItem)) {
+        const dieSize = this._getDamageSourceDieSize(sourceItem, actionIdx, sourceActor);
+        const weakRoll = new Roll(`1d${dieSize}`);
+        await weakRoll.evaluate();
+        finalDamage += weakRoll.total;
+      }
+
+      const _preCtx = { actor: targetActor, amount: finalDamage, damageType, sourceItem };
+      if (Hooks.call('vagabond.preDamageApply', _preCtx) === false) continue;
+      const _final = Math.max(0, _preCtx.amount);
+      const currentHP = targetActor.system.health?.value || 0;
+      const newHP = Math.max(0, currentHP - _final);
+      if (targetActor.isOwner || game.user.isGM) {
+        await targetActor.update({ 'system.health.value': newHP });
+      } else {
+        const { emitSocket } = await import('./socket-helper.mjs');
+        emitSocket('applyDamage', { actorUuid: targetActor.uuid, newHp: newHP });
+      }
+      Hooks.callAll('vagabond.postDamageApply', { actor: targetActor, amount: _final, damageType, sourceItem, oldHp: currentHP, newHp: newHP });
+
+      await VagabondChatCard.applyResult(targetActor, {
+        type: 'damage',
+        rawAmount: damageAmount,
+        shieldReduction,
+        shieldRoll,
+        flankedBonus: breakdown.flankedBonus,
+        armorReduction: breakdown.armorReduction,
+        finalAmount: _final,
+        damageType,
+        previousValue: currentHP,
+        newValue: newHP,
+        sourceName: `${game.i18n.localize('VAGABOND.Chat.ShieldDefense')} (${shieldWeapon.name})`,
+        sourceIcon: shieldWeapon.img ?? targetActor.img ?? null,
+      });
+
+      const isCritical = button.dataset.attackWasCrit === 'true';
+      const { entries: allStatusEntries, coatingEntries } = this.resolveIncomingStatusEntries({
+        sourceActor, sourceItem, actionIdx, attackWasCrit: isCritical,
+      });
+      if (allStatusEntries.length > 0) {
+        const sourceName = sourceItem?.name ?? (actionIdx !== null ? sourceActor?.system?.actions?.[actionIdx]?.name : '') ?? '';
+        const damageWasBlocked = finalDamage === 0;
+        const sourceActorTokenName = canvas.tokens?.placeables?.find(t => t.actor?.id === sourceActor?.id)?.document.name || sourceActor?.name || '';
+        const statusResults = await StatusHelper.processCausedStatuses(
+          targetActor, allStatusEntries, damageWasBlocked, sourceName, { skipSaveRoll: true, sourceActorName: sourceActorTokenName }
+        );
+        if (coatingEntries.length > 0) {
+          await sourceItem.update({ 'system.coating.charges': 0, 'system.coating.causedStatuses': [] });
+        }
+        await VagabondChatCard.statusResults(statusResults, targetActor, sourceName, sourceItem?.img ?? null);
+      }
+    }
   }
 
   /**
@@ -1570,12 +1706,25 @@ export class VagabondDamageHelper {
       resistanceFavor ? 'favor' : 'none'
     );
 
-    // Build and evaluate roll with conditional hinder support
-    // (isHindered = true when heavy armor for Dodge, or ranged/cast attack for Block)
+    // Reflex Saves take a flat penalty equal to worn Armor's Slots (see
+    // actor-character.mjs `reflexArmorPenalty`) — a numeric subtraction, not Hinder.
+    let baseFormula = null;
+    if (saveType === 'reflex') {
+      const penalty = actor.system.reflexArmorPenalty || 0;
+      if (penalty > 0) {
+        const dice = CONFIG.VAGABOND?.homebrew?.dice;
+        const penaltyLabel = game.i18n.localize('VAGABOND.Chat.ArmorPenalty');
+        baseFormula = `${dice?.baseCheck ?? '1d20'} - ${penalty}[${penaltyLabel}]`;
+      }
+    }
+
+    // Build and evaluate roll with conditional hinder support (defenseRules registry —
+    // empty by default per current RAW, available for future homebrew hinder rules)
     const roll = await VagabondRollBuilder.buildAndEvaluateD20WithConditionalHinder(
       actor,
       effectiveFavorHinder,
-      isHindered
+      isHindered,
+      baseFormula
     );
 
     return roll;
@@ -1665,7 +1814,7 @@ export class VagabondDamageHelper {
    * @returns {Promise<ChatMessage>}
    * @private
    */
-  static async _postSaveResult(actor, saveType, roll, difficulty, isSuccess, isCritical, isHindered, originalDamage, saveReduction, armorReduction, finalDamage, damageType, autoApplied, statusContext = null, defensePath = null) {
+  static async _postSaveResult(actor, saveType, roll, difficulty, isSuccess, isCritical, isHindered, originalDamage, saveReduction, armorReduction, finalDamage, damageType, autoApplied, statusContext = null, defensePath = null, flankedBonus = 0) {
     const saveLabel = this.getConfiguredSaves().find(s => s.key === saveType)?.label
       || game.i18n.localize(`VAGABOND.Saves.${saveType.charAt(0).toUpperCase() + saveType.slice(1)}.name`);
 
@@ -1692,11 +1841,11 @@ export class VagabondDamageHelper {
       );
       const normalCalcHTML = this._buildDamageCalculation(
         originalDamage, saveReduction, armorReduction, finalDamage,
-        damageType, saveType, actor, false, isHindered, defensePath
+        damageType, saveType, actor, false, isHindered, defensePath, flankedBonus
       );
 
       cardDescription += `
-        <div class="save-crit-toggle" data-crit-active="true" data-actor-id="${actor.id}">
+        <div class="save-crit-toggle" data-crit-active="true" data-actor-id="${actor.uuid}">
           <div class="crit-state-on">${critCalcHTML}</div>
           <div class="crit-state-off">${normalCalcHTML}</div>
           <div class="save-crit-rule" data-action="toggleCritBenefit" title="${game.i18n.localize('VAGABOND.DefendMechanics.CritToggleHint')}">
@@ -1706,18 +1855,18 @@ export class VagabondDamageHelper {
               ${game.i18n.localize('VAGABOND.DefendMechanics.CritDescription')}
             </span>
           </div>
-          ${this.createApplySaveDamageButton(actor.id, actor.name, finalDamage, damageType, statusContext, finalDamage)}
+          ${this.createApplySaveDamageButton(actor.uuid, actor.name, finalDamage, damageType, statusContext, finalDamage)}
         </div>
       `;
     } else {
       // Normal (non-crit) path
       const damageCalculationHTML = this._buildDamageCalculation(
         originalDamage, saveReduction, armorReduction, finalDamage,
-        damageType, saveType, actor, autoApplied, isHindered, defensePath
+        damageType, saveType, actor, autoApplied, isHindered, defensePath, flankedBonus
       );
       cardDescription += damageCalculationHTML;
       if (!autoApplied && finalDamage > 0) {
-        cardDescription += this.createApplySaveDamageButton(actor.id, actor.name, finalDamage, damageType, statusContext);
+        cardDescription += this.createApplySaveDamageButton(actor.uuid, actor.name, finalDamage, damageType, statusContext);
       }
     }
 
@@ -1804,7 +1953,7 @@ export class VagabondDamageHelper {
    * @returns {string} HTML string
    * @private
    */
-  static _buildDamageCalculation(originalDamage, saveReduction, armorReduction, finalDamage, damageType, saveType, actor, autoApplied, isHindered, defensePath = null) {
+  static _buildDamageCalculation(originalDamage, saveReduction, armorReduction, finalDamage, damageType, saveType, actor, autoApplied, isHindered, defensePath = null, flankedBonus = 0) {
     // Get save icon and label from the configured homebrew saves
     const configuredSave = this.getConfiguredSaves().find(s => s.key === saveType);
     const saveIcon = configuredSave?.icon || 'fa-solid fa-shield';
@@ -1852,6 +2001,15 @@ export class VagabondDamageHelper {
         <span class="damage-component" title="${game.i18n.localize('VAGABOND.Damage.Total')}">
           <i class="fa-solid fa-dice"></i> ${originalDamage}
         </span>`;
+
+    // Add Flanked bonus if any
+    if (flankedBonus > 0) {
+      calculationHTML += `
+        <span class="damage-operator">+</span>
+        <span class="damage-component" title="${game.i18n.localize('VAGABOND.StatusConditions.Flanked')}">
+          <i class="fas fa-people-arrows"></i> ${flankedBonus}
+        </span>`;
+    }
 
     // Add save reduction if any
     if (saveReduction > 0) {
@@ -2023,7 +2181,7 @@ export class VagabondDamageHelper {
     const itemId = button.dataset.itemId;
 
     // Get weapon data for material weakness checks
-    const sourceActor = game.actors.get(actorId);
+    const sourceActor = TargetHelper.resolveActorRef(actorId);
     const sourceItem = sourceActor?.items.get(itemId);
 
     // Build source label: weapon → "[Name] Attack", spell/alchemical/NPC action → "[Name]"
@@ -2053,22 +2211,15 @@ export class VagabondDamageHelper {
       return;
     }
 
-    // Cleave splits damage across targets (ceil/floor, first targets get the remainder)
-    const hasCleave = sourceItem?.system?.properties?.includes('Cleave');
-    const targetCount = targetedTokens.length;
-
-    // Apply damage to each resolved target
+    // Apply damage to each resolved target. Cleave no longer splits damage — every
+    // Target takes the full rolled amount (the die was already stepped down at roll
+    // time, see roll-handler.mjs).
     for (let i = 0; i < targetedTokens.length; i++) {
       const target = targetedTokens[i];
       const targetActor = target.actor;
       if (!targetActor) continue;
 
-      // Split damage for Cleave: floor(total/count), first targets absorb remainder
-      let effectiveDamage = damageAmount;
-      if (hasCleave && targetCount > 1) {
-        const base = Math.floor(damageAmount / targetCount);
-        effectiveDamage = base + (i < (damageAmount % targetCount) ? 1 : 0);
-      }
+      const effectiveDamage = damageAmount;
 
       // Calculate final damage (armor/immune/weak)
       const directBreakdown = this.calculateFinalDamageDetailed(targetActor, effectiveDamage, damageType, sourceItem);
@@ -2101,7 +2252,8 @@ export class VagabondDamageHelper {
       await VCCDirect.applyResult(targetActor, {
         type: 'damage',
         rawAmount: effectiveDamage,
-        armorReduction: directBreakdown.path === 'immune' ? 0 : effectiveDamage - baseAfterFinalDirect,
+        flankedBonus: directBreakdown.flankedBonus,
+        armorReduction: directBreakdown.armorReduction,
         finalAmount: _directFinal,
         damageType,
         previousValue: currentHP,
@@ -2153,7 +2305,7 @@ export class VagabondDamageHelper {
     const damageType = button.dataset.damageType;
 
     // Get the actor who rolled the save
-    const actor = game.actors.get(actorId);
+    const actor = TargetHelper.resolveActorRef(actorId);
     if (!actor) {
       ui.notifications.error('Character not found!');
       return;
@@ -2181,7 +2333,7 @@ export class VagabondDamageHelper {
 
 
     // Build source label from stored source attrs (set when statusContext was provided)
-    const saveSourceActor = game.actors.get(button.dataset.sourceActorId);
+    const saveSourceActor = TargetHelper.resolveActorRef(button.dataset.sourceActorId);
     const saveSourceItem = saveSourceActor?.items.get(button.dataset.sourceItemId);
     const isSaveWeapon = saveSourceItem?.type === 'equipment' && saveSourceItem?.system?.equipmentType === 'weapon';
     const saveSourceLabel = saveSourceItem
@@ -2214,7 +2366,7 @@ export class VagabondDamageHelper {
       const sourceActionIdx = (sourceActionIndexRaw !== '' && sourceActionIndexRaw != null) ? parseInt(sourceActionIndexRaw) : null;
       const attackWasCrit  = button.dataset.attackWasCrit === 'true';
 
-      const sourceActor = game.actors.get(sourceActorId);
+      const sourceActor = TargetHelper.resolveActorRef(sourceActorId);
       const sourceItem  = sourceActor?.items.get(sourceItemId);
 
       const { entries: allStatusEntries, coatingEntries } = this.resolveIncomingStatusEntries({
@@ -2249,7 +2401,7 @@ export class VagabondDamageHelper {
    */
   static async handleGrapple(button) {
     const actorId = button.dataset.actorId;
-    const sourceActor = game.actors.get(actorId);
+    const sourceActor = TargetHelper.resolveActorRef(actorId);
     if (!sourceActor) return;
 
     if (!sourceActor.isOwner && !game.user.isGM) {

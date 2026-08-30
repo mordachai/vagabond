@@ -25,6 +25,7 @@ import { EquipmentHelper } from './helpers/equipment-helper.mjs';
 import { ContextMenuHelper } from './helpers/context-menu-helper.mjs';
 import { AccordionHelper } from './helpers/accordion-helper.mjs';
 import { EnrichmentHelper } from './helpers/enrichment-helper.mjs';
+import { TargetHelper } from './helpers/target-helper.mjs';
 // Import DataModel classes
 import * as models from './data/_module.mjs';
 // Import UI classes
@@ -1407,10 +1408,22 @@ Hooks.once('ready', function () {
     await actor.update({ [field]: value });
   });
 
-  registerSocketAction('applyStatus', async ({ actorUuid, statusId, active }) => {
+  registerSocketAction('applyStatus', async ({ actorUuid, statusId, active, description }) => {
     const actor = await fromUuid(actorUuid);
     if (!actor) return;
-    await actor.toggleStatusEffect(statusId, { active });
+    if (active && !actor.statuses?.has(statusId)) {
+      await actor.toggleStatusEffect(statusId, { active: true });
+    } else if (!active) {
+      await actor.toggleStatusEffect(statusId, { active: false });
+      return;
+    }
+    // Optional per-application description (Flanking/Flanked live text).
+    if (description) {
+      const eff = actor.effects.find(e => e.statuses?.has(statusId));
+      if (eff && eff.description !== description) {
+        await eff.update({ description, 'flags.vagabond.flankInfo': true });
+      }
+    }
   });
 
   registerSocketAction('createCountdownDie', async (data) => {
@@ -2315,6 +2328,72 @@ Hooks.on('updateActor', async (actor, changes, _options, _userId) => {
 });
 
 /* -------------------------------------------- */
+/*  Token Movement Hooks                        */
+/* -------------------------------------------- */
+
+// Live Flanking/Flanked tracking: re-sweep the scene when a token moves so
+// 'flanked' clears the moment a contributor walks off adjacent, not just the
+// next time someone attacks. GM-gated to avoid every connected client sweeping.
+// Also sweeps on token create/delete — a freshly-dropped token (drag from the
+// actor directory) or a removed one changes adjacency without ever firing
+// updateToken, so relying on updateToken alone left the scene stale until the
+// next unrelated move.
+const _flankingSweep = foundry.utils.debounce(() => {
+  import('./helpers/flanking-helper.mjs')
+    .then(({ FlankingHelper }) => FlankingHelper.evaluateScene())
+    .catch(err => console.error('Vagabond | Flanking sweep failed', err));
+}, 200);
+
+for (const hookName of ['updateToken', 'createToken', 'deleteToken']) {
+  Hooks.on(hookName, () => {
+    // Only ONE client may sweep — with multiple GMs connected, every GM running
+    // evaluateScene() races toggleStatusEffect (duplicate creates, "ActiveEffect
+    // does not exist" on clears), and the caught error aborts the rest of that
+    // client's scene loop, leaving statuses stale until tokens move again.
+    if (game.user !== game.users.activeGM) return;
+    _flankingSweep();
+  });
+}
+
+// A dragged token settles through the v13/v14 movement animation; the final
+// rest position sometimes only lands via refreshToken, not a clean updateToken.
+// Cheap position-delta guard keeps this off the per-frame animation spam — the
+// 200ms debounce collapses whatever survives into a single sweep.
+Hooks.on('refreshToken', (token) => {
+  if (game.user !== game.users.activeGM) return;
+  const p = token.document;
+  if (!p) return;
+  const key = `${p.x},${p.y},${p.width},${p.height}`;
+  if (token._vagabondFlankPos === key) return;
+  token._vagabondFlankPos = key;
+  _flankingSweep();
+});
+
+// Re-eval on combat flow too: a token moved on another actor's turn, a flanker
+// going defeated, or the initiative roster changing all alter adjacency without
+// necessarily moving a token on THIS client.
+for (const h of ['combatStart', 'updateCombat', 'createCombatant', 'deleteCombatant', 'updateCombatant']) {
+  Hooks.on(h, () => {
+    if (game.user !== game.users.activeGM) return;
+    _flankingSweep();
+  });
+}
+
+// Combat over — sweep orphans first (presence-based, catches origin-migrated
+// strays actor.statuses can't see), THEN re-run the geometry sweep so any
+// genuinely-still-adjacent tokens keep the correct positional state. Order
+// matters: cleanup before sweep, or the sweep's fresh 'flanked' gets wiped.
+Hooks.on('deleteCombat', () => {
+  if (game.user !== game.users.activeGM) return;
+  import('./helpers/flanking-helper.mjs')
+    .then(async ({ FlankingHelper }) => {
+      await FlankingHelper.cleanupOrphans();
+      await FlankingHelper.evaluateScene();
+    })
+    .catch(err => console.error('Vagabond | Flanking combat-end sweep failed', err));
+});
+
+/* -------------------------------------------- */
 /*  Item Creation Hooks                         */
 /* -------------------------------------------- */
 
@@ -2360,7 +2439,7 @@ const FLUKE_REROLL_ENTRY = {
     const messageId = li.dataset.messageId;
     const message = game.messages.get(messageId);
     if (!message?.flags?.vagabond?.rerollData) return false;
-    const actor = game.actors.get(message.flags.vagabond.actorId);
+    const actor = TargetHelper.resolveActorRef(message.flags.vagabond.actorId);
     if (!actor || !actor.isOwner) return false;
     // Dynamically update name and classes based on current luck
     const currentLuck = actor.system.currentLuck || 0;
@@ -2382,7 +2461,7 @@ const FLUKE_REROLL_ENTRY = {
     const messageId = li.dataset.messageId;
     const message = game.messages.get(messageId);
     const flags = message.flags.vagabond;
-    const actor = game.actors.get(flags.actorId);
+    const actor = TargetHelper.resolveActorRef(flags.actorId);
     const rerollData = flags.rerollData;
 
     if (!actor || !rerollData) return;
@@ -2486,7 +2565,7 @@ const FORCE_CRIT_ENTRY = {
   callback: async (li) => {
     const message = game.messages.get(li.dataset.messageId);
     const flags = message.flags.vagabond;
-    const actor = game.actors.get(flags.actorId);
+    const actor = TargetHelper.resolveActorRef(flags.actorId);
     const rerollData = flags.rerollData;
     if (!actor || !rerollData) return;
 
@@ -2861,6 +2940,20 @@ Hooks.on('renderChatMessageHTML', (message, html) => {
   });
 
   // ---------------------------------------------------------
+  // 5b. Shield Defense Button Handler (Defense weapon property)
+  // ---------------------------------------------------------
+  const shieldDefenseButtons = html.querySelectorAll('.vagabond-shield-defense-button');
+
+  shieldDefenseButtons.forEach(button => {
+    button.addEventListener('click', (ev) => {
+      ev.preventDefault();
+      import('./helpers/damage-helper.mjs').then(({ VagabondDamageHelper }) => {
+        VagabondDamageHelper.handleShieldDefense(button);
+      });
+    });
+  });
+
+  // ---------------------------------------------------------
   // 6. Apply Restorative Effects Button Handlers
   // ---------------------------------------------------------
   const restorativeButtons = html.querySelectorAll(
@@ -2908,7 +3001,7 @@ Hooks.on('renderChatMessageHTML', (message, html) => {
 
       if (itemId) {
         const actorId = message.flags?.vagabond?.actorId;
-        const actor = game.actors.get(actorId);
+        const actor = TargetHelper.resolveActorRef(actorId);
         if (actor) {
           const item = actor.items.get(itemId);
           if (item) {
@@ -3039,7 +3132,7 @@ Hooks.on('renderChatMessageHTML', (message, html) => {
 
       // Manage luck: benefit claimed (active) → remove luck + delete luck card; luck kept → grant luck
       const actorId = container.dataset.actorId;
-      const actor = actorId ? game.actors.get(actorId) : null;
+      const actor = TargetHelper.resolveActorRef(actorId);
       if (actor) {
         import('./helpers/chat-card.mjs').then(async ({ VagabondChatCard }) => {
           if (isNowActive) {
@@ -3087,7 +3180,7 @@ Hooks.on('renderChatMessageHTML', (message, html) => {
 
       // Manage luck: benefit claimed (active) → remove luck + delete luck card; luck kept → grant luck
       const actorId = container.dataset.actorId;
-      const actor = actorId ? game.actors.get(actorId) : null;
+      const actor = TargetHelper.resolveActorRef(actorId);
       if (actor) {
         import('./helpers/chat-card.mjs').then(async ({ VagabondChatCard }) => {
           if (isNowActive) {

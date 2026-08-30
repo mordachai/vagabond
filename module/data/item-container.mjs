@@ -1,4 +1,5 @@
 import VagabondItemBase from './base-item.mjs';
+import { EquipmentHelper } from '../helpers/equipment-helper.mjs';
 
 /**
  * Container item data model (bags, backpacks, pouches, etc.)
@@ -76,11 +77,13 @@ export default class VagabondContainerData extends VagabondItemBase {
     if (this.baseCost.copper > 0) costs.push(`${this.baseCost.copper}${game.i18n.localize('VAGABOND.Currency.Copper.abbr')}`);
     this.costDisplay = costs.length > 0 ? costs.join(' ') : '-';
 
-    // Calculate current slots used (0-slot items don't count toward capacity)
-    this.currentCapacity = this.items.reduce((total, item) => {
-      const itemSlots = item.system?.baseSlots || 0;
-      return total + (itemSlots > 0 ? itemSlots : 0);
-    }, 0);
+    // Current Slots used: non-zero item costs + the pooled zero-Slot cost
+    // (RAW: each complete group of 10 zero-Slot items = 1 Slot, remainder free).
+    const nonZero = this.items.reduce(
+      (total, item) => total + EquipmentHelper.itemSlotCost(item),
+      0
+    );
+    this.currentCapacity = nonZero + EquipmentHelper.pooledZeroSlotCost(this.items);
   }
 
   /**

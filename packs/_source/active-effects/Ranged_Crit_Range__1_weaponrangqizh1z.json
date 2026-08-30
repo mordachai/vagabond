@@ -8,7 +8,7 @@
       {
         "key": "system.rangedCritBonus",
         "type": "add",
-        "value": "1",
+        "value": "-1",
         "phase": "initial",
         "priority": null
       }

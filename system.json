@@ -1,7 +1,7 @@
 {
   "id": "vagabond",
   "title": "Vagabond",
-  "version": "5.36.0",
+  "version": "5.37.0",
   "description": "Indestructoboy's one and only Vagabond RPG system for FoundryVTT!",
   "authors": [
     {
@@ -301,6 +301,19 @@
       },
       "private": false,
       "flags": {}
+    },
+    {
+      "name": "macro-scripts",
+      "label": "GM Tools",
+      "system": "vagabond",
+      "path": "packs/macro-scripts",
+      "type": "Macro",
+      "ownership": {
+        "PLAYER": "NONE",
+        "ASSISTANT": "OWNER"
+      },
+      "private": false,
+      "flags": {}
     }
   ],
   "packFolders": [
@@ -354,12 +367,21 @@
             "active-effects"
           ],
           "folders": []
+        },
+        {
+          "name": "GM Tools",
+          "sorting": "m",
+          "color": "#000000",
+          "packs": [
+            "macro-scripts"
+          ],
+          "folders": []
         }
       ]
     }
   ],
   "manifest": "https://github.com/mordachai/vagabond/releases/latest/download/system.json",
-  "download": "https://github.com/mordachai/vagabond/releases/download/v5.36.0/system.zip",
+  "download": "https://github.com/mordachai/vagabond/releases/download/v5.37.0/system.zip",
   "background": "systems/vagabond/assets/splash.png",
   "grid": {
     "distance": 5,

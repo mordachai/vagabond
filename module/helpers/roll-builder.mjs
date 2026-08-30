@@ -222,24 +222,64 @@ export class VagabondRollBuilder {
    *
    * @param {Object} rollData - The roll data containing critNumber and per-type bonuses
    * @param {string|null} type - The type of roll ('spell', a weapon skill key, or a save key)
+   * @param {Item|null} [item=null] - The weapon being used, if any. Its properties
+   *   (e.g. Keen) apply a threshold adjustment to THIS weapon's attack only —
+   *   distinct from the character-wide bonuses above. See `VAGABOND.critThresholdWeaponProperties`.
    * @returns {number} The final critical hit threshold (e.g., 19 for crit on 19-20)
    */
-  static calculateCritThreshold(rollData, type = null) {
+  static calculateCritThreshold(rollData, type = null, item = null) {
     let critThreshold = rollData.critNumber || 20;
-    if (!type) return Math.clamp(critThreshold, 1, 20);
-
-    if (type === 'spell') {
-      critThreshold += (rollData.castCritBonus || 0);
-    } else {
-      // Per-type crit bonus — works for any weapon skill OR save key
-      critThreshold += (rollData[`${type}CritBonus`] || 0);
-      // Universal weapon-attack crit bonus applies to every weapon skill
-      if (this.isWeaponSkillKey(type)) {
-        critThreshold += (rollData.attackCritBonus || 0);
+    if (type) {
+      if (type === 'spell') {
+        critThreshold += (rollData.castCritBonus || 0);
+      } else {
+        // Per-type crit bonus — works for any weapon skill OR save key
+        critThreshold += (rollData[`${type}CritBonus`] || 0);
+        // Universal weapon-attack crit bonus applies to every weapon skill
+        if (this.isWeaponSkillKey(type)) {
+          critThreshold += (rollData.attackCritBonus || 0);
+        }
       }
+    }
+
+    // This weapon's attack only:
+    //  - reusable property effects (Keen, …) from weaponPropertyEffects
+    //  - the per-item bespoke `system.critThresholdMod` (AE-stackable ArrayField)
+    if (item?.system) {
+      const effects = CONFIG.VAGABOND?.weaponPropertyEffects ?? {};
+      for (const prop of (item.system.properties ?? [])) {
+        const delta = effects[prop]?.critThreshold;
+        if (typeof delta === 'number') critThreshold += delta;
+      }
+      critThreshold += this._sumFormulaValues(item.system.critThresholdMod, rollData);
     }
 
     // Ensure it doesn't go below 1 or above 20
     return Math.clamp(critThreshold, 1, 20);
+  }
+
+  /**
+   * Sum an ArrayField(StringField) of numbers / simple formulas to a single
+   * number. Plain numeric strings add directly; anything else is run through
+   * `Roll.replaceFormulaData` + `Roll.safeEval` against `rollData` (dice terms
+   * and unparseable entries contribute 0).
+   * @param {string[]|null} arr
+   * @param {Object} [rollData={}]
+   * @returns {number}
+   */
+  static _sumFormulaValues(arr, rollData = {}) {
+    if (!Array.isArray(arr) || !arr.length) return 0;
+    let sum = 0;
+    for (const raw of arr) {
+      if (raw == null || raw === '') continue;
+      const n = Number(raw);
+      if (!Number.isNaN(n)) { sum += n; continue; }
+      try {
+        const expr = Roll.replaceFormulaData(String(raw), rollData, { missing: 0 });
+        const val = Roll.safeEval(expr);
+        if (typeof val === 'number' && !Number.isNaN(val)) sum += val;
+      } catch (_) { /* ignore malformed entry */ }
+    }
+    return sum;
   }
 }

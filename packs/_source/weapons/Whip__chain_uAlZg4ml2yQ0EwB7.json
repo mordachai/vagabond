@@ -18,8 +18,8 @@
     "damageType": "-",
     "damageAmount": "",
     "properties": [
-      "Brutal",
-      "Entangle",
+      "Vicious",
+      "Grapple",
       "Long"
     ],
     "weaponSkill": "melee",

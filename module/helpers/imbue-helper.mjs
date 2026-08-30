@@ -1,4 +1,5 @@
 import { EquipmentHelper } from './equipment-helper.mjs';
+import { TargetHelper } from './target-helper.mjs';
 
 /**
  * Automation for the "Imbue" spell delivery: a spell is attached to a willing
@@ -189,7 +190,7 @@ export class VagabondImbueHelper {
       const damageIconClass = CONFIG.VAGABOND?.damageTypeIcons?.[payload.damageTypeKey] || 'fas fa-burst';
       const dieIconClass = this._dieIconClass(payload.dieSize);
       return `<div class="vagabond-imbue-section vagabond-imbue-delivery-controls"
-          data-actor-id="${weapon.parent?.id ?? ''}"
+          data-actor-id="${weapon.parent?.uuid ?? ''}"
           data-item-id="${weapon.id}"
           data-attack-critical="${!!attackResult.isCritical}"
           data-targets="${targetsJson}"
@@ -227,7 +228,7 @@ export class VagabondImbueHelper {
     return `<div class="vagabond-imbue-section">
         ${headerHtml}
         <button class="vagabond-imbue-deliver-button"
-            data-actor-id="${weapon.parent?.id ?? ''}"
+            data-actor-id="${weapon.parent?.uuid ?? ''}"
             data-item-id="${weapon.id}"
             data-attack-critical="${!!attackResult.isCritical}"
             data-targets="${targetsJson}">
@@ -276,7 +277,7 @@ export class VagabondImbueHelper {
    */
   static async deliverImbue(el, chosenState = null) {
     const isControls = el.classList.contains('vagabond-imbue-delivery-controls');
-    const wielder = game.actors.get(el.dataset.actorId);
+    const wielder = TargetHelper.resolveActorRef(el.dataset.actorId);
     const weapon = wielder?.items.get(el.dataset.itemId);
     const payload = weapon?.system?.imbuedSpell;
 

@@ -12,7 +12,7 @@ import { VagabondDiceAppearance } from './dice-appearance.mjs';
  *   1. baseFormula (blank → null return, e.g. a no-damage weapon like the Net)
  *   2. die-size bump (regex on the first NdX term)
  *   3. crit stat bonus (negatives included)
- *   4. always-on crit properties (CONFIG.VAGABOND.critAlwaysOnProperties, e.g. Brutal)
+ *   4. always-on crit properties (CONFIG.VAGABOND.critAlwaysOnProperties, e.g. Vicious)
  *   5. type-bucket universal flat + dice bonuses
  *   6. legacy universal flat + dice bonuses
  *   7. weakness pre-roll (+1 source die when EVERY target is weak to the type)
@@ -206,7 +206,7 @@ export class VagabondDamagePipeline {
 
   /**
    * Collect always-on crit bonuses from the CONFIG.VAGABOND.critAlwaysOnProperties
-   * registry (e.g. Brutal). Fire on every crit regardless of the Luck/benefit toggle.
+   * registry (e.g. Vicious). Fire on every crit regardless of the Luck/benefit toggle.
    * @param {Item|null} item
    * @param {Actor} actor
    * @param {string} currentFormula - Formula built so far (for die-size introspection)
@@ -214,12 +214,20 @@ export class VagabondDamagePipeline {
    */
   static collectCritAlwaysOnBonuses(item, actor, currentFormula) {
     const bonuses = [];
-    const registry = CONFIG.VAGABOND.critAlwaysOnProperties ?? {};
-    for (const [propKey, handler] of Object.entries(registry)) {
-      if (item?.system?.properties?.includes(propKey)) {
-        const bonus = handler.apply(item, actor, currentFormula);
-        if (bonus) bonuses.push(bonus);
+    const effects = CONFIG.VAGABOND.weaponPropertyEffects ?? {};
+    for (const [propKey, cfg] of Object.entries(effects)) {
+      if (!item?.system?.properties?.includes(propKey)) continue;
+      let bonus = null;
+      if (typeof cfg.critAlwaysOn === 'function') {
+        bonus = cfg.critAlwaysOn(item, actor, currentFormula);
+      } else if (cfg.critAlwaysOnDice) {
+        const dieMatch = String(currentFormula).match(/d(\d+)/);
+        const dice = cfg.critAlwaysOnDice === 'matchDie'
+          ? (dieMatch ? `1d${dieMatch[1]}` : null)
+          : cfg.critAlwaysOnDice;
+        if (dice) bonus = { formula: dice, label: `${propKey} (+${dice})` };
       }
+      if (bonus) bonuses.push(bonus);
     }
     return bonuses;
   }

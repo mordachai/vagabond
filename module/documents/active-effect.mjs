@@ -295,8 +295,8 @@ export class VagabondActiveEffect extends ActiveEffect {
       'system.spellDamageDieSizeBonus': 'Spell: Damage Die Size Bonus (Adds to d6)',
 
       // -- Weapon Property Bonuses --
-      'system.cleaveTargets': 'Cleave: Extra Targets (ADD bonus, base 2)',
-      'system.brutalDice': 'Brutal: Extra Crit Dice (ADD bonus, base 1)',
+      // Cleave's extra-target count is derived from the weapon's die size — no bonus field.
+      // Vicious is a flat +1 crit die (RAW) — no AE-scaling field.
 
       // -- NEW: Speed Bonus --
       'system.speed.bonus': 'Speed: Bonus (Flat Add)',

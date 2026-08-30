@@ -18,8 +18,7 @@
     "damageType": "-",
     "damageAmount": "",
     "properties": [
-      "Finesse",
-      "Shield"
+      "Defense"
     ],
     "weaponSkill": "melee",
     "range": "close",

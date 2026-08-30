@@ -463,7 +463,6 @@ system.willCritBonus             → Will save crit
 
 ```txt
 system.cleaveTargets             → Extra Cleave targets beyond the base 2
-system.brutalDice                → Extra Brutal crit dice beyond the base 1
 system.incomingDamageReductionPerDie → Reduce incoming damage by N per incoming die (Berserk)
 ```
 
@@ -572,7 +571,7 @@ This is why you add to `system.health.bonus`, never `system.health.max`.
 | `system.fatigueMax` | derived = config + bonus | `system.fatigueBonus` |
 | `system.maxLuck` | derived from luck stat | `system.bonusLuck` |
 | `system.armor` (character) | derived = equipped armor + bonus | `system.armorBonus` |
-| `system.cleaveMaxTargets` / `system.brutalMaxDice` | derived = base + bonus | `system.cleaveTargets` / `system.brutalDice` |
+| `system.cleaveMaxTargets` | derived = base + bonus | `system.cleaveTargets` |
 | `system.attributes.xpRequired` / `xpProgress` / `canLevelUp` | derived display values | — (not editable) |
 | `system.xp` (NPC) | derived = CR² × 100 | — |
 | `system.threatLevelFormatted` (NPC) | derived display string | `system.threatLevel` |

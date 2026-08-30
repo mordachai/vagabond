@@ -227,15 +227,10 @@ export default class VagabondNPC extends VagabondActorBase {
       { initial: [], label: "Bonus Per Damage Die (Alchemical)" }
     );
 
-    // Weapon property bonus fields (AE-extensible via ADD mode)
-    schema.cleaveTargets = new fields.ArrayField(
-      new fields.StringField({ blank: true }),
-      { initial: [], label: "Cleave Extra Targets", hint: "Adds extra targets to Cleave beyond the base 2. ADD mode." }
-    );
-    schema.brutalDice = new fields.ArrayField(
-      new fields.StringField({ blank: true }),
-      { initial: [], label: "Brutal Extra Crit Dice", hint: "Adds extra damage dice to Brutal crits beyond the base 1. ADD mode." }
-    );
+    // NOTE: Cleave's extra-target count is derived from the weapon's own die size,
+    // not a formula field — see VAGABOND.weaponDieSteps.
+    // Vicious (RAW) is a flat +1 crit die — no formula/AE-scaling field (was 'brutalDice').
+
     // Per-save crit threshold bonuses (dynamic from homebrew saves config).
     for (const save of (CONFIG.VAGABOND.homebrew?.saves ?? [])) {
       schema[`${save.key}CritBonus`] = new fields.ArrayField(
@@ -266,6 +261,48 @@ export default class VagabondNPC extends VagabondActorBase {
       new fields.StringField({ required: true }),
       { required: true, initial: [] }
     );
+
+    // Favor/Hinder system - toggle for roll modifiers (Vulnerable/Flanked/Confused etc.
+    // set this via AE override, same as character; without it those statuses were
+    // silently inert on NPCs — no hinder on the NPC's own attacks/saves)
+    schema.favorHinder = new fields.StringField({
+      initial: 'none',
+      choices: Object.keys(CONFIG.VAGABOND.favorHinderStates),
+      required: true,
+      nullable: false
+    });
+
+    // Incoming attacks modifier (e.g., Vulnerable: attackers targeting it have Favor)
+    schema.incomingAttacksModifier = new fields.StringField({
+      initial: 'none',
+      choices: ['none', 'favor', 'hinder'],
+      label: "Incoming Attacks Modifier"
+    });
+
+    // Outgoing saves modifier (e.g., Confused/Flanked: saves against its attacks have Favor)
+    schema.outgoingSavesModifier = new fields.StringField({
+      initial: 'none',
+      choices: ['none', 'favor', 'hinder'],
+      label: "Outgoing Saves Modifier"
+    });
+
+    // Incoming healing modifier (e.g., Sickened: -2 to healing received)
+    schema.incomingHealingModifier = new fields.NumberField({
+      ...requiredInteger,
+      initial: 0,
+      label: "Incoming Healing Modifier"
+    });
+
+    // Auto-fail stats (e.g., Incapacitated: auto-fail Might and Dexterity)
+    schema.autoFailStats = new fields.ArrayField(
+      new fields.StringField({ required: true }),
+      { required: true, initial: [], label: "Auto-Fail Stats" }
+    );
+
+    // Auto-fail all rolls (e.g., Dead: automatically fails all checks, saves, and attacks)
+    schema.autoFailAllRolls = new fields.BooleanField({
+      initial: false
+    });
 
     // Combat zone
     schema.zone = new fields.StringField({
@@ -434,9 +471,6 @@ export default class VagabondNPC extends VagabondActorBase {
     this.universalSpellDamageBonus = [];
     this.universalAlchemicalDamageBonus = [];
 
-    // Reset weapon property bonus fields
-    this.cleaveTargets = [];
-    this.brutalDice = [];
     for (const save of (CONFIG.VAGABOND.homebrew?.saves ?? [])) {
       this[`${save.key}CritBonus`] = [];
     }
@@ -456,6 +490,13 @@ export default class VagabondNPC extends VagabondActorBase {
     this.weaponBonusPerDamageDie = [];
     this.spellBonusPerDamageDie = [];
     this.alchemicalBonusPerDamageDie = [];
+
+    // Reset Status Condition Fields (override-mode AE targets — see actor-character.mjs)
+    this.incomingHealingModifier = 0;
+    this.incomingAttacksModifier = 'none';
+    this.outgoingSavesModifier = 'none';
+    this.autoFailStats = [];
+    this.autoFailAllRolls = false;
   }
 
   /**
@@ -534,9 +575,8 @@ export default class VagabondNPC extends VagabondActorBase {
     this.spellBonusPerDamageDie = this._evaluateFormulaField(this.spellBonusPerDamageDie, rollData);
     this.alchemicalBonusPerDamageDie = this._evaluateFormulaField(this.alchemicalBonusPerDamageDie, rollData);
 
-    // Weapon property derived totals
-    this.cleaveMaxTargets = 2 + this._evaluateFormulaField(this.cleaveTargets, rollData);
-    this.brutalMaxDice = 1 + this._evaluateFormulaField(this.brutalDice, rollData);
+    // Cleave's target cap is derived from the weapon's own die size, see
+    // VAGABOND.weaponDieSteps — no formula field needed. Vicious = flat +1 crit die.
     for (const save of (CONFIG.VAGABOND.homebrew?.saves ?? [])) {
       const k = `${save.key}CritBonus`;
       this[k] = this._evaluateFormulaField(this[k], rollData);

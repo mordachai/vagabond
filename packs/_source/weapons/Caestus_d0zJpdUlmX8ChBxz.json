@@ -17,9 +17,7 @@
     "metal": "none",
     "damageType": "-",
     "damageAmount": "",
-    "properties": [
-      "Brawl"
-    ],
+    "properties": [],
     "weaponSkill": "brawl",
     "range": "close",
     "grip": "1H",

@@ -6,7 +6,7 @@
   "system": {
     "changes": [
       {
-        "key": "system.spellCritBonus",
+        "key": "system.castCritBonus",
         "type": "add",
         "value": "(@lvl >= 2) ? -1 : 0",
         "phase": "initial",

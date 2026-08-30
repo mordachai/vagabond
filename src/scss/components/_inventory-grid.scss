@@ -403,6 +403,33 @@
   }
 }
 
+// Equipped-weapon Slot counter (RAW: up to 3 Slots of Equipped Weapons).
+// Rides in the same right-side row as the inventory Slots count.
+.inventory-slots-section {
+  .weapon-slot-field .weapon-slot-pips {
+    display: flex;
+    gap: 3px;
+    align-items: center;
+
+    .bound-pip {
+      font-size: 11px;
+      color: $c-dark-bluey;
+      -webkit-text-stroke: 1px $c-dark-bluey;
+      opacity: 0.5;
+
+      &.filled {
+        color: $c-yellow;
+        opacity: 1;
+        filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.4));
+      }
+
+      &.over.filled {
+        color: $c-red;
+      }
+    }
+  }
+}
+
 // Bounds counter in inventory header
 .inventory-header-container {
   .bounds-counter-section {

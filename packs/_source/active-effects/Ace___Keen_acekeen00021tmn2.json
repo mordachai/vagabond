@@ -8,14 +8,14 @@
       {
         "key": "system.meleeCritBonus",
         "type": "add",
-        "value": "2",
+        "value": "-2",
         "phase": "initial",
         "priority": null
       },
       {
         "key": "system.rangedCritBonus",
         "type": "add",
-        "value": "2",
+        "value": "-2",
         "phase": "initial",
         "priority": null
       }

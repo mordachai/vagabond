@@ -86,11 +86,16 @@ export class RollHandler {
       _rollDifficulty = _preCtx.difficulty;
       const _effectiveFavorHinder = _preCtx.favorHinder ?? favorHinder;
 
-      // For saves: apply per-status bonuses for every status currently active on the actor
+      // For saves: apply per-status bonuses for every status currently active on the actor,
+      // plus the flat Reflex penalty from worn Armor's Slots (see actor-character.mjs
+      // `reflexArmorPenalty`) — a numeric subtraction, not Hinder.
       let saveVsStatusBonus = 0;
       if (rollType === 'save' && rollKey) {
         for (const statusId of (this.actor.statuses ?? [])) {
           saveVsStatusBonus += VagabondRollBuilder.getSaveVsStatusBonus(this.actor, statusId, rollKey);
+        }
+        if (rollKey === 'reflex') {
+          saveVsStatusBonus -= (this.actor.system.reflexArmorPenalty || 0);
         }
       }
       const _extraFormula = saveVsStatusBonus !== 0 ? ` + ${saveVsStatusBonus}` : '';
@@ -267,14 +272,34 @@ export class RollHandler {
       }
 
       /* PATH B: WEAPONS */
-      // Enforce target limits based on Cleave property
+      // Cleave: reduce the damage die one size per extra Target beyond the first,
+      // capped by how many steps the weapon's base die has left (floor at d4 — see
+      // VAGABOND.weaponDieSteps). Also ignores this actor's Vulnerable status for
+      // the attack roll itself (still applies normally to Saves).
+      const hasCleave = item.system.properties?.includes('Cleave');
+      let cleaveDieOverride = null;
+      if (hasCleave) {
+        const dieSteps = CONFIG.VAGABOND.weaponDieSteps; // ascending, e.g. [4,6,8,10,12]
+        const baseDieMatch = item.system.currentDamage?.match(/d(\d+)/i);
+        const baseDieIdx = baseDieMatch ? dieSteps.indexOf(parseInt(baseDieMatch[1], 10)) : -1;
+        const maxSteps = baseDieIdx > 0 ? baseDieIdx : 0;
+        const maxTargets = 1 + maxSteps;
+        if (targetsAtRollTime.length > maxTargets) targetsAtRollTime.splice(maxTargets);
+        const extraTargets = Math.max(0, targetsAtRollTime.length - 1);
+        if (extraTargets > 0 && baseDieIdx >= 0) {
+          cleaveDieOverride = dieSteps[Math.max(0, baseDieIdx - extraTargets)];
+        }
+      } else if (targetsAtRollTime.length > 1) {
+        targetsAtRollTime.splice(1);
+      }
+
+      // Flanking/Flanked auto-detection — position-based (grid-adjacent opposing
+      // faction tokens), independent of hit/miss. Re-evaluated on every attack so
+      // it stays current as combatants move.
       {
-        const hasCleave = item.system.properties?.includes('Cleave');
-        if (hasCleave) {
-          const max = this.actor.system.cleaveMaxTargets ?? 2;
-          if (targetsAtRollTime.length > max) targetsAtRollTime.splice(max);
-        } else if (targetsAtRollTime.length > 1) {
-          targetsAtRollTime.splice(1);
+        const { FlankingHelper } = await import('../../helpers/flanking-helper.mjs');
+        for (const targetToken of TargetHelper.resolveTargets(targetsAtRollTime)) {
+          await FlankingHelper.evaluate(targetToken);
         }
       }
 
@@ -295,7 +320,15 @@ export class RollHandler {
       const { VagabondDamageHelper } = await import('../../helpers/damage-helper.mjs');
       const { VagabondRollBuilder } = await import('../../helpers/roll-builder.mjs');
 
-      const systemFavorHinder = this.actor.system.favorHinder || 'none';
+      // Cleave ignores this actor's Vulnerable/Flanked-driven Hinder for the attack
+      // roll (RAW: "Ignores Flanked for attacks"; user confirmed Vulnerable too —
+      // still applies normally to Saves). Manual Shift/Ctrl favor/hinder still applies
+      // — only the automatic status vote is skipped.
+      const ignoresVulnerableHinder = hasCleave
+        && (this.actor.statuses?.has('vulnerable') || this.actor.statuses?.has('flanked'));
+      const systemFavorHinder = ignoresVulnerableHinder
+        ? 'none'
+        : (this.actor.system.favorHinder || 'none');
       const favorHinder = VagabondRollBuilder.calculateEffectiveFavorHinder(
         systemFavorHinder,
         event.shiftKey,
@@ -338,7 +371,7 @@ export class RollHandler {
       let damageRoll = null;
       if (VagabondDamageHelper.shouldRollDamage(attackResult.isHit)) {
         const statKey = attackResult.weaponSkill?.stat || null;
-        damageRoll = await item.rollDamage(this.actor, attackResult.isCritical, statKey, targetsAtRollTime);
+        damageRoll = await item.rollDamage(this.actor, attackResult.isCritical, statKey, targetsAtRollTime, cleaveDieOverride);
       }
 
       await VagabondChatCard.weaponAttack(

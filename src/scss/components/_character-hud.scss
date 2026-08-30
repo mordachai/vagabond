@@ -19,14 +19,16 @@
   // Tune freely — each circle + the armor shield positions itself.
   --vh-wpn0-top: 0px;   --vh-wpn0-right: 30px;
   --vh-wpn1-top: 30px;   --vh-wpn1-right: 10px;
-  --vh-armor-top: 90px; --vh-armor-right: 46px;
+  --vh-wpn2-top: 62px;   --vh-wpn2-right: 24px;
+  --vh-armor-top: 118px; --vh-armor-right: 46px;
 
   // Per-weapon stacking order (higher = on top, image included).
-  --vh-wpn0-z: 2;  --vh-wpn1-z: 1;
+  --vh-wpn0-z: 3;  --vh-wpn1-z: 2;  --vh-wpn2-z: 1;
 
   // Per-weapon versatile grip-badge offset (relative to its own circle).
   --vh-badge0-top: 15px;  --vh-badge0-left: -14px;
   --vh-badge1-top: 15px;  --vh-badge1-left: 40px;
+  --vh-badge2-top: 15px;  --vh-badge2-left: -14px;
 
   // Frameless ApplicationV2 elements get no positioning shell — own it here.
   position: fixed;
@@ -357,7 +359,30 @@
       z-index: var(--vh-wpn1-z);
       .vh-grip-badge { top: var(--vh-badge1-top); left: var(--vh-badge1-left); }
     }
+    &[data-slot-index="2"] {
+      top: var(--vh-wpn2-top); right: var(--vh-wpn2-right);
+      z-index: var(--vh-wpn2-z);
+      .vh-grip-badge { top: var(--vh-badge2-top); left: var(--vh-badge2-left); }
+    }
     &.filled { cursor: pointer; }
+
+    // Slot-cost badge for a weapon occupying >1 equipped-weapon Slot.
+    .vh-slot-cost {
+      position: absolute;
+      bottom: -4px;
+      right: -4px;
+      min-width: 16px;
+      height: 16px;
+      padding: 0 3px;
+      border-radius: 8px;
+      background: $c-inset-1;
+      border: 1px solid $c-yellow;
+      color: $c-yellow;
+      font-size: calc(0.7rem * var(--vh-font-scale));
+      line-height: 14px;
+      text-align: center;
+      z-index: 4;
+    }
     // Hover always wins so an overlapped circle is reachable; doesn't disturb base order.
     &.filled:hover { border-color: $c-stat; box-shadow: 0 0 6px $c-yellow; z-index: 10; }
 

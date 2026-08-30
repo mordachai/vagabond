@@ -135,6 +135,15 @@ VAGABOND.clockPositions = {
 VAGABOND.clockSegments = [4, 6, 8, 10, 12];
 
 /**
+ * Inventory / equipment RAW limits.
+ * - maxEquippedWeaponSlots: total Slots of Equipped Weapons a character can wield (RAW: 3).
+ * - zeroSlotStackSize: how many 0-Slot items pool into a single occupied Slot (RAW: 10).
+ * @type {number}
+ */
+VAGABOND.maxEquippedWeaponSlots = 3;
+VAGABOND.zeroSlotStackSize = 10;
+
+/**
  * Lodging expenses for Rest downtime activity
  * Cost is in silver pieces per day
  * @type {Object}
@@ -389,7 +398,7 @@ VAGABOND.statusEffectDefinitions = [
     name: 'VAGABOND.StatusConditions.Vulnerable',
     img: '/icons/magic/movement/abstract-ribbons-red-orange.webp',
     statuses: ['vulnerable'],
-    description: 'Its attacks and saves have Hinder. Attacks targeting it have Favor. Saves against its attacks have Favor. [FULLY AUTOMATED]',
+    description: 'Its attacks and saves have Hinder. Attacks targeting it have Favor. Saves against its attacks have Favor.',
     changes: [
       {
         key: 'system.favorHinder',
@@ -407,6 +416,54 @@ VAGABOND.statusEffectDefinitions = [
         value: 'favor'
       }
     ]
+  },
+  {
+    // "The Foe is Vulnerable and takes an extra 2 damage from attacks" — deliberately
+    // its own independent AE with the same override set as 'vulnerable' above, rather
+    // than toggling the literal 'vulnerable' status: keeps Flanked's auto-clear from
+    // ever stomping a Vulnerable a GM applied manually for an unrelated reason. The
+    // flat damage bonus (VAGABOND.homebrew.derivations.flankedDamageBonus) is applied
+    // in VagabondDamageHelper._computeFinalDamage, not here (no matching AE key exists
+    // for a flat pre-armor damage add). Auto-applied/cleared by FlankingHelper.evaluate()
+    // (attack time) and .evaluateScene() (token move/create/delete) — also manually
+    // togglable from the token HUD like any other status.
+    id: 'flanked',
+    name: 'VAGABOND.StatusConditions.Flanked',
+    img: '/icons/skills/melee/strike-slashes-red.webp',
+    statuses: ['flanked'],
+    description: 'Vulnerable (its attacks and Saves against attacks have Hinder; attacks targeting it and Saves against its attacks have Favor), and takes an extra 2 damage from attacks (before Armor).',
+    changes: [
+      {
+        key: 'system.favorHinder',
+        type: "override",
+        value: 'hinder'
+      },
+      {
+        key: 'system.incomingAttacksModifier',
+        type: "override",
+        value: 'favor'
+      },
+      {
+        key: 'system.outgoingSavesModifier',
+        type: "override",
+        value: 'favor'
+      }
+    ]
+  },
+  {
+    // Informational only — marks a token as currently contributing to a Flank.
+    // No mechanical changes of its own (the bonus/Vulnerable lives on 'flanked',
+    // applied to the target). Auto-applied/cleared by FlankingHelper (per-attack
+    // evaluate() and the movement-driven evaluateScene() sweep) — see
+    // flanking-helper.mjs; also manually togglable from the token HUD.
+    id: 'flanking',
+    name: 'VAGABOND.StatusConditions.Flanking',
+    img: '/icons/skills/melee/strike-sword-slashing-red.webp',
+    statuses: ['flanking'],
+    // Generic fallback only — when auto-applied, FlankingHelper overwrites this
+    // with live text naming the Foe(s) being pinned and the co-flanker(s).
+    description: 'Flanking an adjacent Foe alongside an ally. +2 damage on attacks against it, and it is Vulnerable while two of you stay Close.',
+    changes: []
   },
   {
     id: 'blinded',
@@ -865,21 +922,27 @@ VAGABOND.weaponGripDescriptions = {
 };
 
 /**
- * Weapon properties and their descriptions
+ * Weapon properties and their descriptions.
+ *
+ * Brawl/Finesse/Ranged/Near migrated to Weapon Type (see `weaponSkills`) and were
+ * removed here. Shield was dropped entirely (no RAW replacement — its
+ * ranged-hinder-negation is gone; Defense below is a distinct mechanic, not a
+ * rename). Entangle was renamed to 'Grapple' (RAW: "Can Grapple with the Attack
+ * Check." — the chat-card Grapple button keys off this string; see
+ * `VagabondDamageHelper.handleGrapple`).
+ *
+ * 'Brutal' was replaced by 'Vicious' (RAW: "Crits with it deal 1 extra damage
+ * die." — flat, no scaling). See `critAlwaysOnProperties.Vicious` below.
  * @type {Object}
  */
 VAGABOND.weaponProperties = {
-  'Brawl': 'VAGABOND.Weapon.Property.Brawl',
-  'Brutal': 'VAGABOND.Weapon.Property.Brutal',
   'Cleave': 'VAGABOND.Weapon.Property.Cleave',
-  'Entangle': 'VAGABOND.Weapon.Property.Entangle',
-  'Finesse': 'VAGABOND.Weapon.Property.Finesse',
+  'Defense': 'VAGABOND.Weapon.Property.Defense',
+  'Grapple': 'VAGABOND.Weapon.Property.Grapple',
   'Keen': 'VAGABOND.Weapon.Property.Keen',
   'Long': 'VAGABOND.Weapon.Property.Long',
-  'Near': 'VAGABOND.Weapon.Property.Near',
-  'Ranged': 'VAGABOND.Weapon.Property.Ranged',
-  'Shield': 'VAGABOND.Weapon.Property.Shield',
-  'Thrown': 'VAGABOND.Weapon.Property.Thrown'
+  'Thrown': 'VAGABOND.Weapon.Property.Thrown',
+  'Vicious': 'VAGABOND.Weapon.Property.Vicious'
 };
 
 /**
@@ -887,18 +950,78 @@ VAGABOND.weaponProperties = {
  * @type {Object}
  */
 VAGABOND.weaponPropertyHints = {
-  'Brawl': 'VAGABOND.Weapon.PropertyHints.Brawl',
-  'Brutal': 'VAGABOND.Weapon.PropertyHints.Brutal',
   'Cleave': 'VAGABOND.Weapon.PropertyHints.Cleave',
-  'Entangle': 'VAGABOND.Weapon.PropertyHints.Entangle',
-  'Finesse': 'VAGABOND.Weapon.PropertyHints.Finesse',
+  'Defense': 'VAGABOND.Weapon.PropertyHints.Defense',
+  'Grapple': 'VAGABOND.Weapon.PropertyHints.Grapple',
   'Keen': 'VAGABOND.Weapon.PropertyHints.Keen',
   'Long': 'VAGABOND.Weapon.PropertyHints.Long',
-  'Near': 'VAGABOND.Weapon.PropertyHints.Near',
-  'Ranged': 'VAGABOND.Weapon.PropertyHints.Ranged',
-  'Shield': 'VAGABOND.Weapon.PropertyHints.Shield',
-  'Thrown': 'VAGABOND.Weapon.PropertyHints.Thrown'
+  'Thrown': 'VAGABOND.Weapon.PropertyHints.Thrown',
+  'Vicious': 'VAGABOND.Weapon.PropertyHints.Vicious'
 };
+
+/**
+ * Weapon-property MECHANICAL EFFECTS — the single place to define what a weapon
+ * property DOES. Labels/hints stay in `weaponProperties` / `weaponPropertyHints`;
+ * the plain string in `item.system.properties` is the tag that opts a weapon in.
+ *
+ * Entry fields (all optional):
+ *   critThreshold: number
+ *     Delta to THIS weapon's crit threshold (negative = crits more easily).
+ *     Summed in `VagabondRollBuilder.calculateCritThreshold` when the weapon is
+ *     supplied. e.g. Keen `-1` → crit on 19.
+ *   critAlwaysOnDice: string
+ *     Dice added to THIS weapon's damage on EVERY crit, regardless of the
+ *     Luck/benefit toggle. `'matchDie'` = one die matching the weapon's own
+ *     damage die (RAW Vicious); otherwise a literal formula (`'1d6'`, `'2'`).
+ *   critAlwaysOn(item, actor, currentFormula) → { formula, label } | null
+ *     Escape hatch for logic `critAlwaysOnDice` can't express. Wins over
+ *     `critAlwaysOnDice` when both are set.
+ *
+ * To give a property a new mechanical effect: add a field here. Nothing else.
+ * For a ONE-OFF weapon that needs a crit-range tweak but no reusable property,
+ * use the per-item `system.critThresholdMod` field instead.
+ * @type {Object<string, {critThreshold?: number, critAlwaysOnDice?: string, critAlwaysOn?: Function}>}
+ */
+VAGABOND.weaponPropertyEffects = {
+  Keen:    { critThreshold: -1 },
+  Vicious: { critAlwaysOnDice: 'matchDie' },
+};
+
+/**
+ * @deprecated Back-compat views derived from `weaponPropertyEffects`. Prefer
+ * that registry directly. Kept so external macros / homebrew referencing the
+ * old names keep working.
+ */
+VAGABOND.critThresholdWeaponProperties = Object.fromEntries(
+  Object.entries(VAGABOND.weaponPropertyEffects)
+    .filter(([, e]) => typeof e.critThreshold === 'number')
+    .map(([k, e]) => [k, e.critThreshold])
+);
+VAGABOND.critAlwaysOnProperties = Object.fromEntries(
+  Object.entries(VAGABOND.weaponPropertyEffects)
+    .filter(([, e]) => e.critAlwaysOnDice || typeof e.critAlwaysOn === 'function')
+    .map(([k, e]) => [k, {
+      label: k,
+      apply: typeof e.critAlwaysOn === 'function'
+        ? e.critAlwaysOn
+        : (item, actor, currentFormula) => {
+            const dieMatch = String(currentFormula).match(/d(\d+)/);
+            const dice = e.critAlwaysOnDice === 'matchDie'
+              ? (dieMatch ? `1d${dieMatch[1]}` : null)
+              : e.critAlwaysOnDice;
+            return dice ? { formula: dice, label: `${k} (+${dice})` } : null;
+          },
+    }])
+);
+
+/**
+ * Ascending weapon die sizes, used by the Cleave property to step a damage die
+ * down one size per extra Target hit (floor at the smallest entry — never
+ * removed/zeroed). Also usable anywhere else a "step this die down/up" table
+ * is needed.
+ * @type {number[]}
+ */
+VAGABOND.weaponDieSteps = [4, 6, 8, 10, 12];
 
 /**
  * Alchemical item types
@@ -943,9 +1066,9 @@ VAGABOND.armorTypes = {
  * @type {Object}
  */
 VAGABOND.armorTypeDescriptions = {
-  'light': 'Light: Rating 1, Might 3, 2 Slot',
+  'light': 'Light: Rating 1, Might 2, 1 Slot',
   'medium': 'Medium: Rating 2, Might 4, 2 Slots',
-  'heavy': 'Heavy: Rating 3, Might 5, 3 Slots'
+  'heavy': 'Heavy: Rating 3, Might 6, 3 Slots'
 };
 
 /**
@@ -1108,6 +1231,14 @@ VAGABOND.glyphGlowColors = {
  * @type {number}
  */
 VAGABOND.glyphCloseSeparationFeet = 5;
+
+/**
+ * Close range band in feet ("Close: Within 5'" — Distance table). Vagabond's Close
+ * means grid-adjacent, so FlankingHelper measures center-to-center distance against
+ * this rather than a separate hardcoded constant.
+ * @type {number}
+ */
+VAGABOND.closeRangeFeet = 5;
 
 /**
  * Hide the solid color fill (the core region highlight) on textured regions so
@@ -1286,7 +1417,7 @@ VAGABOND.attackTypes = {
 };
 
 /**
- * Defense rules registry — data-driven replacement for the hardcoded save-hinder matrix.
+ * Defense rules registry — data-driven replacement for a hardcoded save-hinder matrix.
  * Evaluated by VagabondDamageHelper._isSaveHindered for every defensive save roll.
  *
  * Entry shape:
@@ -1297,33 +1428,12 @@ VAGABOND.attackTypes = {
  *   condition    - optional (actor, attackType) => boolean; rule fires only when true
  *   negatedBy    - optional (actor, attackType) => boolean; rule is cancelled when true
  *
- * Function-valued entries live here (not in JSON homebrew) — same trade-off as
- * critAlwaysOnProperties. Homebrew save RENAMES keep working because rules key on
- * the stable save keys; a brand-new save key is unhindered until a rule is added.
+ * Empty per current RAW — Reflex/Endure no longer have a standing Hinder condition
+ * (heavy armor now applies a flat Reflex penalty instead, see `reflexArmorPenalty`
+ * in actor-character.mjs; Shield's ranged-hinder-negation is gone). Left in place
+ * as the registry future hinder rules go in — never as inline branches.
  */
-VAGABOND.defenseRules = [
-  {
-    // Block (Endure) is Hindered vs ranged and cast attacks; an equipped weapon
-    // with the Shield property negates the ranged hinder — never the cast hinder.
-    id: 'blockVsRangedAndCast',
-    save: 'endure',
-    vsAttackTypes: ['ranged', 'cast'],
-    effect: 'hinder',
-    negatedBy: (actor, attackType) => {
-      if (attackType !== 'ranged') return false;
-      // Late import avoided: helper is attached below in _hasEquippedShield-compatible form
-      return VAGABOND.defenseRuleHelpers.hasEquippedShield(actor);
-    },
-  },
-  {
-    // Dodge (Reflex) is Hindered while wearing heavy armor, regardless of attack type.
-    id: 'dodgeInHeavyArmor',
-    save: 'reflex',
-    vsAttackTypes: '*',
-    effect: 'hinder',
-    condition: (actor) => VAGABOND.defenseRuleHelpers.equippedArmor(actor)?.system.armorType === 'heavy',
-  },
-];
+VAGABOND.defenseRules = [];
 
 /**
  * Shared predicates for defense rules (kept here so registry entries stay self-contained
@@ -1337,16 +1447,20 @@ VAGABOND.defenseRuleHelpers = {
       return isArmor && i.system.equipped;
     }) ?? null;
   },
-  /** Whether any equipped weapon carries the Shield property. */
-  hasEquippedShield(actor) {
-    return !!actor.items?.some(i => {
+  /** First equipped weapon carrying the given property (e.g. 'Defense', 'Cleave'), or null. */
+  equippedWeaponWithProperty(actor, propertyName) {
+    return actor.items?.find(i => {
       const isWeapon = i.type === 'weapon' || (i.type === 'equipment' && i.system.equipmentType === 'weapon');
       if (!isWeapon) return false;
       const equipped = i.system.equipped === true
         || i.system.equipmentState === 'oneHand'
         || i.system.equipmentState === 'twoHands';
-      return equipped && i.system.properties?.includes('Shield');
-    });
+      return equipped && i.system.properties?.includes(propertyName);
+    }) ?? null;
+  },
+  /** Whether any equipped weapon carries the given property (e.g. 'Defense', 'Cleave'). */
+  hasEquippedWeaponWithProperty(actor, propertyName) {
+    return !!VAGABOND.defenseRuleHelpers.equippedWeaponWithProperty(actor, propertyName);
   },
 };
 
@@ -1452,13 +1566,12 @@ VAGABOND.fxSchools = {
  * To add a new always-on crit effect: add one entry here. Nothing else to change.
  */
 VAGABOND.critAlwaysOnProperties = {
-  'Brutal': {
-    label: 'Brutal',
+  'Vicious': {
+    label: 'Vicious',
     apply: (item, actor, currentFormula) => {
       const dieMatch = currentFormula.match(/d(\d+)/);
       if (!dieMatch) return null;
-      const count = actor.system.brutalMaxDice ?? 1;
-      return { formula: `${count}d${dieMatch[1]}`, label: `Brutal (+${count}d${dieMatch[1]})` };
+      return { formula: `1d${dieMatch[1]}`, label: `Vicious (+1d${dieMatch[1]})` };
     }
   },
 };

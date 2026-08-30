@@ -1,0 +1,27 @@
+{
+  "name": "Refresh World Data",
+  "type": "script",
+  "author": "13p65OEadZSZVLRk",
+  "img": "icons/svg/upgrade.svg",
+  "scope": "global",
+  "command": "/**\n * Vagabond — Refresh World Data\n * ---------------------------------------------------------------------------\n * Forces every Actor, Item and canvas Token to re-run data preparation and\n * re-render, WITHOUT a full page reload.\n *\n * Use it after you change system code that only affects:\n *   - data preparation / derived data (prepareBaseData, prepareDerivedData)\n *   - helper logic used during preparation\n *   - CONFIG.VAGABOND / homebrew config values already loaded in memory\n *\n * A full page reload (F5) is still required for:\n *   - DataModel SCHEMA changes (new/removed fields, changed field types)\n *   - migrateData changes\n *   - init / ready hook logic, template (.hbs) structure, new CONFIG wiring\n * because Foundry does not hot-reload .mjs modules.\n * ---------------------------------------------------------------------------\n */\n(async () => {\n  if (!game.user.isGM) return ui.notifications.warn(\"Refresh World Data: GM only.\");\n\n  const stats = { actors: 0, items: 0, synthetic: 0, apps: 0, errors: 0 };\n\n  const reprep = (doc, label) => {\n    try {\n      doc.reset?.();       // restore _source + re-init DataModel\n      doc.prepareData();   // belt-and-braces for classes without a useful reset()\n      return true;\n    } catch (err) {\n      stats.errors++;\n      console.error(`Refresh World Data | ${label} ${doc?.uuid ?? doc?.id ?? \"?\"} failed`, err);\n      return false;\n    }\n  };\n\n  // 1. World actors (embedded items are prepared inside prepareData)\n  for (const actor of game.actors) {\n    if (reprep(actor, \"Actor\")) stats.actors++;\n    for (const item of actor.items) reprep(item, \"Item(embedded)\");\n  }\n\n  // 2. World items\n  for (const item of game.items) if (reprep(item, \"Item\")) stats.items++;\n\n  // 3. Synthetic (unlinked) token actors on the active scene\n  for (const token of canvas?.tokens?.placeables ?? []) {\n    if (token.actor && !token.document.actorLink) {\n      if (reprep(token.actor, \"Actor(synthetic)\")) stats.synthetic++;\n      for (const item of token.actor.items) reprep(item, \"Item(synthetic)\");\n    }\n  }\n\n  // 4. Re-render every open application (V1 windows + V2 instances)\n  const seen = new Set();\n  const renderApp = (app) => {\n    if (!app || seen.has(app)) return;\n    seen.add(app);\n    try { app.render(false); stats.apps++; } catch (err) { stats.errors++; }\n  };\n  for (const app of Object.values(ui.windows ?? {})) renderApp(app);\n  for (const app of foundry.applications?.instances?.values?.() ?? []) renderApp(app);\n\n  // 5. Redraw token visuals (bars, effects, nameplate)\n  for (const token of canvas?.tokens?.placeables ?? []) {\n    try { token.renderFlags.set({ redraw: true }); } catch (_) {}\n  }\n\n  // 6. Sidebar directories\n  for (const key of [\"actors\", \"items\", \"combat\", \"effects\", \"compendium\"]) {\n    try { ui[key]?.render(false); } catch (_) {}\n  }\n\n  ui.notifications.info(\n    `Refresh World Data — ${stats.actors} actors, ${stats.items} items, ` +\n    `${stats.synthetic} token actors, ${stats.apps} apps re-rendered` +\n    (stats.errors ? ` (${stats.errors} errors, see console)` : \"\") + \".\"\n  );\n  console.log(\"Refresh World Data | done\", stats);\n})();\n",
+  "folder": null,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.365",
+    "systemId": "vagabond",
+    "systemVersion": "5.36.0",
+    "lastModifiedBy": "13p65OEadZSZVLRk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "createdTime": 1788000000000,
+    "modifiedTime": 1788000000000
+  },
+  "sort": 0,
+  "_id": "VgbdRefreshWrld0",
+  "_key": "!macros!VgbdRefreshWrld0"
+}

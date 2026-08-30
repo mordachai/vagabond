@@ -95,13 +95,17 @@
     },
     "DefendMechanics": {
       "DefendingTitle": "Opções de defesa",
-      "BlockTitle": "Bloquear (Resistir)",
-      "DodgeTitle": "Esquivar (Reflexo)",
+      "ReflexTitle": "Reflexo",
+      "ShieldTitle": "Escudo",
       "CritTitle": "Crítico",
-      "BlockDescription": "Role Resistir. Sucesso ignora um dado de dano mais alto. Desvantagem se ataque à Distância.",
-      "DodgeDescription": "Role Reflexo. Sucesso ignora um dado de dano mais alto. Desvantagem se Armadura Pesada.",
+      "ReflexDescription": "Salvaguarda para evitar uma Ação Inimiga. Se passar, não é afetado.",
+      "ShieldDescription": "Role o dado da sua arma em vez do d20. Some o resultado à sua Armadura contra o ataque.",
       "CritDescription": "Você não é afetado pelo que causou a Salvaguarda, e pode usar uma Ação.",
       "CritToggleHint": "Clique para alternar: Dano Extra ou Ganhar Ponto de Sorte"
+    },
+    "Chat": {
+      "ShieldDefense": "Escudo",
+      "ArmorPenalty": "Penalidade de Armadura"
     },
     "AttackTypes": {
       "Melee": "Corpo a Corpo",
@@ -213,6 +217,8 @@
       "Dazed": "Atordoado",
       "Dead": "Morto",
       "Fatigued": "Fatigado",
+      "Flanked": "Flanqueado",
+      "Flanking": "Flanqueando",
       "Focusing": "Concentrado",
       "Frightened": "Amedrontado",
       "Incapacitated": "Incapacitado",
@@ -235,6 +241,8 @@
       "Confused": "Testes/Salvaguardas com Desvantagem. Salvaguardas contra suas Ações com Vantagem [AUTOMATIZADO]",
       "Sickened": "-2 de penalidade à cura recebida [AUTOMATIZADO]",
       "Vulnerable": "Seus ataques e suas Salvaguardas contra ataques têm Desvantagem. Ataques direcionados a ele e Salvaguardas contra seus ataques têm Vantagem [AUTOMATIZADO]",
+      "Flanked": "Vulnerável (seus ataques e Salvaguardas contra ataques têm Desvantagem; ataques direcionados a ele e Salvaguardas contra seus ataques têm Vantagem) e sofre 2 de dano extra de ataques, antes da Armadura [AUTOMATIZADO]",
+      "Flanking": "Flanqueando um Inimigo adjacente junto de um aliado. +2 de dano em ataques contra ele, e ele fica Vulnerável enquanto dois de vocês permanecerem Próximos. [AUTOMATIZADO]",
       "Restrained": "Vulnerável + Velocidade = 0 [AUTOMATIZADO]",
       "Grappling": "Contendo um alvo. Velocidade reduzida à metade a menos que o alvo seja menor. [PARCIALMENTE AUTOMATIZADO]",
       "Blinded": "Não pode ver. Vulnerável [AUTOMATIZADO]",
@@ -791,6 +799,9 @@
         "PCMaxFatigueHint": "Fadiga máxima para personagens jogadores. Cada fadiga custa um espaço de inventário.",
         "NPCMaxFatigue": "Fadiga Máxima de NPC",
         "NPCMaxFatigueHint": "Fadiga máxima para NPCs.",
+        "CombatLegend": "Combate",
+        "FlankedDamageBonus": "Bônus de Dano por Flanqueio",
+        "FlankedDamageBonusHint": "Dano extra causado a um alvo Flanqueado, aplicado antes da Armadura.",
         "StatsDisplayLegend": "Exibição de Atributos",
         "Layout": "Layout",
         "Progression": "Progressão",
@@ -1189,7 +1200,11 @@
           "baseCost": {"label": "Custo Base"},
           "baseSlots": {"label": "Espaços Base"},
           "cost": {"label": "Custo"},
-          "slots": {"label": "Espaços"}
+          "slots": {"label": "Espaços"},
+          "critThresholdMod": {
+            "label": "Mod. de Alcance de Crítico",
+            "hint": "Ajusta o limiar de crítico DESTA arma. Negativo critica mais fácil (-1 = crítico em 19). Para um efeito reutilizável, adicione uma propriedade de arma."
+          }
         }
       },
       "Armor": {
@@ -1484,7 +1499,7 @@
         "WhenEquipped": "Quando Equipado",
         "WhenEquippedHint": "Este efeito só se aplica enquanto o item está equipado (armas, armaduras, acessórios). O efeito desliga quando desequipado.",
         "OnUse": "Apenas ao Usar",
-        "OnUseHint": "Este efeito só se aplica ao fazer rolagens COM este item específico. Use para propriedades de arma (Afiada, Brutal), modificadores de magia, ou bônus específicos de item."
+        "OnUseHint": "Este efeito só se aplica ao fazer rolagens COM este item específico. Use para propriedades de arma (Afiada, Cruel), modificadores de magia, ou bônus específicos de item."
       },
       "FormulaHelp": {
         "Summary": "Suporte a Fórmulas para Valores de Efeito",
@@ -1533,30 +1548,22 @@
     },
     "Property": {
       "ViewPropertiesLabel": "Ver Propriedades",
-      "Brawl": "Briga",
-      "Brutal": "Brutal",
       "Cleave": "Cutilar",
-      "Entangle": "Enredar",
-      "Finesse": "Finesse",
+      "Defense": "Defesa",
+      "Grapple": "Agarrar",
       "Keen": "Afiada",
       "Long": "Longa",
-      "Near": "Próximo",
-      "Ranged": "À Distância",
-      "Shield": "Escudo",
-      "Thrown": "Arremesso"
+      "Thrown": "Arremesso",
+      "Vicious": "Cruel"
     },
     "PropertyHints": {
-      "Brawl": "Arma desarmada usável com a perícia Briga.",
-      "Brutal": "Críticos causam 1 dado de dano extra.",
-      "Cleave": "Pode causar metade do dano a dois Alvos.",
-      "Entangle": "Ao acertar, o alvo fica Enredado até o fim do próximo turno dele.",
-      "Finesse": "Pode usar Destreza em vez de Força para rolagens de ataque.",
-      "Keen": "Acerto crítico em 19-20 em vez de apenas 20.",
+      "Cleave": "Ignora Vulnerável neste ataque. Reduza seu dado um tamanho para acertar outro Alvo ao alcance, por redução.",
+      "Defense": "Role o dado de dano desta arma em vez de um d20 para uma Salvaguarda de Reflexo, e some o resultado à sua Armadura contra o que causou a Salvaguarda.",
+      "Grapple": "Pode Agarrar com a Checagem de Ataque desta arma.",
+      "Keen": "Crítico 1 ponto mais baixo na Checagem de Ataque desta arma.",
       "Long": "Alcance estendido, pode atacar de 10 pés de distância.",
-      "Near": "Arma à distância com alcance Perto.",
-      "Ranged": "Arma à distância, usa a perícia À Distância.",
-      "Shield": "Ignora a Desvantagem de Bloquear Ataques à Distância. Pode Empurrar (jogo manual).",
-      "Thrown": "Pode ser arremessada como ataque à distância."
+      "Thrown": "Pode ser arremessada como ataque à distância.",
+      "Vicious": "Críticos com ela causam 1 dado de dano extra."
     }
     },
     "Armor": {
@@ -1954,6 +1961,7 @@
         "Damage": "Dano",
         "Delivery": "Entrega",
         "Overloaded": "Sobrecarregado!",
+        "EquippedWeapons": "Armas Equipadas",
         "EquipmentType": "Tipo de Equipamento",
         "Weapon": "Arma",
         "Armor": "Armadura",
@@ -2167,6 +2175,15 @@
         "TargetedBy": "Alvo de",
         "GM": "Mestre"
       }
+    },
+    "Flanking": {
+      "ListTwo": "{a} e {b}",
+      "ListMore": "{head} e {last}",
+      "With": " com {allies}",
+      "FlankingSingular": "Flanqueando {foes}{with}. +{bonus} de dano em ataques contra ele, e ele fica Vulnerável enquanto dois de vocês permanecerem Próximos.",
+      "FlankingPlural": "Flanqueando {foes}{with}. +{bonus} de dano em ataques contra eles, e eles ficam Vulneráveis enquanto dois de vocês permanecerem Próximos.",
+      "FlankedBy": "Flanqueado por {names}. Sofre {bonus} de dano extra de ataques (antes da Armadura) e fica Vulnerável — ataques contra ele e Salvaguardas contra seus ataques têm Vantagem; seus próprios ataques e Salvaguardas contra ataques têm Desvantagem.",
+      "FlankedNoNames": "Flanqueado. Sofre {bonus} de dano extra de ataques (antes da Armadura) e fica Vulnerável — ataques contra ele e Salvaguardas contra seus ataques têm Vantagem; seus próprios ataques e Salvaguardas contra ataques têm Desvantagem."
     },
     "StatusSettings": {
       "Title": "Efeitos de Status",

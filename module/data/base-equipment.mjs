@@ -344,6 +344,18 @@ export default class VagabondEquipment extends VagabondItemBase {
       { required: true, initial: [] }
     );
 
+    // Bespoke crit-threshold adjustment for THIS weapon's own attack roll.
+    // ArrayField(StringField) — an AE with ADD mode appends a value/formula and
+    // VagabondRollBuilder.calculateCritThreshold sums the array against roll
+    // data. Negative = crits more easily (e.g. "-1" → crit on 19). For a
+    // REUSABLE behaviour prefer a weapon property in
+    // CONFIG.VAGABOND.weaponPropertyEffects; this field is the one-off escape
+    // hatch (a single weird weapon, no shared property).
+    schema.critThresholdMod = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      { required: true, initial: [], label: 'VAGABOND.Item.Weapon.FIELDS.critThresholdMod.label' }
+    );
+
     // Status immunities granted by this armor (armor only — UI gated by equipmentType)
     schema.blockedStatuses = new fields.ArrayField(
       new fields.StringField({ required: true }),
@@ -451,6 +463,24 @@ export default class VagabondEquipment extends VagabondItemBase {
       if (source[key] == null) continue;
       if (!Array.isArray(source[key])) source[key] = Object.values(source[key]);
       source[key] = source[key].filter(e => e != null);
+    }
+    // Weapon-property taxonomy overhaul (new rules version):
+    //  - 'Brutal'  → 'Vicious'  (flat +1 crit die, RAW)
+    //  - 'Entangle' → 'Grapple' (chat-card Grapple button keys off this string)
+    //  - Brawl / Finesse / Brawn / Ranged / Near are Weapon TYPES now
+    //    (source.weaponSkill), never properties — drop them from the array.
+    // Runs on every DataModel construction, so world / compendium-instantiated
+    // / token-embedded items all self-heal on load.
+    if (Array.isArray(source.properties)) {
+      const DEAD = new Set(['brawl', 'finesse', 'brawn', 'ranged', 'near']);
+      const RENAME = { brutal: 'Vicious', entangle: 'Grapple' };
+      source.properties = source.properties
+        .map(p => {
+          const k = String(p).trim();
+          return RENAME[k.toLowerCase()] ?? k;
+        })
+        .filter(p => p && !DEAD.has(p.toLowerCase()))
+        .filter((p, i, arr) => arr.indexOf(p) === i);
     }
     // Nested: coating.causedStatuses
     const coating = source.coating;
@@ -581,9 +611,9 @@ export default class VagabondEquipment extends VagabondItemBase {
 
     // Determine might requirement based on armor type
     const mightMap = {
-      'light': 3,
+      'light': 2,
       'medium': 4,
-      'heavy': 5
+      'heavy': 6
     };
     this.might = mightMap[this.armorType] || 3;
 

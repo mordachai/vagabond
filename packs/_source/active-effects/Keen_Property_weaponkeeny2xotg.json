@@ -6,9 +6,9 @@
   "system": {
     "changes": [
       {
-        "key": "system.critNumber",
-        "type": "override",
-        "value": "19",
+        "key": "system.critThresholdMod",
+        "type": "add",
+        "value": "-1",
         "phase": "initial",
         "priority": null
       }
@@ -22,7 +22,7 @@
     "expiry": null,
     "expired": false
   },
-  "description": "<p>Keen property: critical hits on 19 or 20.</p>",
+  "description": "<p>Keen: this weapon crits on 19-20. Drop onto a weapon item. (Reusable behaviour normally lives in CONFIG.VAGABOND.weaponPropertyEffects; use this only for a one-off weapon.)</p>",
   "origin": null,
   "tint": "#ffffff",
   "transfer": false,

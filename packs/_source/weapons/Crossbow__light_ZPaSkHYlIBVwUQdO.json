@@ -17,9 +17,7 @@
     "metal": "none",
     "damageType": "-",
     "damageAmount": "",
-    "properties": [
-      "Ranged"
-    ],
+    "properties": [],
     "weaponSkill": "ranged",
     "range": "far",
     "grip": "1H",

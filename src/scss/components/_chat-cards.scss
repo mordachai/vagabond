@@ -1091,14 +1091,16 @@ li.chat-message:has(.vagabond-chat-card-v2) {
             }
         }
 
-        /* Save Buttons Row */
+        /* Save Buttons Row — 2x2 grid: Reflex+Shield on top, Endure+Will below.
+           Reflex spans the full row when no Shield button is present. */
         .save-buttons-row {
-            display: flex; gap: 6px; width: 100%;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 6px; width: 100%;
 
             .vagabond-save-button,
-            .vagabond-save-reminder-button {
-                flex: 1;
-                background: url('../assets/ui/chat/yellow-button.webp');
+            .vagabond-save-reminder-button,
+            .vagabond-shield-defense-button {
+                //background: url('../assets/ui/chat/yellow-button.webp');
+                background: $c-yellow;
                 border: none;
                 color: var(--c-dark-blue);
                 padding: 6px 2px;
@@ -1111,8 +1113,8 @@ li.chat-message:has(.vagabond-chat-card-v2) {
 
                 &:hover {
                     filter: brightness(1.1);
-                    background: url('../assets/ui/chat/yellow-button.webp');
-                    color: $c-dark;
+                    background: $c-dark-yellow;
+                    color: $c-white;
                 }
 
                 // Red tint: this save is required to resist an on-hit status effect
@@ -1130,6 +1132,16 @@ li.chat-message:has(.vagabond-chat-card-v2) {
                         color: #fff;
                     }
                 }
+            }
+
+            .save-reflex { order: 1; }
+            .vagabond-shield-defense-button { order: 2; }
+            .save-endure { order: 3; }
+            .save-will { order: 4; }
+
+            // No Shield button present → Reflex grows to fill the whole top row
+            &:not(:has(.vagabond-shield-defense-button)) .save-reflex {
+                grid-column: 1 / -1;
             }
         }
 

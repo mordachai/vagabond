@@ -218,8 +218,11 @@ export class GearStepManager extends BaseStepManager {
     const previewActor = await this._createPreviewActor(state);
     const maxSlots = previewActor?.system?.inventory?.maxSlots || 0;
 
+    const zeroStack = CONFIG.VAGABOND?.zeroSlotStackSize || 10;
     let slotsFromPack = 0;
     let slotsFromGear = 0;
+    // Zero-Slot items pool: each complete group of 10 = 1 Slot (floor, pooled).
+    let zeroQty = 0;
 
     // Calculate slots from starting pack
     if (state.selectedStartingPack) {
@@ -234,7 +237,8 @@ export class GearStepManager extends BaseStepManager {
               if (item) {
                 const qty = packItemData.quantity || 1;
                 const slots = item.system.baseSlots || 0;
-                slotsFromPack += slots * qty;
+                if (slots > 0) slotsFromPack += slots * qty;
+                else zeroQty += qty;
               }
             } catch (error) {
               console.warn(`Failed to load pack item ${packItemData.uuid}:`, error);
@@ -252,14 +256,15 @@ export class GearStepManager extends BaseStepManager {
         const item = await fromUuid(uuid);
         if (item) {
           const slots = item.system.baseSlots || 0;
-          slotsFromGear += slots;
+          if (slots > 0) slotsFromGear += slots;
+          else zeroQty += 1;
         }
       } catch (error) {
         console.warn(`Failed to load gear item ${uuid} for slots calculation:`, error);
       }
     }
 
-    const totalOccupied = slotsFromPack + slotsFromGear;
+    const totalOccupied = slotsFromPack + slotsFromGear + Math.floor(zeroQty / zeroStack);
     const freeSlots = maxSlots - totalOccupied;
 
     return {

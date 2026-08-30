@@ -18,8 +18,7 @@
     "damageType": "-",
     "damageAmount": "",
     "properties": [
-      "Brutal",
-      "Ranged"
+      "Vicious"
     ],
     "weaponSkill": "ranged",
     "range": "far",

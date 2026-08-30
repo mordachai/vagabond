@@ -34,16 +34,27 @@ export class CombatTrackerHelper {
   }
 
   /**
+   * Faction key for a token document, derived from its disposition. Shared by
+   * factionKeyForCombatant (Combat Tracker/Carousel) and FlankingHelper (works
+   * outside an active Combat too — Flanking is detected per-attack, not per-turn).
+   * @param {TokenDocument} tokenDocument
+   * @returns {'friendly'|'neutral'|'hostile'|'secret'}
+   */
+  static factionKeyForToken(tokenDocument) {
+    const disposition = tokenDocument?.disposition;
+    if (disposition === CONST.TOKEN_DISPOSITIONS.FRIENDLY) return 'friendly';
+    if (disposition === CONST.TOKEN_DISPOSITIONS.HOSTILE) return 'hostile';
+    if (disposition === CONST.TOKEN_DISPOSITIONS.SECRET) return 'secret';
+    return 'neutral';
+  }
+
+  /**
    * Faction key for a combatant, derived from its token disposition.
    * @param {Combatant} combatant
    * @returns {'friendly'|'neutral'|'hostile'|'secret'}
    */
   static factionKeyForCombatant(combatant) {
-    const disposition = combatant.token?.disposition;
-    if (disposition === CONST.TOKEN_DISPOSITIONS.FRIENDLY) return 'friendly';
-    if (disposition === CONST.TOKEN_DISPOSITIONS.HOSTILE) return 'hostile';
-    if (disposition === CONST.TOKEN_DISPOSITIONS.SECRET) return 'secret';
-    return 'neutral';
+    return this.factionKeyForToken(combatant.token);
   }
 
   /**

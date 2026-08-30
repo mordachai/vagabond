@@ -698,7 +698,7 @@ export class VagabondItem extends Item {
 
     // Check critical - ONLY the d20 result, not including favor/hinder
     // ✅ CRITICAL: Use type-specific crit threshold from rollData
-    const critNumber = VagabondRollBuilder.calculateCritThreshold(rollData, weaponSkillKey);
+    const critNumber = VagabondRollBuilder.calculateCritThreshold(rollData, weaponSkillKey, this);
     const d20Term = roll.terms.find(term => term.constructor.name === 'Die' && term.faces === 20);
     const d20Result = d20Term?.results?.[0]?.result || 0;
     const isCritical = forceCritical || (d20Result >= critNumber);
@@ -722,7 +722,7 @@ export class VagabondItem extends Item {
    * @param {string} statKey - The stat used for the attack (for crit bonus)
    * @returns {Promise<Roll>} The damage roll
    */
-  async rollDamage(actor, isCritical = false, statKey = null, targetsAtRollTime = []) {
+  async rollDamage(actor, isCritical = false, statKey = null, targetsAtRollTime = [], dieOverride = null) {
     // Check if this is a weapon (legacy weapon item OR equipment with equipmentType='weapon')
     const isWeapon = (this.type === 'weapon') ||
                     (this.type === 'equipment' && this.system.equipmentType === 'weapon');
@@ -731,7 +731,11 @@ export class VagabondItem extends Item {
       throw new Error('Not a weapon');
     }
 
-    const damageFormula = this.system.currentDamage;
+    // Cleave: die stepped down one size per extra Target beyond the first (see
+    // roll-handler.mjs rollWeapon, which computes dieOverride from weaponDieSteps).
+    const damageFormula = dieOverride
+      ? this.system.currentDamage.replace(/d\d+/i, `d${dieOverride}`)
+      : this.system.currentDamage;
 
     // No damage formula — weapon has no damage (e.g. Grapple, Net)
     if (!damageFormula?.trim()) return null;

@@ -1660,7 +1660,8 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   /* Apply Direct (Full Width) */
   /* Macro buttons — utility accent (not damage/save). On Success = purple,
      Always = teal so the two slots read as distinct at a glance. */
-  /* Save Buttons Row */
+  /* Save Buttons Row — 2x2 grid: Reflex+Shield on top, Endure+Will below.
+     Reflex spans the full row when no Shield button is present. */
   /* Apply Save Damage Button Container (in save result cards) */
   /* Defend Options Accordion */
 }
@@ -1768,14 +1769,15 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   color: #b8f0ff !important;
 }
 .vagabond-chat-card-v2 .card-actions .save-buttons-row {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 6px;
   width: 100%;
 }
 .vagabond-chat-card-v2 .card-actions .save-buttons-row .vagabond-save-button,
-.vagabond-chat-card-v2 .card-actions .save-buttons-row .vagabond-save-reminder-button {
-  flex: 1;
-  background: url("../assets/ui/chat/yellow-button.webp");
+.vagabond-chat-card-v2 .card-actions .save-buttons-row .vagabond-save-reminder-button,
+.vagabond-chat-card-v2 .card-actions .save-buttons-row .vagabond-shield-defense-button {
+  background: var(--vagabond-c-chat-yellow);
   border: none;
   color: var(--c-dark-blue);
   padding: 6px 2px;
@@ -1791,21 +1793,39 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.4);
 }
 .vagabond-chat-card-v2 .card-actions .save-buttons-row .vagabond-save-button:hover,
-.vagabond-chat-card-v2 .card-actions .save-buttons-row .vagabond-save-reminder-button:hover {
+.vagabond-chat-card-v2 .card-actions .save-buttons-row .vagabond-save-reminder-button:hover,
+.vagabond-chat-card-v2 .card-actions .save-buttons-row .vagabond-shield-defense-button:hover {
   filter: brightness(1.1);
-  background: url("../assets/ui/chat/yellow-button.webp");
-  color: var(--vagabond-c-dark);
+  background: var(--vagabond-dark-yellow);
+  color: var(--vagabond-c-white);
 }
 .vagabond-chat-card-v2 .card-actions .save-buttons-row .vagabond-save-button.save-has-status,
-.vagabond-chat-card-v2 .card-actions .save-buttons-row .vagabond-save-reminder-button.save-has-status {
+.vagabond-chat-card-v2 .card-actions .save-buttons-row .vagabond-save-reminder-button.save-has-status,
+.vagabond-chat-card-v2 .card-actions .save-buttons-row .vagabond-shield-defense-button.save-has-status {
   background: linear-gradient(rgba(180, 30, 20, 0.55), rgba(180, 30, 20, 0.55)), url("../assets/ui/chat/yellow-button.webp");
   color: #fff;
 }
 .vagabond-chat-card-v2 .card-actions .save-buttons-row .vagabond-save-button.save-has-status:hover,
-.vagabond-chat-card-v2 .card-actions .save-buttons-row .vagabond-save-reminder-button.save-has-status:hover {
+.vagabond-chat-card-v2 .card-actions .save-buttons-row .vagabond-save-reminder-button.save-has-status:hover,
+.vagabond-chat-card-v2 .card-actions .save-buttons-row .vagabond-shield-defense-button.save-has-status:hover {
   filter: brightness(1.15);
   background: linear-gradient(rgba(180, 30, 20, 0.65), rgba(180, 30, 20, 0.65)), url("../assets/ui/chat/yellow-button.webp");
   color: #fff;
+}
+.vagabond-chat-card-v2 .card-actions .save-buttons-row .save-reflex {
+  order: 1;
+}
+.vagabond-chat-card-v2 .card-actions .save-buttons-row .vagabond-shield-defense-button {
+  order: 2;
+}
+.vagabond-chat-card-v2 .card-actions .save-buttons-row .save-endure {
+  order: 3;
+}
+.vagabond-chat-card-v2 .card-actions .save-buttons-row .save-will {
+  order: 4;
+}
+.vagabond-chat-card-v2 .card-actions .save-buttons-row:not(:has(.vagabond-shield-defense-button)) .save-reflex {
+  grid-column: 1/-1;
 }
 .vagabond-chat-card-v2 .card-actions .vagabond-save-buttons-container {
   margin-bottom: 10px;
@@ -3618,14 +3638,19 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   --vh-wpn0-right: 30px;
   --vh-wpn1-top: 30px;
   --vh-wpn1-right: 10px;
-  --vh-armor-top: 90px;
+  --vh-wpn2-top: 62px;
+  --vh-wpn2-right: 24px;
+  --vh-armor-top: 118px;
   --vh-armor-right: 46px;
-  --vh-wpn0-z: 2;
-  --vh-wpn1-z: 1;
+  --vh-wpn0-z: 3;
+  --vh-wpn1-z: 2;
+  --vh-wpn2-z: 1;
   --vh-badge0-top: 15px;
   --vh-badge0-left: -14px;
   --vh-badge1-top: 15px;
   --vh-badge1-left: 40px;
+  --vh-badge2-top: 15px;
+  --vh-badge2-left: -14px;
   position: fixed;
   z-index: 70;
   width: auto;
@@ -3951,8 +3976,33 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   top: var(--vh-badge1-top);
   left: var(--vh-badge1-left);
 }
+.vbd-hud .vh-pc-weapon[data-slot-index="2"] {
+  top: var(--vh-wpn2-top);
+  right: var(--vh-wpn2-right);
+  z-index: var(--vh-wpn2-z);
+}
+.vbd-hud .vh-pc-weapon[data-slot-index="2"] .vh-grip-badge {
+  top: var(--vh-badge2-top);
+  left: var(--vh-badge2-left);
+}
 .vbd-hud .vh-pc-weapon.filled {
   cursor: pointer;
+}
+.vbd-hud .vh-pc-weapon .vh-slot-cost {
+  position: absolute;
+  bottom: -4px;
+  right: -4px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 3px;
+  border-radius: 8px;
+  background: var(--vagabond-c-inset-1);
+  border: 1px solid var(--vagabond-c-chat-yellow);
+  color: var(--vagabond-c-chat-yellow);
+  font-size: calc(0.7rem * var(--vh-font-scale));
+  line-height: 14px;
+  text-align: center;
+  z-index: 4;
 }
 .vbd-hud .vh-pc-weapon.filled:hover {
   border-color: var(--vagabond-c-stat);
@@ -15015,6 +15065,25 @@ ol#combat-tracker.directory-list {
 .vagabond .inventory-overload-warning i {
   font-size: 16px;
 }
+.vagabond .inventory-slots-section .weapon-slot-field .weapon-slot-pips {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+}
+.vagabond .inventory-slots-section .weapon-slot-field .weapon-slot-pips .bound-pip {
+  font-size: 11px;
+  color: var(--vagabond-c-dark-bluey);
+  -webkit-text-stroke: 1px var(--vagabond-c-dark-bluey);
+  opacity: 0.5;
+}
+.vagabond .inventory-slots-section .weapon-slot-field .weapon-slot-pips .bound-pip.filled {
+  color: var(--vagabond-c-chat-yellow);
+  opacity: 1;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.4));
+}
+.vagabond .inventory-slots-section .weapon-slot-field .weapon-slot-pips .bound-pip.over.filled {
+  color: var(--vagabond-c-red);
+}
 .vagabond .inventory-header-container .bounds-counter-section {
   position: absolute;
   left: 15px;
@@ -21004,5 +21073,3 @@ details[open] .vagabond .npc-immunity-toggle i {
 .vagabond.ongoing-panel .osp-resource-fatigue i {
   color: var(--vagabond-c-muted);
 }
-
-/*# sourceMappingURL=vagabond.css.map */

@@ -95,6 +95,10 @@ export class InventoryHandler {
       }
     });
 
+    // Pooled zero-Slot bundle (RAW: 10 zero-Slot items = 1 Slot) also consumes
+    // capacity numbers, even though individual 0-slot cards stay unnumbered.
+    capacityNumber += EquipmentHelper.pooledZeroSlotCost(allInventoryItems);
+
     // Calculate how many empty slots we need to show full base capacity (including fatigue slots)
     // capacityNumber is now at the next available capacity number
     // We need empty slots until capacityNumber reaches baseMaxSlots + 1
@@ -132,6 +136,18 @@ export class InventoryHandler {
     // Build bounds pips array for template rendering
     context.boundsPips = Array.from({ length: context.maxBounds }, (_, i) => ({
       filled: i < context.currentBounds,
+    }));
+
+    // Equipped-weapon Slot counter (RAW: up to maxEquippedWeaponSlots Slots).
+    const eqW = this.actor.system.inventory?.equippedWeaponSlots ?? 0;
+    const maxEqW = this.actor.system.inventory?.maxEquippedWeaponSlots
+      ?? (CONFIG.VAGABOND?.maxEquippedWeaponSlots || 3);
+    context.equippedWeaponSlots = eqW;
+    context.maxEquippedWeaponSlots = maxEqW;
+    context.weaponSlotOverloaded = eqW > maxEqW;
+    context.weaponSlotPips = Array.from({ length: Math.max(maxEqW, eqW) }, (_, i) => ({
+      filled: i < eqW,
+      over: i >= maxEqW,
     }));
   }
 

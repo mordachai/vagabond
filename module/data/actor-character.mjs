@@ -1,4 +1,5 @@
 import VagabondActorBase from './base-actor.mjs';
+import { EquipmentHelper } from '../helpers/equipment-helper.mjs';
 
 export default class VagabondCharacter extends VagabondActorBase {
   static LOCALIZATION_PREFIXES = [
@@ -299,15 +300,9 @@ export default class VagabondCharacter extends VagabondActorBase {
       }
     );
 
-    // Weapon property bonus fields (AE-extensible via ADD mode)
-    schema.cleaveTargets = new fields.ArrayField(
-      new fields.StringField({ blank: true }),
-      { initial: [], label: "Cleave Extra Targets", hint: "Adds extra targets to Cleave beyond the base 2. ADD mode." }
-    );
-    schema.brutalDice = new fields.ArrayField(
-      new fields.StringField({ blank: true }),
-      { initial: [], label: "Brutal Extra Crit Dice", hint: "Adds extra damage dice to Brutal crits beyond the base 1. ADD mode." }
-    );
+    // NOTE: Cleave's extra-target count is no longer a formula/perk-extensible field —
+    // it's derived purely from the weapon's own die size (see VAGABOND.weaponDieSteps).
+    // Vicious (RAW) is a flat +1 crit die — no formula/AE-scaling field (was 'brutalDice').
 
     // Spell Damage Die Size - derived value
     schema.spellDamageDieSize = new fields.NumberField({
@@ -649,10 +644,6 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.incomingDamageReductionPerDie = [];
     this.bonuses.globalExplode = [];
 
-    // Reset weapon property bonus fields
-    this.cleaveTargets = [];
-    this.brutalDice = [];
-
     // --- 3. Loop: Reset All Stat & Save Bonuses ---
     for (let s of Object.values(this.stats)) { s.bonus = []; }
     for (let s of Object.values(this.saves)) { s.bonus = []; }
@@ -764,10 +755,6 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.weaponBonusPerDamageDie = this._evaluateFormulaField(this.weaponBonusPerDamageDie, rollData);
     this.spellBonusPerDamageDie = this._evaluateFormulaField(this.spellBonusPerDamageDie, rollData);
     this.alchemicalBonusPerDamageDie = this._evaluateFormulaField(this.alchemicalBonusPerDamageDie, rollData);
-
-    // Weapon property derived totals
-    this.cleaveMaxTargets = 2 + this._evaluateFormulaField(this.cleaveTargets, rollData);
-    this.brutalMaxDice = 1 + this._evaluateFormulaField(this.brutalDice, rollData);
 
     // Evaluate dice bonuses (join arrays into formula strings)
     this.universalDamageDice = this.universalDamageDice.filter(d => !!d).join(' + ');
@@ -1138,18 +1125,23 @@ export default class VagabondCharacter extends VagabondActorBase {
 
     // Armor Calculation
     let totalArmor = 0;
+    let totalArmorSlots = 0;
     if (this.parent?.items) {
       for (const item of this.parent.items) {
         const isArmor = (item.type === 'armor') ||
                        (item.type === 'equipment' && item.system.equipmentType === 'armor');
         if (isArmor && item.system.equipped) {
           totalArmor += item.system.finalRating || 0;
+          totalArmorSlots += item.system.slots || 0;
         }
       }
     }
     // Evaluate armor bonus inline (StringFields coerce numbers back to strings)
     const armorBonus = this._evaluateFormulaField(this.armorBonus, rollData);
     this.armor = totalArmor + armorBonus;
+    // "Wearing Armor causes a penalty to Reflex Saves equal to the Slots occupied."
+    // Slots already reflect metal modifiers (Adamant +1, Mythral -1) — see base-equipment.mjs.
+    this.reflexArmorPenalty = totalArmorSlots;
   }
 
   _calculateInventorySlots(rollData) {
@@ -1168,38 +1160,32 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.inventory.fatigueSlots = currentFatigue; // Store fatigue count
     this.inventory.maxSlots = Math.max(0, baseMaxSlots - currentFatigue); // Effective max
 
-    let occupiedSlots = 0;
-    let occupiedSlotsWithZero = 0;
+    const inventoryItems = this.parent?.items
+      ? this.parent.items.filter((item) =>
+          item.type === 'equipment' ||
+          item.type === 'weapon' ||
+          item.type === 'armor' ||
+          item.type === 'gear' ||
+          item.type === 'container')
+      : [];
 
-    if (this.parent?.items) {
-      for (const item of this.parent.items) {
-        const isInventoryItem = (item.type === 'equipment') ||
-                               (item.type === 'weapon') ||
-                               (item.type === 'armor') ||
-                               (item.type === 'gear') ||
-                               (item.type === 'container');
+    // Top-level only — items nested in a container count against the container.
+    const topLevel = inventoryItems.filter((i) => !i.system.containerId);
 
-        if (isInventoryItem) {
-          // Skip items inside containers
-          if (item.system.containerId) continue;
+    // occupiedSlotsFor() sums non-zero item costs + the pooled zero-Slot cost
+    // (RAW: each complete group of 10 zero-Slot items = 1 Slot, remainder free).
+    const occupiedSlots = EquipmentHelper.occupiedSlotsFor(topLevel);
 
-          // Get slots from appropriate field (containers use 'slots', equipment uses 'baseSlots' or 'slots')
-          const itemSlots = item.system.slots || item.system.baseSlots || 0;
-
-          // Add to occupied (excludes slot-0 items)
-          if (itemSlots > 0) {
-            occupiedSlots += itemSlots;
-          }
-
-          // Track all items for grid display (each item instance counts as 1)
-          occupiedSlotsWithZero += 1;
-        }
-      }
-    }
-
-    this.inventory.occupiedSlots = occupiedSlots; // Only counts non-zero slot items
-    this.inventory.totalItems = occupiedSlotsWithZero; // All items for grid sizing
+    this.inventory.occupiedSlots = occupiedSlots;
+    this.inventory.zeroSlotBundleCost = EquipmentHelper.pooledZeroSlotCost(topLevel); // computed, not rendered
+    this.inventory.totalItems = topLevel.length; // All items for grid sizing
     this.inventory.availableSlots = this.inventory.maxSlots - occupiedSlots; // Available = Effective max - occupied
+
+    // RAW: you can wield up to maxEquippedWeaponSlots Slots of Equipped Weapons.
+    this.inventory.equippedWeaponSlots = this.parent
+      ? EquipmentHelper.equippedWeaponSlots(this.parent)
+      : 0;
+    this.inventory.maxEquippedWeaponSlots = CONFIG.VAGABOND?.maxEquippedWeaponSlots || 3;
   }
 
   _calculateBounds(rollData) {

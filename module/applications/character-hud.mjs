@@ -62,7 +62,8 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
   static AUTO_OPEN_MIN_OWNERSHIP = CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER;
 
   static ITEM_SLOTS = 5;
-  static WEAPON_SLOTS = 2;
+  // Weapon circles are derived from the RAW equipped-weapon Slot budget
+  // (CONFIG.VAGABOND.maxEquippedWeaponSlots), not a fixed count — see _categorizeItems.
 
   /** Re-apply per-user display prefs to every open PC HUD (no reopen). */
   static refreshDisplayPrefs() {
@@ -480,23 +481,45 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
         return this._slotEntry(item, item?.type === 'spell' ? 'spell' : 'item');
       });
 
-    // Hand circles are NOT a persisted slot pick — they're a live mirror of
+    // Weapon circles are NOT a persisted slot pick — they're a live mirror of
     // whatever equipment currently occupies hands (`system.equipmentState`
-    // oneHand/twoHands: weapons AND hand-occupying non-weapons like torches or
-    // wands), the exact same field the character sheet's "Equipped" panel
-    // reads. Equipping/unequipping from either the sheet or the HUD is
-    // instantly reflected in both, and the 2-circle cap is naturally enforced
-    // by the unified hand-limit rule (max 2 hands total).
+    // oneHand/twoHands), the exact same field the character sheet's "Equipped"
+    // panel reads. Equipping/unequipping from either the sheet or the HUD is
+    // instantly reflected in both.
+    //
+    // RAW: you can wield up to `cap` Slots of Equipped Weapons. Each held weapon
+    // renders as ONE circle but consumes its Slot cost (min 1) from that budget;
+    // whatever budget is left over shows as empty circles. Non-weapon hand items
+    // (torch/wand) append after, OUTSIDE the weapon budget.
     const { EquipmentHelper } = globalThis.vagabond.utils;
-    const handItemIds = actor.items
+    const cap = CONFIG.VAGABOND?.maxEquippedWeaponSlots || 3;
+
+    const heldItems = actor.items
       .filter((i) => i.type === 'equipment' && ['oneHand', 'twoHands'].includes(i.system.equipmentState))
-      .sort((a, b) => (a.getFlag('vagabond', 'equippedAt') || 0) - (b.getFlag('vagabond', 'equippedAt') || 0))
-      .map((i) => i.id);
-    context.weaponSlots = this._padIds(handItemIds, VagabondCharacterHud.WEAPON_SLOTS)
-      .map((id) => {
-        const item = id ? actor.items.get(id) : null;
-        return this._slotEntry(item, item && !EquipmentHelper.isWeapon(item) ? 'item' : 'weapon');
-      });
+      .sort((a, b) => (a.getFlag('vagabond', 'equippedAt') || 0) - (b.getFlag('vagabond', 'equippedAt') || 0));
+    const heldWeapons = heldItems.filter((i) => EquipmentHelper.isWeapon(i));
+    const heldNonWeapons = heldItems.filter((i) => !EquipmentHelper.isWeapon(i));
+
+    const weaponCost = (w) => Math.max(1, EquipmentHelper.itemSlotCost(w));
+
+    // One circle per held item (weapon or non-weapon). A weapon still CONSUMES
+    // its Slot cost from the `cap` budget — so a 2-Slot weapon leaves 1 empty
+    // circle, a 3-Slot weapon leaves none. Non-weapon hand items cost 1 each.
+    const weaponCells = heldWeapons.map((w) => {
+      const entry = this._slotEntry(w, 'weapon');
+      entry.slotCost = weaponCost(w);
+      entry.multiSlot = entry.slotCost > 1;
+      return entry;
+    });
+    for (const it of heldNonWeapons) weaponCells.push(this._slotEntry(it, 'item'));
+
+    const usedBudget =
+      heldWeapons.reduce((n, w) => n + weaponCost(w), 0) + heldNonWeapons.length;
+    const emptyCircles = Math.max(0, cap - usedBudget);
+    for (let i = 0; i < emptyCircles; i++) weaponCells.push({ filled: false, type: 'weapon' });
+
+    // Hard-cap at the budget so circle indices stay 0..cap-1 (CSS positions them).
+    context.weaponSlots = weaponCells.slice(0, cap);
   }
 
   /**

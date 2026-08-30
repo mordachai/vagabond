@@ -184,6 +184,53 @@ export class EquipmentHelper {
       }
     }
 
+    // RAW: total Slots of Equipped Weapons ≤ maxEquippedWeaponSlots. Only fires
+    // when equipping a weapon into a held state. Bump OTHER equipped weapons
+    // oldest-first (same `equippedAt` ordering as the hand pool) until the
+    // newcomer fits. A weapon whose own cost already exceeds the cap is still
+    // allowed (nothing left to bump) with a warning.
+    if (need > 0 && this.isWeapon(item)) {
+      const cap = CONFIG.VAGABOND?.maxEquippedWeaponSlots || 3;
+      const bumped = new Set(
+        updates.filter((u) => u['system.equipmentState'] === 'unequipped').map((u) => u._id)
+      );
+      const targetCost = Math.max(1, this.itemSlotCost(item));
+      const otherWeapons = actor.items.filter(
+        (i) =>
+          this.isWeapon(i) &&
+          i.id !== itemId &&
+          i.system.equipmentState !== 'unequipped' &&
+          !bumped.has(i.id)
+      );
+      let wOver =
+        otherWeapons.reduce((n, w) => n + Math.max(1, this.itemSlotCost(w)), 0) + targetCost - cap;
+
+      if (wOver > 0) {
+        const oldestFirst = [...otherWeapons].sort(
+          (a, b) => (a.getFlag('vagabond', 'equippedAt') || 0) - (b.getFlag('vagabond', 'equippedAt') || 0)
+        );
+        const wConflicts = [];
+        for (const w of oldestFirst) {
+          if (wOver <= 0) break;
+          wConflicts.push(w);
+          wOver -= Math.max(1, this.itemSlotCost(w));
+        }
+        for (const c of wConflicts) {
+          updates.push({ _id: c.id, 'system.equipmentState': 'unequipped' });
+        }
+        if (wConflicts.length) {
+          ui.notifications.info(
+            `Unequipped ${wConflicts.map((c) => c.name).join(', ')} to make room (weapon Slot limit).`
+          );
+        }
+        if (wOver > 0) {
+          ui.notifications.warn(
+            `${item.name} occupies ${targetCost} weapon Slots — exceeds the ${cap}-Slot limit.`
+          );
+        }
+      }
+    }
+
     updates.push({
       _id: itemId,
       'system.equipmentState': newState,
@@ -263,17 +310,104 @@ export class EquipmentHelper {
     }
 
     const bumpIds = new Set(bump.map((w) => w.id));
+
+    // 3) RAW weapon-Slot cap: Σ Slots of equipped weapons ≤ cap. Independent of
+    // the hand pass — bump oldest equipped weapons first until it fits (keeps
+    // the newest that fit, matching the hand-pool philosophy).
+    const wCap = CONFIG.VAGABOND?.maxEquippedWeaponSlots || 3;
+    const wCost = (it) => Math.max(1, this.itemSlotCost(it));
+    const equippedWeapons = equipped.filter(
+      (i) =>
+        this.isWeapon(i) &&
+        (HANDS[effectiveState.get(i.id)] ?? 0) > 0 &&
+        !bumpIds.has(i.id)
+    );
+    let wTotal = equippedWeapons.reduce((n, w) => n + wCost(w), 0);
+    const wBump = [];
+    if (wTotal > wCap) {
+      const oldestFirst = [...equippedWeapons].sort(
+        (a, b) => (a.getFlag('vagabond', 'equippedAt') || 0) - (b.getFlag('vagabond', 'equippedAt') || 0)
+      );
+      for (const w of oldestFirst) {
+        if (wTotal <= wCap) break;
+        wBump.push(w);
+        wTotal -= wCost(w);
+      }
+    }
+    for (const w of wBump) bumpIds.add(w.id);
+
+    const allBumped = [...bump, ...wBump];
     const updates = [
       ...fixUpdates.filter((u) => !bumpIds.has(u._id)),
-      ...bump.map((w) => ({ _id: w.id, 'system.equipmentState': 'unequipped' })),
+      ...allBumped.map((w) => ({ _id: w.id, 'system.equipmentState': 'unequipped' })),
     ];
 
     if (!updates.length) return;
 
     await actor.updateEmbeddedDocuments('Item', updates);
-    if (bump.length) {
-      ui.notifications.info(`Hand-limit cleanup: unequipped ${bump.map((w) => w.name).join(', ')}.`);
+    if (allBumped.length) {
+      ui.notifications.info(
+        `Equipment cleanup: unequipped ${allBumped.map((w) => w.name).join(', ')}.`
+      );
     }
+  }
+
+  // ===========================
+  // Inventory Slot Methods
+  // ===========================
+
+  /**
+   * Non-zero Slot cost of a single item. Zero-Slot items return 0 — they pool
+   * separately via {@link pooledZeroSlotCost}.
+   * @param {Object} item
+   * @returns {number}
+   */
+  static itemSlotCost(item) {
+    return Math.max(0, item?.system?.slots ?? item?.system?.baseSlots ?? 0);
+  }
+
+  /**
+   * Pooled Slot cost of every zero-Slot item in a list. RAW: each complete group
+   * of `zeroSlotStackSize` (10) zero-Slot items occupies 1 Slot — any remainder
+   * under 10 is free. floor(Σ quantity / stack) across ALL zero-Slot items
+   * combined (0-9 → 0, 10-19 → 1, 20-29 → 2, …).
+   * @param {Iterable<Object>} items
+   * @returns {number}
+   */
+  static pooledZeroSlotCost(items) {
+    const stack = CONFIG.VAGABOND?.zeroSlotStackSize || 10;
+    let qty = 0;
+    for (const it of items) {
+      if (this.itemSlotCost(it) > 0) continue;
+      qty += Math.max(0, it?.system?.quantity ?? 1);
+    }
+    return Math.floor(qty / stack);
+  }
+
+  /**
+   * Total occupied inventory Slots for a collection of items: sum of non-zero
+   * item costs + the pooled zero-Slot cost. Items nested in a container
+   * (`system.containerId` set) are excluded — they count against the container.
+   * @param {Iterable<Object>} items
+   * @returns {number}
+   */
+  static occupiedSlotsFor(items) {
+    const top = [...items].filter((i) => !i?.system?.containerId);
+    let total = 0;
+    for (const it of top) total += this.itemSlotCost(it);
+    return total + this.pooledZeroSlotCost(top);
+  }
+
+  /**
+   * Slots consumed by an actor's currently-equipped weapons (oneHand/twoHands).
+   * Each weapon counts at least 1 Slot. Drives the RAW 3-Slot equipped-weapon cap.
+   * @param {Actor} actor
+   * @returns {number}
+   */
+  static equippedWeaponSlots(actor) {
+    return actor.items
+      .filter((i) => this.isWeapon(i) && i.system.equipmentState !== 'unequipped')
+      .reduce((n, w) => n + Math.max(1, this.itemSlotCost(w)), 0);
   }
 
   // ===========================

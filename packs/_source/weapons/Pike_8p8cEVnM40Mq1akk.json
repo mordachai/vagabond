@@ -41,57 +41,7 @@
     "damageTypeOneHand": "piercing",
     "damageTypeTwoHands": "piercing"
   },
-  "effects": [
-    {
-      "name": "Keen Property",
-      "origin": "Compendium.vagabond.weapons.Item.8p8cEVnM40Mq1akk",
-      "img": "icons/svg/aura.svg",
-      "_id": "obJ8NWkN7JIpq5J6",
-      "type": "base",
-      "system": {
-        "changes": [
-          {
-            "key": "system.critNumber",
-            "value": 19,
-            "priority": null,
-            "type": "override"
-          }
-        ]
-      },
-      "disabled": false,
-      "duration": {
-        "value": null,
-        "units": "seconds",
-        "expiry": null,
-        "expired": false
-      },
-      "description": "",
-      "tint": "#ffffff",
-      "transfer": true,
-      "statuses": [],
-      "sort": 0,
-      "flags": {
-        "vagabond": {
-          "applicationMode": "on-use"
-        }
-      },
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null,
-        "coreVersion": "14.361",
-        "systemId": "vagabond",
-        "systemVersion": "1.8.1",
-        "createdTime": 1766842278408,
-        "modifiedTime": 1766853180722,
-        "lastModifiedBy": "13p65OEadZSZVLRk"
-      },
-      "start": null,
-      "showIcon": 1,
-      "folder": null,
-      "_key": "!items.effects!8p8cEVnM40Mq1akk.obJ8NWkN7JIpq5J6"
-    }
-  ],
+  "effects": [],
   "folder": null,
   "flags": {},
   "_stats": {

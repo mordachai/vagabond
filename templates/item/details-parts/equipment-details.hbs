@@ -521,6 +521,22 @@
             </div>
           </div>
         </div>
+
+        {{! Bespoke crit-range tweak — one-off weapons only. Reusable behaviour
+            belongs in CONFIG.VAGABOND.weaponPropertyEffects. }}
+        <div class='form-group'>
+          <label class='resource-label' data-tooltip='{{localize "VAGABOND.Item.Weapon.FIELDS.critThresholdMod.hint"}}'>
+            {{localize "VAGABOND.Item.Weapon.FIELDS.critThresholdMod.label"}}
+          </label>
+          <input
+            type='number'
+            step='1'
+            data-field='critThresholdMod'
+            data-dtype='Number'
+            value='{{#if system.critThresholdMod.length}}{{system.critThresholdMod.[0]}}{{/if}}'
+            placeholder='0'
+          />
+        </div>
         </div>{{! /item-section-box WeaponConfig }}
       {{/if}}
 

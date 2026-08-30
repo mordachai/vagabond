@@ -1087,6 +1087,18 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       }
     }
 
+    // Bespoke per-weapon crit-threshold mod. It's an ArrayField(StringField)
+    // (so Active Effects can ADD to it), but the sheet exposes a single scalar:
+    // blank / 0 → empty array, any other value → [value].
+    const critModInput = this.element.querySelector('[data-field="critThresholdMod"]');
+    if (critModInput) {
+      critModInput.addEventListener('change', () => {
+        const v = critModInput.value.trim();
+        const next = (v === '' || v === '0') ? [] : [v];
+        this.item.update({ 'system.critThresholdMod': next }, { render: false }).catch(() => {});
+      });
+    }
+
     // Auto-save all named form fields immediately on change.
     // IMPORTANT: For array element fields (system.traits.N.* or system.levelFeatures.N.*),
     // saving just one dot-notation path replaces the entire element in Foundry's DataModel.
@@ -2857,14 +2869,14 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     if (!itemData) return;
 
     try {
-      // Check if character has enough slots
+      // RAW carry limit is warn-only — flag an overload but never block the move.
       const itemSlots = itemData.system?.baseSlots || 0;
       const actor = this.item.actor;
-      const availableSlots = actor.system.inventory.max - actor.system.inventory.used;
+      const inv = actor.system.inventory ?? {};
+      const availableSlots = (inv.maxSlots ?? 0) - (inv.occupiedSlots ?? 0);
 
-      if (availableSlots < itemSlots) {
-        ui.notifications.warn(`Not enough inventory space. Need ${itemSlots} slots, have ${availableSlots} available.`);
-        return;
+      if (itemSlots > 0 && availableSlots < itemSlots) {
+        ui.notifications.warn(`${itemData.name} pushes you over your Inventory Slots (${inv.occupiedSlots ?? 0}/${inv.maxSlots ?? 0}).`);
       }
 
       // Set equipped state based on item type

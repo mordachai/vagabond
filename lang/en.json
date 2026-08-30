@@ -95,13 +95,17 @@
     },
     "DefendMechanics": {
       "DefendingTitle": "Defending options",
-      "BlockTitle": "Block (Endure)",
-      "DodgeTitle": "Dodge (Reflex)",
+      "ReflexTitle": "Reflex",
+      "ShieldTitle": "Shield",
       "CritTitle": "Crit",
-      "BlockDescription": "Roll Endure save. Success ignores one highest damage die. Hindered if Ranged attack.",
-      "DodgeDescription": "Roll Reflex save. Success ignores one highest damage die. Hindered if Heavy Armor.",
+      "ReflexDescription": "Save to avoid an Enemy Action. Pass, and it doesn't affect you.",
+      "ShieldDescription": "Roll your weapon's die instead of d20. Add the result to your Armor against the attack.",
       "CritDescription": "You aren't affected by what provoked the Save, and can use an Action.",
       "CritToggleHint": "Click to toggle: Extra Damage or Gain Luck Point"
+    },
+    "Chat": {
+      "ShieldDefense": "Shield",
+      "ArmorPenalty": "Armor Penalty"
     },
     "AttackTypes": {
       "Melee": "Melee",
@@ -213,6 +217,8 @@
       "Dazed": "Dazed",
       "Dead": "Dead",
       "Fatigued": "Fatigued",
+      "Flanked": "Flanked",
+      "Flanking": "Flanking",
       "Focusing": "Focusing",
       "Frightened": "Frightened",
       "Incapacitated": "Incapacitated",
@@ -235,6 +241,8 @@
       "Confused": "Checks/Saves Hindered. Saves against its Actions Favored [AUTOMATED]",
       "Sickened": "-2 penalty to healing received [AUTOMATED]",
       "Vulnerable": "Its attacks and its Saves against attacks have Hinder. Attacks targeting it and Saves against its attacks have Favor [AUTOMATED]",
+      "Flanked": "Vulnerable (its attacks and Saves against attacks have Hinder; attacks targeting it and Saves against its attacks have Favor) and takes an extra 2 damage from attacks, before Armor [AUTOMATED]",
+      "Flanking": "Flanking an adjacent Foe alongside an ally. +2 damage on attacks against it, and it is Vulnerable while two of you stay Close. [AUTOMATED]",
       "Restrained": "Vulnerable + Speed = 0 [AUTOMATED]",
       "Grappling": "Restraining a target. Speed halved unless target is smaller. [PARTIALLY AUTOMATED]",
       "Blinded": "Can't see. Vulnerable [AUTOMATED]",
@@ -792,6 +800,9 @@
         "PCMaxFatigueHint": "Maximum fatigue for player characters. Each fatigue costs one inventory slot.",
         "NPCMaxFatigue": "NPC Max Fatigue",
         "NPCMaxFatigueHint": "Maximum fatigue for NPCs.",
+        "CombatLegend": "Combat",
+        "FlankedDamageBonus": "Flanked Damage Bonus",
+        "FlankedDamageBonusHint": "Extra damage dealt to a Flanked target, applied before Armor.",
         "StatsDisplayLegend": "Stats Display",
         "Layout": "Layout",
         "Progression": "Progression",
@@ -1190,7 +1201,11 @@
           "baseCost": {"label": "Base Cost"},
           "baseSlots": {"label": "Base Slots"},
           "cost": {"label": "Cost"},
-          "slots": {"label": "Slots"}
+          "slots": {"label": "Slots"},
+          "critThresholdMod": {
+            "label": "Crit Range Mod",
+            "hint": "Adjusts THIS weapon's crit threshold. Negative crits more easily (-1 = crit on 19). For a reusable effect, add a weapon property instead."
+          }
         }
       },
       "Armor": {
@@ -1485,7 +1500,7 @@
         "WhenEquipped": "When Equipped",
         "WhenEquippedHint": "This effect only applies while the item is equipped (weapons, armor, accessories). The effect turns off when unequipped.",
         "OnUse": "On Use Only",
-        "OnUseHint": "This effect only applies when making rolls WITH this specific item. Use for weapon properties (Keen, Brutal), spell modifiers, or item-specific bonuses."
+        "OnUseHint": "This effect only applies when making rolls WITH this specific item. Use for weapon properties (Keen, Vicious), spell modifiers, or item-specific bonuses."
       },
       "FormulaHelp": {
         "Summary": "Formula Support for Effect Values",
@@ -1534,30 +1549,22 @@
     },
     "Property": {
       "ViewPropertiesLabel": "View Properties",
-      "Brawl": "Brawl",
-      "Brutal": "Brutal",
       "Cleave": "Cleave",
-      "Entangle": "Entangle",
-      "Finesse": "Finesse",
+      "Defense": "Defense",
+      "Grapple": "Grapple",
       "Keen": "Keen",
       "Long": "Long",
-      "Near": "Near",
-      "Ranged": "Ranged",
-      "Shield": "Shield",
-      "Thrown": "Thrown"
+      "Thrown": "Thrown",
+      "Vicious": "Vicious"
     },
     "PropertyHints": {
-      "Brawl": "Unarmed weapon usable with Brawl skill.",
-      "Brutal": "Crits deal 1 extra damage die.",
-      "Cleave": "Can deal half damage to two Targets.",
-      "Entangle": "On hit, target is Entangled until end of their next turn.",
-      "Finesse": "Can use Dexterity instead of Might for attack rolls.",
-      "Keen": "Critical hit on 19-20 instead of just 20.",
+      "Cleave": "Ignores Vulnerable for this attack. Reduce its die one size to hit another Target within reach, per size reduction.",
+      "Defense": "Roll this weapon's damage die instead of a d20 for a Reflex Save, and add the result to your Armor against what forced the Save.",
+      "Grapple": "Can Grapple with this weapon's Attack Check.",
+      "Keen": "Crits 1 lower on this weapon's Attack Check.",
       "Long": "Extended reach, can attack from 10ft away.",
-      "Near": "Ranged weapon with Near range.",
-      "Ranged": "Ranged weapon, uses Ranged skill.",
-      "Shield": "Ignores Hinder from Blocking Ranged Attacks. Can Shove (manual play).",
-      "Thrown": "Can be thrown as a ranged attack."
+      "Thrown": "Can be thrown as a ranged attack.",
+      "Vicious": "Crits with it deal 1 extra damage die."
     }
     },
     "Armor": {
@@ -1955,6 +1962,7 @@
         "Damage": "Damage",
         "Delivery": "Delivery",
         "Overloaded": "Overloaded!",
+        "EquippedWeapons": "Equipped Weapons",
         "EquipmentType": "Equipment Type",
         "Weapon": "Weapon",
         "Armor": "Armor",
@@ -2168,6 +2176,15 @@
         "TargetedBy": "Targeted by",
         "GM": "GM"
       }
+    },
+    "Flanking": {
+      "ListTwo": "{a} and {b}",
+      "ListMore": "{head} and {last}",
+      "With": " with {allies}",
+      "FlankingSingular": "Flanking {foes}{with}. +{bonus} damage on attacks against it, and it is Vulnerable while two of you stay Close.",
+      "FlankingPlural": "Flanking {foes}{with}. +{bonus} damage on attacks against them, and they are Vulnerable while two of you stay Close.",
+      "FlankedBy": "Flanked by {names}. Takes an extra {bonus} damage from attacks (before Armor) and is Vulnerable — attacks against it and Saves against its attacks have Favor; its own attacks and Saves against attacks have Hinder.",
+      "FlankedNoNames": "Flanked. Takes an extra {bonus} damage from attacks (before Armor) and is Vulnerable — attacks against it and Saves against its attacks have Favor; its own attacks and Saves against attacks have Hinder."
     },
     "StatusSettings": {
       "Title": "Status Effects",

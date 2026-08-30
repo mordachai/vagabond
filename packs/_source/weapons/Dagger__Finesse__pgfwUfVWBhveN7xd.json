@@ -18,7 +18,6 @@
     "damageType": "-",
     "damageAmount": "",
     "properties": [
-      "Finesse",
       "Keen",
       "Thrown"
     ],
@@ -48,57 +47,7 @@
       "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Ranged/Dagger01_01_Regular_White_15ft_1000x400.webm"
     }
   },
-  "effects": [
-    {
-      "name": "Keen Property",
-      "origin": "Compendium.vagabond.weapons.Item.HwX2SFNKg7DPXSma",
-      "img": "icons/svg/aura.svg",
-      "_id": "lBkyb2yQOgfSPHVU",
-      "type": "base",
-      "system": {
-        "changes": [
-          {
-            "key": "system.critNumber",
-            "value": -1,
-            "priority": null,
-            "type": "add"
-          }
-        ]
-      },
-      "disabled": false,
-      "duration": {
-        "value": null,
-        "units": "seconds",
-        "expiry": null,
-        "expired": false
-      },
-      "description": "",
-      "tint": "#ffffff",
-      "transfer": true,
-      "statuses": [],
-      "sort": 0,
-      "flags": {
-        "vagabond": {
-          "applicationMode": "on-use"
-        }
-      },
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null,
-        "coreVersion": "14.361",
-        "systemId": "vagabond",
-        "systemVersion": "3.3.1",
-        "lastModifiedBy": "13p65OEadZSZVLRk",
-        "modifiedTime": 1774105697311,
-        "createdTime": null
-      },
-      "start": null,
-      "showIcon": 1,
-      "folder": null,
-      "_key": "!items.effects!pgfwUfVWBhveN7xd.lBkyb2yQOgfSPHVU"
-    }
-  ],
+  "effects": [],
   "folder": null,
   "flags": {},
   "_stats": {

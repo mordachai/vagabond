@@ -53,7 +53,7 @@ export const VAGABOND_HOMEBREW_DEFAULTS = {
       stat1: 'might',
       stat2: 'might',
       baseValue: 20,
-      icon: 'fas fa-shield-alt',
+      icon: 'fas fa-hand-fist',
     },
     {
       key: 'will',
@@ -104,6 +104,8 @@ export const VAGABOND_HOMEBREW_DEFAULTS = {
     fatigueNPCMax: 5,
     luckStat: 'luck',
     statsLayout: 'progression',
+    // Flat damage bonus applied to attacks against a Flanked target (before Armor).
+    flankedDamageBonus: 2,
   },
 
   // --- Tab 6: Damage Types (runtime) ---
@@ -301,7 +303,7 @@ export function applyRuntimeHomebrewOverrides(config) {
 
   // Save icons (runtime): legacy saved configs may lack the icon field → default per key,
   // falling back to a generic shield for brand-new homebrew saves.
-  const defaultSaveIcons = { reflex: 'fas fa-running', endure: 'fas fa-shield-alt', will: 'fas fa-brain' };
+  const defaultSaveIcons = { reflex: 'fas fa-running', endure: 'fas fa-hand-fist', will: 'fas fa-brain' };
   CONFIG.VAGABOND.saveIcons = Object.fromEntries(config.saves.map(s =>
     [s.key, s.icon || defaultSaveIcons[s.key] || 'fa-solid fa-shield']
   ));

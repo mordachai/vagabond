@@ -231,8 +231,14 @@ export class StartingPacksStepManager extends BaseStepManager {
       const curr = packItem.system.currency || {};
       const startingSilver = (curr.gold || 0) * 100 + (curr.silver || 0) + (curr.copper || 0) / 10;
 
-      // Calculate total slots occupied by pack items
-      const totalSlotsOccupied = itemDetails.reduce((sum, item) => sum + (item.slots * item.qty), 0);
+      // Calculate total slots occupied by pack items. Zero-Slot items pool:
+      // each complete group of 10 = 1 Slot (floor, pooled across all zero-Slot items).
+      const zeroStack = CONFIG.VAGABOND?.zeroSlotStackSize || 10;
+      const nonZeroSlots = itemDetails.reduce(
+        (sum, item) => sum + (item.slots > 0 ? item.slots * item.qty : 0), 0);
+      const zeroQty = itemDetails.reduce(
+        (sum, item) => sum + (item.slots > 0 ? 0 : item.qty), 0);
+      const totalSlotsOccupied = nonZeroSlots + Math.floor(zeroQty / zeroStack);
 
       // Get max inventory slots from character's actual data model
       const state = this.getCurrentState();
