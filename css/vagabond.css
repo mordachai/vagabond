@@ -12442,6 +12442,7 @@ ol#combat-tracker.directory-list {
   min-height: 0;
 }
 .vagabond .favorites-section h4.right-col {
+  position: relative;
   color: var(--vagabond-c-white);
   background-image: url("../assets/images/sheets/rightColBg.svg");
   background-repeat: no-repeat;
@@ -12453,6 +12454,32 @@ ol#combat-tracker.directory-list {
   text-align: center;
   filter: drop-shadow(2px 2px 1px var(--vagabond-c-inset-1));
   text-shadow: 2px 2px 0 var(--vagabond-c-black), -2px 2px 0 var(--vagabond-c-black), -2px -2px 0 var(--vagabond-c-black), 2px -2px 0 var(--vagabond-c-black);
+}
+.vagabond .favorites-section h4.right-col .equipped-slot-pips {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  gap: 2px;
+  align-items: center;
+}
+.vagabond .favorites-section h4.right-col .equipped-slot-pips .equipped-slot-pip {
+  font-size: 11px;
+  transition: color 0.2s, filter 0.2s;
+}
+.vagabond .favorites-section h4.right-col .equipped-slot-pips .equipped-slot-pip.filled {
+  color: var(--vagabond-c-chat-yellow);
+  filter: drop-shadow(0 0 3px var(--vagabond-dark-yellow));
+}
+.vagabond .favorites-section h4.right-col .equipped-slot-pips .equipped-slot-pip.empty {
+  color: var(--vagabond-dark-yellow);
+  opacity: 0.25;
+}
+.vagabond .favorites-section h4.right-col .equipped-slot-pips .equipped-slot-pip.over {
+  color: var(--vagabond-c-red);
+  filter: drop-shadow(0 0 3px var(--vagabond-c-red));
+  opacity: 1;
 }
 .vagabond .favorites-section .title-container {
   display: flex;
@@ -21073,3 +21100,5 @@ details[open] .vagabond .npc-immunity-toggle i {
 .vagabond.ongoing-panel .osp-resource-fatigue i {
   color: var(--vagabond-c-muted);
 }
+
+/*# sourceMappingURL=vagabond.css.map */

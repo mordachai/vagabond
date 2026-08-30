@@ -1,11 +1,15 @@
 # Changelog
 
-## v5.37.0
-- **Flanking:** automatic flanked/flanking detection — a target caught between two enemies is marked, with large-token adjacency handled correctly.
+## v5.37.0 — Print Wave 3 Alpha 2
+
+- **Flanking:** automatic flanked/flanking detection — a foe with two or more enemies Close (and no more than one size larger) is marked Flanked (Vulnerable, +2 damage), attackers marked Flanking; multi-cell tokens handled, updates on movement and per attack.
+- **Weapon properties overhaul:** properties reviewed and expanded, with far more of them now resolved automatically during attack and damage rolls instead of by hand. Keen and Vicious moved onto the weapon-property effects registry, plus a per-weapon "Crit Range Mod" field on the weapon sheet. Relic renames: "Ace - Entangle" → "Ace - Grapple", "Ace - Brutal" → "Ace - Vicious".
+- **Defense property — block with a Shield:** when an attack calls for a Save, the chat card now offers a button to defend with an equipped Shield instead of rolling the Save.
+- **Equipped-weapon cap:** you can now keep up to 3 Slots' worth of weapons equipped at once (RAW), counted by weapon Slot size and tracked independently of the two-hand pool.
+- **Fix — inventory Slot accounting:** a stack of Slot 0 items (e.g. ×10) now counts as 1 Slot total instead of 0.
 - **GM Tools compendium:** the old "Dev Tools" / "Macro Scripts" pack is now **GM Tools**, with two GM macros:
+  - **Sync Items From Compendium** — after you edit compendium content, re-pulls the current version of every compendium-linked item already on actors and scene tokens so nobody is left holding a stale copy; per-instance state (quantity, equip, grid slot…) is preserved.
   - **Refresh World Data** — re-runs data preparation and re-renders every actor, item, token and open sheet without a page reload (for derived-data / homebrew-value changes).
-  - **Sync Items From Compendium** — re-pulls the current compendium version of every compendium-linked item on actors and scene tokens, preserving per-instance state (quantity, equip, grid slot…).
-- **Weapon crit properties:** Keen and Vicious reworked through the weapon-property effects registry; per-weapon "Crit Range Mod" field on the weapon sheet. Relic renames: *Ace - Entangle* → *Ace - Grapple*, *Ace - Brutal* → *Ace - Vicious*.
 - Internal: damage roll pipeline refactor — all weapon/spell/alchemical/NPC damage now flows through one path.
 
 ## v5.35.0

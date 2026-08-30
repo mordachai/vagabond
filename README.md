@@ -15,6 +15,19 @@ _You need the book (digital or paperback) to have access to the compendia contai
 
 ## Features
 
+### **New feature:** Print Wave 3 Alpha 2
+
+- **Flanking:** automatic detection on the canvas. When two or more enemies are Close (grid-adjacent) to a foe no more than one size larger, the foe is marked **Flanked** — Vulnerable, taking +2 damage from attacks — and the attackers are marked **Flanking**. Multi-cell tokens count every occupied square, and the statuses update live as tokens move and on each attack.
+- **Weapon properties overhaul:** properties reviewed and expanded, with many more of them now resolved automatically during attack and damage rolls instead of by hand.
+- **Defense property — block with a Shield:** when an attack calls for a Save, the chat card now shows a button to defend with an equipped Shield instead of rolling the Save.
+- **Equip up to 3 Slots of weapons:** you can keep up to three Slots' worth of weapons equipped at once, counted by weapon Slot size and tracked separately from the two-hand pool.
+- **Inventory fix:** a stack of Slot 0 items (e.g. ×10) now counts as 1 Slot total instead of 0.
+- **Keep items fresh:** a new GM macro, **Sync Items From Compendium**, re-pulls the current compendium version of items already on sheets and tokens after an update, so nobody is stuck with a stale copy. Per-instance state (quantity, equip, grid slot…) is kept.
+
+> IMPORTANT: Only the rules and calculations were updated. Classes, NPCs, Perks, Ancestries and even the Gear were not touched yet. We await until the book is released. 
+
+---
+
 ### **New feature:** Combat Carousel & Enhanced Encounters [YouTube video below](https://youtu.be/neHg99dUvrw)
 
 [![Combat Carousel](https://img.youtube.com/vi/neHg99dUvrw/0.jpg)](https://youtu.be/neHg99dUvrw)

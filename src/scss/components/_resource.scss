@@ -396,6 +396,7 @@
   min-height: 0;
 
   h4.right-col {
+    position: relative;
     color: $c-white;
     background-image: url('../assets/images/sheets/rightColBg.svg');
     background-repeat: no-repeat;
@@ -412,6 +413,37 @@
       -2px -2px 0 $c-black,
       2px -2px 0 $c-black;
 
+    // Equipped-weapon Slot pips — absolute left (mirrors .focus-pips on spells title)
+    .equipped-slot-pips {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      gap: 2px;
+      align-items: center;
+
+      .equipped-slot-pip {
+        font-size: 11px;
+        transition: color 0.2s, filter 0.2s;
+
+        &.filled {
+          color: $c-yellow;
+          filter: drop-shadow(0 0 3px $c-dark-yellow);
+        }
+
+        &.empty {
+          color: $c-dark-yellow;
+          opacity: 0.25;
+        }
+
+        &.over {
+          color: $c-red;
+          filter: drop-shadow(0 0 3px $c-red);
+          opacity: 1;
+        }
+      }
+    }
   }
 
   .title-container{

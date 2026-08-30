@@ -28,18 +28,6 @@
       {{! Inventory Slots Section }}
       <div class='inventory-slots-section'>
         <div class='slots-info flexrow'>
-          {{! Equipped Weapon Slots (RAW: up to 3 Slots of Equipped Weapons).
-              Count rides in the label, shown only when NOT at the cap. }}
-          <div class='slot-field weapon-slot-field {{#if weaponSlotOverloaded}}overloaded{{/if}}'>
-            <label class='resource-label'>
-              {{localize "VAGABOND.UI.Labels.EquippedWeapons"}}{{#unless (eq equippedWeaponSlots maxEquippedWeaponSlots)}} {{equippedWeaponSlots}}/{{maxEquippedWeaponSlots}}{{/unless}}
-            </label>
-            <div class='bounds-pips weapon-slot-pips'>
-              {{#each weaponSlotPips as |pip|}}
-                <i class='fa-solid fa-swords bound-pip {{#if pip.filled}}filled{{/if}} {{#if pip.over}}over{{/if}}'></i>
-              {{/each}}
-            </div>
-          </div>
           <div class='slot-field {{#if (gt system.inventory.occupiedSlots system.inventory.maxSlots)}}overloaded{{/if}}'>
             <label class='resource-label'>{{localize "VAGABOND.Item.Weapon.FIELDS.slots.label"}}:</label>
             <span class='slot-value'>

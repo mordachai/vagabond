@@ -380,7 +380,15 @@
         <div class='right-column-scrollable'>
         {{! Favorites Section - Equipped Items }}
         <div class='favorites-section flexcol'>
-          <h4 class="right-col">{{localize "VAGABOND.UI.Sections.Equipped"}}</h4>
+          <h4 class="right-col">
+            {{! Equipped-weapon Slot pips — float left of title (mirrors focus-pips) }}
+            <span class="equipped-slot-pips" title="Equipped Weapons Slots Count">
+              {{#each weaponSlotPips as |pip|}}
+                <i class="fa-solid fa-swords equipped-slot-pip {{#if pip.filled}}filled{{else}}empty{{/if}} {{#if pip.over}}over{{/if}}"></i>
+              {{/each}}
+            </span>
+            {{localize "VAGABOND.UI.Sections.Equipped"}}
+          </h4>
 
           {{!-- Check if any items are equipped --}}
           {{#if hasEquippedItems}}
