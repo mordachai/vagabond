@@ -162,27 +162,25 @@
                             {{#each group as |skill skillIndex|}}
                             <div class="prereq-row">
                                 <select name="system.prerequisites.trainedSkillOrGroups.{{groupIndex}}.{{skillIndex}}">
-                                    {{#select skill}}
-                                    <option value="">{{localize "VAGABOND.Item.Perk.SelectSkillPlaceholder"}}</option>
+                                    <option value="" {{#if (eq skill '')}}selected{{/if}}>{{localize "VAGABOND.Item.Perk.SelectSkillPlaceholder"}}</option>
                                     <optgroup label="{{localize 'VAGABOND.Item.Perk.SkillsOptgroupLabel'}}">
-                                        <option value="arcana">{{localize 'VAGABOND.Skills.Arcana'}}</option>
-                                        <option value="craft">{{localize 'VAGABOND.Skills.Craft'}}</option>
-                                        <option value="medicine">{{localize 'VAGABOND.Skills.Medicine'}}</option>
-                                        <option value="brawl">{{localize 'VAGABOND.Skills.Brawl'}}</option>
-                                        <option value="finesse">{{localize 'VAGABOND.Skills.Finesse'}}</option>
-                                        <option value="sneak">{{localize 'VAGABOND.Skills.Sneak'}}</option>
-                                        <option value="detect">{{localize 'VAGABOND.Skills.Detect'}}</option>
-                                        <option value="mysticism">{{localize 'VAGABOND.Skills.Mysticism'}}</option>
-                                        <option value="survival">{{localize 'VAGABOND.Skills.Survival'}}</option>
-                                        <option value="influence">{{localize 'VAGABOND.Skills.Influence'}}</option>
-                                        <option value="leadership">{{localize 'VAGABOND.Skills.Leadership'}}</option>
-                                        <option value="performance">{{localize 'VAGABOND.Skills.Performance'}}</option>
+                                        <option value="arcana" {{#if (eq skill 'arcana')}}selected{{/if}}>{{localize 'VAGABOND.Skills.Arcana'}}</option>
+                                        <option value="craft" {{#if (eq skill 'craft')}}selected{{/if}}>{{localize 'VAGABOND.Skills.Craft'}}</option>
+                                        <option value="medicine" {{#if (eq skill 'medicine')}}selected{{/if}}>{{localize 'VAGABOND.Skills.Medicine'}}</option>
+                                        <option value="brawl" {{#if (eq skill 'brawl')}}selected{{/if}}>{{localize 'VAGABOND.Skills.Brawl'}}</option>
+                                        <option value="finesse" {{#if (eq skill 'finesse')}}selected{{/if}}>{{localize 'VAGABOND.Skills.Finesse'}}</option>
+                                        <option value="sneak" {{#if (eq skill 'sneak')}}selected{{/if}}>{{localize 'VAGABOND.Skills.Sneak'}}</option>
+                                        <option value="detect" {{#if (eq skill 'detect')}}selected{{/if}}>{{localize 'VAGABOND.Skills.Detect'}}</option>
+                                        <option value="mysticism" {{#if (eq skill 'mysticism')}}selected{{/if}}>{{localize 'VAGABOND.Skills.Mysticism'}}</option>
+                                        <option value="survival" {{#if (eq skill 'survival')}}selected{{/if}}>{{localize 'VAGABOND.Skills.Survival'}}</option>
+                                        <option value="influence" {{#if (eq skill 'influence')}}selected{{/if}}>{{localize 'VAGABOND.Skills.Influence'}}</option>
+                                        <option value="leadership" {{#if (eq skill 'leadership')}}selected{{/if}}>{{localize 'VAGABOND.Skills.Leadership'}}</option>
+                                        <option value="performance" {{#if (eq skill 'performance')}}selected{{/if}}>{{localize 'VAGABOND.Skills.Performance'}}</option>
                                     </optgroup>
                                     <optgroup label="{{localize 'VAGABOND.Item.Perk.WeaponSkillsOptgroupLabel'}}">
-                                        <option value="melee">{{localize 'VAGABOND.WeaponSkills.Melee'}}</option>
-                                        <option value="ranged">{{localize 'VAGABOND.WeaponSkills.Ranged'}}</option>
+                                        <option value="melee" {{#if (eq skill 'melee')}}selected{{/if}}>{{localize 'VAGABOND.WeaponSkills.Melee'}}</option>
+                                        <option value="ranged" {{#if (eq skill 'ranged')}}selected{{/if}}>{{localize 'VAGABOND.WeaponSkills.Ranged'}}</option>
                                     </optgroup>
-                                    {{/select}}
                                 </select>
                                 <a class="delete-btn"
                                    data-action="removeSkillFromOrGroup"
