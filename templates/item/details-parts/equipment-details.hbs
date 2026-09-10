@@ -287,6 +287,20 @@
                 <span class='stat-label'>{{localize "VAGABOND.UI.Labels.Slots"}}:</span>
                 <span class='stat-value'>{{system.slots}}</span>
               </div>
+              {{#unless (eq system.equipmentType 'weapon')}}
+                {{#if system.handsRequired}}
+                  <div class='locked-stat'>
+                    <span class='stat-label'>{{localize "VAGABOND.Item.Equipment.FIELDS.handsRequired.label"}}:</span>
+                    <span class='stat-value'>{{#if (eq system.handsRequired 1)}}{{localize "VAGABOND.Item.Equipment.FIELDS.handsRequired.hands1"}}{{else}}{{localize "VAGABOND.Item.Equipment.FIELDS.handsRequired.hands2"}}{{/if}}</span>
+                  </div>
+                {{/if}}
+              {{/unless}}
+              {{#if system.isTrinket}}
+                <div class='locked-stat'>
+                  <span class='stat-label'>{{localize "VAGABOND.Item.Equipment.FIELDS.isTrinket.label"}}:</span>
+                  <span class='stat-value'>{{localize "VAGABOND.UI.Labels.Yes"}}</span>
+                </div>
+              {{/if}}
               {{#if (gt system.quantity 1)}}
                 <div class='locked-stat'>
                   <span class='stat-label'>{{localize "VAGABOND.UI.Labels.Quantity"}}:</span>

@@ -1087,11 +1087,14 @@ export default class VagabondCharacter extends VagabondActorBase {
     const dexTotal = this.stats.dexterity?.total || 0;
     const level = this.attributes.level.value || 1;
 
-    // Luck Pool — driven by configurable stat; 'none' disables the pool entirely
+    // Luck Pool — driven by configurable stat; 'none' disables the pool entirely.
+    // system.bonusLuck (AE-driven, e.g. a Perk) adds to the pool max WITHOUT touching the Luck stat.
     const luckStatKey = CONFIG.VAGABOND?.homebrew?.derivations?.luckStat ?? 'luck';
     const hasLuckPool = luckStatKey && luckStatKey !== 'none';
     this.hasLuckPool = hasLuckPool;
-    this.maxLuck = hasLuckPool ? (this.stats[luckStatKey]?.total || 0) : 0;
+    this.maxLuck = hasLuckPool
+      ? Math.max(0, (this.stats[luckStatKey]?.total || 0) + (this.bonusLuck || 0))
+      : 0;
 
     if (this.currentLuck === undefined || this.currentLuck === null) {
       this.currentLuck = this.maxLuck;

@@ -3,12 +3,12 @@
   "type": "perk",
   "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
   "system": {
-    "description": "<p><span class=\"fontstyle0\">If you Crit to Block an attack, the attacker is Vulnerable until the end of your next Turn.</span> <br style=\"font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:normal;orphans:2;text-align:-webkit-auto;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-size-adjust:auto;-webkit-text-stroke-width:0px\" /></p>",
+    "description": "<p><span class=\"fontstyle0\">If you pass a Reflex Save against an attack by 10 or more, you can deflect the attack to another viable Target of the attack, which could be the attacker, rerolling the damage.</span> <br style=\"font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:normal;orphans:2;text-align:-webkit-auto;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-size-adjust:auto;-webkit-text-stroke-width:0px\" /></p>",
     "prerequisites": {
       "stats": [
         {
-          "stat": "might",
-          "value": 4
+          "value": 7,
+          "stat": "might"
         }
       ],
       "trainedSkills": [],
@@ -16,12 +16,7 @@
       "other": [
         "Trained: Brawl or Melee"
       ],
-      "trainedSkillOrGroups": [
-        [
-          "brawl",
-          "melee"
-        ]
-      ]
+      "trainedSkillOrGroups": []
     }
   },
   "effects": [],
@@ -31,12 +26,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "13.351",
+    "coreVersion": "14.367",
     "systemId": "vagabond",
-    "systemVersion": "2.8.0",
+    "systemVersion": "5.37.1",
     "createdTime": 1764966653728,
-    "modifiedTime": 1769601047922,
-    "lastModifiedBy": "13p65OEadZSZVLRk"
+    "modifiedTime": 1788972833375,
+    "lastModifiedBy": "YsqWUndwVB75hmUs"
   },
   "ownership": {
     "default": 0,

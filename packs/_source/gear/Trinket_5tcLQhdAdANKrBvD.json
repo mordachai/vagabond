@@ -30,7 +30,9 @@
     "immunities": [],
     "gearCategory": "Books & Magic",
     "alchemicalType": "concoction",
-    "lore": ""
+    "lore": "",
+    "handsRequired": 1,
+    "isTrinket": true
   },
   "effects": [],
   "flags": {
@@ -40,12 +42,12 @@
     "compendiumSource": "Item.jk4DXpFQlLpnewrm",
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "13.351",
+    "coreVersion": "14.367",
     "systemId": "vagabond",
-    "systemVersion": "1.3.0",
+    "systemVersion": "5.37.2",
     "createdTime": 1765500883340,
-    "modifiedTime": 1765500883340,
-    "lastModifiedBy": "13p65OEadZSZVLRk"
+    "modifiedTime": 1789028205563,
+    "lastModifiedBy": "SCvf5oKTLP13uXbE"
   },
   "_id": "5tcLQhdAdANKrBvD",
   "folder": "jDENOiYNJhBGEQx1",
