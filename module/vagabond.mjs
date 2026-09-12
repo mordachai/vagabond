@@ -2369,6 +2369,17 @@ Hooks.on('refreshToken', (token) => {
   _flankingSweep();
 });
 
+// Dead status added/removed (HUD condition toggle, HP-zero auto-toggle, or a
+// direct macro) changes flanking eligibility without moving any token, so
+// updateToken/refreshToken never fire for it. Re-sweep on the AE itself.
+for (const hookName of ['createActiveEffect', 'deleteActiveEffect']) {
+  Hooks.on(hookName, (effect) => {
+    if (!effect.statuses?.has('dead')) return;
+    if (game.user !== game.users.activeGM) return;
+    _flankingSweep();
+  });
+}
+
 // Re-eval on combat flow too: a token moved on another actor's turn, a flanker
 // going defeated, or the initiative roster changing all alter adjacency without
 // necessarily moving a token on THIS client.

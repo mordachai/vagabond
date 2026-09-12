@@ -53,6 +53,11 @@ export class FlankingHelper {
     };
   }
 
+  /** Dead actors can't contribute to a flank and can't be a flank target. */
+  static isDead(actor) {
+    return actor?.statuses?.has('dead') ?? false;
+  }
+
   /** Whether two faction keys are opposed (friendly vs hostile). Neutral/secret never oppose. */
   static isOpposingFaction(factionA, factionB) {
     return (factionA === 'friendly' && factionB === 'hostile')
@@ -87,6 +92,7 @@ export class FlankingHelper {
 
     return canvas.tokens.placeables.filter(t => {
       if (t === targetToken || !t.actor) return false;
+      if (this.isDead(t.actor)) return false;
       if (!this.isAdjacent(targetToken, t)) return false;
       const faction = CombatTrackerHelper.factionKeyForToken(t.document);
       if (!this.isOpposingFaction(targetFaction, faction)) return false;
@@ -232,6 +238,10 @@ export class FlankingHelper {
    */
   static async evaluate(targetToken) {
     if (!targetToken?.actor || !canvas.scene) return;
+    if (this.isDead(targetToken.actor)) {
+      await this._forceRemoveStatus(targetToken.actor, 'flanked');
+      return;
+    }
     const contributors = await this.findContributors(targetToken);
 
     if (contributors.length >= 2) {
@@ -286,6 +296,10 @@ export class FlankingHelper {
 
     for (const token of canvas.tokens.placeables) {
       if (!token.actor) continue;
+      if (this.isDead(token.actor)) {
+        await this._forceRemoveStatus(token.actor, 'flanked');
+        continue;
+      }
       try {
         const contributors = await this.findContributors(token);
         if (contributors.length >= 2) {
