@@ -208,13 +208,25 @@ export class InventoryHandler {
     // Use option
     if (showUseOption) {
       menuItems.push({
-        label: game.i18n.localize('VAGABOND.ContextMenu.Use'),
-        icon: 'fas fa-hand-sparkles',
+        label: game.i18n.localize(isWeapon ? 'VAGABOND.ContextMenu.Attack' : 'VAGABOND.ContextMenu.Use'),
+        icon: isWeapon ? 'fas fa-swords' : 'fas fa-hand-sparkles',
         enabled: true,
         action: async () => {
           // Equips the item first if it occupies hands and isn't already
           // equipped (weapons, torches, etc.), then performs its action.
           await activateHandItem({ actor: this.actor, item, event, rollHandler: this.sheet.rollHandler });
+        },
+      });
+    }
+
+    // Throw (Thrown weapons): attack without equipping, spends one from the stack
+    if (EquipmentHelper.isThrowable(item)) {
+      menuItems.push({
+        label: game.i18n.localize('VAGABOND.ContextMenu.Throw'),
+        icon: 'fas fa-share',
+        enabled: true,
+        action: async () => {
+          await activateHandItem({ actor: this.actor, item, event, rollHandler: this.sheet.rollHandler, mode: 'throw' });
         },
       });
     }
@@ -581,6 +593,8 @@ export class InventoryHandler {
       // Right-click: Show context menu
       card.addEventListener('contextmenu', (event) => {
         event.preventDefault();
+        // Right-click actions on the card (quantity badge) handle themselves
+        if (event.target.closest('[data-action]')) return;
         this.showInventoryContextMenu(event, itemId);
       });
 

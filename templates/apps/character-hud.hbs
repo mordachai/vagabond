@@ -163,13 +163,13 @@
   {{!-- ============ BODY ============ --}}
   <div class="vh-body">
 
-    {{!-- Floating cluster: weapon circles + armor shield --}}
+    {{!-- Floating cluster: hand spaces (R, L) + armor shield. A 2H holder hides L. --}}
     <div class="vh-floating">
       <div class="vh-pc-weapons">
-        {{#each weaponSlots}}
-          <div class="vh-pc-weapon {{#if filled}}filled{{/if}}" data-slot-index="{{@index}}" {{#if filled}}data-action="slotUse" data-type="{{type}}" data-item-id="{{id}}" title="{{name}}"{{/if}}>
-            {{#if filled}}<img src="{{img}}" alt="{{name}}" />{{else}}<i class="fas fa-swords vh-slot-empty"></i>{{/if}}
-            {{#if multiSlot}}<span class="vh-slot-cost" title="{{slotCost}} weapon Slots">{{slotCost}}</span>{{/if}}
+        {{#each handSlots}}
+          <div class="vh-pc-weapon {{#if filled}}filled{{/if}}" data-slot-index="{{@index}}" data-hand="{{hand}}" data-hud-tip-html="{{tip}}" {{#if filled}}data-action="slotUse" data-type="{{type}}" data-item-id="{{id}}"{{/if}}>
+            {{#if filled}}<img src="{{img}}" alt="{{name}}" />{{else}}<i class="fas fa-hand vh-slot-empty"></i>{{/if}}
+            <span class="vh-hand-label">{{hand}}</span>
             {{#if versatile}}<i class="vh-grip-badge fas {{#if twoHanded}}fa-hands{{else}}fa-hand-fist{{/if}} clickable" data-action="toggleWeaponGrip" data-item-id="{{id}}" data-hud-tip="{{#if twoHanded}}{{localize 'VAGABOND.Hud.Menu.UseOneHand'}}{{else}}{{localize 'VAGABOND.Hud.Menu.UseTwoHands'}}{{/if}}"></i>{{/if}}
           </div>
         {{/each}}
@@ -219,6 +219,7 @@
           {{#each itemSlots}}
             <div class="vh-slot {{#if filled}}filled{{/if}}" data-slot-index="{{@index}}" {{#if filled}}data-action="slotUse" data-type="{{type}}" data-item-id="{{id}}" title="{{name}}"{{/if}}>
               {{#if filled}}<img src="{{img}}" alt="{{name}}" />{{/if}}
+              {{#if throwable}}<span class="vh-slot-qty {{#unless quantity}}empty{{/unless}}" data-action="adjustQuantity" data-item-id="{{id}}" data-hud-tip-html="{{localize 'VAGABOND.ContextMenu.QuantityHint'}} | <i class='fas fa-computer-mouse'></i>L: +1 &middot; <i class='fas fa-computer-mouse'></i>R: −1">×{{quantity}}</span>{{/if}}
             </div>
           {{/each}}
           {{#if hasMana}}

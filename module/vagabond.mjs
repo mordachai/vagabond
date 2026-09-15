@@ -374,6 +374,26 @@ function registerGameSettings() {
     requiresReload: false,
   });
 
+  // What the trinket requirement checks (severity comes from the setting above):
+  // equipped = any equipped trinket, even worn (amulet); inHand = a trinket
+  // must be held, the other hand is free to hold anything; handsFree = gesture
+  // casting, no non-trinket item may be held. Gish weapons count as trinkets;
+  // the AE flag system.castWithHandsFull falls back to 'equipped'.
+  game.settings.register('vagabond', 'trinketCastMode', {
+    name: 'VAGABOND.Settings.trinketCastMode.name',
+    hint: 'VAGABOND.Settings.trinketCastMode.hint',
+    scope: 'world',
+    config: true,
+    type: String,
+    choices: {
+      equipped: 'VAGABOND.Settings.trinketCastMode.equipped',
+      inHand: 'VAGABOND.Settings.trinketCastMode.inHand',
+      handsFree: 'VAGABOND.Settings.trinketCastMode.handsFree',
+    },
+    default: 'inHand',
+    requiresReload: false,
+  });
+
   // Light-source hand coupling: how lighting a hand-held light source (torch,
   // candle — handsRequired > 0) interacts with the 2-hand equipment limit.
   // Consumed by LightSource.use()/douse() in helpers/light-source.mjs.

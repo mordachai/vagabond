@@ -430,6 +430,10 @@
                       <span class='eq-separator'>//</span>
                     {{/unless}}
                     <span class='eq-range'>{{weapon.system.rangeAbbrev}}</span>
+                    {{#if weapon.system.isThrowable}}
+                      <span class='eq-separator'>//</span>
+                      <span class='eq-throw clickable' data-action='throwWeapon' data-item-id='{{weapon._id}}' data-tooltip='{{localize "VAGABOND.ContextMenu.Throw"}}'><i class='fas fa-share'></i> ×{{weapon.system.quantity}}</span>
+                    {{/if}}
                   </div>
                 </div>
               {{/if}}

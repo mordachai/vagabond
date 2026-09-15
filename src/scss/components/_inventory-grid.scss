@@ -331,6 +331,19 @@
     color: $c-title-2;
   }
 
+  // Thrown-weapon stack count. L-click +1 (retrieve), R-click −1.
+  .item-qty-badge {
+    position: absolute;
+    bottom: 2px;
+    right: 3px;
+    z-index: 10;
+    font-size: 10px;
+    font-weight: bold;
+    color: $c-dark-bluey;
+    cursor: pointer;
+    &.empty { color: $c-red; }
+  }
+
   .bound-marker {
     position: absolute;
     top: 2px;

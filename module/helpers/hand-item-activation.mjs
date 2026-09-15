@@ -17,9 +17,26 @@ import { runMacroFromButton } from './item-macro.mjs';
  * @param {Item} o.item
  * @param {Event} o.event
  * @param {{rollWeapon: Function, useItem: Function}} o.rollHandler
+ * @param {'use'|'throw'} [o.mode] 'throw' (Thrown weapons only): attack
+ *   WITHOUT equipping, then spend one from the stack. Stops at 0 (item kept)
+ *   so raising the quantity "retrieves" thrown weapons.
  */
-export async function activateHandItem({ actor, item, event, rollHandler }) {
+export async function activateHandItem({ actor, item, event, rollHandler, mode = 'use' }) {
   const { EquipmentHelper } = globalThis.vagabond.utils;
+
+  if (mode === 'throw' && EquipmentHelper.isThrowable(item)) {
+    const qty = item.system.quantity ?? 0;
+    if (qty <= 0) {
+      return ui.notifications.warn(game.i18n.format('VAGABOND.ContextMenu.ThrowNoneLeft', { name: item.name }));
+    }
+    const roll = await rollHandler.rollWeapon(event, { dataset: { itemId: item.id } }, { thrown: true });
+    if (!roll) return; // aborted (hook, auto-fail, error) — nothing left the hand
+    const update = { 'system.quantity': qty - 1 };
+    // Threw the last one out of your hand → the hand is free again
+    if (qty === 1 && EquipmentHelper.handsFor(item) > 0) update['system.equipmentState'] = 'unequipped';
+    await item.update(update);
+    return roll;
+  }
 
   const occupiesHands = EquipmentHelper.isWeapon(item)
     || (item.type === 'equipment' && (item.system.handsRequired ?? 0) > 0);

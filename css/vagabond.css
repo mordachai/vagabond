@@ -3638,19 +3638,14 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   --vh-wpn0-right: 30px;
   --vh-wpn1-top: 30px;
   --vh-wpn1-right: 10px;
-  --vh-wpn2-top: 62px;
-  --vh-wpn2-right: 24px;
   --vh-armor-top: 118px;
   --vh-armor-right: 46px;
   --vh-wpn0-z: 3;
   --vh-wpn1-z: 2;
-  --vh-wpn2-z: 1;
   --vh-badge0-top: 15px;
   --vh-badge0-left: -14px;
   --vh-badge1-top: 15px;
   --vh-badge1-left: 40px;
-  --vh-badge2-top: 15px;
-  --vh-badge2-left: -14px;
   position: fixed;
   z-index: 70;
   width: auto;
@@ -3976,33 +3971,19 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   top: var(--vh-badge1-top);
   left: var(--vh-badge1-left);
 }
-.vbd-hud .vh-pc-weapon[data-slot-index="2"] {
-  top: var(--vh-wpn2-top);
-  right: var(--vh-wpn2-right);
-  z-index: var(--vh-wpn2-z);
-}
-.vbd-hud .vh-pc-weapon[data-slot-index="2"] .vh-grip-badge {
-  top: var(--vh-badge2-top);
-  left: var(--vh-badge2-left);
-}
 .vbd-hud .vh-pc-weapon.filled {
   cursor: pointer;
 }
-.vbd-hud .vh-pc-weapon .vh-slot-cost {
+.vbd-hud .vh-pc-weapon .vh-hand-label {
   position: absolute;
-  bottom: -4px;
-  right: -4px;
-  min-width: 16px;
-  height: 16px;
-  padding: 0 3px;
-  border-radius: 8px;
-  background: var(--vagabond-c-inset-1);
-  border: 1px solid var(--vagabond-c-chat-yellow);
-  color: var(--vagabond-c-chat-yellow);
-  font-size: calc(0.7rem * var(--vh-font-scale));
-  line-height: 14px;
-  text-align: center;
+  bottom: -3px;
+  left: -3px;
   z-index: 4;
+  font-size: calc(0.7rem * var(--vh-font-scale));
+  font-weight: bold;
+  color: var(--vagabond-c-chat-yellow);
+  text-shadow: var(--vh-outline-2);
+  pointer-events: none;
 }
 .vbd-hud .vh-pc-weapon.filled:hover {
   border-color: var(--vagabond-c-stat);
@@ -4025,6 +4006,23 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   cursor: pointer;
 }
 .vbd-hud .vh-pc-weapon .vh-grip-badge:hover {
+  color: var(--vagabond-c-red);
+}
+.vbd-hud .vh-slot {
+  position: relative;
+}
+.vbd-hud .vh-slot .vh-slot-qty {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  padding: 0 2px;
+  background: var(--vagabond-c-inset-1);
+  color: var(--vagabond-c-chat-yellow);
+  font-size: calc(0.65rem * var(--vh-font-scale));
+  line-height: 1.1;
+  cursor: pointer;
+}
+.vbd-hud .vh-slot .vh-slot-qty.empty {
   color: var(--vagabond-c-red);
 }
 .vbd-hud .vh-armor {
@@ -15031,6 +15029,19 @@ ol#combat-tracker.directory-list {
   line-clamp: 3;
   -webkit-box-orient: vertical;
   color: var(--vagabond-c-title2);
+}
+.vagabond .inventory-card .item-qty-badge {
+  position: absolute;
+  bottom: 2px;
+  right: 3px;
+  z-index: 10;
+  font-size: 10px;
+  font-weight: bold;
+  color: var(--vagabond-c-dark-bluey);
+  cursor: pointer;
+}
+.vagabond .inventory-card .item-qty-badge.empty {
+  color: var(--vagabond-c-red);
 }
 .vagabond .inventory-card .bound-marker {
   position: absolute;

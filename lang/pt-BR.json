@@ -450,6 +450,13 @@
         "warn": "Apenas Avisar",
         "block": "Bloquear Conjuração"
       },
+      "trinketCastMode": {
+        "name": "Modo do Trinket para Conjurar",
+        "hint": "O que o requisito de Trinket verifica (a severidade vem da configuração acima). Equipado: qualquer Trinket equipado, mesmo vestido (amuleto). Trinket na Mão: um Trinket deve estar empunhado — a outra mão pode segurar qualquer coisa. Ambas as Mãos Livres: conjuração por gestos — um Trinket equipado e nada empunhado que não seja Trinket. Armas Gish contam como Trinkets; a chave de Efeito Ativo system.castWithHandsFull volta para Equipado.",
+        "equipped": "Equipado (qualquer lugar)",
+        "inHand": "Trinket na Mão",
+        "handsFree": "Ambas as Mãos Livres (gestos)"
+      },
       "lightSourceHandMode": {
         "name": "Fontes de Luz Ocupam Mãos",
         "hint": "Como acender uma fonte de luz portátil (tocha, vela) interage com o limite de 2 mãos de equipamento. Independente: sem interação. Auto-Equipar: acender a equipa em uma mão, deslocando o item mais antigo se necessário. Requer Mão Livre: acender falha a menos que haja mãos suficientes livres.",
@@ -1697,6 +1704,10 @@
     },
     "ContextMenu": {
       "Use": "Usar",
+      "Attack": "Atacar",
+      "Throw": "Arremessar",
+      "ThrowNoneLeft": "Não há mais {name} para arremessar.",
+      "QuantityHint": "Quantidade",
       "SendToChat": "Enviar ao Chat",
       "Equip": "Equipar",
       "Unequip": "Desequipar",
@@ -1735,10 +1746,15 @@
       "SlotForeignItem": "Esse item não pertence a este personagem.",
       "SlotNotWeapon":   "Apenas armas podem ir em um espaço de arma.",
       "NoTokenToPing":   "Este personagem não tem token na cena atual.",
+      "HandRight":       "Mão Direita",
+      "HandLeft":        "Mão Esquerda",
+      "Slots":           "Espaços",
       "Equipped": "Equipado",
       "Favorited": "Favoritado",
       "Menu": {
         "Use":           "Usar",
+        "Attack":        "Atacar",
+        "Throw":         "Arremessar",
         "Cast":          "Conjurar",
         "Open":          "Abrir",
         "SendToChat":    "Enviar ao Chat",
@@ -1865,6 +1881,10 @@
       "Increase": "Aumentar",
       "TrinketGateBlocked": "Você precisa de um Trinket equipado para conjurar magias.",
       "TrinketGateWarned": "Conjurando sem uma Trinket equipado.",
+      "TrinketInHandGateBlocked": "Você precisa de um Trinket na mão para conjurar magias.",
+      "TrinketInHandGateWarned": "Conjurando sem um Trinket na mão.",
+      "HandsFreeGateBlocked": "Suas mãos precisam estar livres (apenas Trinkets) para conjurar magias.",
+      "HandsFreeGateWarned": "Conjurando com as mãos ocupadas.",
       "NoDelivery": "Selecione um tipo de entrega.",
       "NoImbueTarget": "Mire em um ser disposto com uma arma equipada.",
       "ImbueNoWeaponSkip": "{name} não tem arma equipada e será ignorado.",

@@ -451,6 +451,13 @@
         "warn": "Warn Only",
         "block": "Block Casting"
       },
+      "trinketCastMode": {
+        "name": "Trinket Casting Mode",
+        "hint": "What the Trinket requirement checks (severity from the setting above). Equipped: any equipped Trinket, even worn (amulet). Trinket in Hand: a Trinket must be held — the other hand may hold anything. Both Hands Free: gesture casting — an equipped Trinket and nothing held that isn't a Trinket. Gish weapons count as Trinkets; the Active Effect key system.castWithHandsFull falls back to Equipped.",
+        "equipped": "Equipped (anywhere)",
+        "inHand": "Trinket in Hand",
+        "handsFree": "Both Hands Free (gestures)"
+      },
       "lightSourceHandMode": {
         "name": "Light Sources Occupy Hands",
         "hint": "How lighting a hand-held light source (torch, candle) interacts with the 2-hand equipment limit. Independent: no interaction. Auto-Equip: lighting equips it into a hand, bumping the oldest held item if needed. Require Free Hand: lighting fails unless enough hands are free.",
@@ -1698,6 +1705,10 @@
     },
     "ContextMenu": {
       "Use": "Use",
+      "Attack": "Attack",
+      "Throw": "Throw",
+      "ThrowNoneLeft": "No {name} left to throw.",
+      "QuantityHint": "Quantity",
       "SendToChat": "Send to Chat",
       "Equip": "Equip",
       "Unequip": "Unequip",
@@ -1736,10 +1747,15 @@
       "SlotForeignItem": "That item does not belong to this character.",
       "SlotNotWeapon":   "Only weapons can go in a weapon slot.",
       "NoTokenToPing":   "This character has no token on the current scene.",
+      "HandRight":       "Right Hand",
+      "HandLeft":        "Left Hand",
+      "Slots":           "Slots",
       "Equipped": "Equipped",
       "Favorited": "Favorited",
       "Menu": {
         "Use":           "Use",
+        "Attack":        "Attack",
+        "Throw":         "Throw",
         "Cast":          "Cast",
         "Open":          "Open",
         "SendToChat":    "Send to Chat",
@@ -1866,6 +1882,10 @@
       "Increase": "Increase",
       "TrinketGateBlocked": "You need an equipped Trinket to cast spells.",
       "TrinketGateWarned": "Casting without an equipped Trinket.",
+      "TrinketInHandGateBlocked": "You need a Trinket in hand to cast spells.",
+      "TrinketInHandGateWarned": "Casting without a Trinket in hand.",
+      "HandsFreeGateBlocked": "Your hands must be free (Trinkets only) to cast spells.",
+      "HandsFreeGateWarned": "Casting with your hands full.",
       "NoDelivery": "Select a delivery type.",
       "NoImbueTarget": "Target a willing being with an equipped weapon.",
       "ImbueNoWeaponSkip": "{name} has no equipped weapon and will be skipped.",

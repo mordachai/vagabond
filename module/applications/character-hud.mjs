@@ -170,6 +170,7 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
       togglePerk: this._onToggleAccordion,
       openSheet: this._onOpenSheet,
       slotUse: { handler: this._onSlotUse, buttons: [0, 2] },
+      adjustQuantity: { handler: this._onAdjustQuantity, buttons: [0, 2] },
       toggleWeaponGrip: this._onToggleWeaponGrip,
       itemMenu: this._onItemMenu,
       spellMenu: this._onSpellMenu,
@@ -486,45 +487,48 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
         return this._slotEntry(item, item?.type === 'spell' ? 'spell' : 'item');
       });
 
-    // Weapon circles are NOT a persisted slot pick — they're a live mirror of
-    // whatever equipment currently occupies hands (`system.equipmentState`
-    // oneHand/twoHands), the exact same field the character sheet's "Equipped"
-    // panel reads. Equipping/unequipping from either the sheet or the HUD is
-    // instantly reflected in both.
-    //
-    // RAW: you can wield up to `cap` Slots of Equipped Weapons. Each held weapon
-    // renders as ONE circle but consumes its Slot cost (min 1) from that budget;
-    // whatever budget is left over shows as empty circles. Non-weapon hand items
-    // (torch/wand) append after, OUTSIDE the weapon budget.
+    // Two hand spaces (R, L) — NOT a persisted slot pick, a live mirror of
+    // whatever occupies hands (`system.equipmentState` oneHand/twoHands), the
+    // same field the sheet's "Equipped" panel reads. Oldest holder goes in R.
+    // A 2H holder takes R and hides L; a 1H holder leaves L open. The weapon
+    // Slot cap is still enforced by EquipmentHelper, just not drawn here.
     const { EquipmentHelper } = globalThis.vagabond.utils;
-    const cap = CONFIG.VAGABOND?.maxEquippedWeaponSlots || 3;
-
-    const heldItems = actor.items
-      .filter((i) => i.type === 'equipment' && ['oneHand', 'twoHands'].includes(i.system.equipmentState))
+    const held = actor.items
+      .filter((i) => EquipmentHelper.handsFor(i) > 0)
       .sort((a, b) => (a.getFlag('vagabond', 'equippedAt') || 0) - (b.getFlag('vagabond', 'equippedAt') || 0));
-    const heldWeapons = heldItems.filter((i) => EquipmentHelper.isWeapon(i));
-    const heldNonWeapons = heldItems.filter((i) => !EquipmentHelper.isWeapon(i));
 
-    const weaponCost = (w) => Math.max(1, EquipmentHelper.itemSlotCost(w));
-
-    // One circle per held item (weapon or non-weapon). A weapon still CONSUMES
-    // its Slot cost from the `cap` budget — so a 2-Slot weapon leaves 1 empty
-    // circle, a 3-Slot weapon leaves none. Non-weapon hand items cost 1 each.
-    const weaponCells = heldWeapons.map((w) => {
-      const entry = this._slotEntry(w, 'weapon');
-      entry.slotCost = weaponCost(w);
-      entry.multiSlot = entry.slotCost > 1;
+    const handCell = (item, hand) => {
+      if (!item) {
+        const label = game.i18n.localize(hand === 'R' ? 'VAGABOND.Hud.HandRight' : 'VAGABOND.Hud.HandLeft');
+        return { filled: false, type: 'weapon', hand, tip: label };
+      }
+      const entry = this._slotEntry(item, EquipmentHelper.isWeapon(item) ? 'weapon' : 'item');
+      entry.hand = hand;
+      entry.tip = this._handTip(item);
       return entry;
-    });
-    for (const it of heldNonWeapons) weaponCells.push(this._slotEntry(it, 'item'));
+    };
+    context.handSlots = held[0]?.system.equipmentState === 'twoHands'
+      ? [handCell(held[0], 'R')]
+      : [handCell(held[0], 'R'), handCell(held[1], 'L')];
+  }
 
-    const usedBudget =
-      heldWeapons.reduce((n, w) => n + weaponCost(w), 0) + heldNonWeapons.length;
-    const emptyCircles = Math.max(0, cap - usedBudget);
-    for (let i = 0; i < emptyCircles; i++) weaponCells.push({ filled: false, type: 'weapon' });
+  /**
+   * Hand-circle hover (HTML): "Name: Damage <dmg icon> | Range | N Slots".
+   * Non-weapons show "Name | N Slots".
+   * @param {Item} item
+   * @returns {string}
+   */
+  _handTip(item) {
+    const { EquipmentHelper } = globalThis.vagabond.utils;
+    const esc = Handlebars.escapeExpression;
+    const name = `<strong>${esc(item.name)}</strong>`;
+    const slots = `${EquipmentHelper.itemSlotCost(item)} ${game.i18n.localize('VAGABOND.Hud.Slots')}`;
+    if (!EquipmentHelper.isWeapon(item)) return `${name} | ${slots}`;
 
-    // Hard-cap at the budget so circle indices stay 0..cap-1 (CSS positions them).
-    context.weaponSlots = weaponCells.slice(0, cap);
+    const sys = item.system;
+    const icon = CONFIG.VAGABOND.damageTypeIcons?.[sys.currentDamageType];
+    const damage = [esc(sys.currentDamage ?? ''), icon ? `<i class='${icon}'></i>` : ''].filter(Boolean).join(' ');
+    return `${name}: ${damage} | ${esc(sys.rangeAbbrev ?? '')} | ${slots}`;
   }
 
   /**
@@ -566,6 +570,11 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
     // Any 2-hand holder (weapon or torch-style item) marks its circle as 2H
     if (item.type === 'equipment') {
       entry.twoHanded = item.system.equipmentState === 'twoHands';
+      const { EquipmentHelper } = globalThis.vagabond.utils;
+      if (EquipmentHelper.isThrowable(item)) {
+        entry.throwable = true;
+        entry.quantity = item.system.quantity ?? 0;
+      }
     }
     return entry;
   }
@@ -1016,6 +1025,7 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
     if (!id) return;
     const item = this.actor.items.get(id);
     if (!item) return;
+    const inHandCircle = !!target.closest('.vh-pc-weapon');
 
     if (event.type === 'contextmenu' || event.button === 2) {
       event.preventDefault();
@@ -1023,15 +1033,26 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
       // state, so the way to remove one is "Unequip", not "Remove from HUD"
       // (a hand-circle item isn't in the slot map; clearing it would corrupt
       // the launcher slots).
-      const inHandCircle = !!target.closest('.vh-pc-weapon');
-      return this._openSlotMenu(event, item, type, { includeRemove: !inHandCircle && type !== 'weapon' });
+      return this._openSlotMenu(event, item, type, { includeRemove: !inHandCircle });
     }
     if (type === 'spell') return this._spellHandler.castSpell(event, { dataset: { spellId: id } });
 
-    // Equips the item first if it occupies hands and isn't already equipped
-    // (weapons, torches, etc. — from either a hand circle or a launcher
-    // slot), then performs its action (attack / ignite-toggle / use).
-    return activateHandItem({ actor: this.actor, item, event, rollHandler: this.rollHandler });
+    // Belt weapons with Thrown default to Throw (no equip, spends quantity).
+    // Otherwise equips the item first if it occupies hands and isn't already
+    // equipped, then performs its action (attack / ignite-toggle / use).
+    const { EquipmentHelper } = globalThis.vagabond.utils;
+    const mode = !inHandCircle && EquipmentHelper.isThrowable(item) ? 'throw' : 'use';
+    return activateHandItem({ actor: this.actor, item, event, rollHandler: this.rollHandler, mode });
+  }
+
+  /** Belt quantity badge: left-click +1 (retrieve), right-click −1. Floors at 0. */
+  static async _onAdjustQuantity(event, target) {
+    event.preventDefault();
+    event.stopPropagation();
+    const item = this.actor.items.get(target.dataset.itemId);
+    const delta = event.type === 'contextmenu' || event.button === 2 ? -1 : 1;
+    const { EquipmentHelper } = globalThis.vagabond.utils;
+    return EquipmentHelper.adjustQuantity(item, delta);
   }
 
   /**
@@ -1064,11 +1085,19 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
         action: () => this._spellHandler.castSpell(event, { dataset: { spellId: item.id } }),
       });
     } else {
+      const isWeapon = EquipmentHelper.isWeapon(item);
       items.push({
-        label: L('VAGABOND.Hud.Menu.Use'),
-        icon: 'fas fa-hand-sparkles',
+        label: L(isWeapon ? 'VAGABOND.Hud.Menu.Attack' : 'VAGABOND.Hud.Menu.Use'),
+        icon: isWeapon ? 'fas fa-swords' : 'fas fa-hand-sparkles',
         action: () => activateHandItem({ actor: this.actor, item, event, rollHandler: this.rollHandler }),
       });
+      if (EquipmentHelper.isThrowable(item)) {
+        items.push({
+          label: L('VAGABOND.Hud.Menu.Throw'),
+          icon: 'fas fa-share',
+          action: () => activateHandItem({ actor: this.actor, item, event, rollHandler: this.rollHandler, mode: 'throw' }),
+        });
+      }
     }
 
     if (type === 'weapon' && EquipmentHelper.isVersatileWeapon(item)) {
@@ -1247,15 +1276,12 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
    * or otherwise touch game state (equip/unequip is done from the Inventory
    * tab; see `EquipmentHelper.equipWeaponWithHandLimit` via
    * `inventory-handler.mjs`'s Equip/Unequip context menu, shared by sheet and
-   * HUD). Weapons have no slot to assign to (the circles are a live mirror of
-   * actual equip state — see `_categorizeItems`), so dropping one is a no-op.
+   * HUD). Weapons may go in the belt too (Thrown ones default to Throw there);
+   * the hand circles are never assigned — they mirror actual equip state.
    * @param {Item} item
    * @param {HTMLElement|null} slotEl  The slot element under the cursor, if any.
    */
   async _assignDrop(item, slotEl) {
-    const isWeapon = item.type === 'equipment' && item.system.equipmentType === 'weapon';
-    if (isWeapon) return;
-
     const max = VagabondCharacterHud.ITEM_SLOTS;
     const slots = this._readSlots();
     slots.items = slots.items.map(id => (id === item.id ? null : id));

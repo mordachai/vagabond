@@ -27,6 +27,14 @@
       {{/each}}
     </div>
   {{/if}}
+  {{#if item.system.isThrowable}}
+    <div
+      class='item-qty-badge {{#unless item.system.quantity}}empty{{/unless}}'
+      data-action='adjustQuantity'
+      data-item-id='{{item._id}}'
+      data-tooltip='{{localize "VAGABOND.ContextMenu.QuantityHint"}}: L +1 · R −1'
+    >×{{item.system.quantity}}</div>
+  {{/if}}
   {{#if requiresBound}}
     <div class='bound-marker'>
       {{#if bound}}

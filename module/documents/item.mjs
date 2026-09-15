@@ -230,9 +230,10 @@ export class VagabondItem extends Item {
 
   /**
    * Validate that this weapon can attack
+   * @param {{allowUnequipped?: boolean}} [options] allowUnequipped: thrown attacks
    * @throws {Error} If weapon is not equipped or not a weapon
    */
-  validateCanAttack() {
+  validateCanAttack({ allowUnequipped = false } = {}) {
     // Check if this is a weapon (legacy weapon item OR equipment with equipmentType='weapon')
     const isWeapon = (this.type === 'weapon') ||
                     (this.type === 'equipment' && this.system.equipmentType === 'weapon');
@@ -241,7 +242,7 @@ export class VagabondItem extends Item {
       throw new Error('Not a weapon');
     }
     const equipmentState = this.system.equipmentState || 'unequipped';
-    if (equipmentState === 'unequipped') {
+    if (!allowUnequipped && equipmentState === 'unequipped') {
       throw new Error(`${this.name} is not equipped. Equip it first to attack.`);
     }
   }
@@ -638,10 +639,11 @@ export class VagabondItem extends Item {
   /**
    * Roll an attack with this weapon
    * @param {VagabondActor} actor - The actor making the attack
+   * @param {{allowUnequipped?: boolean}} [options] allowUnequipped: thrown attacks
    * @returns {Promise<Object>} Attack result with roll, difficulty, isHit, isCritical, weaponSkill
    */
-  async rollAttack(actor, favorHinder = 'none', difficultyOverride = null) {
-    this.validateCanAttack();
+  async rollAttack(actor, favorHinder = 'none', difficultyOverride = null, { allowUnequipped = false } = {}) {
+    this.validateCanAttack({ allowUnequipped });
 
     // Get roll data WITH this item's "on-use" effects applied
     // This allows weapon properties like "Keen" to affect only this weapon's rolls

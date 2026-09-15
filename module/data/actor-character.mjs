@@ -65,6 +65,14 @@ export default class VagabondCharacter extends VagabondActorBase {
           label: "Bonus Bounds",
           hint: "Can be a number (e.g., 1, 5) or formula (e.g., @attributes.level.value)"
         }
+      ),
+      weaponSlotsBonus: new fields.ArrayField(
+        new fields.StringField({ blank: true }),
+        {
+          initial: [],
+          label: "Bonus Equipped Weapon Slots",
+          hint: "Can be a number (e.g., 1) or formula (e.g., @attributes.level.value)"
+        }
       )
     });
 
@@ -523,6 +531,13 @@ export default class VagabondCharacter extends VagabondActorBase {
       label: "Weapon Counts as Trinket"
     });
 
+    // Homebrew: ignore the hand part of the trinket casting mode (e.g. a
+    // Wizard who casts with a sword in hand) — only an equipped Trinket needed
+    schema.castWithHandsFull = new fields.BooleanField({
+      initial: false,
+      label: "Cast With Hands Full"
+    });
+
     // Defender status modifiers (affects attackers targeting this actor)
     schema.defenderStatusModifiers = new fields.SchemaField({
       // Invisible: attackers are treated as Blinded
@@ -588,6 +603,7 @@ export default class VagabondCharacter extends VagabondActorBase {
     // --- 1. Reset Flat Mechanics ---
     this.inventory.bonusSlots = []; // MUST reset - Active Effects will add to this
     this.inventory.boundsBonus = [];
+    this.inventory.weaponSlotsBonus = [];
     this.mana.bonus = [];
     this.mana.castingMaxBonus = [];
     this.focus.maxBonus = [];
@@ -662,6 +678,7 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.autoFailStats = [];
     this.autoFailAllRolls = false;
     this.weaponAsTrinket = false;
+    this.castWithHandsFull = false;
     this.defenderStatusModifiers.attackersAreBlinded = false;
     this.defenderStatusModifiers.closeAttacksAutoCrit = false;
     // Don't reset statusEffectData - it contains persistent state like charmerUuid
@@ -1188,7 +1205,9 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.inventory.equippedWeaponSlots = this.parent
       ? EquipmentHelper.equippedWeaponSlots(this.parent)
       : 0;
-    this.inventory.maxEquippedWeaponSlots = CONFIG.VAGABOND?.maxEquippedWeaponSlots || 3;
+    // Active Effects can raise it via inventory.weaponSlotsBonus (e.g. giants).
+    const weaponSlotsBonus = this._evaluateFormulaField(this.inventory.weaponSlotsBonus, rollData);
+    this.inventory.maxEquippedWeaponSlots = (CONFIG.VAGABOND?.maxEquippedWeaponSlots || 3) + weaponSlotsBonus;
   }
 
   _calculateBounds(rollData) {

@@ -88,6 +88,38 @@ export class EquipmentHelper {
   }
 
   /**
+   * Weapon with the Thrown property — can be thrown straight from the belt or
+   * inventory without being equipped (see activateHandItem mode 'throw').
+   * @param {Object} item
+   * @returns {boolean}
+   */
+  static isThrowable(item) {
+    return this.isWeapon(item) && (item.system.properties ?? []).includes('Thrown');
+  }
+
+  /**
+   * Max Slots of Equipped Weapons for an actor: RAW base plus
+   * `system.inventory.weaponSlotsBonus` (Active Effects — e.g. giants).
+   * @param {Actor} actor
+   * @returns {number}
+   */
+  static weaponSlotCap(actor) {
+    return actor?.system?.inventory?.maxEquippedWeaponSlots
+      ?? (CONFIG.VAGABOND?.maxEquippedWeaponSlots || 3);
+  }
+
+  /**
+   * Add `delta` to an item's quantity, floored at 0. Thrown weapons stop at 0
+   * instead of being deleted, so raising it again "retrieves" them.
+   * @param {Item} item
+   * @param {number} delta
+   */
+  static async adjustQuantity(item, delta) {
+    if (item?.type !== 'equipment') return;
+    await item.update({ 'system.quantity': Math.max(0, (item.system.quantity ?? 0) + delta) });
+  }
+
+  /**
    * The state an item should enter when equipped. Weapons derive it from
    * `grip`; non-weapons from `handsRequired` (0 = 'worn').
    * @param {Object} item
@@ -190,7 +222,7 @@ export class EquipmentHelper {
     // newcomer fits. A weapon whose own cost already exceeds the cap is still
     // allowed (nothing left to bump) with a warning.
     if (need > 0 && this.isWeapon(item)) {
-      const cap = CONFIG.VAGABOND?.maxEquippedWeaponSlots || 3;
+      const cap = this.weaponSlotCap(actor);
       const bumped = new Set(
         updates.filter((u) => u['system.equipmentState'] === 'unequipped').map((u) => u._id)
       );
@@ -314,7 +346,7 @@ export class EquipmentHelper {
     // 3) RAW weapon-Slot cap: Σ Slots of equipped weapons ≤ cap. Independent of
     // the hand pass — bump oldest equipped weapons first until it fits (keeps
     // the newest that fit, matching the hand-pool philosophy).
-    const wCap = CONFIG.VAGABOND?.maxEquippedWeaponSlots || 3;
+    const wCap = this.weaponSlotCap(actor);
     const wCost = (it) => Math.max(1, this.itemSlotCost(it));
     const equippedWeapons = equipped.filter(
       (i) =>

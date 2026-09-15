@@ -503,6 +503,8 @@ export default class VagabondEquipment extends VagabondItemBase {
   prepareDerivedData() {
     // Universal derived equip mirror — equipmentState is the stored truth
     this.equipped = this.equipmentState !== 'unequipped';
+    // Template-visible mirror of EquipmentHelper.isThrowable (Thrown weapons)
+    this.isThrowable = this.equipmentType === 'weapon' && (this.properties ?? []).includes('Thrown');
 
     // Relics don't use metal - skip metal calculations
     const isRelic = this.equipmentType === 'relic';

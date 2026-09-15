@@ -41,6 +41,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       roll: this._onRoll,
       rollWeapon: this._onRollWeapon,
       useItem: this._onUseItem,
+      throwWeapon: this._onThrowWeapon,
+      adjustQuantity: { handler: this._onAdjustQuantity, buttons: [0, 2] },
       rollMorale: this._onRollMorale,
       rollAppearing: this._onRollAppearing,
       // Equipment actions - delegated to equipmentHandler
@@ -782,6 +784,24 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
   static async _onUseItem(event, target) {
     return this._activateItemAction(event, target);
+  }
+
+  /** Throw a Thrown weapon without equipping it; spends one from the stack. */
+  static async _onThrowWeapon(event, target) {
+    event.preventDefault();
+    event.stopPropagation();
+    const item = this.actor.items.get(target.dataset.itemId);
+    if (!item) return;
+    return activateHandItem({ actor: this.actor, item, event, rollHandler: this.rollHandler, mode: 'throw' });
+  }
+
+  /** Quantity badge: left-click +1 (retrieve), right-click −1. Floors at 0. */
+  static async _onAdjustQuantity(event, target) {
+    event.preventDefault();
+    event.stopPropagation();
+    const item = this.actor.items.get(target.dataset.itemId);
+    const delta = event.type === 'contextmenu' || event.button === 2 ? -1 : 1;
+    return globalThis.vagabond.utils.EquipmentHelper.adjustQuantity(item, delta);
   }
 
   /**

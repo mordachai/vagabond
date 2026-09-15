@@ -164,8 +164,10 @@ export class RollHandler {
    * Handle weapon attack rolls
    * @param {Event} event - The triggering event
    * @param {HTMLElement} target - The target element
+   * @param {{thrown?: boolean}} [options] thrown: attack with an unequipped
+   *   Thrown weapon (quantity is spent by activateHandItem, not consumption)
    */
-  async rollWeapon(event, target = null) {
+  async rollWeapon(event, target = null, { thrown = false } = {}) {
     event.preventDefault();
 
     // 1. Target Safety
@@ -345,7 +347,7 @@ export class RollHandler {
       const _wpnEffectiveFavorHinder = _wpnPreCtx.favorHinder ?? favorHinder;
       const _wpnDifficultyOverride = _wpnPreCtx.difficulty !== _wpnBaseDifficulty ? _wpnPreCtx.difficulty : null;
 
-      const attackResult = await item.rollAttack(this.actor, _wpnEffectiveFavorHinder, _wpnDifficultyOverride);
+      const attackResult = await item.rollAttack(this.actor, _wpnEffectiveFavorHinder, _wpnDifficultyOverride, { allowUnequipped: thrown });
       if (!attackResult) return;
 
       // Post-roll hook for weapon attack
@@ -383,8 +385,9 @@ export class RollHandler {
         _wpnPostCtx.extraMetadata,
         _wpnPostCtx.extraTags
       );
-      // Handle consumption after successful attack (regardless of hit/miss)
-      await item.handleConsumption();
+      // Handle consumption after successful attack (regardless of hit/miss).
+      // A throw already spends quantity in activateHandItem.
+      if (!thrown) await item.handleConsumption();
       return attackResult.roll;
     } catch (error) {
       console.error(error);

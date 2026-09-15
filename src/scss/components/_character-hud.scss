@@ -19,16 +19,14 @@
   // Tune freely — each circle + the armor shield positions itself.
   --vh-wpn0-top: 0px;   --vh-wpn0-right: 30px;
   --vh-wpn1-top: 30px;   --vh-wpn1-right: 10px;
-  --vh-wpn2-top: 62px;   --vh-wpn2-right: 24px;
   --vh-armor-top: 118px; --vh-armor-right: 46px;
 
-  // Per-weapon stacking order (higher = on top, image included).
-  --vh-wpn0-z: 3;  --vh-wpn1-z: 2;  --vh-wpn2-z: 1;
+  // Per-hand stacking order (higher = on top, image included). 0 = R, 1 = L.
+  --vh-wpn0-z: 3;  --vh-wpn1-z: 2;
 
-  // Per-weapon versatile grip-badge offset (relative to its own circle).
+  // Per-hand versatile grip-badge offset (relative to its own circle).
   --vh-badge0-top: 15px;  --vh-badge0-left: -14px;
   --vh-badge1-top: 15px;  --vh-badge1-left: 40px;
-  --vh-badge2-top: 15px;  --vh-badge2-left: -14px;
 
   // Frameless ApplicationV2 elements get no positioning shell — own it here.
   position: fixed;
@@ -308,9 +306,24 @@
     align-items: center;
     justify-content: center;
     overflow: hidden;
+    position: relative; // anchors the quantity badge
     img { width: 100%; height: 100%; object-fit: cover; }
     &.filled { cursor: pointer; }
     &.filled:hover { border-color: $c-yellow; box-shadow: 0 0 5px $c-yellow; }
+
+    // Thrown-weapon stack count. L-click +1 (retrieve), R-click −1.
+    .vh-slot-qty {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      padding: 0 2px;
+      background: $c-inset-1;
+      color: $c-yellow;
+      font-size: calc(0.65rem * var(--vh-font-scale));
+      line-height: 1.1;
+      cursor: pointer;
+      &.empty { color: $c-red; }
+    }
   }
 
   .vh-mana {
@@ -359,29 +372,19 @@
       z-index: var(--vh-wpn1-z);
       .vh-grip-badge { top: var(--vh-badge1-top); left: var(--vh-badge1-left); }
     }
-    &[data-slot-index="2"] {
-      top: var(--vh-wpn2-top); right: var(--vh-wpn2-right);
-      z-index: var(--vh-wpn2-z);
-      .vh-grip-badge { top: var(--vh-badge2-top); left: var(--vh-badge2-left); }
-    }
     &.filled { cursor: pointer; }
 
-    // Slot-cost badge for a weapon occupying >1 equipped-weapon Slot.
-    .vh-slot-cost {
+    // Hand label (R / L), bottom-left of the circle.
+    .vh-hand-label {
       position: absolute;
-      bottom: -4px;
-      right: -4px;
-      min-width: 16px;
-      height: 16px;
-      padding: 0 3px;
-      border-radius: 8px;
-      background: $c-inset-1;
-      border: 1px solid $c-yellow;
-      color: $c-yellow;
-      font-size: calc(0.7rem * var(--vh-font-scale));
-      line-height: 14px;
-      text-align: center;
+      bottom: -3px;
+      left: -3px;
       z-index: 4;
+      font-size: calc(0.7rem * var(--vh-font-scale));
+      font-weight: bold;
+      color: $c-yellow;
+      text-shadow: var(--vh-outline-2);
+      pointer-events: none;
     }
     // Hover always wins so an overlapped circle is reachable; doesn't disturb base order.
     &.filled:hover { border-color: $c-stat; box-shadow: 0 0 6px $c-yellow; z-index: 10; }
