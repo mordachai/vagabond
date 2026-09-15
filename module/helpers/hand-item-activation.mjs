@@ -20,8 +20,10 @@ import { runMacroFromButton } from './item-macro.mjs';
  * @param {'use'|'throw'} [o.mode] 'throw' (Thrown weapons only): attack
  *   WITHOUT equipping, then spend one from the stack. Stops at 0 (item kept)
  *   so raising the quantity "retrieves" thrown weapons.
+ * @param {string|null} [o.skillKey] 'use' weapons: which allowed skill to attack
+ *   with (default: the weapon's preferred skill).
  */
-export async function activateHandItem({ actor, item, event, rollHandler, mode = 'use' }) {
+export async function activateHandItem({ actor, item, event, rollHandler, mode = 'use', skillKey = null }) {
   const { EquipmentHelper } = globalThis.vagabond.utils;
 
   if (mode === 'throw' && EquipmentHelper.isThrowable(item)) {
@@ -41,8 +43,13 @@ export async function activateHandItem({ actor, item, event, rollHandler, mode =
   const occupiesHands = EquipmentHelper.isWeapon(item)
     || (item.type === 'equipment' && (item.system.handsRequired ?? 0) > 0);
 
-  if (occupiesHands && !EquipmentHelper.isEquipped(item)) {
-    await EquipmentHelper.equipWithHandLimit(actor, item.id, EquipmentHelper.defaultEquipState(item));
+  // Unequipped, or sitting in Belt ('worn') while it normally needs hands
+  // → draw it into hands first.
+  const heldState = EquipmentHelper.defaultEquipState(item);
+  const needsDraw = !EquipmentHelper.isEquipped(item)
+    || (EquipmentHelper.handsFor(item) === 0 && heldState !== 'worn');
+  if (occupiesHands && needsDraw) {
+    await EquipmentHelper.equipWithHandLimit(actor, item.id, heldState);
   }
 
   const LS = game.vagabond?.lightSource;
@@ -64,7 +71,7 @@ export async function activateHandItem({ actor, item, event, rollHandler, mode =
   const target = { dataset: { itemId: item.id } };
 
   if (EquipmentHelper.isWeapon(item) || hasAlchemicalDamage) {
-    return rollHandler.rollWeapon(event, target);
+    return rollHandler.rollWeapon(event, target, { skillKey });
   }
   return rollHandler.useItem(event, target);
 }

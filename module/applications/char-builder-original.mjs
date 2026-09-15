@@ -2092,8 +2092,8 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
         // Auto-equip Weapons
         else if (item.type === 'weapon' || (item.type === 'equipment' && item.system.equipmentType === 'weapon')) {
             const grip = item.system.grip;
-            // Default to oneHand unless it's strictly 2H
-            const state = (grip === '2H') ? 'twoHands' : 'oneHand';
+            // Default to oneHand unless it's strictly 2H or Zero Grip (no hands)
+            const state = { '2H': 'twoHands', '0': 'worn' }[grip] ?? 'oneHand';
             foundry.utils.setProperty(item, 'system.equipmentState', state);
             // Also set equipped flag for compatibility
             foundry.utils.setProperty(item, 'system.equipped', true);

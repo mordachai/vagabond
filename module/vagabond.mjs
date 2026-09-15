@@ -2562,7 +2562,7 @@ const FLUKE_REROLL_ENTRY = {
       let damageRoll = null;
       if (VagabondDamageHelper.shouldRollDamage(isSuccess)) {
         const statKey = weaponSkill?.stat || null;
-        damageRoll = await weapon.rollDamage(actor, isCritical, statKey, targetsAtRollTime);
+        damageRoll = await weapon.rollDamage(actor, isCritical, statKey, targetsAtRollTime, null, weaponSkillKey);
       }
       await VagabondChatCard.weaponAttack(actor, weapon, attackResult, damageRoll, targetsAtRollTime);
 

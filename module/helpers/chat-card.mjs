@@ -803,7 +803,7 @@ export class VagabondChatCard {
       // weapon skill's stat (crit stat bonus only applies on real crits).
       const { VagabondDamageHelper } = await import('./damage-helper.mjs');
       if (!damageRoll && VagabondDamageHelper.shouldRollDamage(isHit)) {
-          damageRoll = await weapon.rollDamage(actor, isCritical, weaponSkill?.stat || null, targetsAtRollTime);
+          damageRoll = await weapon.rollDamage(actor, isCritical, weaponSkill?.stat || null, targetsAtRollTime, null, weaponSkillKey);
       }
 
       const tags = [];
@@ -820,7 +820,7 @@ export class VagabondChatCard {
       }
 
       if (weapon.system.grip) {
-          const gripMap = { '1H': 'fas fa-hand-fist', '2H': 'fas fa-hands', 'V': 'fas fa-hand-peace' };
+          const gripMap = { '1H': 'fas fa-hand-fist', '2H': 'fas fa-hands', 'V': 'fas fa-hand-peace', '0': 'fas fa-wind' };
           tags.push({ icon: gripMap[weapon.system.grip], cssClass: 'tag-grip' });
       }
 

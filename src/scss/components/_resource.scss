@@ -13,7 +13,7 @@
 // Skills List - 1 column layout
 .skills-container {
   gap: 20px;
-  color: $c-dark !important;
+  color: $c-text-1 !important;
   font-family: $font-primary;
   flex: 1;
   min-height: 0;
@@ -444,6 +444,21 @@
         }
       }
     }
+  }
+
+  // Soft divider between the Hands and Belt zones of the Equipped list
+  .equipped-divider {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    margin: 4px 4px 2px;
+    padding-bottom: 1px;
+    border-bottom: 1px solid $c-text-1;
+    font-size: 10px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    opacity: 0.8;
   }
 
   .title-container{

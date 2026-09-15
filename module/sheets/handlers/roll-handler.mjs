@@ -164,10 +164,11 @@ export class RollHandler {
    * Handle weapon attack rolls
    * @param {Event} event - The triggering event
    * @param {HTMLElement} target - The target element
-   * @param {{thrown?: boolean}} [options] thrown: attack with an unequipped
-   *   Thrown weapon (quantity is spent by activateHandItem, not consumption)
+   * @param {{thrown?: boolean, skillKey?: string|null}} [options] thrown: attack with an unequipped
+   *   Thrown weapon (quantity is spent by activateHandItem, not consumption) — rolls Ranged,
+   *   Hindered at Far. skillKey: one of the weapon's allowed skills (default: preferred).
    */
-  async rollWeapon(event, target = null, { thrown = false } = {}) {
+  async rollWeapon(event, target = null, { thrown = false, skillKey = null } = {}) {
     event.preventDefault();
 
     // 1. Target Safety
@@ -331,14 +332,29 @@ export class RollHandler {
       const systemFavorHinder = ignoresVulnerableHinder
         ? 'none'
         : (this.actor.system.favorHinder || 'none');
-      const favorHinder = VagabondRollBuilder.calculateEffectiveFavorHinder(
+      let favorHinder = VagabondRollBuilder.calculateEffectiveFavorHinder(
         systemFavorHinder,
         event.shiftKey,
         event.ctrlKey
       );
 
-      // Pre-roll hook for weapon attack
-      const _wpnRollKey = item.system.weaponSkill;
+      // Thrown (RAW): "Can throw attack to Near, or Far with Hinder" — measured
+      // from the thrower to the first Target. No Target → no automatic vote.
+      let throwRangeBand = null;
+      if (thrown) {
+        const { FlankingHelper } = await import('../../helpers/flanking-helper.mjs');
+        const throwerToken = this.actor.token?.object ?? this.actor.getActiveTokens(true)[0];
+        const throwTarget = TargetHelper.resolveTargets(targetsAtRollTime)[0];
+        if (throwerToken && throwTarget) throwRangeBand = FlankingHelper.rangeBand(throwerToken, throwTarget);
+        if (throwRangeBand === 'far') {
+          favorHinder = VagabondRollBuilder.mergeFavorHinder(favorHinder, 'hinder');
+          ui.notifications.warn(game.i18n.format('VAGABOND.ContextMenu.ThrowFar', { name: item.name }));
+        }
+      }
+
+      // Pre-roll hook for weapon attack. Throw rolls Ranged; otherwise the
+      // chosen / preferred / default skill.
+      const _wpnRollKey = EquipmentHelper.attackSkillFor(item, { mode: thrown ? 'throw' : 'use', skillKey });
       const _wpnRollData = this.actor.getRollData();
       const _wpnSkillData = _wpnRollData.skills?.[_wpnRollKey] || _wpnRollData.saves?.[_wpnRollKey];
       const _wpnBaseDifficulty = _wpnSkillData?.difficulty ?? 10;
@@ -347,11 +363,14 @@ export class RollHandler {
       const _wpnEffectiveFavorHinder = _wpnPreCtx.favorHinder ?? favorHinder;
       const _wpnDifficultyOverride = _wpnPreCtx.difficulty !== _wpnBaseDifficulty ? _wpnPreCtx.difficulty : null;
 
-      const attackResult = await item.rollAttack(this.actor, _wpnEffectiveFavorHinder, _wpnDifficultyOverride, { allowUnequipped: thrown });
+      const attackResult = await item.rollAttack(this.actor, _wpnEffectiveFavorHinder, _wpnDifficultyOverride, { allowUnequipped: thrown, skillKey: _wpnRollKey, thrown });
       if (!attackResult) return;
 
       // Post-roll hook for weapon attack
       const _wpnPostCtx = { actor: this.actor, item, rollKey: attackResult.weaponSkillKey, rollType: 'weapon', roll: attackResult.roll, difficulty: attackResult.difficulty, isSuccess: attackResult.isHit, isCritical: attackResult.isCritical, extraMetadata: [], extraTags: [] };
+      if (throwRangeBand === 'far') {
+        _wpnPostCtx.extraTags.push({ label: game.i18n.localize('VAGABOND.ContextMenu.ThrowFarTag'), cssClass: 'tag-range' });
+      }
       Hooks.callAll('vagabond.postD20Roll', _wpnPostCtx);
 
       // Stash the crit stat bonus so the damage card can render the two-state toggle
@@ -373,7 +392,7 @@ export class RollHandler {
       let damageRoll = null;
       if (VagabondDamageHelper.shouldRollDamage(attackResult.isHit)) {
         const statKey = attackResult.weaponSkill?.stat || null;
-        damageRoll = await item.rollDamage(this.actor, attackResult.isCritical, statKey, targetsAtRollTime, cleaveDieOverride);
+        damageRoll = await item.rollDamage(this.actor, attackResult.isCritical, statKey, targetsAtRollTime, cleaveDieOverride, attackResult.weaponSkillKey);
       }
 
       await VagabondChatCard.weaponAttack(

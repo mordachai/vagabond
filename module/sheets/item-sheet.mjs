@@ -83,6 +83,8 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       clearAllResourceOrGroups: this._onClearAllResourceOrGroups,
       toggleWeaponProperty: this._onToggleWeaponProperty,
       removeWeaponProperty: this._onRemoveWeaponProperty,
+      toggleWeaponAltSkill: this._onToggleWeaponAltSkill,
+      removeWeaponAltSkill: this._onRemoveWeaponAltSkill,
       toggleImmunity: this._onToggleImmunity,
       removeImmunity: this._onRemoveImmunity,
       toggleLock: this._onToggleLock,
@@ -240,6 +242,18 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       fields: this.document.schema.fields,
       systemFields: this.document.system.schema.fields,
     };
+
+    // Weapons: the skill attacks roll with (preferred, else default) and every
+    // allowed skill as a comma-separated list — shown on the locked sheet.
+    const { EquipmentHelper } = globalThis.vagabond.utils;
+    if (EquipmentHelper.isWeapon(this.item)) {
+      const skillLabel = (k) => game.i18n.localize(CONFIG.VAGABOND.weaponSkills?.[k] ?? k);
+      const skillOptions = EquipmentHelper.attackSkillOptions(this.item);
+      context.attackSkill = {
+        label: skillLabel(EquipmentHelper.attackSkillFor(this.item)),
+        optionsDisplay: skillOptions.length > 1 ? skillOptions.map(skillLabel).join(', ') : '',
+      };
+    }
 
     return context;
   }
@@ -588,7 +602,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
                     : '';
                   const grip = sys.grip ? (sys.grip === 'V' ? '1H/2H' : sys.grip) : '—';
                   const costDisplay = sys.costDisplay || `0${game.i18n.localize('VAGABOND.Currency.Gold.abbr')}`;
-                  const slots = sys.slots || 1;
+                  const slots = sys.slots ?? 0;
 
                   stats = `${damageDisplay} ${damageType} • ${grip} • ${costDisplay} • ${slots} slot${slots !== 1 ? 's' : ''}`;
 
@@ -621,14 +635,14 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
                 } else if (sys.equipmentType === 'relic') {
                   // Relic: cost, slots
                   const costDisplay = sys.costDisplay || `0${game.i18n.localize('VAGABOND.Currency.Gold.abbr')}`;
-                  const slots = sys.baseSlots || 1;
+                  const slots = sys.slots ?? 0;
                   stats = `${costDisplay} • Slots: ${slots}`;
                   description = 'Relic';
 
                 } else {
                   // Gear: cost, slots
                   const costDisplay = sys.costDisplay || `0${game.i18n.localize('VAGABOND.Currency.Gold.abbr')}`;
-                  const slots = sys.baseSlots || 1;
+                  const slots = sys.slots ?? 0;
                   stats = `${costDisplay} • Slots: ${slots}`;
                   description = sys.gearType || 'Gear';
                 }
@@ -1145,7 +1159,8 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
         else value = e.target.value;
         try {
           // Allow a render for fields whose changes affect calculated display values.
-          const needsRender = name === 'name' || name === 'system.metal' || name === 'system.usesDiceScaling';
+          const needsRender = name === 'name' || name === 'system.metal' || name === 'system.usesDiceScaling'
+            || name === 'system.weaponSkill'; // Other Skills list excludes the default
           const options = needsRender ? {} : { render: false };
           await this.document.update({ [name]: value }, options);
         } catch (err) {
@@ -2162,6 +2177,38 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
   }
 
   /**
+   * Add/remove an alternate attack skill on a weapon (via checkbox)
+   *
+   * @this VagabondItemSheet
+   * @param {PointerEvent} event   The originating click event
+   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
+   * @private
+   */
+  static async _onToggleWeaponAltSkill(event, target) {
+    const skill = target.dataset.skill;
+    const altSkills = this.item.system.altSkills || [];
+    const next = target.checked
+      ? [...new Set([...altSkills, skill])]
+      : altSkills.filter(s => s !== skill);
+    await this.item.update({ 'system.altSkills': next });
+  }
+
+  /**
+   * Remove an alternate attack skill from a weapon (via tag x button)
+   *
+   * @this VagabondItemSheet
+   * @param {PointerEvent} event   The originating click event
+   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
+   * @private
+   */
+  static async _onRemoveWeaponAltSkill(event, target) {
+    const skill = target.dataset.skill;
+    if (!skill) return;
+    const altSkills = this.item.system.altSkills || [];
+    await this.item.update({ 'system.altSkills': altSkills.filter(s => s !== skill) });
+  }
+
+  /**
    * Handle adding/removing immunity from armor (via checkbox)
    *
    * @this VagabondItemSheet
@@ -2887,6 +2934,8 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
             itemData.system.equipmentState = 'oneHand';
           } else if (itemData.system.grip === '2H') {
             itemData.system.equipmentState = 'twoHands';
+          } else if (itemData.system.grip === '0') {
+            itemData.system.equipmentState = 'worn'; // Zero Grip: equipped, no hands
           }
         } else if (itemData.system.equipmentType === 'armor') {
           itemData.system.equipmentState = 'worn'; // equipped, occupies no hands

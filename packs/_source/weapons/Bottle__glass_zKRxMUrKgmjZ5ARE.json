@@ -6,7 +6,7 @@
     "description": "",
     "equipmentType": "weapon",
     "locked": true,
-    "equipped": false,
+    "equipped": true,
     "quantity": 1,
     "baseCost": {
       "gold": 0,
@@ -37,27 +37,34 @@
       "hitDuration": 1000,
       "hitOffsetX": -100
     },
-    "damageTypeOneHand": "slashing"
+    "damageTypeOneHand": "slashing",
+    "altSkills": [
+      "melee"
+    ]
   },
   "effects": [],
   "folder": null,
-  "flags": {},
+  "flags": {
+    "vagabond": {
+      "preferredSkill": ""
+    }
+  },
   "_stats": {
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "13.351",
+    "coreVersion": "14.367",
     "systemId": "vagabond",
-    "systemVersion": "4.3.1",
+    "systemVersion": "5.37.4",
     "createdTime": 1764967045011,
-    "modifiedTime": 1773713111045,
-    "lastModifiedBy": "13p65OEadZSZVLRk"
+    "modifiedTime": 1789499550497,
+    "lastModifiedBy": "7hJBvKOxyEF7RWCr"
   },
   "ownership": {
     "default": 0,
     "vJkLjvlErdx6ZHoC": 3
   },
   "_id": "zKRxMUrKgmjZ5ARE",
-  "sort": 4400000,
+  "sort": 5400000,
   "_key": "!items!zKRxMUrKgmjZ5ARE"
 }

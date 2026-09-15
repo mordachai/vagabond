@@ -6,6 +6,7 @@ import { VagabondActorSheet } from '../sheets/actor-sheet.mjs';
 import { AccordionHelper } from '../helpers/accordion-helper.mjs';
 import { applyHudDisplayPrefs, getHudHealthBar, isItemPile } from '../helpers/hud-display.mjs';
 import { activateHandItem } from '../helpers/hand-item-activation.mjs';
+import { buildItemMenuItems } from '../helpers/item-menu.mjs';
 import { bindHudTooltips } from '../helpers/hud-tooltip.mjs';
 import * as ItemSections from '../helpers/item-sections.mjs';
 
@@ -170,7 +171,6 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
       togglePerk: this._onToggleAccordion,
       openSheet: this._onOpenSheet,
       slotUse: { handler: this._onSlotUse, buttons: [0, 2] },
-      adjustQuantity: { handler: this._onAdjustQuantity, buttons: [0, 2] },
       toggleWeaponGrip: this._onToggleWeaponGrip,
       itemMenu: this._onItemMenu,
       spellMenu: this._onSpellMenu,
@@ -1045,16 +1045,6 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
     return activateHandItem({ actor: this.actor, item, event, rollHandler: this.rollHandler, mode });
   }
 
-  /** Belt quantity badge: left-click +1 (retrieve), right-click −1. Floors at 0. */
-  static async _onAdjustQuantity(event, target) {
-    event.preventDefault();
-    event.stopPropagation();
-    const item = this.actor.items.get(target.dataset.itemId);
-    const delta = event.type === 'contextmenu' || event.button === 2 ? -1 : 1;
-    const { EquipmentHelper } = globalThis.vagabond.utils;
-    return EquipmentHelper.adjustQuantity(item, delta);
-  }
-
   /**
    * Versatile-weapon grip badge → toggle 1H ⇄ 2H. Delegates to the shared
    * EquipmentHandler; the `updateItem` hook re-renders and flips the badge.
@@ -1074,7 +1064,7 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
    * @param {'spell'|'weapon'|'item'} type
    */
   _openSlotMenu(event, item, type, { includeRemove = true } = {}) {
-    const { ContextMenuHelper, VagabondChatCard, EquipmentHelper } = globalThis.vagabond.utils;
+    const { ContextMenuHelper, VagabondChatCard } = globalThis.vagabond.utils;
     const L = (k) => game.i18n.localize(k);
     const items = [];
 
@@ -1084,55 +1074,28 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
         icon: 'fas fa-wand-sparkles',
         action: () => this._spellHandler.castSpell(event, { dataset: { spellId: item.id } }),
       });
+      items.push({
+        label: L('VAGABOND.Hud.Menu.Open'),
+        icon: 'fas fa-up-right-from-square',
+        action: () => item.sheet.render(true),
+      });
+      items.push({
+        label: L('VAGABOND.Hud.Menu.SendToChat'),
+        icon: 'fas fa-comment',
+        action: () => VagabondChatCard.gearUse(this.actor, item),
+      });
     } else {
-      const isWeapon = EquipmentHelper.isWeapon(item);
-      items.push({
-        label: L(isWeapon ? 'VAGABOND.Hud.Menu.Attack' : 'VAGABOND.Hud.Menu.Use'),
-        icon: isWeapon ? 'fas fa-swords' : 'fas fa-hand-sparkles',
-        action: () => activateHandItem({ actor: this.actor, item, event, rollHandler: this.rollHandler }),
-      });
-      if (EquipmentHelper.isThrowable(item)) {
-        items.push({
-          label: L('VAGABOND.Hud.Menu.Throw'),
-          icon: 'fas fa-share',
-          action: () => activateHandItem({ actor: this.actor, item, event, rollHandler: this.rollHandler, mode: 'throw' }),
-        });
-      }
-    }
-
-    if (type === 'weapon' && EquipmentHelper.isVersatileWeapon(item)) {
-      const twoH = item.system.equipmentState === 'twoHands';
-      items.push({
-        label: L(twoH ? 'VAGABOND.Hud.Menu.UseOneHand' : 'VAGABOND.Hud.Menu.UseTwoHands'),
-        icon: twoH ? 'fas fa-hand-fist' : 'fas fa-hands',
-        action: async () => {
-          await this._equipmentHandler.toggleWeaponGrip(event, { dataset: { itemId: item.id } });
-          this.render();
-        },
-      });
-    }
-
-    items.push({
-      label: L('VAGABOND.Hud.Menu.Open'),
-      icon: 'fas fa-up-right-from-square',
-      action: () => item.sheet.render(true),
-    });
-
-    items.push({
-      label: L('VAGABOND.Hud.Menu.SendToChat'),
-      icon: 'fas fa-comment',
-      action: () => VagabondChatCard.gearUse(this.actor, item),
-    });
-
-    if (type !== 'spell') {
-      items.push({
-        label: L('VAGABOND.Hud.Menu.Unequip'),
-        icon: 'fas fa-times',
-        action: async () => {
-          await item.update({ 'system.equipmentState': 'unequipped' });
-          this.render();
-        },
-      });
+      // Shared with the inventory grid and the sheet's Equipped panel.
+      // Slotted items always offer "Use" — they were placed there to be used.
+      items.push(...buildItemMenuItems({
+        actor: this.actor,
+        item,
+        event,
+        rollHandler: this.rollHandler,
+        equipmentHandler: this._equipmentHandler,
+        forceUse: true,
+        onChange: () => this.render(),
+      }));
     }
 
     if (includeRemove) {

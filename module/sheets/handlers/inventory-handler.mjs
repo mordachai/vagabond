@@ -1,5 +1,5 @@
 import * as ItemSections from '../../helpers/item-sections.mjs';
-import { activateHandItem } from '../../helpers/hand-item-activation.mjs';
+import { buildItemMenuItems } from '../../helpers/item-menu.mjs';
 
 /**
  * Handler for inventory-related functionality in the character sheet.
@@ -47,8 +47,11 @@ export class InventoryHandler {
         metalColor: EquipmentHelper.getMetalColor(item),
         weaponSkillIcon: EquipmentHelper.getWeaponSkillIcon(item),
         damageTypeIcon: EquipmentHelper.getDamageTypeIcon(item),
-        isSlotZero: (item.system.slots || item.system.baseSlots || 0) === 0,
-        totalSlots: item.system.slots || item.system.baseSlots || 0,
+        isSlotZero: EquipmentHelper.itemSlotCost(item) === 0,
+        // Card width: per-unit Slots, capped to the 4-column grid (stacks don't widen the card)
+        totalSlots: Math.min(EquipmentHelper.itemSlotCost(item), 4),
+        // Capacity consumed by the whole stack (cost × quantity) — drives numbering only
+        stackSlots: EquipmentHelper.itemStackCost(item),
         requiresBound: item.system.requiresBound || false,
         bound: item.system.bound || false,
         usesPips: ItemSections.usesPipsArray(item),
@@ -89,7 +92,7 @@ export class InventoryHandler {
     context.inventoryItems.forEach((itemData) => {
       if (!itemData.isSlotZero) {
         itemData.displayNumber = capacityNumber; // Show starting number
-        capacityNumber += itemData.totalSlots; // Increment by slot size!
+        capacityNumber += itemData.stackSlots; // Increment by stack size (cost × quantity)
       } else {
         itemData.displayNumber = null; // Slot-0 items have no number
       }
@@ -173,119 +176,17 @@ export class InventoryHandler {
       return;
     }
 
-    // Import helpers
-    const { EquipmentHelper } = globalThis.vagabond.utils;
     const { ContextMenuHelper } = globalThis.vagabond.utils;
-    const { VagabondChatCard } = globalThis.vagabond.utils;
 
-    const isEquipped = EquipmentHelper.isEquipped(item);
-    const isWeapon = EquipmentHelper.isWeapon(item);
-    const isArmor = EquipmentHelper.isArmor(item);
-    const isGear = EquipmentHelper.isGear(item);
-
-    // Determine if "Use" option should be shown
-    let showUseOption = false;
-
-    if (isWeapon) {
-      // Use auto-equips if needed, so it's always available
-      showUseOption = true;
-    } else if (isArmor) {
-      // Armor cannot be "used"
-      showUseOption = false;
-    } else if (isGear) {
-      // Gear can be "used" if it's consumable, or if it occupies hands
-      // (e.g. a torch — Use auto-equips it, so it must be reachable even
-      // before the item is ever equipped)
-      showUseOption = item.system.isConsumable === true || (item.system.handsRequired ?? 0) > 0;
-    } else {
-      // Alchemicals, relics, and other items can be used
-      showUseOption = true;
-    }
-
-    // Build menu items
-    const menuItems = [];
-
-    // Use option
-    if (showUseOption) {
-      menuItems.push({
-        label: game.i18n.localize(isWeapon ? 'VAGABOND.ContextMenu.Attack' : 'VAGABOND.ContextMenu.Use'),
-        icon: isWeapon ? 'fas fa-swords' : 'fas fa-hand-sparkles',
-        enabled: true,
-        action: async () => {
-          // Equips the item first if it occupies hands and isn't already
-          // equipped (weapons, torches, etc.), then performs its action.
-          await activateHandItem({ actor: this.actor, item, event, rollHandler: this.sheet.rollHandler });
-        },
-      });
-    }
-
-    // Throw (Thrown weapons): attack without equipping, spends one from the stack
-    if (EquipmentHelper.isThrowable(item)) {
-      menuItems.push({
-        label: game.i18n.localize('VAGABOND.ContextMenu.Throw'),
-        icon: 'fas fa-share',
-        enabled: true,
-        action: async () => {
-          await activateHandItem({ actor: this.actor, item, event, rollHandler: this.sheet.rollHandler, mode: 'throw' });
-        },
-      });
-    }
-
-    // Send to Chat
-    menuItems.push({
-      label: game.i18n.localize('VAGABOND.ContextMenu.SendToChat'),
-      icon: 'fas fa-comment',
-      enabled: true,
-      action: async () => {
-        await VagabondChatCard.gearUse(this.actor, item);
-      },
-    });
-
-    // Equip/Unequip
-    menuItems.push({
-      label: game.i18n.localize(isEquipped ? 'VAGABOND.ContextMenu.Unequip' : 'VAGABOND.ContextMenu.Equip'),
-      icon: `fas fa-${isEquipped ? 'times' : 'check'}`,
-      enabled: true,
-      action: async () => {
-        const newState = isEquipped ? 'unequipped' : EquipmentHelper.defaultEquipState(item);
-        await EquipmentHelper.equipWithHandLimit(this.actor, item.id, newState);
-      },
-    });
-
-    // Bound / Unbind (only for items that require binding)
-    if (item.system.requiresBound) {
-      const isBound = item.system.bound === true;
-      menuItems.push({
-        label: game.i18n.localize(isBound ? 'VAGABOND.ContextMenu.Unbind' : 'VAGABOND.ContextMenu.Bind'),
-        icon: 'fa-solid fa-diamond',
-        enabled: true,
-        action: async () => {
-          // If trying to bind, check the actor's bounds limit
-          if (!isBound) {
-            const currentBounds = this.actor.system.inventory?.currentBounds ?? 0;
-            const maxBounds = this.actor.system.inventory?.maxBounds ?? 3;
-            if (currentBounds >= maxBounds) {
-              ui.notifications.warn(game.i18n.format('VAGABOND.UI.Labels.BoundsLimitReached', {
-                name: item.name,
-                current: currentBounds,
-                max: maxBounds,
-              }));
-              return;
-            }
-          }
-          await item.update({ 'system.bound': !isBound });
-        },
-      });
-    }
-
-    // Edit
-    menuItems.push({
-      label: game.i18n.localize('VAGABOND.ContextMenu.Edit'),
-      icon: 'fas fa-edit',
-      enabled: true,
-      action: () => {
-        item.sheet.render(true);
-      },
+    // Same entries as the HUD slot menu (Attack/Use, Throw + Quantity, grip,
+    // Open, Send to Chat, Equip/Unequip, Bind), plus Delete. Works for both the
+    // actor sheet and the HUD (which names its equipment handler differently).
+    const menuItems = buildItemMenuItems({
+      actor: this.actor,
+      item,
+      event,
+      rollHandler: this.sheet.rollHandler,
+      equipmentHandler: this.sheet.equipmentHandler ?? this.sheet._equipmentHandler,
     });
 
     // Delete

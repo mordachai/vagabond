@@ -54,6 +54,31 @@ export class ContextMenuHelper {
       const labelHtml = `<span>${itemConfig.label}</span>`;
       item.innerHTML = `${iconHtml}${labelHtml}`;
 
+      // Stepper row: "Label  − N +". Buttons adjust in place and keep the menu open.
+      if (itemConfig.stepper) {
+        const { value, onChange } = itemConfig.stepper;
+        item.classList.add('context-menu-stepper-row');
+        const stepper = document.createElement('span');
+        stepper.classList.add('context-menu-stepper');
+        stepper.innerHTML = `<button type="button" data-delta="-1"><i class="fas fa-minus"></i></button>`
+          + `<span class="context-menu-stepper-value">${value}</span>`
+          + `<button type="button" data-delta="1"><i class="fas fa-plus"></i></button>`;
+        const valueEl = stepper.querySelector('.context-menu-stepper-value');
+        stepper.querySelectorAll('button').forEach(btn => btn.addEventListener('click', async (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          try {
+            const next = await onChange(Number(btn.dataset.delta));
+            if (next !== undefined) valueEl.textContent = next;
+          } catch (error) {
+            console.error('Context menu stepper error:', error);
+          }
+        }));
+        item.appendChild(stepper);
+        menu.appendChild(item);
+        return;
+      }
+
       // Add click handler (only if enabled)
       if (itemConfig.enabled !== false && itemConfig.action) {
         item.addEventListener('click', async (e) => {

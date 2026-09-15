@@ -306,24 +306,12 @@
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    position: relative; // anchors the quantity badge
     img { width: 100%; height: 100%; object-fit: cover; }
     &.filled { cursor: pointer; }
     &.filled:hover { border-color: $c-yellow; box-shadow: 0 0 5px $c-yellow; }
 
-    // Thrown-weapon stack count. L-click +1 (retrieve), R-click −1.
-    .vh-slot-qty {
-      position: absolute;
-      right: 0;
-      bottom: 0;
-      padding: 0 2px;
-      background: $c-inset-1;
-      color: $c-yellow;
-      font-size: calc(0.65rem * var(--vh-font-scale));
-      line-height: 1.1;
-      cursor: pointer;
-      &.empty { color: $c-red; }
-    }
+    // Thrown weapon with no quantity left (adjusted via the slot context menu)
+    &.empty img { filter: grayscale(1) contrast(0.5); opacity: 0.6; }
   }
 
   .vh-mana {

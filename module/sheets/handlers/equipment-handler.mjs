@@ -50,9 +50,12 @@ export class EquipmentHandler {
     if (grip === '2H') {
       // Two-handed only weapons: unequipped <-> twoHands
       nextState = currentState === 'unequipped' ? 'twoHands' : 'unequipped';
-    } else if (grip === '1H' || grip === 'F') {
-      // One-handed only or fist weapons: unequipped <-> oneHand
+    } else if (grip === '1H') {
+      // One-handed only weapons: unequipped <-> oneHand
       nextState = currentState === 'unequipped' ? 'oneHand' : 'unequipped';
+    } else if (grip === '0') {
+      // Zero Grip (breath attacks, floating weapons): unequipped <-> worn (no hands)
+      nextState = currentState === 'unequipped' ? 'worn' : 'unequipped';
     } else if (grip === 'V') {
       // Versatile weapons: full cycle unequipped -> oneHand -> twoHands -> unequipped
       switch (currentState) {

@@ -217,9 +217,8 @@
 
         <div class="vh-slots">
           {{#each itemSlots}}
-            <div class="vh-slot {{#if filled}}filled{{/if}}" data-slot-index="{{@index}}" {{#if filled}}data-action="slotUse" data-type="{{type}}" data-item-id="{{id}}" title="{{name}}"{{/if}}>
+            <div class="vh-slot {{#if filled}}filled{{/if}} {{#if throwable}}{{#unless quantity}}empty{{/unless}}{{/if}}" data-slot-index="{{@index}}" {{#if filled}}data-action="slotUse" data-type="{{type}}" data-item-id="{{id}}" title="{{name}}{{#if throwable}} ×{{quantity}}{{/if}}"{{/if}}>
               {{#if filled}}<img src="{{img}}" alt="{{name}}" />{{/if}}
-              {{#if throwable}}<span class="vh-slot-qty {{#unless quantity}}empty{{/unless}}" data-action="adjustQuantity" data-item-id="{{id}}" data-hud-tip-html="{{localize 'VAGABOND.ContextMenu.QuantityHint'}} | <i class='fas fa-computer-mouse'></i>L: +1 &middot; <i class='fas fa-computer-mouse'></i>R: −1">×{{quantity}}</span>{{/if}}
             </div>
           {{/each}}
           {{#if hasMana}}

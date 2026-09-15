@@ -507,15 +507,14 @@ export class VagabondItem extends Item {
     if (foundry.utils.hasProperty(changed, "system.grip")) {
       const newGrip = foundry.utils.getProperty(changed, "system.grip");
 
-      // 3. Logic: If Grip becomes "1H" or "Fist", FORCE state to "equipped" (1H)
-      // This prevents the "2H" state from getting stuck on a 1H weapon.
-      if (["1H", "F"].includes(newGrip)) {
-        foundry.utils.setProperty(changed, "system.equipmentState", "oneHand");
-      }
-
-      // Optional: If Grip becomes "2H" (Strict Two-Handed), FORCE state to "twoHands"
-      if (newGrip === "2H") {
-        foundry.utils.setProperty(changed, "system.equipmentState", "twoHands");
+      // 3. Logic: re-derive an EQUIPPED weapon's state from its new grip, so a
+      // "2H" state can't get stuck on a 1H weapon (or hands on a Zero Grip one).
+      // Unequipped weapons stay unequipped. Versatile keeps its current state.
+      const curState = foundry.utils.getProperty(changed, "system.equipmentState") ?? this.system.equipmentState;
+      const gripState = { "1H": "oneHand", "2H": "twoHands", "0": "worn" }[newGrip];
+      // Items in Belt ('worn') stay there — they aren't held.
+      if (gripState && curState && curState !== "unequipped" && curState !== "worn") {
+        foundry.utils.setProperty(changed, "system.equipmentState", gripState);
       }
     }
 
@@ -639,10 +638,12 @@ export class VagabondItem extends Item {
   /**
    * Roll an attack with this weapon
    * @param {VagabondActor} actor - The actor making the attack
-   * @param {{allowUnequipped?: boolean}} [options] allowUnequipped: thrown attacks
+   * @param {{allowUnequipped?: boolean, skillKey?: string|null, thrown?: boolean}} [options]
+   *   allowUnequipped: thrown attacks. skillKey: skill to roll (default: this.system.weaponSkill).
+   *   thrown: the attack is not a Close attack regardless of the weapon's range.
    * @returns {Promise<Object>} Attack result with roll, difficulty, isHit, isCritical, weaponSkill
    */
-  async rollAttack(actor, favorHinder = 'none', difficultyOverride = null, { allowUnequipped = false } = {}) {
+  async rollAttack(actor, favorHinder = 'none', difficultyOverride = null, { allowUnequipped = false, skillKey = null, thrown = false } = {}) {
     this.validateCanAttack({ allowUnequipped });
 
     // Get roll data WITH this item's "on-use" effects applied
@@ -654,7 +655,7 @@ export class VagabondItem extends Item {
     // 1. A weapon skill (melee, brawl, finesse, ranged) - now in actor.system.skills
     // 2. A regular skill (arcana, craft, etc.) - from actor.system.skills
     // 3. A save (reflex, endure, will) - from actor.system.saves
-    const weaponSkillKey = this.system.weaponSkill;
+    const weaponSkillKey = skillKey ?? this.system.weaponSkill;
     let weaponSkill = rollData.skills?.[weaponSkillKey] ||
                       rollData.saves?.[weaponSkillKey];
     const difficulty = difficultyOverride ?? (weaponSkill?.difficulty || 10);
@@ -690,8 +691,8 @@ export class VagabondItem extends Item {
       const targetActor = targets[0].actor;
       if (targetActor) {
         const closeAttacksAutoCrit = targetActor.system.defenderStatusModifiers?.closeAttacksAutoCrit || false;
-        // Check if this is a close attack (weapon range = 'close')
-        const isCloseAttack = this.system.range === 'close';
+        // Check if this is a close attack (weapon range = 'close'; a throw never is)
+        const isCloseAttack = !thrown && this.system.range === 'close';
         if (closeAttacksAutoCrit && isCloseAttack) {
           forceCritical = true;
         }
@@ -724,7 +725,7 @@ export class VagabondItem extends Item {
    * @param {string} statKey - The stat used for the attack (for crit bonus)
    * @returns {Promise<Roll>} The damage roll
    */
-  async rollDamage(actor, isCritical = false, statKey = null, targetsAtRollTime = [], dieOverride = null) {
+  async rollDamage(actor, isCritical = false, statKey = null, targetsAtRollTime = [], dieOverride = null, skillKey = null) {
     // Check if this is a weapon (legacy weapon item OR equipment with equipmentType='weapon')
     const isWeapon = (this.type === 'weapon') ||
                     (this.type === 'equipment' && this.system.equipmentType === 'weapon');
@@ -742,7 +743,7 @@ export class VagabondItem extends Item {
     // No damage formula — weapon has no damage (e.g. Grapple, Net)
     if (!damageFormula?.trim()) return null;
 
-    const weaponSkillKey = this.system.weaponSkill;
+    const weaponSkillKey = skillKey ?? this.system.weaponSkill;
     const dieSizeBonus = actor.system[`${weaponSkillKey}DamageDieSizeBonus`] || 0;
 
     const { VagabondDamagePipeline } = await import('../helpers/damage-pipeline.mjs');

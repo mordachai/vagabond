@@ -327,6 +327,10 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         (context.gear && context.gear.some(i => i.system.equipped)) ||
         (context.armor && context.armor.some(i => i.system.equipped));
 
+      // Equipped panel is soft-divided: Hands (oneHand/twoHands) and Belt ('worn')
+      const panelEquipped = [...(context.weapons ?? []), ...(context.gear ?? [])].filter(i => i.system.equipped);
+      context.hasBeltItems = panelEquipped.some(i => i.system.equipmentState === 'worn');
+
       context.hasFavoritedSpells = context.spells && context.spells.some(i => i.system.favorite);
       context.useSpellDialog = game.settings.get('vagabond', 'useSpellCastDialog');
 
@@ -1884,103 +1888,18 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
   /**
    * Setup context menu listeners for equipped items and favorited spells in the sliding panel.
-   * Options: Send to Chat, Use (if applicable), Unequip, Unbind (relics only).
+   * Equipped rows use the same full item menu as the inventory grid and HUD slots.
    * @private
    */
   _setupPanelContextMenuListeners() {
-    // Equipped items (weapons, relics, alchemicals, gear)
-    const equippedItems = this.element.querySelectorAll('.equipped-item .eq-name');
-    equippedItems.forEach(label => {
-      label.addEventListener('contextmenu', async (event) => {
+    // Equipped items (weapons, relics, alchemicals, gear) — whole row
+    const equippedItems = this.element.querySelectorAll('.equipped-item[data-item-id]');
+    equippedItems.forEach(row => {
+      row.addEventListener('contextmenu', (event) => {
         event.preventDefault();
-        event.stopPropagation();
-
-        const itemId = label.closest('[data-item-id]')?.dataset.itemId;
-        if (!itemId) return;
-
-        const item = this.actor.items.get(itemId);
-        if (!item) return;
-
-        const isWeapon = EquipmentHelper.isWeapon(item);
-        const isAlchemical = EquipmentHelper.isAlchemical(item);
-        const hasAlchemicalDamage = isAlchemical && item.system.damageType && item.system.damageType !== '-';
-        const isArmor = EquipmentHelper.isArmor(item);
-        const isGear = EquipmentHelper.isGear(item);
-
-        // Determine if "Use" option should be shown
-        let showUseOption = false;
-        if (isWeapon || hasAlchemicalDamage) {
-          showUseOption = true;
-        } else if (isArmor) {
-          showUseOption = false;
-        } else if (isGear) {
-          showUseOption = item.system.isConsumable === true;
-        } else {
-          showUseOption = true;
-        }
-
-        const menuItems = [];
-
-        // Use
-        if (showUseOption) {
-          menuItems.push({
-            label: game.i18n.localize('VAGABOND.ContextMenu.Use'),
-            icon: 'fas fa-hand-sparkles',
-            enabled: true,
-            action: async () => {
-              if (isWeapon || hasAlchemicalDamage) {
-                await VagabondActorSheet._onRollWeapon.call(this, event, {
-                  dataset: { itemId },
-                });
-              } else {
-                await VagabondActorSheet._onUseItem.call(this, event, {
-                  dataset: { itemId },
-                });
-              }
-            },
-          });
-        }
-
-        // Send to Chat
-        menuItems.push({
-          label: game.i18n.localize('VAGABOND.ContextMenu.SendToChat'),
-          icon: 'fas fa-comment',
-          enabled: true,
-          action: async () => {
-            await VagabondChatCard.gearUse(this.actor, item);
-          },
-        });
-
-        // Unequip
-        menuItems.push({
-          label: game.i18n.localize('VAGABOND.ContextMenu.Unequip'),
-          icon: 'fas fa-times',
-          enabled: true,
-          action: async () => {
-            await item.update({ 'system.equipmentState': 'unequipped' });
-          },
-        });
-
-        // Unbind (relics only)
-        if (item.system.requiresBound) {
-          const isBound = item.system.bound === true;
-          if (isBound) {
-            menuItems.push({
-              label: game.i18n.localize('VAGABOND.ContextMenu.Unbind'),
-              icon: 'fa-solid fa-diamond',
-              enabled: true,
-              action: async () => {
-                await item.update({ 'system.bound': false });
-              },
-            });
-          }
-        }
-
-        ContextMenuHelper.create({
-          position: { x: event.clientX, y: event.clientY },
-          items: menuItems,
-          className: 'inventory-context-menu',
-        });
+        // Inline controls (uses pips, grip badge, throw) handle their own right-clicks
+        if (event.target.closest('.uses-pip, [data-action="toggleWeaponGrip"], [data-action="throwWeapon"]')) return;
+        this.inventoryHandler?.showInventoryContextMenu(event, row.dataset.itemId);
       });
     });
 
