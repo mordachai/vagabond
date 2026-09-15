@@ -595,8 +595,9 @@ export default class VagabondEquipment extends VagabondItemBase {
     // Set current damage type
     this.currentDamageType = baseDamageType || '-';
 
-    // Apply adamant bonus (+1 to damage)
-    if (this.metal === 'adamant') {
+    // Apply adamant bonus (+1 to damage). "-" means no damage (e.g. Net) and
+    // stays that way.
+    if (this.metal === 'adamant' && baseDamage && baseDamage.trim() !== '-') {
       // Parse the damage formula and add +1
       if (baseDamage && baseDamage.includes('d')) {
         this.currentDamage = `${baseDamage}+1`;

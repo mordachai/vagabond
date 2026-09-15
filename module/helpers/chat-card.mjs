@@ -496,7 +496,13 @@ export class VagabondChatCard {
            // Use provided damageFormula, or fall back to item's current damage
            // For spells, damageFormula should be passed explicitly with increased dice
            // For weapons, item.system.currentDamage accounts for grip state
-           const formula = damageFormula || item.system.currentDamage || '1d6';
+           const rawFormula = damageFormula || item.system.currentDamage;
+           // Weapons with no damage ("-" or empty, e.g. Net, Garotte wire) get no
+           // Roll Damage button — "-" is not a valid Roll formula.
+           const isWeaponItem = item.type === 'equipment' && item.system.equipmentType === 'weapon';
+           const noDamage = !rawFormula?.trim() || rawFormula.trim() === '-';
+           if (!(isWeaponItem && noDamage)) {
+           const formula = (rawFormula?.trim() && rawFormula.trim() !== '-') ? rawFormula : '1d6';
 
            // Determine statKey for crit damage bonus
            // For weapons: get from weaponSkill.stat
@@ -517,6 +523,7 @@ export class VagabondChatCard {
                critStatBonus: rollData?.critStatBonus || 0
            }, targetsAtRollTime);
            card.addFooterAction(btn);
+           }
       }
 
       // Executable macro buttons (simple always; hit macro only on a hit/success)

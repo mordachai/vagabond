@@ -1116,7 +1116,7 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
 
               const effectData = {
                 name: `${perk.name} Effect`,
-                icon: perk.img,
+                img: perk.img,
                 disabled: false,
                 changes: [{
                   key: attributeKey,

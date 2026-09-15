@@ -1360,11 +1360,13 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
             if (targetField) {
               await this.actor.createEmbeddedDocuments('ActiveEffect', [{
                 name: `${createdPerk.name}`,
-                icon: createdPerk.img,
+                img: createdPerk.img,
                 origin: createdPerk.uuid,
                 system: { changes: [{
                   key: targetField,
-                  type: config.effectType ?? config.effectMode ?? "add",
+                  // choiceConfig.effectMode is a legacy numeric mode (2 = add);
+                  // v14 system.changes requires the string type
+                  type: ['custom', 'multiply', 'add', 'downgrade', 'upgrade', 'override'][config.effectMode] ?? 'add',
                   value: config.effectValue || '1',
                 }] },
                 flags: { vagabond: { applicationMode: 'permanent' } },

@@ -1578,7 +1578,8 @@ export class VagabondDamageHelper {
       const shieldFormula = shieldWeapon.system.currentDamage;
       let shieldReduction = 0;
       let shieldRoll = null;
-      if (shieldFormula?.trim()) {
+      // "-" = no damage (not a valid Roll formula)
+      if (shieldFormula?.trim() && shieldFormula.trim() !== '-') {
         shieldRoll = new Roll(shieldFormula, targetActor.getRollData());
         await shieldRoll.evaluate();
         shieldReduction = shieldRoll.total;
@@ -2445,6 +2446,9 @@ export class VagabondDamageHelper {
         name: game.i18n.localize(restrainedDef?.name ?? 'VAGABOND.StatusConditions.Restrained'),
         img: restrainedDef?.img ?? 'icons/magic/control/debuff-chains-shackles-movement-blue.webp',
         statuses: ['restrained'],
+        // v14 tokens only draw non-temporary effects set to ALWAYS
+        // (toggleStatusEffect sets this; a manual create must too)
+        showIcon: CONST.ACTIVE_EFFECT_SHOW_ICON.ALWAYS,
         system: { changes: restrainedDef?.changes ?? [] },
         flags: { vagabond: { fromGrapple: true, grappleSourceUuid: sourceActor.uuid } }
       }]);
@@ -2484,7 +2488,8 @@ export class VagabondDamageHelper {
       name: game.i18n.localize(grapplingDef?.name ?? 'VAGABOND.StatusConditions.Grappling'),
       img: grapplingDef?.img ?? 'icons/skills/melee/hand-grip-staff-blue.webp',
       statuses: ['grappling'],
-      changes: speedChanges,
+      showIcon: CONST.ACTIVE_EFFECT_SHOW_ICON.ALWAYS,
+      system: { changes: speedChanges },
       flags: { vagabond: { grappling: { targetUuids } } }
     }]);
 

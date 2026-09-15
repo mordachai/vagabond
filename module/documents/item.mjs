@@ -418,7 +418,7 @@ export class VagabondItem extends Item {
     try {
       await this.createEmbeddedDocuments('ActiveEffect', [{
         name: `${this.name} Effect`,
-        icon: this.img,
+        img: this.img,
         disabled: false,
         changes: [{
           key: attributeKey,
@@ -740,8 +740,10 @@ export class VagabondItem extends Item {
       ? this.system.currentDamage.replace(/d\d+/i, `d${dieOverride}`)
       : this.system.currentDamage;
 
-    // No damage formula — weapon has no damage (e.g. Grapple, Net)
-    if (!damageFormula?.trim()) return null;
+    // No damage formula — weapon has no damage (e.g. Grapple, Net). "-" is the
+    // stored "no damage" placeholder and is not a valid Roll formula.
+    const trimmed = damageFormula?.trim();
+    if (!trimmed || trimmed === '-') return null;
 
     const weaponSkillKey = skillKey ?? this.system.weaponSkill;
     const dieSizeBonus = actor.system[`${weaponSkillKey}DamageDieSizeBonus`] || 0;
