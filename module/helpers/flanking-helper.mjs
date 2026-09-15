@@ -39,6 +39,35 @@ export class FlankingHelper {
     return Math.max(gapI, gapJ) <= 1;
   }
 
+  /**
+   * Distance in feet between two token placeables. On a grid it is measured edge
+   * to edge from the occupied-cell rectangles (Chebyshev; touching = 5 ft), so
+   * Large/Huge tokens read correctly. Gridless scenes use center-to-center.
+   */
+  static distanceFeet(tokenA, tokenB) {
+    const feetPerSquare = game.system.grid?.distance ?? 5;
+    const grid = canvas.grid;
+    if (!grid.isGridless) {
+      const a = this._cellRect(tokenA);
+      const b = this._cellRect(tokenB);
+      if (a && b) {
+        const gapI = Math.max(0, a.i0 - b.i1, b.i0 - a.i1);
+        const gapJ = Math.max(0, a.j0 - b.j1, b.j0 - a.j1);
+        return Math.max(gapI, gapJ) * feetPerSquare;
+      }
+    }
+    const pixelDist = Math.hypot(tokenA.center.x - tokenB.center.x, tokenA.center.y - tokenB.center.y);
+    return pixelDist * feetPerSquare / grid.size;
+  }
+
+  /** Range band between two tokens (Distance table): 'close' ≤ 5 ft, 'near' ≤ 30 ft, else 'far'. */
+  static rangeBand(tokenA, tokenB) {
+    const feet = this.distanceFeet(tokenA, tokenB);
+    if (feet <= (CONFIG.VAGABOND.closeRangeFeet ?? 5)) return 'close';
+    if (feet <= (CONFIG.VAGABOND.nearRangeFeet ?? 30)) return 'near';
+    return 'far';
+  }
+
   /** Inclusive occupied-cell rectangle {i0,j0,i1,j1} for a token, from its committed document position. */
   static _cellRect(token) {
     const grid = canvas.grid;

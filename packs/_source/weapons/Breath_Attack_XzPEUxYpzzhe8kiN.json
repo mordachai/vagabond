@@ -4,9 +4,9 @@
   "_id": "XzPEUxYpzzhe8kiN",
   "img": "icons/magic/fire/beam-jet-stream-trails-orange.webp",
   "system": {
-    "description": "<p>You can make a 15-foot Cone breath attack. When you do, make an <strong>Endure</strong> or <strong>Will</strong> Save. On a pass, this attack deals 2d6!. Afterward, you can’t use this Ability until you Rest or take 1 Fatigue to do so again.</p>",
+    "description": "<p>You have a Breath Attack that requires an <strong>Action</strong> to begin. On a subsequent Turn within the same Scene, you can then use an <strong>Action</strong> or skip your <strong>Move</strong> to exhale a 15’ Cone of energy that deals <strong>2d6!</strong>, using an Endure or Will Save for the Check.</p>",
     "equipmentType": "weapon",
-    "locked": true,
+    "locked": false,
     "equipped": false,
     "quantity": 1,
     "baseCost": {
@@ -21,7 +21,7 @@
     "canExplode": false,
     "explodeValues": "",
     "properties": [],
-    "weaponSkill": "ranged",
+    "weaponSkill": "endure",
     "range": "near",
     "grip": "1H",
     "damageOneHand": "d6",
@@ -44,7 +44,7 @@
   },
   "effects": [],
   "folder": null,
-  "sort": 2700000,
+  "sort": 3800000,
   "ownership": {
     "default": 0,
     "13p65OEadZSZVLRk": 3
@@ -54,12 +54,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "13.351",
+    "coreVersion": "14.367",
     "systemId": "vagabond",
-    "systemVersion": "4.3.1",
+    "systemVersion": "5.37.4",
     "createdTime": 1766065460675,
-    "modifiedTime": 1773713108845,
-    "lastModifiedBy": "13p65OEadZSZVLRk"
+    "modifiedTime": 1789500595506,
+    "lastModifiedBy": "7hJBvKOxyEF7RWCr"
   },
   "_key": "!items!XzPEUxYpzzhe8kiN"
 }

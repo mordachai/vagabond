@@ -220,6 +220,7 @@ export class VagabondActiveEffect extends ActiveEffect {
       // ===== INVENTORY =====
       'system.inventory.bonusSlots': 'Inventory: Bonus Slots',
       'system.inventory.boundsBonus': 'Inventory: Bonus Bounds',
+      'system.inventory.weaponSlotsBonus': 'Inventory: Bonus Equipped Weapon Slots (ADD)',
 
       // ===== MANA =====
       'system.mana.current': 'Mana: Current',
@@ -258,6 +259,7 @@ export class VagabondActiveEffect extends ActiveEffect {
       'system.incomingAttacksModifier': 'Incoming Attacks Modifier (none / favor / hinder)',
       'system.outgoingSavesModifier': 'Outgoing Saves Modifier (none / favor / hinder)',
       'system.autoFailAllRolls': 'Auto-Fail All Rolls (true/false)',
+      'system.castWithHandsFull': 'Cast With Hands Full — ignore trinket hand mode (true/false)',
       'system.autoFailStats': 'Auto-Fail Specific Stats (ADD stat key, e.g. might)',
       'system.defenderStatusModifiers.attackersAreBlinded': 'Defender: Attackers Are Blinded (true/false)',
       'system.defenderStatusModifiers.closeAttacksAutoCrit': 'Defender: Close Attacks Auto-Crit (true/false)',

@@ -922,6 +922,8 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
             const grip = itemData.system.grip || '1H';
             if (grip === '2H') {
               itemData.system.equipmentState = 'twoHands';
+            } else if (grip === '0') {
+              itemData.system.equipmentState = 'worn'; // Zero Grip: no hands
             } else {
               itemData.system.equipmentState = 'oneHand';
             }
@@ -1024,6 +1026,8 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
                       const grip = itemData.system.grip || '1H';
                       if (grip === '2H') {
                         itemData.system.equipmentState = 'twoHands';
+                      } else if (grip === '0') {
+                        itemData.system.equipmentState = 'worn'; // Zero Grip: no hands
                       } else {
                         itemData.system.equipmentState = 'oneHand';
                       }

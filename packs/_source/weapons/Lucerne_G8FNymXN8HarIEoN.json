@@ -48,18 +48,18 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "13.351",
+    "coreVersion": "14.367",
     "systemId": "vagabond",
     "systemVersion": "4.3.1",
     "createdTime": 1764967045011,
-    "modifiedTime": 1773713231477,
-    "lastModifiedBy": "13p65OEadZSZVLRk"
+    "modifiedTime": 1789500096517,
+    "lastModifiedBy": "7hJBvKOxyEF7RWCr"
   },
   "ownership": {
     "default": 0,
     "vJkLjvlErdx6ZHoC": 3
   },
   "_id": "G8FNymXN8HarIEoN",
-  "sort": 1200000,
+  "sort": 2300000,
   "_key": "!items!G8FNymXN8HarIEoN"
 }

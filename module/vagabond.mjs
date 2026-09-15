@@ -55,6 +55,7 @@ import { OngoingPanel } from './applications/ongoing-panel.mjs';
 import { VagabondCharacterHud } from './applications/character-hud.mjs';
 import { VagabondNPCHud } from './applications/npc-hud.mjs';
 import { HudDisplayConfig } from './applications/hud-display-config.mjs';
+import { isItemPile } from './helpers/hud-display.mjs';
 import { StatusEffectsSettings } from './applications/status-effects-settings.mjs';
 import VagabondActiveEffectConfig from './applications/active-effect-config.mjs';
 import { VagabondSpellSequencer } from './helpers/spell-sequencer.mjs';
@@ -370,6 +371,26 @@ function registerGameSettings() {
       block: 'VAGABOND.Settings.trinketCastRequirement.block',
     },
     default: 'block',
+    requiresReload: false,
+  });
+
+  // What the trinket requirement checks (severity comes from the setting above):
+  // equipped = any equipped trinket, even worn (amulet); inHand = a trinket
+  // must be held, the other hand is free to hold anything; handsFree = gesture
+  // casting, no non-trinket item may be held. Gish weapons count as trinkets;
+  // the AE flag system.castWithHandsFull falls back to 'equipped'.
+  game.settings.register('vagabond', 'trinketCastMode', {
+    name: 'VAGABOND.Settings.trinketCastMode.name',
+    hint: 'VAGABOND.Settings.trinketCastMode.hint',
+    scope: 'world',
+    config: true,
+    type: String,
+    choices: {
+      equipped: 'VAGABOND.Settings.trinketCastMode.equipped',
+      inHand: 'VAGABOND.Settings.trinketCastMode.inHand',
+      handsFree: 'VAGABOND.Settings.trinketCastMode.handsFree',
+    },
+    default: 'inHand',
     requiresReload: false,
   });
 
@@ -1822,7 +1843,7 @@ Hooks.on('getSceneControlButtons', (controls) => {
         // (e.g. several summons off one base actor) share actor.id but are
         // distinct tokens and must each get their own HUD.
         const actors = [...new Map(
-          controlled.map(t => t.actor).filter(a => a?.type === 'character')
+          controlled.map(t => t.actor).filter(a => a?.type === 'character' && !isItemPile(a))
             .map(a => [VagabondCharacterHud._keyFor(a), a])
         ).values()];
         if (!actors.length) actors.push(VagabondCharacterHud.resolveActor());
@@ -1846,7 +1867,7 @@ Hooks.on('getSceneControlButtons', (controls) => {
         // (e.g. 3 goblins off one base actor) share actor.id but are distinct
         // tokens and must each get their own HUD.
         const actors = [...new Map(
-          controlled.map(t => t.actor).filter(a => a?.type === 'npc')
+          controlled.map(t => t.actor).filter(a => a?.type === 'npc' && !isItemPile(a))
             .map(a => [VagabondNPCHud._keyFor(a), a])
         ).values()];
         if (!actors.length) actors.push(VagabondNPCHud.resolveActor());
@@ -2541,7 +2562,7 @@ const FLUKE_REROLL_ENTRY = {
       let damageRoll = null;
       if (VagabondDamageHelper.shouldRollDamage(isSuccess)) {
         const statKey = weaponSkill?.stat || null;
-        damageRoll = await weapon.rollDamage(actor, isCritical, statKey, targetsAtRollTime);
+        damageRoll = await weapon.rollDamage(actor, isCritical, statKey, targetsAtRollTime, null, weaponSkillKey);
       }
       await VagabondChatCard.weaponAttack(actor, weapon, attackResult, damageRoll, targetsAtRollTime);
 

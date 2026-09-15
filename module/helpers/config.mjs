@@ -906,8 +906,8 @@ VAGABOND.rangeAbbreviations = {
 VAGABOND.grip = {
   '1H': 'VAGABOND.Weapon.Grip.1H',
   '2H': 'VAGABOND.Weapon.Grip.2H',
-  'F': 'VAGABOND.Weapon.Grip.F',
-  'V': 'VAGABOND.Weapon.Grip.V'
+  'V': 'VAGABOND.Weapon.Grip.V',
+  '0': 'VAGABOND.Weapon.Grip.0'
 };
 
 /**
@@ -917,8 +917,8 @@ VAGABOND.grip = {
 VAGABOND.weaponGripDescriptions = {
   '1H': 'VAGABOND.Weapon.GripDescriptions.1H',
   '2H': 'VAGABOND.Weapon.GripDescriptions.2H',
-  'F': 'VAGABOND.Weapon.GripDescriptions.F',
-  'V': 'VAGABOND.Weapon.GripDescriptions.V'
+  'V': 'VAGABOND.Weapon.GripDescriptions.V',
+  '0': 'VAGABOND.Weapon.GripDescriptions.0'
 };
 
 /**
@@ -1239,6 +1239,13 @@ VAGABOND.glyphCloseSeparationFeet = 5;
  * @type {number}
  */
 VAGABOND.closeRangeFeet = 5;
+
+/**
+ * Near range band upper bound in feet ("Near: Between 5' to 30'" — Distance table).
+ * Anything beyond is Far. Used by FlankingHelper.rangeBand (e.g. Thrown: Far = Hinder).
+ * @type {number}
+ */
+VAGABOND.nearRangeFeet = 30;
 
 /**
  * Hide the solid color fill (the core region highlight) on textured regions so

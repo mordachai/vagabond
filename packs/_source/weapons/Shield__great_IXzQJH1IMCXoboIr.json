@@ -1,0 +1,129 @@
+{
+  "name": "Shield, great",
+  "type": "equipment",
+  "img": "icons/equipment/shield/heater-steel-boss-red.webp",
+  "system": {
+    "description": "",
+    "equipmentType": "weapon",
+    "locked": true,
+    "equipped": true,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 1,
+      "silver": 50,
+      "copper": 0
+    },
+    "baseSlots": 2,
+    "metal": "none",
+    "damageType": "-",
+    "damageAmount": "",
+    "properties": [
+      "Cleave",
+      "Defense"
+    ],
+    "weaponSkill": "melee",
+    "range": "close",
+    "grip": "V",
+    "damageOneHand": "d6",
+    "damageTwoHands": "d8",
+    "equipmentState": "oneHand",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "",
+    "alchemicalType": "concoction",
+    "lore": "",
+    "itemFx": {
+      "enabled": true,
+      "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Melee/Group06/MeleeAttack06_Shield01*",
+      "hitOffsetX": -100,
+      "hitDuration": 1000,
+      "animType": "auto",
+      "hitScale": 1,
+      "hitSound": "",
+      "missFile": "",
+      "missScale": 1,
+      "missDuration": 600,
+      "missSound": "",
+      "soundVolume": 0.6
+    },
+    "damageTypeOneHand": "blunt",
+    "handsRequired": 0,
+    "isTrinket": false,
+    "requiresBound": false,
+    "bound": false,
+    "gridPosition": 0,
+    "containerId": null,
+    "canExplode": false,
+    "explodeValues": "",
+    "altSkills": [],
+    "damageTypeTwoHands": "blunt",
+    "isSupply": false,
+    "isBeverage": false,
+    "isConsumable": false,
+    "linkedConsumable": "",
+    "uses": {
+      "max": 0,
+      "value": 0
+    },
+    "passiveCausedStatuses": [],
+    "causedStatuses": [],
+    "critCausedStatuses": [],
+    "critThresholdMod": [],
+    "blockedStatuses": [],
+    "resistedStatuses": [],
+    "coating": {
+      "sourceName": "",
+      "charges": 0,
+      "causedStatuses": []
+    },
+    "imbuedSpell": {
+      "active": false,
+      "sourceActorUuid": "",
+      "sourceActorName": "",
+      "spellUuid": "",
+      "spellName": "",
+      "spellImg": "",
+      "damageTypeKey": "",
+      "dieSize": 0,
+      "damageDice": 0,
+      "deferredMana": 0,
+      "deferredPayment": false,
+      "manaSkillKey": ""
+    },
+    "macro": {
+      "enabled": false,
+      "uuid": "",
+      "command": "",
+      "label": "",
+      "runAsGM": false
+    },
+    "hitMacro": {
+      "enabled": false,
+      "uuid": "",
+      "command": "",
+      "label": "",
+      "runAsGM": false
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.367",
+    "systemId": "vagabond",
+    "systemVersion": "5.37.4",
+    "createdTime": 1789499550465,
+    "modifiedTime": 1789500096517,
+    "lastModifiedBy": "7hJBvKOxyEF7RWCr",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "ownership": {
+    "default": 0,
+    "7hJBvKOxyEF7RWCr": 3
+  },
+  "_id": "IXzQJH1IMCXoboIr",
+  "sort": 1000000,
+  "_key": "!items!IXzQJH1IMCXoboIr"
+}

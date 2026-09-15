@@ -413,27 +413,41 @@ export class SpellHandler {
   // ===========================
 
   /**
-   * Trinket casting requirement (world setting `trinketCastRequirement`).
-   * Passes if any equipped item is flagged isTrinket ('worn' counts — the
-   * derived `equipped` mirror covers all states), OR the actor has the Gish
-   * flag `system.weaponAsTrinket` and any weapon equipped.
-   * @returns {'ok'|'warn'|'block'}
+   * Trinket casting requirement. Severity from world setting
+   * `trinketCastRequirement` (off/warn/block); what is checked from
+   * `trinketCastMode`. The checks stack:
+   *  1. an equipped Trinket anywhere ('worn' counts)
+   *  2. inHand:    a Trinket held in a hand (the other hand may hold a sword)
+   *     handsFree: nothing held that isn't a Trinket (gesture casting)
+   * Gish (`system.weaponAsTrinket`) makes weapons count as Trinkets. The AE
+   * flag `system.castWithHandsFull` skips step 2.
+   * @returns {{status: 'ok'|'warn'|'block', reason?: 'Trinket'|'TrinketInHand'|'HandsFree'}}
+   *   `reason` picks the lang key `VAGABOND.SpellCast.<reason>Gate{Blocked,Warned}`.
    * @private
    */
   _trinketGateStatus() {
-    if (this.actor.type !== 'character') return 'ok';
-    const mode = game.settings.get('vagabond', 'trinketCastRequirement');
-    if (mode === 'off') return 'ok';
+    const ok = { status: 'ok' };
+    if (this.actor.type !== 'character') return ok;
+    const severity = game.settings.get('vagabond', 'trinketCastRequirement');
+    if (severity === 'off') return ok;
 
     const { EquipmentHelper } = globalThis.vagabond.utils;
-    const hasTrinket = this.actor.items.some(
-      (i) => i.type === 'equipment' && i.system.isTrinket && i.system.equipped
-    );
-    const gish = this.actor.system.weaponAsTrinket === true
-      && this.actor.items.some((i) => EquipmentHelper.isWeapon(i) && i.system.equipped);
+    const sys = this.actor.system;
+    const equipment = this.actor.items.filter((i) => i.type === 'equipment');
+    const countsAsTrinket = (i) =>
+      i.system.isTrinket || (sys.weaponAsTrinket === true && EquipmentHelper.isWeapon(i));
+    const held = equipment.filter((i) => EquipmentHelper.handsFor(i) > 0);
+    const mode = sys.castWithHandsFull === true
+      ? 'equipped'
+      : game.settings.get('vagabond', 'trinketCastMode');
 
-    if (hasTrinket || gish) return 'ok';
-    return mode === 'block' ? 'block' : 'warn';
+    let reason = null;
+    if (!equipment.some((i) => i.system.equipped && countsAsTrinket(i))) reason = 'Trinket';
+    else if (mode === 'inHand' && !held.some(countsAsTrinket)) reason = 'TrinketInHand';
+    else if (mode === 'handsFree' && held.some((i) => !countsAsTrinket(i))) reason = 'HandsFree';
+
+    if (!reason) return ok;
+    return { status: severity === 'block' ? 'block' : 'warn', reason };
   }
 
   /**
@@ -454,8 +468,9 @@ export class SpellHandler {
 
     // Trinket gate (block only — don't even open the dialog; warn mode is
     // handled once in _executeCast so it never fires twice per cast)
-    if (this._trinketGateStatus() === 'block') {
-      ui.notifications.warn(game.i18n.localize('VAGABOND.SpellCast.TrinketGateBlocked'));
+    const gate = this._trinketGateStatus();
+    if (gate.status === 'block') {
+      ui.notifications.warn(game.i18n.localize(`VAGABOND.SpellCast.${gate.reason}GateBlocked`));
       return;
     }
 
@@ -509,12 +524,12 @@ export class SpellHandler {
     // Trinket gate — authoritative choke point: covers sheet, HUD (same
     // handler class), dialog confirm and the direct (no-dialog) path.
     const trinketGate = this._trinketGateStatus();
-    if (trinketGate === 'block') {
-      ui.notifications.warn(game.i18n.localize('VAGABOND.SpellCast.TrinketGateBlocked'));
+    if (trinketGate.status === 'block') {
+      ui.notifications.warn(game.i18n.localize(`VAGABOND.SpellCast.${trinketGate.reason}GateBlocked`));
       return;
     }
-    if (trinketGate === 'warn') {
-      ui.notifications.warn(game.i18n.localize('VAGABOND.SpellCast.TrinketGateWarned'));
+    if (trinketGate.status === 'warn') {
+      ui.notifications.warn(game.i18n.localize(`VAGABOND.SpellCast.${trinketGate.reason}GateWarned`));
     }
 
     // Use the dialog-provided state for this cast

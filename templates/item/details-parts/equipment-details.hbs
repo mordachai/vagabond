@@ -48,18 +48,24 @@
           <div class='locked-stats-grid'>
             <div class='locked-stat'>
               <span class='stat-label'>{{localize "VAGABOND.UI.Labels.SkillColon"}}</span>
-              <span class='stat-value'>{{localize (lookup config.weaponSkills system.weaponSkill)}}</span>
+              <span class='stat-value'>{{attackSkill.label}}</span>
             </div>
+            {{#if attackSkill.optionsDisplay}}
+              <div class='locked-stat'>
+                <span class='stat-label'>{{localize "VAGABOND.UI.Labels.SkillsColon"}}</span>
+                <span class='stat-value'>{{attackSkill.optionsDisplay}}</span>
+              </div>
+            {{/if}}
             <div class='locked-stat'>
               <span class='stat-label'>{{localize "VAGABOND.UI.Labels.RangeColon"}}</span>
-              <span class='stat-value'>{{system.range}}</span>
+              <span class='stat-value'>{{#if system.range}}{{localize (lookup config.weaponRanges system.range)}}{{else}}-{{/if}}</span>
             </div>
             <div class='locked-stat'>
               <span class='stat-label'>{{localize "VAGABOND.UI.Labels.GripColon"}}</span>
               <span class='stat-value'>{{system.gripDisplay}}</span>
             </div>
             <div class='locked-stat'>
-              <span class='stat-label'>{{localize "VAGABOND.UI.Labels.DamageOneHandColon"}}</span>
+              <span class='stat-label'>{{#if (eq system.grip '0')}}{{localize "VAGABOND.UI.Labels.DamageColon"}}{{else}}{{localize "VAGABOND.UI.Labels.DamageOneHandColon"}}{{/if}}</span>
               <span class='stat-value'>{{system.damageOneHand}} {{localize (lookup config.damageTypes system.damageTypeOneHand)}}</span>
             </div>
             {{#if (or (eq system.grip '2H') (eq system.grip 'V'))}}
@@ -79,9 +85,12 @@
           {{#if system.properties.length}}
             <div class='locked-properties'>
               <span class='stat-label'>{{localize "VAGABOND.UI.Labels.Properties"}}:</span>
-              <div class='property-tags-locked'>
+              <div class='property-list-locked'>
                 {{#each system.properties as |property|}}
-                  <span data-tooltip='{{lookup ../config.weaponPropertyHints property}}'>{{localize (lookup ../config.weaponProperties property)}}</span>
+                  <div class='property-row-locked'>
+                    <strong>{{#if (lookup @root.config.weaponProperties property)}}{{localize (lookup @root.config.weaponProperties property)}}{{else}}{{property}}{{/if}}:</strong>
+                    {{#if (lookup @root.config.weaponPropertyHints property)}}{{localize (lookup @root.config.weaponPropertyHints property)}}{{/if}}
+                  </div>
                 {{/each}}
               </div>
             </div>
@@ -422,8 +431,9 @@
         <div class='form-group'>
           <label class='resource-label'>{{localize "VAGABOND.UI.Labels.Damage"}}</label>
           <div class='grid grid-2col gap-8'>
+            {{! Zero Grip has a single damage value — no hand-count prefix, no 2H row }}
             <div class='damage-with-icon'>
-              <label class='resource-label'><i class='fas fa-hand-fist'></i> {{localize "VAGABOND.Item.Equipment.FIELDS.handsRequired.hands1"}} - {{localize "VAGABOND.UI.Labels.Amount"}}</label>
+              <label class='resource-label'>{{#unless (eq system.grip '0')}}<i class='fas fa-hand-fist'></i> {{localize "VAGABOND.Item.Equipment.FIELDS.handsRequired.hands1"}} - {{/unless}}{{localize "VAGABOND.UI.Labels.Amount"}}</label>
               <input
                 type='text'
                 name='system.damageOneHand'
@@ -433,7 +443,7 @@
               />
             </div>
             <div class='damage-with-icon'>
-              <label class='resource-label'><i class='fas fa-hand-fist'></i> {{localize "VAGABOND.Item.Equipment.FIELDS.handsRequired.hands1"}} - {{localize "VAGABOND.UI.Labels.TypeLabel"}}</label>
+              <label class='resource-label'>{{#unless (eq system.grip '0')}}<i class='fas fa-hand-fist'></i> {{localize "VAGABOND.Item.Equipment.FIELDS.handsRequired.hands1"}} - {{/unless}}{{localize "VAGABOND.UI.Labels.TypeLabel"}}</label>
               {{> "systems/vagabond/templates/shared/damage-type-select.hbs"
                   name="system.damageTypeOneHand"
                   selected=system.damageTypeOneHand
@@ -441,6 +451,7 @@
                   config=config}}
             </div>
           </div>
+          {{#unless (eq system.grip '0')}}
           <div class='grid grid-2col gap-8'>
             <div class='damage-with-icon'>
               <label class='resource-label'><i class='fas fa-hands'></i> {{localize "VAGABOND.Item.Equipment.FIELDS.handsRequired.hands2"}} - {{localize "VAGABOND.UI.Labels.Amount"}}</label>
@@ -468,6 +479,7 @@
               {{/if}}
             </div>
           </div>
+          {{/unless}}
         </div>
 
         {{! Exploding Dice Configuration }}
@@ -515,11 +527,11 @@
                 <input 
                   type='checkbox' 
                   value='{{key}}' 
-                  {{#if (contains system.properties key)}}checked{{/if}} 
-                  data-action='toggleWeaponProperty' 
+                  {{#if (contains @root.system.properties key)}}checked{{/if}}
+                  data-action='toggleWeaponProperty'
                   data-property='{{key}}'
                 >
-                <span data-tooltip='{{lookup config.weaponPropertyHints key}}'>{{localize label}}</span>
+                <span data-tooltip='{{lookup @root.config.weaponPropertyHints key}}'>{{localize label}}</span>
               </label>
               {{/each}}
               
@@ -527,14 +539,66 @@
           </details>
             <div class='property-tags'>
               {{#each system.properties as |property index|}}
-                <span class='property-tag' data-tooltip='{{lookup config.weaponPropertyHints property}}'>
-                  {{localize (lookup config.weaponProperties property)}}
+                <span class='property-tag' data-tooltip='{{lookup @root.config.weaponPropertyHints property}}'>
+                  {{localize (lookup @root.config.weaponProperties property)}}
                   <i class='fas fa-times' data-action='removeWeaponProperty' data-property='{{property}}'></i>
                 </span>
               {{/each}}
             </div>
           </div>
         </div>
+
+        {{! Other attack skills (e.g. Dagger: Melee, also Finesse) }}
+        <div class='form-group'>
+          <label class='resource-label'>{{localize 'VAGABOND.UI.Labels.AltSkills'}}</label>
+          <div class='property-selector-row'>
+          <details class='property-dropdown' data-details-id='altskill-dropdown'>
+            <summary class='property-dropdown-toggle'>
+              <i class='fas fa-chevron-down'></i>
+              <span>{{localize "VAGABOND.UI.Labels.SelectSkills"}}</span>
+            </summary>
+            <div class='property-checkboxes'>
+              {{#each config.weaponSkills as |label key|}}
+              {{#unless (eq key @root.system.weaponSkill)}}
+              <label class='property-checkbox-item'>
+                <input
+                  type='checkbox'
+                  value='{{key}}'
+                  {{#if (contains @root.system.altSkills key)}}checked{{/if}}
+                  data-action='toggleWeaponAltSkill'
+                  data-skill='{{key}}'
+                >
+                <span>{{localize label}}</span>
+              </label>
+              {{/unless}}
+              {{/each}}
+            </div>
+          </details>
+            <div class='property-tags'>
+              {{#each system.altSkills as |skill|}}
+                <span class='property-tag'>
+                  {{localize (lookup @root.config.weaponSkills skill)}}
+                  <i class='fas fa-times' data-action='removeWeaponAltSkill' data-skill='{{skill}}'></i>
+                </span>
+              {{/each}}
+            </div>
+          </div>
+        </div>
+
+        {{! Owner's preferred attack skill (blank = the default Skill above) }}
+        {{#if system.altSkills.length}}
+        <div class='form-group'>
+          <label class='resource-label'>{{localize 'VAGABOND.UI.Labels.PreferredSkill'}}</label>
+          <select name='flags.vagabond.preferredSkill' data-dtype='String'>
+            <option value=''>{{localize (lookup config.weaponSkills system.weaponSkill)}}</option>
+            {{#each system.altSkills as |skill|}}
+            <option value='{{skill}}' {{#if (eq @root.item.flags.vagabond.preferredSkill skill)}}selected{{/if}}>
+              {{localize (lookup @root.config.weaponSkills skill)}}
+            </option>
+            {{/each}}
+          </select>
+        </div>
+        {{/if}}
 
         {{! Bespoke crit-range tweak — one-off weapons only. Reusable behaviour
             belongs in CONFIG.VAGABOND.weaponPropertyEffects. }}

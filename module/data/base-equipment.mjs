@@ -161,6 +161,17 @@ export default class VagabondEquipment extends VagabondItemBase {
       initial: 'melee',
     });
 
+    // Other skills this weapon can also attack with (e.g. Dagger: Melee, also
+    // Finesse). The owner's pick lives in flags.vagabond.preferredSkill so it
+    // stays separate from the item's authored options.
+    // initial MUST be a factory: Foundry returns a literal `initial` by reference
+    // and ArrayField._updateCommit mutates arrays in place, so a shared `[]`
+    // leaks one weapon's skills into every weapon without a stored value.
+    schema.altSkills = new fields.ArrayField(
+      new fields.StringField({ required: true, blank: false }),
+      { initial: () => [] }
+    );
+
     // Range (close, near, far)
     schema.range = new fields.StringField({
       required: false,
@@ -169,12 +180,13 @@ export default class VagabondEquipment extends VagabondItemBase {
       choices: ['close', 'near', 'far']
     });
 
-    // Grip (1H, 2H, F, V)
+    // Grip (1H, 2H, V, 0). '0' = Zero Grip: uses no hands (breath attacks,
+    // floating weapons) — equips as 'worn' and has a single damage value.
     schema.grip = new fields.StringField({
       required: false,
       blank: true,
       initial: '1H',
-      choices: ['1H', '2H', 'F', 'V']
+      choices: ['1H', '2H', 'V', '0']
     });
 
     // Damage one-handed (for weapons)
@@ -482,6 +494,8 @@ export default class VagabondEquipment extends VagabondItemBase {
         .filter(p => p && !DEAD.has(p.toLowerCase()))
         .filter((p, i, arr) => arr.indexOf(p) === i);
     }
+    // Fist grip was removed in the new rules version — Fist weapons are now 1H.
+    if (source.grip === 'F') source.grip = '1H';
     // Nested: coating.causedStatuses
     const coating = source.coating;
     if (coating?.causedStatuses != null) {
@@ -503,6 +517,8 @@ export default class VagabondEquipment extends VagabondItemBase {
   prepareDerivedData() {
     // Universal derived equip mirror — equipmentState is the stored truth
     this.equipped = this.equipmentState !== 'unequipped';
+    // Template-visible mirror of EquipmentHelper.isThrowable (Thrown weapons)
+    this.isThrowable = this.equipmentType === 'weapon' && (this.properties ?? []).includes('Thrown');
 
     // Relics don't use metal - skip metal calculations
     const isRelic = this.equipmentType === 'relic';

@@ -55,7 +55,7 @@
   --vagabond-c-tan: #a2a2a2;
   --vagabond-c-tan-lite: #acacac6c;
   --vagabond-c-muted: #666666;
-  --vagabond-bg-paper: url("../assets/images/sheets/card-bg.webp");
+  --vagabond-bg-paper: url('../assets/images/sheets/card-bg.webp');
   --vagabond-bg-repeat: repeat;
   --vagabond-bg-size: 200px 200px;
   --vagabond-c-stat: #f1f1f1;
@@ -88,10 +88,10 @@
   --vagabond-c-text-3: rgb(222, 214, 86);
   --vagabond-c-bg1: #ded656;
   --vagabond-c-bg2: rgb(44, 62, 80);
-  --vagabond-detail-1: url("../assets/images/sheets/blackSquare.webp");
-  --vagabond-img-leftcolbg: url("../assets/images/sheets/leftColBg.svg");
-  --vagabond-img-trained: url("../assets/images/sheets/trained.svg");
-  --vagabond-img-untrained: url("../assets/images/sheets/untrained.svg");
+  --vagabond-detail-1: url('../assets/images/sheets/blackSquare.webp');
+  --vagabond-img-leftcolbg: url('../assets/images/sheets/leftColBg.svg');
+  --vagabond-img-trained: url('../assets/images/sheets/trained.svg');
+  --vagabond-img-untrained: url('../assets/images/sheets/untrained.svg');
   --vagabond-inventory-blend-hover: multiply;
   --vagabond-c-input-bg: rgba(255, 255, 255, 0.8);
   --vagabond-c-surface: rgba(255, 255, 255, 0.35);
@@ -119,7 +119,7 @@ body[data-theme=dark] #sidebar {
   --vagabond-c-red: #ff8b9f;
   --vagabond-c-inset-1: rgba(145, 150, 168, 0.451);
   --vagabond-c-inset-2: rgba(89, 99, 106, 0.1);
-  --vagabond-bg-paper: url("../assets/images/sheets/dark/dark-bg-300.webp");
+  --vagabond-bg-paper: url('../assets/images/sheets/dark/dark-bg-300.webp');
   --vagabond-bg-repeat: repeat;
   --vagabond-bg-size: 300px 300px;
   --vagabond-c-bluey: #1f2324da;
@@ -139,10 +139,10 @@ body[data-theme=dark] #sidebar {
   --vagabond-c-text-3: rgb(44, 62, 80);
   --vagabond-c-bg1: #2c3e50;
   --vagabond-c-bg2: #051a2f;
-  --vagabond-detail-1: url("../assets/images/sheets/dark/blackSquare.webp");
-  --vagabond-img-leftcolbg: url("../assets/images/sheets/leftColBg.svg");
-  --vagabond-img-trained: url("../assets/images/sheets/dark/trained.svg");
-  --vagabond-img-untrained: url("../assets/images/sheets/dark/untrained.svg");
+  --vagabond-detail-1: url('../assets/images/sheets/dark/blackSquare.webp');
+  --vagabond-img-leftcolbg: url('../assets/images/sheets/leftColBg.svg');
+  --vagabond-img-trained: url('../assets/images/sheets/dark/trained.svg');
+  --vagabond-img-untrained: url('../assets/images/sheets/dark/untrained.svg');
   --vagabond-c-title1: rgb(0,0,0);
   --vagabond-c-title2: rgb(255,255,255);
   --vagabond-inventory-blend-hover: normal;
@@ -774,27 +774,6 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   font-family: var(--font-primary);
   color: var(--c-dark-blue);
   /* 1. Character Name Header */
-  /* 2. Main Card Body */
-  /* HEADER */
-  /* MODIFIER BADGE */
-  /* ROLL STRIP */
-  /*CARD DESCRIPTION*/
-  /* ================================================
-   * CRIT BENEFIT TOGGLE (Save Cards)
-   * ================================================ */
-  /* SAVE CRIT RULE — clickable pill */
-  /* ================================================
-   * CRIT BENEFIT TOGGLE (Attack/Cast Cards)
-   * ================================================ */
-  /* ==================================================
-   * AUTO-FAIL BANNER (for Dead status, etc.)
-   * ================================================== */
-  /* DAMAGE SECTION */
-  /* IMBUED SPELL SECTION — sits above the Damage section so the weapon's
-     own damage + Apply button stay grouped together below it. */
-  /* CRITICAL SECTION */
-  /* PROPERTIES ACCORDION */
-  /* FOOTER BUTTONS */
 }
 .vagabond-chat-card-v2 .actor-name-header {
   color: var(--c-yellow-text);
@@ -805,6 +784,9 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   border: none;
   text-shadow: 1px 1px 2px #000;
 }
+.vagabond-chat-card-v2 {
+  /* 2. Main Card Body */
+}
 .vagabond-chat-card-v2 .card-body {
   background-image: url("../assets/ui/chat/card-bg.webp");
   background-repeat: repeat;
@@ -813,6 +795,9 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   border-radius: 2px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
   position: relative;
+}
+.vagabond-chat-card-v2 {
+  /* HEADER */
 }
 .vagabond-chat-card-v2 .card-header {
   display: flex;
@@ -848,7 +833,6 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   display: flex;
   flex-direction: column;
   border-bottom: 4px double var(--c-dark-blue);
-  /* Metadata Row Styling */
 }
 .vagabond-chat-card-v2 .card-header .header-info .header-title {
   font-size: 20px;
@@ -861,6 +845,9 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   font-family: "Germania", serif;
   border-bottom: 3px solid var(--c-dark-blue);
 }
+.vagabond-chat-card-v2 .card-header .header-info {
+  /* Metadata Row Styling */
+}
 .vagabond-chat-card-v2 .card-header .header-info .metadata-tags-row {
   display: flex;
   flex-wrap: wrap; /* Allow tags to wrap to multiple lines */
@@ -869,12 +856,6 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   margin-top: 4px;
   max-width: 100%;
   /* Standard Tag */
-  /* Feature and Trait Info Tags */
-  /* Source Label Tag (applied damage cards: "Greataxe Attack", "Fire Spell") */
-  /* Perk Prerequisite Tags */
-  /* The Slash Separator // */
-  /* Active property tag — highlights when the property is in effect (e.g. Cleave splitting) */
-  /* The Properties Group (Clickable) */
 }
 .vagabond-chat-card-v2 .card-header .header-info .metadata-tags-row .meta-tag {
   font-size: 16px;
@@ -891,6 +872,9 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   opacity: 0.7;
   font-size: 12px;
 }
+.vagabond-chat-card-v2 .card-header .header-info .metadata-tags-row {
+  /* Feature and Trait Info Tags */
+}
 .vagabond-chat-card-v2 .card-header .header-info .metadata-tags-row .tag-feature-info {
   color: var(--c-dark-blue);
   font-style: italic;
@@ -899,10 +883,16 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   color: var(--c-dark-blue);
   font-style: italic;
 }
+.vagabond-chat-card-v2 .card-header .header-info .metadata-tags-row {
+  /* Source Label Tag (applied damage cards: "Greataxe Attack", "Fire Spell") */
+}
 .vagabond-chat-card-v2 .card-header .header-info .metadata-tags-row .tag-source {
   font-size: 13px;
   font-style: italic;
   opacity: 0.75;
+}
+.vagabond-chat-card-v2 .card-header .header-info .metadata-tags-row {
+  /* Perk Prerequisite Tags */
 }
 .vagabond-chat-card-v2 .card-header .header-info .metadata-tags-row .tag-prerequisite {
   color: var(--c-dark-blue);
@@ -921,6 +911,9 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   text-decoration: underline solid;
   font-weight: bold;
 }
+.vagabond-chat-card-v2 .card-header .header-info .metadata-tags-row {
+  /* The Slash Separator // */
+}
 .vagabond-chat-card-v2 .card-header .header-info .metadata-tags-row .tag-separator {
   color: var(--c-dark-blue);
   font-weight: 300;
@@ -935,9 +928,15 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .vagabond-chat-card-v2 .card-header .header-info .metadata-tags-row .tag-mana i {
   font-size: 14px;
 }
+.vagabond-chat-card-v2 .card-header .header-info .metadata-tags-row {
+  /* Active property tag — highlights when the property is in effect (e.g. Cleave splitting) */
+}
 .vagabond-chat-card-v2 .card-header .header-info .metadata-tags-row .tag-property--active {
   color: var(--vagabond-c-red);
   font-weight: bold;
+}
+.vagabond-chat-card-v2 .card-header .header-info .metadata-tags-row {
+  /* The Properties Group (Clickable) */
 }
 .vagabond-chat-card-v2 .card-header .header-info .metadata-tags-row .tag-property-group {
   cursor: pointer;
@@ -954,6 +953,9 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   background: #fff;
   border-color: var(--vagabond-c-bg-lite);
   color: #000;
+}
+.vagabond-chat-card-v2 {
+  /* MODIFIER BADGE */
 }
 .vagabond-chat-card-v2 .modifier-badge {
   position: relative;
@@ -980,6 +982,9 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   background-image: url("../assets/ui/chat/hindered-bg.webp");
   color: var(--vagabond-c-black);
 }
+.vagabond-chat-card-v2 {
+  /* ROLL STRIP */
+}
 .vagabond-chat-card-v2 .roll-strip {
   background-image: url("../assets/ui/chat/roll-bg.webp");
   background-size: 100% 100%;
@@ -992,8 +997,6 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   gap: 10px; /* FIX: 10px margin between Banner and Dice */
   height: 100px;
   box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
-  /* The Skill Label (FINESSE, etc.) */
-  /* Crit Label for Saves (positioned on the right of the banner) */
 }
 .vagabond-chat-card-v2 .roll-strip .roll-info-group {
   position: relative;
@@ -1001,6 +1004,9 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   flex-direction: column;
   justify-content: center;
   flex-shrink: 0; /* Prevent banner from squishing */
+}
+.vagabond-chat-card-v2 .roll-strip {
+  /* The Skill Label (FINESSE, etc.) */
 }
 .vagabond-chat-card-v2 .roll-strip .roll-skill-label {
   position: absolute; /* Take out of flow so it doesn't affect vertical centering */
@@ -1015,6 +1021,9 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   z-index: 2;
   opacity: 0.9;
   white-space: nowrap; /* Ensure it stays on one line */
+}
+.vagabond-chat-card-v2 .roll-strip {
+  /* Crit Label for Saves (positioned on the right of the banner) */
 }
 .vagabond-chat-card-v2 .roll-strip .roll-crit-label {
   position: absolute;
@@ -1082,12 +1091,14 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .vagabond-chat-card-v2 .roll-strip .roll-result-banner .roll-value, .vagabond-chat-card-v2 .roll-strip .roll-result-banner .roll-outcome-text {
   text-shadow: 1px 1px 0 var(--c-dark-blue), -1px 1px 0 var(--c-dark-blue), -1px -1px 0 var(--c-dark-blue), 1px -1px 0 var(--c-dark-blue);
 }
+.vagabond-chat-card-v2 {
+  /*CARD DESCRIPTION*/
+}
 .vagabond-chat-card-v2 .card-description {
   margin: 8px 16px;
   font-family: "Paradigma", serif;
   font-size: 16px;
   /* Item Stats Grid - for Send to Chat detailed info */
-  /* Item Properties - for weapon properties */
 }
 .vagabond-chat-card-v2 .card-description .item-stats-grid {
   margin-top: 12px;
@@ -1111,6 +1122,9 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 }
 .vagabond-chat-card-v2 .card-description .item-stats-grid .stat-row .stat-value {
   color: var(--c-dark-blue);
+}
+.vagabond-chat-card-v2 .card-description {
+  /* Item Properties - for weapon properties */
 }
 .vagabond-chat-card-v2 .card-description .item-properties {
   margin-top: 10px;
@@ -1145,14 +1159,20 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   font-size: 18px;
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2705882353);
 }
+.vagabond-chat-card-v2 {
+  /* ================================================
+   * CRIT BENEFIT TOGGLE (Save Cards)
+   * ================================================ */
+}
 .vagabond-chat-card-v2 .save-crit-toggle {
   /* Both states rendered — CSS shows/hides based on data-crit-active */
-  /* Crit benefit active (default): show crit state, hide normal, hide Apply button */
-  /* Luck kept (toggled off): show normal state, show Apply button, dim crit rule */
 }
 .vagabond-chat-card-v2 .save-crit-toggle .crit-state-on,
 .vagabond-chat-card-v2 .save-crit-toggle .crit-state-off {
   display: block;
+}
+.vagabond-chat-card-v2 .save-crit-toggle {
+  /* Crit benefit active (default): show crit state, hide normal, hide Apply button */
 }
 .vagabond-chat-card-v2 .save-crit-toggle[data-crit-active=true] .crit-state-off {
   display: none;
@@ -1168,6 +1188,9 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .vagabond-chat-card-v2 .save-crit-toggle[data-crit-active=true] .save-crit-rule i {
   opacity: 1;
 }
+.vagabond-chat-card-v2 .save-crit-toggle {
+  /* Luck kept (toggled off): show normal state, show Apply button, dim crit rule */
+}
 .vagabond-chat-card-v2 .save-crit-toggle[data-crit-active=false] .crit-state-on {
   display: none;
 }
@@ -1175,6 +1198,9 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   opacity: 0.4;
   border-left-color: rgba(231, 87, 10, 0.4);
   background: rgba(231, 87, 10, 0.04);
+}
+.vagabond-chat-card-v2 {
+  /* SAVE CRIT RULE — clickable pill */
 }
 .vagabond-chat-card-v2 .save-crit-rule {
   display: flex;
@@ -1188,7 +1214,6 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   cursor: pointer;
   transition: opacity 0.2s ease, background 0.2s ease;
   user-select: none;
-  /* Non-toggle version (non-crit saves, reminder results) */
 }
 .vagabond-chat-card-v2 .save-crit-rule:hover {
   background: rgba(231, 87, 10, 0.2);
@@ -1209,6 +1234,9 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   text-transform: uppercase;
   font-size: 13px;
 }
+.vagabond-chat-card-v2 .save-crit-rule {
+  /* Non-toggle version (non-crit saves, reminder results) */
+}
 .vagabond-chat-card-v2 .save-crit-rule p {
   margin: 0;
   font-family: "Paradigma", serif;
@@ -1220,16 +1248,20 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   text-transform: uppercase;
   font-size: 13px;
 }
+.vagabond-chat-card-v2 {
+  /* ================================================
+   * CRIT BENEFIT TOGGLE (Attack/Cast Cards)
+   * ================================================ */
+}
 .vagabond-chat-card-v2 .damage-section.attack-crit-toggle {
   /* Both states rendered — CSS shows/hides based on data-crit-active */
-  /* Crit benefit active (default): show crit total, hide base total */
-  /* Luck kept (toggled off): show base total, dim crit pill */
-  /* Crit pill becomes a clickable toggle button */
-  /* Cross out the flat roll modifier (+stat) in the dice list when crit is off */
 }
 .vagabond-chat-card-v2 .damage-section.attack-crit-toggle .crit-state-on,
 .vagabond-chat-card-v2 .damage-section.attack-crit-toggle .crit-state-off {
   display: contents;
+}
+.vagabond-chat-card-v2 .damage-section.attack-crit-toggle {
+  /* Crit benefit active (default): show crit total, hide base total */
 }
 .vagabond-chat-card-v2 .damage-section.attack-crit-toggle[data-crit-active=true] .crit-state-off {
   display: none;
@@ -1237,12 +1269,18 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .vagabond-chat-card-v2 .damage-section.attack-crit-toggle[data-crit-active=true] .attack-crit-toggle-btn {
   opacity: 1;
 }
+.vagabond-chat-card-v2 .damage-section.attack-crit-toggle {
+  /* Luck kept (toggled off): show base total, dim crit pill */
+}
 .vagabond-chat-card-v2 .damage-section.attack-crit-toggle[data-crit-active=false] .crit-state-on {
   display: none;
 }
 .vagabond-chat-card-v2 .damage-section.attack-crit-toggle[data-crit-active=false] .attack-crit-toggle-btn {
   opacity: 0.4;
   text-decoration: line-through;
+}
+.vagabond-chat-card-v2 .damage-section.attack-crit-toggle {
+  /* Crit pill becomes a clickable toggle button */
 }
 .vagabond-chat-card-v2 .damage-section.attack-crit-toggle .attack-crit-toggle-btn {
   cursor: pointer;
@@ -1253,9 +1291,17 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   opacity: 0.7 !important;
   text-decoration: none !important;
 }
+.vagabond-chat-card-v2 .damage-section.attack-crit-toggle {
+  /* Cross out the flat roll modifier (+stat) in the dice list when crit is off */
+}
 .vagabond-chat-card-v2 .damage-section.attack-crit-toggle[data-crit-active=false] .damage-dice-list .roll-modifier {
   text-decoration: line-through;
   opacity: 0.4;
+}
+.vagabond-chat-card-v2 {
+  /* ==================================================
+   * AUTO-FAIL BANNER (for Dead status, etc.)
+   * ================================================== */
 }
 .vagabond-chat-card-v2 .auto-fail-banner {
   width: 100%;
@@ -1280,15 +1326,19 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   letter-spacing: 1px;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
 }
+.vagabond-chat-card-v2 {
+  /* DAMAGE SECTION */
+}
 .vagabond-chat-card-v2 .content-body {
   padding-top: 10px;
+}
+.vagabond-chat-card-v2 {
+  /* IMBUED SPELL SECTION — sits above the Damage section so the weapon's
+     own damage + Apply button stay grouped together below it. */
 }
 .vagabond-chat-card-v2 .vagabond-imbue-section {
   display: block;
   margin-bottom: 10px;
-  /* Icon + number(s) share one line; label (if any) sits on the line below */
-  /* Damage node — left-click +1 die, right-click -1 die (see vagabond.mjs) */
-  /* Mana node — bigger number, orange 1px outline via text-shadow trick, no label */
 }
 .vagabond-chat-card-v2 .vagabond-imbue-section .imbue-header-container {
   display: flex;
@@ -1348,6 +1398,9 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   text-transform: uppercase;
   color: var(--c-dark-blue);
 }
+.vagabond-chat-card-v2 .vagabond-imbue-section {
+  /* Icon + number(s) share one line; label (if any) sits on the line below */
+}
 .vagabond-chat-card-v2 .vagabond-imbue-section .imbue-node-row {
   display: flex;
   align-items: center;
@@ -1370,12 +1423,18 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   font-size: 16px;
   opacity: 0.8;
 }
+.vagabond-chat-card-v2 .vagabond-imbue-section {
+  /* Damage node — left-click +1 die, right-click -1 die (see vagabond.mjs) */
+}
 .vagabond-chat-card-v2 .vagabond-imbue-section .imbue-node-damage {
   cursor: pointer;
   user-select: none;
 }
 .vagabond-chat-card-v2 .vagabond-imbue-section .imbue-node-damage:hover .imbue-node-icon {
   filter: brightness(1.3);
+}
+.vagabond-chat-card-v2 .vagabond-imbue-section {
+  /* Mana node — bigger number, orange 1px outline via text-shadow trick, no label */
 }
 .vagabond-chat-card-v2 .vagabond-imbue-section .imbue-node-mana .vagabond-imbue-total-value {
   font-family: var(--font-secondary);
@@ -1448,8 +1507,6 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 }
 .vagabond-chat-card-v2 .damage-section {
   margin-bottom: 10px;
-  /* Add inside .vagabond-chat-card-v2 .damage-section */
-  /* THE DAMAGE TOTAL DISPLAY (Big Orange Number) */
 }
 .vagabond-chat-card-v2 .damage-section .damage-header-container {
   display: flex;
@@ -1480,7 +1537,6 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   justify-content: center;
   margin-bottom: 5px;
   filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.5));
-  /* The Right Line */
 }
 .vagabond-chat-card-v2 .damage-section .damage-header-arrow span {
   color: white;
@@ -1497,6 +1553,9 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   border-radius: 1px;
   max-width: 40px; /* Limit length so it doesn't touch edges */
 }
+.vagabond-chat-card-v2 .damage-section .damage-header-arrow {
+  /* The Right Line */
+}
 .vagabond-chat-card-v2 .damage-section .damage-header-arrow::after {
   content: "";
   flex: 1; /* Grow to fill space */
@@ -1505,12 +1564,18 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   border-radius: 1px;
   max-width: 40px;
 }
+.vagabond-chat-card-v2 .damage-section {
+  /* Add inside .vagabond-chat-card-v2 .damage-section */
+}
 .vagabond-chat-card-v2 .damage-section .damage-row {
   display: flex;
   align-items: center;
   justify-content: space-around;
   gap: 12px;
   padding: 0 20px;
+}
+.vagabond-chat-card-v2 .damage-section {
+  /* THE DAMAGE TOTAL DISPLAY (Big Orange Number) */
 }
 .vagabond-chat-card-v2 .damage-section .damage-total-display {
   width: 50px;
@@ -1521,12 +1586,14 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   gap: 5px;
   white-space: nowrap;
   /* Faded Background Icon (Burst/Skull/Fire) */
-  /* The Number Value */
 }
 .vagabond-chat-card-v2 .damage-section .damage-total-display .damage-bg-icon {
   font-size: 30px;
   color: var(--vagabond-c-damage-orange);
   text-shadow: 1px 1px 0 white, -1px 1px 0 white, -1px -1px 0 white, 1px -1px 0 white;
+}
+.vagabond-chat-card-v2 .damage-section .damage-total-display {
+  /* The Number Value */
 }
 .vagabond-chat-card-v2 .damage-section .damage-total-display .damage-value {
   font-family: var(--font-secondary);
@@ -1534,6 +1601,9 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   font-weight: 900;
   color: var(--vagabond-c-damage-orange); /* Dark Orange */
   text-shadow: 1px 1px 0 white, -1px 1px 0 white, -1px -1px 0 white, 1px -1px 0 white;
+}
+.vagabond-chat-card-v2 {
+  /* CRITICAL SECTION */
 }
 .vagabond-chat-card-v2 .crit-section {
   margin-bottom: 10px;
@@ -1586,6 +1656,9 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   font-size: 13px;
   line-height: 1.5;
   color: var(--c-dark-blue);
+}
+.vagabond-chat-card-v2 {
+  /* PROPERTIES ACCORDION */
 }
 .vagabond-chat-card-v2 .metadata-item-expandable {
   background: #f1f1f1;
@@ -1652,18 +1725,15 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   max-height: 200px;
   padding-bottom: 5px;
 }
+.vagabond-chat-card-v2 {
+  /* FOOTER BUTTONS */
+}
 .vagabond-chat-card-v2 .card-actions {
   display: flex;
   flex-direction: column;
   gap: 6px;
   margin: 8px 16px;
   /* Apply Direct (Full Width) */
-  /* Macro buttons — utility accent (not damage/save). On Success = purple,
-     Always = teal so the two slots read as distinct at a glance. */
-  /* Save Buttons Row — 2x2 grid: Reflex+Shield on top, Endure+Will below.
-     Reflex spans the full row when no Shield button is present. */
-  /* Apply Save Damage Button Container (in save result cards) */
-  /* Defend Options Accordion */
 }
 .vagabond-chat-card-v2 .card-actions button.vagabond-apply-direct-button,
 .vagabond-chat-card-v2 .card-actions button.vagabond-grapple-button,
@@ -1746,10 +1816,13 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   color: var(--c-yellow-text) !important;
   flex-shrink: 0;
 }
+.vagabond-chat-card-v2 .card-actions {
+  /* Macro buttons — utility accent (not damage/save). On Success = purple,
+     Always = teal so the two slots read as distinct at a glance. */
+}
 .vagabond-chat-card-v2 .card-actions button.vagabond-macro-button {
   background-image: none !important;
   background: linear-gradient(180deg, #4a2f6e, #311e4a) !important;
-  /* Always slot — teal */
 }
 .vagabond-chat-card-v2 .card-actions button.vagabond-macro-button i {
   color: #d7b8ff !important;
@@ -1762,11 +1835,18 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .vagabond-chat-card-v2 .card-actions button.vagabond-macro-button:hover {
   filter: brightness(1.3);
 }
+.vagabond-chat-card-v2 .card-actions button.vagabond-macro-button {
+  /* Always slot — teal */
+}
 .vagabond-chat-card-v2 .card-actions button.vagabond-macro-button[data-macro-slot=macro] {
   background: linear-gradient(180deg, #1f5e63, #123a3e) !important;
 }
 .vagabond-chat-card-v2 .card-actions button.vagabond-macro-button[data-macro-slot=macro] i {
   color: #b8f0ff !important;
+}
+.vagabond-chat-card-v2 .card-actions {
+  /* Save Buttons Row — 2x2 grid: Reflex+Shield on top, Endure+Will below.
+     Reflex spans the full row when no Shield button is present. */
 }
 .vagabond-chat-card-v2 .card-actions .save-buttons-row {
   display: grid;
@@ -1830,9 +1910,15 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .vagabond-chat-card-v2 .card-actions .vagabond-save-buttons-container {
   margin-bottom: 10px;
 }
+.vagabond-chat-card-v2 .card-actions {
+  /* Apply Save Damage Button Container (in save result cards) */
+}
 .vagabond-chat-card-v2 .card-actions .save-apply-button-container {
   margin-top: 10px;
   width: 100%;
+}
+.vagabond-chat-card-v2 .card-actions {
+  /* Defend Options Accordion */
 }
 .vagabond-chat-card-v2 .card-actions .defend-info-box {
   background: #fff;
@@ -1951,7 +2037,6 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   z-index: 1;
   padding-bottom: 3px;
   /* 1. ATTACK ROLL STRIP DICE (Standard Size) */
-  /* 2. DAMAGE SECTION DICE (Smaller Size) */
 }
 .vb-die-wrapper.die-type-check {
   width: 45px !important;
@@ -1960,14 +2045,17 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .vb-die-wrapper.die-type-check .vb-die-val {
   font-size: 32px;
 }
+.vb-die-wrapper {
+  /* 2. DAMAGE SECTION DICE (Smaller Size) */
+}
 .vb-die-wrapper.die-type-damage {
   width: 40px !important; /* Make them smaller */
   height: 40px !important;
-  /* Smaller text */
 }
 .vb-die-wrapper.die-type-damage .vb-die-val {
   font-size: 28px;
 }
+.vb-die-wrapper.die-type-damage { /* Smaller text */ }
 
 .vb-die-wrapper .vb-die-bg {
   position: absolute !important;
@@ -2038,8 +2126,6 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   padding: 8px 5px;
   text-align: center;
   /* Title styling matching the Damage Arrow */
-  /* The Calculation Row (15 - 1 = 14) */
-  /* Footer Note */
 }
 .save-damage-calculation .damage-title {
   /* Reuse the damage title background */
@@ -2060,7 +2146,6 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   text-transform: uppercase;
   text-shadow: 1px 1px 0 #000;
   padding-right: 15px; /* Visual balance for arrow tip */
-  /* The Right Line */
 }
 .save-damage-calculation .damage-title::before {
   content: "";
@@ -2070,6 +2155,9 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   border-radius: 1px;
   max-width: 20px; /* Limit length so it doesn't touch edges */
 }
+.save-damage-calculation .damage-title {
+  /* The Right Line */
+}
 .save-damage-calculation .damage-title::after {
   content: "";
   flex: 1; /* Grow to fill space */
@@ -2077,6 +2165,9 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   background: #5a6e76;
   border-radius: 1px;
   max-width: 20px;
+}
+.save-damage-calculation {
+  /* The Calculation Row (15 - 1 = 14) */
 }
 .save-damage-calculation .damage-formula-line {
   display: flex;
@@ -2089,8 +2180,6 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   color: var(--c-dark-blue);
   margin-bottom: 5px;
   /* Numbers & Icons */
-  /* Operators (- / =) */
-  /* The Final Result */
 }
 .save-damage-calculation .damage-formula-line .damage-component {
   display: flex;
@@ -2101,10 +2190,16 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   color: var(--c-dark-blue); /* Dark Blue Icons */
   font-size: 16px;
 }
+.save-damage-calculation .damage-formula-line {
+  /* Operators (- / =) */
+}
 .save-damage-calculation .damage-formula-line .damage-operator {
   color: #7f8c8d;
   font-size: 20px;
   font-weight: 900;
+}
+.save-damage-calculation .damage-formula-line {
+  /* The Final Result */
 }
 .save-damage-calculation .damage-formula-line .damage-final {
   font-size: 24px;
@@ -2117,6 +2212,9 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .save-damage-calculation .damage-formula-line .damage-final i {
   color: var(--vagabond-c-damage-orange);
   font-size: 16px;
+}
+.save-damage-calculation {
+  /* Footer Note */
 }
 .save-damage-calculation .damage-application-note {
   font-size: 0.8rem;
@@ -2145,7 +2243,6 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   margin-bottom: 5px;
   gap: 4px;
   filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.5));
-  /* The Right Line */
 }
 .chat-targets-section .targets-header span {
   color: white;
@@ -2165,6 +2262,9 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   background: var(--vagabond-c-bluey); /* Dark slate color matching the UI */
   border-radius: 1px;
   max-width: 30px; /* Limit length so it doesn't touch edges */
+}
+.chat-targets-section .targets-header {
+  /* The Right Line */
 }
 .chat-targets-section .targets-header::after {
   content: "";
@@ -2519,8 +2619,6 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   gap: 6px;
   width: 100%;
   margin-top: 4px;
-  /* Trigger: same art as the Roll Damage / Apply Damage buttons */
-  /* Dismiss: same art as the save buttons (e.g. Reflex) */
 }
 .glyph-card-buttons button {
   flex: 1;
@@ -2545,6 +2643,9 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .glyph-card-buttons button:hover {
   filter: brightness(1.15);
 }
+.glyph-card-buttons {
+  /* Trigger: same art as the Roll Damage / Apply Damage buttons */
+}
 .glyph-card-buttons .vagabond-glyph-trigger-button {
   background: transparent url("../assets/ui/chat/apply-direct-bg.webp") no-repeat center center;
   background-size: 100% 100%;
@@ -2552,6 +2653,9 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 }
 .glyph-card-buttons .vagabond-glyph-trigger-button i {
   color: var(--c-yellow-text, #DED656);
+}
+.glyph-card-buttons {
+  /* Dismiss: same art as the save buttons (e.g. Reflex) */
 }
 .glyph-card-buttons .vagabond-glyph-dismiss-button {
   background: url("../assets/ui/chat/yellow-button.webp");
@@ -2834,7 +2938,6 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   background: transparent;
   border: 1px solid transparent;
   border-radius: 3px;
-  -moz-appearance: textfield;
 }
 .progress-clock-config-form .pc-card .pc-tracker-input:focus {
   border-color: var(--vagabond-c-chat-yellow);
@@ -2843,6 +2946,9 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .progress-clock-config-form .pc-card .pc-tracker-input::-webkit-outer-spin-button, .progress-clock-config-form .pc-card .pc-tracker-input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
+}
+.progress-clock-config-form .pc-card .pc-tracker-input {
+  -moz-appearance: textfield;
 }
 .progress-clock-config-form .pc-card .pc-card-label {
   font-family: "Eskapade", serif;
@@ -3638,19 +3744,14 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   --vh-wpn0-right: 30px;
   --vh-wpn1-top: 30px;
   --vh-wpn1-right: 10px;
-  --vh-wpn2-top: 62px;
-  --vh-wpn2-right: 24px;
   --vh-armor-top: 118px;
   --vh-armor-right: 46px;
   --vh-wpn0-z: 3;
   --vh-wpn1-z: 2;
-  --vh-wpn2-z: 1;
   --vh-badge0-top: 15px;
   --vh-badge0-left: -14px;
   --vh-badge1-top: 15px;
   --vh-badge1-left: 40px;
-  --vh-badge2-top: 15px;
-  --vh-badge2-left: -14px;
   position: fixed;
   z-index: 70;
   width: auto;
@@ -3659,11 +3760,13 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   color: var(--vagabond-c-white);
   user-select: none;
   pointer-events: auto;
-  scrollbar-width: auto !important;
-  scrollbar-color: auto !important;
 }
 .vbd-hud * {
   box-sizing: border-box;
+}
+.vbd-hud {
+  scrollbar-width: auto !important;
+  scrollbar-color: auto !important;
 }
 .vbd-hud::-webkit-scrollbar {
   width: 6px;
@@ -3914,6 +4017,10 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   border-color: var(--vagabond-c-chat-yellow);
   box-shadow: 0 0 5px var(--vagabond-c-chat-yellow);
 }
+.vbd-hud .vh-slot.empty img {
+  filter: grayscale(1) contrast(0.5);
+  opacity: 0.6;
+}
 .vbd-hud .vh-mana {
   display: inline-flex;
   align-items: center;
@@ -3976,33 +4083,19 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   top: var(--vh-badge1-top);
   left: var(--vh-badge1-left);
 }
-.vbd-hud .vh-pc-weapon[data-slot-index="2"] {
-  top: var(--vh-wpn2-top);
-  right: var(--vh-wpn2-right);
-  z-index: var(--vh-wpn2-z);
-}
-.vbd-hud .vh-pc-weapon[data-slot-index="2"] .vh-grip-badge {
-  top: var(--vh-badge2-top);
-  left: var(--vh-badge2-left);
-}
 .vbd-hud .vh-pc-weapon.filled {
   cursor: pointer;
 }
-.vbd-hud .vh-pc-weapon .vh-slot-cost {
+.vbd-hud .vh-pc-weapon .vh-hand-label {
   position: absolute;
-  bottom: -4px;
-  right: -4px;
-  min-width: 16px;
-  height: 16px;
-  padding: 0 3px;
-  border-radius: 8px;
-  background: var(--vagabond-c-inset-1);
-  border: 1px solid var(--vagabond-c-chat-yellow);
-  color: var(--vagabond-c-chat-yellow);
-  font-size: calc(0.7rem * var(--vh-font-scale));
-  line-height: 14px;
-  text-align: center;
+  bottom: -3px;
+  left: -3px;
   z-index: 4;
+  font-size: calc(0.7rem * var(--vh-font-scale));
+  font-weight: bold;
+  color: var(--vagabond-c-chat-yellow);
+  text-shadow: var(--vh-outline-2);
+  pointer-events: none;
 }
 .vbd-hud .vh-pc-weapon.filled:hover {
   border-color: var(--vagabond-c-stat);
@@ -10074,14 +10167,6 @@ ol#combat-tracker.directory-list {
   position: relative;
   width: 350px;
   padding: 0 0.5rem 1rem;
-  color: rgb(var(--ac));
-  font-family: "Paradigm", serif;
-  border-radius: 10px;
-  user-select: none;
-  cursor: grab;
-  backdrop-filter: blur(var(--vsc-blur, 0));
-  -webkit-backdrop-filter: blur(var(--vsc-blur, 0));
-  background-color: rgba(10, 10, 10, var(--vsc-dark, 0));
 }
 .vsc-root.minimized {
   padding-bottom: 0;
@@ -10130,6 +10215,16 @@ ol#combat-tracker.directory-list {
 .vsc-root.no-rings .vsc-imbue-ring {
   --vb-min: 56;
   --vb-span: 248;
+}
+.vsc-root {
+  color: rgb(var(--ac));
+  font-family: "Paradigm", serif;
+  border-radius: 10px;
+  user-select: none;
+  cursor: grab;
+  backdrop-filter: blur(var(--vsc-blur, 0));
+  -webkit-backdrop-filter: blur(var(--vsc-blur, 0));
+  background-color: rgba(10, 10, 10, var(--vsc-dark, 0));
 }
 .vsc-root:active {
   cursor: grabbing;
@@ -10285,15 +10380,17 @@ ol#combat-tracker.directory-list {
   fill: rgb(var(--ac));
   font-family: "Ludlow", serif;
   font-size: 26px;
+}
+.vsc-root .vsc-circle .vsc-num.big {
+  font-size: 28px;
+}
+.vsc-root .vsc-circle .vsc-num {
   pointer-events: none;
   paint-order: stroke fill;
   stroke: #000;
   stroke-width: 4px;
   stroke-linejoin: round;
   filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 6px rgba(var(--ac), 0.6));
-}
-.vsc-root .vsc-circle .vsc-num.big {
-  font-size: 28px;
 }
 .vsc-root .vsc-circle .vsc-sub {
   fill: rgb(var(--ac));
@@ -11230,6 +11327,50 @@ ol#combat-tracker.directory-list {
 .vagabond-context-menu.inventory-context-menu .context-menu-item.danger:hover {
   background: rgba(217, 83, 79, 0.1);
 }
+.vagabond .inventory-context-menu .context-menu-item.context-menu-stepper-row,
+.vagabond-context-menu.inventory-context-menu .context-menu-item.context-menu-stepper-row {
+  cursor: default;
+}
+.vagabond .inventory-context-menu .context-menu-item.context-menu-stepper-row > span:not(.context-menu-stepper),
+.vagabond-context-menu.inventory-context-menu .context-menu-item.context-menu-stepper-row > span:not(.context-menu-stepper) {
+  flex: 1;
+}
+.vagabond .inventory-context-menu .context-menu-item .context-menu-stepper,
+.vagabond-context-menu.inventory-context-menu .context-menu-item .context-menu-stepper {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 12px;
+}
+.vagabond .inventory-context-menu .context-menu-item .context-menu-stepper button,
+.vagabond-context-menu.inventory-context-menu .context-menu-item .context-menu-stepper button {
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  margin: 0;
+  line-height: 1;
+  border: 1px solid var(--vagabond-c-white);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--vagabond-c-white);
+  cursor: pointer;
+}
+.vagabond .inventory-context-menu .context-menu-item .context-menu-stepper button:hover,
+.vagabond-context-menu.inventory-context-menu .context-menu-item .context-menu-stepper button:hover {
+  background: var(--vagabond-c-white);
+  color: var(--vagabond-c-dark);
+}
+.vagabond .inventory-context-menu .context-menu-item .context-menu-stepper button i,
+.vagabond-context-menu.inventory-context-menu .context-menu-item .context-menu-stepper button i {
+  width: auto;
+  font-size: 10px;
+}
+.vagabond .inventory-context-menu .context-menu-item .context-menu-stepper .context-menu-stepper-value,
+.vagabond-context-menu.inventory-context-menu .context-menu-item .context-menu-stepper .context-menu-stepper-value {
+  min-width: 1.5em;
+  text-align: center;
+  font-weight: bold;
+}
 
 /* Status context menu - Uses ContextMenuHelper with dual-selector pattern */
 .vagabond .status-context-menu,
@@ -11275,6 +11416,50 @@ ol#combat-tracker.directory-list {
 .vagabond .status-context-menu .context-menu-item.danger:hover,
 .vagabond-context-menu.status-context-menu .context-menu-item.danger:hover {
   background: rgba(217, 83, 79, 0.1);
+}
+.vagabond .status-context-menu .context-menu-item.context-menu-stepper-row,
+.vagabond-context-menu.status-context-menu .context-menu-item.context-menu-stepper-row {
+  cursor: default;
+}
+.vagabond .status-context-menu .context-menu-item.context-menu-stepper-row > span:not(.context-menu-stepper),
+.vagabond-context-menu.status-context-menu .context-menu-item.context-menu-stepper-row > span:not(.context-menu-stepper) {
+  flex: 1;
+}
+.vagabond .status-context-menu .context-menu-item .context-menu-stepper,
+.vagabond-context-menu.status-context-menu .context-menu-item .context-menu-stepper {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 12px;
+}
+.vagabond .status-context-menu .context-menu-item .context-menu-stepper button,
+.vagabond-context-menu.status-context-menu .context-menu-item .context-menu-stepper button {
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  margin: 0;
+  line-height: 1;
+  border: 1px solid var(--vagabond-c-white);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--vagabond-c-white);
+  cursor: pointer;
+}
+.vagabond .status-context-menu .context-menu-item .context-menu-stepper button:hover,
+.vagabond-context-menu.status-context-menu .context-menu-item .context-menu-stepper button:hover {
+  background: var(--vagabond-c-white);
+  color: var(--vagabond-c-dark);
+}
+.vagabond .status-context-menu .context-menu-item .context-menu-stepper button i,
+.vagabond-context-menu.status-context-menu .context-menu-item .context-menu-stepper button i {
+  width: auto;
+  font-size: 10px;
+}
+.vagabond .status-context-menu .context-menu-item .context-menu-stepper .context-menu-stepper-value,
+.vagabond-context-menu.status-context-menu .context-menu-item .context-menu-stepper .context-menu-stepper-value {
+  min-width: 1.5em;
+  text-align: center;
+  font-weight: bold;
 }
 
 /* Party compact view context menu */
@@ -11322,6 +11507,50 @@ ol#combat-tracker.directory-list {
 .vagabond-context-menu.party-compact-context-menu .context-menu-item.danger:hover {
   background: rgba(217, 83, 79, 0.1);
 }
+.vagabond .party-compact-context-menu .context-menu-item.context-menu-stepper-row,
+.vagabond-context-menu.party-compact-context-menu .context-menu-item.context-menu-stepper-row {
+  cursor: default;
+}
+.vagabond .party-compact-context-menu .context-menu-item.context-menu-stepper-row > span:not(.context-menu-stepper),
+.vagabond-context-menu.party-compact-context-menu .context-menu-item.context-menu-stepper-row > span:not(.context-menu-stepper) {
+  flex: 1;
+}
+.vagabond .party-compact-context-menu .context-menu-item .context-menu-stepper,
+.vagabond-context-menu.party-compact-context-menu .context-menu-item .context-menu-stepper {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 12px;
+}
+.vagabond .party-compact-context-menu .context-menu-item .context-menu-stepper button,
+.vagabond-context-menu.party-compact-context-menu .context-menu-item .context-menu-stepper button {
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  margin: 0;
+  line-height: 1;
+  border: 1px solid var(--vagabond-c-white);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--vagabond-c-white);
+  cursor: pointer;
+}
+.vagabond .party-compact-context-menu .context-menu-item .context-menu-stepper button:hover,
+.vagabond-context-menu.party-compact-context-menu .context-menu-item .context-menu-stepper button:hover {
+  background: var(--vagabond-c-white);
+  color: var(--vagabond-c-dark);
+}
+.vagabond .party-compact-context-menu .context-menu-item .context-menu-stepper button i,
+.vagabond-context-menu.party-compact-context-menu .context-menu-item .context-menu-stepper button i {
+  width: auto;
+  font-size: 10px;
+}
+.vagabond .party-compact-context-menu .context-menu-item .context-menu-stepper .context-menu-stepper-value,
+.vagabond-context-menu.party-compact-context-menu .context-menu-item .context-menu-stepper .context-menu-stepper-value {
+  min-width: 1.5em;
+  text-align: center;
+  font-weight: bold;
+}
 
 /* Party portrait right-click — main menu */
 .vagabond .party-status-context-menu,
@@ -11368,6 +11597,50 @@ ol#combat-tracker.directory-list {
 .vagabond-context-menu.party-status-context-menu .context-menu-item.danger:hover {
   background: rgba(217, 83, 79, 0.1);
 }
+.vagabond .party-status-context-menu .context-menu-item.context-menu-stepper-row,
+.vagabond-context-menu.party-status-context-menu .context-menu-item.context-menu-stepper-row {
+  cursor: default;
+}
+.vagabond .party-status-context-menu .context-menu-item.context-menu-stepper-row > span:not(.context-menu-stepper),
+.vagabond-context-menu.party-status-context-menu .context-menu-item.context-menu-stepper-row > span:not(.context-menu-stepper) {
+  flex: 1;
+}
+.vagabond .party-status-context-menu .context-menu-item .context-menu-stepper,
+.vagabond-context-menu.party-status-context-menu .context-menu-item .context-menu-stepper {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 12px;
+}
+.vagabond .party-status-context-menu .context-menu-item .context-menu-stepper button,
+.vagabond-context-menu.party-status-context-menu .context-menu-item .context-menu-stepper button {
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  margin: 0;
+  line-height: 1;
+  border: 1px solid var(--vagabond-c-white);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--vagabond-c-white);
+  cursor: pointer;
+}
+.vagabond .party-status-context-menu .context-menu-item .context-menu-stepper button:hover,
+.vagabond-context-menu.party-status-context-menu .context-menu-item .context-menu-stepper button:hover {
+  background: var(--vagabond-c-white);
+  color: var(--vagabond-c-dark);
+}
+.vagabond .party-status-context-menu .context-menu-item .context-menu-stepper button i,
+.vagabond-context-menu.party-status-context-menu .context-menu-item .context-menu-stepper button i {
+  width: auto;
+  font-size: 10px;
+}
+.vagabond .party-status-context-menu .context-menu-item .context-menu-stepper .context-menu-stepper-value,
+.vagabond-context-menu.party-status-context-menu .context-menu-item .context-menu-stepper .context-menu-stepper-value {
+  min-width: 1.5em;
+  text-align: center;
+  font-weight: bold;
+}
 
 /* Party portrait right-click — status submenu (3-column grid) */
 .vagabond .party-status-submenu,
@@ -11384,11 +11657,6 @@ ol#combat-tracker.directory-list {
   border-radius: 8px;
   padding: 8PX;
   corner-shape: scoop;
-  display: grid;
-  grid-template-columns: repeat(3, minmax(140px, 1fr));
-  min-width: 440px;
-  max-height: 60vh;
-  overflow-y: auto;
 }
 .vagabond .party-status-submenu .context-menu-item,
 .vagabond-context-menu.party-status-submenu .context-menu-item {
@@ -11418,6 +11686,58 @@ ol#combat-tracker.directory-list {
 .vagabond .party-status-submenu .context-menu-item.danger:hover,
 .vagabond-context-menu.party-status-submenu .context-menu-item.danger:hover {
   background: rgba(217, 83, 79, 0.1);
+}
+.vagabond .party-status-submenu .context-menu-item.context-menu-stepper-row,
+.vagabond-context-menu.party-status-submenu .context-menu-item.context-menu-stepper-row {
+  cursor: default;
+}
+.vagabond .party-status-submenu .context-menu-item.context-menu-stepper-row > span:not(.context-menu-stepper),
+.vagabond-context-menu.party-status-submenu .context-menu-item.context-menu-stepper-row > span:not(.context-menu-stepper) {
+  flex: 1;
+}
+.vagabond .party-status-submenu .context-menu-item .context-menu-stepper,
+.vagabond-context-menu.party-status-submenu .context-menu-item .context-menu-stepper {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 12px;
+}
+.vagabond .party-status-submenu .context-menu-item .context-menu-stepper button,
+.vagabond-context-menu.party-status-submenu .context-menu-item .context-menu-stepper button {
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  margin: 0;
+  line-height: 1;
+  border: 1px solid var(--vagabond-c-white);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--vagabond-c-white);
+  cursor: pointer;
+}
+.vagabond .party-status-submenu .context-menu-item .context-menu-stepper button:hover,
+.vagabond-context-menu.party-status-submenu .context-menu-item .context-menu-stepper button:hover {
+  background: var(--vagabond-c-white);
+  color: var(--vagabond-c-dark);
+}
+.vagabond .party-status-submenu .context-menu-item .context-menu-stepper button i,
+.vagabond-context-menu.party-status-submenu .context-menu-item .context-menu-stepper button i {
+  width: auto;
+  font-size: 10px;
+}
+.vagabond .party-status-submenu .context-menu-item .context-menu-stepper .context-menu-stepper-value,
+.vagabond-context-menu.party-status-submenu .context-menu-item .context-menu-stepper .context-menu-stepper-value {
+  min-width: 1.5em;
+  text-align: center;
+  font-weight: bold;
+}
+.vagabond .party-status-submenu,
+.vagabond-context-menu.party-status-submenu {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(140px, 1fr));
+  min-width: 440px;
+  max-height: 60vh;
+  overflow-y: auto;
 }
 .vagabond .party-status-submenu .context-menu-item .status-icon,
 .vagabond-context-menu.party-status-submenu .context-menu-item .status-icon {
@@ -11484,53 +11804,6 @@ ol#combat-tracker.directory-list {
 }
 
 /* Styles limited to vagabond sheets */
-.vagabond {
-  /* Features & Perks columns */
-  /* ===== Executable Macro Config (item/spell sheets) ===== */
-  /* Each slot is its own panel, accent-coloured to match its chat-card button:
-     Always = teal, On Success = purple. */
-  /* Button-label text field — boxed look, theme-aware (light + dark). */
-  /* Embedded script — native <code-mirror>: line numbers + syntax highlight come
-     for free from the element; we only box it and force a mono font + min height.
-     The host element does not cascade into the internal .cm-editor, so the inner
-     selectors are set explicitly. */
-  /* ===== NPC action macro config (mirrors the item/spell macro treatment) ===== */
-  /* Container Item Styles */
-  /* Character Name at Top - 2x2 Grid: Name + XP on top, Character Info below */
-  /* Combined Character Info Row - sits inside .name-row-top grid */
-  /* Character Builder Icon Button - Inline */
-  /* Pulsing glow animation */
-  /* ======================================
-     SLIDING PANEL SYSTEM
-     ====================================== */
-  /* When closed, panel slides behind main sheet, only 20px trigger visible */
-  /* When open, panel at natural position next to main sheet */
-  /* Click zone - visible sliver on the RIGHT edge of panel when closed */
-  /* Pulse animation for the active tooltip area */
-  /* First-time tooltip for sliding panel */
-  /* Panel content area */
-  /* Mana skill row - label and select on same line, baseline aligned */
-  /* Mana info row - 3 columns, 2 rows (labels top, values bottom) */
-  /* =========================================
-     NPC HEADER - NEW LAYOUT
-     ========================================= */
-  /* --- Column 1: Portrait --- */
-  /* Status Effects Display - grid overlapping portrait base, grows upward */
-  /* TL Display - in name row, position relative to not affect row height */
-  /* --- Column 2: Stats --- */
-  /* Row 1: HD & HP */
-  /* Row 2: Speed + Armor */
-  /* Speed group (left side of row 2) — max 70% */
-  /* Row 3: Fatigue */
-  /* Row 4: Morale + Appearance */
-  /* Armor group (right side of row 2) — 30% centered */
-  /* --- Bottom Header Rows --- */
-  /* =========================================
-     ORIGINAL STYLES (RESTORED)
-     ========================================= */
-  /* Senses section */
-  /* Immunities / Weaknesses / Status Immunities */
-}
 .vagabond h1, .vagabond h2, .vagabond h3, .vagabond h4, .vagabond h5, .vagabond h6 {
   font-family: "Germania", serif;
   font-weight: normal;
@@ -11985,7 +12258,9 @@ ol#combat-tracker.directory-list {
   padding: 8px;
   border: 1px solid var(--vagabond-c-faint);
   border-radius: 4px;
-  background: var(--vagabond-c-white);
+  background: var(--vagabond-bg-paper) var(--vagabond-bg-repeat);
+  background-size: var(--vagabond-bg-size);
+  color: var(--vagabond-c-text-primary);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   z-index: 1000;
   max-height: 300px;
@@ -12008,7 +12283,7 @@ ol#combat-tracker.directory-list {
   user-select: none;
 }
 .vagabond .property-dropdown .property-checkboxes .property-checkbox-item:hover {
-  background: rgba(0, 0, 0, 0.05);
+  background: var(--vagabond-inventory-hover);
 }
 .vagabond .property-tags {
   flex: 2;
@@ -12108,7 +12383,7 @@ ol#combat-tracker.directory-list {
 }
 .vagabond .skills-container {
   gap: 20px;
-  color: var(--vagabond-c-dark) !important;
+  color: var(--vagabond-c-text-primary) !important;
   font-family: "Eskapade", serif;
   flex: 1;
   min-height: 0;
@@ -12481,6 +12756,19 @@ ol#combat-tracker.directory-list {
   filter: drop-shadow(0 0 3px var(--vagabond-c-red));
   opacity: 1;
 }
+.vagabond .favorites-section .equipped-divider {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  margin: 4px 4px 2px;
+  padding-bottom: 1px;
+  border-bottom: 1px solid var(--vagabond-c-text-primary);
+  font-size: 10px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.8;
+}
 .vagabond .favorites-section .title-container {
   display: flex;
   flex-direction: row;
@@ -12552,6 +12840,9 @@ ol#combat-tracker.directory-list {
 }
 .vagabond .saves .save .save-difficulty i {
   font-size: 16px;
+}
+.vagabond {
+  /* Features & Perks columns */
 }
 .vagabond .features-perks-section .grid {
   margin: 0;
@@ -14089,6 +14380,9 @@ ol#combat-tracker.directory-list {
   font-size: 12px;
   flex-shrink: 0;
 }
+.vagabond {
+  /* ===== Executable Macro Config (item/spell sheets) ===== */
+}
 .vagabond .macro-section-box {
   /* (?) help icon sitting next to the "Macros" legend */
 }
@@ -14100,6 +14394,10 @@ ol#combat-tracker.directory-list {
 .vagabond .macro-section-box .macro-help:hover {
   opacity: 1;
 }
+.vagabond {
+  /* Each slot is its own panel, accent-coloured to match its chat-card button:
+     Always = teal, On Success = purple. */
+}
 .vagabond .macro-slot {
   margin: 12px 0;
   padding: 10px 12px 12px;
@@ -14107,16 +14405,15 @@ ol#combat-tracker.directory-list {
   border-left-width: 4px;
   border-radius: 5px;
   background: var(--vagabond-c-surface);
-  /* Enable toggle on the left, Allow Players on the right of the same row */
-  /* extra breathing room between the linked-macro drop zone and the label field */
-  /* checkboxes are near-invisible in dark mode — add a ring via box-shadow so the
-     native control keeps its size/alignment (a real border offsets the checkmark). */
 }
 .vagabond .macro-slot[data-macro-slot=macro] {
   border-left-color: #1f5e63;
 }
 .vagabond .macro-slot[data-macro-slot=hitMacro] {
   border-left-color: #6b4ba0;
+}
+.vagabond .macro-slot {
+  /* Enable toggle on the left, Allow Players on the right of the same row */
 }
 .vagabond .macro-slot .macro-slot-header {
   display: flex;
@@ -14144,8 +14441,15 @@ ol#combat-tracker.directory-list {
 .vagabond .macro-slot[data-macro-slot=hitMacro] .macro-slot-toggle span {
   color: #8a68c9;
 }
+.vagabond .macro-slot {
+  /* extra breathing room between the linked-macro drop zone and the label field */
+}
 .vagabond .macro-slot .macro-label-group {
   margin-top: 10px;
+}
+.vagabond .macro-slot {
+  /* checkboxes are near-invisible in dark mode — add a ring via box-shadow so the
+     native control keeps its size/alignment (a real border offsets the checkmark). */
 }
 .vagabond .macro-slot input[type=checkbox] {
   border-radius: 3px;
@@ -14189,6 +14493,9 @@ ol#combat-tracker.directory-list {
 .vagabond .vagabond-macro-drop .macro-clear:hover {
   background: rgba(180, 40, 40, 0.35);
 }
+.vagabond {
+  /* Button-label text field — boxed look, theme-aware (light + dark). */
+}
 .vagabond .macro-label-input {
   width: 100%;
   padding: 4px 8px;
@@ -14208,13 +14515,18 @@ ol#combat-tracker.directory-list {
   border-color: #8a68c9;
   background: var(--vagabond-c-input-bg);
 }
+.vagabond {
+  /* Embedded script — native <code-mirror>: line numbers + syntax highlight come
+     for free from the element; we only box it and force a mono font + min height.
+     The host element does not cascade into the internal .cm-editor, so the inner
+     selectors are set explicitly. */
+}
 .vagabond .macro-command-input {
   display: block;
   width: 100%;
   border: 1px solid var(--vagabond-c-faint);
   border-radius: 4px;
   overflow: hidden;
-  /* plain textarea (NPC slots use this — code-mirror is risky inside accordions) */
 }
 .vagabond .macro-command-input .cm-editor {
   min-height: 130px;
@@ -14226,6 +14538,9 @@ ol#combat-tracker.directory-list {
   font-family: var(--font-mono, "Courier New", monospace);
   font-size: 12px;
   line-height: 1.5;
+}
+.vagabond .macro-command-input {
+  /* plain textarea (NPC slots use this — code-mirror is risky inside accordions) */
 }
 .vagabond .macro-command-inputtextarea {
   min-height: 120px;
@@ -14244,17 +14559,14 @@ ol#combat-tracker.directory-list {
   opacity: 0.45;
   font-style: italic;
 }
+.vagabond {
+  /* ===== NPC action macro config (mirrors the item/spell macro treatment) ===== */
+}
 .vagabond .npc-macro-config {
   margin-top: 10px;
   padding-top: 8px;
   border-top: 1px solid var(--vagabond-c-faint);
   /* Section title — match the item-sheet section-label size/weight */
-  /* Each slot = its own accent panel: Always = teal, On Success = purple */
-  /* Enable toggle left, Allow Players right, on one row */
-  /* Button-label field — boxed, theme-aware (same as item version) */
-  /* checkbox ring so they're visible in dark mode (box-shadow = no misalignment) */
-  /* override .npc-content textarea { font-family: $font-title } — script must be
-     plain mono, not the bold display font */
 }
 .vagabond .npc-macro-config .action-edit-subheader {
   display: inline-flex;
@@ -14276,6 +14588,9 @@ ol#combat-tracker.directory-list {
 .vagabond .npc-macro-config .action-edit-subheader .macro-help:hover {
   opacity: 1;
 }
+.vagabond .npc-macro-config {
+  /* Each slot = its own accent panel: Always = teal, On Success = purple */
+}
 .vagabond .npc-macro-config .npc-macro-slot {
   margin: 10px 0;
   padding: 8px 10px 10px;
@@ -14289,6 +14604,9 @@ ol#combat-tracker.directory-list {
 }
 .vagabond .npc-macro-config .npc-macro-slot[data-macro-slot=hitMacro] {
   border-left-color: #6b4ba0;
+}
+.vagabond .npc-macro-config {
+  /* Enable toggle left, Allow Players right, on one row */
 }
 .vagabond .npc-macro-config .npc-macro-header {
   display: flex;
@@ -14322,6 +14640,9 @@ ol#combat-tracker.directory-list {
   gap: 5px;
   cursor: pointer;
 }
+.vagabond .npc-macro-config {
+  /* Button-label field — boxed, theme-aware (same as item version) */
+}
 .vagabond .npc-macro-config .macro-label-input {
   width: 100%;
   padding: 4px 8px;
@@ -14340,10 +14661,17 @@ ol#combat-tracker.directory-list {
   outline: none;
   border-color: #8a68c9;
 }
+.vagabond .npc-macro-config {
+  /* checkbox ring so they're visible in dark mode (box-shadow = no misalignment) */
+}
 .vagabond .npc-macro-config input[type=checkbox] {
   border-radius: 3px;
   background: var(--vagabond-c-input-bg);
   box-shadow: 0 0 0 1px var(--vagabond-c-faint);
+}
+.vagabond .npc-macro-config {
+  /* override .npc-content textarea { font-family: $font-title } — script must be
+     plain mono, not the bold display font */
 }
 .vagabond .npc-macro-config textarea.macro-command-input {
   font-family: "Courier New", Courier, monospace;
@@ -14593,6 +14921,9 @@ ol#combat-tracker.directory-list {
   border: none;
   border-top: 1px solid var(--vagabond-c-dark);
   margin: 1.5rem 0;
+}
+.vagabond {
+  /* Container Item Styles */
 }
 .vagabond .window-content.drag-over {
   background-color: rgba(76, 175, 80, 0.1);
@@ -15031,6 +15362,19 @@ ol#combat-tracker.directory-list {
   line-clamp: 3;
   -webkit-box-orient: vertical;
   color: var(--vagabond-c-title2);
+}
+.vagabond .inventory-card .item-qty-badge {
+  position: absolute;
+  bottom: 2px;
+  right: 3px;
+  z-index: 10;
+  font-size: 10px;
+  font-weight: bold;
+  color: var(--vagabond-c-white);
+  cursor: pointer;
+}
+.vagabond .inventory-card .item-qty-badge.empty {
+  color: var(--vagabond-c-red);
 }
 .vagabond .inventory-card .bound-marker {
   position: absolute;
@@ -15915,6 +16259,9 @@ ol#combat-tracker.directory-list {
   font-weight: 400;
   line-height: 1.2;
 }
+.vagabond {
+  /* Character Name at Top - 2x2 Grid: Name + XP on top, Character Info below */
+}
 .vagabond .name-row-top {
   position: relative;
   width: auto;
@@ -15997,6 +16344,9 @@ ol#combat-tracker.directory-list {
   font-size: 1em;
   color: var(--vagabond-c-chat-yellow);
 }
+.vagabond {
+  /* Combined Character Info Row - sits inside .name-row-top grid */
+}
 .vagabond .character-info-combined-row {
   grid-column: 1;
   grid-row: 2;
@@ -16023,6 +16373,9 @@ ol#combat-tracker.directory-list {
 .vagabond .character-info-combined-row .level-input:hover, .vagabond .character-info-combined-row .level-input:focus {
   border-bottom: 1px solid rgba(var(--vagabond-c-white), 0.5);
 }
+.vagabond {
+  /* Character Builder Icon Button - Inline */
+}
 .vagabond .btn-char-builder-icon {
   display: inline-flex;
   align-items: center;
@@ -16046,6 +16399,9 @@ ol#combat-tracker.directory-list {
 }
 .vagabond .btn-char-builder-icon:active {
   transform: scale(0.95);
+}
+.vagabond {
+  /* Pulsing glow animation */
 }
 @keyframes pulse-glow {
   0%, 100% {
@@ -16391,6 +16747,11 @@ ol#combat-tracker.directory-list {
     font-size: 12px;
   }
 }
+.vagabond {
+  /* ======================================
+     SLIDING PANEL SYSTEM
+     ====================================== */
+}
 .vagabond .sliding-panel {
   position: absolute;
   top: 0;
@@ -16415,11 +16776,20 @@ ol#combat-tracker.directory-list {
   backface-visibility: hidden;
   will-change: transform;
 }
+.vagabond {
+  /* When closed, panel slides behind main sheet, only 20px trigger visible */
+}
 .vagabond .sliding-panel.panel-closed {
   transform: translateX(-410px) rotate(0deg);
 }
+.vagabond {
+  /* When open, panel at natural position next to main sheet */
+}
 .vagabond .sliding-panel.panel-open {
   transform: translateX(0) rotate(2deg);
+}
+.vagabond {
+  /* Click zone - visible sliver on the RIGHT edge of panel when closed */
 }
 .vagabond .panel-click-zone {
   position: absolute;
@@ -16435,10 +16805,12 @@ ol#combat-tracker.directory-list {
   align-items: center;
   justify-content: center;
   transition: background-color 0.3s ease;
-  /* When tooltip is active, highlight the click area */
 }
 .vagabond .panel-click-zone:hover {
   background-color: rgba(0, 0, 0, 0.3);
+}
+.vagabond .panel-click-zone {
+  /* When tooltip is active, highlight the click area */
 }
 .vagabond .panel-click-zone.tooltip-active {
   background-color: rgba(213, 0, 0, 0.4);
@@ -16447,6 +16819,9 @@ ol#combat-tracker.directory-list {
 .vagabond .panel-click-zone.tooltip-active:hover {
   background-color: rgba(213, 0, 0, 0.4);
 }
+.vagabond {
+  /* Pulse animation for the active tooltip area */
+}
 @keyframes pulse-highlight {
   0%, 100% {
     background-color: rgba(0, 0, 0, 0.4);
@@ -16454,6 +16829,9 @@ ol#combat-tracker.directory-list {
   50% {
     background-color: rgba(0, 0, 0, 0.6);
   }
+}
+.vagabond {
+  /* First-time tooltip for sliding panel */
 }
 .vagabond .sliding-panel-tooltip {
   position: absolute;
@@ -16494,6 +16872,9 @@ ol#combat-tracker.directory-list {
   line-height: 1.4;
   text-align: center;
 }
+.vagabond {
+  /* Panel content area */
+}
 .vagabond .panel-content {
   margin-right: 8px; /* Make room for click zone on the right */
   padding: 25px 5px 16px 25px;
@@ -16519,6 +16900,9 @@ ol#combat-tracker.directory-list {
   border-bottom: none;
   margin-bottom: 0;
   padding-bottom: 0;
+}
+.vagabond {
+  /* Mana skill row - label and select on same line, baseline aligned */
 }
 .vagabond .mana-skill-row {
   display: flex;
@@ -16559,6 +16943,9 @@ ol#combat-tracker.directory-list {
   outline: none;
   border-bottom: 1px solid var(--vagabond-c-dark);
   background-color: rgba(0, 0, 0, 0.02);
+}
+.vagabond {
+  /* Mana info row - 3 columns, 2 rows (labels top, values bottom) */
 }
 .vagabond .mana-info-row {
   display: grid;
@@ -16744,6 +17131,11 @@ ol#combat-tracker.directory-list {
   border: none;
   padding: 0;
 }
+.vagabond {
+  /* =========================================
+     NPC HEADER - NEW LAYOUT
+     ========================================= */
+}
 .vagabond .npc-header {
   padding: 0px;
 }
@@ -16759,6 +17151,9 @@ ol#combat-tracker.directory-list {
   background-position: top center;
   padding: 8px;
   box-shadow: 2px 2px 2px var(--vagabond-c-bluey);
+}
+.vagabond {
+  /* --- Column 1: Portrait --- */
 }
 .vagabond .npc-portrait-column {
   flex: 0 0 150px; /* Fixed width */
@@ -16791,6 +17186,9 @@ ol#combat-tracker.directory-list {
 }
 .vagabond .npc-image-container .npc-profile-img:hover {
   opacity: 0.9;
+}
+.vagabond {
+  /* Status Effects Display - grid overlapping portrait base, grows upward */
 }
 .vagabond .npc-status-display {
   position: absolute;
@@ -16827,6 +17225,9 @@ ol#combat-tracker.directory-list {
 .vagabond .npc-status-display .status-icon:hover img {
   filter: drop-shadow(0 0 3px rgba(255, 215, 0, 0.9));
 }
+.vagabond {
+  /* TL Display - in name row, position relative to not affect row height */
+}
 .vagabond .npc-tl-container {
   position: relative;
   left: -4px;
@@ -16854,6 +17255,9 @@ ol#combat-tracker.directory-list {
   font-size: 1em;
   color: var(--vagabond-c-white);
 }
+.vagabond {
+  /* --- Column 2: Stats --- */
+}
 .vagabond .npc-stats-column {
   flex: 1;
   display: flex;
@@ -16873,6 +17277,9 @@ ol#combat-tracker.directory-list {
   background-repeat: no-repeat;
   background-size: 100% 100%;
   border-radius: 2px;
+}
+.vagabond {
+  /* Row 1: HD & HP */
 }
 .vagabond .npc-row-hd-hp {
   justify-content: space-between;
@@ -16929,6 +17336,9 @@ ol#combat-tracker.directory-list {
 .vagabond .npc-hp-display .npc-hp-separator {
   font-size: 0.8em;
 }
+.vagabond {
+  /* Row 2: Speed + Armor */
+}
 .vagabond .npc-row-speed-armor {
   gap: 8px;
   align-items: center;
@@ -16939,6 +17349,9 @@ ol#combat-tracker.directory-list {
 }
 .vagabond .npc-row-speed-armor .npc-speed-group {
   z-index: 10;
+}
+.vagabond {
+  /* Speed group (left side of row 2) — max 70% */
 }
 .vagabond .npc-speed-group {
   display: flex;
@@ -17057,6 +17470,9 @@ ol#combat-tracker.directory-list {
   opacity: 1;
   color: var(--vagabond-c-red);
 }
+.vagabond {
+  /* Row 3: Fatigue */
+}
 .vagabond .npc-row-fatigue {
   gap: 1px;
   width: 80%;
@@ -17090,6 +17506,9 @@ ol#combat-tracker.directory-list {
 }
 .vagabond .npc-fatigue-checkboxes .fatigue-skull.fatigue-inactive {
   color: rgba(0, 0, 0, 0.2);
+}
+.vagabond {
+  /* Row 4: Morale + Appearance */
 }
 .vagabond .npc-row-morale-app {
   gap: 6px;
@@ -17150,6 +17569,9 @@ ol#combat-tracker.directory-list {
   background: rgba(0, 0, 0, 0.14);
   border-color: rgba(0, 0, 0, 0.4);
 }
+.vagabond {
+  /* Armor group (right side of row 2) — 30% centered */
+}
 .vagabond .npc-armor-group {
   flex: 1 1 auto;
   display: flex;
@@ -17198,6 +17620,9 @@ ol#combat-tracker.directory-list {
   text-align: center;
   padding: 1px 2px;
   margin-top: 2px;
+}
+.vagabond {
+  /* --- Bottom Header Rows --- */
 }
 .vagabond .npc-lock-name-row {
   display: flex;
@@ -17322,6 +17747,11 @@ ol#combat-tracker.directory-list {
   color: var(--vagabond-c-black);
   font-family: "Paradigm", serif;
 }
+.vagabond {
+  /* =========================================
+     ORIGINAL STYLES (RESTORED)
+     ========================================= */
+}
 .vagabond .npc-content {
   padding: 5px 0;
   display: flex;
@@ -17332,6 +17762,9 @@ ol#combat-tracker.directory-list {
 }
 .vagabond .npc-content.has-scroll {
   padding-right: 10px;
+}
+.vagabond {
+  /* Senses section */
 }
 .vagabond .npc-senses-section {
   background-color: var(--vagabond-c-lightgrey);
@@ -17349,6 +17782,9 @@ ol#combat-tracker.directory-list {
 }
 .vagabond .npc-senses-section .npc-text-input {
   font-size: 1.1em;
+}
+.vagabond {
+  /* Immunities / Weaknesses / Status Immunities */
 }
 .vagabond .npc-resistances-section {
   background-color: var(--vagabond-c-chat-yellow);
@@ -19167,11 +19603,13 @@ details[open] .vagabond .npc-immunity-toggle i {
   padding: 0;
   text-align: center;
   font-family: "Germania", serif;
-  -moz-appearance: textfield;
 }
 .vagabond .vehicle-part-card .part-hp-input::-webkit-inner-spin-button, .vagabond .vehicle-part-card .part-hp-input::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
+}
+.vagabond .vehicle-part-card .part-hp-input {
+  -moz-appearance: textfield;
 }
 .vagabond .vehicle-part-card .part-stats-row {
   display: flex;
@@ -19923,11 +20361,13 @@ details[open] .vagabond .npc-immunity-toggle i {
   padding: 0;
   text-align: center;
   font-family: "Germania", serif;
-  -moz-appearance: textfield;
 }
 .vagabond .construct-part-card .part-hp-input::-webkit-inner-spin-button, .vagabond .construct-part-card .part-hp-input::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
+}
+.vagabond .construct-part-card .part-hp-input {
+  -moz-appearance: textfield;
 }
 .vagabond .construct-part-card .part-stats-row {
   display: flex;
@@ -21100,3 +21540,5 @@ details[open] .vagabond .npc-immunity-toggle i {
 .vagabond.ongoing-panel .osp-resource-fatigue i {
   color: var(--vagabond-c-muted);
 }
+
+/*# sourceMappingURL=vagabond.css.map */

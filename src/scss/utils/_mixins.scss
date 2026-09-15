@@ -81,5 +81,39 @@
         background: rgba(217, 83, 79, 0.1);
       }
     }
+
+    // "Label  − N +" row (ContextMenuHelper `stepper` entry)
+    &.context-menu-stepper-row {
+      cursor: default;
+      > span:not(.context-menu-stepper) { flex: 1; }
+    }
+
+    .context-menu-stepper {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      margin-left: 12px;
+
+      button {
+        width: 20px;
+        height: 20px;
+        padding: 0;
+        margin: 0;
+        line-height: 1;
+        border: 1px solid $c-white;
+        border-radius: 4px;
+        background: transparent;
+        color: $c-white;
+        cursor: pointer;
+        &:hover { background: $c-white; color: $c-dark; }
+        i { width: auto; font-size: 10px; }
+      }
+
+      .context-menu-stepper-value {
+        min-width: 1.5em;
+        text-align: center;
+        font-weight: bold;
+      }
+    }
   }
 }

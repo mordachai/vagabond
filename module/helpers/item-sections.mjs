@@ -130,7 +130,7 @@ export function buildWeaponStats(item) {
       ` : ''}
       <div class="stat-row">
         <span class="stat-name">${L('Slots')}</span>
-        <span class="stat-value">${item.system.slots || 1}</span>
+        <span class="stat-value">${item.system.slots ?? 0}</span>
       </div>
     </div>
   `;
@@ -173,7 +173,7 @@ export function buildArmorStats(item) {
       ` : ''}
       <div class="stat-row">
         <span class="stat-name">${L('Slots')}</span>
-        <span class="stat-value">${item.system.slots || 1}</span>
+        <span class="stat-value">${item.system.slots ?? 0}</span>
       </div>
     </div>
   `;
@@ -265,7 +265,7 @@ export function buildGearStats(item) {
       ` : ''}
       <div class="stat-row">
         <span class="stat-name">${L('Slots')}</span>
-        <span class="stat-value">${item.system.slots || 1}</span>
+        <span class="stat-value">${item.system.slots ?? 0}</span>
       </div>
     </div>
   `;

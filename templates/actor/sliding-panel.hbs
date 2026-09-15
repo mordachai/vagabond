@@ -381,7 +381,7 @@
         {{! Favorites Section - Equipped Items }}
         <div class='favorites-section flexcol'>
           <h4 class="right-col">
-            {{! Equipped-weapon Slot pips — float left of title (mirrors focus-pips) }}
+            {{! Equipped-weapon Slot pips — left of title; only weapons in Hands count }}
             <span class="equipped-slot-pips" title="Equipped Weapons Slots Count">
               {{#each weaponSlotPips as |pip|}}
                 <i class="fa-solid fa-swords equipped-slot-pip {{#if pip.filled}}filled{{else}}empty{{/if}} {{#if pip.over}}over{{/if}}"></i>
@@ -393,9 +393,11 @@
           {{!-- Check if any items are equipped --}}
           {{#if hasEquippedItems}}
 
+            {{! Rows for one zone: worn=false → Hands, worn=true → Belt }}
+            {{#*inline 'vgEquippedRows'}}
             {{! 1. Equipped Weapons }}
             {{#each weapons as |weapon|}}
-              {{#if weapon.system.equipped}}
+              {{#if (and weapon.system.equipped (eq (eq weapon.system.equipmentState 'worn') ../worn))}}
                 <div class='equipped-item' data-action='rollWeapon' data-item-id='{{weapon._id}}'>
                   <div class='eq-icon-frame'><img class='eq-icon' src='{{weapon.img}}' alt='' /></div>
                   <label class='eq-name rollable' data-action='rollWeapon' data-item-id='{{weapon._id}}' title='{{weapon.name}}'>{{weapon.name}}</label>
@@ -413,7 +415,7 @@
                   <div class='eq-grip'>
                     {{#if (eq weapon.system.grip '1H')}}<i class='fas fa-hand-fist'></i>
                     {{else if (eq weapon.system.grip '2H')}}<i class='fas fa-hands'></i>
-                    {{else if (eq weapon.system.grip 'F')}}<i class='fas fa-hand-fist'></i>
+                    {{else if (eq weapon.system.grip '0')}}<i class='fas fa-wind'></i>
                     {{else if (eq weapon.system.grip 'V')}}
                       {{#if (eq weapon.system.equipmentState 'oneHand')}}<i class='fas fa-hand-fist clickable' data-action='toggleWeaponGrip' data-item-id='{{weapon._id}}'></i>
                       {{else if (eq weapon.system.equipmentState 'twoHands')}}<i class='fas fa-hands clickable' data-action='toggleWeaponGrip' data-item-id='{{weapon._id}}'></i>
@@ -430,6 +432,10 @@
                       <span class='eq-separator'>//</span>
                     {{/unless}}
                     <span class='eq-range'>{{weapon.system.rangeAbbrev}}</span>
+                    {{#if weapon.system.isThrowable}}
+                      <span class='eq-separator'>//</span>
+                      <span class='eq-throw clickable' data-action='throwWeapon' data-item-id='{{weapon._id}}' data-tooltip='{{localize "VAGABOND.ContextMenu.Throw"}}'><i class='fas fa-share'></i> ×{{weapon.system.quantity}}</span>
+                    {{/if}}
                   </div>
                 </div>
               {{/if}}
@@ -437,7 +443,7 @@
 
             {{! 2. Equipped Relics }}
             {{#each gear as |item|}}
-              {{#if (and item.system.equipped (eq item.system.equipmentType 'relic'))}}
+              {{#if (and (and item.system.equipped (eq (eq item.system.equipmentState 'worn') ../worn)) (eq item.system.equipmentType 'relic'))}}
                 <div class='equipped-item' data-action='useItem' data-item-id='{{item._id}}'>
                   <div class='eq-icon-frame'><img class='eq-icon' src='{{item.img}}' alt='' /></div>
                   <label class='eq-name eq-name-wide rollable' data-action='useItem' data-item-id='{{item._id}}' title='{{item.name}}'>{{item.name}}</label>
@@ -467,7 +473,7 @@
 
             {{! 3. Equipped Alchemicals }}
             {{#each gear as |item|}}
-              {{#if (and item.system.equipped (eq item.system.equipmentType 'alchemical'))}}
+              {{#if (and (and item.system.equipped (eq (eq item.system.equipmentState 'worn') ../worn)) (eq item.system.equipmentType 'alchemical'))}}
                 {{#unless (eq item.system.damageType '-')}}
                   {{! Alchemicals with damage }}
                   <div class='equipped-item' data-action='rollWeapon' data-item-id='{{item._id}}'>
@@ -523,7 +529,7 @@
 
             {{! 4. Equipped Gear (Everything else) }}
             {{#each gear as |item|}}
-              {{#if item.system.equipped}}
+              {{#if (and item.system.equipped (eq (eq item.system.equipmentState 'worn') ../worn))}}
                 {{#unless (or (eq item.system.equipmentType 'relic') (eq item.system.equipmentType 'alchemical'))}}
                   <div class='equipped-item' data-action='useItem' data-item-id='{{item._id}}'>
                     <div class='eq-icon-frame'><img class='eq-icon' src='{{item.img}}' alt='' /></div>
@@ -543,6 +549,20 @@
                 {{/unless}}
               {{/if}}
             {{/each}}
+
+            {{/inline}}
+
+            <div class='equipped-divider'>
+              <span class='equipped-divider-label'>{{localize 'VAGABOND.UI.Sections.EquippedHands'}}</span>
+            </div>
+            {{> vgEquippedRows worn=false}}
+
+            {{#if hasBeltItems}}
+              <div class='equipped-divider'>
+                <span class='equipped-divider-label'>{{localize 'VAGABOND.UI.Sections.EquippedBelt'}}</span>
+              </div>
+              {{> vgEquippedRows worn=true}}
+            {{/if}}
 
             {{! 5. Equipped Armor - COMMENTED OUT }}
             {{!--

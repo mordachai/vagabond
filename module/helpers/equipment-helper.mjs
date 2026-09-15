@@ -88,13 +88,101 @@ export class EquipmentHelper {
   }
 
   /**
+   * Weapon with the Thrown property — can be thrown straight from the belt or
+   * inventory without being equipped (see activateHandItem mode 'throw').
+   * @param {Object} item
+   * @returns {boolean}
+   */
+  static isThrowable(item) {
+    return this.isWeapon(item) && (item.system.properties ?? []).includes('Thrown');
+  }
+
+  /**
+   * Skills a weapon can attack with: its default `weaponSkill` plus any
+   * `altSkills` (e.g. a Dagger: Melee, also Finesse). Deduped, default first.
+   * @param {Object} item
+   * @returns {string[]}
+   */
+  static attackSkillOptions(item) {
+    const keys = [item?.system?.weaponSkill || 'melee', ...(item?.system?.altSkills ?? [])];
+    return keys.filter((k, i) => k && keys.indexOf(k) === i);
+  }
+
+  /**
+   * Skill key an attack rolls with. A throw always rolls Ranged (RAW Thrown).
+   * Otherwise an explicit `skillKey`, then the owner's preferred skill
+   * (`flags.vagabond.preferredSkill`), then the weapon's default — each only
+   * if the weapon allows it.
+   * @param {Object} item
+   * @param {{mode?: 'use'|'throw', skillKey?: string|null}} [options]
+   * @returns {string}
+   */
+  static attackSkillFor(item, { mode = 'use', skillKey = null } = {}) {
+    if (mode === 'throw') return 'ranged';
+    const options = this.attackSkillOptions(item);
+    const preferred = item?.getFlag?.('vagabond', 'preferredSkill');
+    return [skillKey, preferred].find((k) => k && options.includes(k)) ?? options[0];
+  }
+
+  /**
+   * Context-menu entries for attacking with a weapon: "Attack (Preferred)"
+   * first, then one "Attack with X" per other allowed skill. Plain "Attack"
+   * when the weapon has a single skill.
+   * @param {Object} item
+   * @param {(skillKey: string) => any} attack
+   * @returns {{label: string, icon: string, action: Function}[]}
+   */
+  static weaponAttackMenuItems(item, attack) {
+    const options = this.attackSkillOptions(item);
+    const preferred = this.attackSkillFor(item);
+    const skillLabel = (k) => game.i18n.localize(CONFIG.VAGABOND.weaponSkills?.[k] ?? k);
+    if (options.length < 2) {
+      return [{ label: game.i18n.localize('VAGABOND.ContextMenu.Attack'), icon: 'fas fa-swords', action: () => attack(preferred) }];
+    }
+    return [
+      {
+        label: game.i18n.format('VAGABOND.ContextMenu.AttackSkill', { skill: skillLabel(preferred) }),
+        icon: 'fas fa-swords',
+        action: () => attack(preferred),
+      },
+      ...options.filter((k) => k !== preferred).map((k) => ({
+        label: game.i18n.format('VAGABOND.ContextMenu.AttackWith', { skill: skillLabel(k) }),
+        icon: CONFIG.VAGABOND.weaponSkillIcons?.[k] ?? 'fas fa-swords',
+        action: () => attack(k),
+      })),
+    ];
+  }
+
+  /**
+   * Max Slots of Equipped Weapons for an actor: RAW base plus
+   * `system.inventory.weaponSlotsBonus` (Active Effects — e.g. giants).
+   * @param {Actor} actor
+   * @returns {number}
+   */
+  static weaponSlotCap(actor) {
+    return actor?.system?.inventory?.maxEquippedWeaponSlots
+      ?? (CONFIG.VAGABOND?.maxEquippedWeaponSlots || 3);
+  }
+
+  /**
+   * Add `delta` to an item's quantity, floored at 0. Thrown weapons stop at 0
+   * instead of being deleted, so raising it again "retrieves" them.
+   * @param {Item} item
+   * @param {number} delta
+   */
+  static async adjustQuantity(item, delta) {
+    if (item?.type !== 'equipment') return;
+    await item.update({ 'system.quantity': Math.max(0, (item.system.quantity ?? 0) + delta) });
+  }
+
+  /**
    * The state an item should enter when equipped. Weapons derive it from
-   * `grip`; non-weapons from `handsRequired` (0 = 'worn').
+   * `grip` (Zero Grip '0' = 'worn'); non-weapons from `handsRequired` (0 = 'worn').
    * @param {Object} item
    * @returns {'oneHand'|'twoHands'|'worn'}
    */
   static defaultEquipState(item) {
-    if (this.isWeapon(item)) return item.system.grip === '2H' ? 'twoHands' : 'oneHand';
+    if (this.isWeapon(item)) return { '2H': 'twoHands', '0': 'worn' }[item.system.grip] ?? 'oneHand';
     const hr = item?.system?.handsRequired ?? 0;
     return hr === 2 ? 'twoHands' : hr === 1 ? 'oneHand' : 'worn';
   }
@@ -190,20 +278,23 @@ export class EquipmentHelper {
     // newcomer fits. A weapon whose own cost already exceeds the cap is still
     // allowed (nothing left to bump) with a warning.
     if (need > 0 && this.isWeapon(item)) {
-      const cap = CONFIG.VAGABOND?.maxEquippedWeaponSlots || 3;
+      const cap = this.weaponSlotCap(actor);
       const bumped = new Set(
         updates.filter((u) => u['system.equipmentState'] === 'unequipped').map((u) => u._id)
       );
-      const targetCost = Math.max(1, this.itemSlotCost(item));
+      // Only weapons held in hands count; zero-Slot weapons cost nothing
+      // (and so never bump anything).
+      const targetCost = this.itemSlotCost(item);
       const otherWeapons = actor.items.filter(
         (i) =>
           this.isWeapon(i) &&
           i.id !== itemId &&
-          i.system.equipmentState !== 'unequipped' &&
+          this.handsFor(i) > 0 &&
           !bumped.has(i.id)
       );
-      let wOver =
-        otherWeapons.reduce((n, w) => n + Math.max(1, this.itemSlotCost(w)), 0) + targetCost - cap;
+      let wOver = targetCost > 0
+        ? otherWeapons.reduce((n, w) => n + this.itemSlotCost(w), 0) + targetCost - cap
+        : 0;
 
       if (wOver > 0) {
         const oldestFirst = [...otherWeapons].sort(
@@ -213,7 +304,7 @@ export class EquipmentHelper {
         for (const w of oldestFirst) {
           if (wOver <= 0) break;
           wConflicts.push(w);
-          wOver -= Math.max(1, this.itemSlotCost(w));
+          wOver -= this.itemSlotCost(w);
         }
         for (const c of wConflicts) {
           updates.push({ _id: c.id, 'system.equipmentState': 'unequipped' });
@@ -280,11 +371,16 @@ export class EquipmentHelper {
     for (const it of equipped) {
       let state = it.system.equipmentState;
       if (this.isWeapon(it)) {
+        // 'worn' (Belt: equipped, not in hands) is legal for any weapon —
+        // only held states are corrected to match the grip.
         const grip = it.system.grip;
-        if (grip === '2H' && state !== 'twoHands') state = 'twoHands';
-        else if ((grip === '1H' || grip === 'F') && state !== 'oneHand') state = 'oneHand';
-        else if (grip === 'V' && state === 'worn') state = 'oneHand'; // 'worn' illegal for weapons
+        if (state !== 'worn') {
+          if (grip === '2H') state = 'twoHands';
+          else if (grip === '1H') state = 'oneHand';
+          else if (grip === '0') state = 'worn'; // Zero Grip: no hands
+        }
       } else {
+        // Non-weapons follow handsRequired: occupying hands means in hands.
         const hr = it.system.handsRequired ?? 0;
         state = hr === 2 ? 'twoHands' : hr === 1 ? 'oneHand' : 'worn';
       }
@@ -314,8 +410,8 @@ export class EquipmentHelper {
     // 3) RAW weapon-Slot cap: Σ Slots of equipped weapons ≤ cap. Independent of
     // the hand pass — bump oldest equipped weapons first until it fits (keeps
     // the newest that fit, matching the hand-pool philosophy).
-    const wCap = CONFIG.VAGABOND?.maxEquippedWeaponSlots || 3;
-    const wCost = (it) => Math.max(1, this.itemSlotCost(it));
+    const wCap = this.weaponSlotCap(actor);
+    const wCost = (it) => this.itemSlotCost(it); // zero-Slot weapons don't count
     const equippedWeapons = equipped.filter(
       (i) =>
         this.isWeapon(i) &&
@@ -367,6 +463,16 @@ export class EquipmentHelper {
   }
 
   /**
+   * Inventory Slots a whole stack occupies: per-unit cost × quantity (a 2-Slot
+   * item ×4 = 8). Zero-Slot items return 0 — see {@link pooledZeroSlotCost}.
+   * @param {Object} item
+   * @returns {number}
+   */
+  static itemStackCost(item) {
+    return this.itemSlotCost(item) * Math.max(0, item?.system?.quantity ?? 1);
+  }
+
+  /**
    * Pooled Slot cost of every zero-Slot item in a list. RAW: each complete group
    * of `zeroSlotStackSize` (10) zero-Slot items occupies 1 Slot — any remainder
    * under 10 is free. floor(Σ quantity / stack) across ALL zero-Slot items
@@ -386,7 +492,7 @@ export class EquipmentHelper {
 
   /**
    * Total occupied inventory Slots for a collection of items: sum of non-zero
-   * item costs + the pooled zero-Slot cost. Items nested in a container
+   * stack costs (cost × quantity) + the pooled zero-Slot cost. Items nested in a container
    * (`system.containerId` set) are excluded — they count against the container.
    * @param {Iterable<Object>} items
    * @returns {number}
@@ -394,20 +500,21 @@ export class EquipmentHelper {
   static occupiedSlotsFor(items) {
     const top = [...items].filter((i) => !i?.system?.containerId);
     let total = 0;
-    for (const it of top) total += this.itemSlotCost(it);
+    for (const it of top) total += this.itemStackCost(it);
     return total + this.pooledZeroSlotCost(top);
   }
 
   /**
-   * Slots consumed by an actor's currently-equipped weapons (oneHand/twoHands).
-   * Each weapon counts at least 1 Slot. Drives the RAW 3-Slot equipped-weapon cap.
+   * Slots consumed by weapons held in hands (oneHand/twoHands). Weapons in
+   * Belt ('worn') don't count, and zero-Slot weapons add nothing.
+   * Drives the RAW 3-Slot equipped-weapon cap.
    * @param {Actor} actor
    * @returns {number}
    */
   static equippedWeaponSlots(actor) {
     return actor.items
-      .filter((i) => this.isWeapon(i) && i.system.equipmentState !== 'unequipped')
-      .reduce((n, w) => n + Math.max(1, this.itemSlotCost(w)), 0);
+      .filter((i) => this.isWeapon(i) && this.handsFor(i) > 0)
+      .reduce((n, w) => n + this.itemSlotCost(w), 0);
   }
 
   // ===========================
@@ -432,7 +539,7 @@ export class EquipmentHelper {
    */
   static getWeaponSkillIcon(item) {
     if (!this.isWeapon(item)) return null;
-    const skill = item.system.weaponSkill || 'melee';
+    const skill = this.attackSkillFor(item);
     return CONFIG.VAGABOND.weaponSkillIcons?.[skill] || null;
   }
 
