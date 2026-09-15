@@ -55,6 +55,7 @@ import { OngoingPanel } from './applications/ongoing-panel.mjs';
 import { VagabondCharacterHud } from './applications/character-hud.mjs';
 import { VagabondNPCHud } from './applications/npc-hud.mjs';
 import { HudDisplayConfig } from './applications/hud-display-config.mjs';
+import { isItemPile } from './helpers/hud-display.mjs';
 import { StatusEffectsSettings } from './applications/status-effects-settings.mjs';
 import VagabondActiveEffectConfig from './applications/active-effect-config.mjs';
 import { VagabondSpellSequencer } from './helpers/spell-sequencer.mjs';
@@ -1822,7 +1823,7 @@ Hooks.on('getSceneControlButtons', (controls) => {
         // (e.g. several summons off one base actor) share actor.id but are
         // distinct tokens and must each get their own HUD.
         const actors = [...new Map(
-          controlled.map(t => t.actor).filter(a => a?.type === 'character')
+          controlled.map(t => t.actor).filter(a => a?.type === 'character' && !isItemPile(a))
             .map(a => [VagabondCharacterHud._keyFor(a), a])
         ).values()];
         if (!actors.length) actors.push(VagabondCharacterHud.resolveActor());
@@ -1846,7 +1847,7 @@ Hooks.on('getSceneControlButtons', (controls) => {
         // (e.g. 3 goblins off one base actor) share actor.id but are distinct
         // tokens and must each get their own HUD.
         const actors = [...new Map(
-          controlled.map(t => t.actor).filter(a => a?.type === 'npc')
+          controlled.map(t => t.actor).filter(a => a?.type === 'npc' && !isItemPile(a))
             .map(a => [VagabondNPCHud._keyFor(a), a])
         ).values()];
         if (!actors.length) actors.push(VagabondNPCHud.resolveActor());

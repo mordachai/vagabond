@@ -1724,6 +1724,7 @@
       "BecomeTooltip":   "Close this sheet and open the floating HUD",
       "NoActor":         "No character assigned and no token selected.",
       "NotCharacter":    "The Character HUD only supports player characters.",
+      "NotForItemPile":  "HUDs are not available for Item Piles.",
       "DisabledForUser": "The Character HUD is disabled for you. Re-enable it in Configure HUD Display.",
       "SpendHint":       "Spend",
       "AddHint":         "Add",

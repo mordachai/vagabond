@@ -4,7 +4,7 @@ import { InventoryHandler } from '../sheets/handlers/inventory-handler.mjs';
 import { EquipmentHandler } from '../sheets/handlers/equipment-handler.mjs';
 import { VagabondActorSheet } from '../sheets/actor-sheet.mjs';
 import { AccordionHelper } from '../helpers/accordion-helper.mjs';
-import { applyHudDisplayPrefs, getHudHealthBar } from '../helpers/hud-display.mjs';
+import { applyHudDisplayPrefs, getHudHealthBar, isItemPile } from '../helpers/hud-display.mjs';
 import { activateHandItem } from '../helpers/hand-item-activation.mjs';
 import { bindHudTooltips } from '../helpers/hud-tooltip.mjs';
 import * as ItemSections from '../helpers/item-sections.mjs';
@@ -193,7 +193,7 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
   static resolveActor() {
     if (game.user.character) return game.user.character;
     const controlled = canvas.tokens?.controlled ?? [];
-    return controlled.find(t => t.actor)?.actor ?? null;
+    return controlled.find(t => t.actor && !isItemPile(t.actor))?.actor ?? null;
   }
 
   /**
@@ -215,6 +215,10 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
     }
     if (actor.type !== 'character') {
       ui.notifications.warn(game.i18n.localize('VAGABOND.Hud.NotCharacter'));
+      return null;
+    }
+    if (isItemPile(actor)) {
+      if (!silent) ui.notifications.warn(game.i18n.localize('VAGABOND.Hud.NotForItemPile'));
       return null;
     }
     const key = this._keyFor(actor);
@@ -259,6 +263,7 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
     const actor = (controlled.length === 1) ? controlled[0]?.actor : null;
     const eligible = !!actor
       && actor.type === 'character'
+      && !isItemPile(actor)
       && actor.testUserPermission(game.user, this.AUTO_OPEN_MIN_OWNERSHIP);
 
     if (!eligible) { this.#closeAuto(); return; }
@@ -281,7 +286,7 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
   static syncAlwaysOn() {
     const on = game.settings.get('vagabond', 'hudAlwaysOnForMainChar');
     const actor = game.user.character;
-    const eligible = on && actor && actor.type === 'character';
+    const eligible = on && actor && actor.type === 'character' && !isItemPile(actor);
     const key = actor ? this._keyFor(actor) : null;
 
     // Tear down a stale pin (setting toggled off, or character reassigned).

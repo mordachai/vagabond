@@ -24,6 +24,21 @@ export function getHudDisplayPrefs() {
 }
 
 /**
+ * True when an actor (or token) is an Item Piles pile. Piles are `character`
+ * actors under the Vagabond integration, so HUDs must skip them explicitly.
+ * Safe when the Item Piles module is absent or not yet ready (flag fallback).
+ * @param {Actor|Token|TokenDocument|null} actorOrToken
+ * @returns {boolean}
+ */
+export function isItemPile(actorOrToken) {
+  const actor = actorOrToken?.actor ?? actorOrToken;
+  if (!actor) return false;
+  const api = game.itempiles?.API;
+  if (api?.isValidItemPile) return !!api.isValidItemPile(actor);
+  return !!actor.getFlag?.('item-piles', 'data')?.enabled;
+}
+
+/**
  * Compute the HUD name-underline health bar: a fill width (%) and a colour that
  * shifts green → yellow → orange as HP drops. Shared by both HUDs.
  *

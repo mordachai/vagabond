@@ -1723,6 +1723,7 @@
       "BecomeTooltip":   "Fechar esta ficha e abrir o HUD flutuante",
       "NoActor":         "Nenhum personagem designado e nenhum token selecionado.",
       "NotCharacter":    "O HUD de Personagem só suporta personagens de jogador.",
+      "NotForItemPile":  "HUDs não estão disponíveis para Item Piles.",
       "DisabledForUser": "O HUD de Personagem está desativado para você. Reative em Configurar Exibição do HUD.",
       "SpendHint":       "Gastar",
       "AddHint":         "Adicionar",

@@ -2,7 +2,7 @@ import { RollHandler, NPCActionHandler } from '../sheets/handlers/_module.mjs';
 import { VagabondActorSheet } from '../sheets/actor-sheet.mjs';
 import { EnrichmentHelper } from '../helpers/enrichment-helper.mjs';
 import { VagabondTextParser } from '../helpers/text-parser.mjs';
-import { applyHudDisplayPrefs, getHudHealthBar } from '../helpers/hud-display.mjs';
+import { applyHudDisplayPrefs, getHudHealthBar, isItemPile } from '../helpers/hud-display.mjs';
 import { bindHudTooltips } from '../helpers/hud-tooltip.mjs';
 
 const { api } = foundry.applications;
@@ -127,7 +127,7 @@ export class VagabondNPCHud extends api.HandlebarsApplicationMixin(api.Applicati
   /** Resolve the actor a no-argument open should target: the controlled token. */
   static resolveActor() {
     const controlled = canvas.tokens?.controlled ?? [];
-    return controlled.find(t => t.actor?.type === 'npc')?.actor ?? null;
+    return controlled.find(t => t.actor?.type === 'npc' && !isItemPile(t.actor))?.actor ?? null;
   }
 
   /**
@@ -144,6 +144,10 @@ export class VagabondNPCHud extends api.HandlebarsApplicationMixin(api.Applicati
     }
     if (actor.type !== 'npc') {
       ui.notifications.warn(game.i18n.localize('VAGABOND.Hud.NotNPC'));
+      return null;
+    }
+    if (isItemPile(actor)) {
+      ui.notifications.warn(game.i18n.localize('VAGABOND.Hud.NotForItemPile'));
       return null;
     }
     // Resolve the token whose image drives the portrait: explicit > controlled-of-this-actor > first active.
@@ -195,6 +199,7 @@ export class VagabondNPCHud extends api.HandlebarsApplicationMixin(api.Applicati
     const actor = token?.actor ?? null;
     const eligible = !!actor
       && actor.type === 'npc'
+      && !isItemPile(actor)
       && actor.testUserPermission(game.user, this.AUTO_OPEN_MIN_OWNERSHIP);
 
     if (!eligible) { this.#closeAuto(); return; }
