@@ -25,7 +25,7 @@
     "grip": "V",
     "damageOneHand": "d8",
     "damageTwoHands": "d10",
-    "equipmentState": "oneHand",
+    "equipmentState": "unequipped",
     "armorType": "light",
     "immunities": [],
     "gearCategory": "",

@@ -13,16 +13,18 @@
       "silver": 80,
       "copper": 0
     },
-    "baseSlots": 1,
+    "baseSlots": 2,
     "metal": "none",
     "damageType": "-",
     "damageAmount": "",
-    "properties": [],
+    "properties": [
+      "Vicious"
+    ],
     "weaponSkill": "melee",
     "range": "close",
     "grip": "V",
-    "damageOneHand": "d6",
-    "damageTwoHands": "d8",
+    "damageOneHand": "d8",
+    "damageTwoHands": "d10",
     "equipmentState": "unequipped",
     "armorType": "light",
     "immunities": [],

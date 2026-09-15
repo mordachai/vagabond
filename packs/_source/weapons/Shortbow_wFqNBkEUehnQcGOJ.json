@@ -6,7 +6,7 @@
     "description": "",
     "equipmentType": "weapon",
     "locked": true,
-    "equipped": true,
+    "equipped": false,
     "quantity": 1,
     "baseCost": {
       "gold": 0,
@@ -21,11 +21,14 @@
       "Keen"
     ],
     "weaponSkill": "ranged",
+    "altSkills": [
+      "finesse"
+    ],
     "range": "far",
     "grip": "2H",
     "damageOneHand": "d6",
     "damageTwoHands": "d6",
-    "equipmentState": "twoHands",
+    "equipmentState": "unequipped",
     "armorType": "light",
     "immunities": [],
     "gearCategory": "",

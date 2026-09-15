@@ -6,7 +6,7 @@
     "description": "",
     "equipmentType": "weapon",
     "locked": true,
-    "equipped": true,
+    "equipped": false,
     "quantity": 1,
     "baseCost": {
       "gold": 0,
@@ -26,7 +26,7 @@
     "grip": "1H",
     "damageOneHand": "1",
     "damageTwoHands": "1",
-    "equipmentState": "oneHand",
+    "equipmentState": "unequipped",
     "armorType": "light",
     "immunities": [],
     "gearCategory": "",

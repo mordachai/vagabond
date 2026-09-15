@@ -6,7 +6,7 @@
     "description": "",
     "equipmentType": "weapon",
     "locked": true,
-    "equipped": true,
+    "equipped": false,
     "quantity": 1,
     "baseCost": {
       "gold": 0,
@@ -21,11 +21,14 @@
       "Keen"
     ],
     "weaponSkill": "brawl",
+    "altSkills": [
+      "finesse"
+    ],
     "range": "close",
     "grip": "1H",
     "damageOneHand": "d4",
     "damageTwoHands": "d4",
-    "equipmentState": "oneHand",
+    "equipmentState": "unequipped",
     "armorType": "light",
     "immunities": [],
     "gearCategory": "",

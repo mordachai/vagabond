@@ -38,7 +38,6 @@
     "damageTypeOneHand": "blunt",
     "damageTypeTwoHands": "blunt",
     "altSkills": [
-      "finesse",
       "melee"
     ]
   },

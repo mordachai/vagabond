@@ -13,7 +13,7 @@
       "silver": 80,
       "copper": 0
     },
-    "baseSlots": 3,
+    "baseSlots": 2,
     "metal": "none",
     "damageType": "-",
     "damageAmount": "",
@@ -26,7 +26,7 @@
     "grip": "2H",
     "damageOneHand": "d10",
     "damageTwoHands": "d10",
-    "equipmentState": "twoHands",
+    "equipmentState": "unequipped",
     "armorType": "light",
     "immunities": [],
     "gearCategory": "",

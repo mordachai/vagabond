@@ -1,0 +1,64 @@
+{
+  "name": "Maul",
+  "type": "equipment",
+  "img": "icons/weapons/hammers/hammer-war-rounding.webp",
+  "system": {
+    "description": "",
+    "equipmentType": "weapon",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 1,
+      "silver": 50,
+      "copper": 0
+    },
+    "baseSlots": 2,
+    "metal": "none",
+    "damageType": "-",
+    "damageAmount": "",
+    "properties": [
+      "Vicious"
+    ],
+    "weaponSkill": "melee",
+    "range": "close",
+    "grip": "2H",
+    "damageOneHand": "d10",
+    "damageTwoHands": "d10",
+    "equipmentState": "unequipped",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "",
+    "alchemicalType": "concoction",
+    "lore": "",
+    "itemFx": {
+      "hitOffsetX": -150,
+      "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Melee/Group03/MeleeAttack03_GreatClub*",
+      "hitDuration": 1000,
+      "enabled": true
+    },
+    "damageTypeOneHand": "blunt",
+    "damageTypeTwoHands": "blunt"
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.367",
+    "systemId": "vagabond",
+    "systemVersion": "5.38.0",
+    "createdTime": 1789506857875,
+    "modifiedTime": 1789506857875,
+    "lastModifiedBy": "7hJBvKOxyEF7RWCr"
+  },
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "_id": "EDaWqypRQcAP8Zsq",
+  "sort": 2000000,
+  "_key": "!items!EDaWqypRQcAP8Zsq"
+}

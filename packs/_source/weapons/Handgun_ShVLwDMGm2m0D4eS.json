@@ -17,13 +17,15 @@
     "metal": "none",
     "damageType": "-",
     "damageAmount": "",
-    "properties": [],
+    "properties": [
+      "Keen"
+    ],
     "weaponSkill": "ranged",
     "range": "far",
     "grip": "1H",
     "damageOneHand": "d4",
     "damageTwoHands": "d4",
-    "equipmentState": "oneHand",
+    "equipmentState": "unequipped",
     "armorType": "light",
     "immunities": [],
     "gearCategory": "",

@@ -10,7 +10,7 @@
     "quantity": 1,
     "baseCost": {
       "gold": 0,
-      "silver": 40,
+      "silver": 20,
       "copper": 0
     },
     "baseSlots": 1,
@@ -23,7 +23,7 @@
     "grip": "1H",
     "damageOneHand": "d6",
     "damageTwoHands": "d6",
-    "equipmentState": "oneHand",
+    "equipmentState": "unequipped",
     "armorType": "light",
     "immunities": [],
     "gearCategory": "",

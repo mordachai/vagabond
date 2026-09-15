@@ -13,20 +13,20 @@
       "silver": 80,
       "copper": 0
     },
-    "baseSlots": 3,
+    "baseSlots": 2,
     "metal": "none",
     "damageType": "-",
     "damageAmount": "",
     "properties": [
-      "Keen",
-      "Long"
+      "Long",
+      "Vicious"
     ],
     "weaponSkill": "melee",
-    "range": "near",
+    "range": "close",
     "grip": "2H",
     "damageOneHand": "d10",
     "damageTwoHands": "d10",
-    "equipmentState": "twoHands",
+    "equipmentState": "unequipped",
     "armorType": "light",
     "immunities": [],
     "gearCategory": "",

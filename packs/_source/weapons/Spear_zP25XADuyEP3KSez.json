@@ -21,11 +21,11 @@
       "Thrown"
     ],
     "weaponSkill": "melee",
-    "range": "near",
+    "range": "close",
     "grip": "1H",
     "damageOneHand": "d6",
     "damageTwoHands": "d6",
-    "equipmentState": "oneHand",
+    "equipmentState": "unequipped",
     "armorType": "light",
     "immunities": [],
     "gearCategory": "",
