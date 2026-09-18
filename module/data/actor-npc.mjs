@@ -540,7 +540,7 @@ export default class VagabondNPC extends VagabondActorBase {
 
     try {
       // Replace @variables with their values from rollData
-      const replaced = Roll.replaceFormulaData(formulaStr, rollData);
+      const replaced = Roll.replaceFormulaData(formulaStr, rollData, { missing: 0 });
 
       // Safely evaluate the expression
       const result = Roll.safeEval(replaced);

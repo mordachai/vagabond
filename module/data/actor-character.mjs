@@ -728,7 +728,7 @@ export default class VagabondCharacter extends VagabondActorBase {
       const cleaned = formulaStr.replace(/^\((.+)\)$/, '$1');
 
       // Replace @variables with their values from rollData
-      const replaced = Roll.replaceFormulaData(cleaned, rollData);
+      const replaced = Roll.replaceFormulaData(cleaned, rollData, { missing: 0 });
 
       // If the result is pure dice notation (e.g. "1d8") safeEval cannot handle it.
       // Dice expressions are invalid for synchronous derived-value bonus fields — skip silently.
