@@ -18,13 +18,14 @@
     "metal": "none",
     "damageType": "-",
     "damageAmount": "",
-    "canExplode": false,
-    "explodeValues": "",
+    "canExplode": true,
+    "explodeValues": "6",
     "properties": [],
     "weaponSkill": "endure",
+    "altSkills": ["will"],
     "range": "near",
-    "grip": "1H",
-    "damageOneHand": "d6",
+    "grip": "0",
+    "damageOneHand": "2d6",
     "damageTwoHands": "d8",
     "equipmentState": "unequipped",
     "armorType": "light",
@@ -39,7 +40,7 @@
       "enabled": true,
       "hitFile": "modules/JB2A_DnD5e/Library/Generic/Template/Cone/Breath_Weapon/BreathWeapon_Fire01_Regular_Orange_30ft_Cone_Burst_600x600.webm",
       "hitDuration": 7000,
-      "hitScale": 3
+      "hitScale": 1
     }
   },
   "effects": [],

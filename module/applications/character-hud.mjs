@@ -8,6 +8,7 @@ import { applyHudDisplayPrefs, getHudHealthBar, isItemPile } from '../helpers/hu
 import { activateHandItem } from '../helpers/hand-item-activation.mjs';
 import { buildItemMenuItems } from '../helpers/item-menu.mjs';
 import { bindHudTooltips } from '../helpers/hud-tooltip.mjs';
+import { setupDragReorder } from '../helpers/drag-reorder.mjs';
 import * as ItemSections from '../helpers/item-sections.mjs';
 
 /** Inventory tab groupings, in display order, keyed by equipmentType. */
@@ -62,7 +63,8 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
    */
   static AUTO_OPEN_MIN_OWNERSHIP = CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER;
 
-  static ITEM_SLOTS = 5;
+  static MIN_ITEM_SLOTS = 5;
+  static MAX_ITEM_SLOTS = 7;
   // Weapon circles are derived from the RAW equipped-weapon Slot budget
   // (CONFIG.VAGABOND.maxEquippedWeaponSlots), not a fixed count — see _categorizeItems.
 
@@ -405,9 +407,9 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
 
   /** Split actor items + build the derived quick slots. */
   _categorizeItems(context) {
+    const { EquipmentHelper } = globalThis.vagabond.utils;
     const actor = this.actor;
     const weapons = [];
-    const usableEquipped = []; // equipped gear / relic / alchemical (non-weapon, non-armor)
     const allEquipment = [];   // every equipment item, regardless of equipped state
     const containers = [];
     const spells = [];
@@ -423,7 +425,6 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
           const kind = item.system.equipmentType;
           allEquipment.push(item);
           if (kind === 'weapon') weapons.push(item);
-          else if (kind !== 'armor' && item.system.equipped) usableEquipped.push(item);
           break;
         }
         case 'container':
@@ -473,15 +474,32 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
         items: byType[g.key].map(item => this._invRow(item)),
       }));
 
-    // ----- Persistent quick slots (per-user, keyed by actor) -----
-    // Item slots are an explicit id→slot map, NOT re-derived each render — so a
-    // removed item leaves its slot empty instead of being back-filled. The map
-    // is auto-populated ONCE, on the first ever render for this actor; after
-    // that only drag-drop (assign) and "Remove from HUD" (clear) change it.
-    let slots = this._getSlots();
-    if (!slots) slots = this._autoFillSlots(spells, usableEquipped);
+    // ----- Belt (item slots) — live mirror, same principle as the hand   -----
+    // ----- circles: NOT a persisted pick list, always re-derived from    -----
+    // ----- actual game state (favorited spells + Belt/'worn' equipment). -----
+    // Order: favorited spells first, then worn equipment (oldest-equipped
+    // first). Base row is 5 slots; grows to fit up to MAX_ITEM_SLOTS (7).
+    // Beyond that cap this is a HUD-DISPLAY-ONLY overflow — the sheet's Belt
+    // stays uncapped, the HUD just drops the oldest worn items from view
+    // (favorited spells are never dropped for this).
+    // Same pool as the sheet's Belt (weapons + gear/alchemical/relic, armor
+    // excluded — see actor-sheet.mjs `panelEquipped`/`hasBeltItems`): no
+    // "has a Use action" gate here, worn is worn (e.g. a Waterskin has no
+    // consumable/hands flag but still belongs in the Belt).
+    const favSpells = spells.filter(s => s.system.favorite);
+    const wornItems = allEquipment
+      .filter(i => i.system.equipmentState === 'worn' && i.system.equipmentType !== 'armor')
+      .sort((a, b) => (a.getFlag('vagabond', 'equippedAt') || 0) - (b.getFlag('vagabond', 'equippedAt') || 0));
 
-    context.itemSlots = this._padIds(slots.items, VagabondCharacterHud.ITEM_SLOTS)
+    const spellsShown = favSpells.slice(0, VagabondCharacterHud.MAX_ITEM_SLOTS);
+    const equipRoom = VagabondCharacterHud.MAX_ITEM_SLOTS - spellsShown.length;
+    const equipShown = equipRoom > 0 ? wornItems.slice(-equipRoom) : [];
+    // Default order is spells-then-equipment (above); a manual drag reorder
+    // (HUD or sheet, same flag) overrides it — see `EquipmentHelper.sortByBeltOrder`.
+    const beltItems = EquipmentHelper.sortByBeltOrder([...spellsShown, ...equipShown]);
+    const slotCount = Math.max(VagabondCharacterHud.MIN_ITEM_SLOTS, beltItems.length);
+
+    context.itemSlots = this._padIds(beltItems.map(i => i.id), slotCount)
       .map((id) => {
         const item = id ? actor.items.get(id) : null;
         return this._slotEntry(item, item?.type === 'spell' ? 'spell' : 'item');
@@ -492,7 +510,6 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
     // same field the sheet's "Equipped" panel reads. Oldest holder goes in R.
     // A 2H holder takes R and hides L; a 1H holder leaves L open. The weapon
     // Slot cap is still enforced by EquipmentHelper, just not drawn here.
-    const { EquipmentHelper } = globalThis.vagabond.utils;
     const held = actor.items
       .filter((i) => EquipmentHelper.handsFor(i) > 0)
       .sort((a, b) => (a.getFlag('vagabond', 'equippedAt') || 0) - (b.getFlag('vagabond', 'equippedAt') || 0));
@@ -529,28 +546,6 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
     const icon = CONFIG.VAGABOND.damageTypeIcons?.[sys.currentDamageType];
     const damage = [esc(sys.currentDamage ?? ''), icon ? `<i class='${icon}'></i>` : ''].filter(Boolean).join(' ');
     return `${name}: ${damage} | ${esc(sys.rangeAbbrev ?? '')} | ${slots}`;
-  }
-
-  /**
-   * First-ever-render slot population for item slots: favorited spells first,
-   * then equipped alchemicals → relics → gear. The result is persisted
-   * immediately so the slots never auto-fill again — thereafter the user owns
-   * the layout (drag to add, "Remove from HUD" to clear). Returns the
-   * in-memory map for the current render. Weapon circles are NOT part of this
-   * (see `_categorizeItems` — they're always live-derived from equip state).
-   */
-  _autoFillSlots(spells, usableEquipped) {
-    const TYPE_ORDER = { alchemical: 0, relic: 1, gear: 2 };
-    const favSpells = spells.filter(s => s.system.favorite);
-    const orderedEquip = usableEquipped.slice().sort(
-      (a, b) => (TYPE_ORDER[a.system.equipmentType] ?? 9) - (TYPE_ORDER[b.system.equipmentType] ?? 9),
-    );
-    const itemIds = [...favSpells, ...orderedEquip]
-      .slice(0, VagabondCharacterHud.ITEM_SLOTS).map(i => i.id);
-    const slots = { items: this._padIds(itemIds, VagabondCharacterHud.ITEM_SLOTS) };
-    // Fire-and-forget: setFlag triggers no hook the HUD listens to (no loop).
-    this._saveSlots(slots);
-    return slots;
   }
 
   /** Slice/pad an id array to exactly `n` entries, padding short with null. */
@@ -687,8 +682,11 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
       VagabondActorSheet._onModifyMana.call(this, e, manaEl);
     }, { signal });
 
-    // Drag a row by its name onto the slots. The name span carries the id and is
-    // the accordion toggle (single-click expands); the image triggers use/cast.
+    // Drag a row by its name (e.g. onto the hotbar to make a macro). The name
+    // span carries the id and is also the accordion toggle (single-click
+    // expands); the image triggers use/cast. Belt slots are a live mirror
+    // (favorited spells + worn equipment) — dragging a row here does NOT add
+    // it to the Belt; equip via the Inventory tab / favorite via the spell menu.
     for (const el of this.element.querySelectorAll('.vh-inv-name, .vh-spell-name')) {
       el.setAttribute('draggable', 'true');
       el.addEventListener('dragstart', (e) => {
@@ -700,12 +698,21 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
       }, { signal });
     }
 
-    // Drop anywhere on the HUD body (incl. item/weapon slots) → equip / favorite.
-    const body = this.element.querySelector('.vh-body');
-    if (body) {
-      body.addEventListener('dragover', (e) => { e.preventDefault(); body.classList.add('drag-over'); }, { signal });
-      body.addEventListener('dragleave', (e) => { if (e.target === body) body.classList.remove('drag-over'); }, { signal });
-      body.addEventListener('drop', (e) => this._onHudDrop(e, body), { signal });
+    // Belt slots: drag-to-reorder among themselves (position only — the Belt's
+    // membership is still the live mirror above; this just persists display
+    // order via `flags.vagabond.beltOrder`, shared with the sheet's Equipped
+    // Belt list so reordering either one updates both).
+    const beltRow = this.element.querySelector('.vh-slots');
+    if (beltRow) {
+      const { EquipmentHelper } = globalThis.vagabond.utils;
+      const beltReorder = setupDragReorder({
+        container: beltRow,
+        itemSelector: '.vh-slot.filled',
+        boundarySelector: '.vh-slot:not(.filled)',
+        onDrop: (orderedIds) => EquipmentHelper.saveBeltOrder(this.actor, orderedIds),
+        signal,
+      });
+      for (const el of beltRow.querySelectorAll('.vh-slot.filled')) beltReorder.bindItem(el);
     }
 
     // Idle fade (wires its own AbortController so it can be re-evaluated live
@@ -1012,7 +1019,7 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
   static _onSpellMenu(event, target) {
     event.preventDefault();
     const item = this.actor.items.get(target.dataset.spellId);
-    if (item) this._openSlotMenu(event, item, 'spell', { includeRemove: false });
+    if (item) this._openSlotMenu(event, item, 'spell');
   }
 
   /**
@@ -1029,11 +1036,10 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
 
     if (event.type === 'contextmenu' || event.button === 2) {
       event.preventDefault();
-      // Hand circles have no "HUD slot" concept — they mirror actual equip
-      // state, so the way to remove one is "Unequip", not "Remove from HUD"
-      // (a hand-circle item isn't in the slot map; clearing it would corrupt
-      // the launcher slots).
-      return this._openSlotMenu(event, item, type, { includeRemove: !inHandCircle });
+      // Both hand circles and Belt slots are live mirrors of actual game
+      // state (equipped-in-hand / favorited+worn) — there's no separate "HUD
+      // slot" to remove from. The way out is Unequip / un-favorite.
+      return this._openSlotMenu(event, item, type);
     }
     if (type === 'spell') return this._spellHandler.castSpell(event, { dataset: { spellId: id } });
 
@@ -1055,15 +1061,15 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
   }
 
   /**
-   * Slot context menu. Spells: Send to Chat, Remove from HUD. Items: Use, Send
-   * to Chat, Unequip, Remove from HUD. Weapons: Use, Send to Chat, Unequip —
-   * NO "Remove from HUD" (there's no separate slot state to remove from; the
-   * circles mirror actual equip state, so unequipping IS the removal).
+   * Slot context menu. Spells: Cast, Open, Send to Chat. Items/weapons: Use,
+   * Send to Chat, Unequip. No "Remove from HUD" — hand circles and Belt slots
+   * are both live mirrors of actual game state (equipped-in-hand, or
+   * favorited/worn), so Unequip / un-favorite IS the removal.
    * @param {Event} event
    * @param {Item} item
    * @param {'spell'|'weapon'|'item'} type
    */
-  _openSlotMenu(event, item, type, { includeRemove = true } = {}) {
+  _openSlotMenu(event, item, type) {
     const { ContextMenuHelper, VagabondChatCard } = globalThis.vagabond.utils;
     const L = (k) => game.i18n.localize(k);
     const items = [];
@@ -1096,14 +1102,6 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
         forceUse: true,
         onChange: () => this.render(),
       }));
-    }
-
-    if (includeRemove) {
-      items.push({
-        label: L('VAGABOND.Hud.Menu.RemoveFromHud'),
-        icon: 'fas fa-eye-slash',
-        action: async () => { await this._clearSlot(item.id); },
-      });
     }
 
     ContextMenuHelper.create({
@@ -1173,93 +1171,4 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
     canvas.animatePan({ x: token.center.x, y: token.center.y });
   }
 
-  /* -------------------------------------------- */
-  /*  Persistent quick-slot storage (per user)    */
-  /* -------------------------------------------- */
-
-  /**
-   * Saved slot map for this actor, or null when never initialized.
-   * Stored on the ACTOR (not the user) so the quick slots are shared — the GM
-   * and the player who owns the character see the exact same layout.
-   */
-  _getSlots() {
-    return this.actor.getFlag('vagabond', 'hudSlots') ?? null;
-  }
-
-  /** Normalized slot map (never null; item array padded to its count). Weapon
-   *  circles have no persisted slot map — see `_categorizeItems`. */
-  _readSlots() {
-    const raw = this._getSlots();
-    return { items: this._padIds(raw?.items, VagabondCharacterHud.ITEM_SLOTS) };
-  }
-
-  async _saveSlots(slots) {
-    // Shared layout: persist on the actor, not the user. Only owners (GM + the
-    // assigned player) can write, which matches who can open this HUD anyway.
-    if (!this.actor.isOwner) return;
-    await this.actor.setFlag('vagabond', 'hudSlots', slots);
-  }
-
-  /** "Remove from HUD": drop an item id out of every slot, leaving it empty. */
-  async _clearSlot(itemId) {
-    const slots = this._readSlots();
-    slots.items = slots.items.map(id => (id === itemId ? null : id));
-    await this._saveSlots(slots);
-    this.render();
-  }
-
-  /* -------------------------------------------- */
-  /*  Drop → item-slot assignment (layout only)   */
-  /* -------------------------------------------- */
-
-  async _onHudDrop(event, body) {
-    event.preventDefault();
-    body.classList.remove('drag-over');
-    const data = foundry.applications.ux.TextEditor.implementation.getDragEventData(event);
-    if (data?.type !== 'Item') return;
-    const item = await fromUuid(data.uuid);
-    if (!item) return;
-    if (item.parent !== this.actor) {
-      ui.notifications.warn(game.i18n.localize('VAGABOND.Hud.SlotForeignItem'));
-      return;
-    }
-    // Only spells + equipment go in slots; armor has no quick-use action.
-    if (item.type !== 'spell' && item.type !== 'equipment') return;
-    if (item.type === 'equipment' && item.system.equipmentType === 'armor') return;
-    const slotEl = event.target?.closest?.('.vh-slot, .vh-pc-weapon') ?? null;
-    await this._assignDrop(item, slotEl);
-  }
-
-  /**
-   * Assign a dropped item into the persisted item-slot map: replace, never
-   * displace — if the drop landed on a specific empty/filled slot that slot
-   * is used, otherwise the first empty slot, else the last slot. The item is
-   * first removed from any item slot it already occupied (move, not
-   * duplicate). Purely a launcher-layout change — does NOT equip, favorite,
-   * or otherwise touch game state (equip/unequip is done from the Inventory
-   * tab; see `EquipmentHelper.equipWeaponWithHandLimit` via
-   * `inventory-handler.mjs`'s Equip/Unequip context menu, shared by sheet and
-   * HUD). Weapons may go in the belt too (Thrown ones default to Throw there);
-   * the hand circles are never assigned — they mirror actual equip state.
-   * @param {Item} item
-   * @param {HTMLElement|null} slotEl  The slot element under the cursor, if any.
-   */
-  async _assignDrop(item, slotEl) {
-    const max = VagabondCharacterHud.ITEM_SLOTS;
-    const slots = this._readSlots();
-    slots.items = slots.items.map(id => (id === item.id ? null : id));
-
-    let idx = -1;
-    if (slotEl) {
-      const sameKind = slotEl.classList.contains('vh-slot');
-      const n = Number(slotEl.dataset.slotIndex);
-      if (sameKind && Number.isInteger(n) && n >= 0 && n < max) idx = n;
-    }
-    if (idx < 0) idx = slots.items.findIndex(id => id == null);
-    if (idx < 0) idx = max - 1; // all full, no target → replace the last slot
-
-    slots.items[idx] = item.id;
-    await this._saveSlots(slots);
-    this.render();
-  }
 }

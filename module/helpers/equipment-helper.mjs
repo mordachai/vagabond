@@ -325,7 +325,10 @@ export class EquipmentHelper {
     updates.push({
       _id: itemId,
       'system.equipmentState': newState,
-      ...(need > 0 ? { 'flags.vagabond.equippedAt': Date.now() } : {}),
+      // Stamped on every real equip (hands AND 'worn'/Belt) — the hand pool
+      // only reads this for hand-occupying holders, but the HUD Belt row
+      // also needs it to know which worn item is oldest for its display cap.
+      ...(newState !== 'unequipped' ? { 'flags.vagabond.equippedAt': Date.now() } : {}),
     });
 
     await actor.updateEmbeddedDocuments('Item', updates);
@@ -515,6 +518,46 @@ export class EquipmentHelper {
     return actor.items
       .filter((i) => this.isWeapon(i) && this.handsFor(i) > 0)
       .reduce((n, w) => n + this.itemSlotCost(w), 0);
+  }
+
+  // ===========================
+  // Belt Ordering (HUD Belt slots + the sheet's Equipped Belt list share
+  // this: reordering in either place writes the same flag, so they always
+  // agree — same principle as `equipmentState` driving both displays.)
+  // ===========================
+
+  /**
+   * Stable-sort items by their manual `flags.vagabond.beltOrder` (ascending).
+   * Items without an explicit order keep their relative input order and sort
+   * AFTER every item that has one — so a freshly favorited spell or newly
+   * worn item just appends to the end until the user drags it into place.
+   * @param {Item[]} items
+   * @returns {Item[]}
+   */
+  static sortByBeltOrder(items) {
+    return items
+      .map((item, i) => ({ item, order: item.getFlag('vagabond', 'beltOrder'), i }))
+      .sort((a, b) => {
+        if (a.order == null && b.order == null) return a.i - b.i;
+        if (a.order == null) return 1;
+        if (b.order == null) return -1;
+        return a.order - b.order;
+      })
+      .map((x) => x.item);
+  }
+
+  /**
+   * Persist a manual Belt order: stamps sequential `flags.vagabond.beltOrder`
+   * on every item currently shown, in the given order. Called after a drag
+   * reorder in either the HUD Belt row or the sheet's Equipped Belt list.
+   * @param {Actor} actor
+   * @param {string[]} orderedIds
+   */
+  static async saveBeltOrder(actor, orderedIds) {
+    const updates = orderedIds
+      .filter((id) => actor.items.get(id))
+      .map((id, i) => ({ _id: id, 'flags.vagabond.beltOrder': i }));
+    if (updates.length) await actor.updateEmbeddedDocuments('Item', updates);
   }
 
   // ===========================

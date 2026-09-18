@@ -552,16 +552,157 @@
 
             {{/inline}}
 
-            <div class='equipped-divider'>
-              <span class='equipped-divider-label'>{{localize 'VAGABOND.UI.Sections.EquippedHands'}}</span>
+            <div class='equipped-zone'>
+              <div class='equipped-zone-label'>{{localize 'VAGABOND.UI.Sections.EquippedHands'}}</div>
+              <div class='equipped-zone-rows'>
+                {{> vgEquippedRows worn=false}}
+              </div>
             </div>
-            {{> vgEquippedRows worn=false}}
 
             {{#if hasBeltItems}}
-              <div class='equipped-divider'>
-                <span class='equipped-divider-label'>{{localize 'VAGABOND.UI.Sections.EquippedBelt'}}</span>
+              {{! Belt is one freely drag-reorderable list (flattened + sorted in JS via
+                  `context.beltItems`, same flags.vagabond.beltOrder the HUD Belt row uses)
+                  — unlike Hands above, items here are NOT locked to a weapon/relic/
+                  alchemical/gear category order. }}
+              <div class='equipped-zone'>
+              <div class='equipped-zone-label'>{{localize 'VAGABOND.UI.Sections.EquippedBelt'}}</div>
+              <div class='equipped-zone-rows equipped-belt-zone'>
+                {{#each beltItems as |entry|}}
+                  {{#with entry.item as |item|}}
+                    {{#if (eq entry.kind 'weapon')}}
+                      <div class='equipped-item' data-action='rollWeapon' data-item-id='{{item._id}}'>
+                        <div class='eq-icon-frame'><img class='eq-icon' src='{{item.img}}' alt='' draggable='false' /></div>
+                        <label class='eq-name rollable' data-action='rollWeapon' data-item-id='{{item._id}}' title='{{item.name}}'>{{item.name}}</label>
+                        <div class='eq-qty'>
+                          {{#if item.usesPips.length}}
+                            <span class='eq-uses-pips'>
+                              {{#each item.usesPips as |pip|}}
+                                <i class='fa-solid fa-circle uses-pip {{#if pip.filled}}filled{{else}}empty{{/if}}' data-action='usePip' data-item-uuid='{{item.uuid}}' data-pip-index='{{pip.index}}'></i>
+                              {{/each}}
+                            </span>
+                          {{/if}}
+                        </div>
+                        <div class='eq-dmgtype'><i class='{{lookup @root.config.damageTypeIcons item.system.damageType}}'></i></div>
+                        <div class='eq-damage'>{{item.system.currentDamage}}</div>
+                        <div class='eq-grip'>
+                          {{#if (eq item.system.grip '1H')}}<i class='fas fa-hand-fist'></i>
+                          {{else if (eq item.system.grip '2H')}}<i class='fas fa-hands'></i>
+                          {{else if (eq item.system.grip '0')}}<i class='fas fa-wind'></i>
+                          {{else if (eq item.system.grip 'V')}}
+                            {{#if (eq item.system.equipmentState 'oneHand')}}<i class='fas fa-hand-fist clickable' data-action='toggleWeaponGrip' data-item-id='{{item._id}}'></i>
+                            {{else if (eq item.system.equipmentState 'twoHands')}}<i class='fas fa-hands clickable' data-action='toggleWeaponGrip' data-item-id='{{item._id}}'></i>
+                            {{/if}}
+                          {{/if}}
+                        </div>
+                        <div class='eq-row2'>
+                          {{#if item.system.canExplode}}
+                            <span class='eq-explode'><i class='fas fa-burst'></i> ({{item.system.explodeValues}})</span>
+                            <span class='eq-separator'>//</span>
+                          {{/if}}
+                          {{#unless (eq item.system.propertiesDisplay '-')}}
+                            <span class='eq-properties'>{{item.system.propertiesDisplay}}</span>
+                            <span class='eq-separator'>//</span>
+                          {{/unless}}
+                          <span class='eq-range'>{{item.system.rangeAbbrev}}</span>
+                          {{#if item.system.isThrowable}}
+                            <span class='eq-separator'>//</span>
+                            <span class='eq-throw clickable' data-action='throwWeapon' data-item-id='{{item._id}}' data-tooltip='{{localize "VAGABOND.ContextMenu.Throw"}}'><i class='fas fa-share'></i> ×{{item.system.quantity}}</span>
+                          {{/if}}
+                        </div>
+                      </div>
+                    {{else if (eq entry.kind 'relic')}}
+                      <div class='equipped-item' data-action='useItem' data-item-id='{{item._id}}'>
+                        <div class='eq-icon-frame'><img class='eq-icon' src='{{item.img}}' alt='' draggable='false' /></div>
+                        <label class='eq-name eq-name-wide rollable' data-action='useItem' data-item-id='{{item._id}}' title='{{item.name}}'>{{item.name}}</label>
+                        <div class='eq-grip'>
+                          {{#if item.usesPips.length}}
+                            <span class='eq-uses-pips'>
+                              {{#each item.usesPips as |pip|}}
+                                <i class='fa-solid fa-circle uses-pip {{#if pip.filled}}filled{{else}}empty{{/if}}' data-action='usePip' data-item-uuid='{{item.uuid}}' data-pip-index='{{pip.index}}'></i>
+                              {{/each}}
+                            </span>
+                          {{else}}
+                            ×{{item.system.quantity}}
+                          {{/if}}
+                        </div>
+                        <div class='eq-row2'>
+                          {{#if item.system.requiresBound}}
+                            <span class='eq-bound {{#if item.system.bound}}is-bound{{/if}}'>{{#if item.system.bound}}{{localize "VAGABOND.Item.Equipment.FIELDS.bound.label"}}{{else}}{{localize "VAGABOND.UI.Labels.Unbound"}}{{/if}}</span>
+                          {{/if}}
+                          {{#if item.system.lore}}
+                            {{#if item.system.requiresBound}}<span class='eq-separator'>//</span>{{/if}}
+                            <span class='eq-lore'>{{item.system.lore}}</span>
+                          {{/if}}
+                        </div>
+                      </div>
+                    {{else if (eq entry.kind 'alchemicalDamage')}}
+                      <div class='equipped-item' data-action='rollWeapon' data-item-id='{{item._id}}'>
+                        <div class='eq-icon-frame'><img class='eq-icon' src='{{item.img}}' alt='' draggable='false' /></div>
+                        <label class='eq-name rollable' data-action='rollWeapon' data-item-id='{{item._id}}' title='{{item.name}}'>{{item.name}}</label>
+                        <div class='eq-qty'>
+                          {{#if item.usesPips.length}}
+                            <span class='eq-uses-pips'>
+                              {{#each item.usesPips as |pip|}}
+                                <i class='fa-solid fa-circle uses-pip {{#if pip.filled}}filled{{else}}empty{{/if}}' data-action='usePip' data-item-uuid='{{item.uuid}}' data-pip-index='{{pip.index}}'></i>
+                              {{/each}}
+                            </span>
+                          {{/if}}
+                        </div>
+                        <div class='eq-dmgtype'><i class='{{lookup @root.config.damageTypeIcons item.system.damageType}}'></i></div>
+                        <div class='eq-damage'>{{item.system.damageAmount}}</div>
+                        <div class='eq-grip'>×{{item.system.quantity}}</div>
+                        <div class='eq-row2'>
+                          {{#if item.system.canExplode}}
+                            <span class='eq-explode'><i class='fas fa-burst'></i> ({{item.system.explodeValues}})</span>
+                            <span class='eq-separator'>//</span>
+                          {{/if}}
+                          <span class='eq-alch-type'>{{item.system.alchemicalType}}</span>
+                        </div>
+                      </div>
+                    {{else if (eq entry.kind 'alchemicalPlain')}}
+                      <div class='equipped-item' data-action='useItem' data-item-id='{{item._id}}'>
+                        <div class='eq-icon-frame'><img class='eq-icon' src='{{item.img}}' alt='' draggable='false' /></div>
+                        <label class='eq-name eq-name-wide rollable' data-action='useItem' data-item-id='{{item._id}}' title='{{item.name}}'>{{item.name}}</label>
+                        <div class='eq-grip'>
+                          {{#if item.usesPips.length}}
+                            <span class='eq-uses-pips'>
+                              {{#each item.usesPips as |pip|}}
+                                <i class='fa-solid fa-circle uses-pip {{#if pip.filled}}filled{{else}}empty{{/if}}' data-action='usePip' data-item-uuid='{{item.uuid}}' data-pip-index='{{pip.index}}'></i>
+                              {{/each}}
+                            </span>
+                          {{else}}
+                            ×{{item.system.quantity}}
+                          {{/if}}
+                        </div>
+                        <div class='eq-row2'>
+                          {{#if item.system.canExplode}}
+                            <span class='eq-explode'><i class='fas fa-burst'></i> ({{item.system.explodeValues}})</span>
+                            <span class='eq-separator'>//</span>
+                          {{/if}}
+                          <span class='eq-alch-type'>{{item.system.alchemicalType}}</span>
+                        </div>
+                      </div>
+                    {{else}}
+                      <div class='equipped-item' data-action='useItem' data-item-id='{{item._id}}'>
+                        <div class='eq-icon-frame'><img class='eq-icon' src='{{item.img}}' alt='' draggable='false' /></div>
+                        <label class='eq-name eq-name-wide rollable' data-action='useItem' data-item-id='{{item._id}}' title='{{item.name}}'>{{item.name}}</label>
+                        <div class='eq-grip'>
+                          {{#if item.usesPips.length}}
+                            <span class='eq-uses-pips'>
+                              {{#each item.usesPips as |pip|}}
+                                <i class='fa-solid fa-circle uses-pip {{#if pip.filled}}filled{{else}}empty{{/if}}' data-action='usePip' data-item-uuid='{{item.uuid}}' data-pip-index='{{pip.index}}'></i>
+                              {{/each}}
+                            </span>
+                          {{else}}
+                            ×{{item.system.quantity}}
+                          {{/if}}
+                        </div>
+                      </div>
+                    {{/if}}
+                  {{/with}}
+                {{/each}}
               </div>
-              {{> vgEquippedRows worn=true}}
+              </div>
             {{/if}}
 
             {{! 5. Equipped Armor - COMMENTED OUT }}

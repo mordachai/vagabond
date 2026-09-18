@@ -10,6 +10,7 @@ import { EnrichmentHelper } from '../helpers/enrichment-helper.mjs';
 import { EquipmentHelper } from '../helpers/equipment-helper.mjs';
 import { activateHandItem } from '../helpers/hand-item-activation.mjs';
 import * as ItemSections from '../helpers/item-sections.mjs';
+import { setupDragReorder } from '../helpers/drag-reorder.mjs';
 
 const { api, sheets } = foundry.applications;
 
@@ -329,7 +330,22 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
       // Equipped panel is soft-divided: Hands (oneHand/twoHands) and Belt ('worn')
       const panelEquipped = [...(context.weapons ?? []), ...(context.gear ?? [])].filter(i => i.system.equipped);
-      context.hasBeltItems = panelEquipped.some(i => i.system.equipmentState === 'worn');
+      const wornPanelItems = panelEquipped.filter(i => i.system.equipmentState === 'worn');
+      context.hasBeltItems = wornPanelItems.length > 0;
+
+      // Belt is a single freely-reorderable list (drag-drop, same
+      // `flags.vagabond.beltOrder` the HUD Belt row reads/writes) — unlike
+      // Hands (still the fixed weapon → relic → alchemical → gear category
+      // blocks below), so it's flattened here into one sorted array tagged
+      // with a render `kind` instead of 4 separate template loops.
+      context.beltItems = EquipmentHelper.sortByBeltOrder(wornPanelItems).map((item) => ({
+        item,
+        kind: item.system.equipmentType === 'weapon' ? 'weapon'
+          : item.system.equipmentType === 'relic' ? 'relic'
+          : item.system.equipmentType === 'alchemical'
+            ? (item.system.damageType !== '-' ? 'alchemicalDamage' : 'alchemicalPlain')
+            : 'gear',
+      }));
 
       context.hasFavoritedSpells = context.spells && context.spells.some(i => i.system.favorite);
       context.useSpellDialog = game.settings.get('vagabond', 'useSpellCastDialog');
@@ -749,6 +765,9 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
     // Setup panel favorites context menu listeners
     this._setupPanelContextMenuListeners();
+
+    // Belt drag-to-reorder (sliding panel's Equipped > Belt list)
+    this._setupBeltReorderListeners();
 
     // Setup status icon listeners
     this._setupStatusIconListeners();
@@ -1942,6 +1961,24 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         });
       });
     });
+  }
+
+  /**
+   * Drag-to-reorder within the sliding panel's Equipped > Belt list. Persists
+   * `flags.vagabond.beltOrder` — the same flag the Character HUD's Belt row
+   * reads/writes, so reordering in either place updates both.
+   * @private
+   */
+  _setupBeltReorderListeners() {
+    const zone = this.element.querySelector('.equipped-belt-zone');
+    if (!zone) return;
+
+    const reorder = setupDragReorder({
+      container: zone,
+      itemSelector: '.equipped-item',
+      onDrop: (orderedIds) => EquipmentHelper.saveBeltOrder(this.actor, orderedIds),
+    });
+    for (const el of zone.querySelectorAll('.equipped-item')) reorder.bindItem(el);
   }
 
   /**

@@ -191,7 +191,12 @@
     width: 100%;
     padding: 0px 5px;
     line-height: 1.1;
-    margin:3px 0;
+    margin: 3px 0;
+    // .eq-icon-frame is rotated + translateY(30%), spilling ~6px below its own
+    // row — invisible when .eq-row2 exists (absorbs it), but a row with no
+    // second line (plain gear: no damage/properties/bound/lore) has nothing
+    // to absorb it into, so it overlapped the next row. Floor the height.
+    min-height: 26px;
     color: $c-text-1;
 
 
@@ -444,21 +449,55 @@
         }
       }
     }
+
+    // Actively being drag-reordered (Belt list only — see actor-sheet.mjs
+    // `_setupBeltReorderListeners`). Same treatment as the inventory grid.
+    &.reorder-dragging {
+      opacity: 0.3;
+      outline: 2px dashed $c-yellow;
+      outline-offset: -2px;
+      pointer-events: none;
+      cursor: grabbing;
+    }
   }
 
-  // Soft divider between the Hands and Belt zones of the Equipped list
-  .equipped-divider {
+  // Wraps the Belt zone's rows so drag-to-reorder can be scoped to just this
+  // list (Hands above keeps its fixed weapon/relic/alchemical/gear order).
+  .equipped-belt-zone {
     display: flex;
-    align-items: flex-end;
-    justify-content: center;
-    margin: 4px 4px 2px;
-    padding-bottom: 1px;
-    border-bottom: 1px solid $c-text-1;
-    font-size: 10px;
-    font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    opacity: 0.8;
+    flex-direction: column;
+  }
+
+  // Hands / Belt zone: vertical title on the left, its border-right running
+  // the full height of the zone's rows (align-items: stretch does the sizing).
+  .equipped-zone {
+    display: flex;
+    align-items: stretch;
+    gap: 2px;
+    margin: 4px 0 2px;
+
+    &-label {
+      flex: 0 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      border-left: 1px solid $c-text-1;
+      padding-left: 0px;
+      font-size: 10px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      opacity: 0.8;
+    }
+
+    &-rows {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+    }
   }
 
   .title-container{

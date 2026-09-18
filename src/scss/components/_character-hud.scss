@@ -68,8 +68,6 @@
     //backdrop-filter: blur(2px);
     //-webkit-backdrop-filter: blur(2px);
     //border-radius: var(--vh-radius);
-
-    &.drag-over { border-color: $c-yellow; box-shadow: inset 0 0 12px $c-yellow; }
   }
 
   // ---------------------------------------------------------
@@ -309,6 +307,15 @@
     img { width: 100%; height: 100%; object-fit: cover; }
     &.filled { cursor: pointer; }
     &.filled:hover { border-color: $c-yellow; box-shadow: 0 0 5px $c-yellow; }
+
+    // Actively being drag-reordered — same treatment as the inventory grid
+    &.reorder-dragging {
+      opacity: 0.3;
+      outline: 2px dashed $c-yellow;
+      outline-offset: -2px;
+      pointer-events: none;
+      cursor: grabbing;
+    }
 
     // Thrown weapon with no quantity left (adjusted via the slot context menu)
     &.empty img { filter: grayscale(1) contrast(0.5); opacity: 0.6; }

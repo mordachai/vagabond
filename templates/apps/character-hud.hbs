@@ -218,7 +218,7 @@
         <div class="vh-slots">
           {{#each itemSlots}}
             <div class="vh-slot {{#if filled}}filled{{/if}} {{#if throwable}}{{#unless quantity}}empty{{/unless}}{{/if}}" data-slot-index="{{@index}}" {{#if filled}}data-action="slotUse" data-type="{{type}}" data-item-id="{{id}}" title="{{name}}{{#if throwable}} ×{{quantity}}{{/if}}"{{/if}}>
-              {{#if filled}}<img src="{{img}}" alt="{{name}}" />{{/if}}
+              {{#if filled}}<img src="{{img}}" alt="{{name}}" draggable="false" />{{/if}}
             </div>
           {{/each}}
           {{#if hasMana}}

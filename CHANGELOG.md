@@ -1,5 +1,14 @@
 # Changelog
 
+## v5.38.2
+- **HUD Belt row is now a live mirror**, same principle as the hand circles: always shows favorited spells + worn ('Belt') equipment (oldest first), base 5 slots growing up to 7; beyond that it's HUD-display-only overflow (the sheet's Belt stays uncapped).
+- **Belt drag-to-reorder**: both the Character HUD's Belt row and the sheet's Equipped > Belt list support drag-to-reorder, sharing the same `flags.vagabond.beltOrder` so reordering in either place updates both.
+- Sheet's Equipped > Belt list is now one freely reorderable list instead of fixed category blocks.
+- Fix: Hands/Belt zone dividers in the Equipped panel — title now renders as vertical text on the left with the separator line running the full height of that zone's rows.
+- Fix: ancestry trait description box had washed-out, low-contrast text/background in both light and dark themes.
+- Fix: Breath Attack item FX hit scale was 3, corrected to 1.
+- Weapons pack cleanup: match rulebook table, remove duplicates and variants.
+
 ## v5.37.0 — Print Wave 3 Alpha 2
 
 - **Flanking:** automatic flanked/flanking detection — a foe with two or more enemies Close (and no more than one size larger) is marked Flanked (Vulnerable, +2 damage), attackers marked Flanking; multi-cell tokens handled, updates on movement and per attack.

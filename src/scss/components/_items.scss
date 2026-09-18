@@ -154,11 +154,12 @@
     line-height: 1.5;
     font-size: 0.95em;
     font-family: $font-text;
+    color: $c-text-1;
     min-height: 60px;
     padding: 8px;
-    border: 1px solid rgba(0, 0, 0, 0.1);
+    border: 1px solid $c-faint;
     border-radius: 4px;
-    background: rgba(255, 255, 255, 0.3);
+    background: var(--vagabond-c-input-bg);
 
     input {
       width: 100%;
@@ -172,12 +173,13 @@
       font-family: $font-text;
       font-size: 0.95em;
       line-height: 1.5;
+      color: $c-text-1;
       resize: none;
       box-sizing: border-box;
       padding: 4px 6px;
-      border: 1px solid rgba(0, 0, 0, 0.2);
+      border: 1px solid $c-faint;
       border-radius: 3px;
-      background: rgba(255, 255, 255, 0.5);
+      background: var(--vagabond-c-input-bg);
       overflow: hidden;
     }
 
