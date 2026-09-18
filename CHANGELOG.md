@@ -1,5 +1,12 @@
 # Changelog
 
+## v5.39.0
+- **HUD hand circles: drag to rearrange.** Drag one held item onto the other hand circle to swap them; with a single 1H item held, drag it onto the empty circle to park it in that hand. The move is remembered until the item is re-equipped.
+- **HUD hand circles:** removed the R / L letter labels (the empty-hand tooltips still say Right / Left Hand).
+- **HUD drop-to-add:** drop an Item, container item or Folder onto the Character HUD to add it to the actor, same as dropping on the sheet. The HUD highlights while a drag is over it.
+- **HUD Spells & Inventory tabs:** the favorite star and the equipped check are now clickable toggles (favorite ⇄ unfavorite, equip ⇄ unequip, hand limit still enforced), dimmed when off.
+- **Spell context menu unified:** the HUD (Spells rows, belt slots) and the sheet's favorited-spells panel now share one menu: Cast, Open, Send to Chat, Favorite / Unfavorite. Right-clicking a spell row on the HUD Spells tab opens it too.
+
 ## v5.38.3
 - Fix: `@statuses.<id>` bonus formulas (e.g. Barbarian Rage's `(@statuses.berserk) ? 2 : 0`) logged an "Invalid formula" console warning on every data prep while the status was inactive. Value was always correct — this was console noise only. Thanks to @DimitroffVodka for the report and diagnosis (#67).
 

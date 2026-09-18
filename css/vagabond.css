@@ -3686,6 +3686,14 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   gap: 4px;
   min-width: 425px;
   padding: 7px var(--vh-float-w) 4px calc(var(--vh-status-w) + 10px);
+  transition: box-shadow 0.15s ease, background-color 0.15s ease;
+}
+.vbd-hud.vh-drop-active .vh-body {
+  border-radius: var(--vh-radius);
+  outline: 2px dashed var(--vagabond-c-chat-yellow);
+  outline-offset: -2px;
+  background-color: color-mix(in srgb, var(--vagabond-c-chat-yellow) 10%, transparent);
+  box-shadow: 0 0 14px -2px var(--vagabond-c-chat-yellow), inset 0 0 18px -6px var(--vagabond-c-chat-yellow);
 }
 .vbd-hud.vbd-hud--bg-dark .vh-body, .vbd-hud.vbd-hud--blur .vh-body {
   padding-top: 12px;
@@ -3981,16 +3989,12 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .vbd-hud .vh-pc-weapon.filled {
   cursor: pointer;
 }
-.vbd-hud .vh-pc-weapon .vh-hand-label {
-  position: absolute;
-  bottom: -3px;
-  left: -3px;
-  z-index: 4;
-  font-size: calc(0.7rem * var(--vh-font-scale));
-  font-weight: bold;
-  color: var(--vagabond-c-chat-yellow);
-  text-shadow: var(--vh-outline-2);
-  pointer-events: none;
+.vbd-hud .vh-pc-weapon.hand-dragging {
+  opacity: 0.3;
+}
+.vbd-hud .vh-pc-weapon.hand-drop-target {
+  border-color: var(--vagabond-c-stat);
+  box-shadow: 0 0 8px var(--vagabond-c-chat-yellow);
 }
 .vbd-hud .vh-pc-weapon.filled:hover {
   border-color: var(--vagabond-c-stat);
@@ -4384,18 +4388,23 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.vbd-hud .vh-inv-eq {
-  color: var(--vagabond-c-white);
-  font-size: calc(0.75rem * var(--vh-font-scale));
-  flex: 0 0 auto;
-}
 .vbd-hud .vh-inv:not(.is-equipped) .vh-inv-img {
   opacity: 0.55;
 }
+.vbd-hud .vh-inv-eq,
 .vbd-hud .vh-spell-fav {
+  font-size: calc(0.75rem * var(--vh-font-scale));
+}
+.vbd-hud .vh-inv-eq:not(.is-on),
+.vbd-hud .vh-spell-fav:not(.is-on) {
+  opacity: 0.4;
+}
+.vbd-hud .vh-inv-eq:not(.is-on):hover,
+.vbd-hud .vh-spell-fav:not(.is-on):hover {
+  opacity: 1;
+}
+.vbd-hud .vh-spell-fav.is-on {
   color: var(--vagabond-c-chat-yellow);
-  font-size: calc(0.7rem * var(--vh-font-scale));
-  flex: 0 0 auto;
 }
 .vbd-hud .vh-spell-dmg {
   flex: 0 0 auto;

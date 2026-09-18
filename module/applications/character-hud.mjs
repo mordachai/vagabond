@@ -6,7 +6,7 @@ import { VagabondActorSheet } from '../sheets/actor-sheet.mjs';
 import { AccordionHelper } from '../helpers/accordion-helper.mjs';
 import { applyHudDisplayPrefs, getHudHealthBar, isItemPile } from '../helpers/hud-display.mjs';
 import { activateHandItem } from '../helpers/hand-item-activation.mjs';
-import { buildItemMenuItems } from '../helpers/item-menu.mjs';
+import { buildItemMenuItems, buildSpellMenuItems } from '../helpers/item-menu.mjs';
 import { bindHudTooltips } from '../helpers/hud-tooltip.mjs';
 import { setupDragReorder } from '../helpers/drag-reorder.mjs';
 import * as ItemSections from '../helpers/item-sections.mjs';
@@ -35,8 +35,8 @@ const { api } = foundry.applications;
  * Weapon circles are NOT persisted — they're a live mirror of whichever
  * weapons are actually equipped (`system.equipmentState`), always in sync
  * with the character sheet's "Equipped" panel in both directions. Dropping an
- * item onto the HUD equips (or favorites) it, which makes it appear in the
- * relevant slot/circle.
+ * outside item onto the HUD adds it to the actor exactly like a sheet drop
+ * (see `_onDrop`); equipping/favoriting stays a separate explicit action.
  *
  * One instance per token (keyed by token uuid for unlinked actors, else actor
  * id) — so unlinked duplicate PC-type actors (e.g. summons sharing one base
@@ -176,6 +176,8 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
       toggleWeaponGrip: this._onToggleWeaponGrip,
       itemMenu: this._onItemMenu,
       spellMenu: this._onSpellMenu,
+      toggleSpellFavorite: this._onToggleSpellFavorite,
+      toggleEquip: this._onToggleEquip,
       usePip: this._onUsePip,
     },
   };
@@ -524,9 +526,52 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
       entry.tip = this._handTip(item);
       return entry;
     };
-    context.handSlots = held[0]?.system.equipmentState === 'twoHands'
-      ? [handCell(held[0], 'R')]
-      : [handCell(held[0], 'R'), handCell(held[1], 'L')];
+    if (held[0]?.system.equipmentState === 'twoHands') {
+      context.handSlots = [handCell(held[0], 'R')];
+    } else if (held.length === 1 && held[0].getFlag('vagabond', 'handPref') === 1) {
+      // Lone item the user parked in the second circle (`_moveLoneHand`).
+      context.handSlots = [handCell(null, 'R'), handCell(held[0], 'L')];
+    } else {
+      context.handSlots = [handCell(held[0], 'R'), handCell(held[1], 'L')];
+    }
+  }
+
+  /**
+   * Swap the two hand-holders' circle order by trading `equippedAt` stamps
+   * (the sort key for the circles). Equal/missing stamps get a +1 nudge so
+   * the swap is still visible.
+   * @param {string} idA
+   * @param {string} idB
+   */
+  async _swapHands(idA, idB) {
+    const a = this.actor.items.get(idA);
+    const b = this.actor.items.get(idB);
+    if (!a || !b) return;
+    const ta = a.getFlag('vagabond', 'equippedAt') || 0;
+    const tb = b.getFlag('vagabond', 'equippedAt') || 0;
+    let newA = tb;
+    let newB = ta;
+    if (ta === tb) {
+      // Tie → current order is item-collection order; push whichever is drawn first to +1.
+      const aFirst = [...this.actor.items].indexOf(a) < [...this.actor.items].indexOf(b);
+      newA = aFirst ? ta + 1 : ta;
+      newB = aFirst ? tb : tb + 1;
+    }
+    await this.actor.updateEmbeddedDocuments('Item', [
+      { _id: a.id, 'flags.vagabond.equippedAt': newA },
+      { _id: b.id, 'flags.vagabond.equippedAt': newB },
+    ]);
+  }
+
+  /**
+   * Park the lone held item in the given circle (0 = first, 1 = second).
+   * @param {string} itemId
+   * @param {number} index
+   */
+  async _moveLoneHand(itemId, index) {
+    const item = this.actor.items.get(itemId);
+    if (!item) return;
+    await item.setFlag('vagabond', 'handPref', index === 1 ? 1 : 0);
   }
 
   /**
@@ -715,9 +760,120 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
       for (const el of beltRow.querySelectorAll('.vh-slot.filled')) beltReorder.bindItem(el);
     }
 
+    // Hand circles: drag a held item onto the other circle. Filled target →
+    // swap (order derives from `equippedAt`, so a swap trades timestamps).
+    // Empty target → park the lone item there (`flags.vagabond.handPref`).
+    const handCircles = [...this.element.querySelectorAll('.vh-pc-weapon')];
+    if (handCircles.length === 2 && this.actor.isOwner) {
+      let dragging = null;
+      const clear = () => { for (const c of handCircles) c.classList.remove('hand-dragging', 'hand-drop-target'); };
+      for (const el of handCircles) {
+        if (el.classList.contains('filled')) {
+          el.setAttribute('draggable', 'true');
+          el.addEventListener('dragstart', (e) => {
+            dragging = el;
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/plain', 'vagabond-hand-swap');
+            requestAnimationFrame(() => el.classList.add('hand-dragging'));
+          }, { signal });
+          el.addEventListener('dragend', () => { dragging = null; clear(); }, { signal });
+        }
+        el.addEventListener('dragover', (e) => {
+          if (!dragging || dragging === el) return;
+          e.preventDefault();
+          e.stopPropagation();
+          e.dataTransfer.dropEffect = 'move';
+          el.classList.add('hand-drop-target');
+        }, { signal });
+        el.addEventListener('dragleave', () => el.classList.remove('hand-drop-target'), { signal });
+        el.addEventListener('drop', (e) => {
+          if (!dragging || dragging === el) return;
+          e.preventDefault();
+          e.stopPropagation();
+          const fromId = dragging.dataset.itemId;
+          dragging = null;
+          const op = el.classList.contains('filled')
+            ? this._swapHands(fromId, el.dataset.itemId)
+            : this._moveLoneHand(fromId, Number(el.dataset.slotIndex));
+          op.catch((err) => console.error('Vagabond | hand move failed:', err));
+        }, { signal });
+      }
+    }
+
+    // Right-click a Spells-tab row → same menu as its "⋮" button.
+    for (const head of this.element.querySelectorAll('.vh-spell .vh-row-head')) {
+      head.addEventListener('contextmenu', (e) => {
+        const spell = this.actor.items.get(head.querySelector('[data-spell-id]')?.dataset.spellId);
+        if (!spell) return;
+        e.preventDefault();
+        this._openSlotMenu(e, spell, 'spell');
+      }, { signal });
+    }
+
+    // Drop an Item / Folder / container item anywhere on the HUD → add it to
+    // the actor, same as dropping on the sheet. Bubble phase on purpose: the
+    // Belt reorder above stops propagation of its own drops, and
+    // `defaultPrevented` on dragover means it already claimed the gesture.
+    const setDropHighlight = (on) => this.element?.classList.toggle('vh-drop-active', on);
+    this.element.addEventListener('dragover', (e) => {
+      if (e.defaultPrevented || !this.actor.isOwner) return;
+      // No dropEffect override: forcing 'copy' vetoes the drop when the source
+      // set effectAllowed to 'move' (browser then never fires `drop`).
+      e.preventDefault();
+      setDropHighlight(true);
+    }, { signal });
+    // Leaving the HUD (not just crossing between its child elements).
+    this.element.addEventListener('dragleave', (e) => {
+      if (!this.element.contains(e.relatedTarget)) setDropHighlight(false);
+    }, { signal });
+    this.element.addEventListener('drop', (e) => {
+      e.preventDefault();
+      this._onDrop(e).catch((err) => console.error('Vagabond | HUD drop failed:', err));
+    }, { signal });
+    // Highlight cleanup for every way a drag can end (drop anywhere, Esc, drop
+    // elsewhere) — `dragleave` alone misses cancelled drags.
+    document.addEventListener('drop', () => setDropHighlight(false), { signal });
+    document.addEventListener('dragend', () => setDropHighlight(false), { signal });
+
     // Idle fade (wires its own AbortController so it can be re-evaluated live
     // when the setting changes without a full re-render).
     this._applyIdleFade();
+  }
+
+  /* -------------------------------------------- */
+  /*  Drop handling (shares the sheet's logic)    */
+  /* -------------------------------------------- */
+
+  /**
+   * Route a drop onto the HUD. Mirrors the sheet's `_onDrop` for the types that
+   * make sense here (Item, ContainerItem, Folder), delegating to the sheet's
+   * own methods so both surfaces create items identically (ancestry/class
+   * replacement, gridPosition, transfer-from-other-actor).
+   * @param {DragEvent} event
+   */
+  async _onDrop(event) {
+    if (!this.actor.isOwner) return;
+    const data = foundry.applications.ux.TextEditor.getDragEventData(event);
+    const sheet = VagabondActorSheet.prototype;
+
+    switch (data.type) {
+      case 'Item': {
+        // Own items dragged from the HUD/sheet: on the sheet this is a re-sort;
+        // the HUD has nothing to sort (equip is via the Inventory tab menu).
+        const item = await Item.implementation.fromDropData(data);
+        if (!item || item.parent?.uuid === this.actor.uuid) return;
+        return sheet._onDropItem.call(this, event, data);
+      }
+      case 'ContainerItem':
+        return sheet._onDropContainerItem.call(this, event, data);
+      case 'Folder':
+        return sheet._onDropFolder.call(this, event, data);
+    }
+  }
+
+  /** Delegated by the sheet's `_onDropItem` (shared creation path). */
+  _onDropItemCreate(itemData, event) {
+    return VagabondActorSheet.prototype._onDropItemCreate.call(this, itemData, event);
   }
 
   /* -------------------------------------------- */
@@ -1022,6 +1178,16 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
     if (item) this._openSlotMenu(event, item, 'spell');
   }
 
+  /** Spells-panel star → favorite ⇄ unfavorite (belt + sheet favorites follow). */
+  static _onToggleSpellFavorite(event, target) {
+    return this._spellHandler.toggleSpellFavorite(event, target);
+  }
+
+  /** Inventory-row check → equip ⇄ unequip (hand limit / bumping handled by EquipmentHelper). */
+  static _onToggleEquip(event, target) {
+    return this._equipmentHandler.equipItem(event, target);
+  }
+
   /**
    * Left-click a filled slot = use it (cast / attack / use).
    * Right-click = open the slot context menu.
@@ -1061,39 +1227,22 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
   }
 
   /**
-   * Slot context menu. Spells: Cast, Open, Send to Chat. Items/weapons: Use,
-   * Send to Chat, Unequip. No "Remove from HUD" — hand circles and Belt slots
-   * are both live mirrors of actual game state (equipped-in-hand, or
-   * favorited/worn), so Unequip / un-favorite IS the removal.
+   * Slot context menu. Spells: Cast, Open, Send to Chat, Favorite/Unfavorite.
+   * Items/weapons: Use, Send to Chat, Unequip. No "Remove from HUD" — hand
+   * circles and Belt slots are both live mirrors of actual game state
+   * (equipped-in-hand, or favorited/worn), so Unequip / un-favorite IS the removal.
    * @param {Event} event
    * @param {Item} item
    * @param {'spell'|'weapon'|'item'} type
    */
   _openSlotMenu(event, item, type) {
-    const { ContextMenuHelper, VagabondChatCard } = globalThis.vagabond.utils;
-    const L = (k) => game.i18n.localize(k);
-    const items = [];
+    const { ContextMenuHelper } = globalThis.vagabond.utils;
 
-    if (type === 'spell') {
-      items.push({
-        label: L('VAGABOND.Hud.Menu.Cast'),
-        icon: 'fas fa-wand-sparkles',
-        action: () => this._spellHandler.castSpell(event, { dataset: { spellId: item.id } }),
-      });
-      items.push({
-        label: L('VAGABOND.Hud.Menu.Open'),
-        icon: 'fas fa-up-right-from-square',
-        action: () => item.sheet.render(true),
-      });
-      items.push({
-        label: L('VAGABOND.Hud.Menu.SendToChat'),
-        icon: 'fas fa-comment',
-        action: () => VagabondChatCard.gearUse(this.actor, item),
-      });
-    } else {
-      // Shared with the inventory grid and the sheet's Equipped panel.
-      // Slotted items always offer "Use" — they were placed there to be used.
-      items.push(...buildItemMenuItems({
+    // Both builders are shared with the sheet. Slotted items always offer
+    // "Use" — they were placed there to be used.
+    const items = type === 'spell'
+      ? buildSpellMenuItems({ actor: this.actor, spell: item, event, spellHandler: this._spellHandler })
+      : buildItemMenuItems({
         actor: this.actor,
         item,
         event,
@@ -1101,8 +1250,7 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
         equipmentHandler: this._equipmentHandler,
         forceUse: true,
         onChange: () => this.render(),
-      }));
-    }
+      });
 
     ContextMenuHelper.create({
       position: { x: event.clientX, y: event.clientY },

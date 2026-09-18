@@ -68,6 +68,17 @@
     //backdrop-filter: blur(2px);
     //-webkit-backdrop-filter: blur(2px);
     //border-radius: var(--vh-radius);
+    transition: box-shadow 0.15s ease, background-color 0.15s ease;
+  }
+
+  // Drop-target feedback while an item is dragged over the HUD (toggled by
+  // the dragover/dragleave/drop listeners in `VagabondCharacterHud#_onRender`).
+  &.vh-drop-active .vh-body {
+    border-radius: var(--vh-radius);
+    outline: 2px dashed $c-yellow;
+    outline-offset: -2px;
+    background-color: color-mix(in srgb, #{$c-yellow} 10%, transparent);
+    box-shadow: 0 0 14px -2px $c-yellow, inset 0 0 18px -6px $c-yellow;
   }
 
   // ---------------------------------------------------------
@@ -369,18 +380,9 @@
     }
     &.filled { cursor: pointer; }
 
-    // Hand label (R / L), bottom-left of the circle.
-    .vh-hand-label {
-      position: absolute;
-      bottom: -3px;
-      left: -3px;
-      z-index: 4;
-      font-size: calc(0.7rem * var(--vh-font-scale));
-      font-weight: bold;
-      color: $c-yellow;
-      text-shadow: var(--vh-outline-2);
-      pointer-events: none;
-    }
+    // Drag-to-swap hands: source dims, target glows.
+    &.hand-dragging { opacity: 0.3; }
+    &.hand-drop-target { border-color: $c-stat; box-shadow: 0 0 8px $c-yellow; }
     // Hover always wins so an overlapped circle is reachable; doesn't disturb base order.
     &.filled:hover { border-color: $c-stat; box-shadow: 0 0 6px $c-yellow; z-index: 10; }
 
@@ -783,9 +785,16 @@
     text-overflow: ellipsis;
     white-space: nowrap;
   }
-  .vh-inv-eq { color: $c-white; font-size: calc(0.75rem * var(--vh-font-scale)); flex: 0 0 auto; }
   .vh-inv:not(.is-equipped) .vh-inv-img { opacity: 0.55; }
-  .vh-spell-fav { color: $c-yellow; font-size: calc(0.7rem * var(--vh-font-scale)); flex: 0 0 auto; }
+  // Click-to-toggle row icons, built on the `.vh-inv-menu` button below.
+  // Off = dimmed. Equip swaps check (on) / empty circle (off) in the template;
+  // the favorite star is lit yellow (on) / outline (off).
+  .vh-inv-eq,
+  .vh-spell-fav {
+    font-size: calc(0.75rem * var(--vh-font-scale));
+    &:not(.is-on) { opacity: 0.4; &:hover { opacity: 1; } }
+  }
+  .vh-spell-fav.is-on { color: $c-yellow; }
   .vh-spell-dmg { flex: 0 0 auto; }
   .vh-inv-menu {
     flex: 0 0 auto;

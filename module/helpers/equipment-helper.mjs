@@ -329,6 +329,8 @@ export class EquipmentHelper {
       // only reads this for hand-occupying holders, but the HUD Belt row
       // also needs it to know which worn item is oldest for its display cap.
       ...(newState !== 'unequipped' ? { 'flags.vagabond.equippedAt': Date.now() } : {}),
+      // HUD "lone item in the second hand circle" pick — reset on each fresh equip.
+      ...(newState !== 'unequipped' ? { 'flags.vagabond.handPref': 0 } : {}),
     });
 
     await actor.updateEmbeddedDocuments('Item', updates);

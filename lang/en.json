@@ -1724,6 +1724,7 @@
       "EditAncestry": "Edit Ancestry",
       "EditClass": "Edit Class",
       "Delete": "Delete",
+      "Favorite": "Favorite",
       "Unfavorite": "Unfavorite",
       "RemoveStatus": "Remove Status",
       "DeleteItemTitle": "Delete {name}?",

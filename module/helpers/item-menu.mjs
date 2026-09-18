@@ -18,6 +18,47 @@ export function itemHasUse(item) {
 }
 
 /**
+ * Shared spell context-menu entries used by the HUD (Spells tab rows + belt
+ * slots) and the sheet's favorited-spells panel: Cast, Open, Send to Chat,
+ * Favorite ⇄ Unfavorite.
+ *
+ * @param {object} o
+ * @param {Actor} o.actor
+ * @param {Item} o.spell
+ * @param {Event} o.event
+ * @param {SpellHandler} o.spellHandler
+ * @returns {object[]} ContextMenuHelper item configs
+ */
+export function buildSpellMenuItems({ actor, spell, event, spellHandler }) {
+  const { VagabondChatCard } = globalThis.vagabond.utils;
+  const L = (k) => game.i18n.localize(k);
+  const isFavorite = !!spell.system.favorite;
+
+  return [
+    {
+      label: L('VAGABOND.Hud.Menu.Cast'),
+      icon: 'fas fa-wand-sparkles',
+      action: () => spellHandler.castSpell(event, { dataset: { spellId: spell.id } }),
+    },
+    {
+      label: L('VAGABOND.Hud.Menu.Open'),
+      icon: 'fas fa-up-right-from-square',
+      action: () => spell.sheet.render(true),
+    },
+    {
+      label: L('VAGABOND.ContextMenu.SendToChat'),
+      icon: 'fas fa-comment',
+      action: () => VagabondChatCard.itemUse(actor, spell),
+    },
+    {
+      label: L(isFavorite ? 'VAGABOND.ContextMenu.Unfavorite' : 'VAGABOND.ContextMenu.Favorite'),
+      icon: `${isFavorite ? 'fas' : 'far'} fa-star`,
+      action: () => spell.update({ 'system.favorite': !isFavorite }),
+    },
+  ];
+}
+
+/**
  * Shared item context-menu entries used by the HUD belt slots / hand circles,
  * the inventory grid (sheet + HUD inventory tab) and the sheet's Equipped panel:
  * Attack / Use, Throw + Quantity, 1H ⇄ 2H grip, Open, Send to Chat,

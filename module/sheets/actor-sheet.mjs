@@ -6,6 +6,7 @@ import { VagabondCharBuilder } from '../applications/char-builder/index.mjs';
 import { VagabondTextParser } from '../helpers/text-parser.mjs';
 import { AccordionHelper } from '../helpers/accordion-helper.mjs';
 import { ContextMenuHelper } from '../helpers/context-menu-helper.mjs';
+import { buildSpellMenuItems } from '../helpers/item-menu.mjs';
 import { EnrichmentHelper } from '../helpers/enrichment-helper.mjs';
 import { EquipmentHelper } from '../helpers/equipment-helper.mjs';
 import { activateHandItem } from '../helpers/hand-item-activation.mjs';
@@ -1922,41 +1923,19 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       });
     });
 
-    // Favorited spells
-    const spellNames = this.element.querySelectorAll('.favorited-spell .spell-name-container');
-    spellNames.forEach(container => {
-      container.addEventListener('contextmenu', async (event) => {
+    // Favorited spells — right-click the row header (list) or the card (grid);
+    // the expanded accordion body has real inputs, so it keeps the native menu.
+    const spellRows = this.element.querySelectorAll('.favorited-spell .spell-trigger, .favorited-spell.spell-grid-card');
+    spellRows.forEach(row => {
+      row.addEventListener('contextmenu', (event) => {
+        const spell = this.actor.items.get(row.closest('[data-spell-id]')?.dataset.spellId);
+        if (!spell) return;
         event.preventDefault();
         event.stopPropagation();
 
-        const spellId = container.closest('[data-spell-id]')?.dataset.spellId;
-        if (!spellId) return;
-
-        const spell = this.actor.items.get(spellId);
-        if (!spell) return;
-
-        const menuItems = [
-          {
-            label: game.i18n.localize('VAGABOND.ContextMenu.SendToChat'),
-            icon: 'fas fa-comment',
-            enabled: true,
-            action: async () => {
-              await VagabondChatCard.itemUse(this.actor, spell);
-            },
-          },
-          {
-            label: game.i18n.localize('VAGABOND.ContextMenu.Unfavorite'),
-            icon: 'fas fa-star',
-            enabled: true,
-            action: async () => {
-              await spell.update({ 'system.favorite': false });
-            },
-          },
-        ];
-
         ContextMenuHelper.create({
           position: { x: event.clientX, y: event.clientY },
-          items: menuItems,
+          items: buildSpellMenuItems({ actor: this.actor, spell, event, spellHandler: this.spellHandler }),
           className: 'inventory-context-menu',
         });
       });

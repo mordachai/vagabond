@@ -106,7 +106,7 @@
                 <img class="vh-spell-img clickable rollable" src="{{img}}" alt="{{name}}" draggable="false" data-action="castSpellRow" data-spell-id="{{_id}}" data-hud-tip="{{localize 'VAGABOND.Hud.Menu.Cast'}}" />
                 <span class="vh-spell-name accordion-header" data-action="toggleItemDetail" data-spell-id="{{_id}}" title="{{name}}">{{name}}</span>
                 {{#unless (eq damageType '-')}}<i class="{{lookup @root.config.damageTypeIcons damageType}} vh-spell-dmg"></i>{{/unless}}
-                {{#if favorite}}<i class="fas fa-star vh-spell-fav" data-hud-tip="{{localize 'VAGABOND.Hud.Favorited'}}"></i>{{/if}}
+                <button type="button" class="vh-inv-menu vh-spell-fav {{#if favorite}}is-on{{/if}}" data-action="toggleSpellFavorite" data-item-id="{{_id}}" data-hud-tip="{{#if favorite}}{{localize 'VAGABOND.UI.Tooltips.FavoriteOn'}}{{else}}{{localize 'VAGABOND.UI.Tooltips.FavoriteOff'}}{{/if}}"><i class="{{#if favorite}}fas{{else}}far{{/if}} fa-star"></i></button>
                 <button type="button" class="vh-inv-menu" data-action="spellMenu" data-spell-id="{{_id}}" data-hud-tip="{{localize 'VAGABOND.Hud.Menu.Actions'}}"><i class="fas fa-ellipsis-vertical"></i></button>
               </div>
               <div class="accordion-content collapsed"><div class="vh-acc-body vh-item-detail">{{{detailHtml}}}</div></div>
@@ -145,7 +145,7 @@
                 <img class="vh-inv-img clickable rollable" src="{{img}}" alt="{{name}}" draggable="false" data-action="useItemRow" data-item-id="{{_id}}" data-hud-tip="{{localize 'VAGABOND.Hud.Menu.Use'}}" />
                 <span class="vh-inv-name accordion-header" data-action="toggleItemDetail" data-item-id="{{_id}}" title="{{name}}">{{name}}</span>
                 {{#if isWeapon}}{{#unless (eq damageType '-')}}<i class="{{lookup @root.config.damageTypeIcons damageType}} vh-inv-dmg" data-hud-tip="{{damageTypeLabel}}"></i>{{/unless}}{{#if damage}}<span class="vh-inv-val">{{damage}}</span>{{/if}}{{#if range}}<span class="vh-inv-range" data-hud-tip="{{rangeLabel}}">{{range}}</span>{{/if}}{{#if properties}}<span class="vh-inv-props" data-hud-tip="{{properties}}">{{properties}}</span>{{/if}}{{/if}}
-                {{#if equipped}}<i class="fa-regular fa-check vh-inv-eq" data-hud-tip="{{localize 'VAGABOND.Hud.Equipped'}}"></i>{{/if}}
+                <button type="button" class="vh-inv-menu vh-inv-eq {{#if equipped}}is-on{{/if}}" data-action="toggleEquip" data-item-id="{{_id}}" data-hud-tip="{{#if equipped}}{{localize 'VAGABOND.ContextMenu.Unequip'}}{{else}}{{localize 'VAGABOND.ContextMenu.Equip'}}{{/if}}"><i class="{{#if equipped}}fa-regular fa-check{{else}}fa-regular fa-circle{{/if}}"></i></button>
                 <button type="button" class="vh-inv-menu" data-action="itemMenu" data-item-id="{{_id}}" data-hud-tip="{{localize 'VAGABOND.Hud.Menu.Actions'}}"><i class="fas fa-ellipsis-vertical"></i></button>
               </div>
               <div class="accordion-content collapsed"><div class="vh-acc-body vh-item-detail">{{{detailHtml}}}</div></div>
@@ -168,8 +168,7 @@
       <div class="vh-pc-weapons">
         {{#each handSlots}}
           <div class="vh-pc-weapon {{#if filled}}filled{{/if}}" data-slot-index="{{@index}}" data-hand="{{hand}}" data-hud-tip-html="{{tip}}" {{#if filled}}data-action="slotUse" data-type="{{type}}" data-item-id="{{id}}"{{/if}}>
-            {{#if filled}}<img src="{{img}}" alt="{{name}}" />{{else}}<i class="fas fa-hand vh-slot-empty"></i>{{/if}}
-            <span class="vh-hand-label">{{hand}}</span>
+            {{#if filled}}<img src="{{img}}" alt="{{name}}" draggable="false" />{{else}}<i class="fas fa-hand vh-slot-empty"></i>{{/if}}
             {{#if versatile}}<i class="vh-grip-badge fas {{#if twoHanded}}fa-hands{{else}}fa-hand-fist{{/if}} clickable" data-action="toggleWeaponGrip" data-item-id="{{id}}" data-hud-tip="{{#if twoHanded}}{{localize 'VAGABOND.Hud.Menu.UseOneHand'}}{{else}}{{localize 'VAGABOND.Hud.Menu.UseTwoHands'}}{{/if}}"></i>{{/if}}
           </div>
         {{/each}}
