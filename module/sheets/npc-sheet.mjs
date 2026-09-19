@@ -120,9 +120,6 @@ export class VagabondNPCSheet extends VagabondActorSheet {
     // Setup debounced input listeners for action/ability editing
     this._setupDebouncedInputListeners(signal);
 
-    // Manual binding for createDoc action (workaround for action inheritance issue)
-    this._bindCreateDocActions(signal);
-
     // Bind manual save actions for creation
     this._bindSaveActions(signal);
   }
@@ -144,74 +141,6 @@ export class VagabondNPCSheet extends VagabondActorSheet {
 
         // Explicitly force a re-render to expand the accordion and update the UI
         await this.render(true);
-      }, { signal });
-    });
-  }
-
-  /**
-   * Manually bind createDoc actions to effect buttons
-   * This is a workaround for action inheritance not working properly
-   * @param {AbortSignal} signal - Signal for listener cleanup
-   * @private
-   */
-  _bindCreateDocActions(signal) {
-    // Bind createDoc actions for effect creation
-    const effectButtons = this.element.querySelectorAll('[data-action="createDoc"][data-document-class="ActiveEffect"]');
-
-    effectButtons.forEach(button => {
-      button.addEventListener('click', async (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-
-        try {
-          await this.constructor._createDoc.call(this, event, button);
-          await this.render(false);
-        } catch (error) {
-          console.error('Vagabond | Error creating effect:', error);
-        }
-      }, { signal });
-    });
-
-    // Bind other effect actions (viewDoc, deleteDoc, toggleEffect)
-    const effectActionButtons = this.element.querySelectorAll('[data-action="viewDoc"], [data-action="deleteDoc"], [data-action="toggleEffect"]');
-
-    effectActionButtons.forEach(button => {
-      const action = button.dataset.action;
-
-      button.addEventListener('click', async (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-
-        try {
-          switch (action) {
-            case 'viewDoc':
-              const viewDoc = this.constructor._getEmbeddedDocument(button, this.actor);
-              if (viewDoc) viewDoc.sheet.render(true);
-              break;
-            case 'deleteDoc':
-              const deleteDoc = this.constructor._getEmbeddedDocument(button, this.actor);
-              if (deleteDoc) {
-                const confirmed = await foundry.applications.api.DialogV2.confirm({
-                  window: { title: `Delete ${deleteDoc.name}?` },
-                  content: `<p>Are you sure you want to delete ${deleteDoc.name}?</p>`,
-                });
-                if (confirmed) {
-                  await deleteDoc.delete();
-                }
-              }
-              await this.render(false);
-              break;
-            case 'toggleEffect':
-              const toggleEffect = this.constructor._getEmbeddedDocument(button, this.actor);
-              if (toggleEffect) {
-                await toggleEffect.update({ disabled: !toggleEffect.disabled });
-              }
-              await this.render(false);
-              break;
-          }
-        } catch (error) {
-          console.error(`Vagabond | Error with ${action}:`, error);
-        }
       }, { signal });
     });
   }

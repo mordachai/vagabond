@@ -1,5 +1,14 @@
 # Changelog
 
+## v5.40.0
+- **Active Effects list overhaul:** character, NPC, construct and party sheets now show effects as an Active / Inactive list. Each row has the effect icon, name, origin pill, duration chip, a small on/off switch, send-to-chat and a ⋮ menu (right-click a row opens the same menu). "+" in each section header adds an effect.
+- **Effect descriptions:** click an effect's name to expand its description below the row. Effects on items (perks, traits, relics, weapons…) now use their item's icon and description when they have none of their own, in the list, the accordion and the chat card. New effects created on an item are pre-filled from it.
+- **Item effects can be disabled, not deleted:** effects granted by an item, weapon, ancestry or class can be switched off from the sheet, but only removed from their item (Delete is greyed out with a hint). Effects that are not applying (unequipped item, on-use, expired) stay listed, dimmed with a badge. Status conditions show fully; switching one off removes it along with its countdown die.
+- **HUD: effect switches:** the Character and NPC HUD portrait menus end with an "Active Effects:" list with a small switch per effect.
+- **Active Effect config window:** key column no longer overflows (truncates with a tooltip), wider window, cleaner inputs.
+- **Foundry v14 Active Effect compatibility:** effect changes are now read from the v14 `system.changes` shape (`type` instead of the old numeric `mode`), so on-use item effects apply again. Perk-choice effects are created in the v14 shape. "When equipped" / "on use" rules are handled through v14 effect suppression instead of hiding effects, and `@` references in effect values are left for the system to resolve after stats are calculated.
+- Fix: countdown/status removal from the Ongoing panel now also clears the linked status correctly.
+
 ## v5.39.0
 - **HUD hand circles: drag to rearrange.** Drag one held item onto the other hand circle to swap them; with a single 1H item held, drag it onto the empty circle to park it in that hand. The move is remembered until the item is re-equipped.
 - **HUD hand circles:** removed the R / L letter labels (the empty-hand tooltips still say Right / Left Hand).

@@ -11219,6 +11219,68 @@ ol#combat-tracker.directory-list {
   text-align: center;
   color: inherit;
 }
+.vagabond .inventory-context-menu .context-menu-item.is-dim,
+.vagabond-context-menu.inventory-context-menu .context-menu-item.is-dim {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.vagabond .inventory-context-menu .context-menu-item.is-dim:hover,
+.vagabond-context-menu.inventory-context-menu .context-menu-item.is-dim:hover {
+  background: transparent;
+}
+.vagabond .inventory-context-menu .context-menu-item.context-menu-header,
+.vagabond-context-menu.inventory-context-menu .context-menu-item.context-menu-header {
+  cursor: default;
+  font-size: 12px;
+  opacity: 0.7;
+}
+.vagabond .inventory-context-menu .context-menu-item.context-menu-header:hover,
+.vagabond-context-menu.inventory-context-menu .context-menu-item.context-menu-header:hover {
+  background: transparent;
+}
+.vagabond .inventory-context-menu .context-menu-item.context-menu-toggle-row > span:not(.context-menu-switch),
+.vagabond-context-menu.inventory-context-menu .context-menu-item.context-menu-toggle-row > span:not(.context-menu-switch) {
+  flex: 1;
+}
+.vagabond .inventory-context-menu .context-menu-item.context-menu-toggle-row.is-busy,
+.vagabond-context-menu.inventory-context-menu .context-menu-item.context-menu-toggle-row.is-busy {
+  pointer-events: none;
+}
+.vagabond .inventory-context-menu .context-menu-item .context-menu-switch,
+.vagabond-context-menu.inventory-context-menu .context-menu-item .context-menu-switch {
+  position: relative;
+  flex: 0 0 auto;
+  box-sizing: border-box;
+  width: 12px;
+  height: 8px;
+  margin-left: 12px;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  opacity: 0.55;
+  transition: background 0.15s ease, opacity 0.15s ease;
+}
+.vagabond .inventory-context-menu .context-menu-item .context-menu-switch::after,
+.vagabond-context-menu.inventory-context-menu .context-menu-item .context-menu-switch::after {
+  content: "";
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: currentColor;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+.vagabond .inventory-context-menu .context-menu-item .context-menu-switch.is-on,
+.vagabond-context-menu.inventory-context-menu .context-menu-item .context-menu-switch.is-on {
+  opacity: 1;
+  background: currentColor;
+}
+.vagabond .inventory-context-menu .context-menu-item .context-menu-switch.is-on::after,
+.vagabond-context-menu.inventory-context-menu .context-menu-item .context-menu-switch.is-on::after {
+  background: var(--vagabond-c-dark);
+  transform: translateX(4px);
+}
 .vagabond .inventory-context-menu .context-menu-item.danger,
 .vagabond-context-menu.inventory-context-menu .context-menu-item.danger {
   color: var(--vagabond-c-red);
@@ -11308,6 +11370,68 @@ ol#combat-tracker.directory-list {
   width: 16px;
   text-align: center;
   color: inherit;
+}
+.vagabond .status-context-menu .context-menu-item.is-dim,
+.vagabond-context-menu.status-context-menu .context-menu-item.is-dim {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.vagabond .status-context-menu .context-menu-item.is-dim:hover,
+.vagabond-context-menu.status-context-menu .context-menu-item.is-dim:hover {
+  background: transparent;
+}
+.vagabond .status-context-menu .context-menu-item.context-menu-header,
+.vagabond-context-menu.status-context-menu .context-menu-item.context-menu-header {
+  cursor: default;
+  font-size: 12px;
+  opacity: 0.7;
+}
+.vagabond .status-context-menu .context-menu-item.context-menu-header:hover,
+.vagabond-context-menu.status-context-menu .context-menu-item.context-menu-header:hover {
+  background: transparent;
+}
+.vagabond .status-context-menu .context-menu-item.context-menu-toggle-row > span:not(.context-menu-switch),
+.vagabond-context-menu.status-context-menu .context-menu-item.context-menu-toggle-row > span:not(.context-menu-switch) {
+  flex: 1;
+}
+.vagabond .status-context-menu .context-menu-item.context-menu-toggle-row.is-busy,
+.vagabond-context-menu.status-context-menu .context-menu-item.context-menu-toggle-row.is-busy {
+  pointer-events: none;
+}
+.vagabond .status-context-menu .context-menu-item .context-menu-switch,
+.vagabond-context-menu.status-context-menu .context-menu-item .context-menu-switch {
+  position: relative;
+  flex: 0 0 auto;
+  box-sizing: border-box;
+  width: 12px;
+  height: 8px;
+  margin-left: 12px;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  opacity: 0.55;
+  transition: background 0.15s ease, opacity 0.15s ease;
+}
+.vagabond .status-context-menu .context-menu-item .context-menu-switch::after,
+.vagabond-context-menu.status-context-menu .context-menu-item .context-menu-switch::after {
+  content: "";
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: currentColor;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+.vagabond .status-context-menu .context-menu-item .context-menu-switch.is-on,
+.vagabond-context-menu.status-context-menu .context-menu-item .context-menu-switch.is-on {
+  opacity: 1;
+  background: currentColor;
+}
+.vagabond .status-context-menu .context-menu-item .context-menu-switch.is-on::after,
+.vagabond-context-menu.status-context-menu .context-menu-item .context-menu-switch.is-on::after {
+  background: var(--vagabond-c-dark);
+  transform: translateX(4px);
 }
 .vagabond .status-context-menu .context-menu-item.danger,
 .vagabond-context-menu.status-context-menu .context-menu-item.danger {
@@ -11399,6 +11523,68 @@ ol#combat-tracker.directory-list {
   text-align: center;
   color: inherit;
 }
+.vagabond .party-compact-context-menu .context-menu-item.is-dim,
+.vagabond-context-menu.party-compact-context-menu .context-menu-item.is-dim {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.vagabond .party-compact-context-menu .context-menu-item.is-dim:hover,
+.vagabond-context-menu.party-compact-context-menu .context-menu-item.is-dim:hover {
+  background: transparent;
+}
+.vagabond .party-compact-context-menu .context-menu-item.context-menu-header,
+.vagabond-context-menu.party-compact-context-menu .context-menu-item.context-menu-header {
+  cursor: default;
+  font-size: 12px;
+  opacity: 0.7;
+}
+.vagabond .party-compact-context-menu .context-menu-item.context-menu-header:hover,
+.vagabond-context-menu.party-compact-context-menu .context-menu-item.context-menu-header:hover {
+  background: transparent;
+}
+.vagabond .party-compact-context-menu .context-menu-item.context-menu-toggle-row > span:not(.context-menu-switch),
+.vagabond-context-menu.party-compact-context-menu .context-menu-item.context-menu-toggle-row > span:not(.context-menu-switch) {
+  flex: 1;
+}
+.vagabond .party-compact-context-menu .context-menu-item.context-menu-toggle-row.is-busy,
+.vagabond-context-menu.party-compact-context-menu .context-menu-item.context-menu-toggle-row.is-busy {
+  pointer-events: none;
+}
+.vagabond .party-compact-context-menu .context-menu-item .context-menu-switch,
+.vagabond-context-menu.party-compact-context-menu .context-menu-item .context-menu-switch {
+  position: relative;
+  flex: 0 0 auto;
+  box-sizing: border-box;
+  width: 12px;
+  height: 8px;
+  margin-left: 12px;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  opacity: 0.55;
+  transition: background 0.15s ease, opacity 0.15s ease;
+}
+.vagabond .party-compact-context-menu .context-menu-item .context-menu-switch::after,
+.vagabond-context-menu.party-compact-context-menu .context-menu-item .context-menu-switch::after {
+  content: "";
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: currentColor;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+.vagabond .party-compact-context-menu .context-menu-item .context-menu-switch.is-on,
+.vagabond-context-menu.party-compact-context-menu .context-menu-item .context-menu-switch.is-on {
+  opacity: 1;
+  background: currentColor;
+}
+.vagabond .party-compact-context-menu .context-menu-item .context-menu-switch.is-on::after,
+.vagabond-context-menu.party-compact-context-menu .context-menu-item .context-menu-switch.is-on::after {
+  background: var(--vagabond-c-dark);
+  transform: translateX(4px);
+}
 .vagabond .party-compact-context-menu .context-menu-item.danger,
 .vagabond-context-menu.party-compact-context-menu .context-menu-item.danger {
   color: var(--vagabond-c-red);
@@ -11488,6 +11674,68 @@ ol#combat-tracker.directory-list {
   width: 16px;
   text-align: center;
   color: inherit;
+}
+.vagabond .party-status-context-menu .context-menu-item.is-dim,
+.vagabond-context-menu.party-status-context-menu .context-menu-item.is-dim {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.vagabond .party-status-context-menu .context-menu-item.is-dim:hover,
+.vagabond-context-menu.party-status-context-menu .context-menu-item.is-dim:hover {
+  background: transparent;
+}
+.vagabond .party-status-context-menu .context-menu-item.context-menu-header,
+.vagabond-context-menu.party-status-context-menu .context-menu-item.context-menu-header {
+  cursor: default;
+  font-size: 12px;
+  opacity: 0.7;
+}
+.vagabond .party-status-context-menu .context-menu-item.context-menu-header:hover,
+.vagabond-context-menu.party-status-context-menu .context-menu-item.context-menu-header:hover {
+  background: transparent;
+}
+.vagabond .party-status-context-menu .context-menu-item.context-menu-toggle-row > span:not(.context-menu-switch),
+.vagabond-context-menu.party-status-context-menu .context-menu-item.context-menu-toggle-row > span:not(.context-menu-switch) {
+  flex: 1;
+}
+.vagabond .party-status-context-menu .context-menu-item.context-menu-toggle-row.is-busy,
+.vagabond-context-menu.party-status-context-menu .context-menu-item.context-menu-toggle-row.is-busy {
+  pointer-events: none;
+}
+.vagabond .party-status-context-menu .context-menu-item .context-menu-switch,
+.vagabond-context-menu.party-status-context-menu .context-menu-item .context-menu-switch {
+  position: relative;
+  flex: 0 0 auto;
+  box-sizing: border-box;
+  width: 12px;
+  height: 8px;
+  margin-left: 12px;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  opacity: 0.55;
+  transition: background 0.15s ease, opacity 0.15s ease;
+}
+.vagabond .party-status-context-menu .context-menu-item .context-menu-switch::after,
+.vagabond-context-menu.party-status-context-menu .context-menu-item .context-menu-switch::after {
+  content: "";
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: currentColor;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+.vagabond .party-status-context-menu .context-menu-item .context-menu-switch.is-on,
+.vagabond-context-menu.party-status-context-menu .context-menu-item .context-menu-switch.is-on {
+  opacity: 1;
+  background: currentColor;
+}
+.vagabond .party-status-context-menu .context-menu-item .context-menu-switch.is-on::after,
+.vagabond-context-menu.party-status-context-menu .context-menu-item .context-menu-switch.is-on::after {
+  background: var(--vagabond-c-dark);
+  transform: translateX(4px);
 }
 .vagabond .party-status-context-menu .context-menu-item.danger,
 .vagabond-context-menu.party-status-context-menu .context-menu-item.danger {
@@ -11583,6 +11831,68 @@ ol#combat-tracker.directory-list {
   width: 16px;
   text-align: center;
   color: inherit;
+}
+.vagabond .party-status-submenu .context-menu-item.is-dim,
+.vagabond-context-menu.party-status-submenu .context-menu-item.is-dim {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.vagabond .party-status-submenu .context-menu-item.is-dim:hover,
+.vagabond-context-menu.party-status-submenu .context-menu-item.is-dim:hover {
+  background: transparent;
+}
+.vagabond .party-status-submenu .context-menu-item.context-menu-header,
+.vagabond-context-menu.party-status-submenu .context-menu-item.context-menu-header {
+  cursor: default;
+  font-size: 12px;
+  opacity: 0.7;
+}
+.vagabond .party-status-submenu .context-menu-item.context-menu-header:hover,
+.vagabond-context-menu.party-status-submenu .context-menu-item.context-menu-header:hover {
+  background: transparent;
+}
+.vagabond .party-status-submenu .context-menu-item.context-menu-toggle-row > span:not(.context-menu-switch),
+.vagabond-context-menu.party-status-submenu .context-menu-item.context-menu-toggle-row > span:not(.context-menu-switch) {
+  flex: 1;
+}
+.vagabond .party-status-submenu .context-menu-item.context-menu-toggle-row.is-busy,
+.vagabond-context-menu.party-status-submenu .context-menu-item.context-menu-toggle-row.is-busy {
+  pointer-events: none;
+}
+.vagabond .party-status-submenu .context-menu-item .context-menu-switch,
+.vagabond-context-menu.party-status-submenu .context-menu-item .context-menu-switch {
+  position: relative;
+  flex: 0 0 auto;
+  box-sizing: border-box;
+  width: 12px;
+  height: 8px;
+  margin-left: 12px;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  opacity: 0.55;
+  transition: background 0.15s ease, opacity 0.15s ease;
+}
+.vagabond .party-status-submenu .context-menu-item .context-menu-switch::after,
+.vagabond-context-menu.party-status-submenu .context-menu-item .context-menu-switch::after {
+  content: "";
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: currentColor;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+.vagabond .party-status-submenu .context-menu-item .context-menu-switch.is-on,
+.vagabond-context-menu.party-status-submenu .context-menu-item .context-menu-switch.is-on {
+  opacity: 1;
+  background: currentColor;
+}
+.vagabond .party-status-submenu .context-menu-item .context-menu-switch.is-on::after,
+.vagabond-context-menu.party-status-submenu .context-menu-item .context-menu-switch.is-on::after {
+  background: var(--vagabond-c-dark);
+  transform: translateX(4px);
 }
 .vagabond .party-status-submenu .context-menu-item.danger,
 .vagabond-context-menu.party-status-submenu .context-menu-item.danger {
@@ -15663,18 +15973,18 @@ ol#combat-tracker.directory-list {
   font-size: 0.9em;
   color: var(--vagabond-c-text-primary);
 }
-.vagabond .active-effect-config input[name^=changes][name$=".value"] {
+.vagabond.active-effect-config input[name^="system.changes."][name$=".value"] {
   font-family: "Courier New", monospace;
 }
-.vagabond .active-effect-config input[name^=changes][name$=".value"]::placeholder {
+.vagabond.active-effect-config input[name^="system.changes."][name$=".value"]::placeholder {
   font-family: var(--font-primary);
   font-style: italic;
-  color: var(--vagabond-c-text-primary);
+  opacity: 0.6;
 }
-.vagabond .active-effect-config input[name^=changes][name$=".value"]:focus {
+.vagabond.active-effect-config input[name^="system.changes."][name$=".value"]:focus {
   outline: 2px solid var(--color-border-highlight-alt);
 }
-.vagabond .active-effect-config .formula-hint {
+.vagabond.active-effect-config .formula-hint {
   color: var(--vagabond-c-text-primary);
   font-size: 0.85em;
   font-style: italic;
@@ -15689,125 +15999,342 @@ ol#combat-tracker.directory-list {
     opacity: 1;
   }
 }
-.vagabond .active-effect-config .form-group:has(input[name^=changes][name$=".value"]) {
-  position: relative;
+.vagabond.active-effect-config .tab.changes header,
+.vagabond.active-effect-config .tab.changes ol {
+  grid-template-columns: minmax(0, 1fr) 6.5rem minmax(6rem, 8rem) 3.5rem 1.75rem;
+  gap: 0.4rem;
 }
-.vagabond .active-effect-config .form-group:has(input[name^=changes][name$=".value"])::after {
-  content: "\f121";
-  font-family: "Font Awesome 6 Free";
-  font-weight: 900;
-  position: absolute;
-  right: 8px;
-  top: 50%;
-  transform: translateY(-50%);
+.vagabond.active-effect-config .tab.changes header {
+  padding: 0 2px 4px;
+  border-bottom: 1px solid var(--vagabond-c-tan-lite);
   color: var(--vagabond-c-text-primary);
-  pointer-events: none;
-  font-size: 0.85em;
+  font-size: 12px;
+  font-weight: 700;
 }
-.vagabond .theme-dark .controls button,
-.vagabond .theme-dark .effect-controls button,
-.vagabond .theme-dark button.inline-control {
-  color: var(--vagabond-c-text-primary) !important;
-  background: var(--vagabond-c-white) !important;
-  border: 2px solid var(--vagabond-c-faint) !important;
-  padding: 4px 8px !important;
-  border-radius: 4px !important;
+.vagabond.active-effect-config .tab.changes ol {
+  row-gap: 0.5rem;
+  padding-top: 6px;
 }
-.vagabond .theme-dark .controls button:hover,
-.vagabond .theme-dark .effect-controls button:hover,
-.vagabond .theme-dark button.inline-control:hover {
-  background: var(--vagabond-c-tan) !important;
-  color: var(--vagabond-c-text-primary) !important;
-  transform: scale(1.1) !important;
+.vagabond.active-effect-config .tab.changes .key input,
+.vagabond.active-effect-config .tab.changes .value input {
+  font-family: "Courier New", monospace;
+  font-size: 12px;
+  text-overflow: ellipsis;
 }
-.vagabond .theme-dark .controls button.icon, .vagabond .theme-dark .controls button.fa-regular, .vagabond .theme-dark .controls button.fa-solid,
-.vagabond .theme-dark .effect-controls button.icon,
-.vagabond .theme-dark .effect-controls button.fa-regular,
-.vagabond .theme-dark .effect-controls button.fa-solid,
-.vagabond .theme-dark button.inline-control.icon,
-.vagabond .theme-dark button.inline-control.fa-regular,
-.vagabond .theme-dark button.inline-control.fa-solid {
-  color: var(--vagabond-c-text-primary) !important;
-  font-size: 16px !important;
-  font-weight: bold !important;
+.vagabond.active-effect-config .tab.changes .key input,
+.vagabond.active-effect-config .tab.changes .type select,
+.vagabond.active-effect-config .tab.changes .value input,
+.vagabond.active-effect-config .tab.changes .priority input {
+  height: 28px;
+  border-radius: 6px;
 }
-.vagabond .theme-dark button[data-action=addChange] {
-  color: var(--vagabond-c-text-primary) !important;
-  background: var(--vagabond-c-white) !important;
-  border: 2px solid var(--vagabond-c-text-primary) !important;
-  padding: 6px 10px !important;
-  border-radius: 4px !important;
-  font-size: 18px !important;
-  font-weight: bold !important;
+.vagabond.active-effect-config .tab.changes .priority input {
+  text-align: center;
 }
-.vagabond .theme-dark button[data-action=addChange]:hover {
-  background: var(--vagabond-c-tan) !important;
-  color: var(--vagabond-c-text-primary) !important;
-  transform: scale(1.15) !important;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+.vagabond.active-effect-config .tab.changes .controls {
+  display: flex;
+  justify-content: flex-end;
 }
-.vagabond .theme-dark .effect-change .effect-control,
-.vagabond .theme-dark .effect-change button,
-.vagabond .theme-dark .changes-list button,
-.vagabond .theme-dark .changes-list .effect-control {
-  color: var(--vagabond-c-red) !important;
-  background: var(--vagabond-c-white) !important;
-  border: 2px solid var(--vagabond-c-red) !important;
-  padding: 4px 8px !important;
-  border-radius: 4px !important;
-  font-size: 14px !important;
+.vagabond.active-effect-config .tab.changes .controls button.inline-control {
+  width: 24px;
+  height: 24px;
+  min-height: 0;
+  padding: 0;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  cursor: pointer;
+  color: var(--vagabond-c-text-primary);
+  background: transparent;
+  border: 1px solid transparent;
+  box-shadow: none;
 }
-.vagabond .theme-dark .effect-change .effect-control:hover,
-.vagabond .theme-dark .effect-change button:hover,
-.vagabond .theme-dark .changes-list button:hover,
-.vagabond .theme-dark .changes-list .effect-control:hover {
-  background: var(--vagabond-c-red) !important;
-  color: var(--vagabond-c-white) !important;
-  transform: scale(1.1) !important;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+.vagabond.active-effect-config .tab.changes .controls button.inline-control:hover {
+  border-color: var(--vagabond-c-tan);
+  background: var(--vagabond-c-surface);
 }
-.vagabond .theme-dark .changes .form-group button,
-.vagabond .theme-dark .changes .form-fields button {
-  color: var(--vagabond-c-red) !important;
-  background: var(--vagabond-c-white) !important;
-  border: 2px solid var(--vagabond-c-red) !important;
-  padding: 4px 8px !important;
-  border-radius: 4px !important;
-  font-size: 14px !important;
+.vagabond.active-effect-config .tab.changes .controls button.inline-control.fa-trash:hover {
+  color: var(--vagabond-c-red);
 }
-.vagabond .theme-dark .changes .form-group button:hover,
-.vagabond .theme-dark .changes .form-fields button:hover {
-  background: var(--vagabond-c-red) !important;
-  color: var(--vagabond-c-white) !important;
-  transform: scale(1.1) !important;
+.vagabond .fx-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 4px 2px;
+  color: var(--vagabond-c-text-primary);
 }
-.vagabond .theme-dark .changes .form-group button i.fa-trash,
-.vagabond .theme-dark .changes .form-group button i.fa-times,
-.vagabond .theme-dark .changes .form-group button i.fa-minus,
-.vagabond .theme-dark .changes .form-fields button i.fa-trash,
-.vagabond .theme-dark .changes .form-fields button i.fa-times,
-.vagabond .theme-dark .changes .form-fields button i.fa-minus {
-  color: inherit !important;
+.vagabond .fx-section-header {
+  display: flex;
+  margin-bottom: 4px;
 }
-.vagabond .theme-dark button[data-action=removeChange],
-.vagabond .theme-dark button.fa-trash,
-.vagabond .theme-dark button.fa-times,
-.vagabond .theme-dark button.fa-minus {
-  color: var(--vagabond-c-red) !important;
-  background: var(--vagabond-c-white) !important;
-  border: 2px solid var(--vagabond-c-red) !important;
-  padding: 4px 8px !important;
-  border-radius: 4px !important;
-  font-size: 14px !important;
+.vagabond .fx-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 2px 8px 2px 10px;
+  border-radius: 4px;
+  background: var(--vagabond-c-chat-yellow);
+  color: #1b1b1b;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.4;
 }
-.vagabond .theme-dark button[data-action=removeChange]:hover,
-.vagabond .theme-dark button.fa-trash:hover,
-.vagabond .theme-dark button.fa-times:hover,
-.vagabond .theme-dark button.fa-minus:hover {
-  background: var(--vagabond-c-red) !important;
-  color: var(--vagabond-c-white) !important;
-  transform: scale(1.1) !important;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+.vagabond .fx-add {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  min-height: 0;
+  padding: 0;
+  line-height: 1;
+  border: none;
+  border-radius: 3px;
+  background: transparent;
+  box-shadow: none;
+  color: #1b1b1b;
+  cursor: pointer;
+}
+.vagabond .fx-add i {
+  font-size: 12px;
+}
+.vagabond .fx-add:hover {
+  background: rgba(0, 0, 0, 0.15);
+}
+.vagabond .fx-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.vagabond .fx-empty {
+  padding: 4px 10px;
+  font-size: 11px;
+  font-style: italic;
+  color: var(--vagabond-c-muted);
+  list-style: none;
+}
+.vagabond .fx-row {
+  padding: 6px 8px;
+  border: 1px solid var(--vagabond-c-tan-lite);
+  border-radius: 4px;
+  background: var(--vagabond-c-surface);
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+.vagabond .fx-row:hover {
+  border-color: var(--vagabond-c-tan);
+}
+.vagabond .fx-row.is-off .fx-icon {
+  filter: grayscale(1);
+}
+.vagabond .fx-row.is-off .fx-body {
+  opacity: 0.5;
+  filter: grayscale(0.6);
+}
+.vagabond .fx-row.is-off .fx-details {
+  opacity: 0.6;
+}
+.vagabond .fx-row.is-suppressed .fx-body {
+  opacity: 0.5;
+}
+.vagabond .fx-row.is-open .fx-details {
+  grid-template-rows: 1fr;
+}
+.vagabond .fx-row.is-open .fx-chevron {
+  color: var(--vagabond-c-chat-yellow);
+  opacity: 1;
+}
+.vagabond .fx-main {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: start;
+}
+.vagabond .fx-name-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  width: auto;
+  height: auto;
+  min-height: 0;
+  padding: 0;
+  line-height: normal;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.vagabond .fx-name-toggle:hover {
+  background: transparent;
+  box-shadow: none;
+}
+.vagabond .fx-name-toggle:hover .fx-name {
+  text-decoration: underline;
+  text-decoration-color: var(--vagabond-c-chat-yellow);
+  text-underline-offset: 3px;
+}
+.vagabond .fx-name-toggle .fx-chevron {
+  font-size: 11px;
+  opacity: 0.7;
+  transition: color 0.2s ease, opacity 0.2s ease;
+}
+.vagabond .fx-details {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.2s ease;
+}
+.vagabond .fx-details-inner {
+  min-height: 0;
+  overflow: hidden;
+}
+.vagabond .fx-divider {
+  height: 1px;
+  margin: 8px 0 6px;
+  background: linear-gradient(to right, transparent, var(--vagabond-c-chat-yellow), transparent);
+}
+.vagabond .fx-icon {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+  border: none;
+  border-radius: 4px;
+}
+.vagabond .fx-body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+  min-width: 0;
+}
+.vagabond .fx-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+.vagabond .fx-name {
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--vagabond-c-text-primary);
+}
+.vagabond .fx-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 6px;
+  border: 1px solid var(--vagabond-c-tan);
+  border-radius: 999px;
+  font-size: 10px;
+  line-height: 1.5;
+  color: var(--vagabond-c-text-primary);
+  white-space: nowrap;
+}
+.vagabond .fx-chip.fx-suppressed {
+  border-color: var(--vagabond-c-yellow-2, #b8860b);
+  color: var(--vagabond-c-yellow-2, #b8860b);
+}
+.vagabond .fx-origin {
+  padding: 0 6px;
+  border: 1px solid var(--vagabond-c-text-primary);
+  border-radius: 3px;
+  font-size: 10px;
+  line-height: 1.5;
+  color: var(--vagabond-c-text-primary);
+  opacity: 0.85;
+}
+.vagabond .fx-description {
+  font-size: 12px;
+  line-height: 1.35;
+  color: var(--vagabond-c-text-primary);
+  overflow-wrap: anywhere;
+}
+.vagabond .fx-description p {
+  margin: 0 0 0.25em;
+}
+.vagabond .fx-description p:last-child {
+  margin-bottom: 0;
+}
+.vagabond .fx-description img {
+  max-width: 100%;
+}
+.vagabond .fx-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-top: 2px;
+}
+.vagabond .fx-switch-wrap {
+  display: inline-flex;
+}
+.vagabond .fx-switch {
+  position: relative;
+  flex: 0 0 auto;
+  width: 22px;
+  height: 12px;
+  min-height: 0;
+  padding: 0;
+  line-height: normal;
+  border: 1px solid var(--vagabond-c-tan);
+  border-radius: 999px;
+  background: var(--vagabond-c-tan-lite);
+  box-shadow: none;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.vagabond .fx-switch .fx-switch-knob {
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+  transition: transform 0.15s ease;
+}
+.vagabond .fx-switch.is-on {
+  background: var(--vagabond-c-green);
+  border-color: var(--vagabond-c-green);
+}
+.vagabond .fx-switch.is-on .fx-switch-knob {
+  transform: translateX(10px);
+}
+.vagabond .fx-switch:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.vagabond .fx-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  min-height: 0;
+  padding: 0;
+  line-height: 1;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+  color: var(--vagabond-c-text-primary);
+  opacity: 0.75;
+  cursor: pointer;
+}
+.vagabond .fx-btn i {
+  font-size: 13px;
+}
+.vagabond .fx-btn:hover {
+  opacity: 1;
+  background: transparent;
+  box-shadow: none;
+  color: var(--vagabond-c-text-secondary);
 }
 .vagabond .vagabond.actor .sheet-header,
 .vagabond .sliding-panel .sheet-header {
@@ -18069,103 +18596,6 @@ ol#combat-tracker.directory-list {
 .vagabond .action-add-btn i,
 .vagabond .ability-add-btn i {
   font-size: 14px;
-}
-.vagabond .npc-effects .effects-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  color: var(--vagabond-c-text-primary);
-}
-.vagabond .npc-effects .effects-category {
-  margin-bottom: 8px;
-}
-.vagabond .npc-effects .effects-category-label {
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--vagabond-c-text-primary);
-  margin-bottom: 4px;
-}
-.vagabond .npc-effects .effect {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 8px;
-  border: 1px solid var(--vagabond-c-dark);
-  border-radius: 4px;
-  color: var(--vagabond-c-text-primary);
-}
-.vagabond .npc-effects .effect:hover {
-  background: var(--vagabond-c-tan);
-  border-color: var(--vagabond-c-text-primary);
-}
-.vagabond .npc-effects .effect-name {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.8em;
-  color: var(--vagabond-c-text-primary);
-  flex: 1;
-}
-.vagabond .npc-effects .effect-image,
-.vagabond .npc-effects .effect-icon {
-  width: 24px;
-  height: 24px;
-  border-radius: 3px;
-  border: 1px solid var(--vagabond-c-text-primary);
-}
-.vagabond .npc-effects .effect-source {
-  font-size: 0.8em;
-  color: var(--vagabond-c-text-primary);
-  min-width: 80px;
-  text-align: center;
-}
-.vagabond .npc-effects .effect-duration {
-  font-size: 1em;
-  min-width: 60px;
-  text-align: center;
-}
-.vagabond .npc-effects .effect-controls {
-  display: flex;
-  gap: 6px;
-  align-items: center;
-}
-.vagabond .npc-effects .effect-control {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  font-size: 14px;
-  width: 20px;
-  height: 20px;
-  transition: color 0.2s ease;
-}
-.vagabond .npc-effects .effect-control i {
-  font-size: 14px;
-}
-.vagabond .npc-effects .effect-create {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  padding: 8px 12px;
-  margin-top: 4px;
-  border: 1px dashed var(--vagabond-c-tan);
-  border-radius: 4px;
-  background: transparent;
-  font-size: 14px;
-  color: var(--vagabond-c-text-primary);
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-.vagabond .npc-effects .effect-create:hover {
-  border-color: var(--vagabond-c-dark);
-  background: var(--vagabond-c-faint);
-}
-.vagabond .npc-effects .effect-create i {
-  font-size: 12px;
 }
 .vagabond .npc-details {
   display: flex;

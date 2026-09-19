@@ -1,0 +1,132 @@
+{{!--
+  Effects list — Active / Inactive sections of switch rows.
+  Context: `effects` = prepareEffectsView() → { active[], inactive[], editable }
+  Shared by the character/construct/party Effects tab and the NPC Effects accordion.
+  Row actions are AppV2 actions on VagabondActorSheet: toggleEffect, toggleEffectDetails
+  (name = accordion trigger), effectToChat, effectMenu (kebab), createEffect.
+  Right-click on a row opens the same menu as the kebab.
+--}}
+{{#*inline "fxRows"}}
+  {{#each rows as |effect|}}
+    <li
+      class='fx-row{{#if effect.draggable}} draggable{{/if}}{{#unless effect.on}} is-off{{/unless}}{{#if effect.suppression}} is-suppressed{{/if}}{{#if effect.open}} is-open{{/if}}'
+      data-effect-id='{{effect.id}}'
+      data-parent-id='{{effect.parentId}}'
+      data-document-class='ActiveEffect'
+    >
+      <div class='fx-main'>
+        <img class='fx-icon' src='{{effect.img}}' alt='' />
+
+        <div class='fx-body'>
+          <div class='fx-title'>
+            {{#if effect.description}}
+              <button
+                type='button'
+                class='fx-name-toggle'
+                data-action='toggleEffectDetails'
+                aria-expanded='{{#if effect.open}}true{{else}}false{{/if}}'
+              >
+                <span class='fx-name'>{{effect.name}}</span>
+                <i class='fa-regular fa-rectangle-list fx-chevron'></i>
+              </button>
+            {{else}}
+              <span class='fx-name'>{{effect.name}}</span>
+            {{/if}}
+            {{#if effect.duration}}
+              <span class='fx-chip fx-duration' data-tooltip='{{localize "EFFECT.TABS.duration"}}'>
+                <i class='fa-solid fa-hourglass-half'></i> {{effect.duration}}
+              </span>
+            {{/if}}
+            {{#if effect.suppression}}
+              <span
+                class='fx-chip fx-suppressed'
+                data-tooltip='{{localize (concat "VAGABOND.Effect.Suppressed." effect.suppression "Hint")}}'
+              >{{localize (concat "VAGABOND.Effect.Suppressed." effect.suppression)}}</span>
+            {{/if}}
+          </div>
+          {{#if effect.origin}}
+            <span class='fx-origin'>{{effect.origin}}</span>
+          {{/if}}
+        </div>
+
+        <div class='fx-actions'>
+          <span
+            class='fx-switch-wrap'
+            data-tooltip='{{#if effect.suppression}}{{localize (concat "VAGABOND.Effect.Suppressed." effect.suppression "Hint")}}{{else if effect.on}}{{localize "VAGABOND.Effect.Disable"}}{{else}}{{localize "VAGABOND.Effect.Enable"}}{{/if}}'
+          >
+            <button
+              type='button'
+              class='fx-switch{{#if effect.on}} is-on{{/if}}'
+              role='switch'
+              aria-checked='{{#if effect.on}}true{{else}}false{{/if}}'
+              aria-label='{{localize "VAGABOND.Effect.Toggle"}}'
+              data-action='toggleEffect'
+              {{#unless effect.canToggle}}disabled{{/unless}}
+            ><span class='fx-switch-knob'></span></button>
+          </span>
+          <button
+            type='button'
+            class='fx-btn'
+            data-action='effectToChat'
+            data-tooltip='{{localize "VAGABOND.ContextMenu.SendToChat"}}'
+          ><i class='fa-regular fa-comment'></i></button>
+          <button
+            type='button'
+            class='fx-btn'
+            data-action='effectMenu'
+            data-tooltip='{{localize "VAGABOND.Effect.Options"}}'
+          ><i class='fa-solid fa-ellipsis-vertical'></i></button>
+        </div>
+      </div>
+
+      {{#if effect.description}}
+        <div class='fx-details'>
+          <div class='fx-details-inner'>
+            <div class='fx-divider'></div>
+            <div class='fx-description'>{{{effect.description}}}</div>
+          </div>
+        </div>
+      {{/if}}
+    </li>
+  {{else}}
+    <li class='fx-empty'>{{localize 'VAGABOND.Effect.Empty'}}</li>
+  {{/each}}
+{{/inline}}
+
+<div class='fx-list'>
+  <section class='fx-section' data-section='active'>
+    <header class='fx-section-header'>
+      <span class='fx-pill'>
+        {{localize 'VAGABOND.Effect.Active'}}
+        {{#if effects.editable}}
+          <button
+            type='button'
+            class='fx-add'
+            data-action='createEffect'
+            data-section='active'
+            data-tooltip='{{localize "VAGABOND.Effect.Add"}}'
+          ><i class='fa-solid fa-plus'></i></button>
+        {{/if}}
+      </span>
+    </header>
+    <ol class='fx-rows'>{{> fxRows rows=effects.active}}</ol>
+  </section>
+
+  <section class='fx-section' data-section='inactive'>
+    <header class='fx-section-header'>
+      <span class='fx-pill'>
+        {{localize 'VAGABOND.Effect.Inactive'}}
+        {{#if effects.editable}}
+          <button
+            type='button'
+            class='fx-add'
+            data-action='createEffect'
+            data-section='inactive'
+            data-tooltip='{{localize "VAGABOND.Effect.Add"}}'
+          ><i class='fa-solid fa-plus'></i></button>
+        {{/if}}
+      </span>
+    </header>
+    <ol class='fx-rows'>{{> fxRows rows=effects.inactive}}</ol>
+  </section>
+</div>

@@ -11,6 +11,7 @@
 
 import { CharacterBuilderDataService } from './char-builder/services/data-service.mjs';
 import { VagabondChatCard } from '../helpers/chat-card.mjs';
+import { effectModeToChangeType } from '../helpers/effects.mjs';
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
@@ -1361,12 +1362,13 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
               await this.actor.createEmbeddedDocuments('ActiveEffect', [{
                 name: `${createdPerk.name}`,
                 img: createdPerk.img,
+                description: createdPerk.system?.description || '',
                 origin: createdPerk.uuid,
                 system: { changes: [{
                   key: targetField,
                   // choiceConfig.effectMode is a legacy numeric mode (2 = add);
                   // v14 system.changes requires the string type
-                  type: ['custom', 'multiply', 'add', 'downgrade', 'upgrade', 'override'][config.effectMode] ?? 'add',
+                  type: effectModeToChangeType(config.effectMode),
                   value: config.effectValue || '1',
                 }] },
                 flags: { vagabond: { applicationMode: 'permanent' } },

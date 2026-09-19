@@ -4,6 +4,7 @@ import { VagabondItem } from './documents/item.mjs';
 import { VagabondCombat } from './documents/combat.mjs';
 import { VagabondCombatant } from './documents/combatant.mjs';
 import { VagabondActiveEffect } from './documents/active-effect.mjs';
+import VagabondActiveEffectData from './data/active-effect-data.mjs';
 import { ProgressClock } from './documents/progress-clock.mjs';
 import { CountdownDice } from './documents/countdown-dice.mjs';
 // Import sheet classes.
@@ -1051,6 +1052,7 @@ async function preloadHandlebarsTemplates() {
     'systems/vagabond/templates/actor/parts/npc-macro-config.hbs',
     // Actor partials
     'systems/vagabond/templates/actor/parts/inventory-card.hbs',
+    'systems/vagabond/templates/actor/parts/effects-list.hbs',
     // Party sheet partials
     'systems/vagabond/templates/party/party-member-card.hbs',
     'systems/vagabond/templates/party/party-npc-card.hbs',
@@ -1281,6 +1283,9 @@ Hooks.once('init', function () {
 
   // Register custom ActiveEffect document class
   CONFIG.ActiveEffect.documentClass = VagabondActiveEffect;
+
+  // v14: ActiveEffect type data model — supplies isSuppressed (when-equipped / on-use)
+  CONFIG.ActiveEffect.dataModels.base = VagabondActiveEffectData;
 
   // Register custom ActiveEffectConfig sheet
   foundry.applications.apps.DocumentSheetConfig.registerSheet(ActiveEffect, 'vagabond', VagabondActiveEffectConfig, {

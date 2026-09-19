@@ -1,4 +1,4 @@
-import { prepareActiveEffectCategories } from '../helpers/effects.mjs';
+import { prepareActiveEffectCategories, effectSeedFromItem } from '../helpers/effects.mjs';
 import { GrantsHandlers } from './item-sheet-grants.mjs';
 import { EnrichmentHelper } from '../helpers/enrichment-helper.mjs';
 import * as ItemSections from '../helpers/item-sections.mjs';
@@ -2458,11 +2458,13 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
         type: target.dataset.type,
         parent: this.item,
       }),
+      // Pre-fill icon + description from this item; the first effect also takes the item's name
+      ...effectSeedFromItem(this.item, { name: this.item.effects.size === 0 }),
     };
     // Loop through the dataset and add it to our effectData
     for (const [dataKey, value] of Object.entries(target.dataset)) {
-      // These data attributes are reserved for the action handling
-      if (['action', 'documentClass'].includes(dataKey)) continue;
+      // Reserved for action handling; `img` is seeded from the item above
+      if (['action', 'documentClass', 'img'].includes(dataKey)) continue;
       foundry.utils.setProperty(effectData, dataKey, value);
     }
 

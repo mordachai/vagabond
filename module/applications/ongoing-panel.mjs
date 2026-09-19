@@ -1,4 +1,5 @@
 import { CountdownDice } from '../documents/countdown-dice.mjs';
+import { StatusHelper } from '../helpers/status-helper.mjs';
 
 const { api } = foundry.applications;
 
@@ -165,30 +166,8 @@ export class OngoingPanel extends api.HandlebarsApplicationMixin(api.Application
         e.preventDefault();
         const actor = await fromUuid(actorUuid);
         if (!actor) return;
-        const statusId = el.dataset.statusId;
-        const canModifyActor = actor.isOwner || game.user.isGM;
-        if (canModifyActor) {
-          actor.toggleStatusEffect(statusId, { active: false });
-        } else {
-          const { emitSocket } = await import('../helpers/socket-helper.mjs');
-          emitSocket('applyStatus', { actorUuid: actor.uuid, statusId, active: false });
-        }
-        // Also delete any countdown dice linked to this actor + status so the
-        // on-screen overlay element disappears immediately.
-        const linkedDice = game.journal.filter(j => {
-          const cd = j.flags?.vagabond?.countdownDice;
-          return cd?.type === 'countdownDice'
-            && cd.linkedActorUuid === actor.uuid
-            && cd.linkedStatusId === statusId;
-        });
-        for (const die of linkedDice) {
-          if (die.isOwner || game.user.isGM) {
-            die.delete();
-          } else {
-            const { emitSocket } = await import('../helpers/socket-helper.mjs');
-            emitSocket('deleteCountdownDie', { id: die.id });
-          }
-        }
+        // Removes the status AND its linked countdown dice (shared with the sheet effects list)
+        await StatusHelper.removeStatus(actor, el.dataset.statusId);
       }, { signal });
     }
 

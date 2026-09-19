@@ -1,6 +1,7 @@
 import { VagabondTextParser } from './text-parser.mjs';
 import { VagabondChatHelper } from './chat-helper.mjs';
 import { buildMacroButtonHTML } from './item-macro.mjs';
+import { resolveEffectDescription, effectDisplayImg } from './effects.mjs';
 
 /**
  * Universal chat card builder for Vagabond system
@@ -1994,54 +1995,18 @@ export class VagabondChatCard {
   static async statusEffect(actor, effect) {
     // Get status name and description
     const statusName = effect.name || effect.label || 'Unknown Status';
-    const statusIcon = effect.img || 'icons/svg/aura.svg';
+    const statusIcon = effectDisplayImg(effect) || 'icons/svg/aura.svg';
 
-    // Try to get description from the effect or from CONFIG
-    let fullDescription = '';
-
-    // Get the status ID from the effect
-    const statusId = effect.statuses?.first() || effect.flags?.core?.statusId;
-
-    // Flanking/Flanked carry a per-application description naming the actual
-    // tokens involved (built by FlankingHelper) — flagged with vagabond.flankInfo.
-    // That live text wins over the generic i18n string.
-    if (effect.flags?.vagabond?.flankInfo && effect.description) {
-      fullDescription = effect.description;
-    }
-
-    // Prefer the localized StatusConditionDescriptions entry. The ActiveEffect's own
-    // `description` field is populated (English, from CONFIG.statusEffects) whenever
-    // Foundry creates the status via toggleStatusEffect, so it must NOT be checked first.
-    if (!fullDescription && statusId) {
-      const pascalId = statusId.charAt(0).toUpperCase() + statusId.slice(1);
-      const localizedKey = `VAGABOND.StatusConditionDescriptions.${pascalId}`;
-      const localized = game.i18n.localize(localizedKey);
-      if (localized !== localizedKey) fullDescription = localized;
-    }
-    if (!fullDescription) {
-      if (effect.description) {
-        fullDescription = effect.description;
-      } else if (statusId) {
-        const statusDef = CONFIG.statusEffects?.find(s => s.id === statusId);
-        if (statusDef?.description) fullDescription = statusDef.description;
-      }
-    }
-
-    // Extract automation status from description (text in square brackets)
-    let automationStatus = '';
-    let cleanDescription = fullDescription;
-
-    const bracketMatch = fullDescription.match(/\[(.*?)\]$/);
-    if (bracketMatch) {
-      automationStatus = bracketMatch[1]; // Text inside brackets
-      cleanDescription = fullDescription.replace(/\s*\[.*?\]$/, '').trim(); // Remove brackets from description
-    }
+    // Description resolution (flank text > localized StatusConditionDescriptions > effect > CONFIG)
+    // is shared with the actor-sheet effects list; a trailing "[automation]" note is split out.
+    const { description: cleanDescription, automation: automationStatus } = resolveEffectDescription(effect);
 
     // Build description HTML (without brackets)
     let descriptionHTML = `<div class="status-effect-info">`;
 
     if (cleanDescription) {
-      descriptionHTML += `<p>${cleanDescription}</p>`;
+      // Item descriptions are already HTML blocks — don't nest them in another <p>
+      descriptionHTML += /^\s*</.test(cleanDescription) ? cleanDescription : `<p>${cleanDescription}</p>`;
     } else {
       descriptionHTML += `<p><em>No description available.</em></p>`;
     }

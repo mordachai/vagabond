@@ -186,6 +186,18 @@
 export class VagabondActiveEffect extends ActiveEffect {
 
   /**
+   * v14 core resolves "@refs" in string change values at apply time (the *initial* phase, against
+   * pre-derived roll data). Vagabond bonus fields are ArrayField(StringField) whose formulas are
+   * evaluated later in prepareDerivedData(), when derived values (stat totals, etc.) exist.
+   * Resolving early would freeze refs like `@stats.dexterity.total` to stale values, so keep the
+   * raw string and let `_evaluateFormulaField()` do the work (matches v13 behavior).
+   * @override
+   */
+  static _replaceDataRefs(raw, data) {
+    return raw;
+  }
+
+  /**
    * Provide attribute key choices for the Active Effect configuration form.
    * This populates the "Attribute Key" dropdown with all available system variables.
    * @returns {object} Object mapping attribute paths to their labels
@@ -359,33 +371,5 @@ export class VagabondActiveEffect extends ActiveEffect {
     };
 
     return choices;
-  }
-
-  /**
-   * Augment the ActiveEffect configuration sheet with attribute choices
-   * This is called by Foundry when preparing the configuration form
-   */
-  static onManageActiveEffect(event, owner) {
-    event.preventDefault();
-    const button = event.currentTarget;
-    const li = button.closest('.effect');
-    const effect = li?.dataset.effectId ? owner.effects.get(li.dataset.effectId) : null;
-
-    switch (button.dataset.action) {
-      case 'create':
-        return owner.createEmbeddedDocuments('ActiveEffect', [{
-          name: game.i18n.localize('VAGABOND.Effect.New'),
-          icon: 'icons/svg/aura.svg',
-          origin: owner.uuid,
-          'duration.rounds': li?.dataset.effectType === 'temporary' ? 1 : undefined,
-          disabled: li?.dataset.effectType === 'inactive'
-        }]);
-      case 'edit':
-        return effect.sheet.render(true);
-      case 'delete':
-        return effect.delete();
-      case 'toggle':
-        return effect.update({ disabled: !effect.disabled });
-    }
   }
 }

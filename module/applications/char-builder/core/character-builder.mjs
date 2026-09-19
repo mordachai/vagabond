@@ -5,6 +5,7 @@
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
 import { VagabondUIHelper } from '../../../helpers/ui-helper.mjs';
+import { effectModeToChangeType } from '../../../helpers/effects.mjs';
 import { ConfigurationSystem } from '../config/configuration-system.mjs';
 import { CharacterBuilderStateManager } from '../state/state-manager.mjs';
 import { ValidationEngine } from '../state/validation-engine.mjs';
@@ -1117,12 +1118,15 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
               const effectData = {
                 name: `${perk.name} Effect`,
                 img: perk.img,
+                description: perk.system?.description || '',
                 disabled: false,
-                changes: [{
-                  key: attributeKey,
-                  mode: config.effectMode,
-                  value: config.effectValue
-                }],
+                system: {
+                  changes: [{
+                    key: attributeKey,
+                    type: effectModeToChangeType(config.effectMode),
+                    value: config.effectValue
+                  }]
+                },
                 flags: {
                   vagabond: {
                     applicationMode: 'permanent'

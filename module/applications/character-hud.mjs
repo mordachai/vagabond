@@ -8,6 +8,7 @@ import { applyHudDisplayPrefs, getHudHealthBar, isItemPile } from '../helpers/hu
 import { activateHandItem } from '../helpers/hand-item-activation.mjs';
 import { buildItemMenuItems, buildSpellMenuItems } from '../helpers/item-menu.mjs';
 import { bindHudTooltips } from '../helpers/hud-tooltip.mjs';
+import { buildEffectMenuItems } from '../helpers/effects.mjs';
 import { setupDragReorder } from '../helpers/drag-reorder.mjs';
 import * as ItemSections from '../helpers/item-sections.mjs';
 
@@ -1304,6 +1305,7 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
           icon: 'fas fa-xmark',
           action: () => this.close(),
         },
+        ...buildEffectMenuItems(this.actor),
       ],
     });
   }

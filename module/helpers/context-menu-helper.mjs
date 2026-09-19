@@ -42,9 +42,21 @@ export class ContextMenuHelper {
       const item = document.createElement('div');
       item.classList.add('context-menu-item');
 
+      // Section header: non-interactive label row (`header: true`)
+      if (itemConfig.header) {
+        item.classList.add('context-menu-header');
+        item.innerHTML = `${itemConfig.icon ? `<i class="${itemConfig.icon}"></i>` : ''}<span>${itemConfig.label}</span>`;
+        menu.appendChild(item);
+        return;
+      }
+
       // Disabled state
       if (itemConfig.enabled === false) {
         item.classList.add('disabled');
+      }
+      // Opt-in greyed-out look for entries that are unavailable (`dim: true`)
+      if (itemConfig.dim) {
+        item.classList.add('is-dim');
       }
 
       // Build item content — supports FA class string (`icon`) or image URL (`img`)
@@ -75,6 +87,44 @@ export class ContextMenuHelper {
           }
         }));
         item.appendChild(stepper);
+        menu.appendChild(item);
+        return;
+      }
+
+      // Switch row: "Label  (o )". Clicking anywhere on the row flips it in place and keeps the
+      // menu open; `onChange(next)` may resolve to the confirmed state (omit to trust `next`).
+      if (itemConfig.toggle) {
+        const { value, disabled, onChange } = itemConfig.toggle;
+        item.classList.add('context-menu-toggle-row');
+        const sw = document.createElement('span');
+        sw.classList.add('context-menu-switch');
+        sw.setAttribute('role', 'switch');
+        const setState = (on) => {
+          sw.classList.toggle('is-on', on);
+          sw.setAttribute('aria-checked', String(on));
+        };
+        setState(!!value);
+        item.appendChild(sw);
+
+        if (disabled) {
+          item.classList.add('is-dim');
+        } else {
+          item.addEventListener('click', async (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            if (item.classList.contains('is-busy')) return;
+            item.classList.add('is-busy');
+            try {
+              const next = !sw.classList.contains('is-on');
+              const confirmed = await onChange(next);
+              setState(confirmed ?? next);
+            } catch (error) {
+              console.error('Context menu toggle error:', error);
+            } finally {
+              item.classList.remove('is-busy');
+            }
+          });
+        }
         menu.appendChild(item);
         return;
       }

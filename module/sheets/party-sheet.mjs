@@ -1,5 +1,5 @@
 import { VagabondActorSheet } from './actor-sheet.mjs';
-import { prepareActiveEffectCategories } from '../helpers/effects.mjs';
+import { prepareEffectsView } from '../helpers/effects.mjs';
 import { TargetHelper } from '../helpers/target-helper.mjs';
 import { PartyCompactView } from '../applications/party-compact-view.mjs';
 import { PartyStatusHelper } from '../helpers/party-status-helper.mjs';
@@ -89,7 +89,7 @@ export class VagabondPartySheet extends VagabondActorSheet {
     };
 
     context.tabs = this._getTabs(options.parts);
-    context.effects = prepareActiveEffectCategories(this.actor.effects);
+    context.effects = await prepareEffectsView(this.actor, { editable: this.isEditable });
 
     // Resolve full member data for party tab cards
     context.members = await this._resolveMembers();
@@ -605,9 +605,6 @@ export class VagabondPartySheet extends VagabondActorSheet {
       delete: Hooks.on('deleteActiveEffect', reRenderIfMember),
     };
 
-    // Wire up effects tab
-    this._bindEffectActions(signal);
-
     // Wire up member card interactions
     this._bindMemberActions(signal);
 
@@ -987,62 +984,6 @@ export class VagabondPartySheet extends VagabondActorSheet {
       const debouncedSave = foundry.utils.debounce(doSave, 500);
       editor.addEventListener('change', debouncedSave, { signal });
     }
-  }
-
-  /**
-   * Bind effects tab action buttons.
-   * @param {AbortSignal} signal
-   * @private
-   */
-  _bindEffectActions(signal) {
-    this.element
-      .querySelectorAll('[data-action="createDoc"][data-document-class="ActiveEffect"]')
-      .forEach(button => {
-        button.addEventListener('click', async (event) => {
-          event.preventDefault();
-          event.stopPropagation();
-          try {
-            await this.constructor._createDoc.call(this, event, button);
-            await this.render(false, { parts: ['effects'] });
-          } catch (err) {
-            console.error('Vagabond | Party sheet: error creating effect:', err);
-          }
-        }, { signal });
-      });
-
-    this.element
-      .querySelectorAll('[data-action="viewDoc"], [data-action="deleteDoc"], [data-action="toggleEffect"]')
-      .forEach(button => {
-        const action = button.dataset.action;
-        button.addEventListener('click', async (event) => {
-          event.preventDefault();
-          event.stopPropagation();
-          try {
-            const doc = this.constructor._getEmbeddedDocument(button, this.actor);
-            switch (action) {
-              case 'viewDoc':
-                if (doc) doc.sheet.render(true);
-                break;
-              case 'deleteDoc': {
-                if (!doc) break;
-                const confirmed = await foundry.applications.api.DialogV2.confirm({
-                  window: { title: `Delete ${doc.name}?` },
-                  content: `<p>Are you sure you want to delete ${doc.name}?</p>`,
-                });
-                if (confirmed) await doc.delete();
-                await this.render(false, { parts: ['effects'] });
-                break;
-              }
-              case 'toggleEffect':
-                if (doc) await doc.update({ disabled: !doc.disabled });
-                await this.render(false, { parts: ['effects'] });
-                break;
-            }
-          } catch (err) {
-            console.error(`Vagabond | Party sheet: error with ${action}:`, err);
-          }
-        }, { signal });
-      });
   }
 
   /** @override */

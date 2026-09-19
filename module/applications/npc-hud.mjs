@@ -4,6 +4,7 @@ import { EnrichmentHelper } from '../helpers/enrichment-helper.mjs';
 import { VagabondTextParser } from '../helpers/text-parser.mjs';
 import { applyHudDisplayPrefs, getHudHealthBar, isItemPile } from '../helpers/hud-display.mjs';
 import { bindHudTooltips } from '../helpers/hud-tooltip.mjs';
+import { buildEffectMenuItems } from '../helpers/effects.mjs';
 
 const { api } = foundry.applications;
 
@@ -679,6 +680,7 @@ export class VagabondNPCHud extends api.HandlebarsApplicationMixin(api.Applicati
         { label: L('VAGABOND.Hud.OpenSheet'), icon: 'fas fa-up-right-from-square', action: () => this.actor.sheet.render(true) },
         { label: L('VAGABOND.Hud.Menu.Ping'), icon: 'fas fa-bullseye', action: () => this._pingToken() },
         { label: L('VAGABOND.Hud.Menu.Close'), icon: 'fas fa-xmark', action: () => this.close() },
+        ...buildEffectMenuItems(this.actor),
       ],
     });
   }

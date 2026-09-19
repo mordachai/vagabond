@@ -43,52 +43,10 @@ export class VagabondActor extends Actor {
     super.prepareData();
   }
 
-  /** @override */
-  allApplicableEffects() {
-    // Get all effects from the actor itself
-    const actorEffects = Array.from(this.effects);
-
-    // Get all effects from owned items (including class items)
-    const itemEffects = [];
-    for (const item of this.items) {
-      // Include effects from all item types, especially class items
-      for (const effect of item.effects) {
-        itemEffects.push(effect);
-      }
-    }
-
-    // Combine all effects
-    const allEffects = [...actorEffects, ...itemEffects];
-
-    // Filter based on application mode
-    const filteredEffects = allEffects.filter(effect => {
-      const applicationMode = effect.flags.vagabond?.applicationMode || 'permanent';
-
-      // Skip "on-use" effects - they're applied manually during rolls
-      if (applicationMode === 'on-use') {
-        return false;
-      }
-
-      // For "when-equipped" effects, check if the parent item is equipped
-      if (applicationMode === 'when-equipped') {
-        const parentItem = effect.parent;
-        if (!parentItem) return false; // No parent, can't check equipped state
-
-        // Use system.equipped (boolean) — a derived mirror of equipmentState
-        // computed in VagabondEquipment.prepareDerivedData() for ALL equipment
-        // ('worn' counts as equipped; items are fully prepared before
-        // applyActiveEffects runs, so the mirror is always current here).
-        const equipped = parentItem.system?.equipped;
-        if (equipped === undefined || equipped === null) return true; // No equipped field → assume applies
-        return equipped === true;
-      }
-
-      // "permanent" effects always apply (including class effects)
-      return true;
-    });
-
-    return filteredEffects;
-  }
+  // NOTE: allApplicableEffects() is intentionally NOT overridden. Foundry's default yields the
+  // actor's own effects + transferring item effects; the when-equipped / on-use rules live in
+  // VagabondActiveEffectData#isSuppressed (module/data/active-effect-data.mjs), so suppressed
+  // effects stay listed (dimmed on the sheet) but never apply (ActiveEffect#active is false).
 
   /** @override */
   prepareBaseData() {
@@ -154,8 +112,8 @@ export class VagabondActor extends Actor {
 
     // Apply each effect's changes
     for (const effect of itemEffects) {
-      for (const change of effect.changes) {
-        let { key, mode, value } = change;
+      for (const change of effect.system.changes) {
+        let { key, type, value } = change;
 
         // IMPORTANT: Active Effect keys are document paths (e.g., "system.critNumber")
         // But rollData is flattened (e.g., "critNumber" at top level)
@@ -179,32 +137,57 @@ export class VagabondActor extends Actor {
         const finalKey = parts[parts.length - 1];
         const currentValue = target[finalKey] ?? 0;
 
-        // Apply the change based on mode.
-        // v14: change.mode is a string (CONST.ACTIVE_EFFECT_CHANGE_TYPES);
-        // v13 fallback: CONST.ACTIVE_EFFECT_MODES (numeric). Accessing the v14
-        // constant first avoids the deprecation warning on v14.
-        const MODES = CONST.ACTIVE_EFFECT_CHANGE_TYPES ?? CONST.ACTIVE_EFFECT_MODES;
-        switch (mode) {
-          case MODES.ADD:
-            target[finalKey] = currentValue + Number(value);
+        // v14: change.type is a string ('add' | 'subtract' | 'multiply' | 'override' |
+        // 'upgrade' | 'downgrade' | 'custom'). CONST.ACTIVE_EFFECT_CHANGE_TYPES maps
+        // type → default PRIORITY (lowercase keys), so it is NOT a mode enum.
+        // Formula strings ("@attributes.level.value") resolve against the roll data.
+        const num = this._resolveChangeNumber(value, modifiedData);
+        switch (type) {
+          case 'add':
+            target[finalKey] = currentValue + num;
             break;
-          case MODES.MULTIPLY:
-            target[finalKey] = currentValue * Number(value);
+          case 'subtract':
+            target[finalKey] = currentValue - num;
             break;
-          case MODES.OVERRIDE:
-            target[finalKey] = Number(value);
+          case 'multiply':
+            target[finalKey] = currentValue * num;
             break;
-          case MODES.DOWNGRADE:
-            target[finalKey] = Math.min(currentValue, Number(value));
+          case 'override':
+            target[finalKey] = num;
             break;
-          case MODES.UPGRADE:
-            target[finalKey] = Math.max(currentValue, Number(value));
+          case 'downgrade':
+            target[finalKey] = Math.min(currentValue, num);
+            break;
+          case 'upgrade':
+            target[finalKey] = Math.max(currentValue, num);
             break;
         }
       }
     }
 
     return modifiedData;
+  }
+
+  /**
+   * Resolve an ActiveEffect change value (AnyField in v14: number, boolean, or string,
+   * possibly a formula with @refs) to a finite number.
+   * @param {*} value
+   * @param {object} data  Roll data used to resolve @refs
+   * @returns {number}
+   * @private
+   */
+  _resolveChangeNumber(value, data) {
+    if (typeof value === 'number') return Number.isFinite(value) ? value : 0;
+    if (typeof value === 'boolean') return value ? 1 : 0;
+    if (typeof value !== 'string' || !value.trim()) return 0;
+    try {
+      const replaced = Roll.replaceFormulaData(value.trim(), data, { missing: '0' });
+      const result = Roll.safeEval(replaced);
+      return Number.isFinite(Number(result)) ? Number(result) : 0;
+    } catch {
+      const n = Number(value);
+      return Number.isFinite(n) ? n : 0;
+    }
   }
 
   /**

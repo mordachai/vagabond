@@ -1,3 +1,5 @@
+import { emitSocket } from './socket-helper.mjs';
+
 /**
  * StatusHelper — central logic for on-hit status effect application.
  *
@@ -53,6 +55,36 @@ export class StatusHelper {
    */
   static actorHasStatus(actor, statusId) {
     return actor.effects.some(e => !e.disabled && e.statuses?.has(statusId));
+  }
+
+  /**
+   * Remove a status condition from an actor AND delete any countdown dice linked to it
+   * (linkedActorUuid + linkedStatusId), so the on-screen die disappears with the status.
+   * Owners/GMs act directly; other users relay through the GM via socket.
+   * Single removal path shared by the Ongoing panel and the actor-sheet effects list.
+   * @param {VagabondActor} actor
+   * @param {string} statusId
+   * @returns {Promise<void>}
+   */
+  static async removeStatus(actor, statusId) {
+    if (!actor || !statusId) return;
+
+    if (actor.isOwner || game.user.isGM) {
+      await actor.toggleStatusEffect(statusId, { active: false });
+    } else {
+      emitSocket('applyStatus', { actorUuid: actor.uuid, statusId, active: false });
+    }
+
+    const linkedDice = game.journal.filter((j) => {
+      const cd = j.flags?.vagabond?.countdownDice;
+      return cd?.type === 'countdownDice'
+        && cd.linkedActorUuid === actor.uuid
+        && cd.linkedStatusId === statusId;
+    });
+    for (const die of linkedDice) {
+      if (die.isOwner || game.user.isGM) await die.delete();
+      else emitSocket('deleteCountdownDie', { id: die.id });
+    }
   }
 
   // ---------------------------------------------------------------------------

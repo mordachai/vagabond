@@ -7,7 +7,8 @@ export default class VagabondActiveEffectConfig extends foundry.applications.she
   /** @override */
   static DEFAULT_OPTIONS = {
     classes: ["vagabond", "active-effect-config"],
-    position: { width: 560 }
+    // Wider than core's 560 so long attribute keys (system.bonuses.rest.short…) stay readable
+    position: { width: 680 }
   };
 
   /** @override */
@@ -71,6 +72,12 @@ export default class VagabondActiveEffectConfig extends foundry.applications.she
 
     // Add formula autocomplete to effect value fields
     this._addFormulaAutocomplete();
+
+    // Full attribute key on hover — the key column can still truncate very long paths
+    for (const keyInput of this.element.querySelectorAll('input[name^="system.changes."][name$=".key"]')) {
+      keyInput.title = keyInput.value;
+      keyInput.addEventListener('input', () => { keyInput.title = keyInput.value; });
+    }
   }
 
   /**
@@ -98,7 +105,8 @@ export default class VagabondActiveEffectConfig extends foundry.applications.she
       'system.statusImmunities',
     ]);
 
-    const valueInputs = this.element.querySelectorAll('input[name^="changes"][name$=".value"]');
+    // v14: change rows are stored at system.changes.N.* (was top-level changes.N.*)
+    const valueInputs = this.element.querySelectorAll('input[name^="system.changes."][name$=".value"]');
 
     valueInputs.forEach(input => {
       const datalistId = `formula-suggestions-${foundry.utils.randomID()}`;

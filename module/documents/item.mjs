@@ -1,4 +1,5 @@
 import { VagabondChatHelper } from '../helpers/chat-helper.mjs';
+import { effectModeToChangeType } from '../helpers/effects.mjs';
 
 /**
  * Extend the basic Item with some very simple modifications.
@@ -419,12 +420,15 @@ export class VagabondItem extends Item {
       await this.createEmbeddedDocuments('ActiveEffect', [{
         name: `${this.name} Effect`,
         img: this.img,
+        description: this.system?.description || '',
         disabled: false,
-        changes: [{
-          key: attributeKey,
-          mode: config.effectMode,
-          value: config.effectValue
-        }],
+        system: {
+          changes: [{
+            key: attributeKey,
+            type: effectModeToChangeType(config.effectMode),
+            value: config.effectValue
+          }]
+        },
         flags: {
           vagabond: {
             applicationMode: 'permanent'

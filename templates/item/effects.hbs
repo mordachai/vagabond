@@ -20,7 +20,8 @@
             {{#if (eq section.type "inactive")}}
               data-disabled="true"
             {{else if (eq section.type "temporary")}}
-              data-duration.rounds="1"
+              data-duration.value="1"
+              data-duration.units="rounds"
             {{/if}}
             data-tooltip='{{localize "DOCUMENT.Create" type='Effect'}}'
           >

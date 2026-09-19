@@ -1,5 +1,5 @@
 import { VagabondActorSheet } from './actor-sheet.mjs';
-import { prepareActiveEffectCategories } from '../helpers/effects.mjs';
+import { prepareEffectsView } from '../helpers/effects.mjs';
 import { TargetHelper } from '../helpers/target-helper.mjs';
 import { VagabondDamageHelper } from '../helpers/damage-helper.mjs';
 import { VagabondDiceAppearance } from '../helpers/dice-appearance.mjs';
@@ -83,7 +83,7 @@ export class VagabondConstructSheet extends VagabondActorSheet {
     };
 
     context.tabs = this._getTabs(options.parts);
-    context.effects = prepareActiveEffectCategories(this.actor.effects);
+    context.effects = await prepareEffectsView(this.actor, { editable: this.isEditable });
 
     // Raw items — resolved per-part in _preparePartContext
     context.constructParts = this.actor.items.filter(i => i.type === 'vehiclePart');
@@ -173,64 +173,7 @@ export class VagabondConstructSheet extends VagabondActorSheet {
       deleteItem: Hooks.on('deleteItem', reRenderConstruct),
     };
 
-    this._bindEffectActions(signal);
     this._bindConstructActions(signal);
-  }
-
-  /**
-   * Bind effects tab action buttons.
-   * @param {AbortSignal} signal
-   * @private
-   */
-  _bindEffectActions(signal) {
-    this.element
-      .querySelectorAll('[data-action="createDoc"][data-document-class="ActiveEffect"]')
-      .forEach(button => {
-        button.addEventListener('click', async (event) => {
-          event.preventDefault();
-          event.stopPropagation();
-          try {
-            await this.constructor._createDoc.call(this, event, button);
-            await this.render(false, { parts: ['effects'] });
-          } catch (err) {
-            console.error('Vagabond | Construct sheet: error creating effect:', err);
-          }
-        }, { signal });
-      });
-
-    this.element
-      .querySelectorAll('[data-action="viewDoc"], [data-action="deleteDoc"], [data-action="toggleEffect"]')
-      .forEach(button => {
-        const action = button.dataset.action;
-        button.addEventListener('click', async (event) => {
-          event.preventDefault();
-          event.stopPropagation();
-          try {
-            const doc = this.constructor._getEmbeddedDocument(button, this.actor);
-            switch (action) {
-              case 'viewDoc':
-                if (doc) doc.sheet.render(true);
-                break;
-              case 'deleteDoc': {
-                if (!doc) break;
-                const confirmed = await foundry.applications.api.DialogV2.confirm({
-                  window: { title: `Delete ${doc.name}?` },
-                  content: `<p>Are you sure you want to delete ${doc.name}?</p>`,
-                });
-                if (confirmed) await doc.delete();
-                await this.render(false, { parts: ['effects'] });
-                break;
-              }
-              case 'toggleEffect':
-                if (doc) await doc.update({ disabled: !doc.disabled });
-                await this.render(false, { parts: ['effects'] });
-                break;
-            }
-          } catch (err) {
-            console.error(`Vagabond | Construct sheet: error with ${action}:`, err);
-          }
-        }, { signal });
-      });
   }
 
   /**

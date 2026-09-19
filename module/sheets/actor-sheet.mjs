@@ -1,4 +1,5 @@
-import { prepareActiveEffectCategories } from '../helpers/effects.mjs';
+import { prepareEffectsView, toggleActorEffect, isStatusEffect } from '../helpers/effects.mjs';
+import { StatusHelper } from '../helpers/status-helper.mjs';
 import { VagabondChatHelper } from '../helpers/chat-helper.mjs';
 import { VagabondChatCard } from '../helpers/chat-card.mjs';
 import { VagabondDiceAppearance } from '../helpers/dice-appearance.mjs';
@@ -38,7 +39,14 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       viewDoc: this._viewDoc,
       createDoc: this._createDoc,
       deleteDoc: this._deleteDoc,
-      toggleEffect: this._toggleEffect,
+      // Effects list (Active / Inactive switch rows)
+      toggleEffect: this._onToggleEffect,
+      toggleEffectDetails: this._onToggleEffectDetails,
+      createEffect: this._onCreateEffect,
+      editEffect: this._onEditEffect,
+      deleteEffect: this._onDeleteEffect,
+      effectToChat: this._onEffectToChat,
+      effectMenu: this._onEffectMenu,
       // Roll actions - delegated to rollHandler
       roll: this._onRoll,
       rollWeapon: this._onRollWeapon,
@@ -385,9 +393,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       context.statusEffects = this._prepareStatusEffects();
     }
 
-    // Prepare active effects (include effects from all sources, including class items)
-    const allEffects = this.actor.allApplicableEffects();
-    context.effects = prepareActiveEffectCategories(allEffects);
+    // Prepare the Active / Inactive effects lists (actor effects + item-granted effects)
+    context.effects = await prepareEffectsView(this.actor, { editable: this.isEditable, open: this._fxOpen });
 
     return context;
   }
@@ -1618,17 +1625,206 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     }
   }
 
+  // ===========================
+  // Effects list (Active / Inactive switch rows)
+  // ===========================
+
   /**
-   * Toggle active effect enabled state
-   * @param {PointerEvent} event - The originating click event
-   * @param {HTMLElement} target - The capturing HTML element
+   * Flip an effect on/off from its row switch.
+   * Status conditions turn OFF by being removed (with their linked countdown dice) — they
+   * cannot sit in the Inactive list; every other effect toggles its `disabled` flag.
+   * @param {PointerEvent} event
+   * @param {HTMLElement} target
    * @protected
    */
-  static async _toggleEffect(event, target) {
+  static async _onToggleEffect(event, target) {
+    if (!this.isEditable) return;
     const effect = this._getEmbeddedDocument(target, this.actor);
-    if (effect) {
-      await effect.update({ disabled: !effect.disabled });
+    if (!effect) return;
+
+    await toggleActorEffect(this.actor, effect);
+  }
+
+  /**
+   * Effect name = accordion trigger: expand/collapse the description below the row.
+   * Own lightweight accordion (not AccordionHelper): that one closes on any outside click and its
+   * global .accordion-item styles fight the row layout. Open ids live on the sheet so they survive
+   * re-renders (switching an effect on/off re-renders the part).
+   * @param {PointerEvent} event
+   * @param {HTMLElement} target
+   * @protected
+   */
+  static _onToggleEffectDetails(event, target) {
+    const row = target.closest('.fx-row');
+    if (!row) return;
+    this._fxOpen ??= new Set();
+    const open = row.classList.toggle('is-open');
+    target.setAttribute('aria-expanded', String(open));
+    if (open) this._fxOpen.add(row.dataset.effectId);
+    else this._fxOpen.delete(row.dataset.effectId);
+  }
+
+  /**
+   * Create a new effect on this actor and open its config sheet.
+   * `data-section="inactive"` creates it disabled.
+   * @param {PointerEvent} event
+   * @param {HTMLElement} target
+   * @protected
+   */
+  static async _onCreateEffect(event, target) {
+    if (!this.isEditable) return;
+    const aeCls = getDocumentClass('ActiveEffect');
+    const [effect] = await this.actor.createEmbeddedDocuments('ActiveEffect', [{
+      name: aeCls.defaultName({ parent: this.actor }),
+      img: 'icons/svg/aura.svg',
+      origin: this.actor.uuid,
+      disabled: target.dataset.section === 'inactive',
+    }]);
+    effect?.sheet.render(true);
+  }
+
+  /**
+   * Open the effect's config sheet.
+   * @param {PointerEvent} event
+   * @param {HTMLElement} target
+   * @protected
+   */
+  static _onEditEffect(event, target) {
+    const effect = this._getEmbeddedDocument(target, this.actor);
+    effect?.sheet.render(true);
+  }
+
+  /**
+   * Delete an effect. Statuses go through the status removal path (countdown-die cleanup);
+   * item-owned effects can't be deleted from the sheet (they belong to the item) — the user is told.
+   * @param {PointerEvent} event
+   * @param {HTMLElement} target
+   * @protected
+   */
+  static async _onDeleteEffect(event, target) {
+    if (!this.isEditable) return;
+    const effect = this._getEmbeddedDocument(target, this.actor);
+    if (!effect) return;
+
+    if (isStatusEffect(effect)) {
+      await StatusHelper.removeStatus(this.actor, effect.statuses.first());
+      return;
     }
+
+    // Item-owned effects are part of the item: they can be disabled here but not deleted
+    if (effect.parent?.documentName === 'Item') {
+      ui.notifications.info(game.i18n.format('VAGABOND.Effect.DeleteLocked', { item: effect.parent.name }));
+      return;
+    }
+
+    const confirmed = await foundry.applications.api.DialogV2.confirm({
+      window: { title: game.i18n.format('VAGABOND.ContextMenu.DeleteItemTitle', { name: effect.name }) },
+      content: game.i18n.format('VAGABOND.ContextMenu.DeleteItemContent', { name: foundry.utils.escapeHTML(effect.name) }),
+    });
+    if (confirmed) await effect.delete();
+  }
+
+  /**
+   * Post the effect (name, icon, description) to chat.
+   * @param {PointerEvent} event
+   * @param {HTMLElement} target
+   * @protected
+   */
+  static async _onEffectToChat(event, target) {
+    const effect = this._getEmbeddedDocument(target, this.actor);
+    if (effect) await VagabondChatCard.statusEffect(this.actor, effect);
+  }
+
+  /**
+   * Kebab button → open the effect context menu below the button.
+   * @param {PointerEvent} event
+   * @param {HTMLElement} target
+   * @protected
+   */
+  static _onEffectMenu(event, target) {
+    const rect = target.getBoundingClientRect();
+    this._openEffectMenu(target, { x: rect.left, y: rect.bottom + 2 });
+  }
+
+  /**
+   * Build and show the effect context menu (Enable/Disable, Edit, Send to Chat, Delete).
+   * @param {HTMLElement} element  Any element inside the effect row
+   * @param {{x: number, y: number}} position  Screen coordinates
+   * @protected
+   */
+  _openEffectMenu(element, position) {
+    const effect = this.constructor._getEmbeddedDocument(element, this.actor);
+    if (!effect) return;
+
+    const editable = this.isEditable;
+    const status = isStatusEffect(effect);
+    // Suppressed effects (unequipped / on-use / expired) can't be flipped from here
+    const suppressed = !!effect.system?.suppressionReason || !!effect.duration?.expired;
+    const enabled = !effect.disabled;
+
+    const items = [];
+    items.push({
+      label: status && enabled
+        ? game.i18n.localize('VAGABOND.ContextMenu.RemoveStatus')
+        : game.i18n.localize(enabled ? 'VAGABOND.Effect.Disable' : 'VAGABOND.Effect.Enable'),
+      icon: status && enabled ? 'fas fa-times' : `fas fa-toggle-${enabled ? 'off' : 'on'}`,
+      enabled: editable && !suppressed,
+      action: () => this.constructor._onToggleEffect.call(this, null, element),
+    });
+    items.push({
+      label: game.i18n.localize('VAGABOND.ContextMenu.Edit'),
+      icon: 'fas fa-pen-to-square',
+      action: () => effect.sheet.render(true),
+    });
+    items.push({
+      label: game.i18n.localize('VAGABOND.ContextMenu.SendToChat'),
+      icon: 'fas fa-comment',
+      action: () => VagabondChatCard.statusEffect(this.actor, effect),
+    });
+    items.push({ divider: true });
+    // Item-owned effects: Delete is greyed out and names the owner (disable still works)
+    const owner = effect.parent?.documentName === 'Item' ? effect.parent : null;
+    items.push({
+      label: owner
+        ? game.i18n.format('VAGABOND.Effect.DeleteLockedMenu', { item: owner.name })
+        : game.i18n.localize('VAGABOND.ContextMenu.Delete'),
+      icon: 'fas fa-trash',
+      enabled: editable && !owner,
+      dim: !!owner,
+      action: () => this.constructor._onDeleteEffect.call(this, null, element),
+    });
+
+    ContextMenuHelper.closeAll();
+    // `inventory-context-menu` carries the menu chrome (background, border, z-index)
+    ContextMenuHelper.create({ position, items, className: 'inventory-context-menu' });
+  }
+
+  /**
+   * Right-click anywhere on an effect row opens the same menu as the kebab button.
+   * Bound once on the window root (survives partial part re-renders).
+   * @override
+   */
+  _onFirstRender(context, options) {
+    super._onFirstRender?.(context, options);
+    this.element.addEventListener('contextmenu', (event) => {
+      const row = event.target.closest?.('.fx-row');
+      if (!row || event.target.closest('input, textarea, select, a[href]')) return;
+      event.preventDefault();
+      event.stopPropagation();
+      this._openEffectMenu(row, { x: event.clientX, y: event.clientY });
+    });
+  }
+
+  /**
+   * Instance-side alias of the static resolver. AppV2 actions run with `this` = the sheet
+   * instance, so `this._getEmbeddedDocument(...)` in static action handlers needs this.
+   * @param {HTMLElement} target
+   * @param {Actor} [actor]
+   * @returns {Document|null}
+   * @protected
+   */
+  _getEmbeddedDocument(target, actor = this.actor) {
+    return this.constructor._getEmbeddedDocument(target, actor);
   }
 
   /**

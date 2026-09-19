@@ -74,6 +74,70 @@
       color: inherit;
     }
 
+    // Unavailable entry (ContextMenuHelper `dim: true`)
+    &.is-dim {
+      opacity: 0.4;
+      cursor: not-allowed;
+
+      &:hover {
+        background: transparent;
+      }
+    }
+
+    // Non-interactive section label (ContextMenuHelper `header: true`)
+    &.context-menu-header {
+      cursor: default;
+      font-size: 12px;
+      opacity: 0.7;
+
+      &:hover {
+        background: transparent;
+      }
+    }
+
+    // "Label  (o )" row (ContextMenuHelper `toggle` entry)
+    &.context-menu-toggle-row {
+      > span:not(.context-menu-switch) { flex: 1; }
+
+      &.is-busy { pointer-events: none; }
+    }
+
+    // 12×8 switch drawn only in the menu's own colors: outline + knob = text color, filled when on
+    .context-menu-switch {
+      position: relative;
+      flex: 0 0 auto;
+      box-sizing: border-box;
+      width: 12px;
+      height: 8px;
+      margin-left: 12px;
+      border: 1px solid currentColor;
+      border-radius: 999px;
+      opacity: 0.55;
+      transition: background 0.15s ease, opacity 0.15s ease;
+
+      &::after {
+        content: '';
+        position: absolute;
+        top: 1px;
+        left: 1px;
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        background: currentColor;
+        transition: transform 0.15s ease, background 0.15s ease;
+      }
+
+      &.is-on {
+        opacity: 1;
+        background: currentColor;
+
+        &::after {
+          background: $c-dark;
+          transform: translateX(4px);
+        }
+      }
+    }
+
     &.danger {
       color: $c-red;
 
