@@ -26,7 +26,8 @@ export function getHudDisplayPrefs() {
 /**
  * True when an actor (or token) is an Item Piles pile. Piles are `character`
  * actors under the Vagabond integration, so HUDs must skip them explicitly.
- * Safe when the Item Piles module is absent or not yet ready (flag fallback).
+ * Item Piles is an optional module: safe when it is absent, inactive, or not yet
+ * ready (falls back to a raw flag read, never `getFlag`).
  * @param {Actor|Token|TokenDocument|null} actorOrToken
  * @returns {boolean}
  */
@@ -35,7 +36,8 @@ export function isItemPile(actorOrToken) {
   if (!actor) return false;
   const api = game.itempiles?.API;
   if (api?.isValidItemPile) return !!api.isValidItemPile(actor);
-  return !!actor.getFlag?.('item-piles', 'data')?.enabled;
+  // Read raw flags: getFlag throws when the module's scope is inactive/absent.
+  return !!actor.flags?.['item-piles']?.data?.enabled;
 }
 
 /**
