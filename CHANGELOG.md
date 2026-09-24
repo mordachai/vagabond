@@ -1,5 +1,15 @@
 # Changelog
 
+## v5.41.0
+- **Armor values are explicit:** each armor now has its own Armor Rating, Might requirement, Slots and Reflex Penalty (no more Light/Medium/Heavy type). Existing armor converts automatically.
+- **One set of armor:** equipping armor takes off any other worn armor; only that one counts.
+- **Might requirement:** wearing armor above your Might applies Restrained automatically, removed when fixed.
+- **Materials (Smithy table):** new Bronze, Gold, Iron, Steel and Wood ("Common" becomes Iron). Orichalcum +1 Slot and weapon die one size up; Mythral weapon die one size down; Wood halves the price. Slot changes also move armor's Reflex penalty.
+- **Weapon sheet:** locked view shows final damage (after material) with damage-type icons, only the damage rows the grip uses, and properties as a full-width footer. Edit view shows the final damage beside each input.
+- **Weapon skill:** multi-skill weapons start on the character's best skill (lowest difficulty) when received; change it from a dropdown in the locked sheet.
+- Prices from materials now show in the largest coins (70g, not 50g 2000s).
+- Compendium: Light Armor is 1 Slot; Maul image; Rapier/Shortsword two-hand damage.
+
 ## v5.40.0
 - **Active Effects list overhaul:** character, NPC, construct and party sheets now show effects as an Active / Inactive list. Each row has the effect icon, name, origin pill, duration chip, a small on/off switch, send-to-chat and a ⋮ menu (right-click a row opens the same menu). "+" in each section header adds an effect.
 - **Effect descriptions:** click an effect's name to expand its description below the row. Effects on items (perks, traits, relics, weapons…) now use their item's icon and description when they have none of their own, in the list, the accordion and the chat card. New effects created on an item are pre-filled from it.
