@@ -1,5 +1,6 @@
 import { VagabondChatHelper } from '../helpers/chat-helper.mjs';
 import { effectModeToChangeType } from '../helpers/effects.mjs';
+import { EquipmentHelper } from '../helpers/equipment-helper.mjs';
 
 /**
  * Extend the basic Item with some very simple modifications.
@@ -487,6 +488,18 @@ export class VagabondItem extends Item {
     }
 
     return super.updateSource(changes, options);
+  }
+
+  /** @override */
+  async _preCreate(data, options, user) {
+    if ((await super._preCreate(data, options, user)) === false) return false;
+    // A weapon entering a character's inventory starts on the allowed attack
+    // skill with the lowest difficulty for that character. After that the
+    // player owns the choice (locked-sheet dropdown) — never recomputed.
+    if (this.parent?.type === 'character' && EquipmentHelper.isWeapon(this)
+        && EquipmentHelper.attackSkillOptions(this).length > 1) {
+      this.updateSource({ 'flags.vagabond.preferredSkill': EquipmentHelper.bestAttackSkill(this, this.parent) });
+    }
   }
 
   /**

@@ -10,7 +10,7 @@ Use this document to prompt an AI assistant to generate relic items for the Vaga
 - **Have lore text** — a dedicated `lore` field for historical/mystical background
 - **Often require binding** — `requiresBound: true` means the character must bind it before use
 - **May have Active Effects** — relics frequently have attached Active Effects for their magical properties
-- **No armor stats** — relics don't use `armorType` or `immunities` (ignored)
+- **No armor stats** — relics don't use armor fields (`armorRating`, `mightRequirement`, `reflexPenalty`) or `immunities` (ignored)
 
 ---
 
@@ -51,7 +51,6 @@ Use this document to prompt an AI assistant to generate relic items for the Vaga
     "damageTwoHands": "d8",
     "damageTypeTwoHands": "-",
     "equipmentState": "unequipped",
-    "armorType": "light",
     "immunities": [],
     "gearCategory": "",
     "isSupply": false,
@@ -138,7 +137,7 @@ Relics frequently use Active Effects for their mechanical bonuses. These are att
     "damageOneHand": "d6", "damageTypeOneHand": "-",
     "damageTwoHands": "d8", "damageTypeTwoHands": "-",
     "equipmentState": "unequipped",
-    "armorType": "light", "immunities": [],
+    "immunities": [],
     "gearCategory": "", "isSupply": false, "isBeverage": false,
     "isConsumable": false, "linkedConsumable": "",
     "alchemicalType": "concoction",
@@ -168,7 +167,7 @@ Relics frequently use Active Effects for their mechanical bonuses. These are att
     "damageOneHand": "3d6", "damageTypeOneHand": "healing",
     "damageTwoHands": "3d6", "damageTypeTwoHands": "healing",
     "equipmentState": "unequipped",
-    "armorType": "light", "immunities": [],
+    "immunities": [],
     "gearCategory": "", "isSupply": false, "isBeverage": false,
     "isConsumable": true, "linkedConsumable": "",
     "alchemicalType": "concoction",

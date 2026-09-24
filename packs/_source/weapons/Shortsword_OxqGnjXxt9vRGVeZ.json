@@ -24,7 +24,7 @@
     "range": "close",
     "grip": "1H",
     "damageOneHand": "d6",
-    "damageTwoHands": "d8",
+    "damageTwoHands": "d6",
     "equipmentState": "unequipped",
     "armorType": "light",
     "immunities": [],

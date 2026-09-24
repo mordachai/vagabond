@@ -21,21 +21,27 @@ Then paste the output JSON into Foundry.
 | `weaponSkill` | `melee`, `brawl`, `finesse`, `ranged` (also any other skill/save key if homebrew) |
 | `range` | `close`, `near`, `far` |
 | `grip` | `1H` (one-handed), `2H` (two-handed), `F` (fist — unarmed), `V` (versatile) |
-| `metal` | `none`, `common`, `adamant`, `coldIron`, `silver`, `mythral`, `orichalcum` |
+| `metal` | `none`, `adamant`, `bronze`, `coldIron`, `gold`, `iron`, `silver`, `mythral`, `orichalcum`, `steel`, `wood` |
 | `properties` | `Brawl`, `Brutal`, `Cleave`, `Entangle`, `Finesse`, `Keen`, `Long`, `Near`, `Ranged`, `Shield`, `Thrown` |
 | `damageType` (one-hand/two-hand) | `blunt`, `piercing`, `slashing`, `physical`, `fire`, `acid`, `shock`, `poison`, `cold`, `necrotic`, `psychic`, `magical`, `-` |
 | `equipmentState` | `unequipped`, `oneHand`, `twoHands` |
 
-### Metal Effects
-| Metal | Cost ×| Effect |
+### Material Effects (`metal` field)
+Rules live in `CONFIG.VAGABOND.metalData`; damage die sizes step along `CONFIG.VAGABOND.weaponDieSteps` (d4–d12, clamped).
+
+| Material | Cost × | Effect |
 |-------|--------|--------|
 | `none` | — | No special material |
-| `common` | ×1 | Standard material |
-| `adamant` | ×50 | +1 damage, +1 inventory slot |
-| `coldIron` | ×20 | Weakness trigger vs Fae |
-| `silver` | ×10 | Blesses against the accursed |
-| `mythral` | ×50 | −1 inventory slot (min 1) |
-| `orichalcum` | ×50 | Armor reduces Cast damage |
+| `adamant` | ×50 | +1 Slot, +1 damage |
+| `bronze` | — | — |
+| `coldIron` | ×20 | Fae are Weak to its damage |
+| `gold` | ×100 | Damage die is a countdown die (hidden feature, off) |
+| `iron` | — | — (replaces legacy `common`) |
+| `silver` | ×10 | Hellspawn, Lycanthropes, Undead are Weak to its damage |
+| `mythral` | ×50 | −1 Slot (min 1), damage die one size smaller |
+| `orichalcum` | ×50 | +1 Slot, damage die one size larger |
+| `steel` | — | — |
+| `wood` | ÷2 | Damage die is a countdown die (hidden feature, off) |
 
 ### Weapon Properties
 | Property | Effect |
@@ -77,7 +83,7 @@ Then paste the output JSON into Foundry.
     "baseSlots": 2,
     "gridPosition": 0,
     "containerId": null,
-    "metal": "common",
+    "metal": "iron",
     "damageType": "-",
     "damageAmount": "",
     "canExplode": false,
@@ -91,7 +97,6 @@ Then paste the output JSON into Foundry.
     "damageTwoHands": "d10",
     "damageTypeTwoHands": "slashing",
     "equipmentState": "unequipped",
-    "armorType": "light",
     "immunities": [],
     "gearCategory": "",
     "isSupply": false,
@@ -188,7 +193,7 @@ Then paste the output JSON into Foundry.
     "damageTwoHands": "d6",
     "damageTypeTwoHands": "piercing",
     "equipmentState": "unequipped",
-    "armorType": "light", "immunities": [],
+    "immunities": [],
     "gearCategory": "", "isSupply": false, "isBeverage": false,
     "isConsumable": false, "linkedConsumable": "",
     "alchemicalType": "concoction", "lore": "",
@@ -222,7 +227,7 @@ Then paste the output JSON into Foundry.
     "damageTwoHands": "d6",
     "damageTypeTwoHands": "piercing",
     "equipmentState": "unequipped",
-    "armorType": "light", "immunities": [],
+    "immunities": [],
     "gearCategory": "", "isSupply": false, "isBeverage": false,
     "isConsumable": false, "linkedConsumable": "",
     "alchemicalType": "concoction", "lore": "",
@@ -249,7 +254,7 @@ Weapon details:
 - Damage (one-hand): [formula] [damage type]
 - Damage (two-hand, for Versatile only): [formula] [damage type]
 - Properties: [list from: Brawl, Brutal, Cleave, Entangle, Finesse, Keen, Long, Near, Ranged, Shield, Thrown]
-- Metal: [none / common / adamant / coldIron / silver / mythral / orichalcum]
+- Material: [none / adamant / bronze / coldIron / gold / iron / silver / mythral / orichalcum / steel / wood]
 - Cost: [X gold, Y silver, Z copper]
 - Slots: [integer]
 - Exploding dice: [yes/no; if yes, which values]

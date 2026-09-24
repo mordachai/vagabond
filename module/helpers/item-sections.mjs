@@ -112,7 +112,7 @@ export function buildWeaponStats(item) {
         <span class="stat-name">${game.i18n.localize('VAGABOND.Item.Weapon.FIELDS.weaponSkill.label')}</span>
         <span class="stat-value">${weaponSkill || '—'}</span>
       </div>
-      ${item.system.metal && item.system.metal !== 'common' ? `
+      ${item.system.metal && !['none', 'iron'].includes(item.system.metal) ? `
       <div class="stat-row">
         <span class="stat-name">${game.i18n.localize('VAGABOND.Item.Weapon.FIELDS.metal.label')}</span>
         <span class="stat-value">${metal}</span>
@@ -143,19 +143,22 @@ export function buildWeaponStats(item) {
  */
 export function buildArmorStats(item) {
   const L = (k) => game.i18n.localize(`VAGABOND.UI.Labels.${k}`);
-  const armorType = localizeConfigValue(CONFIG.VAGABOND.armorTypes, item.system.armorType);
   const metal = localizeConfigValue(CONFIG.VAGABOND.metalTypes, item.system.metal);
   return `
     <div class="mini-sheet-stats">
       <div class="stat-row">
         <span class="stat-name">${game.i18n.localize('VAGABOND.Item.Armor.FIELDS.rating.label')}</span>
-        <span class="stat-value">${item.system.finalRating || item.system.rating || '—'}</span>
+        <span class="stat-value">${item.system.finalRating ?? item.system.armorRating ?? '—'}</span>
       </div>
       <div class="stat-row">
-        <span class="stat-name">${L('TypeLabel')}</span>
-        <span class="stat-value">${armorType || '—'}</span>
+        <span class="stat-name">${game.i18n.localize('VAGABOND.Item.Armor.FIELDS.might.label')}</span>
+        <span class="stat-value">${item.system.mightRequirement ?? '—'}</span>
       </div>
-      ${item.system.metal && item.system.metal !== 'common' ? `
+      <div class="stat-row">
+        <span class="stat-name">${game.i18n.localize('VAGABOND.Item.Armor.FIELDS.reflexPenalty.label')}</span>
+        <span class="stat-value">${item.system.finalReflexPenalty ?? item.system.reflexPenalty ?? 0}</span>
+      </div>
+      ${item.system.metal && !['none', 'iron'].includes(item.system.metal) ? `
       <div class="stat-row">
         <span class="stat-name">${game.i18n.localize('VAGABOND.Item.Armor.FIELDS.metal.label')}</span>
         <span class="stat-value">${metal}</span>

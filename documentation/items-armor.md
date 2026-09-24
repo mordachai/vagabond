@@ -8,7 +8,7 @@ Use this document to prompt an AI assistant to generate armor items for the Vaga
 
 Tell the AI:
 
-> "Create a Vagabond armor item named [NAME]. It is [light/medium/heavy] armor made of [metal]. It costs [price]. Write a short description."
+> "Create a Vagabond armor item named [NAME]. It has Armor Rating [N], Might requirement [N], occupies [N] Slots, made of [metal]. It costs [price]. Write a short description."
 
 ---
 
@@ -16,27 +16,39 @@ Tell the AI:
 
 | Field | Valid Options |
 |-------|--------------|
-| `armorType` | `light` (Rating 1, Might 3 req, 2 slots), `medium` (Rating 2, Might 4 req, 2 slots), `heavy` (Rating 3, Might 5 req, 3 slots) |
-| `metal` | `none`, `common`, `adamant`, `coldIron`, `silver`, `mythral`, `orichalcum` |
+| `armorRating` | integer ≥ 0 — Armor granted while worn (before metal) |
+| `mightRequirement` | integer ≥ 0 — wearer is Restrained while Might is below it |
+| `reflexPenalty` | integer ≥ 0 — penalty to Reflex Saves while worn (RAW: equal to Slots) |
+| `metal` | `none`, `adamant`, `bronze`, `coldIron`, `gold`, `iron`, `silver`, `mythral`, `orichalcum`, `steel`, `wood` |
 | `immunities` | Array of damage type strings: `acid`, `fire`, `shock`, `poison`, `cold`, `blunt`, `piercing`, `slashing`, `physical`, `necrotic`, `psychic`, `magical` |
 
-### Armor Stats by Type
-| Type | Rating | Might Req | Base Slots |
-|------|--------|-----------|------------|
-| `light` | 1 | 3 | 2 |
-| `medium` | 2 | 4 | 2 |
-| `heavy` | 3 | 5 | 3 |
+### Reference Values (RAW Worn Armor table)
+| Armor | `armorRating` | `mightRequirement` | `baseSlots` | `reflexPenalty` | Value |
+|------|--------|-----------|------------|---------|-------|
+| Light | 1 | 2 | 1 | 1 | 50s |
+| Medium | 2 | 4 | 2 | 2 | 1g |
+| Heavy | 3 | 6 | 3 | 3 | 2g |
 
-### Metal Effects on Armor
-| Metal | Cost × | Effect |
+There is no armor "type" field — every value is explicit per item. Only one set of worn Armor counts; equipping armor unequips any other worn armor.
+
+### Material Effects on Armor (`metal` field)
+Rules live in `CONFIG.VAGABOND.metalData`.
+
+| Material | Cost × | Effect |
 |-------|--------|--------|
 | `none` | — | No material |
-| `common` | ×1 | Standard |
-| `adamant` | ×50 | +1 Armor Rating, +1 slot |
-| `coldIron` | ×20 | Weakness trigger vs Fae |
-| `silver` | ×10 | Blesses against the accursed |
-| `mythral` | ×50 | −1 slot (min 1) |
-| `orichalcum` | ×50 | Reduces Cast damage received |
+| `adamant` | ×50 | +1 Slot, +1 Armor Rating |
+| `bronze` | — | — |
+| `coldIron` | ×20 | Fae are Weak to its damage |
+| `gold` | ×100 | Degrades: Armor −1 after taking damage, breaks at 0 (hidden feature, off) |
+| `iron` | — | — (replaces legacy `common`) |
+| `silver` | ×10 | Hellspawn, Lycanthropes, Undead are Weak to its damage |
+| `mythral` | ×50 | −1 Slot (min 1) |
+| `orichalcum` | ×50 | +1 Slot |
+| `steel` | — | — |
+| `wood` | ÷2 | Degrades like Gold (hidden feature, off) |
+
+Slot changes also shift the Reflex penalty (`finalReflexPenalty`).
 
 ---
 
@@ -63,7 +75,7 @@ Tell the AI:
     "baseSlots": 2,
     "gridPosition": 0,
     "containerId": null,
-    "metal": "common",
+    "metal": "iron",
     "damageType": "-",
     "damageAmount": "",
     "canExplode": false,
@@ -77,7 +89,9 @@ Tell the AI:
     "damageTwoHands": "d8",
     "damageTypeTwoHands": "-",
     "equipmentState": "unequipped",
-    "armorType": "medium",
+    "armorRating": 2,
+    "mightRequirement": 4,
+    "reflexPenalty": 2,
     "immunities": [],
     "gearCategory": "",
     "isSupply": false,
@@ -120,12 +134,14 @@ Tell the AI:
 | `baseCost.gold/silver/copper` | integer ≥ 0 | Price before metal multiplier |
 | `baseSlots` | integer | Inventory slots (auto-adjusted by metal) |
 | `metal` | string | Material type |
-| `armorType` | string | `light`, `medium`, or `heavy` |
+| `armorRating` | integer | Armor Rating (Adamant adds +1 → derived `finalRating`) |
+| `mightRequirement` | integer | Might needed to avoid Restrained while worn |
+| `reflexPenalty` | integer | Reflex Save penalty; metal slot modifiers apply on top → derived `finalReflexPenalty` |
 | `immunities` | string[] | Damage types this armor grants immunity to |
 | `requiresBound` | boolean | Must bind before use |
 | `bound` | boolean | Currently bound |
 
-> **Note:** The system automatically calculates `rating` (1/2/3) and `might` requirement (3/4/5) from `armorType`. Do not set these — they are derived values.
+> **Note:** `finalRating`, `slots` and `finalReflexPenalty` are derived (base value + metal modifier). `rating` / `might` are read-only aliases of `armorRating` / `mightRequirement`. Legacy items with `armorType` are migrated on load.
 
 ---
 
@@ -143,7 +159,7 @@ Tell the AI:
     "locked": false, "equipped": false, "quantity": 1,
     "baseCost": { "gold": 1, "silver": 0, "copper": 0 },
     "requiresBound": false, "bound": false,
-    "baseSlots": 2, "gridPosition": 0, "containerId": null,
+    "baseSlots": 1, "gridPosition": 0, "containerId": null,
     "metal": "none",
     "damageType": "-", "damageAmount": "", "canExplode": false, "explodeValues": "",
     "properties": [],
@@ -151,7 +167,7 @@ Tell the AI:
     "damageOneHand": "d6", "damageTypeOneHand": "-",
     "damageTwoHands": "d8", "damageTypeTwoHands": "-",
     "equipmentState": "unequipped",
-    "armorType": "light",
+    "armorRating": 1, "mightRequirement": 2, "reflexPenalty": 1,
     "immunities": [],
     "gearCategory": "", "isSupply": false, "isBeverage": false,
     "isConsumable": false, "linkedConsumable": "",
@@ -181,7 +197,7 @@ Tell the AI:
     "damageOneHand": "d6", "damageTypeOneHand": "-",
     "damageTwoHands": "d8", "damageTypeTwoHands": "-",
     "equipmentState": "unequipped",
-    "armorType": "heavy",
+    "armorRating": 3, "mightRequirement": 6, "reflexPenalty": 3,
     "immunities": [],
     "gearCategory": "", "isSupply": false, "isBeverage": false,
     "isConsumable": false, "linkedConsumable": "",
@@ -203,8 +219,10 @@ Output a valid JSON object matching the structure below exactly. Only change the
 Armor details:
 - Name: [NAME]
 - Description: [LORE / RULES TEXT — HTML OK]
-- Armor Type: [light / medium / heavy]
-- Metal: [none / common / adamant / coldIron / silver / mythral / orichalcum]
+- Armor Rating: [N]
+- Might Requirement: [N]
+- Slots: [N] (Reflex Penalty defaults to the same number)
+- Material: [none / adamant / bronze / coldIron / gold / iron / silver / mythral / orichalcum / steel / wood]
 - Cost: [X gold, Y silver, Z copper]
 - Immunities: [list of damage types this armor resists, or empty]
 - Requires Binding: [yes / no]

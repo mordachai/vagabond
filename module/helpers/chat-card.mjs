@@ -1371,9 +1371,9 @@ export class VagabondChatCard {
         stats.push({ label: i18n('VAGABOND.UI.Labels.Skill'), value: skillKey ? i18n(skillKey) : sys.weaponSkill });
       }
     } else if (equipType === 'armor') {
-      if (sys.armorTypeDisplay) stats.push({ label: i18n('VAGABOND.UI.Labels.TypeLabel'), value: sys.armorTypeDisplay });
       if (sys.finalRating) stats.push({ label: i18n('VAGABOND.Item.Armor.FIELDS.rating.label'), value: sys.finalRating });
-      if (sys.might) stats.push({ label: i18n('VAGABOND.Item.Armor.FIELDS.might.label'), value: sys.might });
+      if (sys.mightRequirement) stats.push({ label: i18n('VAGABOND.Item.Armor.FIELDS.might.label'), value: sys.mightRequirement });
+      if (sys.finalReflexPenalty) stats.push({ label: i18n('VAGABOND.Item.Armor.FIELDS.reflexPenalty.label'), value: sys.finalReflexPenalty });
       if (sys.immunities && sys.immunities.length > 0) {
         const labels = sys.immunities.map(id => this._getDamageTypeLabel(id));
         stats.push({ label: i18n('VAGABOND.Status.DamageImmunities'), value: labels.join(', ') });
@@ -1396,7 +1396,7 @@ export class VagabondChatCard {
     }
 
     // Universal equipment stats
-    if (sys.metalDisplay && sys.metal !== 'none' && sys.metal !== 'common') {
+    if (sys.metalDisplay && sys.metal !== 'none' && sys.metal !== 'iron') {
       stats.push({ label: i18n('VAGABOND.Item.Weapon.FIELDS.metal.label'), value: sys.metalDisplay });
     }
     if (sys.costDisplay) stats.push({ label: i18n('VAGABOND.UI.Labels.Cost'), value: sys.costDisplay });

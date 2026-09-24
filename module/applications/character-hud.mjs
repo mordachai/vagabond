@@ -11,6 +11,7 @@ import { bindHudTooltips } from '../helpers/hud-tooltip.mjs';
 import { buildEffectMenuItems } from '../helpers/effects.mjs';
 import { setupDragReorder } from '../helpers/drag-reorder.mjs';
 import * as ItemSections from '../helpers/item-sections.mjs';
+import { EquipmentHelper } from '../helpers/equipment-helper.mjs';
 
 /** Inventory tab groupings, in display order, keyed by equipmentType. */
 const INV_GROUPS = [
@@ -353,8 +354,7 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
     context.fatigue = { value: sys.fatigue ?? 0, max: sys.fatigueMax ?? 5 };
     context.speed = sys.speed?.base ?? 0;
     context.armor = sys.armor ?? 0;
-    const equippedArmorItem = this.actor.items.find(i =>
-      ((i.type === 'armor') || (i.type === 'equipment' && i.system.equipmentType === 'armor')) && i.system.equipped);
+    const equippedArmorItem = EquipmentHelper.getWornArmor(this.actor);
     context.armorName = equippedArmorItem ? equippedArmorItem.name : '';
     context.favorHinder = sys.favorHinder ?? 'none';
     context.studiedDice = sys.studiedDice ?? 0;

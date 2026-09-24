@@ -14,7 +14,7 @@
       "copper": 0
     },
     "baseSlots": 2,
-    "metal": "common",
+    "metal": "iron",
     "damageType": "-",
     "damageAmount": "",
     "properties": [],
@@ -24,11 +24,13 @@
     "damageOneHand": "d6",
     "damageTwoHands": "d8",
     "equipmentState": "unequipped",
-    "armorType": "medium",
     "immunities": [],
     "gearCategory": "",
     "alchemicalType": "concoction",
-    "lore": ""
+    "lore": "",
+    "armorRating": 2,
+    "mightRequirement": 4,
+    "reflexPenalty": 2
   },
   "effects": [],
   "folder": null,

@@ -367,13 +367,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         filled: i < focusedSpellIds.length
       }));
 
-      // Prepare equipped armor type for header display
-      const equippedArmor = this.actor.items.find(item => {
-        const isArmor = (item.type === 'armor') ||
-                       (item.type === 'equipment' && item.system.equipmentType === 'armor');
-        return isArmor && item.system.equipped;
-      });
-      context.equippedArmorType = equippedArmor ? equippedArmor.system.armorTypeDisplay : '-';
+      // Worn armor name for header display
+      const equippedArmor = EquipmentHelper.getWornArmor(this.actor);
       context.equippedArmorName = equippedArmor ? equippedArmor.name : '';
 
       // Stats layout class for the stats-grid element

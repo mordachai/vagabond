@@ -82,7 +82,7 @@ Any skill key or save key above, plus `melee`, `brawl`, `finesse`, `ranged` most
 `1H`, `2H`, `F` (fist), `V` (versatile)
 
 ### Metal
-`none`, `common`, `adamant`, `coldIron`, `silver`, `mythral`, `orichalcum`
+`none`, `adamant`, `bronze`, `coldIron`, `gold`, `iron`, `silver`, `mythral`, `orichalcum`, `steel`, `wood`
 
 ### Weapon Properties
 `Brawl`, `Brutal`, `Cleave`, `Entangle`, `Finesse`, `Keen`, `Long`, `Near`, `Ranged`, `Shield`, `Thrown`

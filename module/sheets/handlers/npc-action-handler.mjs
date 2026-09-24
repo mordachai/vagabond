@@ -322,6 +322,8 @@ export class NPCActionHandler {
       damageFormula = weapon.system.damageOneHand || '';
       damageType    = weapon.system.damageTypeOneHand || '-';
     }
+    // Material effects (die size shift, Adamant +1) — same as the weapon's own attack
+    if (damageFormula) damageFormula = weapon.system.materialDamageFormula?.(damageFormula) ?? damageFormula;
     // Fallback to generic damageAmount
     if (!damageFormula) damageFormula = weapon.system.damageAmount || '';
     if (!damageType || damageType === '-') damageType = weapon.system.damageType || '-';

@@ -755,8 +755,99 @@
 .locked-two-column {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 20px;
-  margin-top: 10px;
+  gap: 14px;
+  margin-top: 6px;
+}
+
+// Compact key/value rows (the dedicated _equipment-locked partial is disabled,
+// so these otherwise render as loose unstyled blocks).
+.equipment-locked-view {
+  .locked-stats-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  .locked-stat {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 2px 0;
+    border-bottom: 1px dotted rgba(128, 128, 128, 0.25);
+
+    .stat-label {
+      flex: 0 0 auto;
+      color: $c-text-2;
+    }
+
+    .stat-value {
+      min-width: 0;
+      text-align: right;
+      font-weight: bold;
+    }
+  }
+
+  // Multi-skill weapon: owner's attack-skill pick
+  .locked-skill-select {
+    width: auto;
+    height: auto;
+    line-height: normal;
+    padding: 0 4px;
+    font-weight: bold;
+  }
+
+  // Weapon damage: [base → ] final + damage-type icon (tooltip = type name)
+  .locked-damage {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+
+    .locked-dmg-base {
+      opacity: 0.55;
+      text-decoration: line-through;
+      font-weight: normal;
+    }
+
+    .locked-dmg-arrow {
+      font-size: 0.7em;
+      opacity: 0.6;
+    }
+
+    .locked-dmg-icon {
+      margin-left: 2px;
+      cursor: help;
+    }
+  }
+
+  .locked-properties-footer {
+    margin-top: 4px;
+
+    .property-list-locked {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+  }
+}
+
+// Edit mode: damage input + read-only material-adjusted final
+.damage-amount-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  input {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .damage-final {
+    flex: 0 0 auto;
+    color: $c-text-2;
+    font-style: italic;
+    cursor: help;
+  }
 }
 
 .locked-column-left,

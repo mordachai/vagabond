@@ -248,10 +248,15 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     const { EquipmentHelper } = globalThis.vagabond.utils;
     if (EquipmentHelper.isWeapon(this.item)) {
       const skillLabel = (k) => game.i18n.localize(CONFIG.VAGABOND.weaponSkills?.[k] ?? k);
-      const skillOptions = EquipmentHelper.attackSkillOptions(this.item);
+      const current = EquipmentHelper.attackSkillFor(this.item);
+      const options = EquipmentHelper.attackSkillOptions(this.item);
       context.attackSkill = {
-        label: skillLabel(EquipmentHelper.attackSkillFor(this.item)),
-        optionsDisplay: skillOptions.length > 1 ? skillOptions.map(skillLabel).join(', ') : '',
+        label: skillLabel(current),
+        // Multi-skill weapons: the owner picks the skill attacks roll with
+        // (flags.vagabond.preferredSkill) from a dropdown in the locked view
+        choices: options.length > 1 && this.item.isOwner
+          ? options.map((k) => ({ key: k, label: skillLabel(k), selected: k === current }))
+          : null,
       };
     }
 
@@ -616,11 +621,11 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
 
                 } else if (sys.equipmentType === 'armor') {
                   // Armor: armor rating, might requirement, cost
-                  const rating = sys.rating || 0;
-                  const might = sys.might || 0;
+                  const rating = sys.finalRating ?? sys.armorRating ?? 0;
+                  const might = sys.mightRequirement ?? 0;
                   const costDisplay = sys.costDisplay || `0${game.i18n.localize('VAGABOND.Currency.Gold.abbr')}`;
                   stats = `Armor: ${rating} • Might: ${might} • ${costDisplay}`;
-                  description = sys.armorType ? `${sys.armorType.titleCase()} Armor` : 'Armor';
+                  description = 'Armor';
 
                 } else if (sys.equipmentType === 'alchemical') {
                   // Alchemical: damage, type, cost
@@ -1160,7 +1165,9 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
         try {
           // Allow a render for fields whose changes affect calculated display values.
           const needsRender = name === 'name' || name === 'system.metal' || name === 'system.usesDiceScaling'
-            || name === 'system.weaponSkill'; // Other Skills list excludes the default
+            || name === 'system.weaponSkill' // Other Skills list excludes the default
+            // Armor "Final" read-outs derive from these
+            || name === 'system.armorRating' || name === 'system.reflexPenalty' || name === 'system.baseSlots';
           const options = needsRender ? {} : { render: false };
           await this.document.update({ [name]: value }, options);
         } catch (err) {

@@ -284,11 +284,6 @@
                 {{!-- ARMOR --}}
                 {{#if (eq selectedItem.displayStats.subType "armor")}}
                     <h3 class="preview-section-header">{{localize "VAGABOND.UI.Labels.ArmorDetails"}}</h3>
-                    {{#if selectedItem.displayStats.armorTypeDescription}}
-                        <div class="armor-type-description">
-                            <em>{{selectedItem.displayStats.armorTypeDescription}}</em>
-                        </div>
-                    {{/if}}
                     <div class="preview-details-grid">
                         {{#if selectedItem.displayStats.armorRating}}
                             <div><strong>{{localize "VAGABOND.Item.Armor.FIELDS.rating.label"}}:</strong> {{selectedItem.displayStats.armorRating}}</div>
@@ -296,8 +291,8 @@
                         {{#if selectedItem.displayStats.mightRequirement}}
                             <div><strong>{{localize "VAGABOND.Item.Armor.FIELDS.might.label"}}:</strong> {{selectedItem.displayStats.mightRequirement}}</div>
                         {{/if}}
-                        {{#if selectedItem.displayStats.armorType}}
-                            <div><strong>{{localize "VAGABOND.UI.Labels.TypeLabel"}}:</strong> {{selectedItem.displayStats.armorType}}</div>
+                        {{#if selectedItem.displayStats.reflexPenalty}}
+                            <div><strong>{{localize "VAGABOND.Item.Armor.FIELDS.reflexPenalty.label"}}:</strong> {{selectedItem.displayStats.reflexPenalty}}</div>
                         {{/if}}
                         <div><strong>{{localize "VAGABOND.UI.Labels.Slots"}}:</strong> {{selectedItem.displayStats.slots}}</div>
                         <div><strong>{{localize "VAGABOND.UI.Labels.Cost"}}:</strong>

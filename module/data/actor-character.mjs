@@ -1143,25 +1143,19 @@ export default class VagabondCharacter extends VagabondActorBase {
       bonus:  speedBonus,
     };
 
-    // Armor Calculation
-    let totalArmor = 0;
-    let totalArmorSlots = 0;
-    if (this.parent?.items) {
-      for (const item of this.parent.items) {
-        const isArmor = (item.type === 'armor') ||
-                       (item.type === 'equipment' && item.system.equipmentType === 'armor');
-        if (isArmor && item.system.equipped) {
-          totalArmor += item.system.finalRating || 0;
-          totalArmorSlots += item.system.slots || 0;
-        }
-      }
-    }
+    // Armor Calculation — only one set of worn Armor counts (RAW)
+    const wornArmor = EquipmentHelper.getWornArmor(this.parent);
     // Evaluate armor bonus inline (StringFields coerce numbers back to strings)
     const armorBonus = this._evaluateFormulaField(this.armorBonus, rollData);
-    this.armor = totalArmor + armorBonus;
-    // "Wearing Armor causes a penalty to Reflex Saves equal to the Slots occupied."
-    // Slots already reflect metal modifiers (Adamant +1, Mythral -1) — see base-equipment.mjs.
-    this.reflexArmorPenalty = totalArmorSlots;
+    this.armor = (wornArmor?.system.finalRating ?? 0) + armorBonus;
+    // Item's explicit Reflex penalty (already shifted by metal slot modifiers —
+    // see base-equipment.mjs `finalReflexPenalty`).
+    this.reflexArmorPenalty = wornArmor?.system.finalReflexPenalty ?? 0;
+    // RAW: Might below the worn Armor's score → Restrained. Applied as a status
+    // by EquipmentHelper.syncArmorRestrained (GM-side hooks in vagabond.mjs).
+    this.armorMightDeficit = wornArmor
+      ? Math.max(0, (wornArmor.system.mightRequirement ?? 0) - mightTotal)
+      : 0;
   }
 
   _calculateInventorySlots(rollData) {

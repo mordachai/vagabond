@@ -1052,63 +1052,76 @@ VAGABOND.alchemicalTypeHints = {
 };
 
 /**
- * Armor types
- * @type {Object}
- */
-VAGABOND.armorTypes = {
-  'light': 'VAGABOND.Armor.Type.Light',
-  'medium': 'VAGABOND.Armor.Type.Medium',
-  'heavy': 'VAGABOND.Armor.Type.Heavy'
-};
-
-/**
- * Armor type descriptions
- * @type {Object}
- */
-VAGABOND.armorTypeDescriptions = {
-  'light': 'Light: Rating 1, Might 2, 1 Slot',
-  'medium': 'Medium: Rating 2, Might 4, 2 Slots',
-  'heavy': 'Heavy: Rating 3, Might 6, 3 Slots'
-};
-
-/**
- * Metal types for weapons and armor
+ * Materials for weapons and armor (RAW Smithy table). The stored field is still
+ * `system.metal` for data compatibility; the UI calls it "Material".
+ * Keys are listed in table order.
  * @type {Object}
  */
 VAGABOND.metalTypes = {
-  'common': 'VAGABOND.Metal.Common',
   'adamant': 'VAGABOND.Metal.Adamant',
+  'bronze': 'VAGABOND.Metal.Bronze',
   'coldIron': 'VAGABOND.Metal.ColdIron',
+  'gold': 'VAGABOND.Metal.Gold',
+  'iron': 'VAGABOND.Metal.Iron',
   'silver': 'VAGABOND.Metal.Silver',
   'mythral': 'VAGABOND.Metal.Mythral',
-  'orichalcum': 'VAGABOND.Metal.Orichalcum'
+  'orichalcum': 'VAGABOND.Metal.Orichalcum',
+  'steel': 'VAGABOND.Metal.Steel',
+  'wood': 'VAGABOND.Metal.Wood'
 };
 
 /**
- * Metal type multipliers and effects
+ * Material rules — the single source for every material-driven number
+ * (read by base-equipment.mjs `_getMetalData`). Fields:
+ *   multiplier   - cost multiplier on the item's base Value (Wood ÷2 = 0.5)
+ *   slotDelta    - Slots added/removed "to Equip" (never reduces an item below 1 Slot)
+ *   armorBonus   - added to Armor Rating
+ *   weaponDamageBonus - flat bonus added to Weapon damage
+ *   weaponDieStep - Weapon damage die size shift along `weaponDieSteps` (clamped d4–d12)
+ *   degrades     - Armor decreases by 1 after taking damage, breaking at 0, and the
+ *                  weapon damage die is a countdown die. Gated by `materialDegradation`.
  * @type {Object}
  */
 VAGABOND.metalData = {
-  'common': { multiplier: 1, effect: 'VAGABOND.MetalDescriptions.Common' },
-  'adamant': { multiplier: 50, effect: 'VAGABOND.MetalDescriptions.Adamant' },
-  'coldIron': { multiplier: 20, effect: 'VAGABOND.MetalDescriptions.ColdIron' },
-  'silver': { multiplier: 10, effect: 'VAGABOND.MetalDescriptions.Silver' },
-  'mythral': { multiplier: 50, effect: 'VAGABOND.MetalDescriptions.Mythral' },
-  'orichalcum': { multiplier: 50, effect: 'VAGABOND.MetalDescriptions.Orichalcum' }
+  'none':       { multiplier: 1 },
+  'adamant':    { multiplier: 50, slotDelta: 1, armorBonus: 1, weaponDamageBonus: 1, effect: 'VAGABOND.MetalDescriptions.Adamant' },
+  'bronze':     { multiplier: 1 },
+  'coldIron':   { multiplier: 20, effect: 'VAGABOND.MetalDescriptions.ColdIron' },
+  'gold':       { multiplier: 100, degrades: true, effect: 'VAGABOND.MetalDescriptions.Gold' },
+  'iron':       { multiplier: 1 },
+  'silver':     { multiplier: 10, effect: 'VAGABOND.MetalDescriptions.Silver' },
+  'mythral':    { multiplier: 50, slotDelta: -1, weaponDieStep: -1, effect: 'VAGABOND.MetalDescriptions.Mythral' },
+  'orichalcum': { multiplier: 50, slotDelta: 1, weaponDieStep: 1, effect: 'VAGABOND.MetalDescriptions.Orichalcum' },
+  'steel':      { multiplier: 1 },
+  'wood':       { multiplier: 0.5, degrades: true, effect: 'VAGABOND.MetalDescriptions.Wood' }
 };
 
 /**
- * Metal type colors for visual inventory
+ * Hidden feature flag: material degradation (Gold/Wood armor losing Rating after
+ * taking damage; Gold/Wood weapon damage die counting down) + the item Repair
+ * button. Data and helpers exist (`system.armorDamage` / `system.dieDamage`,
+ * EquipmentHelper.damageArmor / damageWeaponDie / repairItem) but nothing
+ * degrades automatically and the UI stays hidden while this is false.
+ * @type {boolean}
+ */
+VAGABOND.materialDegradation = false;
+
+/**
+ * Material colors for visual inventory
  * Used for weapon skill icon colors
  * @type {Object}
  */
 VAGABOND.metalColors = {
-  'common': '#8b7355',      // Brown/tan for common metal
-  'adamant': '#2d2d44',     // Dark blue-grey for adamant
-  'coldIron': '#708090',    // Slate grey for cold iron
+  'adamant': '#2d2d44',     // Dark blue-grey
+  'bronze': '#b08d57',      // Warm bronze
+  'coldIron': '#708090',    // Slate grey
+  'gold': '#d4af37',        // Gold
+  'iron': '#8b7355',        // Brown/tan (former "common")
   'silver': '#c0c0c0',      // Silver
-  'mythral': '#e0e0ff',     // Light blue-white for mythral
-  'orichalcum': '#daa520'   // Golden for orichalcum
+  'mythral': '#e0e0ff',     // Light blue-white
+  'orichalcum': '#daa520',  // Goldenrod
+  'steel': '#9aa4ad',       // Cool grey
+  'wood': '#8b5a2b'         // Wood brown
 };
 
 /**
@@ -1447,12 +1460,11 @@ VAGABOND.defenseRules = [];
  * and damage-helper needs no special imports to evaluate them).
  */
 VAGABOND.defenseRuleHelpers = {
-  /** First equipped armor item, if any. */
+  /** The one set of worn armor that counts (see EquipmentHelper.getWornArmor), or null. */
   equippedArmor(actor) {
-    return actor.items?.find(i => {
-      const isArmor = i.type === 'armor' || (i.type === 'equipment' && i.system.equipmentType === 'armor');
-      return isArmor && i.system.equipped;
-    }) ?? null;
+    return game.vagabond?.utils?.EquipmentHelper?.getWornArmor(actor)
+      ?? actor.items?.find(i => i.type === 'equipment' && i.system.equipmentType === 'armor' && i.system.equipped)
+      ?? null;
   },
   /** First equipped weapon carrying the given property (e.g. 'Defense', 'Cleave'), or null. */
   equippedWeaponWithProperty(actor, propertyName) {

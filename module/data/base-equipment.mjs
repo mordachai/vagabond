@@ -107,12 +107,14 @@ export default class VagabondEquipment extends VagabondItemBase {
       nullable: true
     });
 
-    // Metal type (affects cost multiplier and special properties for weapons/armor)
+    // Material (field keeps its legacy `metal` name). Affects cost multiplier
+    // and special properties — rules live in CONFIG.VAGABOND.metalData.
     schema.metal = new fields.StringField({
       required: true,
       blank: false,
       initial: 'none',
-      choices: ['none', 'common', 'adamant', 'coldIron', 'silver', 'mythral', 'orichalcum']
+      choices: ['none', 'adamant', 'bronze', 'coldIron', 'gold', 'iron', 'silver',
+        'mythral', 'orichalcum', 'steel', 'wood']
     });
 
     // Damage Type - universal damage/healing type
@@ -230,12 +232,33 @@ export default class VagabondEquipment extends VagabondItemBase {
 
     // ===== ARMOR-SPECIFIC FIELDS =====
 
-    // Armor type (light, medium, heavy)
-    schema.armorType = new fields.StringField({
-      required: false,
-      blank: true,
-      initial: 'light',
-      choices: ['light', 'medium', 'heavy']
+    // Armor Rating granted while worn (before metal bonus — Adamant +1)
+    schema.armorRating = new fields.NumberField({
+      required: true, nullable: false, integer: true, min: 0, initial: 1
+    });
+
+    // Might score required to wear it without being Restrained
+    schema.mightRequirement = new fields.NumberField({
+      required: true, nullable: false, integer: true, min: 0, initial: 2
+    });
+
+    // Penalty to Reflex Saves while worn (RAW: equal to the Slots occupied).
+    // Metal slot modifiers (Adamant +1, Mythral -1) apply on top, like slots.
+    schema.reflexPenalty = new fields.NumberField({
+      required: true, nullable: false, integer: true, min: 0, initial: 1
+    });
+
+    // Rating lost to damage — only counts for degrading materials (Gold/Wood).
+    // Prepared for a future breakage/repair feature: nothing writes it yet
+    // (EquipmentHelper.damageArmor / repairItem, gated by materialDegradation).
+    schema.armorDamage = new fields.NumberField({
+      required: true, nullable: false, integer: true, min: 0, initial: 0
+    });
+
+    // Weapon damage-die sizes lost as a countdown die — only counts for
+    // degrading materials (Gold/Wood). Prepared, like armorDamage.
+    schema.dieDamage = new fields.NumberField({
+      required: true, nullable: false, integer: true, min: 0, initial: 0
     });
 
     // Damage immunities (armor provides immunity to these damage types)
@@ -496,6 +519,17 @@ export default class VagabondEquipment extends VagabondItemBase {
     }
     // Fist grip was removed in the new rules version — Fist weapons are now 1H.
     if (source.grip === 'F') source.grip = '1H';
+    // Materials table replaced the generic "Common" metal — it maps to Iron.
+    if (source.metal === 'common') source.metal = 'iron';
+    // Armor values used to be derived from the removed `armorType` field.
+    // Fill each explicit field independently (a user may have persisted only
+    // some of them) from the legacy type's RAW table.
+    if (source.armorType) {
+      const LEGACY = { light: [1, 2], medium: [2, 4], heavy: [3, 6] }[source.armorType] ?? [1, 2];
+      source.armorRating ??= LEGACY[0];
+      source.mightRequirement ??= LEGACY[1];
+      source.reflexPenalty ??= Math.max(0, source.baseSlots ?? 1);
+    }
     // Nested: coating.causedStatuses
     const coating = source.coating;
     if (coating?.causedStatuses != null) {
@@ -534,11 +568,7 @@ export default class VagabondEquipment extends VagabondItemBase {
     }
 
     // Calculate final cost (with metal multiplier for non-relics)
-    this.cost = {
-      gold: this.baseCost.gold * this.metalMultiplier,
-      silver: this.baseCost.silver * this.metalMultiplier,
-      copper: this.baseCost.copper * this.metalMultiplier
-    };
+    this.cost = this.constructor._applyCostMultiplier(this.baseCost, this.metalMultiplier);
 
     // Format cost as a human-readable string
     const costs = [];
@@ -547,16 +577,16 @@ export default class VagabondEquipment extends VagabondItemBase {
     if (this.cost.copper > 0) costs.push(`${this.cost.copper}${game.i18n.localize('VAGABOND.Currency.Copper.abbr')}`);
     this.costDisplay = costs.length > 0 ? costs.join(' ') : '-';
 
-    // Calculate final slots (with metal modifier for non-relics)
+    // Calculate final slots (with material modifier for non-relics). A
+    // reduction never takes an item below 1 Slot (or below its own base if 0/negative).
     let finalSlots = this.baseSlots;
-    if (!isRelic) {
-      if (this.metal === 'adamant') {
-        finalSlots += 1; // Occupies +1 Slot
-      } else if (this.metal === 'mythral') {
-        finalSlots = Math.max(1, finalSlots - 1); // Occupies 1 fewer Slot (min 1)
-      }
-    }
+    const slotDelta = isRelic ? 0 : (this._materialRules().slotDelta ?? 0);
+    if (slotDelta > 0) finalSlots += slotDelta;
+    else if (slotDelta < 0) finalSlots = Math.max(Math.min(1, finalSlots), finalSlots + slotDelta);
     this.slots = finalSlots;
+    // Net slot change from metal — armor's Reflex penalty follows it (RAW ties
+    // the penalty to Slots occupied)
+    this.metalSlotDelta = finalSlots - this.baseSlots;
 
     // Format properties as comma-separated string for display
     this.propertiesDisplay = this.properties.length > 0
@@ -595,19 +625,21 @@ export default class VagabondEquipment extends VagabondItemBase {
     // Set current damage type
     this.currentDamageType = baseDamageType || '-';
 
-    // Apply adamant bonus (+1 to damage). "-" means no damage (e.g. Net) and
-    // stays that way.
-    if (this.metal === 'adamant' && baseDamage && baseDamage.trim() !== '-') {
-      // Parse the damage formula and add +1
-      if (baseDamage && baseDamage.includes('d')) {
-        this.currentDamage = `${baseDamage}+1`;
-      } else {
-        const value = parseInt(baseDamage) || 0;
-        this.currentDamage = String(value + 1);
-      }
-    } else {
-      this.currentDamage = baseDamage;
-    }
+    // Material-adjusted damage (die size shift, countdown loss, flat bonus)
+    this.currentDamage = this.materialDamageFormula(baseDamage);
+    // Per-grip finals for sheet display (independent of current equip state)
+    this.finalDamageOneHand = this.materialDamageFormula(this.damageOneHand);
+    this.finalDamageTwoHands = this.materialDamageFormula(this.damageTwoHands);
+
+    // Countdown die exhausted: stepped down past the smallest die
+    const rules = this._materialRules();
+    this.degrades = !!rules.degrades;
+    const ladder = CONFIG.VAGABOND?.weaponDieSteps ?? [4, 6, 8, 10, 12];
+    const baseDie = Number(String(baseDamage ?? '').match(/d(\d+)/i)?.[1]);
+    const baseIdx = ladder.indexOf(baseDie);
+    const dieLost = this.degrades ? (this.dieDamage ?? 0) : 0;
+    this.broken = dieLost > 0 && baseIdx >= 0
+      && Math.min(ladder.length - 1, Math.max(0, baseIdx + (rules.weaponDieStep ?? 0))) - dieLost < 0;
 
     // Format range display with abbreviations and full names
     this.rangeAbbrev = game.i18n.localize(CONFIG.VAGABOND?.rangeAbbreviations?.[this.range]) || this.range;
@@ -618,58 +650,82 @@ export default class VagabondEquipment extends VagabondItemBase {
   }
 
   _prepareArmorData() {
-    // Determine rating based on armor type
-    const ratingMap = {
-      'light': 1,
-      'medium': 2,
-      'heavy': 3
-    };
-    this.rating = ratingMap[this.armorType] || 1;
+    // Final armor rating with material bonus (Adamant +1), minus Rating lost to
+    // damage (degrading materials; hidden feature — armorDamage stays 0 unless used)
+    const rules = this._materialRules();
+    this.degrades = !!rules.degrades;
+    const ratingBeforeDamage = this.armorRating + (rules.armorBonus ?? 0);
+    // Stored loss only applies to degrading materials (switching Gold → Iron
+    // shows full Rating; switching back restores the stored loss)
+    const ratingLost = this.degrades ? (this.armorDamage ?? 0) : 0;
+    this.finalRating = Math.max(0, ratingBeforeDamage - ratingLost);
+    // "breaking at 0" — only once damage actually brought it there
+    this.broken = ratingLost > 0 && ratingBeforeDamage > 0 && this.finalRating === 0;
+    this.finalReflexPenalty = Math.max(0, this.reflexPenalty + (this.metalSlotDelta ?? 0));
 
-    // Determine might requirement based on armor type
-    const mightMap = {
-      'light': 2,
-      'medium': 4,
-      'heavy': 6
-    };
-    this.might = mightMap[this.armorType] || 3;
+    // Read-only back-compat aliases (chat cards, module API callers)
+    this.rating = this.armorRating;
+    this.might = this.mightRequirement;
+  }
 
-    // Calculate final armor rating with metal bonus
-    this.finalRating = this.rating;
-    if (this.metal === 'adamant') {
-      this.finalRating += 1; // +1 to Armor
-    }
+  /**
+   * Apply this item's material to a weapon damage formula: die size shift
+   * (Mythral −1 / Orichalcum +1), countdown sizes lost (`dieDamage`), then the
+   * flat bonus (Adamant +1). "-" (no damage, e.g. Net) and empty stay as-is.
+   * @param {string} formula
+   * @returns {string}
+   */
+  materialDamageFormula(formula) {
+    if (!formula || formula.trim() === '-') return formula;
+    const rules = this._materialRules();
+    const dieLost = rules.degrades ? (this.dieDamage ?? 0) : 0;
+    const steps = (rules.weaponDieStep ?? 0) - dieLost;
+    let out = steps ? this.constructor.shiftDieSize(formula, steps) : formula;
+    const bonus = rules.weaponDamageBonus ?? 0;
+    if (bonus) out = out.includes('d') ? `${out}+${bonus}` : String((parseInt(out) || 0) + bonus);
+    return out;
+  }
 
-    // Format armor type display
-    this.armorTypeDisplay = game.i18n.localize(CONFIG.VAGABOND?.armorTypes?.[this.armorType]) || this.armorType;
+  /**
+   * Shift every die term along CONFIG.VAGABOND.weaponDieSteps, clamped to the
+   * ladder ends (d4…d12). Dice not on the ladder (d20, d3) are left alone.
+   * @param {string} formula
+   * @param {number} steps - positive = larger die
+   */
+  static shiftDieSize(formula, steps) {
+    const ladder = CONFIG.VAGABOND?.weaponDieSteps ?? [4, 6, 8, 10, 12];
+    return formula.replace(/(\d*)d(\d+)/gi, (m, n, faces) => {
+      const i = ladder.indexOf(Number(faces));
+      if (i < 0) return m;
+      return `${n}d${ladder[Math.min(ladder.length - 1, Math.max(0, i + steps))]}`;
+    });
+  }
+
+  /** Material rules entry from CONFIG.VAGABOND.metalData ({} when unknown). */
+  _materialRules() {
+    return CONFIG.VAGABOND?.metalData?.[this.metal] ?? {};
   }
 
   _getMetalData() {
-    const multipliers = {
-      'none': 1,
-      'common': 1,
-      'adamant': 50,
-      'coldIron': 20,
-      'silver': 10,
-      'mythral': 50,
-      'orichalcum': 50
-    };
-    const descriptionKeys = {
-      'none': null,
-      'common': 'VAGABOND.MetalDescriptions.Common',
-      'adamant': 'VAGABOND.MetalDescriptions.Adamant',
-      'coldIron': 'VAGABOND.MetalDescriptions.ColdIron',
-      'silver': 'VAGABOND.MetalDescriptions.Silver',
-      'mythral': 'VAGABOND.MetalDescriptions.Mythral',
-      'orichalcum': 'VAGABOND.MetalDescriptions.Orichalcum'
-    };
-    const key = descriptionKeys[this.metal];
-    const effect = key ? (game.i18n.localize(key) || '-') : '-';
+    const rules = this._materialRules();
+    const effect = rules.effect ? (game.i18n.localize(rules.effect) || '-') : '-';
+    return { multiplier: rules.multiplier ?? 1, effect };
+  }
 
-    return {
-      multiplier: multipliers[this.metal] ?? multipliers.none,
-      effect: effect || '-'
-    };
+  /**
+   * Apply a material cost multiplier. ×1 keeps the authored split; any other
+   * multiplier converts through copper (1g = 100s, 1s = 10c) and re-splits into
+   * the largest coins, rounding down to whole copper (1g 40s ×50 → 70g, not
+   * 50g 2000s; Wood ÷2: 1g → 50s).
+   * @param {{gold:number, silver:number, copper:number}} base
+   * @param {number} multiplier
+   */
+  static _applyCostMultiplier(base, multiplier) {
+    if (multiplier === 1) return { gold: base.gold, silver: base.silver, copper: base.copper };
+    let copper = Math.floor(((base.gold * 100 + base.silver) * 10 + base.copper) * multiplier);
+    const gold = Math.floor(copper / 1000); copper -= gold * 1000;
+    const silver = Math.floor(copper / 10); copper -= silver * 10;
+    return { gold, silver, copper };
   }
 
   /**

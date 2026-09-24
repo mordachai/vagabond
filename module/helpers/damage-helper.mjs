@@ -1,5 +1,6 @@
 import { VagabondDamagePipeline } from './damage-pipeline.mjs';
 import { TargetHelper } from './target-helper.mjs';
+import { EquipmentHelper } from './equipment-helper.mjs';
 
 /**
  * Universal Damage Helper
@@ -771,12 +772,9 @@ export class VagabondDamageHelper {
    * @returns {boolean}
    */
   static _isLightOrNoArmor(actor) {
-    const equipped = actor.items?.find(i => {
-      const isArmor = i.type === 'armor' || (i.type === 'equipment' && i.system.equipmentType === 'armor');
-      return isArmor && i.system.equipped;
-    });
-    if (!equipped) return true;
-    return equipped.system.armorType === 'light';
+    const worn = EquipmentHelper.getWornArmor(actor);
+    // Light = base Armor Rating 1 or less (before the Adamant bonus)
+    return !worn || (worn.system.armorRating ?? 0) <= 1;
   }
 
   /**
@@ -870,11 +868,7 @@ export class VagabondDamageHelper {
 
     // For PCs, also check equipped armor for immunities
     if (actor.type === 'character') {
-      const equippedArmor = actor.items.find(item => {
-        const isArmor = (item.type === 'armor') ||
-                       (item.type === 'equipment' && item.system.equipmentType === 'armor');
-        return isArmor && item.system.equipped;
-      });
+      const equippedArmor = EquipmentHelper.getWornArmor(actor);
 
       if (equippedArmor && equippedArmor.system.immunities) {
         // Combine actor immunities with armor immunities
@@ -1986,11 +1980,7 @@ export class VagabondDamageHelper {
 
     // Get equipped armor names for tooltip
     let armorTooltip = game.i18n.localize('VAGABOND.Armor.Label');
-    const equippedArmor = actor.items.find(item => {
-      const isArmor = (item.type === 'armor') ||
-                     (item.type === 'equipment' && item.system.equipmentType === 'armor');
-      return isArmor && item.system.equipped;
-    });
+    const equippedArmor = EquipmentHelper.getWornArmor(actor);
     if (equippedArmor) {
       armorTooltip = `${game.i18n.localize('VAGABOND.Armor.Label')}: ${equippedArmor.name}`;
     }

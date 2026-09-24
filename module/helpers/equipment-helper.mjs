@@ -26,6 +26,22 @@ export class EquipmentHelper {
   }
 
   /**
+   * The one set of worn Armor that counts (RAW: "You can only benefit from one
+   * set of worn Armor"). equipWithHandLimit keeps at most one equipped; if data
+   * still holds several, the highest final Rating wins.
+   * @param {Actor} actor
+   * @returns {Item|null}
+   */
+  static getWornArmor(actor) {
+    let best = null;
+    for (const i of actor?.items ?? []) {
+      if (!this.isArmor(i) || !i.system.equipped) continue;
+      if (!best || (i.system.finalRating ?? 0) > (best.system.finalRating ?? 0)) best = i;
+    }
+    return best;
+  }
+
+  /**
    * Check if an item is gear
    * @param {Object} item - The item to check
    * @returns {boolean} True if the item is gear
@@ -117,6 +133,21 @@ export class EquipmentHelper {
    * @param {{mode?: 'use'|'throw', skillKey?: string|null}} [options]
    * @returns {string}
    */
+  /**
+   * The allowed attack skill with the LOWEST difficulty for `actor` (lower =
+   * better in Vagabond: difficulty is the d20 target). Ties keep the weapon's
+   * option order (default first). Used once, when a weapon enters a
+   * character's inventory, to seed `flags.vagabond.preferredSkill`.
+   * @param {Object} item
+   * @param {Actor} actor
+   * @returns {string}
+   */
+  static bestAttackSkill(item, actor) {
+    const options = this.attackSkillOptions(item);
+    const diff = (k) => actor?.system?.skills?.[k]?.difficulty ?? actor?.system?.saves?.[k]?.difficulty ?? Infinity;
+    return options.reduce((best, k) => (diff(k) < diff(best) ? k : best), options[0]);
+  }
+
   static attackSkillFor(item, { mode = 'use', skillKey = null } = {}) {
     if (mode === 'throw') return 'ranged';
     const options = this.attackSkillOptions(item);
@@ -322,6 +353,15 @@ export class EquipmentHelper {
       }
     }
 
+    // RAW: only one set of worn Armor — putting one on takes the other off.
+    if (newState !== 'unequipped' && this.isArmor(item)) {
+      const worn = actor.items.filter((i) => this.isArmor(i) && i.id !== itemId && i.system.equipped);
+      for (const a of worn) updates.push({ _id: a.id, 'system.equipmentState': 'unequipped' });
+      if (worn.length) {
+        ui.notifications.info(`Unequipped ${worn.map((a) => a.name).join(', ')} (only one set of Armor).`);
+      }
+    }
+
     updates.push({
       _id: itemId,
       'system.equipmentState': newState,
@@ -334,6 +374,91 @@ export class EquipmentHelper {
     });
 
     await actor.updateEmbeddedDocuments('Item', updates);
+  }
+
+  /**
+   * Degrading materials (Gold/Wood): "Armor decreases by 1 after taking damage,
+   * breaking at 0." Not wired into the damage flow yet — no-op while
+   * CONFIG.VAGABOND.materialDegradation is off.
+   * @param {Item} item - armor made of a `degrades` material
+   * @param {number} [amount=1]
+   */
+  static async damageArmor(item, amount = 1) {
+    if (!CONFIG.VAGABOND.materialDegradation || !this.isArmor(item) || !item.system.degrades) return;
+    if (item.system.finalRating <= 0) return;
+    await item.update({ 'system.armorDamage': (item.system.armorDamage ?? 0) + amount });
+  }
+
+  /**
+   * Restore an item to full condition (clears Rating lost to damage). Entry point
+   * for the item-sheet Repair button; downtime/context-menu hooks can reuse it.
+   * @param {Item} item
+   */
+  static async repairItem(item) {
+    if (!item || ((item.system.armorDamage ?? 0) === 0 && (item.system.dieDamage ?? 0) === 0)) return;
+    await item.update({ 'system.armorDamage': 0, 'system.dieDamage': 0 });
+  }
+
+  /**
+   * Degrading materials (Gold/Wood): "Damage die is a countdown die" — steps the
+   * weapon's damage die down one size (broken once past d4). Not wired into the
+   * damage roll yet — no-op while CONFIG.VAGABOND.materialDegradation is off.
+   * @param {Item} item - weapon made of a `degrades` material
+   */
+  static async damageWeaponDie(item) {
+    if (!CONFIG.VAGABOND.materialDegradation || !this.isWeapon(item) || !item.system.degrades) return;
+    if (item.system.broken) return;
+    await item.update({ 'system.dieDamage': (item.system.dieDamage ?? 0) + 1 });
+  }
+
+  static #armorSyncTimers = new Map();
+
+  /**
+   * Debounced, active-GM-only entry point for syncArmorRestrained. Safe to call
+   * from any hook on every client — only the active GM acts.
+   * @param {Actor} actor
+   */
+  static queueArmorRestrainedSync(actor) {
+    if (actor?.type !== 'character' || !game.users.activeGM?.isSelf) return;
+    const key = actor.uuid;
+    clearTimeout(this.#armorSyncTimers.get(key));
+    this.#armorSyncTimers.set(key, setTimeout(() => {
+      this.#armorSyncTimers.delete(key);
+      this.syncArmorRestrained(actor).catch((err) =>
+        console.warn('Vagabond | Armor Restrained sync failed:', err));
+    }, 150));
+  }
+
+  /**
+   * RAW: "If your Might is not at least equal to the score shown, you are
+   * Restrained by wearing it." Keeps exactly one Restrained effect flagged
+   * `flags.vagabond.fromArmor = <armor item id>` while the worn Armor's
+   * mightRequirement exceeds Might total (`system.armorMightDeficit`), and
+   * removes it otherwise. Only ever touches its own flagged effect, so a
+   * grapple or manually-applied Restrained is never affected.
+   * @param {Actor} actor
+   */
+  static async syncArmorRestrained(actor) {
+    if (actor?.type !== 'character') return;
+    const armor = (actor.system.armorMightDeficit ?? 0) > 0 ? this.getWornArmor(actor) : null;
+
+    const own = actor.effects.filter((e) => e.getFlag('vagabond', 'fromArmor'));
+    const keep = armor ? own.find((e) => e.getFlag('vagabond', 'fromArmor') === armor.id) : null;
+    const stale = own.filter((e) => e !== keep && actor.effects.get(e.id)).map((e) => e.id);
+    if (stale.length) await actor.deleteEmbeddedDocuments('ActiveEffect', stale);
+    if (!armor || keep) return;
+
+    const def = CONFIG.statusEffects.find((e) => e.id === 'restrained');
+    const label = game.i18n.localize(def?.name ?? 'VAGABOND.StatusConditions.Restrained');
+    await actor.createEmbeddedDocuments('ActiveEffect', [{
+      name: `${label} (${armor.name})`,
+      img: def?.img ?? 'icons/magic/control/debuff-chains-shackles-movement-blue.webp',
+      statuses: ['restrained'],
+      // v14 tokens only draw non-temporary effects set to ALWAYS
+      showIcon: CONST.ACTIVE_EFFECT_SHOW_ICON.ALWAYS,
+      system: { changes: def?.changes ?? [] },
+      flags: { vagabond: { fromArmor: armor.id } },
+    }]);
   }
 
   /**

@@ -13881,8 +13881,78 @@ ol#combat-tracker.directory-list {
 .vagabond .locked-two-column {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 20px;
-  margin-top: 10px;
+  gap: 14px;
+  margin-top: 6px;
+}
+.vagabond .equipment-locked-view .locked-stats-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.vagabond .equipment-locked-view .locked-stat {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 2px 0;
+  border-bottom: 1px dotted rgba(128, 128, 128, 0.25);
+}
+.vagabond .equipment-locked-view .locked-stat .stat-label {
+  flex: 0 0 auto;
+  color: var(--vagabond-c-text-secondary);
+}
+.vagabond .equipment-locked-view .locked-stat .stat-value {
+  min-width: 0;
+  text-align: right;
+  font-weight: bold;
+}
+.vagabond .equipment-locked-view .locked-skill-select {
+  width: auto;
+  height: auto;
+  line-height: normal;
+  padding: 0 4px;
+  font-weight: bold;
+}
+.vagabond .equipment-locked-view .locked-damage {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.vagabond .equipment-locked-view .locked-damage .locked-dmg-base {
+  opacity: 0.55;
+  text-decoration: line-through;
+  font-weight: normal;
+}
+.vagabond .equipment-locked-view .locked-damage .locked-dmg-arrow {
+  font-size: 0.7em;
+  opacity: 0.6;
+}
+.vagabond .equipment-locked-view .locked-damage .locked-dmg-icon {
+  margin-left: 2px;
+  cursor: help;
+}
+.vagabond .equipment-locked-view .locked-properties-footer {
+  margin-top: 4px;
+}
+.vagabond .equipment-locked-view .locked-properties-footer .property-list-locked {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.vagabond .damage-amount-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.vagabond .damage-amount-row input {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.vagabond .damage-amount-row .damage-final {
+  flex: 0 0 auto;
+  color: var(--vagabond-c-text-secondary);
+  font-style: italic;
+  cursor: help;
 }
 .vagabond .locked-column-left,
 .vagabond .locked-column-right {
@@ -21803,5 +21873,3 @@ details[open] .vagabond .npc-immunity-toggle i {
 .vagabond.ongoing-panel .osp-resource-fatigue i {
   color: var(--vagabond-c-muted);
 }
-
-/*# sourceMappingURL=vagabond.css.map */

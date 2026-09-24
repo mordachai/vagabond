@@ -301,8 +301,9 @@ export class GearStepManager extends BaseStepManager {
       displayStats.damage2h = sys.damageTwoHands || null;
       displayStats.damageType = sys.damageType || "-";
     } else if (eqType === 'armor') {
-      displayStats.armorValue = sys.armorValue || 0;
-      displayStats.armorType = sys.armorType || null;
+      displayStats.armorRating = sys.finalRating ?? sys.armorRating ?? 0;
+      displayStats.mightRequirement = sys.mightRequirement ?? 0;
+      displayStats.reflexPenalty = sys.finalReflexPenalty ?? sys.reflexPenalty ?? 0;
     } else if (eqType === 'shield') {
       displayStats.shieldValue = sys.shieldValue || 0;
     }

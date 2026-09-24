@@ -1160,6 +1160,7 @@
       }
     },
     "Item": {
+      "Repair": "Repair",
       "Tabs": {
         "Attributes": "Attributes",
         "Details": "Details",
@@ -1197,6 +1198,7 @@
         }
       },
       "Weapon": {
+        "FinalDamageHint": "Final damage after material effects",
         "FIELDS": {
           "damageOneHand": {"label": "Damage (1H)"},
           "damageTwoHands": {"label": "Damage (2H)"},
@@ -1204,11 +1206,12 @@
           "weaponSkill": {"label": "Weapon Skill"},
           "range": {"label": "Range"},
           "grip": {"label": "Grip"},
-          "metal": {"label": "Metal"},
+          "metal": {"label": "Material"},
           "baseCost": {"label": "Base Cost"},
           "baseSlots": {"label": "Base Slots"},
           "cost": {"label": "Cost"},
           "slots": {"label": "Slots"},
+          "dieDamage": {"label": "Die Sizes Lost"},
           "critThresholdMod": {
             "label": "Crit Range Mod",
             "hint": "Adjusts THIS weapon's crit threshold. Negative crits more easily (-1 = crit on 19). For a reusable effect, add a weapon property instead."
@@ -1218,12 +1221,17 @@
       "Armor": {
         "FIELDS": {
 
-          "armorType": {"label": "Armor Type"},
-          "metal": {"label": "Metal"},
+          "metal": {"label": "Material"},
           "baseCost": {"label": "Base Cost"},
           "rating": {"label": "Armor Rating"},
-          "might": {"label": "Might Requirement"}
-        }
+          "might": {"label": "Might Requirement"},
+          "slots": {"label": "Slots"},
+          "reflexPenalty": {"label": "Reflex Penalty", "hint": "Penalty to Reflex Saves while worn (RAW: equal to the Slots occupied). Metal slot modifiers apply on top."},
+          "armorDamage": {"label": "Rating Lost"},
+          "mightHint": "Wearer is Restrained while their Might is below this score.",
+          "final": "Final"
+        },
+        "Broken": "Broken"
       },
       "Spell": {
         "FIELDS": {
@@ -1599,20 +1607,25 @@
       }
     },
     "Metal": {
-      "Common": "Common",
       "Adamant": "Adamant",
+      "Bronze": "Bronze",
       "ColdIron": "Cold Iron",
+      "Gold": "Gold",
+      "Iron": "Iron",
       "Silver": "Silver",
       "Mythral": "Mythral",
-      "Orichalcum": "Orichalcum"
+      "Orichalcum": "Orichalcum",
+      "Steel": "Steel",
+      "Wood": "Wood"
     },
     "MetalDescriptions": {
-      "Common": "",
-      "Adamant": "Occupies +1 Slot. +1 to Armor (if Armor) or Weapon damage.",
-      "ColdIron": "Situational weakness (Fae).",
-      "Silver": "Blesses weapons against the accursed.",
-      "Mythral": "Occupies 1 fewer Slot (min 1).",
-      "Orichalcum": "Armor reduces Cast damage."
+      "Adamant": "Counts as 1 more Slot to Equip, +1 to Armor (if Armor) or Weapon damage.",
+      "ColdIron": "Fae are Weak to its damage.",
+      "Gold": "Damage die is a countdown die. Armor decreases by 1 after taking damage, breaking at 0.",
+      "Silver": "Hellspawn, Lycanthropes, and Undead are Weak to its damage.",
+      "Mythral": "Counts as 1 less Slot to Equip, and Weapons decrease the damage die one size.",
+      "Orichalcum": "Counts as 1 more Slot to Equip, and Weapons increase the damage die one size.",
+      "Wood": "Damage die is a countdown die. Armor decreases by 1 after taking damage, breaking at 0."
     },
     "EquipmentTypes": {
       "weapon": "Weapon",

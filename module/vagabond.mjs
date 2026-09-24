@@ -2353,6 +2353,22 @@ Hooks.on('updateActor', async (actor, changes, _options, _userId) => {
   }
 });
 
+// Armor Might requirement → Restrained (RAW). Anything that can move Might total
+// or change the worn Armor re-queues the sync; it's debounced, active-GM-only and
+// a no-op when already consistent (EquipmentHelper.syncArmorRestrained).
+const _armorSyncActor = (doc) => {
+  const actor = doc instanceof Actor ? doc : (doc?.parent instanceof Actor ? doc.parent : doc?.parent?.parent);
+  if (actor instanceof Actor) EquipmentHelper.queueArmorRestrainedSync(actor);
+};
+Hooks.on('updateActor', (actor) => _armorSyncActor(actor));
+for (const hook of ['createItem', 'updateItem', 'deleteItem',
+  'createActiveEffect', 'updateActiveEffect', 'deleteActiveEffect']) {
+  Hooks.on(hook, (doc) => _armorSyncActor(doc));
+}
+Hooks.once('ready', () => {
+  for (const actor of game.actors) EquipmentHelper.queueArmorRestrainedSync(actor);
+});
+
 /* -------------------------------------------- */
 /*  Token Movement Hooks                        */
 /* -------------------------------------------- */

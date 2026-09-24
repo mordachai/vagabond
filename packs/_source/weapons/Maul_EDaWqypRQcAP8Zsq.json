@@ -1,7 +1,7 @@
 {
   "name": "Maul",
   "type": "equipment",
-  "img": "icons/weapons/hammers/hammer-war-rounding.webp",
+  "img": "/icons/weapons/hammers/hammer-double-steel-embossed.webp",
   "system": {
     "description": "",
     "equipmentType": "weapon",

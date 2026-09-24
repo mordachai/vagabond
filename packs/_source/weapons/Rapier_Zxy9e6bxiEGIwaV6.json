@@ -38,7 +38,7 @@
     "grip": "1H",
     "damageOneHand": "d4",
     "damageTypeOneHand": "piercing",
-    "damageTwoHands": "d8",
+    "damageTwoHands": "d4",
     "damageTypeTwoHands": "-",
     "equipmentState": "unequipped",
     "armorType": "light",

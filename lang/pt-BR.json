@@ -1159,6 +1159,7 @@
       }
     },
     "Item": {
+      "Repair": "Reparar",
       "Tabs": {
         "Attributes": "Atributos",
         "Details": "Detalhes",
@@ -1196,6 +1197,7 @@
         }
       },
       "Weapon": {
+        "FinalDamageHint": "Dano final após efeitos do material",
         "FIELDS": {
           "damageOneHand": {"label": "Dano (1M)"},
           "damageTwoHands": {"label": "Dano (2M)"},
@@ -1203,11 +1205,12 @@
           "weaponSkill": {"label": "Perícia de Arma"},
           "range": {"label": "Alcance"},
           "grip": {"label": "Empunhadura"},
-          "metal": {"label": "Metal"},
+          "metal": {"label": "Material"},
           "baseCost": {"label": "Custo Base"},
           "baseSlots": {"label": "Espaços Base"},
           "cost": {"label": "Custo"},
           "slots": {"label": "Espaços"},
+          "dieDamage": {"label": "Tamanhos de Dado Perdidos"},
           "critThresholdMod": {
             "label": "Mod. de Alcance de Crítico",
             "hint": "Ajusta o limiar de crítico DESTA arma. Negativo critica mais fácil (-1 = crítico em 19). Para um efeito reutilizável, adicione uma propriedade de arma."
@@ -1217,12 +1220,17 @@
       "Armor": {
         "FIELDS": {
 
-          "armorType": {"label": "Tipo de Armadura"},
-          "metal": {"label": "Metal"},
+          "metal": {"label": "Material"},
           "baseCost": {"label": "Custo Base"},
           "rating": {"label": "Classe de Armadura"},
-          "might": {"label": "Requisito de Força"}
-        }
+          "might": {"label": "Requisito de Força"},
+          "slots": {"label": "Espaços"},
+          "reflexPenalty": {"label": "Penalidade de Reflexos", "hint": "Penalidade em Testes de Resistência de Reflexos enquanto vestida (RAW: igual aos Espaços ocupados). Modificadores de espaço do metal se aplicam por cima."},
+          "armorDamage": {"label": "Classe Perdida"},
+          "mightHint": "Quem veste fica Imobilizado enquanto seu Vigor estiver abaixo deste valor.",
+          "final": "Final"
+        },
+        "Broken": "Quebrada"
       },
       "Spell": {
         "FIELDS": {
@@ -1598,20 +1606,25 @@
       }
     },
     "Metal": {
-      "Common": "Comum",
       "Adamant": "Adamant",
+      "Bronze": "Bronze",
       "ColdIron": "Ferro Frio",
+      "Gold": "Ouro",
+      "Iron": "Ferro",
       "Silver": "Prata",
       "Mythral": "Mythral",
-      "Orichalcum": "Orichalcum"
+      "Orichalcum": "Orichalcum",
+      "Steel": "Aço",
+      "Wood": "Madeira"
     },
     "MetalDescriptions": {
-      "Common": "",
-      "Adamant": "Ocupa +1 Espaço. +1 à Armadura (se Armadura) ou dano da Arma.",
-      "ColdIron": "Fraqueza situacional (Feérico).",
-      "Silver": "Abençoa armas contra os amaldiçoados.",
-      "Mythral": "Ocupa 1 Espaço a menos (mín. 1).",
-      "Orichalcum": "Armadura reduz dano de Conjuração."
+      "Adamant": "Conta como 1 Espaço a mais para Equipar, +1 à Armadura (se Armadura) ou ao dano da Arma.",
+      "ColdIron": "Feéricos são Fracos ao seu dano.",
+      "Gold": "O dado de dano é um dado de contagem regressiva. A Armadura diminui 1 após sofrer dano, quebrando em 0.",
+      "Silver": "Infernais, Licantropos e Mortos-vivos são Fracos ao seu dano.",
+      "Mythral": "Conta como 1 Espaço a menos para Equipar, e Armas diminuem o dado de dano em um tamanho.",
+      "Orichalcum": "Conta como 1 Espaço a mais para Equipar, e Armas aumentam o dado de dano em um tamanho.",
+      "Wood": "O dado de dano é um dado de contagem regressiva. A Armadura diminui 1 após sofrer dano, quebrando em 0."
     },
     "EquipmentTypes": {
       "weapon": "Arma",
