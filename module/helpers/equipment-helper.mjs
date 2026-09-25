@@ -634,6 +634,23 @@ export class EquipmentHelper {
     return total + this.pooledZeroSlotCost(top);
   }
 
+  /** Item types that live on the inventory grid (`system.gridPosition`). */
+  static GRID_ITEM_TYPES = Object.freeze(['equipment', 'container']);
+
+  /**
+   * Next free inventory grid position on an actor (one past the highest used).
+   * For a batch create, assign `start + i` to each item up front — preCreateItem
+   * never sees its siblings in the same batch, so it can't space them out.
+   * @param {Actor} actor
+   * @returns {number}
+   */
+  static nextGridPosition(actor) {
+    const max = (actor?.items ?? [])
+      .filter((i) => this.GRID_ITEM_TYPES.includes(i.type))
+      .reduce((m, i) => Math.max(m, i.system.gridPosition ?? 0), -1);
+    return max + 1;
+  }
+
   /**
    * Slots consumed by weapons held in hands (oneHand/twoHands). Weapons in
    * Belt ('worn') don't count, and zero-Slot weapons add nothing.

@@ -9844,22 +9844,82 @@ ol#combat-tracker.directory-list {
   max-height: 480px;
   display: block;
 }
+.vagabond-video-preview .vpd-groups {
+  --vpd-gap: 0.25rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(max(4.5rem, (100% - (var(--vpd-cols) - 1) * var(--vpd-gap)) / var(--vpd-cols)), 1fr));
+  gap: var(--vpd-gap);
+  padding: 0.3rem 0.5rem;
+  border-bottom: 1px solid var(--vagabond-c-faint);
+}
+.vagabond-video-preview .vpd-group-btn {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  height: auto;
+  line-height: normal;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.82rem;
+}
+.vagabond-video-preview .vpd-group-btn.active {
+  border-color: var(--vagabond-c-chat-yellow);
+  box-shadow: inset 0 0 0 1px var(--vagabond-c-chat-yellow);
+  font-weight: bold;
+}
 .vagabond-video-preview .vpd-footer {
   display: flex;
   justify-content: center;
+  align-items: center;
+  gap: 0.4rem;
   padding: 0.35rem 0.5rem;
   border-top: 1px solid var(--vagabond-c-faint);
   background: rgba(0, 0, 0, 0.04);
 }
+.vagabond-video-preview .vpd-play-btn,
 .vagabond-video-preview .vpd-loop-btn {
   font-size: 0.82rem;
   gap: 0.3rem;
   padding: 0.2rem 0.7rem;
 }
+.vagabond-video-preview .vpd-play-btn.active,
 .vagabond-video-preview .vpd-loop-btn.active {
   background: rgba(34, 197, 94, 0.15);
   color: #166534;
   border-color: rgba(34, 197, 94, 0.4);
+}
+.vagabond-video-preview .vpd-step-btn {
+  flex: 0 0 auto;
+  width: 1.8rem;
+  height: auto;
+  line-height: normal;
+  padding: 0.2rem 0;
+}
+.vagabond-video-preview .vpd-counter {
+  min-width: 3.5rem;
+  text-align: center;
+  font-size: 0.82rem;
+  font-variant-numeric: tabular-nums;
+}
+.vagabond-video-preview .vpd-mute {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.82rem;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.vagabond-video-preview .vpd-mute input {
+  margin: 0;
+}
+.vagabond-video-preview .vpd-filename {
+  padding: 0 0.5rem 0.3rem;
+  font-size: 0.72rem;
+  text-align: center;
+  opacity: 0.7;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 #dsn-damage-appearance-config.dsn-damage-appearance-form .window-content {
@@ -11179,6 +11239,1460 @@ ol#combat-tracker.directory-list {
   font-weight: bold;
   font-size: 0.75rem;
   color: var(--vagabond-c-text-primary);
+}
+
+.vagabond.shop-sheet .window-content {
+  padding: 0;
+}
+.vagabond.shop-sheet .shop-sheet-root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+.vagabond.shop-sheet .shop-sheet-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  border-bottom: 2px solid var(--vagabond-c-black);
+  background-image: url("../assets/images/sheets/tabNavBG.webp");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.vagabond.shop-sheet .shop-sheet-header .shop-sign {
+  width: 90px;
+  height: 90px;
+  flex-shrink: 0;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 2px solid var(--vagabond-c-chat-yellow);
+  background-color: var(--vagabond-c-black);
+  filter: drop-shadow(2px 2px 1px var(--vagabond-c-inset-1));
+  cursor: pointer;
+}
+.vagabond.shop-sheet .shop-sheet-header .shop-title {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+.vagabond.shop-sheet .shop-sheet-header .shop-name {
+  font-family: "Germania", serif;
+  font-size: 1.5em;
+  height: auto;
+  line-height: 2;
+  width: 100%;
+  padding: 0 10px;
+  color: var(--vagabond-c-white);
+  border-bottom: none;
+  background-image: url("../assets/images/sheets/titleBG.webp");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  filter: drop-shadow(2px 2px 1px var(--vagabond-c-inset-1));
+  text-shadow: 2px 2px 0 var(--vagabond-c-black), -2px 2px 0 var(--vagabond-c-black), -2px -2px 0 var(--vagabond-c-black), 2px -2px 0 var(--vagabond-c-black);
+}
+.vagabond.shop-sheet .shop-sheet-header .shop-subtitle {
+  flex: 1;
+  min-width: 0;
+  height: auto;
+  padding: 0 4px;
+  font-family: "Germania", serif;
+  font-size: 1.1em;
+  font-style: italic;
+  color: var(--vagabond-c-chat-yellow);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 3px;
+}
+.vagabond.shop-sheet .shop-sheet-header .shop-subtitle::placeholder {
+  color: var(--vagabond-c-chat-yellow);
+  opacity: 0.5;
+}
+.vagabond.shop-sheet .shop-sheet-header .shop-subtitle:hover, .vagabond.shop-sheet .shop-sheet-header .shop-subtitle:focus {
+  border-color: var(--vagabond-c-chat-yellow);
+}
+.vagabond.shop-sheet .shop-sheet-header .shop-subtitle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.vagabond.shop-sheet .shop-sheet-header .shop-header-buttons {
+  display: flex;
+  gap: 6px;
+}
+.vagabond.shop-sheet .shop-sheet-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding-bottom: 10px;
+}
+.vagabond.shop-sheet .shop-section {
+  margin-bottom: 6px;
+}
+.vagabond.shop-sheet .shop-section-title {
+  font-family: "Germania", serif;
+  font-size: 1.2em;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--vagabond-c-chat-yellow);
+  text-shadow: 1px 1px 0 var(--vagabond-c-black), -1px 1px 0 var(--vagabond-c-black), -1px -1px 0 var(--vagabond-c-black), 1px -1px 0 var(--vagabond-c-black);
+  margin: 0 0 6px;
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--vagabond-c-tan-lite);
+  background: var(--vagabond-c-inset-2);
+}
+.vagabond.shop-sheet input[type=text],
+.vagabond.shop-sheet input[type=number] {
+  background: var(--vagabond-c-input-bg);
+  border: 1px solid var(--vagabond-c-tan-lite);
+  border-radius: 4px;
+  color: var(--vagabond-c-text-primary);
+  font-family: "Paradigm", serif;
+}
+.vagabond.shop-sheet input[type=text]:focus,
+.vagabond.shop-sheet input[type=number]:focus {
+  border-color: var(--vagabond-c-chat-yellow);
+  box-shadow: 0 0 4px -1px var(--vagabond-c-chat-yellow);
+}
+.vagabond.shop-sheet input[type=number] {
+  font-family: "Germania", serif;
+  font-size: 1.1em;
+  text-align: right;
+}
+.vagabond.shop-sheet .shop-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 20px;
+  padding: 0 10px;
+}
+.vagabond.shop-sheet .shop-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 30px;
+  padding: 2px 0;
+  font-family: "Paradigm", serif;
+  color: var(--vagabond-c-text-primary);
+}
+.vagabond.shop-sheet .shop-field label {
+  flex: 1;
+  min-width: 0;
+}
+.vagabond.shop-sheet .shop-field .shop-help {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 15px;
+  height: 15px;
+  margin-left: 4px;
+  border-radius: 50%;
+  background: var(--vagabond-c-chat-yellow);
+  color: var(--vagabond-c-dark);
+  font-size: 0.7rem;
+  font-weight: bold;
+  vertical-align: middle;
+}
+.vagabond.shop-sheet .shop-field input[type=number] {
+  flex: 0 0 70px;
+  width: 70px;
+}
+.vagabond.shop-sheet .shop-field input[type=text] {
+  flex: 2;
+}
+.vagabond.shop-sheet .shop-field input[type=range] {
+  flex: 0 0 110px;
+  width: 110px;
+  margin: 0;
+  accent-color: var(--vagabond-c-chat-yellow);
+  cursor: pointer;
+}
+.vagabond.shop-sheet .shop-field .shop-slider-value {
+  flex: 0 0 46px;
+  text-align: right;
+  font-family: "Germania", serif;
+  font-size: 1.1em;
+  color: var(--vagabond-c-text-primary);
+}
+.vagabond.shop-sheet .shop-field input[type=checkbox] {
+  flex: 0 0 auto;
+  margin: 0;
+}
+.vagabond.shop-sheet .shop-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: start;
+}
+.vagabond.shop-sheet .shop-split .shop-field {
+  padding: 2px 10px;
+}
+.vagabond.shop-sheet .shop-keeper-row {
+  display: flex;
+  gap: 10px;
+  padding: 0 10px;
+}
+.vagabond.shop-sheet .shop-keeper-row .shop-keeper-portrait {
+  width: 124px;
+  height: auto;
+  min-height: 124px;
+  flex: 0 0 124px;
+  align-self: stretch;
+  object-fit: cover;
+  object-position: top center;
+  border-radius: 10px;
+  border: 2px solid var(--vagabond-c-chat-yellow);
+  background-color: var(--vagabond-c-black);
+  filter: drop-shadow(2px 2px 1px var(--vagabond-c-inset-1));
+  cursor: pointer;
+}
+.vagabond.shop-sheet .shop-keeper-row .shop-keeper-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+.vagabond.shop-sheet .shop-keeper-row .shop-keeper-fields prose-mirror {
+  min-height: 70px;
+  background: var(--vagabond-c-surface);
+  border: 1px solid var(--vagabond-c-tan-lite);
+  border-radius: 4px;
+  color: var(--vagabond-c-text-primary);
+  font-family: "Paradigm", serif;
+}
+.vagabond.shop-sheet .shop-purse-coins {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 2px 10px;
+  font-family: "Germania", serif;
+  font-size: 1.1em;
+  color: var(--vagabond-c-text-primary);
+}
+.vagabond.shop-sheet .shop-purse-coins label {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+.vagabond.shop-sheet .shop-purse-coins input {
+  width: 52px;
+}
+.vagabond.shop-sheet .shop-purse-coins .shop-purse-total {
+  margin-left: auto;
+  color: var(--vagabond-c-muted);
+  white-space: nowrap;
+}
+.vagabond.shop-sheet .shop-stock-list {
+  list-style: none;
+  margin: 4px 10px 0;
+  padding: 0;
+  color: var(--vagabond-c-text-primary);
+}
+.vagabond.shop-sheet .shop-stock-list li {
+  display: grid;
+  grid-template-columns: 32px 1fr 44px 80px 80px 24px;
+  align-items: center;
+  gap: 8px;
+  padding: 3px 4px;
+  border-bottom: 1px solid var(--vagabond-inventory-lines);
+}
+.vagabond.shop-sheet .shop-stock-list.with-category li {
+  grid-template-columns: 32px 1fr 120px 44px 80px 80px 24px;
+}
+.vagabond.shop-sheet .shop-stock-list .shop-stock-head {
+  font-family: "Germania", serif;
+  color: var(--vagabond-c-muted);
+  text-transform: uppercase;
+  font-size: 0.85em;
+}
+.vagabond.shop-sheet .shop-stock-list .shop-stock-head .shop-stock-num {
+  text-align: right;
+}
+.vagabond.shop-sheet .shop-stock-list .shop-stock-row {
+  font-family: "Paradigm", serif;
+}
+.vagabond.shop-sheet .shop-stock-list .shop-stock-row:hover {
+  background: var(--vagabond-inventory-hover);
+}
+.vagabond.shop-sheet .shop-stock-list .shop-stock-row img {
+  width: 32px;
+  height: 32px;
+  border: none;
+  object-fit: cover;
+}
+.vagabond.shop-sheet .shop-stock-list .shop-stock-row .shop-stock-category {
+  width: 100%;
+  min-width: 0;
+  font-size: 0.85em;
+  text-align: left;
+}
+.vagabond.shop-sheet .shop-stock-list .shop-stock-row .shop-stock-category::placeholder {
+  color: var(--vagabond-c-muted);
+  font-style: italic;
+}
+.vagabond.shop-sheet .shop-stock-list .shop-stock-row .shop-stock-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.vagabond.shop-sheet .shop-stock-list .shop-stock-row .shop-stock-qty,
+.vagabond.shop-sheet .shop-stock-list .shop-stock-row .shop-stock-base,
+.vagabond.shop-sheet .shop-stock-list .shop-stock-row .shop-stock-price {
+  font-family: "Germania", serif;
+  font-size: 1.15em;
+  text-align: right;
+}
+.vagabond.shop-sheet .shop-stock-list .shop-stock-row .shop-stock-base {
+  color: var(--vagabond-c-muted);
+}
+.vagabond.shop-sheet .shop-stock-list .shop-stock-row .shop-stock-delete {
+  color: var(--vagabond-c-muted);
+  text-align: center;
+}
+.vagabond.shop-sheet .shop-stock-list .shop-stock-row .shop-stock-delete:hover {
+  color: var(--vagabond-c-red);
+}
+.vagabond.shop-sheet .shop-stock-list .shop-stock-empty {
+  display: block;
+  text-align: center;
+  font-family: "Germania", serif;
+  color: var(--vagabond-c-muted);
+  padding: 20px 12px;
+}
+
+.vagabond .shop-tabbars {
+  flex-shrink: 0;
+}
+.vagabond .shop-tabbars .shop-tabbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 2px;
+  padding: 6px 8px 0;
+  background: var(--vagabond-c-bg2);
+  border-bottom: 1px solid var(--vagabond-c-chat-yellow);
+}
+.vagabond .shop-tabbars .shop-tab {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  margin-bottom: -1px;
+  font-family: "Manofa", serif;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--vagabond-c-lightgrey);
+  border: 1px solid transparent;
+  border-bottom: 2px solid transparent;
+  border-radius: 4px 4px 0 0;
+  white-space: nowrap;
+  transition: color 0.15s, box-shadow 0.15s;
+}
+.vagabond .shop-tabbars .shop-tab:hover {
+  color: var(--vagabond-c-white);
+  text-shadow: none;
+}
+.vagabond .shop-tabbars .shop-tab.active {
+  color: var(--vagabond-c-chat-yellow);
+  border-color: var(--vagabond-c-chat-yellow);
+  border-bottom-color: var(--vagabond-c-chat-yellow);
+  box-shadow: inset 0 0 14px -6px var(--vagabond-c-chat-yellow);
+}
+.vagabond .shop-tabbars .shop-tab.shop-tab-icon {
+  padding: 8px 12px;
+  font-size: 1.05rem;
+}
+.vagabond .shop-tabbars .shop-subtabbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 6px;
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--vagabond-c-tan-lite);
+  background: var(--vagabond-c-inset-2);
+}
+.vagabond .shop-tabbars .shop-subtab {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 10px;
+  font-family: "Manofa", serif;
+  font-size: 0.85rem;
+  color: var(--vagabond-c-text-primary);
+  border: 1px solid var(--vagabond-c-tan-lite);
+  border-radius: 12px;
+  white-space: nowrap;
+}
+.vagabond .shop-tabbars .shop-subtab:hover {
+  border-color: var(--vagabond-c-chat-yellow);
+  text-shadow: none;
+}
+.vagabond .shop-tabbars .shop-subtab.active {
+  background: var(--vagabond-c-bg2);
+  color: var(--vagabond-c-chat-yellow);
+  border-color: var(--vagabond-c-chat-yellow);
+}
+
+.vagabond .shop-show-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: auto;
+  height: auto;
+  line-height: normal;
+  padding: 4px 10px;
+  background: var(--vagabond-c-bg2);
+  color: var(--vagabond-c-white);
+  border: 1px solid var(--vagabond-c-chat-yellow);
+  border-radius: 4px;
+  font-family: "Manofa", serif;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: box-shadow 0.15s;
+}
+.vagabond .shop-show-btn:hover {
+  box-shadow: 0 0 8px -1px var(--vagabond-c-chat-yellow), inset 0 0 0 1px var(--vagabond-c-chat-yellow);
+}
+
+.vagabond.shop-app .window-content {
+  padding: 10px;
+}
+.vagabond.shop-app button {
+  height: auto;
+  line-height: normal;
+}
+.vagabond.shop-app .shop-app-root {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: 100%;
+  min-height: 0;
+}
+.vagabond.shop-app .shop-app-banner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-shrink: 0;
+  min-height: 124px;
+  padding: 12px 14px;
+  border: 1px solid var(--vagabond-c-chat-yellow);
+  border-radius: 6px;
+  overflow: hidden;
+  background-color: var(--vagabond-c-black);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.vagabond.shop-app .shop-app-banner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.25) 45%, rgba(0, 0, 0, 0.8) 100%);
+  pointer-events: none;
+}
+.vagabond.shop-app .shop-app-banner > * {
+  position: relative;
+}
+.vagabond.shop-app .shop-app-identity {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+.vagabond.shop-app .shop-app-name {
+  align-self: flex-start;
+  font-family: "Germania", serif;
+  font-size: 1.8em;
+  line-height: 1.7;
+  padding: 0 14px;
+  margin: 0;
+  border: none;
+  color: var(--vagabond-c-white);
+  background-image: url("../assets/images/sheets/titleBG.webp");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  filter: drop-shadow(2px 2px 1px var(--vagabond-c-inset-1));
+  text-shadow: 2px 2px 0 var(--vagabond-c-black), -2px 2px 0 var(--vagabond-c-black), -2px -2px 0 var(--vagabond-c-black), 2px -2px 0 var(--vagabond-c-black);
+}
+.vagabond.shop-app .shop-app-subtitle {
+  margin-top: -4px;
+  padding-left: 4px;
+  font-family: "Paradigm", serif;
+  font-style: italic;
+  color: var(--vagabond-c-white);
+  text-shadow: 1px 1px 2px var(--vagabond-c-black);
+}
+.vagabond.shop-app .shop-app-gm-buttons {
+  display: flex;
+  gap: 6px;
+}
+.vagabond.shop-app .shop-app-merchant {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 45%;
+  min-width: 0;
+}
+.vagabond.shop-app .shop-app-merchant-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  min-width: 0;
+  text-align: right;
+}
+.vagabond.shop-app .shop-app-merchant-label {
+  font-family: "Manofa", serif;
+  font-size: 0.75em;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--vagabond-c-lightgrey);
+}
+.vagabond.shop-app .shop-app-keeper-name {
+  font-family: "Germania", serif;
+  font-size: 1.25em;
+  color: var(--vagabond-c-chat-yellow);
+  text-shadow: 1px 1px 0 var(--vagabond-c-black);
+}
+.vagabond.shop-app .shop-app-keeper-title {
+  font-family: "Paradigm", serif;
+  font-size: 0.85em;
+  font-style: italic;
+  color: var(--vagabond-c-lightgrey);
+  text-shadow: 1px 1px 1px var(--vagabond-c-black);
+}
+.vagabond.shop-app .shop-app-attitude {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.8em;
+  color: var(--vagabond-c-lightgrey);
+}
+.vagabond.shop-app .shop-app-attitude select {
+  height: auto;
+  padding: 0 4px;
+  font-family: "Manofa", serif;
+  font-size: 1em;
+  text-transform: uppercase;
+  color: var(--vagabond-c-white);
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px dashed var(--vagabond-c-lightgrey);
+  border-radius: 3px;
+}
+.vagabond.shop-app .shop-app-description {
+  font-family: "Paradigm", serif;
+  font-size: 0.85em;
+  color: var(--vagabond-c-white);
+  max-height: 3.4em;
+  overflow-y: auto;
+  text-shadow: 1px 1px 1px var(--vagabond-c-black);
+}
+.vagabond.shop-app .shop-app-description p {
+  margin: 0;
+}
+.vagabond.shop-app .shop-app-keeper {
+  width: 92px;
+  height: 92px;
+  flex-shrink: 0;
+  object-fit: cover;
+  object-position: top center;
+  border-radius: 10px;
+  border: 2px solid var(--vagabond-c-chat-yellow);
+  background-color: var(--vagabond-c-black);
+}
+.vagabond.shop-app .shop-app-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  font-family: "Paradigm", serif;
+  color: var(--vagabond-c-text-primary);
+}
+.vagabond.shop-app .shop-app-toolbar select,
+.vagabond.shop-app .shop-app-toolbar input {
+  height: 30px;
+  background: var(--vagabond-c-input-bg);
+  border: 1px solid var(--vagabond-c-tan-lite);
+  border-radius: 4px;
+  color: var(--vagabond-c-text-primary);
+  font-family: "Paradigm", serif;
+}
+.vagabond.shop-app .shop-app-search {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.vagabond.shop-app .shop-app-search > i {
+  position: absolute;
+  left: 10px;
+  color: var(--vagabond-c-muted);
+  pointer-events: none;
+}
+.vagabond.shop-app .shop-app-search input {
+  width: 100%;
+  padding: 0 90px 0 30px;
+}
+.vagabond.shop-app .shop-app-search .shop-app-search-count {
+  position: absolute;
+  right: 28px;
+  font-size: 0.8em;
+  color: var(--vagabond-c-muted);
+  pointer-events: none;
+}
+.vagabond.shop-app .shop-app-search .shop-app-search-clear {
+  position: absolute;
+  right: 10px;
+  color: var(--vagabond-c-muted);
+}
+.vagabond.shop-app .shop-app-search .shop-app-search-clear:hover {
+  color: var(--vagabond-c-text-primary);
+  text-shadow: none;
+}
+.vagabond.shop-app .shop-app-sort {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--vagabond-c-muted);
+}
+.vagabond.shop-app .shop-app-viewtoggle {
+  display: flex;
+  border: 1px solid var(--vagabond-c-tan-lite);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.vagabond.shop-app .shop-app-viewtoggle button {
+  width: 32px;
+  height: 28px;
+  padding: 0;
+  background: var(--vagabond-c-input-bg);
+  color: var(--vagabond-c-muted);
+  border: none;
+  border-radius: 0;
+}
+.vagabond.shop-app .shop-app-viewtoggle button.active {
+  background: var(--vagabond-c-bg2);
+  color: var(--vagabond-c-chat-yellow);
+  box-shadow: inset 0 0 0 1px var(--vagabond-c-chat-yellow);
+}
+.vagabond.shop-app .shop-app-body {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 180px minmax(0, 1fr) 255px;
+  border: 1px solid var(--vagabond-c-tan-lite);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.vagabond.shop-app .shop-app-body.sidebar-collapsed {
+  grid-template-columns: 46px minmax(0, 1fr) 255px;
+}
+.vagabond.shop-app .shop-app-body.sidebar-collapsed .shop-app-sidebar-title,
+.vagabond.shop-app .shop-app-body.sidebar-collapsed .shop-cat-label,
+.vagabond.shop-app .shop-app-body.sidebar-collapsed .shop-cat-children {
+  display: none;
+}
+.vagabond.shop-app .shop-app-body.sidebar-collapsed .shop-app-sidebar-head,
+.vagabond.shop-app .shop-app-body.sidebar-collapsed .shop-cat {
+  justify-content: center;
+}
+.vagabond.shop-app .shop-app-sidebar {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  border-right: 1px solid var(--vagabond-c-tan-lite);
+  background: var(--vagabond-c-inset-2);
+}
+.vagabond.shop-app .shop-app-sidebar-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--vagabond-c-tan-lite);
+}
+.vagabond.shop-app .shop-app-sidebar-title {
+  font-family: "Manofa", serif;
+  font-size: 0.85em;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--vagabond-c-chat-yellow);
+  -webkit-text-stroke: 1px var(--vagabond-c-black);
+  paint-order: stroke fill;
+}
+.vagabond.shop-app .shop-app-sidebar-toggle {
+  color: var(--vagabond-c-muted);
+}
+.vagabond.shop-app .shop-app-sidebar-toggle:hover {
+  color: var(--vagabond-c-text-primary);
+  text-shadow: none;
+}
+.vagabond.shop-app .shop-app-sidebar-list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.vagabond.shop-app .shop-cat {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  font-family: "Paradigm", serif;
+  color: var(--vagabond-c-text-primary);
+  transition: background 0.15s, border-color 0.15s;
+}
+.vagabond.shop-app .shop-cat i {
+  width: 16px;
+  text-align: center;
+  color: var(--vagabond-c-muted);
+}
+.vagabond.shop-app .shop-cat .shop-cat-label {
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.vagabond.shop-app .shop-cat:hover {
+  background: var(--vagabond-c-surface);
+  text-shadow: none;
+}
+.vagabond.shop-app .shop-cat.active {
+  border-color: var(--vagabond-c-chat-yellow);
+  background: var(--vagabond-c-surface);
+  box-shadow: inset 3px 0 0 var(--vagabond-c-chat-yellow);
+}
+.vagabond.shop-app .shop-cat.active i {
+  color: var(--vagabond-c-chat-yellow);
+}
+.vagabond.shop-app .shop-cat-children {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-left: 14px;
+  padding-left: 6px;
+  border-left: 1px solid var(--vagabond-c-tan-lite);
+}
+.vagabond.shop-app .shop-cat-child {
+  padding: 4px 8px;
+  font-size: 0.92em;
+}
+.vagabond.shop-app .shop-app-list {
+  min-height: 0;
+  overflow-y: auto;
+  padding: 10px;
+}
+.vagabond.shop-app .shop-app-list.drag-over {
+  box-shadow: inset 0 0 0 2px var(--vagabond-c-chat-yellow), inset 0 0 18px -6px var(--vagabond-c-chat-yellow);
+}
+.vagabond.shop-app .shop-app-empty-hint {
+  margin-top: 8px;
+  font-family: "Paradigm", serif;
+  font-size: 0.9em;
+  font-style: italic;
+}
+.vagabond.shop-app .shop-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(165px, 1fr));
+  gap: 10px;
+}
+.vagabond.shop-app .shop-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  padding: 6px;
+  background: var(--vagabond-c-surface);
+  border: 1px solid var(--vagabond-c-tan-lite);
+  border-radius: 6px;
+  color: var(--vagabond-c-text-primary);
+  font-family: "Paradigm", serif;
+  user-select: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.vagabond.shop-app .shop-card:hover {
+  border-color: var(--vagabond-c-chat-yellow);
+  box-shadow: 0 0 8px -3px var(--vagabond-c-chat-yellow);
+}
+.vagabond.shop-app .shop-card.featured {
+  border-color: var(--vagabond-c-chat-yellow);
+}
+.vagabond.shop-app .shop-card.out-of-stock, .vagabond.shop-app .shop-card.blocked {
+  opacity: 0.55;
+}
+.vagabond.shop-app .shop-card.is-hidden {
+  opacity: 0.7;
+  border-style: dashed;
+}
+.vagabond.shop-app .shop-card-head {
+  display: flex;
+  gap: 6px;
+  min-width: 0;
+}
+.vagabond.shop-app .shop-card-img {
+  width: 52px;
+  height: 52px;
+  flex: 0 0 52px;
+  object-fit: cover;
+  border: 1px solid var(--vagabond-c-tan-lite);
+  border-radius: 4px;
+  background: var(--vagabond-c-black);
+  cursor: help;
+}
+.vagabond.shop-app .shop-card-plate {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+  padding: 3px 6px;
+  background: var(--vagabond-c-inset-2);
+  border: 1px solid var(--vagabond-c-tan-lite);
+  border-radius: 4px;
+}
+.vagabond.shop-app .shop-card-name {
+  font-family: "Germania", serif;
+  font-size: 1.05em;
+  line-height: 1.15;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.vagabond.shop-app .shop-card-name .shop-card-featured {
+  color: var(--vagabond-c-chat-yellow);
+  text-shadow: 1px 1px 0 var(--vagabond-c-black);
+  margin-right: 4px;
+}
+.vagabond.shop-app .shop-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px 6px;
+  font-size: 0.78em;
+  color: var(--vagabond-c-muted);
+}
+.vagabond.shop-app .shop-card-meta .shop-card-slots,
+.vagabond.shop-app .shop-card-meta .shop-card-stat {
+  font-family: "Germania", serif;
+  font-size: 1.25em;
+  white-space: nowrap;
+}
+.vagabond.shop-app .shop-card-meta .shop-card-stat {
+  color: var(--vagabond-c-text-primary);
+}
+.vagabond.shop-app .shop-card-meta .shop-card-stock.out {
+  color: var(--vagabond-c-red);
+}
+.vagabond.shop-app .shop-card-badge {
+  font-family: "Manofa", serif;
+  font-size: 0.85em;
+  text-transform: uppercase;
+  padding: 0 5px;
+  border-radius: 3px;
+  color: var(--vagabond-c-white);
+}
+.vagabond.shop-app .shop-card-badge.sale {
+  background: var(--vagabond-c-green);
+}
+.vagabond.shop-app .shop-card-badge.hidden {
+  background: var(--vagabond-c-muted);
+}
+.vagabond.shop-app .shop-card-desc {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 5.6em;
+  padding: 5px 7px;
+  background: var(--vagabond-c-input-bg);
+  border: 1px solid var(--vagabond-c-tan-lite);
+  border-radius: 4px;
+}
+.vagabond.shop-app .shop-card-excerpt {
+  font-size: 0.82em;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.vagabond.shop-app .shop-card-excerpt em {
+  color: var(--vagabond-c-muted);
+}
+.vagabond.shop-app .shop-card-foot {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 2px 0;
+  border-top: 1px solid var(--vagabond-c-tan-lite);
+}
+.vagabond.shop-app .shop-card-price {
+  flex: 1;
+  min-width: 0;
+  font-family: "Germania", serif;
+  font-size: 1.15em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: help;
+}
+.vagabond.shop-app .shop-card-price i {
+  color: var(--vagabond-c-chat-yellow);
+  font-size: 0.85em;
+}
+.vagabond.shop-app .shop-card-price.cannot-afford {
+  color: var(--vagabond-c-red);
+}
+.vagabond.shop-app .shop-cart-purchase, .vagabond.shop-app .shop-card-buy {
+  background: var(--vagabond-c-bg2);
+  color: var(--vagabond-c-white);
+  border: 1px solid var(--vagabond-c-chat-yellow);
+  border-radius: 4px;
+  transition: box-shadow 0.15s, opacity 0.15s;
+}
+.vagabond.shop-app .shop-cart-purchase:hover:not(:disabled), .vagabond.shop-app .shop-card-buy:hover:not(:disabled) {
+  box-shadow: 0 0 8px -1px var(--vagabond-c-chat-yellow), inset 0 0 0 1px var(--vagabond-c-chat-yellow);
+}
+.vagabond.shop-app .shop-cart-purchase:disabled, .vagabond.shop-app .shop-card-buy:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.vagabond.shop-app .shop-card-buy {
+  position: relative;
+  flex-shrink: 0;
+  width: 32px;
+  padding: 5px 0;
+}
+.vagabond.shop-app .shop-card-incart {
+  position: absolute;
+  top: -7px;
+  right: -7px;
+  min-width: 16px;
+  padding: 0 3px;
+  font-family: "Germania", serif;
+  font-size: 0.8em;
+  line-height: 16px;
+  color: var(--vagabond-c-black);
+  background: var(--vagabond-c-chat-yellow);
+  border-radius: 8px;
+}
+.vagabond.shop-app .shop-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.vagabond.shop-app .shop-row {
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr) 90px 34px 48px 80px 32px;
+  align-items: center;
+  gap: 8px;
+  padding: 3px 6px;
+  background: var(--vagabond-c-surface);
+  border: 1px solid var(--vagabond-c-tan-lite);
+  border-radius: 4px;
+  font-family: "Paradigm", serif;
+  color: var(--vagabond-c-text-primary);
+  user-select: none;
+}
+.vagabond.shop-app .shop-row img {
+  width: 30px;
+  height: 30px;
+  object-fit: cover;
+  border: none;
+  border-radius: 3px;
+  cursor: help;
+}
+.vagabond.shop-app .shop-row .num {
+  text-align: right;
+  font-family: "Germania", serif;
+  font-size: 1.15em;
+  white-space: nowrap;
+}
+.vagabond.shop-app .shop-row .num.out {
+  color: var(--vagabond-c-red);
+}
+.vagabond.shop-app .shop-row:hover:not(.shop-row-head) {
+  border-color: var(--vagabond-c-chat-yellow);
+}
+.vagabond.shop-app .shop-row.featured {
+  border-color: var(--vagabond-c-chat-yellow);
+}
+.vagabond.shop-app .shop-row.out-of-stock, .vagabond.shop-app .shop-row.blocked {
+  opacity: 0.55;
+}
+.vagabond.shop-app .shop-row.is-hidden {
+  opacity: 0.7;
+  border-style: dashed;
+}
+.vagabond.shop-app .shop-row-head {
+  background: var(--vagabond-c-bg2);
+  border-color: var(--vagabond-c-bg2);
+  font-family: "Manofa", serif;
+  font-size: 0.78em;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--vagabond-c-lightgrey);
+}
+.vagabond.shop-app .shop-row-head .num {
+  font-family: "Manofa", serif;
+}
+.vagabond.shop-app .shop-row-name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  font-family: "Germania", serif;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.vagabond.shop-app .shop-row-name:hover {
+  text-shadow: none;
+  color: var(--vagabond-c-chat-yellow);
+}
+.vagabond.shop-app .shop-row-name .shop-card-featured {
+  color: var(--vagabond-c-chat-yellow);
+  text-shadow: 1px 1px 0 var(--vagabond-c-black);
+}
+.vagabond.shop-app .shop-row-stats {
+  display: flex;
+  gap: 8px;
+  font-family: "Germania", serif;
+  font-size: 1.05em;
+  white-space: nowrap;
+}
+.vagabond.shop-app .shop-app-empty {
+  text-align: center;
+  font-family: "Germania", serif;
+  color: var(--vagabond-c-muted);
+  padding: 30px 12px;
+}
+.vagabond.shop-app .shop-app-cart {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  border-left: 1px solid var(--vagabond-c-tan-lite);
+  background: var(--vagabond-c-inset-2);
+  font-family: "Paradigm", serif;
+  color: var(--vagabond-c-text-primary);
+}
+.vagabond.shop-app .shop-cart-tabs {
+  display: flex;
+  gap: 2px;
+  padding: 6px 6px 0;
+  background: var(--vagabond-c-bg2);
+  border-bottom: 1px solid var(--vagabond-c-chat-yellow);
+}
+.vagabond.shop-app .shop-cart-tab {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 7px 4px;
+  margin-bottom: -1px;
+  font-family: "Manofa", serif;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--vagabond-c-lightgrey);
+  border: 1px solid transparent;
+  border-radius: 4px 4px 0 0;
+}
+.vagabond.shop-app .shop-cart-tab:hover {
+  color: var(--vagabond-c-white);
+  text-shadow: none;
+}
+.vagabond.shop-app .shop-cart-tab.active {
+  color: var(--vagabond-c-chat-yellow);
+  border-color: var(--vagabond-c-chat-yellow);
+  box-shadow: inset 0 0 14px -6px var(--vagabond-c-chat-yellow);
+}
+.vagabond.shop-app .shop-cart-payer {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--vagabond-c-tan-lite);
+}
+.vagabond.shop-app .shop-cart-who {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+.vagabond.shop-app .shop-cart-who img {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  object-fit: cover;
+  object-position: top center;
+  border: 1px solid var(--vagabond-c-chat-yellow);
+  border-radius: 50%;
+}
+.vagabond.shop-app .shop-cart-who select {
+  width: 100%;
+  background: var(--vagabond-c-input-bg);
+  border: 1px solid var(--vagabond-c-tan-lite);
+  color: var(--vagabond-c-text-primary);
+  font-family: "Paradigm", serif;
+}
+.vagabond.shop-app .shop-cart-who-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.vagabond.shop-app .shop-cart-caption {
+  font-family: "Manofa", serif;
+  font-size: 0.72em;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--vagabond-c-muted);
+}
+.vagabond.shop-app .shop-cart-who-name {
+  font-family: "Germania", serif;
+  font-size: 1.1em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.vagabond.shop-app .shop-cart-warn {
+  color: var(--vagabond-c-red);
+  font-size: 0.85em;
+}
+.vagabond.shop-app .shop-cart-funds {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: 5px 8px;
+  background: var(--vagabond-c-surface);
+  border: 1px solid var(--vagabond-c-tan-lite);
+  border-radius: 4px;
+  font-size: 0.88em;
+}
+.vagabond.shop-app .shop-cart-funds > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+.vagabond.shop-app .shop-cart-funds > div span:last-child {
+  font-family: "Germania", serif;
+  font-size: 1.15em;
+}
+.vagabond.shop-app .shop-cart-funds .short {
+  color: var(--vagabond-c-red);
+}
+.vagabond.shop-app .shop-app-cart.stock-drag-over .shop-cart-lines {
+  background: var(--vagabond-c-surface);
+  box-shadow: inset 0 0 0 2px var(--vagabond-c-chat-yellow), inset 0 0 18px -6px var(--vagabond-c-chat-yellow);
+}
+.vagabond.shop-app .shop-card[draggable=true],
+.vagabond.shop-app .shop-row[draggable=true] {
+  cursor: grab;
+}
+.vagabond.shop-app .shop-card.dragging,
+.vagabond.shop-app .shop-row.dragging {
+  opacity: 0.4;
+}
+.vagabond.shop-app .shop-cart-lines {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.vagabond.shop-app .shop-cart-line {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 6px;
+  background: var(--vagabond-c-surface);
+  border: 1px solid var(--vagabond-c-tan-lite);
+  border-radius: 4px;
+}
+.vagabond.shop-app .shop-cart-line img {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  object-fit: cover;
+  border: none;
+  border-radius: 3px;
+}
+.vagabond.shop-app .shop-cart-line-name {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.9em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.vagabond.shop-app .shop-cart-qty {
+  display: flex;
+  align-items: center;
+}
+.vagabond.shop-app .shop-cart-qty input {
+  width: 28px;
+  height: 20px;
+  padding: 0;
+  text-align: center;
+  font-family: "Germania", serif;
+  font-size: 1.1em;
+  background: var(--vagabond-c-input-bg);
+  border: 1px solid var(--vagabond-c-tan-lite);
+  border-radius: 3px;
+  color: var(--vagabond-c-text-primary);
+}
+.vagabond.shop-app .shop-cart-qty button {
+  width: 14px;
+  padding: 2px 0;
+  font-size: 0.6em;
+  background: transparent;
+  border: none;
+  color: var(--vagabond-c-text-primary);
+}
+.vagabond.shop-app .shop-cart-qty button:disabled {
+  opacity: 0.3;
+}
+.vagabond.shop-app .shop-cart-line-price {
+  font-family: "Germania", serif;
+  font-size: 1.05em;
+  white-space: nowrap;
+}
+.vagabond.shop-app .shop-cart-line-remove {
+  color: var(--vagabond-c-muted);
+  font-size: 0.85em;
+}
+.vagabond.shop-app .shop-cart-line-remove:hover {
+  color: var(--vagabond-c-red);
+  text-shadow: none;
+}
+.vagabond.shop-app .shop-cart-empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 20px 10px;
+  text-align: center;
+  font-style: italic;
+  color: var(--vagabond-c-muted);
+}
+.vagabond.shop-app .shop-cart-empty i {
+  font-size: 2em;
+  opacity: 0.6;
+}
+.vagabond.shop-app .shop-cart-receipt {
+  margin: 0 8px 6px;
+  padding: 5px 8px;
+  border: 1px solid var(--vagabond-c-tan-lite);
+  border-radius: 4px;
+  background: var(--vagabond-c-surface);
+  font-size: 0.85em;
+}
+.vagabond.shop-app .shop-cart-receipt .shop-cart-receipt-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.vagabond.shop-app .shop-cart-receipt .shop-cart-receipt-head span {
+  margin-left: auto;
+  font-family: "Germania", serif;
+  font-size: 1.15em;
+}
+.vagabond.shop-app .shop-cart-receipt .shop-cart-receipt-head span.paid {
+  color: var(--vagabond-c-red);
+}
+.vagabond.shop-app .shop-cart-receipt .shop-cart-receipt-head span.received {
+  color: var(--vagabond-c-green);
+}
+.vagabond.shop-app .shop-cart-receipt ul {
+  margin: 3px 0 0;
+  padding-left: 18px;
+  max-height: 4.5em;
+  overflow-y: auto;
+}
+.vagabond.shop-app .shop-cart-checkout {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px 10px;
+  border-top: 1px solid var(--vagabond-c-tan-lite);
+}
+.vagabond.shop-app .shop-cart-total {
+  display: flex;
+  justify-content: space-between;
+  font-family: "Germania", serif;
+  font-size: 1.15em;
+}
+.vagabond.shop-app .shop-cart-total span:last-child {
+  font-family: "Germania", serif;
+  font-size: 1.1em;
+}
+.vagabond.shop-app .shop-cart-purchase {
+  width: 100%;
+  padding: 7px 10px;
+  font-family: "Manofa", serif;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.vagabond.shop-app .shop-sell-zone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  margin: 0 10px 10px;
+  padding: 12px 10px;
+  border: 2px dashed var(--vagabond-c-tan-lite);
+  border-radius: 6px;
+  text-align: center;
+  color: var(--vagabond-c-muted);
+  transition: border-color 0.15s, background 0.15s, color 0.15s;
+}
+.vagabond.shop-app .shop-sell-zone i {
+  font-size: 1.5em;
+}
+.vagabond.shop-app .shop-sell-zone .shop-sell-title {
+  font-family: "Manofa", serif;
+  font-size: 0.85em;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.vagabond.shop-app .shop-sell-zone .shop-sell-hint {
+  font-size: 0.8em;
+  font-style: italic;
+}
+.vagabond.shop-app .shop-sell-zone.drag-over {
+  border-color: var(--vagabond-c-chat-yellow);
+  color: var(--vagabond-c-text-primary);
+  background: var(--vagabond-c-surface);
+  box-shadow: inset 0 0 12px -4px var(--vagabond-c-chat-yellow);
+}
+
+.shop-price-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 180px;
+}
+.shop-price-breakdown .shop-price-line {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+.shop-price-breakdown .shop-price-line span:last-child {
+  font-family: "Germania", serif;
+  font-size: 1.15em;
+}
+
+.shop-show-users {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.shop-sell-confirm {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+.shop-sell-confirm img {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  object-fit: cover;
+  border: none;
+  border-radius: 4px;
+}
+.shop-sell-confirm p {
+  margin: 0 0 4px;
+}
+
+.shop-receipt-lines {
+  margin: 2px 0 0;
+  padding-left: 18px;
+}
+
+.shop-item-tooltip {
+  max-width: 320px;
+  text-align: left;
+}
+.shop-item-tooltip .shop-item-tooltip-hint {
+  margin-top: 6px;
+  font-size: 0.85em;
+  font-style: italic;
+  opacity: 0.7;
+}
+.shop-item-tooltip .shop-item-tooltip-name {
+  font-family: "Germania", serif;
+  font-size: 1.15em;
+  margin-bottom: 4px;
+}
+.shop-item-tooltip .mini-sheet-description {
+  margin-bottom: 6px;
+}
+.shop-item-tooltip .mini-sheet-description p {
+  margin: 0 0 4px;
+}
+.shop-item-tooltip .mini-sheet-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px 14px;
+  margin-bottom: 4px;
+}
+.shop-item-tooltip .mini-sheet-stats--inline {
+  grid-template-columns: repeat(3, 1fr);
+}
+.shop-item-tooltip .stat-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 6px;
+  min-width: 0;
+}
+.shop-item-tooltip .stat-name {
+  opacity: 0.7;
+}
+.shop-item-tooltip .stat-value {
+  font-family: "Germania", serif;
+  text-transform: capitalize;
+}
+.shop-item-tooltip .mini-sheet-label {
+  font-family: "Germania", serif;
+  color: var(--vagabond-c-chat-yellow);
+  margin: 4px 0 2px;
+}
+.shop-item-tooltip .property-row {
+  display: flex;
+  gap: 4px;
+}
+.shop-item-tooltip .property-name {
+  opacity: 0.7;
+  flex: 0 0 auto;
+}
+
+.shop-item-popup .shop-item-tooltip {
+  max-width: none;
 }
 
 /* Context menus - imported at top level because they render outside sheets (appended to document.body) */
@@ -14656,6 +16170,15 @@ ol#combat-tracker.directory-list {
 }
 .vagabond .item-fx-locked-icons i {
   opacity: 0.85;
+}
+.vagabond .item-fx-locked-icons i[data-action=previewItemFx],
+.vagabond .item-fx-locked-icons i[data-action=previewSpellFx] {
+  cursor: pointer;
+}
+.vagabond .item-fx-locked-icons i[data-action=previewItemFx]:hover,
+.vagabond .item-fx-locked-icons i[data-action=previewSpellFx]:hover {
+  opacity: 1;
+  text-shadow: 0 0 6px var(--vagabond-c-chat-yellow);
 }
 .vagabond .item-fx-section {
   padding: 8px 10px 10px;
@@ -21873,3 +23396,5 @@ details[open] .vagabond .npc-immunity-toggle i {
 .vagabond.ongoing-panel .osp-resource-fatigue i {
   color: var(--vagabond-c-muted);
 }
+
+/*# sourceMappingURL=vagabond.css.map */

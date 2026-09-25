@@ -1,10 +1,36 @@
 <div class="vpd-wrapper">
+  {{#if groups.length}}
+    <nav class="vpd-groups" style="--vpd-cols: {{groupCols}}">
+      {{#each groups}}
+        <button type="button" class="vpd-group-btn {{#if active}}active{{/if}}" data-action="selectGroup" data-index="{{index}}">{{label}}</button>
+      {{/each}}
+    </nav>
+  {{/if}}
   <div class="vpd-video-container">
-    <video class="vpd-video" src="{{file}}" autoplay playsinline></video>
+    <video class="vpd-video" src="{{file}}" playsinline muted></video>
+    {{#if sound}}<audio class="vpd-audio" src="{{sound}}" preload="auto"></audio>{{/if}}
   </div>
   <footer class="vpd-footer">
-    <button type="button" class="vpd-loop-btn" data-action="toggleLoop" title="{{localize 'VAGABOND.VideoPreview.ToggleLoopTooltip'}}">
+    {{#if hasVariants}}
+      <button type="button" class="vpd-step-btn" data-action="stepVariant" data-dir="-1" data-tooltip="{{localize 'VAGABOND.VideoPreview.PrevVariant'}}">
+        <i class="fas fa-chevron-left"></i>
+      </button>
+      <span class="vpd-counter">{{variantIndex}} / {{variantCount}}</span>
+      <button type="button" class="vpd-step-btn" data-action="stepVariant" data-dir="1" data-tooltip="{{localize 'VAGABOND.VideoPreview.NextVariant'}}">
+        <i class="fas fa-chevron-right"></i>
+      </button>
+    {{/if}}
+    <button type="button" class="vpd-play-btn" data-action="replay" title="{{localize 'VAGABOND.VideoPreview.ReplayTooltip'}}">
+      <i class="fas fa-play"></i> {{localize "VAGABOND.VideoPreview.Play"}}
+    </button>
+    <button type="button" class="vpd-loop-btn {{#if loop}}active{{/if}}" data-action="toggleLoop" title="{{localize 'VAGABOND.VideoPreview.ToggleLoopTooltip'}}">
       <i class="fas fa-repeat"></i> {{localize "VAGABOND.VideoPreview.Loop"}}
     </button>
+    {{#if sound}}
+      <label class="vpd-mute">
+        <input type="checkbox" {{#if muted}}checked{{/if}}> {{localize "VAGABOND.VideoPreview.Mute"}}
+      </label>
+    {{/if}}
   </footer>
+  <div class="vpd-filename" title="{{file}}">{{fileName}}</div>
 </div>

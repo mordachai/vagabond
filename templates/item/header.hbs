@@ -20,7 +20,7 @@
       <div class='item-document-name'>
         <input name='name' type='text' value='{{item.name}}' placeholder='{{localize "VAGABOND.UI.Labels.NamePlaceholder"}}' />
       </div>
-      {{#if (or (eq item.type 'equipment') (eq item.type 'container') (eq item.type 'spell'))}}
+      {{#if (and editable (or (eq item.type 'equipment') (eq item.type 'container') (eq item.type 'spell')))}}
         <button
           type='button'
           class='equipment-lock-toggle'

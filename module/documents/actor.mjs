@@ -17,6 +17,45 @@ export class VagabondActor extends Actor {
     }
   }
 
+  /**
+   * @override
+   * Keep token names following the actor name while they still match it. Renaming the actor
+   * renames the prototype token (and, in _onUpdate, placed linked tokens) only when that token's
+   * name equals the OLD actor name — a token given its own custom name is left alone.
+   */
+  async _preUpdate(changed, options, user) {
+    const allowed = await super._preUpdate(changed, options, user);
+    if (allowed === false) return false;
+
+    const newName = changed.name;
+    if (typeof newName !== 'string' || !newName || newName === this.name || this.isToken) return allowed;
+
+    const oldName = this.name;
+    if (this.prototypeToken.name === oldName && foundry.utils.getProperty(changed, 'prototypeToken.name') === undefined) {
+      foundry.utils.setProperty(changed, 'prototypeToken.name', newName);
+    }
+    options.vagabondRenamedFrom = oldName;
+    return allowed;
+  }
+
+  /** @override */
+  _onUpdate(changed, options, userId) {
+    super._onUpdate(changed, options, userId);
+
+    const oldName = options.vagabondRenamedFrom;
+    if (!oldName || userId !== game.user.id || !('name' in changed)) return;
+
+    // Placed tokens linked to this actor that still carry the old actor name
+    for (const scene of game.scenes) {
+      const updates = scene.tokens
+        .filter(t => t.actorLink && t.actorId === this.id && t.name === oldName && t.canUserModify(game.user, 'update'))
+        .map(t => ({ _id: t.id, name: this.name }));
+      if (updates.length) {
+        scene.updateEmbeddedDocuments('Token', updates).catch(err => console.error('Vagabond | Token rename failed', err));
+      }
+    }
+  }
+
   /** @override */
   static getDefaultArtwork(actorData) {
     // 1. Check if the actor being created is an NPC
@@ -30,8 +69,25 @@ export class VagabondActor extends Actor {
       };
     }
 
+    if (actorData.type === 'shop') {
+      const img = 'icons/environment/settlement/market-stall.webp';
+      return { img, texture: { src: img } };
+    }
+
     // 3. Fallback for characters or other types
     return super.getDefaultArtwork(actorData);
+  }
+
+  /**
+   * @override
+   * The `shop` type is only offered while the `shopsEnabled` world setting is on.
+   */
+  static async createDialog(data = {}, createOptions = {}, options = {}, renderOptions = {}) {
+    if (!game.settings.get('vagabond', 'shopsEnabled')) {
+      const types = (options.types ?? this.TYPES).filter(t => t !== 'shop' && t !== CONST.BASE_DOCUMENT_TYPE);
+      options = { ...options, types };
+    }
+    return super.createDialog(data, createOptions, options, renderOptions);
   }
 
   /** @override */

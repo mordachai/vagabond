@@ -1,0 +1,276 @@
+<div class="shop-app-root">
+  {{!-- Banner: shop art + name + GM buttons | merchant --}}
+  <header class="shop-app-banner" style="background-image: url('{{shop.img}}')">
+    <div class="shop-app-identity">
+      <h2 class="shop-app-name">{{shop.name}}</h2>
+      {{#if subtitle}}<div class="shop-app-subtitle">{{subtitle}}</div>{{/if}}
+      {{#if isGM}}
+      <div class="shop-app-gm-buttons">
+        <button type="button" class="shop-show-btn" data-action="openShopSheet">
+          <i class="fas fa-gear"></i> {{localize 'VAGABOND.Shop.App.ConfigureShop'}}
+        </button>
+        <button type="button" class="shop-show-btn" data-action="showToPlayers">
+          <i class="fas fa-bullhorn"></i> {{localize 'VAGABOND.Shop.App.ShowToPlayers'}}
+        </button>
+      </div>
+      {{/if}}
+    </div>
+    <div class="shop-app-merchant">
+      <div class="shop-app-merchant-text">
+        <div class="shop-app-merchant-label">{{localize 'VAGABOND.Shop.App.Merchant'}}</div>
+        <div class="shop-app-keeper-name">{{shopkeeper.name}}</div>
+        {{#if shopkeeper.title}}<div class="shop-app-keeper-title">{{shopkeeper.title}}</div>{{/if}}
+        {{#if attitude}}
+        <label class="shop-app-attitude" data-tooltip="{{localize 'VAGABOND.Shop.App.AttitudeHint'}}">
+          <i class="fas fa-eye-slash"></i>
+          <select name="attitude">
+            {{#each attitude}}<option value="{{level}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}
+          </select>
+        </label>
+        {{/if}}
+        {{#if shopkeeper.description}}
+        <div class="shop-app-description">{{{shopkeeper.description}}}</div>
+        {{/if}}
+      </div>
+      <img class="shop-app-keeper" src="{{shopkeeper.img}}" alt="{{shopkeeper.name}}">
+    </div>
+  </header>
+
+  {{!-- Toolbar: search (all categories) | sort | grid/list --}}
+  <div class="shop-app-toolbar">
+    <label class="shop-app-search">
+      <i class="fas fa-magnifying-glass"></i>
+      <input type="search" name="shopSearch" value="{{search}}" placeholder="{{localize 'VAGABOND.Shop.App.SearchPlaceholder'}}" autocomplete="off">
+      {{#if search}}
+      <span class="shop-app-search-count">{{localize 'VAGABOND.Shop.App.SearchCount' count=searchCount}}</span>
+      <a class="shop-app-search-clear" data-action="clearSearch"><i class="fas fa-xmark"></i></a>
+      {{/if}}
+    </label>
+    <label class="shop-app-sort" data-tooltip="{{localize 'VAGABOND.Shop.App.SortBy'}}">
+      <i class="fas fa-arrow-down-wide-short"></i>
+      <select name="shopSort">
+        {{#each sortOptions}}<option value="{{key}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}
+      </select>
+    </label>
+    <div class="shop-app-viewtoggle">
+      <button type="button" data-action="setView" data-view="grid" class="{{#unless listView}}active{{/unless}}"
+        data-tooltip="{{localize 'VAGABOND.Shop.App.ViewGrid'}}"><i class="fas fa-grid-2"></i></button>
+      <button type="button" data-action="setView" data-view="list" class="{{#if listView}}active{{/if}}"
+        data-tooltip="{{localize 'VAGABOND.Shop.App.ViewList'}}"><i class="fas fa-list"></i></button>
+    </div>
+  </div>
+
+  <div class="shop-app-body {{#if sidebarCollapsed}}sidebar-collapsed{{/if}}">
+    {{!-- Categories --}}
+    <aside class="shop-app-sidebar">
+      <div class="shop-app-sidebar-head">
+        <span class="shop-app-sidebar-title">{{localize 'VAGABOND.Shop.App.Categories'}}</span>
+        <a class="shop-app-sidebar-toggle" data-action="toggleSidebar"
+          data-tooltip="{{localize 'VAGABOND.Shop.App.ToggleSidebar'}}">
+          <i class="fas {{#if sidebarCollapsed}}fa-angles-right{{else}}fa-angles-left{{/if}}"></i>
+        </a>
+      </div>
+      <nav class="shop-app-sidebar-list">
+        {{#each tabs}}
+        <a class="shop-cat {{#if active}}active{{/if}}" data-action="selectTab" data-tab="{{key}}" data-tooltip="{{label}}">
+          <i class="{{icon}}"></i><span class="shop-cat-label">{{label}}</span>
+        </a>
+        {{#if children}}
+        <div class="shop-cat-children">
+          {{#each children}}
+          <a class="shop-cat shop-cat-child {{#if active}}active{{/if}}" data-action="selectTab" data-tab="{{../key}}" data-sub="{{key}}">
+            <span class="shop-cat-label">{{label}}</span>
+          </a>
+          {{/each}}
+        </div>
+        {{/if}}
+        {{/each}}
+      </nav>
+    </aside>
+
+    {{!-- Wares --}}
+    <section class="shop-app-list">
+      {{#if listView}}
+      <div class="shop-rows">
+        <div class="shop-row shop-row-head">
+          <span></span>
+          <span>{{localize 'VAGABOND.Shop.App.Item'}}</span>
+          <span>{{localize 'VAGABOND.Shop.App.Stats'}}</span>
+          <span class="num"><i class="fas fa-box" data-tooltip="{{localize 'VAGABOND.Shop.App.Slots'}}"></i></span>
+          <span class="num">{{localize 'VAGABOND.Shop.App.Stock'}}</span>
+          <span class="num">{{localize 'VAGABOND.Shop.App.Price'}}</span>
+          <span></span>
+        </div>
+        {{#each rows}}
+        <div class="shop-row {{#if outOfStock}}out-of-stock{{/if}} {{#if blockBuy}}blocked{{/if}} {{#if hidden}}is-hidden{{/if}} {{#if featured}}featured{{/if}}" data-item-id="{{id}}" draggable="{{#if canAdd}}true{{else}}false{{/if}}">
+          <img src="{{img}}" alt="" draggable="false" data-tooltip-html="{{detailHtml}}" data-tooltip-direction="RIGHT">
+          <span class="shop-row-name">
+            {{#if featured}}<i class="fas fa-star shop-card-featured"></i>{{/if}}{{name}}
+            {{#if onSale}}<span class="shop-card-badge sale">{{localize 'VAGABOND.Shop.App.Sale'}}</span>{{/if}}
+            {{#if hidden}}<span class="shop-card-badge hidden">{{localize 'VAGABOND.Shop.App.Hidden'}}</span>{{/if}}
+          </span>
+          <span class="shop-row-stats">{{#each stats}}<span data-tooltip="{{tooltip}}"><i class="{{icon}}"></i> {{value}}</span>{{/each}}</span>
+          <span class="num">{{slots}}</span>
+          <span class="num {{#if outOfStock}}out{{/if}}">{{#if outOfStock}}0{{else if stock}}{{stock}}{{else}}∞{{/if}}</span>
+          <span class="num shop-card-price {{#unless canAfford}}cannot-afford{{/unless}}" data-tooltip-html="{{priceTooltip}}">{{unitPrice}}</span>
+          <button type="button" class="shop-card-buy" data-action="addToCart" {{#unless canAdd}}disabled{{/unless}}
+            data-tooltip="{{localize 'VAGABOND.Shop.App.AddToCart'}}">
+            <i class="fas fa-cart-plus"></i>{{#if inCart}}<span class="shop-card-incart">{{inCart}}</span>{{/if}}
+          </button>
+        </div>
+        {{/each}}
+      </div>
+      {{else}}
+      <div class="shop-card-grid">
+        {{#each rows}}
+        <article class="shop-card {{#if outOfStock}}out-of-stock{{/if}} {{#if blockBuy}}blocked{{/if}} {{#if hidden}}is-hidden{{/if}} {{#if featured}}featured{{/if}}" data-item-id="{{id}}" draggable="{{#if canAdd}}true{{else}}false{{/if}}">
+          <div class="shop-card-head">
+            <img class="shop-card-img" src="{{img}}" alt="" draggable="false" data-tooltip-html="{{detailHtml}}" data-tooltip-direction="RIGHT">
+            <div class="shop-card-plate">
+              <div class="shop-card-name">
+                {{#if featured}}<i class="fas fa-star shop-card-featured"></i>{{/if}}{{name}}
+              </div>
+              <div class="shop-card-meta">
+                <span class="shop-card-slots" data-tooltip="{{localize 'VAGABOND.Shop.App.Slots'}}"><i class="fas fa-box"></i> {{slots}}</span>
+                {{#each stats}}<span class="shop-card-stat" data-tooltip="{{tooltip}}"><i class="{{icon}}"></i> {{value}}</span>{{/each}}
+                {{#if outOfStock}}<span class="shop-card-stock out">{{localize 'VAGABOND.Shop.App.OutOfStock'}}</span>
+                {{else if stock}}<span class="shop-card-stock">{{localize 'VAGABOND.Shop.App.InStock' count=stock}}</span>{{/if}}
+                {{#if onSale}}<span class="shop-card-badge sale">{{localize 'VAGABOND.Shop.App.Sale'}}</span>{{/if}}
+                {{#if hidden}}<span class="shop-card-badge hidden">{{localize 'VAGABOND.Shop.App.Hidden'}}</span>{{/if}}
+              </div>
+            </div>
+          </div>
+          <div class="shop-card-desc">
+            <div class="shop-card-excerpt">{{#if excerpt}}{{excerpt}}{{else}}<em>{{localize 'VAGABOND.Shop.App.NoDescription'}}</em>{{/if}}</div>
+          </div>
+          <div class="shop-card-foot">
+            <span class="shop-card-price {{#unless canAfford}}cannot-afford{{/unless}}" data-tooltip-html="{{priceTooltip}}"><i class="fas fa-coins"></i> {{unitPrice}}</span>
+            <button type="button" class="shop-card-buy" data-action="addToCart" {{#unless canAdd}}disabled{{/unless}}
+              data-tooltip="{{localize 'VAGABOND.Shop.App.AddToCart'}}">
+              <i class="fas fa-cart-plus"></i>{{#if inCart}}<span class="shop-card-incart">{{inCart}}</span>{{/if}}
+            </button>
+          </div>
+        </article>
+        {{/each}}
+      </div>
+      {{/if}}
+      {{#if empty}}
+      <div class="shop-app-empty">
+        {{localize 'VAGABOND.Shop.App.Empty'}}
+        {{#if isGM}}<div class="shop-app-empty-hint"><i class="fas fa-file-import"></i> {{localize 'VAGABOND.Shop.App.DropStockHint'}}</div>{{/if}}
+      </div>
+      {{else if (eq searchCount 0)}}
+      <div class="shop-app-empty">{{localize 'VAGABOND.Shop.App.NoMatches'}}</div>
+      {{/if}}
+    </section>
+
+    {{!-- Cart + sell zone --}}
+    <aside class="shop-app-cart">
+      <nav class="shop-cart-tabs">
+        {{#each cartTabs}}
+        <a class="shop-cart-tab {{#if active}}active{{/if}}" data-action="cartTab" data-cart="{{key}}">
+          <i class="{{icon}}"></i> {{label}}
+        </a>
+        {{/each}}
+      </nav>
+
+      <div class="shop-cart-payer">
+        {{#if buyer}}
+        <div class="shop-cart-who">
+          <img src="{{buyer.img}}" alt="">
+          <div class="shop-cart-who-text">
+            <span class="shop-cart-caption">{{localize 'VAGABOND.Shop.App.BuyingAs'}}</span>
+            {{#if buyerOptions}}
+            <select name="buyer">
+              {{#each buyerOptions}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}}</option>{{/each}}
+            </select>
+            {{else}}
+            <span class="shop-cart-who-name">{{buyer.name}}</span>
+            {{/if}}
+          </div>
+        </div>
+        {{else}}
+        <div class="shop-cart-warn"><i class="fas fa-triangle-exclamation"></i> {{localize 'VAGABOND.Shop.App.NoCharacter'}}</div>
+        {{/if}}
+
+        {{#if isGroup}}
+          {{#if party}}
+          <div class="shop-cart-who">
+            <img src="{{party.img}}" alt="">
+            <div class="shop-cart-who-text">
+              <span class="shop-cart-caption">{{localize 'VAGABOND.Shop.App.Treasury'}}</span>
+              {{#if partyOptions}}
+              <select name="party">
+                {{#each partyOptions}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}}</option>{{/each}}
+              </select>
+              {{else}}
+              <span class="shop-cart-who-name">{{party.name}}</span>
+              {{/if}}
+            </div>
+          </div>
+          {{else}}
+          <div class="shop-cart-warn"><i class="fas fa-triangle-exclamation"></i> {{localize 'VAGABOND.Shop.App.NoParty'}}</div>
+          {{/if}}
+        {{/if}}
+
+        {{#if cart.payer}}
+        <div class="shop-cart-funds">
+          <div><span>{{localize 'VAGABOND.Shop.App.Available'}}</span><span>{{cart.available}}</span></div>
+          <div class="{{#if cart.short}}short{{/if}}"><span>{{localize 'VAGABOND.Shop.App.After'}}</span>
+            <span>{{#if cart.short}}{{localize 'VAGABOND.Shop.App.Short'}}{{else}}{{cart.after}}{{/if}}</span></div>
+          {{#if cart.slots}}
+          <div class="{{#if cart.slots.over}}short{{/if}}"><span>{{localize 'VAGABOND.Shop.App.Slots'}}</span>
+            <span>{{cart.slots.before}} → {{cart.slots.after}}/{{cart.slots.max}}</span></div>
+          {{/if}}
+        </div>
+        {{/if}}
+      </div>
+
+      <div class="shop-cart-lines">
+        {{#each cart.lines}}
+        <div class="shop-cart-line" data-item-id="{{id}}">
+          <img src="{{img}}" alt="">
+          <span class="shop-cart-line-name" data-tooltip="{{name}}">{{name}}</span>
+          <div class="shop-cart-qty">
+            <button type="button" data-action="cartStep" data-step="-1"><i class="fas fa-minus"></i></button>
+            <input type="number" data-cart-qty="{{id}}" value="{{qty}}" min="0" max="{{max}}" step="1">
+            <button type="button" data-action="cartStep" data-step="1" {{#if (gte qty max)}}disabled{{/if}}><i class="fas fa-plus"></i></button>
+          </div>
+          <span class="shop-cart-line-price">{{price}}</span>
+          <a class="shop-cart-line-remove" data-action="cartRemove" data-tooltip="{{localize 'VAGABOND.Shop.App.Remove'}}"><i class="fas fa-xmark"></i></a>
+        </div>
+        {{else}}
+        <div class="shop-cart-empty">
+          <i class="fas fa-cart-shopping"></i>
+          <span>{{localize 'VAGABOND.Shop.App.CartEmpty'}}</span>
+        </div>
+        {{/each}}
+      </div>
+
+      {{#if receipt}}
+      <div class="shop-cart-receipt">
+        <div class="shop-cart-receipt-head">
+          <i class="fas fa-receipt"></i> {{localize 'VAGABOND.Shop.App.LastReceipt'}}
+          <span class="{{#if receipt.paid}}paid{{else}}received{{/if}}">
+            {{#if receipt.paid}}{{localize 'VAGABOND.Shop.App.Paid'}}{{else}}{{localize 'VAGABOND.Shop.App.Received'}}{{/if}} {{receipt.price}}
+          </span>
+        </div>
+        <ul>{{#each receipt.lines}}<li>{{qty}}× {{name}}</li>{{/each}}</ul>
+      </div>
+      {{/if}}
+
+      <div class="shop-cart-checkout">
+        <div class="shop-cart-total"><span>{{localize 'VAGABOND.Shop.App.Total'}}</span><span>{{cart.total}}</span></div>
+        <button type="button" class="shop-cart-purchase" data-action="purchase" {{#unless cart.canPurchase}}disabled{{/unless}}>
+          <i class="fas fa-bag-shopping"></i> {{localize 'VAGABOND.Shop.App.Purchase'}}
+        </button>
+      </div>
+
+      <div class="shop-sell-zone">
+        <i class="fas fa-hand-holding-dollar"></i>
+        <span class="shop-sell-title">{{localize 'VAGABOND.Shop.App.SellZone'}}</span>
+        <span class="shop-sell-hint">{{localize 'VAGABOND.Shop.App.SellRate' pct=sell.pct}}</span>
+      </div>
+    </aside>
+  </div>
+</div>

@@ -152,7 +152,7 @@ export class SequencerFxConfig extends api.HandlebarsApplicationMixin(api.Applic
     const school = target.dataset.school;
     const file   = this.element.querySelector(`input[name="castAnims.${school}.file"]`)?.value;
     if (!file) { ui.notifications.warn(game.i18n.localize('VAGABOND.SequencerFX.NoFile')); return; }
-    VideoPreviewDialog.open(file);
+    VideoPreviewDialog.open([this.#previewGroup(`castAnims.${school}`, file, 0.45)]);
   }
 
   static #onPreviewArea(event, target) {
@@ -160,7 +160,14 @@ export class SequencerFxConfig extends api.HandlebarsApplicationMixin(api.Applic
     const delivery = target.dataset.delivery;
     const file     = this.element.querySelector(`input[name="areaAnims.${school}.${delivery}.file"]`)?.value;
     if (!file) { ui.notifications.warn(game.i18n.localize('VAGABOND.SequencerFX.NoFile')); return; }
-    VideoPreviewDialog.open(file);
+    VideoPreviewDialog.open([this.#previewGroup(`areaAnims.${school}.${delivery}`, file, 0.6)]);
+  }
+
+  /** Preview group for a row: its video plus the row's (unsaved) sound + volume inputs. */
+  #previewGroup(prefix, file, defaultVolume) {
+    const sound  = this.element.querySelector(`input[name="${prefix}.sound"]`)?.value ?? '';
+    const volume = parseFloat(this.element.querySelector(`input[name="${prefix}.volume"]`)?.value);
+    return { label: '', spec: file, sound, volume: Number.isFinite(volume) ? volume : defaultVolume };
   }
 
   static #onPreviewSound(event, target) {

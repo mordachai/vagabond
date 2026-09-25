@@ -363,12 +363,173 @@
       "NoScene": "No active scene to place a glyph on.",
       "CreateFailed": "Could not create the glyph on this scene."
     },
+    "Shop": {
+      "Tabs": {
+        "all": "All Wares",
+        "armor": "Armor",
+        "weapon": "Weapons",
+        "gear": "Gear",
+        "alchemical": "Alchemical",
+        "relic": "Relics",
+        "general": "General"
+      },
+      "Relation": {
+        "hostile": "Hostile",
+        "unfriendly": "Unfriendly",
+        "neutral": "Neutral",
+        "friendly": "Friendly",
+        "allied": "Allied"
+      },
+      "App": {
+        "OpenHint": "Double-click the card to open the item",
+        "DropStockHint": "Drop items, item folders or whole compendiums here to stock the shop.",
+        "AttitudeHint": "GM only: this buyer's attitude toward the shop (changes prices)",
+        "SearchPlaceholder": "Search the wares...",
+        "SearchCount": "{count} found",
+        "NoMatches": "No wares match your search.",
+        "SortBy": "Sort by",
+        "ViewGrid": "Cards",
+        "ViewList": "List",
+        "Item": "Item",
+        "Stats": "Stats",
+        "Stock": "Stock",
+        "Price": "Price",
+        "Damage": "Damage",
+        "ArmorRating": "Armor Rating",
+        "Sort": {
+          "shop": "Shop order",
+          "name": "Name",
+          "priceAsc": "Price: low to high",
+          "priceDesc": "Price: high to low",
+          "slots": "Slots"
+        },
+        "Merchant": "Merchant",
+        "Categories": "Categories",
+        "ToggleSidebar": "Collapse / expand categories",
+        "Details": "Details",
+        "NoDescription": "No description.",
+        "AddToCart": "Add to cart",
+        "BuyingAs": "Buying as",
+        "Treasury": "Party treasury",
+        "NoParty": "Your character is not in a party.",
+        "Available": "Available",
+        "After": "After",
+        "Short": "Not enough",
+        "Remove": "Remove",
+        "CartEmpty": "Your cart is empty. Drag wares here or use their cart button.",
+        "LastReceipt": "Last receipt",
+        "Paid": "Paid",
+        "Received": "Received",
+        "Total": "Total",
+        "Purchase": "Purchase",
+        "SellZone": "Drop items here to sell",
+        "SellRate": "The merchant pays {pct}% of their value",
+        "SellTitle": "Sell Item",
+        "SellConfirm": "Sell {item} to {shop}?",
+        "SellOffer": "Offer: {price} each.",
+        "Sell": "Sell",
+        "Quantity": "Quantity",
+        "SellNotYours": "You can only sell items from your character or your party.",
+        "Cart": {
+          "personal": "Personal Cart",
+          "group": "Group Cart"
+        },
+        "ShowToPlayers": "Show to Players",
+        "ConfigureShop": "Configure Shop",
+        "NoPlayers": "No players are online.",
+        "Shown": "{shop} shown to {users}.",
+        "NoShops": "There are no shops in this world.",
+        "PickShop": "Open Shop",
+        "Open": "Open",
+        "Show": "Show",
+        "BuyingFor": "Buying for",
+        "Wallet": "Coins",
+        "Slots": "Inventory Slots",
+        "NoCharacter": "You have no character to shop with. Ask the GM to assign one in User Configuration.",
+        "Sale": "Sale",
+        "Hidden": "Hidden",
+        "OutOfStock": "Out of stock",
+        "InStock": "{count} in stock",
+        "Buy": "Buy",
+        "Empty": "Nothing for sale right now.",
+        "SlotWarningTitle": "Not Enough Space",
+        "SlotWarning": "{name} would carry {after} Slots, over the limit of {max}. Buy anyway?",
+        "SceneControl": "Open Shop"
+      },
+      "Chat": {
+        "BuyLines": "{actor} paid {price} for:",
+        "BuyLinesParty": "{actor} paid {price} from {party}'s treasury for:",
+        "BuyTitle": "Purchase",
+        "SellTitle": "Sale",
+        "DepositTitle": "Party Deposit",
+        "WithdrawTitle": "Party Withdrawal",
+        "Buy": "{actor} bought {item} for {price}.",
+        "Sell": "{actor} sold {item} for {price}.",
+        "Deposit": "{actor} deposited {price} into {party}'s treasury.",
+        "Withdraw": "{actor} withdrew {price} from {party}'s treasury."
+      },
+      "Errors": {
+        "emptyCart": "The cart is empty.",
+        "disabled": "Shops are disabled in world settings.",
+        "noGM": "A GM must be online to trade.",
+        "noShop": "Shop not found.",
+        "noActor": "No valid character for this transaction.",
+        "permission": "You do not have permission for this transaction.",
+        "badQty": "Invalid quantity.",
+        "noItem": "That item is not available.",
+        "blocked": "The shop will not trade this item.",
+        "badMaterial": "That material is not offered for this item.",
+        "outOfStock": "Not enough in stock.",
+        "funds": "Not enough money.",
+        "shopFunds": "The shop cannot afford this.",
+        "equipped": "Unequip the item before selling it.",
+        "notBought": "This shop does not buy that kind of item.",
+        "containerNotEmpty": "Empty the container before selling it.",
+        "badAmount": "Invalid amount.",
+        "error": "The transaction failed. See the console for details."
+      },
+      "Price": {
+        "Base": "Base value",
+        "Markup": "Shop markup",
+        "Override": "Price override",
+        "Sale": "On sale",
+        "Relationship": "Relationship",
+        "Presence": "Presence",
+        "Haggle": "Haggle",
+        "BuyRatio": "Buy ratio"
+      },
+      "Sheet": {
+        "OnlyItemPacks": "Only Item compendiums can stock a shop.",
+        "TaglinePlaceholder": "Tagline (e.g. Blades, Mail, and Roadwise Gear)",
+        "TitlePlaceholder": "e.g. Master Outfitter",
+        "ShopTab": "Shop & Settings",
+        "Category": "Category",
+        "FolderAdded": "Added {count} items from {folder} ({skipped} already in stock).",
+        "FolderNothing": "Nothing new to add from {folder} ({skipped} already in stock).",
+        "OpenStore": "Open Store",
+        "ShopImage": "Shop sign / token image",
+        "ShopName": "Shop name",
+        "Shopkeeper": "Shopkeeper",
+        "ShopkeeperPortrait": "Shopkeeper portrait",
+        "Pricing": "Pricing",
+        "Purse": "Purse",
+        "Stock": "Stock",
+        "Item": "Item",
+        "Qty": "Qty",
+        "Base": "Base",
+        "Price": "Price",
+        "Remove": "Remove from stock",
+        "EmptyStock": "No stock. Drag items, item folders or whole compendiums here.",
+        "OnlyEquipment": "Only equipment and containers can be stocked in a shop."
+      }
+    },
     "SheetLabels": {
       "Actor": "Vagabond Actor Sheet",
       "Character": "Vagabond Character Sheet",
       "NPC": "Vagabond NPC Sheet",
       "Party": "Vagabond Party Sheet",
       "Construct": "Vagabond Construct Sheet",
+      "Shop": "Vagabond Shop Sheet",
       "Item": "Vagabond Item Sheet"
     },
     "Keybindings": {
@@ -457,6 +618,17 @@
         "equipped": "Equipped (anywhere)",
         "inHand": "Trinket in Hand",
         "handsFree": "Both Hands Free (gestures)"
+      },
+      "shopChatMode": {
+        "name": "Shop Receipts in Chat",
+        "hint": "Who sees the chat card posted for each purchase, sale and party transfer.",
+        "public": "Everyone",
+        "private": "GM and the trader only",
+        "off": "No chat cards"
+      },
+      "shopsEnabled": {
+        "name": "Enable Shops",
+        "hint": "Enables the Shop actor type: vendors players can buy from and sell to. Purchases and sales are processed by the active GM."
       },
       "lightSourceHandMode": {
         "name": "Light Sources Occupy Hands",
@@ -596,7 +768,14 @@
     },
     "VideoPreview": {
       "ToggleLoopTooltip": "Toggle loop",
-      "Loop": "Loop"
+      "Loop": "Loop",
+      "Play": "Play",
+      "ReplayTooltip": "Play from the start",
+      "Mute": "Mute",
+      "Title": "Animation Preview",
+      "NoFile": "No playable animation file found.",
+      "PrevVariant": "Previous variant",
+      "NextVariant": "Next variant"
     },
     "CompendiumSettings": {
       "Description": "Control which Item compendiums are available in the Character Builder. This determines what content (ancestries, classes, equipment, etc.) players can choose from during character creation.",
@@ -879,6 +1058,53 @@
       }
     },
     "Actor": {
+      "Shop": {
+        "FIELDS": {
+          "shopkeeper": {
+            "title": {
+              "label": "Title"
+            },
+            "name": {
+              "label": "Name"
+            }
+          },
+          "pricing": {
+            "markup": {
+              "label": "Markup %",
+              "hint": "Added to every item's base cost when players buy."
+            },
+            "buyRatio": {
+              "label": "Buy Price %",
+              "hint": "Share of an item's value the shop pays when players sell (50% = half). No RAW rule, set per shop."
+            },
+            "saleDiscount": {
+              "label": "Sale Discount %",
+              "hint": "Discount on items flagged On Sale."
+            },
+            "presenceEnabled": {
+              "label": "Presence Discount",
+              "hint": "Buyers get a discount per point of Presence."
+            },
+            "presencePctPerPoint": {
+              "label": "Discount % per Presence"
+            }
+          },
+          "resell": {
+            "label": "Resell Bought Items",
+            "hint": "Items sold to the shop go into its stock."
+          },
+          "usePurse": {
+            "label": "Limited Purse",
+            "hint": "The shop pays sellers from its own coins. Off = unlimited funds."
+          },
+          "stock": {
+            "unlimitedByDefault": {
+              "label": "Unlimited Stock by Default",
+              "hint": "Items never run out unless set otherwise per item."
+            }
+          }
+        }
+      },
       "Tabs": {
         "Biography": "Biography",
         "Features": "Features",
@@ -1951,7 +2177,11 @@
       "BrowseAudio": "Browse audio file",
       "FileNotFound": "File not found",
       "AnimConfigured": "Animation configured",
-      "SoundConfigured": "Sound configured"
+      "SoundConfigured": "Sound configured",
+      "Hit": "Hit",
+      "Miss": "Miss",
+      "ClickToPreview": "Click to preview",
+      "Cast": "Cast"
     },
     "UI": {
       "Sections": {
@@ -2665,7 +2895,8 @@
       "character": "Character",
       "npc": "NPC",
       "party": "Party",
-      "construct": "Construct"
+      "construct": "Construct",
+      "shop": "Shop"
     },
     "Item": {
       "gear": "- Remove",

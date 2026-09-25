@@ -1,5 +1,18 @@
 # Changelog
 
+## v5.42.0
+- **Shops (new):** a new **Shop** actor type — merchants players buy from and sell to. On by default (world setting "Enable Shops"); GMs open one from the new **Open Shop** scene tool or the actor.
+  - **Store window:** banner with the shop art, name, tagline and merchant (portrait, title, description); categories sidebar (All Wares, Armor, Weapons, Gear, Alchemical, Relics — Gear split by category, Alchemical by type); item cards showing slots, damage / armor rating, stock, a description excerpt and the price (hover for the price breakdown; double-click opens the item). Search across all wares, sort (shop order, name, price, slots) and a card / list view toggle.
+  - **Carts:** **Personal Cart** pays from the character and puts items in their inventory; **Group Cart** pays from the party treasury and puts items on the party. Add with the cart button or drag cards onto the cart. Shows money and inventory Slots before/after; the whole cart is bought in one go, with one chat receipt.
+  - **Selling:** drop an item from your character or party on the sell zone; the money goes to whoever owned it. The merchant pays the shop's Buy Price %.
+  - **GM setup (Configure Shop):** merchant, tagline, pricing sliders (Markup, Buy Price, Sale Discount, Presence discount), limited purse, unlimited stock. Stock the shop by dropping items, item folders or **whole compendiums** on the sheet or the store — items land in their categories (folder names become Gear categories). "Show to Players" opens the store on chosen players' screens; a GM-only attitude picker sets each buyer's standing (changes prices).
+  - All purchases and sales are checked and processed by the active GM. Receipts in chat follow the "Shop Receipts in Chat" setting (public / private / off). Macro API: `game.vagabond.shop` (open, show, buy, buyCart, sell, partyTransfer, price) and `game.vagabond.currency`.
+- **Party treasury:** parties now hold their own coins (used by the Group Cart and shop sales).
+- **FX preview:** the film icon on locked weapon/alchemical/relic sheets (and the new Anim row on spells) opens a preview of the item's Hit / Miss (or the spell school's Cast + area) animations, with prev/next variants and the configured sound played together. The Spell FX config preview plays the row's sound too.
+- **Token names follow actor renames:** renaming an actor also renames its prototype token and placed linked tokens that still had the old name.
+- Item sheets opened read-only (e.g. a shop item a player is viewing) always show the locked view, without the lock toggle.
+- Compendium: Light/Medium/Heavy Armor default material set to none.
+
 ## v5.41.0
 - **Armor values are explicit:** each armor now has its own Armor Rating, Might requirement, Slots and Reflex Penalty (no more Light/Medium/Heavy type). Existing armor converts automatically.
 - **One set of armor:** equipping armor takes off any other worn armor; only that one counts.

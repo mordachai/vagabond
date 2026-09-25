@@ -1,0 +1,158 @@
+<div class="shop-sheet-root">
+  <header class="shop-sheet-header">
+    <img class="shop-sign" src="{{actor.img}}" alt="{{actor.name}}" data-action="editImage" data-edit="img"
+      data-tooltip="{{localize 'VAGABOND.Shop.Sheet.ShopImage'}}">
+    <div class="shop-title">
+      <input class="shop-name" type="text" name="name" value="{{actor.name}}"
+        placeholder="{{localize 'VAGABOND.Shop.Sheet.ShopName'}}" {{disabled (not editable)}}>
+      <div class="shop-subtitle-row">
+        <input class="shop-subtitle" type="text" name="system.subtitle" value="{{system.subtitle}}"
+          placeholder="{{localize 'VAGABOND.Shop.Sheet.TaglinePlaceholder'}}" {{disabled (not editable)}}>
+        <div class="shop-header-buttons">
+          <button type="button" class="shop-show-btn" data-action="openStore">
+            <i class="fas fa-store"></i> {{localize 'VAGABOND.Shop.Sheet.OpenStore'}}
+          </button>
+          {{#if isGM}}
+          <button type="button" class="shop-show-btn" data-action="showToPlayers">
+            <i class="fas fa-bullhorn"></i> {{localize 'VAGABOND.Shop.App.ShowToPlayers'}}
+          </button>
+          {{/if}}
+        </div>
+      </div>
+    </div>
+  </header>
+
+  {{> "systems/vagabond/templates/shop/shop-tabs.hbs" iconTab=iconTab tabs=tabs subtabs=subtabs}}
+
+  <div class="shop-sheet-body">
+    {{#if onShopTab}}
+    <section class="shop-section shop-keeper">
+      <h3 class="shop-section-title">{{localize 'VAGABOND.Shop.Sheet.Shopkeeper'}}</h3>
+      <div class="shop-keeper-row">
+        <img class="shop-keeper-portrait" src="{{shopkeeperImg}}" alt="" data-action="editImage"
+          data-edit="system.shopkeeper.img" data-tooltip="{{localize 'VAGABOND.Shop.Sheet.ShopkeeperPortrait'}}">
+        <div class="shop-keeper-fields">
+          <div class="shop-field">
+            <label>{{localize 'VAGABOND.Actor.Shop.FIELDS.shopkeeper.name.label'}}</label>
+            <input type="text" name="system.shopkeeper.name" value="{{system.shopkeeper.name}}">
+          </div>
+          <div class="shop-field">
+            <label>{{localize 'VAGABOND.Actor.Shop.FIELDS.shopkeeper.title.label'}}</label>
+            <input type="text" name="system.shopkeeper.title" value="{{system.shopkeeper.title}}"
+              placeholder="{{localize 'VAGABOND.Shop.Sheet.TitlePlaceholder'}}">
+          </div>
+          <prose-mirror name="system.shopkeeper.description" data-document-uuid="{{actor.uuid}}"
+            value="{{system.shopkeeper.description}}" toggled="true">
+            {{{enrichedShopkeeperDescription}}}
+          </prose-mirror>
+        </div>
+      </div>
+    </section>
+
+    <section class="shop-section shop-pricing">
+      <h3 class="shop-section-title">{{localize 'VAGABOND.Shop.Sheet.Pricing'}}</h3>
+      <div class="shop-fields">
+      <div class="shop-field shop-slider-field">
+        <label>{{localize 'VAGABOND.Actor.Shop.FIELDS.pricing.markup.label'}} <span class="shop-help" data-tooltip="{{localize 'VAGABOND.Actor.Shop.FIELDS.pricing.markup.hint'}}">?</span></label>
+        <input type="range" name="system.pricing.markup" value="{{sliders.markup.value}}" min="{{sliders.markup.min}}" max="{{sliders.markup.max}}"
+          step="{{sliders.markup.step}}" data-format="{{sliders.markup.format}}">
+        <output class="shop-slider-value">{{sliders.markup.display}}</output>
+      </div>
+      <div class="shop-field shop-slider-field">
+        <label>{{localize 'VAGABOND.Actor.Shop.FIELDS.pricing.buyRatio.label'}} <span class="shop-help" data-tooltip="{{localize 'VAGABOND.Actor.Shop.FIELDS.pricing.buyRatio.hint'}}">?</span></label>
+        <input type="range" name="system.pricing.buyRatio" value="{{sliders.buyRatio.value}}" min="{{sliders.buyRatio.min}}" max="{{sliders.buyRatio.max}}"
+          step="{{sliders.buyRatio.step}}" data-format="{{sliders.buyRatio.format}}">
+        <output class="shop-slider-value">{{sliders.buyRatio.display}}</output>
+      </div>
+      <div class="shop-field shop-slider-field">
+        <label>{{localize 'VAGABOND.Actor.Shop.FIELDS.pricing.saleDiscount.label'}} <span class="shop-help" data-tooltip="{{localize 'VAGABOND.Actor.Shop.FIELDS.pricing.saleDiscount.hint'}}">?</span></label>
+        <input type="range" name="system.pricing.saleDiscount" value="{{sliders.saleDiscount.value}}" min="{{sliders.saleDiscount.min}}" max="{{sliders.saleDiscount.max}}"
+          step="{{sliders.saleDiscount.step}}" data-format="{{sliders.saleDiscount.format}}">
+        <output class="shop-slider-value">{{sliders.saleDiscount.display}}</output>
+      </div>
+      <div class="shop-field">
+        <label>{{localize 'VAGABOND.Actor.Shop.FIELDS.resell.label'}} <span class="shop-help" data-tooltip="{{localize 'VAGABOND.Actor.Shop.FIELDS.resell.hint'}}">?</span></label>
+        <input type="checkbox" name="system.resell" {{checked system.resell}}>
+      </div>
+      {{!-- Last row: Presence toggle + its % (the % only shows while the toggle is on) --}}
+      <div class="shop-field">
+        <label>{{localize 'VAGABOND.Actor.Shop.FIELDS.pricing.presenceEnabled.label'}} <span class="shop-help" data-tooltip="{{localize 'VAGABOND.Actor.Shop.FIELDS.pricing.presenceEnabled.hint'}}">?</span></label>
+        <input type="checkbox" name="system.pricing.presenceEnabled" {{checked system.pricing.presenceEnabled}}>
+      </div>
+      {{#if system.pricing.presenceEnabled}}
+      <div class="shop-field shop-slider-field">
+        <label>{{localize 'VAGABOND.Actor.Shop.FIELDS.pricing.presencePctPerPoint.label'}}</label>
+        <input type="range" name="system.pricing.presencePctPerPoint" value="{{sliders.presencePctPerPoint.value}}" min="{{sliders.presencePctPerPoint.min}}" max="{{sliders.presencePctPerPoint.max}}"
+          step="{{sliders.presencePctPerPoint.step}}" data-format="{{sliders.presencePctPerPoint.format}}">
+        <output class="shop-slider-value">{{sliders.presencePctPerPoint.display}}</output>
+      </div>
+      {{/if}}
+      </div>
+    </section>
+
+    {{!-- Purse | Stock settings side by side --}}
+    <div class="shop-split">
+      <section class="shop-section shop-purse">
+        <h3 class="shop-section-title">{{localize 'VAGABOND.Shop.Sheet.Purse'}}</h3>
+        <div class="shop-field">
+          <label>{{localize 'VAGABOND.Actor.Shop.FIELDS.usePurse.label'}} <span class="shop-help" data-tooltip="{{localize 'VAGABOND.Actor.Shop.FIELDS.usePurse.hint'}}">?</span></label>
+          <input type="checkbox" name="system.usePurse" {{checked system.usePurse}}>
+        </div>
+        {{#if system.usePurse}}
+        <div class="shop-purse-coins">
+          <label><input type="number" name="system.currency.gold" value="{{system.currency.gold}}" min="0" step="1">
+            <span data-tooltip="{{localize 'VAGABOND.Currency.Gold.long'}}">{{localize 'VAGABOND.Currency.Gold.abbr'}}</span></label>
+          <label><input type="number" name="system.currency.silver" value="{{system.currency.silver}}" min="0" step="1">
+            <span data-tooltip="{{localize 'VAGABOND.Currency.Silver.long'}}">{{localize 'VAGABOND.Currency.Silver.abbr'}}</span></label>
+          <label><input type="number" name="system.currency.copper" value="{{system.currency.copper}}" min="0" step="1">
+            <span data-tooltip="{{localize 'VAGABOND.Currency.Copper.long'}}">{{localize 'VAGABOND.Currency.Copper.abbr'}}</span></label>
+          <span class="shop-purse-total">{{purseTotal}}</span>
+        </div>
+        {{/if}}
+      </section>
+
+      <section class="shop-section shop-stock-settings">
+        <h3 class="shop-section-title">{{localize 'VAGABOND.Shop.Sheet.Stock'}}</h3>
+        <div class="shop-field">
+          <label>{{localize 'VAGABOND.Actor.Shop.FIELDS.stock.unlimitedByDefault.label'}} <span class="shop-help" data-tooltip="{{localize 'VAGABOND.Actor.Shop.FIELDS.stock.unlimitedByDefault.hint'}}">?</span></label>
+          <input type="checkbox" name="system.stock.unlimitedByDefault" {{checked system.stock.unlimitedByDefault}}>
+        </div>
+      </section>
+    </div>
+
+    {{else}}
+    <section class="shop-section shop-stock">
+      <ol class="shop-stock-list {{#if isGear}}with-category{{/if}}">
+        <li class="shop-stock-head">
+          <span></span>
+          <span>{{localize 'VAGABOND.Shop.Sheet.Item'}}</span>
+          {{#if isGear}}<span>{{localize 'VAGABOND.Shop.Sheet.Category'}}</span>{{/if}}
+          <span class="shop-stock-num">{{localize 'VAGABOND.Shop.Sheet.Qty'}}</span>
+          <span class="shop-stock-num">{{localize 'VAGABOND.Shop.Sheet.Base'}}</span>
+          <span class="shop-stock-num">{{localize 'VAGABOND.Shop.Sheet.Price'}}</span>
+          <span></span>
+        </li>
+        {{#each rows}}
+        <li class="shop-stock-row" data-item-id="{{id}}">
+          <img src="{{img}}" alt="">
+          <a class="shop-stock-name" data-action="openStockItem">{{name}}</a>
+          {{#if @root.isGear}}
+          <input type="text" class="shop-stock-category" data-category-for="{{id}}" value="{{category}}"
+            placeholder="{{localize 'VAGABOND.Shop.Tabs.general'}}" {{disabled (not @root.editable)}}>
+          {{/if}}
+          <span class="shop-stock-qty">{{#if unlimited}}&infin;{{else}}{{quantity}}{{/if}}</span>
+          <span class="shop-stock-base">{{base}}</span>
+          <span class="shop-stock-price">{{price}}</span>
+          {{#if @root.editable}}
+          <a class="shop-stock-delete" data-action="deleteStockItem" data-tooltip="{{localize 'VAGABOND.Shop.Sheet.Remove'}}">
+            <i class="fas fa-trash"></i></a>
+          {{else}}<span></span>{{/if}}
+        </li>
+        {{else}}
+        <li class="shop-stock-empty">{{localize 'VAGABOND.Shop.Sheet.EmptyStock'}}</li>
+        {{/each}}
+      </ol>
+    </section>
+    {{/if}}
+  </div>
+</div>

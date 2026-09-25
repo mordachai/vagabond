@@ -55,6 +55,8 @@
 @import 'apps/choice-dialog';
 @import 'apps/imbue-weapon-select';
 @import 'apps/glyph-action-dialog';
+@import 'apps/shop-sheet';
+@import 'apps/shop-app';
 
 /* Context menus - imported at top level because they render outside sheets (appended to document.body) */
 

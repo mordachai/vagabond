@@ -4,6 +4,7 @@ export { default as VagabondCharacter } from './actor-character.mjs';
 export { default as VagabondNPC } from './actor-npc.mjs';
 export { default as VagabondParty } from './actor-party.mjs';
 export { default as VagabondConstruct } from './actor-construct.mjs';
+export { default as VagabondShop } from './actor-shop.mjs';
 
 // Export Items
 export { default as VagabondItemBase } from './base-item.mjs';

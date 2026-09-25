@@ -1,0 +1,1148 @@
+// Store window (ShopApp) — what players shop in.
+// Layout: banner header / [categories | card grid | cart + sell zone].
+// Colors/fonts: system $c-* / $font-* variables only; paper background comes
+// from `.vagabond .window-content` (global/_window.scss), light/dark aware.
+
+.vagabond.shop-app {
+  .window-content {
+    padding: 10px;
+  }
+
+  // Foundry buttons carry fixed metrics — reset for every button in here
+  button {
+    height: auto;
+    line-height: normal;
+  }
+
+  .shop-app-root {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    height: 100%;
+    min-height: 0;
+  }
+
+  // ── Banner: shop art + name + GM buttons | merchant ──────────────────
+  .shop-app-banner {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-shrink: 0;
+    min-height: 124px;
+    padding: 12px 14px;
+    border: 1px solid $c-yellow;
+    border-radius: 6px;
+    overflow: hidden;
+    background-color: $c-black;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    // Darken the art so the text stays readable
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.25) 45%, rgba(0, 0, 0, 0.8) 100%);
+      pointer-events: none;
+    }
+
+    > * {
+      position: relative;
+    }
+  }
+
+  .shop-app-identity {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  .shop-app-name {
+    align-self: flex-start;
+    font-family: $font-title;
+    font-size: 1.8em;
+    line-height: 1.7;
+    padding: 0 14px;
+    margin: 0;
+    border: none;
+    color: $c-white;
+    background-image: url('../assets/images/sheets/titleBG.webp');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    filter: drop-shadow(2px 2px 1px $c-inset-1);
+    text-shadow:
+      2px 2px 0 $c-black,
+      -2px 2px 0 $c-black,
+      -2px -2px 0 $c-black,
+      2px -2px 0 $c-black;
+  }
+
+  .shop-app-subtitle {
+    margin-top: -4px;
+    padding-left: 4px;
+    font-family: $font-text;
+    font-style: italic;
+    color: $c-white;
+    text-shadow: 1px 1px 2px $c-black;
+  }
+
+  .shop-app-gm-buttons {
+    display: flex;
+    gap: 6px;
+  }
+
+  .shop-app-merchant {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    max-width: 45%;
+    min-width: 0;
+  }
+
+  .shop-app-merchant-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+    min-width: 0;
+    text-align: right;
+  }
+
+  .shop-app-merchant-label {
+    font-family: $font-secondary;
+    font-size: 0.75em;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: $c-lightgrey;
+  }
+
+  .shop-app-keeper-name {
+    font-family: $font-title;
+    font-size: 1.25em;
+    color: $c-yellow;
+    text-shadow: 1px 1px 0 $c-black;
+  }
+
+  .shop-app-keeper-title {
+    font-family: $font-text;
+    font-size: 0.85em;
+    font-style: italic;
+    color: $c-lightgrey;
+    text-shadow: 1px 1px 1px $c-black;
+  }
+
+  // GM-only: the buyer's standing with the shop
+  .shop-app-attitude {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.8em;
+    color: $c-lightgrey;
+
+    select {
+      height: auto;
+      padding: 0 4px;
+      font-family: $font-secondary;
+      font-size: 1em;
+      text-transform: uppercase;
+      color: $c-white;
+      background: rgba(0, 0, 0, 0.55);
+      border: 1px dashed $c-lightgrey;
+      border-radius: 3px;
+    }
+  }
+
+  .shop-app-description {
+    font-family: $font-text;
+    font-size: 0.85em;
+    color: $c-white;
+    max-height: 3.4em;
+    overflow-y: auto;
+    text-shadow: 1px 1px 1px $c-black;
+
+    p { margin: 0; }
+  }
+
+  .shop-app-keeper {
+    width: 92px;
+    height: 92px;
+    flex-shrink: 0;
+    object-fit: cover;
+    object-position: top center;
+    border-radius: 10px;
+    border: 2px solid $c-yellow;
+    background-color: $c-black;
+  }
+
+  // ── Toolbar: search | sort | view ────────────────────────────────────
+  .shop-app-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+    font-family: $font-text;
+    color: $c-text-1;
+
+    select,
+    input {
+      height: 30px;
+      background: var(--vagabond-c-input-bg);
+      border: 1px solid $c-tan-lite;
+      border-radius: 4px;
+      color: $c-text-1;
+      font-family: $font-text;
+    }
+  }
+
+  .shop-app-search {
+    flex: 1;
+    min-width: 0;
+    position: relative;
+    display: flex;
+    align-items: center;
+
+    > i {
+      position: absolute;
+      left: 10px;
+      color: $c-muted;
+      pointer-events: none;
+    }
+
+    input {
+      width: 100%;
+      padding: 0 90px 0 30px;
+    }
+
+    .shop-app-search-count {
+      position: absolute;
+      right: 28px;
+      font-size: 0.8em;
+      color: $c-muted;
+      pointer-events: none;
+    }
+
+    .shop-app-search-clear {
+      position: absolute;
+      right: 10px;
+      color: $c-muted;
+
+      &:hover { color: $c-text-1; text-shadow: none; }
+    }
+  }
+
+  .shop-app-sort {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: $c-muted;
+  }
+
+  .shop-app-viewtoggle {
+    display: flex;
+    border: 1px solid $c-tan-lite;
+    border-radius: 4px;
+    overflow: hidden;
+
+    button {
+      width: 32px;
+      height: 28px;
+      padding: 0;
+      background: var(--vagabond-c-input-bg);
+      color: $c-muted;
+      border: none;
+      border-radius: 0;
+
+      &.active {
+        background: $c-bg2;
+        color: $c-yellow;
+        box-shadow: inset 0 0 0 1px $c-yellow;
+      }
+    }
+  }
+
+  // ── Body: three columns ──────────────────────────────────────────────
+  .shop-app-body {
+    flex: 1;
+    min-height: 0;
+    display: grid;
+    grid-template-columns: 180px minmax(0, 1fr) 255px;
+    border: 1px solid $c-tan-lite;
+    border-radius: 6px;
+    overflow: hidden;
+
+    &.sidebar-collapsed {
+      grid-template-columns: 46px minmax(0, 1fr) 255px;
+
+      .shop-app-sidebar-title,
+      .shop-cat-label,
+      .shop-cat-children {
+        display: none;
+      }
+
+      .shop-app-sidebar-head,
+      .shop-cat {
+        justify-content: center;
+      }
+    }
+  }
+
+  // ── Categories sidebar ───────────────────────────────────────────────
+  .shop-app-sidebar {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    border-right: 1px solid $c-tan-lite;
+    background: $c-inset-2;
+  }
+
+  .shop-app-sidebar-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 10px;
+    border-bottom: 1px solid $c-tan-lite;
+  }
+
+  .shop-app-sidebar-title {
+    font-family: $font-secondary;
+    font-size: 0.85em;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: $c-yellow;
+    -webkit-text-stroke: 1px $c-black;
+    paint-order: stroke fill;
+  }
+
+  .shop-app-sidebar-toggle {
+    color: $c-muted;
+
+    &:hover { color: $c-text-1; text-shadow: none; }
+  }
+
+  .shop-app-sidebar-list {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .shop-cat {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 8px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    font-family: $font-text;
+    color: $c-text-1;
+    transition: background 0.15s, border-color 0.15s;
+
+    i {
+      width: 16px;
+      text-align: center;
+      color: $c-muted;
+    }
+
+    .shop-cat-label {
+      flex: 1;
+      min-width: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    &:hover {
+      background: var(--vagabond-c-surface);
+      text-shadow: none;
+    }
+
+    &.active {
+      border-color: $c-yellow;
+      background: var(--vagabond-c-surface);
+      box-shadow: inset 3px 0 0 $c-yellow;
+
+      i { color: $c-yellow; }
+    }
+  }
+
+  .shop-cat-children {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-left: 14px;
+    padding-left: 6px;
+    border-left: 1px solid $c-tan-lite;
+  }
+
+  .shop-cat-child {
+    padding: 4px 8px;
+    font-size: 0.92em;
+  }
+
+  // ── Wares: card grid ─────────────────────────────────────────────────
+  .shop-app-list {
+    min-height: 0;
+    overflow-y: auto;
+    padding: 10px;
+
+    // GM stocking drop target
+    &.drag-over {
+      box-shadow: inset 0 0 0 2px $c-yellow, inset 0 0 18px -6px $c-yellow;
+    }
+  }
+
+  .shop-app-empty-hint {
+    margin-top: 8px;
+    font-family: $font-text;
+    font-size: 0.9em;
+    font-style: italic;
+  }
+
+  .shop-card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(165px, 1fr));
+    gap: 10px;
+  }
+
+  // Card zones: head (image + name plate) / description box / price footer
+  .shop-card {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+    padding: 6px;
+    background: var(--vagabond-c-surface);
+    border: 1px solid $c-tan-lite;
+    border-radius: 6px;
+    color: $c-text-1;
+    font-family: $font-text;
+    user-select: none; // double-click opens the item — don't select words
+    transition: border-color 0.15s, box-shadow 0.15s;
+
+    &:hover {
+      border-color: $c-yellow;
+      box-shadow: 0 0 8px -3px $c-yellow;
+    }
+
+    &.featured {
+      border-color: $c-yellow;
+    }
+
+    &.out-of-stock,
+    &.blocked {
+      opacity: 0.55;
+    }
+
+    &.is-hidden {
+      opacity: 0.7;
+      border-style: dashed;
+    }
+  }
+
+  .shop-card-head {
+    display: flex;
+    gap: 6px;
+    min-width: 0;
+  }
+
+  .shop-card-img {
+    width: 52px;
+    height: 52px;
+    flex: 0 0 52px;
+    object-fit: cover;
+    border: 1px solid $c-tan-lite;
+    border-radius: 4px;
+    background: $c-black;
+    cursor: help;
+  }
+
+  .shop-card-plate {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2px;
+    padding: 3px 6px;
+    background: $c-inset-2;
+    border: 1px solid $c-tan-lite;
+    border-radius: 4px;
+  }
+
+  // Name: up to 2 lines, then ellipsis
+  .shop-card-name {
+    font-family: $font-title;
+    font-size: 1.05em;
+    line-height: 1.15;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+
+    .shop-card-featured {
+      color: $c-yellow;
+      text-shadow: 1px 1px 0 $c-black;
+      margin-right: 4px;
+    }
+  }
+
+  .shop-card-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 2px 6px;
+    font-size: 0.78em;
+    color: $c-muted;
+
+    .shop-card-slots,
+    .shop-card-stat {
+      font-family: $shop-font-number;
+      font-size: 1.25em;
+      white-space: nowrap;
+    }
+
+    .shop-card-stat {
+      color: $c-text-1;
+    }
+
+    .shop-card-stock.out {
+      color: $c-red;
+    }
+  }
+
+  .shop-card-badge {
+    font-family: $font-secondary;
+    font-size: 0.85em;
+    text-transform: uppercase;
+    padding: 0 5px;
+    border-radius: 3px;
+    color: $c-white;
+
+    &.sale { background: $c-green; }
+    &.hidden { background: $c-muted; }
+  }
+
+  .shop-card-desc {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 5.6em;
+    padding: 5px 7px;
+    background: var(--vagabond-c-input-bg);
+    border: 1px solid $c-tan-lite;
+    border-radius: 4px;
+  }
+
+  .shop-card-excerpt {
+    font-size: 0.82em;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+
+    em { color: $c-muted; }
+  }
+
+  .shop-card-foot {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 2px 0;
+    border-top: 1px solid $c-tan-lite;
+  }
+
+  .shop-card-price {
+    flex: 1;
+    min-width: 0;
+    font-family: $shop-font-number;
+    font-size: 1.15em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: help;
+
+    i { color: $c-yellow; font-size: 0.85em; }
+
+    &.cannot-afford { color: $c-red; }
+  }
+
+  // Shared dark/yellow button look (card add, cart purchase)
+  %shop-gold-button {
+    background: $c-bg2;
+    color: $c-white;
+    border: 1px solid $c-yellow;
+    border-radius: 4px;
+    transition: box-shadow 0.15s, opacity 0.15s;
+
+    &:hover:not(:disabled) {
+      box-shadow: 0 0 8px -1px $c-yellow, inset 0 0 0 1px $c-yellow;
+    }
+
+    &:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+  }
+
+  .shop-card-buy {
+    @extend %shop-gold-button;
+    position: relative;
+    flex-shrink: 0;
+    width: 32px;
+    padding: 5px 0;
+  }
+
+  .shop-card-incart {
+    position: absolute;
+    top: -7px;
+    right: -7px;
+    min-width: 16px;
+    padding: 0 3px;
+    font-family: $shop-font-number;
+    font-size: 0.8em;
+    line-height: 16px;
+    color: $c-black;
+    background: $c-yellow;
+    border-radius: 8px;
+  }
+
+  // ── Wares: list view ─────────────────────────────────────────────────
+  .shop-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .shop-row {
+    display: grid;
+    grid-template-columns: 30px minmax(0, 1fr) 90px 34px 48px 80px 32px;
+    align-items: center;
+    gap: 8px;
+    padding: 3px 6px;
+    background: var(--vagabond-c-surface);
+    border: 1px solid $c-tan-lite;
+    border-radius: 4px;
+    font-family: $font-text;
+    color: $c-text-1;
+    user-select: none;
+
+    img {
+      width: 30px;
+      height: 30px;
+      object-fit: cover;
+      border: none;
+      border-radius: 3px;
+      cursor: help;
+    }
+
+    .num {
+      text-align: right;
+      font-family: $shop-font-number;
+      font-size: 1.15em;
+      white-space: nowrap;
+
+      &.out { color: $c-red; }
+    }
+
+    &:hover:not(.shop-row-head) { border-color: $c-yellow; }
+    &.featured { border-color: $c-yellow; }
+    &.out-of-stock, &.blocked { opacity: 0.55; }
+    &.is-hidden { opacity: 0.7; border-style: dashed; }
+  }
+
+  .shop-row-head {
+    background: $c-bg2;
+    border-color: $c-bg2;
+    font-family: $font-secondary;
+    font-size: 0.78em;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: $c-lightgrey;
+
+    .num { font-family: $font-secondary; }
+  }
+
+  .shop-row-name {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+    font-family: $font-title;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    &:hover { text-shadow: none; color: $c-yellow; }
+
+    .shop-card-featured { color: $c-yellow; text-shadow: 1px 1px 0 $c-black; }
+  }
+
+  .shop-row-stats {
+    display: flex;
+    gap: 8px;
+    font-family: $shop-font-number;
+    font-size: 1.05em;
+    white-space: nowrap;
+  }
+
+  .shop-app-empty {
+    text-align: center;
+    font-family: $font-title;
+    color: $c-muted;
+    padding: 30px 12px;
+  }
+
+  // ── Cart column ──────────────────────────────────────────────────────
+  .shop-app-cart {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    border-left: 1px solid $c-tan-lite;
+    background: $c-inset-2;
+    font-family: $font-text;
+    color: $c-text-1;
+  }
+
+  .shop-cart-tabs {
+    display: flex;
+    gap: 2px;
+    padding: 6px 6px 0;
+    background: $c-bg2;
+    border-bottom: 1px solid $c-yellow;
+  }
+
+  .shop-cart-tab {
+    flex: 1 1 0;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 7px 4px;
+    margin-bottom: -1px;
+    font-family: $font-secondary;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: $c-lightgrey;
+    border: 1px solid transparent;
+    border-radius: 4px 4px 0 0;
+
+    &:hover { color: $c-white; text-shadow: none; }
+
+    &.active {
+      color: $c-yellow;
+      border-color: $c-yellow;
+      box-shadow: inset 0 0 14px -6px $c-yellow;
+    }
+  }
+
+  .shop-cart-payer {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 8px 10px;
+    border-bottom: 1px solid $c-tan-lite;
+  }
+
+  .shop-cart-who {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+
+    img {
+      width: 36px;
+      height: 36px;
+      flex-shrink: 0;
+      object-fit: cover;
+      object-position: top center;
+      border: 1px solid $c-yellow;
+      border-radius: 50%;
+    }
+
+    select {
+      width: 100%;
+      background: var(--vagabond-c-input-bg);
+      border: 1px solid $c-tan-lite;
+      color: $c-text-1;
+      font-family: $font-text;
+    }
+  }
+
+  .shop-cart-who-text {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .shop-cart-caption {
+    font-family: $font-secondary;
+    font-size: 0.72em;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: $c-muted;
+  }
+
+  .shop-cart-who-name {
+    font-family: $font-title;
+    font-size: 1.1em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .shop-cart-warn {
+    color: $c-red;
+    font-size: 0.85em;
+  }
+
+  .shop-cart-funds {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    padding: 5px 8px;
+    background: var(--vagabond-c-surface);
+    border: 1px solid $c-tan-lite;
+    border-radius: 4px;
+    font-size: 0.88em;
+
+    > div {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+
+      span:last-child { font-family: $shop-font-number; font-size: 1.15em; }
+    }
+
+    .short { color: $c-red; }
+  }
+
+  // Stock card dragged over the cart column
+  .shop-app-cart.stock-drag-over .shop-cart-lines {
+    background: var(--vagabond-c-surface);
+    box-shadow: inset 0 0 0 2px $c-yellow, inset 0 0 18px -6px $c-yellow;
+  }
+
+  .shop-card[draggable="true"],
+  .shop-row[draggable="true"] {
+    cursor: grab;
+  }
+
+  .shop-card.dragging,
+  .shop-row.dragging {
+    opacity: 0.4;
+  }
+
+  .shop-cart-lines {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .shop-cart-line {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 6px;
+    background: var(--vagabond-c-surface);
+    border: 1px solid $c-tan-lite;
+    border-radius: 4px;
+
+    img {
+      width: 28px;
+      height: 28px;
+      flex-shrink: 0;
+      object-fit: cover;
+      border: none;
+      border-radius: 3px;
+    }
+  }
+
+  .shop-cart-line-name {
+    flex: 1;
+    min-width: 0;
+    font-size: 0.9em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .shop-cart-qty {
+    display: flex;
+    align-items: center;
+
+    input {
+      width: 28px;
+      height: 20px;
+      padding: 0;
+      text-align: center;
+      font-family: $shop-font-number;
+      font-size: 1.1em;
+      background: var(--vagabond-c-input-bg);
+      border: 1px solid $c-tan-lite;
+      border-radius: 3px;
+      color: $c-text-1;
+    }
+
+    button {
+      width: 14px;
+      padding: 2px 0;
+      font-size: 0.6em;
+      background: transparent;
+      border: none;
+      color: $c-text-1;
+
+      &:disabled { opacity: 0.3; }
+    }
+  }
+
+  .shop-cart-line-price {
+    font-family: $shop-font-number;
+    font-size: 1.05em;
+    white-space: nowrap;
+  }
+
+  .shop-cart-line-remove {
+    color: $c-muted;
+    font-size: 0.85em;
+
+    &:hover { color: $c-red; text-shadow: none; }
+  }
+
+  .shop-cart-empty {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 20px 10px;
+    text-align: center;
+    font-style: italic;
+    color: $c-muted;
+
+    i { font-size: 2em; opacity: 0.6; }
+  }
+
+  .shop-cart-receipt {
+    margin: 0 8px 6px;
+    padding: 5px 8px;
+    border: 1px solid $c-tan-lite;
+    border-radius: 4px;
+    background: var(--vagabond-c-surface);
+    font-size: 0.85em;
+
+    .shop-cart-receipt-head {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+
+      span {
+        margin-left: auto;
+        font-family: $shop-font-number;
+        font-size: 1.15em;
+        &.paid { color: $c-red; }
+        &.received { color: $c-green; }
+      }
+    }
+
+    ul {
+      margin: 3px 0 0;
+      padding-left: 18px;
+      max-height: 4.5em;
+      overflow-y: auto;
+    }
+  }
+
+  .shop-cart-checkout {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 8px 10px;
+    border-top: 1px solid $c-tan-lite;
+  }
+
+  .shop-cart-total {
+    display: flex;
+    justify-content: space-between;
+    font-family: $font-title;
+    font-size: 1.15em;
+
+    span:last-child { font-family: $shop-font-number; font-size: 1.1em; }
+  }
+
+  .shop-cart-purchase {
+    @extend %shop-gold-button;
+    width: 100%;
+    padding: 7px 10px;
+    font-family: $font-secondary;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  // ── Sell drop zone ───────────────────────────────────────────────────
+  .shop-sell-zone {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    margin: 0 10px 10px;
+    padding: 12px 10px;
+    border: 2px dashed $c-tan-lite;
+    border-radius: 6px;
+    text-align: center;
+    color: $c-muted;
+    transition: border-color 0.15s, background 0.15s, color 0.15s;
+
+    i { font-size: 1.5em; }
+
+    .shop-sell-title {
+      font-family: $font-secondary;
+      font-size: 0.85em;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .shop-sell-hint {
+      font-size: 0.8em;
+      font-style: italic;
+    }
+
+    &.drag-over {
+      border-color: $c-yellow;
+      color: $c-text-1;
+      background: var(--vagabond-c-surface);
+      box-shadow: inset 0 0 12px -4px $c-yellow;
+    }
+  }
+}
+
+// Price breakdown tooltip (rendered in Foundry's tooltip layer, outside the app)
+.shop-price-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 180px;
+
+  .shop-price-line {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+
+    span:last-child {
+      font-family: $shop-font-number;
+      font-size: 1.15em;
+    }
+  }
+}
+
+// "Show to Players" dialog user list
+.shop-show-users {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+// Sell confirmation dialog
+.shop-sell-confirm {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+
+  img {
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+    object-fit: cover;
+    border: none;
+    border-radius: 4px;
+  }
+
+  p { margin: 0 0 4px; }
+}
+
+// Chat receipt item list
+.shop-receipt-lines {
+  margin: 2px 0 0;
+  padding-left: 18px;
+}
+
+// Item detail tooltip (hover a card's image) and the detail popup for players
+// without Observer — same markup as the inventory mini-sheet (helpers/item-sections.mjs).
+.shop-item-tooltip {
+  max-width: 320px;
+  text-align: left;
+
+  .shop-item-tooltip-hint {
+    margin-top: 6px;
+    font-size: 0.85em;
+    font-style: italic;
+    opacity: 0.7;
+  }
+
+  .shop-item-tooltip-name {
+    font-family: $font-title;
+    font-size: 1.15em;
+    margin-bottom: 4px;
+  }
+
+  .mini-sheet-description {
+    margin-bottom: 6px;
+    p { margin: 0 0 4px; }
+  }
+
+  .mini-sheet-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px 14px;
+    margin-bottom: 4px;
+  }
+
+  .mini-sheet-stats--inline {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .stat-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 6px;
+    min-width: 0;
+  }
+
+  .stat-name { opacity: 0.7; }
+  .stat-value {
+    font-family: $font-title;
+    text-transform: capitalize;
+  }
+
+  .mini-sheet-label {
+    font-family: $font-title;
+    color: $c-yellow;
+    margin: 4px 0 2px;
+  }
+
+  .property-row { display: flex; gap: 4px; }
+  .property-name { opacity: 0.7; flex: 0 0 auto; }
+}
+
+.shop-item-popup .shop-item-tooltip {
+  max-width: none;
+}

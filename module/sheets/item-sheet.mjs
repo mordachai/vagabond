@@ -2,6 +2,8 @@ import { prepareActiveEffectCategories, effectSeedFromItem } from '../helpers/ef
 import { GrantsHandlers } from './item-sheet-grants.mjs';
 import { EnrichmentHelper } from '../helpers/enrichment-helper.mjs';
 import * as ItemSections from '../helpers/item-sections.mjs';
+import { VideoPreviewDialog } from '../applications/video-preview-dialog.mjs';
+import { VagabondSpellSequencer } from '../helpers/spell-sequencer.mjs';
 
 const { api, sheets } = foundry.applications;
 const DragDrop = foundry.applications.ux.DragDrop;
@@ -39,6 +41,8 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       onEditImage: this._onEditImage,
       browseItemFxFile: this._onBrowseItemFxFile,
       browseItemFxSound: this._onBrowseItemFxSound,
+      previewItemFx: this._onPreviewItemFx,
+      previewSpellFx: this._onPreviewSpellFx,
       viewDoc: this._viewEffect,
       createDoc: this._createEffect,
       deleteDoc: this._deleteEffect,
@@ -260,6 +264,12 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       };
     }
 
+    // View-only viewers (e.g. players reading a shop's stock item) always get the
+    // locked view — the templates switch on `system.locked`, so shadow it.
+    if (!this.isEditable && this.item.system.locked === false) {
+      context.system = Object.create(this.item.system, { locked: { value: true } });
+    }
+
     return context;
   }
 
@@ -332,6 +342,11 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
           )
         };
         context.macroNames = VagabondItemSheet._resolveMacroNames(this.item);
+        // Locked-view Anim row: school label + whether the school has any configured anim
+        if (this.item.system.locked && VagabondSpellSequencer.isAvailable()) {
+          const { schoolLabel, groups } = VagabondItemSheet._spellFxGroups(this.item);
+          if (groups.length) context.spellFx = { schoolLabel };
+        }
         break;
 
       case 'ancestryDetails':
@@ -2275,6 +2290,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
    */
   static async _onToggleLock(event, target) {
     if (this.item.type !== 'equipment' && this.item.type !== 'container' && this.item.type !== 'spell') return;
+    if (!this.isEditable) return;
 
     // Submit the form BEFORE toggling to save any pending changes
     if (this.element && this.element.tagName === 'FORM') {
@@ -2344,6 +2360,57 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       left: this.position.left + 10,
     });
     return fp.browse();
+  }
+
+  /**
+   * Locked-view film icon: open the floating preview with the item's Hit / Miss animations.
+   * @this VagabondItemSheet
+   * @protected
+   */
+  static _onPreviewItemFx(event, target) {
+    const fx = this.item.system.itemFx ?? {};
+    const groups = [];
+    const volume = fx.soundVolume ?? 0.6;
+    if (fx.hitFile) groups.push({ label: game.i18n.localize('VAGABOND.ItemFx.Hit'), spec: fx.hitFile, sound: fx.hitSound, volume });
+    if (fx.missFile) groups.push({ label: game.i18n.localize('VAGABOND.ItemFx.Miss'), spec: fx.missFile, sound: fx.missSound, volume });
+    if (!groups.length) return;
+    VideoPreviewDialog.open(groups, { title: this.item.name });
+  }
+
+  /**
+   * Preview groups for a spell's FX school: the cast anim, then one group per
+   * delivery type that has an area anim configured.
+   * @param {Item} item  spell
+   * @returns {{schoolLabel: string, groups: {label: string, spec: string}[]}}
+   */
+  static _spellFxGroups(item) {
+    const school = VagabondSpellSequencer._resolveSchool(item);
+    const cfg = VagabondSpellSequencer._getConfig();
+    const schoolLabel = game.i18n.localize(CONFIG.VAGABOND.fxSchools?.[school] ?? school);
+    const groups = [];
+    const cast = cfg.castAnims?.[school];
+    if (cast?.file) {
+      groups.push({ label: game.i18n.localize('VAGABOND.ItemFx.Cast'), spec: cast.file, sound: cast.sound, volume: cast.volume ?? 0.45 });
+    }
+    for (const [delivery, entry] of Object.entries(cfg.areaAnims?.[school] ?? {})) {
+      if (!entry?.file) continue;
+      groups.push({
+        label: game.i18n.localize(CONFIG.VAGABOND.deliveryTypes?.[delivery] ?? delivery),
+        spec: entry.file, sound: entry.sound, volume: entry.volume ?? 0.6,
+      });
+    }
+    return { schoolLabel, groups };
+  }
+
+  /**
+   * Locked-view film icon on spells: preview the school's cast + area animations.
+   * @this VagabondItemSheet
+   * @protected
+   */
+  static _onPreviewSpellFx(event, target) {
+    const { schoolLabel, groups } = VagabondItemSheet._spellFxGroups(this.item);
+    if (!groups.length) return;
+    VideoPreviewDialog.open(groups, { title: `${this.item.name} (${schoolLabel})` });
   }
 
   /**

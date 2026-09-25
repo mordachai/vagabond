@@ -362,12 +362,173 @@
       "NoScene": "Nenhuma cena ativa para posicionar um glifo.",
       "CreateFailed": "Não foi possível criar o glifo nesta cena."
     },
+    "Shop": {
+      "Tabs": {
+        "all": "Todas as Mercadorias",
+        "armor": "Armaduras",
+        "weapon": "Armas",
+        "gear": "Equipamentos",
+        "alchemical": "Alquímicos",
+        "relic": "Relíquias",
+        "general": "Geral"
+      },
+      "Relation": {
+        "hostile": "Hostil",
+        "unfriendly": "Inamistoso",
+        "neutral": "Neutro",
+        "friendly": "Amigável",
+        "allied": "Aliado"
+      },
+      "App": {
+        "OpenHint": "Clique duas vezes no cartão para abrir o item",
+        "DropStockHint": "Solte itens, pastas de itens ou compêndios inteiros aqui para abastecer a loja.",
+        "AttitudeHint": "Só o Mestre: a atitude da loja com este comprador (altera os preços)",
+        "SearchPlaceholder": "Buscar mercadorias...",
+        "SearchCount": "{count} encontrados",
+        "NoMatches": "Nenhuma mercadoria corresponde à busca.",
+        "SortBy": "Ordenar por",
+        "ViewGrid": "Cartões",
+        "ViewList": "Lista",
+        "Item": "Item",
+        "Stats": "Atributos",
+        "Stock": "Estoque",
+        "Price": "Preço",
+        "Damage": "Dano",
+        "ArmorRating": "Valor de Armadura",
+        "Sort": {
+          "shop": "Ordem da loja",
+          "name": "Nome",
+          "priceAsc": "Preço: menor para maior",
+          "priceDesc": "Preço: maior para menor",
+          "slots": "Espaços"
+        },
+        "Merchant": "Mercador",
+        "Categories": "Categorias",
+        "ToggleSidebar": "Recolher / expandir categorias",
+        "Details": "Detalhes",
+        "NoDescription": "Sem descrição.",
+        "AddToCart": "Adicionar ao carrinho",
+        "BuyingAs": "Comprando como",
+        "Treasury": "Tesouro do grupo",
+        "NoParty": "Seu personagem não está em um grupo.",
+        "Available": "Disponível",
+        "After": "Depois",
+        "Short": "Insuficiente",
+        "Remove": "Remover",
+        "CartEmpty": "Seu carrinho está vazio. Arraste mercadorias para cá ou use o botão de carrinho delas.",
+        "LastReceipt": "Último recibo",
+        "Paid": "Pago",
+        "Received": "Recebido",
+        "Total": "Total",
+        "Purchase": "Comprar",
+        "SellZone": "Solte itens aqui para vender",
+        "SellRate": "O mercador paga {pct}% do valor",
+        "SellTitle": "Vender Item",
+        "SellConfirm": "Vender {item} para {shop}?",
+        "SellOffer": "Oferta: {price} cada.",
+        "Sell": "Vender",
+        "Quantity": "Quantidade",
+        "SellNotYours": "Você só pode vender itens do seu personagem ou do seu grupo.",
+        "Cart": {
+          "personal": "Carrinho Pessoal",
+          "group": "Carrinho do Grupo"
+        },
+        "ShowToPlayers": "Mostrar aos Jogadores",
+        "ConfigureShop": "Configurar Loja",
+        "NoPlayers": "Nenhum jogador online.",
+        "Shown": "{shop} mostrada para {users}.",
+        "NoShops": "Não há lojas neste mundo.",
+        "PickShop": "Abrir Loja",
+        "Open": "Abrir",
+        "Show": "Mostrar",
+        "BuyingFor": "Comprando para",
+        "Wallet": "Moedas",
+        "Slots": "Espaços de Inventário",
+        "NoCharacter": "Você não tem um personagem para comprar. Peça ao GM para atribuir um na Configuração de Usuário.",
+        "Sale": "Promoção",
+        "Hidden": "Oculto",
+        "OutOfStock": "Esgotado",
+        "InStock": "{count} em estoque",
+        "Buy": "Comprar",
+        "Empty": "Nada à venda no momento.",
+        "SlotWarningTitle": "Sem Espaço Suficiente",
+        "SlotWarning": "{name} ficaria com {after} Espaços, acima do limite de {max}. Comprar mesmo assim?",
+        "SceneControl": "Abrir Loja"
+      },
+      "Chat": {
+        "BuyLines": "{actor} pagou {price} por:",
+        "BuyLinesParty": "{actor} pagou {price} do tesouro de {party} por:",
+        "BuyTitle": "Compra",
+        "SellTitle": "Venda",
+        "DepositTitle": "Depósito do Grupo",
+        "WithdrawTitle": "Saque do Grupo",
+        "Buy": "{actor} comprou {item} por {price}.",
+        "Sell": "{actor} vendeu {item} por {price}.",
+        "Deposit": "{actor} depositou {price} no tesouro de {party}.",
+        "Withdraw": "{actor} sacou {price} do tesouro de {party}."
+      },
+      "Errors": {
+        "emptyCart": "O carrinho está vazio.",
+        "disabled": "As lojas estão desativadas nas configurações do mundo.",
+        "noGM": "Um GM precisa estar online para negociar.",
+        "noShop": "Loja não encontrada.",
+        "noActor": "Nenhum personagem válido para esta transação.",
+        "permission": "Você não tem permissão para esta transação.",
+        "badQty": "Quantidade inválida.",
+        "noItem": "Este item não está disponível.",
+        "blocked": "A loja não negocia este item.",
+        "badMaterial": "Este material não é oferecido para este item.",
+        "outOfStock": "Estoque insuficiente.",
+        "funds": "Dinheiro insuficiente.",
+        "shopFunds": "A loja não pode pagar por isso.",
+        "equipped": "Desequipe o item antes de vendê-lo.",
+        "notBought": "Esta loja não compra esse tipo de item.",
+        "containerNotEmpty": "Esvazie o recipiente antes de vendê-lo.",
+        "badAmount": "Valor inválido.",
+        "error": "A transação falhou. Veja o console para detalhes."
+      },
+      "Price": {
+        "Base": "Valor base",
+        "Markup": "Margem da loja",
+        "Override": "Preço definido",
+        "Sale": "Em promoção",
+        "Relationship": "Relacionamento",
+        "Presence": "Presença",
+        "Haggle": "Pechincha",
+        "BuyRatio": "Taxa de compra"
+      },
+      "Sheet": {
+        "OnlyItemPacks": "Apenas compêndios de Itens podem abastecer uma loja.",
+        "TaglinePlaceholder": "Slogan (ex: Lâminas, Malhas e Equipamento de Estrada)",
+        "TitlePlaceholder": "ex: Mestre Fornecedor",
+        "ShopTab": "Loja e Configurações",
+        "Category": "Categoria",
+        "FolderAdded": "{count} itens adicionados de {folder} ({skipped} já em estoque).",
+        "FolderNothing": "Nada novo para adicionar de {folder} ({skipped} já em estoque).",
+        "OpenStore": "Abrir Loja",
+        "ShopImage": "Imagem da placa / token da loja",
+        "ShopName": "Nome da loja",
+        "Shopkeeper": "Lojista",
+        "ShopkeeperPortrait": "Retrato do lojista",
+        "Pricing": "Preços",
+        "Purse": "Bolsa",
+        "Stock": "Estoque",
+        "Item": "Item",
+        "Qty": "Qtd",
+        "Base": "Base",
+        "Price": "Preço",
+        "Remove": "Remover do estoque",
+        "EmptyStock": "Sem estoque. Arraste itens, pastas de itens ou compêndios inteiros para cá.",
+        "OnlyEquipment": "Apenas equipamentos e recipientes podem ser estocados em uma loja."
+      }
+    },
     "SheetLabels": {
       "Actor": "Ficha de Ator Vagabond",
       "Character": "Ficha de Personagem Vagabond",
       "NPC": "Ficha de NPC Vagabond",
       "Party": "Ficha de Grupo Vagabond",
       "Construct": "Ficha de Construto Vagabond",
+      "Shop": "Ficha de Loja Vagabond",
       "Item": "Ficha de Item Vagabond"
     },
     "Keybindings": {
@@ -456,6 +617,17 @@
         "equipped": "Equipado (qualquer lugar)",
         "inHand": "Trinket na Mão",
         "handsFree": "Ambas as Mãos Livres (gestos)"
+      },
+      "shopChatMode": {
+        "name": "Recibos da Loja no Chat",
+        "hint": "Quem vê o cartão de chat de cada compra, venda e transferência do grupo.",
+        "public": "Todos",
+        "private": "GM e o negociante",
+        "off": "Sem cartões"
+      },
+      "shopsEnabled": {
+        "name": "Ativar Lojas",
+        "hint": "Ativa o tipo de ator Loja: comerciantes com quem os jogadores compram e vendem. Compras e vendas são processadas pelo GM ativo."
       },
       "lightSourceHandMode": {
         "name": "Fontes de Luz Ocupam Mãos",
@@ -595,7 +767,14 @@
     },
     "VideoPreview": {
       "ToggleLoopTooltip": "Alternar repetição",
-      "Loop": "Repetir"
+      "Loop": "Repetir",
+      "Play": "Reproduzir",
+      "ReplayTooltip": "Reproduzir desde o início",
+      "Mute": "Mudo",
+      "Title": "Pré-visualização da Animação",
+      "NoFile": "Nenhum arquivo de animação reproduzível encontrado.",
+      "PrevVariant": "Variante anterior",
+      "NextVariant": "Próxima variante"
     },
     "CompendiumSettings": {
       "Description": "Controle quais compêndios de Item estão disponíveis no Criador de Personagem. Isso determina qual conteúdo (ancestralidades, classes, equipamentos, etc.) os jogadores podem escolher durante a criação do personagem.",
@@ -878,6 +1057,53 @@
       }
     },
     "Actor": {
+      "Shop": {
+        "FIELDS": {
+          "shopkeeper": {
+            "title": {
+              "label": "Título"
+            },
+            "name": {
+              "label": "Nome"
+            }
+          },
+          "pricing": {
+            "markup": {
+              "label": "Margem %",
+              "hint": "Somada ao custo base de cada item quando os jogadores compram."
+            },
+            "buyRatio": {
+              "label": "Preço de Compra %",
+              "hint": "Parte do valor do item que a loja paga quando jogadores vendem (50% = metade). Sem regra oficial, defina por loja."
+            },
+            "saleDiscount": {
+              "label": "Desconto de Promoção %",
+              "hint": "Desconto em itens marcados Em Promoção."
+            },
+            "presenceEnabled": {
+              "label": "Desconto por Presença",
+              "hint": "Compradores recebem desconto por ponto de Presença."
+            },
+            "presencePctPerPoint": {
+              "label": "Desconto % por Presença"
+            }
+          },
+          "resell": {
+            "label": "Revender Itens Comprados",
+            "hint": "Itens vendidos à loja entram no estoque dela."
+          },
+          "usePurse": {
+            "label": "Bolsa Limitada",
+            "hint": "A loja paga os vendedores com as próprias moedas. Desligado = fundos ilimitados."
+          },
+          "stock": {
+            "unlimitedByDefault": {
+              "label": "Estoque Ilimitado por Padrão",
+              "hint": "Itens nunca acabam, salvo configuração por item."
+            }
+          }
+        }
+      },
       "Tabs": {
         "Biography": "Biografia",
         "Features": "Características",
@@ -1950,7 +2176,11 @@
       "BrowseAudio": "Procurar arquivo de áudio",
       "FileNotFound": "Arquivo não encontrado",
       "AnimConfigured": "Animação configurada",
-      "SoundConfigured": "Som configurado"
+      "SoundConfigured": "Som configurado",
+      "Hit": "Acerto",
+      "Miss": "Erro",
+      "ClickToPreview": "Clique para pré-visualizar",
+      "Cast": "Conjuração"
     },
     "UI": {
       "Sections": {
@@ -2664,7 +2894,8 @@
       "character": "Personagem",
       "npc": "NPC",
       "party": "Grupo",
-      "construct": "Construto"
+      "construct": "Construto",
+      "shop": "Loja"
     },
     "Item": {
       "gear": "- Remover",

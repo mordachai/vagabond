@@ -1,0 +1,23 @@
+{{!-- Shop tab bar (shop sheet + store window). Optional leading icon tab via `iconTab`. --}}
+<div class="shop-tabbars">
+  <nav class="shop-tabbar">
+    {{#if iconTab}}
+    <a class="shop-tab shop-tab-icon {{#if iconTab.active}}active{{/if}}" data-action="selectTab" data-tab="{{iconTab.key}}"
+      data-tooltip="{{iconTab.label}}"><i class="{{iconTab.icon}}"></i></a>
+    {{/if}}
+    {{#each tabs}}
+    <a class="shop-tab {{#if active}}active{{/if}}" data-action="selectTab" data-tab="{{key}}">
+      {{label}}
+    </a>
+    {{/each}}
+  </nav>
+  {{#if subtabs}}
+  <nav class="shop-subtabbar">
+    {{#each subtabs}}
+    <a class="shop-subtab {{#if active}}active{{/if}}" data-action="selectSubTab" data-sub="{{key}}">
+      {{label}}
+    </a>
+    {{/each}}
+  </nav>
+  {{/if}}
+</div>

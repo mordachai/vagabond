@@ -26,6 +26,13 @@ export default class VagabondParty extends VagabondActorBase {
     schema.crawl  = new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 });
     schema.travel = new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 });
 
+    // Party treasury — shared funds (shop split payments, member transfers)
+    schema.currency = new fields.SchemaField({
+      gold: new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 }),
+      silver: new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 }),
+      copper: new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 }),
+    });
+
     return schema;
   }
 }

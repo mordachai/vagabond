@@ -332,8 +332,9 @@
                   <span class='stat-label'>{{localize "VAGABOND.UI.Labels.Anim"}}:</span>
                   <span class='stat-value item-fx-locked-icons'>
                     {{#if (or system.itemFx.hitFile system.itemFx.missFile)}}
-                      <i class='fas fa-film {{#if itemFxValidation.animInvalid}}fx-icon-invalid{{/if}}'
-                         data-tooltip='{{#if itemFxValidation.animInvalid}}{{localize "VAGABOND.ItemFx.FileNotFound"}}{{else}}{{localize "VAGABOND.ItemFx.AnimConfigured"}}{{/if}}'></i>
+                      <i class='fas fa-film clickable {{#if itemFxValidation.animInvalid}}fx-icon-invalid{{/if}}'
+                         data-action='previewItemFx'
+                         data-tooltip='{{#if itemFxValidation.animInvalid}}{{localize "VAGABOND.ItemFx.FileNotFound"}}{{else}}{{localize "VAGABOND.ItemFx.AnimConfigured"}} — {{localize "VAGABOND.ItemFx.ClickToPreview"}}{{/if}}'></i>
                     {{/if}}
                     {{#if (or system.itemFx.hitSound system.itemFx.missSound)}}
                       <i class='fas fa-music {{#if itemFxValidation.soundInvalid}}fx-icon-invalid{{/if}}'

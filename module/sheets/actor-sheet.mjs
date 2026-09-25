@@ -2325,10 +2325,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     newItemData.system.containerId = null;
 
     // Assign next available gridPosition
-    const maxPosition = this.actor.items
-      .filter(i => i.type === 'equipment' && i.system.gridPosition != null)
-      .reduce((max, i) => Math.max(max, i.system.gridPosition ?? 0), -1);
-    newItemData.system.gridPosition = maxPosition + 1;
+    newItemData.system.gridPosition = EquipmentHelper.nextGridPosition(this.actor);
 
     // Create the item on the actor, then remove it from the container
     await this.actor.createEmbeddedDocuments('Item', [newItemData]);
@@ -2388,12 +2385,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
     // Assign gridPosition for equipment items if not set
     if (itemData.type === 'equipment' && itemData.system && !itemData.system.gridPosition) {
-      // Find highest gridPosition in current inventory
-      const maxPosition = this.actor.items
-        .filter(i => i.type === 'equipment' && i.system.gridPosition != null)
-        .reduce((max, item) => Math.max(max, item.system.gridPosition || 0), -1);
-
-      itemData.system.gridPosition = maxPosition + 1;
+      itemData.system.gridPosition = EquipmentHelper.nextGridPosition(this.actor);
     }
 
     // Create the item

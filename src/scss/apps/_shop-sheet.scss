@@ -1,0 +1,509 @@
+// Shop numbers (prices, coins, slots, stats, quantities) — one font for sheet + store.
+// Defined here because this partial is imported before _shop-app.scss.
+$shop-font-number: $font-title;
+
+// Shop actor sheet (GM configuration) — phase 0 foundation.
+// Colors/fonts: system $c-* / $font-* variables only. The window paper background
+// ($bg-paper, light/dark aware) comes from global/_window.scss — don't override it.
+
+.vagabond.shop-sheet {
+  .window-content {
+    padding: 0;
+  }
+
+  .shop-sheet-root {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+  }
+
+  // ── Header (matches the construct sheet header) ─────────────────────
+  .shop-sheet-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px;
+    border-bottom: 2px solid $c-black;
+    background-image: url('../assets/images/sheets/tabNavBG.webp');
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    .shop-sign {
+      width: 90px;
+      height: 90px;
+      flex-shrink: 0;
+      object-fit: cover;
+      border-radius: 10px;
+      border: 2px solid $c-yellow;
+      background-color: $c-black;
+      filter: drop-shadow(2px 2px 1px $c-inset-1);
+      cursor: pointer;
+    }
+
+    .shop-title {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .shop-name {
+      font-family: $font-title;
+      font-size: 1.5em;
+      height: auto;
+      line-height: 2;
+      width: 100%;
+      padding: 0 10px;
+      color: $c-white;
+      border-bottom: none;
+      background-image: url('../assets/images/sheets/titleBG.webp');
+      background-repeat: no-repeat;
+      background-size: 100% 100%;
+      filter: drop-shadow(2px 2px 1px $c-inset-1);
+      text-shadow:
+        2px 2px 0 $c-black,
+        -2px 2px 0 $c-black,
+        -2px -2px 0 $c-black,
+        2px -2px 0 $c-black;
+    }
+
+    // Tagline input — reads as the yellow subtitle it replaces
+    .shop-subtitle {
+      flex: 1;
+      min-width: 0;
+      height: auto;
+      padding: 0 4px;
+      font-family: $font-title;
+      font-size: 1.1em;
+      font-style: italic;
+      color: $c-yellow;
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 3px;
+
+      &::placeholder { color: $c-yellow; opacity: 0.5; }
+      &:hover, &:focus { border-color: $c-yellow; }
+    }
+
+    .shop-subtitle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .shop-header-buttons {
+      display: flex;
+      gap: 6px;
+    }
+  }
+
+  // ── Body ─────────────────────────────────────────────────────────────
+  .shop-sheet-body {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding-bottom: 10px;
+  }
+
+  .shop-section {
+    margin-bottom: 6px;
+  }
+
+  // Yellow title, black outline
+  .shop-section-title {
+    font-family: $font-title;
+    font-size: 1.2em;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: $c-yellow;
+    text-shadow:
+      1px 1px 0 $c-black,
+      -1px 1px 0 $c-black,
+      -1px -1px 0 $c-black,
+      1px -1px 0 $c-black;
+    margin: 0 0 6px;
+    padding: 6px 10px;
+    border-bottom: 1px solid $c-tan-lite;
+    background: $c-inset-2;
+  }
+
+  // Inputs: themed surface (light/dark aware), not the transparent sheet default
+  input[type="text"],
+  input[type="number"] {
+    background: var(--vagabond-c-input-bg);
+    border: 1px solid $c-tan-lite;
+    border-radius: 4px;
+    color: $c-text-1;
+    font-family: $font-text;
+
+    &:focus {
+      border-color: $c-yellow;
+      box-shadow: 0 0 4px -1px $c-yellow;
+    }
+  }
+
+  input[type="number"] {
+    font-family: $shop-font-number;
+    font-size: 1.1em;
+    text-align: right;
+  }
+
+  // ── Label + input on one row ─────────────────────────────────────────
+  .shop-fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 20px;
+    padding: 0 10px;
+  }
+
+  .shop-field {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 30px;
+    padding: 2px 0;
+    font-family: $font-text;
+    color: $c-text-1;
+
+    label {
+      flex: 1;
+      min-width: 0;
+    }
+
+    // ? help bubble — hover shows the field's hint (same look as the clock config dialog)
+    .shop-help {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 15px;
+      height: 15px;
+      margin-left: 4px;
+      border-radius: 50%;
+      background: $c-yellow;
+      color: $c-dark;
+      font-size: 0.7rem;
+      font-weight: bold;
+      vertical-align: middle;
+    }
+
+    input[type="number"] {
+      flex: 0 0 70px;
+      width: 70px;
+    }
+
+    input[type="text"] {
+      flex: 2;
+    }
+
+    // Pricing sliders: [label | slider | readout]
+    input[type="range"] {
+      flex: 0 0 110px;
+      width: 110px;
+      margin: 0;
+      accent-color: $c-yellow;
+      cursor: pointer;
+    }
+
+    .shop-slider-value {
+      flex: 0 0 46px;
+      text-align: right;
+      font-family: $shop-font-number;
+      font-size: 1.1em;
+      color: $c-text-1;
+    }
+
+    input[type="checkbox"] {
+      flex: 0 0 auto;
+      margin: 0;
+    }
+  }
+
+  // Purse | Stock settings in two columns
+  .shop-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+
+    .shop-field {
+      padding: 2px 10px;
+    }
+  }
+
+  // ── Shopkeeper ───────────────────────────────────────────────────────
+  .shop-keeper-row {
+    display: flex;
+    gap: 10px;
+    padding: 0 10px;
+
+    // Stretches to the height of the name + description column so both edges line up
+    .shop-keeper-portrait {
+      width: 124px;
+      height: auto;
+      min-height: 124px;
+      flex: 0 0 124px;
+      align-self: stretch;
+      object-fit: cover;
+      object-position: top center;
+      border-radius: 10px;
+      border: 2px solid $c-yellow;
+      background-color: $c-black;
+      filter: drop-shadow(2px 2px 1px $c-inset-1);
+      cursor: pointer;
+    }
+
+    .shop-keeper-fields {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      flex: 1;
+      min-width: 0;
+
+      prose-mirror {
+        min-height: 70px;
+        background: var(--vagabond-c-surface);
+        border: 1px solid $c-tan-lite;
+        border-radius: 4px;
+        color: $c-text-1;
+        font-family: $font-text;
+      }
+    }
+  }
+
+  // ── Purse ────────────────────────────────────────────────────────────
+  .shop-purse-coins {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 2px 10px;
+    font-family: $shop-font-number;
+    font-size: 1.1em;
+    color: $c-text-1;
+
+    label {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    input {
+      width: 52px;
+    }
+
+    .shop-purse-total {
+      margin-left: auto;
+      color: $c-muted;
+      white-space: nowrap;
+    }
+  }
+
+  // ── Stock list ───────────────────────────────────────────────────────
+  .shop-stock-list {
+    list-style: none;
+    margin: 4px 10px 0;
+    padding: 0;
+    color: $c-text-1;
+
+    li {
+      display: grid;
+      grid-template-columns: 32px 1fr 44px 80px 80px 24px;
+      align-items: center;
+      gap: 8px;
+      padding: 3px 4px;
+      border-bottom: 1px solid $c-inventory-lines;
+    }
+
+    // Gear tab adds the Category column
+    &.with-category li {
+      grid-template-columns: 32px 1fr 120px 44px 80px 80px 24px;
+    }
+
+    .shop-stock-head {
+      font-family: $font-title;
+      color: $c-muted;
+      text-transform: uppercase;
+      font-size: 0.85em;
+
+      // Numeric headers right-align like the values below them
+      .shop-stock-num {
+        text-align: right;
+      }
+    }
+
+    .shop-stock-row {
+      font-family: $font-text;
+
+      &:hover {
+        background: $c-inventory-hover;
+      }
+
+      img {
+        width: 32px;
+        height: 32px;
+        border: none;
+        object-fit: cover;
+      }
+
+      // Category: empty = grouped by equipment type (shown as placeholder)
+      .shop-stock-category {
+        width: 100%;
+        min-width: 0;
+        font-size: 0.85em;
+        text-align: left;
+
+        &::placeholder {
+          color: $c-muted;
+          font-style: italic;
+        }
+      }
+
+      .shop-stock-name {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .shop-stock-qty,
+      .shop-stock-base,
+      .shop-stock-price {
+        font-family: $shop-font-number;
+        font-size: 1.15em;
+        text-align: right;
+      }
+
+      .shop-stock-base {
+        color: $c-muted;
+      }
+
+      .shop-stock-delete {
+        color: $c-muted;
+        text-align: center;
+
+        &:hover {
+          color: $c-red;
+        }
+      }
+    }
+
+    .shop-stock-empty {
+      display: block;
+      text-align: center;
+      font-family: $font-title;
+      color: $c-muted;
+      padding: 20px 12px;
+    }
+  }
+}
+
+// ── Shop tab bar (shared: shop sheet + store window) ─────────────────────
+// Flat dark strip; active tab = yellow text, framed with a yellow underline.
+// Colors: $c-bg2 is dark in both themes, so the strip reads the same in light/dark.
+.vagabond .shop-tabbars {
+  flex-shrink: 0;
+
+  .shop-tabbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    gap: 2px;
+    padding: 6px 8px 0;
+    background: $c-bg2;
+    border-bottom: 1px solid $c-yellow;
+  }
+
+  .shop-tab {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    margin-bottom: -1px;
+    font-family: $font-secondary;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: $c-lightgrey;
+    border: 1px solid transparent;
+    border-bottom: 2px solid transparent;
+    border-radius: 4px 4px 0 0;
+    white-space: nowrap;
+    transition: color 0.15s, box-shadow 0.15s;
+
+    &:hover {
+      color: $c-white;
+      text-shadow: none;
+    }
+
+    &.active {
+      color: $c-yellow;
+      border-color: $c-yellow;
+      border-bottom-color: $c-yellow;
+      box-shadow: inset 0 0 14px -6px $c-yellow;
+    }
+
+    &.shop-tab-icon {
+      padding: 8px 12px;
+      font-size: 1.05rem;
+    }
+  }
+
+  // Gear categories: pill row under the main bar
+  .shop-subtabbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 6px;
+    padding: 6px 10px;
+    border-bottom: 1px solid $c-tan-lite;
+    background: $c-inset-2;
+  }
+
+  .shop-subtab {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 2px 10px;
+    font-family: $font-secondary;
+    font-size: 0.85rem;
+    color: $c-text-1;
+    border: 1px solid $c-tan-lite;
+    border-radius: 12px;
+    white-space: nowrap;
+
+    &:hover {
+      border-color: $c-yellow;
+      text-shadow: none;
+    }
+
+    &.active {
+      background: $c-bg2;
+      color: $c-yellow;
+      border-color: $c-yellow;
+    }
+  }
+}
+
+// GM action buttons (Open Store / Show to Players) — shop sheet header + store buyer bar
+.vagabond .shop-show-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: auto;
+  height: auto;
+  line-height: normal;
+  padding: 4px 10px;
+  background: $c-bg2;
+  color: $c-white;
+  border: 1px solid $c-yellow;
+  border-radius: 4px;
+  font-family: $font-secondary;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: box-shadow 0.15s;
+
+  &:hover {
+    box-shadow: 0 0 8px -1px $c-yellow, inset 0 0 0 1px $c-yellow;
+  }
+}

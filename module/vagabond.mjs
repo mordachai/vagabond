@@ -14,6 +14,7 @@ import {
   VagabondNPCSheet,
   VagabondPartySheet,
   VagabondConstructSheet,
+  VagabondShopSheet,
 } from './sheets/_module.mjs';
 import { VagabondItemSheet } from './sheets/item-sheet.mjs';
 // Import helper/utility classes and constants.
@@ -68,6 +69,10 @@ import { LightSource } from './helpers/light-source.mjs';
 import { VagabondDamageHelper } from './helpers/damage-helper.mjs';
 import { StatusHelper } from './helpers/status-helper.mjs';
 import { VagabondRollBuilder } from './helpers/roll-builder.mjs';
+import { CurrencyHelper } from './helpers/currency-helper.mjs';
+import { ShopPricing } from './helpers/shop-pricing.mjs';
+import { ShopTransactions } from './helpers/shop-transactions.mjs';
+import { ShopApp } from './applications/shop-app.mjs';
 import { VagabondTokenRingShader, installStatusRingEffects, STATUS_RING_EFFECTS } from './ui/effects/index.mjs';
 
 const collections = foundry.documents.collections;
@@ -411,6 +416,43 @@ function registerGameSettings() {
     },
     default: 'requireFreeHand',
     requiresReload: false,
+  });
+
+  // Shops: enables the `shop` actor type and shop transactions (docs/shop-plan.md).
+  game.settings.register('vagabond', 'shopsEnabled', {
+    name: 'VAGABOND.Settings.shopsEnabled.name',
+    hint: 'VAGABOND.Settings.shopsEnabled.hint',
+    scope: 'world',
+    config: true,
+    type: Boolean,
+    default: true,
+    requiresReload: false,
+    onChange: () => ui.controls?.render(), // show/hide the GM Shops scene tool
+  });
+
+  // Shop transaction receipts in chat: everyone, GMs + the trader's owners, or none.
+  game.settings.register('vagabond', 'shopChatMode', {
+    name: 'VAGABOND.Settings.shopChatMode.name',
+    hint: 'VAGABOND.Settings.shopChatMode.hint',
+    scope: 'world',
+    config: true,
+    type: String,
+    choices: {
+      public: 'VAGABOND.Settings.shopChatMode.public',
+      private: 'VAGABOND.Settings.shopChatMode.private',
+      off: 'VAGABOND.Settings.shopChatMode.off',
+    },
+    default: 'public',
+    requiresReload: false,
+  });
+
+  // Store window layout per user: card grid or compact list (toggled in the store toolbar)
+  game.settings.register('vagabond', 'shopView', {
+    scope: 'client',
+    config: false,
+    type: String,
+    choices: { grid: 'grid', list: 'list' },
+    default: 'grid',
   });
 
   // Imbue delivery: pay Damage/Effect mana upfront at cast (legacy) vs deferred
@@ -1060,6 +1102,7 @@ async function preloadHandlebarsTemplates() {
     'systems/vagabond/templates/party/party-compact-view.hbs',
     'systems/vagabond/templates/party/notes-tab.hbs',
     'systems/vagabond/templates/party/notes-right.hbs',
+    'systems/vagabond/templates/shop/shop-tabs.hbs',
     // Construct sheet partials
     'systems/vagabond/templates/construct/construct-tab.hbs',
     'systems/vagabond/templates/construct/construct-part-card.hbs',
@@ -1140,6 +1183,7 @@ globalThis.vagabond = {
     VagabondCharacterHud,
     VagabondNPCHud,
     CombatCarousel,
+    ShopApp,
   },
   ui: {
     ProgressClockOverlay,
@@ -1264,8 +1308,12 @@ Hooks.once('init', function () {
     npc: models.VagabondNPC,
     party: models.VagabondParty,
     construct: models.VagabondConstruct,
+    shop: models.VagabondShop,
   };
   CONFIG.Item.documentClass = VagabondItem;
+
+  // Shop transactions run on the active GM via User#query (buy / sell / party transfer)
+  ShopTransactions.registerQueries();
   CONFIG.Item.dataModels = {
     equipment: models.VagabondEquipment,
     spell: models.VagabondSpell,
@@ -1322,6 +1370,12 @@ Hooks.once('init', function () {
     types: ['construct'],
     makeDefault: true,
     label: 'VAGABOND.SheetLabels.Construct',
+  });
+  // Register Shop sheet (GM configuration)
+  collections.Actors.registerSheet('vagabond', VagabondShopSheet, {
+    types: ['shop'],
+    makeDefault: true,
+    label: 'VAGABOND.SheetLabels.Shop',
   });
   collections.Items.unregisterSheet('core', sheets.ItemSheet);
   collections.Items.registerSheet('vagabond', VagabondItemSheet, {
@@ -1535,6 +1589,9 @@ Hooks.once('ready', function () {
   // Positional spell-cast sound — broadcast (not GM-relayed) so every client computes
   // its own distance/wall-based volume from its own listener tokens and plays a plain
   // one-shot sound locally. Keeps audio timing in line with the locally-rendered FX.
+  // GM "Show to Players": every targeted client opens the store window.
+  registerSocketAction('shopShow', (data) => ShopApp.onShowSocket(data), { gmOnly: false });
+
   registerSocketAction('spellSoundPlay', (data) => {
     VagabondSpellSequencer._renderLocalPositionalSound(data);
   }, { gmOnly: false });
@@ -1551,6 +1608,22 @@ Hooks.once('ready', function () {
     // Light-source automation: game.vagabond.lightSource.use({...}) (item macros),
     // .douse(token) (hotbar "Douse Light" macro).
     lightSource: LightSource,
+    // Money math (g/s/c): game.vagabond.currency.format(copper), .pay(wallet, copper), …
+    currency: CurrencyHelper,
+    // Shops: game.vagabond.shop.open(ref), .show(ref, { userIds }) (GM),
+    // .buy({ shop, buyer, itemId, qty }), .buyCart({ shop, buyer, party?, lines }),
+    // .sell({ shop, seller, itemId, qty }), .partyTransfer({ party, actor, copper }), .price(item, ctx)
+    shop: {
+      open: (ref, options) => ShopApp.open(ref, options),
+      show: (ref, options) => ShopApp.show(ref, options),
+      buy: (args) => ShopTransactions.buy(args),
+      buyCart: (args) => ShopTransactions.buyCart(args),
+      sell: (args) => ShopTransactions.sell(args),
+      partyTransfer: (args) => ShopTransactions.partyTransfer(args),
+      price: (item, ctx) => ShopPricing.price(item, ctx),
+      transactions: ShopTransactions,
+      pricing: ShopPricing,
+    },
     api: {
       VagabondChatCard,
       VagabondDamageHelper,
@@ -1801,6 +1874,14 @@ Hooks.on('getSceneControlButtons', (controls) => {
         icon:    'fas fa-list-ul',
         button:  true,
         onChange: () => Hooks.callAll('vagabond.toggleOngoingPanel'),
+      },
+      shops: {
+        name:    'shops',
+        title:   game.i18n.localize('VAGABOND.Shop.App.SceneControl'),
+        icon:    'fas fa-store',
+        button:  true,
+        visible: game.user.isGM && game.settings.get('vagabond', 'shopsEnabled'),
+        onChange: () => ShopApp.pickAndOpen(),
       },
       combatCarousel: {
         name:    'combatCarousel',
@@ -2318,6 +2399,13 @@ Hooks.on('preCreateActor', (actor, _data, _options, _userId) => {
   if (actor.type === 'party' || actor.type === 'construct') {
     actor.updateSource({ 'prototypeToken.disposition': CONST.TOKEN_DISPOSITIONS.NEUTRAL });
   }
+  // Shops: one shared stock/purse, so tokens stay linked to the actor
+  if (actor.type === 'shop') {
+    actor.updateSource({
+      'prototypeToken.disposition': CONST.TOKEN_DISPOSITIONS.NEUTRAL,
+      'prototypeToken.actorLink': true,
+    });
+  }
 });
 
 /* -------------------------------------------- */
@@ -2453,26 +2541,12 @@ Hooks.on('deleteCombat', () => {
 // Ensure new inventory items get proper gridPosition
 Hooks.on('preCreateItem', (item, data, options, userId) => {
   // Only handle inventory items
-  const isInventoryItem = ['equipment', 'weapon', 'armor', 'gear', 'container'].includes(item.type);
-  if (!isInventoryItem) return;
+  if (!EquipmentHelper.GRID_ITEM_TYPES.includes(item.type)) return;
 
   // If gridPosition not set, assign next available position
   if (item.system.gridPosition === undefined || item.system.gridPosition === null) {
     const actor = item.parent;
-    if (actor) {
-      // Find max gridPosition of existing items
-      const existingItems = actor.items.filter(i =>
-        ['equipment', 'weapon', 'armor', 'gear', 'container'].includes(i.type)
-      );
-
-      const maxPosition = existingItems.reduce((max, i) => {
-        const pos = i.system.gridPosition ?? 0;
-        return Math.max(max, pos);
-      }, -1);
-
-      // Assign next position
-      item.updateSource({ 'system.gridPosition': maxPosition + 1 });
-    }
+    if (actor) item.updateSource({ 'system.gridPosition': EquipmentHelper.nextGridPosition(actor) });
   }
 });
 

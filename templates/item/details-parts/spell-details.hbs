@@ -50,7 +50,21 @@
         </div>
       {{/if}}
 
-      {{> "systems/vagabond/templates/item/parts/macro-config.hbs" system=system macroNames=macroNames}}
+      {{! Animation preview (Sequencer) }}
+      {{#if spellFx}}
+        <div class='locked-section'>
+          <div class='locked-stat locked-stat--row'>
+            <span class='stat-label'>{{localize "VAGABOND.UI.Labels.Anim"}}:</span>
+            <span class='stat-value item-fx-locked-icons'>
+              <i class='fas fa-film' data-action='previewSpellFx'
+                 data-tooltip='{{spellFx.schoolLabel}} — {{localize "VAGABOND.ItemFx.ClickToPreview"}}'></i>
+              <span>{{spellFx.schoolLabel}}</span>
+            </span>
+          </div>
+        </div>
+      {{/if}}
+
+{{> "systems/vagabond/templates/item/parts/macro-config.hbs" system=system macroNames=macroNames}}
     </div>
   {{else}}
     {{! ===== UNLOCKED VIEW (EDITABLE) ===== }}

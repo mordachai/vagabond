@@ -1650,6 +1650,11 @@
   gap: 6px;
   align-items: center;
   i { opacity: 0.85; }
+  i[data-action='previewItemFx'],
+  i[data-action='previewSpellFx'] {
+    cursor: pointer;
+    &:hover { opacity: 1; text-shadow: 0 0 6px $c-yellow; }
+  }
 }
 
 .item-fx-section {

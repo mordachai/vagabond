@@ -14,7 +14,7 @@
       "copper": 0
     },
     "baseSlots": 2,
-    "metal": "iron",
+    "metal": "none",
     "damageType": "-",
     "damageAmount": "",
     "properties": [],
