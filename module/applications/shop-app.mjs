@@ -259,7 +259,7 @@ export class ShopApp extends HandlebarsApplicationMixin(ApplicationV2) {
     return candidates[0] ?? null;
   }
 
-  /** @returns {Actor|null} party for the group cart */
+  /** @returns {Actor|null} party for the party cart */
   get party() {
     const parties = ShopApp.partiesFor(this.buyer);
     return parties.find(p => p.id === this._partyId) ?? parties[0] ?? null;
@@ -825,14 +825,8 @@ export class ShopApp extends HandlebarsApplicationMixin(ApplicationV2) {
   #openItem(itemId) {
     const item = this.shop.items.get(itemId);
     if (!item) return;
-    // Observer (granted by "Show to Players") opens the read-only sheet; less → detail popup
-    if (item.testUserPermission(game.user, 'OBSERVER')) return item.sheet.render(true);
-    new foundry.applications.api.DialogV2({
-      window: { title: item.name, icon: 'fas fa-circle-info' },
-      classes: ['vagabond', 'shop-item-popup'],
-      content: this.#detailHtml(item),
-      buttons: [{ action: 'close', label: game.i18n.localize('Close'), default: true }],
-    }).render({ force: true });
+    // Players (Limited or better) get the locked, read-only sheet — see VagabondItemSheet#limitedView
+    item.sheet.render(true);
   }
 
   static async #onSetView(event, target) {

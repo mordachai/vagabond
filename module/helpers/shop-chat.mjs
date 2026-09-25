@@ -16,7 +16,7 @@ export class ShopChat {
    * @param {Item} [tx.item]
    * @param {number} [tx.qty]
    * @param {number} tx.copper    price paid / received (party transfer: signed amount)
-   * @param {Actor} [tx.party]    party treasury that paid (group cart) / received
+   * @param {Actor} [tx.party]    party treasury that paid (party cart) / received
    * @param {Array<{item: Item, qty: number, copper: number}>} [tx.lines]  cart lines (buy)
    */
   static async post(tx) {

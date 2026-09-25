@@ -22,6 +22,7 @@ export class VagabondShopSheet extends HandlebarsApplicationMixin(ActorSheetV2) 
     actions: {
       openStockItem: VagabondShopSheet.#onOpenStockItem,
       deleteStockItem: VagabondShopSheet.#onDeleteStockItem,
+      removeDuplicates: VagabondShopSheet.#onRemoveDuplicates,
       openStore: VagabondShopSheet.#onOpenStore,
       showToPlayers: VagabondShopSheet.#onShowToPlayers,
       selectTab: VagabondShopSheet.#onSelectTab,
@@ -171,6 +172,14 @@ export class VagabondShopSheet extends HandlebarsApplicationMixin(ActorSheetV2) 
     }
     if (['Item', 'Folder', 'Compendium'].includes(data?.type)) return ShopStock.handleDrop(this.actor, data);
     return super._onDrop(event);
+  }
+
+  static async #onRemoveDuplicates() {
+    if (!this.actor.isOwner) return;
+    const removed = await ShopStock.removeDuplicates(this.actor);
+    ui.notifications.info(removed
+      ? game.i18n.format('VAGABOND.Shop.Sheet.DuplicatesRemoved', { count: removed })
+      : game.i18n.localize('VAGABOND.Shop.Sheet.NoDuplicates'));
   }
 
   static #onOpenStockItem(event, target) {

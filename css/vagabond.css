@@ -12691,10 +12691,6 @@ ol#combat-tracker.directory-list {
   flex: 0 0 auto;
 }
 
-.shop-item-popup .shop-item-tooltip {
-  max-width: none;
-}
-
 /* Context menus - imported at top level because they render outside sheets (appended to document.body) */
 /* Inventory context menu - Uses ContextMenuHelper with dual-selector pattern */
 .vagabond .inventory-context-menu,

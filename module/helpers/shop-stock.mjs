@@ -77,8 +77,8 @@ export class ShopStock {
     // Skip items already in stock, and duplicates within this drop
     const fresh = [];
     for (const d of tradeable) {
-      if (ShopTransactions.findStockMatch(shop, d)) continue;
-      if (fresh.some(f => ShopTransactions.sameSource(f, d))) continue;
+      if (shop.items.some(i => this.isDuplicate(i, d))) continue;
+      if (fresh.some(f => this.isDuplicate(f, d))) continue;
       fresh.push(d);
     }
     const skipped = tradeable.length - fresh.length;
@@ -93,6 +93,47 @@ export class ShopStock {
       }));
     }
     return created;
+  }
+
+  /**
+   * Whether two items are the same ware for stocking: same source, or — since the same
+   * item often lives in several compendiums/folders with different sources — same type,
+   * equipment type, name and material.
+   */
+  static isDuplicate(a, b) {
+    if (ShopTransactions.sameSource(a, b)) return true;
+    return a?.type === b?.type
+      && a.name?.trim().toLowerCase() === b.name?.trim().toLowerCase()
+      && (a.system?.equipmentType ?? null) === (b.system?.equipmentType ?? null)
+      && (a.system?.metal ?? 'none') === (b.system?.metal ?? 'none');
+  }
+
+  /**
+   * Merge duplicate stock (see isDuplicate): the first copy stays, limited copies add
+   * their quantity to it, the rest are deleted.
+   * @param {Actor} shop
+   * @returns {Promise<number>} copies removed
+   */
+  static async removeDuplicates(shop) {
+    const keepers = [];
+    const merged = new Map(); // keeper id → quantity
+    const remove = [];
+    const items = shop.items.filter(i => ShopTransactions.TRADE_TYPES.includes(i.type))
+      .sort((a, b) => (a.sort - b.sort) || a.id.localeCompare(b.id));
+    for (const item of items) {
+      const keep = keepers.find(k => this.isDuplicate(k, item));
+      if (!keep) { keepers.push(item); continue; }
+      remove.push(item.id);
+      if (keep.type === 'equipment' && !ShopTransactions.isUnlimited(keep, shop)) {
+        merged.set(keep.id, (merged.get(keep.id) ?? ShopTransactions.quantityOf(keep)) + ShopTransactions.quantityOf(item));
+      }
+    }
+    if (!remove.length) return 0;
+    if (merged.size) {
+      await shop.updateEmbeddedDocuments('Item', [...merged].map(([_id, q]) => ({ _id, 'system.quantity': q })));
+    }
+    await shop.deleteEmbeddedDocuments('Item', remove);
+    return remove.length;
   }
 
   /** Creation data for a stock copy of `item`, tagged with its folder as shop category. */

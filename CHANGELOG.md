@@ -1,5 +1,10 @@
 # Changelog
 
+## v5.42.1
+- **Shops: remove duplicates.** Configure Shop → Stock → **Remove Duplicates** merges items stocked more than once (same source, or same name, type and material — e.g. the same item from two compendiums). One copy stays; limited stock quantities add up. Dropping items, folders or compendiums now skips these duplicates too.
+- **Shops: players can read item sheets.** Double-clicking a ware opens its full item sheet (locked, read-only) for every player who can open the store — no more plain-text popup.
+- "Group Cart" renamed **Party Cart**.
+
 ## v5.42.0
 - **Shops (new):** a new **Shop** actor type — merchants players buy from and sell to. On by default (world setting "Enable Shops"); GMs open one from the new **Open Shop** scene tool or the actor.
   - **Store window:** banner with the shop art, name, tagline and merchant (portrait, title, description); categories sidebar (All Wares, Armor, Weapons, Gear, Alchemical, Relics — Gear split by category, Alchemical by type); item cards showing slots, damage / armor rating, stock, a description excerpt and the price (hover for the price breakdown; double-click opens the item). Search across all wares, sort (shop order, name, price, slots) and a card / list view toggle.

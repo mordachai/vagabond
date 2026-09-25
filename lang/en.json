@@ -432,7 +432,7 @@
         "SellNotYours": "You can only sell items from your character or your party.",
         "Cart": {
           "personal": "Personal Cart",
-          "group": "Group Cart"
+          "group": "Party Cart"
         },
         "ShowToPlayers": "Show to Players",
         "ConfigureShop": "Configure Shop",
@@ -499,6 +499,11 @@
         "BuyRatio": "Buy ratio"
       },
       "Sheet": {
+        "Duplicates": "Duplicates",
+        "DuplicatesHint": "Same item stocked more than once (same source, or same name, type and material, e.g. from two compendiums). Keeps one copy; limited stock adds up.",
+        "RemoveDuplicates": "Remove",
+        "DuplicatesRemoved": "Removed {count} duplicate items.",
+        "NoDuplicates": "No duplicates found.",
         "OnlyItemPacks": "Only Item compendiums can stock a shop.",
         "TaglinePlaceholder": "Tagline (e.g. Blades, Mail, and Roadwise Gear)",
         "TitlePlaceholder": "e.g. Master Outfitter",

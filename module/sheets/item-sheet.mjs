@@ -190,11 +190,19 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     },
   };
 
+  /**
+   * Limited viewers see only the header — except for a shop's stock: wares are public,
+   * so anyone who can open the store reads the full (locked) item sheet.
+   */
+  get #limitedView() {
+    return this.document.limited && this.document.parent?.type !== 'shop';
+  }
+
   /** @override */
   _configureRenderOptions(options) {
     super._configureRenderOptions(options);
     options.parts = ['header', 'tabs'];
-    if (this.document.limited) return;
+    if (this.#limitedView) return;
     switch (this.document.type) {
       case 'equipment':
         // Equipment template now handles both locked and unlocked states internally
@@ -232,7 +240,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       // Validates both permissions and compendium status
       editable: this.isEditable,
       owner: this.document.isOwner,
-      limited: this.document.limited,
+      limited: this.#limitedView,
       // Add the item document.
       item: this.item,
       // Adding system and flags for easier access

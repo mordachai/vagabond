@@ -498,6 +498,11 @@
         "BuyRatio": "Taxa de compra"
       },
       "Sheet": {
+        "Duplicates": "Duplicados",
+        "DuplicatesHint": "Mesmo item no estoque mais de uma vez (mesma origem, ou mesmo nome, tipo e material, ex: de dois compêndios). Mantém uma cópia; estoque limitado é somado.",
+        "RemoveDuplicates": "Remover",
+        "DuplicatesRemoved": "{count} itens duplicados removidos.",
+        "NoDuplicates": "Nenhum duplicado encontrado.",
         "OnlyItemPacks": "Apenas compêndios de Itens podem abastecer uma loja.",
         "TaglinePlaceholder": "Slogan (ex: Lâminas, Malhas e Equipamento de Estrada)",
         "TitlePlaceholder": "ex: Mestre Fornecedor",

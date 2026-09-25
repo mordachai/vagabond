@@ -117,6 +117,12 @@
           <label>{{localize 'VAGABOND.Actor.Shop.FIELDS.stock.unlimitedByDefault.label'}} <span class="shop-help" data-tooltip="{{localize 'VAGABOND.Actor.Shop.FIELDS.stock.unlimitedByDefault.hint'}}">?</span></label>
           <input type="checkbox" name="system.stock.unlimitedByDefault" {{checked system.stock.unlimitedByDefault}}>
         </div>
+        <div class="shop-field">
+          <label>{{localize 'VAGABOND.Shop.Sheet.Duplicates'}} <span class="shop-help" data-tooltip="{{localize 'VAGABOND.Shop.Sheet.DuplicatesHint'}}">?</span></label>
+          <button type="button" class="shop-show-btn" data-action="removeDuplicates">
+            <i class="fas fa-clone"></i> {{localize 'VAGABOND.Shop.Sheet.RemoveDuplicates'}}
+          </button>
+        </div>
       </section>
     </div>
 
