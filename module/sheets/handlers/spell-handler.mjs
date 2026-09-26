@@ -415,13 +415,14 @@ export class SpellHandler {
   /**
    * Trinket casting requirement. Severity from world setting
    * `trinketCastRequirement` (off/warn/block); what is checked from
-   * `trinketCastMode`. The checks stack:
+   * `trinketCastMode`. `openHands` (RAW) passes when nothing is held OR a
+   * Trinket is held. The other modes stack:
    *  1. an equipped Trinket anywhere ('worn' counts)
    *  2. inHand:    a Trinket held in a hand (the other hand may hold a sword)
    *     handsFree: nothing held that isn't a Trinket (gesture casting)
    * Gish (`system.weaponAsTrinket`) makes weapons count as Trinkets. The AE
    * flag `system.castWithHandsFull` skips step 2.
-   * @returns {{status: 'ok'|'warn'|'block', reason?: 'Trinket'|'TrinketInHand'|'HandsFree'}}
+   * @returns {{status: 'ok'|'warn'|'block', reason?: 'Trinket'|'TrinketInHand'|'HandsFree'|'OpenHands'}}
    *   `reason` picks the lang key `VAGABOND.SpellCast.<reason>Gate{Blocked,Warned}`.
    * @private
    */
@@ -442,7 +443,10 @@ export class SpellHandler {
       : game.settings.get('vagabond', 'trinketCastMode');
 
     let reason = null;
-    if (!equipment.some((i) => i.system.equipped && countsAsTrinket(i))) reason = 'Trinket';
+    if (mode === 'openHands') {
+      // RAW: hands open, OR holding a Trinket (the other hand may hold anything)
+      if (held.length && !held.some(countsAsTrinket)) reason = 'OpenHands';
+    } else if (!equipment.some((i) => i.system.equipped && countsAsTrinket(i))) reason = 'Trinket';
     else if (mode === 'inHand' && !held.some(countsAsTrinket)) reason = 'TrinketInHand';
     else if (mode === 'handsFree' && held.some((i) => !countsAsTrinket(i))) reason = 'HandsFree';
 

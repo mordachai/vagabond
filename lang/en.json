@@ -812,14 +812,15 @@
       },
       "trinketCastRequirement": {
         "name": "Trinket Casting Requirement",
-        "hint": "Whether casting a spell requires an equipped Trinket item (or any equipped weapon, for characters with Gish). Off: no check. Warn: notify but allow. Block: prevent the cast.",
+        "hint": "How strictly the Trinket rule below is enforced when casting. Off: no check. Warn: notify but allow. Block: prevent the cast.",
         "off": "Off",
         "warn": "Warn Only",
         "block": "Block Casting"
       },
       "trinketCastMode": {
         "name": "Trinket Casting Mode",
-        "hint": "What the Trinket requirement checks (severity from the setting above). Equipped: any equipped Trinket, even worn (amulet). Trinket in Hand: a Trinket must be held — the other hand may hold anything. Both Hands Free: gesture casting — an equipped Trinket and nothing held that isn't a Trinket. Gish weapons count as Trinkets; the Active Effect key system.castWithHandsFull falls back to Equipped.",
+        "hint": "What casting requires. Open Hands or Trinket (RAW): hands empty, or a Trinket held. Equipped: any equipped Trinket, even worn (amulet). Trinket in Hand: a Trinket held; the other hand may hold anything. Both Hands Free: an equipped Trinket and nothing else held. Gish weapons count as Trinkets.",
+        "openHands": "Open Hands or Trinket (RAW)",
         "equipped": "Equipped (anywhere)",
         "inHand": "Trinket in Hand",
         "handsFree": "Both Hands Free (gestures)"
@@ -2416,6 +2417,8 @@
       "TrinketInHandGateWarned": "Casting without a Trinket in hand.",
       "HandsFreeGateBlocked": "Your hands must be free (Trinkets only) to cast spells.",
       "HandsFreeGateWarned": "Casting with your hands full.",
+      "OpenHandsGateBlocked": "Your hands must be open, or you must hold a Trinket, to cast spells.",
+      "OpenHandsGateWarned": "Casting with your hands full and no Trinket held.",
       "NoDelivery": "Select a delivery type.",
       "NoImbueTarget": "Target a willing being with an equipped weapon.",
       "ImbueNoWeaponSkip": "{name} has no equipped weapon and will be skipped.",

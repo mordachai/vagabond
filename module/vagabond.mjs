@@ -367,9 +367,8 @@ function registerGameSettings() {
     requiresReload: false,
   });
 
-  // Trinket casting requirement: casting a spell requires an equipped trinket
-  // (system.isTrinket item, or any equipped weapon when the actor has the Gish
-  // flag system.weaponAsTrinket). Gate lives in SpellHandler._trinketGateStatus.
+  // Trinket casting severity (off/warn/block); the rule itself is
+  // trinketCastMode below. Gate lives in SpellHandler._trinketGateStatus.
   game.settings.register('vagabond', 'trinketCastRequirement', {
     name: 'VAGABOND.Settings.trinketCastRequirement.name',
     hint: 'VAGABOND.Settings.trinketCastRequirement.hint',
@@ -385,11 +384,13 @@ function registerGameSettings() {
     requiresReload: false,
   });
 
-  // What the trinket requirement checks (severity comes from the setting above):
-  // equipped = any equipped trinket, even worn (amulet); inHand = a trinket
-  // must be held, the other hand is free to hold anything; handsFree = gesture
-  // casting, no non-trinket item may be held. Gish weapons count as trinkets;
-  // the AE flag system.castWithHandsFull falls back to 'equipped'.
+  // What casting requires (severity comes from the setting above):
+  // openHands (RAW, default) = hands empty OR a trinket held;
+  // equipped = any equipped trinket, even worn (amulet);
+  // inHand = a trinket held, the other hand may hold anything;
+  // handsFree = gesture casting, an equipped trinket and nothing else held.
+  // Gish weapons (system.weaponAsTrinket) count as trinkets; the AE flag
+  // system.castWithHandsFull falls back to 'equipped'.
   game.settings.register('vagabond', 'trinketCastMode', {
     name: 'VAGABOND.Settings.trinketCastMode.name',
     hint: 'VAGABOND.Settings.trinketCastMode.hint',
@@ -397,11 +398,12 @@ function registerGameSettings() {
     config: true,
     type: String,
     choices: {
+      openHands: 'VAGABOND.Settings.trinketCastMode.openHands',
       equipped: 'VAGABOND.Settings.trinketCastMode.equipped',
       inHand: 'VAGABOND.Settings.trinketCastMode.inHand',
       handsFree: 'VAGABOND.Settings.trinketCastMode.handsFree',
     },
-    default: 'inHand',
+    default: 'openHands',
     requiresReload: false,
   });
 
@@ -2618,7 +2620,7 @@ Hooks.on('preCreateItem', (item, data, options, userId) => {
  * Shared between hook and prototype override approaches.
  */
 const FLUKE_REROLL_ENTRY = {
-  name: 'Luck Reroll (Fluke)',
+  label: 'Luck Reroll (Fluke)',
   icon: '<i class="fas fa-clover"></i>',
   classes: '',
   visible: function (li) {
@@ -2627,7 +2629,7 @@ const FLUKE_REROLL_ENTRY = {
     if (!message?.flags?.vagabond?.rerollData) return false;
     const actor = TargetHelper.resolveActorRef(message.flags.vagabond.actorId);
     if (!actor || !actor.isOwner) return false;
-    // Dynamically update name and classes based on current luck
+    // Dynamically update label and classes based on current luck
     const currentLuck = actor.system.currentLuck || 0;
     const maxLuck = actor.system.maxLuck || 0;
     const flukeLabel = game.i18n.localize('VAGABOND.UI.Chat.FlukeReroll');
@@ -2635,15 +2637,15 @@ const FLUKE_REROLL_ENTRY = {
     const pt = CONFIG.VAGABOND.homebrew?.terms?.poolTerm || 'Pool';
     const luckLabel = `${lt} ${pt}`;
     if (currentLuck > 0) {
-      FLUKE_REROLL_ENTRY.name = `${flukeLabel} (${luckLabel}: ${currentLuck}/${maxLuck})`;
+      FLUKE_REROLL_ENTRY.label = `${flukeLabel} (${luckLabel}: ${currentLuck}/${maxLuck})`;
       FLUKE_REROLL_ENTRY.classes = '';
     } else {
-      FLUKE_REROLL_ENTRY.name = `${flukeLabel} (${luckLabel}: 0/${maxLuck})`;
+      FLUKE_REROLL_ENTRY.label = `${flukeLabel} (${luckLabel}: 0/${maxLuck})`;
       FLUKE_REROLL_ENTRY.classes = 'vagabond-disabled';
     }
     return true;
   },
-  callback: async (li) => {
+  onClick: async (event, li) => {
     const messageId = li.dataset.messageId;
     const message = game.messages.get(messageId);
     const flags = message.flags.vagabond;
@@ -2742,14 +2744,14 @@ const FLUKE_REROLL_ENTRY = {
  * Replays the existing roll as a guaranteed critical hit, re-rolling damage with the crit bonus.
  */
 const FORCE_CRIT_ENTRY = {
-  name: 'Force Critical',
+  label: 'Force Critical',
   icon: '<i class="fas fa-star"></i>',
   visible: (li) => {
     if (!game.user.isGM) return false;
     const message = game.messages.get(li.dataset.messageId);
     return !!message?.flags?.vagabond?.rerollData;
   },
-  callback: async (li) => {
+  onClick: async (event, li) => {
     const message = game.messages.get(li.dataset.messageId);
     const flags = message.flags.vagabond;
     const actor = TargetHelper.resolveActorRef(flags.actorId);

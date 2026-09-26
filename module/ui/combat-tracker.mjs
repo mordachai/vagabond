@@ -104,7 +104,7 @@ export class VagabondCombatTracker {
     
     // Filter out standard "Reroll Initiative" if rolls are hidden
     if (game.settings.get('vagabond', 'hideInitiativeRoll')) {
-      const rerollIndex = options.findIndex(o => o.name === "COMBAT.Reroll");
+      const rerollIndex = options.findIndex(o => (o.label ?? o.name) === "COMBATANT.ACTIONS.Reroll");
       if (rerollIndex > -1) {
         options.splice(rerollIndex, 1);
       }
@@ -112,34 +112,31 @@ export class VagabondCombatTracker {
 
     options.push(
       {
-        name: "VAGABOND.Combat.Context.AddActivation",
+        label: "VAGABOND.Combat.Context.AddActivation",
         icon: '<i class="fas fa-plus"></i>',
         visible: game.user.isGM,
-        callback: li => {
-          const element = li instanceof jQuery ? li[0] : li;
-          const combatantId = element.dataset.combatantId;
+        onClick: (event, li) => {
+          const combatantId = li.dataset.combatantId;
           if (!this.viewed || !combatantId) return;
           return this.viewed.addMaxActivation(combatantId, 1);
         }
       },
       {
-        name: "VAGABOND.Combat.Context.RemoveActivation",
+        label: "VAGABOND.Combat.Context.RemoveActivation",
         icon: '<i class="fas fa-minus"></i>',
         visible: game.user.isGM,
-        callback: li => {
-          const element = li instanceof jQuery ? li[0] : li;
-          const combatantId = element.dataset.combatantId;
+        onClick: (event, li) => {
+          const combatantId = li.dataset.combatantId;
           if (!this.viewed || !combatantId) return;
           return this.viewed.addMaxActivation(combatantId, -1);
         }
       },
       {
-        name: "VAGABOND.Combat.Context.UndoUse",
+        label: "VAGABOND.Combat.Context.UndoUse",
         icon: '<i class="fas fa-undo"></i>',
         visible: game.user.isGM,
-        callback: li => {
-          const element = li instanceof jQuery ? li[0] : li;
-          const combatantId = element.dataset.combatantId;
+        onClick: (event, li) => {
+          const combatantId = li.dataset.combatantId;
           if (!this.viewed || !combatantId) return;
           return this.viewed.addCurrentActivation(combatantId, 1);
         }

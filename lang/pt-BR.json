@@ -826,14 +826,15 @@
       },
       "trinketCastRequirement": {
         "name": "Requer Trinket para Conjurar",
-        "hint": "Se conjurar uma magia requer um Trinket equipado (ou qualquer arma equipada, para personagens Gish). Desligado: sem verificação. Avisar: notifica mas permite. Bloquear: impede a conjuração.",
+        "hint": "Quão rigorosamente a regra de Trinket abaixo é aplicada ao conjurar. Desligado: sem verificação. Avisar: notifica mas permite. Bloquear: impede a conjuração.",
         "off": "Desligado",
         "warn": "Apenas Avisar",
         "block": "Bloquear Conjuração"
       },
       "trinketCastMode": {
         "name": "Modo do Trinket para Conjurar",
-        "hint": "O que o requisito de Trinket verifica (a severidade vem da configuração acima). Equipado: qualquer Trinket equipado, mesmo vestido (amuleto). Trinket na Mão: um Trinket deve estar empunhado — a outra mão pode segurar qualquer coisa. Ambas as Mãos Livres: conjuração por gestos — um Trinket equipado e nada empunhado que não seja Trinket. Armas Gish contam como Trinkets; a chave de Efeito Ativo system.castWithHandsFull volta para Equipado.",
+        "hint": "O que conjurar exige. Mãos Livres ou Trinket (RAW): mãos vazias, ou um Trinket empunhado. Equipado: qualquer Trinket equipado, mesmo vestido (amuleto). Trinket na Mão: um Trinket empunhado; a outra mão pode segurar qualquer coisa. Ambas as Mãos Livres: um Trinket equipado e nada mais empunhado. Armas Gish contam como Trinkets.",
+        "openHands": "Mãos Livres ou Trinket (RAW)",
         "equipped": "Equipado (qualquer lugar)",
         "inHand": "Trinket na Mão",
         "handsFree": "Ambas as Mãos Livres (gestos)"
@@ -2430,6 +2431,8 @@
       "TrinketInHandGateWarned": "Conjurando sem um Trinket na mão.",
       "HandsFreeGateBlocked": "Suas mãos precisam estar livres (apenas Trinkets) para conjurar magias.",
       "HandsFreeGateWarned": "Conjurando com as mãos ocupadas.",
+      "OpenHandsGateBlocked": "Suas mãos precisam estar livres, ou você precisa empunhar um Trinket, para conjurar magias.",
+      "OpenHandsGateWarned": "Conjurando com as mãos ocupadas e sem Trinket empunhado.",
       "NoDelivery": "Selecione um tipo de entrega.",
       "NoImbueTarget": "Mire em um ser disposto com uma arma equipada.",
       "ImbueNoWeaponSkip": "{name} não tem arma equipada e será ignorado.",
