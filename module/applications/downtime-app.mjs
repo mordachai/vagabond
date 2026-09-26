@@ -1,5 +1,7 @@
 import { VagabondChatCard } from '../helpers/chat-card.mjs';
 import { VagabondChatHelper } from '../helpers/chat-helper.mjs';
+import { WorkbenchApp } from './workbench-app.mjs';
+import { CraftingHelper } from '../helpers/crafting-helper.mjs';
 
 const { api } = foundry.applications;
 
@@ -31,7 +33,7 @@ export class DowntimeApp extends api.HandlebarsApplicationMixin(api.ApplicationV
     actions: {
       processRest: DowntimeApp.prototype._onProcessRest,
       processBreather: DowntimeApp.prototype._onProcessBreather,
-      processCraft: DowntimeApp.prototype._onProcessCraft,
+      openWorkbench: DowntimeApp.prototype._onOpenWorkbench,
       processForage: DowntimeApp.prototype._onProcessForage,
       processHunt: DowntimeApp.prototype._onProcessHunt,
       processStudy: DowntimeApp.prototype._onProcessStudy,
@@ -61,6 +63,7 @@ export class DowntimeApp extends api.HandlebarsApplicationMixin(api.ApplicationV
     context.actor = this.#actor;
     context.studiedDice = this.#actor.system.studiedDice || 0;
     context.config = CONFIG.VAGABOND;
+    context.craftingEnabled = CraftingHelper.config().general.enabled;
 
     return context;
   }
@@ -174,35 +177,11 @@ export class DowntimeApp extends api.HandlebarsApplicationMixin(api.ApplicationV
   }
 
   /**
-   * Handle crafting activity
+   * Open the Crafting Workbench (replaces the old honor-system Craft chat note —
+   * the Workbench tracks Shift budget, Materials, and Project progress for real).
    */
-  async _onProcessCraft(event, target) {
-    const form = this.element;
-    const craftDiffSelect = form.querySelector("select[name='craftDiff']");
-    const val = parseInt(craftDiffSelect.value);
-
-    // Format display value
-    let displayValue = "";
-    if (val >= 100) {
-      displayValue = `${val / 100}${game.i18n.localize('VAGABOND.Currency.Gold.abbr')}`;
-    } else {
-      displayValue = `${val}${game.i18n.localize('VAGABOND.Currency.Silver.abbr')}`;
-    }
-
-    // Create chat card
-    const card = new VagabondChatCard()
-      .setType('generic')
-      .setActor(this.#actor)
-      .setTitle('Crafting')
-      .setSubtitle(this.#actor.name)
-      .setDescription(`
-        <p><i class="fas fa-hammer"></i> <strong>${this.#actor.name}</strong> spends a shift crafting.</p>
-        <p>Based on difficulty, they complete <strong>${displayValue}</strong> worth of work.</p>
-        <hr>
-        <p><em>Ensure you have materials worth half the item value deducted!</em></p>
-      `);
-
-    await card.send();
+  async _onOpenWorkbench(event, target) {
+    WorkbenchApp.open(this.#actor);
   }
 
   /**

@@ -3,6 +3,8 @@ import { SpellHandler } from '../sheets/handlers/spell-handler.mjs';
 import { InventoryHandler } from '../sheets/handlers/inventory-handler.mjs';
 import { EquipmentHandler } from '../sheets/handlers/equipment-handler.mjs';
 import { VagabondActorSheet } from '../sheets/actor-sheet.mjs';
+import { WorkbenchApp } from './workbench-app.mjs';
+import { CraftingHelper } from '../helpers/crafting-helper.mjs';
 import { AccordionHelper } from '../helpers/accordion-helper.mjs';
 import { applyHudDisplayPrefs, getHudHealthBar, isItemPile } from '../helpers/hud-display.mjs';
 import { activateHandItem } from '../helpers/hand-item-activation.mjs';
@@ -1290,6 +1292,11 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
           icon: 'fas fa-hourglass-half',
           action: () => new globalThis.vagabond.applications.DowntimeApp(this.actor).render(true),
         },
+        ...(CraftingHelper.config().general.enabled ? [{
+          label: L('VAGABOND.Craft.Workbench.Title'),
+          icon: 'fas fa-hammer',
+          action: () => WorkbenchApp.open(this.actor),
+        }] : []),
         {
           label: xpLabel,
           icon: canLevelUp ? 'fas fa-chevron-double-up' : 'fas fa-star',

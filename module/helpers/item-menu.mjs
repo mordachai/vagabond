@@ -84,6 +84,15 @@ export function buildItemMenuItems({ actor, item, event, rollHandler, equipmentH
   // Attack options: "Attack (Preferred)" + one "Attack with X" per other allowed skill
   if (EquipmentHelper.isWeapon(item)) {
     items.push(...EquipmentHelper.weaponAttackMenuItems(item, (skillKey) => activate({ skillKey })));
+  } else if (EquipmentHelper.isThrownAlchemical(item)) {
+    // Thrown Alchemical Item: "Throw (Best)" + "Throw with X", then a plain
+    // no-attack Use (pour / apply it — auto-hit card, GM adjudicates)
+    items.push(...EquipmentHelper.weaponAttackMenuItems(item, (skillKey) => activate({ skillKey })));
+    items.push({
+      label: L('VAGABOND.ContextMenu.UseNoAttack'),
+      icon: 'fas fa-hand-sparkles',
+      action: () => activate({ noAttack: true }),
+    });
   } else if (forceUse || itemHasUse(item)) {
     items.push({
       label: L('VAGABOND.ContextMenu.Use'),
@@ -183,7 +192,7 @@ export function buildItemMenuItems({ actor, item, event, rollHandler, equipmentH
             }));
           }
         }
-        await item.update({ 'system.bound': !isBound });
+        await item.update({ 'system.relic.boundTo': isBound ? '' : actor.uuid });
       },
     });
   }

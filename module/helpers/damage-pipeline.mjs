@@ -142,7 +142,7 @@ export class VagabondDamagePipeline {
 
     // 9. Manual dice explosion
     if (options.explode) {
-      const explodeValues = this.getExplodeValues(item, actor);
+      const explodeValues = this.getExplodeValues(item, actor, sourceType);
       if (explodeValues) await this.manuallyExplodeDice(roll, explodeValues);
     }
 
@@ -238,17 +238,24 @@ export class VagabondDamagePipeline {
 
   /**
    * Manually explode dice on specific values (recursive).
-   * Bypasses Foundry's x-syntax; 'max' sentinel resolves per-die to its max face.
+   * Bypasses Foundry's x-syntax; 'max' sentinel resolves per-die to its max face,
+   * 'max-N' to N faces below it (e.g. 'max-1' on a d6 = 5). A relative face that
+   * would land on 1 is dropped so a small die can never explode on every face.
    * @param {Roll} roll - The evaluated roll to explode
-   * @param {Array<number|'max'>} explodeValues
+   * @param {Array<number|'max'|string>} explodeValues
    * @param {number} maxExplosions - Safety limit
    * @returns {Promise<Roll>}
    */
   static async manuallyExplodeDice(roll, explodeValues, maxExplosions = 100) {
     if (!explodeValues || explodeValues.length === 0) return roll;
 
-    const hasMax = explodeValues.includes('max');
-    const numericExplodeValues = explodeValues.filter(v => v !== 'max').map(v => parseInt(v));
+    const maxOffsets = [];
+    const numericExplodeValues = [];
+    for (const v of explodeValues) {
+      const rel = typeof v === 'string' ? v.match(/^max(?:-(\d+))?$/) : null;
+      if (rel) maxOffsets.push(parseInt(rel[1] ?? 0));
+      else numericExplodeValues.push(parseInt(v));
+    }
     let explosionCount = 0;
 
     for (let i = 0; i < roll.terms.length; i++) {
@@ -257,7 +264,9 @@ export class VagabondDamagePipeline {
 
       const faces = term.faces;
       const explodeSet = new Set(numericExplodeValues);
-      if (hasMax) explodeSet.add(faces);
+      for (const off of maxOffsets) {
+        if (off === 0 || faces - off > 1) explodeSet.add(faces - off);
+      }
       const results = term.results || [];
       const originalLength = results.length;
 
@@ -304,12 +313,17 @@ export class VagabondDamagePipeline {
   }
 
   /**
-   * Explosion values for an item, honoring actor global explode bonuses.
+   * Explosion values for an item, honoring actor global explode bonuses and the
+   * Alchemist's Potency feature (scoped to `sourceType === 'alchemical'` only —
+   * unlike `bonuses.globalExplode`, which applies to every damage source).
+   * Potency's `craft.alchemicalExplode` is a face COUNT (1 = highest @L4,
+   * 2 = two highest @L8), added on top of whatever the item authored.
    * @param {Item|null} item
    * @param {Actor|null} actor
-   * @returns {Array<number|'max'>|null}
+   * @param {string|null} [sourceType=null]
+   * @returns {Array<number|'max'|string>|null}
    */
-  static getExplodeValues(item, actor = null) {
+  static getExplodeValues(item, actor = null, sourceType = null) {
     let canExplode = item?.system?.canExplode;
     let explodeValuesStr = item?.system?.explodeValues;
 
@@ -317,15 +331,24 @@ export class VagabondDamagePipeline {
       if (actor.system.bonuses?.globalExplode) canExplode = true;
       const globalValues = actor.system.bonuses?.globalExplodeValues;
       if (globalValues) explodeValuesStr = globalValues;
+
+      // Potency (Alchemist, docs/crafting-plan.md §4.9): grants Explode on
+      // Alchemical Items the actor uses, regardless of the item's own authoring.
+      const potencyFaces = sourceType === 'alchemical' ? Number(actor.system.craft?.alchemicalExplode) || 0 : 0;
+      if (potencyFaces > 0) {
+        canExplode = true;
+        const potency = Array.from({ length: potencyFaces }, (_, n) => n === 0 ? 'max' : `max-${n}`);
+        explodeValuesStr = [explodeValuesStr, ...potency].filter(Boolean).join(',');
+      }
     }
 
     if (!canExplode || !explodeValuesStr) return null;
 
-    const explodeValues = explodeValuesStr
+    const explodeValues = [...new Set(String(explodeValuesStr)
       .split(',')
       .map(v => v.trim().toLowerCase())
-      .filter(v => v && (v === 'max' || !isNaN(v)))
-      .map(v => v === 'max' ? 'max' : parseInt(v));
+      .filter(v => v && (/^max(-\d+)?$/.test(v) || !isNaN(v)))
+      .map(v => v.startsWith('max') ? v : parseInt(v)))];
 
     return explodeValues.length > 0 ? explodeValues : null;
   }

@@ -36,7 +36,16 @@
     "damageTypeOneHand": "-",
     "damageTypeTwoHands": "-",
     "isConsumable": false,
-    "linkedConsumable": ""
+    "linkedConsumable": "",
+    "relicPower": {
+      "enabled": true,
+      "targets": [
+        "weapon"
+      ],
+      "family": "bonusWeapon",
+      "rank": 3,
+      "requiredMaterials": []
+    }
   },
   "effects": [
     {

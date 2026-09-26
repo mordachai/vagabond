@@ -660,6 +660,10 @@ export class SpellHandler {
       _spellExtraTags = _spellPostCtx.extraTags;
     }
 
+    if (isSuccess) {
+      Hooks.callAll('vagabond.actorActed', this.actor, { source: 'cast', itemId: spell.id });
+    }
+
     // Imbue: attach the spell to willing targets' equipped weapons before any mana
     // is spent — a cancelled weapon-picker aborts the whole cast at no cost.
     if (isSuccess && state.deliveryType.toUpperCase() === 'IMBUE') {

@@ -814,25 +814,33 @@ export class VagabondChatCard {
           damageRoll = await weapon.rollDamage(actor, isCritical, weaponSkill?.stat || null, targetsAtRollTime, null, weaponSkillKey);
       }
 
+      // Thrown Alchemical Item: no grip/range/weapon damage fields — its own
+      // damageAmount/damageType, and a "Thrown" range tag.
+      const isAlchemicalThrow = globalThis.vagabond.utils.EquipmentHelper.isThrownAlchemical(weapon);
+      const baseDamage = isAlchemicalThrow ? weapon.system.damageAmount : weapon.system.currentDamage;
+      const baseDamageType = isAlchemicalThrow ? weapon.system.damageType : weapon.system.currentDamageType;
+
       const tags = [];
       tags.push({ label: weaponSkill?.label || weaponSkillKey, cssClass: 'tag-skill' });
       
-      if (weapon.system.currentDamage) {
-          const dType = weapon.system.currentDamageType || 'physical';
+      if (baseDamage) {
+          const dType = baseDamageType || 'physical';
           if (dType && dType !== '-') {
               const icon = CONFIG.VAGABOND?.damageTypeIcons?.[dType.toLowerCase()] || 'fas fa-burst';
-              tags.push({ label: weapon.system.currentDamage, icon: icon, cssClass: 'tag-damage' });
+              tags.push({ label: baseDamage, icon: icon, cssClass: 'tag-damage' });
           } else {
-              tags.push({ label: weapon.system.currentDamage, cssClass: 'tag-damage' });
+              tags.push({ label: baseDamage, cssClass: 'tag-damage' });
           }
       }
 
-      if (weapon.system.grip) {
+      if (weapon.system.grip && !isAlchemicalThrow) {
           const gripMap = { '1H': 'fas fa-hand-fist', '2H': 'fas fa-hands', 'V': 'fas fa-hand-peace', '0': 'fas fa-wind' };
           tags.push({ icon: gripMap[weapon.system.grip], cssClass: 'tag-grip' });
       }
 
-      if (weapon.system.rangeDisplay) {
+      if (isAlchemicalThrow) {
+          tags.push({ label: game.i18n.localize('VAGABOND.Weapon.Property.Thrown'), cssClass: 'tag-range' });
+      } else if (weapon.system.rangeDisplay) {
           tags.push({ label: weapon.system.rangeDisplay, cssClass: 'tag-range' });
       }
 
@@ -864,15 +872,16 @@ export class VagabondChatCard {
           description = await foundry.applications.ux.TextEditor.enrichHTML(parsedDescription, { async: true });
       }
 
-      // Determine attack type from the homebrew weapon skill's attackType field
-      const attackType = VagabondChatCard.attackTypeForWeaponSkill(weaponSkillKey);
+      // Determine attack type from the homebrew weapon skill's attackType field.
+      // A thrown Alchemical Item is ranged even when rolled with Craft.
+      const attackType = isAlchemicalThrow ? 'ranged' : VagabondChatCard.attackTypeForWeaponSkill(weaponSkillKey);
 
       // Compute die-size-adjusted formula for the manual "Roll Damage" button.
       // item.rollDamage() applies this when damage is auto-rolled, but when the
       // "Roll damage with check" setting is OFF the button stores the raw formula
       // from item.system.currentDamage — bypassing the bonus entirely.
-      const dieSizeBonus = actor.system[`${weaponSkillKey}DamageDieSizeBonus`] || 0;
-      let adjustedDamageFormula = weapon.system.currentDamage;
+      const dieSizeBonus = isAlchemicalThrow ? 0 : (actor.system[`${weaponSkillKey}DamageDieSizeBonus`] || 0);
+      let adjustedDamageFormula = baseDamage;
       if (dieSizeBonus !== 0 && adjustedDamageFormula?.includes('d')) {
           adjustedDamageFormula = adjustedDamageFormula.replace(/(\d*)d(\d+)/, (match, count, size) => {
               return `${count}d${parseInt(size) + dieSizeBonus}`;
@@ -921,7 +930,7 @@ export class VagabondChatCard {
           propertyDetails,
           damageRoll, // Now correctly populated for hits/crits
           damageFormula: adjustedDamageFormula, // Die-size-adjusted formula for manual roll button
-          damageType: weapon.system.currentDamageType || 'physical',
+          damageType: baseDamageType || 'physical',
           description,
           hasDefenses: true,
           attackType,  // ✅ FIX: Pass attackType for save hinder logic

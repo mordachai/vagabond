@@ -6,6 +6,7 @@ import { buildItemDetailSections } from '../helpers/item-sections.mjs';
 import { emitSocket } from '../helpers/socket-helper.mjs';
 import { ShopTabs } from '../helpers/shop-tabs.mjs';
 import { ShopStock } from '../helpers/shop-stock.mjs';
+import { equipmentStats } from '../helpers/equipment-stats.mjs';
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
@@ -438,7 +439,7 @@ export class ShopApp extends HandlebarsApplicationMixin(ApplicationV2) {
       slots: EquipmentHelper.itemSlotCost(item),
       stock: unlimited ? null : stock,
       outOfStock,
-      stats: statsOf(item),
+      stats: equipmentStats(item),
       excerpt,
       searchText: `${item.name} ${excerpt}`.toLowerCase(),
       unitCopper: unit.unit,
@@ -858,38 +859,6 @@ function receiptOf(kind, result) {
     price: CurrencyHelper.format(result.copper ?? 0),
     lines: (result.lines ?? []).map(l => ({ name: l.name, qty: l.qty })),
   };
-}
-
-/**
- * Combat numbers shown next to Slots: weapon damage (per grip), armor rating, or the
- * damage of anything else that deals it (alchemicals, relics).
- * @returns {Array<{icon: string, value: string, tooltip: string}>}
- */
-function statsOf(item) {
-  const sys = item.system;
-  if (item.type !== 'equipment') return [];
-  const damageLabel = game.i18n.localize('VAGABOND.Shop.App.Damage');
-  const typed = (type) => {
-    const key = CONFIG.VAGABOND.damageTypes?.[type];
-    return type && type !== '-' && key ? ` (${game.i18n.localize(key)})` : '';
-  };
-  const icon = (type) => (type && type !== '-' && CONFIG.VAGABOND.damageTypeIcons?.[type]) || 'fas fa-burst';
-
-  if (sys.equipmentType === 'weapon') {
-    const one = sys.grip !== '2H' ? sys.finalDamageOneHand : null;
-    const two = ['2H', 'V'].includes(sys.grip) ? sys.finalDamageTwoHands : null;
-    const dice = [...new Set([one, two].filter(Boolean))];
-    if (!dice.length) return [];
-    const type = one ? sys.damageTypeOneHand : sys.damageTypeTwoHands;
-    return [{ icon: icon(type), value: dice.join('/'), tooltip: `${damageLabel}${typed(type)}` }];
-  }
-  if (sys.equipmentType === 'armor') {
-    return [{ icon: 'fas fa-shield-halved', value: String(sys.finalRating ?? 0), tooltip: game.i18n.localize('VAGABOND.Shop.App.ArmorRating') }];
-  }
-  if (sys.damageAmount && sys.damageType && sys.damageType !== '-') {
-    return [{ icon: icon(sys.damageType), value: sys.damageAmount, tooltip: `${damageLabel}${typed(sys.damageType)}` }];
-  }
-  return [];
 }
 
 /** Plain-text excerpt of an item's HTML description (parsed inert, enricher links → labels). */

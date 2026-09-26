@@ -1,0 +1,147 @@
+<div class="crafting-settings-layout">
+
+  <nav class="crafting-settings-tabs" role="tablist">
+    {{#each tabs}}
+    <button type="button" class="crafting-tab-button {{#if active}}active{{/if}}" data-action="switchTab" data-tab="{{id}}" role="tab" aria-selected="{{active}}">
+      <i class="{{icon}}"></i>
+      <span class="tab-label">{{label}}</span>
+    </button>
+    {{/each}}
+    <button type="button" class="cs-reset-all-btn" data-action="resetAll" title="{{localize 'VAGABOND.CraftingSettings.ResetAllTooltip'}}">
+      <i class="fa-solid fa-arrow-rotate-left"></i>
+      {{localize "VAGABOND.CraftingSettings.ResetAllToDefaults"}}
+    </button>
+  </nav>
+
+  <div class="crafting-settings-main">
+    <div class="crafting-tab-content">
+
+      {{#if showGeneral}}
+      <div class="cs-tab-general">
+        <label class="cs-field cs-field--checkbox">
+          <input type="checkbox" name="general.enabled" {{checked config.general.enabled}}>
+          {{localize "VAGABOND.CraftingSettings.Fields.Enabled"}}
+        </label>
+
+        <div class="cs-field">
+          <label>{{localize "VAGABOND.CraftingSettings.Fields.ApprovalLabel"}}</label>
+          <select name="general.approval">
+            {{#each approvalOptions}}
+            <option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>
+            {{/each}}
+          </select>
+        </div>
+
+        <label class="cs-field cs-field--checkbox">
+          <input type="checkbox" name="general.materialsFromCoin" {{checked config.general.materialsFromCoin}}>
+          {{localize "VAGABOND.CraftingSettings.Fields.MaterialsFromCoin"}}
+        </label>
+
+        <div class="cs-field">
+          <label>{{localize "VAGABOND.CraftingSettings.Fields.ToolsRequirementLabel"}}</label>
+          <select name="general.toolsRequirement">
+            {{#each toolsRequirementOptions}}
+            <option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>
+            {{/each}}
+          </select>
+        </div>
+
+        <fieldset class="cs-fieldset">
+          <legend>{{localize "VAGABOND.CraftingSettings.Fields.ValuePerShiftLegend"}}</legend>
+          <p class="cs-hint">{{localize "VAGABOND.CraftingSettings.Fields.ValuePerShiftHint"}}</p>
+          <table class="cs-value-per-shift-table">
+            <thead>
+              <tr>
+                <th>{{localize "VAGABOND.CraftingSettings.Fields.DifficultyRange"}}</th>
+                <th>{{localize "VAGABOND.CraftingSettings.Fields.CopperPerShift"}}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each valuePerShiftRows}}
+              <tr>
+                <td>{{range}}</td>
+                <td><input type="number" min="0" step="1" name="{{fieldName}}" value="{{copper}}"></td>
+              </tr>
+              {{/each}}
+            </tbody>
+          </table>
+        </fieldset>
+      </div>
+      {{/if}}
+
+      {{#if showAlchemy}}
+      <div class="cs-tab-alchemy">
+        <div class="cs-field">
+          <label>{{localize "VAGABOND.CraftingSettings.Fields.MixInertLabel"}}</label>
+          <select name="alchemy.mixInertBehavior">
+            {{#each mixInertOptions}}
+            <option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>
+            {{/each}}
+          </select>
+        </div>
+        <div class="cs-field">
+          <label>{{localize "VAGABOND.CraftingSettings.Fields.MixExpiryLabel"}}</label>
+          <select name="alchemy.mixExpiryOutOfCombat">
+            {{#each mixExpiryOptions}}
+            <option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>
+            {{/each}}
+          </select>
+        </div>
+      </div>
+      {{/if}}
+
+      {{#if showRelics}}
+      <div class="cs-tab-relics">
+        <label class="cs-field cs-field--checkbox">
+          <input type="checkbox" name="relics.bondSuppression" {{checked config.relics.bondSuppression}}>
+          {{localize "VAGABOND.CraftingSettings.Fields.BondSuppression"}}
+        </label>
+        <label class="cs-field cs-field--checkbox">
+          <input type="checkbox" name="relics.combineEnabled" {{checked config.relics.combineEnabled}}>
+          {{localize "VAGABOND.CraftingSettings.Fields.CombineEnabled"}}
+        </label>
+      </div>
+      {{/if}}
+
+      {{#if showVariant}}
+      <div class="cs-tab-variant">
+        <label class="cs-field cs-field--checkbox">
+          <input type="checkbox" name="variant.manaCrystals" {{checked config.variant.manaCrystals}}>
+          {{localize "VAGABOND.CraftingSettings.Fields.ManaCrystals"}}
+        </label>
+
+        <fieldset class="cs-fieldset">
+          <legend>{{localize "VAGABOND.CraftingSettings.Fields.CrystalSlotTableLegend"}}</legend>
+          <table class="cs-crystal-slot-table">
+            <thead>
+              <tr>
+                <th></th>
+                <th>+0</th>
+                <th>+1</th>
+                <th>+2</th>
+                <th>+3</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each crystalSlotRows}}
+              <tr>
+                <th>{{label}}</th>
+                {{#each cells}}
+                <td><input type="number" min="0" step="1" name="{{fieldName}}" value="{{value}}"></td>
+                {{/each}}
+              </tr>
+              {{/each}}
+            </tbody>
+          </table>
+        </fieldset>
+      </div>
+      {{/if}}
+
+    </div>
+
+    <footer class="crafting-settings-footer">
+      <button type="button" data-action="close">{{localize "VAGABOND.UI.Labels.Close"}}</button>
+    </footer>
+  </div>
+
+</div>

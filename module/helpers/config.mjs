@@ -1484,6 +1484,26 @@ VAGABOND.defenseRuleHelpers = {
 };
 
 /**
+ * Crafting mode registry (see docs/crafting-plan.md §4.3). `CraftingHelper` only
+ * dispatches into these entries — every mode's rules live in its own file under
+ * `module/helpers/crafting/`, never as branches inside `CraftingHelper` itself.
+ * New book content = a new registry entry, not a new code path.
+ *
+ * Entry shape:
+ *   key       - matches the object key
+ *   label     - i18n key for the Workbench mode rail
+ *   icon      - font-awesome class
+ *   time      - 'shift' | 'hour' | 'useAction' | 'scene' | 'ritual'
+ *   available(actor)                    -> boolean (gates the rail button)
+ *   recipes(actor)                      -> array of recipe candidates for the grid
+ *   evaluate(actor, recipe, opts)       -> { ok, checks: [{ok, key, label, reason?}], cost }
+ *   execute(actor, recipe, opts)        -> { ok, reason? } — re-evaluates, pays, applies
+ *
+ * Empty until Phase 2+ (Craft/Scrap) starts registering entries.
+ */
+VAGABOND.craftModes = {};
+
+/**
  * Active Effect Application Modes
  * Controls when an effect should be applied to the actor
  * @type {Object}

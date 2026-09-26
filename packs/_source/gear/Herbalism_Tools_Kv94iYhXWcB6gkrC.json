@@ -30,7 +30,8 @@
     "immunities": [],
     "gearCategory": "Tools",
     "alchemicalType": "concoction",
-    "lore": ""
+    "lore": "",
+    "toolKind": "herbalism"
   },
   "effects": [],
   "flags": {

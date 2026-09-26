@@ -48,22 +48,10 @@
             <span class="cost-badge">{{localize "VAGABOND.Downtime.Cost.OneShift"}}</span>
         </div>
         <div class="activity-content">
-            <p>{{localize "VAGABOND.Downtime.Craft.Description"}}</p>
-            <div class="input-group">
-                <label>{{localize "VAGABOND.Downtime.Craft.DifficultyLabel"}}</label>
-                <select name="craftDiff">
-                    <option value="1">{{localize "VAGABOND.Downtime.CraftDifficulty.tier1"}}</option>
-                    <option value="20">{{localize "VAGABOND.Downtime.CraftDifficulty.tier2"}}</option>
-                    <option value="50">{{localize "VAGABOND.Downtime.CraftDifficulty.tier3"}}</option>
-                    <option value="250">{{localize "VAGABOND.Downtime.CraftDifficulty.tier4"}}</option>
-                    <option value="500">{{localize "VAGABOND.Downtime.CraftDifficulty.tier5"}}</option>
-                    <option value="750">{{localize "VAGABOND.Downtime.CraftDifficulty.tier6"}}</option>
-                    <option value="1000">{{localize "VAGABOND.Downtime.CraftDifficulty.tier7"}}</option>
-                </select>
-            </div>
+            <p>{{#if craftingEnabled}}{{localize "VAGABOND.Downtime.Craft.WorkbenchDescription"}}{{else}}{{localize "VAGABOND.Craft.Workbench.SystemDisabled"}}{{/if}}</p>
         </div>
-        <button type="button" class="downtime-btn" data-action="processCraft">
-            <i class="fas fa-tools"></i> {{localize "VAGABOND.Downtime.Craft.Button"}}
+        <button type="button" class="downtime-btn" data-action="openWorkbench" {{#unless craftingEnabled}}disabled{{/unless}}>
+            <i class="fas fa-tools"></i> {{localize "VAGABOND.Craft.Workbench.Title"}}
         </button>
     </div>
 

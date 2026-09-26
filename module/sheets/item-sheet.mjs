@@ -2338,7 +2338,8 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       }
     }
 
-    await this.item.update({ 'system.bound': !currentBound });
+    const actorUuid = this.item.parent?.uuid ?? '';
+    await this.item.update({ 'system.relic.boundTo': currentBound ? '' : actorUuid });
   }
 
   /**

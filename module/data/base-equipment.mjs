@@ -1,5 +1,6 @@
 import VagabondItemBase from './base-item.mjs';
 import { VagabondTextParser } from '../helpers/text-parser.mjs';
+import { CurrencyHelper } from '../helpers/currency-helper.mjs';
 
 /**
  * Base Equipment class for all equippable items (weapons, armor, gear, alchemicals, relics)
@@ -77,9 +78,61 @@ export default class VagabondEquipment extends VagabondItemBase {
     });
 
     // Current bound state - whether this item is bound to a character
+    // Legacy fields — kept for back-compat reads/migration input. `bound` becomes
+    // a DERIVED MIRROR of `relic.boundTo` in prepareDerivedData (same pattern as
+    // `equipped` mirroring `equipmentState`) — never write these two directly;
+    // write `system.relic.boundTo` / rely on `migrateData` for `requiresBond`.
     schema.bound = new fields.BooleanField({
       required: true,
       initial: false
+    });
+
+    // Relic model (docs/crafting-plan.md §4.4). Every equipment item carries this —
+    // most just have empty powers[]/blank flags. `boundTo` migrates legacy `bound`
+    // (see migrateData + prepareDerivedData fallback); `requiresBond` migrates
+    // legacy `requiresBound`. `sockets[]` is the Mana Crystal variant (Phase 7,
+    // unused until then).
+    schema.relic = new fields.SchemaField({
+      powers: new fields.ArrayField(new fields.ObjectField(), { initial: [] }),
+      fabled: new fields.BooleanField({ initial: false }),
+      requiresBond: new fields.BooleanField({ initial: false }),
+      boundTo: new fields.StringField({ initial: '', blank: true }),
+      cursed: new fields.BooleanField({ initial: false }),
+      consumable: new fields.BooleanField({ initial: false }),
+      sockets: new fields.ArrayField(new fields.ObjectField(), { initial: [] }),
+    });
+
+    // Relic POWER item (in the `relics` pack, ~100 of its 140 entries — Bonus –
+    // Weapon +2, Ace – Keen, etc; full relics like Bag of Holding leave `enabled`
+    // false). This is authored data on the power item itself, separate from
+    // `system.relic` above (which lives on the HOST item the power gets crafted
+    // onto). No `choices:` on targets — dynamic/homebrew-extendable list, UI-enforced.
+    schema.relicPower = new fields.SchemaField({
+      enabled: new fields.BooleanField({ initial: false }),
+      targets: new fields.ArrayField(new fields.StringField(), { initial: ['any'] }),
+      family: new fields.StringField({ initial: '', blank: true }),
+      rank: new fields.NumberField({ initial: 1, integer: true, min: 1 }),
+      requiredMaterials: new fields.ArrayField(
+        new fields.SchemaField({
+          key: new fields.StringField({ initial: '', blank: true }),
+          qty: new fields.NumberField({ initial: 0, integer: true, min: 0 }),
+        }),
+        { initial: [] }
+      ),
+    });
+
+    // Mana Crystal (variant, off by default — `craftingConfig().variant.manaCrystals`;
+    // docs/crafting-plan.md §4.12, D10). Authored on the crystal ITEM itself — a
+    // crystal is `equipmentType: 'relic'` with this populated. `payloadUuid` points
+    // at whatever the type needs (a perk/spell/relic-power item); only the socket
+    // mechanics (slot counting, socket/unsocket, growth) are built this pass — the
+    // per-type gameplay adaptations (perk grant, spell cast, elemental/imbue hookup)
+    // are deferred (see Phase 7 as-built notes). `usedThisQuest` drives End Quest growth.
+    schema.crystal = new fields.SchemaField({
+      type: new fields.StringField({ initial: '', blank: true }), // 'perk'|'power'|'spell'|'delivery'|'elemental'|'summon'
+      bonus: new fields.NumberField({ initial: 0, integer: true, min: 0, max: 3 }),
+      payloadUuid: new fields.StringField({ initial: '', blank: true }),
+      usedThisQuest: new fields.BooleanField({ initial: false }),
     });
 
     // Base slots (before metal modifier if applicable, can be negative for items like Backpack)
@@ -275,6 +328,26 @@ export default class VagabondEquipment extends VagabondItemBase {
       blank: true,
       initial: ''
     });
+
+    // Crafting materials bundle (the "Materials (1g)" gear item). `value` is
+    // remaining spendable copper — drawn down as it pays for Crafting/Scrap, deleted
+    // at 0; `key` blank = generic Materials (capped at 1g/1000c per item — see
+    // MaterialsHelper.CAP; an item's `slots` = its `baseSlots`, so 1 Slot = 1g of raw
+    // material, matching the price list), non-blank = a specific Material (dragon
+    // scale…) matched against a relic power's requiredMaterials — uncapped, one item
+    // can hold any amount. See docs/crafting-plan.md §4.4 and
+    // module/helpers/materials-helper.mjs. `value` is initialized from cost in
+    // VagabondItem._preCreate.
+    schema.craftMaterial = new fields.SchemaField({
+      enabled: new fields.BooleanField({ required: true, initial: false }),
+      key:     new fields.StringField({ required: false, blank: true, initial: '' }),
+      value:   new fields.NumberField({ required: true, integer: true, min: 0, initial: 0 }),
+    });
+
+    // Tool kind this item satisfies for a Craft/Alchemy tools-requirement check
+    // (e.g. 'alchemy', 'herbalism'). No `choices:` — dynamic/homebrew-extendable,
+    // validated by CraftingHelper, not the schema.
+    schema.toolKind = new fields.StringField({ required: false, blank: true, initial: '' });
 
     // ===== SUPPLY FIELDS =====
 
@@ -545,6 +618,14 @@ export default class VagabondEquipment extends VagabondItemBase {
         && (!source.equipmentState || source.equipmentState === 'unequipped')) {
       source.equipmentState = 'worn'; // legacy items predate handsRequired (always 0)
     }
+    // Relic model (docs/crafting-plan.md §4.4): requiresBound → relic.requiresBond.
+    // bound:true → relic.boundTo needs an actor uuid this static method never has
+    // (no `this.parent` here) — that half of the migration is a prepareDerivedData
+    // fallback instead. Never overwrite an already-migrated relic block.
+    if (source.requiresBound === true && source.relic?.requiresBond !== true) {
+      source.relic ??= {};
+      source.relic.requiresBond = true;
+    }
     return super.migrateData(source);
   }
 
@@ -553,6 +634,20 @@ export default class VagabondEquipment extends VagabondItemBase {
     this.equipped = this.equipmentState !== 'unequipped';
     // Template-visible mirror of EquipmentHelper.isThrowable (Thrown weapons)
     this.isThrowable = this.equipmentType === 'weapon' && (this.properties ?? []).includes('Thrown');
+
+    // Relic bound migration fallback (see migrateData): a legacy `bound:true` item
+    // that hasn't been re-bound since has no owning-actor uuid on disk — assume its
+    // CURRENT parent is who it's bound to (true for every ordinary case; an item
+    // traded away while still legacy-bound is the one edge case this doesn't
+    // catch — RAW binding is a 10-minute ritual, so that's an unusual state to be
+    // in anyway). Then `bound` becomes a pure derived mirror of `relic.boundTo`,
+    // same pattern as `equipped` mirroring `equipmentState` above — never write
+    // `system.bound` directly, write `system.relic.boundTo`.
+    if (this.bound === true && !this.relic.boundTo && this.parent) {
+      this.relic.boundTo = this.parent.uuid;
+    }
+    this.bound = this.relic.boundTo !== '';
+    this.requiresBound = this.relic.requiresBond;
 
     // Relics don't use metal - skip metal calculations
     const isRelic = this.equipmentType === 'relic';
@@ -569,6 +664,14 @@ export default class VagabondEquipment extends VagabondItemBase {
 
     // Calculate final cost (with metal multiplier for non-relics)
     this.cost = this.constructor._applyCostMultiplier(this.baseCost, this.metalMultiplier);
+
+    // Relic power roll-up (docs/crafting-plan.md §4.5): a crafted-on power adds
+    // its value to resale cost. Sockets add nothing yet (Phase 7 — crystals value
+    // their OWN item separately, not the host).
+    const powerValueCopper = (this.relic.powers ?? []).reduce((sum, p) => sum + (p.value || 0), 0);
+    if (powerValueCopper > 0) {
+      this.cost = CurrencyHelper.fromCopper(CurrencyHelper.toCopper(this.cost) + powerValueCopper);
+    }
 
     // Format cost as a human-readable string
     const costs = [];

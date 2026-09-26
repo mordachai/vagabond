@@ -18,10 +18,27 @@ export default class VagabondActiveEffectData extends foundry.data.ActiveEffectT
   /**
    * Why this effect is suppressed by Vagabond logic, or null when it is not.
    * Used by the sheet to render a badge; `isSuppressed` derives from it.
-   * @returns {'onUse'|'unequipped'|null}
+   * @returns {'onUse'|'unequipped'|'unbound'|null}
    */
   get suppressionReason() {
     const effect = this.parent;
+    const item = effect?.parent;
+
+    // Relic bond gate (docs/crafting-plan.md §4.5): independent of applicationMode —
+    // a permanent power effect is still suppressed while its Bound-requiring host
+    // isn't bound to the wielder. Only meaningful on an actor-embedded item.
+    if (item?.documentName === 'Item' && item.system?.relic?.requiresBond) {
+      const actor = item.actor;
+      const boundTo = item.system.relic.boundTo || '';
+      if (actor && boundTo !== actor.uuid) {
+        let bondSuppression = true;
+        try {
+          bondSuppression = game.settings.get('vagabond', 'craftingConfig')?.relics?.bondSuppression ?? true;
+        } catch { /* setting not registered yet (very early load) — default stays true */ }
+        if (bondSuppression) return 'unbound';
+      }
+    }
+
     const mode = effect?.flags?.vagabond?.applicationMode ?? 'permanent';
 
     if (mode === 'on-use') return 'onUse';

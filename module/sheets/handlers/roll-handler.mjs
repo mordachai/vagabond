@@ -167,8 +167,11 @@ export class RollHandler {
    * @param {{thrown?: boolean, skillKey?: string|null}} [options] thrown: attack with an unequipped
    *   Thrown weapon (quantity is spent by activateHandItem, not consumption) — rolls Ranged,
    *   Hindered at Far. skillKey: one of the weapon's allowed skills (default: preferred).
+   *   A damaging (non-restorative) Alchemical Item is always a throw attack (Ranged or
+   *   Craft, see EquipmentHelper.isThrownAlchemical) unless noAttack: then it posts the
+   *   plain auto-hit Use card (pouring / applying it, GM's call).
    */
-  async rollWeapon(event, target = null, { thrown = false, skillKey = null } = {}) {
+  async rollWeapon(event, target = null, { thrown = false, skillKey = null, noAttack = false } = {}) {
     event.preventDefault();
 
     // 1. Target Safety
@@ -188,6 +191,9 @@ export class RollHandler {
     // 2. Define Item Types
     const isWeapon = EquipmentHelper.isWeapon(item);
     const isAlchemical = EquipmentHelper.isAlchemical(item);
+    // Thrown Alchemical Item → the weapon attack path below, as a throw
+    const alchemicalThrow = isAlchemical && !noAttack && EquipmentHelper.isThrownAlchemical(item);
+    if (alchemicalThrow) thrown = true;
 
     if (!isWeapon && !isAlchemical) {
       ui.notifications.warn(game.i18n.localize('VAGABOND.UI.Errors.ItemNotRollable'));
@@ -206,8 +212,8 @@ export class RollHandler {
     const targetsAtRollTime = TargetHelper.captureCurrentTargets();
 
     try {
-      /* PATH A: ALCHEMICAL */
-      if (isAlchemical) {
+      /* PATH A: ALCHEMICAL (used, not thrown) */
+      if (isAlchemical && !alchemicalThrow) {
         // SMART CHECK: If no damage type or no formula, treat as generic "Use Item"
         const hasDamage =
           item.system.damageType &&
@@ -405,8 +411,9 @@ export class RollHandler {
         _wpnPostCtx.extraTags
       );
       // Handle consumption after successful attack (regardless of hit/miss).
-      // A throw already spends quantity in activateHandItem.
-      if (!thrown) await item.handleConsumption();
+      // A weapon throw already spends quantity in activateHandItem; a thrown
+      // Alchemical Item's container breaks, so it spends a charge here.
+      if (!thrown || alchemicalThrow) await item.handleConsumption();
       return attackResult.roll;
     } catch (error) {
       console.error(error);

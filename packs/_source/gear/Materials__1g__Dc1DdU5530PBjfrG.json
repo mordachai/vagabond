@@ -30,7 +30,13 @@
     "immunities": [],
     "gearCategory": "Alchemy & Medicine",
     "alchemicalType": "concoction",
-    "lore": ""
+    "lore": "",
+    "craftMaterial": {
+      "enabled": true,
+      "key": "",
+      "value": 1000
+    },
+    "toolKind": ""
   },
   "effects": [],
   "flags": {

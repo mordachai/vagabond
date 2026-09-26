@@ -2561,6 +2561,60 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   color: #b03030;
 }
 
+/* --------------------------------------------------------- */
+/* Crafting approval card: GM-only Approve/Deny row. Hidden   */
+/* client-side for non-GMs by the generic .gm-only rule.      */
+/* --------------------------------------------------------- */
+.vagabond-craft-approval-buttons {
+  display: flex;
+  gap: 6px;
+  width: 100%;
+  margin-top: 4px;
+}
+.vagabond-craft-approval-buttons button {
+  flex: 1;
+  height: auto;
+  line-height: 1.2;
+  padding: 6px;
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+}
+.vagabond-craft-approval-buttons button:hover {
+  filter: brightness(1.15);
+}
+.vagabond-craft-approval-buttons button:disabled {
+  opacity: 0.5;
+  cursor: default;
+  filter: none;
+}
+.vagabond-craft-approval-buttons .vagabond-craft-approve-button {
+  background: var(--vagabond-c-chat-yellow);
+  color: var(--vagabond-c-black);
+}
+.vagabond-craft-approval-buttons .vagabond-craft-deny-button {
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+}
+.vagabond-craft-approval-buttons .vagabond-craft-deny-button i {
+  color: var(--vagabond-c-red);
+}
+
+.vagabond-craft-approval-result {
+  margin: 4px 0 0;
+  font-size: 12px;
+  font-style: italic;
+  opacity: 0.85;
+}
+
 /* Animations */
 @keyframes popIn {
   from {
@@ -12689,6 +12743,1468 @@ ol#combat-tracker.directory-list {
 .shop-item-tooltip .property-name {
   opacity: 0.7;
   flex: 0 0 auto;
+}
+
+/* Crafting & Relics Settings Dialog */
+#crafting-settings.crafting-settings-form .window-content {
+  padding: 0;
+  overflow: hidden;
+}
+#crafting-settings.crafting-settings-form .crafting-settings-layout {
+  display: flex;
+  height: 100%;
+  overflow: hidden;
+}
+#crafting-settings.crafting-settings-form .crafting-settings-tabs {
+  display: flex;
+  flex-direction: column;
+  width: 140px;
+  min-width: 140px;
+  border-right: 1px solid var(--vagabond-c-faint);
+  background: rgba(0, 0, 0, 0.05);
+  padding: 0.5rem 3px;
+  gap: 2px;
+}
+#crafting-settings.crafting-settings-form .crafting-tab-button {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: none;
+  border-left: 4px solid transparent;
+  background: transparent;
+  color: var(--vagabond-c-muted);
+  cursor: pointer;
+  text-align: left;
+  font-size: 0.8rem;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+#crafting-settings.crafting-settings-form .crafting-tab-button i:first-child {
+  width: 1em;
+  text-align: center;
+  flex-shrink: 0;
+}
+#crafting-settings.crafting-settings-form .crafting-tab-button:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--vagabond-c-text);
+}
+#crafting-settings.crafting-settings-form .crafting-tab-button.active {
+  border-left-color: var(--vagabond-c-yellow, #c9a227);
+  color: var(--vagabond-c-text);
+  background: rgba(255, 255, 255, 0.08);
+}
+#crafting-settings.crafting-settings-form .cs-reset-all-btn {
+  margin-top: auto;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.75rem;
+  border: none;
+  border-top: 1px solid var(--vagabond-c-faint);
+  background: transparent;
+  color: var(--vagabond-c-muted);
+  font-size: 0.76rem;
+  cursor: pointer;
+  text-align: left;
+  opacity: 0.6;
+  transition: opacity 0.15s, color 0.15s, background 0.15s;
+}
+#crafting-settings.crafting-settings-form .cs-reset-all-btn:hover {
+  opacity: 1;
+  color: var(--vagabond-c-red, #c0392b);
+  background: rgba(192, 57, 43, 0.07);
+}
+#crafting-settings.crafting-settings-form .crafting-settings-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+}
+#crafting-settings.crafting-settings-form .crafting-tab-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.85rem 1rem;
+}
+#crafting-settings.crafting-settings-form .cs-field {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.6rem;
+}
+#crafting-settings.crafting-settings-form .cs-field label {
+  min-width: 180px;
+  font-size: 0.85rem;
+}
+#crafting-settings.crafting-settings-form .cs-field select, #crafting-settings.crafting-settings-form .cs-field input[type=number] {
+  flex: 1;
+  max-width: 220px;
+}
+#crafting-settings.crafting-settings-form .cs-field.cs-field--checkbox {
+  cursor: pointer;
+}
+#crafting-settings.crafting-settings-form .cs-field.cs-field--checkbox label {
+  min-width: 0;
+}
+#crafting-settings.crafting-settings-form .cs-fieldset {
+  margin: 0.85rem 0 0;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--vagabond-c-faint);
+  border-radius: 4px;
+}
+#crafting-settings.crafting-settings-form .cs-fieldset legend {
+  padding: 0 0.4rem;
+  font-weight: 600;
+  font-size: 0.82rem;
+}
+#crafting-settings.crafting-settings-form .cs-hint {
+  margin: 0 0 0.5rem;
+  font-size: 0.78rem;
+  opacity: 0.75;
+}
+#crafting-settings.crafting-settings-form .cs-value-per-shift-table,
+#crafting-settings.crafting-settings-form .cs-crystal-slot-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+#crafting-settings.crafting-settings-form .cs-value-per-shift-table th, #crafting-settings.crafting-settings-form .cs-value-per-shift-table td,
+#crafting-settings.crafting-settings-form .cs-crystal-slot-table th,
+#crafting-settings.crafting-settings-form .cs-crystal-slot-table td {
+  padding: 0.3rem 0.5rem;
+  text-align: left;
+}
+#crafting-settings.crafting-settings-form .cs-value-per-shift-table td input[type=number],
+#crafting-settings.crafting-settings-form .cs-crystal-slot-table td input[type=number] {
+  width: 100%;
+}
+#crafting-settings.crafting-settings-form .cs-value-per-shift-table thead th,
+#crafting-settings.crafting-settings-form .cs-crystal-slot-table thead th {
+  opacity: 0.75;
+  font-weight: 600;
+}
+#crafting-settings.crafting-settings-form .cs-value-per-shift-table tbody tr:nth-child(odd),
+#crafting-settings.crafting-settings-form .cs-crystal-slot-table tbody tr:nth-child(odd) {
+  background: rgba(255, 255, 255, 0.03);
+}
+#crafting-settings.crafting-settings-form .cs-crystal-slot-table td input[type=number] {
+  max-width: 60px;
+}
+#crafting-settings.crafting-settings-form .crafting-settings-footer {
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: flex-end;
+  padding: 0.5rem 1rem;
+  border-top: 1px solid var(--vagabond-c-faint);
+}
+
+/* Crafting Workbench (docs/crafting-plan.md §5) */
+.workbench-app {
+  /* 2x2 wealth mosaic: [you|party] x [coin|material], icon-driven, no text labels */
+  /* Row card: [img] [name] [arrow over yield] [scrap btn at end] */
+  /* Known Formula cards — shop-card pattern (head: img + plate; foot: Craft button) */
+  /* Alchemy tab: center (budget/notice/known) + right sidebar (full catalog + detail).
+     align-items: stretch so the sidebar matches the center column's full height —
+     the row list then flexes to fill it (see .wb-formula-sidebar-list) instead of
+     being capped at a small fixed box. */
+  /* flex:1 stretches the list down to the bottom of the sidebar (which itself now
+     matches the center column's height — see .wb-alchemy-layout) instead of a
+     small fixed box; it scrolls internally once content overflows that space. */
+  /* Accordion: row toggles, .wb-formula-row-detail expands inline right below it */
+  /* ------------------------------------------------------------------ */
+  /* Craft tab: catalog | (selected detail / ongoing Projects / Shift footer) */
+  /* ------------------------------------------------------------------ */
+  /* Right column */
+}
+.workbench-app .window-content {
+  padding: 0.5rem;
+  overflow: hidden;
+}
+.workbench-app .wb-root {
+  display: flex;
+  height: 100%;
+  overflow: hidden;
+  font-family: "Paradigm", serif;
+}
+.workbench-app .wb-rail {
+  display: flex;
+  flex-direction: column;
+  width: 95px;
+  min-width: 95px;
+  border-right: 1px solid var(--vagabond-c-faint);
+  background: var(--vagabond-c-inset-2);
+  padding: 0.5rem 3px;
+  gap: 2px;
+}
+.workbench-app .wb-rail-btn {
+  font-family: "Manofa", serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  width: 100%;
+  padding: 0.5rem 0.3rem;
+  border: none;
+  border-left: 4px solid transparent;
+  background: transparent;
+  color: var(--vagabond-c-muted);
+  cursor: pointer;
+  font-size: 0.72rem;
+  height: auto;
+  line-height: normal;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+.workbench-app .wb-rail-btn i {
+  font-size: 1.1rem;
+}
+.workbench-app .wb-rail-btn:hover {
+  background: var(--vagabond-c-inset-2);
+  color: var(--vagabond-c-text-primary);
+}
+.workbench-app .wb-rail-btn.active {
+  border-left-color: var(--vagabond-c-chat-yellow);
+  color: var(--vagabond-c-text-primary);
+  background: var(--vagabond-c-inset-2);
+}
+.workbench-app .wb-rail-soon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.5rem 0.3rem;
+  font-size: 0.68rem;
+  opacity: 0.35;
+  cursor: help;
+}
+.workbench-app .wb-main {
+  flex: 1;
+  min-width: 0;
+  overflow-y: auto;
+  padding: 0.85rem 1rem;
+}
+.workbench-app .wb-hint {
+  margin: 0 0 0.6rem;
+  font-size: 0.78rem;
+  opacity: 0.75;
+}
+.workbench-app .wb-disabled-hint,
+.workbench-app .wb-materials-warning {
+  color: var(--vagabond-c-red);
+  opacity: 1;
+}
+.workbench-app .wb-alchemy-header {
+  margin-bottom: 0.7rem;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--vagabond-c-faint);
+  border-radius: 4px;
+  background: var(--vagabond-c-surface);
+  font-size: 0.82rem;
+}
+.workbench-app .wb-alchemy-header-row1 {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.35rem;
+}
+.workbench-app .wb-alchemy-header-row1 i {
+  color: var(--vagabond-c-chat-yellow);
+}
+.workbench-app .wb-wealth-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.35rem;
+}
+.workbench-app .wb-wealth-tile {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.5rem;
+  background: var(--vagabond-c-inset-2);
+  border: 1px solid var(--vagabond-c-tan-lite);
+  border-radius: 4px;
+  cursor: help;
+}
+.workbench-app .wb-wealth-tile i:first-child {
+  color: var(--vagabond-c-muted);
+  font-size: 0.8em;
+}
+.workbench-app .wb-wealth-tile i:nth-child(2) {
+  color: var(--vagabond-c-chat-yellow);
+}
+.workbench-app .wb-wealth-icon {
+  width: 14px;
+  height: 14px;
+  object-fit: cover;
+  border-radius: 2px;
+}
+.workbench-app .wb-wealth-value {
+  margin-left: auto;
+  font-family: "Germania", serif;
+  font-size: 1rem;
+}
+.workbench-app .wb-alchemy-notice {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.1rem;
+  margin-bottom: 0.7rem;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--vagabond-c-red);
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--vagabond-c-red) 8%, transparent);
+  color: var(--vagabond-c-red);
+  font-size: 0.78rem;
+}
+.workbench-app .wb-alchemy-notice i {
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+.workbench-app .wb-alchemy-notice.is-empty {
+  visibility: hidden;
+}
+.workbench-app .wb-budget-bar {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.7rem;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--vagabond-c-faint);
+  border-radius: 4px;
+  font-size: 0.82rem;
+  background: var(--vagabond-c-surface);
+}
+.workbench-app .wb-fieldset {
+  margin: 0 0 0.85rem;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--vagabond-c-faint);
+  border-radius: 4px;
+}
+.workbench-app .wb-fieldset legend {
+  font-family: "Manofa", serif;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0 0.4rem;
+  font-weight: 600;
+  font-size: 0.82rem;
+}
+.workbench-app .wb-edit-toggle {
+  width: 20px;
+  height: 20px;
+  line-height: normal;
+  padding: 0;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--vagabond-c-muted);
+  border-radius: 4px;
+  font-size: 0.7rem;
+  cursor: pointer;
+}
+.workbench-app .wb-edit-toggle:hover {
+  color: var(--vagabond-c-text-primary);
+}
+.workbench-app .wb-edit-toggle.active {
+  color: var(--vagabond-c-chat-yellow);
+  border-color: var(--vagabond-c-chat-yellow);
+}
+.workbench-app .wb-empty {
+  margin: 0.3rem 0;
+  font-size: 0.8rem;
+  opacity: 0.6;
+  font-style: italic;
+}
+.workbench-app .wb-budget-over {
+  color: var(--vagabond-c-red);
+}
+.workbench-app .wb-project-bar {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--vagabond-c-inset-2);
+  overflow: hidden;
+  margin: 0.2rem 0;
+}
+.workbench-app .wb-project-fill {
+  height: 100%;
+  background: var(--vagabond-c-chat-yellow);
+}
+.workbench-app .wb-icon-btn {
+  width: 26px;
+  height: 26px;
+  line-height: normal;
+  flex-shrink: 0;
+  padding: 0;
+  border: 1px solid var(--vagabond-c-faint);
+  background: transparent;
+  color: var(--vagabond-c-muted);
+  border-radius: 4px;
+  cursor: pointer;
+}
+.workbench-app .wb-icon-btn:hover {
+  color: var(--vagabond-c-text-primary);
+  border-color: var(--vagabond-c-text-primary);
+}
+.workbench-app .wb-icon-btn-danger:hover {
+  color: var(--vagabond-c-red);
+  border-color: var(--vagabond-c-red);
+}
+.workbench-app .wb-scrap-actions {
+  display: flex;
+  gap: 0.3rem;
+}
+.workbench-app .wb-shift-btn {
+  font-family: "Manofa", serif;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.55rem;
+  height: auto;
+  line-height: normal;
+  font-weight: 600;
+  cursor: pointer;
+}
+.workbench-app .wb-shift-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.workbench-app .wb-craft-project-btn {
+  margin-top: 0.4rem;
+  background: transparent;
+  color: var(--vagabond-c-text-primary);
+  border: 1px solid var(--vagabond-c-faint);
+}
+.workbench-app .wb-craft-project-btn:hover {
+  border-color: var(--vagabond-c-chat-yellow);
+}
+.workbench-app .wb-scrap-top {
+  display: flex;
+  align-items: stretch;
+  gap: 0.6rem;
+  margin-bottom: 0.7rem;
+}
+.workbench-app .wb-scrap-stock {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 0 0 auto;
+  padding: 0.35rem 0.8rem 0.35rem 0.4rem;
+  border: 1px solid var(--vagabond-c-faint);
+  border-radius: 4px;
+}
+.workbench-app .wb-scrap-stock img {
+  width: 44px;
+  height: 44px;
+  object-fit: cover;
+  border-radius: 4px;
+  border: none;
+}
+.workbench-app .wb-scrap-stock-value {
+  font-family: "Germania", serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+}
+.workbench-app .wb-scrap-header {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--vagabond-c-faint);
+  border-radius: 4px;
+  background: var(--vagabond-c-surface);
+  font-size: 1rem;
+}
+.workbench-app .wb-scrap-header i {
+  color: var(--vagabond-c-chat-yellow);
+}
+.workbench-app .wb-scrap-group {
+  margin-bottom: 0.85rem;
+}
+.workbench-app .wb-scrap-group:last-child {
+  margin-bottom: 0;
+}
+.workbench-app .wb-scrap-group-label {
+  font-family: "Manofa", serif;
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  opacity: 0.6;
+  margin-bottom: 0.35rem;
+  padding-bottom: 0.2rem;
+  border-bottom: 1px solid var(--vagabond-c-faint);
+}
+.workbench-app .wb-scrap-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 0.6rem;
+}
+.workbench-app .wb-scrap-card {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  align-items: center;
+  column-gap: 0.45rem;
+  padding: 0.6rem;
+  border: 1px solid var(--vagabond-c-faint);
+  border-radius: 4px;
+  text-align: left;
+}
+.workbench-app .wb-scrap-card img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+.workbench-app .wb-scrap-card .wb-icon-btn {
+  justify-self: end;
+}
+.workbench-app .wb-scrap-name {
+  font-family: "Germania", serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  min-width: 0;
+}
+.workbench-app .wb-scrap-out {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1.1;
+}
+.workbench-app .wb-scrap-arrow {
+  font-size: 0.9rem;
+  opacity: 0.6;
+}
+.workbench-app .wb-scrap-yield {
+  font-size: 0.85rem;
+  opacity: 0.75;
+  white-space: nowrap;
+}
+.workbench-app .wb-known-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.6rem;
+}
+.workbench-app .wb-known-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  min-width: 0;
+  padding: 0.4rem;
+  background: var(--vagabond-c-surface);
+  border: 1px solid var(--vagabond-c-tan-lite);
+  border-radius: 6px;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.workbench-app .wb-known-card:hover {
+  border-color: var(--vagabond-c-chat-yellow);
+  box-shadow: 0 0 8px -3px var(--vagabond-c-chat-yellow);
+}
+.workbench-app .wb-known-card-empty {
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  min-height: 90px;
+  border-style: dashed;
+  color: var(--vagabond-c-muted);
+  font-size: 0.75rem;
+  text-align: center;
+}
+.workbench-app .wb-known-card-empty i {
+  font-size: 1.2rem;
+  opacity: 0.5;
+}
+.workbench-app .wb-known-card-empty:hover {
+  border-color: var(--vagabond-c-tan-lite);
+  box-shadow: none;
+}
+.workbench-app .wb-known-remove {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 18px;
+  height: 18px;
+  line-height: 16px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--vagabond-c-muted);
+  font-size: 1rem;
+  cursor: pointer;
+  z-index: 1;
+}
+.workbench-app .wb-known-remove:hover {
+  color: var(--vagabond-c-red);
+}
+.workbench-app .wb-known-head {
+  display: flex;
+  gap: 0.4rem;
+  min-width: 0;
+}
+.workbench-app .wb-known-img {
+  width: 48px;
+  height: 48px;
+  flex: 0 0 48px;
+  object-fit: cover;
+  border: 1px solid var(--vagabond-c-tan-lite);
+  border-radius: 4px;
+  background: var(--vagabond-c-black);
+}
+.workbench-app .wb-known-plate {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+  padding: 0.2rem 0.4rem;
+  background: var(--vagabond-c-inset-2);
+  border: 1px solid var(--vagabond-c-tan-lite);
+  border-radius: 4px;
+}
+.workbench-app .wb-known-name {
+  font-family: "Germania", serif;
+  font-size: 1.15rem;
+  line-height: 1.15;
+  min-height: 2.3em;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  padding-right: 1rem;
+}
+.workbench-app .wb-known-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+  color: var(--vagabond-c-muted);
+}
+.workbench-app .wb-known-damage {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.95rem;
+  color: var(--vagabond-c-chat-yellow);
+  cursor: help;
+}
+.workbench-app .wb-known-damage i {
+  font-size: 0.85em;
+}
+.workbench-app .wb-known-craft {
+  font-family: "Manofa", serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  width: 100%;
+  padding: 0.3rem 0.5rem;
+  height: auto;
+  line-height: normal;
+  font-size: 0.95rem;
+  background: var(--vagabond-c-bg2);
+  color: var(--vagabond-c-white);
+  border: 1px solid var(--vagabond-c-chat-yellow);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: box-shadow 0.15s;
+}
+.workbench-app .wb-known-craft:hover {
+  box-shadow: 0 0 8px -1px var(--vagabond-c-chat-yellow), inset 0 0 0 1px var(--vagabond-c-chat-yellow);
+}
+.workbench-app .wb-alchemy-tab {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.workbench-app .wb-alchemy-layout {
+  display: flex;
+  gap: 0.85rem;
+  align-items: stretch;
+  flex: 1;
+  min-height: 0;
+}
+.workbench-app .wb-alchemy-center {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  overflow-y: auto;
+}
+.workbench-app .wb-alchemy-sidebar {
+  width: 260px;
+  flex-shrink: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  border: 1px solid var(--vagabond-c-faint);
+  border-radius: 4px;
+  padding: 0.6rem;
+}
+.workbench-app .wb-formula-sidebar-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+.workbench-app .wb-formula-search {
+  width: 100%;
+}
+.workbench-app .wb-formula-sort-tabs {
+  display: flex;
+  gap: 0.25rem;
+}
+.workbench-app .wb-formula-sort-btn {
+  font-family: "Manofa", serif;
+  flex: 1;
+  height: auto;
+  line-height: normal;
+  padding: 0.25rem 0.3rem;
+  font-size: 0.7rem;
+  border: 1px solid var(--vagabond-c-faint);
+  background: transparent;
+  color: var(--vagabond-c-muted);
+  border-radius: 4px;
+  cursor: pointer;
+}
+.workbench-app .wb-formula-sort-btn:hover {
+  color: var(--vagabond-c-text-primary);
+}
+.workbench-app .wb-formula-sort-btn.active {
+  color: var(--vagabond-c-text-primary);
+  border-color: var(--vagabond-c-chat-yellow);
+  background: var(--vagabond-c-inset-2);
+}
+.workbench-app .wb-formula-sidebar-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+.workbench-app .wb-formula-group.is-hidden {
+  display: none;
+}
+.workbench-app .wb-formula-group-label {
+  font-family: "Manofa", serif;
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  opacity: 0.6;
+  margin-bottom: 0.2rem;
+}
+.workbench-app .wb-formula-item.is-hidden {
+  display: none;
+}
+.workbench-app .wb-formula-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.25rem 0.35rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.workbench-app .wb-formula-row:hover {
+  background: var(--vagabond-c-inset-2);
+}
+.workbench-app .wb-formula-row.is-selected {
+  background: color-mix(in srgb, var(--vagabond-c-chat-yellow) 15%, transparent);
+  outline: 1px solid var(--vagabond-c-chat-yellow);
+}
+.workbench-app .wb-formula-row.is-over-cap {
+  opacity: 0.5;
+}
+.workbench-app .wb-formula-row.is-known {
+  opacity: 0.7;
+}
+.workbench-app .wb-formula-row-icon {
+  position: relative;
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+}
+.workbench-app .wb-formula-row-icon img {
+  width: 22px;
+  height: 22px;
+  object-fit: cover;
+  border-radius: 3px;
+}
+.workbench-app .wb-formula-row-badge {
+  position: absolute;
+  bottom: -4px;
+  right: -4px;
+  min-width: 14px;
+  height: 14px;
+  padding: 0 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--vagabond-c-chat-yellow);
+  color: var(--vagabond-c-black);
+  border-radius: 7px;
+  font-size: 0.6rem;
+  font-weight: 700;
+  line-height: 1;
+  cursor: help;
+}
+.workbench-app .wb-formula-row-name {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.95rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.workbench-app .wb-formula-row-cost {
+  font-size: 0.68rem;
+  opacity: 0.75;
+  flex-shrink: 0;
+}
+.workbench-app .wb-formula-row-known {
+  font-size: 0.7rem;
+  color: var(--vagabond-c-chat-yellow);
+  flex-shrink: 0;
+}
+.workbench-app .wb-formula-row-caret {
+  font-size: 0.65rem;
+  opacity: 0.5;
+  flex-shrink: 0;
+  transition: transform 0.15s;
+}
+.workbench-app .wb-formula-item.is-expanded .wb-formula-row-caret {
+  transform: rotate(90deg);
+}
+.workbench-app .wb-formula-row-detail {
+  margin: 0.3rem 0 0.2rem;
+  padding: 0.45rem 0.5rem;
+  background: var(--vagabond-c-inset-2);
+  border: 1px solid var(--vagabond-c-tan-lite);
+  border-radius: 4px;
+}
+.workbench-app .wb-formula-detail-desc {
+  font-size: 0.85rem;
+  opacity: 0.85;
+  max-height: 130px;
+  overflow-y: auto;
+  margin-bottom: 0.4rem;
+}
+.workbench-app .wb-formula-detail-desc p:first-child {
+  margin-top: 0;
+}
+.workbench-app .wb-formula-detail-desc p:last-child {
+  margin-bottom: 0;
+}
+.workbench-app .wb-formula-detail-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.8rem;
+}
+.workbench-app .wb-formula-detail-stats .stat-row {
+  display: flex;
+  justify-content: space-between;
+}
+.workbench-app .wb-formula-detail-stats .stat-name {
+  opacity: 0.7;
+}
+.workbench-app .wb-formula-detail-note {
+  margin: 0;
+  font-size: 0.75rem;
+  opacity: 0.7;
+  font-style: italic;
+}
+.workbench-app .wb-formula-detail-warn {
+  color: var(--vagabond-c-red);
+  opacity: 1;
+}
+.workbench-app .wb-craft-tab {
+  height: 100%;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: 0.85rem;
+  border-radius: 6px;
+}
+.workbench-app .wb-craft-tab.drag-over {
+  outline: 2px dashed var(--vagabond-c-chat-yellow);
+  outline-offset: 2px;
+}
+.workbench-app .wb-mat-icon {
+  width: 16px;
+  height: 16px;
+  object-fit: cover;
+  border: none;
+  border-radius: 2px;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+.workbench-app .wb-budget-bar {
+  align-items: center;
+  margin-bottom: 0;
+}
+.workbench-app .wb-budget-bar span {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+.workbench-app .wb-budget-bar i {
+  color: var(--vagabond-c-chat-yellow);
+}
+.workbench-app .wb-catalog {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 0;
+  min-height: 0;
+}
+.workbench-app .wb-catalog-search {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0 0.6rem;
+  border: 1px solid var(--vagabond-c-faint);
+  border-radius: 4px;
+  background: var(--vagabond-c-surface);
+}
+.workbench-app .wb-catalog-search i {
+  opacity: 0.6;
+}
+.workbench-app .wb-catalog-search input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+  height: 2rem;
+}
+.workbench-app .wb-catalog-chips {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0.35rem;
+}
+.workbench-app .wb-chip {
+  font-family: "Manofa", serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  min-width: 0;
+  height: auto;
+  line-height: normal;
+  padding: 0.35rem 0.4rem;
+  font-size: 0.74rem;
+  border: 1px solid var(--vagabond-c-faint);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--vagabond-c-muted);
+  cursor: pointer;
+}
+.workbench-app .wb-chip span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.workbench-app .wb-chip:hover {
+  color: var(--vagabond-c-text-primary);
+}
+.workbench-app .wb-chip.active {
+  color: var(--vagabond-c-text-primary);
+  border-color: var(--vagabond-c-chat-yellow);
+  box-shadow: 0 0 8px -1px var(--vagabond-c-chat-yellow), inset 0 0 0 1px var(--vagabond-c-chat-yellow);
+}
+.workbench-app .wb-catalog-list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-right: 2px;
+}
+.workbench-app .wb-cat-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.3rem 0.5rem;
+  border: 1px solid var(--vagabond-c-faint);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+.workbench-app .wb-cat-row:hover {
+  background: var(--vagabond-c-inset-2);
+}
+.workbench-app .wb-cat-row.is-selected {
+  border-color: var(--vagabond-c-chat-yellow);
+  background: color-mix(in srgb, var(--vagabond-c-chat-yellow) 12%, transparent);
+  box-shadow: inset 0 0 0 1px var(--vagabond-c-chat-yellow);
+}
+.workbench-app .wb-cat-row.is-hidden {
+  display: none;
+}
+.workbench-app .wb-cat-img {
+  width: 36px;
+  height: 36px;
+  flex: 0 0 36px;
+  object-fit: cover;
+  border: 1px solid var(--vagabond-c-tan-lite);
+  border-radius: 4px;
+  background: var(--vagabond-c-black);
+}
+.workbench-app .wb-cat-info {
+  flex: 1;
+  min-width: 0;
+}
+.workbench-app .wb-cat-name {
+  font-family: "Germania", serif;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.95rem;
+  font-weight: 400;
+}
+.workbench-app .wb-cat-name > span:first-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.workbench-app .wb-cat-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.85rem;
+  color: var(--vagabond-c-muted);
+}
+.workbench-app .wb-stat {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-weight: 600;
+  color: var(--vagabond-c-chat-yellow);
+  cursor: help;
+}
+.workbench-app .wb-stat i {
+  font-size: 0.9em;
+}
+.workbench-app .wb-cat-stats {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  flex-shrink: 0;
+  font-size: 0.85rem;
+}
+.workbench-app .wb-cat-stats i {
+  color: var(--vagabond-c-chat-yellow);
+  font-size: 0.85em;
+}
+.workbench-app .wb-cat-cost {
+  font-family: "Eskapade", serif;
+  font-weight: 600;
+}
+.workbench-app .wb-cat-sub {
+  display: flex;
+  gap: 0.85rem;
+  color: var(--vagabond-c-muted);
+}
+.workbench-app .wb-cat-sub > span {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+.workbench-app .wb-cat-sub .wb-mat-icon {
+  width: 13px;
+  height: 13px;
+}
+.workbench-app .wb-gm-badge {
+  flex-shrink: 0;
+  padding: 0 0.3rem;
+  border: 1px solid var(--vagabond-c-chat-yellow);
+  border-radius: 3px;
+  color: var(--vagabond-c-chat-yellow);
+  font-size: 0.6rem;
+  font-weight: 700;
+  line-height: 1.4;
+  cursor: help;
+}
+.workbench-app .wb-catalog-nomatch[hidden] {
+  display: none;
+}
+.workbench-app .wb-side {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  min-height: 0;
+}
+.workbench-app .wb-detail,
+.workbench-app .wb-projects,
+.workbench-app .wb-shift-footer {
+  border: 1px solid var(--vagabond-c-faint);
+  border-radius: 4px;
+  background: var(--vagabond-c-surface);
+  padding: 0.55rem 0.6rem;
+}
+.workbench-app .wb-detail {
+  flex: 0 0 auto;
+}
+.workbench-app .wb-detail-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+}
+.workbench-app .wb-detail-img {
+  width: 64px;
+  height: 64px;
+  flex: 0 0 64px;
+  object-fit: cover;
+  border: 1px solid var(--vagabond-c-chat-yellow);
+  border-radius: 6px;
+  background: var(--vagabond-c-black);
+}
+.workbench-app .wb-detail-plate {
+  flex: 1;
+  min-width: 0;
+}
+.workbench-app .wb-detail-name {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: "Germania", serif;
+  font-size: 1.1rem;
+  line-height: 1.2;
+}
+.workbench-app .wb-detail-meta {
+  font-size: 0.75rem;
+  color: var(--vagabond-c-muted);
+}
+.workbench-app .wb-detail-damage {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-top: 0.15rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--vagabond-c-chat-yellow);
+}
+.workbench-app .wb-detail-damage > span {
+  cursor: help;
+}
+.workbench-app .wb-detail-damage .wb-sep {
+  color: var(--vagabond-c-muted);
+  cursor: default;
+}
+.workbench-app .wb-detail-desc {
+  margin: 0.45rem 0 0;
+  padding-top: 0.4rem;
+  border-top: 1px solid var(--vagabond-c-faint);
+  font-size: 0.75rem;
+  max-height: 72px;
+  overflow-y: auto;
+  opacity: 0.85;
+}
+.workbench-app .wb-detail-desc p:first-child {
+  margin-top: 0;
+}
+.workbench-app .wb-detail-desc p:last-child {
+  margin-bottom: 0;
+}
+.workbench-app .wb-detail-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.35rem;
+  margin: 0.5rem 0;
+}
+.workbench-app .wb-detail-stats > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.25rem;
+  background: var(--vagabond-c-inset-2);
+  border: 1px solid var(--vagabond-c-tan-lite);
+  border-radius: 4px;
+}
+.workbench-app .wb-detail-stats span {
+  font-family: "Manofa", serif;
+  font-size: 0.65rem;
+  color: var(--vagabond-c-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.workbench-app .wb-detail-stats strong {
+  font-family: "Germania", serif;
+  font-size: 0.85rem;
+}
+.workbench-app .wb-stage-btn,
+.workbench-app .wb-shift-actions .wb-shift-btn {
+  background: var(--vagabond-c-bg2);
+  color: var(--vagabond-c-white);
+  border: 1px solid var(--vagabond-c-chat-yellow);
+  border-radius: 4px;
+}
+.workbench-app .wb-stage-btn:not(:disabled):hover,
+.workbench-app .wb-shift-actions .wb-shift-btn:not(:disabled):hover {
+  box-shadow: 0 0 8px -1px var(--vagabond-c-chat-yellow), inset 0 0 0 1px var(--vagabond-c-chat-yellow);
+}
+.workbench-app .wb-detail-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.8rem 0.4rem;
+  text-align: center;
+  font-size: 0.78rem;
+  color: var(--vagabond-c-muted);
+}
+.workbench-app .wb-detail-empty i {
+  font-size: 1.3rem;
+  opacity: 0.6;
+}
+.workbench-app .wb-detail-empty-gm {
+  font-size: 0.7rem;
+  font-style: italic;
+}
+.workbench-app .wb-projects {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+.workbench-app .wb-projects-head {
+  font-family: "Manofa", serif;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.workbench-app .wb-count {
+  min-width: 20px;
+  padding: 0 0.35rem;
+  border-radius: 10px;
+  background: var(--vagabond-c-inset-2);
+  border: 1px solid var(--vagabond-c-tan-lite);
+  text-align: center;
+  font-size: 0.7rem;
+}
+.workbench-app .wb-proj-list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+.workbench-app .wb-proj-row {
+  padding: 0.35rem 0.45rem;
+  border: 1px solid var(--vagabond-c-faint);
+  border-radius: 4px;
+  transition: border-color 0.15s;
+}
+.workbench-app .wb-proj-row.is-new {
+  border-style: dashed;
+}
+.workbench-app .wb-proj-row.is-allocated {
+  border-color: var(--vagabond-c-chat-yellow);
+}
+.workbench-app .wb-proj-top {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+.workbench-app .wb-proj-top img {
+  width: 28px;
+  height: 28px;
+  flex: 0 0 28px;
+  object-fit: cover;
+  border-radius: 3px;
+  border: 1px solid var(--vagabond-c-tan-lite);
+}
+.workbench-app .wb-proj-top .wb-icon-btn {
+  width: 22px;
+  height: 22px;
+  font-size: 0.75rem;
+}
+.workbench-app .wb-proj-name {
+  font-family: "Germania", serif;
+  flex: 1;
+  min-width: 0;
+  font-size: 0.82rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.workbench-app .wb-new-badge {
+  padding: 0 0.3rem;
+  border-radius: 3px;
+  background: var(--vagabond-c-chat-yellow);
+  color: var(--vagabond-c-black);
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  cursor: help;
+}
+.workbench-app .wb-proj-progress {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 0.25rem 0;
+}
+.workbench-app .wb-proj-progress .wb-project-bar {
+  flex: 1;
+  margin: 0;
+}
+.workbench-app .wb-proj-progress-label {
+  flex-shrink: 0;
+  font-size: 0.68rem;
+  color: var(--vagabond-c-muted);
+}
+.workbench-app .wb-proj-alloc {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.72rem;
+}
+.workbench-app .wb-proj-alloc-label {
+  flex: 1;
+  color: var(--vagabond-c-muted);
+}
+.workbench-app .wb-proj-alloc-label i {
+  color: var(--vagabond-c-chat-yellow);
+}
+.workbench-app .wb-stepper {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--vagabond-c-faint);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.workbench-app .wb-stepper button {
+  width: 22px;
+  height: 22px;
+  line-height: normal;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: var(--vagabond-c-inset-2);
+  color: var(--vagabond-c-muted);
+  font-size: 0.6rem;
+  cursor: pointer;
+}
+.workbench-app .wb-stepper button:hover {
+  color: var(--vagabond-c-chat-yellow);
+}
+.workbench-app .wb-stepper .wb-alloc-input {
+  width: 64px;
+  height: 22px;
+  padding: 0 0.2rem;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  text-align: center;
+  font-size: 0.75rem;
+}
+.workbench-app .wb-alloc-materials {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  min-width: 52px;
+  justify-content: flex-end;
+  color: var(--vagabond-c-muted);
+  cursor: help;
+}
+.workbench-app .wb-shift-footer {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+.workbench-app .wb-shift-footer .wb-hint {
+  margin: 0;
+}
+.workbench-app .wb-shift-footer .wb-hint[hidden] {
+  display: none;
+}
+.workbench-app .wb-shift-footer .wb-budget-warning {
+  color: var(--vagabond-c-red);
+  opacity: 1;
+}
+.workbench-app .wb-shift-line {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+}
+.workbench-app .wb-shift-line-label {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  width: 88px;
+  flex-shrink: 0;
+  color: var(--vagabond-c-muted);
+}
+.workbench-app .wb-shift-line-label i {
+  color: var(--vagabond-c-chat-yellow);
+}
+.workbench-app .wb-meter {
+  flex: 1;
+  height: 8px;
+  border-radius: 4px;
+  background: var(--vagabond-c-inset-2);
+  overflow: hidden;
+}
+.workbench-app .wb-meter.is-over .wb-meter-fill {
+  background: var(--vagabond-c-red);
+}
+.workbench-app .wb-meter-fill {
+  height: 100%;
+  width: 0;
+  background: var(--vagabond-c-chat-yellow);
+  transition: width 0.15s;
+}
+.workbench-app .wb-shift-spent {
+  flex-shrink: 0;
+  font-family: "Germania", serif;
+  font-weight: 600;
+}
+.workbench-app .wb-mats-needed {
+  font-weight: 600;
+}
+.workbench-app .wb-shift-actions {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.4rem;
+  margin-top: 0.15rem;
+}
+.workbench-app .wb-autofill-btn {
+  font-family: "Manofa", serif;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  height: auto;
+  line-height: normal;
+  padding: 0.5rem 0.7rem;
+  font-size: 0.75rem;
+  border: 1px solid var(--vagabond-c-faint);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--vagabond-c-text-primary);
+  cursor: pointer;
+}
+.workbench-app .wb-autofill-btn:hover {
+  border-color: var(--vagabond-c-chat-yellow);
 }
 
 /* Context menus - imported at top level because they render outside sheets (appended to document.body) */

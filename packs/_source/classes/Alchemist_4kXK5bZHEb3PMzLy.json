@@ -3,23 +3,25 @@
   "type": "class",
   "img": "icons/consumables/potions/potion-flash-open-blue.webp",
   "system": {
-    "description": "<p><strong>Why respect knights when my potions can do anything that you can?</strong></p><p><em>— Justin Kuritzkes, Potion Seller</em></p><p>Often sequestered in a lab, alchemists study the essence of creation. They are as curious as they are resourceful, and always have \"just the thing for this.\"</p><h3>Iconic Alchemists</h3><ul><li><strong>The Colorman</strong>, <em>Sacré Bleu</em></li><li><strong>Diablo</strong>, <em>Marvel Comics</em></li><li><strong>Dr. Jekyll</strong>, <em>Dr. Jekyll and Mr. Hyde</em></li><li><strong>Tessa Cade</strong>, <em>Defy the Night</em></li></ul><h3>Playing Alchemist</h3><p>The alchemist is a low defense, high damage and utility blaster. It's recommended you stay Far from Enemies to use alchemical items.</p><p><strong>Action:</strong> Use (Craft &amp; Attack)<br /><strong>Move:</strong> Backline<br /><strong>Starting Pack:</strong> Alchemist or Assassin<br /><strong>Key Stat:</strong> Reason<br /><strong>Complexity:</strong> ★★★★☆</p><h3>Training</h3><p><strong>Weapons:</strong> –<br /><strong>Skills:</strong> Craft and 4 others</p><p></p><h3><span class=\"fontstyle0\">Class Features</span></h3><table class=\"NormalTable\"><tbody><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle0\" style=\"color:rgb(255,255,255);font-size:9pt\">Level</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle0\" style=\"color:rgb(255,255,255);font-size:9pt\">Features</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"82\" colspan=\"2\"><p><span class=\"fontstyle0\" style=\"color:rgb(255,255,255);font-size:9pt\">Formulae</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle0\" style=\"color:rgb(255,255,255);font-size:9pt\"></span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle0\" style=\"color:rgb(255,255,255);font-size:9pt\"></span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"41\"><p><span class=\"fontstyle0\" style=\"color:rgb(255,255,255);font-size:9pt\">Known</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"41\"><p><span class=\"fontstyle0\" style=\"color:rgb(255,255,255);font-size:9pt\">Value</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">1st</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Alchemy, Catalyze</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"41\"><p><span class=\"fontstyle2\">4</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"41\"><p><span class=\"fontstyle2\">50s</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">2nd</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Eureka</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"41\"><p><span class=\"fontstyle2\">4</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"41\"><p><span class=\"fontstyle2\">1g</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">3rd</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"41\"><p><span class=\"fontstyle2\">5</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"41\"><p><span class=\"fontstyle2\">1g 50s</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">4th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Potency</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"41\"><p><span class=\"fontstyle2\">5</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"41\"><p><span class=\"fontstyle2\">2g</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">5th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"41\"><p><span class=\"fontstyle2\">6</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"41\"><p><span class=\"fontstyle2\">2g 50s</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">6th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Mix</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"41\"><p><span class=\"fontstyle2\">6</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"41\"><p><span class=\"fontstyle2\">3g</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">7th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"41\"><p><span class=\"fontstyle2\">7</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"41\"><p><span class=\"fontstyle2\">3g 50s</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">8th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Big Bang</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"41\"><p><span class=\"fontstyle2\">7</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"41\"><p><span class=\"fontstyle2\">4g</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">9th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"41\"><p><span class=\"fontstyle2\">8</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"41\"><p><span class=\"fontstyle2\">4g 50s</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">10th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Prima Materia</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"41\"><p><span class=\"fontstyle2\">8</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"41\"><p><span class=\"fontstyle2\">5g</span></p></td></tr></tbody></table><p><br style=\"font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:normal;orphans:2;text-align:-webkit-auto;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-size-adjust:auto;-webkit-text-stroke-width:0px\" /></p>",
+    "description": "<p><strong>Why respect knights when my potions can do anything that you can?</strong></p><p><em>— Justin Kuritzkes, Potion Seller</em></p><p>Often sequestered in a lab, alchemists study the essence of creation. They are as curious as they are resourceful, and always have \"just the thing for this.\"</p><h3>Iconic Alchemists</h3><ul><li><strong>The Colorman</strong>, <em>Sacré Bleu</em></li><li><strong>Dr. Jekyll</strong>, <em>Dr. Jekyll and Mr. Hyde</em></li><li><strong>Tessa Cade</strong>, <em>Defy the Night</em></li><li><strong>Walter White</strong>, <em>Breaking Bad</em></li></ul><h3>Playing Alchemist</h3><p>The alchemist is a low-defense, high-damage-and-utility blaster. It's recommended you stay Far from Enemies to use Alchemical Items.</p><p><strong>Action:</strong> Use (Craft &amp; Attack)<br /><strong>Move:</strong> Backline<br /><strong>Starting Pack:</strong> Alchemist or Assassin<br /><strong>Key Stat:</strong> Reason<br /><strong>Complexity:</strong> ★★★★☆</p><h3>Training</h3><p><strong>Weapons:</strong> –<br /><strong>Skills:</strong> Arcana, Craft, Medicine</p><h3>Class Features</h3><table class=\"NormalTable\"><tbody><tr><td rowspan=\"2\"><p><strong>Level</strong></p></td><td rowspan=\"2\"><p><strong>Features</strong></p></td><td colspan=\"2\"><p><strong>Formulae</strong></p></td></tr><tr><td><p><strong>Known</strong></p></td><td><p><strong>Value</strong></p></td></tr><tr><td><p>1st</p></td><td><p>Alchemy, Catalyze</p></td><td><p>4</p></td><td><p>50s</p></td></tr><tr><td><p>2nd</p></td><td><p>Eureka (10+)</p></td><td><p>4</p></td><td><p>1g</p></td></tr><tr><td><p>3rd</p></td><td><p>Perk</p></td><td><p>4</p></td><td><p>1g 50s</p></td></tr><tr><td><p>4th</p></td><td><p>Potency (highest)</p></td><td><p>5</p></td><td><p>2g</p></td></tr><tr><td><p>5th</p></td><td><p>Perk</p></td><td><p>5</p></td><td><p>2g 50s</p></td></tr><tr><td><p>6th</p></td><td><p>Mix, Eureka (9+)</p></td><td><p>5</p></td><td><p>3g</p></td></tr><tr><td><p>7th</p></td><td><p>Perk</p></td><td><p>6</p></td><td><p>3g 50s</p></td></tr><tr><td><p>8th</p></td><td><p>Potency (2 highest)</p></td><td><p>6</p></td><td><p>4g</p></td></tr><tr><td><p>9th</p></td><td><p>Perk</p></td><td><p>6</p></td><td><p>4g 50s</p></td></tr><tr><td><p>10th</p></td><td><p>Prima Materia, Eureka (8+)</p></td><td><p>7</p></td><td><p>5g</p></td></tr></tbody></table>",
     "isSpellcaster": false,
     "levelFeatures": [
       {
         "level": 1,
         "name": "Alchemy",
-        "description": "<p>Choose 4 Alchemical Items with a value no higher than (your Alchemist Level × 50s). You only need 5s of Materials and Alchemy Tools equipped to Craft them. You learn to Craft 1 other Alchemical Item this way every 2 Levels in this Class hereafter.</p>",
+        "description": "<p>Choose 4 Alchemical Items (p. 84) with a value no higher than (your Level × 50s). You only need 5s of Materials and Alchemy Tools equipped to Craft them.</p><p>You learn to Craft 1 other Alchemical Item this way every 3 Levels hereafter.</p>",
         "statBonusPoints": 0,
         "extraTraining": 0,
         "requiredSpells": [],
         "allowedPerks": [],
-        "perkAmount": 0
+        "perkAmount": 0,
+        "formulaAmount": 4,
+        "formulaValueCap": "@attributes.level.value * 50"
       },
       {
         "level": 1,
         "name": "Catalyze",
-        "description": "<p><span class=\"fontstyle0\">You gain the Deft Hands Perk (p. 68), and you can Craft alchemical items with the Use Action.</span></p>",
+        "description": "<p>You gain the Deft Hands Perk (p. 68), and can Craft Alchemical Items with the Use Action.</p>",
         "statBonusPoints": 0,
         "extraTraining": 0,
         "requiredSpells": [],
@@ -31,7 +33,7 @@
       {
         "level": 2,
         "name": "Eureka",
-        "description": "<p><span class=\"fontstyle0\">You gain a Studied die (p. 19) when you Crit on a Craft Check.</span> <br style=\" font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-align: -webkit-auto; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; \"></p>",
+        "description": "<p>When you pass a Craft Check by 10 or more, you gain a Studied die (p. 19). The roll required to do so is decreased by 1 every 4 Levels hereafter.</p>",
         "statBonusPoints": 1,
         "extraTraining": 0,
         "requiredSpells": [],
@@ -66,7 +68,9 @@
         "extraTraining": 0,
         "requiredSpells": [],
         "allowedPerks": [],
-        "perkAmount": 1
+        "perkAmount": 1,
+        "formulaAmount": 1,
+        "formulaValueCap": "@attributes.level.value * 50"
       },
       {
         "level": 9,
@@ -81,17 +85,19 @@
       {
         "level": 4,
         "name": "Potency",
-        "description": "<p><span class=\"fontstyle0\">The damage and healing dice of your alchemical items can explode.</span> <br style=\" font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-align: -webkit-auto; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; \"></p>",
+        "description": "<p>You have a +1 bonus to each of the damage and healing dice of your Alchemical Items, and they can Explode. This bonus increases by 1 every 4 Levels hereafter.</p>",
         "statBonusPoints": 1,
         "extraTraining": 0,
         "requiredSpells": [],
         "allowedPerks": [],
-        "perkAmount": 0
+        "perkAmount": 0,
+        "formulaAmount": 1,
+        "formulaValueCap": "@attributes.level.value * 50"
       },
       {
         "level": 6,
         "name": "Mix",
-        "description": "<p><span class=\"fontstyle0\">You can take the Use Action to combine two alchemical items together, causing their effects to both occur when you Use the combined item. This combined item lasts for the Round, then goes inert.</span> <br style=\" font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-align: -webkit-auto; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; \"></p>",
+        "description": "<p>You can combine two Alchemical Items together with the Use Action by spending a Studied die, causing both Items to occur simultaneously when used. The combined Item goes inert at the start of your next Turn.</p>",
         "statBonusPoints": 1,
         "extraTraining": 0,
         "requiredSpells": [],
@@ -100,8 +106,8 @@
       },
       {
         "level": 8,
-        "name": "Big Bang",
-        "description": "<p>You gain a d6 bonus to the damage and healing of your alchemical items, and they can explode on a roll of their two highest values.</p>",
+        "name": "Potency",
+        "description": "<p>Your Potency bonus increases to +2 on each of the damage and healing dice of your Alchemical Items, and they Explode on their two highest values.</p>",
         "statBonusPoints": 1,
         "extraTraining": 0,
         "requiredSpells": [],
@@ -111,28 +117,26 @@
       {
         "level": 10,
         "name": "Prima Materia",
-        "description": "<p>Once per Day, you can use your Action or skip your Move to Craft an alchemical item with a value as high as 10g without materials.</p>",
+        "description": "<p>You can spend a Studied die to Craft any Alchemical Item with a value as high as 10g without Materials.</p>",
         "statBonusPoints": 1,
         "extraTraining": 0,
         "requiredSpells": [],
         "allowedPerks": [],
-        "perkAmount": 0
+        "perkAmount": 0,
+        "formulaAmount": 1,
+        "formulaValueCap": "@attributes.level.value * 50"
       }
     ],
     "manaSkill": null,
     "castingStat": null,
     "manaMultiplier": 0,
     "skillGrant": {
-      "choices": [
-        {
-          "count": 4,
-          "label": "",
-          "pool": []
-        }
-      ],
       "guaranteed": [
-        "craft"
-      ]
+        "arcana",
+        "craft",
+        "medicine"
+      ],
+      "choices": []
     },
     "levelSpells": [],
     "keyStat": "reason",
@@ -144,7 +148,87 @@
       "Compendium.vagabond.starting-packs.Item.JXGh2kMRaR4Wyh5w"
     ]
   },
-  "effects": [],
+  "effects": [
+    {
+      "name": "Alchemist Features",
+      "origin": "Compendium.vagabond.classes.Item.4kXK5bZHEb3PMzLy",
+      "img": "icons/svg/aura.svg",
+      "_id": "hS06DPzU7WEcUXrk",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.craft.catalyze",
+            "value": "1",
+            "priority": null,
+            "type": "add"
+          },
+          {
+            "key": "system.craft.eurekaMargin",
+            "value": "(@attributes.level.value >= 2) ? (10 - floor(max(0, @attributes.level.value - 2) / 4)) : 0",
+            "priority": null,
+            "type": "add"
+          },
+          {
+            "key": "system.alchemicalBonusPerDamageDie",
+            "value": "(@attributes.level.value >= 4) ? (1 + floor(max(0, @attributes.level.value - 4) / 4)) : 0",
+            "priority": null,
+            "type": "add"
+          },
+          {
+            "key": "system.craft.alchemicalExplode",
+            "value": "(@attributes.level.value >= 8) ? 2 : ((@attributes.level.value >= 4) ? 1 : 0)",
+            "priority": null,
+            "type": "add"
+          },
+          {
+            "key": "system.craft.mix",
+            "value": "(@attributes.level.value >= 6) ? 1 : 0",
+            "priority": null,
+            "type": "add"
+          },
+          {
+            "key": "system.craft.primaMateria",
+            "value": "(@attributes.level.value >= 10) ? 1 : 0",
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "Catalyze (L1), Eureka 10+/9+/8+ (L2/6/10), Potency +1 & explode highest (L4) / +2 & explode 2 highest (L8), Mix (L6), Prima Materia (L10) — all level-gated within this single effect.",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent"
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.42.1",
+        "createdTime": 1790353295025,
+        "modifiedTime": 1790353295025,
+        "lastModifiedBy": "13p65OEadZSZVLRk"
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!4kXK5bZHEb3PMzLy.hS06DPzU7WEcUXrk"
+    }
+  ],
   "folder": null,
   "flags": {},
   "_stats": {

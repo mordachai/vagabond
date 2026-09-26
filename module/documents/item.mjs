@@ -1,6 +1,7 @@
 import { VagabondChatHelper } from '../helpers/chat-helper.mjs';
 import { effectModeToChangeType } from '../helpers/effects.mjs';
 import { EquipmentHelper } from '../helpers/equipment-helper.mjs';
+import { CurrencyHelper } from '../helpers/currency-helper.mjs';
 
 /**
  * Extend the basic Item with some very simple modifications.
@@ -101,6 +102,9 @@ export class VagabondItem extends Item {
         // For other item types (ancestry, class, perk, etc), just post description
         await VagabondChatHelper.postMessage(this.actor, item.system.description ?? '');
       }
+      if (this.actor && (item.type === 'equipment' || item.type === 'spell')) {
+        Hooks.callAll('vagabond.actorActed', this.actor, { source: 'itemUse', itemId: item.id });
+      }
     }
     // Otherwise, create a roll and send a chat message from it.
     else {
@@ -133,6 +137,9 @@ export class VagabondItem extends Item {
       // burn-out instead — see the non-formula branch above)
       if (item.type === 'equipment' && !game.vagabond?.lightSource?.isLightItem?.(item)) {
         await this.handleConsumption();
+      }
+      if (this.actor) {
+        Hooks.callAll('vagabond.actorActed', this.actor, { source: 'itemUse', itemId: item.id });
       }
       return roll;
     }
@@ -240,6 +247,8 @@ export class VagabondItem extends Item {
     const isWeapon = (this.type === 'weapon') ||
                     (this.type === 'equipment' && this.system.equipmentType === 'weapon');
 
+    // A thrown Alchemical Item attacks straight from the inventory (no equip)
+    if (EquipmentHelper.isThrownAlchemical(this)) return;
     if (!isWeapon) {
       throw new Error('Not a weapon');
     }
@@ -500,6 +509,12 @@ export class VagabondItem extends Item {
         && EquipmentHelper.attackSkillOptions(this).length > 1) {
       this.updateSource({ 'flags.vagabond.preferredSkill': EquipmentHelper.bestAttackSkill(this, this.parent) });
     }
+    // Materials bundle: seed remaining spendable copper from cost, once, unless
+    // creation data already specified a value (e.g. a partial-bundle duplicate).
+    if (this.type === 'equipment' && this.system.craftMaterial?.enabled
+        && foundry.utils.getProperty(data, 'system.craftMaterial.value') === undefined) {
+      this.updateSource({ 'system.craftMaterial.value': CurrencyHelper.toCopper(this.system.cost) });
+    }
   }
 
   /**
@@ -557,6 +572,16 @@ export class VagabondItem extends Item {
       foundry.utils.setProperty(changed, 'system.equipped', st !== 'unequipped');
     }
 
+    // Same reasoning as above, for the relic bound mirror (docs/crafting-plan.md
+    // §4.4): keep the legacy `bound` boolean in lockstep with relic.boundTo so
+    // prepareDerivedData's migration fallback doesn't re-derive a stale `boundTo`
+    // from a `bound:true` that was never cleared, silently re-binding an item the
+    // player just unbound.
+    if (this.type === 'equipment' && foundry.utils.hasProperty(changed, 'system.relic.boundTo')) {
+      const boundTo = foundry.utils.getProperty(changed, 'system.relic.boundTo');
+      foundry.utils.setProperty(changed, 'system.bound', !!boundTo);
+    }
+
     // Multi-use tracking: when `uses.max` changes without an explicit `uses.value`
     // in the same update, keep value in sync — a full item stays full when its max
     // grows/shrinks, and value is clamped down if it would exceed the new max.
@@ -569,6 +594,23 @@ export class VagabondItem extends Item {
       if (curValue === curMax || curValue > newMax) {
         foundry.utils.setProperty(changed, 'system.uses.value', newMax);
       }
+    }
+
+    // Materials bundle: `craftMaterial.value` (the spendable pool) and `baseCost`
+    // (what the item shows as its price) are meant to read the same — spending
+    // Materials in a Craft/Alchemy check (MaterialsHelper) writes both together.
+    // A manual edit of Cost on the item sheet only touches `baseCost`, so mirror
+    // it into `craftMaterial.value` here — this is how a GM "restocks" a
+    // half-spent bundle: just type the price back up to 1g.
+    if (this.type === 'equipment' && this.system.craftMaterial?.enabled
+        && foundry.utils.hasProperty(changed, 'system.baseCost')
+        && !foundry.utils.hasProperty(changed, 'system.craftMaterial.value')) {
+      const newCost = foundry.utils.mergeObject(
+        foundry.utils.deepClone(this.system.baseCost),
+        foundry.utils.getProperty(changed, 'system.baseCost'),
+        { inplace: false },
+      );
+      foundry.utils.setProperty(changed, 'system.craftMaterial.value', CurrencyHelper.toCopper(newCost));
     }
   }
 
@@ -743,6 +785,23 @@ export class VagabondItem extends Item {
    * @returns {Promise<Roll>} The damage roll
    */
   async rollDamage(actor, isCritical = false, statKey = null, targetsAtRollTime = [], dieOverride = null, skillKey = null) {
+    // Thrown Alchemical Item: its own damage through the alchemical bucket
+    // (Potency etc.), plus the crit stat bonus like any attack. One choke point
+    // for auto-rolled damage, the card's Roll Damage button and Luck rerolls.
+    if (EquipmentHelper.isThrownAlchemical(this)) {
+      const { VagabondDamagePipeline } = await import('../helpers/damage-pipeline.mjs');
+      return VagabondDamagePipeline.rollDamage({
+        actor,
+        item: this,
+        baseFormula: this.system.damageAmount,
+        sourceType: 'alchemical',
+        damageType: this.system.damageType,
+        isCritical,
+        statKey,
+        targets: targetsAtRollTime,
+      });
+    }
+
     // Check if this is a weapon (legacy weapon item OR equipment with equipmentType='weapon')
     const isWeapon = (this.type === 'weapon') ||
                     (this.type === 'equipment' && this.system.equipmentType === 'weapon');

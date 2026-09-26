@@ -1,0 +1,374 @@
+<div class="wb-root">
+
+  <nav class="wb-rail">
+    <button type="button" class="wb-rail-btn {{#if showCraft}}active{{/if}}" data-action="switchTab" data-tab="craft">
+      <i class="fa-solid fa-hammer"></i>
+      <span>{{localize "VAGABOND.Craft.Modes.Craft.Label"}}</span>
+    </button>
+    <button type="button" class="wb-rail-btn {{#if showScrap}}active{{/if}}" data-action="switchTab" data-tab="scrap">
+      <i class="fa-solid fa-recycle"></i>
+      <span>{{localize "VAGABOND.Craft.Modes.Scrap.Label"}}</span>
+    </button>
+    {{#if isAlchemist}}
+    <button type="button" class="wb-rail-btn {{#if showAlchemy}}active{{/if}}" data-action="switchTab" data-tab="alchemy">
+      <i class="fa-solid fa-flask"></i>
+      <span>{{localize "VAGABOND.Craft.Modes.Alchemy.Label"}}</span>
+    </button>
+    {{/if}}
+    <div class="wb-rail-soon" title="{{localize 'VAGABOND.Craft.Workbench.ComingSoon'}}">
+      <i class="fa-solid fa-gem"></i><span>{{localize "VAGABOND.Craft.Workbench.SoonRelic"}}</span>
+    </div>
+    <div class="wb-rail-soon" title="{{localize 'VAGABOND.Craft.Workbench.ComingSoon'}}">
+      <i class="fa-solid fa-flask-vial"></i><span>{{localize "VAGABOND.Craft.Workbench.SoonMix"}}</span>
+    </div>
+  </nav>
+
+  <div class="wb-main">
+
+    {{#unless enabled}}
+    <p class="wb-hint wb-disabled-hint">{{localize "VAGABOND.Craft.Workbench.SystemDisabled"}}</p>
+    {{/unless}}
+
+    {{#if showCraft}}
+    <div class="wb-craft-tab">
+
+      <section class="wb-catalog">
+        <div class="wb-budget-bar">
+          <span><i class="fa-solid fa-hourglass-half"></i> {{localize "VAGABOND.Craft.Workbench.ShiftBudget"}}: <strong>{{budgetLabel}}</strong></span>
+          <span><img class="wb-mat-icon" src="icons/commodities/materials/powder-red-green-yellow.webp" alt=""> {{localize "VAGABOND.Craft.Workbench.MaterialsOnHand"}}: <strong>{{materialsLabel}}</strong></span>
+        </div>
+        {{#unless hasCraftSkill}}
+        <p class="wb-hint">{{localize "VAGABOND.Craft.Workbench.NoCraftSkill"}}</p>
+        {{/unless}}
+
+        <label class="wb-catalog-search">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" class="wb-craft-search" placeholder="{{localize 'VAGABOND.Craft.Workbench.CatalogSearch'}}">
+        </label>
+
+        <div class="wb-catalog-chips">
+          {{#each craft.categories}}
+          <button type="button" class="wb-chip{{#if active}} active{{/if}}" data-action="craftFilter" data-filter="{{key}}">
+            <i class="{{icon}}"></i><span>{{label}}</span>
+          </button>
+          {{/each}}
+        </div>
+
+        <div class="wb-catalog-list">
+          {{#each craft.catalog}}
+          <div class="wb-cat-row{{#if selected}} is-selected{{/if}}" data-action="selectCatalogItem" data-uuid="{{uuid}}" data-name="{{nameLower}}" data-category="{{category}}">
+            <img class="wb-cat-img" src="{{img}}" alt="">
+            <div class="wb-cat-info">
+              <div class="wb-cat-name">
+                <span>{{name}}</span>
+                {{#if custom}}<span class="wb-gm-badge" data-tooltip="{{localize 'VAGABOND.Craft.Workbench.CustomRecipe'}}">{{localize "VAGABOND.Craft.Workbench.GmBadge"}}</span>{{/if}}
+              </div>
+              <div class="wb-cat-meta">
+                <span>{{typeLabel}} · {{slotsLabel}}</span>
+                {{#each stats}}<span class="wb-stat" data-tooltip="{{tooltip}}">{{value}} <i class="{{icon}}"></i></span>{{/each}}
+              </div>
+            </div>
+            <div class="wb-cat-stats">
+              <span class="wb-cat-cost" data-tooltip="{{localize 'VAGABOND.Craft.Workbench.Value'}}"><i class="fa-solid fa-coins"></i> {{costLabel}}</span>
+              <span class="wb-cat-sub">
+                <span data-tooltip="{{localize 'VAGABOND.Craft.Workbench.Materials'}}"><img class="wb-mat-icon" src="icons/commodities/materials/powder-red-green-yellow.webp" alt=""> {{matsLabel}}</span>
+                <span data-tooltip="{{localize 'VAGABOND.Craft.Workbench.EstTime'}}"><i class="fa-solid fa-hourglass-half"></i> {{shifts}}</span>
+              </span>
+            </div>
+          </div>
+          {{else}}
+          <p class="wb-empty">{{localize "VAGABOND.Craft.Workbench.NoCatalog"}}</p>
+          {{/each}}
+          <p class="wb-empty wb-catalog-nomatch" hidden>{{localize "VAGABOND.Craft.Workbench.NoMatches"}}</p>
+        </div>
+      </section>
+
+      <section class="wb-side">
+        <div class="wb-detail">
+          {{#with craft.detail}}
+          <div class="wb-detail-head">
+            <img class="wb-detail-img" src="{{img}}" alt="">
+            <div class="wb-detail-plate">
+              <div class="wb-detail-name">
+                <span>{{name}}</span>
+                {{#if isCustom}}<span class="wb-gm-badge" data-tooltip="{{localize 'VAGABOND.Craft.Workbench.CustomRecipe'}}">{{localize "VAGABOND.Craft.Workbench.GmBadge"}}</span>{{/if}}
+              </div>
+              <div class="wb-detail-meta">{{typeLabel}} - {{slotsLabel}}</div>
+              {{#if stats.length}}
+              <div class="wb-detail-damage">
+                {{#each stats}}<span class="wb-stat" data-tooltip="{{tooltip}}">{{value}} <i class="{{icon}}"></i></span>{{/each}}
+              </div>
+              {{/if}}
+            </div>
+            {{#if canUnregister}}
+            <button type="button" class="wb-icon-btn wb-icon-btn-danger" data-action="unregisterRecipe" data-uuid="{{uuid}}" data-tooltip="{{localize 'VAGABOND.Craft.Workbench.RemoveRecipe'}}"><i class="fa-solid fa-link-slash"></i></button>
+            {{/if}}
+          </div>
+          {{#if description}}<div class="wb-detail-desc">{{{description}}}</div>{{/if}}
+          <div class="wb-detail-stats">
+            <div><span>{{localize "VAGABOND.Craft.Workbench.Value"}}</span><strong>{{valueLabel}}</strong></div>
+            <div><span>{{localize "VAGABOND.Craft.Workbench.Materials"}}</span><strong{{#if matsShort}} class="wb-budget-over"{{/if}}>{{matsLabel}}</strong></div>
+            <div><span>{{localize "VAGABOND.Craft.Workbench.EstTime"}}</span><strong>{{shiftsLabel}}</strong></div>
+          </div>
+          <button type="button" class="wb-shift-btn wb-stage-btn" data-action="stageProject" data-uuid="{{uuid}}" {{#unless canCraft}}disabled{{/unless}}>
+            <i class="fa-solid fa-plus"></i> {{localize "VAGABOND.Craft.Workbench.AddToProjects"}}
+          </button>
+          {{else}}
+          <div class="wb-detail-empty">
+            <i class="fa-solid fa-hand-pointer"></i>
+            <span>{{localize "VAGABOND.Craft.Workbench.SelectHint"}}</span>
+            {{#if @root.isGM}}<span class="wb-detail-empty-gm">{{localize "VAGABOND.Craft.Workbench.GmDropHint"}}</span>{{/if}}
+          </div>
+          {{/with}}
+        </div>
+
+        <div class="wb-projects">
+          <div class="wb-projects-head">
+            <span>{{localize "VAGABOND.Craft.Workbench.OngoingProjects"}}</span>
+            <span class="wb-count">{{craft.rows.length}}</span>
+          </div>
+          <div class="wb-proj-list">
+            {{#each craft.rows}}
+            <div class="wb-proj-row{{#if isNew}} is-new{{/if}}" data-row-key="{{key}}" data-value="{{value}}" data-progress="{{progress}}" data-paid="{{paid}}" data-remaining="{{remaining}}">
+              <div class="wb-proj-top">
+                <img src="{{img}}" alt="">
+                <div class="wb-proj-name">{{name}}</div>
+                {{#if isNew}}<span class="wb-new-badge" data-tooltip="{{localize 'VAGABOND.Craft.Workbench.NewHint'}}">{{localize "VAGABOND.Craft.Workbench.NewBadge"}}</span>{{/if}}
+                <button type="button" class="wb-icon-btn wb-icon-btn-danger" data-action="removeProject" data-tooltip="{{#if isNew}}{{localize 'VAGABOND.Craft.Workbench.RemoveStaged'}}{{else}}{{localize 'VAGABOND.Craft.Workbench.Abandon'}}{{/if}}"><i class="fa-solid fa-xmark"></i></button>
+              </div>
+              <div class="wb-proj-progress">
+                <div class="wb-project-bar"><div class="wb-project-fill" style="width:{{pct}}%"></div></div>
+                <span class="wb-proj-progress-label">{{progressLabel}}</span>
+              </div>
+              <div class="wb-proj-alloc">
+                <span class="wb-proj-alloc-label"><i class="fa-solid fa-hourglass-half"></i> {{localize "VAGABOND.Craft.Workbench.ThisShift"}}</span>
+                <div class="wb-stepper">
+                  <button type="button" data-action="allocStep" data-step="-1"><i class="fa-solid fa-minus"></i></button>
+                  <input type="text" class="wb-alloc-input" value="{{allocLabel}}" data-tooltip="{{localize 'VAGABOND.Craft.Workbench.AllocHint'}}">
+                  <button type="button" data-action="allocStep" data-step="1"><i class="fa-solid fa-plus"></i></button>
+                </div>
+                <span class="wb-alloc-materials" data-tooltip="{{localize 'VAGABOND.Craft.Workbench.MaterialsToConsume'}}">
+                  <img class="wb-mat-icon" src="icons/commodities/materials/powder-red-green-yellow.webp" alt="">
+                  <span class="wb-alloc-materials-value"></span>
+                </span>
+              </div>
+            </div>
+            {{else}}
+            <p class="wb-empty">{{localize "VAGABOND.Craft.Workbench.NoProjects"}}</p>
+            {{/each}}
+          </div>
+        </div>
+
+        <div class="wb-shift-footer" data-budget="{{budget}}" data-materials="{{materials}}">
+          <div class="wb-shift-line">
+            <span class="wb-shift-line-label"><i class="fa-solid fa-hourglass-half"></i> {{localize "VAGABOND.Craft.Workbench.ShiftLabel"}}</span>
+            <div class="wb-meter"><div class="wb-meter-fill"></div></div>
+            <span class="wb-shift-spent"></span>
+          </div>
+          <div class="wb-shift-line">
+            <span class="wb-shift-line-label"><img class="wb-mat-icon" src="icons/commodities/materials/powder-red-green-yellow.webp" alt=""> {{localize "VAGABOND.Craft.Workbench.Materials"}}</span>
+            <span class="wb-mats-needed"></span>
+          </div>
+          <p class="wb-hint wb-materials-warning" hidden>{{localize "VAGABOND.Craft.Workbench.NotEnoughMaterials"}}</p>
+          <p class="wb-hint wb-budget-warning" hidden>{{localize "VAGABOND.Craft.Workbench.OverShiftLimit"}}</p>
+          <div class="wb-shift-actions">
+            <button type="button" class="wb-autofill-btn" data-action="autoFill" data-tooltip="{{localize 'VAGABOND.Craft.Workbench.AutoFillHint'}}">
+              <i class="fa-solid fa-wand-magic-sparkles"></i> {{localize "VAGABOND.Craft.Workbench.AutoFill"}}
+            </button>
+            <button type="button" class="wb-shift-btn" data-action="workShift">
+              <i class="fa-solid fa-hammer"></i> {{localize "VAGABOND.Craft.Workbench.WorkShift"}}
+            </button>
+          </div>
+        </div>
+      </section>
+
+    </div>
+    {{/if}}
+
+    {{#if showScrap}}
+    <div class="wb-scrap-tab">
+      <div class="wb-scrap-top">
+        <div class="wb-scrap-header"><i class="fa-solid fa-recycle"></i> {{localize "VAGABOND.Craft.Workbench.ScrapHint"}}</div>
+        <div class="wb-scrap-stock" data-tooltip="{{localize 'VAGABOND.Craft.Workbench.MaterialsOnHand'}}">
+          <img src="icons/commodities/materials/powder-red-green-yellow.webp" alt="">
+          <span class="wb-scrap-stock-value">{{materialsLabel}}</span>
+        </div>
+      </div>
+      {{#each scrapGroups}}
+      <div class="wb-scrap-group">
+        <div class="wb-scrap-group-label">{{label}}</div>
+        <div class="wb-scrap-grid">
+          {{#each items}}
+          <div class="wb-scrap-card" data-item-id="{{id}}">
+            <img src="{{img}}" alt="">
+            <div class="wb-scrap-name">{{name}}{{qtySuffix}}</div>
+            <div class="wb-scrap-out">
+              <div class="wb-scrap-arrow">→</div>
+              <div class="wb-scrap-yield">{{yieldLabel}}</div>
+            </div>
+            <button type="button" class="wb-icon-btn" data-action="scrapItem" title="{{localize 'VAGABOND.Craft.Modes.Scrap.Label'}}"><i class="fa-solid fa-recycle"></i></button>
+          </div>
+          {{/each}}
+        </div>
+      </div>
+      {{else}}
+      <p class="wb-empty">{{localize "VAGABOND.Craft.Workbench.NoScrapItems"}}</p>
+      {{/each}}
+    </div>
+    {{/if}}
+
+    {{#if showAlchemy}}
+    <div class="wb-alchemy-tab">
+      <div class="wb-alchemy-layout">
+        <div class="wb-alchemy-center">
+          <div class="wb-alchemy-header">
+            <div class="wb-alchemy-header-row1">
+              <i class="fa-solid fa-flask"></i>
+              <strong>{{localize "VAGABOND.Craft.Workbench.AlchemyLevelLine" level=level known=knownCount grants=formulaGrants}}</strong>
+            </div>
+            <div class="wb-wealth-grid">
+              <div class="wb-wealth-tile" data-tooltip="{{localize 'VAGABOND.Craft.Workbench.Wealth'}}">
+                <i class="fa-solid fa-user"></i><i class="fa-solid fa-coins"></i>
+                <span class="wb-wealth-value">{{wealthLabel}}</span>
+              </div>
+              <div class="wb-wealth-tile" data-tooltip="{{localize 'VAGABOND.Craft.Workbench.MaterialsOnHand'}}">
+                <i class="fa-solid fa-user"></i><img class="wb-wealth-icon" src="icons/commodities/materials/powder-red-green-yellow.webp" alt="">
+                <span class="wb-wealth-value">{{materialsLabel}}</span>
+              </div>
+              <div class="wb-wealth-tile" data-tooltip="{{localize 'VAGABOND.Craft.Workbench.PartyWealth'}}">
+                <i class="fa-solid fa-users"></i><i class="fa-solid fa-coins"></i>
+                <span class="wb-wealth-value">{{partyWealthLabel}}</span>
+              </div>
+              <div class="wb-wealth-tile" data-tooltip="{{localize 'VAGABOND.Craft.Workbench.PartyMaterials'}}">
+                <i class="fa-solid fa-users"></i><img class="wb-wealth-icon" src="icons/commodities/materials/powder-red-green-yellow.webp" alt="">
+                <span class="wb-wealth-value">{{partyMaterialsLabel}}</span>
+              </div>
+            </div>
+          </div>
+          <div class="wb-alchemy-notice{{#if catalyzeOn}} is-empty{{/if}}">
+            {{#unless catalyzeOn}}
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <span>{{localize "VAGABOND.Craft.Workbench.NoCatalyze"}}</span>
+            {{/unless}}
+          </div>
+
+          <fieldset class="wb-fieldset">
+            <legend>
+              {{localize "VAGABOND.Craft.Workbench.KnownFormulas"}}
+              <button type="button" class="wb-edit-toggle{{#if formulaEditMode}} active{{/if}}" data-action="toggleFormulaEdit" title="{{localize 'VAGABOND.Craft.Workbench.EditFormulas'}}"><i class="fa-solid fa-pen"></i></button>
+            </legend>
+            <div class="wb-known-grid">
+              {{#each formulaSlots}}
+              {{#if empty}}
+              <article class="wb-known-card wb-known-card-empty">
+                <i class="fa-solid fa-flask"></i>
+                <span>{{localize "VAGABOND.Craft.Workbench.EmptySlot"}}</span>
+              </article>
+              {{else}}
+              <article class="wb-known-card" data-formula-uuid="{{uuid}}">
+                {{#if @root.formulaEditMode}}
+                <button type="button" class="wb-known-remove" data-action="forgetFormula" title="{{localize 'VAGABOND.Craft.Workbench.ForgetFormulaTitle'}}">&times;</button>
+                {{/if}}
+                <div class="wb-known-head">
+                  <img class="wb-known-img" src="{{img}}" alt="">
+                  <div class="wb-known-plate">
+                    <div class="wb-known-name">{{name}}</div>
+                    <div class="wb-known-meta">
+                      <span class="wb-known-type">{{alchemicalTypeLabel}}</span>
+                      {{#if damageAmount}}
+                      <span class="wb-known-damage" {{#if damageTypeLabel}}data-tooltip="{{damageTypeLabel}}"{{/if}}>
+                        {{damageAmount}}
+                        {{#if damageTypeIcon}}<i class="{{damageTypeIcon}}"></i>{{/if}}
+                      </span>
+                      {{/if}}
+                    </div>
+                  </div>
+                </div>
+                <button type="button" class="wb-known-craft" data-action="craftFormula">
+                  <i class="fa-solid fa-flask"></i> {{localize "VAGABOND.Craft.Workbench.CraftCostHint" cost=craftCostLabel}}
+                </button>
+              </article>
+              {{/if}}
+              {{else}}
+              <p class="wb-empty">{{localize "VAGABOND.Craft.Workbench.NoFormulas"}}</p>
+              {{/each}}
+            </div>
+          </fieldset>
+        </div>
+
+        <aside class="wb-alchemy-sidebar">
+          <div class="wb-formula-sidebar-header">
+            <input type="text" class="wb-formula-search" placeholder="{{localize 'VAGABOND.Craft.Workbench.FormulaSearch'}}">
+            <div class="wb-formula-sort-tabs">
+              <button type="button" class="wb-formula-sort-btn{{#if isSortGroup}} active{{/if}}" data-action="sortFormulas" data-sort="group">{{localize "VAGABOND.Craft.Workbench.SortGroup"}}</button>
+              <button type="button" class="wb-formula-sort-btn{{#if isSortAlpha}} active{{/if}}" data-action="sortFormulas" data-sort="alpha">{{localize "VAGABOND.Craft.Workbench.SortAlpha"}}</button>
+              <button type="button" class="wb-formula-sort-btn{{#if isSortCost}} active{{/if}}" data-action="sortFormulas" data-sort="cost">{{localize "VAGABOND.Craft.Workbench.SortCost"}}</button>
+            </div>
+          </div>
+
+          <div class="wb-formula-sidebar-list">
+            {{#each formulaGroups}}
+            <div class="wb-formula-group">
+              {{#if label}}<div class="wb-formula-group-label">{{label}}</div>{{/if}}
+              {{#each items}}
+              <div class="wb-formula-item{{#if selected}} is-expanded{{/if}}">
+                <div class="wb-formula-row{{#if known}} is-known{{/if}}{{#if overCap}} is-over-cap{{/if}}{{#if selected}} is-selected{{/if}}"
+                     data-action="selectFormula" data-formula-uuid="{{uuid}}" data-name="{{nameLower}}"
+                     title="{{#if overCap}}{{localize 'VAGABOND.Craft.Workbench.OverValueCap'}}{{/if}}">
+                  <span class="wb-formula-row-icon">
+                    <img src="{{img}}" alt="">
+                    {{#if ownedQty}}<span class="wb-formula-row-badge" data-tooltip="{{localize 'VAGABOND.Craft.Workbench.OwnedQty'}}">{{ownedQty}}</span>{{/if}}
+                  </span>
+                  <span class="wb-formula-row-name">{{name}}</span>
+                  <span class="wb-formula-row-cost">{{costLabel}}</span>
+                  {{#if known}}<i class="fa-solid fa-check wb-formula-row-known" title="{{localize 'VAGABOND.Craft.Workbench.KnownFormulas'}}"></i>{{/if}}
+                  <i class="fa-solid fa-chevron-right wb-formula-row-caret"></i>
+                </div>
+                {{#if selected}}
+                <div class="wb-formula-row-detail">
+                  {{#if description}}<div class="wb-formula-detail-desc">{{{description}}}</div>{{/if}}
+                  <div class="wb-formula-detail-stats">
+                    {{#if damageAmount}}
+                    <div class="stat-row">
+                      <span class="stat-name">{{localize "VAGABOND.UI.Labels.Damage"}}</span>
+                      <span class="stat-value">{{damageAmount}}{{#if damageTypeLabel}} {{damageTypeLabel}}{{/if}}</span>
+                    </div>
+                    {{/if}}
+                    <div class="stat-row">
+                      <span class="stat-name">{{localize "VAGABOND.UI.Labels.Cost"}}</span>
+                      <span class="stat-value"><i class="fa-solid fa-coins"></i> {{costLabel}}</span>
+                    </div>
+                  </div>
+                  {{#if known}}
+                  <p class="wb-formula-detail-note">{{localize "VAGABOND.Craft.Workbench.AlreadyKnown"}}</p>
+                  {{else if overCap}}
+                  <p class="wb-formula-detail-note wb-formula-detail-warn">{{localize "VAGABOND.Craft.Workbench.OverValueCap"}}</p>
+                  {{else if @root.canLearnFormula}}
+                  <button type="button" class="wb-shift-btn" data-action="learnFormulaPick" data-formula-uuid="{{uuid}}">
+                    <i class="fa-solid fa-hand-sparkles"></i> {{localize "VAGABOND.Craft.Workbench.LearnFormula"}}
+                  </button>
+                  {{else}}
+                  <p class="wb-formula-detail-note">{{localize "VAGABOND.Craft.Workbench.NoPicksLeft"}}</p>
+                  {{/if}}
+                  {{#unless known}}
+                  <button type="button" class="wb-shift-btn wb-craft-project-btn" data-action="craftItemFromCatalog" data-formula-uuid="{{uuid}}" title="{{localize 'VAGABOND.Craft.Workbench.CraftAsProjectHint'}}">
+                    <i class="fa-solid fa-hammer"></i> {{localize "VAGABOND.Craft.Workbench.CraftAsProject"}}
+                  </button>
+                  {{/unless}}
+                </div>
+                {{/if}}
+              </div>
+              {{/each}}
+            </div>
+            {{else}}
+            <p class="wb-empty">{{localize "VAGABOND.Craft.Workbench.NoFormulasAvailable"}}</p>
+            {{/each}}
+          </div>
+        </aside>
+      </div>
+    </div>
+    {{/if}}
+
+  </div>
+
+</div>

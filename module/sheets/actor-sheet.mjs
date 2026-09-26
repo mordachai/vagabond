@@ -4,6 +4,7 @@ import { VagabondChatHelper } from '../helpers/chat-helper.mjs';
 import { VagabondChatCard } from '../helpers/chat-card.mjs';
 import { VagabondDiceAppearance } from '../helpers/dice-appearance.mjs';
 import { VagabondCharBuilder } from '../applications/char-builder/index.mjs';
+import { WorkbenchApp } from '../applications/workbench-app.mjs';
 import { VagabondTextParser } from '../helpers/text-parser.mjs';
 import { AccordionHelper } from '../helpers/accordion-helper.mjs';
 import { ContextMenuHelper } from '../helpers/context-menu-helper.mjs';
@@ -85,6 +86,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       modifyCheckBonus: { handler: this._onModifyCheckBonus, buttons: [0, 2] },
       modifyMana: this._onModifyMana,
       openDowntime: this._onOpenDowntime,
+      openWorkbench: this._onOpenWorkbench,
       becomeHud: this._onBecomeHud,
       openCharBuilder: this._onOpenCharBuilder,
       dismissCharBuilder: this._onDismissCharBuilder,
@@ -1495,6 +1497,16 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
    */
   static async _onOpenDowntime(event, target) {
     new globalThis.vagabond.applications.DowntimeApp(this.actor).render(true);
+  }
+
+  /**
+   * Open the Crafting Workbench for this actor.
+   * @param {PointerEvent} event - The originating click event
+   * @param {HTMLElement} target - The capturing HTML element
+   * @protected
+   */
+  static async _onOpenWorkbench(event, target) {
+    WorkbenchApp.open(this.actor);
   }
 
   /**

@@ -528,6 +528,173 @@
         "OnlyEquipment": "Only equipment and containers can be stocked in a shop."
       }
     },
+    "Craft": {
+      "Checks": {
+        "Mode": "Crafting mode",
+        "Amount": "Shift amount",
+        "Target": "Target item",
+        "Materials": "Materials on hand",
+        "Catalyze": "Catalyze feature",
+        "KnownFormula": "Known formula",
+        "AlchemyTools": "Alchemy Tools equipped",
+        "PrimaMateria": "Prima Materia feature",
+        "StudiedDice": "Studied Die available",
+        "PrimaMateriaValueCap": "Value 10g or under",
+        "RelicTarget": "Host + power",
+        "Mix": "Mix feature",
+        "MixIngredients": "Two different Alchemical Items with a charge left"
+      },
+      "Modes": {
+        "Craft": { "Label": "Craft" },
+        "Scrap": { "Label": "Scrap" },
+        "Alchemy": { "Label": "Alchemy" },
+        "PrimaMateria": { "Label": "Prima Materia" },
+        "RelicForge": { "Label": "Relic Forge" },
+        "Mix": { "Label": "Mix" },
+        "Combine": { "Label": "Combine" }
+      },
+      "Combine": {
+        "Result": "{base} absorbs {other}'s powers through Combining."
+      },
+      "Mix": {
+        "ItemName": "Mixture of {a} + {b}",
+        "ItemDescription": "A combined dose of {a} and {b}.",
+        "WentInertTitle": "Mixture Inert",
+        "WentInert": "{name} goes inert."
+      },
+      "Alchemy": {
+        "Result": "{actor} crafts {item}."
+      },
+      "Workbench": {
+        "Title": "Workbench",
+        "ComingSoon": "Coming in a future update",
+        "NotAlchemist": "Only characters with an Alchemy feature can use this tab.",
+        "SoonAlchemy": "Alchemy",
+        "SoonRelic": "Relic Forge",
+        "SoonMix": "Mix",
+        "AlchemyLevelLine": "Level {level}: {known}/{grants} formulas",
+        "Wealth": "Wealth",
+        "PartyWealth": "Party Wealth",
+        "PartyMaterials": "Party Materials",
+        "NoCatalyze": "You know formulas but don't have Catalyze — you can't craft them here yet.",
+        "KnownFormulas": "Known Formulas",
+        "EditFormulas": "Edit Known Formulas",
+        "NoFormulas": "No formulas known yet.",
+        "EmptySlot": "Empty — choose a formula from the list",
+        "LearnFormula": "Learn a Formula",
+        "ForgetFormulaTitle": "Forget Formula",
+        "ForgetFormulaConfirm": "Forget {name}? This frees up the pick, but you'll need to learn it again to recover it.",
+        "FormulaSearch": "Search alchemical items…",
+        "NoFormulasAvailable": "No alchemical items available — ask your GM to enable a compendium.",
+        "OverValueCap": "Over your formula value cap.",
+        "OwnedQty": "You have this many on hand",
+        "CraftAsProject": "Craft as Project",
+        "CraftAsProjectHint": "Craft this without knowing the formula, using the normal Craft rules (Shift budget + half its value in Materials).",
+        "AlreadyKnown": "Already known.",
+        "NoPicksLeft": "No formula picks remaining.",
+        "SortGroup": "Group",
+        "SortAlpha": "A–Z",
+        "SortCost": "Cost",
+        "CraftCostHint": "{cost} to Craft",
+        "SystemDisabled": "Crafting is turned off for this world.",
+        "ShiftBudget": "Shift Value Limit",
+        "MaterialsOnHand": "Material Available",
+        "MaterialsToConsume": "Materials this allocation will consume",
+        "NotEnoughMaterials": "Not enough Materials on hand for this allocation — lower the amount or gather more Materials first.",
+        "OverShiftLimit": "This allocation is over your Shift Value Limit — lower the amount.",
+        "NoCraftSkill": "You have no Craft skill difficulty set, so your Shift budget is 0.",
+        "NoProjects": "No Projects in progress.",
+        "Abandon": "Abandon Project",
+        "AbandonTitle": "Abandon Project",
+        "AbandonConfirm": "Abandon this Project? Materials already spent on it are lost.",
+        "OnlyEquipment": "Only equipment items can be Crafted.",
+        "WorkShift": "Work a Shift",
+        "CategoryAll": "All",
+        "CatalogSearch": "Search craftable items…",
+        "NoCatalog": "No craftable items — ask your GM to enable a compendium.",
+        "NoMatches": "No items match.",
+        "GmBadge": "GM",
+        "CustomRecipe": "Custom recipe added by the GM",
+        "RecipeAdded": "{name} added to the crafting recipes.",
+        "RemoveRecipe": "Remove from crafting recipes",
+        "SelectHint": "Select an item to see its details and start a Project. You can also drop an item here from a compendium, the sidebar, or an actor sheet.",
+        "GmDropHint": "GM: dropping a world item (Items sidebar) here adds it to everyone's catalog as a custom recipe.",
+        "Value": "Value",
+        "Materials": "Materials",
+        "EstTime": "Est. Time",
+        "ShiftsOne": "1 Shift",
+        "ShiftsMany": "{n} Shifts",
+        "SlotsOne": "{n} Slot",
+        "SlotsMany": "{n} Slots",
+        "AddToProjects": "Add to Projects",
+        "OngoingProjects": "Ongoing Projects",
+        "NewBadge": "New",
+        "NewHint": "Starts as a Project once you work a Shift on it.",
+        "RemoveStaged": "Remove",
+        "ThisShift": "This Shift",
+        "AllocHint": "Type an amount (30s, 1g 5s, 7s5c) — a plain number counts as silver.",
+        "ShiftLabel": "Shift",
+        "MatsNeeded": "{needed} needed / {onHand} on hand",
+        "AutoFill": "Auto-fill",
+        "AutoFillHint": "Spread this Shift's budget over your Projects, top to bottom, within the Materials you have.",
+        "ScrapHint": "Scrap an item for Materials worth half its value. Doesn't use your Shift budget.",
+        "NoScrapItems": "Nothing in your inventory can be scrapped.",
+        "ScrapConfirm": "Scrap {name} for Materials worth half its value?"
+      },
+      "Project": {
+        "WipDescription": "A project in progress. It will become a {name} once finished."
+      },
+      "Scrap": {
+        "Result": "{actor} scraps {item} for {value} worth of Materials."
+      },
+      "Shift": {
+        "Title": "Shift Worked",
+        "Summary": "{actor} spends a Shift crafting ({spent} of {budget}).",
+        "LineCompleted": "Finished {item}.",
+        "LineProgress": "{item}: {progress} / {value}",
+        "LineFailed": "{amount} failed: {reason}",
+        "Wasted": "{value} of this Shift's budget went unused."
+      },
+      "Approval": {
+        "Title": "Crafting Request",
+        "Description": "{actor} wants to {mode} ({cost}).",
+        "Approve": "Approve",
+        "Deny": "Deny",
+        "Approved": "Approved.",
+        "Denied": "Denied.",
+        "Failed": "Failed"
+      },
+      "Errors": {
+        "unknownMode": "That crafting mode isn't available.",
+        "checksFailed": "The requirements for this aren't met.",
+        "cancelled": "Cancelled.",
+        "noActor": "No valid character for this.",
+        "permission": "You do not have permission for this.",
+        "disabled": "Crafting is turned off for this world.",
+        "noAlchemyToolsWarn": "No Alchemy Tools equipped — crafting anyway.",
+        "known": "That formula is already known.",
+        "noPicksLeft": "No formula picks left.",
+        "notAlchemical": "Only Alchemical Items can be learned as formulas.",
+        "overCap": "That item's value is over your formula value cap.",
+        "relicTargetMismatch": "That power can't attach to this item (wrong type, or the item is Fabled).",
+        "combineDisabled": "Combining relics is turned off for this world.",
+        "relicCombineTypeMismatch": "Both relics must be the same Type (weapon, armor, or trinket) to Combine.",
+        "relicFabled": "A Fabled relic can't be Combined.",
+        "manaCrystalsDisabled": "The Mana Crystal variant is turned off for this world.",
+        "noSocketSlot": "That socket doesn't exist on this item.",
+        "socketOccupied": "That socket already holds a crystal.",
+        "notACrystal": "That item isn't a Mana Crystal.",
+        "socketEmpty": "That socket is empty.",
+        "amount": "No Shift value was allocated.",
+        "budget": "That's more than this Shift's budget.",
+        "materials": "Not enough Materials on hand.",
+        "recipeWorldOnly": "Only world items (from the Items sidebar) can be added as crafting recipes.",
+        "recipeNotCraftable": "That item can't be crafted (no value, or it's Materials / a relic Power).",
+        "complete": "That Project is already complete.",
+        "noProject": "That Project no longer exists.",
+        "error": "The request failed. See the console for details."
+      }
+    },
     "SheetLabels": {
       "Actor": "Vagabond Actor Sheet",
       "Character": "Vagabond Character Sheet",
@@ -712,6 +879,11 @@
         "label": "Configure Homebrew",
         "hint": "Customize stats, skills, saves, dice, leveling, derivations, damage types, and more."
       },
+      "craftingSettings": {
+        "name": "Crafting & Relics",
+        "label": "Configure Crafting & Relics",
+        "hint": "Configure Craft/Scrap/Alchemy/Relic Forge rules, GM approval, and the Mana Crystal variant."
+      },
       "useAnimations": {
         "name": "Use Spell Animations",
         "hint": "Master switch for spell visual effects. When disabled, no animations play regardless of other settings. Requires the Sequencer and JB2A modules to be installed."
@@ -877,6 +1049,57 @@
       "Saved": "Damage dice appearance saved.",
       "Cancel": "Cancel",
       "Save": "Save"
+    },
+    "CraftingSettings": {
+      "Title": "Crafting & Relics",
+      "ResetAllToDefaults": "Reset All to Defaults",
+      "ResetAllTooltip": "Reset every crafting setting to its factory default",
+      "ResetAllTitle": "Reset All Crafting Settings?",
+      "ResetAllConfirm": "Clear all crafting settings and revert to system defaults?",
+      "Tabs": {
+        "General": "General",
+        "Alchemy": "Alchemy",
+        "Relics": "Relics",
+        "Variant": "Mana Crystals"
+      },
+      "Fields": {
+        "Enabled": "Enable crafting (Workbench, Craft/Scrap/Alchemy/Relic Forge)",
+        "ApprovalLabel": "GM approval",
+        "Approval": {
+          "off": "Off — players craft freely",
+          "chat": "Chat card — GM must Approve/Deny"
+        },
+        "MaterialsFromCoin": "Pay coin directly instead of Materials bundles",
+        "ToolsRequirementLabel": "Alchemy Tools requirement",
+        "ToolsRequirement": {
+          "off": "Off — no tools needed",
+          "warn": "Warn if not equipped",
+          "block": "Block if not equipped"
+        },
+        "ValuePerShiftLegend": "Value per Shift (by Craft difficulty)",
+        "ValuePerShiftHint": "Value of items that can be Crafted in one Shift, in copper, by Craft skill difficulty.",
+        "DifficultyRange": "Craft Difficulty",
+        "CopperPerShift": "Copper / Shift",
+        "MixInertLabel": "Inert Mix behavior",
+        "MixInert": {
+          "delete": "Delete the mixture",
+          "keep": "Keep it, greyed out"
+        },
+        "MixExpiryLabel": "Mix expiry out of combat",
+        "MixExpiry": {
+          "never": "Never — lasts until used",
+          "nextAction": "At the Alchemist's next action"
+        },
+        "BondSuppression": "Suppress a Bound relic's powers unless bound to the wielder",
+        "CombineEnabled": "Allow the GM Combine ritual (merge two relics)",
+        "ManaCrystals": "Enable the Mana Crystal socket variant",
+        "CrystalSlotTableLegend": "Crystal slots by host and Bonus",
+        "CrystalHost": {
+          "armor": "Armor",
+          "weapon1H": "Weapon (1H/F/V)",
+          "weapon2H": "Weapon (2H)"
+        }
+      }
     },
     "HomebrewSettings": {
       "Title": "Homebrew Configuration",
@@ -1752,7 +1975,9 @@
         "unequipped": "Unequipped",
         "unequippedHint": "Applies while its item is equipped",
         "expired": "Expired",
-        "expiredHint": "Its duration ran out — edit the effect to renew it"
+        "expiredHint": "Its duration ran out — edit the effect to renew it",
+        "unbound": "Unbound",
+        "unboundHint": "This item must be Bound to its wielder before its powers work"
       },
       "Duration": "Duration",
       "ApplicationMode": {
@@ -1970,6 +2195,9 @@
       "ThrowNoneLeft": "No {name} left to throw.",
       "AttackSkill": "Attack ({skill})",
       "AttackWith": "Attack with {skill}",
+      "ThrowSkill": "Throw ({skill})",
+      "ThrowWith": "Throw with {skill}",
+      "UseNoAttack": "Use (no attack roll)",
       "ThrowFar": "{name}: Target is Far — the throw is Hindered.",
       "ThrowFarTag": "Far · Hinder",
       "QuantityHint": "Quantity",
@@ -2112,7 +2340,8 @@
         "Title": "Craft",
         "Description": "Make items. Requires materials worth 50% of item value.",
         "DifficultyLabel": "Craft Difficulty:",
-        "Button": "Craft Item"
+        "Button": "Craft Item",
+        "WorkbenchDescription": "Open the Workbench to spend a Shift crafting, scrapping, or helping a party member."
       },
       "CraftDifficulty": {
         "tier1": "18-17 (1s)",
@@ -2208,6 +2437,7 @@
         "traitsPlaceholder": "No traits yet. Traits are granted by your ancestry.",
         "Perks": "Perks",
         "perksPlaceholder": "No perks yet. Drag perks from the Items directory.",
+        "Formulas": "Alchemy Formulas",
         "spellsTabEmpty": "No spells yet.",
         "spellsTabEmptyHint": "You can drag and drop from the compendium.",
         "LevelFeatures": "Level Features",
@@ -2366,6 +2596,8 @@
         "PerkAmount": "Perk Amount",
         "SpellPool": "Spell Pool",
         "PerkPool": "Perk Pool",
+        "FormulaAmount": "Formula Picks",
+        "FormulaValueCap": "Value Cap (silver)",
         "ExtraTraining": "Extra Training",
         "SkillChoices": "Grouped Choices:",
         "Label": "Label",
@@ -2402,6 +2634,8 @@
         "ExtraTrainingHint": "Unrestricted skill training choices (any skill)",
         "StatBonusHint": "Each point grants +1 to any stat below cap",
         "AmountHint": "How many the player picks from the pool",
+        "FormulaAmountHint": "How many Alchemical Item formulas this feature grants",
+        "FormulaValueCapHint": "Formula. Silver value; each learned formula's item value must be ≤ this. e.g. @attributes.level.value * 50",
         "LabelPlaceholder": "e.g. Ascendancy",
         "DropStarterPack": "Drop starter pack here"
       },

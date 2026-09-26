@@ -21,9 +21,12 @@ import { runMacroFromButton } from './item-macro.mjs';
  *   WITHOUT equipping, then spend one from the stack. Stops at 0 (item kept)
  *   so raising the quantity "retrieves" thrown weapons.
  * @param {string|null} [o.skillKey] 'use' weapons: which allowed skill to attack
- *   with (default: the weapon's preferred skill).
+ *   with (default: the weapon's preferred skill). Thrown Alchemical Items: Ranged
+ *   or Craft (default: the better of the two).
+ * @param {boolean} [o.noAttack] thrown Alchemical Items: plain Use card instead
+ *   of the throw attack.
  */
-export async function activateHandItem({ actor, item, event, rollHandler, mode = 'use', skillKey = null }) {
+export async function activateHandItem({ actor, item, event, rollHandler, mode = 'use', skillKey = null, noAttack = false }) {
   const { EquipmentHelper } = globalThis.vagabond.utils;
 
   if (mode === 'throw' && EquipmentHelper.isThrowable(item)) {
@@ -71,7 +74,7 @@ export async function activateHandItem({ actor, item, event, rollHandler, mode =
   const target = { dataset: { itemId: item.id } };
 
   if (EquipmentHelper.isWeapon(item) || hasAlchemicalDamage) {
-    return rollHandler.rollWeapon(event, target, { skillKey });
+    return rollHandler.rollWeapon(event, target, { skillKey, noAttack });
   }
   return rollHandler.useItem(event, target);
 }

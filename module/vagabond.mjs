@@ -73,6 +73,11 @@ import { CurrencyHelper } from './helpers/currency-helper.mjs';
 import { ShopPricing } from './helpers/shop-pricing.mjs';
 import { ShopTransactions } from './helpers/shop-transactions.mjs';
 import { ShopApp } from './applications/shop-app.mjs';
+import { CraftingHelper } from './helpers/crafting-helper.mjs';
+import { RelicHelper } from './helpers/relic-helper.mjs';
+import { CrystalHelper } from './helpers/crystal-helper.mjs';
+import { CraftingSettingsApp } from './applications/crafting-settings-app.mjs';
+import { WorkbenchApp } from './applications/workbench-app.mjs';
 import { VagabondTokenRingShader, installStatusRingEffects, STATUS_RING_EFFECTS } from './ui/effects/index.mjs';
 
 const collections = foundry.documents.collections;
@@ -1024,6 +1029,26 @@ function registerGameSettings() {
     restricted: true,
   });
 
+  // Setting 24: Crafting Config (hidden data store) — see docs/crafting-plan.md §4.1.
+  // Reads always go through CraftingHelper.config(), never game.settings.get directly.
+  game.settings.register('vagabond', 'craftingConfig', {
+    scope: 'world',
+    config: false,
+    type: Object,
+    default: {},
+    requiresReload: false,
+  });
+
+  // Setting 25: Crafting & Relics Settings Menu button
+  game.settings.registerMenu('vagabond', 'craftingSettingsMenu', {
+    name: 'VAGABOND.Settings.craftingSettings.name',
+    label: 'VAGABOND.Settings.craftingSettings.label',
+    hint: 'VAGABOND.Settings.craftingSettings.hint',
+    icon: 'fas fa-hammer',
+    type: CraftingSettingsApp,
+    restricted: true,
+  });
+
 }
 
 /* -------------------------------------------- */
@@ -1314,6 +1339,9 @@ Hooks.once('init', function () {
 
   // Shop transactions run on the active GM via User#query (buy / sell / party transfer)
   ShopTransactions.registerQueries();
+  // Crafting: GM-relayed execute query + mode registry (craft, scrap)
+  CraftingHelper.registerQueries();
+  CraftingHelper.registerModes();
   CONFIG.Item.dataModels = {
     equipment: models.VagabondEquipment,
     spell: models.VagabondSpell,
@@ -1623,6 +1651,29 @@ Hooks.once('ready', function () {
       price: (item, ctx) => ShopPricing.price(item, ctx),
       transactions: ShopTransactions,
       pricing: ShopPricing,
+    },
+    // Crafting: game.vagabond.craft.config(), .valuePerShift(actor),
+    // .evaluate/.execute/.request(actor, modeKey, recipe, opts), .workShift(actor,
+    // allocations), .open(actor) opens the Workbench.
+    craft: {
+      config: () => CraftingHelper.config(),
+      valuePerShift: (actor) => CraftingHelper.valuePerShift(actor),
+      evaluate: (actor, modeKey, recipe, opts) => CraftingHelper.evaluate(actor, modeKey, recipe, opts),
+      execute: (actor, modeKey, recipe, opts) => CraftingHelper.execute(actor, modeKey, recipe, opts),
+      request: (actor, modeKey, recipe, opts) => CraftingHelper.request(actor, modeKey, recipe, opts),
+      workShift: (actor, allocations) => CraftingHelper.workShift(actor, allocations),
+      open: (actor) => WorkbenchApp.open(actor),
+      // Combine (GM ritual, decision — docs/crafting-plan.md §4.11): not a
+      // craftModes entry (no Shift/Materials, GM judgement only) — call directly.
+      combine: (baseHost, otherHost, opts) => RelicHelper.combine(baseHost, otherHost, opts),
+      // Mana Crystals (variant, off by default): socket mechanics only — see
+      // CrystalHelper's own doc comment for what's deferred.
+      socketCrystal: (hostItem, crystalItem, slotIndex) => CrystalHelper.socket(hostItem, crystalItem, slotIndex),
+      unsocketCrystal: (hostItem, slotIndex) => CrystalHelper.unsocket(hostItem, slotIndex),
+      endQuest: (actor) => CrystalHelper.endQuest(actor),
+      helper: CraftingHelper,
+      relicHelper: RelicHelper,
+      crystalHelper: CrystalHelper,
     },
     api: {
       VagabondChatCard,
@@ -2925,6 +2976,52 @@ Hooks.on('getChatMessageContextOptions', (app, options) => {
   options.push(FORCE_CRIT_ENTRY);
 });
 
+// Generic "you did something" signal for crafting rules that care about an actor's
+// next action (e.g. Mix going inert). Saves are excluded (they can be forced any
+// time); spell casts fire their own 'cast' actorActed from spell-handler.mjs after
+// the isSuccess check, so 'spell' rollType is excluded here to avoid double-firing.
+// See docs/crafting-plan.md §4.6.
+Hooks.on('vagabond.postD20Roll', (ctx) => {
+  if (!ctx?.actor || ctx.rollType === 'save' || ctx.rollType === 'spell') return;
+  const source = (ctx.rollType === 'weapon' || ctx.rollType === 'weaponSkill') ? 'attack' : 'skill';
+  Hooks.callAll('vagabond.actorActed', ctx.actor, { source, itemId: ctx.item?.id ?? null });
+});
+
+// Eureka (Alchemist, L2/6/10, decision D2): passing a Craft skill check by margin
+// or more (roll total - difficulty >= eurekaMargin) grants a Studied Die. Fires only
+// on the roller's own client (postD20Roll isn't socket-relayed), so no extra guard
+// is needed beyond the actor owning the click that produced this roll.
+// An attack rolled with Craft (e.g. a thrown Alchemical Item) is a Craft Check too.
+// See docs/crafting-plan.md §4.9.
+Hooks.on('vagabond.postD20Roll', (ctx) => {
+  if (!['skill', 'weapon'].includes(ctx?.rollType) || ctx.rollKey !== 'craft' || !ctx.isSuccess) return;
+  const actor = ctx.actor;
+  const margin = actor?.system?.craft?.eurekaMargin || 0;
+  if (margin <= 0) return;
+  if ((ctx.roll?.total ?? 0) - (ctx.difficulty ?? 0) < margin) return;
+  const newCount = (actor.system.studiedDice || 0) + 1;
+  actor.update({ 'system.studiedDice': newCount }).then(() => {
+    import('./helpers/chat-card.mjs').then(({ VagabondChatCard }) => VagabondChatCard.studiedDieGain(actor, newCount));
+  });
+});
+
+// Mix lifecycle (docs/crafting-plan.md §4.10). In-combat: fires on EVERY client
+// when the active combatant changes, so it's GM-gated (only the active GM writes
+// the expiry); out-of-combat: fires on whichever client performed the action,
+// almost always the actor's own owner, so no extra guard is needed there (same
+// reasoning as the Eureka listener above).
+Hooks.on('updateCombat', (combat, changed) => {
+  if (game.user !== game.users.activeGM) return;
+  if (changed.turn === undefined && changed.round === undefined) return;
+  const actor = combat.combatant?.actor;
+  if (!actor) return;
+  import('./helpers/crafting/mix-helper.mjs').then(({ MixHelper }) => MixHelper.expireForTurnStart(actor, combat));
+});
+Hooks.on('vagabond.actorActed', (actor, { itemId }) => {
+  if (!actor) return;
+  import('./helpers/crafting/mix-helper.mjs').then(({ MixHelper }) => MixHelper.expireOnNextAction(actor, itemId));
+});
+
 /**
  * V13 Standard: 'renderChatMessageHTML' hook.
  * The 'html' argument is a standard HTMLElement.
@@ -3377,6 +3474,22 @@ Hooks.on('renderChatMessageHTML', (message, html) => {
       const action = button.classList.contains('vagabond-glyph-trigger-button') ? 'trigger' : 'dismiss';
       import('./helpers/glyph-helper.mjs').then(({ VagabondGlyphHelper }) => {
         VagabondGlyphHelper.fromChatButton(button.dataset.regionUuid, action);
+      });
+    });
+  });
+
+  // ---------------------------------------------------------
+  // 10e. Crafting Approval Buttons (GM Only) — see CraftingHelper.request/resolveApproval.
+  // ---------------------------------------------------------
+  html.querySelectorAll('.vagabond-craft-approve-button, .vagabond-craft-deny-button').forEach(button => {
+    button.addEventListener('click', (ev) => {
+      ev.preventDefault();
+      if (!game.user.isGM) return;
+      const approve = button.classList.contains('vagabond-craft-approve-button');
+      button.closest('.vagabond-craft-approval-buttons')?.querySelectorAll('button')
+        .forEach(b => { b.disabled = true; });
+      import('./helpers/crafting-helper.mjs').then(({ CraftingHelper }) => {
+        CraftingHelper.resolveApproval(message.id, approve);
       });
     });
   });

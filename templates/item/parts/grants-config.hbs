@@ -219,4 +219,35 @@
     </div>
   </div>
 
+  {{! ── ALCHEMY FORMULAS (class features only) ─────────────────────────── }}
+  {{#if isClassFeature}}
+  <div class='accordion-item collapsed' data-accordion-id='grant-{{itemIndex}}-formulas'>
+    <div class='accordion-header' data-action='toggleAccordion'>
+      <i class='accordion-icon fas fa-chevron-right'></i>
+      <strong>{{localize "VAGABOND.UI.Sections.Formulas"}}</strong>
+    </div>
+    <div class='accordion-content'>
+      <div class='grants-accordion-body'>
+        <div class='grants-row'>
+          <label>{{localize "VAGABOND.UI.Labels.FormulaAmount"}}</label>
+          <input type='number'
+            name='{{arrayPath}}.{{itemIndex}}.formulaAmount'
+            value='{{grant.formulaAmount}}'
+            min='0' max='10'
+            class='grants-num-input' />
+          <span class='grants-hint'>{{localize "VAGABOND.UI.Hints.FormulaAmountHint"}}</span>
+        </div>
+        <div class='grants-row'>
+          <label>{{localize "VAGABOND.UI.Labels.FormulaValueCap"}}</label>
+          <input type='text'
+            name='{{arrayPath}}.{{itemIndex}}.formulaValueCap'
+            value='{{grant.formulaValueCap}}'
+            class='grants-num-input' />
+          <span class='grants-hint'>{{localize "VAGABOND.UI.Hints.FormulaValueCapHint"}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  {{/if}}
+
 </div>

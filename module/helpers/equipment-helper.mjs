@@ -1,3 +1,5 @@
+import { VagabondDamageHelper } from './damage-helper.mjs';
+
 /**
  * Helper utilities for equipment type checking, state management, and visual enrichment.
  * Eliminates 15+ duplicate equipment type checks across the codebase.
@@ -114,12 +116,31 @@ export class EquipmentHelper {
   }
 
   /**
+   * Alchemical Item that attacks when thrown (RAW: "If used for an attack, they
+   * do so ... with the Thrown Property"): has damage, and its damage type isn't
+   * restorative (potions are drunk, not thrown). Unlike a Thrown weapon, a throw
+   * spends a charge via `_consumeCharge` — the container breaks.
+   * @param {Object} item
+   * @returns {boolean}
+   */
+  static isThrownAlchemical(item) {
+    if (!this.isAlchemical(item)) return false;
+    const { damageType, damageAmount } = item.system;
+    if (!damageType || damageType === '-' || !damageAmount) return false;
+    return !VagabondDamageHelper.isRestorativeDamageType(damageType);
+  }
+
+  /** Skills a thrown Alchemical Item can attack with (Ranged, or Craft). */
+  static THROWN_ALCHEMICAL_SKILLS = ['ranged', 'craft'];
+
+  /**
    * Skills a weapon can attack with: its default `weaponSkill` plus any
    * `altSkills` (e.g. a Dagger: Melee, also Finesse). Deduped, default first.
    * @param {Object} item
    * @returns {string[]}
    */
   static attackSkillOptions(item) {
+    if (this.isThrownAlchemical(item)) return [...this.THROWN_ALCHEMICAL_SKILLS];
     const keys = [item?.system?.weaponSkill || 'melee', ...(item?.system?.altSkills ?? [])];
     return keys.filter((k, i) => k && keys.indexOf(k) === i);
   }
@@ -149,6 +170,12 @@ export class EquipmentHelper {
   }
 
   static attackSkillFor(item, { mode = 'use', skillKey = null } = {}) {
+    // Thrown Alchemical Item: explicit pick, else whichever of Ranged/Craft is
+    // better for the owner right now (never persisted — no preferredSkill seed).
+    if (this.isThrownAlchemical(item)) {
+      const options = this.THROWN_ALCHEMICAL_SKILLS;
+      return options.includes(skillKey) ? skillKey : this.bestAttackSkill(item, item.actor);
+    }
     if (mode === 'throw') return 'ranged';
     const options = this.attackSkillOptions(item);
     const preferred = item?.getFlag?.('vagabond', 'preferredSkill');
@@ -158,7 +185,8 @@ export class EquipmentHelper {
   /**
    * Context-menu entries for attacking with a weapon: "Attack (Preferred)"
    * first, then one "Attack with X" per other allowed skill. Plain "Attack"
-   * when the weapon has a single skill.
+   * when the weapon has a single skill. A thrown Alchemical Item gets the same
+   * shape as "Throw (Best)" + "Throw with X" (Ranged / Craft).
    * @param {Object} item
    * @param {(skillKey: string) => any} attack
    * @returns {{label: string, icon: string, action: Function}[]}
@@ -167,18 +195,21 @@ export class EquipmentHelper {
     const options = this.attackSkillOptions(item);
     const preferred = this.attackSkillFor(item);
     const skillLabel = (k) => game.i18n.localize(CONFIG.VAGABOND.weaponSkills?.[k] ?? k);
+    const isThrow = this.isThrownAlchemical(item);
+    const verb = isThrow ? 'Throw' : 'Attack';
+    const icon = isThrow ? 'fas fa-share' : 'fas fa-swords';
     if (options.length < 2) {
-      return [{ label: game.i18n.localize('VAGABOND.ContextMenu.Attack'), icon: 'fas fa-swords', action: () => attack(preferred) }];
+      return [{ label: game.i18n.localize(`VAGABOND.ContextMenu.${verb}`), icon, action: () => attack(preferred) }];
     }
     return [
       {
-        label: game.i18n.format('VAGABOND.ContextMenu.AttackSkill', { skill: skillLabel(preferred) }),
-        icon: 'fas fa-swords',
+        label: game.i18n.format(`VAGABOND.ContextMenu.${verb}Skill`, { skill: skillLabel(preferred) }),
+        icon,
         action: () => attack(preferred),
       },
       ...options.filter((k) => k !== preferred).map((k) => ({
-        label: game.i18n.format('VAGABOND.ContextMenu.AttackWith', { skill: skillLabel(k) }),
-        icon: CONFIG.VAGABOND.weaponSkillIcons?.[k] ?? 'fas fa-swords',
+        label: game.i18n.format(`VAGABOND.ContextMenu.${verb}With`, { skill: skillLabel(k) }),
+        icon: CONFIG.VAGABOND.weaponSkillIcons?.[k] ?? icon,
         action: () => attack(k),
       })),
     ];

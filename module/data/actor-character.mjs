@@ -354,6 +354,52 @@ export default class VagabondCharacter extends VagabondActorBase {
 
     // ---------------------
 
+    // Crafting bonuses (Alchemist class features Eureka / Potency). The per-die
+    // damage bonus and explode grant for Potency reuse the existing generic
+    // `alchemicalBonusPerDamageDie` bucket / this alchemicalExplode flag — both are
+    // read from the USING actor (not the crafter), matching RAW. See
+    // docs/crafting-plan.md §4.9.
+    schema.craft = new fields.SchemaField({
+      eurekaMargin: new fields.ArrayField(
+        new fields.StringField({ blank: true }),
+        {
+          initial: [],
+          label: "Eureka Margin",
+          hint: "Craft check margin (roll total minus difficulty) needed to gain a Studied Die. 0 = feature absent."
+        }
+      ),
+      alchemicalExplode: new fields.ArrayField(
+        new fields.StringField({ blank: true }),
+        { initial: [], label: "Alchemical Items Explode (Potency)", hint: "Number of highest die faces that Explode on Alchemical Items (1 = highest, 2 = two highest). 0 = none." }
+      ),
+      // Known Alchemical Item formulas (Item uuids) — a real stored choice, not a
+      // bonus-stacking field; never reset in prepareBaseData. Picked via the
+      // Workbench Alchemy tab, gated by AlchemyHelper.formulaPicksRemaining.
+      formulas: new fields.ArrayField(
+        new fields.StringField({ blank: true }),
+        { initial: [], label: "Known Alchemy Formulas" }
+      ),
+      // Alchemist class-feature gates. Formula-stack ArrayFields (evaluated >0 →
+      // boolean), NOT plain BooleanFields: unlike a perk's weaponAsTrinket (which
+      // is either held or not), these live on a single always-embedded class item
+      // and must gate by CURRENT LEVEL (Catalyze L1, Mix L6, Prima Materia L10) — a
+      // conditional ternary formula only resolves through _evaluateFormulaField,
+      // which plain BooleanField overrides never go through. Same pattern as
+      // eurekaMargin/alchemicalExplode above.
+      catalyze: new fields.ArrayField(
+        new fields.StringField({ blank: true }),
+        { initial: [], label: "Catalyze (Craft Alchemical Items with the Use Action)" }
+      ),
+      primaMateria: new fields.ArrayField(
+        new fields.StringField({ blank: true }),
+        { initial: [], label: "Prima Materia (Craft without Materials)" }
+      ),
+      mix: new fields.ArrayField(
+        new fields.StringField({ blank: true }),
+        { initial: [], label: "Mix (Combine two Alchemical Items)" }
+      ),
+    });
+
     // Bonuses container for various character bonuses
     schema.bonuses = new fields.SchemaField({
       hpPerLevel: new fields.ArrayField(
@@ -640,6 +686,14 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.spellBonusPerDamageDie = [];
     this.alchemicalBonusPerDamageDie = [];
 
+    // Reset crafting bonuses (Eureka / Potency / Catalyze / Mix / Prima Materia).
+    // craft.formulas is a persisted player choice, never reset here.
+    this.craft.eurekaMargin = [];
+    this.craft.alchemicalExplode = [];
+    this.craft.catalyze = [];
+    this.craft.primaMateria = [];
+    this.craft.mix = [];
+
     // Reset specific die size bonuses (per-weapon-skill, dynamic)
     for (const skill of (CONFIG.VAGABOND.homebrew?.skills ?? []).filter(s => s.isWeaponSkill)) {
       this[`${skill.key}DamageDieSizeBonus`] = [];
@@ -772,6 +826,12 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.weaponBonusPerDamageDie = this._evaluateFormulaField(this.weaponBonusPerDamageDie, rollData);
     this.spellBonusPerDamageDie = this._evaluateFormulaField(this.spellBonusPerDamageDie, rollData);
     this.alchemicalBonusPerDamageDie = this._evaluateFormulaField(this.alchemicalBonusPerDamageDie, rollData);
+
+    this.craft.eurekaMargin = this._evaluateFormulaField(this.craft.eurekaMargin, rollData);
+    this.craft.alchemicalExplode = Math.max(0, this._evaluateFormulaField(this.craft.alchemicalExplode, rollData));
+    this.craft.catalyze = this._evaluateFormulaField(this.craft.catalyze, rollData) > 0;
+    this.craft.primaMateria = this._evaluateFormulaField(this.craft.primaMateria, rollData) > 0;
+    this.craft.mix = this._evaluateFormulaField(this.craft.mix, rollData) > 0;
 
     // Evaluate dice bonuses (join arrays into formula strings)
     this.universalDamageDice = this.universalDamageDice.filter(d => !!d).join(' + ');

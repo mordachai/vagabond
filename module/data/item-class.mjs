@@ -110,6 +110,16 @@ export default class VagabondClass extends VagabondItemBase {
         // Spell amount - number of spells player can choose from the requiredSpells pool
         spellAmount: new fields.NumberField({ initial: 0, integer: true, min: 0, max: 10 }),
 
+        // Alchemy formula picks - number of Alchemical Item formulas this feature
+        // grants (Workbench Alchemy tab "Learn — N picks left"; see docs/crafting-plan.md
+        // §4.4/§5). No pool — any Alchemical Item under formulaValueCap qualifies.
+        formulaAmount: new fields.NumberField({ initial: 0, integer: true, min: 0, max: 10 }),
+
+        // Formula value cap - a formula (roll-data compatible), in SILVER, e.g.
+        // '@attributes.level.value * 50' for RAW's "value ≤ Level × 50s". Evaluated
+        // against the learning actor at pick time, not stored per-feature.
+        formulaValueCap: new fields.StringField({ initial: '@attributes.level.value * 50', blank: true }),
+
         // Skill choice groups - restricted skill training choices (same as ancestry traits)
         skillChoices: new fields.ArrayField(
           new fields.SchemaField({
