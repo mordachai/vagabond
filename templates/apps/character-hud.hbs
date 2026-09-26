@@ -140,7 +140,7 @@
         <div class="vh-inv-list">
           {{#each items}}
             {{!-- Inline accordion: click the image to USE, click the name to expand details. --}}
-            <div class="vh-inv accordion-item collapsed {{#if equipped}}is-equipped{{/if}}" data-accordion-id="hud-inv-{{_id}}">
+            <div class="vh-inv accordion-item collapsed {{#if equipped}}is-equipped{{/if}} {{#if inert}}is-inert{{/if}}" data-accordion-id="hud-inv-{{_id}}">
               <div class="vh-row-head">
                 <img class="vh-inv-img clickable rollable" src="{{img}}" alt="{{name}}" draggable="false" data-action="useItemRow" data-item-id="{{_id}}" data-hud-tip="{{localize 'VAGABOND.Hud.Menu.Use'}}" />
                 <span class="vh-inv-name accordion-header" data-action="toggleItemDetail" data-item-id="{{_id}}" title="{{name}}">{{name}}</span>
@@ -216,7 +216,7 @@
 
         <div class="vh-slots">
           {{#each itemSlots}}
-            <div class="vh-slot {{#if filled}}filled{{/if}} {{#if throwable}}{{#unless quantity}}empty{{/unless}}{{/if}}" data-slot-index="{{@index}}" {{#if filled}}data-action="slotUse" data-type="{{type}}" data-item-id="{{id}}" title="{{name}}{{#if throwable}} ×{{quantity}}{{/if}}"{{/if}}>
+            <div class="vh-slot {{#if filled}}filled{{/if}} {{#if inert}}is-inert{{/if}} {{#if throwable}}{{#unless quantity}}empty{{/unless}}{{/if}}" data-slot-index="{{@index}}" {{#if filled}}data-action="slotUse" data-type="{{type}}" data-item-id="{{id}}" title="{{name}}{{#if throwable}} ×{{quantity}}{{/if}}"{{/if}}>
               {{#if filled}}<img src="{{img}}" alt="{{name}}" draggable="false" />{{/if}}
             </div>
           {{/each}}

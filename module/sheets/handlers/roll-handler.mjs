@@ -171,6 +171,13 @@ export class RollHandler {
    *   Craft, see EquipmentHelper.isThrownAlchemical) unless noAttack: then it posts the
    *   plain auto-hit Use card (pouring / applying it, GM's call).
    */
+  /** A Mix with two damage types posts its second payload as its own card (MixHelper.postCompanion). */
+  async _postMixCompanion(item, targetsAtRollTime, attackType) {
+    if (item.flags?.vagabond?.mix?.companionIndex == null) return;
+    const { MixHelper } = await import('../../helpers/crafting/mix-helper.mjs');
+    await MixHelper.postCompanion(this.actor, item, targetsAtRollTime, { attackType });
+  }
+
   async rollWeapon(event, target = null, { thrown = false, skillKey = null, noAttack = false } = {}) {
     event.preventDefault();
 
@@ -274,6 +281,7 @@ export class RollHandler {
           hasDefenses: !isRestorative,
           targetsAtRollTime: targetsAtRollTime,
         });
+        await this._postMixCompanion(item, targetsAtRollTime, 'melee');
 
         // Handle consumption after successful use
         await item.handleConsumption();
@@ -410,6 +418,7 @@ export class RollHandler {
         _wpnPostCtx.extraMetadata,
         _wpnPostCtx.extraTags
       );
+      if (alchemicalThrow && attackResult.isHit) await this._postMixCompanion(item, targetsAtRollTime, 'ranged');
       // Handle consumption after successful attack (regardless of hit/miss).
       // A weapon throw already spends quantity in activateHandItem; a thrown
       // Alchemical Item's container breaks, so it spends a charge here.

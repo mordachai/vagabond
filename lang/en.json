@@ -560,7 +560,17 @@
         "ItemName": "Mixture of {a} + {b}",
         "ItemDescription": "A combined dose of {a} and {b}.",
         "WentInertTitle": "Mixture Inert",
-        "WentInert": "{name} goes inert."
+        "WentInert": "{name} goes inert.",
+        "CompanionTitle": "{name} (Mix)",
+        "InertBlocked": "{name} has gone inert and can't be used.",
+        "InertBadge": "Inert",
+        "Result": "{actor} mixes {a} and {b}.",
+        "Expiry": {
+          "NextTurn": "Goes inert at the start of your next Turn",
+          "NextAction": "Goes inert after your next action",
+          "UntilUsed": "Lasts until used",
+          "Inert": "Inert"
+        }
       },
       "Alchemy": {
         "Result": "{actor} crafts {item}."
@@ -572,6 +582,29 @@
         "SoonAlchemy": "Alchemy",
         "SoonRelic": "Relic Forge",
         "SoonMix": "Mix",
+        "PrimaMateriaButton": "Prima Materia ({n} Studied)",
+        "PrimaMateriaHint": "Spend a Studied die to Craft this item instantly, with no Materials (10g or under).",
+        "StudiedDice": "Studied Dice",
+        "Charges": "Charges left",
+        "MixSearch": "Search your alchemicals...",
+        "NoMixIngredients": "No Alchemical Items with a charge left.",
+        "MixOwnedOnly": "Only this character's own Alchemical Items (with a charge left) can be mixed.",
+        "MixEmptySlot": "Drag an ingredient here",
+        "MixClearSlot": "Remove ingredient",
+        "MixCompanion": "Plus",
+        "MixCompanionHint": "A different damage type: rolled as its own card on the same targets (on a hit, when thrown).",
+        "MixStatuses": "Statuses",
+        "MixUse": "Use",
+        "MixThrown": "Thrown (Ranged or Craft)",
+        "MixUsed": "Used (no attack roll)",
+        "MixLasts": "Lasts",
+        "MixNoStudied": "You need a Studied die to Mix.",
+        "MixPickTwo": "Pick two different Alchemical Items.",
+        "MixButton": "Mix (1 Studied die)",
+        "Mixtures": "Mixtures",
+        "NoMixtures": "No Mixtures.",
+        "DiscardMix": "Discard Mixture",
+        "DiscardMixConfirm": "Discard {name}? Its ingredients are lost.",
         "AlchemyLevelLine": "Level {level}: {known}/{grants} formulas",
         "Wealth": "Wealth",
         "PartyWealth": "Party Wealth",
@@ -2341,7 +2374,7 @@
         "Description": "Make items. Requires materials worth 50% of item value.",
         "DifficultyLabel": "Craft Difficulty:",
         "Button": "Craft Item",
-        "WorkbenchDescription": "Open the Workbench to spend a Shift crafting, scrapping, or helping a party member."
+        "WorkbenchDescription": "Open the Workbench to spend a Shift crafting, scrap items for Materials, or work Alchemy."
       },
       "CraftDifficulty": {
         "tier1": "18-17 (1s)",

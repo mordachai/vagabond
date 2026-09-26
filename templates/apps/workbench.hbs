@@ -15,11 +15,14 @@
       <span>{{localize "VAGABOND.Craft.Modes.Alchemy.Label"}}</span>
     </button>
     {{/if}}
+    {{#if mixOn}}
+    <button type="button" class="wb-rail-btn {{#if showMix}}active{{/if}}" data-action="switchTab" data-tab="mix">
+      <i class="fa-solid fa-flask-vial"></i>
+      <span>{{localize "VAGABOND.Craft.Modes.Mix.Label"}}</span>
+    </button>
+    {{/if}}
     <div class="wb-rail-soon" title="{{localize 'VAGABOND.Craft.Workbench.ComingSoon'}}">
       <i class="fa-solid fa-gem"></i><span>{{localize "VAGABOND.Craft.Workbench.SoonRelic"}}</span>
-    </div>
-    <div class="wb-rail-soon" title="{{localize 'VAGABOND.Craft.Workbench.ComingSoon'}}">
-      <i class="fa-solid fa-flask-vial"></i><span>{{localize "VAGABOND.Craft.Workbench.SoonMix"}}</span>
     </div>
   </nav>
 
@@ -350,6 +353,12 @@
                   {{else}}
                   <p class="wb-formula-detail-note">{{localize "VAGABOND.Craft.Workbench.NoPicksLeft"}}</p>
                   {{/if}}
+                  {{#if (and @root.primaMateriaOn primaOk)}}
+                  <button type="button" class="wb-shift-btn wb-prima-btn" data-action="primaMateria" data-formula-uuid="{{uuid}}"
+                          {{#unless @root.studiedDice}}disabled{{/unless}} title="{{localize 'VAGABOND.Craft.Workbench.PrimaMateriaHint'}}">
+                    <i class="fa-solid fa-mortar-pestle"></i> {{localize "VAGABOND.Craft.Workbench.PrimaMateriaButton" n=@root.studiedDice}}
+                  </button>
+                  {{/if}}
                   {{#unless known}}
                   <button type="button" class="wb-shift-btn wb-craft-project-btn" data-action="craftItemFromCatalog" data-formula-uuid="{{uuid}}" title="{{localize 'VAGABOND.Craft.Workbench.CraftAsProjectHint'}}">
                     <i class="fa-solid fa-hammer"></i> {{localize "VAGABOND.Craft.Workbench.CraftAsProject"}}
@@ -366,6 +375,121 @@
           </div>
         </aside>
       </div>
+    </div>
+    {{/if}}
+
+    {{#if showMix}}
+    <div class="wb-mix-tab">
+
+      <section class="wb-catalog">
+        <div class="wb-budget-bar">
+          <span><i class="fa-solid fa-dice-d20"></i> {{localize "VAGABOND.Craft.Workbench.StudiedDice"}}: <strong>{{mix.studiedDice}}</strong></span>
+        </div>
+
+        <label class="wb-catalog-search">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" class="wb-mix-search" placeholder="{{localize 'VAGABOND.Craft.Workbench.MixSearch'}}">
+        </label>
+
+        <div class="wb-catalog-list">
+          {{#each mix.ingredients}}
+          <div class="wb-cat-row wb-mix-ingredient{{#if picked}} is-selected{{/if}}" data-action="pickMixIngredient" data-item-id="{{id}}" data-name="{{nameLower}}" draggable="true">
+            <img class="wb-cat-img" src="{{img}}" alt="" draggable="false">
+            <div class="wb-cat-info">
+              <div class="wb-cat-name"><span>{{name}}</span></div>
+              <div class="wb-cat-meta">
+                <span>{{typeLabel}}</span>
+                {{#with damage}}<span class="wb-stat" data-tooltip="{{typeLabel}}">{{amount}} {{#if icon}}<i class="{{icon}}"></i>{{/if}}</span>{{/with}}
+              </div>
+            </div>
+            <div class="wb-cat-stats">
+              <span class="wb-cat-cost" data-tooltip="{{localize 'VAGABOND.Craft.Workbench.Charges'}}">×{{charges}}</span>
+            </div>
+          </div>
+          {{else}}
+          <p class="wb-empty">{{localize "VAGABOND.Craft.Workbench.NoMixIngredients"}}</p>
+          {{/each}}
+          <p class="wb-empty wb-catalog-nomatch" hidden>{{localize "VAGABOND.Craft.Workbench.NoMatches"}}</p>
+        </div>
+      </section>
+
+      <section class="wb-side">
+        <div class="wb-detail wb-mix-bench">
+          <div class="wb-mix-slots">
+            {{#each mix.slots}}
+            {{#if @index}}<i class="fa-solid fa-plus wb-mix-plus"></i>{{/if}}
+            <div class="wb-mix-slot{{#if filled}} filled{{/if}}" data-slot="{{@index}}">
+              {{#if filled}}
+              <img src="{{img}}" alt="" draggable="false">
+              <span class="wb-mix-slot-name">{{name}}</span>
+              <button type="button" class="wb-mix-slot-clear" data-action="clearMixSlot" data-slot="{{@index}}" data-tooltip="{{localize 'VAGABOND.Craft.Workbench.MixClearSlot'}}"><i class="fa-solid fa-xmark"></i></button>
+              {{else}}
+              <i class="fa-solid fa-flask"></i>
+              <span>{{localize "VAGABOND.Craft.Workbench.MixEmptySlot"}}</span>
+              {{/if}}
+            </div>
+            {{/each}}
+          </div>
+
+          {{#with mix.preview}}
+          <div class="wb-mix-preview">
+            {{#with damage}}
+            <div class="wb-mix-line">
+              <span>{{localize "VAGABOND.UI.Labels.Damage"}}</span>
+              <strong>{{amount}} {{#if icon}}<i class="{{icon}}"></i>{{/if}} {{typeLabel}}</strong>
+            </div>
+            {{/with}}
+            {{#with companion}}
+            <div class="wb-mix-line" data-tooltip="{{localize 'VAGABOND.Craft.Workbench.MixCompanionHint'}}">
+              <span>{{localize "VAGABOND.Craft.Workbench.MixCompanion"}}</span>
+              <strong>{{amount}} {{#if icon}}<i class="{{icon}}"></i>{{/if}} {{typeLabel}}</strong>
+            </div>
+            {{/with}}
+            {{#if statuses.length}}
+            <div class="wb-mix-line">
+              <span>{{localize "VAGABOND.Craft.Workbench.MixStatuses"}}</span>
+              <strong>{{#each statuses}}<span class="wb-mix-status">{{this}}</span>{{/each}}</strong>
+            </div>
+            {{/if}}
+            <div class="wb-mix-line">
+              <span>{{localize "VAGABOND.Craft.Workbench.MixUse"}}</span>
+              <strong>{{#if thrown}}{{localize "VAGABOND.Craft.Workbench.MixThrown"}}{{else}}{{localize "VAGABOND.Craft.Workbench.MixUsed"}}{{/if}}</strong>
+            </div>
+            <div class="wb-mix-line">
+              <span>{{localize "VAGABOND.Craft.Workbench.MixLasts"}}</span>
+              <strong>{{expiryLabel}}</strong>
+            </div>
+          </div>
+          {{/with}}
+
+          {{#if mix.blockHint}}<p class="wb-hint">{{mix.blockHint}}</p>{{/if}}
+          <button type="button" class="wb-shift-btn wb-stage-btn" data-action="mixIngredients" {{#unless mix.canMix}}disabled{{/unless}}>
+            <i class="fa-solid fa-flask-vial"></i> {{localize "VAGABOND.Craft.Workbench.MixButton"}}
+          </button>
+        </div>
+
+        <div class="wb-projects">
+          <div class="wb-projects-head">
+            <span>{{localize "VAGABOND.Craft.Workbench.Mixtures"}}</span>
+            <span class="wb-count">{{mix.mixtures.length}}</span>
+          </div>
+          <div class="wb-proj-list">
+            {{#each mix.mixtures}}
+            <div class="wb-proj-row wb-mix-row{{#if inert}} is-inert{{/if}}" data-item-id="{{id}}">
+              <div class="wb-proj-top">
+                <img src="{{img}}" alt="" draggable="false">
+                <div class="wb-proj-name">{{name}}</div>
+                <button type="button" class="wb-icon-btn wb-icon-btn-danger" data-action="discardMix" data-tooltip="{{localize 'VAGABOND.Craft.Workbench.DiscardMix'}}"><i class="fa-solid fa-xmark"></i></button>
+              </div>
+              <div class="wb-mix-row-status">{{statusLabel}}</div>
+            </div>
+            {{else}}
+            <p class="wb-empty">{{localize "VAGABOND.Craft.Workbench.NoMixtures"}}</p>
+            {{/each}}
+          </div>
+        </div>
+      </section>
+
     </div>
     {{/if}}
 

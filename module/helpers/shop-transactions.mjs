@@ -144,15 +144,18 @@ export class ShopTransactions {
 
   /**
    * Whether two items (documents or data) are the same thing for stacking/restocking.
-   * Compendium source wins (Babele-safe); name + type is the fallback. Material must match.
+   * Compendium source + name when both have a source; name + equipment type is the
+   * fallback. Material must match. The name check keeps renamed copies of one compendium
+   * entry apart (duplicates keep the source — e.g. two "Scroll, Spell" for different spells).
    */
   static sameSource(a, b) {
     if (a?.type !== b?.type) return false;
     if ((a.system?.metal ?? 'none') !== (b.system?.metal ?? 'none')) return false;
+    const sameName = a.name?.trim().toLowerCase() === b.name?.trim().toLowerCase();
     const srcA = a._stats?.compendiumSource;
     const srcB = b._stats?.compendiumSource;
-    if (srcA && srcB) return srcA === srcB;
-    return a.name === b.name && a.system?.equipmentType === b.system?.equipmentType;
+    if (srcA && srcB) return srcA === srcB && sameName;
+    return sameName && a.system?.equipmentType === b.system?.equipmentType;
   }
 
   /** The shop stock item matching `item`, if any. */

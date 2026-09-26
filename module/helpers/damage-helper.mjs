@@ -1142,6 +1142,25 @@ export class VagabondDamageHelper {
    * @param {Event} event - The click event (for keyboard modifiers)
    */
   /**
+   * The Item a chat-card button's `itemId` refers to. Live lookup first; if the
+   * item was consumed on use (last charge, a Mix), rebuild it — unsaved, same id
+   * and parent — from the `itemSnapshot` its card stored (VagabondChatCard#send),
+   * so its on-hit statuses and damage modifiers still apply. Read-only: never
+   * `update()` the returned item unless `sourceItem.actor?.items.has(id)`.
+   * @param {Actor|null} sourceActor
+   * @param {string} itemId
+   * @returns {Item|null}
+   */
+  static _resolveSourceItem(sourceActor, itemId) {
+    if (!sourceActor || !itemId) return null;
+    const live = sourceActor.items.get(itemId);
+    if (live) return live;
+    const message = game.messages.contents.findLast(m => m.flags?.vagabond?.itemSnapshot?._id === itemId);
+    const data = message?.flags.vagabond.itemSnapshot;
+    return data ? new CONFIG.Item.documentClass(data, { parent: sourceActor }) : null;
+  }
+
+  /**
    * Collect every on-hit status entry threatening a target from one attack source.
    * Single source of truth for the item/NPC-action fallback, crit-replaces-normal
    * merge, weapon coating, and equipped-item passive gathering.
@@ -1310,7 +1329,7 @@ export class VagabondDamageHelper {
       const sourceActor = TargetHelper.resolveActorRef(actorId);
       const { saveRoll, difficulty, isSuccess, isCritical, isHindered } = await this._computeSaveOutcome(
         targetActor, saveType, attackType, sourceActor,
-        { sourceItem: sourceActor?.items.get(itemId), actionIdx, attackWasCrit },
+        { sourceItem: this._resolveSourceItem(sourceActor, itemId), actionIdx, attackWasCrit },
         event
       );
       const { VagabondChatCard } = await import('./chat-card.mjs');
@@ -1326,7 +1345,7 @@ export class VagabondDamageHelper {
       // Apply armor/immune/weak modifiers and track armor reduction.
       // The actual rolled dice count (from the serialized roll terms) feeds the
       // berserk per-die reduction so grip/bonus/explosion dice are counted correctly.
-      const sourceItem = sourceActor?.items.get(itemId);
+      const sourceItem = this._resolveSourceItem(sourceActor, itemId);
       const rolledDiceCount = rollTermsData.terms.reduce((n, t) =>
         n + (t.type === 'Die' ? (t.results ?? []).filter(r => r.active !== false).length : 0), 0);
       const damageBreakdown = this.calculateFinalDamageDetailed(
@@ -1414,7 +1433,7 @@ export class VagabondDamageHelper {
         const statusResults = await StatusHelper.processCausedStatuses(
           targetActor, allStatusEntries, damageWasBlocked, sourceItem?.name ?? '', { preRolledSave, sourceActorName: sourceActorTokenName1 }
         );
-        if (coatingEntries.length > 0) {
+        if (coatingEntries.length > 0 && sourceActor.items.has(sourceItem.id)) {
           await sourceItem.update({
             'system.coating.charges': 0,
             'system.coating.sourceName': '',
@@ -1466,7 +1485,7 @@ export class VagabondDamageHelper {
       const sourceActor = TargetHelper.resolveActorRef(actorId);
       const { saveRoll, difficulty, isSuccess, isCritical, isHindered } = await this._computeSaveOutcome(
         targetActor, saveType, attackType, sourceActor,
-        { sourceItem: sourceActor?.items.get(itemId), actionIdx },
+        { sourceItem: this._resolveSourceItem(sourceActor, itemId), actionIdx },
         event
       );
       const { VagabondChatCard } = await import('./chat-card.mjs');
@@ -1486,7 +1505,7 @@ export class VagabondDamageHelper {
       // Process on-hit status effects using the save roll already made above
       // sourceActor is already declared above for outgoingSavesModifier
       // (reminder path never merges crit entries — attackWasCrit stays false)
-      const sourceItem = sourceActor?.items.get(itemId);
+      const sourceItem = this._resolveSourceItem(sourceActor, itemId);
       const { entries: allStatusEntries, coatingEntries } = this.resolveIncomingStatusEntries({
         sourceActor, sourceItem, actionIdx,
       });
@@ -1504,7 +1523,7 @@ export class VagabondDamageHelper {
         const statusResults = await StatusHelper.processCausedStatuses(
           targetActor, allStatusEntries, false, sourceName, { preRolledSave, sourceActorName: sourceActorTokenName2 }
         );
-        if (coatingEntries.length > 0) {
+        if (coatingEntries.length > 0 && sourceActor.items.has(sourceItem.id)) {
           await sourceItem.update({
             'system.coating.charges': 0,
             'system.coating.sourceName': '',
@@ -1546,7 +1565,7 @@ export class VagabondDamageHelper {
     const actionIdx = (actionIndexRaw !== '' && actionIndexRaw != null) ? parseInt(actionIndexRaw) : null;
 
     const sourceActor = TargetHelper.resolveActorRef(actorId);
-    const sourceItem = sourceActor?.items.get(itemId);
+    const sourceItem = this._resolveSourceItem(sourceActor, itemId);
 
     const storedTargets = this._getTargetsFromButton(button);
     if (storedTargets.length === 0) {
@@ -1630,7 +1649,7 @@ export class VagabondDamageHelper {
         const statusResults = await StatusHelper.processCausedStatuses(
           targetActor, allStatusEntries, damageWasBlocked, sourceName, { skipSaveRoll: true, sourceActorName: sourceActorTokenName }
         );
-        if (coatingEntries.length > 0) {
+        if (coatingEntries.length > 0 && sourceActor.items.has(sourceItem.id)) {
           await sourceItem.update({ 'system.coating.charges': 0, 'system.coating.causedStatuses': [] });
         }
         await VagabondChatCard.statusResults(statusResults, targetActor, sourceName, sourceItem?.img ?? null);
@@ -2173,7 +2192,7 @@ export class VagabondDamageHelper {
 
     // Get weapon data for material weakness checks
     const sourceActor = TargetHelper.resolveActorRef(actorId);
-    const sourceItem = sourceActor?.items.get(itemId);
+    const sourceItem = this._resolveSourceItem(sourceActor, itemId);
 
     // Build source label: weapon → "[Name] Attack", spell/alchemical/NPC action → "[Name]"
     const isWeaponDirect = sourceItem?.type === 'equipment' && sourceItem?.system?.equipmentType === 'weapon';
@@ -2269,7 +2288,7 @@ export class VagabondDamageHelper {
         const statusResults = await StatusHelper.processCausedStatuses(
           targetActor, allStatusEntries, damageWasBlocked, sourceName, { skipSaveRoll: true, sourceActorName: sourceActorTokenName3 }
         );
-        if (coatingEntries.length > 0) {
+        if (coatingEntries.length > 0 && sourceActor.items.has(sourceItem.id)) {
           await sourceItem.update({
             'system.coating.charges': 0,
             'system.coating.sourceName': '',
@@ -2358,7 +2377,7 @@ export class VagabondDamageHelper {
       const attackWasCrit  = button.dataset.attackWasCrit === 'true';
 
       const sourceActor = TargetHelper.resolveActorRef(sourceActorId);
-      const sourceItem  = sourceActor?.items.get(sourceItemId);
+      const sourceItem  = this._resolveSourceItem(sourceActor, sourceItemId);
 
       const { entries: allStatusEntries, coatingEntries } = this.resolveIncomingStatusEntries({
         sourceActor, sourceItem, actionIdx: sourceActionIdx, attackWasCrit,
@@ -2374,7 +2393,7 @@ export class VagabondDamageHelper {
         const statusResults = await StatusHelper.processCausedStatuses(
           actor, allStatusEntries, damageWasBlocked, sourceName, { preRolledSave, sourceActorName: sourceActorTokenName4 }
         );
-        if (coatingEntries.length > 0) {
+        if (coatingEntries.length > 0 && sourceActor.items.has(sourceItem.id)) {
           await sourceItem.update({
             'system.coating.charges': 0,
             'system.coating.sourceName': '',

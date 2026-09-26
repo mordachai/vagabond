@@ -108,10 +108,13 @@ export class CraftingHelper {
   /**
    * Entry point for UI/macro calls: runs `execute()` directly, unless the
    * `approval` setting requires a GM chat sign-off and the caller isn't a GM —
-   * then it posts a request card and waits for Approve/Deny.
+   * then it posts a request card and waits for Approve/Deny. Modes flagged
+   * `skipApproval` (Use-Action class features whose own cost is the gate — a
+   * Studied die for Mix / Prima Materia) always run directly.
    */
   static async request(actor, modeKey, recipe, opts = {}) {
-    if (this.config().general.approval !== 'chat' || game.user.isGM) {
+    const skip = !!CONFIG.VAGABOND.craftModes[modeKey]?.skipApproval;
+    if (skip || this.config().general.approval !== 'chat' || game.user.isGM) {
       return this.execute(actor, modeKey, recipe, opts);
     }
     return this.#postApprovalRequest(actor, modeKey, recipe, opts);

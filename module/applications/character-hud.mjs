@@ -605,7 +605,7 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
 
   _slotEntry(item, type) {
     if (!item) return { filled: false, type };
-    const entry = { filled: true, type, id: item.id, img: item.img, name: item.name };
+    const entry = { filled: true, type, id: item.id, img: item.img, name: item.name, inert: !!item.flags?.vagabond?.mix?.inert };
     if (type === 'weapon') {
       const { EquipmentHelper } = globalThis.vagabond.utils;
       entry.versatile = EquipmentHelper.isVersatileWeapon(item);
@@ -663,6 +663,7 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
       row.rangeLabel = item.system?.rangeDisplay || ''; // Close / Near / Far (tooltip)
       row.properties = item.system?.properties?.length ? item.system.propertiesDisplay : '';
     }
+    row.inert = !!item.flags?.vagabond?.mix?.inert;
     return row;
   }
 

@@ -1,5 +1,26 @@
 # Changelog
 
+## v5.43.0
+- **Crafting (new): the Workbench.** Open it from the Downtime window (Craft Item), the character sheet or the Character HUD portrait menu. Turn it on/off and set the rules in the new **Crafting & Relics** settings menu (General / Alchemy / Relics / Mana Crystals tabs).
+  - **Craft tab:** catalog of craftable equipment from the enabled compendiums (search, categories), a detail panel with Value, Materials, estimated Shifts and Slots, and **Ongoing Projects**. "Add to Projects", then **Work a Shift**: spread your Shift Value Limit over your Projects (typed amounts like `30s` or `1g 5s`, ±1 buttons or **Auto-fill**). The Workbench warns before you work a Shift that is over your limit or short on Materials. A Project sits in your inventory until it's finished; abandoning it loses the Materials spent.
+  - **Materials** work as one pool: a single **Materials (1g)** item, spent as the Project progresses (X% worked = X% of the half-value Materials). Leftovers stay as partial bundles; the Materials item's price follows what's left in it.
+  - **Scrap tab:** break an item down for Materials worth half its value (doesn't use your Shift budget).
+  - **GM custom recipes:** drop a world item from the Items sidebar into the catalog to add it for everyone (shown with a "GM" badge).
+  - **GM approval (optional):** crafting requests post an Approve / Deny chat card for the GM.
+- **Alchemist (RAW update):** class pack rewritten to the current rules page — "Big Bang" removed, Training is Arcana / Craft / Medicine, formula picks and a formula value cap come from the class levels.
+  - **Alchemy tab:** learn formulas (up to your picks and value cap) and Craft known formulas for 5s of Materials (Catalyze). Optional Alchemy Tools requirement (off / warn / block).
+  - **Prima Materia:** button in the Alchemy tab — spend a Studied die to create any Alchemical Item worth 10g or less, with no Materials.
+  - **Eureka:** fires on Craft checks, including attacks rolled with Craft.
+  - **Potency:** +N damage per die on alchemicals the Alchemist uses; dice explode on the highest face (L4) or two highest faces (L8).
+  - **Mix tab:** drag two of your Alchemical Items (with a charge left) into the slots and spend a Studied die to make a **Mixture**. Both payloads happen together: same damage type = damage added up; different types = the second type rolls as its own card on the same targets (only on a hit when thrown); on-hit statuses combine. A Mixture goes inert at the start of your next Turn in combat (out of combat: next action or never, a setting). Inert Mixtures are deleted or kept greyed out with an "Inert" badge (setting) and can't be used.
+  - Mix and Prima Materia never need GM approval (the Studied die is the cost).
+- **Throwing alchemicals:** Alchemical Items that deal damage (not potions) now attack as a throw, rolled with **Ranged or Craft** (the better one is picked automatically, or choose "Throw with X"). Far = Hinder, one target, each throw spends a charge hit or miss. "Use (no attack roll)" keeps the old auto-hit card.
+- **Relics:** relic powers of the same family replace each other instead of stacking; Bound relics only work when bound to their wielder (setting, shows an "Unbound" badge on the effect); relic value includes its powers. Relic Forge projects and a GM **Combine** ritual (merge two relics of the same Type) are available through the API.
+- **Mana Crystals (variant, off by default):** crystal sockets on weapons and armor, sized by host and Bonus.
+- Fix: statuses from a consumable used up by the attack (last charge, a Mixture) were lost when the target rolled their Save or the damage was applied — they now apply.
+- Fix: shop Remove Duplicates / stocking no longer merges renamed copies of one compendium entry (e.g. two "Scroll, Spell" for different spells).
+- Compendium: Alembic, Alchemical Item - Complex and a second Herbalism Tools (Alchemy & Medicine) added; Materials (50s) removed (starting packs now give Materials (1g)); "Caestus / Gauntlet" renamed.
+
 ## v5.42.1
 - **Shops: remove duplicates.** Configure Shop → Stock → **Remove Duplicates** merges items stocked more than once (same source, or same name, type and material — e.g. the same item from two compendiums). One copy stays; limited stock quantities add up. Dropping items, folders or compendiums now skips these duplicates too.
 - **Shops: players can read item sheets.** Double-clicking a ware opens its full item sheet (locked, read-only) for every player who can open the store — no more plain-text popup.

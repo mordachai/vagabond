@@ -1,6 +1,8 @@
 import { CraftingHelper } from '../helpers/crafting-helper.mjs';
 import { ProjectHelper } from '../helpers/crafting/project-helper.mjs';
 import { AlchemyHelper } from '../helpers/crafting/alchemy-helper.mjs';
+import { PRIMA_MATERIA_CAP } from '../helpers/crafting/alchemy-mode.mjs';
+import { MixHelper } from '../helpers/crafting/mix-helper.mjs';
 import { CurrencyHelper } from '../helpers/currency-helper.mjs';
 import { MaterialsHelper } from '../helpers/materials-helper.mjs';
 import { CraftCatalog } from '../helpers/crafting/catalog-helper.mjs';
@@ -89,12 +91,17 @@ export class WorkbenchApp extends api.HandlebarsApplicationMixin(api.Application
       allocStep: WorkbenchApp.#onAllocStep,
       autoFill: WorkbenchApp.#onAutoFill,
       craftFormula: WorkbenchApp.#onCraftFormula,
+      primaMateria: WorkbenchApp.#onPrimaMateria,
       craftItemFromCatalog: WorkbenchApp.#onCraftItemFromCatalog,
       forgetFormula: WorkbenchApp.#onForgetFormula,
       learnFormulaPick: WorkbenchApp.#onLearnFormulaPick,
       selectFormula: WorkbenchApp.#onSelectFormula,
       sortFormulas: WorkbenchApp.#onSortFormulas,
       toggleFormulaEdit: WorkbenchApp.#onToggleFormulaEdit,
+      pickMixIngredient: WorkbenchApp.#onPickMixIngredient,
+      clearMixSlot: WorkbenchApp.#onClearMixSlot,
+      mixIngredients: WorkbenchApp.#onMixIngredients,
+      discardMix: WorkbenchApp.#onDiscardMix,
     },
   };
 
@@ -122,6 +129,9 @@ export class WorkbenchApp extends api.HandlebarsApplicationMixin(api.Application
   #formulaEditMode = false;
   #savedScroll = new Map();
   #savedSearch = '';
+  /** Mix tab: the two picked ingredient item ids (null = empty slot) + list search text. */
+  #mixSlots = [null, null];
+  #mixSearch = '';
 
   /**
    * Every render replaces the DOM wholesale, so scroll position + the formula
@@ -147,6 +157,9 @@ export class WorkbenchApp extends api.HandlebarsApplicationMixin(api.Application
     // Catalyze AE. Everyone else crafts alchemicals from the Craft catalog.
     const isAlchemist = AlchemyHelper.formulaGrantsFor(this.actor) > 0;
     if (this.#tab === 'alchemy' && !isAlchemist) this.#tab = 'craft';
+    const mixOn = !!this.actor.system.craft?.mix;
+    if (this.#tab === 'mix' && !mixOn) this.#tab = 'craft';
+    const mix = this.#tab === 'mix' ? this.#prepareMixContext() : null;
     const budget = CraftingHelper.valuePerShift(this.actor);
     const materials = MaterialsHelper.totalValue(this.actor);
     this.#budget = budget;
@@ -212,6 +225,8 @@ export class WorkbenchApp extends api.HandlebarsApplicationMixin(api.Application
     );
 
     const canLearnFormula = catalyzeOn && formulaPicksRemaining > 0;
+    const primaMateriaOn = !!this.actor.system.craft?.primaMateria;
+    const studiedDice = this.actor.system.studiedDice ?? 0;
     let formulaGroups = [];
     if (this.#tab === 'alchemy') {
       const known = new Set(this.actor.system.craft?.formulas ?? []);
@@ -237,6 +252,7 @@ export class WorkbenchApp extends api.HandlebarsApplicationMixin(api.Application
         nameLower: a.name.toLowerCase(),
         selected: a.uuid === this.#selectedFormulaUuid,
         ownedQty: ownedByUuid.get(a.uuid) ?? 0,
+        primaOk: a.cost <= PRIMA_MATERIA_CAP,
       }));
 
       if (this.#formulaSort === 'cost') {
@@ -271,6 +287,8 @@ export class WorkbenchApp extends api.HandlebarsApplicationMixin(api.Application
       showCraft: this.#tab === 'craft',
       showScrap: this.#tab === 'scrap',
       showAlchemy: this.#tab === 'alchemy',
+      showMix: this.#tab === 'mix',
+      mixOn, mix,
       isGM: game.user.isGM,
       budget, budgetLabel: CurrencyHelper.format(budget),
       materials, materialsLabel: CurrencyHelper.format(materials),
@@ -281,6 +299,7 @@ export class WorkbenchApp extends api.HandlebarsApplicationMixin(api.Application
       level, knownCount,
       wealthLabel, partyWealthLabel, partyMaterialsLabel,
       canLearnFormula,
+      primaMateriaOn, studiedDice,
       knownFormulas,
       formulaSlots,
       formulaEditMode: this.#formulaEditMode,
@@ -352,6 +371,68 @@ export class WorkbenchApp extends api.HandlebarsApplicationMixin(api.Application
       canCraft: value > 0,
       isCustom: CraftCatalog.isRecipe(doc),
       canUnregister: game.user.isGM && CraftCatalog.isRecipe(doc),
+    };
+  }
+
+  /** Mix tab: owned ingredients, the two slots, the combined-payload preview, live Mixtures. */
+  #prepareMixContext() {
+    const damageView = (d) => d && ({
+      amount: d.amount,
+      typeLabel: game.i18n.localize(CONFIG.VAGABOND.damageTypes?.[d.type] ?? d.type),
+      icon: CONFIG.VAGABOND.damageTypeIcons?.[d.type] ?? '',
+    });
+    const typeLabel = (item) => game.i18n.localize(CONFIG.VAGABOND.alchemicalTypes?.[item.system.alchemicalType] ?? item.system.alchemicalType ?? '');
+
+    // Drop picks whose item was used up / deleted since.
+    this.#mixSlots = this.#mixSlots.map(id => (id && MixHelper.isMixableItem(this.actor.items.get(id)) ? id : null));
+
+    const ingredients = this.actor.items
+      .filter(i => MixHelper.isMixableItem(i))
+      .sort((a, b) => a.name.localeCompare(b.name))
+      .map(i => ({
+        id: i.id, name: i.name, img: i.img, nameLower: i.name.toLowerCase(),
+        typeLabel: typeLabel(i),
+        damage: damageView(MixHelper.damageOf(i)),
+        charges: CONFIG.Item.documentClass._chargesRemaining(i),
+        picked: this.#mixSlots.includes(i.id),
+      }));
+
+    const picked = this.#mixSlots.map(id => (id ? this.actor.items.get(id) : null));
+    const slots = picked.map(i => (i ? { filled: true, id: i.id, name: i.name, img: i.img } : { filled: false }));
+
+    let preview = null;
+    if (picked[0] && picked[1]) {
+      const [a, b] = picked.map(i => i.toObject());
+      const payload = MixHelper.combinePayloads(a, b);
+      const main = MixHelper.damageOf({ system: payload });
+      const companion = payload.companionIndex === null ? null : MixHelper.damageOf([a, b][payload.companionIndex]);
+      const statusName = (id) => game.i18n.localize(CONFIG.statusEffects.find(s => s.id === id)?.name ?? id);
+      const probe = { type: 'equipment', system: { equipmentType: 'alchemical', damageType: payload.damageType, damageAmount: payload.damageAmount } };
+      preview = {
+        damage: damageView(main),
+        companion: damageView(companion),
+        statuses: payload.causedStatuses.map(s => statusName(s.statusId)),
+        thrown: globalThis.vagabond.utils.EquipmentHelper.isThrownAlchemical(probe),
+        expiryLabel: game.i18n.localize(MixHelper.expiryKeyFor(this.actor)),
+      };
+    }
+
+    const studiedDice = this.actor.system.studiedDice ?? 0;
+    const blockKey = !studiedDice ? 'VAGABOND.Craft.Workbench.MixNoStudied'
+      : !preview ? 'VAGABOND.Craft.Workbench.MixPickTwo' : null;
+
+    const mixtures = this.actor.items
+      .filter(i => i.flags?.vagabond?.mix)
+      .map(i => ({
+        id: i.id, name: i.name, img: i.img,
+        inert: !!i.flags.vagabond.mix.inert,
+        statusLabel: game.i18n.localize(MixHelper.statusKeyOf(i)),
+      }));
+
+    return {
+      studiedDice, ingredients, slots, preview, mixtures,
+      canMix: !blockKey,
+      blockHint: blockKey ? game.i18n.localize(blockKey) : '',
     };
   }
 
@@ -502,6 +583,17 @@ export class WorkbenchApp extends api.HandlebarsApplicationMixin(api.Application
     this.render();
   }
 
+  /** Prima Materia: spend a Studied die → one copy of any ≤10g alchemical, no Materials. */
+  static async #onPrimaMateria(event, target) {
+    const uuid = target.closest('[data-formula-uuid]')?.dataset.formulaUuid;
+    if (!uuid) return;
+    // PrimaMateriaMode.evaluate reads the source synchronously — prime the cache.
+    await fromUuid(uuid);
+    const result = await CraftingHelper.request(this.actor, 'primaMateria', { itemUuid: uuid });
+    if (!result.ok) ui.notifications.warn(CraftingHelper.reasonLabel(result.reason));
+    this.render();
+  }
+
   /**
    * "Craft as Project" — RAW allows Crafting any Item (known formula or not) via
    * the normal Craft Difficulty/Shift-budget rules (docs' Craft table); knowing the
@@ -553,6 +645,107 @@ export class WorkbenchApp extends api.HandlebarsApplicationMixin(api.Application
 
   static #onToggleFormulaEdit() {
     this.#formulaEditMode = !this.#formulaEditMode;
+    this.render();
+  }
+
+  /** Click an ingredient: un-pick it if picked, else fill the first empty slot (or replace the second). */
+  static #onPickMixIngredient(event, target) {
+    const id = target.closest('[data-item-id]')?.dataset.itemId;
+    if (!id) return;
+    this.#pickMixIngredient(id);
+  }
+
+  #pickMixIngredient(id) {
+    const at = this.#mixSlots.indexOf(id);
+    if (at >= 0) this.#mixSlots[at] = null;
+    else {
+      const empty = this.#mixSlots.indexOf(null);
+      this.#mixSlots[empty >= 0 ? empty : 1] = id;
+    }
+    this.render();
+  }
+
+  /** Put `id` into slot `index`; if it already sat in the other slot, it moves. */
+  #setMixSlot(index, id) {
+    const other = index === 0 ? 1 : 0;
+    if (this.#mixSlots[other] === id) this.#mixSlots[other] = null;
+    this.#mixSlots[index] = id;
+    this.render();
+  }
+
+  /**
+   * Mix tab drag-and-drop: ingredient rows are draggable (standard Item drag data,
+   * so an owned alchemical dragged from the character sheet works too); each slot
+   * is its own drop target. Clicking a row still picks it.
+   */
+  #wireMixDragDrop(signal) {
+    const tab = this.element.querySelector('.wb-mix-tab');
+    if (!tab) return;
+
+    tab.querySelectorAll('.wb-cat-row[data-item-id]').forEach(row => {
+      row.addEventListener('dragstart', (ev) => {
+        const item = this.actor.items.get(row.dataset.itemId);
+        if (!item) return;
+        ev.dataTransfer.setData('text/plain', JSON.stringify(item.toDragData()));
+        ev.dataTransfer.effectAllowed = 'copy';
+        row.classList.add('is-dragging');
+        tab.classList.add('is-mix-dragging');
+      }, { signal });
+      row.addEventListener('dragend', () => {
+        row.classList.remove('is-dragging');
+        tab.classList.remove('is-mix-dragging');
+      }, { signal });
+    });
+
+    tab.querySelectorAll('.wb-mix-slot[data-slot]').forEach(slot => {
+      const accept = (ev) => { ev.preventDefault(); slot.classList.add('drag-over'); };
+      slot.addEventListener('dragenter', accept, { signal });
+      slot.addEventListener('dragover', accept, { signal });
+      slot.addEventListener('dragleave', (ev) => {
+        if (!slot.contains(ev.relatedTarget)) slot.classList.remove('drag-over');
+      }, { signal });
+      slot.addEventListener('drop', async (ev) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+        slot.classList.remove('drag-over');
+        tab.classList.remove('is-mix-dragging');
+        const data = foundry.applications.ux.TextEditor.implementation.getDragEventData(ev);
+        if (data?.type !== 'Item' || !data.uuid) return;
+        const source = await fromUuid(data.uuid);
+        if (source?.parent?.uuid !== this.actor.uuid || !MixHelper.isMixableItem(source)) {
+          ui.notifications.warn(game.i18n.localize('VAGABOND.Craft.Workbench.MixOwnedOnly'));
+          return;
+        }
+        this.#setMixSlot(Number(slot.dataset.slot) || 0, source.id);
+      }, { signal });
+    });
+  }
+
+  static #onClearMixSlot(event, target) {
+    this.#mixSlots[Number(target.dataset.slot) || 0] = null;
+    this.render();
+  }
+
+  static async #onMixIngredients() {
+    const [itemIdA, itemIdB] = this.#mixSlots;
+    const result = await CraftingHelper.request(this.actor, 'mix', { itemIdA, itemIdB });
+    if (!result.ok) {
+      ui.notifications.warn(CraftingHelper.reasonLabel(result.reason));
+      return;
+    }
+    this.#mixSlots = [null, null];
+    this.render();
+  }
+
+  static async #onDiscardMix(event, target) {
+    const item = this.actor.items.get(target.closest('[data-item-id]')?.dataset.itemId);
+    if (!item) return;
+    const confirmed = await foundry.applications.api.DialogV2.confirm({
+      window: { title: game.i18n.localize('VAGABOND.Craft.Workbench.DiscardMix') },
+      content: `<p>${game.i18n.format('VAGABOND.Craft.Workbench.DiscardMixConfirm', { name: foundry.utils.escapeHTML(item.name) })}</p>`,
+    });
+    if (!confirmed) return;
+    await item.delete();
     this.render();
   }
 
@@ -640,6 +833,26 @@ export class WorkbenchApp extends api.HandlebarsApplicationMixin(api.Application
         this.#applyCatalogFilter();
       }, { signal });
       this.#applyCatalogFilter();
+    }
+
+    this.#wireMixDragDrop(signal);
+
+    const mixSearch = this.element.querySelector('.wb-mix-search');
+    if (mixSearch) {
+      const apply = () => {
+        const q = this.#mixSearch.trim().toLowerCase();
+        let visible = 0;
+        this.element.querySelectorAll('.wb-mix-tab .wb-cat-row').forEach(row => {
+          const match = !q || (row.dataset.name ?? '').includes(q);
+          row.classList.toggle('is-hidden', !match);
+          if (match) visible++;
+        });
+        const noMatch = this.element.querySelector('.wb-mix-tab .wb-catalog-nomatch');
+        if (noMatch) noMatch.hidden = visible > 0 || !this.element.querySelector('.wb-mix-tab .wb-cat-row');
+      };
+      mixSearch.value = this.#mixSearch;
+      mixSearch.addEventListener('input', () => { this.#mixSearch = mixSearch.value; apply(); }, { signal });
+      apply();
     }
 
     const searchInput = this.element.querySelector('.wb-formula-search');
@@ -810,6 +1023,8 @@ export class WorkbenchApp extends api.HandlebarsApplicationMixin(api.Application
       createItem: Hooks.on('createItem', (item) => onItem(item)),
       updateItem: Hooks.on('updateItem', (item, changes) => onItem(item, changes)),
       deleteItem: Hooks.on('deleteItem', (item) => onItem(item)),
+      // Studied dice / craft flags live on the actor itself (Mix + Prima Materia gates).
+      updateActor: Hooks.on('updateActor', (actor) => { if (actor.uuid === this.actor.uuid) this.#renderDebounce(); }),
     };
   }
 

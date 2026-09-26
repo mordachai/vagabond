@@ -58,32 +58,55 @@ export const AlchemyMode = {
     const spend = await MaterialsHelper.spend(actor, 50);
     if (!spend.ok) return { ok: false, reason: 'materials' };
 
-    const existing = actor.items.find(i => i.flags?.core?.sourceId === recipe.formulaUuid && i.type === 'equipment');
-    let created;
-    if (existing) {
-      await existing.update({ 'system.quantity': (existing.system.quantity ?? 1) + 1 });
-      created = existing;
-    } else {
-      const data = source.toObject();
-      delete data._id;
-      foundry.utils.setProperty(data, 'flags.core.sourceId', recipe.formulaUuid);
-      [created] = await actor.createEmbeddedDocuments('Item', [data]);
-    }
-
-    const card = new VagabondChatCard()
-      .setType('generic')
-      .setActor(actor)
-      .setTitle(game.i18n.localize('VAGABOND.Craft.Modes.Alchemy.Label'))
-      .setSubtitle(actor.name)
-      .setDescription(`<p>${game.i18n.format('VAGABOND.Craft.Alchemy.Result', {
-        actor: `<strong>${foundry.utils.escapeHTML(actor.name)}</strong>`,
-        item: `<strong>${foundry.utils.escapeHTML(created.name)}</strong>`,
-      })}</p>`);
-    await card.send();
-
+    const created = await grantAlchemical(actor, recipe.formulaUuid, source, 'VAGABOND.Craft.Modes.Alchemy.Label');
     return { ok: true, createdItem: created };
   },
 };
+
+/**
+ * Give `actor` one of the alchemical `source` (compendium `uuid`): +1 quantity on
+ * an owned copy crafted from the same uuid (`flags.core.sourceId`), else a new
+ * item stamped with that sourceId — so the Workbench's owned-quantity badge
+ * counts it. Posts the "X crafted Y" card under `titleKey`.
+ */
+async function grantAlchemical(actor, uuid, source, titleKey) {
+  const existing = actor.items.find(i => i.flags?.core?.sourceId === uuid && i.type === 'equipment');
+  let created;
+  if (existing) {
+    await existing.update({ 'system.quantity': (existing.system.quantity ?? 1) + 1 });
+    created = existing;
+  } else {
+    const data = source.toObject();
+    delete data._id;
+    foundry.utils.setProperty(data, 'flags.core.sourceId', uuid);
+    [created] = await actor.createEmbeddedDocuments('Item', [data]);
+  }
+
+  const card = new VagabondChatCard()
+    .setType('generic')
+    .setActor(actor)
+    .setTitle(game.i18n.localize(titleKey))
+    .setSubtitle(actor.name)
+    .setDescription(`<p>${game.i18n.format('VAGABOND.Craft.Alchemy.Result', {
+      actor: `<strong>${foundry.utils.escapeHTML(actor.name)}</strong>`,
+      item: `<strong>${foundry.utils.escapeHTML(created.name)}</strong>`,
+    })}</p>`);
+  await card.send();
+  return created;
+}
+
+/** RAW Prima Materia cap: an Alchemical Item worth 10g or less. */
+export const PRIMA_MATERIA_CAP = 10000;
+
+/**
+ * Stored value (copper) of an alchemical, from a full document OR a compendium
+ * index entry. `system.cost` is derived (absent from indexes); alchemicals carry
+ * no material, so `baseCost` is the same number. Null when neither is present.
+ */
+function alchemicalValue(source) {
+  const raw = source?.system?.cost ?? source?.system?.baseCost;
+  return raw ? CurrencyHelper.toCopper(raw) : null;
+}
 
 /**
  * Prima Materia (L10): spend a Studied die to Craft any Alchemical Item worth
@@ -94,20 +117,23 @@ export const PrimaMateriaMode = {
   label: 'VAGABOND.Craft.Modes.PrimaMateria.Label',
   icon: 'fa-solid fa-mortar-pestle',
   time: 'useAction',
+  skipApproval: true,
 
   available(actor) {
     return actor?.type === 'character' && !!actor.system.craft?.primaMateria;
   },
 
+  /** Callers should `await fromUuid(recipe.itemUuid)` first so the sync lookup sees the full document. */
   evaluate(actor, recipe) {
     const checks = [];
     checks.push({ ok: !!actor.system.craft?.primaMateria, key: 'primaMateria', label: 'VAGABOND.Craft.Checks.PrimaMateria' });
     checks.push({ ok: (actor.system.studiedDice ?? 0) > 0, key: 'studiedDice', label: 'VAGABOND.Craft.Checks.StudiedDice' });
 
     const source = recipe?.itemUuid ? fromUuidSync(recipe.itemUuid) : null;
-    checks.push({ ok: !!source, key: 'target', label: 'VAGABOND.Craft.Checks.Target' });
-    const valueOk = !source || CurrencyHelper.toCopper(source.system?.cost) <= 10000; // 10g
-    checks.push({ ok: valueOk, key: 'valueCap', label: 'VAGABOND.Craft.Checks.PrimaMateriaValueCap' });
+    const isAlchemical = source?.type === 'equipment' && source.system?.equipmentType === 'alchemical';
+    checks.push({ ok: isAlchemical, key: 'target', label: 'VAGABOND.Craft.Checks.Target' });
+    const value = alchemicalValue(source);
+    checks.push({ ok: value !== null && value <= PRIMA_MATERIA_CAP, key: 'valueCap', label: 'VAGABOND.Craft.Checks.PrimaMateriaValueCap' });
 
     return { ok: checks.every(c => c.ok), checks, cost: { copper: 0, materials: 0, studiedDice: 1, action: 'use' } };
   },
@@ -120,21 +146,7 @@ export const PrimaMateriaMode = {
     if (!source) return { ok: false, reason: 'noActor' };
 
     await actor.update({ 'system.studiedDice': actor.system.studiedDice - 1 });
-    const data = source.toObject();
-    delete data._id;
-    const [created] = await actor.createEmbeddedDocuments('Item', [data]);
-
-    const card = new VagabondChatCard()
-      .setType('generic')
-      .setActor(actor)
-      .setTitle(game.i18n.localize('VAGABOND.Craft.Modes.PrimaMateria.Label'))
-      .setSubtitle(actor.name)
-      .setDescription(`<p>${game.i18n.format('VAGABOND.Craft.Alchemy.Result', {
-        actor: `<strong>${foundry.utils.escapeHTML(actor.name)}</strong>`,
-        item: `<strong>${foundry.utils.escapeHTML(created.name)}</strong>`,
-      })}</p>`);
-    await card.send();
-
+    const created = await grantAlchemical(actor, recipe.itemUuid, source, 'VAGABOND.Craft.Modes.PrimaMateria.Label');
     return { ok: true, createdItem: created };
   },
 };

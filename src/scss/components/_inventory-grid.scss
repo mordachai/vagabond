@@ -332,6 +332,22 @@
   }
 
   // Thrown-weapon stack count. L-click +1 (retrieve), R-click −1.
+  // Inert Mix (mixInertBehavior 'keep') — greyed, Use blocked in checkConsumableRequirements
+  &.is-inert .item-image { filter: grayscale(1) brightness(0.6); }
+  .item-inert-badge {
+    position: absolute;
+    top: 2px;
+    left: 3px;
+    z-index: 10;
+    font-size: 9px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: $c-white;
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 3px;
+    padding: 0 3px;
+  }
+
   .item-qty-badge {
     position: absolute;
     bottom: 2px;

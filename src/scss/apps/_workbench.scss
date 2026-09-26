@@ -706,7 +706,8 @@
   /* Craft tab: catalog | (selected detail / ongoing Projects / Shift footer) */
   /* ------------------------------------------------------------------ */
 
-  .wb-craft-tab {
+  .wb-craft-tab,
+  .wb-mix-tab {
     height: 100%;
     min-height: 0;
     display: grid;
@@ -1253,5 +1254,133 @@
     cursor: pointer;
 
     &:hover { border-color: $c-yellow; }
+  }
+
+  /* ------------------------------------------------------------------ */
+  /* Mix tab: owned alchemicals | (two slots + preview / Mixtures list) */
+  /* ------------------------------------------------------------------ */
+
+  .wb-mix-slots {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .wb-mix-plus { color: $c-yellow; flex: 0 0 auto; }
+
+  .wb-mix-slot {
+    position: relative;
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.5rem 0.3rem;
+    border: 1px dashed $c-faint;
+    border-radius: 6px;
+    background: $c-inset-2;
+    text-align: center;
+    font-size: 0.72rem;
+    color: $c-muted;
+
+    > i { font-size: 1.3rem; opacity: 0.5; }
+
+    img {
+      width: 48px;
+      height: 48px;
+      object-fit: cover;
+      border: 1px solid $c-yellow;
+      border-radius: 6px;
+      background: $c-black;
+    }
+
+    &.filled { border-style: solid; border-color: $c-yellow; color: inherit; }
+  }
+
+  .wb-mix-slot-name {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-family: $font-title;
+    font-size: 0.8rem;
+  }
+
+  .wb-mix-slot-clear {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 18px;
+    height: 18px;
+    line-height: normal;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: $c-muted;
+    font-size: 0.7rem;
+    cursor: pointer;
+
+    &:hover { color: $c-red; }
+  }
+
+  .wb-mix-preview {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    margin: 0.5rem 0;
+    padding-top: 0.4rem;
+    border-top: 1px solid $c-faint;
+  }
+
+  .wb-mix-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+
+    > span {
+      font-family: $font-secondary;
+      font-size: 0.65rem;
+      color: $c-muted;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    strong { text-align: right; }
+    i { color: $c-yellow; }
+  }
+
+  .wb-mix-status {
+    display: inline-block;
+    margin-left: 0.25rem;
+    padding: 0 0.3rem;
+    border: 1px solid $c-tan-lite;
+    border-radius: 3px;
+    font-size: 0.68rem;
+  }
+
+  .wb-mix-bench .wb-stage-btn { width: 100%; }
+
+  .wb-mix-row-status {
+    font-size: 0.7rem;
+    color: $c-muted;
+  }
+
+  .wb-mix-row.is-inert img { filter: grayscale(1) brightness(0.6); }
+
+  .wb-mix-ingredient {
+    cursor: grab;
+    img { -webkit-user-drag: none; }
+    &.is-dragging { opacity: 0.45; }
+  }
+
+  // While an ingredient is dragged, every slot shows it's a target; the hovered one glows.
+  .wb-mix-tab.is-mix-dragging .wb-mix-slot { border-color: $c-yellow; }
+  .wb-mix-slot.drag-over {
+    border-style: solid;
+    border-color: $c-yellow;
+    box-shadow: 0 0 8px -1px $c-yellow, inset 0 0 0 1px $c-yellow;
   }
 }

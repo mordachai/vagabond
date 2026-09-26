@@ -302,11 +302,18 @@ export class VagabondChatCard {
       }
 
       if (this.data.actor) {
+        // Consumables (and Mixes) are usually deleted right after their card posts —
+        // snapshot them so save/apply buttons can still resolve their statuses
+        // (VagabondDamageHelper._resolveSourceItem).
+        const item = this.data.item;
+        const snapshot = (item?.type === 'equipment' && item.actor
+          && (item.system?.isConsumable || item.flags?.vagabond?.mix)) ? item.toObject() : null;
         msgData.flags = {
             vagabond: {
                 actorId: this.data.actor.uuid,
-                itemId: this.data.item?.id || null,
+                itemId: item?.id || null,
                 targetsAtRollTime: this.data.targetsAtRollTime || [],
+                ...(snapshot ? { itemSnapshot: snapshot } : {}),
                 ...(this.data.rerollData ? { rerollData: this.data.rerollData } : {})
             }
         };

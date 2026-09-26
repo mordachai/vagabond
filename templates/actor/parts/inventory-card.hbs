@@ -2,7 +2,8 @@
 <div
   class='inventory-card draggable
          {{#if equipped}}equipped{{/if}}
-         {{#if isSlotZero}}slot-zero{{/if}}'
+         {{#if isSlotZero}}slot-zero{{/if}}
+         {{#if item.flags.vagabond.mix.inert}}is-inert{{/if}}'
   data-item-id='{{item._id}}'
   data-uuid='{{item.uuid}}'
   data-item-slots='{{item.system.slots}}'
@@ -15,6 +16,7 @@
 >
   <img src='{{item.img}}' alt='{{item.name}}' class='item-image' />
   <div class='item-name-display'>{{item.name}}</div>
+  {{#if item.flags.vagabond.mix.inert}}<div class='item-inert-badge'>{{localize 'VAGABOND.Craft.Mix.InertBadge'}}</div>{{/if}}
   {{#if usesPips.length}}
     <div class='item-uses-pips'>
       {{#each usesPips as |pip|}}

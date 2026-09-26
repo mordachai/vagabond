@@ -3944,6 +3944,10 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   align-items: center;
   gap: 5px;
 }
+.vbd-hud .vh-slot.is-inert img,
+.vbd-hud .vh-inv.is-inert .vh-inv-img {
+  filter: grayscale(1) brightness(0.6);
+}
 .vbd-hud .vh-slot {
   width: 32px;
   height: 32px;
@@ -12917,6 +12921,9 @@ ol#combat-tracker.directory-list {
   /* Craft tab: catalog | (selected detail / ongoing Projects / Shift footer) */
   /* ------------------------------------------------------------------ */
   /* Right column */
+  /* ------------------------------------------------------------------ */
+  /* Mix tab: owned alchemicals | (two slots + preview / Mixtures list) */
+  /* ------------------------------------------------------------------ */
 }
 .workbench-app .window-content {
   padding: 0.5rem;
@@ -13626,7 +13633,8 @@ ol#combat-tracker.directory-list {
   color: var(--vagabond-c-red);
   opacity: 1;
 }
-.workbench-app .wb-craft-tab {
+.workbench-app .wb-craft-tab,
+.workbench-app .wb-mix-tab {
   height: 100%;
   min-height: 0;
   display: grid;
@@ -13634,7 +13642,8 @@ ol#combat-tracker.directory-list {
   gap: 0.85rem;
   border-radius: 6px;
 }
-.workbench-app .wb-craft-tab.drag-over {
+.workbench-app .wb-craft-tab.drag-over,
+.workbench-app .wb-mix-tab.drag-over {
   outline: 2px dashed var(--vagabond-c-chat-yellow);
   outline-offset: 2px;
 }
@@ -14205,6 +14214,136 @@ ol#combat-tracker.directory-list {
 }
 .workbench-app .wb-autofill-btn:hover {
   border-color: var(--vagabond-c-chat-yellow);
+}
+.workbench-app .wb-mix-slots {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.workbench-app .wb-mix-plus {
+  color: var(--vagabond-c-chat-yellow);
+  flex: 0 0 auto;
+}
+.workbench-app .wb-mix-slot {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.5rem 0.3rem;
+  border: 1px dashed var(--vagabond-c-faint);
+  border-radius: 6px;
+  background: var(--vagabond-c-inset-2);
+  text-align: center;
+  font-size: 0.72rem;
+  color: var(--vagabond-c-muted);
+}
+.workbench-app .wb-mix-slot > i {
+  font-size: 1.3rem;
+  opacity: 0.5;
+}
+.workbench-app .wb-mix-slot img {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border: 1px solid var(--vagabond-c-chat-yellow);
+  border-radius: 6px;
+  background: var(--vagabond-c-black);
+}
+.workbench-app .wb-mix-slot.filled {
+  border-style: solid;
+  border-color: var(--vagabond-c-chat-yellow);
+  color: inherit;
+}
+.workbench-app .wb-mix-slot-name {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: "Germania", serif;
+  font-size: 0.8rem;
+}
+.workbench-app .wb-mix-slot-clear {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 18px;
+  height: 18px;
+  line-height: normal;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--vagabond-c-muted);
+  font-size: 0.7rem;
+  cursor: pointer;
+}
+.workbench-app .wb-mix-slot-clear:hover {
+  color: var(--vagabond-c-red);
+}
+.workbench-app .wb-mix-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  margin: 0.5rem 0;
+  padding-top: 0.4rem;
+  border-top: 1px solid var(--vagabond-c-faint);
+}
+.workbench-app .wb-mix-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+}
+.workbench-app .wb-mix-line > span {
+  font-family: "Manofa", serif;
+  font-size: 0.65rem;
+  color: var(--vagabond-c-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.workbench-app .wb-mix-line strong {
+  text-align: right;
+}
+.workbench-app .wb-mix-line i {
+  color: var(--vagabond-c-chat-yellow);
+}
+.workbench-app .wb-mix-status {
+  display: inline-block;
+  margin-left: 0.25rem;
+  padding: 0 0.3rem;
+  border: 1px solid var(--vagabond-c-tan-lite);
+  border-radius: 3px;
+  font-size: 0.68rem;
+}
+.workbench-app .wb-mix-bench .wb-stage-btn {
+  width: 100%;
+}
+.workbench-app .wb-mix-row-status {
+  font-size: 0.7rem;
+  color: var(--vagabond-c-muted);
+}
+.workbench-app .wb-mix-row.is-inert img {
+  filter: grayscale(1) brightness(0.6);
+}
+.workbench-app .wb-mix-ingredient {
+  cursor: grab;
+}
+.workbench-app .wb-mix-ingredient img {
+  -webkit-user-drag: none;
+}
+.workbench-app .wb-mix-ingredient.is-dragging {
+  opacity: 0.45;
+}
+.workbench-app .wb-mix-tab.is-mix-dragging .wb-mix-slot {
+  border-color: var(--vagabond-c-chat-yellow);
+}
+.workbench-app .wb-mix-slot.drag-over {
+  border-style: solid;
+  border-color: var(--vagabond-c-chat-yellow);
+  box-shadow: 0 0 8px -1px var(--vagabond-c-chat-yellow), inset 0 0 0 1px var(--vagabond-c-chat-yellow);
 }
 
 /* Context menus - imported at top level because they render outside sheets (appended to document.body) */
@@ -18706,6 +18845,22 @@ ol#combat-tracker.directory-list {
   line-clamp: 3;
   -webkit-box-orient: vertical;
   color: var(--vagabond-c-title2);
+}
+.vagabond .inventory-card.is-inert .item-image {
+  filter: grayscale(1) brightness(0.6);
+}
+.vagabond .inventory-card .item-inert-badge {
+  position: absolute;
+  top: 2px;
+  left: 3px;
+  z-index: 10;
+  font-size: 9px;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: var(--vagabond-c-white);
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 3px;
+  padding: 0 3px;
 }
 .vagabond .inventory-card .item-qty-badge {
   position: absolute;

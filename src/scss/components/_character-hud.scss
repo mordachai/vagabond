@@ -305,6 +305,10 @@
     gap: 5px;
   }
 
+  // Inert Mix — greyed art in inventory rows + quick slots
+  .vh-slot.is-inert img,
+  .vh-inv.is-inert .vh-inv-img { filter: grayscale(1) brightness(0.6); }
+
   .vh-slot {
     width: 32px;
     height: 32px;

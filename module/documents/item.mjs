@@ -152,6 +152,12 @@ export class VagabondItem extends Item {
   async checkConsumableRequirements() {
     if (this.type !== 'equipment') return true;
 
+    // An inert Mix (mixInertBehavior 'keep') can't be Used or thrown
+    if (this.flags?.vagabond?.mix?.inert) {
+      ui.notifications.warn(game.i18n.format('VAGABOND.Craft.Mix.InertBlocked', { name: this.name }));
+      return false;
+    }
+
     // If this item has a linked consumable, check if it's available
     if (this.system.linkedConsumable) {
       const linkedItem = this.actor?.items.get(this.system.linkedConsumable);
