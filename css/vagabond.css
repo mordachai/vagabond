@@ -11954,6 +11954,7 @@ ol#combat-tracker.directory-list {
 }
 .vagabond.shop-app .shop-app-body.sidebar-collapsed .shop-app-sidebar-title,
 .vagabond.shop-app .shop-app-body.sidebar-collapsed .shop-cat-label,
+.vagabond.shop-app .shop-app-body.sidebar-collapsed .shop-cat-toggle,
 .vagabond.shop-app .shop-app-body.sidebar-collapsed .shop-cat-children {
   display: none;
 }
@@ -12035,6 +12036,35 @@ ol#combat-tracker.directory-list {
 .vagabond.shop-app .shop-cat.active i {
   color: var(--vagabond-c-chat-yellow);
 }
+.vagabond.shop-app .shop-cat.active-parent {
+  background: var(--vagabond-c-surface);
+}
+.vagabond.shop-app .shop-cat.active-parent i {
+  color: var(--vagabond-c-chat-yellow);
+}
+.vagabond.shop-app .shop-cat-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 3px;
+}
+.vagabond.shop-app .shop-cat-toggle i {
+  width: auto;
+  font-size: 0.7em;
+  color: var(--vagabond-c-muted);
+  transition: transform 0.15s;
+}
+.vagabond.shop-app .shop-cat-toggle.collapsed i {
+  transform: rotate(-90deg);
+}
+.vagabond.shop-app .shop-cat-toggle:hover {
+  background: var(--vagabond-c-inset-2);
+}
+.vagabond.shop-app .shop-cat-toggle:hover i {
+  color: var(--vagabond-c-text-primary);
+}
 .vagabond.shop-app .shop-cat-children {
   display: flex;
   flex-direction: column;
@@ -12042,6 +12072,9 @@ ol#combat-tracker.directory-list {
   margin-left: 14px;
   padding-left: 6px;
   border-left: 1px solid var(--vagabond-c-tan-lite);
+}
+.vagabond.shop-app .shop-cat-children.collapsed {
+  display: none;
 }
 .vagabond.shop-app .shop-cat-child {
   padding: 4px 8px;
@@ -14344,6 +14377,48 @@ ol#combat-tracker.directory-list {
   border-style: solid;
   border-color: var(--vagabond-c-chat-yellow);
   box-shadow: 0 0 8px -1px var(--vagabond-c-chat-yellow), inset 0 0 0 1px var(--vagabond-c-chat-yellow);
+}
+
+/* Party supplies breakdown - renders inside Foundry's #tooltip, outside sheets */
+.party-supplies-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 160px;
+  text-align: left;
+}
+.party-supplies-breakdown .psb-title {
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding-bottom: 3px;
+  margin-bottom: 2px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+}
+.party-supplies-breakdown .psb-row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+.party-supplies-breakdown .psb-row.psb-empty {
+  opacity: 0.5;
+}
+.party-supplies-breakdown .psb-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.party-supplies-breakdown .psb-value {
+  min-width: 2.5em;
+  text-align: right;
+  font-weight: bold;
+  font-variant-numeric: tabular-nums;
+}
+.party-supplies-breakdown .currency-abbr {
+  font-size: 0.75em;
+  margin-left: 1px;
 }
 
 /* Context menus - imported at top level because they render outside sheets (appended to document.body) */
@@ -22117,6 +22192,19 @@ details[open] .vagabond .npc-immunity-toggle i {
   font-weight: bold;
   color: var(--vagabond-c-chat-yellow);
   min-width: 20px;
+}
+.vagabond .party-supplies-bar .supplies-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.vagabond .party-supplies-bar .has-breakdown {
+  cursor: help;
+  border-radius: 3px;
+  transition: background-color 0.15s;
+}
+.vagabond .party-supplies-bar .has-breakdown:hover {
+  background-color: color-mix(in srgb, var(--vagabond-c-chat-yellow) 12%, transparent);
 }
 .vagabond .party-supplies-bar .supplies-sep {
   color: var(--vagabond-c-tan);

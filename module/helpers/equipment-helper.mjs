@@ -130,8 +130,8 @@ export class EquipmentHelper {
     return !VagabondDamageHelper.isRestorativeDamageType(damageType);
   }
 
-  /** Skills a thrown Alchemical Item can attack with (Ranged, or Craft). */
-  static THROWN_ALCHEMICAL_SKILLS = ['ranged', 'craft'];
+  /** Skills a thrown Alchemical Item can attack with (Melee, Finesse or Craft). */
+  static THROWN_ALCHEMICAL_SKILLS = ['melee', 'finesse', 'craft'];
 
   /**
    * Skills a weapon can attack with: its default `weaponSkill` plus any
@@ -145,15 +145,6 @@ export class EquipmentHelper {
     return keys.filter((k, i) => k && keys.indexOf(k) === i);
   }
 
-  /**
-   * Skill key an attack rolls with. A throw always rolls Ranged (RAW Thrown).
-   * Otherwise an explicit `skillKey`, then the owner's preferred skill
-   * (`flags.vagabond.preferredSkill`), then the weapon's default — each only
-   * if the weapon allows it.
-   * @param {Object} item
-   * @param {{mode?: 'use'|'throw', skillKey?: string|null}} [options]
-   * @returns {string}
-   */
   /**
    * The allowed attack skill with the LOWEST difficulty for `actor` (lower =
    * better in Vagabond: difficulty is the d20 target). Ties keep the weapon's
@@ -169,14 +160,21 @@ export class EquipmentHelper {
     return options.reduce((best, k) => (diff(k) < diff(best) ? k : best), options[0]);
   }
 
-  static attackSkillFor(item, { mode = 'use', skillKey = null } = {}) {
-    // Thrown Alchemical Item: explicit pick, else whichever of Ranged/Craft is
+  /**
+   * Skill key an attack rolls with — melee or thrown alike: an explicit
+   * `skillKey`, then the owner's preferred skill (`flags.vagabond.preferredSkill`),
+   * then the weapon's default — each only if the weapon allows it.
+   * @param {Object} item
+   * @param {{skillKey?: string|null}} [options]
+   * @returns {string}
+   */
+  static attackSkillFor(item, { skillKey = null } = {}) {
+    // Thrown Alchemical Item: explicit pick, else whichever of its skills is
     // better for the owner right now (never persisted — no preferredSkill seed).
     if (this.isThrownAlchemical(item)) {
       const options = this.THROWN_ALCHEMICAL_SKILLS;
       return options.includes(skillKey) ? skillKey : this.bestAttackSkill(item, item.actor);
     }
-    if (mode === 'throw') return 'ranged';
     const options = this.attackSkillOptions(item);
     const preferred = item?.getFlag?.('vagabond', 'preferredSkill');
     return [skillKey, preferred].find((k) => k && options.includes(k)) ?? options[0];
@@ -186,7 +184,7 @@ export class EquipmentHelper {
    * Context-menu entries for attacking with a weapon: "Attack (Preferred)"
    * first, then one "Attack with X" per other allowed skill. Plain "Attack"
    * when the weapon has a single skill. A thrown Alchemical Item gets the same
-   * shape as "Throw (Best)" + "Throw with X" (Ranged / Craft).
+   * shape as "Throw (Best)" + "Throw with X" (Melee / Finesse / Craft).
    * @param {Object} item
    * @param {(skillKey: string) => any} attack
    * @returns {{label: string, icon: string, action: Function}[]}

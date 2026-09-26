@@ -1,0 +1,23 @@
+{
+  "name": "Axes",
+  "type": "Item",
+  "folder": null,
+  "sorting": "a",
+  "sort": 200000,
+  "_id": "Iw7Sw7FF4uY4DeAL",
+  "description": "",
+  "color": null,
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.368",
+    "systemId": "vagabond",
+    "systemVersion": "5.43.0",
+    "createdTime": 1790439939922,
+    "modifiedTime": 1790439939922,
+    "lastModifiedBy": "F8lCaC2xBa4wgj43",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!folders!Iw7Sw7FF4uY4DeAL"
+}

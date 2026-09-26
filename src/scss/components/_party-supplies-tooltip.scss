@@ -1,0 +1,48 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// Party sheet supplies breakdown — rendered inside Foundry's #tooltip
+// (outside the sheet), so imported at top level, not inside `.vagabond {}`.
+// ─────────────────────────────────────────────────────────────────────────────
+.party-supplies-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 160px;
+  text-align: left;
+
+  .psb-title {
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding-bottom: 3px;
+    margin-bottom: 2px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+  }
+
+  .psb-row {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+
+    &.psb-empty { opacity: 0.5; }
+  }
+
+  .psb-name {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .psb-value {
+    min-width: 2.5em;
+    text-align: right;
+    font-weight: bold;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .currency-abbr {
+    font-size: 0.75em;
+    margin-left: 1px;
+  }
+}

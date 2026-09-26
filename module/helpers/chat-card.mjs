@@ -822,8 +822,9 @@ export class VagabondChatCard {
       }
 
       // Thrown Alchemical Item: no grip/range/weapon damage fields — its own
-      // damageAmount/damageType, and a "Thrown" range tag.
+      // damageAmount/damageType. Any throw gets a "Thrown" range tag.
       const isAlchemicalThrow = globalThis.vagabond.utils.EquipmentHelper.isThrownAlchemical(weapon);
+      const isThrow = !!attackResult.thrown || isAlchemicalThrow;
       const baseDamage = isAlchemicalThrow ? weapon.system.damageAmount : weapon.system.currentDamage;
       const baseDamageType = isAlchemicalThrow ? weapon.system.damageType : weapon.system.currentDamageType;
 
@@ -845,7 +846,7 @@ export class VagabondChatCard {
           tags.push({ icon: gripMap[weapon.system.grip], cssClass: 'tag-grip' });
       }
 
-      if (isAlchemicalThrow) {
+      if (isThrow) {
           tags.push({ label: game.i18n.localize('VAGABOND.Weapon.Property.Thrown'), cssClass: 'tag-range' });
       } else if (weapon.system.rangeDisplay) {
           tags.push({ label: weapon.system.rangeDisplay, cssClass: 'tag-range' });
@@ -880,8 +881,8 @@ export class VagabondChatCard {
       }
 
       // Determine attack type from the homebrew weapon skill's attackType field.
-      // A thrown Alchemical Item is ranged even when rolled with Craft.
-      const attackType = isAlchemicalThrow ? 'ranged' : VagabondChatCard.attackTypeForWeaponSkill(weaponSkillKey);
+      // A throw is ranged whatever skill it was rolled with.
+      const attackType = isThrow ? 'ranged' : VagabondChatCard.attackTypeForWeaponSkill(weaponSkillKey);
 
       // Compute die-size-adjusted formula for the manual "Roll Damage" button.
       // item.rollDamage() applies this when damage is auto-rolled, but when the
@@ -948,6 +949,7 @@ export class VagabondChatCard {
             type: 'attack',
             itemId: weapon.id,
             weaponSkillKey: weaponSkillKey,
+            thrown: isThrow,
             formula: attackResult.roll.formula,
             difficulty: attackResult.difficulty
           }

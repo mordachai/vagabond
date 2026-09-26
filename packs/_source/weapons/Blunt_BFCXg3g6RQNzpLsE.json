@@ -1,0 +1,23 @@
+{
+  "name": "Blunt",
+  "type": "Item",
+  "folder": null,
+  "sorting": "a",
+  "sort": 300000,
+  "_id": "BFCXg3g6RQNzpLsE",
+  "description": "",
+  "color": null,
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.368",
+    "systemId": "vagabond",
+    "systemVersion": "5.43.0",
+    "createdTime": 1790439939929,
+    "modifiedTime": 1790439939929,
+    "lastModifiedBy": "F8lCaC2xBa4wgj43",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!folders!BFCXg3g6RQNzpLsE"
+}

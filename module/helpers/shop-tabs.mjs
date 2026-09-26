@@ -4,8 +4,8 @@ import { ShopPricing } from './shop-pricing.mjs';
  * Shop tab model shared by the shop sheet (GM) and the store window (ShopApp).
  *
  * Top-level tabs = equipment types (Armor, Weapons, Gear, Alchemical, Relics), plus an
- * optional leading "All Wares" tab (store sidebar). Two tabs split into sub-tabs:
- * - Gear by the item's shop category — the folder it was stocked from
+ * optional leading "All Wares" tab (store sidebar). Four tabs split into sub-tabs:
+ * - Weapons, Gear and Relics by the item's shop category — the folder it was stocked from
  *   (`flags.vagabond.shop.category`, GM-editable). Containers live in Gear.
  * - Alchemical by `system.alchemicalType` (Acid, Oil, Potion…).
  */
@@ -35,8 +35,11 @@ export class ShopTabs {
     return this.TABS.includes(type) ? type : 'gear';
   }
 
-  /** Tabs that split into sub-tabs. */
-  static SUB_TABS = Object.freeze(['gear', 'alchemical']);
+  /** Tabs that split into sub-tabs (see CATEGORY_TABS for those keyed by shop category). */
+  static SUB_TABS = Object.freeze(['weapon', 'gear', 'alchemical', 'relic']);
+
+  /** Tabs whose sub-tabs are the GM-editable shop category (the rest derive from item data). */
+  static CATEGORY_TABS = Object.freeze(['weapon', 'gear', 'relic']);
 
   /** Sub-tab key of a stock item within its tab (GENERAL when it has none). */
   static subOf(item, tab = this.tabOf(item)) {
@@ -63,10 +66,13 @@ export class ShopTabs {
    * @param {boolean} [state.hideEmpty]   drop tabs with no rows (store); the sheet keeps them
    * @param {string|null} [state.fallback] tab used when the remembered one is gone
    * @param {boolean} [state.includeAll]  lead with an "All Wares" tab
+   * @param {boolean} [state.rootShowsAll] a tab with sub-tabs and no sub picked lists every
+   *   row of the tab (store sidebar); otherwise its first sub-tab is picked (sheet sub-tab bar)
    * @returns {{tabs: object[], tab: string|null, subtabs: object[]|null, sub: string|null, rows: object[]}}
-   *   Tabs with sub-tabs carry them as `children` (sidebar nesting).
+   *   Tabs with sub-tabs carry them as `children` (sidebar nesting); `current` marks the
+   *   tab itself being shown (active with no sub-tab picked).
    */
-  static build(rows, { tab = null, sub = null, hideEmpty = false, fallback = null, includeAll = false } = {}) {
+  static build(rows, { tab = null, sub = null, hideEmpty = false, fallback = null, includeAll = false, rootShowsAll = false } = {}) {
     const byTab = new Map(this.TABS.map(k => [k, []]));
     for (const row of rows) byTab.get(this.tabOf(row.item)).push(row);
 
@@ -77,7 +83,9 @@ export class ShopTabs {
     // Sub-tabs (gear categories, alchemical types): appear as soon as any item has one
     const groups = new Map(this.SUB_TABS.map(k => [k, this.#subGroups(k, byTab.get(k))]));
     const activeGroup = groups.get(active) ?? null;
-    const activeSub = activeGroup ? (activeGroup.keys.includes(sub) ? sub : activeGroup.keys[0]) : null;
+    const activeSub = activeGroup
+      ? (activeGroup.keys.includes(sub) ? sub : (rootShowsAll ? null : activeGroup.keys[0]))
+      : null;
     const subtabsOf = (k) => {
       const g = groups.get(k);
       return g ? g.keys.map(key => ({
@@ -94,6 +102,7 @@ export class ShopTabs {
       icon: this.ICONS[k],
       count: k === this.ALL ? rows.length : byTab.get(k).length,
       active: k === active,
+      current: k === active && !activeSub,
       children: subtabsOf(k),
     }));
 

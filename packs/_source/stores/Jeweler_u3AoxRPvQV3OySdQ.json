@@ -1,0 +1,3526 @@
+{
+  "name": "Jeweler",
+  "type": "shop",
+  "_id": "u3AoxRPvQV3OySdQ",
+  "img": "/icons/equipment/finger/ring-cabochon-squared-gold.webp",
+  "system": {
+    "subtitle": "Gems, Jewelry, & Smithing",
+    "shopkeeper": {
+      "name": "",
+      "title": "",
+      "img": "icons/svg/mystery-man.svg",
+      "description": ""
+    },
+    "pricing": {
+      "markup": 0,
+      "buyRatio": 0,
+      "saleDiscount": 0,
+      "presenceEnabled": false,
+      "presenceStat": "presence",
+      "presencePctPerPoint": 2
+    },
+    "buysCategories": [],
+    "resell": true,
+    "relationships": {},
+    "relationLevels": {
+      "hostile": 50,
+      "unfriendly": 20,
+      "neutral": 0,
+      "friendly": -10,
+      "allied": -20
+    },
+    "haggle": {
+      "mode": "off",
+      "skill": "influence",
+      "difficultyMod": 0,
+      "successPct": 10,
+      "critPct": 20,
+      "lockoutOnFail": true
+    },
+    "stock": {
+      "unlimitedByDefault": true,
+      "catalogPacks": [],
+      "restockTable": ""
+    },
+    "usePurse": false,
+    "currency": {
+      "gold": 0,
+      "silver": 0,
+      "copper": 0
+    }
+  },
+  "prototypeToken": {
+    "name": "Jeweler",
+    "displayName": 0,
+    "actorLink": true,
+    "width": 1,
+    "height": 1,
+    "depth": 1,
+    "texture": {
+      "src": "/icons/equipment/finger/ring-cabochon-squared-gold.webp",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": 0,
+    "displayBars": 0,
+    "bar1": {
+      "attribute": "health"
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": false,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "items": [
+    {
+      "name": "Gems & Precious Minerals - Uncommon",
+      "type": "equipment",
+      "img": "icons/commodities/gems/gem-faceted-diamond-blue.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 5,
+          "silver": 0,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "Gems, Jewelry, & Smithing",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 0,
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "isConsumable": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "critThresholdMod": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.0BHVuWhZYPLBdrM3",
+            "category": "Gems, Jewelry, & Smithing"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.0",
+        "createdTime": 1790430806492,
+        "modifiedTime": 1790430806492,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "ownership": {
+        "default": 0,
+        "F8lCaC2xBa4wgj43": 3
+      },
+      "folder": null,
+      "_id": "XyIUCfZjsEAxOivQ",
+      "sort": 0,
+      "_key": "!actors.items!u3AoxRPvQV3OySdQ.XyIUCfZjsEAxOivQ"
+    },
+    {
+      "name": "Locket",
+      "type": "equipment",
+      "img": "icons/equipment/neck/amulet-round-gold-red.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 2,
+          "silver": 50,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "Gems, Jewelry, & Smithing",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 0,
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "isConsumable": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "critThresholdMod": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.3nP5boDiD0X7vya9",
+            "category": "Gems, Jewelry, & Smithing"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.0",
+        "createdTime": 1790430806492,
+        "modifiedTime": 1790430806492,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "ownership": {
+        "default": 0,
+        "F8lCaC2xBa4wgj43": 3
+      },
+      "folder": null,
+      "_id": "HL2Xjt50Lq7wdb4Y",
+      "sort": 0,
+      "_key": "!actors.items!u3AoxRPvQV3OySdQ.HL2Xjt50Lq7wdb4Y"
+    },
+    {
+      "name": "Gems & Precious Minerals - Rare",
+      "type": "equipment",
+      "img": "icons/commodities/gems/gem-faceted-radiant-red.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 50,
+          "silver": 0,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "Gems, Jewelry, & Smithing",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 0,
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "isConsumable": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "critThresholdMod": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.GP9hkL1SZDsv0qR8",
+            "category": "Gems, Jewelry, & Smithing"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.0",
+        "createdTime": 1790430806492,
+        "modifiedTime": 1790430806492,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "ownership": {
+        "default": 0,
+        "F8lCaC2xBa4wgj43": 3
+      },
+      "folder": null,
+      "_id": "CsE0CQiMkB5iZZkN",
+      "sort": 0,
+      "_key": "!actors.items!u3AoxRPvQV3OySdQ.CsE0CQiMkB5iZZkN"
+    },
+    {
+      "name": "Monocle",
+      "type": "equipment",
+      "img": "icons/tools/scribal/lens-grey-red.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 40,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "Gems, Jewelry, & Smithing",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 0,
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "isConsumable": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "critThresholdMod": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.MyC84whhz35LYBjH",
+            "category": "Gems, Jewelry, & Smithing"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.0",
+        "createdTime": 1790430806492,
+        "modifiedTime": 1790430806492,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "ownership": {
+        "default": 0,
+        "F8lCaC2xBa4wgj43": 3
+      },
+      "folder": null,
+      "_id": "5EfYdbrWmyn9UYPz",
+      "sort": 0,
+      "_key": "!actors.items!u3AoxRPvQV3OySdQ.5EfYdbrWmyn9UYPz"
+    },
+    {
+      "name": "Ring, crest/signet",
+      "type": "equipment",
+      "img": "icons/equipment/finger/ring-signet-silver.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 50,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "Gems, Jewelry, & Smithing",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 0,
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "isConsumable": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "critThresholdMod": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.Ni4UCzaYTcKg69An",
+            "category": "Gems, Jewelry, & Smithing"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.0",
+        "createdTime": 1790430806492,
+        "modifiedTime": 1790430806492,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "ownership": {
+        "default": 0,
+        "F8lCaC2xBa4wgj43": 3
+      },
+      "folder": null,
+      "_id": "YqEAgkTAMNfVr3xK",
+      "sort": 0,
+      "_key": "!actors.items!u3AoxRPvQV3OySdQ.YqEAgkTAMNfVr3xK"
+    },
+    {
+      "name": "Gems & Precious Minerals - Common",
+      "type": "equipment",
+      "img": "icons/commodities/gems/gem-cut-square-green.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 1,
+          "silver": 0,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "Gems, Jewelry, & Smithing",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 0,
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "isConsumable": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "critThresholdMod": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.R8maLwl7ysXqTHiQ",
+            "category": "Gems, Jewelry, & Smithing"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.0",
+        "createdTime": 1790430806492,
+        "modifiedTime": 1790430806492,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "ownership": {
+        "default": 0,
+        "F8lCaC2xBa4wgj43": 3
+      },
+      "folder": null,
+      "_id": "FRTx0CmtUlMYFyZ0",
+      "sort": 0,
+      "_key": "!actors.items!u3AoxRPvQV3OySdQ.FRTx0CmtUlMYFyZ0"
+    },
+    {
+      "name": "Ring, basic",
+      "type": "equipment",
+      "img": "icons/equipment/finger/ring-band-gold.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 10,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "Gems, Jewelry, & Smithing",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 0,
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "isConsumable": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "critThresholdMod": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.DOLVhvqssUOk83bz",
+            "category": "Gems, Jewelry, & Smithing"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.0",
+        "createdTime": 1790430806492,
+        "modifiedTime": 1790430806492,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "ownership": {
+        "default": 0,
+        "F8lCaC2xBa4wgj43": 3
+      },
+      "folder": null,
+      "_id": "NGiNzw5iwl5Bdmb0",
+      "sort": 0,
+      "_key": "!actors.items!u3AoxRPvQV3OySdQ.NGiNzw5iwl5Bdmb0"
+    },
+    {
+      "name": "Circlet, gold",
+      "type": "equipment",
+      "img": "icons/equipment/head/crown-gold-blue.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 1,
+          "silver": 50,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "Gems, Jewelry, & Smithing",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 0,
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "isConsumable": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "critThresholdMod": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.7Mgjgi8kfPibLJE4",
+            "category": "Gems, Jewelry, & Smithing"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.0",
+        "createdTime": 1790430806492,
+        "modifiedTime": 1790430806492,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "ownership": {
+        "default": 0,
+        "F8lCaC2xBa4wgj43": 3
+      },
+      "folder": null,
+      "_id": "2rCJWO8xco5AxvmZ",
+      "sort": 0,
+      "_key": "!actors.items!u3AoxRPvQV3OySdQ.2rCJWO8xco5AxvmZ"
+    },
+    {
+      "name": "Pendant",
+      "type": "equipment",
+      "img": "icons/equipment/neck/pendant-gold-crystal-green.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 4,
+          "silver": 50,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "Gems, Jewelry, & Smithing",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 0,
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "isConsumable": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "critThresholdMod": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.YT3SkEIDXeug4XPT",
+            "category": "Gems, Jewelry, & Smithing"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.0",
+        "createdTime": 1790430806492,
+        "modifiedTime": 1790430806492,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "ownership": {
+        "default": 0,
+        "F8lCaC2xBa4wgj43": 3
+      },
+      "folder": null,
+      "_id": "FlZc2wjM7ZilF44b",
+      "sort": 0,
+      "_key": "!actors.items!u3AoxRPvQV3OySdQ.FlZc2wjM7ZilF44b"
+    },
+    {
+      "name": "Ingot",
+      "type": "equipment",
+      "img": "icons/commodities/metal/ingot-gold.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 0,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "Gems, Jewelry, & Smithing",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 1,
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "isConsumable": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "critThresholdMod": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.aFnFL71MJYme7fL2",
+            "category": "Gems, Jewelry, & Smithing"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.0",
+        "createdTime": 1790430806492,
+        "modifiedTime": 1790430806492,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "ownership": {
+        "default": 0,
+        "F8lCaC2xBa4wgj43": 3
+      },
+      "folder": null,
+      "_id": "8Dc4rvGVwY8NV7AD",
+      "sort": 0,
+      "_key": "!actors.items!u3AoxRPvQV3OySdQ.8Dc4rvGVwY8NV7AD"
+    },
+    {
+      "name": "Barrette",
+      "type": "equipment",
+      "img": "icons/commodities/treasure/brooch-jeweled-pink.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 50,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "Gems, Jewelry, & Smithing",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 0,
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "isConsumable": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "critThresholdMod": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.R9LYc0ZhVUobjIe0",
+            "category": "Gems, Jewelry, & Smithing"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.0",
+        "createdTime": 1790430806492,
+        "modifiedTime": 1790430806492,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "ownership": {
+        "default": 0,
+        "F8lCaC2xBa4wgj43": 3
+      },
+      "folder": null,
+      "_id": "lPc27TMWC5RzAWjX",
+      "sort": 0,
+      "_key": "!actors.items!u3AoxRPvQV3OySdQ.lPc27TMWC5RzAWjX"
+    },
+    {
+      "name": "Amulet/necklace",
+      "type": "equipment",
+      "img": "icons/equipment/neck/amulet-simple-carved-stone-spiral.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 50,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "Gems, Jewelry, & Smithing",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 0,
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "isConsumable": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "critThresholdMod": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.bfsQYMV95oCLEE0I",
+            "category": "Gems, Jewelry, & Smithing"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.0",
+        "createdTime": 1790430806492,
+        "modifiedTime": 1790430806492,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "ownership": {
+        "default": 0,
+        "F8lCaC2xBa4wgj43": 3
+      },
+      "folder": null,
+      "_id": "nd3E08NY0dgreVdf",
+      "sort": 0,
+      "_key": "!actors.items!u3AoxRPvQV3OySdQ.nd3E08NY0dgreVdf"
+    },
+    {
+      "name": "Gems & Precious Minerals - Very rare",
+      "type": "equipment",
+      "img": "icons/commodities/gems/gem-faceted-rough-purple.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 100,
+          "silver": 0,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "Gems, Jewelry, & Smithing",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 0,
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "isConsumable": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "critThresholdMod": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.NVsnCWBSPsY10Sy4",
+            "category": "Gems, Jewelry, & Smithing"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.0",
+        "createdTime": 1790430806492,
+        "modifiedTime": 1790430806492,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "ownership": {
+        "default": 0,
+        "F8lCaC2xBa4wgj43": 3
+      },
+      "folder": null,
+      "_id": "rPhcrNPThIWld6IP",
+      "sort": 0,
+      "_key": "!actors.items!u3AoxRPvQV3OySdQ.rPhcrNPThIWld6IP"
+    },
+    {
+      "name": "Circlet, brass",
+      "type": "equipment",
+      "img": "icons/equipment/head/crown-gold-red.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 20,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "Gems, Jewelry, & Smithing",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 0,
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "isConsumable": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "critThresholdMod": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.ZxTWC5A7Bsgh9crv",
+            "category": "Gems, Jewelry, & Smithing"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.0",
+        "createdTime": 1790430806492,
+        "modifiedTime": 1790430806492,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "ownership": {
+        "default": 0,
+        "F8lCaC2xBa4wgj43": 3
+      },
+      "folder": null,
+      "_id": "MIcPpu5vNGfiOBss",
+      "sort": 0,
+      "_key": "!actors.items!u3AoxRPvQV3OySdQ.MIcPpu5vNGfiOBss"
+    },
+    {
+      "name": "Bracelet, silver",
+      "type": "equipment",
+      "img": "icons/equipment/wrist/bracelet-embossed-steel.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 1,
+          "silver": 0,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "Gems, Jewelry, & Smithing",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 0,
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "isConsumable": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "critThresholdMod": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.kWfwtytyxjEds2q0",
+            "category": "Gems, Jewelry, & Smithing"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.0",
+        "createdTime": 1790430806492,
+        "modifiedTime": 1790430806492,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "ownership": {
+        "default": 0,
+        "F8lCaC2xBa4wgj43": 3
+      },
+      "folder": null,
+      "_id": "7Ua9QuN1hkjH8vaC",
+      "sort": 0,
+      "_key": "!actors.items!u3AoxRPvQV3OySdQ.7Ua9QuN1hkjH8vaC"
+    },
+    {
+      "name": "Earring",
+      "type": "equipment",
+      "img": "icons/commodities/treasure/brooch-gold-eye-green.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 20,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "Gems, Jewelry, & Smithing",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 0,
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "isConsumable": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "critThresholdMod": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.u8lN6AnUd28VLXf6",
+            "category": "Gems, Jewelry, & Smithing"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.0",
+        "createdTime": 1790430806492,
+        "modifiedTime": 1790430806492,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "ownership": {
+        "default": 0,
+        "F8lCaC2xBa4wgj43": 3
+      },
+      "folder": null,
+      "_id": "JvSB1jNbPdRjEazl",
+      "sort": 0,
+      "_key": "!actors.items!u3AoxRPvQV3OySdQ.JvSB1jNbPdRjEazl"
+    },
+    {
+      "name": "Circlet, silver",
+      "type": "equipment",
+      "img": "icons/commodities/treasure/trinket-wing-white.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 50,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "Gems, Jewelry, & Smithing",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 0,
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "isConsumable": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "critThresholdMod": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.xmUaIaMA8RaABFni",
+            "category": "Gems, Jewelry, & Smithing"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.0",
+        "createdTime": 1790430806492,
+        "modifiedTime": 1790430806492,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "ownership": {
+        "default": 0,
+        "F8lCaC2xBa4wgj43": 3
+      },
+      "folder": null,
+      "_id": "iZHLbItOWK96PWbl",
+      "sort": 0,
+      "_key": "!actors.items!u3AoxRPvQV3OySdQ.iZHLbItOWK96PWbl"
+    },
+    {
+      "name": "Spectacles",
+      "type": "equipment",
+      "img": "icons/tools/scribal/spectacles-glasses.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 80,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "Gems, Jewelry, & Smithing",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 0,
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "isConsumable": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "critThresholdMod": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.qVgAuWjXOqy5VCl3",
+            "category": "Gems, Jewelry, & Smithing"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.0",
+        "createdTime": 1790430806492,
+        "modifiedTime": 1790430806492,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "ownership": {
+        "default": 0,
+        "F8lCaC2xBa4wgj43": 3
+      },
+      "folder": null,
+      "_id": "Xu7MLQxDh4DVDRWA",
+      "sort": 0,
+      "_key": "!actors.items!u3AoxRPvQV3OySdQ.Xu7MLQxDh4DVDRWA"
+    },
+    {
+      "name": "Belt buckle, decorative",
+      "type": "equipment",
+      "img": "icons/equipment/waist/belt-buckle-gold.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 1,
+          "silver": 0,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "Gems, Jewelry, & Smithing",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 0,
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "isConsumable": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "critThresholdMod": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.zFdpYlX4n577gTDR",
+            "category": "Gems, Jewelry, & Smithing"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.0",
+        "createdTime": 1790430806492,
+        "modifiedTime": 1790430806492,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "ownership": {
+        "default": 0,
+        "F8lCaC2xBa4wgj43": 3
+      },
+      "folder": null,
+      "_id": "UUvAQcwrGxJT561N",
+      "sort": 0,
+      "_key": "!actors.items!u3AoxRPvQV3OySdQ.UUvAQcwrGxJT561N"
+    },
+    {
+      "name": "Bracelet, gold",
+      "type": "equipment",
+      "img": "icons/equipment/wrist/bracelet-embossed-steel.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 2,
+          "silver": 50,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "Gems, Jewelry, & Smithing",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 0,
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "isConsumable": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "critThresholdMod": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.uprcBIkuBMuGePOj",
+            "category": "Gems, Jewelry, & Smithing"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.0",
+        "createdTime": 1790430806492,
+        "modifiedTime": 1790430806492,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "ownership": {
+        "default": 0,
+        "F8lCaC2xBa4wgj43": 3
+      },
+      "folder": null,
+      "_id": "Ue59M8BgonXQvXib",
+      "sort": 0,
+      "_key": "!actors.items!u3AoxRPvQV3OySdQ.Ue59M8BgonXQvXib"
+    }
+  ],
+  "effects": [],
+  "folder": "ZBlhFd167vzgGztg",
+  "ownership": {
+    "default": 0,
+    "F8lCaC2xBa4wgj43": 3
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.368",
+    "systemId": "vagabond",
+    "systemVersion": "5.43.0",
+    "createdTime": 1790430806492,
+    "modifiedTime": 1790431555482,
+    "lastModifiedBy": "F8lCaC2xBa4wgj43",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "sort": 700000,
+  "_key": "!actors!u3AoxRPvQV3OySdQ"
+}

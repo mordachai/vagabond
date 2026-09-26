@@ -89,7 +89,7 @@
       "_key": "!items.effects!Y0izeLa30QsXjMmQ.0ULvSg9q5Zi5Yjgu"
     }
   ],
-  "folder": "o9iJqhb7zjYleADh",
+  "folder": "lAwNM57sXI0LHJXw",
   "flags": {},
   "_stats": {
     "compendiumSource": null,
@@ -101,17 +101,17 @@
       "systemId": "vagabond",
       "systemVersion": "1.3.2"
     },
-    "coreVersion": "14.361",
+    "coreVersion": "14.368",
     "systemId": "vagabond",
     "systemVersion": "2.8.1",
     "createdTime": 1765570895706,
-    "modifiedTime": 1769766913317,
-    "lastModifiedBy": "13p65OEadZSZVLRk"
+    "modifiedTime": 1790436091223,
+    "lastModifiedBy": "F8lCaC2xBa4wgj43"
   },
   "ownership": {
     "default": 0
   },
   "_id": "Y0izeLa30QsXjMmQ",
-  "sort": 4200000,
+  "sort": 200000,
   "_key": "!items!Y0izeLa30QsXjMmQ"
 }

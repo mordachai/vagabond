@@ -1,0 +1,7280 @@
+{
+  "name": "Supplier",
+  "type": "shop",
+  "_id": "S7wGPRQq5yiBI1nv",
+  "img": "icons/containers/bags/pack-leather-white-tan.webp",
+  "system": {
+    "subtitle": "Containers & Packs, Outdoors",
+    "shopkeeper": {
+      "name": "",
+      "title": "",
+      "img": "icons/svg/mystery-man.svg",
+      "description": ""
+    },
+    "pricing": {
+      "markup": 0,
+      "buyRatio": 0,
+      "saleDiscount": 0,
+      "presenceEnabled": false,
+      "presenceStat": "presence",
+      "presencePctPerPoint": 2
+    },
+    "buysCategories": [],
+    "resell": true,
+    "relationships": {},
+    "relationLevels": {
+      "hostile": 50,
+      "unfriendly": 20,
+      "neutral": 0,
+      "friendly": -10,
+      "allied": -20
+    },
+    "haggle": {
+      "mode": "off",
+      "skill": "influence",
+      "difficultyMod": 0,
+      "successPct": 10,
+      "critPct": 20,
+      "lockoutOnFail": true
+    },
+    "stock": {
+      "unlimitedByDefault": true,
+      "catalogPacks": [],
+      "restockTable": ""
+    },
+    "usePurse": false,
+    "currency": {
+      "gold": 0,
+      "silver": 0,
+      "copper": 0
+    }
+  },
+  "prototypeToken": {
+    "name": "Supplier",
+    "displayName": 0,
+    "actorLink": true,
+    "width": 1,
+    "height": 1,
+    "depth": 1,
+    "texture": {
+      "src": "/icons/containers/bags/pack-simple-leather.webp",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": 0,
+    "displayBars": 0,
+    "bar1": {
+      "attribute": "health"
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": false,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "items": [
+    {
+      "name": "Percolator",
+      "type": "equipment",
+      "img": "icons/tools/laboratory/burner-steel-grey.webp",
+      "system": {
+        "description": "<p><strong>Capacity:</strong> 1 pint</p>",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 10,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "Containers & Packs",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 1,
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "isConsumable": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "critThresholdMod": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.4J03dhnTcy72UPKl",
+            "category": "Containers & Packs"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.0",
+        "createdTime": 1790430538301,
+        "modifiedTime": 1790430538301,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "folder": null,
+      "_id": "a5XYJPn5yTUMVeqE",
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_key": "!actors.items!S7wGPRQq5yiBI1nv.a5XYJPn5yTUMVeqE"
+    },
+    {
+      "name": "Jar - Glass",
+      "type": "equipment",
+      "img": "icons/consumables/food/preserves-jam-jelly-jar-brown-red.webp",
+      "system": {
+        "description": "<p><strong>Capacity:</strong> 1 pint</p>",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 3,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "Containers & Packs",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 1,
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "isConsumable": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "critThresholdMod": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.5Niq7PMBoVibDL4z",
+            "category": "Containers & Packs"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.0",
+        "createdTime": 1790430538301,
+        "modifiedTime": 1790430538301,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "folder": null,
+      "_id": "fEIsDoTXR1wvhRFr",
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_key": "!actors.items!S7wGPRQq5yiBI1nv.fEIsDoTXR1wvhRFr"
+    },
+    {
+      "name": "Vial - Glass",
+      "type": "equipment",
+      "img": "icons/consumables/potions/vial-cork-empty.webp",
+      "system": {
+        "description": "<p><strong>Capacity:</strong> 4 ounces</p>",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 3,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "Containers & Packs",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 1,
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "isConsumable": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "critThresholdMod": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.8JZNvhjdL5nTC19W",
+            "category": "Containers & Packs"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.0",
+        "createdTime": 1790430538301,
+        "modifiedTime": 1790430538301,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "folder": null,
+      "_id": "PFHDdJmpI9ubQiyd",
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_key": "!actors.items!S7wGPRQq5yiBI1nv.PFHDdJmpI9ubQiyd"
+    },
+    {
+      "name": "Bottle, glass",
+      "type": "equipment",
+      "img": "icons/consumables/potions/bottle-round-empty-glass.webp",
+      "system": {
+        "description": "<p><strong>Capacity:</strong> 1 1/2 pints</p>",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 2,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "Containers & Packs",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 1,
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "isConsumable": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "critThresholdMod": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.GoYDfP0HISDfZpkK",
+            "category": "Containers & Packs"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.0",
+        "createdTime": 1790430538301,
+        "modifiedTime": 1790430538301,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "folder": null,
+      "_id": "yyXcGzMU9lSGJuhv",
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_key": "!actors.items!S7wGPRQq5yiBI1nv.yyXcGzMU9lSGJuhv"
+    },
+    {
+      "name": "Backpack",
+      "type": "equipment",
+      "img": "icons/containers/bags/pack-leather-white-tan.webp",
+      "system": {
+        "description": "<p>Add +2 slot to Inventory when equipped.</p>",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 5,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "Outdoors",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 0,
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "isConsumable": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "critThresholdMod": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [
+        {
+          "name": "Bonus Inventory",
+          "origin": "Compendium.vagabond.gear.Item.NDwqdKvIY95hFuHy",
+          "img": "icons/svg/aura.svg",
+          "_id": "jCcKXEh5xsh5uk6N",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.inventory.bonusSlots",
+                "value": 2,
+                "priority": null,
+                "type": "add",
+                "phase": "initial"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "permanent"
+            }
+          },
+          "_stats": {
+            "coreVersion": "14.368",
+            "systemId": "vagabond",
+            "systemVersion": "5.43.0",
+            "createdTime": 1790430538301,
+            "modifiedTime": 1790430538301,
+            "lastModifiedBy": "F8lCaC2xBa4wgj43",
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!S7wGPRQq5yiBI1nv.SOTe5HmmjmTYsljo.jCcKXEh5xsh5uk6N"
+        }
+      ],
+      "flags": {
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.NDwqdKvIY95hFuHy",
+            "category": "Containers & Packs"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.0",
+        "createdTime": 1790430538301,
+        "modifiedTime": 1790430538301,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "folder": null,
+      "_id": "SOTe5HmmjmTYsljo",
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_key": "!actors.items!S7wGPRQq5yiBI1nv.SOTe5HmmjmTYsljo"
+    },
+    {
+      "name": "Cauldron",
+      "type": "equipment",
+      "img": "icons/tools/laboratory/cauldron-empty-black.webp",
+      "system": {
+        "description": "<p><strong>Capacity:</strong> 30 gallon</p>",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 2,
+          "silver": 0,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "Containers & Packs",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 0,
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "isConsumable": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "critThresholdMod": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.OjmuPQhLV7NKMT9I",
+            "category": "Containers & Packs"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.0",
+        "createdTime": 1790430538301,
+        "modifiedTime": 1790430538301,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "folder": null,
+      "_id": "1GstTqofKtb7Bu24",
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_key": "!actors.items!S7wGPRQq5yiBI1nv.1GstTqofKtb7Bu24"
+    },
+    {
+      "name": "Vial - Metal",
+      "type": "equipment",
+      "img": "icons/consumables/potions/vial-ornet-silver-black.webp",
+      "system": {
+        "description": "<p><strong>Capacity:</strong> 4 ounces</p>",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 10,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "Containers & Packs",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 1,
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "isConsumable": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "critThresholdMod": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.BpoCcIxNAaDAxmzQ",
+            "category": "Containers & Packs"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.0",
+        "createdTime": 1790430538301,
+        "modifiedTime": 1790430538301,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "folder": null,
+      "_id": "VIU0RHA8z1rkwrcF",
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_key": "!actors.items!S7wGPRQq5yiBI1nv.VIU0RHA8z1rkwrcF"
+    },
+    {
+      "name": "Graduate",
+      "type": "equipment",
+      "img": "icons/tools/laboratory/vial-orange.webp",
+      "system": {
+        "description": "<p><strong>Capacity:</strong> 1/4 pint</p>",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 5,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "Containers & Packs",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 1,
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "isConsumable": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "critThresholdMod": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.VR6sFUss8HA7nMLB",
+            "category": "Containers & Packs"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.0",
+        "createdTime": 1790430538301,
+        "modifiedTime": 1790430538301,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "folder": null,
+      "_id": "cBzSOl6oasA30WSa",
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_key": "!actors.items!S7wGPRQq5yiBI1nv.cBzSOl6oasA30WSa"
+    },
+    {
+      "name": "Jar - Metal",
+      "type": "equipment",
+      "img": "icons/containers/kitchenware/jug-bottle-clay-brown-gold-blue.webp",
+      "system": {
+        "description": "<p><strong>Capacity:</strong> 1 pint</p>",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 10,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "Containers & Packs",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 1,
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "isConsumable": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "critThresholdMod": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.VYE2rbwxfEraB0fE",
+            "category": "Containers & Packs"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.0",
+        "createdTime": 1790430538301,
+        "modifiedTime": 1790430538301,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "folder": null,
+      "_id": "b3ajbv8l7g61G5uL",
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_key": "!actors.items!S7wGPRQq5yiBI1nv.b3ajbv8l7g61G5uL"
+    },
+    {
+      "name": "Pot - Clay",
+      "type": "equipment",
+      "img": "icons/commodities/materials/plant-pot.webp",
+      "system": {
+        "description": "<p><strong>Capacity:</strong> 1 gallon</p>",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "Containers & Packs",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 1,
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "isConsumable": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "critThresholdMod": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.XdBWFxLqxM6PHT1E",
+            "category": "Containers & Packs"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.0",
+        "createdTime": 1790430538301,
+        "modifiedTime": 1790430538301,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "folder": null,
+      "_id": "nuONeMB2WY3WvyYy",
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_key": "!actors.items!S7wGPRQq5yiBI1nv.nuONeMB2WY3WvyYy"
+    },
+    {
+      "name": "Flask",
+      "type": "equipment",
+      "img": "icons/consumables/potions/flask-corked-green.webp",
+      "system": {
+        "description": "<p><strong>Capacity:</strong> 1 pint</p>",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 0,
+          "copper": 2
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "Containers & Packs",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 1,
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "isConsumable": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "critThresholdMod": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.cBqMdQdZVjWVNiHJ",
+            "category": "Containers & Packs"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.0",
+        "createdTime": 1790430538301,
+        "modifiedTime": 1790430538301,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "folder": null,
+      "_id": "6Koz1bqxbwvBN8qm",
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_key": "!actors.items!S7wGPRQq5yiBI1nv.6Koz1bqxbwvBN8qm"
+    },
+    {
+      "name": "Vial - Gold-inlaid",
+      "type": "equipment",
+      "img": "icons/consumables/potions/potion-bottle-corked-stopper-ornate-yellow.webp",
+      "system": {
+        "description": "<p><strong>Capacity:</strong> 4 ounces</p>",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 1,
+          "silver": 0,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "Containers & Packs",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 1,
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "isConsumable": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "critThresholdMod": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.dyOa7L1dj9hncojf",
+            "category": "Containers & Packs"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.0",
+        "createdTime": 1790430538301,
+        "modifiedTime": 1790430538301,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "folder": null,
+      "_id": "Dh9pUCz4Tsq82MuW",
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_key": "!actors.items!S7wGPRQq5yiBI1nv.Dh9pUCz4Tsq82MuW"
+    },
+    {
+      "name": "Vial - Clay",
+      "type": "equipment",
+      "img": "icons/tools/laboratory/vial-orange.webp",
+      "system": {
+        "description": "<p><strong>Capacity:</strong> 4 ounces</p>",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "Containers & Packs",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 1,
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "isConsumable": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "critThresholdMod": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.jgR5XhsZK7rH6b8t",
+            "category": "Containers & Packs"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.0",
+        "createdTime": 1790430538301,
+        "modifiedTime": 1790430538301,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "folder": null,
+      "_id": "sfZOcABJKrIiVutH",
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_key": "!actors.items!S7wGPRQq5yiBI1nv.sfZOcABJKrIiVutH"
+    },
+    {
+      "name": "Jug, clay",
+      "type": "equipment",
+      "img": "icons/containers/kitchenware/jug-clay-brown.webp",
+      "system": {
+        "description": "<p><strong>Capacity:</strong> 1 gallon</p>",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 0,
+          "copper": 2
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "Containers & Packs",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 1,
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "isConsumable": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "critThresholdMod": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.pzif76vOmMrIF95D",
+            "category": "Containers & Packs"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.0",
+        "createdTime": 1790430538301,
+        "modifiedTime": 1790430538301,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "folder": null,
+      "_id": "Dt6iG3G8s2zBv42c",
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_key": "!actors.items!S7wGPRQq5yiBI1nv.Dt6iG3G8s2zBv42c"
+    },
+    {
+      "name": "Pot - Iron",
+      "type": "equipment",
+      "img": "icons/tools/cooking/pot-camping-iron-black.webp",
+      "system": {
+        "description": "<p><strong>Capacity:</strong> 1 gallon</p>",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 5,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "Containers & Packs",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 1,
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "isConsumable": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "critThresholdMod": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.tG22a00yQlWzomrg",
+            "category": "Containers & Packs"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.0",
+        "createdTime": 1790430538301,
+        "modifiedTime": 1790430538301,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "folder": null,
+      "_id": "Ue3aoObQurrlRa4i",
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_key": "!actors.items!S7wGPRQq5yiBI1nv.Ue3aoObQurrlRa4i"
+    },
+    {
+      "name": "Bucket",
+      "type": "equipment",
+      "img": "icons/containers/misc/bucket-wooden-brown.webp",
+      "system": {
+        "description": "<p><strong>Capacity:</strong> 1 gallon</p>",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 0,
+          "copper": 5
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "Containers & Packs",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 1,
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "isConsumable": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "critThresholdMod": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.wke5SmMDTzsejlbP",
+            "category": "Containers & Packs"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.0",
+        "createdTime": 1790430538301,
+        "modifiedTime": 1790430538301,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "folder": null,
+      "_id": "TVgp39ozr68opKPv",
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_key": "!actors.items!S7wGPRQq5yiBI1nv.TVgp39ozr68opKPv"
+    },
+    {
+      "name": "Jar - Clay",
+      "type": "equipment",
+      "img": "icons/consumables/drinks/clay-jar-glowing-orange-blue.webp",
+      "system": {
+        "description": "<p><strong>Capacity:</strong> 1 pint</p>",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "Containers & Packs",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 1,
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "isConsumable": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "critThresholdMod": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.tpbuf6PzLFuf3Uru",
+            "category": "Containers & Packs"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.0",
+        "createdTime": 1790430538301,
+        "modifiedTime": 1790430538301,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "folder": null,
+      "_id": "VQMLJ4bLejmVzZfh",
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_key": "!actors.items!S7wGPRQq5yiBI1nv.VQMLJ4bLejmVzZfh"
+    },
+    {
+      "name": "Waterskin",
+      "type": "equipment",
+      "img": "icons/sundries/survival/waterskin-leather-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 2,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "Outdoors",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isBeverage": true,
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 1,
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isConsumable": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "critThresholdMod": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.4DcbA7RsHfBOPJIa",
+            "category": "Outdoors"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.0",
+        "createdTime": 1790430538301,
+        "modifiedTime": 1790430538301,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "folder": null,
+      "_id": "Pf4KssgxISXPh8Cm",
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_key": "!actors.items!S7wGPRQq5yiBI1nv.Pf4KssgxISXPh8Cm"
+    },
+    {
+      "name": "Backpack",
+      "type": "equipment",
+      "img": "icons/containers/bags/pack-leather-white-tan.webp",
+      "system": {
+        "description": "<p>Add +2 slot to Inventory when equipped.</p>",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 5,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "Outdoors",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 0,
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "isConsumable": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "critThresholdMod": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [
+        {
+          "name": "Bonus Inventory",
+          "origin": "Compendium.vagabond.gear.Item.8o8KVSgpYsNFtGz2",
+          "img": "icons/svg/aura.svg",
+          "_id": "YJlQPYRINJ72Nf57",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.inventory.bonusSlots",
+                "value": 2,
+                "priority": null,
+                "type": "add",
+                "phase": "initial"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "permanent"
+            }
+          },
+          "_stats": {
+            "coreVersion": "14.368",
+            "systemId": "vagabond",
+            "systemVersion": "5.43.0",
+            "createdTime": 1790430538301,
+            "modifiedTime": 1790430538301,
+            "lastModifiedBy": "F8lCaC2xBa4wgj43",
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!S7wGPRQq5yiBI1nv.gKVay8flBKkBD7n9.YJlQPYRINJ72Nf57"
+        }
+      ],
+      "flags": {
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.8o8KVSgpYsNFtGz2",
+            "category": "Outdoors"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.0",
+        "createdTime": 1790430538301,
+        "modifiedTime": 1790430538301,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "folder": null,
+      "_id": "gKVay8flBKkBD7n9",
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_key": "!actors.items!S7wGPRQq5yiBI1nv.gKVay8flBKkBD7n9"
+    },
+    {
+      "name": "Grappling hook",
+      "type": "equipment",
+      "img": "icons/sundries/survival/climbing-anchor-steel-grey.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 10,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "Outdoors",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 1,
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "isConsumable": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "critThresholdMod": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.8ZXlmCn52DvUTgGV",
+            "category": "Outdoors"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.0",
+        "createdTime": 1790430538301,
+        "modifiedTime": 1790430538301,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "folder": null,
+      "_id": "UFbN7MtVuWxCzSMc",
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_key": "!actors.items!S7wGPRQq5yiBI1nv.UFbN7MtVuWxCzSMc"
+    },
+    {
+      "name": "Caltrops, bag of 10",
+      "type": "equipment",
+      "img": "icons/environment/traps/metal-spikes.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 4,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "Outdoors",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 1,
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "isConsumable": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "critThresholdMod": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.FW48RdOHKFHyRkNr",
+            "category": "Outdoors"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.0",
+        "createdTime": 1790430538301,
+        "modifiedTime": 1790430538301,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "folder": null,
+      "_id": "MyjrrlspYZghicM1",
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_key": "!actors.items!S7wGPRQq5yiBI1nv.MyjrrlspYZghicM1"
+    },
+    {
+      "name": "Signal whistle",
+      "type": "equipment",
+      "img": "icons/tools/instruments/horn-white-gray.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 0,
+          "copper": 5
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "Outdoors",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 1,
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "isConsumable": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "critThresholdMod": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.J331pRZaCNDRjeq3",
+            "category": "Outdoors"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.0",
+        "createdTime": 1790430538301,
+        "modifiedTime": 1790430538301,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "folder": null,
+      "_id": "ukRDjVd1cXey9Nos",
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_key": "!actors.items!S7wGPRQq5yiBI1nv.ukRDjVd1cXey9Nos"
+    },
+    {
+      "name": "Tinderbox",
+      "type": "equipment",
+      "img": "icons/commodities/wood/kindling-sticks-yellow.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 5,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "Outdoors",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 1,
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "isConsumable": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "critThresholdMod": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.NmL78R8yRVYJwqPb",
+            "category": "Outdoors"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.0",
+        "createdTime": 1790430538301,
+        "modifiedTime": 1790430538301,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "folder": null,
+      "_id": "iBqvBvTOflZTLWk8",
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_key": "!actors.items!S7wGPRQq5yiBI1nv.iBqvBvTOflZTLWk8"
+    },
+    {
+      "name": "Hunting trap",
+      "type": "equipment",
+      "img": "icons/environment/traps/trap-jaw-steel.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 70,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "Outdoors",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 1,
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "isConsumable": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "critThresholdMod": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.Qz4Mb4y6wUe5lBMI",
+            "category": "Outdoors"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.0",
+        "createdTime": 1790430538301,
+        "modifiedTime": 1790430538301,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "folder": null,
+      "_id": "Gqe8ZlGRq2qLVijG",
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_key": "!actors.items!S7wGPRQq5yiBI1nv.Gqe8ZlGRq2qLVijG"
+    },
+    {
+      "name": "Lantern, hooded",
+      "type": "equipment",
+      "img": "icons/sundries/lights/lantern-iron-lit-yellow.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 50,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "Outdoors",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "macro": {
+          "enabled": true,
+          "uuid": "",
+          "command": "game.vagabond.lightSource.use({ actor, item, token, light: {\"bright\": 25, \"dim\": 30, \"angle\": 180, \"color\": \"#ffc480\", \"alpha\": 0.65, \"attenuation\": 0.25, \"shadows\": 0.2, \"animation\": {\"type\": \"torch\", \"speed\": 2, \"intensity\": 2}}, durationMin: 60, clockOptions: ['lit','realtime','quarter'] });",
+          "label": "Ignite",
+          "runAsGM": false
+        },
+        "isConsumable": true,
+        "handsRequired": 1,
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 1,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "critThresholdMod": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.WkEFG0QhS4QJ6NwL",
+            "category": "Outdoors"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.0",
+        "createdTime": 1790430538301,
+        "modifiedTime": 1790430538301,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "folder": null,
+      "_id": "PbO99LKnNBn5zYCx",
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_key": "!actors.items!S7wGPRQq5yiBI1nv.PbO99LKnNBn5zYCx"
+    },
+    {
+      "name": "Tent, ten-person",
+      "type": "equipment",
+      "img": "icons/environment/settlement/tent-flag.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 2,
+          "silver": 50,
+          "copper": 0
+        },
+        "baseSlots": 3,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "Outdoors",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 3,
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "isConsumable": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "critThresholdMod": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.X4UeUYg5dKsB4mjC",
+            "category": "Outdoors"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.0",
+        "createdTime": 1790430538301,
+        "modifiedTime": 1790430538301,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "folder": null,
+      "_id": "S8BkeDEmDzKc7jKu",
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_key": "!actors.items!S7wGPRQq5yiBI1nv.S8BkeDEmDzKc7jKu"
+    },
+    {
+      "name": "Bedroll",
+      "type": "equipment",
+      "img": "icons/sundries/survival/bedroll-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "Outdoors",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 1,
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "isConsumable": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "critThresholdMod": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.Y8H21qyxnJjwpulj",
+            "category": "Outdoors"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.0",
+        "createdTime": 1790430538301,
+        "modifiedTime": 1790430538301,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "folder": null,
+      "_id": "sTVKN7Bdvk0G2waG",
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_key": "!actors.items!S7wGPRQq5yiBI1nv.sTVKN7Bdvk0G2waG"
+    },
+    {
+      "name": "Fishing tackle",
+      "type": "equipment",
+      "img": "icons/tools/fishing/hook-multi-steel-grey.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 5,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "Outdoors",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 1,
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "isConsumable": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "critThresholdMod": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.ZMMq37K4FjyKESjc",
+            "category": "Outdoors"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.0",
+        "createdTime": 1790430538301,
+        "modifiedTime": 1790430538301,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "folder": null,
+      "_id": "VWVyR0Uhll5cImcD",
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_key": "!actors.items!S7wGPRQq5yiBI1nv.VWVyR0Uhll5cImcD"
+    },
+    {
+      "name": "Lantern, bullseye",
+      "type": "equipment",
+      "img": "icons/sundries/lights/lantern-bullseye-signal-copper.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 1,
+          "silver": 0,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "Outdoors",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "macro": {
+          "enabled": true,
+          "uuid": "",
+          "command": "game.vagabond.lightSource.use({ actor, item, token, light: {\"bright\": 25, \"dim\": 30, \"angle\": 60, \"color\": \"#ffc480\", \"alpha\": 0.65, \"attenuation\": 0.25, \"shadows\": 0.2, \"animation\": {\"type\": \"torch\", \"speed\": 2, \"intensity\": 2}}, durationMin: 60, clockOptions: ['lit','realtime','quarter'] });",
+          "label": "Ignite",
+          "runAsGM": false
+        },
+        "isConsumable": true,
+        "handsRequired": 1,
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 1,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "critThresholdMod": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.ZpPwtGcELCaw9cfD",
+            "category": "Outdoors"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.0",
+        "createdTime": 1790430538301,
+        "modifiedTime": 1790430538301,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "folder": null,
+      "_id": "3nyuRCKZOyv3wyDR",
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_key": "!actors.items!S7wGPRQq5yiBI1nv.3nyuRCKZOyv3wyDR"
+    },
+    {
+      "name": "Rope (50 feet)",
+      "type": "equipment",
+      "img": "icons/sundries/survival/rope-coiled-tan.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 10,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "Outdoors",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 1,
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "isConsumable": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "critThresholdMod": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.b3nK7gDPNtEv5TNC",
+            "category": "Outdoors"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.0",
+        "createdTime": 1790430538301,
+        "modifiedTime": 1790430538301,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "folder": null,
+      "_id": "5QePpInQd2bNLN7U",
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_key": "!actors.items!S7wGPRQq5yiBI1nv.5QePpInQd2bNLN7U"
+    },
+    {
+      "name": "Tent, four-person",
+      "type": "equipment",
+      "img": "icons/environment/settlement/tent-flag.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 1,
+          "silver": 25,
+          "copper": 0
+        },
+        "baseSlots": 3,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "Outdoors",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 3,
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "isConsumable": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "critThresholdMod": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.bvLbN2z72lS6ZJXK",
+            "category": "Outdoors"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.0",
+        "createdTime": 1790430538301,
+        "modifiedTime": 1790430538301,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "folder": null,
+      "_id": "hNrCvNsLbdxISpbE",
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_key": "!actors.items!S7wGPRQq5yiBI1nv.hNrCvNsLbdxISpbE"
+    },
+    {
+      "name": "Tent, one-person",
+      "type": "equipment",
+      "img": "icons/environment/settlement/tent.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 30,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "Outdoors",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 1,
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "isConsumable": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "critThresholdMod": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.dEWM9KgO9HGULvl0",
+            "category": "Outdoors"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.0",
+        "createdTime": 1790430538301,
+        "modifiedTime": 1790430538301,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "folder": null,
+      "_id": "V6vKohpSt3jqC38q",
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_key": "!actors.items!S7wGPRQq5yiBI1nv.V6vKohpSt3jqC38q"
+    },
+    {
+      "name": "Flint & steel",
+      "type": "equipment",
+      "img": "icons/commodities/stone/rock-chunk-grey.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 4,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "Outdoors",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 1,
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "isConsumable": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "critThresholdMod": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.eDmPzN1SuIAFPNKP",
+            "category": "Outdoors"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.0",
+        "createdTime": 1790430538301,
+        "modifiedTime": 1790430538301,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "folder": null,
+      "_id": "PsjFPeCTO0Y7bdAV",
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_key": "!actors.items!S7wGPRQq5yiBI1nv.PsjFPeCTO0Y7bdAV"
+    },
+    {
+      "name": "Fishing rod",
+      "type": "equipment",
+      "img": "icons/tools/fishing/rod-wood-blue-tan.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 30,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "Outdoors",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 1,
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "isConsumable": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "critThresholdMod": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.ijhafkZhVID50O5Y",
+            "category": "Outdoors"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.0",
+        "createdTime": 1790430538301,
+        "modifiedTime": 1790430538301,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "folder": null,
+      "_id": "6g09ZF8A7IHmJPIU",
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_key": "!actors.items!S7wGPRQq5yiBI1nv.6g09ZF8A7IHmJPIU"
+    },
+    {
+      "name": "Air bladder",
+      "type": "equipment",
+      "img": "icons/sundries/survival/wetskin-leather-tan.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "Outdoors",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 1,
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "isConsumable": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "critThresholdMod": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.j0twhlOVlxRhqlMm",
+            "category": "Outdoors"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.0",
+        "createdTime": 1790430538301,
+        "modifiedTime": 1790430538301,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "folder": null,
+      "_id": "We5ATRFz4ytOW4xr",
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_key": "!actors.items!S7wGPRQq5yiBI1nv.We5ATRFz4ytOW4xr"
+    },
+    {
+      "name": "Spyglass",
+      "type": "equipment",
+      "img": "icons/tools/navigation/spyglass-telescope-brass.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 1,
+          "silver": 0,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "Outdoors",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 1,
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "isConsumable": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "critThresholdMod": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.njsZ3fbY2Ad5C9Hu",
+            "category": "Outdoors"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.0",
+        "createdTime": 1790430538301,
+        "modifiedTime": 1790430538301,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "folder": null,
+      "_id": "GnKQaueogOCf2ijk",
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_key": "!actors.items!S7wGPRQq5yiBI1nv.GnKQaueogOCf2ijk"
+    },
+    {
+      "name": "Shovel",
+      "type": "equipment",
+      "img": "icons/tools/hand/shovel-spade-steel-grey.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 20,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "Outdoors",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 1,
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "isConsumable": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "critThresholdMod": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.o9Uoe5AsoQ1AKFdR",
+            "category": "Outdoors"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.0",
+        "createdTime": 1790430538301,
+        "modifiedTime": 1790430538301,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "folder": null,
+      "_id": "5nHSdhZwUQaT40JM",
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_key": "!actors.items!S7wGPRQq5yiBI1nv.5nHSdhZwUQaT40JM"
+    },
+    {
+      "name": "Tent, two-person",
+      "type": "equipment",
+      "img": "icons/environment/settlement/tent.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 50,
+          "copper": 0
+        },
+        "baseSlots": 2,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "Outdoors",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 2,
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "isConsumable": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "critThresholdMod": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.oOCP0M8lqJAatbgU",
+            "category": "Outdoors"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.0",
+        "createdTime": 1790430538301,
+        "modifiedTime": 1790430538301,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "folder": null,
+      "_id": "SSxNKR7VbWs0mqtW",
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_key": "!actors.items!S7wGPRQq5yiBI1nv.SSxNKR7VbWs0mqtW"
+    },
+    {
+      "name": "Heatsuit outfit",
+      "type": "equipment",
+      "img": "icons/equipment/chest/coat-collared-red.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 2,
+          "silver": 0,
+          "copper": 0
+        },
+        "baseSlots": 2,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "Outdoors",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 2,
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "isConsumable": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "critThresholdMod": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.rDPUbhiA6nCS777a",
+            "category": "Outdoors"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.0",
+        "createdTime": 1790430538301,
+        "modifiedTime": 1790430538301,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "folder": null,
+      "_id": "UmEKUZAosLicFsCA",
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_key": "!actors.items!S7wGPRQq5yiBI1nv.UmEKUZAosLicFsCA"
+    },
+    {
+      "name": "Torch",
+      "type": "equipment",
+      "img": "icons/sundries/lights/torch-brown-lit.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "Outdoors",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "macro": {
+          "enabled": true,
+          "uuid": "",
+          "command": "game.vagabond.lightSource.use({ actor, item, token, light: {\"bright\": 25, \"dim\": 30, \"angle\": 360, \"color\": \"#ff9329\", \"alpha\": 0.65, \"attenuation\": 0.25, \"shadows\": 0.2, \"animation\": {\"type\": \"torch\", \"speed\": 5, \"intensity\": 5}}, durationMin: 60, clockOptions: ['lit','realtime','hour'] });",
+          "label": "Ignite",
+          "runAsGM": false
+        },
+        "handsRequired": 1,
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 1,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "critThresholdMod": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.sbHg7jCRQY8lIzY7",
+            "category": "Outdoors"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.0",
+        "createdTime": 1790430538301,
+        "modifiedTime": 1790430538301,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "folder": null,
+      "_id": "LcOOfgw9djrxazjJ",
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_key": "!actors.items!S7wGPRQq5yiBI1nv.LcOOfgw9djrxazjJ"
+    },
+    {
+      "name": "Lamp",
+      "type": "equipment",
+      "img": "icons/commodities/treasure/brass-lamp-yellow.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 5,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "Outdoors",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "macro": {
+          "enabled": true,
+          "uuid": "",
+          "command": "game.vagabond.lightSource.use({ actor, item, token, light: {\"bright\": 2, \"dim\": 5, \"angle\": 360, \"color\": \"#ff9329\", \"alpha\": 0.65, \"attenuation\": 0.25, \"shadows\": 0.2, \"animation\": {\"type\": \"torch\", \"speed\": 1, \"intensity\": 2}}, durationMin: 60, clockOptions: ['lit','realtime','quarter'] });",
+          "label": "Ignite",
+          "runAsGM": false
+        },
+        "isConsumable": true,
+        "handsRequired": 1,
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 1,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "critThresholdMod": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.ycH3XNnolSt2dDou",
+            "category": "Outdoors"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.0",
+        "createdTime": 1790430538301,
+        "modifiedTime": 1790430538301,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "folder": null,
+      "_id": "jaBX7ra2fLBeL47n",
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_key": "!actors.items!S7wGPRQq5yiBI1nv.jaBX7ra2fLBeL47n"
+    },
+    {
+      "name": "Hammock",
+      "type": "equipment",
+      "img": "icons/environment/wilderness/camp-improvised.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 50,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "Outdoors",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 1,
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "isConsumable": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "critThresholdMod": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.ByAG2tyj8Fc98NCl",
+            "category": "Outdoors"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.0",
+        "createdTime": 1790430538301,
+        "modifiedTime": 1790430538301,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "folder": null,
+      "_id": "9lUgU2McwK1aICWW",
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_key": "!actors.items!S7wGPRQq5yiBI1nv.9lUgU2McwK1aICWW"
+    }
+  ],
+  "effects": [],
+  "folder": "ZBlhFd167vzgGztg",
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.368",
+    "systemId": "vagabond",
+    "systemVersion": "5.43.0",
+    "createdTime": 1790430538301,
+    "modifiedTime": 1790431592320,
+    "lastModifiedBy": "F8lCaC2xBa4wgj43",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "ownership": {
+    "default": 0,
+    "F8lCaC2xBa4wgj43": 3
+  },
+  "sort": 500000,
+  "_key": "!actors!S7wGPRQq5yiBI1nv"
+}

@@ -31,7 +31,7 @@
       },
       {
         "uuid": "Compendium.vagabond.gear.Item.VSIqYJp40MiZgxV7",
-        "quantity": 1
+        "quantity": 20
       },
       {
         "uuid": "Compendium.vagabond.armor.Item.K6gCgMFAMIPLJO0L",
@@ -63,7 +63,7 @@
     "systemId": "vagabond",
     "systemVersion": "1.3.4",
     "createdTime": 1765640510531,
-    "modifiedTime": 1765640522942,
+    "modifiedTime": 1790442452644,
     "lastModifiedBy": "13p65OEadZSZVLRk"
   },
   "ownership": {

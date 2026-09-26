@@ -319,7 +319,7 @@ export class VagabondPartySheet extends VagabondActorSheet {
    * @private
    */
   _aggregateSupplies(members) {
-    return members.reduce(
+    const totals = members.reduce(
       (totals, m) => ({
         rations:  totals.rations  + (m._supplyRations   ?? 0),
         beverages: totals.beverages + (m._supplyBeverages ?? 0),
@@ -331,6 +331,44 @@ export class VagabondPartySheet extends VagabondActorSheet {
       }),
       { rations: 0, beverages: 0, currency: { gold: 0, silver: 0, copper: 0 } }
     );
+
+    // Hover breakdowns (per character member). Wealth breakdown is GM-only.
+    const characters = members.filter(m => !m.isNPC);
+    totals.rationsTooltip = this._supplyBreakdownHtml(
+      'VAGABOND.Actor.Party.Card.Rations', characters, m => [m._supplyRations ?? 0]);
+    totals.beveragesTooltip = this._supplyBreakdownHtml(
+      'VAGABOND.Actor.Party.Card.Beverages', characters, m => [m._supplyBeverages ?? 0]);
+    if (game.user.isGM) {
+      const abbr = key => game.i18n.localize(`VAGABOND.Currency.${key}.abbr`);
+      totals.currencyTooltip = this._supplyBreakdownHtml(
+        'VAGABOND.Actor.Party.Card.TotalWealth', characters,
+        m => [m.currency.gold, m.currency.silver, m.currency.copper],
+        [abbr('Gold'), abbr('Silver'), abbr('Copper')]);
+    }
+    return totals;
+  }
+
+  /**
+   * Build the HTML table for a supplies hover tooltip: one row per member.
+   * @param {string} titleKey            i18n key for the tooltip header
+   * @param {Object[]} members           Resolved character member data
+   * @param {(m: Object) => number[]} valuesFn  Column values for a member
+   * @param {string[]} [suffixes]        Per-column unit suffix (e.g. g/s/c)
+   * @returns {string|null}              null when there are no members
+   * @private
+   */
+  _supplyBreakdownHtml(titleKey, members, valuesFn, suffixes = []) {
+    if (!members.length) return null;
+    const esc = foundry.utils.escapeHTML;
+    const rows = members.map(m => {
+      const values = valuesFn(m);
+      const empty = values.every(v => !v);
+      const cells = values.map((v, i) =>
+        `<span class="psb-value">${v}${suffixes[i] ? `<span class="currency-abbr">${esc(suffixes[i])}</span>` : ''}</span>`
+      ).join('');
+      return `<div class="psb-row${empty ? ' psb-empty' : ''}"><span class="psb-name">${esc(m.name)}</span>${cells}</div>`;
+    });
+    return `<div class="party-supplies-breakdown"><div class="psb-title">${esc(game.i18n.localize(titleKey))}</div>${rows.join('')}</div>`;
   }
 
   // ── Notes Tab ──────────────────────────────────────────────────────────────

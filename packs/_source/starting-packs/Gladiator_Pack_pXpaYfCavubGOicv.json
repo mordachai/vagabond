@@ -39,8 +39,8 @@
       }
     ],
     "currency": {
-      "gold": 1,
-      "silver": 65,
+      "gold": 0,
+      "silver": 95,
       "copper": 0
     }
   },
@@ -55,7 +55,7 @@
     "systemId": "vagabond",
     "systemVersion": "2.8.0",
     "createdTime": 1765640510531,
-    "modifiedTime": 1769603232480,
+    "modifiedTime": 1790442452644,
     "lastModifiedBy": "13p65OEadZSZVLRk"
   },
   "ownership": {

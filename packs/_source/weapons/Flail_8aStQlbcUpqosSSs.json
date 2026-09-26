@@ -41,24 +41,24 @@
     "damageTypeTwoHands": "blunt"
   },
   "effects": [],
-  "folder": null,
+  "folder": "bpyQRJjtGW4vNitc",
   "flags": {},
   "_stats": {
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.367",
+    "coreVersion": "14.368",
     "systemId": "vagabond",
     "systemVersion": "4.3.1",
     "createdTime": 1764967045011,
-    "modifiedTime": 1789500096517,
-    "lastModifiedBy": "7hJBvKOxyEF7RWCr"
+    "modifiedTime": 1790439939968,
+    "lastModifiedBy": "F8lCaC2xBa4wgj43"
   },
   "ownership": {
     "default": 0,
     "vJkLjvlErdx6ZHoC": 3
   },
   "_id": "8aStQlbcUpqosSSs",
-  "sort": 1600000,
+  "sort": 200000,
   "_key": "!items!8aStQlbcUpqosSSs"
 }

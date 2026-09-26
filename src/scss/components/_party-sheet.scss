@@ -29,6 +29,20 @@
     min-width: 20px;
   }
 
+  // Label + value pair; hover shows the per-member breakdown tooltip
+  .supplies-group {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .has-breakdown {
+    cursor: help;
+    border-radius: 3px;
+    transition: background-color 0.15s;
+    &:hover { background-color: color-mix(in srgb, #{$c-yellow} 12%, transparent); }
+  }
+
   .supplies-sep {
     color: $c-tan;
     margin: 0 4px;

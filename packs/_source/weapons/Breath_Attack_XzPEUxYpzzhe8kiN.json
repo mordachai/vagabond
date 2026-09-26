@@ -22,7 +22,9 @@
     "explodeValues": "6",
     "properties": [],
     "weaponSkill": "endure",
-    "altSkills": ["will"],
+    "altSkills": [
+      "will"
+    ],
     "range": "near",
     "grip": "0",
     "damageOneHand": "2d6",
@@ -44,8 +46,8 @@
     }
   },
   "effects": [],
-  "folder": null,
-  "sort": 3800000,
+  "folder": "BjNJoIvzJXyagnI4",
+  "sort": 100000,
   "ownership": {
     "default": 0,
     "13p65OEadZSZVLRk": 3
@@ -55,12 +57,12 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.367",
+    "coreVersion": "14.368",
     "systemId": "vagabond",
     "systemVersion": "5.37.4",
     "createdTime": 1766065460675,
-    "modifiedTime": 1789500595506,
-    "lastModifiedBy": "7hJBvKOxyEF7RWCr"
+    "modifiedTime": 1790439939968,
+    "lastModifiedBy": "F8lCaC2xBa4wgj43"
   },
   "_key": "!items!XzPEUxYpzzhe8kiN"
 }

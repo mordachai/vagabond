@@ -339,7 +339,8 @@
       },
       "Touch": {
         "label": "Toque",
-        "description":" Um Alvo Próximo, ou você mesmo"
+        "description":" Um Alvo Próximo, ou você mesmo",
+        "hint": "Sem aumento"
       }
     },
     "Glyph": {
@@ -527,6 +528,220 @@
         "OnlyEquipment": "Apenas equipamentos e recipientes podem ser estocados em uma loja."
       }
     },
+    "Craft": {
+      "Checks": {
+        "Mode": "Modo de fabricação",
+        "Amount": "Valor do Quarto de dia",
+        "Target": "Item alvo",
+        "Materials": "Materiais disponíveis",
+        "Catalyze": "Característica Catalisar",
+        "KnownFormula": "Fórmula conhecida",
+        "AlchemyTools": "Ferramentas de Alquimia equipadas",
+        "PrimaMateria": "Característica Prima Materia",
+        "StudiedDice": "Dado de Estudo disponível",
+        "PrimaMateriaValueCap": "Valor de até 10o",
+        "RelicTarget": "Hospedeiro + poder",
+        "Mix": "Característica Misturar",
+        "MixIngredients": "Dois Itens Alquímicos diferentes com carga restante"
+      },
+      "Modes": {
+        "Craft": {
+          "Label": "Fabricar"
+        },
+        "Scrap": {
+          "Label": "Desmontar"
+        },
+        "Alchemy": {
+          "Label": "Alquimia"
+        },
+        "PrimaMateria": {
+          "Label": "Prima Materia"
+        },
+        "RelicForge": {
+          "Label": "Forja de Relíquias"
+        },
+        "Mix": {
+          "Label": "Misturar"
+        },
+        "Combine": {
+          "Label": "Combinar"
+        }
+      },
+      "Combine": {
+        "Result": "{base} absorve os poderes de {other} por Combinação."
+      },
+      "Mix": {
+        "ItemName": "Mistura de {a} + {b}",
+        "ItemDescription": "Uma dose combinada de {a} e {b}.",
+        "WentInertTitle": "Mistura Inerte",
+        "WentInert": "{name} ficou inerte.",
+        "CompanionTitle": "{name} (Mistura)",
+        "InertBlocked": "{name} ficou inerte e não pode ser usada.",
+        "InertBadge": "Inerte",
+        "Result": "{actor} mistura {a} e {b}.",
+        "Expiry": {
+          "NextTurn": "Fica inerte no início do seu próximo Turno",
+          "NextAction": "Fica inerte após sua próxima ação",
+          "UntilUsed": "Dura até ser usada",
+          "Inert": "Inerte"
+        }
+      },
+      "Alchemy": {
+        "Result": "{actor} fabrica {item}."
+      },
+      "Workbench": {
+        "Title": "Bancada",
+        "ComingSoon": "Em uma atualização futura",
+        "NotAlchemist": "Só personagens com uma característica de Alquimia podem usar esta aba.",
+        "SoonAlchemy": "Alquimia",
+        "SoonRelic": "Forja de Relíquias",
+        "SoonMix": "Misturar",
+        "PrimaMateriaButton": "Prima Materia ({n} de Estudo)",
+        "PrimaMateriaHint": "Gaste um Dado de Estudo para Fabricar este item na hora, sem Materiais (até 10o).",
+        "StudiedDice": "Dados de Estudo",
+        "Charges": "Cargas restantes",
+        "MixSearch": "Buscar seus alquímicos...",
+        "NoMixIngredients": "Nenhum Item Alquímico com carga restante.",
+        "MixOwnedOnly": "Só os Itens Alquímicos do próprio personagem (com carga restante) podem ser misturados.",
+        "MixEmptySlot": "Arraste um ingrediente aqui",
+        "MixClearSlot": "Remover ingrediente",
+        "MixCompanion": "Mais",
+        "MixCompanionHint": "Um tipo de dano diferente: rolado em um cartão próprio nos mesmos alvos (ao acertar, quando arremessada).",
+        "MixStatuses": "Condições",
+        "MixUse": "Uso",
+        "MixThrown": "Arremesso (Corpo a Corpo, Finesse ou Ofício)",
+        "MixUsed": "Usada (sem rolagem de ataque)",
+        "MixLasts": "Duração",
+        "MixNoStudied": "Você precisa de um Dado de Estudo para Misturar.",
+        "MixPickTwo": "Escolha dois Itens Alquímicos diferentes.",
+        "MixButton": "Misturar (1 Dado de Estudo)",
+        "Mixtures": "Misturas",
+        "NoMixtures": "Nenhuma Mistura.",
+        "DiscardMix": "Descartar Mistura",
+        "DiscardMixConfirm": "Descartar {name}? Os ingredientes serão perdidos.",
+        "AlchemyLevelLine": "Nível {level}: {known}/{grants} fórmulas",
+        "Wealth": "Riqueza",
+        "PartyWealth": "Riqueza do Grupo",
+        "PartyMaterials": "Materiais do Grupo",
+        "NoCatalyze": "Você conhece fórmulas, mas não tem Catalisar — ainda não pode fabricá-las aqui.",
+        "KnownFormulas": "Fórmulas Conhecidas",
+        "EditFormulas": "Editar Fórmulas Conhecidas",
+        "NoFormulas": "Nenhuma fórmula conhecida ainda.",
+        "EmptySlot": "Vazio — escolha uma fórmula da lista",
+        "LearnFormula": "Aprender uma Fórmula",
+        "ForgetFormulaTitle": "Esquecer Fórmula",
+        "ForgetFormulaConfirm": "Esquecer {name}? Isso libera a escolha, mas você precisará aprendê-la de novo para recuperá-la.",
+        "FormulaSearch": "Buscar itens alquímicos…",
+        "NoFormulasAvailable": "Nenhum item alquímico disponível — peça ao Mestre para ativar um compêndio.",
+        "OverValueCap": "Acima do seu limite de valor de fórmula.",
+        "OwnedQty": "Quantidade que você tem em mãos",
+        "CraftAsProject": "Fabricar como Projeto",
+        "CraftAsProjectHint": "Fabrique isto sem conhecer a fórmula, pelas regras normais de Fabricação (orçamento do Quarto de dia + metade do valor em Materiais).",
+        "AlreadyKnown": "Já conhecida.",
+        "NoPicksLeft": "Nenhuma escolha de fórmula restante.",
+        "SortGroup": "Grupo",
+        "SortAlpha": "A–Z",
+        "SortCost": "Custo",
+        "CraftCostHint": "{cost} para Fabricar",
+        "SystemDisabled": "A fabricação está desativada neste mundo.",
+        "ShiftBudget": "Limite de Valor por Quarto de dia",
+        "MaterialsOnHand": "Materiais Disponíveis",
+        "MaterialsToConsume": "Materiais que esta distribuição vai consumir",
+        "NotEnoughMaterials": "Materiais insuficientes para esta distribuição — diminua o valor ou junte mais Materiais antes.",
+        "OverShiftLimit": "Esta distribuição passa do seu Limite de Valor por Quarto de dia — diminua o valor.",
+        "NoCraftSkill": "Você não tem dificuldade de Ofício definida, então seu orçamento do Quarto de dia é 0.",
+        "NoProjects": "Nenhum Projeto em andamento.",
+        "Abandon": "Abandonar Projeto",
+        "AbandonTitle": "Abandonar Projeto",
+        "AbandonConfirm": "Abandonar este Projeto? Os Materiais já gastos nele serão perdidos.",
+        "OnlyEquipment": "Só itens de equipamento podem ser Fabricados.",
+        "WorkShift": "Trabalhar um Quarto de dia",
+        "CategoryAll": "Todos",
+        "CatalogSearch": "Buscar itens fabricáveis…",
+        "NoCatalog": "Nenhum item fabricável — peça ao Mestre para ativar um compêndio.",
+        "NoMatches": "Nenhum item encontrado.",
+        "GmBadge": "Mestre",
+        "CustomRecipe": "Receita personalizada adicionada pelo Mestre",
+        "RecipeAdded": "{name} adicionado às receitas de fabricação.",
+        "RemoveRecipe": "Remover das receitas de fabricação",
+        "SelectHint": "Selecione um item para ver os detalhes e iniciar um Projeto. Você também pode soltar aqui um item de um compêndio, da barra lateral ou de uma ficha de ator.",
+        "GmDropHint": "Mestre: soltar aqui um item do mundo (barra lateral de Itens) o adiciona ao catálogo de todos como receita personalizada.",
+        "Value": "Valor",
+        "Materials": "Materiais",
+        "EstTime": "Tempo Est.",
+        "ShiftsOne": "1 Quarto de dia",
+        "ShiftsMany": "{n} Quartos de dia",
+        "SlotsOne": "{n} Espaço",
+        "SlotsMany": "{n} Espaços",
+        "AddToProjects": "Adicionar aos Projetos",
+        "OngoingProjects": "Projetos em Andamento",
+        "NewBadge": "Novo",
+        "NewHint": "Vira um Projeto quando você trabalhar um Quarto de dia nele.",
+        "RemoveStaged": "Remover",
+        "ThisShift": "Este Quarto de dia",
+        "AllocHint": "Digite um valor (30p, 1o 5p, 7p5c) — um número sozinho conta como prata.",
+        "ShiftLabel": "Quarto de dia",
+        "MatsNeeded": "{needed} necessários / {onHand} disponíveis",
+        "AutoFill": "Preencher",
+        "AutoFillHint": "Distribui o orçamento deste Quarto de dia pelos seus Projetos, de cima para baixo, dentro dos Materiais que você tem.",
+        "ScrapHint": "Desmonte um item em Materiais no valor da metade do valor dele. Não usa o orçamento do Quarto de dia.",
+        "NoScrapItems": "Nada no seu inventário pode ser desmontado.",
+        "ScrapConfirm": "Desmontar {name} em Materiais no valor da metade do valor dele?"
+      },
+      "Project": {
+        "WipDescription": "Um projeto em andamento. Vai se tornar {name} quando concluído."
+      },
+      "Scrap": {
+        "Result": "{actor} desmonta {item} em {value} de Materiais."
+      },
+      "Shift": {
+        "Title": "Quarto de dia Trabalhado",
+        "Summary": "{actor} passa um Quarto de dia fabricando ({spent} de {budget}).",
+        "LineCompleted": "{item} concluído.",
+        "LineProgress": "{item}: {progress} / {value}",
+        "LineFailed": "{amount} falhou: {reason}",
+        "Wasted": "{value} do orçamento deste Quarto de dia não foi usado."
+      },
+      "Approval": {
+        "Title": "Pedido de Fabricação",
+        "Description": "{actor} quer {mode} ({cost}).",
+        "Approve": "Aprovar",
+        "Deny": "Negar",
+        "Approved": "Aprovado.",
+        "Denied": "Negado.",
+        "Failed": "Falhou"
+      },
+      "Errors": {
+        "unknownMode": "Esse modo de fabricação não está disponível.",
+        "checksFailed": "Os requisitos para isso não foram cumpridos.",
+        "cancelled": "Cancelado.",
+        "noActor": "Nenhum personagem válido para isso.",
+        "permission": "Você não tem permissão para isso.",
+        "disabled": "A fabricação está desativada neste mundo.",
+        "noAlchemyToolsWarn": "Sem Ferramentas de Alquimia equipadas — fabricando mesmo assim.",
+        "known": "Essa fórmula já é conhecida.",
+        "noPicksLeft": "Nenhuma escolha de fórmula restante.",
+        "notAlchemical": "Só Itens Alquímicos podem ser aprendidos como fórmulas.",
+        "overCap": "O valor desse item passa do seu limite de valor de fórmula.",
+        "relicTargetMismatch": "Esse poder não pode ser ligado a este item (tipo errado, ou o item é Lendário).",
+        "combineDisabled": "Combinar relíquias está desativado neste mundo.",
+        "relicCombineTypeMismatch": "As duas relíquias precisam ser do mesmo Tipo (arma, armadura ou trinket) para Combinar.",
+        "relicFabled": "Uma relíquia Lendária não pode ser Combinada.",
+        "manaCrystalsDisabled": "A variante de Cristais de Mana está desativada neste mundo.",
+        "noSocketSlot": "Esse encaixe não existe neste item.",
+        "socketOccupied": "Esse encaixe já tem um cristal.",
+        "notACrystal": "Esse item não é um Cristal de Mana.",
+        "socketEmpty": "Esse encaixe está vazio.",
+        "amount": "Nenhum valor do Quarto de dia foi distribuído.",
+        "budget": "Isso é mais do que o orçamento deste Quarto de dia.",
+        "materials": "Materiais insuficientes.",
+        "recipeWorldOnly": "Só itens do mundo (da barra lateral de Itens) podem ser adicionados como receitas de fabricação.",
+        "recipeNotCraftable": "Esse item não pode ser fabricado (sem valor, ou é Materiais / um Poder de relíquia).",
+        "complete": "Esse Projeto já está concluído.",
+        "noProject": "Esse Projeto não existe mais.",
+        "error": "O pedido falhou. Veja o console para detalhes."
+      }
+    },
     "SheetLabels": {
       "Actor": "Ficha de Ator Vagabond",
       "Character": "Ficha de Personagem Vagabond",
@@ -711,6 +926,11 @@
         "label": "Configurar Homebrew",
         "hint": "Personalize atributos, perícias, salvaguardas, dados, progressão, derivações, tipos de dano e mais."
       },
+      "craftingSettings": {
+        "name": "Fabricação e Relíquias",
+        "label": "Configurar Fabricação e Relíquias",
+        "hint": "Configure as regras de Fabricar/Desmontar/Alquimia/Forja de Relíquias, a aprovação do Mestre e a variante de Cristais de Mana."
+      },
       "useAnimations": {
         "name": "Usar Animações de Magia",
         "hint": "Chave mestra para efeitos visuais de magia. Quando desativado, nenhuma animação toca independentemente de outras configurações. Requer os módulos Sequencer e JB2A instalados."
@@ -876,6 +1096,57 @@
       "Saved": "Aparência dos dados de dano salva.",
       "Cancel": "Cancelar",
       "Save": "Salvar"
+    },
+    "CraftingSettings": {
+      "Title": "Fabricação e Relíquias",
+      "ResetAllToDefaults": "Restaurar Todos os Padrões",
+      "ResetAllTooltip": "Restaura cada configuração de fabricação ao padrão de fábrica",
+      "ResetAllTitle": "Restaurar Todas as Configurações de Fabricação?",
+      "ResetAllConfirm": "Limpar todas as configurações de fabricação e voltar aos padrões do sistema?",
+      "Tabs": {
+        "General": "Geral",
+        "Alchemy": "Alquimia",
+        "Relics": "Relíquias",
+        "Variant": "Cristais de Mana"
+      },
+      "Fields": {
+        "Enabled": "Ativar fabricação (Bancada, Fabricar/Desmontar/Alquimia/Forja de Relíquias)",
+        "ApprovalLabel": "Aprovação do Mestre",
+        "Approval": {
+          "off": "Desligada — jogadores fabricam livremente",
+          "chat": "Cartão de chat — o Mestre precisa Aprovar/Negar"
+        },
+        "MaterialsFromCoin": "Pagar em moedas direto em vez de pacotes de Materiais",
+        "ToolsRequirementLabel": "Exigência de Ferramentas de Alquimia",
+        "ToolsRequirement": {
+          "off": "Desligada — sem ferramentas",
+          "warn": "Avisar se não estiverem equipadas",
+          "block": "Bloquear se não estiverem equipadas"
+        },
+        "ValuePerShiftLegend": "Valor por Quarto de dia (pela dificuldade de Ofício)",
+        "ValuePerShiftHint": "Valor dos itens que podem ser Fabricados em um Quarto de dia, em cobre, pela dificuldade da perícia Ofício.",
+        "DifficultyRange": "Dificuldade de Ofício",
+        "CopperPerShift": "Cobre / Quarto de dia",
+        "MixInertLabel": "Mistura inerte",
+        "MixInert": {
+          "delete": "Excluir a mistura",
+          "keep": "Manter, esmaecida"
+        },
+        "MixExpiryLabel": "Validade da Mistura fora de combate",
+        "MixExpiry": {
+          "never": "Nunca — dura até ser usada",
+          "nextAction": "Na próxima ação do Alquimista"
+        },
+        "BondSuppression": "Suprimir os poderes de uma relíquia que Requer Vinculação a menos que esteja vinculada a quem a empunha",
+        "CombineEnabled": "Permitir o ritual de Combinar do Mestre (fundir duas relíquias)",
+        "ManaCrystals": "Ativar a variante de encaixes de Cristais de Mana",
+        "CrystalSlotTableLegend": "Encaixes de cristal por hospedeiro e Bônus",
+        "CrystalHost": {
+          "armor": "Armadura",
+          "weapon1H": "Arma (1M/F/V)",
+          "weapon2H": "Arma (2M)"
+        }
+      }
     },
     "HomebrewSettings": {
       "Title": "Configuração Homebrew",
@@ -1164,7 +1435,7 @@
           "members": {"label": "Membros do Grupo"},
           "type":    {"label": "Tipo de Grupo"},
           "speed":   {"label": "Velocidade"},
-          "Exploração":   {"label": "Velocidade de Exploração"},
+          "crawl":   {"label": "Velocidade de Exploração"},
           "travel":  {"label": "Velocidade de Viagem"}
         },
         "NamePlaceholder": "Nome do grupo...",
@@ -1751,7 +2022,9 @@
         "unequipped": "Desequipado",
         "unequippedHint": "Se aplica enquanto o item estiver equipado",
         "expired": "Expirado",
-        "expiredHint": "A duração acabou — edite o efeito para renová-lo"
+        "expiredHint": "A duração acabou — edite o efeito para renová-lo",
+        "unbound": "Não vinculado",
+        "unboundHint": "Este item precisa estar Vinculado a quem o empunha para os poderes funcionarem"
       },
       "Duration": "Duração",
       "ApplicationMode": {
@@ -2114,7 +2387,8 @@
         "Title": "Fabricar",
         "Description": "Fabrique itens. Requer materiais no valor de 50% do valor do item.",
         "DifficultyLabel": "Dificuldade de Fabricação:",
-        "Button": "Fabricar Item"
+        "Button": "Fabricar Item",
+        "WorkbenchDescription": "Abra a Bancada para passar um Quarto de dia fabricando, desmontar itens em Materiais ou trabalhar com Alquimia."
       },
       "CraftDifficulty": {
         "tier1": "18-17 (1p)",
@@ -2210,6 +2484,7 @@
         "traitsPlaceholder": "Ainda sem traços. Traços são concedidos pela sua ancestralidade.",
         "Perks": "Talentos",
         "perksPlaceholder": "Ainda sem talentos. Arraste talentos do diretório de Itens.",
+        "Formulas": "Fórmulas Alquímicas",
         "spellsTabEmpty": "Ainda sem magias.",
         "spellsTabEmptyHint": "Você pode arrastar e soltar do compêndio.",
         "LevelFeatures": "Características de Nível",
@@ -2368,6 +2643,8 @@
         "PerkAmount": "Quantidade de Talentos",
         "SpellPool": "Reserva de Magias",
         "PerkPool": "Reserva de Talentos",
+        "FormulaAmount": "Escolhas de Fórmula",
+        "FormulaValueCap": "Limite de Valor (prata)",
         "ExtraTraining": "Treinamento Extra",
         "SkillChoices": "Escolhas Agrupadas:",
         "Label": "Rótulo",
@@ -2404,6 +2681,8 @@
         "ExtraTrainingHint": "Escolhas de treinamento de perícia irrestritas (qualquer perícia)",
         "StatBonusHint": "Cada ponto concede +1 a qualquer atributo abaixo do limite",
         "AmountHint": "Quantos o jogador escolhe da reserva",
+        "FormulaAmountHint": "Quantas fórmulas de Item Alquímico esta característica concede",
+        "FormulaValueCapHint": "Fórmula. Valor em prata; o valor do item de cada fórmula aprendida deve ser ≤ a isto. ex: @attributes.level.value * 50",
         "LabelPlaceholder": "ex: Ascendência",
         "DropStarterPack": "Solte o pacote inicial aqui"
       },

@@ -109,8 +109,8 @@
     }
   },
   "effects": [],
-  "folder": null,
-  "sort": 900000,
+  "folder": "W17xvUMSzgk8ti6R",
+  "sort": 400000,
   "ownership": {
     "default": 0,
     "7hJBvKOxyEF7RWCr": 3
@@ -121,12 +121,12 @@
     }
   },
   "_stats": {
-    "coreVersion": "14.367",
+    "coreVersion": "14.368",
     "systemId": "vagabond",
     "systemVersion": "5.37.4",
     "createdTime": 1789498229483,
-    "modifiedTime": 1789500096517,
-    "lastModifiedBy": "7hJBvKOxyEF7RWCr",
+    "modifiedTime": 1790439939967,
+    "lastModifiedBy": "F8lCaC2xBa4wgj43",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null

@@ -1,5 +1,5 @@
 {
-  "folder": "o9iJqhb7zjYleADh",
+  "folder": "pW8e9eDngjkWtJJp",
   "name": "Utility - Darkness II",
   "type": "equipment",
   "img": "icons/magic/control/buff-flight-wings-runes-blue-white.webp",
@@ -45,18 +45,18 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "13.351",
+    "coreVersion": "14.368",
     "systemId": "vagabond",
     "systemVersion": "2.8.1",
     "createdTime": 1769766913362,
-    "modifiedTime": 1769766913362,
-    "lastModifiedBy": "13p65OEadZSZVLRk"
+    "modifiedTime": 1790436459762,
+    "lastModifiedBy": "F8lCaC2xBa4wgj43"
   },
   "_id": "b91qxtfecFAs3vHL",
   "ownership": {
     "default": 0,
     "13p65OEadZSZVLRk": 3
   },
-  "sort": 0,
+  "sort": 150000,
   "_key": "!items!b91qxtfecFAs3vHL"
 }

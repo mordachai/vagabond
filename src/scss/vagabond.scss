@@ -60,6 +60,9 @@
 @import 'apps/crafting-settings';
 @import 'apps/workbench';
 
+/* Party supplies breakdown - renders inside Foundry's #tooltip, outside sheets */
+@import 'components/party-supplies-tooltip';
+
 /* Context menus - imported at top level because they render outside sheets (appended to document.body) */
 
 /* Inventory context menu - Uses ContextMenuHelper with dual-selector pattern */

@@ -705,8 +705,8 @@ export class VagabondItem extends Item {
    * @param {VagabondActor} actor - The actor making the attack
    * @param {{allowUnequipped?: boolean, skillKey?: string|null, thrown?: boolean}} [options]
    *   allowUnequipped: thrown attacks. skillKey: skill to roll (default: this.system.weaponSkill).
-   *   thrown: the attack is not a Close attack regardless of the weapon's range.
-   * @returns {Promise<Object>} Attack result with roll, difficulty, isHit, isCritical, weaponSkill
+   *   thrown: a ranged attack, never a Close one, whatever the weapon's range.
+   * @returns {Promise<Object>} Attack result with roll, difficulty, isHit, isCritical, weaponSkill, thrown
    */
   async rollAttack(actor, favorHinder = 'none', difficultyOverride = null, { allowUnequipped = false, skillKey = null, thrown = false } = {}) {
     this.validateCanAttack({ allowUnequipped });
@@ -779,6 +779,7 @@ export class VagabondItem extends Item {
       critNumber, // Pass used threshold for display/debugging
       weaponSkill,
       weaponSkillKey,
+      thrown,
       favorHinder: effectiveFavorHinder, // Use modified favor/hinder (includes target's modifier)
     };
   }

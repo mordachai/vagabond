@@ -279,6 +279,7 @@
 
       .shop-app-sidebar-title,
       .shop-cat-label,
+      .shop-cat-toggle,
       .shop-cat-children {
         display: none;
       }
@@ -370,6 +371,38 @@
 
       i { color: $c-yellow; }
     }
+
+    // Tab whose category is picked: tinted, the category itself carries the full highlight
+    &.active-parent {
+      background: var(--vagabond-c-surface);
+
+      i { color: $c-yellow; }
+    }
+  }
+
+  // Expand/collapse chevron on tabs with categories
+  .shop-cat-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 3px;
+
+    i {
+      width: auto;
+      font-size: 0.7em;
+      color: $c-muted;
+      transition: transform 0.15s;
+    }
+
+    &.collapsed i { transform: rotate(-90deg); }
+
+    &:hover {
+      background: $c-inset-2;
+
+      i { color: $c-text-1; }
+    }
   }
 
   .shop-cat-children {
@@ -379,6 +412,8 @@
     margin-left: 14px;
     padding-left: 6px;
     border-left: 1px solid $c-tan-lite;
+
+    &.collapsed { display: none; }
   }
 
   .shop-cat-child {

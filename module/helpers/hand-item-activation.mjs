@@ -20,9 +20,9 @@ import { runMacroFromButton } from './item-macro.mjs';
  * @param {'use'|'throw'} [o.mode] 'throw' (Thrown weapons only): attack
  *   WITHOUT equipping, then spend one from the stack. Stops at 0 (item kept)
  *   so raising the quantity "retrieves" thrown weapons.
- * @param {string|null} [o.skillKey] 'use' weapons: which allowed skill to attack
- *   with (default: the weapon's preferred skill). Thrown Alchemical Items: Ranged
- *   or Craft (default: the better of the two).
+ * @param {string|null} [o.skillKey] weapons ('use' or 'throw'): which allowed skill
+ *   to attack with (default: the weapon's preferred skill). Thrown Alchemical Items:
+ *   Melee, Finesse or Craft (default: the best of the three).
  * @param {boolean} [o.noAttack] thrown Alchemical Items: plain Use card instead
  *   of the throw attack.
  */
@@ -34,7 +34,7 @@ export async function activateHandItem({ actor, item, event, rollHandler, mode =
     if (qty <= 0) {
       return ui.notifications.warn(game.i18n.format('VAGABOND.ContextMenu.ThrowNoneLeft', { name: item.name }));
     }
-    const roll = await rollHandler.rollWeapon(event, { dataset: { itemId: item.id } }, { thrown: true });
+    const roll = await rollHandler.rollWeapon(event, { dataset: { itemId: item.id } }, { thrown: true, skillKey });
     if (!roll) return; // aborted (hook, auto-fail, error) — nothing left the hand
     const update = { 'system.quantity': qty - 1 };
     // Threw the last one out of your hand → the hand is free again

@@ -4,8 +4,8 @@ import { ShopTransactions } from './shop-transactions.mjs';
  * Bulk stocking for shops (GM): drop an Item, an Item folder (world or compendium,
  * subfolders included), a whole Item compendium, or a folder of compendiums.
  *
- * Every tradeable item is copied into the shop; items already in stock (same source)
- * are skipped. Each copy's shop category (`flags.vagabond.shop.category`, the Gear
+ * Every tradeable item is copied into the shop; items already in stock (same source
+ * UUID — see isDuplicate) are skipped. Each copy's shop category (`flags.vagabond.shop.category`, the Gear
  * sub-tab) is the name of the folder it came from, so a compendium's folder layout
  * becomes the shop's layout. Used by the shop sheet and the store window.
  */
@@ -96,15 +96,27 @@ export class ShopStock {
   }
 
   /**
-   * Whether two items are the same ware for stocking: same source, or — since the same
-   * item often lives in several compendiums/folders with different sources — same type,
-   * equipment type, name and material.
+   * UUID of the document a ware was stocked from. Stock copies carry it in
+   * `flags.vagabond.shop.sourceUuid` (older stock falls back to its compendium source);
+   * a document being dropped is its own source (embedded items: their compendium source).
+   * @returns {string|null}
+   */
+  static sourceUuid(item) {
+    return item?.flags?.vagabond?.shop?.sourceUuid
+      ?? (item?.parent ? item._stats?.compendiumSource : item?.uuid)
+      ?? null;
+  }
+
+  /**
+   * Whether two items are the same ware for stocking: same source UUID only. Same-named
+   * items from different compendiums/folders are distinct wares and are both kept.
+   * Name + material must also match, so renamed/re-materialed copies of one source stay apart.
    */
   static isDuplicate(a, b) {
-    if (ShopTransactions.sameSource(a, b)) return true;
-    return a?.type === b?.type
+    const src = this.sourceUuid(a);
+    if (!src || src !== this.sourceUuid(b)) return false;
+    return a.type === b.type
       && a.name?.trim().toLowerCase() === b.name?.trim().toLowerCase()
-      && (a.system?.equipmentType ?? null) === (b.system?.equipmentType ?? null)
       && (a.system?.metal ?? 'none') === (b.system?.metal ?? 'none');
   }
 
@@ -146,6 +158,8 @@ export class ShopStock {
     if (!data._stats?.compendiumSource && item.inCompendium) {
       foundry.utils.setProperty(data, '_stats.compendiumSource', item.uuid);
     }
+    const src = this.sourceUuid(item);
+    if (src) foundry.utils.setProperty(data, 'flags.vagabond.shop.sourceUuid', src);
     const category = this.folderOf(item)?.name;
     if (category) foundry.utils.setProperty(data, 'flags.vagabond.shop.category', category);
     return data;

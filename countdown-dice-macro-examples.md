@@ -292,7 +292,7 @@ Notes specific to this recipe:
 
 - **One ammo tracker per actor at a time** — the lookup keys off `ammoLinkActorUuid`, so swapping weapon types mid-campaign means deleting/recreating the tracker (or extending the flag to also store a weapon/skill filter if you need multiple simultaneous ammo pools).
 - **Miss still spends ammo** — `postD20Roll` fires regardless of hit/miss, matching "you fired the shot" logic. If you want misses to be free, add `if (!ctx.isSuccess) return;` (or check `ctx.isCritical`/whatever fits your rules) before rolling the die.
-- **Thrown weapons** count as ranged too, since `attackTypeForWeaponSkill` looks at the actual skill used for that roll, not just the weapon's default.
+- **Thrown weapons** roll with the weapon's own skill (the owner's preferred one), so `attackTypeForWeaponSkill(ctx.rollKey)` follows that skill — a Dagger thrown with Melee doesn't spend ammo.
 - **Why the `OWNER` check before rolling**: `postD20Roll` fires on whichever client performed the attack. If a player without `OWNER` on the die somehow triggers it (shouldn't happen given the ownership mirroring in Part 1, but defends against manual edits), they just silently can't tick it — no error spam.
 
 ---

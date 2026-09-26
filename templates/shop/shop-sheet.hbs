@@ -128,11 +128,11 @@
 
     {{else}}
     <section class="shop-section shop-stock">
-      <ol class="shop-stock-list {{#if isGear}}with-category{{/if}}">
+      <ol class="shop-stock-list {{#if hasCategory}}with-category{{/if}}">
         <li class="shop-stock-head">
           <span></span>
           <span>{{localize 'VAGABOND.Shop.Sheet.Item'}}</span>
-          {{#if isGear}}<span>{{localize 'VAGABOND.Shop.Sheet.Category'}}</span>{{/if}}
+          {{#if hasCategory}}<span>{{localize 'VAGABOND.Shop.Sheet.Category'}}</span>{{/if}}
           <span class="shop-stock-num">{{localize 'VAGABOND.Shop.Sheet.Qty'}}</span>
           <span class="shop-stock-num">{{localize 'VAGABOND.Shop.Sheet.Base'}}</span>
           <span class="shop-stock-num">{{localize 'VAGABOND.Shop.Sheet.Price'}}</span>
@@ -142,7 +142,7 @@
         <li class="shop-stock-row" data-item-id="{{id}}">
           <img src="{{img}}" alt="">
           <a class="shop-stock-name" data-action="openStockItem">{{name}}</a>
-          {{#if @root.isGear}}
+          {{#if @root.hasCategory}}
           <input type="text" class="shop-stock-category" data-category-for="{{id}}" value="{{category}}"
             placeholder="{{localize 'VAGABOND.Shop.Tabs.general'}}" {{disabled (not @root.editable)}}>
           {{/if}}

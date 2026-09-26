@@ -460,6 +460,14 @@ function registerGameSettings() {
     default: 'grid',
   });
 
+  // Store sidebar: tabs whose categories the user collapsed ({ tabKey: true }; default all expanded)
+  game.settings.register('vagabond', 'shopCollapsedCategories', {
+    scope: 'client',
+    config: false,
+    type: Object,
+    default: {},
+  });
+
   // Imbue delivery: pay Damage/Effect mana upfront at cast (legacy) vs deferred
   // to delivery-on-hit (RAW-correct default per GM ruling — see imbue-helper.mjs)
   game.settings.register('vagabond', 'imbueUpfrontMana', {
@@ -2698,6 +2706,7 @@ const FLUKE_REROLL_ENTRY = {
         difficulty: rerollData.difficulty,
         weaponSkill,
         weaponSkillKey,
+        thrown: !!rerollData.thrown,
         isHit: isSuccess,
         isCritical
       };
@@ -2771,6 +2780,7 @@ const FORCE_CRIT_ENTRY = {
         difficulty: rerollData.difficulty,
         weaponSkill,
         weaponSkillKey,
+        thrown: !!rerollData.thrown,
         isHit: true,
         isCritical: true
       };

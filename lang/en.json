@@ -595,7 +595,7 @@
         "MixCompanionHint": "A different damage type: rolled as its own card on the same targets (on a hit, when thrown).",
         "MixStatuses": "Statuses",
         "MixUse": "Use",
-        "MixThrown": "Thrown (Ranged or Craft)",
+        "MixThrown": "Thrown (Melee, Finesse or Craft)",
         "MixUsed": "Used (no attack roll)",
         "MixLasts": "Lasts",
         "MixNoStudied": "You need a Studied die to Mix.",

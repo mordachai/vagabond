@@ -1,7 +1,7 @@
 {
   "id": "vagabond",
   "title": "Vagabond",
-  "version": "5.43.0",
+  "version": "5.43.1",
   "description": "Indestructoboy's one and only Vagabond RPG system for FoundryVTT!",
   "authors": [
     {
@@ -295,6 +295,19 @@
       "flags": {}
     },
     {
+      "name": "stores",
+      "label": "Stores",
+      "system": "vagabond",
+      "path": "packs/characters/stores",
+      "type": "Actor",
+      "ownership": {
+        "PLAYER": "NONE",
+        "ASSISTANT": "OWNER"
+      },
+      "private": false,
+      "flags": {}
+    },
+    {
       "name": "active-effects",
       "label": "Active Effects",
       "system": "vagabond",
@@ -360,7 +373,8 @@
           "color": "#000000",
           "packs": [
             "bestiary",
-            "humanlike"
+            "humanlike",
+            "stores"
           ],
           "folders": []
         },
@@ -386,7 +400,7 @@
     }
   ],
   "manifest": "https://github.com/mordachai/vagabond/releases/latest/download/system.json",
-  "download": "https://github.com/mordachai/vagabond/releases/download/v5.43.0/system.zip",
+  "download": "https://github.com/mordachai/vagabond/releases/download/v5.43.1/system.zip",
   "background": "systems/vagabond/assets/splash.png",
   "grid": {
     "distance": 5,

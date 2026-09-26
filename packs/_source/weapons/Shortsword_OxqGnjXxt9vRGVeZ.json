@@ -43,7 +43,7 @@
     ]
   },
   "effects": [],
-  "folder": null,
+  "folder": "W17xvUMSzgk8ti6R",
   "flags": {
     "vagabond": {
       "preferredSkill": ""
@@ -53,18 +53,18 @@
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.367",
+    "coreVersion": "14.368",
     "systemId": "vagabond",
     "systemVersion": "5.37.4",
     "createdTime": 1764967045011,
-    "modifiedTime": 1789500096517,
-    "lastModifiedBy": "7hJBvKOxyEF7RWCr"
+    "modifiedTime": 1790439939967,
+    "lastModifiedBy": "F8lCaC2xBa4wgj43"
   },
   "ownership": {
     "default": 0,
     "vJkLjvlErdx6ZHoC": 3
   },
   "_id": "OxqGnjXxt9vRGVeZ",
-  "sort": 3200000,
+  "sort": 400000,
   "_key": "!items!OxqGnjXxt9vRGVeZ"
 }

@@ -72,11 +72,16 @@
       </div>
       <nav class="shop-app-sidebar-list">
         {{#each tabs}}
-        <a class="shop-cat {{#if active}}active{{/if}}" data-action="selectTab" data-tab="{{key}}" data-tooltip="{{label}}">
+        <a class="shop-cat {{#if current}}active{{else if active}}active-parent{{/if}}" data-action="selectTab" data-tab="{{key}}" data-tooltip="{{label}}">
           <i class="{{icon}}"></i><span class="shop-cat-label">{{label}}</span>
+          {{#if children}}
+          <span class="shop-cat-toggle {{#if collapsed}}collapsed{{/if}}" data-action="toggleCategory" data-tab="{{key}}">
+            <i class="fas fa-chevron-down"></i>
+          </span>
+          {{/if}}
         </a>
         {{#if children}}
-        <div class="shop-cat-children">
+        <div class="shop-cat-children {{#if collapsed}}collapsed{{/if}}">
           {{#each children}}
           <a class="shop-cat shop-cat-child {{#if active}}active{{/if}}" data-action="selectTab" data-tab="{{../key}}" data-sub="{{key}}">
             <span class="shop-cat-label">{{label}}</span>

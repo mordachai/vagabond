@@ -38,24 +38,24 @@
     "damageTypeOneHand": "slashing"
   },
   "effects": [],
-  "folder": null,
+  "folder": "Iw7Sw7FF4uY4DeAL",
   "flags": {},
   "_stats": {
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.367",
+    "coreVersion": "14.368",
     "systemId": "vagabond",
     "systemVersion": "4.3.1",
     "createdTime": 1764967045011,
-    "modifiedTime": 1789500096518,
-    "lastModifiedBy": "7hJBvKOxyEF7RWCr"
+    "modifiedTime": 1790439939967,
+    "lastModifiedBy": "F8lCaC2xBa4wgj43"
   },
   "ownership": {
     "default": 0,
     "vJkLjvlErdx6ZHoC": 3
   },
   "_id": "cBUd8HGKrJNmXviU",
-  "sort": 4000000,
+  "sort": 200000,
   "_key": "!items!cBUd8HGKrJNmXviU"
 }

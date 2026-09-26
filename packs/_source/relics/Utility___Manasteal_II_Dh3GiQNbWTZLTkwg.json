@@ -39,18 +39,18 @@
     "linkedConsumable": ""
   },
   "effects": [],
-  "folder": "o9iJqhb7zjYleADh",
+  "folder": "pW8e9eDngjkWtJJp",
   "flags": {},
   "_stats": {
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "13.351",
+    "coreVersion": "14.368",
     "systemId": "vagabond",
     "systemVersion": "2.8.1",
     "createdTime": 1769604133763,
-    "modifiedTime": 1769766913317,
-    "lastModifiedBy": "13p65OEadZSZVLRk"
+    "modifiedTime": 1790436401839,
+    "lastModifiedBy": "F8lCaC2xBa4wgj43"
   },
   "ownership": {
     "default": 0

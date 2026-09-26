@@ -55,6 +55,7 @@ export class ShopApp extends HandlebarsApplicationMixin(ApplicationV2) {
     position: { width: 1065, height: 800 },
     actions: {
       selectTab: ShopApp.#onSelectTab,
+      toggleCategory: ShopApp.#onToggleCategory,
       toggleSidebar: ShopApp.#onToggleSidebar,
       cartTab: ShopApp.#onCartTab,
       addToCart: ShopApp.#onAddToCart,
@@ -297,8 +298,13 @@ export class ShopApp extends HandlebarsApplicationMixin(ApplicationV2) {
       rows.push(this.#prepareRow(item, { shop, buyer, payer, funds, flags }));
     }
 
-    // Category sidebar: All Wares + type tabs (empty ones hidden), gear categories nested
-    const view = ShopTabs.build(rows, { tab: this._tab, sub: this._sub, hideEmpty: true, includeAll: true });
+    // Category sidebar: All Wares + type tabs (empty ones hidden), categories nested and
+    // collapsible (per-user, remembered). Clicking a tab lists all of its categories.
+    const view = ShopTabs.build(rows, {
+      tab: this._tab, sub: this._sub, hideEmpty: true, includeAll: true, rootShowsAll: true,
+    });
+    const collapsed = game.settings.get('vagabond', 'shopCollapsedCategories') ?? {};
+    for (const t of view.tabs) t.collapsed = !!(t.children && collapsed[t.key]);
 
     // Search spans every category; sort applies to whatever is listed
     const query = this._search.trim().toLowerCase();
@@ -731,6 +737,17 @@ export class ShopApp extends HandlebarsApplicationMixin(ApplicationV2) {
     if (!tab) return;
     this._tab = tab;
     this._sub = sub ?? null;
+    this.render();
+  }
+
+  /** Expand/collapse a sidebar tab's categories (remembered per user). */
+  static async #onToggleCategory(event, target) {
+    const key = target.dataset.tab;
+    if (!key) return;
+    const collapsed = { ...(game.settings.get('vagabond', 'shopCollapsedCategories') ?? {}) };
+    if (collapsed[key]) delete collapsed[key];
+    else collapsed[key] = true;
+    await game.settings.set('vagabond', 'shopCollapsedCategories', collapsed);
     this.render();
   }
 

@@ -40,24 +40,24 @@
     "damageTypeOneHand": "piercing"
   },
   "effects": [],
-  "folder": null,
+  "folder": "2GeJSvXoDFMyhrwx",
   "flags": {},
   "_stats": {
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "14.367",
+    "coreVersion": "14.368",
     "systemId": "vagabond",
     "systemVersion": "4.3.1",
     "createdTime": 1764967045011,
-    "modifiedTime": 1789499550497,
-    "lastModifiedBy": "7hJBvKOxyEF7RWCr"
+    "modifiedTime": 1790439939967,
+    "lastModifiedBy": "F8lCaC2xBa4wgj43"
   },
   "ownership": {
     "default": 0,
     "vJkLjvlErdx6ZHoC": 3
   },
   "_id": "zP25XADuyEP3KSez",
-  "sort": 5500000,
+  "sort": 500000,
   "_key": "!items!zP25XADuyEP3KSez"
 }

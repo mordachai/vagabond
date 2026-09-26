@@ -160,17 +160,6 @@ export class RollHandler {
     }
   }
 
-  /**
-   * Handle weapon attack rolls
-   * @param {Event} event - The triggering event
-   * @param {HTMLElement} target - The target element
-   * @param {{thrown?: boolean, skillKey?: string|null}} [options] thrown: attack with an unequipped
-   *   Thrown weapon (quantity is spent by activateHandItem, not consumption) — rolls Ranged,
-   *   Hindered at Far. skillKey: one of the weapon's allowed skills (default: preferred).
-   *   A damaging (non-restorative) Alchemical Item is always a throw attack (Ranged or
-   *   Craft, see EquipmentHelper.isThrownAlchemical) unless noAttack: then it posts the
-   *   plain auto-hit Use card (pouring / applying it, GM's call).
-   */
   /** A Mix with two damage types posts its second payload as its own card (MixHelper.postCompanion). */
   async _postMixCompanion(item, targetsAtRollTime, attackType) {
     if (item.flags?.vagabond?.mix?.companionIndex == null) return;
@@ -178,6 +167,18 @@ export class RollHandler {
     await MixHelper.postCompanion(this.actor, item, targetsAtRollTime, { attackType });
   }
 
+  /**
+   * Handle weapon attack rolls
+   * @param {Event} event - The triggering event
+   * @param {HTMLElement} target - The target element
+   * @param {{thrown?: boolean, skillKey?: string|null}} [options] thrown: attack with an unequipped
+   *   Thrown weapon (quantity is spent by activateHandItem, not consumption) — a ranged
+   *   attack, Hindered at Far. skillKey: one of the weapon's allowed skills (default:
+   *   preferred), for melee and thrown attacks alike.
+   *   A damaging (non-restorative) Alchemical Item is always a throw attack (Melee,
+   *   Finesse or Craft, see EquipmentHelper.isThrownAlchemical) unless noAttack: then it posts the
+   *   plain auto-hit Use card (pouring / applying it, GM's call).
+   */
   async rollWeapon(event, target = null, { thrown = false, skillKey = null, noAttack = false } = {}) {
     event.preventDefault();
 
@@ -366,9 +367,8 @@ export class RollHandler {
         }
       }
 
-      // Pre-roll hook for weapon attack. Throw rolls Ranged; otherwise the
-      // chosen / preferred / default skill.
-      const _wpnRollKey = EquipmentHelper.attackSkillFor(item, { mode: thrown ? 'throw' : 'use', skillKey });
+      // Pre-roll hook for weapon attack: the chosen / preferred / default skill.
+      const _wpnRollKey = EquipmentHelper.attackSkillFor(item, { skillKey });
       const _wpnRollData = this.actor.getRollData();
       const _wpnSkillData = _wpnRollData.skills?.[_wpnRollKey] || _wpnRollData.saves?.[_wpnRollKey];
       const _wpnBaseDifficulty = _wpnSkillData?.difficulty ?? 10;

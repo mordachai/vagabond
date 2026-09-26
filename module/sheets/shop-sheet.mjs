@@ -102,7 +102,7 @@ export class VagabondShopSheet extends HandlebarsApplicationMixin(ActorSheetV2) 
           subtabs: onShopTab ? null : view.subtabs,
           rows: view.rows,
           onShopTab,
-          isGear: view.tab === 'gear',
+          hasCategory: ShopTabs.CATEGORY_TABS.includes(view.tab),
         };
       })(),
       shopkeeperImg: system.shopkeeper.img || 'icons/svg/mystery-man.svg',
