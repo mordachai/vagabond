@@ -15,9 +15,20 @@ _You need the book (digital or paperback) to have access to the compendia contai
 
 ## Features
 
-<img width="950" alt="image" src="https://github.com/user-attachments/assets/2cdfc134-11a7-4419-9480-be8d9cdfbafe" />
+### **New features:** Stores
+
+<img width="950" alt="image" src="https://github.com/user-attachments/assets/650824dc-b5b3-45b9-88d1-f99bb3035589" />
+
+
+_Map: The City of Greybanner - 2 Minutes Tabletop_
+
+
+
+---
 
 ### **New features:** PW3 Alpha V2 Ruleset
+
+<img width="950" alt="image" src="https://github.com/user-attachments/assets/2cdfc134-11a7-4419-9480-be8d9cdfbafe" />
 
 - **Flanking:** automatic detection on the canvas. When two or more enemies are Close (grid-adjacent) to a foe no more than one size larger, the foe is marked **Flanked** — Vulnerable, taking +2 damage from attacks — and the attackers are marked **Flanking**. Multi-cell tokens count every occupied square, and the statuses update live as tokens move and on each attack.
 - **Weapon properties overhaul:** properties reviewed and expanded, with many more of them now resolved automatically during attack and damage rolls instead of by hand.
