@@ -9,6 +9,11 @@ on:
       - 'system.json'
   # Manual trigger — re-fire a release if GitHub drops the push trigger
   workflow_dispatch:
+    inputs:
+      foundry_dry_run:
+        description: 'Foundry package release API: validate only, do not save'
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -99,3 +104,60 @@ jobs:
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # 5. Publish the version to Foundry's package registry
+      # ------------------------------------------------------------------
+      # https://foundryvtt.com/article/package-release-api/
+      # Runs after a fresh GitHub release, OR on a manual dispatch for a version
+      # whose tag already exists (re-publish after a Foundry-side failure).
+      # Needs repo secret FOUNDRY_RELEASE_TOKEN (the "Package Release Token" on
+      # the package's foundryvtt.com edit page). Manifest must be the
+      # version-pinned URL, not "latest". Compatibility is read from system.json.
+      # Max one release per package per 60s -> retry once on 429.
+      # ------------------------------------------------------------------
+      - name: Publish to Foundry
+        if: steps.check_tag.outputs.exists == 'false' || github.event_name == 'workflow_dispatch'
+        env:
+          FOUNDRY_RELEASE_TOKEN: ${{ secrets.FOUNDRY_RELEASE_TOKEN }}
+          DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.foundry_dry_run || false }}
+        run: |
+          if [ -z "$FOUNDRY_RELEASE_TOKEN" ]; then
+            echo "::error::Secret FOUNDRY_RELEASE_TOKEN is not set"
+            exit 1
+          fi
+
+          VERSION="${{ steps.get_version.outputs.version }}"
+          REPO="${{ github.repository }}"
+
+          BODY=$(jq -n \
+            --arg id "$(jq -r .id system.json)" \
+            --arg version "$VERSION" \
+            --arg manifest "https://github.com/${REPO}/releases/download/v${VERSION}/system.json" \
+            --arg notes "https://github.com/${REPO}/releases/tag/v${VERSION}" \
+            --arg min "$(jq -r '.compatibility.minimum // ""' system.json)" \
+            --arg ver "$(jq -r '.compatibility.verified // ""' system.json)" \
+            --arg max "$(jq -r '.compatibility.maximum // ""' system.json)" \
+            --argjson dry "$DRY_RUN" \
+            '{id: $id, "dry-run": $dry, release: {version: $version, manifest: $manifest, notes: $notes, compatibility: {minimum: $min, verified: $ver, maximum: $max}}}')
+          echo "Request body:"; echo "$BODY"
+
+          for attempt in 1 2; do
+            HTTP=$(curl -sS -o response.json -w '%{http_code}' \
+              -X POST 'https://foundryvtt.com/_api/packages/release_version/' \
+              -H 'Content-Type: application/json' \
+              -H "Authorization: $FOUNDRY_RELEASE_TOKEN" \
+              -d "$BODY" -D headers.txt)
+            echo "HTTP $HTTP"; cat response.json; echo
+            if [ "$HTTP" = "429" ] && [ "$attempt" = "1" ]; then
+              WAIT=$(grep -i '^retry-after:' headers.txt | tr -dc '0-9')
+              echo "Rate limited, waiting ${WAIT:-60}s"
+              sleep "${WAIT:-60}"
+              continue
+            fi
+            break
+          done
+
+          if [ "$HTTP" != "200" ]; then
+            echo "::error::Foundry release API returned HTTP $HTTP"
+            exit 1
+          fi
