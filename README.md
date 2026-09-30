@@ -17,12 +17,19 @@ _You need the book (digital or paperback) to have access to the compendia contai
 
 ### **New features:** Stores
 
+<img width="652" height="733" alt="image" src="https://github.com/user-attachments/assets/c6023070-d224-4c84-84e4-7038220c7bfd" />
+
 <img width="950" alt="image" src="https://github.com/user-attachments/assets/650824dc-b5b3-45b9-88d1-f99bb3035589" />
 
 
 _Map: The City of Greybanner - 2 Minutes Tabletop_
 
 
+### **New features:** Workbench and Alchemists Lab
+
+<img width="950" alt="image" src="https://github.com/user-attachments/assets/304b9a49-d850-477c-8ed3-184710b1030f" />
+
+<img width="950" alt="image" src="https://github.com/user-attachments/assets/a5b71f9f-0e67-460c-b9d7-67e656b63851" />
 
 ---
 
