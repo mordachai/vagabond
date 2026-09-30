@@ -6,15 +6,15 @@
       <input class="shop-name" type="text" name="name" value="{{actor.name}}"
         placeholder="{{localize 'VAGABOND.Shop.Sheet.ShopName'}}" {{disabled (not editable)}}>
       <div class="shop-subtitle-row">
-        <input class="shop-subtitle" type="text" name="system.subtitle" value="{{system.subtitle}}"
-          placeholder="{{localize 'VAGABOND.Shop.Sheet.TaglinePlaceholder'}}" {{disabled (not editable)}}>
+        <textarea class="shop-subtitle" name="system.subtitle" rows="1"
+          placeholder="{{localize 'VAGABOND.Shop.Sheet.TaglinePlaceholder'}}" {{disabled (not editable)}}>{{system.subtitle}}</textarea>
         <div class="shop-header-buttons">
           <button type="button" class="shop-show-btn" data-action="openStore">
             <i class="fas fa-store"></i> {{localize 'VAGABOND.Shop.Sheet.OpenStore'}}
           </button>
           {{#if isGM}}
-          <button type="button" class="shop-show-btn" data-action="showToPlayers">
-            <i class="fas fa-bullhorn"></i> {{localize 'VAGABOND.Shop.App.ShowToPlayers'}}
+          <button type="button" class="shop-show-btn shop-open-toggle{{#if system.open}} is-open{{/if}}" data-action="toggleShopOpen">
+            {{#if system.open}}<i class="fas fa-lock"></i> {{localize 'VAGABOND.Shop.App.CloseShop'}}{{else}}<i class="fas fa-bullhorn"></i> {{localize 'VAGABOND.Shop.App.OpenShop'}}{{/if}}
           </button>
           {{/if}}
         </div>

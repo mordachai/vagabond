@@ -22,6 +22,10 @@ export default class VagabondShop extends foundry.abstract.TypeDataModel {
       new fields.NumberField({ required: true, nullable: false, initial, min, max });
     const schema = {};
 
+    // Open for business. The only gate for player access: closed shops refuse trades and
+    // refuse to open for non-GMs. Toggled by the GM (ShopApp.setOpen).
+    schema.open = new fields.BooleanField({ initial: false });
+
     // Tagline under the shop name in the store banner
     schema.subtitle = new fields.StringField({ initial: '' });
 

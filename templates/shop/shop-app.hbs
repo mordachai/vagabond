@@ -9,8 +9,8 @@
         <button type="button" class="shop-show-btn" data-action="openShopSheet">
           <i class="fas fa-gear"></i> {{localize 'VAGABOND.Shop.App.ConfigureShop'}}
         </button>
-        <button type="button" class="shop-show-btn" data-action="showToPlayers">
-          <i class="fas fa-bullhorn"></i> {{localize 'VAGABOND.Shop.App.ShowToPlayers'}}
+        <button type="button" class="shop-show-btn shop-open-toggle{{#if isOpen}} is-open{{/if}}" data-action="toggleShopOpen">
+          {{#if isOpen}}<i class="fas fa-lock"></i> {{localize 'VAGABOND.Shop.App.CloseShop'}}{{else}}<i class="fas fa-bullhorn"></i> {{localize 'VAGABOND.Shop.App.OpenShop'}}{{/if}}
         </button>
       </div>
       {{/if}}

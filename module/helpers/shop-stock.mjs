@@ -83,15 +83,10 @@ export class ShopStock {
     }
     const skipped = tradeable.length - fresh.length;
     if (!fresh.length) {
-      ui.notifications.info(game.i18n.format('VAGABOND.Shop.Sheet.FolderNothing', { folder: label, skipped }));
+      ui.notifications.warn(game.i18n.format('VAGABOND.Shop.Sheet.FolderNothing', { folder: label, skipped }));
       return [];
     }
     const created = await shop.createEmbeddedDocuments('Item', fresh.map(d => this.stockData(d)));
-    if (docs.length > 1) {
-      ui.notifications.info(game.i18n.format('VAGABOND.Shop.Sheet.FolderAdded', {
-        count: created.length, folder: label, skipped,
-      }));
-    }
     return created;
   }
 

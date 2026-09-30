@@ -82,6 +82,12 @@ $shop-font-number: $font-title;
       background: transparent;
       border: 1px solid transparent;
       border-radius: 3px;
+      // Textarea that wraps long taglines and grows with its text
+      resize: none;
+      overflow: hidden;
+      field-sizing: content;
+      line-height: 1.2;
+      white-space: pre-wrap;
 
       &::placeholder { color: $c-yellow; opacity: 0.5; }
       &:hover, &:focus { border-color: $c-yellow; }
@@ -89,7 +95,7 @@ $shop-font-number: $font-title;
 
     .shop-subtitle-row {
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       justify-content: space-between;
       gap: 8px;
     }
@@ -505,5 +511,14 @@ $shop-font-number: $font-title;
 
   &:hover {
     box-shadow: 0 0 8px -1px $c-yellow, inset 0 0 0 1px $c-yellow;
+  }
+
+  // Open/Close toggle: green while the shop is open for business (button then offers "Close")
+  &.shop-open-toggle.is-open {
+    border-color: $c-green;
+
+    &:hover {
+      box-shadow: 0 0 8px -1px $c-green, inset 0 0 0 1px $c-green;
+    }
   }
 }

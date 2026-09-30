@@ -5,7 +5,19 @@
 export class VagabondCombatant extends Combatant {
   /** @override */
   async _preCreate(data, options, user) {
-    await super._preCreate(data, options, user);
+    const allowed = await super._preCreate(data, options, user);
+    if (allowed === false) return false;
+
+    // Shops never fight: they stay out of encounters, the tracker and the carousel
+    const actor = this.actor ?? game.actors.get(data.actorId ?? this._source.actorId);
+    if (actor?.type === 'shop') {
+      const now = Date.now();
+      if (now - (VagabondCombatant._shopBlockNotified ?? 0) > 1000) {
+        VagabondCombatant._shopBlockNotified = now;
+        ui.notifications.warn(game.i18n.localize('VAGABOND.Shop.Errors.noCombat'));
+      }
+      return false;
+    }
 
     // Initialize activations flags if missing
     const useActivationPoints = game.settings.get('vagabond', 'useActivationPoints');

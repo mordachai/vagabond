@@ -24,7 +24,8 @@ export class VagabondShopSheet extends HandlebarsApplicationMixin(ActorSheetV2) 
       deleteStockItem: VagabondShopSheet.#onDeleteStockItem,
       removeDuplicates: VagabondShopSheet.#onRemoveDuplicates,
       openStore: VagabondShopSheet.#onOpenStore,
-      showToPlayers: VagabondShopSheet.#onShowToPlayers,
+      toggleShopOpen: VagabondShopSheet.#onToggleOpen,
+      createOpenMacro: VagabondShopSheet.#onCreateOpenMacro,
       selectTab: VagabondShopSheet.#onSelectTab,
       selectSubTab: VagabondShopSheet.#onSelectSubTab,
     },
@@ -61,6 +62,9 @@ export class VagabondShopSheet extends HandlebarsApplicationMixin(ActorSheetV2) 
   _getHeaderControls() {
     const controls = super._getHeaderControls();
     controls.unshift({ icon: 'fas fa-store', label: 'VAGABOND.Shop.Sheet.OpenStore', action: 'openStore' });
+    if (game.user.isGM) {
+      controls.push({ icon: 'fas fa-bolt', label: 'VAGABOND.Shop.Sheet.CreateOpenMacro', action: 'createOpenMacro' });
+    }
     return controls;
   }
 
@@ -176,10 +180,7 @@ export class VagabondShopSheet extends HandlebarsApplicationMixin(ActorSheetV2) 
 
   static async #onRemoveDuplicates() {
     if (!this.actor.isOwner) return;
-    const removed = await ShopStock.removeDuplicates(this.actor);
-    ui.notifications.info(removed
-      ? game.i18n.format('VAGABOND.Shop.Sheet.DuplicatesRemoved', { count: removed })
-      : game.i18n.localize('VAGABOND.Shop.Sheet.NoDuplicates'));
+    await ShopStock.removeDuplicates(this.actor);
   }
 
   static #onOpenStockItem(event, target) {
@@ -201,8 +202,21 @@ export class VagabondShopSheet extends HandlebarsApplicationMixin(ActorSheetV2) 
     this.render();
   }
 
-  static #onShowToPlayers() {
-    return ShopApp.promptShow(this.actor);
+  static #onToggleOpen() {
+    return ShopApp.toggleOpen(this.actor);
+  }
+
+  /** GM: make (or reuse) a world macro that toggles this shop open/closed and put it on the hotbar. */
+  static async #onCreateOpenMacro() {
+    const actor = this.actor;
+    const command = `game.vagabond.shop.toggleOpen("${actor.uuid}");`;
+    const name = game.i18n.format('VAGABOND.Shop.Sheet.OpenMacroName', { shop: actor.name });
+    let macro = game.macros.find(m => m.command === command);
+    macro ??= await Macro.create({ name, type: 'script', img: actor.img, command });
+    const taken = new Set(Object.keys(game.user.hotbar ?? {}).map(Number));
+    let slot = 1;
+    while (taken.has(slot) && slot <= 50) slot++;
+    if (slot <= 50) await game.user.assignHotbarMacro(macro, slot);
   }
 
   static #onOpenStore() {

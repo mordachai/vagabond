@@ -132,6 +132,11 @@ export class ShopTransactions {
     return (party.system.members ?? []).some(uuid => fromUuidSync(uuid)?.testUserPermission(user, 'OWNER'));
   }
 
+  /** Whether a user may trade with a shop right now: GM always, everyone else only while it is open. */
+  static canTrade(user, shop) {
+    return !!(user?.isGM || shop?.system?.open);
+  }
+
   /** Whether a stock item never runs out (own flag wins over the shop default). */
   static isUnlimited(item, shop) {
     return ShopPricing.itemFlags(item).unlimited ?? shop?.system?.stock?.unlimitedByDefault ?? false;
@@ -205,7 +210,8 @@ export class ShopTransactions {
     if (shop?.type !== 'shop') return fail('noShop');
     const buyer = await fromUuid(buyerUuid);
     if (buyer?.type !== 'character') return fail('noActor');
-    if (!buyer.testUserPermission(user, 'OWNER') || !shop.testUserPermission(user, 'LIMITED')) return fail('permission');
+    if (!buyer.testUserPermission(user, 'OWNER')) return fail('permission');
+    if (!this.canTrade(user, shop)) return fail('closed');
 
     // Group purchase: the party pays and receives; the buyer must be a member (GM exempt)
     let party = null;
@@ -329,7 +335,8 @@ export class ShopTransactions {
     const seller = await fromUuid(sellerUuid);
     if (!['character', 'party'].includes(seller?.type)) return fail('noActor');
     const mayUse = seller.type === 'party' ? this.canUseParty(seller, user) : seller.testUserPermission(user, 'OWNER');
-    if (!mayUse || !shop.testUserPermission(user, 'LIMITED')) return fail('permission');
+    if (!mayUse) return fail('permission');
+    if (!this.canTrade(user, shop)) return fail('closed');
 
     const item = seller.items.get(itemId);
     if (!item || !this.TRADE_TYPES.includes(item.type)) return fail('noItem');

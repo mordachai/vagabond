@@ -57,7 +57,7 @@
     "height": 1,
     "depth": 1,
     "texture": {
-      "src": "/icons/containers/bags/pack-simple-leather.webp",
+      "src": "icons/containers/bags/pack-leather-white-tan.webp",
       "anchorX": 0.5,
       "anchorY": 0.5,
       "fit": "contain",

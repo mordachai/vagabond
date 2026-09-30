@@ -1648,12 +1648,19 @@ Hooks.once('ready', function () {
     lightSource: LightSource,
     // Money math (g/s/c): game.vagabond.currency.format(copper), .pay(wallet, copper), …
     currency: CurrencyHelper,
-    // Shops: game.vagabond.shop.open(ref), .show(ref, { userIds }) (GM),
+    // Shops: game.vagabond.shop.open(ref), .openShop/.closeShop/.toggleOpen(ref) (GM; .show = openShop),
+    // .isOpen(ref), .setAllOpen(bool),
     // .buy({ shop, buyer, itemId, qty }), .buyCart({ shop, buyer, party?, lines }),
     // .sell({ shop, seller, itemId, qty }), .partyTransfer({ party, actor, copper }), .price(item, ctx)
     shop: {
       open: (ref, options) => ShopApp.open(ref, options),
-      show: (ref, options) => ShopApp.show(ref, options),
+      show: (ref) => ShopApp.show(ref), // alias of openShop
+      // GM open/close (hotbar macros): openShop pushes the store window to players; closing shuts it
+      openShop: (ref) => ShopApp.openShop(ref),
+      closeShop: (ref) => ShopApp.closeShop(ref),
+      toggleOpen: (ref) => ShopApp.toggleOpen(ref),
+      isOpen: (ref) => ShopApp.isOpen(ref),
+      setAllOpen: (open) => ShopApp.setAllOpen(open),
       buy: (args) => ShopTransactions.buy(args),
       buyCart: (args) => ShopTransactions.buyCart(args),
       sell: (args) => ShopTransactions.sell(args),
@@ -1942,7 +1949,7 @@ Hooks.on('getSceneControlButtons', (controls) => {
         icon:    'fas fa-store',
         button:  true,
         visible: game.user.isGM && game.settings.get('vagabond', 'shopsEnabled'),
-        onChange: () => ShopApp.pickAndOpen(),
+        onChange: () => ShopApp.pickAndToggle(),
       },
       combatCarousel: {
         name:    'combatCarousel',
@@ -2461,12 +2468,143 @@ Hooks.on('preCreateActor', (actor, _data, _options, _userId) => {
     actor.updateSource({ 'prototypeToken.disposition': CONST.TOKEN_DISPOSITIONS.NEUTRAL });
   }
   // Shops: one shared stock/purse, so tokens stay linked to the actor
+  // Neutral, always show the name, players can always see it (the `system.open` flag gates trading)
   if (actor.type === 'shop') {
     actor.updateSource({
-      'prototypeToken.disposition': CONST.TOKEN_DISPOSITIONS.NEUTRAL,
-      'prototypeToken.actorLink': true,
+      ...Object.fromEntries(Object.entries(shopTokenRules()).map(([k, v]) => [`prototypeToken.${k}`, v])),
+      'ownership.default': Math.max(actor.ownership?.default ?? 0, CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER),
     });
   }
+});
+
+/* -------------------------------------------- */
+/*  Shop tokens                                 */
+/* -------------------------------------------- */
+
+// Shop tokens: forced neutral, name always visible to everyone, linked (one shared stock/purse).
+// Built lazily — CONST isn't guaranteed at module evaluation.
+const shopTokenRules = () => ({
+  disposition: CONST.TOKEN_DISPOSITIONS.NEUTRAL,
+  displayName: CONST.TOKEN_DISPLAY_MODES.ALWAYS,
+  actorLink: true,
+});
+const SHOP_SWEEP = { vagabondShopSweep: true }; // options flag: lets the ready sweep past the guards below
+
+Hooks.on('preCreateToken', (token) => {
+  if (token.actor?.type === 'shop') token.updateSource(shopTokenRules());
+});
+
+// A GM can't flip a shop token hostile / hide its name / unlink it
+Hooks.on('preUpdateToken', (token, changes, options) => {
+  if (token.actor?.type !== 'shop' || options.vagabondShopSweep) return;
+  for (const key of Object.keys(shopTokenRules())) delete changes[key];
+});
+Hooks.on('preUpdateActor', (actor, changes, options) => {
+  if (actor.type !== 'shop' || options.vagabondShopSweep) return;
+  for (const key of Object.keys(shopTokenRules())) delete changes.prototypeToken?.[key];
+});
+
+// Existing shops: heal ownership + token settings once the GM is ready (idempotent, active GM only)
+Hooks.once('ready', async () => {
+  if (game.user !== game.users.activeGM) return;
+  try {
+    const OBSERVER = CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER;
+    const rules = shopTokenRules();
+    for (const shop of game.actors.filter(a => a.type === 'shop')) {
+      const update = {};
+      if ((shop.ownership?.default ?? 0) < OBSERVER) update['ownership.default'] = OBSERVER;
+      for (const [key, value] of Object.entries(rules)) {
+        if (shop.prototypeToken[key] !== value) update[`prototypeToken.${key}`] = value;
+      }
+      if (Object.keys(update).length) await shop.update(update, SHOP_SWEEP);
+    }
+    for (const scene of game.scenes) {
+      const updates = scene.tokens
+        .filter(t => t.actor?.type === 'shop' && Object.entries(rules).some(([k, v]) => t[k] !== v))
+        .map(t => ({ _id: t.id, ...rules }));
+      if (updates.length) await scene.updateEmbeddedDocuments('Token', updates, SHOP_SWEEP);
+    }
+    // Shops never fight: drop any shop combatants left over from before the block
+    for (const combat of game.combats) {
+      const ids = combat.combatants.filter(c => c.actor?.type === 'shop').map(c => c.id);
+      if (ids.length) await combat.deleteEmbeddedDocuments('Combatant', ids);
+    }
+  } catch (err) {
+    console.error('Vagabond | Shop token sweep failed', err);
+  }
+});
+
+// Closed-shop marker: an 85%-size, 90%-opacity padlock on the token (visible to everyone)
+const _SHOP_LOCK_SRC = 'icons/svg/padlock.svg';
+
+async function _refreshShopLock(token) {
+  const closed = token.actor?.type === 'shop' && !token.actor.system.open;
+  const existing = token._vagabondShopLock;
+  if (!closed) {
+    if (existing && !existing.destroyed) existing.destroy();
+    token._vagabondShopLock = null;
+    return;
+  }
+  const size = Math.min(token.w, token.h) * 0.85;
+  if (existing && !existing.destroyed) {
+    existing.width = size;
+    existing.height = size;
+    existing.position.set(token.w / 2, token.h / 2);
+    return;
+  }
+  if (token._vagabondShopLockLoading) return;
+  token._vagabondShopLockLoading = true;
+  try {
+    const tex = await foundry.canvas.loadTexture(_SHOP_LOCK_SRC);
+    if (!tex || token.destroyed || token._vagabondShopLock?.destroyed === false) return;
+    if (token.actor?.type !== 'shop' || token.actor.system.open) return;
+    const lock = new PIXI.Sprite(tex);
+    lock.anchor.set(0.5);
+    lock.width = size;
+    lock.height = size;
+    lock.position.set(token.w / 2, token.h / 2);
+    lock.alpha = 0.9;
+    lock.eventMode = 'none';
+    token.addChild(lock);
+    token._vagabondShopLock = lock;
+  } finally {
+    token._vagabondShopLockLoading = false;
+  }
+}
+
+Hooks.on('drawToken', (token) => { _refreshShopLock(token); });
+Hooks.on('refreshToken', (token) => {
+  if (token.actor?.type === 'shop') _refreshShopLock(token);
+});
+Hooks.on('updateActor', (actor, changes) => {
+  if (actor.type !== 'shop' || !foundry.utils.hasProperty(changes, 'system.open')) return;
+  for (const token of actor.getActiveTokens(true)) _refreshShopLock(token);
+});
+
+// Shop token HUD: hide the combat toggle, add an open/close switch for the GM
+Hooks.on('renderTokenHUD', (hud, html) => {
+  const token = hud.object;
+  const actor = token?.actor;
+  if (actor?.type !== 'shop') return;
+  html.querySelector('[data-action="combat"]')?.remove();
+  if (!game.user.isGM) return;
+  const leftCol = html.querySelector('.col.left');
+  if (!leftCol) return;
+
+  const isOpen = !!actor.system.open;
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.classList.add('control-icon', 'vagabond-shop-open-toggle');
+  if (isOpen) btn.classList.add('active');
+  btn.setAttribute('data-tooltip', game.i18n.localize(isOpen ? 'VAGABOND.Shop.App.CloseShop' : 'VAGABOND.Shop.App.OpenShop'));
+  btn.innerHTML = `<i class="fas ${isOpen ? 'fa-lock-open' : 'fa-lock'}"></i>`;
+  btn.addEventListener('click', async (ev) => {
+    ev.preventDefault();
+    ev.stopPropagation();
+    await ShopApp.toggleOpen(actor);
+    hud.render();
+  });
+  leftCol.appendChild(btn);
 });
 
 /* -------------------------------------------- */

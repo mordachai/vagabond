@@ -13,23 +13,52 @@ _You need the book (digital or paperback) to have access to the compendia contai
 
 ---
 
+### Print Wave 3 updates:
+
+- Classes: Alchemist
+- Weapons, Armors, Alchemy gear
+- Starting Packs items
+- Relics items
+
+---
+
 ## Features
 
 ### **New features:** Stores
+
+Shops are now a real thing at the table. Create a **Shop** actor, stock it, drop its token on the map and let your players go shopping — prices, change, stock and receipts are all handled for you. _Map: The City of Greybanner - 2 Minutes Tabletop_
 
 <img width="652" height="733" alt="image" src="https://github.com/user-attachments/assets/c6023070-d224-4c84-84e4-7038220c7bfd" />
 
 <img width="950" alt="image" src="https://github.com/user-attachments/assets/650824dc-b5b3-45b9-88d1-f99bb3035589" />
 
-
-_Map: The City of Greybanner - 2 Minutes Tabletop_
+- **Store window:** a banner with the shop art and the merchant, a category sidebar (Armor, Weapons, Gear, Alchemical, Relics, with sub-categories), search, sort, and grid or list view. Every ware shows its price, Slots, stock left and key stats (weapon damage per grip, armor rating, alchemical damage).
+- **Carts:** buy through a **Personal** cart (your character's purse) or a **Party** cart (the party treasury, items go to the party). Checkout is all-or-nothing, makes change automatically and warns you before you overflow your Slots.
+- **Selling:** drop an item from your character or your party onto the sell zone. The merchant pays the ratio the GM set for that shop.
+- **Stocking in seconds (GM):** drag an item, an item folder, a whole compendium or a compendium folder onto the shop. Duplicates are skipped, and each ware keeps its source folder as its category. Set per-item prices, sales, featured wares, limited or unlimited stock, hidden and no-buy flags.
+- **Pricing (GM):** markup, sale discount, buy ratio, an optional Presence discount and a per-character attitude (Hostile to Allied) that moves prices. Hover any price to see the breakdown.
+- **Receipts:** every purchase and sale posts a chat card (public, private or off, your choice in settings).
+- **Open and Close for business:** Use the **Open / Close Stores** button on the scene controls (pick one shop or All), the toggle on the shop sheet, store banner or token HUD, or these GM Tools macros: **Open All Stores** and **Close All Stores**. The shop sheet can also create a hotbar macro that toggles that one shop, see below.
+- **Macro API:** `game.vagabond.shop.openShop(shop)`, `.closeShop(shop)`, `.toggleOpen(shop)`, `.setAllOpen(true|false)`, `.open(shop)` (view the store as GM), `.buy(...)`, `.sell(...)`.
 
 
 ### **New features:** Workbench and Alchemists Lab
 
+One **Workbench** for everything crafted at the table. Open it from the character sheet, the Character HUD menu or the Craft card in Downtime.
+
 <img width="950" alt="image" src="https://github.com/user-attachments/assets/304b9a49-d850-477c-8ed3-184710b1030f" />
 
 <img width="950" alt="image" src="https://github.com/user-attachments/assets/a5b71f9f-0e67-460c-b9d7-67e656b63851" />
+
+- **Craft:** a searchable catalog of everything craftable. Add items to your Projects, split a Shift across several of them by type how much effort (in currrency) you want to invest on it or use Auto-fill.
+- **Projects:** unfinished work lives in your inventory as an item and becomes the finished item when done.
+- **Materials:** tracked and spent for you as you work.
+- **Scrap:** break items down into Materials.
+- **Alchemy:** Alchemists learn formulas at level-up and craft them from a dedicated tab, including Prima Materia.
+- **Alchemist features:** Eureka, Potency and thrown alchemicals are automated.
+- **Mix:** combine two alchemicals into one temporary Mixture, with the merged damage, statuses and companion card handled for you.
+- **Relics:** forge powers onto items and combine relics, for now through macros (`game.vagabond.craft`).
+- **GM control:** a **Crafting & Relics** settings menu for every option, plus optional GM approval through a chat card.
 
 ---
 

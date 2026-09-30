@@ -57,7 +57,7 @@
     "height": 1,
     "depth": 1,
     "texture": {
-      "src": "/icons/consumables/potions/flask-corked-purple-glow.webp",
+      "src": "/icons/consumables/potions/potion-round-corked-glowing-green.webp",
       "anchorX": 0.5,
       "anchorY": 0.5,
       "fit": "contain",

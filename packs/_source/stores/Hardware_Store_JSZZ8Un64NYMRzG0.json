@@ -57,7 +57,7 @@
     "height": 1,
     "depth": 1,
     "texture": {
-      "src": "/icons/tools/smithing/pincers.webp",
+      "src": "/icons/tools/hand/wrench-iron-grey.webp",
       "anchorX": 0.5,
       "anchorY": 0.5,
       "fit": "contain",

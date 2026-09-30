@@ -1,0 +1,27 @@
+{
+  "name": "Open All Stores",
+  "type": "script",
+  "author": "13p65OEadZSZVLRk",
+  "img": "icons/svg/door-open-outline.svg",
+  "scope": "global",
+  "command": "/**\n * Vagabond — Open All Stores\n * GM only. Sets every Shop actor's open flag. Opening also pops the store window on\n * every player's screen; closing shuts their windows.\n */\nif (!game.user.isGM) return ui.notifications.warn(\"Open All Stores: GM only.\");\ngame.vagabond.shop.setAllOpen(true);\n",
+  "folder": null,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.365",
+    "systemId": "vagabond",
+    "systemVersion": "5.43.2",
+    "lastModifiedBy": "13p65OEadZSZVLRk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "createdTime": 1788000000000,
+    "modifiedTime": 1788000000000
+  },
+  "sort": 0,
+  "_id": "VgbdOpenAllShops",
+  "_key": "!macros!VgbdOpenAllShops"
+}

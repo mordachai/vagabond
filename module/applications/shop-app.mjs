@@ -64,7 +64,7 @@ export class ShopApp extends HandlebarsApplicationMixin(ApplicationV2) {
       purchase: ShopApp.#onPurchase,
       setView: ShopApp.#onSetView,
       clearSearch: ShopApp.#onClearSearch,
-      showToPlayers: ShopApp.#onShowToPlayers,
+      toggleShopOpen: ShopApp.#onToggleOpen,
       openShopSheet: ShopApp.#onOpenShopSheet,
     },
   };
@@ -141,8 +141,8 @@ export class ShopApp extends HandlebarsApplicationMixin(ApplicationV2) {
       ui.notifications.warn(game.i18n.localize('VAGABOND.Shop.Errors.noShop'));
       return null;
     }
-    if (!game.user.isGM && !shop.testUserPermission(game.user, 'LIMITED')) {
-      ui.notifications.warn(game.i18n.localize('VAGABOND.Shop.Errors.permission'));
+    if (!ShopTransactions.canTrade(game.user, shop)) {
+      ui.notifications.warn(game.i18n.format('VAGABOND.Shop.Errors.closedShop', { shop: shop.name }));
       return null;
     }
     let app = this.#instances.get(shop.uuid);
@@ -157,76 +157,90 @@ export class ShopApp extends HandlebarsApplicationMixin(ApplicationV2) {
   }
 
   /**
-   * GM: open a shop on players' screens. Grants Observer ownership to those users when
-   * they have less, so they can trade and open stock items' (read-only) sheets.
+   * GM: open or close a shop for business. Opening writes the flag directly (no query — the
+   * GM owns the actor) and pops the store window on every active player's screen; opening an
+   * already-open shop just re-pushes the window. Closing closes players' windows (see the
+   * `updateActor` hook in `#registerHooks`).
    * @param {Actor|string} ref
-   * @param {{userIds?: string[]}} [options]  omitted = every active player
+   * @param {boolean} open
+   * @returns {Promise<boolean>}  whether the shop was found
    */
-  static async show(ref, { userIds } = {}) {
-    if (!game.user.isGM) return;
-    const shop = this.resolveShop(ref);
-    if (!shop) return ui.notifications.warn(game.i18n.localize('VAGABOND.Shop.Errors.noShop'));
-    const targets = (userIds ?? game.users.filter(u => u.active && !u.isGM).map(u => u.id))
-      .map(id => game.users.get(id)).filter(u => u && !u.isGM);
-    if (!targets.length) return ui.notifications.warn(game.i18n.localize('VAGABOND.Shop.App.NoPlayers'));
-
-    const OBSERVER = CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER;
-    const ownership = {};
-    for (const u of targets) {
-      if (!shop.testUserPermission(u, 'OBSERVER')) ownership[u.id] = OBSERVER;
+  static async setOpen(ref, open) {
+    if (!game.user.isGM) {
+      ui.notifications.warn(game.i18n.localize('VAGABOND.Shop.Errors.gmOnly'));
+      return false;
     }
-    if (Object.keys(ownership).length) await shop.update({ ownership });
-
-    emitSocket('shopShow', { shopUuid: shop.uuid, userIds: targets.map(u => u.id) });
-    ui.notifications.info(game.i18n.format('VAGABOND.Shop.App.Shown', {
-      shop: shop.name, users: targets.map(u => u.name).join(', '),
-    }));
+    const shop = this.resolveShop(ref);
+    if (!shop) {
+      ui.notifications.warn(game.i18n.localize('VAGABOND.Shop.Errors.noShop'));
+      return false;
+    }
+    open = !!open;
+    if (shop.system.open !== open) await shop.update({ 'system.open': open });
+    if (open) emitSocket('shopShow', { shopUuid: shop.uuid });
+    return true;
   }
 
-  /**
-   * GM: pick which online players see the shop (all ticked by default), then show it.
-   * Used by the store's and the shop sheet's "Show to Players" buttons.
-   * @param {Actor|string} ref
-   */
-  static async promptShow(ref) {
-    if (!game.user.isGM) return;
-    const players = game.users.filter(u => u.active && !u.isGM);
-    if (!players.length) return ui.notifications.warn(game.i18n.localize('VAGABOND.Shop.App.NoPlayers'));
-    const boxes = players.map(u => `<label class="checkbox"><input type="checkbox" name="${u.id}" checked> ${foundry.utils.escapeHTML(u.name)}</label>`).join('');
-    const userIds = await foundry.applications.api.DialogV2.prompt({
-      window: { title: game.i18n.localize('VAGABOND.Shop.App.ShowToPlayers'), icon: 'fas fa-bullhorn' },
-      content: `<div class="shop-show-users">${boxes}</div>`,
-      ok: {
-        label: game.i18n.localize('VAGABOND.Shop.App.Show'),
-        callback: (event, button) => players.filter(u => button.form.elements[u.id]?.checked).map(u => u.id),
-      },
-      rejectClose: false,
-    });
-    if (userIds?.length) await this.show(ref, { userIds });
+  static openShop(ref) { return this.setOpen(ref, true); }
+
+  static closeShop(ref) { return this.setOpen(ref, false); }
+
+  /** GM: flip a shop's open state. */
+  static toggleOpen(ref) {
+    const shop = this.resolveShop(ref);
+    return this.setOpen(shop ?? ref, !shop?.system.open);
   }
 
-  /** Socket handler (every client): open the shop if this user is targeted. */
-  static onShowSocket({ shopUuid, userIds }) {
-    if (!userIds?.includes(game.user.id)) return;
+  /** Whether a shop is currently open for business. */
+  static isOpen(ref) {
+    return !!this.resolveShop(ref)?.system.open;
+  }
+
+  /** GM: open or close every shop in the world. */
+  static async setAllOpen(open) {
+    for (const shop of game.actors.filter(a => a.type === 'shop')) await this.setOpen(shop, open);
+  }
+
+  /** Alias of {@link ShopApp.openShop} — "show to players" and "open" are the same action. */
+  static show(ref) { return this.openShop(ref); }
+
+  /** Socket handler (every client): players open the pushed shop. */
+  static onShowSocket({ shopUuid }) {
+    if (game.user.isGM) return;
     this.open(shopUuid);
   }
 
-  /** GM scene-control entry: open the only shop, or pick one. */
-  static async pickAndOpen() {
+  /** Picker value that targets every shop. */
+  static ALL = '__all__';
+
+  /**
+   * GM scene-control entry: open/close shops for business. One shop toggles directly; with
+   * several, pick one (or All) and choose Open or Close. Never opens a store window.
+   */
+  static async pickAndToggle() {
+    if (!game.user.isGM) return;
     const shops = game.actors.filter(a => a.type === 'shop');
     if (!shops.length) return ui.notifications.warn(game.i18n.localize('VAGABOND.Shop.App.NoShops'));
-    if (shops.length === 1) return this.open(shops[0]);
-    const options = shops.map(s => `<option value="${s.id}">${foundry.utils.escapeHTML(s.name)}</option>`).join('');
-    const id = await foundry.applications.api.DialogV2.prompt({
-      window: { title: game.i18n.localize('VAGABOND.Shop.App.PickShop'), icon: 'fas fa-store' },
+    if (shops.length === 1) return this.toggleOpen(shops[0]);
+    const L = (key) => game.i18n.localize(`VAGABOND.Shop.App.${key}`);
+    const all = `<option value="${ShopApp.ALL}">${L('All')}</option>`;
+    const options = all + shops.map(s => {
+      const state = s.system.open ? L('StateOpen') : L('StateClosed');
+      return `<option value="${s.id}">${foundry.utils.escapeHTML(s.name)} (${state})</option>`;
+    }).join('');
+    const pick = (open) => (event, button) => ({ open, id: button.form.elements.shopId.value });
+    const result = await foundry.applications.api.DialogV2.wait({
+      window: { title: L('PickShop'), icon: 'fas fa-store' },
       content: `<div class="form-group"><select name="shopId" autofocus>${options}</select></div>`,
-      ok: {
-        label: game.i18n.localize('VAGABOND.Shop.App.Open'),
-        callback: (event, button) => button.form.elements.shopId.value,
-      },
+      buttons: [
+        { action: 'openForBusiness', label: L('Open'), icon: 'fas fa-lock-open', callback: pick(true), default: true },
+        { action: 'closeForBusiness', label: L('Close'), icon: 'fas fa-lock', callback: pick(false) },
+      ],
       rejectClose: false,
     });
-    if (id) this.open(id);
+    if (!result?.id) return;
+    if (result.id === ShopApp.ALL) return this.setAllOpen(result.open);
+    return this.setOpen(result.id, result.open);
   }
 
   /* -------------------------------------------- */
@@ -319,6 +333,7 @@ export class ShopApp extends HandlebarsApplicationMixin(ApplicationV2) {
     const party = this.party;
     return {
       isGM,
+      isOpen: !!shop.system.open,
       shop,
       subtitle: shop.system.subtitle,
       shopkeeper: {
@@ -653,7 +668,7 @@ export class ShopApp extends HandlebarsApplicationMixin(ApplicationV2) {
     };
     const onItem = (item) => { if (relevant(item.parent)) this.#renderDebounce(); };
     const onActor = (actor) => {
-      if (actor.uuid === this.shop.uuid && !this.shop.testUserPermission(game.user, 'LIMITED') && !game.user.isGM) {
+      if (actor.uuid === this.shop.uuid && !ShopTransactions.canTrade(game.user, this.shop)) {
         this.close();
         return;
       }
@@ -859,8 +874,8 @@ export class ShopApp extends HandlebarsApplicationMixin(ApplicationV2) {
     this.render();
   }
 
-  static #onShowToPlayers() {
-    return ShopApp.promptShow(this.shop);
+  static #onToggleOpen() {
+    return ShopApp.toggleOpen(this.shop);
   }
 
   static #onOpenShopSheet() {
