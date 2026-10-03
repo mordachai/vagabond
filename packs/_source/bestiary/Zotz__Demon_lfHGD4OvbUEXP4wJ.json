@@ -20,7 +20,9 @@
     "morale": 11,
     "appearing": "d4",
     "speed": 20,
-    "senses": "Echolocation",
+    "senses": [
+      "echolocation"
+    ],
     "armor": 4,
     "armorDescription": "as (+1) Plate",
     "locked": false,
@@ -178,7 +180,7 @@
       }
     },
     "sight": {
-      "enabled": false,
+      "enabled": true,
       "range": 0,
       "angle": 360,
       "visionMode": "basic",
@@ -188,7 +190,12 @@
       "saturation": 0,
       "contrast": 0
     },
-    "detectionModes": {},
+    "detectionModes": {
+      "echolocation": {
+        "enabled": true,
+        "range": null
+      }
+    },
     "occludable": {
       "radius": 0
     },

@@ -466,6 +466,17 @@ VAGABOND.statusEffectDefinitions = [
     changes: []
   },
   {
+    // Bookkeeping only (no mechanical changes): mapped to Foundry's FLY special status
+    // (CONFIG.specialStatusEffects.FLY) so Feel Tremor / Seismicsense skips airborne tokens.
+    // Toggled manually from the token HUD.
+    id: 'flying',
+    name: 'VAGABOND.StatusConditions.Flying',
+    img: '/icons/creatures/abilities/wings-birdlike-blue.webp',
+    statuses: ['flying'],
+    description: 'Airborne. Not touching the ground, so Seismicsense can\'t detect it.',
+    changes: []
+  },
+  {
     id: 'blinded',
     name: 'VAGABOND.StatusConditions.Blinded',
     img: '/icons/creatures/eyes/humanoid-single-blind.webp',
@@ -1384,6 +1395,32 @@ VAGABOND.speedTable = {
 };
 
 
+
+/**
+ * NPC Senses (rulebook table)
+ * @type {Object}
+ */
+VAGABOND.senses = {
+  'allsight': 'VAGABOND.Senses.Allsight',
+  'blindsight': 'VAGABOND.Senses.Blindsight',
+  'darksight': 'VAGABOND.Senses.Darksight',
+  'echolocation': 'VAGABOND.Senses.Echolocation',
+  'seismicsense': 'VAGABOND.Senses.Seismicsense',
+  'telepathy': 'VAGABOND.Senses.Telepathy'
+};
+
+/**
+ * Sense Hints (Tooltips — the book's description column)
+ * @type {Object}
+ */
+VAGABOND.senseHints = {
+  'allsight': 'VAGABOND.Senses.Hints.Allsight',
+  'blindsight': 'VAGABOND.Senses.Hints.Blindsight',
+  'darksight': 'VAGABOND.Senses.Hints.Darksight',
+  'echolocation': 'VAGABOND.Senses.Hints.Echolocation',
+  'seismicsense': 'VAGABOND.Senses.Hints.Seismicsense',
+  'telepathy': 'VAGABOND.Senses.Hints.Telepathy'
+};
 
 /**
  * Speed Types (Movement modes)

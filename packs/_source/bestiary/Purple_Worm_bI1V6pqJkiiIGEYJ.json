@@ -17,7 +17,11 @@
     "morale": 10,
     "appearing": "d2",
     "speed": 20,
-    "senses": "Blindsight, Seismicsense 60'",
+    "senses": [
+      "blindsight",
+      "seismicsense"
+    ],
+    "sensesNote": "Seismicsense 60'",
     "armor": 3,
     "armorDescription": "as (+1) Chain",
     "locked": true,
@@ -136,7 +140,7 @@
       }
     },
     "sight": {
-      "enabled": false,
+      "enabled": true,
       "range": 0,
       "angle": 360,
       "visionMode": "basic",
@@ -146,7 +150,16 @@
       "saturation": 0,
       "contrast": 0
     },
-    "detectionModes": {},
+    "detectionModes": {
+      "feelTremor": {
+        "enabled": true,
+        "range": 60
+      },
+      "blindsight": {
+        "enabled": true,
+        "range": null
+      }
+    },
     "occludable": {
       "radius": 0
     },

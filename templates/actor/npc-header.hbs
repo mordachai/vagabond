@@ -215,6 +215,9 @@
                       placeholder='0'
                       data-tooltip="{{localize 'VAGABOND.Actor.NPC.Tooltips.SpeedTypeHint' type=(localize (lookup ../config.speedTypes type))}}"
                     /><span class='npc-speed-unit'>{{localize "VAGABOND.UI.Units.Feet"}}</span>
+                    {{#if (eq type 'fly')}}
+                      <input type='checkbox' name='system.flyingByDefault' {{#if ../system.flyingByDefault}}checked{{/if}} data-tooltip="{{localize 'VAGABOND.Actor.NPC.Tooltips.FlyingByDefault'}}" />
+                    {{/if}}
                     <i class='fas fa-times' data-action='removeSpeedType' data-type='{{type}}'></i>
                   {{/if}}
                 </div>

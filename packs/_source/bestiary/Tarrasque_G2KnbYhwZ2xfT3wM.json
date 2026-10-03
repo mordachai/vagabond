@@ -19,7 +19,9 @@
     "morale": 9,
     "appearing": "Unique",
     "speed": 120,
-    "senses": "Darksight",
+    "senses": [
+      "darksight"
+    ],
     "armor": 10,
     "armorDescription": "as (+3) Plate plus (+3) Shield",
     "locked": true,
@@ -189,10 +191,10 @@
       }
     },
     "sight": {
-      "enabled": false,
-      "range": 0,
+      "enabled": true,
+      "range": null,
       "angle": 360,
-      "visionMode": "basic",
+      "visionMode": "darkvision",
       "color": null,
       "attenuation": 0.1,
       "brightness": 0,

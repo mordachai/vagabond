@@ -19,7 +19,11 @@
     "morale": 7,
     "appearing": "d6",
     "speed": 10,
-    "senses": "Darksight, Telepathy (Near)",
+    "senses": [
+      "darksight",
+      "telepathy"
+    ],
+    "sensesNote": "Telepathy (Near)",
     "armor": 1,
     "armorDescription": "as Leather",
     "locked": true,
@@ -140,10 +144,10 @@
       }
     },
     "sight": {
-      "enabled": false,
-      "range": 0,
+      "enabled": true,
+      "range": null,
       "angle": 360,
-      "visionMode": "basic",
+      "visionMode": "darkvision",
       "color": null,
       "attenuation": 0.1,
       "brightness": 0,

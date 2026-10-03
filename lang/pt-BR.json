@@ -113,6 +113,22 @@
       "CastClose": "Conjurar Próximo",
       "CastRanged": "Conjurar à Distância"
     },
+    "Senses": {
+      "Allsight": "Visão Total",
+      "Blindsight": "Visão Cega",
+      "Darksight": "Visão no Escuro",
+      "Echolocation": "Ecolocalização",
+      "Seismicsense": "Sentido Sísmico",
+      "Telepathy": "Telepatia",
+      "Hints": {
+        "Allsight": "Não é enganado por ilusões ou invisibilidade.",
+        "Blindsight": "Pode ver mesmo se estiver Cego.",
+        "Darksight": "Pode ver no escuro.",
+        "Echolocation": "Pode ver por meio da audição.",
+        "Seismicsense": "Pode ver qualquer coisa que toque o chão que ele está tocando.",
+        "Telepathy": "Pode ver qualquer coisa que seja capaz de pensar."
+      }
+    },
     "SpeedTypes": {
       "Climb": "Escalar",
       "Cling": "Agarrar-se",
@@ -219,6 +235,7 @@
       "Fatigued": "Fatigado",
       "Flanked": "Flanqueado",
       "Flanking": "Flanqueando",
+      "Flying": "Voando",
       "Focusing": "Concentrado",
       "Frightened": "Amedrontado",
       "Incapacitated": "Incapacitado",
@@ -243,6 +260,7 @@
       "Vulnerable": "Seus ataques e suas Salvaguardas contra ataques têm Desvantagem. Ataques direcionados a ele e Salvaguardas contra seus ataques têm Vantagem [AUTOMATIZADO]",
       "Flanked": "Vulnerável (seus ataques e Salvaguardas contra ataques têm Desvantagem; ataques direcionados a ele e Salvaguardas contra seus ataques têm Vantagem) e sofre 2 de dano extra de ataques, antes da Armadura [AUTOMATIZADO]",
       "Flanking": "Flanqueando um Inimigo adjacente junto de um aliado. +2 de dano em ataques contra ele, e ele fica Vulnerável enquanto dois de vocês permanecerem Próximos. [AUTOMATIZADO]",
+      "Flying": "No ar. Não toca o chão, então o Sentido Sísmico não o detecta. [MANUAL]",
       "Restrained": "Vulnerável + Velocidade = 0 [AUTOMATIZADO]",
       "Grappling": "Contendo um alvo. Velocidade reduzida à metade a menos que o alvo seja menor. [PARCIALMENTE AUTOMATIZADO]",
       "Blinded": "Não pode ver. Vulnerável [AUTOMATIZADO]",
@@ -1609,7 +1627,7 @@
           "statusImmunities": {"label": "Imunidades de Status:", "short": "Imunidades de Status"},
           "description": {"label": "Descrição"}
         },
-        "SensesPlaceholder": "Visão no Escuro, Visão Cega...",
+        "SensesPlaceholder": "Notas dos sentidos (Longe, 60 ft, só fungos...)",
         "ArmorDescPlaceholder": "Desc. da armadura.",
         "AppearingPlaceholder": "dX",
         "AppAbbrev": "Apr",
@@ -1666,7 +1684,8 @@
           "ModifyHP": "Clique esquerdo: -1 PV | Clique direito: +1 PV",
           "Unlock": "Desbloquear Ficha",
           "Lock": "Clique para bloquear para jogar",
-          "SpeedTypeHint": "Velocidade para {type} (0 = igual à velocidade base)"
+          "SpeedTypeHint": "Velocidade para {type} (0 = igual à velocidade base)",
+          "FlyingByDefault": "Começa Voando (aves, insetos…). NPCs com Velocidade 0 sempre começam."
         },
         "MoraleCheck": {
           "Title": "Teste de Moral",

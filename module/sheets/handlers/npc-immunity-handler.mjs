@@ -130,6 +130,24 @@ export class NPCImmunityHandler {
   }
 
   /**
+   * Remove a sense
+   * @param {Event} event - The triggering event
+   * @param {HTMLElement} target - The target element
+   */
+  async removeSense(event, target) {
+    event.preventDefault();
+    const sense = target.dataset.sense;
+
+    const senses = [...(this.actor.system.senses || [])];
+    const index = senses.indexOf(sense);
+
+    if (index > -1) {
+      senses.splice(index, 1);
+      await this.actor.update({ 'system.senses': senses });
+    }
+  }
+
+  /**
    * Toggle speed type
    * @param {Event} event - The triggering event
    * @param {HTMLElement} target - The target element
@@ -198,6 +216,10 @@ export class NPCImmunityHandler {
     const dropdown = this.sheet.element.querySelector('.npc-resistances-dropdown');
     this._dropdownOpen = dropdown?.hasAttribute('open') ?? false;
 
+    // Senses dropdown (separate details element)
+    const sensesDropdown = this.sheet.element.querySelector('.npc-senses-dropdown');
+    this._sensesDropdownOpen = sensesDropdown?.hasAttribute('open') ?? false;
+
     // Also capture speed types dropdown
     const speedDropdown = this.sheet.element.querySelector('.npc-immunity-dropdown[data-save-target="system.speedTypes"]');
     this._speedDropdownOpen = speedDropdown?.hasAttribute('open') ?? false;
@@ -211,6 +233,10 @@ export class NPCImmunityHandler {
       const dropdown = this.sheet.element.querySelector('.npc-resistances-dropdown');
       if (dropdown) dropdown.setAttribute('open', '');
     }
+    if (this._sensesDropdownOpen) {
+      const sensesDropdown = this.sheet.element.querySelector('.npc-senses-dropdown');
+      if (sensesDropdown) sensesDropdown.setAttribute('open', '');
+    }
     if (this._speedDropdownOpen) {
       const speedDropdown = this.sheet.element.querySelector('.npc-immunity-dropdown[data-save-target="system.speedTypes"]');
       if (speedDropdown) speedDropdown.setAttribute('open', '');
@@ -221,31 +247,38 @@ export class NPCImmunityHandler {
    * Setup event listeners for immunity checkboxes and dropdown toggle
    */
   setupListeners() {
-    // Find the single resistances dropdown (distinct from speed types dropdown)
-    const dropdown = this.sheet.element.querySelector('.npc-resistances-dropdown');
-    if (!dropdown) return;
+    // Resistances + senses dropdowns (distinct from the speed types dropdown)
+    const dropdowns = this.sheet.element.querySelectorAll('.npc-resistances-dropdown, .npc-senses-dropdown');
+    for (const dropdown of dropdowns) {
+      // Find all checkbox groups by data-save-target on wrapper divs
+      const groups = dropdown.querySelectorAll('.npc-resistance-group[data-save-target]');
+      for (const group of groups) {
+        const field = group.dataset.saveTarget;
 
-    // Find all checkbox groups by data-save-target on wrapper divs
-    const groups = dropdown.querySelectorAll('.npc-resistance-group[data-save-target]');
-    for (const group of groups) {
-      const field = group.dataset.saveTarget;
+        // Checkbox changes save silently (no re-render) so dropdown stays open
+        const checkboxes = group.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach((checkbox) => {
+          checkbox.addEventListener('change', async (event) => {
+            const value = event.target.value;
+            const arr = [...(foundry.utils.getProperty(this.actor, field) || [])];
 
-      // Checkbox changes save silently (no re-render) so dropdown stays open
-      const checkboxes = group.querySelectorAll('input[type="checkbox"]');
-      checkboxes.forEach((checkbox) => {
-        checkbox.addEventListener('change', async (event) => {
-          const value = event.target.value;
-          const arr = [...(foundry.utils.getProperty(this.actor, field) || [])];
+            if (event.target.checked) {
+              if (!arr.includes(value)) arr.push(value);
+            } else {
+              const index = arr.indexOf(value);
+              if (index > -1) arr.splice(index, 1);
+            }
 
-          if (event.target.checked) {
-            if (!arr.includes(value)) arr.push(value);
-          } else {
-            const index = arr.indexOf(value);
-            if (index > -1) arr.splice(index, 1);
-          }
-
-          await this.actor.update({ [field]: arr }, { render: false });
+            await this.actor.update({ [field]: arr }, { render: false });
+          });
         });
+      }
+
+      // When the dropdown closes, re-render to update the tags display
+      dropdown.addEventListener('toggle', (event) => {
+        if (!dropdown.open) {
+          this.sheet.render(false);
+        }
       });
     }
 
@@ -275,13 +308,6 @@ export class NPCImmunityHandler {
         }
       });
     }
-
-    // When the resistances dropdown closes, re-render to update the tags display
-    dropdown.addEventListener('toggle', (event) => {
-      if (!dropdown.open) {
-        this.sheet.render(false);
-      }
-    });
 
     // Close open dropdowns when clicking outside them
     this.sheet.element.addEventListener('pointerdown', (event) => {

@@ -19,7 +19,9 @@
     "morale": 10,
     "appearing": "1",
     "speed": 0,
-    "senses": "Blindsense",
+    "senses": [
+      "blindsight"
+    ],
     "armor": 5,
     "armorDescription": "as (+2) Plate",
     "locked": true,
@@ -117,7 +119,7 @@
       }
     },
     "sight": {
-      "enabled": false,
+      "enabled": true,
       "range": 0,
       "angle": 360,
       "visionMode": "basic",
@@ -127,7 +129,12 @@
       "saturation": 0,
       "contrast": 0
     },
-    "detectionModes": {},
+    "detectionModes": {
+      "blindsight": {
+        "enabled": true,
+        "range": null
+      }
+    },
     "occludable": {
       "radius": 0
     },

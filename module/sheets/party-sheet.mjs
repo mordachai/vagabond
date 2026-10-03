@@ -152,7 +152,10 @@ export class VagabondPartySheet extends VagabondActorSheet {
         fatigueMax,
         fatiguePct,
         speedFormatted: this._formatNpcSpeed(sys),
-        senses: sys.senses ?? '',
+        senses: [
+          ...(sys.senses ?? []).map((k) => game.i18n.localize(CONFIG.VAGABOND.senses?.[k] ?? k)),
+          ...(sys.sensesNote ? [sys.sensesNote] : []),
+        ].join(', '),
         immunities: sys.immunities ?? [],
         weaknesses: sys.weaknesses ?? [],
         statusImmunities: sys.statusImmunities ?? [],

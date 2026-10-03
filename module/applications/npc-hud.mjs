@@ -276,7 +276,10 @@ export class VagabondNPCHud extends api.HandlebarsApplicationMixin(api.Applicati
     context.appearing = sys.appearing || '';
 
     // --- Always-on info strip: senses + resistances ---
-    context.senses = sys.senses || '';
+    context.senses = (sys.senses ?? []).map((k) => ({
+      label: L(config.senses?.[k]), hint: L(config.senseHints?.[k]),
+    }));
+    context.sensesNote = sys.sensesNote || '';
     context.immunities = (sys.immunities ?? []).map((k) => ({
       icon: config.damageTypeIcons?.[k], label: L(config.damageTypes?.[k]),
     }));
@@ -286,7 +289,7 @@ export class VagabondNPCHud extends api.HandlebarsApplicationMixin(api.Applicati
     context.statusImmunities = (sys.statusImmunities ?? []).map((k) => ({
       icon: config.statusConditionIcons?.[k], label: L(config.statusConditions?.[k]),
     }));
-    context.hasInfoStrip = !!(context.senses || context.immunities.length
+    context.hasInfoStrip = !!(context.senses.length || context.sensesNote || context.immunities.length
       || context.weaknesses.length || context.statusImmunities.length);
 
     // --- Status effect icons (portrait overlay) ---

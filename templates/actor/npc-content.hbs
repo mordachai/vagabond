@@ -2,27 +2,60 @@
 <div class='npc-content'>
 
   {{! Senses }}
-  {{#unless (and system.locked (not system.senses))}}
+  {{#unless (and system.locked (not system.senses.length) (not system.sensesNote))}}
     <div class='npc-senses-section'>
-      <div class='npc-detail-row'>
-        <label class='npc-field-label'>{{localize "VAGABOND.Actor.NPC.FIELDS.senses.label"}}</label>
-        {{#if system.locked}}
-          <div class='npc-field-display'>{{system.senses}}</div>
-        {{else}}
-          <input
-            type='text'
-            name='system.senses'
-            value='{{system.senses}}'
-            data-dtype='String'
-            class='npc-text-input'
-            placeholder='{{localize "VAGABOND.Actor.NPC.SensesPlaceholder"}}'
-          />
+      {{#if system.locked}}
+        <div class='npc-detail-row'>
+          <label class='npc-field-label'>{{localize "VAGABOND.Actor.NPC.FIELDS.senses.label"}}</label>
+          <div class='npc-field-display'>
+            {{#each system.senses as |sense index|}}
+              <span data-tooltip='{{localize (lookup ../config.senseHints sense)}}'>{{localize (lookup ../config.senses sense)}}</span>{{#unless @last}}, {{/unless}}
+            {{/each}}
+            {{#if system.sensesNote}}{{#if system.senses.length}} — {{/if}}{{system.sensesNote}}{{/if}}
+          </div>
+        </div>
+      {{else}}
+        <details class='npc-immunity-dropdown npc-senses-dropdown'>
+          <summary class='npc-immunity-toggle'>
+            <i class='fas fa-chevron-down'></i>
+            <span>{{localize "VAGABOND.Actor.NPC.FIELDS.senses.short"}}</span>
+          </summary>
+          <div class='npc-immunity-checkboxes npc-resistance-panel'>
+            <div class='npc-resistance-group' data-save-target='system.senses'>
+              {{#each config.senses as |label key|}}
+                <label class='npc-immunity-checkbox-item' data-tooltip='{{localize (lookup ../config.senseHints key)}}'>
+                  <input type='checkbox' value='{{key}}' {{#if (contains ../system.senses key)}}checked{{/if}}>
+                  <span>{{localize label}}</span>
+                </label>
+              {{/each}}
+            </div>
+          </div>
+        </details>
+        {{#if system.senses.length}}
+          <div class='npc-tag-group'>
+            <span class='npc-tag-group-label'>{{localize "VAGABOND.Actor.NPC.FIELDS.senses.label"}}</span>
+            {{#each system.senses as |sense index|}}
+              <span class='npc-immunity-tag npc-sense-tag' data-tooltip='{{localize (lookup ../config.senseHints sense)}}'>
+                {{localize (lookup ../config.senses sense)}}
+                <i class='fas fa-times' data-action='removeSense' data-sense='{{sense}}'></i>
+              </span>
+            {{/each}}
+          </div>
         {{/if}}
-      </div>
+        <input
+          type='text'
+          name='system.sensesNote'
+          value='{{system.sensesNote}}'
+          data-dtype='String'
+          class='npc-text-input'
+          placeholder='{{localize "VAGABOND.Actor.NPC.SensesPlaceholder"}}'
+        />
+      {{/if}}
     </div>
   {{/unless}}
 
-  {{! Immunities, Weaknesses, Status Immunities }}
+  {{! Immunities, Weaknesses, Status Immunities — locked view draws nothing when all are empty }}
+  {{#unless (and system.locked (not system.immunities.length) (not system.weaknesses.length) (not system.statusImmunities.length))}}
   <div class='npc-resistances-section'>
 
     {{#if system.locked}}
@@ -151,6 +184,7 @@
     {{/if}}
 
   </div>
+  {{/unless}}
 
   {{! Actions Section }}
   <section class='npc-section npc-actions'>

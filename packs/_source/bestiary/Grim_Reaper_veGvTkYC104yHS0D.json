@@ -15,7 +15,10 @@
     "morale": 12,
     "appearing": "",
     "speed": 60,
-    "senses": "Allsight, Darksight",
+    "senses": [
+      "allsight",
+      "darksight"
+    ],
     "armor": 8,
     "armorDescription": "as (+5) Heavy",
     "locked": true,
@@ -117,17 +120,22 @@
       }
     },
     "sight": {
-      "enabled": false,
-      "range": 0,
+      "enabled": true,
+      "range": null,
       "angle": 360,
-      "visionMode": "basic",
+      "visionMode": "darkvision",
       "color": null,
       "attenuation": 0.1,
       "brightness": 0,
       "saturation": 0,
       "contrast": 0
     },
-    "detectionModes": {},
+    "detectionModes": {
+      "seeInvisibility": {
+        "enabled": true,
+        "range": null
+      }
+    },
     "occludable": {
       "radius": 0
     },

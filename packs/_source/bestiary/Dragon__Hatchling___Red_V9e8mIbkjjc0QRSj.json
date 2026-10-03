@@ -19,7 +19,9 @@
     "morale": 8,
     "appearing": "1",
     "speed": 30,
-    "senses": "Blindsight",
+    "senses": [
+      "blindsight"
+    ],
     "armor": 2,
     "armorDescription": "as Chain",
     "locked": true,
@@ -147,7 +149,7 @@
       }
     },
     "sight": {
-      "enabled": false,
+      "enabled": true,
       "range": 0,
       "angle": 360,
       "visionMode": "basic",
@@ -157,7 +159,12 @@
       "saturation": 0,
       "contrast": 0
     },
-    "detectionModes": {},
+    "detectionModes": {
+      "blindsight": {
+        "enabled": true,
+        "range": null
+      }
+    },
     "occludable": {
       "radius": 0
     },

@@ -19,7 +19,10 @@
     "morale": 7,
     "appearing": "2d6",
     "speed": 0,
-    "senses": "Darksight, Telepathy",
+    "senses": [
+      "darksight",
+      "telepathy"
+    ],
     "armor": 0,
     "armorDescription": "as Unarmored",
     "locked": true,
@@ -157,10 +160,10 @@
       }
     },
     "sight": {
-      "enabled": false,
-      "range": 0,
+      "enabled": true,
+      "range": null,
       "angle": 360,
-      "visionMode": "basic",
+      "visionMode": "darkvision",
       "color": null,
       "attenuation": 0.1,
       "brightness": 0,

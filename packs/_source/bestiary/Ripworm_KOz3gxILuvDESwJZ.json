@@ -17,7 +17,10 @@
     "morale": 10,
     "appearing": "d4",
     "speed": 20,
-    "senses": "Seismicsense 60'",
+    "senses": [
+      "seismicsense"
+    ],
+    "sensesNote": "Seismicsense 60'",
     "armor": 3,
     "armorDescription": "as Plate",
     "locked": true,
@@ -109,7 +112,7 @@
       }
     },
     "sight": {
-      "enabled": false,
+      "enabled": true,
       "range": 0,
       "angle": 360,
       "visionMode": "basic",
@@ -119,7 +122,12 @@
       "saturation": 0,
       "contrast": 0
     },
-    "detectionModes": {},
+    "detectionModes": {
+      "feelTremor": {
+        "enabled": true,
+        "range": 60
+      }
+    },
     "occludable": {
       "radius": 0
     },

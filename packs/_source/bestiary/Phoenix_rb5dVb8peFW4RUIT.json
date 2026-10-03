@@ -20,7 +20,9 @@
     "morale": 10,
     "appearing": "1",
     "speed": 50,
-    "senses": "Allsight",
+    "senses": [
+      "allsight"
+    ],
     "armor": 5,
     "armorDescription": "as (+3) Chain",
     "locked": true,
@@ -170,7 +172,7 @@
       }
     },
     "sight": {
-      "enabled": false,
+      "enabled": true,
       "range": 0,
       "angle": 360,
       "visionMode": "basic",
@@ -180,7 +182,12 @@
       "saturation": 0,
       "contrast": 0
     },
-    "detectionModes": {},
+    "detectionModes": {
+      "seeInvisibility": {
+        "enabled": true,
+        "range": null
+      }
+    },
     "occludable": {
       "radius": 0
     },

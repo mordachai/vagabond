@@ -21,7 +21,10 @@
     "morale": 11,
     "appearing": "1",
     "speed": 40,
-    "senses": "Darksight, Telepathy",
+    "senses": [
+      "darksight",
+      "telepathy"
+    ],
     "armor": 7,
     "armorDescription": "as (+4) Plate",
     "locked": true,
@@ -169,10 +172,10 @@
       }
     },
     "sight": {
-      "enabled": false,
-      "range": 0,
+      "enabled": true,
+      "range": null,
       "angle": 360,
-      "visionMode": "basic",
+      "visionMode": "darkvision",
       "color": null,
       "attenuation": 0.1,
       "brightness": 0,

@@ -19,7 +19,9 @@
     "morale": 12,
     "appearing": "1",
     "speed": 10,
-    "senses": "Blindsense",
+    "senses": [
+      "blindsight"
+    ],
     "armor": 0,
     "armorDescription": "as Unarmored",
     "locked": true,
@@ -115,7 +117,7 @@
       }
     },
     "sight": {
-      "enabled": false,
+      "enabled": true,
       "range": 0,
       "angle": 360,
       "visionMode": "basic",
@@ -125,7 +127,12 @@
       "saturation": 0,
       "contrast": 0
     },
-    "detectionModes": {},
+    "detectionModes": {
+      "blindsight": {
+        "enabled": true,
+        "range": null
+      }
+    },
     "occludable": {
       "radius": 0
     },

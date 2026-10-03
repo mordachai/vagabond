@@ -15,11 +15,14 @@
     "speedTypes": [
       "fly"
     ],
+    "flyingByDefault": true,
     "hd": 1,
     "morale": 8,
     "appearing": "2d6",
     "speed": 10,
-    "senses": "Echolocation",
+    "senses": [
+      "echolocation"
+    ],
     "armor": 0,
     "armorDescription": "as Unarmored",
     "locked": true,
@@ -117,7 +120,7 @@
       }
     },
     "sight": {
-      "enabled": false,
+      "enabled": true,
       "range": 0,
       "angle": 360,
       "visionMode": "basic",
@@ -127,7 +130,12 @@
       "saturation": 0,
       "contrast": 0
     },
-    "detectionModes": {},
+    "detectionModes": {
+      "echolocation": {
+        "enabled": true,
+        "range": null
+      }
+    },
     "occludable": {
       "radius": 0
     },

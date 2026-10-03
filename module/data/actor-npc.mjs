@@ -7,6 +7,61 @@ export default class VagabondNPC extends VagabondActorBase {
     'VAGABOND.Actor.NPC',
   ];
 
+  /**
+   * Parse a legacy free-text senses string ("Darksight, Telepathy (Far)") into
+   * `{ senses: [keys], sensesNote }`. Recognised book senses become keys; any
+   * qualifier or unrecognised token is kept verbatim in the note.
+   * ("Blindsense" is an old typo for Blindsight.)
+   * @param {string} text
+   * @returns {{senses: string[], sensesNote: string}}
+   */
+  static parseLegacySenses(text) {
+    const aliases = {
+      'allsight': 'allsight', 'all-sight': 'allsight',
+      'blindsight': 'blindsight', 'blindsense': 'blindsight',
+      'darksight': 'darksight', 'echolocation': 'echolocation',
+      'seismicsense': 'seismicsense', 'telepathy': 'telepathy',
+    };
+    const labels = {
+      allsight: 'Allsight', blindsight: 'Blindsight', darksight: 'Darksight',
+      echolocation: 'Echolocation', seismicsense: 'Seismicsense', telepathy: 'Telepathy',
+    };
+    // Split on commas that are not inside parentheses
+    const tokens = [];
+    let depth = 0, current = '';
+    for (const ch of String(text ?? '')) {
+      if (ch === '(') depth++;
+      else if (ch === ')') depth = Math.max(0, depth - 1);
+      if (ch === ',' && depth === 0) { tokens.push(current); current = ''; }
+      else current += ch;
+    }
+    tokens.push(current);
+
+    const senses = [];
+    const notes = [];
+    for (const raw of tokens) {
+      const token = raw.trim();
+      if (!token) continue;
+      const match = token.match(/^(all-?sight|blind(?:sight|sense)|darksight|echolocation|seismicsense|telepathy)\b\s*(.*)$/i);
+      if (!match) { notes.push(token); continue; }
+      const key = aliases[match[1].toLowerCase()];
+      if (!senses.includes(key)) senses.push(key);
+      const qualifier = match[2].trim();
+      if (qualifier) notes.push(`${labels[key]} ${qualifier}`);
+    }
+    return { senses, sensesNote: notes.join(', ') };
+  }
+
+  /** @override Convert legacy string `senses` to the array + note shape. */
+  static migrateData(data) {
+    if (typeof data.senses === 'string') {
+      const { senses, sensesNote } = VagabondNPC.parseLegacySenses(data.senses);
+      data.senses = senses;
+      if (sensesNote && !data.sensesNote) data.sensesNote = sensesNote;
+    }
+    return super.migrateData(data);
+  }
+
   static defineSchema() {
     const fields = foundry.data.fields;
     const requiredInteger = { required: true, nullable: false, integer: true };
@@ -71,6 +126,10 @@ export default class VagabondNPC extends VagabondActorBase {
       min: 0,
     });
 
+    // Starts with the Flying status (birds, insects…): see NpcFlying. Fly-only NPCs
+    // (base Speed 0) get it regardless of this flag.
+    schema.flyingByDefault = new fields.BooleanField({ required: false, initial: false });
+
     // Speed values for each movement type (stores specific speeds for Fly, Climb, etc.)
     schema.speedValues = new fields.SchemaField({
       climb: new fields.NumberField({
@@ -110,7 +169,14 @@ export default class VagabondNPC extends VagabondActorBase {
       })
     });
 
-    schema.senses = new fields.StringField({
+    // Senses: keys of CONFIG.VAGABOND.senses (rulebook table). Free-text qualifiers
+    // ("Far", "60 ft", "fungus only") live in sensesNote.
+    schema.senses = new fields.ArrayField(
+      new fields.StringField({ required: true }),
+      { required: true, initial: [] }
+    );
+
+    schema.sensesNote = new fields.StringField({
       required: false,
       nullable: false,
       initial: '',

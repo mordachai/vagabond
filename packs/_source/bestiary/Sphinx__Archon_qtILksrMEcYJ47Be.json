@@ -20,7 +20,10 @@
     "morale": 10,
     "appearing": "1",
     "speed": 60,
-    "senses": "Allsight, Telepathy",
+    "senses": [
+      "allsight",
+      "telepathy"
+    ],
     "armor": 6,
     "armorDescription": "as (+3) Plate",
     "universalDamageBonus": 0,
@@ -276,7 +279,7 @@
       }
     },
     "sight": {
-      "enabled": false,
+      "enabled": true,
       "range": 0,
       "angle": 360,
       "visionMode": "basic",
@@ -286,7 +289,12 @@
       "saturation": 0,
       "contrast": 0
     },
-    "detectionModes": {},
+    "detectionModes": {
+      "seeInvisibility": {
+        "enabled": true,
+        "range": null
+      }
+    },
     "occludable": {
       "radius": 0
     },

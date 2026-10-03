@@ -17,7 +17,10 @@
     "morale": 5,
     "appearing": "d6",
     "speed": 40,
-    "senses": "Darksight, Seismicsense",
+    "senses": [
+      "darksight",
+      "seismicsense"
+    ],
     "armor": 3,
     "armorDescription": "as Chain plus Shield",
     "locked": true,
@@ -138,17 +141,22 @@
       }
     },
     "sight": {
-      "enabled": false,
-      "range": 0,
+      "enabled": true,
+      "range": null,
       "angle": 360,
-      "visionMode": "basic",
+      "visionMode": "darkvision",
       "color": null,
       "attenuation": 0.1,
       "brightness": 0,
       "saturation": 0,
       "contrast": 0
     },
-    "detectionModes": {},
+    "detectionModes": {
+      "feelTremor": {
+        "enabled": true,
+        "range": null
+      }
+    },
     "occludable": {
       "radius": 0
     },

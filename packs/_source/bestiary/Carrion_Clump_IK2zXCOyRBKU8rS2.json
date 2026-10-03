@@ -17,7 +17,9 @@
     "morale": 12,
     "appearing": "d6",
     "speed": 10,
-    "senses": "Blindsight",
+    "senses": [
+      "blindsight"
+    ],
     "armor": 1,
     "armorDescription": "as Leather",
     "locked": true,
@@ -116,7 +118,7 @@
       }
     },
     "sight": {
-      "enabled": false,
+      "enabled": true,
       "range": 0,
       "angle": 360,
       "visionMode": "basic",
@@ -126,7 +128,12 @@
       "saturation": 0,
       "contrast": 0
     },
-    "detectionModes": {},
+    "detectionModes": {
+      "blindsight": {
+        "enabled": true,
+        "range": null
+      }
+    },
     "occludable": {
       "radius": 0
     },

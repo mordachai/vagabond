@@ -15,6 +15,7 @@
     "speedTypes": [
       "fly"
     ],
+    "flyingByDefault": true,
     "hd": 1,
     "morale": 9,
     "appearing": "2d6",

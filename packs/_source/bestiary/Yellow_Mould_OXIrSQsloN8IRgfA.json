@@ -17,7 +17,11 @@
     "morale": 12,
     "appearing": "d4",
     "speed": 0,
-    "senses": "Blindsight, Telepathy (fungus only)",
+    "senses": [
+      "blindsight",
+      "telepathy"
+    ],
+    "sensesNote": "Telepathy (fungus only)",
     "armor": 0,
     "armorDescription": "as Unarmored",
     "locked": true,
@@ -105,7 +109,7 @@
       }
     },
     "sight": {
-      "enabled": false,
+      "enabled": true,
       "range": 0,
       "angle": 360,
       "visionMode": "basic",
@@ -115,7 +119,12 @@
       "saturation": 0,
       "contrast": 0
     },
-    "detectionModes": {},
+    "detectionModes": {
+      "blindsight": {
+        "enabled": true,
+        "range": null
+      }
+    },
     "occludable": {
       "radius": 0
     },

@@ -27,7 +27,10 @@
       "phase": 0,
       "swim": 0
     },
-    "senses": "Allsight, Telepathy",
+    "senses": [
+      "allsight",
+      "telepathy"
+    ],
     "armor": 4,
     "armorDescription": "as (+1) Plate",
     "universalDamageBonus": 0,
@@ -185,7 +188,7 @@
       }
     },
     "sight": {
-      "enabled": false,
+      "enabled": true,
       "range": 0,
       "angle": 360,
       "visionMode": "basic",
@@ -195,7 +198,12 @@
       "saturation": 0,
       "contrast": 0
     },
-    "detectionModes": {},
+    "detectionModes": {
+      "seeInvisibility": {
+        "enabled": true,
+        "range": null
+      }
+    },
     "occludable": {
       "radius": 0
     },

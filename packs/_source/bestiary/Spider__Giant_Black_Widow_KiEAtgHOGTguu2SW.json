@@ -19,7 +19,9 @@
     "morale": 8,
     "appearing": "d3",
     "speed": 40,
-    "senses": "Darksight",
+    "senses": [
+      "darksight"
+    ],
     "armor": 1,
     "armorDescription": "as Leather",
     "locked": true,
@@ -118,10 +120,10 @@
       }
     },
     "sight": {
-      "enabled": false,
-      "range": 0,
+      "enabled": true,
+      "range": null,
       "angle": 360,
-      "visionMode": "basic",
+      "visionMode": "darkvision",
       "color": null,
       "attenuation": 0.1,
       "brightness": 0,

@@ -24,6 +24,8 @@ import { loadJB2ADefaults } from './helpers/sequencer-config.mjs';
 import { VagabondChatCard } from './helpers/chat-card.mjs';
 import { VagabondDiceAppearance } from './helpers/dice-appearance.mjs';
 import { EquipmentHelper } from './helpers/equipment-helper.mjs';
+import { NpcSenses } from './helpers/npc-senses.mjs';
+import { NpcFlying } from './helpers/npc-flying.mjs';
 import { ContextMenuHelper } from './helpers/context-menu-helper.mjs';
 import { AccordionHelper } from './helpers/accordion-helper.mjs';
 import { EnrichmentHelper } from './helpers/enrichment-helper.mjs';
@@ -1273,8 +1275,27 @@ Hooks.once('init', function () {
       return nameA.localeCompare(nameB);
     });
     CONFIG.statusEffects = sortedEffects;
+
+    // Point Foundry's special statuses at ours (core defaults are 'blind' / 'fly').
+    // Blinded cuts the token's sight-type vision; Flying hides it from Feel Tremor.
+    CONFIG.specialStatusEffects.BLIND = 'blinded';
+    CONFIG.specialStatusEffects.FLY = 'flying';
   }
   // If 'foundry', do nothing - Foundry's defaults will remain active
+
+  // Custom detection modes for NPC senses. Same detection as Sense All, but they respect
+  // walls (a Blindsight NPC can't see through a wall) and are not sight-type, so they keep
+  // working while the token is Blinded.
+  const { DetectionModeAll, DetectionMode } = foundry.canvas.perception;
+  for (const [id, label] of [['blindsight', 'VAGABOND.Senses.Blindsight'], ['echolocation', 'VAGABOND.Senses.Echolocation']]) {
+    CONFIG.Canvas.detectionModes[id] = new DetectionModeAll({
+      id,
+      label,
+      walls: true,
+      angle: false,
+      type: DetectionMode.DETECTION_TYPES.OTHER,
+    });
+  }
 
   // Loads placeholder images for character sheets
   CONFIG.Actor.typeImages = VAGABOND.actorTypeImages;
@@ -2579,6 +2600,32 @@ Hooks.on('refreshToken', (token) => {
 Hooks.on('updateActor', (actor, changes) => {
   if (actor.type !== 'shop' || !foundry.utils.hasProperty(changes, 'system.open')) return;
   for (const token of actor.getActiveTokens(true)) _refreshShopLock(token);
+});
+
+// NPC senses → token vision / detection modes (prototype token + placed linked tokens).
+// Single active GM only, so multi-GM sessions don't double-write.
+Hooks.on('updateActor', (actor, changes) => {
+  if (actor.type !== 'npc' || !game.users.activeGM?.isSelf) return;
+  if (!foundry.utils.hasProperty(changes, 'system.senses')
+    && !foundry.utils.hasProperty(changes, 'system.sensesNote')) return;
+  NpcSenses.syncActorTokens(actor);
+});
+
+// Fly-only NPCs (base Speed 0) and flyingByDefault NPCs (birds, insects) get the Flying status automatically.
+// Single active GM only; sync() is idempotent, so the canvasReady sweep also catches
+// NPCs placed/edited before this existed.
+Hooks.on('createToken', (token) => {
+  if (!game.users.activeGM?.isSelf || token.actor?.type !== 'npc') return;
+  NpcFlying.sync(token.actor);
+});
+Hooks.on('updateActor', (actor, changes) => {
+  if (actor.type !== 'npc' || !game.users.activeGM?.isSelf) return;
+  if (!['system.speed', 'system.speedTypes', 'system.flyingByDefault']
+    .some((path) => foundry.utils.hasProperty(changes, path))) return;
+  NpcFlying.sync(actor);
+});
+Hooks.on('canvasReady', () => {
+  if (game.users.activeGM?.isSelf) NpcFlying.sweep();
 });
 
 // Shop token HUD: hide the combat toggle, add an open/close switch for the GM

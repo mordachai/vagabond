@@ -19,7 +19,11 @@
     "morale": 9,
     "appearing": "d4",
     "speed": 20,
-    "senses": "All-Sight, Telepathy 120'",
+    "senses": [
+      "allsight",
+      "telepathy"
+    ],
+    "sensesNote": "Telepathy 120'",
     "armor": 3,
     "armorDescription": "as (+1) Chain",
     "locked": true,
@@ -149,7 +153,7 @@
       }
     },
     "sight": {
-      "enabled": false,
+      "enabled": true,
       "range": 0,
       "angle": 360,
       "visionMode": "basic",
@@ -159,7 +163,12 @@
       "saturation": 0,
       "contrast": 0
     },
-    "detectionModes": {},
+    "detectionModes": {
+      "seeInvisibility": {
+        "enabled": true,
+        "range": null
+      }
+    },
     "occludable": {
       "radius": 0
     },

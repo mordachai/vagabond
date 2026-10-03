@@ -17,7 +17,10 @@
     "morale": 8,
     "appearing": "1",
     "speed": 30,
-    "senses": "Telepathy (Far)",
+    "senses": [
+      "telepathy"
+    ],
+    "sensesNote": "Telepathy (Far)",
     "armor": 3,
     "armorDescription": "as (+1) Chain",
     "locked": true,

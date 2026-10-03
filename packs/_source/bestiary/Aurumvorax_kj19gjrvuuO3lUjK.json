@@ -17,7 +17,11 @@
     "morale": 12,
     "appearing": "1",
     "speed": 15,
-    "senses": "Darksight, Seismicsense 60 feet",
+    "senses": [
+      "darksight",
+      "seismicsense"
+    ],
+    "sensesNote": "Seismicsense 60 feet",
     "armor": 3,
     "armorDescription": "as (+2) Leather",
     "locked": true,
@@ -136,17 +140,22 @@
       }
     },
     "sight": {
-      "enabled": false,
-      "range": 0,
+      "enabled": true,
+      "range": null,
       "angle": 360,
-      "visionMode": "basic",
+      "visionMode": "darkvision",
       "color": null,
       "attenuation": 0.1,
       "brightness": 0,
       "saturation": 0,
       "contrast": 0
     },
-    "detectionModes": {},
+    "detectionModes": {
+      "feelTremor": {
+        "enabled": true,
+        "range": 60
+      }
+    },
     "occludable": {
       "radius": 0
     },

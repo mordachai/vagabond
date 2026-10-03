@@ -20,7 +20,10 @@
     "morale": 7,
     "appearing": "2d4",
     "speed": 30,
-    "senses": "Telepathy (Near)",
+    "senses": [
+      "telepathy"
+    ],
+    "sensesNote": "Telepathy (Near)",
     "armor": 3,
     "armorDescription": "as Plate",
     "locked": true,

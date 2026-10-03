@@ -20,7 +20,9 @@
     "morale": 8,
     "appearing": "1",
     "speed": 20,
-    "senses": "All-Sight",
+    "senses": [
+      "allsight"
+    ],
     "armor": 4,
     "armorDescription": "as (+1) Plate",
     "locked": true,
@@ -238,7 +240,7 @@
       }
     },
     "sight": {
-      "enabled": false,
+      "enabled": true,
       "range": 0,
       "angle": 360,
       "visionMode": "basic",
@@ -248,7 +250,12 @@
       "saturation": 0,
       "contrast": 0
     },
-    "detectionModes": {},
+    "detectionModes": {
+      "seeInvisibility": {
+        "enabled": true,
+        "range": null
+      }
+    },
     "occludable": {
       "radius": 0
     },

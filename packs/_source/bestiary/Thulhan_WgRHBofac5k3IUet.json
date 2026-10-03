@@ -18,7 +18,10 @@
     "morale": 4,
     "appearing": "d4",
     "speed": 30,
-    "senses": "Darksight, Telepathy",
+    "senses": [
+      "darksight",
+      "telepathy"
+    ],
     "armor": 3,
     "armorDescription": "as (+1) Chain",
     "locked": true,
@@ -176,10 +179,10 @@
       }
     },
     "sight": {
-      "enabled": false,
-      "range": 0,
+      "enabled": true,
+      "range": null,
       "angle": 360,
-      "visionMode": "basic",
+      "visionMode": "darkvision",
       "color": null,
       "attenuation": 0.1,
       "brightness": 0,
