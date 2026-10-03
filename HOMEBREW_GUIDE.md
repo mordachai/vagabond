@@ -231,7 +231,7 @@ Maximum stat value reachable through level-up increases. Default: 7.
 
 ### Character Builder Stat Arrays
 
-Each row is one stat array offered in the character builder. Values are assigned to stats left-to-right in the order defined in Tab 1. The row index is also the result of a 1d12 random roll (row 1 = roll 1, etc.).
+Each row is one stat array offered in the character builder. Values are assigned to stats left-to-right in the order defined in Tab 1. The row index is also the result of a 1d8 random roll (row 1 = roll 1, etc.).
 
 Add rows to offer more array options. Remove rows to restrict choices. All values should respect the configured Stat Cap.
 

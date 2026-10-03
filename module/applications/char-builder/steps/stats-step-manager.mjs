@@ -264,10 +264,9 @@ export class StatsStepManager extends BaseStepManager {
 
     // Last resort hardcoded fallback
     return {
-      1: [5, 5, 5, 4, 4, 3], 2: [5, 5, 5, 5, 3, 2], 3: [6, 5, 4, 4, 4, 3],
-      4: [6, 5, 5, 4, 3, 2], 5: [6, 6, 4, 3, 3, 3], 6: [6, 6, 4, 4, 3, 2],
-      7: [6, 6, 5, 3, 2, 2], 8: [7, 4, 4, 4, 4, 2], 9: [7, 4, 4, 4, 3, 3],
-      10: [7, 5, 4, 3, 3, 2], 11: [7, 5, 5, 2, 2, 2], 12: [7, 6, 4, 2, 2, 2]
+      1: [5, 5, 5, 5, 3, 3], 2: [6, 5, 5, 4, 3, 3], 3: [6, 6, 4, 4, 3, 3],
+      4: [6, 6, 5, 3, 3, 2], 5: [7, 5, 4, 4, 3, 3], 6: [7, 5, 5, 3, 3, 2],
+      7: [7, 6, 4, 3, 3, 2], 8: [7, 7, 3, 3, 2, 2]
     };
   }
 
@@ -676,7 +675,7 @@ export class StatsStepManager extends BaseStepManager {
    * Randomize stats selection and auto-assign with key stat priority
    *
    * Logic:
-   * - Roll 1d12 to select stat array
+   * - Roll 1dN (N = array count, 1d8 by default) to select stat array
    * - Sort values descending (highest first)
    * - Assign highest value to the class's key stat
    * - Assign remaining values in order: might, dex, awr, rsn, pre, luck (skipping key stat)
@@ -690,15 +689,9 @@ export class StatsStepManager extends BaseStepManager {
       return;
     }
 
-    // Roll 1d12 to select stat array (or random if not 12 arrays)
-    let selectedId;
-    if (arrayIds.length === 12) {
-      const roll = await new Roll("1d12").evaluate();
-      selectedId = String(roll.total);
-    } else {
-      const randomIndex = Math.floor(Math.random() * arrayIds.length);
-      selectedId = arrayIds[randomIndex];
-    }
+    // Roll 1dN (N = number of arrays; 8 by default) to select the stat array
+    const roll = await new Roll(`1d${arrayIds.length}`).evaluate();
+    const selectedId = arrayIds[roll.total - 1];
 
     const selectedArray = statArrays[selectedId];
     if (!selectedArray) {

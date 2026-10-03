@@ -61,10 +61,9 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
 
     // Initialize with fallback values, will be replaced by config
     this.statArrays = {
-      1: [5, 5, 5, 4, 4, 3], 2: [5, 5, 5, 5, 3, 2], 3: [6, 5, 4, 4, 4, 3],
-      4: [6, 5, 5, 4, 3, 2], 5: [6, 6, 4, 3, 3, 3], 6: [6, 6, 4, 4, 3, 2],
-      7: [6, 6, 5, 3, 2, 2], 8: [7, 4, 4, 4, 4, 2], 9: [7, 4, 4, 4, 3, 3],
-      10: [7, 5, 4, 3, 3, 2], 11: [7, 5, 5, 2, 2, 2], 12: [7, 6, 4, 2, 2, 2]
+      1: [5, 5, 5, 5, 3, 3], 2: [6, 5, 5, 4, 3, 3], 3: [6, 6, 4, 4, 3, 3],
+      4: [6, 6, 5, 3, 3, 2], 5: [7, 5, 4, 4, 3, 3], 6: [7, 5, 5, 3, 3, 2],
+      7: [7, 6, 4, 3, 3, 2], 8: [7, 7, 3, 3, 2, 2]
     };
 
     // Start loading configuration immediately

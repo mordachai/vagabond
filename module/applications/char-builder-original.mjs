@@ -35,12 +35,11 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
     this.compendiumTypeCache = {}; // Cache which compendiums contain which types
     this.showAllPerks = false; // Toggle for showing all perks regardless of prerequisites
 
-    // Step 3: The 1d12 Stat Array Table
+    // Step 3: The 1d8 Stat Array Table
     this.statArrays = {
-      1: [5, 5, 5, 4, 4, 3], 2: [5, 5, 5, 5, 3, 2], 3: [6, 5, 4, 4, 4, 3],
-      4: [6, 5, 5, 4, 3, 2], 5: [6, 6, 4, 3, 3, 3], 6: [6, 6, 4, 4, 3, 2],
-      7: [6, 6, 5, 3, 2, 2], 8: [7, 4, 4, 4, 4, 2], 9: [7, 4, 4, 4, 3, 3],
-      10: [7, 5, 4, 3, 3, 2], 11: [7, 5, 5, 2, 2, 2], 12: [7, 6, 4, 2, 2, 2]
+      1: [5, 5, 5, 5, 3, 3], 2: [6, 5, 5, 4, 3, 3], 3: [6, 6, 4, 4, 3, 3],
+      4: [6, 6, 5, 3, 3, 2], 5: [7, 5, 4, 4, 3, 3], 6: [7, 5, 5, 3, 3, 2],
+      7: [7, 6, 4, 3, 3, 2], 8: [7, 7, 3, 3, 2, 2]
     };
   }
 
@@ -2268,8 +2267,8 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
    * @param {boolean} autoAssign - If true, automatically assign values in order
    */
   async _randomizeStats(autoAssign = false) {
-    // Roll 1d12 to select stat array
-    const roll = await new Roll("1d12").evaluate();
+    // Roll 1d8 to select stat array
+    const roll = await new Roll("1d8").evaluate();
     this.builderData.selectedArrayId = String(roll.total);
     this.builderData.unassignedValues = [...this.statArrays[roll.total]];
 

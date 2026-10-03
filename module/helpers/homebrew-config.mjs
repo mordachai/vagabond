@@ -134,20 +134,16 @@ export const VAGABOND_HOMEBREW_DEFAULTS = {
   statCap: 7,
 
   // Stat arrays offered in the character builder (each sub-array must have one value per stat).
-  // Row index + 1 = the "roll" result (row 0 → roll 1, row 11 → roll 12, etc.).
+  // Row index + 1 = the "roll" result (row 0 → roll 1, row 7 → roll 8, etc.).
   statArrays: [
-    [5, 5, 5, 4, 4, 3],
-    [5, 5, 5, 5, 3, 2],
-    [6, 5, 4, 4, 4, 3],
-    [6, 5, 5, 4, 3, 2],
-    [6, 6, 4, 3, 3, 3],
-    [6, 6, 4, 4, 3, 2],
-    [6, 6, 5, 3, 2, 2],
-    [7, 4, 4, 4, 4, 2],
-    [7, 4, 4, 4, 3, 3],
-    [7, 5, 4, 3, 3, 2],
-    [7, 5, 5, 2, 2, 2],
-    [7, 6, 4, 2, 2, 2],
+    [5, 5, 5, 5, 3, 3],
+    [6, 5, 5, 4, 3, 3],
+    [6, 6, 4, 4, 3, 3],
+    [6, 6, 5, 3, 3, 2],
+    [7, 5, 4, 4, 3, 3],
+    [7, 5, 5, 3, 3, 2],
+    [7, 6, 4, 3, 3, 2],
+    [7, 7, 3, 3, 2, 2],
   ],
 
   // --- Tab 4: Magic (runtime) ---
