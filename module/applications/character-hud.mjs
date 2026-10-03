@@ -6,7 +6,7 @@ import { VagabondActorSheet } from '../sheets/actor-sheet.mjs';
 import { WorkbenchApp } from './workbench-app.mjs';
 import { CraftingHelper } from '../helpers/crafting-helper.mjs';
 import { AccordionHelper } from '../helpers/accordion-helper.mjs';
-import { applyHudDisplayPrefs, getHudHealthBar, isItemPile } from '../helpers/hud-display.mjs';
+import { applyHudDisplayPrefs, bindHudBodyDrag, getHudHealthBar, isItemPile } from '../helpers/hud-display.mjs';
 import { activateHandItem } from '../helpers/hand-item-activation.mjs';
 import { buildItemMenuItems, buildSpellMenuItems } from '../helpers/item-menu.mjs';
 import { bindHudTooltips } from '../helpers/hud-tooltip.mjs';
@@ -699,6 +699,8 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
     // Drag handle: portrait moves the HUD.
     const handle = this.element.querySelector('.vh-drag');
     if (handle) handle.addEventListener('pointerdown', (e) => this._onDragStart(e), { signal });
+    // …and so does any free area of the body (interactive parts excluded).
+    bindHudBodyDrag(this.element, (e) => this._onDragStart(e), signal);
 
     // Double-click portrait → open the actor sheet (HUD stays open).
     const portrait = this.element.querySelector('.vh-portrait');

@@ -6,11 +6,9 @@
 // =============================================================
 
 .vbd-hud--npc {
-  // NPCs have no weapon circles — only the armor shield sits in the right
-  // gutter, so reclaim most of the reserved space and re-anchor the shield.
-  --vh-float-w: 46px;
-  --vh-armor-top: 6px;
-  --vh-armor-right: 6px;
+  // NPCs have no weapon circles; the armor shield lives in the info strip,
+  // so the right gutter is only a small margin.
+  --vh-float-w: 14px;
 
   .vh-body { min-width: 360px; max-width: 800px; }
 
@@ -186,6 +184,15 @@
     gap: 10px;
     font-size: calc(1.2rem * var(--vh-font-scale));
     text-shadow: var(--vh-outline-1);
+
+    // Armor shield = first item of the strip (in flow, not floating).
+    // Sized to match the height of the boxes beside it, centered on that line.
+    .vh-armor {
+      position: relative; top: auto; right: auto; flex: none; align-self: center;
+      width: 32px; height: 30px;
+      i { font-size: calc(30px * var(--vh-font-scale)); }
+      .vh-armor-val { font-size: calc(1.3rem * var(--vh-font-scale)); }
+    }
 
     // Each section (senses / immunities / weaknesses / status immunities) is a
     // bordered box with a centered legend label sitting on the top border.

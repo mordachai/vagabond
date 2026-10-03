@@ -48,13 +48,6 @@
   {{!-- ============ BODY ============ --}}
   <div class="vh-body">
 
-    {{!-- Floating cluster: armor shield (NPCs have no weapon circles) --}}
-    <div class="vh-floating">
-      <div class="vh-armor" data-hud-tip="{{system.armorDescription}}">
-        <i class="fas fa-shield"></i><span class="vh-armor-val">{{armor}}</span>
-      </div>
-    </div>
-
     {{!-- Ongoing status icons — floating vertical strip in the left gutter.
          Same .status-icon markup + menu as the sheet: left-click = chat,
          right-click = Send to Chat / Remove. --}}
@@ -108,15 +101,18 @@
       </div>
     </div>
 
-    {{!-- Always-on info strip: senses + resistances --}}
-    {{#if hasInfoStrip}}
-      <div class="vh-npc-info">
+    {{!-- Always-on info strip: armor + senses + resistances --}}
+    <div class="vh-npc-info">
+      <div class="vh-armor" data-hud-tip="{{system.armorDescription}}">
+        <i class="fas fa-shield"></i><span class="vh-armor-val">{{armor}}</span>
+      </div>
+      {{#if hasInfoStrip}}
         {{#if (or senses.length sensesNote)}}<fieldset class="vh-info-group vh-info-senses"><legend>{{localize 'VAGABOND.Actor.NPC.FIELDS.senses.short'}}</legend><div class="vh-info-body">{{#each senses}}<span data-hud-tip="{{hint}}">{{label}}</span>{{#unless @last}}, {{/unless}}{{/each}}{{#if sensesNote}}{{#if senses.length}} — {{/if}}{{sensesNote}}{{/if}}</div></fieldset>{{/if}}
         {{#if immunities.length}}<fieldset class="vh-info-group"><legend>{{localize 'VAGABOND.Actor.NPC.FIELDS.immunities.short'}}</legend><div class="vh-info-body">{{#each immunities}}<i class="{{icon}} vh-info-immune" data-hud-tip="{{localize 'VAGABOND.Actor.NPC.FIELDS.immunities.label'}}: {{label}}"></i>{{/each}}</div></fieldset>{{/if}}
         {{#if weaknesses.length}}<fieldset class="vh-info-group"><legend>{{localize 'VAGABOND.Actor.NPC.FIELDS.weaknesses.short'}}</legend><div class="vh-info-body">{{#each weaknesses}}<i class="{{icon}} vh-info-weak" data-hud-tip="{{localize 'VAGABOND.Actor.NPC.FIELDS.weaknesses.label'}}: {{label}}"></i>{{/each}}</div></fieldset>{{/if}}
         {{#if statusImmunities.length}}<fieldset class="vh-info-group"><legend>{{localize 'VAGABOND.Actor.NPC.FIELDS.statusImmunities.short'}}</legend><div class="vh-info-body">{{#each statusImmunities}}<img class="status-condition-icon vh-info-status" src="{{icon}}" data-hud-tip="{{localize 'VAGABOND.Actor.NPC.FIELDS.statusImmunities.label'}}: {{label}}" />{{/each}}</div></fieldset>{{/if}}
-      </div>
-    {{/if}}
+      {{/if}}
+    </div>
 
     {{!-- Action chips — single inline row: [recharge?] name [chevron?].
          Click name = roll routine; chevron = open detail panel.

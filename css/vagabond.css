@@ -3686,14 +3686,14 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   --vh-font-scale: 1;
   --vh-portrait-w: 100px;
   --vh-portrait-h: 100px;
-  --vh-float-w: 84px;
+  --vh-float-w: 94px;
   --vh-status-w: 18px;
-  --vh-wpn0-top: 0px;
-  --vh-wpn0-right: 30px;
-  --vh-wpn1-top: 30px;
-  --vh-wpn1-right: 10px;
-  --vh-armor-top: 118px;
-  --vh-armor-right: 46px;
+  --vh-wpn0-top: 12px;
+  --vh-wpn0-right: 40px;
+  --vh-wpn1-top: 42px;
+  --vh-wpn1-right: 20px;
+  --vh-armor-top: 10px;
+  --vh-armor-right: 8px;
   --vh-wpn0-z: 3;
   --vh-wpn1-z: 2;
   --vh-badge0-top: 15px;
@@ -3739,20 +3739,15 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   flex-direction: column;
   gap: 4px;
   min-width: 425px;
-  padding: 7px var(--vh-float-w) 4px calc(var(--vh-status-w) + 10px);
+  padding: 20px var(--vh-float-w) 16px calc(var(--vh-status-w) + 10px);
   transition: box-shadow 0.15s ease, background-color 0.15s ease;
-}
-.vbd-hud.vh-drop-active .vh-body {
-  border-radius: var(--vh-radius);
-  outline: 2px dashed var(--vagabond-c-chat-yellow);
-  outline-offset: -2px;
-  background-color: color-mix(in srgb, var(--vagabond-c-chat-yellow) 10%, transparent);
-  box-shadow: 0 0 14px -2px var(--vagabond-c-chat-yellow), inset 0 0 18px -6px var(--vagabond-c-chat-yellow);
 }
 .vbd-hud.vbd-hud--bg-dark .vh-body, .vbd-hud.vbd-hud--blur .vh-body {
   padding-top: 12px;
   padding-bottom: 10px;
   border-radius: var(--vh-radius);
+  border: 2px solid var(--vagabond-c-chat-yellow);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.7), 0 0 4px rgba(0, 0, 0, 0.8);
 }
 .vbd-hud.vbd-hud--bg-dark .vh-body {
   background: rgba(0, 0, 0, 0.55);
@@ -3760,6 +3755,13 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .vbd-hud.vbd-hud--blur .vh-body {
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
+}
+.vbd-hud.vh-drop-active .vh-body {
+  border-radius: var(--vh-radius);
+  outline: 2px dashed var(--vagabond-c-chat-yellow);
+  outline-offset: -2px;
+  background-color: color-mix(in srgb, var(--vagabond-c-chat-yellow) 10%, transparent);
+  box-shadow: 0 0 14px -2px var(--vagabond-c-chat-yellow), inset 0 0 18px -6px var(--vagabond-c-chat-yellow);
 }
 .vbd-hud .vh-main-grid {
   display: grid;
@@ -3770,8 +3772,8 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .vbd-hud .vh-hud-statuses {
   position: absolute;
   left: 4px;
-  top: 7px;
-  bottom: 4px;
+  top: 20px;
+  bottom: 16px;
   width: var(--vh-status-w);
   display: flex;
   flex-direction: column;
@@ -3804,6 +3806,9 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 }
 .vbd-hud .vh-drag:active {
   cursor: grabbing;
+}
+.vbd-hud .vh-body {
+  cursor: grab;
 }
 .vbd-hud .vh-portrait {
   position: relative;
@@ -4081,39 +4086,40 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   position: absolute;
   top: var(--vh-armor-top);
   right: var(--vh-armor-right);
-  width: 34px;
-  height: 34px;
+  width: 26px;
+  height: 26px;
   display: grid;
   place-items: center;
   justify-content: center;
 }
 .vbd-hud .vh-armor i {
-  font-size: calc(32px * var(--vh-font-scale));
+  font-size: calc(24px * var(--vh-font-scale));
   color: var(--vagabond-c-black);
-  text-shadow: -2px -2px 0 var(--vagabond-c-chat-yellow), 2px -2px 0 var(--vagabond-c-chat-yellow), -2px 2px 0 var(--vagabond-c-chat-yellow), 2px 2px 0 var(--vagabond-c-chat-yellow);
+  text-shadow: -1px -1px 0 var(--vagabond-c-chat-yellow), 1px -1px 0 var(--vagabond-c-chat-yellow), -1px 1px 0 var(--vagabond-c-chat-yellow), 1px 1px 0 var(--vagabond-c-chat-yellow);
 }
 .vbd-hud .vh-armor .vh-armor-val {
   position: absolute;
   top: 48%;
   transform: translateY(-50%);
   font-family: "Ludlow", serif;
-  font-size: calc(1.4rem * var(--vh-font-scale));
+  font-size: calc(1.175rem * var(--vh-font-scale));
   color: var(--vagabond-c-chat-yellow);
 }
 .vbd-hud .vh-tabs {
   display: flex;
   justify-content: space-between;
   align-items: stretch;
-  gap: 0;
+  gap: 14px;
   margin-top: 2px;
-  padding: 0 6px;
+  padding: 0 12px;
   background: linear-gradient(180deg, var(--vagabond-c-chat-yellow), #8a6a1c);
   border: 1px solid #6e5314;
   border-radius: 5px;
   height: 25px;
 }
 .vbd-hud .vh-tab {
-  flex: 1 1 auto;
+  flex: 0 0 auto;
+  white-space: nowrap;
   height: 100%;
   min-height: 0;
   margin: 0;
@@ -4667,9 +4673,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 
 /* NPC HUD - layers on the shared `.vbd-hud` base; also renders outside sheets */
 .vbd-hud--npc {
-  --vh-float-w: 46px;
-  --vh-armor-top: 6px;
-  --vh-armor-right: 6px;
+  --vh-float-w: 14px;
 }
 .vbd-hud--npc .vh-body {
   min-width: 360px;
@@ -4825,6 +4829,21 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   gap: 10px;
   font-size: calc(1.2rem * var(--vh-font-scale));
   text-shadow: var(--vh-outline-1);
+}
+.vbd-hud--npc .vh-npc-info .vh-armor {
+  position: relative;
+  top: auto;
+  right: auto;
+  flex: none;
+  align-self: center;
+  width: 32px;
+  height: 30px;
+}
+.vbd-hud--npc .vh-npc-info .vh-armor i {
+  font-size: calc(30px * var(--vh-font-scale));
+}
+.vbd-hud--npc .vh-npc-info .vh-armor .vh-armor-val {
+  font-size: calc(1.3rem * var(--vh-font-scale));
 }
 .vbd-hud--npc .vh-npc-info .vh-info-group {
   min-inline-size: 0;

@@ -2,7 +2,7 @@ import { RollHandler, NPCActionHandler } from '../sheets/handlers/_module.mjs';
 import { VagabondActorSheet } from '../sheets/actor-sheet.mjs';
 import { EnrichmentHelper } from '../helpers/enrichment-helper.mjs';
 import { VagabondTextParser } from '../helpers/text-parser.mjs';
-import { applyHudDisplayPrefs, getHudHealthBar, isItemPile } from '../helpers/hud-display.mjs';
+import { applyHudDisplayPrefs, bindHudBodyDrag, getHudHealthBar, isItemPile } from '../helpers/hud-display.mjs';
 import { bindHudTooltips } from '../helpers/hud-tooltip.mjs';
 import { buildEffectMenuItems } from '../helpers/effects.mjs';
 
@@ -403,6 +403,8 @@ export class VagabondNPCHud extends api.HandlebarsApplicationMixin(api.Applicati
     // Drag handle: portrait moves the HUD.
     const handle = this.element.querySelector('.vh-drag');
     if (handle) handle.addEventListener('pointerdown', (e) => this._onDragStart(e), { signal });
+    // …and so does any free area of the body (interactive parts excluded).
+    bindHudBodyDrag(this.element, (e) => this._onDragStart(e), signal);
 
     // Double-click portrait → open the actor sheet (HUD stays open).
     const portrait = this.element.querySelector('.vh-npc-portrait');

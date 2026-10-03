@@ -12,14 +12,14 @@
   --vh-font-scale: 1; // per-user accessibility font multiplier (HUD Display settings)
   --vh-portrait-w: 100px;
   --vh-portrait-h: 100px;
-  --vh-float-w: 84px; // right gutter reserved for weapon circles + shield
+  --vh-float-w: 94px; // right gutter reserved for weapon circles + shield
   --vh-status-w: 18px; // left gutter + floating status icon size
 
   // Independent placement for each floating piece (anchored to .vh-body, top/right).
   // Tune freely — each circle + the armor shield positions itself.
-  --vh-wpn0-top: 0px;   --vh-wpn0-right: 30px;
-  --vh-wpn1-top: 30px;   --vh-wpn1-right: 10px;
-  --vh-armor-top: 118px; --vh-armor-right: 46px;
+  --vh-wpn0-top: 12px;   --vh-wpn0-right: 40px;
+  --vh-wpn1-top: 42px;   --vh-wpn1-right: 20px;
+  --vh-armor-top: 10px; --vh-armor-right: 8px;
 
   // Per-hand stacking order (higher = on top, image included). 0 = R, 1 = L.
   --vh-wpn0-z: 3;  --vh-wpn1-z: 2;
@@ -63,22 +63,12 @@
     flex-direction: column;
     gap: 4px;
     min-width: 425px;
-    padding: 7px var(--vh-float-w) 4px calc(var(--vh-status-w) + 10px); // right pad clears weapons/shield; left pad reserves the status strip
+    padding: 20px var(--vh-float-w) 16px calc(var(--vh-status-w) + 10px); // right pad clears weapons/shield; left pad reserves the status strip
     //background: rgba(0, 0, 0, 0.2);
     //backdrop-filter: blur(2px);
     //-webkit-backdrop-filter: blur(2px);
     //border-radius: var(--vh-radius);
     transition: box-shadow 0.15s ease, background-color 0.15s ease;
-  }
-
-  // Drop-target feedback while an item is dragged over the HUD (toggled by
-  // the dragover/dragleave/drop listeners in `VagabondCharacterHud#_onRender`).
-  &.vh-drop-active .vh-body {
-    border-radius: var(--vh-radius);
-    outline: 2px dashed $c-yellow;
-    outline-offset: -2px;
-    background-color: color-mix(in srgb, #{$c-yellow} 10%, transparent);
-    box-shadow: 0 0 14px -2px $c-yellow, inset 0 0 18px -6px $c-yellow;
   }
 
   // ---------------------------------------------------------
@@ -96,6 +86,9 @@
     padding-top: 12px;
     padding-bottom: 10px;
     border-radius: var(--vh-radius);
+    // Frame + drop shadow to detach the panel from the scene behind it.
+    border: 2px solid $c-yellow;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.7), 0 0 4px rgba(0, 0, 0, 0.8);
   }
   &.vbd-hud--bg-dark .vh-body {
     background: rgba(0, 0, 0, 0.55);
@@ -103,6 +96,16 @@
   &.vbd-hud--blur .vh-body {
     backdrop-filter: blur(6px);
     -webkit-backdrop-filter: blur(6px);
+  }
+
+  // Drop-target feedback (declared AFTER the bg/blur modifiers so it wins) while an item is dragged over the HUD (toggled by
+  // the dragover/dragleave/drop listeners in `VagabondCharacterHud#_onRender`).
+  &.vh-drop-active .vh-body {
+    border-radius: var(--vh-radius);
+    outline: 2px dashed $c-yellow;
+    outline-offset: -2px;
+    background-color: color-mix(in srgb, #{$c-yellow} 10%, transparent);
+    box-shadow: 0 0 14px -2px $c-yellow, inset 0 0 18px -6px $c-yellow;
   }
 
   .vh-main-grid {
@@ -122,8 +125,8 @@
   .vh-hud-statuses {
     position: absolute;
     left: 4px;
-    top: 7px;     // aligns with the portrait top (matches .vh-body padding-top)
-    bottom: 4px;  // reaches the bottom of the HUD body
+    top: 20px;    // aligns with the portrait top (matches .vh-body padding-top)
+    bottom: 16px;  // reaches the bottom of the HUD body
     width: var(--vh-status-w);
     display: flex;
     flex-direction: column;
@@ -158,6 +161,9 @@
     cursor: grab;
     &:active { cursor: grabbing; }
   }
+
+  // Whole body is a drag handle; interactive children set their own cursor.
+  .vh-body { cursor: grab; }
 
   .vh-portrait {
     position: relative;
@@ -419,22 +425,22 @@
     position: absolute; // anchored to .vh-body, placed via --vh-armor-* vars
     top: var(--vh-armor-top);
     right: var(--vh-armor-right);
-    width: 34px;
-    height: 34px;
+    width: 26px;
+    height: 26px;
     display: grid;
     place-items: center;
     justify-content: center;
     i {
-      font-size: calc(32px * var(--vh-font-scale));
+      font-size: calc(24px * var(--vh-font-scale));
       color: $c-black;
       
       // Yellow glyph outline (text-shadow, 4 directions — `outline` can't trace a glyph).
 
       text-shadow:
-        -2px -2px 0 $c-yellow,
-        2px -2px 0 $c-yellow,
-        -2px 2px 0 $c-yellow,
-        2px 2px 0 $c-yellow;
+        -1px -1px 0 $c-yellow,
+        1px -1px 0 $c-yellow,
+        -1px 1px 0 $c-yellow,
+        1px 1px 0 $c-yellow;
     }
 
     .vh-armor-val {
@@ -442,7 +448,7 @@
       top: 48%;
       transform: translateY(-50%);
       font-family: $font-number;
-      font-size: calc(1.4rem * var(--vh-font-scale));
+      font-size: calc(1.175rem * var(--vh-font-scale));
       color: $c-yellow;
     }
   }
@@ -455,9 +461,9 @@
     display: flex;
     justify-content: space-between;
     align-items: stretch;
-    gap: 0;
+    gap: 14px; // minimum space between labels; extra width is spread evenly (space-between)
     margin-top: 2px;
-    padding: 0 6px;
+    padding: 0 12px;
     background: linear-gradient(180deg, $c-yellow, #8a6a1c);
     border: 1px solid #6e5314;
     border-radius: 5px;
@@ -465,7 +471,10 @@
   }
 
   .vh-tab {
-    flex: 1 1 auto;
+    // Natural width (never squeezed): long translations widen the HUD instead of
+    // cramming; short ones get the leftover space distributed by space-between.
+    flex: 0 0 auto;
+    white-space: nowrap;
     // Kill Foundry's global <button> box: it forces min-height/line-height that
     // overflow the 25px bar. Collapse to the bar height.
     height: 100%;

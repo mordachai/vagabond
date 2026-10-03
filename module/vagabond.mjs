@@ -116,7 +116,7 @@ function registerGameSettings() {
     scope: 'client',
     config: false,
     type: Object,
-    default: { darkBg: false, blur: false, fontScale: 1 },
+    default: { darkBg: true, blur: true, fontScale: 1 },
     requiresReload: false,
   });
   game.settings.registerMenu('vagabond', 'hudDisplayConfigMenu', {

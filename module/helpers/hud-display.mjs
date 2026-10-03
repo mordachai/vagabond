@@ -10,10 +10,10 @@
  * element. Shared by {@link VagabondCharacterHud} and {@link VagabondNPCHud}.
  */
 
-/** Default prefs == the current look (so existing users see no change). */
+/** Default prefs: dark backdrop + blur on (users who already saved prefs keep theirs). */
 export const HUD_DISPLAY_DEFAULTS = Object.freeze({
-  darkBg: false,
-  blur: false,
+  darkBg: true,
+  blur: true,
   fontScale: 1,
 });
 
@@ -87,4 +87,28 @@ export function applyHudDisplayPrefs(element) {
   element.classList.toggle('vbd-hud--blur', !!prefs.blur);
   const scale = Number(prefs.fontScale) || 1;
   element.style.setProperty('--vh-font-scale', String(scale));
+}
+
+/** Elements inside `.vh-body` that keep their own click/drag behavior. */
+const HUD_INTERACTIVE = [
+  'button', 'a', 'input', 'select', 'textarea', 'label',
+  '[data-action]', '[draggable="true"]', '.rollable', '.clickable',
+  '.vh-chip', '.vh-slot.filled', '.vh-pc-weapon.filled', '.status-icon',
+  '.vh-drag', // portrait has its own drag handle
+].join(',');
+
+/**
+ * Let the whole HUD body act as a drag handle, except for interactive bits.
+ * @param {HTMLElement} element   HUD root element.
+ * @param {(event: PointerEvent) => void} onDragStart  The HUD's drag starter.
+ * @param {AbortSignal} signal
+ */
+export function bindHudBodyDrag(element, onDragStart, signal) {
+  const body = element?.querySelector('.vh-body');
+  if (!body) return;
+  body.addEventListener('pointerdown', (e) => {
+    if (e.button !== 0 || !(e.target instanceof Element)) return;
+    if (e.target.closest(HUD_INTERACTIVE)) return;
+    onDragStart(e);
+  }, { signal });
 }
