@@ -369,6 +369,18 @@ function registerGameSettings() {
     requiresReload: false,
   });
 
+  // Defense weapon property: may a defender use BOTH Defense weapons in one
+  // Defense action? Gate lives in CONFIG.VAGABOND.defenseRuleHelpers.defenseWeaponLimit.
+  game.settings.register('vagabond', 'defenseWithBothWeapons', {
+    name: 'VAGABOND.Settings.defenseWithBothWeapons.name',
+    hint: 'VAGABOND.Settings.defenseWithBothWeapons.hint',
+    scope: 'world',
+    config: true,
+    type: Boolean,
+    default: true,
+    requiresReload: false,
+  });
+
   // Trinket casting severity (off/warn/block); the rule itself is
   // trinketCastMode below. Gate lives in SpellHandler._trinketGateStatus.
   game.settings.register('vagabond', 'trinketCastRequirement', {
@@ -3361,15 +3373,15 @@ Hooks.on('renderChatMessageHTML', (message, html) => {
   });
 
   // ---------------------------------------------------------
-  // 5b. Shield Defense Button Handler (Defense weapon property)
+  // 5b. Defense Button Handler (Defense weapon property)
   // ---------------------------------------------------------
-  const shieldDefenseButtons = html.querySelectorAll('.vagabond-shield-defense-button');
+  const defenseButtons = html.querySelectorAll('.vagabond-defense-button');
 
-  shieldDefenseButtons.forEach(button => {
+  defenseButtons.forEach(button => {
     button.addEventListener('click', (ev) => {
       ev.preventDefault();
       import('./helpers/damage-helper.mjs').then(({ VagabondDamageHelper }) => {
-        VagabondDamageHelper.handleShieldDefense(button);
+        VagabondDamageHelper.handleDefenseWeapons(button);
       });
     });
   });

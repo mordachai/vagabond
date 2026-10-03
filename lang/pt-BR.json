@@ -96,15 +96,16 @@
     "DefendMechanics": {
       "DefendingTitle": "Opções de defesa",
       "ReflexTitle": "Reflexo",
-      "ShieldTitle": "Escudo",
+      "DefenseTitle": "Defesa",
       "CritTitle": "Crítico",
       "ReflexDescription": "Salvaguarda para evitar uma Ação Inimiga. Se passar, não é afetado.",
-      "ShieldDescription": "Role o dado da sua arma em vez do d20. Some o resultado à sua Armadura contra o ataque.",
+      "DefenseDescription": "Role o dano da(s) sua(s) arma(s) com Defesa em vez do d20. Some o resultado à sua Armadura contra o ataque.",
       "CritDescription": "Você não é afetado pelo que causou a Salvaguarda, e pode usar uma Ação.",
       "CritToggleHint": "Clique para alternar: Dano Extra ou Ganhar Ponto de Sorte"
     },
     "Chat": {
-      "ShieldDefense": "Escudo",
+      "Defense": "Defesa",
+      "DefenseBoth": "Ambas",
       "ArmorPenalty": "Penalidade de Armadura"
     },
     "AttackTypes": {
@@ -854,6 +855,10 @@
       "autoApplySaveDamage": {
         "name": "Aplicar Dano de Salvaguarda Automaticamente",
         "hint": "Quando ativado, o dano é aplicado automaticamente aos PV após rolagens de salvaguarda. Quando desativado, os valores de dano são mostrados no chat mas devem ser aplicados manualmente."
+      },
+      "defenseWithBothWeapons": {
+        "name": "Defender com Ambas as Armas de Defesa",
+        "hint": "Ligado: quem empunha duas armas com Defesa pode usar as duas em uma única ação de Defesa (os danos se somam). Desligado: a Defesa usa uma arma por vez."
       },
       "trinketCastRequirement": {
         "name": "Requer Trinket para Conjurar",

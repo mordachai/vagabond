@@ -1935,7 +1935,7 @@ export class VagabondChatCard {
       if (shieldReduction > 0) {
         calcHTML += `
           <span class="damage-operator">-</span>
-          <span class="damage-component" title="${game.i18n.localize('VAGABOND.Chat.ShieldDefense')} (${shieldRoll?.formula ?? shieldReduction})"><i class="fas fa-shield-halved"></i> ${shieldReduction}</span>`;
+          <span class="damage-component" title="${game.i18n.localize('VAGABOND.Chat.Defense')} (${shieldRoll?.formula ?? shieldReduction})"><i class="fas fa-shield-halved"></i> ${shieldReduction}</span>`;
       }
 
       if (armorReduction > 0) {

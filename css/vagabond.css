@@ -1660,8 +1660,8 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   /* Apply Direct (Full Width) */
   /* Macro buttons — utility accent (not damage/save). On Success = purple,
      Always = teal so the two slots read as distinct at a glance. */
-  /* Save Buttons Row — 2x2 grid: Reflex+Shield on top, Endure+Will below.
-     Reflex spans the full row when no Shield button is present. */
+  /* Save Buttons Row — Reflex (full width), optional Defense row (full width,
+     1-3 buttons), then Endure + Will side by side. */
   /* Apply Save Damage Button Container (in save result cards) */
   /* Defend Options Accordion */
 }
@@ -1776,7 +1776,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 }
 .vagabond-chat-card-v2 .card-actions .save-buttons-row .vagabond-save-button,
 .vagabond-chat-card-v2 .card-actions .save-buttons-row .vagabond-save-reminder-button,
-.vagabond-chat-card-v2 .card-actions .save-buttons-row .vagabond-shield-defense-button {
+.vagabond-chat-card-v2 .card-actions .save-buttons-row .vagabond-defense-button {
   background: var(--vagabond-c-chat-yellow);
   border: none;
   color: var(--c-dark-blue);
@@ -1794,29 +1794,31 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 }
 .vagabond-chat-card-v2 .card-actions .save-buttons-row .vagabond-save-button:hover,
 .vagabond-chat-card-v2 .card-actions .save-buttons-row .vagabond-save-reminder-button:hover,
-.vagabond-chat-card-v2 .card-actions .save-buttons-row .vagabond-shield-defense-button:hover {
+.vagabond-chat-card-v2 .card-actions .save-buttons-row .vagabond-defense-button:hover {
   filter: brightness(1.1);
   background: var(--vagabond-dark-yellow);
   color: var(--vagabond-c-white);
 }
 .vagabond-chat-card-v2 .card-actions .save-buttons-row .vagabond-save-button.save-has-status,
 .vagabond-chat-card-v2 .card-actions .save-buttons-row .vagabond-save-reminder-button.save-has-status,
-.vagabond-chat-card-v2 .card-actions .save-buttons-row .vagabond-shield-defense-button.save-has-status {
+.vagabond-chat-card-v2 .card-actions .save-buttons-row .vagabond-defense-button.save-has-status {
   background: linear-gradient(rgba(180, 30, 20, 0.55), rgba(180, 30, 20, 0.55)), url("../assets/ui/chat/yellow-button.webp");
   color: #fff;
 }
 .vagabond-chat-card-v2 .card-actions .save-buttons-row .vagabond-save-button.save-has-status:hover,
 .vagabond-chat-card-v2 .card-actions .save-buttons-row .vagabond-save-reminder-button.save-has-status:hover,
-.vagabond-chat-card-v2 .card-actions .save-buttons-row .vagabond-shield-defense-button.save-has-status:hover {
+.vagabond-chat-card-v2 .card-actions .save-buttons-row .vagabond-defense-button.save-has-status:hover {
   filter: brightness(1.15);
   background: linear-gradient(rgba(180, 30, 20, 0.65), rgba(180, 30, 20, 0.65)), url("../assets/ui/chat/yellow-button.webp");
   color: #fff;
 }
 .vagabond-chat-card-v2 .card-actions .save-buttons-row .save-reflex {
   order: 1;
+  grid-column: 1/-1;
 }
-.vagabond-chat-card-v2 .card-actions .save-buttons-row .vagabond-shield-defense-button {
+.vagabond-chat-card-v2 .card-actions .save-buttons-row .defense-buttons-row {
   order: 2;
+  grid-column: 1/-1;
 }
 .vagabond-chat-card-v2 .card-actions .save-buttons-row .save-endure {
   order: 3;
@@ -1824,8 +1826,28 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .vagabond-chat-card-v2 .card-actions .save-buttons-row .save-will {
   order: 4;
 }
-.vagabond-chat-card-v2 .card-actions .save-buttons-row:not(:has(.vagabond-shield-defense-button)) .save-reflex {
-  grid-column: 1/-1;
+.vagabond-chat-card-v2 .card-actions .save-buttons-row .defense-buttons-row {
+  display: grid;
+  gap: 6px;
+  width: 100%;
+}
+.vagabond-chat-card-v2 .card-actions .save-buttons-row .defense-buttons-row.defense-cols-1 {
+  grid-template-columns: 1fr;
+}
+.vagabond-chat-card-v2 .card-actions .save-buttons-row .defense-buttons-row.defense-cols-2 {
+  grid-template-columns: 1fr 1fr;
+}
+.vagabond-chat-card-v2 .card-actions .save-buttons-row .defense-buttons-row.defense-cols-3 {
+  grid-template-columns: auto 1fr 1fr;
+}
+.vagabond-chat-card-v2 .card-actions .save-buttons-row .defense-buttons-row .vagabond-defense-button {
+  height: auto;
+  line-height: normal;
+  min-width: 0;
+}
+.vagabond-chat-card-v2 .card-actions .save-buttons-row .defense-buttons-row .vagabond-defense-button .defense-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .vagabond-chat-card-v2 .card-actions .vagabond-save-buttons-container {
   margin-bottom: 10px;

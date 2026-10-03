@@ -1518,6 +1518,25 @@ VAGABOND.defenseRuleHelpers = {
   hasEquippedWeaponWithProperty(actor, propertyName) {
     return !!VAGABOND.defenseRuleHelpers.equippedWeaponWithProperty(actor, propertyName);
   },
+  /** ALL hand-held weapons carrying the given property, oldest-equipped first. */
+  heldWeaponsWithProperty(actor, propertyName) {
+    return (actor.items?.filter(i => {
+      const isWeapon = i.type === 'weapon' || (i.type === 'equipment' && i.system.equipmentType === 'weapon');
+      if (!isWeapon) return false;
+      const held = i.system.equipmentState === 'oneHand' || i.system.equipmentState === 'twoHands';
+      return held && i.system.properties?.includes(propertyName);
+    }) ?? []).sort((a, b) =>
+      (a.getFlag('vagabond', 'equippedAt') ?? 0) - (b.getFlag('vagabond', 'equippedAt') ?? 0));
+  },
+  /**
+   * Gate: how many Defense weapons the actor may use in ONE Defense action.
+   * 2 = may defend with both at once; 1 = one weapon per Defense. Single choke point —
+   * a future perk/feature that grants (or removes) "defend with both" hooks in here
+   * (e.g. an actor flag), nowhere else.
+   */
+  defenseWeaponLimit(actor) {
+    return game.settings.get('vagabond', 'defenseWithBothWeapons') ? 2 : 1;
+  },
 };
 
 /**

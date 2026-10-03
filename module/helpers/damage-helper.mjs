@@ -961,8 +961,8 @@ export class VagabondDamageHelper {
             ${game.i18n.localize('VAGABOND.DefendMechanics.ReflexDescription')}
           </p>
           <p>
-            <strong>${game.i18n.localize('VAGABOND.DefendMechanics.ShieldTitle')}:</strong>
-            ${game.i18n.localize('VAGABOND.DefendMechanics.ShieldDescription')}
+            <strong>${game.i18n.localize('VAGABOND.DefendMechanics.DefenseTitle')}:</strong>
+            ${game.i18n.localize('VAGABOND.DefendMechanics.DefenseDescription')}
           </p>
           <p>
             <strong>${game.i18n.localize('VAGABOND.DefendMechanics.CritTitle')}:</strong>
@@ -1082,13 +1082,10 @@ export class VagabondDamageHelper {
             </button>`;
     }).join('');
 
-    // Shield button — only when at least one targeted actor has an equipped
-    // Defense-property weapon. Rolls that weapon's die and subtracts it from the
-    // incoming damage (no save, no d20) — see handleShieldDefense.
-    const shieldEligible = this._anyTargetHasDefenseWeapon(targetsAtRollTime);
-    const shieldLabel = game.i18n.localize('VAGABOND.Chat.ShieldDefense');
-    const shieldButton = shieldEligible ? `
-            <button class="vagabond-shield-defense-button"
+    // Defense row — only when at least one targeted actor holds a Defense-property
+    // weapon. Rolls the weapon damage and subtracts it from the incoming damage
+    // (no save, no d20) — see handleDefenseWeapons.
+    const defenseRow = this._buildDefenseRow(targetsAtRollTime, `
               data-damage-amount="${damageAmount}"
               data-damage-type="${damageType}"
               data-actor-id="${actorId}"
@@ -1096,11 +1093,9 @@ export class VagabondDamageHelper {
               data-action-index="${actionIndex ?? ''}"
               data-attack-was-crit="${attackWasCrit}"
               data-weakness-pre-rolled="${weaknessPreRolled}"
-              data-targets="${targetsJson}"${critAttrs}>
-              <i class="fas fa-shield-halved"></i> ${shieldLabel}
-            </button>` : '';
+              data-targets="${targetsJson}"${critAttrs}`);
 
-    // LAYOUT: Two rows. Top: Apply Direct. Bottom: Saves + Shield.
+    // LAYOUT: Two rows. Top: Apply Direct. Bottom: Reflex, Defense row, other Saves.
     return `
       <div class="vagabond-save-buttons-container">
         <div class="save-buttons-top">
@@ -1117,23 +1112,63 @@ export class VagabondDamageHelper {
             </button>
         </div>
 
-        <div class="save-buttons-row">${saveButtons}${shieldButton}
+        <div class="save-buttons-row">${saveButtons}${defenseRow}
         </div>
       </div>
     `;
   }
 
   /**
-   * Whether any of the stored targets has an equipped Defense-property weapon —
-   * gates the Shield button on the save-buttons row.
+   * Build the Defense button row for the save-buttons grid. Empty string when no
+   * target holds a Defense weapon. Buttons carry `data-defense-slot` (`both` | `1` | `2`),
+   * never item ids, so every target resolves its OWN weapons at click time.
+   *  - 1 weapon            → one full-width "Defense" button
+   *  - 2 weapons, limit 2  → "Both" + one button per weapon
+   *  - 2 weapons, limit 1  → one button per weapon (pick one)
+   * Labels come from the target holding the most Defense weapons.
    * @param {Array<Object>} targetsAtRollTime - Stored target data (TargetHelper shape)
-   * @returns {boolean}
+   * @param {string} sharedAttrs - data-* attribute string shared by every button
+   * @returns {string}
    * @private
    */
-  static _anyTargetHasDefenseWeapon(targetsAtRollTime) {
-    if (!targetsAtRollTime?.length) return false;
+  static _buildDefenseRow(targetsAtRollTime, sharedAttrs) {
+    if (!targetsAtRollTime?.length) return '';
+    const helpers = CONFIG.VAGABOND.defenseRuleHelpers;
     const tokens = this._resolveStoredTargets(targetsAtRollTime);
-    return tokens.some(t => t.actor && this._hasEquippedDefenseWeapon(t.actor));
+
+    let best = null; // { weapons, limit } for the target with the most Defense weapons
+    for (const t of tokens) {
+      if (!t.actor) continue;
+      const weapons = helpers.heldWeaponsWithProperty(t.actor, 'Defense');
+      if (weapons.length && (!best || weapons.length > best.weapons.length)) {
+        best = { weapons, limit: helpers.defenseWeaponLimit(t.actor) };
+      }
+    }
+    if (!best) return '';
+
+    const icon = '<i class="fas fa-shield-halved"></i>';
+    const esc = (s) => foundry.utils.escapeHTML?.(s) ?? s;
+    const button = (slot, label, title = '') => `
+            <button class="vagabond-defense-button" data-defense-slot="${slot}"${title ? ` title="${esc(title)}"` : ''}${sharedAttrs}>
+              ${icon} <span class="defense-label">${esc(label)}</span>
+            </button>`;
+
+    const defenseLabel = game.i18n.localize('VAGABOND.Chat.Defense');
+    let buttons;
+    if (best.weapons.length === 1) {
+      buttons = button('1', defenseLabel, best.weapons[0].name);
+    } else {
+      const [w1, w2] = best.weapons;
+      buttons = (best.limit >= 2
+        ? button('both', game.i18n.localize('VAGABOND.Chat.DefenseBoth'), `${w1.name} + ${w2.name}`)
+        : '')
+        + button('1', w1.name, w1.name) + button('2', w2.name, w2.name);
+    }
+
+    const cols = best.weapons.length === 1 ? 1 : (best.limit >= 2 ? 3 : 2);
+    return `
+          <div class="defense-buttons-row defense-cols-${cols}">${buttons}
+          </div>`;
   }
 
   /**
@@ -1538,25 +1573,15 @@ export class VagabondDamageHelper {
   }
 
   /**
-   * Check if actor has an equipped weapon with the Defense property (offers the
-   * "Shield" button on the save-buttons row — see createSaveButtons/handleShieldDefense).
-   * @param {Actor} actor
-   * @returns {boolean}
-   * @private
+   * Handle the Defense buttons — Defense weapon property. No save, no d20: roll the
+   * chosen weapon(s)' damage and subtract the total from the incoming damage before
+   * Armor/Immune/Weak math. `data-defense-slot` picks the weapons per target:
+   * `both` = every held Defense weapon (capped by `defenseWeaponLimit`), `1`/`2` = that
+   * single weapon. Targets without a matching weapon are skipped. Otherwise mirrors
+   * handleApplyDirect (bypasses saves, applies on-hit statuses unconditionally).
+   * @param {HTMLElement} button - The clicked Defense button
    */
-  static _hasEquippedDefenseWeapon(actor) {
-    return CONFIG.VAGABOND.defenseRuleHelpers.hasEquippedWeaponWithProperty(actor, 'Defense');
-  }
-
-  /**
-   * Handle the "Shield" button — Defense weapon property. No save, no d20: roll the
-   * weapon's damage die and subtract it from the incoming damage before Armor/Immune/
-   * Weak math. Only applies to targets that actually have a Defense weapon equipped;
-   * others are skipped. Otherwise mirrors handleApplyDirect (bypasses saves, applies
-   * on-hit statuses unconditionally).
-   * @param {HTMLElement} button - The clicked Shield button
-   */
-  static async handleShieldDefense(button) {
+  static async handleDefenseWeapons(button) {
     const damageAmount = parseInt(button.dataset.damageAmount);
     const damageType = button.dataset.damageType;
     const actorId = button.dataset.actorId;
@@ -1585,18 +1610,26 @@ export class VagabondDamageHelper {
       const targetActor = target.actor;
       if (!targetActor) continue;
 
-      const shieldWeapon = CONFIG.VAGABOND.defenseRuleHelpers.equippedWeaponWithProperty(targetActor, 'Defense');
-      if (!shieldWeapon) continue; // Only targets carrying a Defense weapon can use it
+      const helpers = CONFIG.VAGABOND.defenseRuleHelpers;
+      const held = helpers.heldWeaponsWithProperty(targetActor, 'Defense');
+      const slot = button.dataset.defenseSlot ?? 'both';
+      const defenseWeapons = slot === 'both'
+        ? held.slice(0, helpers.defenseWeaponLimit(targetActor))
+        : (held[parseInt(slot) - 1] ? [held[parseInt(slot) - 1]] : []);
+      if (defenseWeapons.length === 0) continue; // Only targets carrying a matching Defense weapon can use it
 
-      const shieldFormula = shieldWeapon.system.currentDamage;
+      // "-" = no damage (not a valid Roll formula); several weapons roll as ONE combined Roll
+      const formulas = defenseWeapons
+        .map(w => w.system.currentDamage?.trim())
+        .filter(f => f && f !== '-');
       let shieldReduction = 0;
       let shieldRoll = null;
-      // "-" = no damage (not a valid Roll formula)
-      if (shieldFormula?.trim() && shieldFormula.trim() !== '-') {
-        shieldRoll = new Roll(shieldFormula, targetActor.getRollData());
+      if (formulas.length) {
+        shieldRoll = new Roll(formulas.map(f => `(${f})`).join(' + '), targetActor.getRollData());
         await shieldRoll.evaluate();
         shieldReduction = shieldRoll.total;
       }
+      const defenseWeaponNames = defenseWeapons.map(w => w.name).join(' + ');
 
       const reducedDamage = Math.max(0, damageAmount - shieldReduction);
 
@@ -1634,8 +1667,8 @@ export class VagabondDamageHelper {
         damageType,
         previousValue: currentHP,
         newValue: newHP,
-        sourceName: `${game.i18n.localize('VAGABOND.Chat.ShieldDefense')} (${shieldWeapon.name})`,
-        sourceIcon: shieldWeapon.img ?? targetActor.img ?? null,
+        sourceName: `${game.i18n.localize('VAGABOND.Chat.Defense')} (${defenseWeaponNames})`,
+        sourceIcon: defenseWeapons[0].img ?? targetActor.img ?? null,
       });
 
       const isCritical = button.dataset.attackWasCrit === 'true';

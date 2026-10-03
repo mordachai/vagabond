@@ -96,15 +96,16 @@
     "DefendMechanics": {
       "DefendingTitle": "Defending options",
       "ReflexTitle": "Reflex",
-      "ShieldTitle": "Shield",
+      "DefenseTitle": "Defense",
       "CritTitle": "Crit",
       "ReflexDescription": "Save to avoid an Enemy Action. Pass, and it doesn't affect you.",
-      "ShieldDescription": "Roll your weapon's die instead of d20. Add the result to your Armor against the attack.",
+      "DefenseDescription": "Roll the damage of your Defense weapon(s) instead of a d20. Add the result to your Armor against the attack.",
       "CritDescription": "You aren't affected by what provoked the Save, and can use an Action.",
       "CritToggleHint": "Click to toggle: Extra Damage or Gain Luck Point"
     },
     "Chat": {
-      "ShieldDefense": "Shield",
+      "Defense": "Defense",
+      "DefenseBoth": "Both",
       "ArmorPenalty": "Armor Penalty"
     },
     "AttackTypes": {
@@ -840,6 +841,10 @@
       "autoApplySaveDamage": {
         "name": "Auto-Apply Save Damage",
         "hint": "When enabled, damage is automatically applied to HP after save rolls. When disabled, damage amounts are shown in chat but must be applied manually."
+      },
+      "defenseWithBothWeapons": {
+        "name": "Defend With Both Defense Weapons",
+        "hint": "When on, a defender holding two Defense weapons can use both in one Defense action (their damage rolls add together). When off, Defense uses one weapon at a time."
       },
       "trinketCastRequirement": {
         "name": "Trinket Casting Requirement",
