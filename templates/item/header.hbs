@@ -189,7 +189,7 @@
     {{#if (eq item.type 'perk')}}
       <div class='perk-description-in-header'>
         {{#if editable}}
-          <prose-mirror name="system.description" data-document-uuid="{{item.uuid}}" value="{{system.description}}" collaborate="true" toggled="true" button="false" enriched="true">
+          <prose-mirror name="system.description" data-document-uuid="{{item.uuid}}" value="{{system.description}}" toggled="true" button="false" enriched="true">
             {{{enriched.description}}}
           </prose-mirror>
         {{else}}
@@ -216,7 +216,7 @@
         {{! Unlocked: editable description }}
         <div class='spell-description-in-header'>
           {{#if editable}}
-            <prose-mirror name="system.description" data-document-uuid="{{item.uuid}}" value="{{system.description}}" collaborate="true" toggled="true">
+            <prose-mirror name="system.description" data-document-uuid="{{item.uuid}}" value="{{system.description}}" toggled="true">
               {{{enriched.description}}}
             </prose-mirror>
           {{else}}

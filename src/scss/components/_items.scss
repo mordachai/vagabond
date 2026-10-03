@@ -1,3 +1,10 @@
+// Item sheet tab sections: accordion contents animate on every re-render, which
+// briefly changes the section height; browser scroll-anchoring then drags scrollTop
+// away from the position Foundry restored. Opt out so edits don't lose the user's place.
+&.item section.tab {
+  overflow-anchor: none;
+}
+
 // General h3 styling for Inventory tab sections
 .inventory {
   h3 {

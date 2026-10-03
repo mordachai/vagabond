@@ -846,13 +846,29 @@
   }
 
   .npc-immunity-text {
-    font-size: 1.0em;
+    font-size: 1.2em;
+
+    .status-condition-icon {
+      width: 1.2em;
+      height: 1.2em;
+    }
   }
 
   > .npc-detail-row {
     width: 100%;
     padding: 4px 0;
     position: relative;
+    // Label + values flow as one wrapping line (wrapped lines go under the label, not in a column)
+    display: block;
+
+    .npc-field-label {
+      display: inline;
+      margin-right: 4px;
+    }
+
+    .npc-immunity-text {
+      display: inline;
+    }
 
     & + .npc-detail-row {
       padding-top: 8px;
@@ -1104,6 +1120,95 @@
     &.fa-chevron-down {
       transform: rotate(90deg);
     }
+  }
+}
+
+// Reorder controls (drag handle + up/down chevrons) in front of an action/ability name
+.npc-reorder-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+
+  .npc-drag-handle {
+    cursor: grab;
+    font-size: 12px;
+    color: $c-text-1;
+    opacity: 0.6;
+    padding: 0 2px;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  // Up/down chevrons stacked to save horizontal space
+  .npc-move-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .npc-move-btn {
+    // Foundry gives buttons a fixed height/line-height
+    height: 10px;
+    min-height: 0;
+    line-height: 10px;
+    width: auto;
+    margin: 0;
+    padding: 0 3px;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    color: $c-text-1;
+    font-size: 10px;
+    opacity: 0.6;
+    cursor: pointer;
+
+    &:hover:not(:disabled) {
+      opacity: 1;
+    }
+
+    &:disabled {
+      opacity: 0.2;
+      cursor: default;
+    }
+  }
+}
+
+.npc-action-edit,
+.npc-ability-edit {
+  &.is-dragging {
+    opacity: 0.5;
+  }
+
+  // Drop marker: a bold line in the gap where the dragged entry will land
+  // (entries clip overflow, so let the marker poke out into the gap while it is shown)
+  &.drop-before,
+  &.drop-after {
+    overflow: visible;
+  }
+
+  &.drop-before::before,
+  &.drop-after::after {
+    content: '';
+    position: absolute;
+    left: -2px;
+    right: -2px;
+    height: 4px;
+    border-radius: 2px;
+    background: #ffd54a;
+    box-shadow: 0 0 8px 2px rgba(255, 213, 74, 0.75), 0 0 0 1px #000;
+    pointer-events: none;
+    z-index: 5;
+  }
+
+  &.drop-before::before {
+    top: -6px;
+  }
+
+  &.drop-after::after {
+    bottom: -6px;
   }
 }
 

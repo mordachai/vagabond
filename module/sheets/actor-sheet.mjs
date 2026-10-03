@@ -110,6 +110,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       toggleActionAccordion: this._onToggleActionAccordion,
       addAbility: this._onAddAbility,
       removeAbility: this._onRemoveAbility,
+      moveAction: this._onMoveAction,
+      moveAbility: this._onMoveAbility,
       clickAbilityName: this._onClickAbilityName,
       toggleAbilityAccordion: this._onToggleAbilityAccordion,
       clickActionName: this._onClickActionName,
@@ -992,6 +994,14 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
   static async _onRemoveAbility(event, target) {
     return this.actionHandler?.removeAbility(event, target);
+  }
+
+  static async _onMoveAction(event, target) {
+    return this.actionHandler?.moveEntry('actions', event, target);
+  }
+
+  static async _onMoveAbility(event, target) {
+    return this.actionHandler?.moveEntry('abilities', event, target);
   }
 
   static async _onToggleAbilityAccordion(event, target) {

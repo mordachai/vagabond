@@ -11,7 +11,7 @@
       <label class='resource-label'>{{localize 'VAGABOND.Item.Tabs.Description'}}</label>
       <div class='class-description'>
         {{#if editable}}
-          <prose-mirror name="system.description" data-document-uuid="{{item.uuid}}" value="{{system.description}}" collaborate="true" toggled="true">
+          <prose-mirror name="system.description" data-document-uuid="{{item.uuid}}" value="{{system.description}}" toggled="true">
             {{{enrichedDescription}}}
           </prose-mirror>
         {{else}}
@@ -258,7 +258,6 @@
                           name='system.levelFeatures.{{feature.index}}.description'
                           data-document-uuid='{{@root.item.uuid}}'
                           value='{{feature.description}}'
-                          collaborate='true'
                           toggled='true'
                         >
                           {{{feature.enrichedDescription}}}

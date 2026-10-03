@@ -59,6 +59,18 @@ export class VagabondNPCSheet extends VagabondActorSheet {
     // Guard: element doesn't exist on first render
     if (!this.element) return;
 
+    // A reorder is about to move entries: open accordions follow their entry to the new index
+    if (this._pendingReorder) {
+      const { kind, order } = this._pendingReorder;
+      const { idPrefix } = NPCActionHandler.REORDER[kind];
+      const pattern = new RegExp(`^${idPrefix}-(\\d+)$`);
+      this._savedAccordionState = (this._savedAccordionState ?? []).map(id => {
+        const match = pattern.exec(id);
+        return match ? `${idPrefix}-${order.indexOf(parseInt(match[1]))}` : id;
+      });
+      this._pendingReorder = null;
+    }
+
     // Capture dropdown (details) open state
     if (this.immunityHandler) {
       this.immunityHandler.captureDropdownState();
@@ -122,6 +134,9 @@ export class VagabondNPCSheet extends VagabondActorSheet {
 
     // Bind manual save actions for creation
     this._bindSaveActions(signal);
+
+    // Drag-handle reordering of actions/abilities
+    this.actionHandler?.setupReorder(signal);
   }
 
   /**
@@ -292,6 +307,35 @@ export class VagabondNPCSheet extends VagabondActorSheet {
   }
 
   /**
+   * Overlay the values scraped from an action/ability editor onto its stored entry.
+   * Plain nested objects (macro, hitMacro) are merged key-by-key; the status arrays are
+   * rebuilt from the DOM (rows are added/removed through their own actions, so the DOM is
+   * the truth for which rows exist) but each row keeps stored fields that have no input.
+   * @param {object|undefined} existing - Stored entry (already a clone)
+   * @param {object} edited - Values collected from `[data-field]` inputs
+   * @returns {object}
+   * @private
+   */
+  static _mergeEntryEdit(existing, edited) {
+    const merged = existing ?? {};
+    for (const [key, value] of Object.entries(edited)) {
+      if (key === 'causedStatuses' || key === 'critCausedStatuses') {
+        // setProperty('x.0.y') builds {0: {...}}, not an array
+        const rows = Array.isArray(value)
+          ? value
+          : Object.keys(value ?? {}).sort((a, b) => a - b).map(i => value[i]);
+        const stored = merged[key] ?? [];
+        merged[key] = rows.map((row, i) => ({ ...(stored[i] ?? {}), ...row }));
+      } else if (foundry.utils.getType(value) === 'Object' && foundry.utils.getType(merged[key]) === 'Object') {
+        merged[key] = foundry.utils.mergeObject(merged[key], value, { inplace: false });
+      } else {
+        merged[key] = value;
+      }
+    }
+    return merged;
+  }
+
+  /**
    * Save pending changes to the actor
    * @param {boolean} render - Whether to re-render the sheet after update (default: false)
    * @private
@@ -301,8 +345,12 @@ export class VagabondNPCSheet extends VagabondActorSheet {
 
     try {
       // Collect all action data from inputs
+      // Start from the stored arrays and overlay what the DOM shows: the editors only expose
+      // some fields, so replacing an entry with DOM data alone would reset the rest to their
+      // schema defaults (weaponPrev* snapshot, rechargeCountdownId, ...).
       const actionEdits = this.element.querySelectorAll('.npc-action-edit');
-      const actions = [];
+      const actions = foundry.utils.deepClone(this.actor.system.actions ?? []);
+      let actionsEdited = false;
 
       actionEdits.forEach((actionEdit) => {
         const actionIndex = parseInt(actionEdit.dataset.actionIndex);
@@ -322,12 +370,14 @@ export class VagabondNPCSheet extends VagabondActorSheet {
           foundry.utils.setProperty(actionData, field, value);
         });
 
-        actions[actionIndex] = actionData;
+        actions[actionIndex] = VagabondNPCSheet._mergeEntryEdit(actions[actionIndex], actionData);
+        actionsEdited = true;
       });
 
       // Collect all ability data from inputs
       const abilityEdits = this.element.querySelectorAll('.npc-ability-edit');
-      const abilities = [];
+      const abilities = foundry.utils.deepClone(this.actor.system.abilities ?? []);
+      let abilitiesEdited = false;
 
       abilityEdits.forEach((abilityEdit) => {
         const abilityIndex = parseInt(abilityEdit.dataset.abilityIndex);
@@ -339,24 +389,29 @@ export class VagabondNPCSheet extends VagabondActorSheet {
           abilityData[field] = input.value;
         });
 
-        abilities[abilityIndex] = abilityData;
+        abilities[abilityIndex] = VagabondNPCSheet._mergeEntryEdit(abilities[abilityIndex], abilityData);
+        abilitiesEdited = true;
       });
 
       // Update actor with collected data
       const updateData = {};
-      if (actions.length > 0) {
+      if (actionsEdited) {
         updateData['system.actions'] = actions;
       }
-      if (abilities.length > 0) {
+      if (abilitiesEdited) {
         updateData['system.abilities'] = abilities;
       }
 
-      if (Object.keys(updateData).length > 0) {
-        await this.actor.update(updateData, { render: render });
-      }
-
+      // Clear BEFORE awaiting: a second blur (or the debounce) firing while the update is
+      // in flight would otherwise see dirty=true and send an identical duplicate write.
       this._isDirty = false;
+
+      if (Object.keys(updateData).length > 0) {
+        this._pendingSave = this.actor.update(updateData, { render: render });
+        await this._pendingSave;
+      }
     } catch (error) {
+      this._isDirty = true; // keep the edit pending so the next blur/close retries
       console.error('Vagabond | Error saving NPC changes:', error);
       ui.notifications.error('Failed to save changes');
     }

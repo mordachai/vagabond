@@ -17,7 +17,6 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
 ) {
   constructor(options = {}) {
     super(options);
-    this._savedScrollPositions = new Map();
     this._savedOpenDetails = new Set();
     this._savedOpenAccordions = new Set();
     this._updateQueue = Promise.resolve();
@@ -31,6 +30,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     if (this.element && this.isEditable) {
       try { await this.submit(); } catch(e) {}
     }
+    this._listenerController?.abort();
     return super.close(options);
   }
 
@@ -131,7 +131,6 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     },
     form: {
       submitOnChange: false,
-      submitOnClose: true,
     },
     // Custom property that's merged into `this.options`
     dragDrop: [{ dragSelector: '.draggable', dropSelector: null }],
@@ -160,33 +159,43 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     },
     description: {
       template: 'systems/vagabond/templates/item/description.hbs',
+      scrollable: [''],
     },
     equipmentDetails: {
       template: 'systems/vagabond/templates/item/details-parts/equipment-details.hbs',
+      scrollable: [''],
     },
     spellDetails: {
       template: 'systems/vagabond/templates/item/details-parts/spell-details.hbs',
+      scrollable: [''],
     },
     ancestryDetails: {
       template: 'systems/vagabond/templates/item//details-parts/ancestry-details.hbs',
+      scrollable: [''],
     },
     classDetails: {
       template: 'systems/vagabond/templates/item/details-parts/class-details.hbs',
+      scrollable: [''],
     },
     perkDetails: {
       template: 'systems/vagabond/templates/item/details-parts/perk-details.hbs',
+      scrollable: [''],
     },
     starterPackDetails: {
       template: 'systems/vagabond/templates/item/details-parts/starter-pack-details.hbs',
+      scrollable: [''],
     },
     containerDetails: {
       template: 'systems/vagabond/templates/item/details-parts/container-details.hbs',
+      scrollable: [''],
     },
     vehiclePartDetails: {
       template: 'systems/vagabond/templates/item/details-parts/vehicle-part-details.hbs',
+      scrollable: [''],
     },
     effects: {
       template: 'systems/vagabond/templates/item/effects.hbs',
+      scrollable: [''],
     },
   };
 
@@ -891,22 +900,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     await super._preRender(context, options);
     if (!this.element) return;
 
-    // Capture scroll positions from all scrollable containers.
-    // Multiple elements can be independently scrolled: .window-content,
-    // the active tab section, and inner content divs like .class-item-content
-    this._savedScrollPositions.clear();
-    const scrollSelectors = [
-      '.window-content',
-      '.tab.active',
-      '.perk-details-wrapper',
-      '.traits-section',
-    ];
-    for (const selector of scrollSelectors) {
-      const el = this.element.querySelector(selector);
-      if (el && el.scrollTop > 0) {
-        this._savedScrollPositions.set(selector, el.scrollTop);
-      }
-    }
+    // Scroll position: restored by core via `scrollable` on each PART (see PARTS).
 
     // Save open <details> elements by their stable ID or fallback to index
     this._savedOpenDetails.clear();
@@ -941,6 +935,13 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
   async _onRender(context, options) {
     await super._onRender(context, options);
 
+    // Listeners below bind to the whole element (incl. parts a partial render did not
+    // replace), so drop the previous render's listeners first or each render stacks
+    // another copy and every change fires N duplicate writes.
+    this._listenerController?.abort();
+    this._listenerController = new AbortController();
+    const { signal } = this._listenerController;
+
     // Restore <details> open state
     if (this._savedOpenDetails.size > 0) {
       const allDetails = this.element.querySelectorAll('details');
@@ -966,14 +967,6 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
           }
         }
       });
-    }
-
-    // Restore scroll positions for all captured containers
-    for (const [selector, scrollTop] of this._savedScrollPositions) {
-      const el = this.element.querySelector(selector);
-      if (el) {
-        el.scrollTop = scrollTop;
-      }
     }
 
     // Auto-resize trait description textareas to fit their content
@@ -1154,6 +1147,10 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
         const name = e.target.name;
         if (!name) return;
 
+        // A closed (toggled) prose-mirror shows server-enriched HTML that only a render
+        // refreshes — a render:false save leaves the old/empty text on screen.
+        const isEditor = e.target.tagName === 'PROSE-MIRROR';
+
         // Check if this field belongs to an array element
         const arrayMatch = name.match(/^(system\.(traits|levelFeatures|causedStatuses|critCausedStatuses))\.(\d+)\./);
         if (arrayMatch) {
@@ -1176,7 +1173,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
             return;
           }
 
-          await this._saveArrayElement(arrayPath, arrayProp, idx);
+          await this._saveArrayElement(arrayPath, arrayProp, idx, isEditor ? {} : { render: false });
           return;
         }
 
@@ -1187,16 +1184,16 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
         else value = e.target.value;
         try {
           // Allow a render for fields whose changes affect calculated display values.
-          const needsRender = name === 'name' || name === 'system.metal' || name === 'system.usesDiceScaling'
+          const needsRender = isEditor || name === 'name' || name === 'system.metal' || name === 'system.usesDiceScaling'
             || name === 'system.weaponSkill' // Other Skills list excludes the default
             // Armor "Final" read-outs derive from these
             || name === 'system.armorRating' || name === 'system.reflexPenalty' || name === 'system.baseSlots';
           const options = needsRender ? {} : { render: false };
           await this.document.update({ [name]: value }, options);
         } catch (err) {
-          // Silently ignore
+          console.error(`Vagabond | Auto-save of "${name}" failed:`, err);
         }
-      });
+      }, { signal });
     });
 
     // <code-mirror> (embedded macro scripts) does not bubble a normal change event:
@@ -1206,7 +1203,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       const t = e.target;
       if (!t || t.tagName !== 'CODE-MIRROR' || !t.name) return;
       this.document.update({ [t.name]: t.value }, { render: false }).catch(() => {});
-    });
+    }, { signal });
 
   }
 
@@ -3252,10 +3249,10 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
    * @param {string} arrayProp - e.g. "traits"
    * @param {number} idx       - element index
    */
-  async _saveArrayElement(arrayPath, arrayProp, idx) {
+  async _saveArrayElement(arrayPath, arrayProp, idx, options = { render: false }) {
     const items = this._collectArrayFromDOM(arrayPath, arrayProp);
     if (!items[idx]) return;
-    return this._safeUpdate({ [arrayPath]: items }, { render: false });
+    return this._safeUpdate({ [arrayPath]: items }, options);
   }
 
   /**

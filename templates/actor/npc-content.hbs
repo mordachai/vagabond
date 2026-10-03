@@ -202,7 +202,14 @@
               <div class='npc-action-edit accordion-item {{#unless action.name}}expanded{{/unless}}' data-action-index='{{index}}' data-accordion-id='action-{{index}}'>
                 {{#if action.name}}
                   <div class='action-edit-header accordion-header' data-action='toggleActionAccordion' data-index='{{index}}' role='button' tabindex='0' aria-expanded='false'>
-                    <span class='action-edit-name'>{{action.name}}</span>
+                    <span class='npc-reorder-group'>
+                      <span class='npc-drag-handle' data-reorder-handle title='{{localize "VAGABOND.Actor.NPC.Action.DragTooltip"}}'><i class='fas fa-bars'></i></span>
+                      <span class='npc-move-col'>
+                        <button type='button' class='npc-move-btn' data-action='moveAction' data-direction='up' {{#if @first}}disabled{{/if}} title='{{localize "VAGABOND.Actor.NPC.Action.MoveUp"}}'><i class='fas fa-chevron-up'></i></button>
+                        <button type='button' class='npc-move-btn' data-action='moveAction' data-direction='down' {{#if @last}}disabled{{/if}} title='{{localize "VAGABOND.Actor.NPC.Action.MoveDown"}}'><i class='fas fa-chevron-down'></i></button>
+                      </span>
+                      <span class='action-edit-name'>{{action.name}}</span>
+                    </span>
                     <i class='fas fa-chevron-right accordion-icon'></i>
                   </div>
                 {{/if}}
@@ -463,7 +470,14 @@
               <div class='npc-ability-edit accordion-item {{#unless ability.name}}expanded{{/unless}}' data-ability-index='{{index}}' data-accordion-id='ability-{{index}}'>
                 {{#if ability.name}}
                   <div class='ability-edit-header accordion-header' data-action='toggleAbilityAccordion' data-index='{{index}}' role='button' tabindex='0' aria-expanded='false'>
-                    <span class='ability-edit-name'>{{ability.name}}</span>
+                    <span class='npc-reorder-group'>
+                      <span class='npc-drag-handle' data-reorder-handle title='{{localize "VAGABOND.Actor.NPC.Ability.DragTooltip"}}'><i class='fas fa-bars'></i></span>
+                      <span class='npc-move-col'>
+                        <button type='button' class='npc-move-btn' data-action='moveAbility' data-direction='up' {{#if @first}}disabled{{/if}} title='{{localize "VAGABOND.Actor.NPC.Ability.MoveUp"}}'><i class='fas fa-chevron-up'></i></button>
+                        <button type='button' class='npc-move-btn' data-action='moveAbility' data-direction='down' {{#if @last}}disabled{{/if}} title='{{localize "VAGABOND.Actor.NPC.Ability.MoveDown"}}'><i class='fas fa-chevron-down'></i></button>
+                      </span>
+                      <span class='ability-edit-name'>{{ability.name}}</span>
+                    </span>
                     <i class='fas fa-chevron-right accordion-icon'></i>
                   </div>
                 {{/if}}

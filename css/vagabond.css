@@ -11363,6 +11363,11 @@ ol#combat-tracker.directory-list {
   background: transparent;
   border: 1px solid transparent;
   border-radius: 3px;
+  resize: none;
+  overflow: hidden;
+  field-sizing: content;
+  line-height: 1.2;
+  white-space: pre-wrap;
 }
 .vagabond.shop-sheet .shop-sheet-header .shop-subtitle::placeholder {
   color: var(--vagabond-c-chat-yellow);
@@ -11373,7 +11378,7 @@ ol#combat-tracker.directory-list {
 }
 .vagabond.shop-sheet .shop-sheet-header .shop-subtitle-row {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 8px;
 }
@@ -11714,6 +11719,12 @@ ol#combat-tracker.directory-list {
 }
 .vagabond .shop-show-btn:hover {
   box-shadow: 0 0 8px -1px var(--vagabond-c-chat-yellow), inset 0 0 0 1px var(--vagabond-c-chat-yellow);
+}
+.vagabond .shop-show-btn.shop-open-toggle.is-open {
+  border-color: var(--vagabond-c-green);
+}
+.vagabond .shop-show-btn.shop-open-toggle.is-open:hover {
+  box-shadow: 0 0 8px -1px var(--vagabond-c-green), inset 0 0 0 1px var(--vagabond-c-green);
 }
 
 .vagabond.shop-app .window-content {
@@ -16513,6 +16524,9 @@ ol#combat-tracker.directory-list {
   animation: focus-stripes 3.2s linear infinite;
   border-radius: 5px;
   font-weight: 600;
+}
+.vagabond.item section.tab {
+  overflow-anchor: none;
 }
 .vagabond .inventory h3 {
   font-size: 18px;
@@ -21500,12 +21514,24 @@ ol#combat-tracker.directory-list {
   font-size: 1.2em;
 }
 .vagabond .npc-resistances-section .npc-immunity-text {
-  font-size: 1em;
+  font-size: 1.2em;
+}
+.vagabond .npc-resistances-section .npc-immunity-text .status-condition-icon {
+  width: 1.2em;
+  height: 1.2em;
 }
 .vagabond .npc-resistances-section > .npc-detail-row {
   width: 100%;
   padding: 4px 0;
   position: relative;
+  display: block;
+}
+.vagabond .npc-resistances-section > .npc-detail-row .npc-field-label {
+  display: inline;
+  margin-right: 4px;
+}
+.vagabond .npc-resistances-section > .npc-detail-row .npc-immunity-text {
+  display: inline;
 }
 .vagabond .npc-resistances-section > .npc-detail-row + .npc-detail-row {
   padding-top: 8px;
@@ -21715,6 +21741,80 @@ ol#combat-tracker.directory-list {
 .vagabond .action-edit-header .accordion-icon.fa-chevron-down,
 .vagabond .ability-edit-header .accordion-icon.fa-chevron-down {
   transform: rotate(90deg);
+}
+.vagabond .npc-reorder-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+.vagabond .npc-reorder-group .npc-drag-handle {
+  cursor: grab;
+  font-size: 12px;
+  color: var(--vagabond-c-text-primary);
+  opacity: 0.6;
+  padding: 0 2px;
+}
+.vagabond .npc-reorder-group .npc-drag-handle:hover {
+  opacity: 1;
+}
+.vagabond .npc-reorder-group .npc-move-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.vagabond .npc-reorder-group .npc-move-btn {
+  height: 10px;
+  min-height: 0;
+  line-height: 10px;
+  width: auto;
+  margin: 0;
+  padding: 0 3px;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  color: var(--vagabond-c-text-primary);
+  font-size: 10px;
+  opacity: 0.6;
+  cursor: pointer;
+}
+.vagabond .npc-reorder-group .npc-move-btn:hover:not(:disabled) {
+  opacity: 1;
+}
+.vagabond .npc-reorder-group .npc-move-btn:disabled {
+  opacity: 0.2;
+  cursor: default;
+}
+.vagabond .npc-action-edit.is-dragging,
+.vagabond .npc-ability-edit.is-dragging {
+  opacity: 0.5;
+}
+.vagabond .npc-action-edit.drop-before, .vagabond .npc-action-edit.drop-after,
+.vagabond .npc-ability-edit.drop-before,
+.vagabond .npc-ability-edit.drop-after {
+  overflow: visible;
+}
+.vagabond .npc-action-edit.drop-before::before, .vagabond .npc-action-edit.drop-after::after,
+.vagabond .npc-ability-edit.drop-before::before,
+.vagabond .npc-ability-edit.drop-after::after {
+  content: "";
+  position: absolute;
+  left: -2px;
+  right: -2px;
+  height: 4px;
+  border-radius: 2px;
+  background: #ffd54a;
+  box-shadow: 0 0 8px 2px rgba(255, 213, 74, 0.75), 0 0 0 1px #000;
+  pointer-events: none;
+  z-index: 5;
+}
+.vagabond .npc-action-edit.drop-before::before,
+.vagabond .npc-ability-edit.drop-before::before {
+  top: -6px;
+}
+.vagabond .npc-action-edit.drop-after::after,
+.vagabond .npc-ability-edit.drop-after::after {
+  bottom: -6px;
 }
 .vagabond .accordion-item.expanded .accordion-header .accordion-icon,
 .vagabond .npc-edit-item.expanded .npc-edit-header .accordion-icon,

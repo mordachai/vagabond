@@ -6,7 +6,7 @@
 >
   {{! Editors must receive enriched text data from getData to properly handle rolls, UUID links, etc. }}
   {{#if editable}} 
-    <prose-mirror name="system.biography" data-document-uuid="{{actor.uuid}}" value="{{system.biography}}" collaborate="true" toggled="true">
+    <prose-mirror name="system.biography" data-document-uuid="{{actor.uuid}}" value="{{system.biography}}" toggled="true">
       {{{enrichedBiography}}}
     </prose-mirror>
   {{else}} {{{enrichedBiography}}}

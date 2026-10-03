@@ -1626,7 +1626,10 @@
           "RechargePlaceholder": "1/Day or Cd6",
           "ExtraInfoPlaceholder": "Extra information...",
           "SaveTooltip": "Save Action",
-          "RemoveTooltip": "Remove Action"
+          "RemoveTooltip": "Remove Action",
+          "MoveUp": "Move Action Up",
+          "MoveDown": "Move Action Down",
+          "DragTooltip": "Drag to reorder"
         },
         "Ability": {
           "Name": "Name",
@@ -1635,7 +1638,10 @@
           "NamePlaceholder": "Ability Name",
           "DescriptionPlaceholder": "Description (dice like d6 or 2d8 will be clickable)",
           "SaveTooltip": "Save Ability",
-          "RemoveTooltip": "Remove Ability"
+          "RemoveTooltip": "Remove Ability",
+          "MoveUp": "Move Ability Up",
+          "MoveDown": "Move Ability Down",
+          "DragTooltip": "Drag to reorder"
         },
         "Messages": {
           "NoActions": "No actions defined",

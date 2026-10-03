@@ -529,18 +529,6 @@ export class VagabondItem extends Item {
   async _preUpdate(changed, options, user) {
     await super._preUpdate(changed, options, user);
 
-    // Suppress re-renders triggered by collaborate description autosaves.
-    // These fire periodically while the user is typing and cause the sheet to re-render
-    // with an intermediate snapshot, making the preview show a "distorted" in-progress version.
-    // Form submission on close (which includes ALL fields) is not description-only and
-    // will still trigger a proper re-render with the final content.
-    const flat = foundry.utils.flattenObject(changed);
-    const keys = Object.keys(flat);
-    const isDescriptionOnly = keys.length > 0 && keys.every(k =>
-      k === 'system.description' || /^system\.(traits|levelFeatures)\.\d+\.description$/.test(k)
-    );
-    if (isDescriptionOnly) options.render = false;
-
     // 2. Check: "Is the user changing the Grip?"
     if (foundry.utils.hasProperty(changed, "system.grip")) {
       const newGrip = foundry.utils.getProperty(changed, "system.grip");
