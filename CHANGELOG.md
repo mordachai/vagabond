@@ -9,6 +9,22 @@
 - **Character builder:** stat arrays replaced by the new 8-row table; Randomize rolls 1d8 over the array count.
 - Requires Foundry **v14** (minimum raised from 13).
 
+## v5.43.3
+- **Shops: Open / Closed replaces "Show to Players".** A shop now has an open-for-business switch (store window and shop sheet button, the **Open / Close Stores** scene tool, a lock button on the shop's token HUD, or the new **Create Toggle Macro** on the sheet). Opening pops the store on every player's screen; closing shuts their windows. A closed shop refuses trades and won't open for players, and shows a padlock on its token. The shop's open state is the only access gate, so you no longer hand out Observer ownership per player. Macro API: `game.vagabond.shop.openShop / closeShop / toggleOpen / isOpen / setAllOpen`.
+- **Shop tokens** are always neutral, linked and show their name to everyone (existing shops and tokens are fixed on load). Shops can't join combat and are removed from encounters.
+- Stocking from a folder or compendium no longer pops an info notice on success (only warnings); the tagline field on the shop sheet is now multi-line.
+- Release pipeline: new tags publish to foundryvtt.com automatically.
+
+## v5.43.2
+- **Spell casting (RAW):** the default Trinket rule is now **Open Hands or Trinket** — you can cast with empty hands, or while holding a Trinket (the other hand may hold anything). The other modes (Equipped / Trinket in Hand / Hands Free) are unchanged; set the strictness in the existing Trinket Casting Requirement setting.
+- Fix (Foundry v14): Combat tracker context menu entries (Add / Remove Activation, Undo Use), the Luck Reroll (Fluke) and Force Critical chat entries, and the Reroll lookup used the old menu format and no longer showed up or worked.
+
+## v5.43.1
+- **Throwing alchemicals:** they now throw with **Melee, Finesse or Craft** (the best is picked automatically, or choose "Throw with X" — the Mix card says the same). Thrown weapons roll your preferred skill instead of always Ranged; every throw is a ranged attack for Far / Hinder purposes, and Luck rerolls keep it a throw.
+- **Shops:** the store sidebar nests categories under Weapons, Gear, Relics and Alchemical; each tab can be collapsed (remembered per user) and clicking a tab lists all of its categories. Duplicate detection now compares the item's source, so same-named items from different compendiums are both kept.
+- **Party sheet:** hover Rations, Beverages and (GM only) total Wealth for a per-member breakdown.
+- pt-BR: large batch of missing translations.
+
 ## v5.43.0
 - **Crafting (new): the Workbench.** Open it from the Downtime window (Craft Item), the character sheet or the Character HUD portrait menu. Turn it on/off and set the rules in the new **Crafting & Relics** settings menu (General / Alchemy / Relics / Mana Crystals tabs).
   - **Craft tab:** catalog of craftable equipment from the enabled compendiums (search, categories), a detail panel with Value, Materials, estimated Shifts and Slots, and **Ongoing Projects**. "Add to Projects", then **Work a Shift**: spread your Shift Value Limit over your Projects (typed amounts like `30s` or `1g 5s`, ±1 buttons or **Auto-fill**). The Workbench warns before you work a Shift that is over your limit or short on Materials. A Project sits in your inventory until it's finished; abandoning it loses the Materials spent.
