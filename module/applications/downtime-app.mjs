@@ -2,6 +2,7 @@ import { VagabondChatCard } from '../helpers/chat-card.mjs';
 import { VagabondChatHelper } from '../helpers/chat-helper.mjs';
 import { WorkbenchApp } from './workbench-app.mjs';
 import { CraftingHelper } from '../helpers/crafting-helper.mjs';
+import { CurrencyHelper } from '../helpers/currency-helper.mjs';
 
 const { api } = foundry.applications;
 
@@ -81,22 +82,15 @@ export class DowntimeApp extends api.HandlebarsApplicationMixin(api.ApplicationV
     const lodgingType = lodgingTypeSelect.value;
     const lodging = CONFIG.VAGABOND.lodgingExpenses[lodgingType];
 
-    // Check if player has enough money
-    const totalSilver = this.#actor.system.currency.gold * 100 +
-                        this.#actor.system.currency.silver +
-                        this.#actor.system.currency.copper / 100;
+    // Lodging cost is in silver; CurrencyHelper works in copper and makes change
+    // without consolidating untouched coins (silver stays silver).
+    const costCopper = lodging.cost * CurrencyHelper.RATES.silver;
+    const newWallet = CurrencyHelper.pay(this.#actor.system.currency, costCopper);
 
-    if (totalSilver < lodging.cost) {
-      ui.notifications.warn(`Not enough money! You need ${lodging.cost}s but only have ${Math.floor(totalSilver)}s.`);
+    if (!newWallet) {
+      ui.notifications.warn(`Not enough money! You need ${CurrencyHelper.format(costCopper)} but only have ${CurrencyHelper.format(this.#actor.system.currency)}.`);
       return;
     }
-
-    // Calculate new currency after deducting cost
-    let remainingSilver = totalSilver - lodging.cost;
-    const newGold = Math.floor(remainingSilver / 100);
-    remainingSilver -= newGold * 100;
-    const newSilver = Math.floor(remainingSilver);
-    const newCopper = Math.round((remainingSilver - newSilver) * 100);
 
     // Determine what gets recovered
     const currentHP = this.#actor.system.health.value;
@@ -111,9 +105,9 @@ export class DowntimeApp extends api.HandlebarsApplicationMixin(api.ApplicationV
       'system.health.value': maxHP,
       'system.mana.current': maxMana,
       'system.currentLuck': maxLuck,
-      'system.currency.gold': newGold,
-      'system.currency.silver': newSilver,
-      'system.currency.copper': newCopper
+      'system.currency.gold': newWallet.gold,
+      'system.currency.silver': newWallet.silver,
+      'system.currency.copper': newWallet.copper
     };
 
     let recoveryText = '<ul>';
@@ -139,7 +133,7 @@ export class DowntimeApp extends api.HandlebarsApplicationMixin(api.ApplicationV
       .setSubtitle(this.#actor.name)
       .setDescription(`
         <p><i class="fas fa-bed"></i> <strong>${this.#actor.name}</strong> takes a rest.</p>
-        <p><strong>Lodging:</strong> ${lodging.label} (${lodging.cost > 0 ? (lodging.cost >= 100 ? `${lodging.cost/100}${game.i18n.localize('VAGABOND.Currency.Gold.abbr')}` : `${lodging.cost}${game.i18n.localize('VAGABOND.Currency.Silver.abbr')}`) : 'Free'})</p>
+        <p><strong>Lodging:</strong> ${lodging.label} (${lodging.cost > 0 ? CurrencyHelper.format(costCopper) : 'Free'})</p>
         <hr>
         <p><strong>Recovery:</strong></p>
         ${recoveryText}

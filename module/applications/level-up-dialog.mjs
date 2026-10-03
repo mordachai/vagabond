@@ -10,6 +10,7 @@
  */
 
 import { CharacterBuilderDataService } from './char-builder/services/data-service.mjs';
+import { CurrencyHelper } from '../helpers/currency-helper.mjs';
 import { VagabondChatCard } from '../helpers/chat-card.mjs';
 import { effectModeToChangeType } from '../helpers/effects.mjs';
 
@@ -1062,12 +1063,7 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
       case 'currentLuck': return sys.stats?.luck?.total || 0;
       case 'speed': return sys.speed?.base || 0;
       case 'inventorySlots': return sys.inventory?.maxSlots || 0;
-      case 'wealth': {
-        const gold = sys.currency?.gold || 0;
-        const silver = sys.currency?.silver || 0;
-        const copper = sys.currency?.copper || 0;
-        return gold * 100 + silver + copper / 10;
-      }
+      case 'wealth': return CurrencyHelper.toSilver(sys.currency);
       default: return 0;
     }
   }

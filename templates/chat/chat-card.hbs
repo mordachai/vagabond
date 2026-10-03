@@ -1,5 +1,5 @@
 {{! chat-card.hbs }}
-<div class="vagabond-chat-card-v2" data-card-type="{{type}}">
+<div class="vagabond-chat-card-v2{{#if rollCritToggle}} attack-crit-toggle{{/if}}" data-card-type="{{type}}"{{#if rollCritToggle}} data-crit-active="true" data-actor-id="{{actor.uuid}}"{{/if}}>
 
     {{!-- 1. Character Name --}}
     {{!-- <h4 class="actor-name-header">{{alias}}</h4> --}}
@@ -79,6 +79,23 @@
         </div>
         {{/if}}
 
+        {{!-- TARGETS: full-width bar above the check. Names show for up to 4 targets, avatars only beyond. --}}
+        {{#if targetsAtRollTime.length}}
+        <section class="chat-targets-section{{#if (gt targetsAtRollTime.length 4)}} targets-many{{/if}}{{#if (gt targetsAtRollTime.length 8)}} targets-crowd{{/if}}">
+          <div class="targets-list">
+            {{#each targetsAtRollTime}}
+            <div class="target-token" title="{{this.actorName}}{{#if this.subName}} - {{this.subName}}{{/if}} (click to ping)" data-token-id="{{this.tokenId}}" data-scene-id="{{this.sceneId}}">
+              <img src="{{this.actorImg}}" alt="{{this.actorName}}">
+              <span class="target-text">
+                <span class="target-name">{{this.actorName}}</span>
+                {{#if this.subName}}<span class="target-sub">{{this.subName}}</span>{{/if}}
+              </span>
+            </div>
+            {{/each}}
+          </div>
+        </section>
+        {{/if}}
+
         {{!-- B. MODIFIER BADGE --}}
         {{#if isFavored}}
         <div class="modifier-badge favored">
@@ -96,7 +113,7 @@
             <div class="roll-info-group">
                 {{!-- SKILL LABEL --}}
                 {{#if rollSkillLabel}}
-                <div class="roll-skill-label">{{rollSkillLabel}}</div>
+                <div class="roll-skill-label">{{rollSkillLabel}}{{#if rollCritToggle}} <span class="roll-crit-toggle attack-crit-toggle-btn" data-action="toggleAttackCritBenefit" title="{{localize 'VAGABOND.DefendMechanics.CritToggleHint'}}">(Crit)</span>{{/if}}</div>
                 {{/if}}
 
                 {{!-- CRIT LABEL FOR SAVES --}}
@@ -124,25 +141,6 @@
         {{!-- AUTO-FAIL / NO ROLL OUTCOME BANNER --}}
         <section class="auto-fail-banner {{outcomeClass}}">
             <span class="auto-fail-text">{{outcome}}</span>
-        </section>
-        {{/if}}
-
-        {{!-- E. TARGETS SECTION --}}
-        {{#if targetsAtRollTime.length}}
-        <section class="chat-targets-section">
-          <div class="targets-header">
-            <i class="fas fa-crosshairs"></i>
-            <span>{{localize "VAGABOND.UI.Labels.Targets"}}</span>
-          </div>
-          <div class="targets-list">
-            {{#each targetsAtRollTime}}
-            <div class="target-token" title="{{this.actorName}}{{#if this.subName}} - {{this.subName}}{{/if}} (click to ping)" data-token-id="{{this.tokenId}}" data-scene-id="{{this.sceneId}}">
-              <img src="{{this.actorImg}}" alt="{{this.actorName}}">
-              <span class="target-name">{{this.actorName}}</span>
-              {{#if this.subName}}<span class="target-sub">{{this.subName}}</span>{{/if}}
-            </div>
-            {{/each}}
-          </div>
         </section>
         {{/if}}
 

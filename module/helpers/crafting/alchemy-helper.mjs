@@ -32,7 +32,7 @@ export class AlchemyHelper {
    * The value cap (in copper) a newly-learned formula must be under — from the
    * highest-level granted feature's `formulaValueCap` formula (RAW's own table
    * scales identically across every Alchemy grant, so "the current one" is
-   * always what should gate a new pick). Silver formula result × 10 → copper.
+   * always what should gate a new pick). Silver formula result × RATES.silver → copper.
    */
   static formulaValueCapCopper(actor) {
     const classItem = this.classItemOf(actor);
@@ -47,7 +47,7 @@ export class AlchemyHelper {
       const replaced = Roll.replaceFormulaData(String(formula).trim(), actor.getRollData(), { missing: 0 });
       const silver = Roll.safeEval(replaced);
       if (silver === null || silver === undefined || isNaN(silver)) return 0;
-      return Math.max(0, Math.round(silver) * 10);
+      return Math.max(0, Math.round(silver) * CurrencyHelper.RATES.silver);
     } catch {
       return 0;
     }

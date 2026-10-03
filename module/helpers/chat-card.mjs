@@ -112,6 +112,8 @@ export class VagabondChatCard {
       // Crit stat bonus toggle: when > 0, enables the two-state toggle in damage-display.hbs
       critStatBonus: (isCritical && critStatBonus !== 0) ? critStatBonus : 0,
       baseTotal: (isCritical && critStatBonus !== 0) ? total - critStatBonus : total,
+      // Two-state toggle shown on this card (off when the attack card already owns it)
+      critToggle: isCritical && critStatBonus !== 0,
     };
     return this;
   }
@@ -469,6 +471,11 @@ export class VagabondChatCard {
           const critStatBonus = rollData?.critStatBonus || 0;
 
           card.addDamage(damageRoll, dLabel, isCrit, key, critStatBonus);
+          // Manual flow: the attack card's (Crit) toggle already decided Luck vs benefit
+          // and is locked once damage is rolled — no second toggle here.
+          if (rollData?.critLocked) card.data.damage.critToggle = false;
+          // Luck kept instead of the benefit: no "Crit!" badge on the damage
+          if (rollData?.critBenefitOff) card.data.damage.isCritical = false;
 
           // Restorative types (healing/recover/recharge) get an Apply button, never save buttons
           const isRestorativeCard = VagabondDamageHelper.isRestorativeDamageType(damageType);
@@ -498,6 +505,14 @@ export class VagabondChatCard {
 
           card.addFooterAction(btns);
 
+          // Defense shields render inside the damage section, beside the number
+          if (!isRestorativeCard) {
+            card.data.damage.defenseHtml = VagabondDamageHelper.createDefenseShields(
+              damageRoll.total, damageType, actor.uuid, item?.id, targetsAtRollTime, actionIndex,
+              rollData?.isCritical ?? false, critStatBonus, effectiveWeaknessPreRolled
+            );
+          }
+
       } else if (rollData?.isHit && item && !damageRoll) {
            const { VagabondDamageHelper } = await import('./damage-helper.mjs');
 
@@ -509,7 +524,10 @@ export class VagabondChatCard {
            // Roll Damage button — "-" is not a valid Roll formula.
            const isWeaponItem = item.type === 'equipment' && item.system.equipmentType === 'weapon';
            const noDamage = !rawFormula?.trim() || rawFormula.trim() === '-';
-           if (!(isWeaponItem && noDamage)) {
+           // Spells with no damage dice (utility spells, dice-scaling) pass no formula —
+           // never fall back to a made-up 1d6 for them.
+           const isSpellWithoutDamage = item.type === 'spell' && !damageFormula;
+           if (!(isWeaponItem && noDamage) && !isSpellWithoutDamage) {
            const formula = (rawFormula?.trim() && rawFormula.trim() !== '-') ? rawFormula : '1d6';
 
            // Determine statKey for crit damage bonus
@@ -531,6 +549,14 @@ export class VagabondChatCard {
                critStatBonus: rollData?.critStatBonus || 0
            }, targetsAtRollTime);
            card.addFooterAction(btn);
+
+           // Crit with a stat-bonus benefit: the "(Crit)" tag after the skill becomes the
+           // Luck/benefit toggle (same behavior as the damage card's crit badge). Roll
+           // Damage reads its state when clicked.
+           if (rollData.isCritical && rollData.critStatBonus > 0 && card.data.rollSkillLabel) {
+               card.data.rollCritToggle = true;
+               card.data.rollSkillLabel = card.data.rollSkillLabel.replace(/\s*\(Crit\)$/, '');
+           }
            }
       }
 
@@ -541,7 +567,7 @@ export class VagabondChatCard {
       // Add defend options if requested (independent of damage; never for restoratives)
       if (hasDefenses) {
         const { VagabondDamageHelper } = await import('./damage-helper.mjs');
-        if (!VagabondDamageHelper.isRestorativeDamageType(damageType)) {
+        if (!VagabondDamageHelper.isRestorativeDamageType(damageType) && !VagabondDamageHelper.targetsAreAllNpc(targetsAtRollTime)) {
           card.addFooterAction(VagabondDamageHelper.createDefendOptions());
         }
       }
@@ -817,8 +843,9 @@ export class VagabondChatCard {
       // buttons then appear immediately. isCritical is a boolean and statKey the
       // weapon skill's stat (crit stat bonus only applies on real crits).
       const { VagabondDamageHelper } = await import('./damage-helper.mjs');
+      const cleaveDie = globalThis.vagabond.utils.EquipmentHelper.cleaveDieFor(weapon, targetsAtRollTime.length);
       if (!damageRoll && VagabondDamageHelper.shouldRollDamage(isHit)) {
-          damageRoll = await weapon.rollDamage(actor, isCritical, weaponSkill?.stat || null, targetsAtRollTime, null, weaponSkillKey);
+          damageRoll = await weapon.rollDamage(actor, isCritical, weaponSkill?.stat || null, targetsAtRollTime, cleaveDie, weaponSkillKey);
       }
 
       // Thrown Alchemical Item: no grip/range/weapon damage fields — its own
@@ -890,6 +917,10 @@ export class VagabondChatCard {
       // from item.system.currentDamage — bypassing the bonus entirely.
       const dieSizeBonus = isAlchemicalThrow ? 0 : (actor.system[`${weaponSkillKey}DamageDieSizeBonus`] || 0);
       let adjustedDamageFormula = baseDamage;
+      // Cleave step-down first (mirrors item.rollDamage), then the die-size bonus
+      if (cleaveDie && adjustedDamageFormula?.includes('d')) {
+          adjustedDamageFormula = adjustedDamageFormula.replace(/d\d+/i, `d${cleaveDie}`);
+      }
       if (dieSizeBonus !== 0 && adjustedDamageFormula?.includes('d')) {
           adjustedDamageFormula = adjustedDamageFormula.replace(/(\d*)d(\d+)/, (match, count, size) => {
               return `${count}d${parseInt(size) + dieSizeBonus}`;
@@ -963,15 +994,15 @@ export class VagabondChatCard {
       const { roll, difficulty, isSuccess, isCritical, manaSkill, manaSkillKey, costs, deliveryText, spellState, manaOverrideDelta = 0 } = spellCastResult;
 
       const tags = [];
-      
+      const { VagabondDamageHelper: SpellDmgHelper } = await import('./damage-helper.mjs');
+
       // 1. Skill Tag
       tags.push({ label: manaSkill?.label || 'Magic', cssClass: 'tag-skill' });
       
       // 2. Damage Tag (suppressed for dice-scaling spells — dice aren't damage)
       if (spellState.damageDice && spellState.damageDice > 0 && !spell.system.usesDiceScaling) {
           const dType = spell.system.damageType;
-          // Determine die size: spell override > actor default (6)
-          const dieSize = spell.system.damageDieSize || actor.system.spellDamageDieSize || 6;
+          const dieSize = SpellDmgHelper.spellDieSize(actor, spell);
 
           // Show damage dice with icon if type exists, without icon if typeless ("-")
           if (dType && dType !== '-') {
@@ -1009,7 +1040,7 @@ export class VagabondChatCard {
       // This must include the increased damage dice from mana expenditure
       let spellDamageFormula = null;
       if (spellState.damageDice && spellState.damageDice > 0 && !spell.system.usesDiceScaling) {
-          const dieSize = spell.system.damageDieSize || actor.system.spellDamageDieSize || 6;
+          const dieSize = SpellDmgHelper.spellDieSize(actor, spell);
           spellDamageFormula = `${spellState.damageDice}d${dieSize}`;
       }
 
@@ -1162,7 +1193,7 @@ export class VagabondChatCard {
             }
         }
         // rollWithCheck ON → no buttons; damage fires automatically below.
-        // Saves and defending options appear on the damage card (postNPCActionDamage), not here.
+        // Manual mode: saves and defending options appear on the damage card (postNPCActionDamage).
     } else {
         // No damage — this card IS the only card, so save reminder buttons must live here.
         footerActions.push(VagabondDamageHelper.createSaveReminderButtons(
@@ -1173,28 +1204,13 @@ export class VagabondChatCard {
     // 8b. Executable macro buttons for this NPC action
     this._buildNpcMacroButtons(actor, action, actionIndex).forEach(b => footerActions.push(b));
 
-    // 9. Create the initial action card — damage-only buttons, no saves or defending.
-    // Saves and defending options are shown on the damage card posted by postNPCActionDamage.
-    await this.createActionCard({
-        actor,
-        title: action.name || 'NPC Action',
-        subtitle,
-        tags,
-        description,
-        footerActions,
-        hasDefenses: false,
-        targetsAtRollTime
-    });
-
-    // 10. Auto-roll damage when "Roll Damage With Check" is ON.
-    // NPC actions have no attack check, so damage fires immediately after the action card.
+    // 9. Auto-roll damage when "Roll Damage With Check" is ON. NPC actions have no attack
+    // check, so damage is rolled up front and folded into the SAME card as the action
+    // (name, traits, description, targets, damage, saves) — one card, not two.
+    let damageRoll = null;
+    const rawType = action.damageType || 'physical';
     if (hasDamage && rollWithCheck) {
-        const rawType    = action.damageType || 'physical';
-        const dTypeLabel = rawType === '-' ? '' : (game.i18n.localize(CONFIG.VAGABOND.damageTypes[rawType]) || rawType);
-
-        let damageRoll = null;
         let finalDamage;
-
         if (preferFlat && action.flatDamage) {
             // Flat damage - authored value stays pure, no bonus fields apply
             finalDamage = parseInt(action.flatDamage);
@@ -1215,10 +1231,29 @@ export class VagabondChatCard {
             finalDamage = parseInt(action.flatDamage);
         }
 
-        await VagabondDamageHelper.postNPCActionDamage(
-            damageRoll, finalDamage, dTypeLabel, actor, action, rawType, attackType, targetsAtRollTime, actionIndex
-        );
+        // Flat damage has no Roll — the card builder wants one to read total/formula from
+        if (!damageRoll) {
+            damageRoll = new Roll(`${finalDamage}`);
+            await damageRoll.evaluate();
+        }
     }
+
+    // 10. Create the card. Manual mode: damage buttons only (saves + defending appear on the
+    // damage card the button posts). Auto mode: damage, saves and defending are right here.
+    await this.createActionCard({
+        actor,
+        title: action.name || 'NPC Action',
+        subtitle,
+        tags,
+        description,
+        footerActions,
+        damageRoll,
+        damageType: rawType,
+        attackType,
+        actionIndex,
+        hasDefenses: !!damageRoll,
+        targetsAtRollTime
+    });
   }
 
   static async _onClickAbilityName(event, target) {

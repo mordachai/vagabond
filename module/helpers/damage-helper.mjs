@@ -184,6 +184,18 @@ export class VagabondDamageHelper {
     const storedTargetsForWeak = this._getTargetsFromButton(button);
     const finalDamageTypeKey = context.damageType || null;
 
+    // Attack card's "(Crit)" toggle: benefit on → crit stat bonus rolls; Luck kept → it
+    // doesn't (always-on crit dice like Vicious still apply). Rolling locks the toggle so
+    // Luck and damage can't disagree afterwards.
+    const critCard = button.closest('.attack-crit-toggle');
+    const hasCritToggle = !!critCard && button.closest('.content-body') !== null;
+    const critBenefitOn = !hasCritToggle || critCard.dataset.critActive !== 'false';
+    if (hasCritToggle) critCard.dataset.critLocked = 'true';
+    if (!critBenefitOn) {
+      context.statKey = null;
+      context.critStatBonus = 0;
+    }
+
     // Unified damage pipeline (die-size bump is pre-baked into damageFormula upstream)
     const { VagabondDamagePipeline } = await import('./damage-pipeline.mjs');
     const damageRoll = await VagabondDamagePipeline.rollDamage({
@@ -235,14 +247,14 @@ export class VagabondDamageHelper {
 
     // Post a SEPARATE damage message instead of updating the attack card
     // This prevents double-rolling issues and matches the save result flow
-    await this.postDamageResult(damageRoll, damageTypeLabel, context.isCritical, actor, item, finalDamageTypeKey, attackType, critStatBonus, damageRoll._weaknessPreRolled ?? false);
+    await this.postDamageResult(damageRoll, damageTypeLabel, context.isCritical, actor, item, finalDamageTypeKey, attackType, critStatBonus, damageRoll._weaknessPreRolled ?? false, storedTargetsForWeak, hasCritToggle, !critBenefitOn);
   }
 
   /**
    * Post a separate damage result message with save buttons
    * Uses existing createActionCard() to avoid code duplication
    */
-  static async postDamageResult(damageRoll, damageType, isCritical, actor, item, damageTypeKey = null, attackType = 'melee', critStatBonus = 0, weaknessPreRolled = false) {
+  static async postDamageResult(damageRoll, damageType, isCritical, actor, item, damageTypeKey = null, attackType = 'melee', critStatBonus = 0, weaknessPreRolled = false, targetsAtRollTime = [], critLocked = false, critBenefitOff = false) {
     const { VagabondChatCard } = await import('./chat-card.mjs');
 
     return await VagabondChatCard.createActionCard({
@@ -253,14 +265,30 @@ export class VagabondDamageHelper {
       damageType: damageTypeKey || damageType,
       hasDefenses: !this.isRestorativeDamageType(damageTypeKey || damageType),
       attackType,
-      rollData: isCritical ? { isCritical: true, critStatBonus } : null,
+      rollData: isCritical ? { isCritical: true, critStatBonus, critLocked, critBenefitOff } : null,
       weaknessPreRolled,
+      targetsAtRollTime,
     });
   }
 
   /** @see VagabondDamagePipeline.getExplodeValues */
   static _getExplodeValues(item, actor = null) {
     return VagabondDamagePipeline.getExplodeValues(item, actor);
+  }
+
+  /**
+   * Spell damage die size — single source for the auto-roll, the manual Roll Damage
+   * button formula and the card's damage tag. A per-spell override still gets the
+   * actor's Spell Damage Die Size Bonus; otherwise the actor's derived die size
+   * (homebrew base + bonus) applies.
+   * @param {Actor} actor
+   * @param {Item} spell
+   * @returns {number}
+   */
+  static spellDieSize(actor, spell) {
+    const bonus = actor.system.spellDamageDieSizeBonus || 0;
+    if (spell.system.damageDieSize) return spell.system.damageDieSize + bonus;
+    return actor.system.spellDamageDieSize || (6 + bonus);
   }
 
   /**
@@ -276,14 +304,10 @@ export class VagabondDamageHelper {
     // Allow typeless damage ("-") - only skip if there are no damage dice at all
     if (!spellState.damageDice || spellState.damageDice <= 0) return null;
 
-    // Determine die size: base (spell override or default 6) + actor bonus
-    const baseDieSize = spell.system.damageDieSize || 6;
-    const dieSize = baseDieSize + (actor.system.spellDamageDieSizeBonus || 0);
-
     return VagabondDamagePipeline.rollDamage({
       actor,
       item: spell,
-      baseFormula: `${spellState.damageDice}d${dieSize}`,
+      baseFormula: `${spellState.damageDice}d${this.spellDieSize(actor, spell)}`,
       sourceType: 'spell',
       damageType: spell.system.damageType,
       isCritical,
@@ -951,7 +975,7 @@ export class VagabondDamageHelper {
     return `
       <div class="defend-info-box">
         <div class="defend-header">
-          <i class="fas fa-shield-alt"></i>
+          <i class="fas fa-circle-info"></i>
           <span>${game.i18n.localize('VAGABOND.DefendMechanics.DefendingTitle')}</span>
           <i class="fas fa-chevron-down expand-icon"></i>
         </div>
@@ -1004,6 +1028,8 @@ export class VagabondDamageHelper {
    * @returns {string} HTML string
    */
   static createSaveReminderButtons(attackType = 'melee', targetsAtRollTime = [], actorId = '', itemId = '', actionIndex = null, statusSaveTypes = new Set()) {
+    if (this.targetsAreAllNpc(targetsAtRollTime)) return '';
+
     const targetsJson = JSON.stringify(targetsAtRollTime).replace(/"/g, '&quot;');
 
     const buttons = this.getConfiguredSaves().map(save => {
@@ -1022,11 +1048,38 @@ export class VagabondDamageHelper {
     }).join('');
 
     return `
-      <div class="vagabond-save-buttons-container">
+      <div class="vagabond-save-buttons-container" style="--save-cols:${this._saveColumns()}">
         <div class="save-buttons-row">${buttons}
         </div>
       </div>
     `;
+  }
+
+  /**
+   * True when every stored target resolves to an NPC actor. Saves and Defense are a
+   * player-side choice, so cards aimed only at NPCs offer Apply Direct alone.
+   * Unresolvable targets or an empty list return false (keep the full button set).
+   * Resolves quietly — no "token not found" warnings, unlike _resolveStoredTargets.
+   * @param {Array<Object>} storedTargets - Stored target data (TargetHelper shape)
+   * @returns {boolean}
+   */
+  static targetsAreAllNpc(storedTargets) {
+    if (!storedTargets?.length) return false;
+    return storedTargets.every(t => {
+      const actor = canvas.tokens?.get(t.tokenId)?.actor ?? game.actors.get(t.actorId);
+      return actor?.type === 'npc';
+    });
+  }
+
+  /**
+   * Column count for the one-row save grid: one column per configured save,
+   * capped at 3 so homebrew setups with many saves wrap instead of crushing labels.
+   * @returns {number}
+   * @private
+   */
+  static _saveColumns() {
+    const n = this.getConfiguredSaves().length;
+    return Math.max(1, n > 4 ? 3 : n);
   }
 
   /**
@@ -1082,22 +1135,12 @@ export class VagabondDamageHelper {
             </button>`;
     }).join('');
 
-    // Defense row — only when at least one targeted actor holds a Defense-property
-    // weapon. Rolls the weapon damage and subtracts it from the incoming damage
-    // (no save, no d20) — see handleDefenseWeapons.
-    const defenseRow = this._buildDefenseRow(targetsAtRollTime, `
-              data-damage-amount="${damageAmount}"
-              data-damage-type="${damageType}"
-              data-actor-id="${actorId}"
-              data-item-id="${itemId || ''}"
-              data-action-index="${actionIndex ?? ''}"
-              data-attack-was-crit="${attackWasCrit}"
-              data-weakness-pre-rolled="${weaknessPreRolled}"
-              data-targets="${targetsJson}"${critAttrs}`);
+    // Defense shields live in the damage section (see createDefenseShields), not here.
+    // Cards aimed only at NPCs offer Apply Direct alone — saves are a player-side choice.
+    const npcOnly = this.targetsAreAllNpc(targetsAtRollTime);
 
-    // LAYOUT: Two rows. Top: Apply Direct. Bottom: Reflex, Defense row, other Saves.
     return `
-      <div class="vagabond-save-buttons-container">
+      <div class="vagabond-save-buttons-container" style="--save-cols:${this._saveColumns()}">
         <div class="save-buttons-top">
             <button class="vagabond-apply-direct-button"
               data-damage-amount="${damageAmount}"
@@ -1111,11 +1154,37 @@ export class VagabondDamageHelper {
               <i class="fas fa-burst"></i> ${applyDirectLabel}
             </button>
         </div>
-
-        <div class="save-buttons-row">${saveButtons}${defenseRow}
-        </div>
+${npcOnly ? '' : `
+        <div class="save-buttons-row">${saveButtons}
+        </div>`}
       </div>
     `;
+  }
+
+  /**
+   * Defense shields for a damage card: one shield token per way a target can block
+   * (weapon art inside a shield frame). Rendered inside the damage section so the
+   * answer to the damage sits beside the number. Empty string when no target holds a
+   * Defense weapon or every target is an NPC.
+   * Buttons carry the same data-* payload as Apply Direct, so handleDefenseWeapons
+   * and the crit toggle (data-damage-crit/normal) treat them like any damage button.
+   * @returns {string} HTML ('' when nothing to show)
+   */
+  static createDefenseShields(damageAmount, damageType, actorId, itemId, targetsAtRollTime, actionIndex = null, attackWasCrit = false, critStatBonus = 0, weaknessPreRolled = false) {
+    if (!targetsAtRollTime?.length || this.targetsAreAllNpc(targetsAtRollTime)) return '';
+    const targetsJson = JSON.stringify(targetsAtRollTime).replace(/"/g, '&quot;');
+    const critAttrs = (critStatBonus > 0 && attackWasCrit)
+      ? ` data-damage-crit="${damageAmount}" data-damage-normal="${damageAmount - critStatBonus}"`
+      : '';
+    return this._buildDefenseRow(targetsAtRollTime, `
+              data-damage-amount="${damageAmount}"
+              data-damage-type="${damageType}"
+              data-actor-id="${actorId}"
+              data-item-id="${itemId || ''}"
+              data-action-index="${actionIndex ?? ''}"
+              data-attack-was-crit="${attackWasCrit}"
+              data-weakness-pre-rolled="${weaknessPreRolled}"
+              data-targets="${targetsJson}"${critAttrs}`);
   }
 
   /**
@@ -1146,28 +1215,39 @@ export class VagabondDamageHelper {
     }
     if (!best) return '';
 
-    const icon = '<i class="fas fa-shield-halved"></i>';
     const esc = (s) => foundry.utils.escapeHTML?.(s) ?? s;
-    const button = (slot, label, title = '') => `
-            <button class="vagabond-defense-button" data-defense-slot="${slot}"${title ? ` title="${esc(title)}"` : ''}${sharedAttrs}>
-              ${icon} <span class="defense-label">${esc(label)}</span>
-            </button>`;
+    // Weapon art inside a shield-shaped mask (CSS). `title` carries the weapon name.
+    const imgSrc = (weapon) => esc(encodeURI(weapon.img || 'icons/svg/sword.svg').replace(/'/g, '%27'));
+    const shield = (weapon) =>
+      `<span class="defense-shield"><img src="${imgSrc(weapon)}" alt="${esc(weapon.name)}" draggable="false"></span>`;
+    // "Both": one shield, the two weapons split along the diagonal
+    const shieldBoth = (w1, w2) =>
+      `<span class="defense-shield is-both"><img src="${imgSrc(w1)}" alt="${esc(w1.name)}" draggable="false"><img src="${imgSrc(w2)}" alt="${esc(w2.name)}" draggable="false"></span>`;
+    const button = (slot, title, shields) => `
+            <button class="vagabond-defense-button" data-defense-slot="${slot}" title="${esc(title)}"${sharedAttrs}>${shields}</button>`;
 
     const defenseLabel = game.i18n.localize('VAGABOND.Chat.Defense');
+    const [w1, w2] = best.weapons;
     let buttons;
-    if (best.weapons.length === 1) {
-      buttons = button('1', defenseLabel, best.weapons[0].name);
+    let rowClass = 'defense-buttons-row';
+    if (!w2) {
+      buttons = button('1', `${defenseLabel}: ${w1.name}`, shield(w1));
+    } else if (best.limit >= 2) {
+      // Pyramid: "Both" on top, the two weapons below
+      rowClass += ' defense-stack';
+      buttons = button('both', `${game.i18n.localize('VAGABOND.Chat.DefenseBoth')}: ${w1.name} + ${w2.name}`, shieldBoth(w1, w2))
+        + `<div class="defense-pair">`
+        + button('1', `${defenseLabel}: ${w1.name}`, shield(w1))
+        + button('2', `${defenseLabel}: ${w2.name}`, shield(w2))
+        + `</div>`;
     } else {
-      const [w1, w2] = best.weapons;
-      buttons = (best.limit >= 2
-        ? button('both', game.i18n.localize('VAGABOND.Chat.DefenseBoth'), `${w1.name} + ${w2.name}`)
-        : '')
-        + button('1', w1.name, w1.name) + button('2', w2.name, w2.name);
+      // Limit 1: pick one weapon
+      buttons = button('1', `${defenseLabel}: ${w1.name}`, shield(w1))
+        + button('2', `${defenseLabel}: ${w2.name}`, shield(w2));
     }
 
-    const cols = best.weapons.length === 1 ? 1 : (best.limit >= 2 ? 3 : 2);
     return `
-          <div class="defense-buttons-row defense-cols-${cols}">${buttons}
+          <div class="${rowClass}">${buttons}
           </div>`;
   }
 
@@ -1775,19 +1855,6 @@ export class VagabondDamageHelper {
     );
 
     return roll;
-  }
-
-  /**
-   * Collect all always-on crit bonuses for an item from the registry.
-   * These bonuses fire on every crit regardless of the Luck/benefit toggle.
-   *
-   * @param {VagabondItem} item - The item being used
-   * @param {VagabondActor} actor - The attacking actor
-   * @param {string} currentFormula - The damage formula built so far (needed for die-size inspection)
-   * @returns {Array<{formula: string, label: string}>}
-   */
-  static _collectCritAlwaysOnBonuses(item, actor, currentFormula) {
-    return VagabondDamagePipeline.collectCritAlwaysOnBonuses(item, actor, currentFormula);
   }
 
   /**

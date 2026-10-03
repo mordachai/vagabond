@@ -41,7 +41,49 @@
     "damageTypeOneHand": "blunt",
     "damageTypeTwoHands": "blunt"
   },
-  "effects": [],
+  "effects": [
+    {
+      "name": "Vicious",
+      "img": "icons/svg/aura.svg",
+      "_id": "Pm7ngPPZIDiTWATe",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.critBonusDice",
+            "type": "add",
+            "value": "matchDie"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "Crits with it deal 1 extra damage die.",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "on-use"
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.4"
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!G8FNymXN8HarIEoN.Pm7ngPPZIDiTWATe"
+    }
+  ],
   "folder": "2GeJSvXoDFMyhrwx",
   "flags": {},
   "_stats": {

@@ -992,6 +992,26 @@ function registerGameSettings() {
     requiresReload: false,
   });
 
+  // Setting 21f: One-time migration guard (hidden) — see EquipmentHelper.migrateWeaponPropertyEffects().
+  // Keen/Vicious moved from a code registry to On Use Only effects on the weapon.
+  game.settings.register('vagabond', 'weaponPropertyEffectsMigrated', {
+    scope: 'world',
+    config: false,
+    type: Boolean,
+    default: false,
+    requiresReload: false,
+  });
+
+  // Setting 21g: One-time migration guard (hidden) — see CurrencyHelper.migrateCopperScale().
+  // Stored raw-copper amounts were ×10 too small after the 1s=100c ratio correction.
+  game.settings.register('vagabond', 'copperScaleMigrated', {
+    scope: 'world',
+    config: false,
+    type: Boolean,
+    default: false,
+    requiresReload: false,
+  });
+
   // Setting 21b: Sequencer FX Config menu button
   game.settings.registerMenu('vagabond', 'sequencerFxConfigMenu', {
     name: 'VAGABOND.Settings.sequencerFxConfig.name',
@@ -1755,6 +1775,10 @@ Hooks.once('ready', function () {
   LightSource.startDriver();
   // One-time fix for items placed before the runAsGM compendium fix.
   LightSource.migrateRunAsGM();
+  // One-time: Keen/Vicious tags → On Use Only effects on the weapon.
+  EquipmentHelper.migrateWeaponPropertyEffects();
+  // One-time: stored copper amounts ×10 (ratio corrected to the book's 1s = 100c).
+  CurrencyHelper.migrateCopperScale();
 });
 
 // Recompute realtime light timers on scene load (catches elapsed time during reloads).
@@ -2897,7 +2921,7 @@ const FLUKE_REROLL_ENTRY = {
       const weaponSkillKey = rerollData.weaponSkillKey;
       const weaponSkill = actor.system.skills?.[weaponSkillKey];
       const critType = VagabondRollBuilder.isWeaponSkillKey(weaponSkillKey) ? weaponSkillKey : null;
-      const critNumber = VagabondRollBuilder.calculateCritThreshold(actor.getRollData(), critType);
+      const critNumber = VagabondRollBuilder.calculateCritThreshold(actor.getRollDataWithItemEffects(weapon), critType);
       const isCritical = VagabondChatCard.isRollCritical(roll, critNumber);
 
       const attackResult = {
@@ -2916,7 +2940,8 @@ const FLUKE_REROLL_ENTRY = {
       let damageRoll = null;
       if (VagabondDamageHelper.shouldRollDamage(isSuccess)) {
         const statKey = weaponSkill?.stat || null;
-        damageRoll = await weapon.rollDamage(actor, isCritical, statKey, targetsAtRollTime, null, weaponSkillKey);
+        const cleaveDie = globalThis.vagabond.utils.EquipmentHelper.cleaveDieFor(weapon, targetsAtRollTime.length);
+        damageRoll = await weapon.rollDamage(actor, isCritical, statKey, targetsAtRollTime, cleaveDie, weaponSkillKey);
       }
       await VagabondChatCard.weaponAttack(actor, weapon, attackResult, damageRoll, targetsAtRollTime);
 
@@ -3313,6 +3338,22 @@ Hooks.on('renderChatMessageHTML', (message, html) => {
     });
   });
 
+  // Damage dice + modifiers fold away under the total; click (or Enter/Space) the total to open
+  html.querySelectorAll('[data-dice-toggle]').forEach(toggle => {
+    const flip = (ev) => {
+      ev.preventDefault();
+      ev.stopPropagation();
+      const block = toggle.closest('.damage-block');
+      if (!block) return;
+      const open = block.classList.toggle('dice-open');
+      toggle.setAttribute('aria-expanded', String(open));
+    };
+    toggle.addEventListener('click', flip);
+    toggle.addEventListener('keydown', (ev) => {
+      if (ev.key === 'Enter' || ev.key === ' ') flip(ev);
+    });
+  });
+
   // ---------------------------------------------------------
   // 3. Damage Roll Button Handler
   // ---------------------------------------------------------
@@ -3596,6 +3637,8 @@ Hooks.on('renderChatMessageHTML', (message, html) => {
       ev.preventDefault();
       const container = toggle.closest('.attack-crit-toggle');
       if (!container) return;
+      // Attack-card toggle locks once Roll Damage has been clicked (damage already rolled)
+      if (container.dataset.critLocked === 'true') return;
       const wasActive = container.dataset.critActive === 'true';
       container.dataset.critActive = wasActive ? 'false' : 'true';
       const isNowActive = container.dataset.critActive === 'true';

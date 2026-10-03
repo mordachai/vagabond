@@ -12,7 +12,7 @@ import { CurrencyHelper } from './currency-helper.mjs';
  */
 export class MaterialsHelper {
   /** Copper cap for one generic Materials item (1g). Specific materials are uncapped. */
-  static CAP = 1000;
+  static CAP = CurrencyHelper.RATES.gold;
 
   /**
    * Matching `craftMaterial`-enabled equipment items on `actor`, cheapest first.

@@ -1742,11 +1742,7 @@
           "baseSlots": {"label": "Base Slots"},
           "cost": {"label": "Cost"},
           "slots": {"label": "Slots"},
-          "dieDamage": {"label": "Die Sizes Lost"},
-          "critThresholdMod": {
-            "label": "Crit Range Mod",
-            "hint": "Adjusts THIS weapon's crit threshold. Negative crits more easily (-1 = crit on 19). For a reusable effect, add a weapon property instead."
-          }
+          "dieDamage": {"label": "Die Sizes Lost"}
         }
       },
       "Armor": {
@@ -2684,6 +2680,7 @@
         "Count": "Select:",
         "RestrictedPool": "Among these:",
         "Targets": "Targets",
+        "ShowDice": "Show dice",
         "Bounds": "Bounds:",
         "BoundsLimitReached": "Cannot bind {name}: all bound slots are full ({current}/{max}).",
         "SizeSuffix": "size",

@@ -8,6 +8,10 @@
  * `valuePerShift` keys are `"<max>-<min>"` (or a bare difficulty for a single-value
  * band) matching the RAW table in docs/crafting-plan.md §1; values are copper.
  */
+import { CurrencyHelper } from '../currency-helper.mjs';
+
+const SILVER = CurrencyHelper.RATES.silver;
+
 export const CRAFTING_DEFAULTS = Object.freeze({
   general: {
     enabled: true,
@@ -15,13 +19,13 @@ export const CRAFTING_DEFAULTS = Object.freeze({
     materialsFromCoin: false,
     toolsRequirement: 'block', // 'off' | 'warn' | 'block'
     valuePerShift: {
-      '18-17': 10,
-      '16-15': 200,
-      '14-13': 500,
-      '12-11': 2500,
-      '10-9': 5000,
-      '8-7': 7500,
-      '6': 10000,
+      '18-17': 1 * SILVER,
+      '16-15': 20 * SILVER,
+      '14-13': 50 * SILVER,
+      '12-11': 250 * SILVER,
+      '10-9': 500 * SILVER,
+      '8-7': 750 * SILVER,
+      '6': 1000 * SILVER,
     },
   },
   alchemy: {

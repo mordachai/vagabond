@@ -754,7 +754,7 @@ export class VagabondItem extends Item {
 
     // Check critical - ONLY the d20 result, not including favor/hinder
     // ✅ CRITICAL: Use type-specific crit threshold from rollData
-    const critNumber = VagabondRollBuilder.calculateCritThreshold(rollData, weaponSkillKey, this);
+    const critNumber = VagabondRollBuilder.calculateCritThreshold(rollData, weaponSkillKey);
     const d20Term = roll.terms.find(term => term.constructor.name === 'Die' && term.faces === 20);
     const d20Result = d20Term?.results?.[0]?.result || 0;
     const isCritical = forceCritical || (d20Result >= critNumber);

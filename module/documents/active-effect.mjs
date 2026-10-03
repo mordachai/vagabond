@@ -249,6 +249,7 @@ export class VagabondActiveEffect extends ActiveEffect {
       // -- Universal Crit Bonuses (stack on top of per-type bonuses) --
       'system.attackCritBonus': 'Crit: All Weapon Attacks (every weapon skill)',
       'system.castCritBonus': 'Crit: All Spell Casts',
+      'system.critBonusDice': 'Crit: Extra Damage Dice on Crit (On Use Only; value e.g. 1d6, or matchDie = weapon\'s own die — Vicious)',
       // -- Specific Crit Bonuses, per weapon skill (dynamic from homebrew; lower is better, e.g. -1 for 19-20) --
       ...Object.fromEntries(
         (CONFIG.VAGABOND.homebrew?.skills ?? []).filter(s => s.isWeaponSkill).map(s => [

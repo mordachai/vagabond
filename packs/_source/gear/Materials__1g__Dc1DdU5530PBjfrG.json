@@ -34,7 +34,7 @@
     "craftMaterial": {
       "enabled": true,
       "key": "",
-      "value": 1000
+      "value": 10000
     },
     "toolKind": ""
   },

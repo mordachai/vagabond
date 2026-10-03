@@ -331,7 +331,7 @@ export default class VagabondEquipment extends VagabondItemBase {
 
     // Crafting materials bundle (the "Materials (1g)" gear item). `value` is
     // remaining spendable copper — drawn down as it pays for Crafting/Scrap, deleted
-    // at 0; `key` blank = generic Materials (capped at 1g/1000c per item — see
+    // at 0; `key` blank = generic Materials (capped at 1g per item — see
     // MaterialsHelper.CAP; an item's `slots` = its `baseSlots`, so 1 Slot = 1g of raw
     // material, matching the price list), non-blank = a specific Material (dragon
     // scale…) matched against a relic power's requiredMaterials — uncapped, one item
@@ -450,18 +450,6 @@ export default class VagabondEquipment extends VagabondItemBase {
         // fatigueOnTick: new fields.NumberField({ required: false, integer: true, min: 0, initial: 0, nullable: false }),
       }),
       { required: true, initial: [] }
-    );
-
-    // Bespoke crit-threshold adjustment for THIS weapon's own attack roll.
-    // ArrayField(StringField) — an AE with ADD mode appends a value/formula and
-    // VagabondRollBuilder.calculateCritThreshold sums the array against roll
-    // data. Negative = crits more easily (e.g. "-1" → crit on 19). For a
-    // REUSABLE behaviour prefer a weapon property in
-    // CONFIG.VAGABOND.weaponPropertyEffects; this field is the one-off escape
-    // hatch (a single weird weapon, no shared property).
-    schema.critThresholdMod = new fields.ArrayField(
-      new fields.StringField({ blank: true }),
-      { required: true, initial: [], label: 'VAGABOND.Item.Weapon.FIELDS.critThresholdMod.label' }
     );
 
     // Status immunities granted by this armor (armor only — UI gated by equipmentType)
@@ -817,7 +805,7 @@ export default class VagabondEquipment extends VagabondItemBase {
 
   /**
    * Apply a material cost multiplier. ×1 keeps the authored split; any other
-   * multiplier converts through copper (1g = 100s, 1s = 10c) and re-splits into
+   * multiplier converts through copper (CurrencyHelper) and re-splits into
    * the largest coins, rounding down to whole copper (1g 40s ×50 → 70g, not
    * 50g 2000s; Wood ÷2: 1g → 50s).
    * @param {{gold:number, silver:number, copper:number}} base
@@ -825,10 +813,7 @@ export default class VagabondEquipment extends VagabondItemBase {
    */
   static _applyCostMultiplier(base, multiplier) {
     if (multiplier === 1) return { gold: base.gold, silver: base.silver, copper: base.copper };
-    let copper = Math.floor(((base.gold * 100 + base.silver) * 10 + base.copper) * multiplier);
-    const gold = Math.floor(copper / 1000); copper -= gold * 1000;
-    const silver = Math.floor(copper / 10); copper -= silver * 10;
-    return { gold, silver, copper };
+    return CurrencyHelper.fromCopper(Math.floor(CurrencyHelper.toCopper(base) * multiplier));
   }
 
   /**

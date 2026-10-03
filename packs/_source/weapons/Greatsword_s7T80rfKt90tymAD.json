@@ -41,7 +41,49 @@
     "damageTypeOneHand": "slashing",
     "damageTypeTwoHands": "slashing"
   },
-  "effects": [],
+  "effects": [
+    {
+      "name": "Keen",
+      "img": "icons/svg/aura.svg",
+      "_id": "VbugKGKDbkCJz9hU",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.attackCritBonus",
+            "type": "subtract",
+            "value": "1"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "Crits 1 lower on this weapon's Attack Check.",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "on-use"
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.4"
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!s7T80rfKt90tymAD.VbugKGKDbkCJz9hU"
+    }
+  ],
   "folder": "W17xvUMSzgk8ti6R",
   "flags": {},
   "_stats": {

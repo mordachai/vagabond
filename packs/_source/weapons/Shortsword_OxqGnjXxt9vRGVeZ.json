@@ -42,7 +42,49 @@
       "finesse"
     ]
   },
-  "effects": [],
+  "effects": [
+    {
+      "name": "Keen",
+      "img": "icons/svg/aura.svg",
+      "_id": "KadvCH38xZ3ez7Kr",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.attackCritBonus",
+            "type": "subtract",
+            "value": "1"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "Crits 1 lower on this weapon's Attack Check.",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "on-use"
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.4"
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!OxqGnjXxt9vRGVeZ.KadvCH38xZ3ez7Kr"
+    }
+  ],
   "folder": "W17xvUMSzgk8ti6R",
   "flags": {
     "vagabond": {

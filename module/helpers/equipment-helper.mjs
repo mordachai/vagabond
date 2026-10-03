@@ -106,6 +106,25 @@ export class EquipmentHelper {
   }
 
   /**
+   * Cleave: damage die size after stepping down one size per extra Target beyond
+   * the first (floor d4, see VAGABOND.weaponDieSteps). Single source for every
+   * damage path (auto-roll, manual Roll Damage button, Luck rerolls).
+   * @param {Object} weapon
+   * @param {number} targetCount - Targets the attack reached
+   * @returns {number|null} New die size, or null when Cleave doesn't change the die
+   */
+  static cleaveDieFor(weapon, targetCount) {
+    if (!weapon?.system?.properties?.includes('Cleave')) return null;
+    const extra = Math.max(0, targetCount - 1);
+    if (!extra) return null;
+    const steps = CONFIG.VAGABOND.weaponDieSteps;
+    const faces = weapon.system.currentDamage?.match(/d(\d+)/i)?.[1];
+    const idx = faces ? steps.indexOf(parseInt(faces, 10)) : -1;
+    if (idx < 0) return null;
+    return steps[Math.max(0, idx - extra)];
+  }
+
+  /**
    * Weapon with the Thrown property — can be thrown straight from the belt or
    * inventory without being equipped (see activateHandItem mode 'throw').
    * @param {Object} item
@@ -488,6 +507,55 @@ export class EquipmentHelper {
       system: { changes: def?.changes ?? [] },
       flags: { vagabond: { fromArmor: armor.id } },
     }]);
+  }
+
+  /**
+   * One-time migration: Keen/Vicious used to be code-driven by the property tag.
+   * They are now On Use Only Active Effects on the weapon. Gives every world /
+   * actor-owned weapon that still carries the tag but lacks the effect its effect.
+   * Active GM only; guarded by the hidden `weaponPropertyEffectsMigrated` setting.
+   */
+  static async migrateWeaponPropertyEffects() {
+    if (game.user !== game.users.activeGM) return;
+    if (game.settings.get('vagabond', 'weaponPropertyEffectsMigrated')) return;
+
+    const defs = {
+      Keen: { key: 'system.attackCritBonus', type: 'subtract', value: '1',
+        description: "Crits 1 lower on this weapon's Attack Check." },
+      Vicious: { key: 'system.critBonusDice', type: 'add', value: 'matchDie',
+        description: 'Crits with it deal 1 extra damage die.' },
+    };
+    const safeItems = (doc) => { try { return Array.from(doc?.items ?? []); } catch { return []; } };
+    const candidates = [
+      ...game.items,
+      ...game.actors.contents.flatMap(safeItems),
+      ...game.scenes.contents.flatMap((s) => s.tokens.contents.filter((t) => !t.actorLink && t.actor)
+        .flatMap((t) => safeItems(t.actor))),
+    ];
+
+    for (const item of candidates) {
+      try {
+        if (item.type !== 'equipment') continue;
+        const creates = [];
+        for (const [prop, def] of Object.entries(defs)) {
+          if (!item.system?.properties?.includes(prop)) continue;
+          if (item.effects.some((e) => e.system?.changes?.some((c) => c.key === def.key))) continue;
+          creates.push({
+            name: prop,
+            img: 'icons/svg/aura.svg',
+            description: def.description,
+            transfer: true,
+            system: { changes: [{ key: def.key, type: def.type, value: def.value }] },
+            flags: { vagabond: { applicationMode: 'on-use' } },
+          });
+        }
+        if (creates.length) await item.createEmbeddedDocuments('ActiveEffect', creates);
+      } catch (err) {
+        console.warn(`vagabond | migrateWeaponPropertyEffects: skipped ${item?.uuid ?? '(unknown)'}`, err);
+      }
+    }
+
+    await game.settings.set('vagabond', 'weaponPropertyEffectsMigrated', true);
   }
 
   /**

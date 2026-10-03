@@ -143,7 +143,7 @@ export class VagabondActor extends Actor {
     // Get all effects from this item that have "on-use" application mode
     const itemEffects = item.effects.filter(effect => {
       const applicationMode = effect.flags.vagabond?.applicationMode || 'permanent';
-      return applicationMode === 'on-use';
+      return applicationMode === 'on-use' && !effect.disabled;
     });
 
     return Array.from(itemEffects);
@@ -191,6 +191,16 @@ export class VagabondActor extends Actor {
         }
 
         const finalKey = parts[parts.length - 1];
+
+        // Dice-formula keys (e.g. `critBonusDice` — Vicious) accumulate as a
+        // "+"-joined string instead of resolving to a number.
+        if (/Dice$/.test(finalKey) && type === 'add' && typeof value === 'string') {
+          const prev = target[finalKey];
+          target[finalKey] = [Array.isArray(prev) ? prev.join(' + ') : prev, value.trim()]
+            .filter((v) => typeof v === 'string' && v.trim() && v !== '0').join(' + ');
+          continue;
+        }
+
         const currentValue = target[finalKey] ?? 0;
 
         // v14: change.type is a string ('add' | 'subtract' | 'multiply' | 'override' |

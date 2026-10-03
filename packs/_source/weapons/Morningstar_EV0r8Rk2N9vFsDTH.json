@@ -40,7 +40,49 @@
     "damageTypeOneHand": "piercing",
     "damageTypeTwoHands": "piercing"
   },
-  "effects": [],
+  "effects": [
+    {
+      "name": "Vicious",
+      "img": "icons/svg/aura.svg",
+      "_id": "LFKA3cjanNruARmP",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.critBonusDice",
+            "type": "add",
+            "value": "matchDie"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "Crits with it deal 1 extra damage die.",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "on-use"
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.4"
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!EV0r8Rk2N9vFsDTH.LFKA3cjanNruARmP"
+    }
+  ],
   "folder": "BFCXg3g6RQNzpLsE",
   "flags": {},
   "_stats": {

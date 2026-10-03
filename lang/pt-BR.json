@@ -1756,11 +1756,7 @@
           "baseSlots": {"label": "Espaços Base"},
           "cost": {"label": "Custo"},
           "slots": {"label": "Espaços"},
-          "dieDamage": {"label": "Tamanhos de Dado Perdidos"},
-          "critThresholdMod": {
-            "label": "Mod. de Alcance de Crítico",
-            "hint": "Ajusta o limiar de crítico DESTA arma. Negativo critica mais fácil (-1 = crítico em 19). Para um efeito reutilizável, adicione uma propriedade de arma."
-          }
+          "dieDamage": {"label": "Tamanhos de Dado Perdidos"}
         }
       },
       "Armor": {
@@ -2698,6 +2694,7 @@
         "Count": "Selecionar:",
         "RestrictedPool": "Entre estes:",
         "Targets": "Alvos",
+        "ShowDice": "Mostrar dados",
         "Bounds": "Vínculos:",
         "BoundsLimitReached": "Não é possível vincular {name}: todos os espaços vinculados estão cheios ({current}/{max}).",
         "SizeSuffix": "",

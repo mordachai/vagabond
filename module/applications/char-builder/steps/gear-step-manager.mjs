@@ -2,6 +2,7 @@
  * Gear Step Manager - Handles gear selection logic
  */
 import { BaseStepManager } from './base-step-manager.mjs';
+import { CurrencyHelper } from '../../../helpers/currency-helper.mjs';
 
 export class GearStepManager extends BaseStepManager {
   constructor(stateManager, dataService, configSystem) {
@@ -178,8 +179,7 @@ export class GearStepManager extends BaseStepManager {
         const packItem = await fromUuid(state.selectedStartingPack);
         if (packItem && packItem.system.currency) {
           const curr = packItem.system.currency;
-          // Convert to silver: 1 gold = 100 silver, 1 copper = 0.1 silver
-          budgetInSilver = (curr.gold || 0) * 100 + (curr.silver || 0) + (curr.copper || 0) / 10;
+          budgetInSilver = CurrencyHelper.toSilver(curr);
         }
       } catch (error) {
         console.warn('Failed to load starting pack for budget calculation:', error);
@@ -524,16 +524,10 @@ export class GearStepManager extends BaseStepManager {
 
     // Handle cost object with gold/silver/copper
     if (typeof cost === 'object') {
-      // Convert to silver (base currency)
-      // 1 gold = 100 silver, 1 silver = 1, 1 copper = 0.1 silver
-      const goldInSilver = (cost.gold || 0) * 100;
-      const silverValue = (cost.silver || 0);
-      const copperInSilver = (cost.copper || 0) * 0.1;
-      return goldInSilver + silverValue + copperInSilver;
+      return CurrencyHelper.toSilver(cost);
     } else if (typeof cost === 'number') {
-      // Direct value in copper - convert to silver
-      // Assuming the number represents copper value
-      return cost / 10;
+      // Direct value is copper
+      return cost / CurrencyHelper.RATES.silver;
     }
 
     return 0;

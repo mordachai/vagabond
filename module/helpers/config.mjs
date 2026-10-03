@@ -155,7 +155,7 @@ VAGABOND.lodgingExpenses = {
   'modest': { label: 'Modest', cost: 10 },
   'comfortable': { label: 'Comfortable', cost: 20 },
   'luxury': { label: 'Luxury', cost: 40 },
-  'opulent': { label: 'Opulent', cost: 100 } // 1g = 100s
+  'opulent': { label: 'Opulent', cost: 100 } // silver (converted via CurrencyHelper)
 };
 
 /**
@@ -943,7 +943,12 @@ VAGABOND.weaponGripDescriptions = {
  * `VagabondDamageHelper.handleGrapple`).
  *
  * 'Brutal' was replaced by 'Vicious' (RAW: "Crits with it deal 1 extra damage
- * die." — flat, no scaling). See `critAlwaysOnProperties.Vicious` below.
+ * die." — flat, no scaling).
+ *
+ * These tables are LABELS/HINTS only. What Keen/Vicious DO lives on the weapon as
+ * an On Use Only Active Effect (Keen: `system.attackCritBonus` subtract 1; Vicious:
+ * `system.critBonusDice` add `matchDie`) — shipped on the pack weapons, editable
+ * per item.
  * @type {Object}
  */
 VAGABOND.weaponProperties = {
@@ -969,61 +974,6 @@ VAGABOND.weaponPropertyHints = {
   'Thrown': 'VAGABOND.Weapon.PropertyHints.Thrown',
   'Vicious': 'VAGABOND.Weapon.PropertyHints.Vicious'
 };
-
-/**
- * Weapon-property MECHANICAL EFFECTS — the single place to define what a weapon
- * property DOES. Labels/hints stay in `weaponProperties` / `weaponPropertyHints`;
- * the plain string in `item.system.properties` is the tag that opts a weapon in.
- *
- * Entry fields (all optional):
- *   critThreshold: number
- *     Delta to THIS weapon's crit threshold (negative = crits more easily).
- *     Summed in `VagabondRollBuilder.calculateCritThreshold` when the weapon is
- *     supplied. e.g. Keen `-1` → crit on 19.
- *   critAlwaysOnDice: string
- *     Dice added to THIS weapon's damage on EVERY crit, regardless of the
- *     Luck/benefit toggle. `'matchDie'` = one die matching the weapon's own
- *     damage die (RAW Vicious); otherwise a literal formula (`'1d6'`, `'2'`).
- *   critAlwaysOn(item, actor, currentFormula) → { formula, label } | null
- *     Escape hatch for logic `critAlwaysOnDice` can't express. Wins over
- *     `critAlwaysOnDice` when both are set.
- *
- * To give a property a new mechanical effect: add a field here. Nothing else.
- * For a ONE-OFF weapon that needs a crit-range tweak but no reusable property,
- * use the per-item `system.critThresholdMod` field instead.
- * @type {Object<string, {critThreshold?: number, critAlwaysOnDice?: string, critAlwaysOn?: Function}>}
- */
-VAGABOND.weaponPropertyEffects = {
-  Keen:    { critThreshold: -1 },
-  Vicious: { critAlwaysOnDice: 'matchDie' },
-};
-
-/**
- * @deprecated Back-compat views derived from `weaponPropertyEffects`. Prefer
- * that registry directly. Kept so external macros / homebrew referencing the
- * old names keep working.
- */
-VAGABOND.critThresholdWeaponProperties = Object.fromEntries(
-  Object.entries(VAGABOND.weaponPropertyEffects)
-    .filter(([, e]) => typeof e.critThreshold === 'number')
-    .map(([k, e]) => [k, e.critThreshold])
-);
-VAGABOND.critAlwaysOnProperties = Object.fromEntries(
-  Object.entries(VAGABOND.weaponPropertyEffects)
-    .filter(([, e]) => e.critAlwaysOnDice || typeof e.critAlwaysOn === 'function')
-    .map(([k, e]) => [k, {
-      label: k,
-      apply: typeof e.critAlwaysOn === 'function'
-        ? e.critAlwaysOn
-        : (item, actor, currentFormula) => {
-            const dieMatch = String(currentFormula).match(/d(\d+)/);
-            const dice = e.critAlwaysOnDice === 'matchDie'
-              ? (dieMatch ? `1d${dieMatch[1]}` : null)
-              : e.critAlwaysOnDice;
-            return dice ? { formula: dice, label: `${k} (+${dice})` } : null;
-          },
-    }])
-);
 
 /**
  * Ascending weapon die sizes, used by the Cleave property to step a damage die
@@ -1650,23 +1600,3 @@ VAGABOND.fxSchools = {
   'genericdark':  'VAGABOND.FxSchool.GenericDark',
 };
 
-/**
- * Always-on crit bonus registry.
- * Each entry fires on any crit where the item has the matching property.
- * The bonus is always included in the damage roll regardless of the Luck/benefit toggle.
- *
- * Entry shape:
- *   apply(item, actor, currentFormula) → { formula: string, label: string } | null
- *
- * To add a new always-on crit effect: add one entry here. Nothing else to change.
- */
-VAGABOND.critAlwaysOnProperties = {
-  'Vicious': {
-    label: 'Vicious',
-    apply: (item, actor, currentFormula) => {
-      const dieMatch = currentFormula.match(/d(\d+)/);
-      if (!dieMatch) return null;
-      return { formula: `1d${dieMatch[1]}`, label: `Vicious (+1d${dieMatch[1]})` };
-    }
-  },
-};

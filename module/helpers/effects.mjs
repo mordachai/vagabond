@@ -162,6 +162,30 @@ function suppressionOf(effect) {
 }
 
 /**
+ * Why the effect's on/off switch is locked (null when it can be flipped).
+ * An "on-use" effect never applies passively, but its switch is a real enable/disable
+ * (`disabled`) — it is only locked while its item is unequipped, i.e. out of play.
+ * @param {ActiveEffect} effect
+ * @returns {'onUse'|'unequipped'|'unbound'|'expired'|null}
+ */
+export function toggleBlockerOf(effect) {
+  const reason = suppressionOf(effect);
+  if (reason !== 'onUse') return reason;
+  return effect.parent?.system?.equipped === false ? 'onUse' : null;
+}
+
+/**
+ * Does the effect's switch read "on"? On-use effects are armed (on) while enabled and their item is
+ * in play; every other effect mirrors whether it is applying right now.
+ * @param {ActiveEffect} effect
+ * @returns {boolean}
+ */
+function isSwitchOn(effect) {
+  if (suppressionOf(effect) !== 'onUse') return effect.active;
+  return !effect.disabled && effect.parent?.system?.equipped !== false;
+}
+
+/**
  * Build the render model for one effect row.
  * @param {ActiveEffect} effect
  * @param {Actor} actor
@@ -174,6 +198,7 @@ async function buildEffectRow(effect, actor, editable, open) {
   const isItemEffect = effect.parent?.documentName === 'Item';
   const isStatus = isStatusEffect(effect);
   const suppression = suppressionOf(effect);
+  const blocked = toggleBlockerOf(effect);
   const { description, automation } = resolveEffectDescription(effect);
 
   // Origin pill: owning item for item effects; a resolvable origin for actor effects
@@ -206,10 +231,11 @@ async function buildEffectRow(effect, actor, editable, open) {
     disabled: effect.disabled,
     open: !!open?.has(effect.id),
     suppression,
-    // The switch mirrors "is this effect applying right now"
-    on: effect.active,
-    // Suppressed effects can't be flipped from the list — equip the item / edit the duration instead
-    canToggle: editable && !suppression,
+    // The switch mirrors "is this effect applying right now" (on-use: armed)
+    on: isSwitchOn(effect),
+    // Locked switches (unequipped / expired / unbound) can't be flipped — equip the item / edit the duration instead
+    blocked,
+    canToggle: editable && !blocked,
     // Item-owned effects belong to the item: disable-able here, deletable only on the item
     canDelete: editable && !isItemEffect,
     // Only the actor's own effects can be dragged (core drag reads actor.effects)
@@ -265,8 +291,8 @@ export function listEffectSwitches(actor) {
       effect,
       name: effect.name,
       img: effectDisplayImg(effect),
-      on: effect.active,
-      canToggle: actor.isOwner && !suppressionOf(effect),
+      on: isSwitchOn(effect),
+      canToggle: actor.isOwner && !toggleBlockerOf(effect),
     }));
 }
 
@@ -291,7 +317,7 @@ export function buildEffectMenuItems(actor) {
         // Confirm from the document itself: a suppressed/expired effect may not end up "active"
         onChange: async () => {
           await toggleActorEffect(actor, row.effect);
-          return row.effect.active;
+          return isSwitchOn(row.effect);
         },
       },
     })),

@@ -9,7 +9,7 @@
 {{#*inline "fxRows"}}
   {{#each rows as |effect|}}
     <li
-      class='fx-row{{#if effect.draggable}} draggable{{/if}}{{#unless effect.on}} is-off{{/unless}}{{#if effect.suppression}} is-suppressed{{/if}}{{#if effect.open}} is-open{{/if}}'
+      class='fx-row{{#if effect.draggable}} draggable{{/if}}{{#unless effect.on}} is-off{{/unless}}{{#if effect.blocked}} is-suppressed{{/if}}{{#if effect.open}} is-open{{/if}}'
       data-effect-id='{{effect.id}}'
       data-parent-id='{{effect.parentId}}'
       data-document-class='ActiveEffect'
@@ -52,7 +52,7 @@
         <div class='fx-actions'>
           <span
             class='fx-switch-wrap'
-            data-tooltip='{{#if effect.suppression}}{{localize (concat "VAGABOND.Effect.Suppressed." effect.suppression "Hint")}}{{else if effect.on}}{{localize "VAGABOND.Effect.Disable"}}{{else}}{{localize "VAGABOND.Effect.Enable"}}{{/if}}'
+            data-tooltip='{{#if effect.blocked}}{{localize (concat "VAGABOND.Effect.Suppressed." effect.blocked "Hint")}}{{else if effect.on}}{{localize "VAGABOND.Effect.Disable"}}{{else}}{{localize "VAGABOND.Effect.Enable"}}{{/if}}'
           >
             <button
               type='button'

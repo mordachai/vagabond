@@ -12,7 +12,7 @@ import { VagabondDiceAppearance } from './dice-appearance.mjs';
  *   1. baseFormula (blank → null return, e.g. a no-damage weapon like the Net)
  *   2. die-size bump (regex on the first NdX term)
  *   3. crit stat bonus (negatives included)
- *   4. always-on crit properties (CONFIG.VAGABOND.critAlwaysOnProperties, e.g. Vicious)
+ *   4. always-on crit dice (`rollData.critBonusDice` from the weapon's on-use effects, e.g. Vicious)
  *   5. type-bucket universal flat + dice bonuses
  *   6. legacy universal flat + dice bonuses
  *   7. weakness pre-roll (+1 source die when EVERY target is weak to the type)
@@ -107,7 +107,7 @@ export class VagabondDamagePipeline {
 
     // 4. Always-on crit properties (fire regardless of the Luck/benefit toggle)
     if (isCritical) {
-      for (const bonus of this.collectCritAlwaysOnBonuses(item, actor, formula)) {
+      for (const bonus of this.collectCritAlwaysOnBonuses(rollData, formula)) {
         formula += ` + ${bonus.formula}`;
       }
     }
@@ -205,29 +205,25 @@ export class VagabondDamagePipeline {
   }
 
   /**
-   * Collect always-on crit bonuses from the CONFIG.VAGABOND.critAlwaysOnProperties
-   * registry (e.g. Vicious). Fire on every crit regardless of the Luck/benefit toggle.
-   * @param {Item|null} item
-   * @param {Actor} actor
-   * @param {string} currentFormula - Formula built so far (for die-size introspection)
-   * @returns {Array<{formula: string, label: string}>}
+   * Collect always-on crit dice from `rollData.critBonusDice` — fed by On Use Only
+   * Active Effects on the weapon (Vicious = `system.critBonusDice` add `matchDie`).
+   * Fire on every crit regardless of the Luck/benefit toggle. Entries are dice
+   * formulas; the token `matchDie` means one die matching the first die of the
+   * damage formula built so far.
+   * @param {object} rollData - Roll data WITH the item's on-use effects applied
+   * @param {string} currentFormula - Formula built so far (for `matchDie`)
+   * @returns {Array<{formula: string}>}
    */
-  static collectCritAlwaysOnBonuses(item, actor, currentFormula) {
+  static collectCritAlwaysOnBonuses(rollData, currentFormula) {
+    const raw = rollData?.critBonusDice;
+    const entries = Array.isArray(raw) ? raw : String(raw ?? '').split('+');
+    const dieMatch = String(currentFormula).match(/d(\d+)/);
     const bonuses = [];
-    const effects = CONFIG.VAGABOND.weaponPropertyEffects ?? {};
-    for (const [propKey, cfg] of Object.entries(effects)) {
-      if (!item?.system?.properties?.includes(propKey)) continue;
-      let bonus = null;
-      if (typeof cfg.critAlwaysOn === 'function') {
-        bonus = cfg.critAlwaysOn(item, actor, currentFormula);
-      } else if (cfg.critAlwaysOnDice) {
-        const dieMatch = String(currentFormula).match(/d(\d+)/);
-        const dice = cfg.critAlwaysOnDice === 'matchDie'
-          ? (dieMatch ? `1d${dieMatch[1]}` : null)
-          : cfg.critAlwaysOnDice;
-        if (dice) bonus = { formula: dice, label: `${propKey} (+${dice})` };
-      }
-      if (bonus) bonuses.push(bonus);
+    for (let entry of entries) {
+      entry = String(entry).trim();
+      if (!entry || entry === '0') continue;
+      if (entry === 'matchDie') entry = dieMatch ? `1d${dieMatch[1]}` : '';
+      if (entry) bonuses.push({ formula: entry });
     }
     return bonuses;
   }

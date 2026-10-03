@@ -2,6 +2,7 @@
  * Starting Packs Step Manager - Handles starting pack selection logic
  */
 import { BaseStepManager } from './base-step-manager.mjs';
+import { CurrencyHelper } from '../../../helpers/currency-helper.mjs';
 
 export class StartingPacksStepManager extends BaseStepManager {
   constructor(stateManager, dataService, configSystem) {
@@ -175,30 +176,17 @@ export class StartingPacksStepManager extends BaseStepManager {
             const qty = packItemData.quantity || 1;
             const slots = item.system.baseSlots || 0;
 
-            // Get cost - handle both direct cost and currency object formats
+            // Get cost in copper - handle both direct cost and currency object formats
             let cost = 0;
             if (typeof item.system.cost === 'number') {
               cost = item.system.cost;
             } else if (item.system.cost && typeof item.system.cost === 'object') {
-              // Handle currency object format {gold: X, silver: Y, copper: Z}
-              const costObj = item.system.cost;
-              cost = (costObj.gold || 0) * 100 + (costObj.silver || 0) * 10 + (costObj.copper || 0);
+              cost = CurrencyHelper.toCopper(item.system.cost);
             } else if (item.system.currency) {
-              // Alternative currency format
-              const curr = item.system.currency;
-              cost = (curr.gold || 0) * 100 + (curr.silver || 0) * 10 + (curr.copper || 0);
+              cost = CurrencyHelper.toCopper(item.system.currency);
             }
 
-            // Format cost display
-            const gold = Math.floor(cost / 100);
-            const silver = Math.floor((cost % 100) / 10);
-            const copper = cost % 10;
-            const copperAbbr = game.i18n.localize('VAGABOND.Currency.Copper.abbr');
-            let costDisplay = '';
-            if (gold > 0) costDisplay += `${gold}${game.i18n.localize('VAGABOND.Currency.Gold.abbr')} `;
-            if (silver > 0) costDisplay += `${silver}${game.i18n.localize('VAGABOND.Currency.Silver.abbr')} `;
-            if (copper > 0) costDisplay += `${copper}${copperAbbr}`;
-            if (!costDisplay) costDisplay = `0${copperAbbr}`;
+            const costDisplay = CurrencyHelper.format(cost);
 
             itemDetails.push({
               uuid: packItemData.uuid,
@@ -229,7 +217,7 @@ export class StartingPacksStepManager extends BaseStepManager {
 
       // Calculate starting budget from currency object
       const curr = packItem.system.currency || {};
-      const startingSilver = (curr.gold || 0) * 100 + (curr.silver || 0) + (curr.copper || 0) / 10;
+      const startingSilver = CurrencyHelper.toSilver(curr);
 
       // Calculate total slots occupied by pack items. Zero-Slot items pool:
       // each complete group of 10 = 1 Slot (floor, pooled across all zero-Slot items).

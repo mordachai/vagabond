@@ -39,7 +39,49 @@
     "damageTypeOneHand": "piercing",
     "damageTypeTwoHands": "piercing"
   },
-  "effects": [],
+  "effects": [
+    {
+      "name": "Keen",
+      "img": "icons/svg/aura.svg",
+      "_id": "LJOsUntZ3r5j1M02",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.attackCritBonus",
+            "type": "subtract",
+            "value": "1"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "Crits 1 lower on this weapon's Attack Check.",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "on-use"
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.4"
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!ReQB9WHhhob5MZ96.LJOsUntZ3r5j1M02"
+    }
+  ],
   "folder": "bpZbzcLEJ9bwCpA6",
   "flags": {},
   "_stats": {

@@ -1,5 +1,21 @@
 # Changelog
 
+## v5.44.0
+- **Compact damage card.** Damage dice and modifiers fold away under the total — click the number to open them. Defense now sits inside the damage section as **weapon-art shields** (one shield per weapon; with two Defense weapons a "Both" shield on top and one per weapon below). Saves share one row, sized to your configured saves; the info button uses a plain info icon.
+- **Attacks against NPCs only offer Apply Direct** — no save buttons and no Defense shields on cards aimed only at NPCs (saves and Defense are a player-side choice).
+- **NPC actions with auto-rolled damage are one card** (name, description, targets, damage, saves) instead of two.
+- **Roll Damage With Check OFF — fixes:**
+  - The damage card now shows the targets from the attack (target images, flanked bonus, NPC-only handling).
+  - **Cleave** steps the damage die down one size per extra target on the Roll Damage button and Luck rerolls too (it only worked with auto-roll before).
+  - Spell damage uses one die-size rule everywhere: a spell's own die override now also gets the Spell Damage Die Size Bonus, and the homebrew base die is honored.
+  - Spells that hit but deal no damage no longer get a stray "Roll Damage" (1d6) button.
+- **Crit Luck toggle on the attack card.** On a crit with a stat bonus, the "(Crit)" tag after the skill (now with a shimmering star) is the Luck / benefit toggle, same as the damage card's Crit badge. Click it to keep the Luck instead of the bonus; Roll Damage reads it and then locks it. The damage card shows no second toggle, and no "Crit!" badge when you kept the Luck.
+- **Keen and Vicious are now Active Effects on the weapon.** Both are "On Use Only" effects (Keen: crit on 19; Vicious: an extra crit die matching the weapon's die), visible and editable in the weapon's Effects tab and shipped on every compendium weapon and shop item. Existing worlds are converted once on load. New Active Effect key `system.critBonusDice` (value like `1d6`, or `matchDie`). The per-weapon "Crit Range Mod" field is gone — use an effect instead.
+- **On-use effect switches are real:** the switch on an "On use" effect (Keen, Vicious…) now enables / disables it for that weapon's rolls; it is locked only while the weapon is unequipped. Applies to the sheet, the effect menu and the HUD.
+- **Currency uses the book's Silver Standard: 1g = 100s, 1s = 100c** (it was 1s = 10c). Stored copper-based values (crafting Materials, Projects and relic power values, shop price overrides, Value-per-Shift) are rescaled once on load. Wallets and coin counts are untouched. Costs, lodging, char builder budgets and the Wealth readout all use one shared conversion now.
+- Compendium: shop stock and Materials (1g) updated to match; the old Refresh World Data GM macro is removed from the GM Tools pack.
+- Internal: removed a dead copy of the old character builder.
+
 ## v5.43.4
 - **Defense weapons: new Defense row.** The "Shield" button on damage cards is now **Defense** and sits in its own row under Reflex, shown only when a target holds a Defense weapon in hand. One Defense weapon = one full-width **Defense** button; two = **Both | Weapon 1 | Weapon 2**. Still no roll to hit: the weapon's damage is subtracted from the incoming damage before Armor. "Both" adds the two weapons' damage together. New world setting **Defend With Both Defense Weapons** (on by default); turn it off to defend with one weapon at a time.
 - **NPC senses rework:** senses are a list of the six book senses plus a free-text note, in their own section of the NPC sheet (old text senses convert automatically). Senses also set the token's vision/detection modes (Darkvision, See Invisibility, Feel Tremor, wall-respecting Blindsight / Echolocation; no range = unlimited). New **Flying** status, applied automatically to fly-only and "flies by default" NPCs. 184 bestiary NPCs converted. The locked NPC sheet hides empty senses/resistances sections.
@@ -109,9 +125,8 @@
 - **Defense property — block with a Shield:** when an attack calls for a Save, the chat card now offers a button to defend with an equipped Shield instead of rolling the Save.
 - **Equipped-weapon cap:** you can now keep up to 3 Slots' worth of weapons equipped at once (RAW), counted by weapon Slot size and tracked independently of the two-hand pool.
 - **Fix — inventory Slot accounting:** a stack of Slot 0 items (e.g. ×10) now counts as 1 Slot total instead of 0.
-- **GM Tools compendium:** the old "Dev Tools" / "Macro Scripts" pack is now **GM Tools**, with two GM macros:
+- **GM Tools compendium:** the old "Dev Tools" / "Macro Scripts" pack is now **GM Tools**, with a GM macro:
   - **Sync Items From Compendium** — after you edit compendium content, re-pulls the current version of every compendium-linked item already on actors and scene tokens so nobody is left holding a stale copy; per-instance state (quantity, equip, grid slot…) is preserved.
-  - **Refresh World Data** — re-runs data preparation and re-renders every actor, item, token and open sheet without a page reload (for derived-data / homebrew-value changes).
 - Internal: damage roll pipeline refactor — all weapon/spell/alchemical/NPC damage now flows through one path.
 
 ## v5.35.0

@@ -594,6 +594,44 @@ li.chat-message:has(.vagabond-chat-card-v2) {
         }
     }
 
+    /* "(Crit)" tag on the attack card's skill label — same toggle as the damage crit badge */
+    &.attack-crit-toggle .roll-crit-toggle {
+        cursor: pointer;
+        color: $c-yellow;
+        user-select: none;
+        transition: opacity 0.2s ease;
+        position: relative;
+        display: inline-block;
+
+        &:hover { opacity: 0.7; }
+
+        /* Shining 4-point star: rotates and pulses in scale over the word */
+        &::after {
+            content: '';
+            position: absolute;
+            top: -3px;
+            right: -7px;
+            width: 12px;
+            height: 12px;
+            background: #fff;
+            clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%);
+            pointer-events: none;
+            animation: crit-star-shine 2.2s ease-in-out infinite;
+        }
+    }
+
+    &.attack-crit-toggle[data-crit-active="false"] .roll-crit-toggle {
+        opacity: 0.4;
+        text-decoration: line-through;
+
+        &::after { display: none; }
+    }
+
+    &.attack-crit-toggle[data-crit-locked="true"] .roll-crit-toggle {
+        cursor: default;
+        &:hover { opacity: inherit; }
+    }
+
     /* ==================================================
      * AUTO-FAIL BANNER (for Dead status, etc.)
      * ================================================== */
@@ -799,106 +837,208 @@ li.chat-message:has(.vagabond-chat-card-v2) {
     }
 
     .damage-section {
-        margin-bottom: 10px;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        gap: 4px 14px;
+        margin: 2px 0 4px;
+        padding: 0 4px;
 
-        .damage-header-container {
+        /* DEFENSE SHIELDS — heraldic answer to the damage. Same double frame as the
+           target avatars (yellow inside, black outside). Weapon art in a shield mask. */
+        .defense-buttons-row {
+            flex: 0 0 auto;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            padding-right: 30px;
-
-            /* Critical Label */
-            .crit-label {
-                background: $c-damage;
-                color: white;
-                font-size: 13px;
-                font-weight: bold;
-                padding: 3px 6px;
-                border-radius: 3px;
-                z-index: 3;
-                white-space: nowrap;
-                box-shadow: 0 1px 2px rgba(0,0,0,0.3);
-            }
+            gap: 5px;
+            padding-left: 14px;
+            border-left: 1px dashed color-mix(in srgb, #{$c-dark-bluey} 55%, transparent);
         }
-        
-        .damage-header-arrow {
-            background-image: url('../assets/ui/chat/damage-title-bg.webp');
-            background-size: contain;
-            background-repeat: no-repeat;
-            width: 150px; height: 30px;
-            display: flex; align-items: center; justify-content: center;
-            margin-bottom: 5px;
-            filter: drop-shadow( 2px 2px 2px rgba(0, 0, 0, 0.5));
-            
-            span {
-                color: white; font-weight: 900; font-size: 14px;
-                text-transform: uppercase; text-shadow: 1px 1px 0 #000;
+
+        /* Pyramid: "Both" on top, the two weapons side by side below */
+        .defense-buttons-row.defense-stack {
+            flex-direction: column;
+            gap: 3px;
+
+            .defense-pair { display: flex; gap: 4px; }
+            .defense-shield { height: 34px; }
+        }
+
+        button.vagabond-defense-button {
+            height: auto;
+            line-height: normal;
+            width: auto;
+            min-width: 0;
+            padding: 0;
+            margin: 0;
+            background: none;
+            border: none;
+            border-radius: 4px;
+            box-shadow: none;
+            display: flex;
+            cursor: pointer;
+            filter: drop-shadow(1px 2px 1px rgba(0, 0, 0, 0.45));
+            transition: transform 0.15s ease, filter 0.15s ease;
+
+
+            &:hover {
+                transform: translateY(-2px);
+                filter: drop-shadow(0 0 5px $c-yellow) drop-shadow(1px 2px 1px rgba(0, 0, 0, 0.45));
+            }
+            &:focus-visible { outline: 2px solid $c-yellow; outline-offset: 2px; }
+            &:disabled { opacity: 0.6; cursor: not-allowed; filter: grayscale(1); }
+        }
+
+        .defense-shield {
+            position: relative;
+            display: block;
+            height: 40px;
+            aspect-ratio: 100 / 120;
+            background: #000;
+            -webkit-mask: url('../assets/ui/chat/defense-shield-mask.svg') center / 100% 100% no-repeat;
+            mask: url('../assets/ui/chat/defense-shield-mask.svg') center / 100% 100% no-repeat;
+
+            &::before,
+            img {
+                position: absolute;
+                -webkit-mask: url('../assets/ui/chat/defense-shield-mask.svg') center / 100% 100% no-repeat;
+                mask: url('../assets/ui/chat/defense-shield-mask.svg') center / 100% 100% no-repeat;
             }
 
+            /* yellow rim */
             &::before {
-                    content: "";
-                    flex: 1; /* Grow to fill space */
-                    height: 2px;
-                    background: var(--vagabond-c-bluey); /* Dark slate color matching the UI */
-                    border-radius: 1px;
-                    max-width: 40px; /* Limit length so it doesn't touch edges */
-                }
+                content: "";
+                inset: 2px;
+                background: $c-yellow;
+            }
 
-                /* The Right Line */
+            /* weapon art */
+            img {
+                inset: 4px;
+                width: calc(100% - 8px);
+                height: calc(100% - 8px);
+                object-fit: cover;
+                border: none;
+                pointer-events: none;
+            }
+
+            /* Both weapons: one shield split along the diagonal, yellow seam between */
+            &.is-both {
+                img:nth-of-type(1) { clip-path: polygon(0 0, 100% 0, 0 100%); }
+                img:nth-of-type(2) { clip-path: polygon(100% 0, 100% 100%, 0 100%); }
                 &::after {
                     content: "";
-                    flex: 1; /* Grow to fill space */
-                    height: 2px;
-                    background: var(--vagabond-c-bluey);
-                    border-radius: 1px;
-                    max-width: 40px;
+                    position: absolute;
+                    inset: 4px;
+                    background: linear-gradient(to bottom right,
+                        transparent calc(50% - 1px), $c-yellow calc(50% - 1px),
+                        $c-yellow calc(50% + 1px), transparent calc(50% + 1px));
                 }
+            }
         }
-        /* Add inside .vagabond-chat-card-v2 .damage-section */
+
+        .damage-block {
+            flex: 1 1 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0;
+            min-width: 0;
+        }
 
         .damage-row {
             display: flex;
             align-items: center;
-            justify-content: space-around;
-            gap: 12px;
-            padding: 0 20px;
+            justify-content: center;
+            gap: 8px;
+
+            /* Critical badge (clickable toggle when critStatBonus) */
+            .crit-label {
+                background: $c-damage;
+                color: white;
+                font-size: 11px;
+                font-weight: bold;
+                line-height: 1;
+                padding: 3px 6px;
+                border-radius: 3px;
+                white-space: nowrap;
+                box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+            }
         }
 
-        /* THE DAMAGE TOTAL DISPLAY (Big Orange Number) */
+        /* Dice + modifiers accordion: grid-rows 0fr -> 1fr animates the height */
+        .damage-dice-wrap {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.2s ease;
+
+            > .damage-dice-list {
+                min-height: 0;
+                overflow: hidden;
+            }
+        }
+
+        /* Modifier text (+6) scales down with the dice */
+        .damage-dice-list .roll-modifier { font-size: 18px; margin: 2px; }
+
+        .damage-block.dice-open {
+            .damage-dice-wrap { grid-template-rows: 1fr; }
+            .damage-chevron { transform: rotate(180deg); opacity: 1; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .damage-dice-wrap { transition: none; }
+        }
+
+        /* THE DAMAGE TOTAL DISPLAY (Big Orange Number) — click opens the dice */
         .damage-total-display {
-            width: 50px;
-            height: 50px;
+            cursor: pointer;
+            user-select: none;
+
+            .damage-chevron {
+                align-self: center;
+                font-size: 10px;
+                color: $c-darkgray;
+                opacity: 0.55;
+                transition: transform 0.2s ease, opacity 0.2s ease;
+            }
+
+            &:hover .damage-chevron,
+            &:focus-visible .damage-chevron { opacity: 1; }
+            &:focus-visible { outline: 2px solid $c-yellow; outline-offset: 2px; border-radius: 3px; }
+
+            height: 42px;
             display: flex;
             align-items: last baseline;
             justify-content: center;
-            gap: 5px;
+            gap: 4px;
             white-space: nowrap;
 
-            /* Faded Background Icon (Burst/Skull/Fire) */
             .damage-bg-icon {
-                font-size: 30px;
+                font-size: 26px;
                 color: $c-damage;
                 text-shadow:
                     1px 1px 0 white,
                     -1px 1px 0 white,
                     -1px -1px 0 white,
                     1px -1px 0 white;
-                }
+            }
 
-            /* The Number Value */
             .damage-value {
                 font-family: var(--font-secondary);
-                font-size: 34px; 
+                font-size: 32px;
+                line-height: 1.1;
                 font-weight: 900;
-                color: $c-damage;       /* Dark Orange */
+                color: $c-damage;
                 text-shadow:
                     1px 1px 0 white,
                     -1px 1px 0 white,
                     -1px -1px 0 white,
                     1px -1px 0 white;
             }
-        } 
-
+        }
     }
 
     /* CRITICAL SECTION */
@@ -1091,24 +1231,48 @@ li.chat-message:has(.vagabond-chat-card-v2) {
             }
         }
 
-        /* Save Buttons Row — Reflex (full width), optional Defense row (full width,
-           1-3 buttons), then Endure + Will side by side. */
+        /* TOP ROW: Apply Direct (fills) + Defense shields (auto) */
+        .save-buttons-top {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            button.vagabond-apply-direct-button {
+                flex: 1 1 0;
+                width: auto;
+                min-width: 0;
+                margin-bottom: 0;
+                height: auto;
+                line-height: normal;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+        }
+
+        /* Save row: every configured save side by side (--save-cols set by createSaveButtons) */
         .save-buttons-row {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 6px; width: 100%;
+            display: grid;
+            grid-template-columns: repeat(var(--save-cols, 3), minmax(0, 1fr));
+            gap: 6px;
+            width: 100%;
 
             .vagabond-save-button,
-            .vagabond-save-reminder-button,
-            .vagabond-defense-button {
-                //background: url('../assets/ui/chat/yellow-button.webp');
+            .vagabond-save-reminder-button {
                 background: $c-yellow;
                 border: none;
                 color: var(--c-dark-blue);
-                padding: 6px 2px;
+                padding: 5px 2px;
+                height: auto;
+                line-height: normal;
+                min-width: 0;
                 font-size: 12px; font-weight: bold;
                 border-radius: 2px;
                 cursor: pointer;
                 display: flex; justify-content: center; align-items: center; gap: 4px;
                 white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
                 box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.4);
 
                 &:hover {
@@ -1133,27 +1297,12 @@ li.chat-message:has(.vagabond-chat-card-v2) {
                     }
                 }
             }
-
-            .save-reflex { order: 1; grid-column: 1 / -1; }
-            .defense-buttons-row { order: 2; grid-column: 1 / -1; }
-            .save-endure { order: 3; }
-            .save-will { order: 4; }
-
-            // Defense row: 1 button (full), 2 (pick a weapon) or 3 (Both + each weapon)
-            .defense-buttons-row {
-                display: grid; gap: 6px; width: 100%;
-                &.defense-cols-1 { grid-template-columns: 1fr; }
-                &.defense-cols-2 { grid-template-columns: 1fr 1fr; }
-                &.defense-cols-3 { grid-template-columns: auto 1fr 1fr; }
-
-                .vagabond-defense-button {
-                    height: auto; line-height: normal; min-width: 0;
-                    .defense-label { overflow: hidden; text-overflow: ellipsis; }
-                }
-            }
         }
 
         .vagabond-save-buttons-container {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
             margin-bottom: 10px;
         }
 
@@ -1186,6 +1335,40 @@ li.chat-message:has(.vagabond-chat-card-v2) {
             &.expanded {
                 .defend-header .expand-icon { transform: rotate(180deg); }
                 .defend-content { max-height: 200px; padding: 5px 8px; }
+            }
+        }
+
+        /* Chip mode (damage cards): the accordion header becomes a small shield chip
+           sitting at the right end of the saves row; expanding opens the text below. */
+        .vagabond-save-buttons-container:has(+ .defend-info-box:not(.variant-rule-box)) {
+            margin-bottom: 0;
+            .save-buttons-row { padding-right: 34px; }
+        }
+
+        .vagabond-save-buttons-container + .defend-info-box:not(.variant-rule-box) {
+            position: relative;
+            overflow: visible;
+            border-bottom: none;
+            background: transparent;
+
+            .defend-header {
+                position: absolute;
+                right: 0;
+                bottom: 100%;
+                width: 28px;
+                height: 28px;
+                padding: 0;
+                justify-content: center;
+                border-radius: 2px;
+                box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.4);
+                span, .expand-icon { display: none; }
+            }
+
+            .defend-content { background: #fff; border-radius: 3px; }
+
+            &.expanded {
+                margin-top: 6px;
+                .defend-header { background: var(--vagabond-c-bluey); }
             }
         }
     }
@@ -1283,10 +1466,10 @@ li.chat-message:has(.vagabond-chat-card-v2) {
 
     /* 2. DAMAGE SECTION DICE (Smaller Size) */
     &.die-type-damage {
-        width: 40px !important;  /* Make them smaller */
-        height: 40px !important;
+        width: 32px !important;  /* Make them smaller */
+        height: 32px !important;
 
-        .vb-die-val { font-size: 28px; } /* Smaller text */
+        .vb-die-val { font-size: 22px; } /* Smaller text */
     }
 }
 
@@ -1482,114 +1665,97 @@ li.chat-message:has(.vagabond-chat-card-v2) {
     }
 }
 
-/* Targets Section */
+/* Targets bar: full width, above the check. Avatars centered, name under each. */
 .chat-targets-section {
-    margin: 8px 0;
-    padding: 4px 0;
-    border-bottom: 1px solid $c-dark-bluey;
-
-
-    .targets-header {
-        background-image: url('../assets/ui/chat/damage-title-bg.webp');
-        background-size: contain;
-        background-repeat: no-repeat;
-        width: 150px; height: 30px;
-        display: flex; align-items: center; justify-content: center;
-        margin-bottom: 5px;
-        gap: 4px;
-        filter: drop-shadow( 2px 2px 2px rgba(0, 0, 0, 0.5));
-        
-        span {
-            color: white; font-weight: 900; font-size: 14px;
-            text-transform: uppercase; text-shadow: 1px 1px 0 #000;
-        }
-
-        i {
-            color: $c-yellow;
-            font-size: 14px;
-        }
-
-        &::before {
-                content: "";
-                flex: 1; /* Grow to fill space */
-                height: 2px;
-                background: var(--vagabond-c-bluey); /* Dark slate color matching the UI */
-                border-radius: 1px;
-                max-width: 30px; /* Limit length so it doesn't touch edges */
-        }
-
-            /* The Right Line */
-            &::after {
-                content: "";
-                flex: 1; /* Grow to fill space */
-                height: 2px;
-                background: var(--vagabond-c-bluey);
-                border-radius: 1px;
-                max-width: 30px;
-        }
-    }
+    display: flex;
+    align-items: stretch;
+    gap: 4px;
+    //margin: 4px 0 4px;
+    //padding: 2px 4px 4px;
+    //border-bottom: 1px solid $c-dark-bluey;
 
     .targets-list {
+        flex: 1 1 0;
+        min-width: 0;
         display: flex;
         flex-wrap: wrap;
+        align-items: flex-start;
         justify-content: center;
-        gap: 8px;
+        gap: 6px 14px;
+        max-height: 110px;
+        overflow-y: auto;
+        scrollbar-width: thin;
     }
 
     .target-token {
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 4px;
+        gap: 2px;
+        min-width: 0;
+        max-width: 90px;
         cursor: pointer;
-        transition: transform 0.2s ease, filter 0.2s ease;
+        transition: filter 0.2s ease;
 
         &:hover {
-            transform: scale(1.02);
             filter: brightness(1.2);
-
-            img {
-                box-shadow: 0 0 8px rgba(222, 214, 86, 0.6);
-            }
-
-            .target-name {
-                color: $c-dark;
-            }
+            img { box-shadow: 0 0 0 2px #000, 0 0 8px 2px rgba(222, 214, 86, 0.7); }
         }
 
         img {
-            width: 32px;
-            height: 32px;
-            border-radius: 2px;
+            flex: 0 0 auto;
+            width: 34px;
+            height: 34px;
+            margin: 2px;
+            border: 2px solid $c-yellow;
+            border-radius: 50%;
+            box-shadow: 0 0 0 2px #000;
             object-fit: cover;
             transition: box-shadow 0.2s ease;
         }
 
-        .target-name {
-            font-size: 14px;
-            color: $c-darkgray;
-            font-weight: 700;
+        .target-text {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 0;
             max-width: 100%;
+            line-height: 1.15;
+        }
+
+        .target-name {
+            max-width: 100%;
+            font-size: 13px;
+            font-weight: 700;
+            text-align: center;
+            color: $c-darkgray;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
-            text-align: center;
-            transition: color 0.2s ease, font-weight 0.2s ease;
         }
 
         // Second line under the name (e.g. Imbue: weapon name, bearer below)
         .target-sub {
-            font-size: 12px;
-            color: $c-darkgray;
-            opacity: 0.75;
             max-width: 100%;
+            font-size: 11px;
+            text-align: center;
+            opacity: 0.75;
+            color: $c-darkgray;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
-            text-align: center;
-            margin-top: -4px; // tuck under the name (chip has 4px flex gap)
         }
     }
+
+    /* 5+ targets: avatars only (names live in the tooltip) */
+    &.targets-many {
+        .targets-list { gap: 4px 6px; }
+        .target-token .target-text { display: none; }
+        .target-token img { width: 28px; height: 28px; }
+    }
+
+    /* 9+ targets: tighter avatars */
+    &.targets-crowd .target-token img { width: 22px; height: 22px; }
 }
 
 /* Level Up Card Styling */
@@ -1997,4 +2163,12 @@ li.chat-message:has(.vagabond-chat-card-v2) {
 @keyframes popIn {
     from { transform: scale(0); opacity: 0; }
     to { transform: scale(1); opacity: 1; }
+}
+
+/* Crit tag star: spins while swelling and shrinking, dimming between flashes */
+@keyframes crit-star-shine {
+    0%   { transform: rotate(0deg)   scale(0.3); opacity: 0; }
+    35%  { transform: rotate(120deg) scale(1.1); opacity: 1; }
+    60%  { transform: rotate(220deg) scale(0.7); opacity: 0.85; }
+    100% { transform: rotate(360deg) scale(0.3); opacity: 0; }
 }

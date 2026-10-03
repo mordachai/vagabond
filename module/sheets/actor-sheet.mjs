@@ -1,4 +1,4 @@
-import { prepareEffectsView, toggleActorEffect, isStatusEffect } from '../helpers/effects.mjs';
+import { prepareEffectsView, toggleActorEffect, toggleBlockerOf, isStatusEffect } from '../helpers/effects.mjs';
 import { StatusHelper } from '../helpers/status-helper.mjs';
 import { VagabondChatHelper } from '../helpers/chat-helper.mjs';
 import { VagabondChatCard } from '../helpers/chat-card.mjs';
@@ -1780,8 +1780,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
     const editable = this.isEditable;
     const status = isStatusEffect(effect);
-    // Suppressed effects (unequipped / on-use / expired) can't be flipped from here
-    const suppressed = !!effect.system?.suppressionReason || !!effect.duration?.expired;
+    // Locked effects (unequipped item / expired) can't be flipped from here; on-use effects can
+    const suppressed = !!toggleBlockerOf(effect);
     const enabled = !effect.disabled;
 
     const items = [];
