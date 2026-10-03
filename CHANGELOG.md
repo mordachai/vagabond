@@ -1,5 +1,14 @@
 # Changelog
 
+## v5.43.4
+- **Defense weapons: new Defense row.** The "Shield" button on damage cards is now **Defense** and sits in its own row under Reflex, shown only when a target holds a Defense weapon in hand. One Defense weapon = one full-width **Defense** button; two = **Both | Weapon 1 | Weapon 2**. Still no roll to hit: the weapon's damage is subtracted from the incoming damage before Armor. "Both" adds the two weapons' damage together. New world setting **Defend With Both Defense Weapons** (on by default); turn it off to defend with one weapon at a time.
+- **NPC senses rework:** senses are a list of the six book senses plus a free-text note, in their own section of the NPC sheet (old text senses convert automatically). Senses also set the token's vision/detection modes (Darkvision, See Invisibility, Feel Tremor, wall-respecting Blindsight / Echolocation; no range = unlimited). New **Flying** status, applied automatically to fly-only and "flies by default" NPCs. 184 bestiary NPCs converted. The locked NPC sheet hides empty senses/resistances sections.
+- **NPC sheet:** reorder actions and abilities in edit mode with a drag handle or up/down chevrons (open accordions, unsaved typing and weapon links follow the entry). Locked Resistances panel reads as one wrapping line with larger values. Fix: unsaved edits and linked-weapon data could be lost when saving.
+- **Item sheets:** edits (especially descriptions) no longer appear to revert until you lock/unlock or reopen; scroll position and open sections are kept, and the page no longer jumps while editing.
+- **HUD:** the whole body of the Character and NPC HUD is a drag handle; framed panel with a yellow border; dark background and blur on by default; NPC armor sits first in the info strip, and long translated tab labels no longer cram.
+- **Character builder:** stat arrays replaced by the new 8-row table; Randomize rolls 1d8 over the array count.
+- Requires Foundry **v14** (minimum raised from 13).
+
 ## v5.43.0
 - **Crafting (new): the Workbench.** Open it from the Downtime window (Craft Item), the character sheet or the Character HUD portrait menu. Turn it on/off and set the rules in the new **Crafting & Relics** settings menu (General / Alchemy / Relics / Mana Crystals tabs).
   - **Craft tab:** catalog of craftable equipment from the enabled compendiums (search, categories), a detail panel with Value, Materials, estimated Shifts and Slots, and **Ongoing Projects**. "Add to Projects", then **Work a Shift**: spread your Shift Value Limit over your Projects (typed amounts like `30s` or `1g 5s`, ±1 buttons or **Auto-fill**). The Workbench warns before you work a Shift that is over your limit or short on Materials. A Project sits in your inventory until it's finished; abandoning it loses the Materials spent.
