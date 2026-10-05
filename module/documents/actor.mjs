@@ -1,3 +1,5 @@
+import { armorWornRollData, combatRollData } from '../helpers/rule-rolldata.mjs';
+
 /**
  * Extend the base Actor document by defining a custom roll data structure which is ideal for the Simple system.
  * @extends {Actor}
@@ -275,6 +277,10 @@ export class VagabondActor extends Actor {
     // (e.g. `(@statuses.berserk) ? 2 : 0`). Centralized here so NPCs get it too.
     data.statuses ??= {};
     if (this.statuses) for (const id of this.statuses) data.statuses[id] = 1;
+
+    // Rule-condition slices (@armorWorn.slots, @combat.round) — see rule-rolldata.mjs
+    data.armorWorn = armorWornRollData(this);
+    data.combat = combatRollData(this);
 
     // Expose progress clocks for formulas/AE: @clocks.<handle>.value, .pct, .max, etc.
     const PC = globalThis.vagabond?.documents?.ProgressClock;

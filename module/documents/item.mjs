@@ -720,12 +720,15 @@ export class VagabondItem extends Item {
     let effectiveFavorHinder = favorHinder;
     const targets = Array.from(game.user.targets);
     if (targets.length > 0) {
+      // Attacker-side situational Favor (CONFIG.VAGABOND.attackFavorRules, e.g. Bloodthirsty)
+      const attackerVote = VagabondRollBuilder.attackFavorVote(actor, targets.map(t => t.actor).filter(Boolean));
+      effectiveFavorHinder = VagabondRollBuilder.mergeFavorHinder(favorHinder, attackerVote);
       const targetActor = targets[0].actor;
       if (targetActor) {
         const targetModifier = targetActor.system.incomingAttacksModifier || 'none';
         const attackersAreBlinded = targetActor.system.defenderStatusModifiers?.attackersAreBlinded || false;
         effectiveFavorHinder = VagabondRollBuilder.mergeFavorHinder(
-          favorHinder,
+          effectiveFavorHinder,
           targetModifier,
           attackersAreBlinded ? 'hinder' : 'none'
         );

@@ -244,7 +244,9 @@ export class VagabondActiveEffect extends ActiveEffect {
       'system.critNumber': 'Critical Hit Threshold (Global)',
       
       // -- Incoming Damage Reduction --
-      'system.incomingDamageReductionPerDie': 'Incoming Damage Reduction Per Die (Berserk)',
+      'system.incomingDamageReductionPerDie': 'Incoming Damage Reduction Per Die (formula, e.g. Rage: (@statuses.berserk) ? ((@armorWorn.slots <= 1) ? 1 : 0) : 0)',
+      'system.attackFavorVs': 'Attack Favor Rules (ADD a rule key, e.g. wounded = Bloodthirsty)',
+      'system.rageTrigger': 'Auto-Berserk on damage taken / attack (Rage)',
 
       // -- Universal Crit Bonuses (stack on top of per-type bonuses) --
       'system.attackCritBonus': 'Crit: All Weapon Attacks (every weapon skill)',

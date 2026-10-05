@@ -37,12 +37,18 @@
                 <i class='fa-solid fa-hourglass-half'></i> {{effect.duration}}
               </span>
             {{/if}}
-            {{#if effect.suppression}}
+            {{#if effect.minLevel}}
+              <span
+                class='fx-chip fx-level{{#if effect.levelLocked}} fx-suppressed{{/if}}'
+                data-tooltip='{{localize "VAGABOND.Effect.LevelBadgeHint" level=effect.minLevel}}'
+              >{{localize "VAGABOND.Effect.LevelBadge" level=effect.minLevel}}</span>
+            {{/if}}
+            {{#if effect.suppression}}{{#unless effect.levelLocked}}
               <span
                 class='fx-chip fx-suppressed'
                 data-tooltip='{{localize (concat "VAGABOND.Effect.Suppressed." effect.suppression "Hint")}}'
               >{{localize (concat "VAGABOND.Effect.Suppressed." effect.suppression)}}</span>
-            {{/if}}
+            {{/unless}}{{/if}}
           </div>
           {{#if effect.origin}}
             <span class='fx-origin'>{{effect.origin}}</span>

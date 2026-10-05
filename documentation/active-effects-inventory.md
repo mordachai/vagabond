@@ -154,25 +154,18 @@ Modules can resolve any entry by either:
 
 | Name | Canonical ID | Stable `_id` | Statuses | Mechanics | Description |
 |---|---|---|---|---|---|
-| Aggressor | `aggressor` | `barbarianabi165q` | — | `system.hasAggressor` = true | Additional Barbarian aggression mechanics. |
-| Bloodthirsty | `bloodthirsty` | `barbarianbddfz6w` | — | `system.hasBloodthirsty` = true | Heal on kill while Raging. |
 | Bravado | `bravado` | `bardbravadgy500n` | — | `system.hasBravado` = true | Will Saves can't be Hindered while not Incapacitated. Ignore effects that rely on hearing. |
 | Climax | `climax` | `bardclimax5xztqu` | — | `system.hasClimax` = true | Favor and bonus dice you grant can Explode. |
 | Deep Pockets (Feature) | `deep-pockets-feature` | `merchantde17e6rb` | — | `system.inventory.bonusSlots` + 1 | Merchant feature: +1 inventory slot. |
 | Evasive | `evasive` | `rogueevasiwfcaqc` | — | `system.hasEvasive` = true | No Hinder on Dodge saves from Heavy Armor. On success, remove TWO highest dice instead of one. |
 | Exalted | `exalted` | `CeoreuhLLhpCECDp` | — | `system.bonusPerDamageDie` + 1; `system.bonusPerDamageDieDoubleVsBeingTypes` + Hellspawn; `system.bonusPerDamageDieDoubleVsBeingTypes` + Undead; `saveVsStatusBonuses` + frightened:will:1 | — |
-| Fearmonger | `fearmonger` | `barbarianfit5dnr` | — | `system.hasFearmonger` = true | Barbarian fear mechanics. |
 | Fisticuffs | `fisticuffs` | `fisticuffs6babjv` | — | `system.fisticuffs` = true | Unarmed strikes deal lethal damage and scale with class. |
 | Lethal Weapon | `lethal-weapon` | `rogueletha39as91` | — | `system.hasLethalWeapon` = true | Sneak Attack always applies (ignores once-per-round limit). |
 | lv10 - Sculpt Spell | `lv10-sculpt-spell` | `wizardscul47is1r` | — | `system.bonuses.deliveryManaCostReduction` + (@lvl >= 10) ? 1 : 0 | Wizard Lv10: additional -1 delivery mana cost. |
 | lv10 - Spell-Slinger | `lv10-spell-slinger` | `sorcererspjms77d` | — | `system.spellCritBonus` + (@lvl >= 10) ? -1 : 0 | Sorcerer Lv10: additional -1 spell crit threshold. |
 | lv2 - Sculpt Spell | `lv2-sculpt-spell` | `wizardsculnsyncg` | — | `system.bonuses.deliveryManaCostReduction` + (@attributes.level.value >= 2) ? 1 : 0 | Wizard Lv2: -1 delivery mana cost. |
 | lv2 - Spell-Slinger | `lv2-spell-slinger` | `sorcerersppyd0tm` | — | `system.spellCritBonus` + (@lvl >= 2) ? -1 : 0; `system.spellDamageDieSizeBonus` + (@lvl >= 2) ? 2 : 0 | Sorcerer Lv2: -1 spell crit threshold and +2 spell damage die size steps. |
-| Mindless Rancor | `mindless-rancor` | `barbarianme03nl1` | — | `system.hasMindlessRancor` = true | While Raging: immune to mental effects. |
-| Rage | `rage` | `hOzkzY3GeZjFGvty` | — | `system.meleeDamageDieSizeBonus` + 2; `system.brawlDamageDieSizeBonus` + 2; `system.bonuses.globalExplode` = 1; `system.bonuses.globalExplodeValues` = max; `system.bonusPerDamageDie` + 1; `system.incomingDamageReductionPerDie` + 1 | — |
-| Rage Damage Reduction | `rage-damage-reduction` | `barbarianra36my7` | — | `system.rageDamageReduction` = 1 | While Raging, reduce each incoming damage die by 1. |
-| Rage Damage Reduction (Improved) | `rage-damage-reduction-improved` | `barbarianraqhg0g` | — | `system.rageDamageReduction` = 2 | While Raging, reduce each incoming damage die by 2. |
-| Rip and Tear | `rip-and-tear` | `barbarianr8tc7cb` | — | `system.hasRipAndTear` = true | While Raging: +1 damage per damage die dealt. |
+| Rage | `rage` | `hOzkzY3GeZjFGvty` | — | `system.{melee,ranged,brawl,finesse}DamageDieSizeBonus` + `(@statuses.berserk) ? 2 : 0`; `system.incomingDamageReductionPerDie` + `(@statuses.berserk) ? ((@armorWorn.slots <= 1) ? 1 : 0) : 0` | Manual drop-in of the Barbarian Rage effect. |
 | Sneak Attack (1d4) | `sneak-attack-1d4` | `roguesneakgwndyd` | — | `system.sneakAttackDice` = 1 | Deal +1d4 damage on Favored weapon attacks. |
 | Sneak Attack (2d4) | `sneak-attack-2d4` | `roguesneakgwo5om` | — | `system.sneakAttackDice` = 2 | Deal +2d4 damage on Favored weapon attacks. |
 | Sneak Attack (3d4) | `sneak-attack-3d4` | `roguesneakgwoxev` | — | `system.sneakAttackDice` = 3 | Deal +3d4 damage on Favored weapon attacks. |

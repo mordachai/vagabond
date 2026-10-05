@@ -790,18 +790,6 @@ export class VagabondDamageHelper {
    * @returns {number} Final damage amount
    */
   /**
-   * Returns true if the actor has no equipped armor or only light armor.
-   * Used for the Berserk damage-reduction condition.
-   * @param {Actor} actor
-   * @returns {boolean}
-   */
-  static _isLightOrNoArmor(actor) {
-    const worn = EquipmentHelper.getWornArmor(actor);
-    // Light = base Armor Rating 1 or less (before the Adamant bonus)
-    return !worn || (worn.system.armorRating ?? 0) <= 1;
-  }
-
-  /**
    * Count the total number of dice in a formula string (e.g. "2d8 + 1d4" → 3).
    * @param {string} formula
    * @returns {number}
@@ -933,12 +921,15 @@ export class VagabondDamageHelper {
     const armorReduction = finalDamage - afterArmor;
     finalDamage = afterArmor;
 
-    // Berserk — reduce by 1 per die while berserk with light or no armor.
+    // Per-die reduction (Barbarian Rage / Rip and Tear). Conditions (Berserk, armor
+    // weight…) live in the AE formulas that feed `incomingDamageReductionPerDie`
+    // (e.g. `@statuses.berserk`, `@armorWorn.slots <= 1`) — not here — so the rule is
+    // reusable and a table can disable it by switching the effect off.
     // Dice count prefers the ACTUAL rolled dice count (threaded from the damage roll,
     // explosions included) over counting the weapon's authored formula.
     let berserkReduction = 0;
     const reductionPerDie = actor.system.incomingDamageReductionPerDie || 0;
-    if (reductionPerDie > 0 && actor.statuses?.has('berserk') && VagabondDamageHelper._isLightOrNoArmor(actor)) {
+    if (reductionPerDie > 0) {
       const numDice = opts.rolledDiceCount
         ?? VagabondDamageHelper._countDiceInFormula(attackingWeapon?.system?.damageAmount ?? '');
       if (numDice > 0) {

@@ -10,6 +10,11 @@
  *  - `when-equipped` applies only while the parent item is equipped (any hand state or 'worn')
  *  - `on-use`        never applies passively — applied manually per roll (Actor#getRollDataWithItemEffects)
  *
+ *
+ * Independent of applicationMode, `flags.vagabond.minLevel` (number) suppresses the effect
+ * while the owning actor's Level is lower — a level-gated class feature rides on ONE effect
+ * (e.g. Barbarian Murder Mode immunities at 4+) and stays listed/dimmed until it unlocks.
+ *
  * Returning `undefined` (not `false`) when nothing suppresses lets Foundry fall back to its
  * own expiry check, so expired temporary effects are still suppressed.
  */
@@ -18,7 +23,7 @@ export default class VagabondActiveEffectData extends foundry.data.ActiveEffectT
   /**
    * Why this effect is suppressed by Vagabond logic, or null when it is not.
    * Used by the sheet to render a badge; `isSuppressed` derives from it.
-   * @returns {'onUse'|'unequipped'|'unbound'|null}
+   * @returns {'onUse'|'unequipped'|'unbound'|'level'|null}
    */
   get suppressionReason() {
     const effect = this.parent;
@@ -37,6 +42,14 @@ export default class VagabondActiveEffectData extends foundry.data.ActiveEffectT
         } catch { /* setting not registered yet (very early load) — default stays true */ }
         if (bondSuppression) return 'unbound';
       }
+    }
+
+    // Level gate (class features): needs an owning actor to read the Level from
+    const minLevel = Number(effect?.flags?.vagabond?.minLevel) || 0;
+    if (minLevel > 0) {
+      const owner = item?.documentName === 'Item' ? item.actor : (effect?.parent?.documentName === 'Actor' ? effect.parent : null);
+      const level = owner?.system?.attributes?.level?.value;
+      if (level !== undefined && level < minLevel) return 'level';
     }
 
     const mode = effect?.flags?.vagabond?.applicationMode ?? 'permanent';

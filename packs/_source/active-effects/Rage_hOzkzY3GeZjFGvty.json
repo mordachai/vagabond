@@ -8,42 +8,35 @@
       {
         "key": "system.meleeDamageDieSizeBonus",
         "type": "add",
-        "value": 2,
+        "value": "(@statuses.berserk) ? 2 : 0",
+        "phase": "initial",
+        "priority": null
+      },
+      {
+        "key": "system.rangedDamageDieSizeBonus",
+        "type": "add",
+        "value": "(@statuses.berserk) ? 2 : 0",
         "phase": "initial",
         "priority": null
       },
       {
         "key": "system.brawlDamageDieSizeBonus",
         "type": "add",
-        "value": 2,
+        "value": "(@statuses.berserk) ? 2 : 0",
         "phase": "initial",
         "priority": null
       },
       {
-        "key": "system.bonuses.globalExplode",
-        "type": "override",
-        "value": 1,
-        "phase": "initial",
-        "priority": null
-      },
-      {
-        "key": "system.bonuses.globalExplodeValues",
-        "type": "override",
-        "value": "max",
-        "phase": "initial",
-        "priority": null
-      },
-      {
-        "key": "system.bonusPerDamageDie",
+        "key": "system.finesseDamageDieSizeBonus",
         "type": "add",
-        "value": 1,
+        "value": "(@statuses.berserk) ? 2 : 0",
         "phase": "initial",
         "priority": null
       },
       {
         "key": "system.incomingDamageReductionPerDie",
         "type": "add",
-        "value": 1,
+        "value": "(@statuses.berserk) ? ((@armorWorn.slots <= 1) ? 1 : 0) : 0",
         "phase": "initial",
         "priority": null
       }
@@ -57,7 +50,7 @@
     "expiry": null,
     "expired": false
   },
-  "description": "",
+  "description": "<p>While Berserk: attack damage dice one size larger, and -1 damage taken per damage die in Light or no Armor (1 Slot or less). Manual drop-in version of the Barbarian Rage effect.</p>",
   "origin": null,
   "tint": "#ffffff",
   "transfer": false,

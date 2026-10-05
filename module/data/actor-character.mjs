@@ -1,5 +1,6 @@
 import VagabondActorBase from './base-actor.mjs';
 import { EquipmentHelper } from '../helpers/equipment-helper.mjs';
+import { armorWornRollData, combatRollData } from '../helpers/rule-rolldata.mjs';
 
 export default class VagabondCharacter extends VagabondActorBase {
   static LOCALIZATION_PREFIXES = [
@@ -351,6 +352,21 @@ export default class VagabondCharacter extends VagabondActorBase {
       new fields.StringField({ blank: true }),
       { initial: [], label: "Incoming Damage Reduction Per Die" }
     );
+
+    // Situational attack Favor — AE ADDs a rule key from CONFIG.VAGABOND.attackFavorRules
+    // (e.g. 'wounded' = Bloodthirsty). See VagabondRollBuilder.attackFavorVote.
+    schema.attackFavorVs = new fields.ArrayField(
+      new fields.StringField({ required: true }),
+      { required: true, initial: [], label: "Attack Favor Rules" }
+    );
+
+    // Barbarian Rage auto-trigger: when true (AE-set — switch that effect off to play
+    // Berserk by hand), taking damage or attacking applies Berserk. See rage-helper.mjs.
+    schema.rageTrigger = new fields.BooleanField({
+      required: true,
+      initial: false,
+      label: "Auto-Berserk (Rage)"
+    });
 
     // ---------------------
 
@@ -733,6 +749,8 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.autoFailAllRolls = false;
     this.weaponAsTrinket = false;
     this.castWithHandsFull = false;
+    this.attackFavorVs = [];
+    this.rageTrigger = false;
     this.defenderStatusModifiers.attackersAreBlinded = false;
     this.defenderStatusModifiers.closeAttacksAutoCrit = false;
     // Don't reset statusEffectData - it contains persistent state like charmerUuid
@@ -1127,6 +1145,11 @@ export default class VagabondCharacter extends VagabondActorBase {
         data.statuses[statusId] = 1;
       }
     }
+
+    // Rule-condition slices for AE formulas: @armorWorn.slots (armor weight) and
+    // @combat.round (0 when no combat — formulas must stay valid without a tracker).
+    data.armorWorn = armorWornRollData(this.parent);
+    data.combat = combatRollData(this.parent);
 
     // Add attributes for formula usage (enables @attributes.level.value, etc.)
     if (this.attributes) {

@@ -268,7 +268,7 @@ VAGABOND.statusEffectDefinitions = [
     name: 'VAGABOND.StatusConditions.Berserk',
     img: '/icons/magic/perception/eye-ringed-glow-angry-large-red.webp',
     statuses: ['berserk'],
-    description: 'Can\'t take Cast Action or Focus. Doesn\'t make Morale Checks. Can\'t be Frightened. Class-specific bonuses (e.g. Barbarian Valor) are applied via the class item\'s Active Effects using @statuses.berserk formulas.'
+    description: 'Can\'t take Cast Action or Focus. Doesn\'t make Morale Checks. Can\'t be Frightened. Class-specific bonuses (e.g. Barbarian Rage) are applied via the class item\'s Active Effects using @statuses.berserk formulas.'
   },
   {
     id: 'burning',
@@ -1441,6 +1441,27 @@ VAGABOND.attackTypes = {
  * as the registry future hinder rules go in — never as inline branches.
  */
 VAGABOND.defenseRules = [];
+
+/**
+ * Attack-Favor rules: situational "your attacks are Favored against X" features
+ * (e.g. Barbarian Bloodthirsty). An Active Effect ADDs a rule key to
+ * `system.attackFavorVs`; `Item#rollAttack` casts ONE 'favor' vote (merged via
+ * VagabondRollBuilder.mergeFavorHinder with every other vote) when the actor has
+ * the key AND `test` passes. New rules go here — never as inline branches.
+ * Switching the granting effect off (or just using the manual Favor toggle) always
+ * works; nothing here is required for play.
+ *
+ * `test(attacker, targetActors)` → boolean. Called only with ≥1 target.
+ * @type {Object<string, {label: string, test: Function}>}
+ */
+VAGABOND.attackFavorRules = {
+  // Bloodthirsty: every Target is missing any HP.
+  wounded: {
+    label: 'VAGABOND.AttackFavorRules.Wounded',
+    test: (attacker, targetActors) => targetActors.every(t =>
+      (t.system?.health?.value ?? 0) < (t.system?.health?.max ?? 0))
+  }
+};
 
 /**
  * Shared predicates for defense rules (kept here so registry entries stay self-contained

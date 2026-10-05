@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased
+- **Barbarian revised to the new book text.** Rage (Berserk: bigger attack dice; −1 damage per die in Light or no Armor), Wrath, Aggressor (+5' Speed at 2, +5' every 4 Levels, doubled in the first Round), Murder Mode (immune to Charmed / Confused / Frightened; Berserk dice Explode with a +1/+2 bonus), Bloodthirsty (Favor vs targets missing HP) and Rip and Tear. Fearmonger and Mindless Rancor are gone; training is now Melee and Survival.
+  - **Every automated piece is its own Active Effect** you can switch off — Berserk, Aggressor's first-Round doubling and the rest all work by hand. New **Rage: Auto-Berserk** effect (off = manual Berserk): attacking or taking damage applies Berserk for 1 minute, and it ends if you finish a Turn without attacking or taking damage. **Aggressor: First Round (manual)** ships disabled for tables without the combat tracker.
+  - **Armor weight is read in Slots** (`@armorWorn.slots`): Adamant / Orichalcum light armor no longer counts as Light for Rage; Mythral medium armor does. New formula values `@armorWorn.slots|rating|might` and `@combat.round` (0 outside combat); effects can be level-gated (`minLevel`), and Active Effects can grant situational attack Favor (`system.attackFavorVs`).
+  - Fix: Rage's exploding dice never actually exploded on weapons without their own explode setting. A global explode value no longer overrides an item's own faces while global explode is off.
+  - Effects tied to a class Level show a **Lv N** badge in the effects list (yellow while still locked).
+  - Existing Barbarian class items are converted once on load (your Rage on/off choice is kept). The 7 unused Barbarian library effects are removed and the library Rage effect is now conditional on Berserk.
+
 ## v5.44.0
 - **Compact damage card.** Damage dice and modifiers fold away under the total — click the number to open them. Defense now sits inside the damage section as **weapon-art shields** (one shield per weapon; with two Defense weapons a "Both" shield on top and one per weapon below). Saves share one row, sized to your configured saves; the info button uses a plain info icon.
 - **Attacks against NPCs only offer Apply Direct** — no save buttons and no Defense shields on cards aimed only at NPCs (saves and Defense are a player-side choice).

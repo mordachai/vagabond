@@ -272,24 +272,29 @@ Add **3 changes** per affected key — all with Change Mode **Add**. Apply to ea
 
 Result: −1 at L1, −2 at L4, −3 at L8.
 
-### Barbarian — Berserk Bonuses
+### Barbarian — Rage, Aggressor, Murder Mode…
 
-While Berserk with Light or No Armor: attack dice one size larger, dice explode on max, +1 flat per die rolled, reduce incoming damage by 1 per die.
+The Barbarian class item ships **one Active Effect per automated behavior**, so a table can switch any piece off from the effects list (and play Berserk by hand with the Berserk status). Conditions live in the formulas, not in code:
 
-These AEs live on the **Barbarian class item** (permanent mode). They use `@statuses.berserk` so they only activate while the character has the Berserk status — non-Barbarians never get these bonuses even if they also go Berserk.
-
-| Attribute Key | Mode | Effect Value | Result |
+| Effect | Key | Mode | Value |
 | --- | --- | --- | --- |
-| `system.meleeDamageDieSizeBonus` | Add | `(@statuses.berserk) ? 2 : 0` | Melee die one size larger (d6→d8) |
-| `system.brawlDamageDieSizeBonus` | Add | `(@statuses.berserk) ? 2 : 0` | Brawl die one size larger |
-| `system.finesseDamageDieSizeBonus` | Add | `(@statuses.berserk) ? 2 : 0` | Finesse die one size larger |
-| `system.bonuses.globalExplode` | Add | `(@statuses.berserk) ? 1 : 0` | Enables exploding dice on all attacks |
-| `system.bonuses.globalExplodeValues` | Override | `max` | Dice explode on their max face (d6 on 6, d8 on 8, etc.) |
-| `system.bonusPerDamageDie` | Add | `(@statuses.berserk) ? 1 : 0` | +1 flat damage per die rolled (including explosions) |
-| `system.incomingDamageReductionPerDie` | Add | `(@statuses.berserk) ? 1 : 0` | −1 per incoming die (light/no armor enforced in code) |
+| Rage | `system.<melee/ranged/brawl/finesse>DamageDieSizeBonus` | Add | `(@statuses.berserk) ? 2 : 0` (one die size larger) |
+| Rage | `system.incomingDamageReductionPerDie` | Add | `(@statuses.berserk) ? ((@armorWorn.slots <= 1) ? 1 : 0) : 0` (Light / no Armor) |
+| Rage: Auto-Berserk | `system.rageTrigger` | Override | `true` (damage taken / attacking applies Berserk — switch off for manual) |
+| Aggressor | `system.speed.bonus` | Add | `(@lvl >= 2) ? 5 * (1 + floor((@lvl - 2) / 4)) : 0` |
+| Aggressor: First Round (auto) | `system.speed.bonus` | Add | `(@combat.round == 1) ? (<Aggressor formula>) : 0` |
+| Aggressor: First Round (manual) | `system.speed.bonus` | Add | `(@combat.round == 1) ? 0 : <Aggressor formula>` — ships **disabled**; flip on at fight start |
+| Murder Mode: Immunities (Lv 4+) | `system.statusImmunities` | Add | `charmed`, `confused`, `frightened` |
+| Murder Mode: Fury (Lv 4+) | `system.bonuses.globalExplode` | Add | `(@statuses.berserk) ? 1 : 0` |
+| Murder Mode: Fury | `system.bonuses.globalExplodeValues` | Override | `max` |
+| Murder Mode: Fury | `system.bonusPerDamageDie` | Add | `(@statuses.berserk) ? floor(@lvl / 4) : 0` (+1 at 4, +2 at 8) |
+| Bloodthirsty (Lv 6+) | `system.attackFavorVs` | Add | `wounded` (rule key from `CONFIG.VAGABOND.attackFavorRules`) |
+| Rip and Tear (Lv 10+) | `system.incomingDamageReductionPerDie` | Add | `(@statuses.berserk) ? 1 : 0` (any armor; stacks with Rage) |
 
-> **`globalExplodeValues = max`** is a special keyword — it resolves to the die's own max face at roll time, so it works correctly regardless of weapon die size.
-> The Override on `globalExplodeValues` is permanent but harmless — it has no effect while `globalExplode` is 0.
+> **Level gates:** `flags.vagabond.minLevel` on an effect suppresses it (listed, dimmed, "Locked") until the owner reaches that Level.
+> **`@armorWorn.slots|rating|might`** = the worn Armor's occupied Slots / base Armor Rating / Might requirement (0 with no armor). Slots tracks real weight, so Adamant light armor (2 Slots) stops counting as Light.
+> **`@combat.round`** = current Round of a started combat the actor is in, else 0 — formulas must read as "no bonus" at 0 so play never requires a tracker. `@combat.active` is 1/0.
+> **`globalExplodeValues = max`** resolves to each die's own max face at roll time. It only overrides an item's own explode faces while `globalExplode` is on.
 
 ### Exalted — Bonus Per Damage Die (with Doubling vs Specific Being Types)
 
@@ -463,7 +468,7 @@ system.willCritBonus             → Will save crit
 
 ```txt
 system.cleaveTargets             → Extra Cleave targets beyond the base 2
-system.incomingDamageReductionPerDie → Reduce incoming damage by N per incoming die (Berserk)
+system.incomingDamageReductionPerDie → Reduce incoming damage by N per incoming die (formula; conditions like Berserk / armor Slots live in the formula)
 ```
 
 ### Armor & Speed

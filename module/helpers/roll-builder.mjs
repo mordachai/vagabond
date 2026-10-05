@@ -148,6 +148,21 @@ export class VagabondRollBuilder {
   }
 
   /**
+   * One attacker-side Favor vote from `CONFIG.VAGABOND.attackFavorRules`.
+   * 'favor' when the actor carries at least one rule key in `system.attackFavorVs`
+   * (granted by an Active Effect) whose test passes for the given targets; else 'none'.
+   * @param {Actor} actor - The attacker
+   * @param {Actor[]} targetActors
+   * @returns {'favor'|'none'}
+   */
+  static attackFavorVote(actor, targetActors) {
+    const keys = actor?.system?.attackFavorVs;
+    if (!keys?.length || !targetActors?.length) return 'none';
+    const rules = CONFIG.VAGABOND.attackFavorRules ?? {};
+    return keys.some(k => rules[k]?.test(actor, targetActors)) ? 'favor' : 'none';
+  }
+
+  /**
    * Calculate effective favor/hinder state from system state and keyboard modifiers
    * This is the standard cancellation logic used throughout the system
    * @param {string} systemState - Actor's system.favorHinder ('favor', 'hinder', 'none')

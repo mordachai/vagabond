@@ -71,6 +71,7 @@ import { LightSource } from './helpers/light-source.mjs';
 import { VagabondDamageHelper } from './helpers/damage-helper.mjs';
 import { StatusHelper } from './helpers/status-helper.mjs';
 import { VagabondRollBuilder } from './helpers/roll-builder.mjs';
+import { RageHelper } from './helpers/rage-helper.mjs';
 import { CurrencyHelper } from './helpers/currency-helper.mjs';
 import { ShopPricing } from './helpers/shop-pricing.mjs';
 import { ShopTransactions } from './helpers/shop-transactions.mjs';
@@ -1003,6 +1004,15 @@ function registerGameSettings() {
   });
 
   // Setting 21g: One-time migration guard (hidden) — see CurrencyHelper.migrateCopperScale().
+  // Setting 21f2: One-time migration guard (hidden) — see RageHelper.migrateBarbarianClass().
+  game.settings.register('vagabond', 'barbarianClassMigrated', {
+    scope: 'world',
+    config: false,
+    type: Boolean,
+    default: false,
+    requiresReload: false,
+  });
+
   // Stored raw-copper amounts were ×10 too small after the 1s=100c ratio correction.
   game.settings.register('vagabond', 'copperScaleMigrated', {
     scope: 'world',
@@ -1785,6 +1795,8 @@ Hooks.once('ready', function () {
 Hooks.on('canvasReady', () => LightSource.tickRealtime());
 
 // Register Dice So Nice colorsets when Dice So Nice is ready
+  // One-time: Barbarian class items get the book-revision effect set (per-behavior switches).
+  RageHelper.migrateBarbarianClass();
 Hooks.once('diceSoNiceReady', (dice3d) => {
   VagabondDiceAppearance.registerColorsets();
   VagabondDiceAppearance.registerDamageColorsets();
@@ -1815,6 +1827,39 @@ Hooks.on('updateJournalEntry', (journal, changes) => {
   if (!('filled' in pc) && !('segments' in pc) && !('handle' in pc)) return;
   _refreshClockDependents();
 });
+
+/* -------------------------------------------- */
+/*  Combat → Actor Reactivity (@combat.round)    */
+/* -------------------------------------------- */
+
+// Effects may read `@combat.round` (e.g. Barbarian Aggressor's first-Round Speed). Optional:
+// formulas resolve to "no bonus" outside a started combat. When the combat state changes,
+// re-prepare the combatants' actors LOCALLY (no writes) and refresh their open sheets.
+const _pendingCombatActors = new Set();
+const _refreshCombatDependents = foundry.utils.debounce(() => {
+  const actors = [..._pendingCombatActors];
+  _pendingCombatActors.clear();
+  for (const actor of actors) {
+    try {
+      actor.reset();
+      for (const app of Object.values(actor.apps ?? {})) app.render(false);
+    } catch (e) {
+      console.warn('VagabondSystem | Combat-dependent actor refresh failed', e);
+    }
+  }
+}, 150);
+const _queueCombatRefresh = (combat) => {
+  for (const c of combat?.combatants ?? []) if (c.actor?.type === 'character') _pendingCombatActors.add(c.actor);
+  _refreshCombatDependents();
+};
+for (const hook of ['combatStart', 'combatRound', 'deleteCombat']) Hooks.on(hook, (combat) => _queueCombatRefresh(combat));
+Hooks.on('createCombatant', (combatant) => _queueCombatRefresh(combatant.parent));
+Hooks.on('deleteCombatant', (combatant) => _queueCombatRefresh(combatant.parent));
+// Page reload mid-combat: actors were prepared before combats existed, so re-prepare once.
+Hooks.once('ready', () => _queueCombatRefresh(game.combats?.active));
+
+// Barbarian Rage auto-Berserk (inert unless an actor has system.rageTrigger)
+RageHelper.registerHooks();
 
 /* -------------------------------------------- */
 /*  UI Hooks - Progress Clocks Overlay          */

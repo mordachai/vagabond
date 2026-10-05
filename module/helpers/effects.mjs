@@ -153,7 +153,7 @@ export function resolveEffectDescription(effect) {
 /**
  * Why (if at all) an effect is currently not applying.
  * @param {ActiveEffect} effect
- * @returns {'onUse'|'unequipped'|'expired'|null}
+ * @returns {'onUse'|'unequipped'|'unbound'|'level'|'expired'|null}
  */
 function suppressionOf(effect) {
   const vagabond = effect.system?.suppressionReason;
@@ -166,7 +166,7 @@ function suppressionOf(effect) {
  * An "on-use" effect never applies passively, but its switch is a real enable/disable
  * (`disabled`) — it is only locked while its item is unequipped, i.e. out of play.
  * @param {ActiveEffect} effect
- * @returns {'onUse'|'unequipped'|'unbound'|'expired'|null}
+ * @returns {'onUse'|'unequipped'|'unbound'|'level'|'expired'|null}
  */
 export function toggleBlockerOf(effect) {
   const reason = suppressionOf(effect);
@@ -231,6 +231,9 @@ async function buildEffectRow(effect, actor, editable, open) {
     disabled: effect.disabled,
     open: !!open?.has(effect.id),
     suppression,
+    // Level-gated class-feature effects (flags.vagabond.minLevel): badge shows the Level always
+    minLevel: Number(effect.flags?.vagabond?.minLevel) || 0,
+    levelLocked: suppression === 'level',
     // The switch mirrors "is this effect applying right now" (on-use: armed)
     on: isSwitchOn(effect),
     // Locked switches (unequipped / expired / unbound) can't be flipped — equip the item / edit the duration instead

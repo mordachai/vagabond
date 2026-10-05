@@ -324,9 +324,13 @@ export class VagabondDamagePipeline {
     let explodeValuesStr = item?.system?.explodeValues;
 
     if (actor) {
-      if (actor.system.bonuses?.globalExplode) canExplode = true;
-      const globalValues = actor.system.bonuses?.globalExplodeValues;
-      if (globalValues) explodeValuesStr = globalValues;
+      // Global values only apply while the global explode is ON — otherwise a
+      // permanently-present Override effect (Murder Mode) would clobber the item's own.
+      if (actor.system.bonuses?.globalExplode) {
+        canExplode = true;
+        const globalValues = actor.system.bonuses?.globalExplodeValues;
+        if (globalValues) explodeValuesStr = globalValues;
+      }
 
       // Potency (Alchemist, docs/crafting-plan.md §4.9): grants Explode on
       // Alchemical Items the actor uses, regardless of the item's own authoring.

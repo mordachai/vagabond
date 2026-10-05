@@ -161,6 +161,12 @@
         "Charmed": "Charmed (Pink Hearts)"
       }
     },
+    "AttackFavorRules": {
+      "Wounded": "Targets missing any HP (Bloodthirsty)"
+    },
+    "Rage": {
+      "Ended": "{name}'s Rage fades — no attack or damage since their last Turn."
+    },
     "BeingTypes": {
       "Humanlike": "Humanlike",
       "Fae": "Fae",
@@ -2050,11 +2056,15 @@
         "expired": "Expired",
         "expiredHint": "Its duration ran out — edit the effect to renew it",
         "unbound": "Unbound",
-        "unboundHint": "This item must be Bound to its wielder before its powers work"
+        "unboundHint": "This item must be Bound to its wielder before its powers work",
+        "level": "Locked",
+        "levelHint": "Unlocks at a higher Level"
       },
       "Duration": "Duration",
       "ApplicationMode": {
         "Label": "Application Mode",
+      "LevelBadge": "Lv {level}",
+      "LevelBadgeHint": "Applies from Level {level}",
         "Permanent": "Permanent (Always Active)",
         "PermanentHint": "This effect is always active. Use for perks, permanent buffs, or equipped armor bonuses that don't require the item to be actively used.",
         "WhenEquipped": "When Equipped",

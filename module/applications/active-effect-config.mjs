@@ -104,6 +104,7 @@ export default class VagabondActiveEffectConfig extends foundry.applications.she
       'system.statusResistances',
       'system.statusImmunities',
     ]);
+    const FAVOR_RULE_FIELDS = new Set(['system.attackFavorVs']);
 
     // v14: change rows are stored at system.changes.N.* (was top-level changes.N.*)
     const valueInputs = this.element.querySelectorAll('input[name^="system.changes."][name$=".value"]');
@@ -130,6 +131,15 @@ export default class VagabondActiveEffectConfig extends foundry.applications.she
             const option = document.createElement('option');
             option.value = statusId;
             option.textContent = label;
+            datalist.appendChild(option);
+          });
+        } else if (FAVOR_RULE_FIELDS.has(keyValue)) {
+          // Show attack-favor rule keys (CONFIG.VAGABOND.attackFavorRules)
+          input.setAttribute('placeholder', 'Rule key (e.g., wounded)');
+          Object.entries(CONFIG.VAGABOND.attackFavorRules ?? {}).forEach(([ruleKey, rule]) => {
+            const option = document.createElement('option');
+            option.value = ruleKey;
+            option.textContent = game.i18n.localize(rule.label);
             datalist.appendChild(option);
           });
         } else {
@@ -202,6 +212,13 @@ export default class VagabondActiveEffectConfig extends foundry.applications.she
 
       // Incoming Damage Reduction
       { value: '@incomingDamageReductionPerDie', label: 'Incoming Damage Reduction Per Die' },
+
+      // Rule conditions (armor weight / combat state — both 0 when absent)
+      { value: '@armorWorn.slots', label: 'Worn Armor: Slots occupied (0 = no armor; Light = 1)' },
+      { value: '@armorWorn.rating', label: 'Worn Armor: base Armor Rating (0 = none)' },
+      { value: '@armorWorn.might', label: 'Worn Armor: Might requirement (0 = none)' },
+      { value: '@combat.round', label: 'Combat: current Round (0 when not in a started combat)' },
+      { value: '@combat.active', label: 'Combat: 1 when this actor is in a started combat' },
 
       // Crit Bonuses (universal)
       { value: '@attackCritBonus', label: 'Attack Crit Bonus (All Weapon Types)' },
