@@ -2,7 +2,7 @@
   "folder": null,
   "name": "Insect Repellent",
   "type": "equipment",
-  "img": "icons/consumables/drinks/alcohol-spirits-bottle-green.webp",
+  "img": "icons/consumables/potions/potion-flask-capped-yellow-green.webp",
   "system": {
     "description": "<p><span class=\"fontstyle0\">Covers a Medium or Smaller Being for a Shift, during which, insects Near it act as Frightened.</span></p>",
     "equipmentType": "alchemical",

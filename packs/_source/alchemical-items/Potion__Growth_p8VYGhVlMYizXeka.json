@@ -2,7 +2,7 @@
   "folder": null,
   "name": "Potion, Growth",
   "type": "equipment",
-  "img": "icons/consumables/potions/bottle-round-label-cork-blue.webp",
+  "img": "icons/consumables/potions/potion-bottle-corked-labeled-red.webp",
   "system": {
     "description": "<p><span class=\"fontstyle0\">For 1 Hour, the consumer gains these benefits:</span></p><ul><li><span class=\"fontstyle0\">Their size increases by one.</span></li><li><span class=\"fontstyle0\">Their attacks deal an extra die of damage.</span></li></ul><p><span class=\"fontstyle0\">A Being can benefit from no more than one of these potions at a time.</span></p>",
     "equipmentType": "alchemical",

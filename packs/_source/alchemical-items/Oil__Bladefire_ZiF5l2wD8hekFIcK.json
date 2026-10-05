@@ -2,7 +2,7 @@
   "folder": null,
   "name": "Oil, Bladefire",
   "type": "equipment",
-  "img": "icons/consumables/potions/potion-flask-stopped-labeled-yellow.webp",
+  "img": "icons/consumables/potions/potion-flask-corked-shiny-red.webp",
   "system": {
     "description": "<p><span class=\"fontstyle0\">Acts as basic oil. However, when coated on a Weapon that is then ignited, it sheds Light out to Near and attacks with it cause the Target to be Burning (Cd4).</span></p>",
     "equipmentType": "alchemical",

@@ -2,7 +2,7 @@
   "folder": null,
   "name": "Candle, Insectbane",
   "type": "equipment",
-  "img": "icons/sundries/lights/candle-lit-yellow.webp",
+  "img": "icons/sundries/lights/candle-pillar-lit-yellow.webp",
   "system": {
     "description": "<p><span class=\"fontstyle0\">Sheds light out to Close for up to 1 hour while burning. Insects act as Frightened while within the light it sheds.</span></p>",
     "equipmentType": "alchemical",

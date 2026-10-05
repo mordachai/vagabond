@@ -2,7 +2,7 @@
   "folder": null,
   "name": "Oil, Wyrmwound",
   "type": "equipment",
-  "img": "icons/consumables/potions/potion-flask-stopped-labeled-yellow.webp",
+  "img": "icons/consumables/potions/potion-flask-stopped-red.webp",
   "system": {
     "description": "<p><span class=\"fontstyle0\">This crimson oil is a bane to scaly-kind. Acts as basic oil. However, while coated on a weapon that is then ignited, its damage against scaled Beings can explode and ignores 2 Armor.</span></p>",
     "equipmentType": "alchemical",

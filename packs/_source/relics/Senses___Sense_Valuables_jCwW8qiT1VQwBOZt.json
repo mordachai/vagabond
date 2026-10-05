@@ -1,7 +1,7 @@
 {
   "name": "Senses - Sense Valuables",
   "type": "equipment",
-  "img": "icons/magic/control/buff-flight-wings-runes-blue-white.webp",
+  "img": "icons/magic/control/buff-flight-wings-purple.webp",
   "system": {
     "description": "<p>Senses gold and gems within Near.</p>",
     "equipmentType": "relic",

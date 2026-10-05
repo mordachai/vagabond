@@ -2,7 +2,7 @@
   "folder": null,
   "name": "Thunderstone",
   "type": "equipment",
-  "img": "icons/magic/fire/projectile-smoke-swirl-red.webp",
+  "img": "icons/magic/sonic/explosion-impact-shock-wave.webp",
   "system": {
     "description": "<p><span class=\"fontstyle0\">The stone is known to create an ear-shattering bang, and can be thrown at a Being or a point. Anything Near the Target can't hear until the end of its next Turn.</span></p>",
     "equipmentType": "alchemical",

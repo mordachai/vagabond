@@ -1,7 +1,7 @@
 {
   "name": "Ace - Long",
   "type": "equipment",
-  "img": "icons/magic/control/buff-flight-wings-runes-blue-white.webp",
+  "img": "icons/magic/control/buff-flight-wings-runes-red.webp",
   "system": {
     "description": "<p>Its Range is 10 feet further, rather than 5 feet further.</p>",
     "equipmentType": "relic",

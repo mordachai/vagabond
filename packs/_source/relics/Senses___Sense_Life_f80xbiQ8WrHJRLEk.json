@@ -1,7 +1,7 @@
 {
   "name": "Senses - Sense Life",
   "type": "equipment",
-  "img": "icons/magic/control/buff-flight-wings-runes-blue-white.webp",
+  "img": "icons/magic/control/buff-flight-wings-purple.webp",
   "system": {
     "description": "<p>Senses Small and larger Beings within Far who aren't Artificials or Undead.</p>",
     "equipmentType": "relic",

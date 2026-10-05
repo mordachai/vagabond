@@ -1,7 +1,7 @@
 {
   "name": "Senses - True-Seeing",
   "type": "equipment",
-  "img": "icons/magic/control/buff-flight-wings-runes-blue-white.webp",
+  "img": "icons/magic/control/buff-flight-wings-purple.webp",
   "system": {
     "description": "<p>Grants All-Sight (Bound).</p>",
     "equipmentType": "relic",

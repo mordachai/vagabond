@@ -2,7 +2,7 @@
   "folder": null,
   "name": "Alchemist’s Fire",
   "type": "equipment",
-  "img": "icons/magic/fire/projectile-smoke-swirl-red.webp",
+  "img": "icons/consumables/potions/flask-red-bubbles-vortex.webp",
   "system": {
     "description": "<p><span class=\"fontstyle0\">A flammable, tar-like fluid that ignites when exposed to oxygen, dealing 2d6 damage and Burning (Cd6) a hit Target.</span></p>",
     "equipmentType": "alchemical",

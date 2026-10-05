@@ -1,7 +1,7 @@
 {
   "name": "Ace - Vicious",
   "type": "equipment",
-  "img": "icons/magic/control/buff-flight-wings-runes-blue-white.webp",
+  "img": "icons/magic/control/buff-flight-wings-runes-red.webp",
   "system": {
     "description": "<p>Deals an extra damage die from the Vicious Property.</p>",
     "equipmentType": "relic",

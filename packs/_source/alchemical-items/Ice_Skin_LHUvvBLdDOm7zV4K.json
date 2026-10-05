@@ -2,7 +2,7 @@
   "folder": null,
   "name": "Ice Skin",
   "type": "equipment",
-  "img": "icons/consumables/drinks/alcohol-spirits-bottle-green.webp",
+  "img": "icons/magic/water/barrier-ice-shield.webp",
   "system": {
     "description": "<p><span class=\"fontstyle0\">One dose can cover a Medium or smaller Being for a Shift. During that Shift, that Being is protected against Bitter Cold.</span></p>",
     "equipmentType": "alchemical",

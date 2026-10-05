@@ -2,7 +2,7 @@
   "folder": null,
   "name": "Potion, Control Monster",
   "type": "equipment",
-  "img": "icons/consumables/potions/bottle-round-label-cork-blue.webp",
+  "img": "icons/consumables/potions/bottle-bulb-corked-purple.webp",
   "system": {
     "description": "<p><span class=\"fontstyle0\">The consumer gains the ability to control a type of Being they can see for 1 Hour, which requires their Focus. Once a Being is chosen, the consumer must make a Will Save. On a pass, the Being is Charmed and under their control for the duration. A Being controlled this way will not obey commands that clearly cause harm to itself. After this time, the Being becomes Hostile. This potion affects Monsters (Dragon, Plant, Giant, Undead).</span></p>",
     "equipmentType": "alchemical",

@@ -2,7 +2,7 @@
   "folder": null,
   "name": "Potion, ESP",
   "type": "equipment",
-  "img": "icons/consumables/potions/bottle-round-label-cork-blue.webp",
+  "img": "icons/consumables/potions/potion-vial-corked-labeled-purple.webp",
   "system": {
     "description": "<p>For 1 Hour, the consumer gains Telepathy (Far). Using this sense requires Focus, and it is obstructed by 1 inch of lead or more than 2' of stone.</p>",
     "equipmentType": "alchemical",

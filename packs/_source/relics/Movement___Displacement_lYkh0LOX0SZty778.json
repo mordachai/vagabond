@@ -1,7 +1,7 @@
 {
   "name": "Movement - Displacement",
   "type": "equipment",
-  "img": "icons/magic/control/buff-flight-wings-runes-blue-white.webp",
+  "img": "icons/magic/control/buff-flight-wings-blue.webp",
   "system": {
     "description": "<p>Sight-based attacks against the Wearer are made as if the attacker is Vulnerable.</p>",
     "equipmentType": "relic",

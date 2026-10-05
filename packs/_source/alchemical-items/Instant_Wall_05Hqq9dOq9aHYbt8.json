@@ -2,7 +2,7 @@
   "folder": null,
   "name": "Instant Wall",
   "type": "equipment",
-  "img": "icons/consumables/drinks/alcohol-spirits-bottle-green.webp",
+  "img": "icons/commodities/stone/masonry-block-cube-grey.webp",
   "system": {
     "description": "<p><span class=\"fontstyle0\">Creates a wall that is 10 feet in length and height, and 1 foot in width. The wall appears in the orientation of the user's choice. It has 20 HP and Armor: 2. The wall crumbles to dust after 1 minute or if it is destroyed.</span></p>",
     "equipmentType": "alchemical",

@@ -2,7 +2,7 @@
   "folder": null,
   "name": "Potion, Healing II",
   "type": "equipment",
-  "img": "icons/consumables/potions/bottle-round-label-cork-blue.webp",
+  "img": "icons/consumables/potions/potion-tube-corked-red.webp",
   "system": {
     "description": "<p><span class=\"fontstyle0\">The consumer regains HP equal to a number of d6 rolls determined by the Potion's Rank, plus a modifier equal to its Rank (2d6+2).</span></p>",
     "equipmentType": "alchemical",

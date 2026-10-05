@@ -2,7 +2,7 @@
   "folder": null,
   "name": "Torch, Repel Beast",
   "type": "equipment",
-  "img": "icons/sundries/lights/candle-lit-yellow.webp",
+  "img": "icons/sundries/lights/torch-brown-lit.webp",
   "system": {
     "description": "<p><span class=\"fontstyle0\">A torch that burns with an unnaturally crimson flame that unsettles Beasts. While burning, Beasts in the Light it sheds are Frightened until they take damage. Afterwards, it can’t be Frightened this way for 1 Day.</span></p>",
     "equipmentType": "alchemical",

@@ -2,7 +2,7 @@
   "folder": null,
   "name": "Oil, Vicious",
   "type": "equipment",
-  "img": "icons/consumables/potions/potion-flask-stopped-labeled-yellow.webp",
+  "img": "icons/consumables/potions/potion-flask-corked-blue.webp",
   "system": {
     "description": "<p><span class=\"fontstyle0\">A thick blue oil that acts as a powerful anticoagulant. Acts as basic oil. However, while coated on a weapon that is then ignited, its damage from attacks that hit Beings with half their HP or less can explode and cause them to bleed profusely for the Shift, granting Favor on Survival Checks to track it for this time.</span></p>",
     "equipmentType": "alchemical",

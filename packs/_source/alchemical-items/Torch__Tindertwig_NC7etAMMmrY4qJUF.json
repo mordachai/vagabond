@@ -2,7 +2,7 @@
   "folder": null,
   "name": "Torch, Tindertwig",
   "type": "equipment",
-  "img": "icons/sundries/lights/candle-lit-yellow.webp",
+  "img": "icons/commodities/wood/kindling-stick-brown.webp",
   "system": {
     "description": "<p><span class=\"fontstyle0\">This small, wooden stick ignites when struck against a rough surface. Tindertwigs do not burn out over time, meaning it can be reused as often and for as long as the user desires.</span></p>",
     "equipmentType": "alchemical",

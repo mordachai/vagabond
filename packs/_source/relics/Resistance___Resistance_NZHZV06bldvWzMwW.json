@@ -1,7 +1,7 @@
 {
   "name": "Resistance - Resistance",
   "type": "equipment",
-  "img": "icons/magic/control/buff-flight-wings-runes-blue-white.webp",
+  "img": "icons/magic/control/buff-flight-wings-runes-blue.webp",
   "system": {
     "description": "<p>Favor on Saves and damage reduction against a damage source (such as fire).</p>",
     "equipmentType": "relic",

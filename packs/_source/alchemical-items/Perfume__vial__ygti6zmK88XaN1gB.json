@@ -2,7 +2,7 @@
   "folder": null,
   "name": "Perfume (vial)",
   "type": "equipment",
-  "img": "icons/consumables/drinks/alcohol-spirits-bottle-green.webp",
+  "img": "icons/consumables/potions/flask-decorated-label-pink.webp",
   "system": {
     "description": "<p><span class=\"fontstyle0\">A fragrant, pleasant spray.</span></p>",
     "equipmentType": "alchemical",

@@ -2,7 +2,7 @@
   "folder": null,
   "name": "Alkahest",
   "type": "equipment",
-  "img": "icons/consumables/drinks/alcohol-spirits-bottle-green.webp",
+  "img": "icons/magic/acid/dissolve-drip-droplet-smoke.webp",
   "system": {
     "description": "<p><span class=\"fontstyle0\">When poured on or within an Alchemical Item, the item is reduced back to its raw materials after 1 minute.</span></p>",
     "equipmentType": "alchemical",

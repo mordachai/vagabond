@@ -1,7 +1,7 @@
 {
   "name": "Fabled - Precision",
   "type": "equipment",
-  "img": "icons/magic/control/buff-flight-wings-runes-blue-white.webp",
+  "img": "icons/magic/control/buff-flight-wings-runes-purple-orange.webp",
   "system": {
     "description": "<p>Once per day, gain Favor on attacks for 1 minute, or until you miss.</p>",
     "equipmentType": "relic",

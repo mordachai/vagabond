@@ -1,7 +1,7 @@
 {
   "name": "Movement - Blinking",
   "type": "equipment",
-  "img": "icons/magic/control/buff-flight-wings-runes-blue-white.webp",
+  "img": "icons/magic/control/buff-flight-wings-blue.webp",
   "system": {
     "description": "<p>Wearer is under the effects of the Blink Spell.</p>",
     "equipmentType": "relic",

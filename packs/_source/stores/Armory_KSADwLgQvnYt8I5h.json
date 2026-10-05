@@ -283,49 +283,7 @@
           "runAsGM": false
         }
       },
-      "effects": [
-        {
-          "name": "Vicious",
-          "img": "icons/svg/aura.svg",
-          "_id": "gCX1GFQXUr2Sj39I",
-          "type": "base",
-          "system": {
-            "changes": [
-              {
-                "key": "system.critBonusDice",
-                "type": "add",
-                "value": "matchDie"
-              }
-            ]
-          },
-          "disabled": false,
-          "duration": {
-            "value": null,
-            "units": "seconds",
-            "expiry": null,
-            "expired": false
-          },
-          "description": "Crits with it deal 1 extra damage die.",
-          "tint": "#ffffff",
-          "transfer": true,
-          "statuses": [],
-          "sort": 0,
-          "flags": {
-            "vagabond": {
-              "applicationMode": "on-use"
-            }
-          },
-          "_stats": {
-            "coreVersion": "14.361",
-            "systemId": "vagabond",
-            "systemVersion": "5.43.4"
-          },
-          "start": null,
-          "showIcon": 1,
-          "folder": null,
-          "_key": "!actors.items.effects!KSADwLgQvnYt8I5h.mxAwVO0TRqtpy7SVKSADwLgQvnYt8I5h.mxAwVO0TRqtpy7SV.gCX1GFQXUr2Sj39I"
-        }
-      ],
+      "effects": [],
       "flags": {
         "vagabond": {
           "shop": {
@@ -664,49 +622,7 @@
           "runAsGM": false
         }
       },
-      "effects": [
-        {
-          "name": "Vicious",
-          "img": "icons/svg/aura.svg",
-          "_id": "x9uqP4gmCfjntr1R",
-          "type": "base",
-          "system": {
-            "changes": [
-              {
-                "key": "system.critBonusDice",
-                "type": "add",
-                "value": "matchDie"
-              }
-            ]
-          },
-          "disabled": false,
-          "duration": {
-            "value": null,
-            "units": "seconds",
-            "expiry": null,
-            "expired": false
-          },
-          "description": "Crits with it deal 1 extra damage die.",
-          "tint": "#ffffff",
-          "transfer": true,
-          "statuses": [],
-          "sort": 0,
-          "flags": {
-            "vagabond": {
-              "applicationMode": "on-use"
-            }
-          },
-          "_stats": {
-            "coreVersion": "14.361",
-            "systemId": "vagabond",
-            "systemVersion": "5.43.4"
-          },
-          "start": null,
-          "showIcon": 1,
-          "folder": null,
-          "_key": "!actors.items.effects!KSADwLgQvnYt8I5h.JqnI6Kdiq5vzgyexKSADwLgQvnYt8I5h.JqnI6Kdiq5vzgyex.x9uqP4gmCfjntr1R"
-        }
-      ],
+      "effects": [],
       "flags": {
         "vagabond": {
           "shop": {
@@ -875,49 +791,7 @@
           "runAsGM": false
         }
       },
-      "effects": [
-        {
-          "name": "Vicious",
-          "img": "icons/svg/aura.svg",
-          "_id": "eizUUPSeixTk9V3R",
-          "type": "base",
-          "system": {
-            "changes": [
-              {
-                "key": "system.critBonusDice",
-                "type": "add",
-                "value": "matchDie"
-              }
-            ]
-          },
-          "disabled": false,
-          "duration": {
-            "value": null,
-            "units": "seconds",
-            "expiry": null,
-            "expired": false
-          },
-          "description": "Crits with it deal 1 extra damage die.",
-          "tint": "#ffffff",
-          "transfer": true,
-          "statuses": [],
-          "sort": 0,
-          "flags": {
-            "vagabond": {
-              "applicationMode": "on-use"
-            }
-          },
-          "_stats": {
-            "coreVersion": "14.361",
-            "systemId": "vagabond",
-            "systemVersion": "5.43.4"
-          },
-          "start": null,
-          "showIcon": 1,
-          "folder": null,
-          "_key": "!actors.items.effects!KSADwLgQvnYt8I5h.5UYTuIxa79c8guIFKSADwLgQvnYt8I5h.5UYTuIxa79c8guIF.eizUUPSeixTk9V3R"
-        }
-      ],
+      "effects": [],
       "flags": {
         "vagabond": {
           "shop": {
@@ -1087,49 +961,7 @@
           "runAsGM": false
         }
       },
-      "effects": [
-        {
-          "name": "Keen",
-          "img": "icons/svg/aura.svg",
-          "_id": "PIsoroQKuqwpy3h2",
-          "type": "base",
-          "system": {
-            "changes": [
-              {
-                "key": "system.attackCritBonus",
-                "type": "subtract",
-                "value": "1"
-              }
-            ]
-          },
-          "disabled": false,
-          "duration": {
-            "value": null,
-            "units": "seconds",
-            "expiry": null,
-            "expired": false
-          },
-          "description": "Crits 1 lower on this weapon's Attack Check.",
-          "tint": "#ffffff",
-          "transfer": true,
-          "statuses": [],
-          "sort": 0,
-          "flags": {
-            "vagabond": {
-              "applicationMode": "on-use"
-            }
-          },
-          "_stats": {
-            "coreVersion": "14.361",
-            "systemId": "vagabond",
-            "systemVersion": "5.43.4"
-          },
-          "start": null,
-          "showIcon": 1,
-          "folder": null,
-          "_key": "!actors.items.effects!KSADwLgQvnYt8I5h.T7qsTix3j4RnTjp8KSADwLgQvnYt8I5h.T7qsTix3j4RnTjp8.PIsoroQKuqwpy3h2"
-        }
-      ],
+      "effects": [],
       "flags": {
         "vagabond": {
           "shop": {
@@ -1299,49 +1131,7 @@
           "runAsGM": false
         }
       },
-      "effects": [
-        {
-          "name": "Vicious",
-          "img": "icons/svg/aura.svg",
-          "_id": "mIFiyvKEcae7gJT3",
-          "type": "base",
-          "system": {
-            "changes": [
-              {
-                "key": "system.critBonusDice",
-                "type": "add",
-                "value": "matchDie"
-              }
-            ]
-          },
-          "disabled": false,
-          "duration": {
-            "value": null,
-            "units": "seconds",
-            "expiry": null,
-            "expired": false
-          },
-          "description": "Crits with it deal 1 extra damage die.",
-          "tint": "#ffffff",
-          "transfer": true,
-          "statuses": [],
-          "sort": 0,
-          "flags": {
-            "vagabond": {
-              "applicationMode": "on-use"
-            }
-          },
-          "_stats": {
-            "coreVersion": "14.361",
-            "systemId": "vagabond",
-            "systemVersion": "5.43.4"
-          },
-          "start": null,
-          "showIcon": 1,
-          "folder": null,
-          "_key": "!actors.items.effects!KSADwLgQvnYt8I5h.bv6cvgJL197zZGkhKSADwLgQvnYt8I5h.bv6cvgJL197zZGkh.mIFiyvKEcae7gJT3"
-        }
-      ],
+      "effects": [],
       "flags": {
         "vagabond": {
           "shop": {
@@ -1677,49 +1467,7 @@
           "runAsGM": false
         }
       },
-      "effects": [
-        {
-          "name": "Vicious",
-          "img": "icons/svg/aura.svg",
-          "_id": "jxk4MajohFfTmmgl",
-          "type": "base",
-          "system": {
-            "changes": [
-              {
-                "key": "system.critBonusDice",
-                "type": "add",
-                "value": "matchDie"
-              }
-            ]
-          },
-          "disabled": false,
-          "duration": {
-            "value": null,
-            "units": "seconds",
-            "expiry": null,
-            "expired": false
-          },
-          "description": "Crits with it deal 1 extra damage die.",
-          "tint": "#ffffff",
-          "transfer": true,
-          "statuses": [],
-          "sort": 0,
-          "flags": {
-            "vagabond": {
-              "applicationMode": "on-use"
-            }
-          },
-          "_stats": {
-            "coreVersion": "14.361",
-            "systemId": "vagabond",
-            "systemVersion": "5.43.4"
-          },
-          "start": null,
-          "showIcon": 1,
-          "folder": null,
-          "_key": "!actors.items.effects!KSADwLgQvnYt8I5h.4o3fY3HxJXvBgRdrKSADwLgQvnYt8I5h.4o3fY3HxJXvBgRdr.jxk4MajohFfTmmgl"
-        }
-      ],
+      "effects": [],
       "flags": {
         "vagabond": {
           "shop": {
@@ -1888,49 +1636,7 @@
           "runAsGM": false
         }
       },
-      "effects": [
-        {
-          "name": "Vicious",
-          "img": "icons/svg/aura.svg",
-          "_id": "5EA7iWQAFqLagdU7",
-          "type": "base",
-          "system": {
-            "changes": [
-              {
-                "key": "system.critBonusDice",
-                "type": "add",
-                "value": "matchDie"
-              }
-            ]
-          },
-          "disabled": false,
-          "duration": {
-            "value": null,
-            "units": "seconds",
-            "expiry": null,
-            "expired": false
-          },
-          "description": "Crits with it deal 1 extra damage die.",
-          "tint": "#ffffff",
-          "transfer": true,
-          "statuses": [],
-          "sort": 0,
-          "flags": {
-            "vagabond": {
-              "applicationMode": "on-use"
-            }
-          },
-          "_stats": {
-            "coreVersion": "14.361",
-            "systemId": "vagabond",
-            "systemVersion": "5.43.4"
-          },
-          "start": null,
-          "showIcon": 1,
-          "folder": null,
-          "_key": "!actors.items.effects!KSADwLgQvnYt8I5h.VQoJXMQ4sPet7VO6KSADwLgQvnYt8I5h.VQoJXMQ4sPet7VO6.5EA7iWQAFqLagdU7"
-        }
-      ],
+      "effects": [],
       "flags": {
         "vagabond": {
           "shop": {
@@ -2269,49 +1975,7 @@
           "runAsGM": false
         }
       },
-      "effects": [
-        {
-          "name": "Vicious",
-          "img": "icons/svg/aura.svg",
-          "_id": "6LzVGsLphfb427w6",
-          "type": "base",
-          "system": {
-            "changes": [
-              {
-                "key": "system.critBonusDice",
-                "type": "add",
-                "value": "matchDie"
-              }
-            ]
-          },
-          "disabled": false,
-          "duration": {
-            "value": null,
-            "units": "seconds",
-            "expiry": null,
-            "expired": false
-          },
-          "description": "Crits with it deal 1 extra damage die.",
-          "tint": "#ffffff",
-          "transfer": true,
-          "statuses": [],
-          "sort": 0,
-          "flags": {
-            "vagabond": {
-              "applicationMode": "on-use"
-            }
-          },
-          "_stats": {
-            "coreVersion": "14.361",
-            "systemId": "vagabond",
-            "systemVersion": "5.43.4"
-          },
-          "start": null,
-          "showIcon": 1,
-          "folder": null,
-          "_key": "!actors.items.effects!KSADwLgQvnYt8I5h.DfXWUgNeFlgIv06iKSADwLgQvnYt8I5h.DfXWUgNeFlgIv06i.6LzVGsLphfb427w6"
-        }
-      ],
+      "effects": [],
       "flags": {
         "vagabond": {
           "shop": {
@@ -2649,49 +2313,7 @@
           "runAsGM": false
         }
       },
-      "effects": [
-        {
-          "name": "Vicious",
-          "img": "icons/svg/aura.svg",
-          "_id": "JvgUEfyNCqKOieCh",
-          "type": "base",
-          "system": {
-            "changes": [
-              {
-                "key": "system.critBonusDice",
-                "type": "add",
-                "value": "matchDie"
-              }
-            ]
-          },
-          "disabled": false,
-          "duration": {
-            "value": null,
-            "units": "seconds",
-            "expiry": null,
-            "expired": false
-          },
-          "description": "Crits with it deal 1 extra damage die.",
-          "tint": "#ffffff",
-          "transfer": true,
-          "statuses": [],
-          "sort": 0,
-          "flags": {
-            "vagabond": {
-              "applicationMode": "on-use"
-            }
-          },
-          "_stats": {
-            "coreVersion": "14.361",
-            "systemId": "vagabond",
-            "systemVersion": "5.43.4"
-          },
-          "start": null,
-          "showIcon": 1,
-          "folder": null,
-          "_key": "!actors.items.effects!KSADwLgQvnYt8I5h.iTQnJHsMq0XnHAWCKSADwLgQvnYt8I5h.iTQnJHsMq0XnHAWC.JvgUEfyNCqKOieCh"
-        }
-      ],
+      "effects": [],
       "flags": {
         "vagabond": {
           "shop": {
@@ -2862,49 +2484,7 @@
           "runAsGM": false
         }
       },
-      "effects": [
-        {
-          "name": "Keen",
-          "img": "icons/svg/aura.svg",
-          "_id": "d6RSbkdChI8PyHM3",
-          "type": "base",
-          "system": {
-            "changes": [
-              {
-                "key": "system.attackCritBonus",
-                "type": "subtract",
-                "value": "1"
-              }
-            ]
-          },
-          "disabled": false,
-          "duration": {
-            "value": null,
-            "units": "seconds",
-            "expiry": null,
-            "expired": false
-          },
-          "description": "Crits 1 lower on this weapon's Attack Check.",
-          "tint": "#ffffff",
-          "transfer": true,
-          "statuses": [],
-          "sort": 0,
-          "flags": {
-            "vagabond": {
-              "applicationMode": "on-use"
-            }
-          },
-          "_stats": {
-            "coreVersion": "14.361",
-            "systemId": "vagabond",
-            "systemVersion": "5.43.4"
-          },
-          "start": null,
-          "showIcon": 1,
-          "folder": null,
-          "_key": "!actors.items.effects!KSADwLgQvnYt8I5h.g2JinM7digBLLoFnKSADwLgQvnYt8I5h.g2JinM7digBLLoFn.d6RSbkdChI8PyHM3"
-        }
-      ],
+      "effects": [],
       "flags": {
         "vagabond": {
           "preferredSkill": "",
@@ -3077,49 +2657,7 @@
           "runAsGM": false
         }
       },
-      "effects": [
-        {
-          "name": "Keen",
-          "img": "icons/svg/aura.svg",
-          "_id": "pmBMqhddDq48WjIX",
-          "type": "base",
-          "system": {
-            "changes": [
-              {
-                "key": "system.attackCritBonus",
-                "type": "subtract",
-                "value": "1"
-              }
-            ]
-          },
-          "disabled": false,
-          "duration": {
-            "value": null,
-            "units": "seconds",
-            "expiry": null,
-            "expired": false
-          },
-          "description": "Crits 1 lower on this weapon's Attack Check.",
-          "tint": "#ffffff",
-          "transfer": true,
-          "statuses": [],
-          "sort": 0,
-          "flags": {
-            "vagabond": {
-              "applicationMode": "on-use"
-            }
-          },
-          "_stats": {
-            "coreVersion": "14.361",
-            "systemId": "vagabond",
-            "systemVersion": "5.43.4"
-          },
-          "start": null,
-          "showIcon": 1,
-          "folder": null,
-          "_key": "!actors.items.effects!KSADwLgQvnYt8I5h.li2ClPpier34HpaQKSADwLgQvnYt8I5h.li2ClPpier34HpaQ.pmBMqhddDq48WjIX"
-        }
-      ],
+      "effects": [],
       "flags": {
         "vagabond": {
           "shop": {
@@ -3631,49 +3169,7 @@
           "runAsGM": false
         }
       },
-      "effects": [
-        {
-          "name": "Vicious",
-          "img": "icons/svg/aura.svg",
-          "_id": "1ObZ2dnDxb1wY3zV",
-          "type": "base",
-          "system": {
-            "changes": [
-              {
-                "key": "system.critBonusDice",
-                "type": "add",
-                "value": "matchDie"
-              }
-            ]
-          },
-          "disabled": false,
-          "duration": {
-            "value": null,
-            "units": "seconds",
-            "expiry": null,
-            "expired": false
-          },
-          "description": "Crits with it deal 1 extra damage die.",
-          "tint": "#ffffff",
-          "transfer": true,
-          "statuses": [],
-          "sort": 0,
-          "flags": {
-            "vagabond": {
-              "applicationMode": "on-use"
-            }
-          },
-          "_stats": {
-            "coreVersion": "14.361",
-            "systemId": "vagabond",
-            "systemVersion": "5.43.4"
-          },
-          "start": null,
-          "showIcon": 1,
-          "folder": null,
-          "_key": "!actors.items.effects!KSADwLgQvnYt8I5h.ul8yoXWadSNmDAzpKSADwLgQvnYt8I5h.ul8yoXWadSNmDAzp.1ObZ2dnDxb1wY3zV"
-        }
-      ],
+      "effects": [],
       "flags": {
         "vagabond": {
           "shop": {
@@ -3842,49 +3338,7 @@
           "runAsGM": false
         }
       },
-      "effects": [
-        {
-          "name": "Keen",
-          "img": "icons/svg/aura.svg",
-          "_id": "1UhxTL6kvOSwNpQg",
-          "type": "base",
-          "system": {
-            "changes": [
-              {
-                "key": "system.attackCritBonus",
-                "type": "subtract",
-                "value": "1"
-              }
-            ]
-          },
-          "disabled": false,
-          "duration": {
-            "value": null,
-            "units": "seconds",
-            "expiry": null,
-            "expired": false
-          },
-          "description": "Crits 1 lower on this weapon's Attack Check.",
-          "tint": "#ffffff",
-          "transfer": true,
-          "statuses": [],
-          "sort": 0,
-          "flags": {
-            "vagabond": {
-              "applicationMode": "on-use"
-            }
-          },
-          "_stats": {
-            "coreVersion": "14.361",
-            "systemId": "vagabond",
-            "systemVersion": "5.43.4"
-          },
-          "start": null,
-          "showIcon": 1,
-          "folder": null,
-          "_key": "!actors.items.effects!KSADwLgQvnYt8I5h.2WreUo1UJGAMslphKSADwLgQvnYt8I5h.2WreUo1UJGAMslph.1UhxTL6kvOSwNpQg"
-        }
-      ],
+      "effects": [],
       "flags": {
         "vagabond": {
           "shop": {
@@ -4055,49 +3509,7 @@
           "runAsGM": false
         }
       },
-      "effects": [
-        {
-          "name": "Keen",
-          "img": "icons/svg/aura.svg",
-          "_id": "c49kh9fh9c7qy6cC",
-          "type": "base",
-          "system": {
-            "changes": [
-              {
-                "key": "system.attackCritBonus",
-                "type": "subtract",
-                "value": "1"
-              }
-            ]
-          },
-          "disabled": false,
-          "duration": {
-            "value": null,
-            "units": "seconds",
-            "expiry": null,
-            "expired": false
-          },
-          "description": "Crits 1 lower on this weapon's Attack Check.",
-          "tint": "#ffffff",
-          "transfer": true,
-          "statuses": [],
-          "sort": 0,
-          "flags": {
-            "vagabond": {
-              "applicationMode": "on-use"
-            }
-          },
-          "_stats": {
-            "coreVersion": "14.361",
-            "systemId": "vagabond",
-            "systemVersion": "5.43.4"
-          },
-          "start": null,
-          "showIcon": 1,
-          "folder": null,
-          "_key": "!actors.items.effects!KSADwLgQvnYt8I5h.12CC4I4cqryAJTTfKSADwLgQvnYt8I5h.12CC4I4cqryAJTTf.c49kh9fh9c7qy6cC"
-        }
-      ],
+      "effects": [],
       "flags": {
         "vagabond": {
           "preferredSkill": "",
@@ -4267,49 +3679,7 @@
           "runAsGM": false
         }
       },
-      "effects": [
-        {
-          "name": "Keen",
-          "img": "icons/svg/aura.svg",
-          "_id": "mK9P5fw0mfB8AvWf",
-          "type": "base",
-          "system": {
-            "changes": [
-              {
-                "key": "system.attackCritBonus",
-                "type": "subtract",
-                "value": "1"
-              }
-            ]
-          },
-          "disabled": false,
-          "duration": {
-            "value": null,
-            "units": "seconds",
-            "expiry": null,
-            "expired": false
-          },
-          "description": "Crits 1 lower on this weapon's Attack Check.",
-          "tint": "#ffffff",
-          "transfer": true,
-          "statuses": [],
-          "sort": 0,
-          "flags": {
-            "vagabond": {
-              "applicationMode": "on-use"
-            }
-          },
-          "_stats": {
-            "coreVersion": "14.361",
-            "systemId": "vagabond",
-            "systemVersion": "5.43.4"
-          },
-          "start": null,
-          "showIcon": 1,
-          "folder": null,
-          "_key": "!actors.items.effects!KSADwLgQvnYt8I5h.3BRYiEkFhuqoZwQWKSADwLgQvnYt8I5h.3BRYiEkFhuqoZwQW.mK9P5fw0mfB8AvWf"
-        }
-      ],
+      "effects": [],
       "flags": {
         "vagabond": {
           "shop": {
@@ -4694,47 +4064,6 @@
           "showIcon": 1,
           "folder": null,
           "_key": "!actors.items.effects!KSADwLgQvnYt8I5h.PjbVQwviqzUJZxtk.ZQF5oDM1HSf5nF45"
-        },
-        {
-          "name": "Vicious",
-          "img": "icons/svg/aura.svg",
-          "_id": "g4dpsj1bIbUhSpxO",
-          "type": "base",
-          "system": {
-            "changes": [
-              {
-                "key": "system.critBonusDice",
-                "type": "add",
-                "value": "matchDie"
-              }
-            ]
-          },
-          "disabled": false,
-          "duration": {
-            "value": null,
-            "units": "seconds",
-            "expiry": null,
-            "expired": false
-          },
-          "description": "Crits with it deal 1 extra damage die.",
-          "tint": "#ffffff",
-          "transfer": true,
-          "statuses": [],
-          "sort": 0,
-          "flags": {
-            "vagabond": {
-              "applicationMode": "on-use"
-            }
-          },
-          "_stats": {
-            "coreVersion": "14.361",
-            "systemId": "vagabond",
-            "systemVersion": "5.43.4"
-          },
-          "start": null,
-          "showIcon": 1,
-          "folder": null,
-          "_key": "!actors.items.effects!KSADwLgQvnYt8I5h.PjbVQwviqzUJZxtkKSADwLgQvnYt8I5h.PjbVQwviqzUJZxtk.g4dpsj1bIbUhSpxO"
         }
       ],
       "flags": {
@@ -4905,49 +4234,7 @@
           "runAsGM": false
         }
       },
-      "effects": [
-        {
-          "name": "Keen",
-          "img": "icons/svg/aura.svg",
-          "_id": "wCp4F6KsvGjqmoBk",
-          "type": "base",
-          "system": {
-            "changes": [
-              {
-                "key": "system.attackCritBonus",
-                "type": "subtract",
-                "value": "1"
-              }
-            ]
-          },
-          "disabled": false,
-          "duration": {
-            "value": null,
-            "units": "seconds",
-            "expiry": null,
-            "expired": false
-          },
-          "description": "Crits 1 lower on this weapon's Attack Check.",
-          "tint": "#ffffff",
-          "transfer": true,
-          "statuses": [],
-          "sort": 0,
-          "flags": {
-            "vagabond": {
-              "applicationMode": "on-use"
-            }
-          },
-          "_stats": {
-            "coreVersion": "14.361",
-            "systemId": "vagabond",
-            "systemVersion": "5.43.4"
-          },
-          "start": null,
-          "showIcon": 1,
-          "folder": null,
-          "_key": "!actors.items.effects!KSADwLgQvnYt8I5h.xk61ccXIKmxp1CtXKSADwLgQvnYt8I5h.xk61ccXIKmxp1CtX.wCp4F6KsvGjqmoBk"
-        }
-      ],
+      "effects": [],
       "flags": {
         "vagabond": {
           "shop": {
@@ -5116,49 +4403,7 @@
           "runAsGM": false
         }
       },
-      "effects": [
-        {
-          "name": "Vicious",
-          "img": "icons/svg/aura.svg",
-          "_id": "SmHVNeODBfs5fqir",
-          "type": "base",
-          "system": {
-            "changes": [
-              {
-                "key": "system.critBonusDice",
-                "type": "add",
-                "value": "matchDie"
-              }
-            ]
-          },
-          "disabled": false,
-          "duration": {
-            "value": null,
-            "units": "seconds",
-            "expiry": null,
-            "expired": false
-          },
-          "description": "Crits with it deal 1 extra damage die.",
-          "tint": "#ffffff",
-          "transfer": true,
-          "statuses": [],
-          "sort": 0,
-          "flags": {
-            "vagabond": {
-              "applicationMode": "on-use"
-            }
-          },
-          "_stats": {
-            "coreVersion": "14.361",
-            "systemId": "vagabond",
-            "systemVersion": "5.43.4"
-          },
-          "start": null,
-          "showIcon": 1,
-          "folder": null,
-          "_key": "!actors.items.effects!KSADwLgQvnYt8I5h.k52N9mq3AaHtde7CKSADwLgQvnYt8I5h.k52N9mq3AaHtde7C.SmHVNeODBfs5fqir"
-        }
-      ],
+      "effects": [],
       "flags": {
         "vagabond": {
           "shop": {
@@ -5327,49 +4572,7 @@
           "runAsGM": false
         }
       },
-      "effects": [
-        {
-          "name": "Keen",
-          "img": "icons/svg/aura.svg",
-          "_id": "LEvTspQ0b5hPs4kw",
-          "type": "base",
-          "system": {
-            "changes": [
-              {
-                "key": "system.attackCritBonus",
-                "type": "subtract",
-                "value": "1"
-              }
-            ]
-          },
-          "disabled": false,
-          "duration": {
-            "value": null,
-            "units": "seconds",
-            "expiry": null,
-            "expired": false
-          },
-          "description": "Crits 1 lower on this weapon's Attack Check.",
-          "tint": "#ffffff",
-          "transfer": true,
-          "statuses": [],
-          "sort": 0,
-          "flags": {
-            "vagabond": {
-              "applicationMode": "on-use"
-            }
-          },
-          "_stats": {
-            "coreVersion": "14.361",
-            "systemId": "vagabond",
-            "systemVersion": "5.43.4"
-          },
-          "start": null,
-          "showIcon": 1,
-          "folder": null,
-          "_key": "!actors.items.effects!KSADwLgQvnYt8I5h.zKqDttXs0SrnxxhgKSADwLgQvnYt8I5h.zKqDttXs0Srnxxhg.LEvTspQ0b5hPs4kw"
-        }
-      ],
+      "effects": [],
       "flags": {
         "vagabond": {
           "shop": {
@@ -5539,49 +4742,7 @@
         },
         "toolKind": ""
       },
-      "effects": [
-        {
-          "name": "Vicious",
-          "img": "icons/svg/aura.svg",
-          "_id": "aq3ZaxfxdV8jkAWW",
-          "type": "base",
-          "system": {
-            "changes": [
-              {
-                "key": "system.critBonusDice",
-                "type": "add",
-                "value": "matchDie"
-              }
-            ]
-          },
-          "disabled": false,
-          "duration": {
-            "value": null,
-            "units": "seconds",
-            "expiry": null,
-            "expired": false
-          },
-          "description": "Crits with it deal 1 extra damage die.",
-          "tint": "#ffffff",
-          "transfer": true,
-          "statuses": [],
-          "sort": 0,
-          "flags": {
-            "vagabond": {
-              "applicationMode": "on-use"
-            }
-          },
-          "_stats": {
-            "coreVersion": "14.361",
-            "systemId": "vagabond",
-            "systemVersion": "5.43.4"
-          },
-          "start": null,
-          "showIcon": 1,
-          "folder": null,
-          "_key": "!actors.items.effects!KSADwLgQvnYt8I5h.iL0NhKnWM2a1e3kxKSADwLgQvnYt8I5h.iL0NhKnWM2a1e3kx.aq3ZaxfxdV8jkAWW"
-        }
-      ],
+      "effects": [],
       "flags": {
         "vagabond": {
           "shop": {
@@ -5920,90 +5081,7 @@
         },
         "toolKind": ""
       },
-      "effects": [
-        {
-          "name": "Keen",
-          "img": "icons/svg/aura.svg",
-          "_id": "ndv2BmGwk8ssIALx",
-          "type": "base",
-          "system": {
-            "changes": [
-              {
-                "key": "system.attackCritBonus",
-                "type": "subtract",
-                "value": "1"
-              }
-            ]
-          },
-          "disabled": false,
-          "duration": {
-            "value": null,
-            "units": "seconds",
-            "expiry": null,
-            "expired": false
-          },
-          "description": "Crits 1 lower on this weapon's Attack Check.",
-          "tint": "#ffffff",
-          "transfer": true,
-          "statuses": [],
-          "sort": 0,
-          "flags": {
-            "vagabond": {
-              "applicationMode": "on-use"
-            }
-          },
-          "_stats": {
-            "coreVersion": "14.361",
-            "systemId": "vagabond",
-            "systemVersion": "5.43.4"
-          },
-          "start": null,
-          "showIcon": 1,
-          "folder": null,
-          "_key": "!actors.items.effects!KSADwLgQvnYt8I5h.dOGvrLPqsH5pVUR0KSADwLgQvnYt8I5h.dOGvrLPqsH5pVUR0.ndv2BmGwk8ssIALx"
-        },
-        {
-          "name": "Vicious",
-          "img": "icons/svg/aura.svg",
-          "_id": "16XZwWwmFazYRA65",
-          "type": "base",
-          "system": {
-            "changes": [
-              {
-                "key": "system.critBonusDice",
-                "type": "add",
-                "value": "matchDie"
-              }
-            ]
-          },
-          "disabled": false,
-          "duration": {
-            "value": null,
-            "units": "seconds",
-            "expiry": null,
-            "expired": false
-          },
-          "description": "Crits with it deal 1 extra damage die.",
-          "tint": "#ffffff",
-          "transfer": true,
-          "statuses": [],
-          "sort": 0,
-          "flags": {
-            "vagabond": {
-              "applicationMode": "on-use"
-            }
-          },
-          "_stats": {
-            "coreVersion": "14.361",
-            "systemId": "vagabond",
-            "systemVersion": "5.43.4"
-          },
-          "start": null,
-          "showIcon": 1,
-          "folder": null,
-          "_key": "!actors.items.effects!KSADwLgQvnYt8I5h.dOGvrLPqsH5pVUR0KSADwLgQvnYt8I5h.dOGvrLPqsH5pVUR0.16XZwWwmFazYRA65"
-        }
-      ],
+      "effects": [],
       "flags": {
         "vagabond": {
           "preferredSkill": "",
@@ -7018,49 +6096,7 @@
           "runAsGM": false
         }
       },
-      "effects": [
-        {
-          "name": "Keen",
-          "img": "icons/svg/aura.svg",
-          "_id": "U6PwQgn20zxfLvNd",
-          "type": "base",
-          "system": {
-            "changes": [
-              {
-                "key": "system.attackCritBonus",
-                "type": "subtract",
-                "value": "1"
-              }
-            ]
-          },
-          "disabled": false,
-          "duration": {
-            "value": null,
-            "units": "seconds",
-            "expiry": null,
-            "expired": false
-          },
-          "description": "Crits 1 lower on this weapon's Attack Check.",
-          "tint": "#ffffff",
-          "transfer": true,
-          "statuses": [],
-          "sort": 0,
-          "flags": {
-            "vagabond": {
-              "applicationMode": "on-use"
-            }
-          },
-          "_stats": {
-            "coreVersion": "14.361",
-            "systemId": "vagabond",
-            "systemVersion": "5.43.4"
-          },
-          "start": null,
-          "showIcon": 1,
-          "folder": null,
-          "_key": "!actors.items.effects!KSADwLgQvnYt8I5h.HGZ7KrOB9E29imCeKSADwLgQvnYt8I5h.HGZ7KrOB9E29imCe.U6PwQgn20zxfLvNd"
-        }
-      ],
+      "effects": [],
       "flags": {
         "vagabond": {
           "shop": {
@@ -7231,49 +6267,7 @@
           "runAsGM": false
         }
       },
-      "effects": [
-        {
-          "name": "Vicious",
-          "img": "icons/svg/aura.svg",
-          "_id": "m5s90sKCyZWvpWCx",
-          "type": "base",
-          "system": {
-            "changes": [
-              {
-                "key": "system.critBonusDice",
-                "type": "add",
-                "value": "matchDie"
-              }
-            ]
-          },
-          "disabled": false,
-          "duration": {
-            "value": null,
-            "units": "seconds",
-            "expiry": null,
-            "expired": false
-          },
-          "description": "Crits with it deal 1 extra damage die.",
-          "tint": "#ffffff",
-          "transfer": true,
-          "statuses": [],
-          "sort": 0,
-          "flags": {
-            "vagabond": {
-              "applicationMode": "on-use"
-            }
-          },
-          "_stats": {
-            "coreVersion": "14.361",
-            "systemId": "vagabond",
-            "systemVersion": "5.43.4"
-          },
-          "start": null,
-          "showIcon": 1,
-          "folder": null,
-          "_key": "!actors.items.effects!KSADwLgQvnYt8I5h.WhjYp99zHxzwUc4BKSADwLgQvnYt8I5h.WhjYp99zHxzwUc4B.m5s90sKCyZWvpWCx"
-        }
-      ],
+      "effects": [],
       "flags": {
         "vagabond": {
           "shop": {
@@ -7781,49 +6775,7 @@
           "runAsGM": false
         }
       },
-      "effects": [
-        {
-          "name": "Keen",
-          "img": "icons/svg/aura.svg",
-          "_id": "nxapYUSBP7mSoxvf",
-          "type": "base",
-          "system": {
-            "changes": [
-              {
-                "key": "system.attackCritBonus",
-                "type": "subtract",
-                "value": "1"
-              }
-            ]
-          },
-          "disabled": false,
-          "duration": {
-            "value": null,
-            "units": "seconds",
-            "expiry": null,
-            "expired": false
-          },
-          "description": "Crits 1 lower on this weapon's Attack Check.",
-          "tint": "#ffffff",
-          "transfer": true,
-          "statuses": [],
-          "sort": 0,
-          "flags": {
-            "vagabond": {
-              "applicationMode": "on-use"
-            }
-          },
-          "_stats": {
-            "coreVersion": "14.361",
-            "systemId": "vagabond",
-            "systemVersion": "5.43.4"
-          },
-          "start": null,
-          "showIcon": 1,
-          "folder": null,
-          "_key": "!actors.items.effects!KSADwLgQvnYt8I5h.cjSS166l9waE9A8OKSADwLgQvnYt8I5h.cjSS166l9waE9A8O.nxapYUSBP7mSoxvf"
-        }
-      ],
+      "effects": [],
       "flags": {
         "vagabond": {
           "preferredSkill": "",
@@ -8705,12 +7657,12 @@
     "systemId": "vagabond",
     "systemVersion": "5.43.0",
     "createdTime": 1790440878606,
-    "modifiedTime": 1790441383927,
+    "modifiedTime": 1791169387398,
     "lastModifiedBy": "F8lCaC2xBa4wgj43",
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null
   },
-  "sort": 100000,
+  "sort": 400000,
   "_key": "!actors!KSADwLgQvnYt8I5h"
 }

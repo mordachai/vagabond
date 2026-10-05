@@ -2,7 +2,7 @@
   "folder": null,
   "name": "Antitoxin",
   "type": "equipment",
-  "img": "icons/consumables/drinks/alcohol-spirits-bottle-green.webp",
+  "img": "icons/consumables/potions/potion-bottle-labeled-medicine-capped-red-black.webp",
   "system": {
     "description": "<p><span class=\"fontstyle0\">Removes the Sickened Status from the consumer.</span></p>",
     "equipmentType": "alchemical",

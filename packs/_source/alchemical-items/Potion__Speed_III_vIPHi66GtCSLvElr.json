@@ -2,7 +2,7 @@
   "folder": null,
   "name": "Potion, Speed III",
   "type": "equipment",
-  "img": "icons/consumables/potions/bottle-round-label-cork-blue.webp",
+  "img": "icons/consumables/potions/bottle-conical-corked-cyan.webp",
   "system": {
     "description": "<p><span class=\"fontstyle0\">This thin blue liquid tightens the consumer’s muscles. For 1 Hour, the consumer’s Speed is increased by 15 feet.</span></p>",
     "equipmentType": "alchemical",

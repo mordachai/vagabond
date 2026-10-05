@@ -1,7 +1,7 @@
 {
   "name": "Fabled - Vorpal",
   "type": "equipment",
-  "img": "icons/magic/control/buff-flight-wings-runes-blue-white.webp",
+  "img": "icons/magic/control/buff-flight-wings-runes-purple-orange.webp",
   "system": {
     "description": "<p>Behead Target on Crit if the Target takes the damage.</p>",
     "equipmentType": "relic",

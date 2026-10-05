@@ -2,7 +2,7 @@
   "folder": null,
   "name": "Smelling Salts",
   "type": "equipment",
-  "img": "icons/consumables/drinks/alcohol-spirits-bottle-green.webp",
+  "img": "icons/consumables/potions/vial-cork-blue.webp",
   "system": {
     "description": "<p><span class=\"fontstyle0\">This pungent fluid can be administered by wafting the contents under a Being’s nose. If the Being is Unconscious from sleep, it immediately wakes up.</span></p>",
     "equipmentType": "alchemical",

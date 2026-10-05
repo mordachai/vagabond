@@ -1,7 +1,7 @@
 {
   "name": "Fabled - Benediction",
   "type": "equipment",
-  "img": "icons/magic/control/buff-flight-wings-runes-blue-white.webp",
+  "img": "icons/magic/control/buff-flight-wings-runes-purple-orange.webp",
   "system": {
     "description": "<p>Immediately revived upon death by dropping to 0 HP, once per week.</p>",
     "equipmentType": "relic",

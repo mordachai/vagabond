@@ -2,7 +2,7 @@
   "folder": null,
   "name": "Clearbreath",
   "type": "equipment",
-  "img": "icons/consumables/potions/bottle-round-label-cork-blue.webp",
+  "img": "icons/consumables/potions/potion-bottle-fumes-blue.webp",
   "system": {
     "description": "<p><span class=\"fontstyle0\">Gray, smokey vapors that temporarily dull one’s sense of smell when inhaled. A Being that inhales the clearbreath gains Favor on Saves against foul smells and gases for 1 hour.</span></p>",
     "equipmentType": "alchemical",

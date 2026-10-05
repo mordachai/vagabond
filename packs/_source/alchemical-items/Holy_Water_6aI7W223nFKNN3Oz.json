@@ -2,7 +2,7 @@
   "folder": null,
   "name": "Holy Water",
   "type": "equipment",
-  "img": "icons/consumables/drinks/alcohol-spirits-bottle-green.webp",
+  "img": "icons/magic/holy/chalice-glowing-yellow-blue.webp",
   "system": {
     "description": "<p><span class=\"fontstyle0\">Used in sacred rituals, and is known to be caustic to unholy Beings. Undead and Hellspawn hit with it take d6 damage and are Burning (Cd4).</span></p>",
     "equipmentType": "alchemical",

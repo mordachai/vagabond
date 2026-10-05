@@ -2,7 +2,7 @@
   "folder": null,
   "name": "Potion, Freedom",
   "type": "equipment",
-  "img": "icons/consumables/potions/bottle-round-label-cork-blue.webp",
+  "img": "icons/consumables/potions/potion-round-stopped-yellow-green.webp",
   "system": {
     "description": "<p><span class=\"fontstyle0\">For 1 Hour, the consumer is Immune to the Restrained and Paralyzed Statuses.</span></p>",
     "equipmentType": "alchemical",

@@ -2,7 +2,7 @@
   "folder": null,
   "name": "Levin Shell",
   "type": "equipment",
-  "img": "icons/magic/fire/projectile-smoke-swirl-red.webp",
+  "img": "icons/commodities/treasure/stone-cracked-lightning-blue.webp",
   "system": {
     "description": "<p><span class=\"fontstyle0\">An unstable mass of electric energy that sparks when exposed to oxygen. A Target hit with this Item takes d6 damage and any other Close Beings take half. A Being that takes this damage is Dazed until the end of its next Turn.</span></p>",
     "equipmentType": "alchemical",

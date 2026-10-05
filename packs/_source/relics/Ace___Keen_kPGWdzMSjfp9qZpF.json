@@ -1,7 +1,7 @@
 {
   "name": "Ace - Keen",
   "type": "equipment",
-  "img": "icons/magic/control/buff-flight-wings-runes-blue-white.webp",
+  "img": "icons/magic/control/buff-flight-wings-runes-red.webp",
   "system": {
     "description": "<p>Crit on Attack Checks 2 lower, rather than 1 lower.</p>",
     "equipmentType": "relic",

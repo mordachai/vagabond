@@ -1,7 +1,7 @@
 {
   "name": "Movement - Flying",
   "type": "equipment",
-  "img": "icons/magic/control/buff-flight-wings-runes-blue-white.webp",
+  "img": "icons/magic/control/buff-flight-wings-blue.webp",
   "system": {
     "description": "<p>Wearer gains Fly.</p>",
     "equipmentType": "relic",

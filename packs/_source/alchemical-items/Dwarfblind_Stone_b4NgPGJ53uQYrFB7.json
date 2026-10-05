@@ -2,7 +2,7 @@
   "folder": null,
   "name": "Dwarfblind Stone",
   "type": "equipment",
-  "img": "icons/magic/fire/projectile-smoke-swirl-red.webp",
+  "img": "icons/commodities/stone/rock-chunk-purple.webp",
   "system": {
     "description": "<p><span class=\"fontstyle0\">Treated stones with a purple sheen. A hit Target with Darksight is Blinded (Cd6).</span></p>",
     "equipmentType": "alchemical",

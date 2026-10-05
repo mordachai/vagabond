@@ -2,7 +2,7 @@
   "folder": null,
   "name": "Potion, Diminution",
   "type": "equipment",
-  "img": "icons/consumables/potions/bottle-round-label-cork-blue.webp",
+  "img": "icons/consumables/potions/vial-cork-green.webp",
   "system": {
     "description": "<p><span class=\"fontstyle0\">For 1 Hour, the consumer becomes Small. During this time, their damage dice are reduced by one size (minimum d4).</span></p>",
     "equipmentType": "alchemical",

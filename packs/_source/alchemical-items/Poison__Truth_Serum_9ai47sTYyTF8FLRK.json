@@ -2,7 +2,7 @@
   "folder": null,
   "name": "Poison, Truth Serum",
   "type": "equipment",
-  "img": "icons/consumables/potions/potion-jar-corked-labeled-poison-skull-green.webp",
+  "img": "icons/consumables/potions/potion-bottle-skull-label-poison-teal.webp",
   "system": {
     "description": "<p><span class=\"fontstyle0\">The Target is Sickened (Cd8, it can't knowingly tell a lie).</span></p><p><span class=\"fontstyle2\"><strong>Consumed:</strong> </span><span class=\"fontstyle0\">Affects Targets who consume it.</span></p>",
     "equipmentType": "alchemical",

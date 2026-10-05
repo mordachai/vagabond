@@ -1,7 +1,7 @@
 {
   "name": "Fabled - Soul Eater",
   "type": "equipment",
-  "img": "icons/magic/control/buff-flight-wings-runes-blue-white.webp",
+  "img": "icons/magic/control/buff-flight-wings-runes-purple-orange.webp",
   "system": {
     "description": "<p>Those killed by it can't be resurrected unless a wish is granted to do so.</p>",
     "equipmentType": "relic",

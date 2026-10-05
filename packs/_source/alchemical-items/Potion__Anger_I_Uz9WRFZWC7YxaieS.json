@@ -2,7 +2,7 @@
   "folder": null,
   "name": "Potion, Anger I",
   "type": "equipment",
-  "img": "icons/consumables/potions/bottle-round-label-cork-blue.webp",
+  "img": "icons/consumables/potions/bottle-round-corked-red.webp",
   "system": {
     "description": "<p><span class=\"fontstyle0\">The consumer becomes Berserk for a number of Rounds equal to the roll of a countdown die (Cd4). The size of the die is determined by its Rank.</span></p>",
     "equipmentType": "alchemical",

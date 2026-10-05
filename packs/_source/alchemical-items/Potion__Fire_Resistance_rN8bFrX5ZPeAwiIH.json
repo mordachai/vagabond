@@ -2,7 +2,7 @@
   "folder": null,
   "name": "Potion, Fire Resistance",
   "type": "equipment",
-  "img": "icons/consumables/potions/bottle-round-label-cork-blue.webp",
+  "img": "icons/consumables/potions/potion-flask-corked-flat-red.webp",
   "system": {
     "description": "<p><span class=\"fontstyle0\">For 1 Hour, the consumer gains these benefits:</span></p><ul><li><span class=\"fontstyle0\">They aren't harmed by Sweltering Heat.</span></li><li><span class=\"fontstyle0\">They gain a +2 bonus to Saves against Fire based attacks and magic.</span></li><li><span class=\"fontstyle0\">They reduce any Fire damage they take by 1 per die used for the damage.</span></li></ul>",
     "equipmentType": "alchemical",

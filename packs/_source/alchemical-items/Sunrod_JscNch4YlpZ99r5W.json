@@ -2,7 +2,7 @@
   "folder": null,
   "name": "Sunrod",
   "type": "equipment",
-  "img": "icons/sundries/lights/candle-lit-yellow.webp",
+  "img": "icons/weapons/wands/wand-carved-fire.webp",
   "system": {
     "description": "<p><span class=\"fontstyle0\">This gold-tipped, iron rod glows brightly when struck. When you do, it sheds Light out to Near for a Shift, and the Light it sheds within Close is Sunlight.</span></p>",
     "equipmentType": "alchemical",

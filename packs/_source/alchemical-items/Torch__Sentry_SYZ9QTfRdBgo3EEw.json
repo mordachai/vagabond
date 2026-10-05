@@ -2,7 +2,7 @@
   "folder": null,
   "name": "Torch, Sentry",
   "type": "equipment",
-  "img": "icons/sundries/lights/candle-lit-yellow.webp",
+  "img": "icons/sundries/lights/torch-black.webp",
   "system": {
     "description": "<p><span class=\"fontstyle0\">While burning, effects that cause Invisibility are suspended while in its Light.</span></p>",
     "equipmentType": "alchemical",

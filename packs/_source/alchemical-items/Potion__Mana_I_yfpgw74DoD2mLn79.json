@@ -2,7 +2,7 @@
   "folder": null,
   "name": "Potion, Mana I",
   "type": "equipment",
-  "img": "icons/consumables/potions/bottle-round-label-cork-blue.webp",
+  "img": "icons/consumables/potions/bottle-round-corked-blue.webp",
   "system": {
     "description": "<p><span class=\"fontstyle0\">The consumer regains Mana equal to a number of d6 rolls determined by the Potion's Rank, plus a modifier equal to its Rank (d6+1). Once it regains Mana with one of these potions, it must regain Mana from a Rest to do so again.</span></p>",
     "equipmentType": "alchemical",

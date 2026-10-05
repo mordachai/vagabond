@@ -1,7 +1,7 @@
 {
   "name": "Movement - Swiftness II",
   "type": "equipment",
-  "img": "icons/magic/control/buff-flight-wings-runes-blue-white.webp",
+  "img": "icons/magic/control/buff-flight-wings-blue.webp",
   "system": {
     "description": "<p>Wearer gains a bonus +10 feet to Speed.</p>",
     "equipmentType": "relic",

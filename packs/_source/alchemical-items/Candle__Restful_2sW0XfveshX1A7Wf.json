@@ -2,7 +2,7 @@
   "folder": null,
   "name": "Candle, Restful",
   "type": "equipment",
-  "img": "icons/sundries/lights/candle-lit-yellow.webp",
+  "img": "icons/sundries/lights/candle-unlit-red.webp",
   "system": {
     "description": "<p><span class=\"fontstyle0\">Sheds light out to Close for up to 1 hour while burning and fills the air within Near with a cozy odor. Once per Shift, a Being that takes a Breather in this area gains Favor on its next Will Save that Shift.</span></p>",
     "equipmentType": "alchemical",

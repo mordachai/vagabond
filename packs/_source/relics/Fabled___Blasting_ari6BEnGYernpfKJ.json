@@ -1,7 +1,7 @@
 {
   "name": "Fabled - Blasting",
   "type": "equipment",
-  "img": "icons/magic/control/buff-flight-wings-runes-blue-white.webp",
+  "img": "icons/magic/control/buff-flight-wings-runes-purple-orange.webp",
   "system": {
     "description": "<p>Can send a beam of magic energy to attack.</p>",
     "equipmentType": "relic",

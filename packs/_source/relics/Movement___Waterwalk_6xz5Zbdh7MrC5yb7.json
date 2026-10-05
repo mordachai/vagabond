@@ -1,7 +1,7 @@
 {
   "name": "Movement - Waterwalk",
   "type": "equipment",
-  "img": "icons/magic/control/buff-flight-wings-runes-blue-white.webp",
+  "img": "icons/magic/control/buff-flight-wings-blue.webp",
   "system": {
     "description": "<p>Wearer can walk on liquids.</p>",
     "equipmentType": "relic",

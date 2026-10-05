@@ -1,7 +1,7 @@
 {
   "name": "Protection - Specific",
   "type": "equipment",
-  "img": "icons/magic/control/buff-flight-wings-runes-blue-white.webp",
+  "img": "icons/magic/defensive/shield-barrier-flaming-diamond-teal.webp",
   "system": {
     "description": "<p>Applies to a Being subtype, such as giants (not all Cryptids).</p>",
     "equipmentType": "relic",

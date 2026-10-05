@@ -2,7 +2,7 @@
   "folder": null,
   "name": "Potion, Flying",
   "type": "equipment",
-  "img": "icons/consumables/potions/bottle-round-label-cork-blue.webp",
+  "img": "icons/consumables/potions/bottle-conical-corked-tied-blue.webp",
   "system": {
     "description": "<p><span class=\"fontstyle0\">For 1 Hour, the consumer has a 120' Fly Speed.</span></p>",
     "equipmentType": "alchemical",

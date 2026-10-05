@@ -2,7 +2,7 @@
   "folder": null,
   "name": "Oil, Crone’s Ire",
   "type": "equipment",
-  "img": "icons/consumables/potions/potion-flask-stopped-labeled-yellow.webp",
+  "img": "icons/consumables/potions/potion-flask-corked-capped-green.webp",
   "system": {
     "description": "<p><span class=\"fontstyle0\">A sickly emerald oil that shrieks when lit. Acts as basic oil. However, when coated on a Weapon that is then ignited, attack damage with it can explode if the Target can Cast. If the Target is Focusing and any of the dice do explode, its Focus ends.</span></p>",
     "equipmentType": "alchemical",

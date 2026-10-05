@@ -2,7 +2,7 @@
   "folder": null,
   "name": "Potion, Gaseous Form",
   "type": "equipment",
-  "img": "icons/consumables/potions/bottle-round-label-cork-blue.webp",
+  "img": "icons/consumables/potions/bottle-round-flask-fumes-purple.webp",
   "system": {
     "description": "<p><span class=\"fontstyle0\">For 1 Hour, the consumer's body becomes a cloud of gas and the following rules apply:</span></p><ul><li><span class=\"fontstyle0\">They immediately drop anything they have equipped, and can't equip anything.</span></li><li><span class=\"fontstyle0\">They can Move by seeping into tiny spaces.</span></li><li><span class=\"fontstyle0\">They can't Attack or Cast.</span></li><li><span class=\"fontstyle0\">They are Immune to all damage from attacks that aren't made by Relics.</span></li></ul>",
     "equipmentType": "alchemical",

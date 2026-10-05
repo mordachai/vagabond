@@ -2,7 +2,7 @@
   "folder": null,
   "name": "Potion, Invisibility",
   "type": "equipment",
-  "img": "icons/consumables/potions/bottle-round-label-cork-blue.webp",
+  "img": "icons/consumables/potions/bottle-round-empty-glass.webp",
   "system": {
     "description": "<p><span class=\"fontstyle0\">For 1 Hour, the consumer and everything they are wearing and carrying become Invisible until they attempt to harm another Being.</span></p>",
     "equipmentType": "alchemical",

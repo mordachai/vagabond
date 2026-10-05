@@ -2,7 +2,7 @@
   "folder": null,
   "name": "Potion, Regeneration I",
   "type": "equipment",
-  "img": "icons/consumables/potions/bottle-round-label-cork-blue.webp",
+  "img": "icons/consumables/potions/potion-tube-corked-green.webp",
   "system": {
     "description": "<p><span class=\"fontstyle0\">The consumer of the item regains HP equal to the roll of a countdown die (Cd4). The size of the die is determined by its Rank.</span></p>",
     "equipmentType": "alchemical",

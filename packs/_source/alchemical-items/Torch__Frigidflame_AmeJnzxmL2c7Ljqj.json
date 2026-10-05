@@ -2,7 +2,7 @@
   "folder": null,
   "name": "Torch, Frigidflame",
   "type": "equipment",
-  "img": "icons/sundries/lights/candle-lit-yellow.webp",
+  "img": "icons/sundries/lights/torch-white.webp",
   "system": {
     "description": "<p><span class=\"fontstyle0\">While burning, it sheds Moonlight and counts as a source of ice rather than fire.</span></p>",
     "equipmentType": "alchemical",

@@ -2,7 +2,7 @@
   "folder": null,
   "name": "Potion, Levitation",
   "type": "equipment",
-  "img": "icons/consumables/potions/bottle-round-label-cork-blue.webp",
+  "img": "icons/consumables/potions/potion-bottle-corked-fancy-blue.webp",
   "system": {
     "description": "<p><span class=\"fontstyle0\">For 1 Hour, the consumer can Move vertically up and down in the air as if by Fly, but must gain momentum to Move horizontally.</span></p>",
     "equipmentType": "alchemical",

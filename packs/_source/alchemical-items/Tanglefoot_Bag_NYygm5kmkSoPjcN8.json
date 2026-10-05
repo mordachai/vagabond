@@ -2,7 +2,7 @@
   "folder": null,
   "name": "Tanglefoot Bag",
   "type": "equipment",
-  "img": "icons/magic/fire/projectile-smoke-swirl-red.webp",
+  "img": "icons/containers/bags/pouch-cloth-tan.webp",
   "system": {
     "description": "<p><span class=\"fontstyle0\">A bag filled with sticky black tar that bursts on impact. A Target who is hit with this Item is Restrained (Cd4 Rounds). This has no effect underwater.</span></p>",
     "equipmentType": "alchemical",

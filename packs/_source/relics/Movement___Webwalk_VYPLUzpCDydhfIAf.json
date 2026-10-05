@@ -1,7 +1,7 @@
 {
   "name": "Movement - Webwalk",
   "type": "equipment",
-  "img": "icons/magic/control/buff-flight-wings-runes-blue-white.webp",
+  "img": "icons/magic/control/buff-flight-wings-blue.webp",
   "system": {
     "description": "<p>Wearer ignores Difficult Terrain of webs, and can't be Restrained by them.</p>",
     "equipmentType": "relic",

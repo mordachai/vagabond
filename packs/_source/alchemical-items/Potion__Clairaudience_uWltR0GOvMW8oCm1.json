@@ -2,7 +2,7 @@
   "folder": null,
   "name": "Potion, Clairaudience",
   "type": "equipment",
-  "img": "icons/consumables/potions/bottle-round-label-cork-blue.webp",
+  "img": "icons/consumables/potions/potion-flask-corked-tied-necklace-teal.webp",
   "system": {
     "description": "<p>For 1 Hour, the consumer can hear what other Beings of their choice within Far hear. This sense is obstructed by 1 inch of lead or more than 2’ of stone.</p>",
     "equipmentType": "alchemical",

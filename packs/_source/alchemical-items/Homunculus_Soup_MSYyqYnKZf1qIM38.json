@@ -2,7 +2,7 @@
   "folder": null,
   "name": "Homunculus Soup",
   "type": "equipment",
-  "img": "icons/consumables/drinks/alcohol-spirits-bottle-green.webp",
+  "img": "icons/tools/laboratory/cauldron-filled-gold.webp",
   "system": {
     "description": "<p><span class=\"fontstyle0\">A special mixture of clay, ash, mandrake root, and the alchemist's own blood. This soup creates a homunculus (p. 120) under the alchemist's control, and it uses their Craft Skill for any Checks it makes. If another homunculus is created from the same alchemist's blood, the oldest homunculus dies.</span></p>",
     "equipmentType": "alchemical",

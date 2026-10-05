@@ -1,7 +1,7 @@
 {
   "name": "Bonus - Trinket +2",
   "type": "equipment",
-  "img": "icons/magic/control/buff-flight-wings-runes-blue-white.webp",
+  "img": "icons/magic/control/buff-flight-wings-runes-purple.webp",
   "system": {
     "description": "<p>+2 bonus to Spell damage.</p>",
     "equipmentType": "relic",

@@ -1,7 +1,7 @@
 {
   "name": "Ace - Grapple",
   "type": "equipment",
-  "img": "icons/magic/control/buff-flight-wings-runes-blue-white.webp",
+  "img": "icons/magic/control/buff-flight-wings-runes-red.webp",
   "system": {
     "description": "<p>Target is considered Vulnerable for ending the Restrained Status.</p>",
     "equipmentType": "relic",

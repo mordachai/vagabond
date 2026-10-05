@@ -2,7 +2,7 @@
   "folder": null,
   "name": "Acid, Green Slime",
   "type": "equipment",
-  "img": "icons/consumables/potions/bottle-conical-fumes-green.webp",
+  "img": "icons/commodities/materials/slime-thick-green.webp",
   "system": {
     "description": "<p><span class=\"fontstyle0\">Contains a green slime (p. 173).<br /><br />@UUID[Compendium.vagabond.bestiary.Actor.9rpGK7YO9OfbXJoh]{Green Slime}</span></p>",
     "equipmentType": "alchemical",

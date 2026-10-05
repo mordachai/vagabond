@@ -2,7 +2,7 @@
   "folder": null,
   "name": "Soap",
   "type": "equipment",
-  "img": "icons/consumables/drinks/alcohol-spirits-bottle-green.webp",
+  "img": "icons/sundries/survival/soap.webp",
   "system": {
     "description": "<p><span class=\"fontstyle0\">Fragrant bar of fat and oil, used for bathing.</span></p>",
     "equipmentType": "alchemical",
