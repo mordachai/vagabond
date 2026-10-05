@@ -140,6 +140,9 @@
             <li class='feature accordion-item collapsed' data-feature-level='{{feature.level}}' data-feature-index='{{feature.index}}' data-source-type='class' data-accordion-id='feature-{{feature.index}}'>
               <div class='feature-header accordion-header clickable' data-action='toggleFeature' data-feature-id='{{feature._id}}'>
                 <h5 class='feature-name'>{{feature.name}}</h5>
+                {{#if feature.fx}}
+                  <button type='button' class='feature-action-btn' data-action='featureAction' data-action-key='{{feature.fx.key}}' data-tooltip='{{feature.fx.label}}'><i class='{{feature.fx.icon}}'></i></button>
+                {{/if}}
               </div>
               {{#if feature.enrichedDescription}}
                 <div class='feature-description accordion-content' data-feature-id='{{feature._id}}'>{{{feature.enrichedDescription}}}</div>
@@ -160,6 +163,9 @@
             <li class='trait accordion-item collapsed' data-trait-index='{{trait.index}}' data-source-type='ancestry' data-accordion-id='trait-{{trait.index}}'>
               <div class='trait-header accordion-header clickable' data-action='toggleTrait' data-trait-id='{{trait._id}}'>
                 <h5 class='trait-name'>{{trait.name}}</h5>
+                {{#if trait.fx}}
+                  <button type='button' class='feature-action-btn' data-action='featureAction' data-action-key='{{trait.fx.key}}' data-tooltip='{{trait.fx.label}}'><i class='{{trait.fx.icon}}'></i></button>
+                {{/if}}
               </div>
               {{#if trait.enrichedDescription}}
                 <div class='trait-description accordion-content' data-trait-id='{{trait._id}}'>{{{trait.enrichedDescription}}}</div>
@@ -177,6 +183,9 @@
             <li class='perk-card accordion-item collapsed' data-item-id='{{perk._id}}' data-accordion-id='perk-{{perk._id}}'>
               <div class='perk-header accordion-header clickable' data-action='togglePerk' data-perk-id='{{perk._id}}'>
                 <h5 class='perk-name'>{{perk.name}}</h5>
+                {{#if perk.fx}}
+                  <button type='button' class='feature-action-btn' data-action='featureAction' data-action-key='{{perk.fx.key}}' data-tooltip='{{perk.fx.label}}'><i class='{{perk.fx.icon}}'></i></button>
+                {{/if}}
               </div>
               <div class='perk-content accordion-content' data-perk-id='{{perk._id}}'>
                 {{#if perk.prerequisites}}

@@ -1,6 +1,16 @@
 # Changelog
 
 ## Unreleased
+- **Action buttons on features, traits and perks.** Any class feature, ancestry trait or perk can now define an action button in its item sheet (Action Button section: label, Font Awesome icon, macro UUID or embedded script, Allow Players). It shows on the character sheet's Features / Traits / Perks lists; right-click it to **Add to Belt** and it appears in the HUD Belt (click runs it, right-click: Run / Remove from Belt). Runs through the item-macro scope (`actor`, `item`, `token`, `targets`, `speaker`).
+- **Effects can be spent on use.** An Active Effect flagged `consumeOn` (`attack`, `cast`, `save`, `heal`) is removed from its actor right after a roll of that kind.
+- **Bard revised to the new book text.** Class description, Overtuned at Levels 2 / 6 / 10 (21+ / 20+ / 19+), Audacity at 4 / 8 (Cd4 / Cd6), Enjoy the Silence, Climax and Well-Versed now read exactly as printed; training is Finesse, Influence and Performance. Song of Rest, Starstruck, Bravado and Starstruck Enhancement are gone.
+  - **Virtuoso is playable.** The Virtuoso feature has a **Perform** button (character sheet Features list, or pinned to the HUD Belt). It posts a chat card with Inspiration / Resolve / Valor buttons; picking one rolls Performance and, on a pass, applies the benefit to your Group (the Party sheet's members, else you plus your Targets). Inspiration = +1d6 on HP-restoring rolls; Resolve = Favor on Saves; Valor = Favor on Attack and Cast Checks. Performing again replaces your previous benefit.
+  - **Benefits are spent when used:** each one is removed from the recipient after their next roll of that kind (healing roll / Save / Attack or Cast). Manual-first: it is an ordinary effect with an on/off switch; inside a started combat it also ends at the end of that Round, with no combat it lasts until used or switched off.
+  - **Climax (Lv 10)** makes the Favor die and the healing d6 of the benefit you grant explode. **Overtuned** gives you 1 Luck when the Favor die from your Virtuoso lifts a d20 from below the threshold to at-or-above it.
+  - **Enjoy the Silence** is an Active Effect under Class Features (Lv 6): Favor on Saves against Berserk, Charmed, Confused and Frightened. Audacity is text-only.
+  - New reusable effect fields: `system.favorChecks` (Favor on all attack / cast / save checks), `system.healingBonusDice`, `system.bonusDiceExplode`.
+  - Removed the dead Bravado and Climax library effects (they pointed at fields nothing read).
+  - Existing Bard class items are converted once on load.
 - **Effects list: Class Features category.** Class-feature effects (Catalyze, Potency, Rage…) are listed in their own "Class Features" section without an on/off switch and no longer clutter the HUD effect menu. Helper effects meant to be flipped by hand (Rage: Auto-Berserk, Aggressor first-Round twins) stay in Active / Inactive and the HUD.
 - **Alchemist revised to the new book text.** Class description, Eureka at Levels 2 / 6 / 10 (10+ / 9+ / 8+), Potency at 4 / 8 and every other feature now read exactly as printed; training is Arcana, Craft and Medicine.
   - **Every automated piece is its own Active Effect** under Class Features: Catalyze, Eureka, Potency (+1 per die, +2 at 8), Potency: Explode, Mix and Prima Materia. Each Level-gated one shows its **Lv N** badge until you reach it.

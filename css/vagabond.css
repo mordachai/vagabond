@@ -4169,6 +4169,10 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   height: 100%;
   object-fit: cover;
 }
+.vbd-hud .vh-slot.vh-slot-action > i {
+  font-size: 16px;
+  color: var(--vagabond-c-chat-yellow);
+}
 .vbd-hud .vh-slot.filled {
   cursor: pointer;
 }
@@ -4846,6 +4850,26 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 }
 .vbd-hud .accordion-item .accordion-header:hover .vh-acc-name {
   color: var(--vagabond-c-chat-yellow);
+}
+.vbd-hud .accordion-item .accordion-header .vh-fx-btn {
+  margin-left: auto;
+  width: 20px;
+  height: 20px;
+  line-height: normal;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: none;
+  border: 1px solid var(--vagabond-c-chat-yellow);
+  border-radius: 3px;
+  color: var(--vagabond-c-chat-yellow);
+  font-size: calc(0.8rem * var(--vh-font-scale));
+  cursor: pointer;
+}
+.vbd-hud .accordion-item .accordion-header .vh-fx-btn:hover {
+  box-shadow: 0 0 5px var(--vagabond-c-chat-yellow);
 }
 .vbd-hud .accordion-item .accordion-icon {
   transition: transform 0.15s ease;
@@ -16917,6 +16941,25 @@ ol#combat-tracker.directory-list {
 }
 .vagabond .features-list {
   overflow-y: auto;
+}
+.vagabond .features-list .feature-action-btn {
+  margin-left: auto;
+  width: 22px;
+  height: 22px;
+  line-height: normal;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--vagabond-c-text-primary);
+  background: none;
+  border: 1px solid currentColor;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.vagabond .features-list .feature-action-btn:hover {
+  color: var(--vagabond-c-chat-yellow);
 }
 .vagabond .traits-list {
   margin-bottom: 16px;

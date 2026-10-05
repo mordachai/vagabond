@@ -164,6 +164,33 @@
     "AttackFavorRules": {
       "Wounded": "Targets missing any HP (Bloodthirsty)"
     },
+    "FeatureAction": {
+      "Section": "Action Button",
+      "Enabled": "Show action button",
+      "Label": "Button label",
+      "Icon": "Icon (Font Awesome name)",
+      "RunAsGM": "Allow Players",
+      "MacroUuid": "Macro UUID",
+      "Script": "Embedded script",
+      "Hint": "Adds a button on the character sheet (and the HUD Belt) that runs the macro below.",
+      "Run": "Run",
+      "AddToBelt": "Add to Belt",
+      "RemoveFromBelt": "Remove from Belt",
+      "Missing": "This action is no longer available."
+    },
+    "Virtuoso": {
+      "Title": "Virtuoso",
+      "Pick": "Choose the benefit your Group gains this Round:",
+      "NoBoons": "This Bard class item has no Virtuoso benefits — update the class from the compendium.",
+      "Recipients": "Group",
+      "NoGM": "No GM is connected to apply the benefit.",
+      "ApplyFailed": "Could not give the Virtuoso benefit to {name} — see console.",
+      "NotYours": "Only the Bard’s owner can perform.",
+      "Perform": "Perform (Virtuoso)",
+      "Failed": "{name}’s performance falls flat.",
+      "Passed": "<strong>{name}</strong> performs — the Group gains <strong>{boon}</strong> for the Round.",
+      "Overtuned": "Overtuned"
+    },
     "Rage": {
       "Ended": "{name}'s Rage fades — no attack or damage since their last Turn."
     },

@@ -70,10 +70,14 @@ export class RollHandler {
 
       // Apply favor/hinder based on system state and keyboard modifiers
       const systemFavorHinder = this.actor.system.favorHinder || 'none';
-      const favorHinder = VagabondRollBuilder.calculateEffectiveFavorHinder(
-        systemFavorHinder,
-        event.shiftKey,
-        event.ctrlKey
+      const favorHinder = VagabondRollBuilder.mergeFavorHinder(
+        VagabondRollBuilder.calculateEffectiveFavorHinder(
+          systemFavorHinder,
+          event.shiftKey,
+          event.ctrlKey
+        ),
+        // Unconditional Favor on Saves (system.favorChecks, e.g. Virtuoso: Resolve)
+        rollType === 'save' ? VagabondRollBuilder.checkFavorVote(this.actor, 'save') : 'none'
       );
 
       // Compute difficulty upfront so pre-hook can see (and modify) it

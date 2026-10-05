@@ -164,6 +164,33 @@
     "AttackFavorRules": {
       "Wounded": "Alvos com qualquer HP faltando (Sede de Sangue)"
     },
+    "FeatureAction": {
+      "Section": "Botão de Ação",
+      "Enabled": "Mostrar botão de ação",
+      "Label": "Rótulo do botão",
+      "Icon": "Ícone (nome Font Awesome)",
+      "RunAsGM": "Permitir Jogadores",
+      "MacroUuid": "UUID da Macro",
+      "Script": "Script embutido",
+      "Hint": "Adiciona um botão na ficha (e no Cinto do HUD) que executa a macro abaixo.",
+      "Run": "Executar",
+      "AddToBelt": "Adicionar ao Cinto",
+      "RemoveFromBelt": "Remover do Cinto",
+      "Missing": "Esta ação não está mais disponível."
+    },
+    "Virtuoso": {
+      "Title": "Virtuoso",
+      "Pick": "Escolha o benefício que seu Grupo ganha nesta Rodada:",
+      "NoBoons": "Este item de classe Bardo não tem os benefícios de Virtuoso — atualize a classe a partir do compêndio.",
+      "Recipients": "Grupo",
+      "NoGM": "Nenhum GM conectado para aplicar o benefício.",
+      "ApplyFailed": "Não foi possível dar o benefício de Virtuoso a {name} — veja o console.",
+      "NotYours": "Apenas o dono do Bardo pode se apresentar.",
+      "Perform": "Atuar (Virtuoso)",
+      "Failed": "A apresentação de {name} não convence.",
+      "Passed": "<strong>{name}</strong> se apresenta — o Grupo ganha <strong>{boon}</strong> pela Rodada.",
+      "Overtuned": "Superafinado"
+    },
     "Rage": {
       "Ended": "A Fúria de {name} se dissipa — nenhum ataque ou dano desde o último Turno."
     },

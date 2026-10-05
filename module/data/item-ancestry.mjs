@@ -1,4 +1,5 @@
 import VagabondItemBase from './base-item.mjs';
+import { featureActionSchema } from './feature-action.mjs';
 
 export default class VagabondAncestry extends VagabondItemBase {
   static LOCALIZATION_PREFIXES = [
@@ -52,6 +53,9 @@ export default class VagabondAncestry extends VagabondItemBase {
 
         // Spell amount - number of spells player can choose from the allowedSpells pool
         spellAmount: new fields.NumberField({ initial: 0, integer: true, min: 0, max: 10 }),
+
+        // Optional action button on the actor sheet / HUD Belt (see helpers/feature-action.mjs)
+        action: featureActionSchema(),
 
         // Skill choice groups - restricted skill training choices
         skillChoices: new fields.ArrayField(

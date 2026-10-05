@@ -14,6 +14,7 @@ import { buildEffectMenuItems } from '../helpers/effects.mjs';
 import { setupDragReorder } from '../helpers/drag-reorder.mjs';
 import * as ItemSections from '../helpers/item-sections.mjs';
 import { EquipmentHelper } from '../helpers/equipment-helper.mjs';
+import { FeatureAction } from '../helpers/feature-action.mjs';
 import { VagabondDamagePipeline } from '../helpers/damage-pipeline.mjs';
 
 /** Inventory tab groupings, in display order, keyed by equipmentType. */
@@ -176,6 +177,7 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
       closePanel: this._onClosePanel,
       toggleTrait: this._onToggleAccordion,
       toggleFeature: this._onToggleAccordion,
+      featureAction: { handler: this._onFeatureAction, buttons: [0, 2] },
       togglePerk: this._onToggleAccordion,
       openSheet: this._onOpenSheet,
       consolidateWealth: this._onConsolidateWealth,
@@ -448,14 +450,21 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
         case 'class':
           if (item.system.levelFeatures) {
             context.features.push(...item.system.levelFeatures
-              .filter(f => f.level <= currentLevel)
-              .map((f, index) => ({ ...f, index, _id: `${item.id}-feature-${index}` })));
+              .map((f, srcIndex) => ({ f, srcIndex }))
+              .filter(({ f }) => f.level <= currentLevel)
+              .map(({ f, srcIndex }, index) => ({
+                ...f, index, _id: `${item.id}-feature-${index}`,
+                fx: FeatureAction.row(actor, item, `levelFeatures.${srcIndex}.action`, f.name),
+              })));
           }
           break;
         case 'ancestry':
           if (item.system.traits) {
             context.traits.push(...item.system.traits
-              .map((t, index) => ({ ...t, index, _id: `${item.id}-trait-${index}` })));
+              .map((t, index) => ({
+                ...t, index, _id: `${item.id}-trait-${index}`,
+                fx: FeatureAction.row(actor, item, `traits.${index}.action`, t.name),
+              })));
           }
           break;
       }
@@ -465,6 +474,7 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
     context.weapons = weapons;
     context.spells = spells.map(s => this._spellRow(s));
     context.favoritedSpells = spells.filter(s => s.system.favorite);
+    for (const perk of perks) perk.fx = FeatureAction.row(actor, perk, 'action', perk.name);
     context.perks = perks;
 
     // Inventory tab = the full carried inventory, grouped by equipment type
@@ -500,19 +510,22 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
       .filter(i => i.system.equipmentState === 'worn' && i.system.equipmentType !== 'armor')
       .sort((a, b) => (a.getFlag('vagabond', 'equippedAt') || 0) - (b.getFlag('vagabond', 'equippedAt') || 0));
 
+    // Feature / trait / perk actions pinned to the Belt (FeatureAction): after the favorited
+    // spells, before worn gear. They are not part of the drag-reorder (appended in pin order).
     const spellsShown = favSpells.slice(0, VagabondCharacterHud.MAX_ITEM_SLOTS);
-    const equipRoom = VagabondCharacterHud.MAX_ITEM_SLOTS - spellsShown.length;
+    const actionsShown = FeatureAction.beltEntries(actor).slice(0, VagabondCharacterHud.MAX_ITEM_SLOTS - spellsShown.length);
+    const equipRoom = VagabondCharacterHud.MAX_ITEM_SLOTS - spellsShown.length - actionsShown.length;
     const equipShown = equipRoom > 0 ? wornItems.slice(-equipRoom) : [];
     // Default order is spells-then-equipment (above); a manual drag reorder
     // (HUD or sheet, same flag) overrides it — see `EquipmentHelper.sortByBeltOrder`.
     const beltItems = EquipmentHelper.sortByBeltOrder([...spellsShown, ...equipShown]);
-    const slotCount = Math.max(VagabondCharacterHud.MIN_ITEM_SLOTS, beltItems.length);
+    const slotCount = Math.max(VagabondCharacterHud.MIN_ITEM_SLOTS, beltItems.length + actionsShown.length);
 
-    context.itemSlots = this._padIds(beltItems.map(i => i.id), slotCount)
-      .map((id) => {
-        const item = id ? actor.items.get(id) : null;
-        return this._slotEntry(item, item?.type === 'spell' ? 'spell' : 'item');
-      });
+    context.itemSlots = [
+      ...beltItems.map(item => this._slotEntry(item, item.type === 'spell' ? 'spell' : 'item')),
+      ...actionsShown.map(a => ({ filled: true, type: 'action', id: a.key, icon: a.icon, name: a.name })),
+    ];
+    while (context.itemSlots.length < slotCount) context.itemSlots.push(this._slotEntry(null, 'item'));
 
     // Two hand spaces (R, L) — NOT a persisted slot pick, a live mirror of
     // whatever occupies hands (`system.equipmentState` oneHand/twoHands), the
@@ -764,12 +777,12 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
       const { EquipmentHelper } = globalThis.vagabond.utils;
       const beltReorder = setupDragReorder({
         container: beltRow,
-        itemSelector: '.vh-slot.filled',
+        itemSelector: '.vh-slot.filled:not(.vh-slot-action)',
         boundarySelector: '.vh-slot:not(.filled)',
         onDrop: (orderedIds) => EquipmentHelper.saveBeltOrder(this.actor, orderedIds),
         signal,
       });
-      for (const el of beltRow.querySelectorAll('.vh-slot.filled')) beltReorder.bindItem(el);
+      for (const el of beltRow.querySelectorAll('.vh-slot.filled:not(.vh-slot-action)')) beltReorder.bindItem(el);
     }
 
     // Hand circles: drag a held item onto the other circle. Filled target →
@@ -1194,6 +1207,7 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
   static _onStatusClick(event, target) { return VagabondActorSheet._onStatusClick.call(this, event, target); }
   static _onSpendLuck(event, target) { return VagabondActorSheet._onSpendLuck.call(this, event, target); }
   static _onSpendStudiedDie(event, target) { return VagabondActorSheet._onSpendStudiedDie.call(this, event, target); }
+  static _onFeatureAction(event, target) { return VagabondActorSheet._onFeatureAction.call(this, event, target); }
   static _onModifyCheckBonus(event, target) { return VagabondActorSheet._onModifyCheckBonus.call(this, event, target); }
   static _onModifyMana(event, target) { return VagabondActorSheet._onModifyMana.call(this, event, target); }
 
@@ -1265,6 +1279,21 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
     const type = target.dataset.type;
     const id = target.dataset.itemId;
     if (!id) return;
+
+    // Pinned feature / trait / perk action (id is the FeatureAction key)
+    if (type === 'action') {
+      if (event.type === 'contextmenu' || event.button === 2) {
+        event.preventDefault();
+        const { ContextMenuHelper } = globalThis.vagabond.utils;
+        return ContextMenuHelper.create({
+          position: { x: event.clientX, y: event.clientY },
+          items: FeatureAction.menuItems(this.actor, id),
+          className: 'inventory-context-menu',
+        });
+      }
+      return FeatureAction.run(this.actor, id);
+    }
+
     const item = this.actor.items.get(id);
     if (!item) return;
     const inHandCircle = !!target.closest('.vh-pc-weapon');

@@ -1,4 +1,5 @@
 import { VagabondDiceAppearance } from './dice-appearance.mjs';
+import { consumeUsedEffects } from './use-effects.mjs';
 
 /**
  * Unified Damage Pipeline
@@ -113,6 +114,7 @@ export class VagabondDamagePipeline {
     }
 
     // 5. + 6. Universal bonuses (type bucket, then legacy)
+    let healingApplied = false;
     if (options.typeBonuses) {
       const buckets = [];
       if (BONUS_BUCKETS[sourceType]) buckets.push(BONUS_BUCKETS[sourceType]);
@@ -121,6 +123,15 @@ export class VagabondDamagePipeline {
         formula = this._appendBonusFields(formula, actor.system[bucket.flat], actor.system[bucket.dice]);
       }
       formula = this._appendBonusFields(formula, actor.system.universalDamageBonus, actor.system.universalDamageDice);
+
+      // Healing bonus dice (e.g. Virtuoso: Inspiration) — HP-restoring rolls only; they explode
+      // while `bonusDiceExplode` is on (Bard Climax).
+      let healingDice = actor.system.healingBonusDice;
+      if (typeof healingDice === 'string' && healingDice.trim() !== '' && this._restoresHp(damageType)) {
+        if (actor.system.bonusDiceExplode === true) healingDice = healingDice.replace(/(\d*d\d+)(?![\dx])/g, '$1x');
+        formula += ` + ${healingDice}`;
+        healingApplied = true;
+      }
     }
 
     // 7. Weakness pre-roll: only when EVERY stored target is weak to the damage type
@@ -166,6 +177,9 @@ export class VagabondDamagePipeline {
     // 11. Metadata stash
     roll._weaknessPreRolled = weaknessPreRolled;
 
+    // Healing bonus dice are spent by the roll that used them (consumeOn: 'heal' effects)
+    if (healingApplied) await consumeUsedEffects(actor, 'heal');
+
     // Informational hook: the evaluated roll and the descriptor that produced it
     Hooks.callAll('vagabond.postDamageRoll', { descriptor: d, roll });
     return roll;
@@ -174,6 +188,18 @@ export class VagabondDamagePipeline {
   /* ------------------------------------------------------------------------ */
   /* Formula assembly helpers                                                 */
   /* ------------------------------------------------------------------------ */
+
+  /**
+   * Does this damage type restore HP? (Mirrors VagabondDamageHelper.getRestorativeResource —
+   * this module must not import damage-helper.)
+   * @param {string|null} damageType
+   * @returns {boolean}
+   */
+  static _restoresHp(damageType) {
+    const type = damageType?.toLowerCase() || '';
+    const configured = CONFIG.VAGABOND?.restorativeDamageTypes;
+    return (configured ? configured[type] : { healing: 'hp' }[type]) === 'hp';
+  }
 
   /**
    * Bump the size of the FIRST die term in a formula (e.g. bonus 2: "2d6+1" → "2d8+1").

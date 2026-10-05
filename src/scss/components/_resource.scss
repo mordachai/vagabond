@@ -709,6 +709,26 @@
 // Specific Overrides
 .features-list {
   overflow-y: auto;
+
+  // Inline action on a class feature row (Bard: Virtuoso)
+  .feature-action-btn {
+    margin-left: auto;
+    width: 22px;
+    height: 22px;
+    line-height: normal;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: $c-text-1;
+    background: none;
+    border: 1px solid currentColor;
+    border-radius: 3px;
+    cursor: pointer;
+
+    &:hover { color: $c-yellow; }
+  }
 }
 
 .traits-list {

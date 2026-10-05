@@ -3,25 +3,33 @@
   "type": "class",
   "img": "icons/tools/instruments/harp-yellow-teal.webp",
   "system": {
-    "description": "<p><strong>Bards were terrible at keeping secrets. They insisted on putting them to music.</strong></p><p><em>– Tanya Huff, Sing the Four Quarters</em></p><p>Heralds of the awe-inspiring beauty of creation. While the painter and sculptor decorate space, a Bard decorates time.</p><h3>Iconic Bards</h3><ul><li><strong>Edward Chris von Muir</strong>, <em>Final Fantasy IV</em></li><li><strong>Jaskier</strong>, <em>The Witcher series</em></li><li><strong>Kvothe</strong>, <em>The Kingkiller Chronicles</em></li><li><strong>Sylvando</strong>, <em>Dragon Quest 11</em></li></ul><h3>Playing Bards</h3><p>The bard is a low/mid-defense, high support class with a focus on optimizing your Group's d20 rolls. It's recommended that you avoid melee on most Bard builds.</p><p><strong>Action:</strong> Virtuoso<br /><strong>Move:</strong> Midline/Backline<br /><strong>Starting Pack:</strong> Musician<br /><strong>Key Stat:</strong> Presence<br /><strong>Complexity:</strong> ★★☆☆☆</p><h3>Training</h3><p><strong>Weapons:</strong> –<br /><strong>Skills:</strong> Performance and 4 others</p><p></p><h3><span class=\"fontstyle0\">Class Features</span></h3><table class=\"NormalTable\"><tbody><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle0\" style=\"color:rgb(255,255,255);font-size:9pt\">Level</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle0\" style=\"color:rgb(255,255,255);font-size:9pt\">Features</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">1st</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Virtuoso, Well-Versed</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">2nd</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Song of Rest</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">3rd</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">4th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Starstruck</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">5th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">6th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Bravado</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">7th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">8th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Climax</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">9th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">10th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Starstruck Enhancement</span></p></td></tr></tbody></table><p><br style=\"font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:normal;orphans:2;text-align:-webkit-auto;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-size-adjust:auto;-webkit-text-stroke-width:0px\" /></p>",
+    "description": "<p><strong>Bards were terrible at keeping secrets. They insisted on putting them to music.</strong></p><p><em>—Tanya Huff, Sing the Four Quarters</em></p><p>Bard’s are heralds of the awe-inspiring beauty of creation. While the painter and sculptor decorate space, a Bard decorates time.</p><h3>Iconic Bards</h3><ul><li><strong>Edward Chris von Muir</strong>, <em>Final Fantasy IV</em></li><li><strong>Jaskier</strong>, <em>The Witcher</em></li><li><strong>Kvothe</strong>, <em>The Kingkiller Chronicle</em></li><li><strong>Sylvando</strong>, <em>Dragon Quest XI</em></li></ul><h3>Playing Bards</h3><p>The bard is a mid-defense, high-support class with a focus on optimizing your Group’s d20 rolls. It’s recommended that you avoid melee on most Bard builds.</p><p><strong>Action:</strong> Virtuoso<br /><strong>Move:</strong> Midline/Backline<br /><strong>Starting Pack:</strong> Musician<br /><strong>Key Stat:</strong> Presence<br /><strong>Complexity:</strong> ★★☆☆☆<br /><strong>Training:</strong> Finesse, Influence, Performance</p><h3>Class Features</h3><table class=\"NormalTable\"><tbody><tr><td><p><strong>Level</strong></p></td><td><p><strong>Features</strong></p></td></tr><tr><td><p>1st</p></td><td><p>Virtuoso, Well-Versed</p></td></tr><tr><td><p>2nd</p></td><td><p>Overtuned (21+)</p></td></tr><tr><td><p>3rd</p></td><td><p>Perk</p></td></tr><tr><td><p>4th</p></td><td><p>Audacity (Cd4)</p></td></tr><tr><td><p>5th</p></td><td><p>Perk</p></td></tr><tr><td><p>6th</p></td><td><p>Overtuned (20+), Enjoy the Silence</p></td></tr><tr><td><p>7th</p></td><td><p>Perk</p></td></tr><tr><td><p>8th</p></td><td><p>Audacity (Cd6)</p></td></tr><tr><td><p>9th</p></td><td><p>Perk</p></td></tr><tr><td><p>10th</p></td><td><p>Overtuned (19+), Climax</p></td></tr></tbody></table>",
     "isSpellcaster": false,
     "levelFeatures": [
       {
         "level": 1,
         "name": "Virtuoso",
-        "description": "<p>You can use your Action or skip your Move to make a Performance Check. If you pass, your Group gains one of the following benefits of your choice for that Round:</p><ul><li><p><strong>Inspiration:</strong> d6 bonus to Healing rolls</p></li><li><p><strong>Resolve:</strong> Favor on Saves</p></li><li><p><strong>Valor:</strong> Favor on Attack and Cast Checks</p></li></ul>",
+        "description": "<p>You can use your Action or skip your Move to choose one of the following benefits and make a Performance Check. If you pass, your Group gains the benefit for that Round:</p><ul><li><p><strong>Inspiration:</strong> d6 bonus to Healing rolls</p></li><li><p><strong>Resolve:</strong> Favor on Saves</p></li><li><p><strong>Valor:</strong> Favor on Attack and Cast Checks</p></li></ul>",
         "statBonusPoints": 0,
         "extraTraining": 0,
         "requiredSpells": [],
         "allowedPerks": [],
         "perkAmount": 0,
         "spellAmount": 0,
-        "skillChoices": []
+        "skillChoices": [],
+        "action": {
+          "enabled": true,
+          "label": "Perform",
+          "icon": "music",
+          "uuid": "",
+          "command": "system:bard.virtuoso",
+          "runAsGM": false
+        }
       },
       {
         "level": 1,
         "name": "Well-Versed",
-        "description": "<p><span class=\"fontstyle0\">You ignore Prerequisites for Perks, and gain a Perk of your choice.</span> <br style=\" font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-align: -webkit-auto; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; \"></p>",
+        "description": "<p>You ignore Stat minimum Prerequisites for Perks, and gain a Perk of your choice.</p>",
         "statBonusPoints": 0,
         "extraTraining": 0,
         "requiredSpells": [],
@@ -32,8 +40,8 @@
       },
       {
         "level": 2,
-        "name": "Song of Rest",
-        "description": "<p><span class=\"fontstyle0\">During a Breather while you aren't Incapacitated, you and your Allies gain a Studied die and regain additional HP equal to (your Presence + your Bard Level) .</span></p>",
+        "name": "Overtuned (21+)",
+        "description": "<p>If a d6 bonus you grant causes a d20 result to be 21 or higher, you gain 1 Luck. The result needed is reduced by 1 every 4 Levels hereafter.</p>",
         "statBonusPoints": 1,
         "extraTraining": 0,
         "requiredSpells": [],
@@ -45,7 +53,7 @@
       {
         "level": 3,
         "name": "Perk",
-        "description": "<p>Choose a new perk, you do not need to meet the Prerequisite to benefit from it.</p>",
+        "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
         "statBonusPoints": 0,
         "extraTraining": 0,
         "requiredSpells": [],
@@ -56,8 +64,8 @@
       },
       {
         "level": 4,
-        "name": "Starstruck",
-        "description": "<p><span class=\"fontstyle0\">When you perform Virtuoso, you can choose a Near Enemy who hears the performance and make a Performance Check. If you pass, you can choose one of the following Statuses that affects it for Cd4 Rounds: Berserk, Charmed, Confused, Frightened.</span></p>",
+        "name": "Audacity (Cd4)",
+        "description": "<p>When you pass a Performance Check or Crit on any Save, you can cause a Being that can hear you to become Berserk, Charmed, Confused, or Frightened for Cd4 Rounds. Once this ends, they are immune to this Ability for the Shift.</p><p>This countdown die increases to a Cd6 at 8th Level.</p>",
         "statBonusPoints": 1,
         "extraTraining": 0,
         "requiredSpells": [],
@@ -69,7 +77,7 @@
       {
         "level": 5,
         "name": "Perk",
-        "description": "<p>Choose a new perk, you do not need to meet the Prerequisite to benefit from it.</p>",
+        "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
         "statBonusPoints": 0,
         "extraTraining": 0,
         "requiredSpells": [],
@@ -80,9 +88,21 @@
       },
       {
         "level": 6,
-        "name": "Bravado",
-        "description": "<p><span class=\"fontstyle0\">Your Will Saves can't be Hindered while you aren't Incapacitated, and you can ignore effects that rely on you hearing them to be affected (such as a banshee's scream).</span></p>",
+        "name": "Overtuned (20+)",
+        "description": "<p>If a d6 bonus you grant causes a d20 result to be 21 or higher, you gain 1 Luck. The result needed is reduced by 1 every 4 Levels hereafter.</p>",
         "statBonusPoints": 1,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": []
+      },
+      {
+        "level": 6,
+        "name": "Enjoy the Silence",
+        "description": "<p>You ignore effects that rely on you hearing them to be affected (such as a banshee’s scream), and you have Favor on Saves against being Berserk, Charmed, Confused, or Frightened.</p>",
+        "statBonusPoints": 0,
         "extraTraining": 0,
         "requiredSpells": [],
         "allowedPerks": [],
@@ -93,7 +113,7 @@
       {
         "level": 7,
         "name": "Perk",
-        "description": "<p>Choose a new perk, you do not need to meet the Prerequisite to benefit from it.</p>",
+        "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
         "statBonusPoints": 0,
         "extraTraining": 0,
         "requiredSpells": [],
@@ -104,8 +124,8 @@
       },
       {
         "level": 8,
-        "name": "Climax",
-        "description": "<p><span class=\"fontstyle0\">Favor and bonus dice you grant can Explode.</span></p>",
+        "name": "Audacity (Cd6)",
+        "description": "<p>When you pass a Performance Check or Crit on any Save, you can cause a Being that can hear you to become Berserk, Charmed, Confused, or Frightened for Cd4 Rounds. Once this ends, they are immune to this Ability for the Shift.</p><p>This countdown die increases to a Cd6 at 8th Level.</p>",
         "statBonusPoints": 1,
         "extraTraining": 0,
         "requiredSpells": [],
@@ -117,7 +137,7 @@
       {
         "level": 9,
         "name": "Perk",
-        "description": "<p>Choose a new perk, you do not need to meet the Prerequisite to benefit from it.</p>",
+        "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
         "statBonusPoints": 0,
         "extraTraining": 0,
         "requiredSpells": [],
@@ -128,9 +148,21 @@
       },
       {
         "level": 10,
-        "name": "Starstruck Enhancement",
-        "description": "<p><span class=\"fontstyle0\">Your Starstruck Feature can now affect all Near Enemies.</span></p>",
+        "name": "Overtuned (19+)",
+        "description": "<p>If a d6 bonus you grant causes a d20 result to be 21 or higher, you gain 1 Luck. The result needed is reduced by 1 every 4 Levels hereafter.</p>",
         "statBonusPoints": 1,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": []
+      },
+      {
+        "level": 10,
+        "name": "Climax",
+        "description": "<p>Your bonus dice rolls and bonus dice rolls you grant can Explode.</p>",
+        "statBonusPoints": 0,
         "extraTraining": 0,
         "requiredSpells": [],
         "allowedPerks": [],
@@ -143,16 +175,12 @@
     "castingStat": null,
     "manaMultiplier": 0,
     "skillGrant": {
-      "choices": [
-        {
-          "count": 4,
-          "pool": [],
-          "label": ""
-        }
-      ],
       "guaranteed": [
+        "finesse",
+        "influence",
         "performance"
-      ]
+      ],
+      "choices": []
     },
     "levelSpells": [],
     "keyStats": [
@@ -162,7 +190,245 @@
       "Compendium.vagabond.starting-packs.Item.2nNcbg2WCi5XPKUC"
     ]
   },
-  "effects": [],
+  "effects": [
+    {
+      "name": "Enjoy the Silence",
+      "origin": "Compendium.vagabond.classes.Item.3BTEyMIzoyGVTuxz",
+      "img": "icons/svg/aura.svg",
+      "_id": "bArDsIlEnCe00001",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.statusResistances",
+            "value": "berserk",
+            "priority": null,
+            "type": "add"
+          },
+          {
+            "key": "system.statusResistances",
+            "value": "charmed",
+            "priority": null,
+            "type": "add"
+          },
+          {
+            "key": "system.statusResistances",
+            "value": "confused",
+            "priority": null,
+            "type": "add"
+          },
+          {
+            "key": "system.statusResistances",
+            "value": "frightened",
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent",
+          "minLevel": 6
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.44.0",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "createdTime": 1791300000000,
+        "modifiedTime": 1791300000000,
+        "lastModifiedBy": null
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!3BTEyMIzoyGVTuxz.bArDsIlEnCe00001"
+    },
+    {
+      "name": "Virtuoso: Inspiration",
+      "origin": "Compendium.vagabond.classes.Item.3BTEyMIzoyGVTuxz",
+      "img": "icons/svg/aura.svg",
+      "_id": "bArDvIrTuOsO0001",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.healingBonusDice",
+            "value": "1d6",
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "<p><strong>Inspiration:</strong> d6 bonus to Healing rolls</p>",
+      "tint": "#ffffff",
+      "transfer": false,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent",
+          "virtuosoBoon": "inspiration",
+          "virtuosoIcon": "heart-pulse",
+          "consumeOn": [
+            "heal"
+          ]
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.44.0",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "createdTime": 1791300000000,
+        "modifiedTime": 1791300000000,
+        "lastModifiedBy": null
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!3BTEyMIzoyGVTuxz.bArDvIrTuOsO0001"
+    },
+    {
+      "name": "Virtuoso: Resolve",
+      "origin": "Compendium.vagabond.classes.Item.3BTEyMIzoyGVTuxz",
+      "img": "icons/svg/aura.svg",
+      "_id": "bArDvIrTuOsO0002",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.favorChecks",
+            "value": "save",
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "<p><strong>Resolve:</strong> Favor on Saves</p>",
+      "tint": "#ffffff",
+      "transfer": false,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent",
+          "virtuosoBoon": "resolve",
+          "virtuosoIcon": "shield-heart",
+          "consumeOn": [
+            "save"
+          ]
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.44.0",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "createdTime": 1791300000000,
+        "modifiedTime": 1791300000000,
+        "lastModifiedBy": null
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!3BTEyMIzoyGVTuxz.bArDvIrTuOsO0002"
+    },
+    {
+      "name": "Virtuoso: Valor",
+      "origin": "Compendium.vagabond.classes.Item.3BTEyMIzoyGVTuxz",
+      "img": "icons/svg/aura.svg",
+      "_id": "bArDvIrTuOsO0003",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.favorChecks",
+            "value": "attack",
+            "priority": null,
+            "type": "add"
+          },
+          {
+            "key": "system.favorChecks",
+            "value": "cast",
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "<p><strong>Valor:</strong> Favor on Attack and Cast Checks</p>",
+      "tint": "#ffffff",
+      "transfer": false,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent",
+          "virtuosoBoon": "valor",
+          "virtuosoIcon": "swords",
+          "consumeOn": [
+            "attack",
+            "cast"
+          ]
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.44.0",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "createdTime": 1791300000000,
+        "modifiedTime": 1791300000000,
+        "lastModifiedBy": null
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!3BTEyMIzoyGVTuxz.bArDvIrTuOsO0003"
+    }
+  ],
   "folder": null,
   "flags": {},
   "_stats": {

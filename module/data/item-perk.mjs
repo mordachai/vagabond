@@ -1,4 +1,5 @@
 import VagabondItemBase from './base-item.mjs';
+import { featureActionSchema } from './feature-action.mjs';
 
 export default class VagabondPerk extends VagabondItemBase {
   static LOCALIZATION_PREFIXES = [
@@ -145,6 +146,9 @@ export default class VagabondPerk extends VagabondItemBase {
         { initial: [] }
       )
     });
+
+    // Optional action button on the actor sheet / HUD Belt (see helpers/feature-action.mjs)
+    schema.action = featureActionSchema();
 
     // Choice configuration for perks that require player selection
     // (e.g., New Training - select which skill, Advancement - select which stat)

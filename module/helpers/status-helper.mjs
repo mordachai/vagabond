@@ -214,13 +214,19 @@ export class StatusHelper {
     const systemState = actor.system.favorHinder || 'none';
     const effectiveFavorHinder = VagabondRollBuilder.mergeFavorHinder(
       systemState,
-      favored ? 'favor' : 'none'
+      favored ? 'favor' : 'none',
+      VagabondRollBuilder.checkFavorVote(actor, 'save')
     );
 
     let formula = VagabondRollBuilder.buildD20Formula(actor, effectiveFavorHinder);
     const statusSaveBonus = VagabondRollBuilder.getSaveVsStatusBonus(actor, entry.statusId, entry.saveType);
     if (statusSaveBonus !== 0) formula += ` + ${statusSaveBonus}`;
     const roll = await VagabondRollBuilder.evaluateRoll(formula, actor, effectiveFavorHinder);
+
+    const { BardHelper } = await import('./bard-helper.mjs');
+    await BardHelper.onCheckRolled(actor, roll, 'save');
+    const { consumeUsedEffects } = await import('./use-effects.mjs');
+    await consumeUsedEffects(actor, 'save');
 
     const difficulty = actor.system.saves?.[entry.saveType]?.difficulty ?? 10;
 

@@ -1,4 +1,5 @@
 import VagabondItemBase from './base-item.mjs';
+import { featureActionSchema } from './feature-action.mjs';
 
 export default class VagabondClass extends VagabondItemBase {
   static LOCALIZATION_PREFIXES = [
@@ -119,6 +120,9 @@ export default class VagabondClass extends VagabondItemBase {
         // '@attributes.level.value * 50' for RAW's "value ≤ Level × 50s". Evaluated
         // against the learning actor at pick time, not stored per-feature.
         formulaValueCap: new fields.StringField({ initial: '@attributes.level.value * 50', blank: true }),
+
+        // Optional action button on the actor sheet / HUD Belt (see helpers/feature-action.mjs)
+        action: featureActionSchema(),
 
         // Skill choice groups - restricted skill training choices (same as ancestry traits)
         skillChoices: new fields.ArrayField(

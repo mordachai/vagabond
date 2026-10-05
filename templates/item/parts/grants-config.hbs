@@ -250,4 +250,41 @@
   </div>
   {{/if}}
 
+  {{! ── ACTION BUTTON ──────────────────────────────────────────────────── }}
+  <div class='accordion-item collapsed' data-accordion-id='grant-{{itemIndex}}-action'>
+    <div class='accordion-header' data-action='toggleAccordion'>
+      <i class='accordion-icon fas fa-chevron-right'></i>
+      <strong>{{localize "VAGABOND.FeatureAction.Section"}}</strong>
+    </div>
+    <div class='accordion-content'>
+      <div class='grants-accordion-body'>
+        <div class='grants-row'>
+          <label>{{localize "VAGABOND.FeatureAction.Enabled"}}</label>
+          <input type='checkbox' name='{{arrayPath}}.{{itemIndex}}.action.enabled' {{#if grant.action.enabled}}checked{{/if}} />
+          <span class='grants-hint'>{{localize "VAGABOND.FeatureAction.Hint"}}</span>
+        </div>
+        <div class='grants-row'>
+          <label>{{localize "VAGABOND.FeatureAction.Label"}}</label>
+          <input type='text' name='{{arrayPath}}.{{itemIndex}}.action.label' value='{{grant.action.label}}' />
+        </div>
+        <div class='grants-row'>
+          <label>{{localize "VAGABOND.FeatureAction.Icon"}}</label>
+          <input type='text' name='{{arrayPath}}.{{itemIndex}}.action.icon' value='{{grant.action.icon}}' placeholder='music' />
+        </div>
+        <div class='grants-row'>
+          <label>{{localize "VAGABOND.FeatureAction.RunAsGM"}}</label>
+          <input type='checkbox' name='{{arrayPath}}.{{itemIndex}}.action.runAsGM' {{#if grant.action.runAsGM}}checked{{/if}} />
+        </div>
+        <div class='grants-row'>
+          <label>{{localize "VAGABOND.FeatureAction.MacroUuid"}}</label>
+          <input type='text' name='{{arrayPath}}.{{itemIndex}}.action.uuid' value='{{grant.action.uuid}}' placeholder='Macro.xxxxxxxx' />
+        </div>
+        <div class='grants-row'>
+          <label>{{localize "VAGABOND.FeatureAction.Script"}}</label>
+          <textarea name='{{arrayPath}}.{{itemIndex}}.action.command' rows='4' class='macro-command-input'>{{grant.action.command}}</textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </div>

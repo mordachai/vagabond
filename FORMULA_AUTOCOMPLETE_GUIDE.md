@@ -311,6 +311,22 @@ The Alchemist class item ships **one Active Effect per automated behavior** (all
 
 > **Don't start a formula with `(` and end it with `)`** — the evaluator strips one outer pair, so `(a) ? 2 : ((b) ? 1 : 0)` is mangled and reads as 0. End with a non-paren token or avoid the leading paren.
 
+### Bard — Enjoy the Silence, Virtuoso benefits
+
+The Bard class item ships Enjoy the Silence as a class feature, plus three **untransferred** benefit templates (`flags.vagabond.virtuosoBoon`). The Virtuoso **Perform** button copies the chosen one onto each Group member (inside a started combat with `duration.expiry = roundEnd`; Lv 10 also adds the Climax change).
+
+| Effect | Key | Mode | Value |
+| --- | --- | --- | --- |
+| Enjoy the Silence (Lv 6+) | `system.statusResistances` | Add | `berserk`, `charmed`, `confused`, `frightened` (one change each — Favor on Saves vs those Statuses) |
+| Virtuoso: Inspiration | `system.healingBonusDice` | Add | `1d6` (added to HP-restoring rolls by the damage pipeline) |
+| Virtuoso: Resolve | `system.favorChecks` | Add | `save` |
+| Virtuoso: Valor | `system.favorChecks` | Add | `attack`, `cast` (one change each) |
+| Climax (added to the copy at Bard Lv 10) | `system.bonusDiceExplode` | Add | `1` (Favor die + healing dice explode) |
+
+> The three benefit templates carry `flags.vagabond.consumeOn` (`['heal']`, `['save']`, `['attack','cast']`) — the recipient's effect is deleted after their next roll of that kind (`helpers/use-effects.mjs`). Delete the flag to make a benefit last the whole Round instead.
+
+> `system.favorChecks` is a general field: ADD `attack`, `cast` or `save` for an independent Favor vote on that whole category (merged net-count with every other vote). `system.bonusDiceExplode` > 0 turns the Favor die into `1d6x[favored]` and the healing bonus dice into exploding dice.
+
 ### Exalted — Bonus Per Damage Die (with Doubling vs Specific Being Types)
 
 Grants a flat bonus per damage die rolled. When attacking Undead (or other configured types), the bonus is doubled.

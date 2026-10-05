@@ -330,6 +330,8 @@
     justify-content: center;
     overflow: hidden;
     img { width: 100%; height: 100%; object-fit: cover; }
+    // Pinned feature action: a Font Awesome glyph instead of item art
+    &.vh-slot-action > i { font-size: 16px; color: $c-yellow; }
     &.filled { cursor: pointer; }
     &.filled:hover { border-color: $c-yellow; box-shadow: 0 0 5px $c-yellow; }
 
@@ -941,6 +943,25 @@
       cursor: pointer;
       .vh-acc-name { font-family: $font-title; font-size: calc(1.1rem * var(--vh-font-scale)); color: $c-lite; }
       &:hover .vh-acc-name { color: $c-yellow; }
+      // Feature / trait / perk action button (FeatureAction)
+      .vh-fx-btn {
+        margin-left: auto;
+        width: 20px;
+        height: 20px;
+        line-height: normal;
+        padding: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        background: none;
+        border: 1px solid $c-yellow;
+        border-radius: 3px;
+        color: $c-yellow;
+        font-size: calc(0.8rem * var(--vh-font-scale));
+        cursor: pointer;
+        &:hover { box-shadow: 0 0 5px $c-yellow; }
+      }
     }
     .accordion-icon { transition: transform 0.15s ease; color: $c-tan; font-size: calc(0.7rem * var(--vh-font-scale)); }
     &.expanded .accordion-icon { transform: rotate(90deg); }

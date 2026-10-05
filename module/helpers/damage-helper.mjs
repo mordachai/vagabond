@@ -1893,7 +1893,8 @@ ${npcOnly ? '' : `
     const effectiveFavorHinder = VagabondRollBuilder.mergeFavorHinder(
       VagabondRollBuilder.calculateEffectiveFavorHinder(systemState, shiftKey, ctrlKey),
       attackerModifier,
-      resistanceFavor ? 'favor' : 'none'
+      resistanceFavor ? 'favor' : 'none',
+      VagabondRollBuilder.checkFavorVote(actor, 'save')
     );
 
     // Reflex Saves take a flat penalty equal to worn Armor's Slots (see
@@ -1916,6 +1917,12 @@ ${npcOnly ? '' : `
       isHindered,
       baseFormula
     );
+
+    // Bard Overtuned: a Virtuoso Favor die that lifts the d20 past the threshold grants the Bard Luck
+    const { BardHelper } = await import('./bard-helper.mjs');
+    await BardHelper.onCheckRolled(actor, roll, 'save');
+    const { consumeUsedEffects } = await import('./use-effects.mjs');
+    await consumeUsedEffects(actor, 'save');
 
     return roll;
   }

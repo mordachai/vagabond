@@ -633,10 +633,14 @@ export class SpellHandler {
 
       // Apply favor/hinder with keyboard modifiers
       const systemFavorHinder = this.actor.system.favorHinder || 'none';
-      const favorHinder = VagabondRollBuilder.calculateEffectiveFavorHinder(
-        systemFavorHinder,
-        event.shiftKey,
-        event.ctrlKey
+      const favorHinder = VagabondRollBuilder.mergeFavorHinder(
+        VagabondRollBuilder.calculateEffectiveFavorHinder(
+          systemFavorHinder,
+          event.shiftKey,
+          event.ctrlKey
+        ),
+        // Unconditional Favor on Casts (system.favorChecks, e.g. Virtuoso: Valor)
+        VagabondRollBuilder.checkFavorVote(this.actor, 'cast')
       );
 
       // Pre-roll hook for spell cast — cancellable; modules may mutate ctx.difficulty / ctx.favorHinder

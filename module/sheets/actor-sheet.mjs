@@ -8,6 +8,7 @@ import { WorkbenchApp } from '../applications/workbench-app.mjs';
 import { VagabondTextParser } from '../helpers/text-parser.mjs';
 import { AccordionHelper } from '../helpers/accordion-helper.mjs';
 import { ContextMenuHelper } from '../helpers/context-menu-helper.mjs';
+import { FeatureAction } from '../helpers/feature-action.mjs';
 import { buildSpellMenuItems } from '../helpers/item-menu.mjs';
 import { EnrichmentHelper } from '../helpers/enrichment-helper.mjs';
 import { EquipmentHelper } from '../helpers/equipment-helper.mjs';
@@ -78,6 +79,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       levelUp: this._onLevelUp,
       consolidateWealth: this._onConsolidateWealth,
       toggleFeature: this._onToggleFeature,
+      featureAction: { handler: this._onFeatureAction, buttons: [0, 2] },
       toggleTrait: this._onToggleTrait,
       togglePerk: this._onTogglePerk,
       togglePanel: this._onTogglePanel,
@@ -684,10 +686,12 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
           // Get features for current level and below
           if (item.system.levelFeatures) {
             const classFeatures = item.system.levelFeatures
-              .filter(f => f.level <= currentLevel)
-              .map((f, index) => ({
+              .map((f, srcIndex) => ({ f, srcIndex }))
+              .filter(({ f }) => f.level <= currentLevel)
+              .map(({ f, srcIndex }, index) => ({
                 ...f,
                 index: index,
+                srcIndex,
                 _id: `${item.id}-feature-${index}`,
                 sourceItem: item
               }));
@@ -1220,6 +1224,29 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
   static async _onToggleFeature(event, target) {
     const accordion = target.closest('.feature.accordion-item');
     AccordionHelper.toggle(accordion);
+  }
+
+  /**
+   * Feature / trait / perk action button (see helpers/feature-action.mjs).
+   * Left-click runs it; right-click opens Run / Add to Belt.
+   * @param {PointerEvent} event - The originating click event
+   * @param {HTMLElement} target - The capturing HTML element
+   * @protected
+   */
+  static async _onFeatureAction(event, target) {
+    event.preventDefault();
+    event.stopPropagation();
+    const key = target.dataset.actionKey;
+    if (!key) return;
+    if (event.type === 'contextmenu' || event.button === 2) {
+      ContextMenuHelper.closeAll();
+      return ContextMenuHelper.create({
+        position: { x: event.clientX, y: event.clientY },
+        items: FeatureAction.menuItems(this.actor, key),
+        className: 'inventory-context-menu',
+      });
+    }
+    return FeatureAction.run(this.actor, key);
   }
 
   /**

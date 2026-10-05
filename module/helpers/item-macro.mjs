@@ -14,6 +14,34 @@
 import { emitSocket } from './socket-helper.mjs';
 
 /**
+ * Built-in handlers a macro slot can call as `system:<name>` instead of a script. Unlike script
+ * macros they need no MACRO_SCRIPT permission and receive the FULL scope (`actor`, `item`,
+ * `token`, `targets`, `speaker`, plus any button extraScope) as one object.
+ */
+const _handlers = new Map();
+
+/**
+ * @param {string} name  e.g. 'bard.virtuoso'
+ * @param {(scope: object) => *} fn
+ */
+export function registerMacroHandler(name, fn) {
+  _handlers.set(name, fn);
+}
+
+/**
+ * Font Awesome classes from an author-typed icon (`music`, `fa-music` or `fa-solid fa-music`).
+ * @param {string} raw
+ * @param {string} [fallback]
+ * @returns {string}
+ */
+export function faIconClasses(raw, fallback = 'fa-solid fa-scroll') {
+  const s = String(raw ?? '').trim();
+  if (!s) return fallback;
+  if (/\bfa-(solid|regular|light|thin|duotone|brands)\b/.test(s)) return s;
+  return `fa-solid ${s.startsWith('fa-') ? s : `fa-${s}`}`;
+}
+
+/**
  * Resolve the macro-slot config object from a descriptor.
  * @param {object} d
  * @returns {Promise<{cfg: object|null, item: Item|null, actor: Actor|null}>}
@@ -32,7 +60,8 @@ async function _resolveSlot(d) {
   if (d.itemUuid) {
     item = await fromUuid(d.itemUuid);
     actor = item?.actor ?? await resolveActor();
-    cfg = item?.system?.[d.slot] ?? null;
+    // `slot` is a path into item.system: 'macro' / 'hitMacro' or e.g. 'levelFeatures.3.action'
+    cfg = (item && d.slot) ? (foundry.utils.getProperty(item.system, d.slot) ?? null) : null;
   } else {
     actor = await resolveActor();
     const action = (d.actionIndex != null) ? actor?.system?.actions?.[d.actionIndex] : null;
@@ -90,6 +119,17 @@ export async function executeItemMacro(d) {
   // cannot clobber the core scope keys.
   const extraScope = (d.extraScope && typeof d.extraScope === 'object') ? d.extraScope : {};
   const scope = { actor, item: scopeItem, token, targets, isCritical, itemName, speaker: ChatMessage.getSpeaker({ actor }), ...extraScope };
+
+  // `system:<name>` → built-in handler (no script permission needed, full scope as one object)
+  if (!cfg.uuid && typeof cfg.command === 'string' && cfg.command.trim().startsWith('system:')) {
+    const name = cfg.command.trim().slice('system:'.length).trim();
+    const fn = _handlers.get(name);
+    if (!fn) {
+      ui.notifications.warn(`Unknown built-in action "${name}".`);
+      return;
+    }
+    return fn(scope);
+  }
 
   if (cfg.uuid) {
     const macro = await fromUuid(cfg.uuid);
@@ -179,6 +219,6 @@ export function buildMacroButtonHTML({ cfg, slot, actorUuid, itemUuid, itemName,
     scopeB64 ? `data-extra-scope-b64="${scopeB64}"` : '',
   ].filter(Boolean).join(' ');
   return `<button class="vagabond-macro-button" ${attrs}>
-            <i class="fa-solid fa-scroll"></i> ${safe}${cfg.runAsGM ? ' <i class="fa-solid fa-user-shield vagabond-macro-gm" title="Runs as GM"></i>' : ''}
+            <i class="${faIconClasses(cfg.icon)}"></i> ${safe}${cfg.runAsGM ? ' <i class="fa-solid fa-user-shield vagabond-macro-gm" title="Runs as GM"></i>' : ''}
           </button>`;
 }

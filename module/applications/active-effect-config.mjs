@@ -105,6 +105,7 @@ export default class VagabondActiveEffectConfig extends foundry.applications.she
       'system.statusImmunities',
     ]);
     const FAVOR_RULE_FIELDS = new Set(['system.attackFavorVs']);
+    const FAVOR_CHECK_FIELDS = new Set(['system.favorChecks']);
 
     // v14: change rows are stored at system.changes.N.* (was top-level changes.N.*)
     const valueInputs = this.element.querySelectorAll('input[name^="system.changes."][name$=".value"]');
@@ -140,6 +141,14 @@ export default class VagabondActiveEffectConfig extends foundry.applications.she
             const option = document.createElement('option');
             option.value = ruleKey;
             option.textContent = game.i18n.localize(rule.label);
+            datalist.appendChild(option);
+          });
+        } else if (FAVOR_CHECK_FIELDS.has(keyValue)) {
+          input.setAttribute('placeholder', 'attack, cast or save');
+          ['attack', 'cast', 'save'].forEach(kind => {
+            const option = document.createElement('option');
+            option.value = kind;
+            option.textContent = kind;
             datalist.appendChild(option);
           });
         } else {

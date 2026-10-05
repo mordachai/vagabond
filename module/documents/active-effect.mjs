@@ -247,6 +247,9 @@ export class VagabondActiveEffect extends ActiveEffect {
       'system.incomingDamageReductionPerDie': 'Incoming Damage Reduction Per Die (formula, e.g. Rage: (@statuses.berserk) ? ((@armorWorn.slots <= 1) ? 1 : 0) : 0)',
       'system.attackFavorVs': 'Attack Favor Rules (ADD a rule key, e.g. wounded = Bloodthirsty)',
       'system.rageTrigger': 'Auto-Berserk on damage taken / attack (Rage)',
+      'system.favorChecks': 'Favor On Checks (ADD attack, cast or save)',
+      'system.bonusDiceExplode': 'Favor + Healing Bonus Dice Explode (1 = on)',
+      'system.healingBonusDice': 'Healing Rolls (Dice Bonus, e.g. 1d6)',
 
       // -- Universal Crit Bonuses (stack on top of per-type bonuses) --
       'system.attackCritBonus': 'Crit: All Weapon Attacks (every weapon skill)',

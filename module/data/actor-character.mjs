@@ -360,6 +360,25 @@ export default class VagabondCharacter extends VagabondActorBase {
       { required: true, initial: [], label: "Attack Favor Rules" }
     );
 
+    // Unconditional Favor on whole categories of checks — AE ADDs 'attack' | 'cast' | 'save'.
+    // One independent Favor vote per category at the roll sites (VagabondRollBuilder.checkFavorVote).
+    schema.favorChecks = new fields.ArrayField(
+      new fields.StringField({ required: true }),
+      { required: true, initial: [], label: "Favor On Checks" }
+    );
+
+    // Favor dice and healing bonus dice roll as exploding dice while this evaluates > 0.
+    schema.bonusDiceExplode = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      { initial: [], label: "Bonus Dice Explode" }
+    );
+
+    // Extra dice added to HP-restoring rolls (healing spells / potions), e.g. '1d6'.
+    schema.healingBonusDice = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      { initial: [], label: "Healing Bonus Dice" }
+    );
+
     // Barbarian Rage auto-trigger: when true (AE-set — switch that effect off to play
     // Berserk by hand), taking damage or attacking applies Berserk. See rage-helper.mjs.
     schema.rageTrigger = new fields.BooleanField({
@@ -750,6 +769,9 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.weaponAsTrinket = false;
     this.castWithHandsFull = false;
     this.attackFavorVs = [];
+    this.favorChecks = [];
+    this.bonusDiceExplode = [];
+    this.healingBonusDice = [];
     this.rageTrigger = false;
     this.defenderStatusModifiers.attackersAreBlinded = false;
     this.defenderStatusModifiers.closeAttacksAutoCrit = false;
@@ -856,6 +878,8 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.universalWeaponDamageDice = this.universalWeaponDamageDice.filter(d => !!d).join(' + ');
     this.universalSpellDamageDice = this.universalSpellDamageDice.filter(d => !!d).join(' + ');
     this.universalAlchemicalDamageDice = this.universalAlchemicalDamageDice.filter(d => !!d).join(' + ');
+    this.healingBonusDice = this.healingBonusDice.filter(d => !!d).join(' + ');
+    this.bonusDiceExplode = this._evaluateFormulaField(this.bonusDiceExplode, rollData) > 0;
 
     // Mana bonuses
     this.mana.bonus = this._evaluateFormulaField(this.mana.bonus, rollData);

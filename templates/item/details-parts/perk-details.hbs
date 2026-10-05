@@ -530,5 +530,45 @@
         </div>
 
         {{/unless}}
+
+        <div class='grants-accordions perk-action-config'>
+  {{! ── ACTION BUTTON ──────────────────────────────────────────────────── }}
+  <div class='accordion-item collapsed' data-accordion-id='perk-action'>
+    <div class='accordion-header' data-action='toggleAccordion'>
+      <i class='accordion-icon fas fa-chevron-right'></i>
+      <strong>{{localize "VAGABOND.FeatureAction.Section"}}</strong>
+    </div>
+    <div class='accordion-content'>
+      <div class='grants-accordion-body'>
+        <div class='grants-row'>
+          <label>{{localize "VAGABOND.FeatureAction.Enabled"}}</label>
+          <input type='checkbox' name='system.action.enabled' {{#if item.system.action.enabled}}checked{{/if}} />
+          <span class='grants-hint'>{{localize "VAGABOND.FeatureAction.Hint"}}</span>
+        </div>
+        <div class='grants-row'>
+          <label>{{localize "VAGABOND.FeatureAction.Label"}}</label>
+          <input type='text' name='system.action.label' value='{{item.system.action.label}}' />
+        </div>
+        <div class='grants-row'>
+          <label>{{localize "VAGABOND.FeatureAction.Icon"}}</label>
+          <input type='text' name='system.action.icon' value='{{item.system.action.icon}}' placeholder='music' />
+        </div>
+        <div class='grants-row'>
+          <label>{{localize "VAGABOND.FeatureAction.RunAsGM"}}</label>
+          <input type='checkbox' name='system.action.runAsGM' {{#if item.system.action.runAsGM}}checked{{/if}} />
+        </div>
+        <div class='grants-row'>
+          <label>{{localize "VAGABOND.FeatureAction.MacroUuid"}}</label>
+          <input type='text' name='system.action.uuid' value='{{item.system.action.uuid}}' placeholder='Macro.xxxxxxxx' />
+        </div>
+        <div class='grants-row'>
+          <label>{{localize "VAGABOND.FeatureAction.Script"}}</label>
+          <textarea name='system.action.command' rows='4' class='macro-command-input'>{{item.system.action.command}}</textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+        </div>
     </div>
 </section>

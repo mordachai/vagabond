@@ -48,13 +48,24 @@ export class VagabondRollBuilder {
     return total;
   }
 
+  /**
+   * The Favor die term from the homebrew dice config, optionally exploding
+   * (`1d6[favored]` → `1d6x[favored]`: modifiers precede the flavor).
+   * @param {boolean} [explode=false] - e.g. `actor.system.bonusDiceExplode`
+   * @returns {string}
+   */
+  static favorDieFormula(explode = false) {
+    const die = CONFIG.VAGABOND?.homebrew?.dice?.favorBonus ?? '1d6[favored]';
+    return explode === true ? die.replace(/(\d*d\d+)(?![\dx])/, '$1x') : die;
+  }
+
   static buildD20Formula(actor, favorHinder, baseFormula = null) {
     const dice = CONFIG.VAGABOND?.homebrew?.dice;
     let formula = baseFormula ?? dice?.baseCheck ?? '1d20';
 
     // Add favor/hinder dice from homebrew config
     if (favorHinder === 'favor') {
-      const favDice = dice?.favorBonus ?? '1d6[favored]';
+      const favDice = this.favorDieFormula(actor?.system?.bonusDiceExplode);
       formula += ` + ${favDice}`;
     } else if (favorHinder === 'hinder') {
       const hindDice = dice?.hinderPenalty ?? '1d6[hindered]';
@@ -110,7 +121,7 @@ export class VagabondRollBuilder {
 
     // Add favor/hinder dice
     if (favorHinder === 'favor') {
-      formula += ` + ${dice?.favorBonus ?? '1d6[favored]'}`;
+      formula += ` + ${this.favorDieFormula(rollData?.bonusDiceExplode)}`;
     } else if (favorHinder === 'hinder') {
       formula += ` - ${dice?.hinderPenalty ?? '1d6[hindered]'}`;
     }
@@ -145,6 +156,17 @@ export class VagabondRollBuilder {
       else if (vote === 'hinder') net--;
     }
     return net > 0 ? 'favor' : net < 0 ? 'hinder' : 'none';
+  }
+
+  /**
+   * One Favor vote from `system.favorChecks` — unconditional Favor on a whole category of
+   * checks (an Active Effect ADDs 'attack' / 'cast' / 'save'). Independent of every other vote.
+   * @param {Actor} actor
+   * @param {'attack'|'cast'|'save'} kind
+   * @returns {'favor'|'none'}
+   */
+  static checkFavorVote(actor, kind) {
+    return actor?.system?.favorChecks?.includes(kind) ? 'favor' : 'none';
   }
 
   /**

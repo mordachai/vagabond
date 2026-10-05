@@ -150,12 +150,10 @@ Modules can resolve any entry by either:
 | Weakness -2 | `weakness-minus-2` | `cursedweakl0ei60` | — | `system.universalWeaponDamageBonus` + -2 | Cursed weapon: -2 weapon damage. |
 | Weakness -3 | `weakness-minus-3` | `cursedweakl0ei61` | — | `system.universalWeaponDamageBonus` + -3 | Cursed weapon: -3 weapon damage. |
 
-## 📘 Class Features — 23 entries
+## 📘 Class Features — 21 entries
 
 | Name | Canonical ID | Stable `_id` | Statuses | Mechanics | Description |
 |---|---|---|---|---|---|
-| Bravado | `bravado` | `bardbravadgy500n` | — | `system.hasBravado` = true | Will Saves can't be Hindered while not Incapacitated. Ignore effects that rely on hearing. |
-| Climax | `climax` | `bardclimax5xztqu` | — | `system.hasClimax` = true | Favor and bonus dice you grant can Explode. |
 | Deep Pockets (Feature) | `deep-pockets-feature` | `merchantde17e6rb` | — | `system.inventory.bonusSlots` + 1 | Merchant feature: +1 inventory slot. |
 | Evasive | `evasive` | `rogueevasiwfcaqc` | — | `system.hasEvasive` = true | No Hinder on Dodge saves from Heavy Armor. On success, remove TWO highest dice instead of one. |
 | Exalted | `exalted` | `CeoreuhLLhpCECDp` | — | `system.bonusPerDamageDie` + 1; `system.bonusPerDamageDieDoubleVsBeingTypes` + Hellspawn; `system.bonusPerDamageDieDoubleVsBeingTypes` + Undead; `saveVsStatusBonuses` + frightened:will:1 | — |

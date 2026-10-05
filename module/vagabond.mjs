@@ -66,13 +66,15 @@ import { VagabondSpellSequencer } from './helpers/spell-sequencer.mjs';
 import { VagabondItemSequencer } from './helpers/item-sequencer.mjs';
 import { VagabondFXResolver } from './helpers/fx-file-resolver.mjs';
 import { registerSocket, emitSocket, registerSocketAction } from './helpers/socket-helper.mjs';
-import { runMacroFromButton, executeItemMacro } from './helpers/item-macro.mjs';
+import { runMacroFromButton, executeItemMacro, registerMacroHandler } from './helpers/item-macro.mjs';
 import { LightSource } from './helpers/light-source.mjs';
 import { VagabondDamageHelper } from './helpers/damage-helper.mjs';
 import { VagabondDamagePipeline } from './helpers/damage-pipeline.mjs';
 import { StatusHelper } from './helpers/status-helper.mjs';
 import { RageHelper } from './helpers/rage-helper.mjs';
 import { AlchemyHelper } from './helpers/crafting/alchemy-helper.mjs';
+import { BardHelper } from './helpers/bard-helper.mjs';
+import { consumeUsedEffects } from './helpers/use-effects.mjs';
 import { VagabondRollBuilder } from './helpers/roll-builder.mjs';
 import { CurrencyHelper } from './helpers/currency-helper.mjs';
 import { ShopPricing } from './helpers/shop-pricing.mjs';
@@ -1023,6 +1025,15 @@ function registerGameSettings() {
     requiresReload: false,
   });
 
+  // Setting 21f4: One-time migration guard (hidden) — see BardHelper.migrateBardClass().
+  game.settings.register('vagabond', 'bardClassMigrated', {
+    scope: 'world',
+    config: false,
+    type: Boolean,
+    default: false,
+    requiresReload: false,
+  });
+
   // Setting 21g: One-time migration guard (hidden) — see CurrencyHelper.migrateCopperScale().
   // Stored raw-copper amounts were ×10 too small after the 1s=100c ratio correction.
   game.settings.register('vagabond', 'copperScaleMigrated', {
@@ -1647,6 +1658,11 @@ Hooks.once('ready', function () {
     await combat.updateEmbeddedDocuments('Combatant', updates);
   });
 
+  // Bard Virtuoso — players route the benefit copy onto Group members through the GM.
+  registerSocketAction('virtuosoApply', (payload) => BardHelper.apply(payload));
+  registerMacroHandler('bard.virtuoso', (scope) => BardHelper.virtuoso(scope));
+  registerMacroHandler('bard.perform', (scope) => BardHelper.perform(scope));
+
   registerSocketAction('grantLuck', async ({ actorUuid, amount }) => {
     const actor = await fromUuid(actorUuid);
     if (!actor) return;
@@ -1777,6 +1793,7 @@ Hooks.once('ready', function () {
       VagabondChatCard,
       VagabondDamageHelper,
       StatusHelper,
+      BardHelper,
       VagabondRollBuilder,
       // Stable read-only derived snapshot for modules/macros:
       // game.vagabond.api.readActor(actorOrTokenOrUuidOrId)
@@ -1811,6 +1828,8 @@ Hooks.once('ready', function () {
   RageHelper.flagSwitchableEffects();
   // One-time: Alchemist class items get the book-revision effect set (per-behavior switches).
   AlchemyHelper.migrateAlchemistClass();
+  // One-time: Bard class items get the book-revision features + Enjoy the Silence effect.
+  BardHelper.migrateBardClass();
   // One-time: stored copper amounts ×10 (ratio corrected to the book's 1s = 100c).
   CurrencyHelper.migrateCopperScale();
 });
@@ -3297,6 +3316,14 @@ Hooks.on('vagabond.postD20Roll', (ctx) => {
   if (!ctx?.actor || ctx.rollType === 'save' || ctx.rollType === 'spell') return;
   const source = (ctx.rollType === 'weapon' || ctx.rollType === 'weaponSkill') ? 'attack' : 'skill';
   Hooks.callAll('vagabond.actorActed', ctx.actor, { source, itemId: ctx.item?.id ?? null });
+});
+
+// Overtuned (Bard, L2/6/10): a Virtuoso Favor die that lifts a d20 past the threshold grants the
+// Bard 1 Luck. Chat-button saves call BardHelper.onCheckRolled from `_rollSave` directly.
+Hooks.on('vagabond.postD20Roll', (ctx) => {
+  const kind = { weapon: 'attack', spell: 'cast', save: 'save' }[ctx?.rollType];
+  // Overtuned reads the benefit first, then the benefit is spent (consumeOn effects)
+  if (kind && ctx.actor) BardHelper.onCheckRolled(ctx.actor, ctx.roll, kind).then(() => consumeUsedEffects(ctx.actor, kind));
 });
 
 // Eureka (Alchemist, L2/6/10, decision D2): passing a Craft skill check by margin

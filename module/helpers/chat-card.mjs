@@ -1872,6 +1872,29 @@ export class VagabondChatCard {
   }
 
   /**
+   * Standard card for the outcome of a class feature / trait / perk action (Virtuoso, …).
+   * Same generic layout as every other system card: actor portrait, title, subtitle, and a
+   * description — put the BOOK text of what was gained in `description` so the table sees it.
+   * @param {VagabondActor} actor - The actor using the feature
+   * @param {Object} opts
+   * @param {string} opts.title - Card title (e.g. "Virtuoso: Valor")
+   * @param {string} [opts.subtitle] - Defaults to the actor's name
+   * @param {string} opts.description - HTML body
+   * @param {string} [opts.icon] - Icon override (defaults to the actor portrait)
+   * @returns {Promise<ChatMessage>}
+   */
+  static async featureCard(actor, { title, subtitle, description, icon = null }) {
+    const card = new VagabondChatCard()
+      .setType('generic')
+      .setActor(actor)
+      .setTitle(title)
+      .setSubtitle(subtitle ?? actor.name)
+      .setDescription(description);
+    if (icon) card.data.icon = icon;
+    return await card.send();
+  }
+
+  /**
    * Create a chat card for spending a studied die
    * @param {VagabondActor} actor - The actor spending the die
    * @param {Roll} roll - The d6 roll

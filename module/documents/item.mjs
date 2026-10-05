@@ -717,7 +717,8 @@ export class VagabondItem extends Item {
     // and Invisible (attackersAreBlinded → Hinder vote); merged net-count BEFORE rolling.
     // Only the first target is consulted (multi-target attacks ignore targets 2..n).
     const { VagabondRollBuilder } = await import('../helpers/roll-builder.mjs');
-    let effectiveFavorHinder = favorHinder;
+    // Unconditional Favor on Attacks (system.favorChecks, e.g. Virtuoso: Valor)
+    let effectiveFavorHinder = VagabondRollBuilder.mergeFavorHinder(favorHinder, VagabondRollBuilder.checkFavorVote(actor, 'attack'));
     const targets = Array.from(game.user.targets);
     if (targets.length > 0) {
       // Attacker-side situational Favor (CONFIG.VAGABOND.attackFavorRules, e.g. Bloodthirsty)

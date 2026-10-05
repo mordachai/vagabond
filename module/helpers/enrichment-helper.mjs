@@ -1,4 +1,5 @@
 import { VagabondTextParser } from './text-parser.mjs';
+import { FeatureAction } from './feature-action.mjs';
 
 /**
  * Helper utilities for enriching HTML content in items.
@@ -30,6 +31,7 @@ export class EnrichmentHelper {
           }
         );
       }
+      feature.fx = FeatureAction.row(actor, feature.sourceItem, `levelFeatures.${feature.srcIndex ?? feature.index}.action`, feature.name);
       context.enrichedFeatures.push(feature);
     }
   }
@@ -59,6 +61,7 @@ export class EnrichmentHelper {
           }
         );
       }
+      trait.fx = FeatureAction.row(actor, trait.sourceItem, `traits.${trait.index}.action`, trait.name);
       context.enrichedTraits.push(trait);
     }
   }
@@ -88,6 +91,7 @@ export class EnrichmentHelper {
           }
         );
       }
+      perk.fx = FeatureAction.row(actor, perk, 'action', perk.name);
       context.enrichedPerks.push(perk);
     }
   }
