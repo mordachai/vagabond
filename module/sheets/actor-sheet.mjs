@@ -11,6 +11,7 @@ import { ContextMenuHelper } from '../helpers/context-menu-helper.mjs';
 import { buildSpellMenuItems } from '../helpers/item-menu.mjs';
 import { EnrichmentHelper } from '../helpers/enrichment-helper.mjs';
 import { EquipmentHelper } from '../helpers/equipment-helper.mjs';
+import { CurrencyHelper } from '../helpers/currency-helper.mjs';
 import { activateHandItem } from '../helpers/hand-item-activation.mjs';
 import * as ItemSections from '../helpers/item-sections.mjs';
 import { setupDragReorder } from '../helpers/drag-reorder.mjs';
@@ -75,6 +76,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       viewAncestry: this._viewAncestry,
       viewClass: this._viewClass,
       levelUp: this._onLevelUp,
+      consolidateWealth: this._onConsolidateWealth,
       toggleFeature: this._onToggleFeature,
       toggleTrait: this._onToggleTrait,
       togglePerk: this._onTogglePerk,
@@ -1193,6 +1195,17 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
    * @param {HTMLElement} target - The capturing HTML element
    * @protected
    */
+  /** Wealth trade icon: exchange copper→silver→gold into the largest coins. Shared with the HUD. */
+  static async _onConsolidateWealth() {
+    const current = CurrencyHelper.normalize(this.actor.system.currency);
+    const traded = CurrencyHelper.consolidate(current);
+    if (['gold', 'silver', 'copper'].every((d) => traded[d] === current[d])) {
+      ui.notifications.info(game.i18n.localize('VAGABOND.Hud.WealthAlreadyTrimmed'));
+      return;
+    }
+    await this.actor.update({ 'system.currency': traded });
+  }
+
   static async _onLevelUp(event, target) {
     const { LevelUpDialog } = globalThis.vagabond.applications;
     new LevelUpDialog(this.actor).render(true);

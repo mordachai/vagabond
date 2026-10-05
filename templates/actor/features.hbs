@@ -91,7 +91,7 @@
     {{! Wealth Section }}
     <div class='wealth-section'>
       <div class='currency-row flexrow'>
-        <div class='wealth-title'>{{localize "VAGABOND.UI.Sections.Wealth"}}:</div>
+        <div class='wealth-title' data-tooltip='{{localize "VAGABOND.UI.Sections.Wealth"}}'><i class='fas fa-coins'></i></div>
         <div class='currency-field'>
           <label class='resource-label gold-label'>{{localize "VAGABOND.Currency.Gold.long"}}</label>
           <input
@@ -122,6 +122,7 @@
             {{#unless @root.editable}}disabled{{/unless}}
           />
         </div>
+        {{#if @root.editable}}<i class='fas fa-scale-balanced wealth-trade clickable' data-action='consolidateWealth' data-tooltip='{{localize "VAGABOND.Hud.ConsolidateWealth"}}'></i>{{/if}}
       </div>
     </div>
   </section>

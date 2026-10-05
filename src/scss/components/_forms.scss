@@ -592,8 +592,18 @@ prose-mirror .editor-content {
         user-select: none;
       }
 
+      // Neutral hover (the inventory-hover tint is a saturated blue/orange in the dark/light themes)
       &:hover {
-        background: $c-inventory-hover;
+        background: color-mix(in srgb, $c-text-1 10%, transparent);
+      }
+
+      // Selected rows: soft accent tint
+      &:has(input:checked) {
+        background: color-mix(in srgb, $c-yellow 16%, transparent);
+
+        &:hover {
+          background: color-mix(in srgb, $c-yellow 26%, transparent);
+        }
       }
     }
   }

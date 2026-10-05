@@ -5,6 +5,7 @@
  */
 
 import { VagabondFXResolver } from './fx-file-resolver.mjs';
+import { VagabondFXDb } from './item-fx-db.mjs';
 
 export class VagabondItemSequencer {
 
@@ -83,12 +84,90 @@ export class VagabondItemSequencer {
     // Y shrinks with distance^0.73, floor at 3 grids to avoid oversized short beams.
     const gridsAway = Math.max(3, dist / canvas.grid.size);
     const scaleY = scale / Math.pow(gridsAway, 0.73);
-    seq.effect()
+    const eff = seq.effect()
       .file(file)
       .atLocation(srcPos)
       .stretchTo(dstPos)
-      .scale({ y: scaleY })
-      .duration(duration);
+      .scale({ y: scaleY });
+    if (duration) eff.duration(duration);
+  }
+
+  /**
+   * The projectile a THROW plays: the item's own Throw file when it has one (and its
+   * animation is on), else the auto-recognised throw. Always a caster → target flight.
+   * Returns null to let the normal Hit spec decide (no throw clip available, or the
+   * author's own ranged Hit file on an item that has no Throw file).
+   * @param {Item} item
+   * @param {object} fx  item.system.itemFx
+   * @returns {{spec: string, animType: 'ranged', auto: boolean, thrown: true}|null|undefined}
+   *   undefined = no throw opinion (fall back to Hit logic); null = silenced
+   * @private
+   */
+  static _throwSpec(item, fx) {
+    const file = fx.throwFile?.trim();
+    if (file) return fx.enabled ? { spec: file, animType: 'ranged', auto: false, thrown: true } : null;
+    // An author-set Hit file stays in charge when it is already a flight (ranged) or
+    // belongs to an Alchemical Item (their Hit file is the thrown effect).
+    const ownHit = !!fx.hitFile?.trim()
+      && (this._resolveAnimType(item) === 'ranged' || item.system?.equipmentType === 'alchemical');
+    if (fx.auto === false || ownHit) return undefined;
+    const auto = VagabondFXDb.autoThrownSpec(item);
+    return auto ? { spec: auto.path, animType: 'ranged', auto: true, thrown: true } : undefined;
+  }
+
+  /**
+   * Where a thrown miss lands: a little past the target and off to one side.
+   * @param {{x,y}} src  thrower center
+   * @param {{x,y}} dst  target center
+   * @returns {{x,y}}
+   * @private
+   */
+  static _missPos(src, dst) {
+    const dx = dst.x - src.x;
+    const dy = dst.y - src.y;
+    const dist = Math.hypot(dx, dy) || 1;
+    const grid = canvas.grid.size;
+    const side = Math.random() < 0.5 ? -1 : 1;
+    return {
+      x: dst.x + (dx / dist) * grid * 0.75 - (dy / dist) * grid * 0.6 * side,
+      y: dst.y + (dy / dist) * grid * 0.75 + (dx / dist) * grid * 0.6 * side,
+    };
+  }
+
+  /**
+   * What an item plays for a hit or a miss.
+   *  - Hit: the item's own Hit file when it has one (and its animation is on);
+   *    otherwise the auto-recognised animation, unless Auto is off.
+   *  - Miss: only an explicit Miss file — auto never invents a miss animation.
+   *  - Thrown attacks: the Throw file / auto-recognised throw replaces the Hit
+   *    animation (a projectile flies caster → target). A thrown miss with no
+   *    explicit Miss file flies the same projectile past the target (`wide`).
+   * @param {Item} item
+   * @param {boolean} isHit
+   * @param {{thrown?: boolean}} [options]
+   * @returns {{spec: string, animType: 'melee'|'ranged', auto: boolean, thrown?: boolean, wide?: boolean}|null}
+   */
+  static specFor(item, isHit, { thrown = false } = {}) {
+    const fx = item?.system?.itemFx;
+    if (!fx) return null;
+    if (thrown) {
+      const throwSpec = this._throwSpec(item, fx);
+      if (throwSpec === null) return null;
+      if (throwSpec) {
+        if (isHit) return throwSpec;
+        const miss = fx.missFile?.trim();
+        if (!miss) return { ...throwSpec, wide: true };
+      }
+    }
+    if (!isHit) {
+      const miss = fx.missFile?.trim();
+      return miss && fx.enabled ? { spec: miss, animType: this._resolveAnimType(item), auto: false } : null;
+    }
+    const hit = fx.hitFile?.trim();
+    if (hit) return fx.enabled ? { spec: hit, animType: this._resolveAnimType(item), auto: false } : null;
+    if (fx.auto === false) return null;
+    const auto = VagabondFXDb.autoSpec(item);
+    return auto ? { spec: auto.path, animType: auto.animType, auto: true } : null;
   }
 
   /**
@@ -98,18 +177,21 @@ export class VagabondItemSequencer {
    * @param {Token|null} casterToken - The attacker's canvas token
    * @param {Token[]} targetTokens - Array of targeted Token objects
    * @param {boolean} isHit - Whether the attack landed
+   * @param {{thrown?: boolean}} [options] thrown: the attack was a throw — plays a projectile
    */
-  static async play(item, casterToken, targetTokens, isHit) {
+  static async play(item, casterToken, targetTokens, isHit, { thrown = false } = {}) {
     if (!this.isEnabledForWorld() || !this.isAvailable() || !this.isEnabledForUser()) return;
     if (!casterToken) return;
 
     const fx = item.system?.itemFx;
-    if (!fx?.enabled) return;
+    const choice = this.specFor(item, isHit, { thrown });
+    if (!choice) return;
 
-    let file       = this._resolveFile(isHit ? fx.hitFile  : fx.missFile);
+    let file       = this._resolveFile(choice.spec);
     const scale    = isHit ? (fx.hitScale    ?? 1.0) : (fx.missScale    ?? 1.0);
     const offsetX  = isHit ? (fx.hitOffsetX  ?? 0)   : 0;
-    const duration = isHit ? (fx.hitDuration ?? 800) : (fx.missDuration ?? 600);
+    // Auto-recognised clips run their natural length; a fixed duration would cut them off.
+    const duration = choice.auto ? null : (isHit ? (fx.hitDuration ?? 800) : (fx.missDuration ?? 600));
     const sound    = isHit ? fx.hitSound    : fx.missSound;
     const volume   = fx.soundVolume ?? 0.6;
 
@@ -123,10 +205,11 @@ export class VagabondItemSequencer {
     }
 
     // Pre-expand any wildcard file paths so player clients never browse the filesystem.
+    file = VagabondFXDb.expandSpec(file);
     file = await VagabondFXResolver.resolve(file);
     if (!file || (Array.isArray(file) && !file.length)) return;
 
-    const animType = this._resolveAnimType(item);
+    const animType = choice.animType;
     const center  = t => t.center ?? { x: t.x, y: t.y };
     const hitPos  = t => ({ x: center(t).x + offsetX,  y: center(t).y });
 
@@ -142,20 +225,25 @@ export class VagabondItemSequencer {
         } else {
           // Impact at each target
           for (const target of targetTokens) {
-            seq.effect()
+            const eff = seq.effect()
               .file(file)
               .atLocation(hitPos(target))
-              .scale(scale)
-              .duration(duration);
+              .scale(scale);
+            if (duration) eff.duration(duration);
           }
         }
+      } else if (choice.wide) {
+        // Thrown miss: the projectile still flies, landing wide of the target
+        const target = targetTokens[0];
+        if (!target) return;
+        this._beamEffect(seq, file, scale, duration, center(casterToken), this._missPos(center(casterToken), center(target)));
       } else {
         // Miss: play on caster (swing whiff / aborted throw)
-        seq.effect()
+        const eff = seq.effect()
           .file(file)
           .atLocation(casterToken)
-          .scale(scale)
-          .duration(duration);
+          .scale(scale);
+        if (duration) eff.duration(duration);
       }
 
       seq.play();

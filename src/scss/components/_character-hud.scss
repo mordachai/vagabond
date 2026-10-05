@@ -247,6 +247,10 @@
     text-shadow: var(--vh-outline-2);
   }
 
+  // Inline-editable name / coin values keep their look — no focus ring.
+  .vh-name[contenteditable]:focus,
+  .vh-inv-wealth-num[contenteditable]:focus { outline: none; }
+
   // Slim health bar under the name — 2px sleeve, no margins/padding so it
   // never adds vertical bulk. Fill width + colour come from `hpBar` context.
   .vh-hp-bar {
@@ -640,6 +644,19 @@
           color: $c-yellow;
         }
       }
+
+      .vh-inv-wealth-trade {
+        color: $c-muted;
+        align-self: center;
+        margin-left: 4px;
+        opacity: 0.8;
+        font-size: 0.85rem;
+
+        &:hover {
+          color: $c-yellow;
+          opacity: 1.0;
+        }
+      }
     }
 
     .vh-inv-header-bounds {
@@ -781,7 +798,7 @@
     flex: 0 0 auto;
     font-family: $font-number;
     font-size: calc(0.7rem * var(--vh-font-scale));
-    color: $c-tan;
+    color: $c-white;
     border: 1px solid $c-dark-yellow;
     border-radius: 3px;
     padding: 0 3px;

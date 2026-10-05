@@ -396,6 +396,9 @@
   white-space: nowrap;
 }
 
+// "Flying by default" toggle next to the Fly speed
+input[type='checkbox'][name='system.flyingByDefault'] { @include vagabond-switch; }
+
 .npc-speed-types-col {
   flex: 0 1 auto;
   display: flex;

@@ -1,0 +1,54 @@
+<div class="ifp-wrapper">
+  <nav class="ifp-crumbs">
+    {{#each crumbs}}
+      <button type="button" class="ifp-crumb" data-action="goTo" data-index="{{index}}">{{label}}</button>
+    {{/each}}
+  </nav>
+
+  <div class="ifp-body">
+    {{#if choices.length}}
+      <section class="ifp-choices-wrap">
+        {{#if showFilter}}
+          <input type="text" class="ifp-filter" placeholder="{{localize 'VAGABOND.ItemFx.Picker.Filter'}}">
+        {{/if}}
+        <div class="ifp-choices">
+          {{#each choices}}
+            <button type="button" class="ifp-choice {{#if branch}}is-branch{{/if}}" data-action="enter" data-name="{{name}}">{{name}}</button>
+          {{/each}}
+        </div>
+      </section>
+    {{/if}}
+
+    {{#if path}}
+      <section class="ifp-stage">
+        <div class="ifp-main">
+          <video class="ifp-main-video" playsinline muted loop></video>
+        </div>
+        <div class="ifp-main-name" title="{{previewName}}">{{previewName}}</div>
+
+        {{#if tiles.length}}
+          <div class="ifp-tiles">
+            {{#each tiles}}
+              <button type="button" class="ifp-tile" data-action="useFile" data-file="{{file}}" data-tooltip="{{name}}">
+                <video src="{{src}}" preload="metadata" muted playsinline></video>
+              </button>
+            {{/each}}
+          </div>
+          {{#if more}}<p class="ifp-more">{{localize 'VAGABOND.ItemFx.Picker.More'}} {{more}}</p>{{/if}}
+          <p class="ifp-hint">{{localize 'VAGABOND.ItemFx.Picker.TileHint'}}</p>
+        {{else}}
+          <p class="ifp-empty">{{localize 'VAGABOND.ItemFx.Picker.NoClips'}}</p>
+        {{/if}}
+      </section>
+    {{else}}
+      <p class="ifp-empty">{{localize 'VAGABOND.ItemFx.Picker.PickStart'}}</p>
+    {{/if}}
+  </div>
+
+  <footer class="ifp-footer">
+    <span class="ifp-path">{{#if path}}{{path}}{{/if}}</span>
+    <button type="button" class="ifp-use" data-action="useLevel" {{#unless canUse}}disabled{{/unless}}>
+      <i class="fas fa-check"></i> {{useLabel}}
+    </button>
+  </footer>
+</div>

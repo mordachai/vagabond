@@ -7,6 +7,13 @@
   - Fix: Rage's exploding dice never actually exploded on weapons without their own explode setting. A global explode value no longer overrides an item's own faces while global explode is off.
   - Effects tied to a class Level show a **Lv N** badge in the effects list (yellow while still locked).
   - Existing Barbarian class items are converted once on load (your Rage on/off choice is kept). The 7 unused Barbarian library effects are removed and the library Rage effect is now conditional on Berserk.
+- **Exploding damage shows `!`** (e.g. `2d6!`) everywhere damage is displayed, when the dice can explode for that character (item setting, global explode effect or Alchemist Potency). Display only.
+- **Trade up:** new icon beside the coins (sheet and HUD) exchanges copper → silver → gold into the largest coins.
+- **HUD:** edit the character name and coin amounts in place; Wealth label is now a coin icon.
+- **Thrown attack animations:** throws now fly a projectile to the target (auto-recognised, e.g. the JB2A dagger throw); a thrown miss lands wide. New optional **Throw** animation slot on Thrown weapons and thrown alchemicals. Also applies to Roll Damage button, Luck rerolls and Force Crit.
+- **Item FX section:** matches the sheet theme; each slot has a Preview button (the inline mini-player is gone). Ranged clips picked in the FX picker keep choosing the file by distance to the target; the preview shows each file's range.
+- **Automated Animations:** the duplicate-animation warning now has a GM "Turn it off" button for its auto-recognition and hides once it's off.
+- **Weapon Properties dropdown:** closes on outside click; cleaner checkboxes and selected-row highlight.
 
 ## v5.44.0
 - **Compact damage card.** Damage dice and modifiers fold away under the total — click the number to open them. Defense now sits inside the damage section as **weapon-art shields** (one shield per weapon; with two Defense weapons a "Both" shield on top and one per weapon below). Saves share one row, sized to your configured saves; the info button uses a plain info icon.

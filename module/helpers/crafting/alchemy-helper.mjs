@@ -84,7 +84,7 @@ export class AlchemyHelper {
       // a material (metal stays 'none', multiplier ×1), so baseCost === cost for them.
       try {
         index = await pack.getIndex({
-          fields: ['type', 'system.equipmentType', 'system.baseCost', 'system.alchemicalType', 'system.description', 'system.damageAmount', 'system.damageType'],
+          fields: ['type', 'system.equipmentType', 'system.baseCost', 'system.alchemicalType', 'system.description', 'system.damageAmount', 'system.damageType', 'system.canExplode', 'system.explodeValues'],
         });
       }
       catch { continue; }
@@ -98,6 +98,8 @@ export class AlchemyHelper {
           alchemicalType: entry.system?.alchemicalType || 'concoction',
           description: entry.system?.description || '',
           damageAmount: entry.system?.damageAmount || '',
+          canExplode: !!entry.system?.canExplode,
+          explodeValues: entry.system?.explodeValues || '',
           damageType: (entry.system?.damageType && entry.system.damageType !== '-') ? entry.system.damageType : '',
         });
       }

@@ -135,6 +135,16 @@ export class CurrencyHelper {
     return { gold: w.gold + inc.gold, silver: w.silver + inc.silver, copper: w.copper + inc.copper };
   }
 
+  /**
+   * Trade a wallet up: exchange coins into the largest denominations of the same total
+   * (copper → silver → gold). Total value is unchanged.
+   * @param {object} wallet
+   * @returns {{gold:number, silver:number, copper:number}}
+   */
+  static consolidate(wallet) {
+    return this.fromCopper(this.toCopper(wallet));
+  }
+
   /** Alias of {@link add} — receiving money into a wallet. */
   static receive(wallet, copper) {
     return this.add(wallet, copper);

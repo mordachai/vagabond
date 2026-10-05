@@ -39,11 +39,25 @@
   .caused-status-req {
     display: flex;
     align-items: center;
-    gap: 3px;
+    gap: 5px;
     font-size: 0.75em;
     white-space: nowrap;
     cursor: help;
     margin-left: auto;
+  }
+
+  .caused-status-dmg-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.75em;
+    white-space: nowrap;
+    cursor: help;
+  }
+
+  .caused-status-req,
+  .caused-status-dmg-toggle {
+    > input[type='checkbox'] { @include vagabond-switch; }
   }
 
   .caused-status-remove {

@@ -69,9 +69,10 @@ import { registerSocket, emitSocket, registerSocketAction } from './helpers/sock
 import { runMacroFromButton, executeItemMacro } from './helpers/item-macro.mjs';
 import { LightSource } from './helpers/light-source.mjs';
 import { VagabondDamageHelper } from './helpers/damage-helper.mjs';
+import { VagabondDamagePipeline } from './helpers/damage-pipeline.mjs';
 import { StatusHelper } from './helpers/status-helper.mjs';
-import { VagabondRollBuilder } from './helpers/roll-builder.mjs';
 import { RageHelper } from './helpers/rage-helper.mjs';
+import { VagabondRollBuilder } from './helpers/roll-builder.mjs';
 import { CurrencyHelper } from './helpers/currency-helper.mjs';
 import { ShopPricing } from './helpers/shop-pricing.mjs';
 import { ShopTransactions } from './helpers/shop-transactions.mjs';
@@ -1003,7 +1004,6 @@ function registerGameSettings() {
     requiresReload: false,
   });
 
-  // Setting 21g: One-time migration guard (hidden) — see CurrencyHelper.migrateCopperScale().
   // Setting 21f2: One-time migration guard (hidden) — see RageHelper.migrateBarbarianClass().
   game.settings.register('vagabond', 'barbarianClassMigrated', {
     scope: 'world',
@@ -1013,6 +1013,7 @@ function registerGameSettings() {
     requiresReload: false,
   });
 
+  // Setting 21g: One-time migration guard (hidden) — see CurrencyHelper.migrateCopperScale().
   // Stored raw-copper amounts were ×10 too small after the 1s=100c ratio correction.
   game.settings.register('vagabond', 'copperScaleMigrated', {
     scope: 'world',
@@ -1521,6 +1522,13 @@ Handlebars.registerHelper('saveIcon', (key) =>
   CONFIG.VAGABOND?.saveIcons?.[key] || 'fa-solid fa-shield'
 );
 
+// Damage display with explode notation: {{explodeMark system.currentDamage item}} → "2d6!"
+// when the item's dice can explode for its owner (item, global effects, Potency).
+Handlebars.registerHelper('explodeMark', (formula, item) =>
+  VagabondDamagePipeline.markExplode(formula, item)
+);
+Handlebars.registerHelper('isExplodable', (item) => VagabondDamagePipeline.isExplodable(item));
+
 Handlebars.registerHelper('gte', (a, b) => a >= b);
 
 Handlebars.registerHelper('and', function () {
@@ -1787,6 +1795,8 @@ Hooks.once('ready', function () {
   LightSource.migrateRunAsGM();
   // One-time: Keen/Vicious tags → On Use Only effects on the weapon.
   EquipmentHelper.migrateWeaponPropertyEffects();
+  // One-time: Barbarian class items get the book-revision effect set (per-behavior switches).
+  RageHelper.migrateBarbarianClass();
   // One-time: stored copper amounts ×10 (ratio corrected to the book's 1s = 100c).
   CurrencyHelper.migrateCopperScale();
 });
@@ -1795,8 +1805,6 @@ Hooks.once('ready', function () {
 Hooks.on('canvasReady', () => LightSource.tickRealtime());
 
 // Register Dice So Nice colorsets when Dice So Nice is ready
-  // One-time: Barbarian class items get the book-revision effect set (per-behavior switches).
-  RageHelper.migrateBarbarianClass();
 Hooks.once('diceSoNiceReady', (dice3d) => {
   VagabondDiceAppearance.registerColorsets();
   VagabondDiceAppearance.registerDamageColorsets();
@@ -1819,14 +1827,6 @@ const _refreshClockDependents = foundry.utils.debounce(() => {
     }
   }
 }, 150);
-
-Hooks.on('updateJournalEntry', (journal, changes) => {
-  const pc = foundry.utils.getProperty(changes, 'flags.vagabond.progressClock');
-  if (!pc) return;
-  // Only refresh when a value that formulas can read actually changed
-  if (!('filled' in pc) && !('segments' in pc) && !('handle' in pc)) return;
-  _refreshClockDependents();
-});
 
 /* -------------------------------------------- */
 /*  Combat → Actor Reactivity (@combat.round)    */
@@ -1860,6 +1860,14 @@ Hooks.once('ready', () => _queueCombatRefresh(game.combats?.active));
 
 // Barbarian Rage auto-Berserk (inert unless an actor has system.rageTrigger)
 RageHelper.registerHooks();
+
+Hooks.on('updateJournalEntry', (journal, changes) => {
+  const pc = foundry.utils.getProperty(changes, 'flags.vagabond.progressClock');
+  if (!pc) return;
+  // Only refresh when a value that formulas can read actually changed
+  if (!('filled' in pc) && !('segments' in pc) && !('handle' in pc)) return;
+  _refreshClockDependents();
+});
 
 /* -------------------------------------------- */
 /*  UI Hooks - Progress Clocks Overlay          */
@@ -2988,7 +2996,8 @@ const FLUKE_REROLL_ENTRY = {
         const cleaveDie = globalThis.vagabond.utils.EquipmentHelper.cleaveDieFor(weapon, targetsAtRollTime.length);
         damageRoll = await weapon.rollDamage(actor, isCritical, statKey, targetsAtRollTime, cleaveDie, weaponSkillKey);
       }
-      await VagabondChatCard.weaponAttack(actor, weapon, attackResult, damageRoll, targetsAtRollTime);
+      const rerollMessage = await VagabondChatCard.weaponAttack(actor, weapon, attackResult, damageRoll, targetsAtRollTime);
+      await VagabondDamageHelper.playFxOrDefer(rerollMessage, { kind: 'item', thrown: !!rerollData.thrown }, actor, weapon, targetsAtRollTime, isSuccess);
 
     } else if (rerollData.type === 'cast') {
       // Spell cast reroll - show as a skill check with the mana skill
@@ -3073,7 +3082,9 @@ const FORCE_CRIT_ENTRY = {
           critDamageRoll = Roll.fromData(rollJSON);
         }
       }
-      await VagabondChatCard.weaponAttack(actor, weapon, attackResult, critDamageRoll, targetsAtRollTime);
+      const critMessage = await VagabondChatCard.weaponAttack(actor, weapon, attackResult, critDamageRoll, targetsAtRollTime);
+      const { VagabondDamageHelper } = await import('./helpers/damage-helper.mjs');
+      await VagabondDamageHelper.playFxOrDefer(critMessage, { kind: 'item', thrown: !!rerollData.thrown }, actor, weapon, targetsAtRollTime, true);
 
     } else if (rerollData.type === 'cast') {
       const spell = actor.items.get(rerollData.itemId);
@@ -3112,7 +3123,7 @@ const FORCE_CRIT_ENTRY = {
         }
       }
 
-      await VagabondChatCard.createActionCard({
+      const critCastMessage = await VagabondChatCard.createActionCard({
         actor,
         item: spell || null,
         title: spell?.name || `${entityLabel} Check`,
@@ -3126,6 +3137,14 @@ const FORCE_CRIT_ENTRY = {
         attackType: 'cast',
         targetsAtRollTime
       });
+      if (spell && rerollData.deliveryType) {
+        const { VagabondDamageHelper } = await import('./helpers/damage-helper.mjs');
+        await VagabondDamageHelper.playFxOrDefer(
+          critCastMessage,
+          { kind: 'spell', deliveryType: rerollData.deliveryType, deliveryIncrease: rerollData.deliveryIncrease ?? 0 },
+          actor, spell, targetsAtRollTime, true
+        );
+      }
 
     } else {
       // Skill or save — carry roll over, force crit marker only (no damage involved)

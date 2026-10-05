@@ -759,7 +759,7 @@ export class SpellHandler {
     costs.manaSpent = manaCost;
 
     // Create chat message
-    await this._createSpellChatCard(
+    const castMessage = await this._createSpellChatCard(
       spell,
       state,
       costs,
@@ -785,8 +785,17 @@ export class SpellHandler {
       const pseudo = { center, x: center.x, y: center.y, document: { width: 1, height: 1 } };
       VagabondSpellSequencer.play(spell, state.deliveryType, state.deliveryIncrease, casterToken ?? pseudo, [pseudo], { deliveryEnabled: isSuccess });
     } else {
-      const liveTargets = Array.from(game.user.targets);
-      VagabondSpellSequencer.play(spell, state.deliveryType, state.deliveryIncrease, casterToken, liveTargets, { deliveryEnabled: isSuccess });
+      // With a manual Roll Damage button on the card, the FX waits for that click
+      // (lands with the damage); otherwise it plays right after the cast.
+      const { VagabondDamageHelper: FxDamageHelper } = await import('../../helpers/damage-helper.mjs');
+      const fxDeferred = isSuccess && await FxDamageHelper.deferFxToDamageButton(
+        castMessage,
+        { kind: 'spell', deliveryType: state.deliveryType, deliveryIncrease: state.deliveryIncrease }
+      );
+      if (!fxDeferred) {
+        const liveTargets = Array.from(game.user.targets);
+        VagabondSpellSequencer.play(spell, state.deliveryType, state.deliveryIncrease, casterToken, liveTargets, { deliveryEnabled: isSuccess });
+      }
     }
     // ── End Sequencer FX ──────────────────────────────────────────────────────
 
@@ -879,7 +888,7 @@ export class SpellHandler {
 
     // Use universal chat card
     const { VagabondChatCard } = await import('../../helpers/chat-card.mjs');
-    await VagabondChatCard.spellCast(
+    return await VagabondChatCard.spellCast(
       this.actor,
       spell,
       spellCastResult,

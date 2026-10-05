@@ -3,7 +3,12 @@ import { GrantsHandlers } from './item-sheet-grants.mjs';
 import { EnrichmentHelper } from '../helpers/enrichment-helper.mjs';
 import * as ItemSections from '../helpers/item-sections.mjs';
 import { VideoPreviewDialog } from '../applications/video-preview-dialog.mjs';
+import { VagabondDamagePipeline } from '../helpers/damage-pipeline.mjs';
 import { VagabondSpellSequencer } from '../helpers/spell-sequencer.mjs';
+import { VagabondItemSequencer } from '../helpers/item-sequencer.mjs';
+import { VagabondFXDb } from '../helpers/item-fx-db.mjs';
+import { EquipmentHelper } from '../helpers/equipment-helper.mjs';
+import { ItemFxPicker } from '../applications/item-fx-picker.mjs';
 
 const { api, sheets } = foundry.applications;
 const DragDrop = foundry.applications.ux.DragDrop;
@@ -42,6 +47,11 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       browseItemFxFile: this._onBrowseItemFxFile,
       browseItemFxSound: this._onBrowseItemFxSound,
       previewItemFx: this._onPreviewItemFx,
+      toggleItemFx: this._onToggleItemFx,
+      openItemFxPicker: this._onOpenItemFxPicker,
+      previewItemFxSlot: this._onPreviewItemFxSlot,
+      disableAAAutoRec: this._onDisableAAAutoRec,
+      resetItemFx: this._onResetItemFx,
       previewSpellFx: this._onPreviewSpellFx,
       viewDoc: this._viewEffect,
       createDoc: this._createEffect,
@@ -338,9 +348,12 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
         // Sequencer FX availability for per-item animation config
         context.sequencerAvailable = !!game.modules.get('sequencer')?.active;
         context.isWeapon = this.item.system.equipmentType === 'weapon';
-        // File validation for locked view indicator (only when relevant)
-        if (context.sequencerAvailable && this.item.system.locked && this.item.system.itemFx?.enabled) {
-          context.itemFxValidation = await VagabondItemSheet._checkFxFiles(this.item.system.itemFx);
+        if (context.sequencerAvailable && ['weapon', 'alchemical', 'relic'].includes(this.item.system.equipmentType)) {
+          context.itemFxView = VagabondItemSheet._itemFxView(this.item);
+          // File validation for locked view indicator (only when relevant)
+          if (this.item.system.locked && context.itemFxView.on) {
+            context.itemFxValidation = await VagabondItemSheet._checkFxFiles(this.item.system.itemFx);
+          }
         }
         context.macroNames = VagabondItemSheet._resolveMacroNames(this.item);
         break;
@@ -633,7 +646,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
                   // Weapon: damage, damage type, grip, cost, slots
                   const damageDisplay = sys.grip === 'V'
                     ? `${sys.damage1H || '—'} / ${sys.damage2H || '—'}`
-                    : (sys.currentDamage || '—');
+                    : (VagabondDamagePipeline.markExplode(sys.currentDamage, item) || '—');
                   const damageType = sys.damageType && sys.damageType !== '-'
                     ? game.i18n.localize(CONFIG.VAGABOND.damageTypes[sys.damageType])
                     : '';
@@ -661,7 +674,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
 
                 } else if (sys.equipmentType === 'alchemical') {
                   // Alchemical: damage, type, cost
-                  const damage = sys.damageAmount || '—';
+                  const damage = VagabondDamagePipeline.markExplode(sys.damageAmount, item) || '—';
                   const damageType = sys.damageType && sys.damageType !== '-'
                     ? game.i18n.localize(CONFIG.VAGABOND.damageTypes[sys.damageType])
                     : '';
@@ -767,7 +780,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
               } else if (sys.equipmentType === 'armor') {
                 ratingDisplay = sys.rating || 0;
               } else if (sys.equipmentType === 'alchemical') {
-                damageDisplay = sys.damageAmount || '—';
+                damageDisplay = VagabondDamagePipeline.markExplode(sys.damageAmount, { type: 'equipment', system: sys }) || '—';
               }
             } else {
               // For non-equipment items, check for baseSlots
@@ -941,6 +954,13 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     this._listenerController?.abort();
     this._listenerController = new AbortController();
     const { signal } = this._listenerController;
+
+    // Weapon-property dropdown: close on a click anywhere outside it
+    document.addEventListener('pointerdown', ev => {
+      this.element?.querySelectorAll('details.property-dropdown[open]').forEach(dd => {
+        if (!dd.contains(ev.target)) dd.open = false;
+      });
+    }, { signal, capture: true });
 
     // Restore <details> open state
     if (this._savedOpenDetails.size > 0) {
@@ -1174,6 +1194,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
           // Allow a render for fields whose changes affect calculated display values.
           const needsRender = isEditor || name === 'name' || name === 'system.metal' || name === 'system.usesDiceScaling'
             || name === 'system.weaponSkill' // Other Skills list excludes the default
+            || name === 'system.grip' // Damage rows depend on the grip (0/1H/2H/V)
             // Armor "Final" read-outs derive from these
             || name === 'system.armorRating' || name === 'system.reflexPenalty' || name === 'system.baseSlots';
           const options = needsRender ? {} : { render: false };
@@ -2365,10 +2386,166 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     const fx = this.item.system.itemFx ?? {};
     const groups = [];
     const volume = fx.soundVolume ?? 0.6;
-    if (fx.hitFile) groups.push({ label: game.i18n.localize('VAGABOND.ItemFx.Hit'), spec: fx.hitFile, sound: fx.hitSound, volume });
-    if (fx.missFile) groups.push({ label: game.i18n.localize('VAGABOND.ItemFx.Miss'), spec: fx.missFile, sound: fx.missSound, volume });
+    const hit = VagabondItemSequencer.specFor(this.item, true);
+    const miss = VagabondItemSequencer.specFor(this.item, false);
+    if (EquipmentHelper.isThrowable(this.item) || EquipmentHelper.isThrownAlchemical(this.item)) {
+      const thrown = VagabondItemSequencer.specFor(this.item, true, { thrown: true });
+      if (thrown?.thrown && thrown.spec !== hit?.spec) groups.push({ label: game.i18n.localize('VAGABOND.ItemFx.Throw'), spec: thrown.spec, sound: fx.hitSound, volume });
+    }
+    if (hit) groups.push({ label: game.i18n.localize('VAGABOND.ItemFx.Hit'), spec: hit.spec, sound: fx.hitSound, volume });
+    if (miss) groups.push({ label: game.i18n.localize('VAGABOND.ItemFx.Miss'), spec: miss.spec, sound: fx.missSound, volume });
     if (!groups.length) return;
     VideoPreviewDialog.open(groups, { title: this.item.name });
+  }
+
+  /**
+   * Preview button on one FX slot (Hit / Throw / Miss) of the unlocked sheet: opens
+   * the floating preview with exactly what that slot plays in-game.
+   * @this VagabondItemSheet
+   * @protected
+   */
+  static _onPreviewItemFxSlot(event, target) {
+    event.preventDefault();
+    const slot = target.dataset.slot;
+    const fx = this.item.system.itemFx ?? {};
+    const choice = slot === 'miss'
+      ? VagabondItemSequencer.specFor(this.item, false)
+      : VagabondItemSequencer.specFor(this.item, true, { thrown: slot === 'throw' });
+    if (!choice) return;
+    const label = game.i18n.localize({ hit: 'VAGABOND.ItemFx.Hit', miss: 'VAGABOND.ItemFx.Miss', throw: 'VAGABOND.ItemFx.Throw' }[slot]);
+    VideoPreviewDialog.open(
+      [{ label, spec: choice.spec, sound: slot === 'miss' ? fx.missSound : fx.hitSound, volume: fx.soundVolume ?? 0.6 }],
+      { title: `${this.item.name} — ${label}` }
+    );
+  }
+
+  /**
+   * One Hit / Miss slot of the FX section: where the clip comes from and a preview frame.
+   * @param {string} spec         stored path string ('' = nothing)
+   * @param {string|null} autoPath  auto-recognised database path, used when spec is empty
+   * @returns {object}
+   * @private
+   */
+  static _fxSlotView(spec, autoPath) {
+    const effective = spec || autoPath || '';
+    if (!effective) return { kind: 'none' };
+    const parts = effective.split('|').map(s => s.trim()).filter(Boolean);
+    const isDb = parts.length === 1 && VagabondFXDb.isDbPath(parts[0]);
+    let video = '';
+    let count = parts.length;
+    let crumbs;
+    if (isDb) {
+      const path = parts[0].replace(/(\.?\*)+$/, '');
+      const files = VagabondFXDb.available() ? VagabondFXDb.files(path, 24) : [];
+      video = files[0] ?? '';
+      count = files.length;
+      crumbs = path.split('.');
+    } else {
+      const first = parts[0] ?? '';
+      if (!first.includes('*')) video = first;
+      crumbs = [decodeURIComponent(first.split('/').pop() ?? first)];
+      if (parts.length > 1) crumbs.push(`+${parts.length - 1}`);
+    }
+    return {
+      kind: spec ? 'custom' : 'auto',
+      crumbs,
+      label: crumbs.join(' › '),
+      count,
+      video: video ? `${video}#t=0.6` : '',
+    };
+  }
+
+  /**
+   * Everything the FX section needs to draw: on/off state, both slots, and warnings.
+   * @param {Item} item
+   * @returns {object}
+   * @private
+   */
+  static _itemFxView(item) {
+    const fx = item.system.itemFx ?? {};
+    const hitFile = fx.hitFile?.trim() ?? '';
+    const missFile = fx.missFile?.trim() ?? '';
+    const throwFile = fx.throwFile?.trim() ?? '';
+    const autoOn = fx.auto !== false;
+    const auto = !hitFile && autoOn ? VagabondFXDb.autoSpec(item) : null;
+    const on = hitFile ? !!fx.enabled : (autoOn || (!!missFile && !!fx.enabled));
+    // Throw slot: only items that can be thrown (Thrown weapons, damaging Alchemicals)
+    const throwable = EquipmentHelper.isThrowable(item) || EquipmentHelper.isThrownAlchemical(item);
+    const autoThrow = throwable && !throwFile && autoOn ? VagabondFXDb.autoThrownSpec(item) : null;
+    return {
+      on,
+      throwable,
+      throw: VagabondItemSheet._fxSlotView(throwFile, autoThrow?.path ?? ''),
+      noAutoThrowMatch: throwable && !throwFile && autoOn && !autoThrow,
+      hit: VagabondItemSheet._fxSlotView(hitFile, auto?.path ?? ''),
+      miss: VagabondItemSheet._fxSlotView(missFile, ''),
+      noAutoMatch: !hitFile && autoOn && !auto,
+      // Automated Animations only duplicates our FX while its global auto-recognition is on
+      aaWarning: VagabondItemSheet._aaAutoRecActive(),
+      aaCanDisable: game.user.isGM,
+    };
+  }
+
+  /** Automated Animations installed, active and with its global auto-recognition enabled. */
+  static _aaAutoRecActive() {
+    if (!game.modules.get('autoanimations')?.active) return false;
+    try { return !game.settings.get('autoanimations', 'disableAutoRec'); } catch { return true; }
+  }
+
+  /**
+   * Turn off Automated Animations' world-wide auto-recognition (GM only), so only items
+   * configured inside AA itself play AA animations and ours stop doubling up.
+   * @this VagabondItemSheet
+   * @protected
+   */
+  static async _onDisableAAAutoRec(event, target) {
+    event.preventDefault();
+    if (!game.user.isGM) return;
+    try {
+      await game.settings.set('autoanimations', 'disableAutoRec', true);
+      ui.notifications.info(game.i18n.localize('VAGABOND.ItemFx.AADisabled'));
+      this.render();
+    } catch (err) {
+      console.warn('Vagabond | Could not disable Automated Animations auto-recognition:', err);
+    }
+  }
+
+  /**
+   * The header switch: one on/off for the whole animation. "Off" silences the item
+   * (Auto off + Enable off); "On" re-enables both so a file or the auto pick plays.
+   * @this VagabondItemSheet
+   * @protected
+   */
+  static async _onToggleItemFx(event, target) {
+    event.preventDefault();
+    event.stopPropagation();
+    const on = VagabondItemSheet._itemFxView(this.item).on;
+    await this.item.update({ 'system.itemFx.enabled': !on, 'system.itemFx.auto': !on });
+  }
+
+  /**
+   * Open the floating FX picker for the Hit or Miss slot.
+   * @this VagabondItemSheet
+   * @protected
+   */
+  static _onOpenItemFxPicker(event, target) {
+    event.preventDefault();
+    const field = { miss: 'missFile', throw: 'throwFile' }[target.dataset.slot] ?? 'hitFile';
+    ItemFxPicker.open(this.item, field);
+  }
+
+  /**
+   * Clear a slot: Hit and Throw go back to auto-recognition, Miss goes back to no animation.
+   * @this VagabondItemSheet
+   * @protected
+   */
+  static async _onResetItemFx(event, target) {
+    event.preventDefault();
+    const slot = target.dataset.slot;
+    await this.item.update({
+      miss: { 'system.itemFx.missFile': '' },
+      throw: { 'system.itemFx.throwFile': '', 'system.itemFx.auto': true, 'system.itemFx.enabled': true },
+    }[slot] ?? { 'system.itemFx.hitFile': '', 'system.itemFx.auto': true, 'system.itemFx.enabled': true });
   }
 
   /**
@@ -2463,6 +2640,8 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     const check = async (path) => {
       if (!path) return null;
       if (path.includes('*') || path.includes('|')) return true;
+      // Sequencer database paths have no file to fetch — check the database instead.
+      if (VagabondFXDb.isDbPath(path)) return !VagabondFXDb.available() || VagabondFXDb.exists(path);
       try {
         const r = await fetch(path, { method: 'HEAD' });
         return r.ok;
@@ -2470,15 +2649,17 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
         return false;
       }
     };
-    const [hitFile, missFile, hitSound, missSound] = await Promise.all([
+    const [hitFile, missFile, throwFile, hitSound, missSound] = await Promise.all([
       check(itemFx.hitFile),
       check(itemFx.missFile),
+      check(itemFx.throwFile),
       check(itemFx.hitSound),
       check(itemFx.missSound),
     ]);
     return {
-      hitFile, missFile, hitSound, missSound,
-      animInvalid: (itemFx.hitFile && hitFile === false) || (itemFx.missFile && missFile === false),
+      hitFile, missFile, throwFile, hitSound, missSound,
+      animInvalid: (itemFx.hitFile && hitFile === false) || (itemFx.missFile && missFile === false)
+        || (itemFx.throwFile && throwFile === false),
       soundInvalid: (itemFx.hitSound && hitSound === false) || (itemFx.missSound && missSound === false),
     };
   }

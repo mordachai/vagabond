@@ -559,6 +559,18 @@
     h5 {color: $c-yellow;}
   }
 
+  .wealth-trade {
+    color: $c-muted;
+    align-self: center;
+    margin-left: 4px;
+    opacity: 0.8;
+
+    &:hover {
+      color: $c-yellow;
+      opacity: 1.0;
+    }
+  }
+
   .currency-field {
     display: flex;
     flex-direction: row;
@@ -572,8 +584,10 @@
 
     input {
       color: $c-yellow;
-      min-width: 30px;
-      max-width: 50px;
+      flex: 0 0 auto;
+      width: 56px; // fits 4 digits
+      min-width: 56px;
+      max-width: 56px;
       text-align: center;
     }
   }

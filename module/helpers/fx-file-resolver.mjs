@@ -186,7 +186,7 @@ export class VagabondFXResolver {
     const collect = it => {
       const fx = it?.system?.itemFx;
       if (!fx) return;
-      for (const f of [fx.hitFile, fx.missFile]) {
+      for (const f of [fx.hitFile, fx.missFile, fx.throwFile]) {
         for (const part of String(f ?? '').split('|').map(s => s.trim())) {
           if (this._isFsWildcard(part)) paths.add(part);
         }

@@ -181,3 +181,55 @@
     }
   }
 }
+
+// Toggle switch drawn over a native checkbox. Off = theme-text track (reads on parchment
+// and on dark), on = green with a white knob. Use on simple boolean checkboxes only —
+// dense checklists and icon-style checkboxes (e.g. skill training) keep their own look.
+@mixin vagabond-switch {
+  appearance: none;
+  -webkit-appearance: none;
+  flex: 0 0 auto;
+  position: relative;
+  width: 30px;
+  height: 16px;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  border-radius: 8px;
+  border: 1px solid $c-text-2;
+  background: rgba(128, 128, 128, 0.28);
+  box-shadow: none;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+
+  &::before { content: none; display: none; }
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: $c-text-2;
+    transition: transform 0.15s, background 0.15s;
+  }
+
+  &:checked {
+    background: $c-green;
+    border-color: $c-green;
+
+    &::after {
+      background: #fff;
+      transform: translateX(14px);
+    }
+  }
+
+  &:focus-visible {
+    outline: 2px solid $c-yellow;
+    outline-offset: 2px;
+  }
+
+  &:disabled { opacity: 0.45; cursor: not-allowed; }
+}

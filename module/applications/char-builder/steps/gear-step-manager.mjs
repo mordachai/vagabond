@@ -3,6 +3,7 @@
  */
 import { BaseStepManager } from './base-step-manager.mjs';
 import { CurrencyHelper } from '../../../helpers/currency-helper.mjs';
+import { VagabondDamagePipeline } from '../../../helpers/damage-pipeline.mjs';
 
 export class GearStepManager extends BaseStepManager {
   constructor(stateManager, dataService, configSystem) {
@@ -297,8 +298,8 @@ export class GearStepManager extends BaseStepManager {
       displayStats.weaponSkill = sys.weaponSkill || null;
       displayStats.range = sys.range || null;
       displayStats.grip = sys.grip || null;
-      displayStats.damage1h = sys.damageOneHand || null;
-      displayStats.damage2h = sys.damageTwoHands || null;
+      displayStats.damage1h = VagabondDamagePipeline.markExplode(sys.damageOneHand, item) || null;
+      displayStats.damage2h = VagabondDamagePipeline.markExplode(sys.damageTwoHands, item) || null;
       displayStats.damageType = sys.damageType || "-";
     } else if (eqType === 'armor') {
       displayStats.armorRating = sys.finalRating ?? sys.armorRating ?? 0;

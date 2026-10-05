@@ -141,6 +141,75 @@ export class VagabondDamageHelper {
   }
 
   /**
+   * Manual damage mode: when the attack/cast card carries a Roll Damage button, hold
+   * the item/spell FX until that button is clicked (the animation lands with the
+   * damage, not the check). Stores the FX payload on the message and returns true;
+   * returns false when there is no button (miss, no damage, auto-rolled) so the
+   * caller plays the FX immediately.
+   * @param {ChatMessage|null} message
+   * @param {{kind: 'item'|'spell', thrown?: boolean, deliveryType?: string, deliveryIncrease?: number}} payload
+   * @returns {Promise<boolean>}
+   */
+  static async deferFxToDamageButton(message, payload) {
+    if (!message?.content?.includes('vagabond-damage-button')) return false;
+    try {
+      await message.setFlag('vagabond', 'pendingFx', payload);
+      return true;
+    } catch (err) {
+      console.warn('Vagabond | Could not defer FX to damage button:', err);
+      return false;
+    }
+  }
+
+  /**
+   * Play the FX held by {@link deferFxToDamageButton}. Fire-and-forget.
+   * @param {ChatMessage|null} message
+   * @param {Actor} actor
+   * @param {Item|null} item
+   * @param {Array} storedTargets - Target data captured at roll time
+   */
+  static _playPendingFx(message, actor, item, storedTargets) {
+    const fx = message?.flags?.vagabond?.pendingFx;
+    if (!fx) return;
+    // A consumed item (thrown alchemical, last dagger) is gone by click time — the
+    // card's snapshot still carries its FX config.
+    item ??= message.flags.vagabond.itemSnapshot ?? null;
+    this._playFx(fx, actor, item, storedTargets, true);
+  }
+
+  /**
+   * Play item/spell FX now. Fire-and-forget.
+   * @param {{kind: 'item'|'spell', thrown?: boolean, deliveryType?: string, deliveryIncrease?: number}} fx
+   * @param {Actor} actor
+   * @param {Item|object|null} item
+   * @param {Array} storedTargets - Target data captured at roll time
+   * @param {boolean} isHit
+   */
+  static _playFx(fx, actor, item, storedTargets, isHit) {
+    if (!fx || !item) return;
+    const casterToken = actor.token?.object ?? actor.getActiveTokens(true)[0];
+    const targets = TargetHelper.resolveTargets(storedTargets);
+    if (fx.kind === 'spell') {
+      import('./spell-sequencer.mjs').then(({ VagabondSpellSequencer }) => {
+        VagabondSpellSequencer.play(item, fx.deliveryType, fx.deliveryIncrease ?? 0, casterToken, targets, { deliveryEnabled: isHit });
+      });
+    } else {
+      import('./item-sequencer.mjs').then(({ VagabondItemSequencer }) => {
+        VagabondItemSequencer.play(item, casterToken, targets, isHit, { thrown: !!fx.thrown });
+      });
+    }
+  }
+
+  /**
+   * Replayed cards (Luck reroll, Force Crit): defer the FX to the card's Roll Damage
+   * button on a hit, otherwise play it right away.
+   */
+  static async playFxOrDefer(message, fx, actor, item, storedTargets, isHit) {
+    if (isHit && await this.deferFxToDamageButton(message, fx)) return;
+    this._playFx(fx, actor, item, storedTargets, isHit);
+  }
+
+  /**
    * Roll damage from a chat message button and update the card in-place
    * @param {HTMLElement} button - The clicked button element
    * @param {string} messageId - The chat message ID
@@ -195,6 +264,9 @@ export class VagabondDamageHelper {
       context.statKey = null;
       context.critStatBonus = 0;
     }
+
+    // Item/spell FX held back from the check land together with the damage roll
+    this._playPendingFx(game.messages.get(messageId), actor, item, storedTargetsForWeak);
 
     // Unified damage pipeline (die-size bump is pre-baked into damageFormula upstream)
     const { VagabondDamagePipeline } = await import('./damage-pipeline.mjs');

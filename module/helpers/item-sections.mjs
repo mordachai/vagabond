@@ -1,4 +1,5 @@
 import { EquipmentHelper } from './equipment-helper.mjs';
+import { VagabondDamagePipeline } from './damage-pipeline.mjs';
 
 /**
  * Shared item detail "section builders".
@@ -98,7 +99,7 @@ export function buildWeaponStats(item) {
     <div class="mini-sheet-stats">
       <div class="stat-row">
         <span class="stat-name">${L('Damage')}</span>
-        <span class="stat-value">${item.system.currentDamage || item.system.damage || '—'} ${damageType}</span>
+        <span class="stat-value">${VagabondDamagePipeline.markExplode(item.system.currentDamage || item.system.damageAmount || item.system.damage, item) || '—'} ${damageType}</span>
       </div>
       <div class="stat-row">
         <span class="stat-name">${L('Range')}</span>

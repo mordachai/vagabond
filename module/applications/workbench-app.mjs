@@ -6,7 +6,8 @@ import { MixHelper } from '../helpers/crafting/mix-helper.mjs';
 import { CurrencyHelper } from '../helpers/currency-helper.mjs';
 import { MaterialsHelper } from '../helpers/materials-helper.mjs';
 import { CraftCatalog } from '../helpers/crafting/catalog-helper.mjs';
-import { equipmentStats } from '../helpers/equipment-stats.mjs';
+import { equipmentStats, markStatsForActor } from '../helpers/equipment-stats.mjs';
+import { VagabondDamagePipeline } from '../helpers/damage-pipeline.mjs';
 
 const { api } = foundry.applications;
 
@@ -206,7 +207,7 @@ export class WorkbenchApp extends api.HandlebarsApplicationMixin(api.Application
       return {
         uuid, name: source.name, img: source.img,
         alchemicalTypeLabel: game.i18n.localize(CONFIG.VAGABOND.alchemicalTypes?.[source.system?.alchemicalType] ?? source.system?.alchemicalType),
-        damageAmount: source.system?.damageAmount || '',
+        damageAmount: this.#markDamage(source.system?.damageAmount || '', source.system),
         damageTypeLabel: (source.system?.damageType && source.system.damageType !== '-')
           ? game.i18n.localize(CONFIG.VAGABOND.damageTypes?.[source.system.damageType] ?? source.system.damageType)
           : '',
@@ -246,6 +247,7 @@ export class WorkbenchApp extends api.HandlebarsApplicationMixin(api.Application
         ...a,
         costLabel: CurrencyHelper.format(a.cost),
         alchemicalTypeLabel: game.i18n.localize(CONFIG.VAGABOND.alchemicalTypes?.[a.alchemicalType] ?? a.alchemicalType),
+        damageAmount: this.#markDamage(a.damageAmount, a),
         damageTypeLabel: a.damageType ? game.i18n.localize(CONFIG.VAGABOND.damageTypes?.[a.damageType] ?? a.damageType) : '',
         known: known.has(a.uuid),
         overCap: a.cost > formulaValueCapCopper,
@@ -319,6 +321,7 @@ export class WorkbenchApp extends api.HandlebarsApplicationMixin(api.Application
     const catalog = this.#catalog.map(e => ({
       ...e,
       costLabel: CurrencyHelper.format(e.cost),
+      stats: markStatsForActor(e.stats, this.actor),
       typeLabel: this.#typeLabel(e.equipmentType),
       slotsLabel: this.#slotsLabel(e.slots),
       matsLabel: CurrencyHelper.format(ProjectHelper.materialsOwed(e.cost, e.cost)),
@@ -358,7 +361,7 @@ export class WorkbenchApp extends api.HandlebarsApplicationMixin(api.Application
       uuid, name: doc.name, img: doc.img,
       typeLabel: this.#typeLabel(sys.equipmentType),
       slotsLabel: this.#slotsLabel(sys.slots ?? sys.baseSlots),
-      stats: equipmentStats(doc),
+      stats: equipmentStats(doc, this.actor),
       description: sys.description
         ? await foundry.applications.ux.TextEditor.implementation.enrichHTML(sys.description, { relativeTo: doc })
         : '',
@@ -374,10 +377,21 @@ export class WorkbenchApp extends api.HandlebarsApplicationMixin(api.Application
     };
   }
 
+  /**
+   * Alchemical damage formula with explode notation ("2d6!") when the dice can
+   * explode for the crafting actor — authored on the item, a global effect, or
+   * Potency. `src` is anything carrying `canExplode`/`explodeValues` (none = only
+   * the actor's own routes count, e.g. a Mix, which carries no explode of its own).
+   */
+  #markDamage(formula, src = null) {
+    const item = { type: 'equipment', system: { equipmentType: 'alchemical', canExplode: src?.canExplode, explodeValues: src?.explodeValues } };
+    return VagabondDamagePipeline.markExplode(formula, item, this.actor);
+  }
+
   /** Mix tab: owned ingredients, the two slots, the combined-payload preview, live Mixtures. */
   #prepareMixContext() {
-    const damageView = (d) => d && ({
-      amount: d.amount,
+    const damageView = (d, src = null) => d && ({
+      amount: this.#markDamage(d.amount, src),
       typeLabel: game.i18n.localize(CONFIG.VAGABOND.damageTypes?.[d.type] ?? d.type),
       icon: CONFIG.VAGABOND.damageTypeIcons?.[d.type] ?? '',
     });
@@ -392,7 +406,7 @@ export class WorkbenchApp extends api.HandlebarsApplicationMixin(api.Application
       .map(i => ({
         id: i.id, name: i.name, img: i.img, nameLower: i.name.toLowerCase(),
         typeLabel: typeLabel(i),
-        damage: damageView(MixHelper.damageOf(i)),
+        damage: damageView(MixHelper.damageOf(i), i.system),
         charges: CONFIG.Item.documentClass._chargesRemaining(i),
         picked: this.#mixSlots.includes(i.id),
       }));

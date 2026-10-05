@@ -402,19 +402,13 @@ export class RollHandler {
         await this.actor.update({ 'system.manualCheckBonus': 0 });
       }
 
-      // Play item FX animation immediately after attack result (before damage roll)
-      // Placed here so it always fires regardless of whether damage rolling succeeds.
-      const casterToken = this.actor.token?.object ?? this.actor.getActiveTokens(true)[0];
-      const resolvedTargets = TargetHelper.resolveTargets(targetsAtRollTime);
-      VagabondItemSequencer.play(item, casterToken, resolvedTargets, attackResult.isHit);
-
       let damageRoll = null;
       if (VagabondDamageHelper.shouldRollDamage(attackResult.isHit)) {
         const statKey = attackResult.weaponSkill?.stat || null;
         damageRoll = await item.rollDamage(this.actor, attackResult.isCritical, statKey, targetsAtRollTime, cleaveDieOverride, attackResult.weaponSkillKey);
       }
 
-      await VagabondChatCard.weaponAttack(
+      const attackMessage = await VagabondChatCard.weaponAttack(
         this.actor,
         item,
         attackResult,
@@ -423,6 +417,15 @@ export class RollHandler {
         _wpnPostCtx.extraMetadata,
         _wpnPostCtx.extraTags
       );
+
+      // Item FX: with a manual Roll Damage button on the card the animation waits for
+      // that click (lands with the damage); otherwise it plays right after the check.
+      const fxDeferred = attackResult.isHit
+        && await VagabondDamageHelper.deferFxToDamageButton(attackMessage, { kind: 'item', thrown: !!thrown });
+      if (!fxDeferred) {
+        const casterToken = this.actor.token?.object ?? this.actor.getActiveTokens(true)[0];
+        VagabondItemSequencer.play(item, casterToken, TargetHelper.resolveTargets(targetsAtRollTime), attackResult.isHit, { thrown: !!thrown });
+      }
       if (alchemicalThrow && attackResult.isHit) await this._postMixCompanion(item, targetsAtRollTime, 'ranged');
       // Handle consumption after successful attack (regardless of hit/miss).
       // A weapon throw already spends quantity in activateHandItem; a thrown

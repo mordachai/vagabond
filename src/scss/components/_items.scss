@@ -381,6 +381,134 @@
   }
 }
 
+// Handling box: hands select + toggles in one tidy row
+.handling-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 8px 14px;
+  align-items: center;
+
+  .hands-required-field select { width: 100%; }
+}
+
+.item-section-box .linked-consumable-field {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px dashed $c-faint;
+
+  .resource-label { display: block; margin-bottom: 3px; }
+}
+
+// ── Toggle switches ─────────────────────────────────────────────────────────
+// Standalone checkboxes in item sheets (label.checkbox-label) render as switches:
+// the native box is near-invisible in dark mode. Track/knob use the theme text
+// color so the off state reads on both parchment and dark; on = green + white knob.
+&.item .checkbox-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+
+  > input[type='checkbox'] { @include vagabond-switch; }
+
+  > span { cursor: pointer; }
+}
+
+// Locked-view toggle sits in the stat value column, no label text
+&.item .checkbox-label.locked-toggle { gap: 0; }
+
+// Dense checklists (weapon properties, skills, immunities, status protections)
+// stay checkboxes — a switch per row would swamp them — but get a visible ring.
+&.item {
+  .property-checkbox-item input[type='checkbox'],
+  .npc-immunity-checkbox-item input[type='checkbox'],
+  .skill-checkbox-label input[type='checkbox'] {
+    // Fully self-drawn box: one border, one fill (core/theme checkbox chrome stacked a
+    // second ring and a mismatched interior on top of this).
+    appearance: none;
+    -webkit-appearance: none;
+    position: relative;
+    flex: 0 0 auto;
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    padding: 0;
+    border: 1px solid $c-text-2;
+    border-radius: 3px;
+    background: var(--vagabond-c-input-bg);
+    box-shadow: none;
+    cursor: pointer;
+
+    &::before { content: none; }
+
+    &:checked {
+      background: $c-yellow;
+      border-color: $c-yellow;
+    }
+
+    &:checked::after {
+      content: '';
+      position: absolute;
+      inset: auto;
+      left: 50%;
+      top: 46%;
+      width: 5px;
+      height: 10px;
+      border: solid #1a1a1a;
+      border-width: 0 2.5px 2.5px 0;
+      background: none;
+      transform: translate(-50%, -55%) rotate(45deg);
+    }
+
+    &:focus-visible {
+      outline: 1px solid $c-yellow;
+      outline-offset: 1px;
+    }
+  }
+}
+
+.supply-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px 12px;
+  align-items: center;
+}
+
+.item-section-box {
+  .item-section-hint {
+    margin: 4px 0 0;
+    font-size: 0.8em;
+    font-style: italic;
+    color: $c-text-2;
+  }
+
+  .max-uses-field {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 8px;
+
+    input[type='number'] { width: 50px; }
+
+    .uses-pips {
+      display: inline-flex;
+      gap: 3px;
+      margin-left: 4px;
+
+      .uses-pip {
+        font-size: 13px;
+        cursor: pointer;
+
+        &.filled { color: $c-yellow; }
+        &.empty { color: $c-text-2; opacity: 0.4; }
+        &:hover { transform: scale(1.2); }
+      }
+    }
+  }
+
+  .linked-consumable-field select { width: 100%; }
+}
+
 .consumable-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1616,9 +1744,29 @@
 
 .item-fx-details {
   margin-top: 8px;
-  border: 1px solid rgba(0, 0, 0, 0.15);
+  border: 1px solid $c-faint;
   border-radius: 4px;
-  background: rgba(0, 0, 0, 0.03);
+  background: var(--vagabond-c-surface);
+  color: $c-text-1;
+
+  // Boxed, theme-aware fields (the raw inputs rendered transparent in the dark theme)
+  input[type='text'],
+  input[type='number'],
+  select {
+    height: auto;
+    line-height: normal;
+    padding: 3px 6px;
+    border: 1px solid $c-faint;
+    border-radius: 3px;
+    background: var(--vagabond-c-input-bg);
+    color: $c-text-1;
+
+    &::placeholder { color: $c-text-1; opacity: 0.45; font-style: italic; }
+    &:focus {
+      outline: none;
+      border-color: var(--vagabond-c-yellow);
+    }
+  }
 
   .item-fx-summary {
     display: flex;
@@ -1715,13 +1863,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid rgba(0, 0, 0, 0.2);
+    border: 1px solid $c-faint;
     border-radius: 3px;
-    background: rgba(0, 0, 0, 0.04);
+    background: var(--vagabond-c-input-bg);
+    color: $c-text-1;
     cursor: pointer;
     font-size: 12px;
 
-    &:hover { background: rgba(0, 0, 0, 0.1); }
+    &:hover { border-color: var(--vagabond-c-yellow); }
   }
 }
 
@@ -1742,6 +1891,244 @@
     width: 60px;
     font-size: 12px;
     flex-shrink: 0;
+  }
+}
+
+// --- FX section v2: summary line, switch, clip slots ---
+
+.item-fx-details {
+  .item-fx-summary {
+    .ifx-title { flex: 0 0 auto; }
+
+    .ifx-summary-line {
+      flex: 1 1 auto;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-weight: 400;
+      font-size: 12px;
+      opacity: 0.75;
+    }
+  }
+
+  // Header switch — mirrors the HUD/effects switch look in the sheet's own colors
+  .ifx-switch {
+    flex: 0 0 auto;
+    margin-left: auto;
+    width: 28px;
+    height: 16px;
+    min-height: 0;
+    padding: 0;
+    line-height: normal;
+    border-radius: 8px;
+    border: 1px solid rgba(0, 0, 0, 0.35);
+    background: rgba(0, 0, 0, 0.18);
+    position: relative;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+
+    .ifx-switch-knob {
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #fff;
+      transition: transform 0.15s;
+    }
+
+    &.is-on {
+      background: #2e7d32;
+      border-color: #2e7d32;
+      .ifx-switch-knob { transform: translateX(12px); }
+    }
+  }
+
+  // The summary line sits before the switch, so the switch no longer needs auto margin
+  .ifx-summary-line + .ifx-chip + .ifx-switch,
+  .ifx-summary-line + .ifx-switch { margin-left: 4px; }
+}
+
+.ifx-chip {
+  flex: 0 0 auto;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+  padding: 2px 5px;
+  border-radius: 3px;
+  border: 1px solid $c-yellow;
+  color: inherit;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.ifx-warning {
+  display: flex;
+  gap: 6px;
+  align-items: flex-start;
+  margin: 0;
+  padding: 5px 8px;
+  font-size: 11px;
+  border-left: 3px solid $c-yellow;
+  background: var(--vagabond-c-input-bg);
+
+  i { margin-top: 2px; }
+  span { flex: 1; }
+
+  .ifx-warning-btn {
+    flex: 0 0 auto;
+    width: auto;
+    height: auto;
+    line-height: normal;
+    padding: 3px 8px;
+    font-size: 11px;
+    border: 1px solid $c-yellow;
+    border-radius: 3px;
+    background: var(--vagabond-c-surface);
+    color: $c-text-1;
+    cursor: pointer;
+
+    &:hover { background: $c-yellow; color: #1a1a1a; }
+  }
+}
+
+.ifx-slots {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 8px;
+}
+
+.ifx-slot {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  padding: 6px 8px 8px;
+  border: 1px solid $c-faint;
+  border-radius: 3px;
+  background: var(--vagabond-c-surface);
+
+  .ifx-slot-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 2px 6px;
+    min-height: 16px;
+
+    // Long hints get their own line instead of squeezing beside the title
+    .item-fx-hint { flex: 1 1 100%; }
+  }
+
+  .ifx-slot-title {
+    font-weight: 700;
+    font-size: 12px;
+  }
+
+  .ifx-slot-main {
+    display: flex;
+    gap: 8px;
+    align-items: stretch;
+  }
+
+  // Preview button (replaces the old inline mini-player): opens the floating preview
+  .ifx-clip {
+    flex: 0 0 64px;
+    width: 64px;
+    height: auto;
+    min-height: 56px;
+    line-height: normal;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    border: 1px solid $c-faint;
+    border-radius: 3px;
+    background: var(--vagabond-c-input-bg);
+    color: $c-text-1;
+    font-size: 10px;
+    cursor: pointer;
+    transition: box-shadow 0.15s, border-color 0.15s;
+
+    i { font-size: 18px; }
+
+    &:hover {
+      border-color: $c-yellow;
+      box-shadow: 0 0 8px -1px $c-yellow;
+    }
+
+    &.is-empty {
+      border-style: dashed;
+      opacity: 0.45;
+      cursor: default;
+      box-shadow: none;
+      &:hover { border-color: $c-faint; }
+    }
+  }
+
+  .ifx-slot-info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    justify-content: space-between;
+  }
+
+  .ifx-crumbs {
+    font-size: 12px;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+  }
+
+  .ifx-count,
+  .ifx-none {
+    font-size: 11px;
+    opacity: 0.7;
+  }
+
+  .ifx-slot-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+
+    button {
+      height: auto;
+      line-height: normal;
+      width: auto;
+      padding: 3px 7px;
+      font-size: 11px;
+      border: 1px solid $c-faint;
+      border-radius: 3px;
+      background: var(--vagabond-c-input-bg);
+      color: $c-text-1;
+      cursor: pointer;
+
+      &:hover { border-color: $c-yellow; }
+    }
+  }
+}
+
+.ifx-advanced {
+  border-top: 1px dashed $c-faint;
+  padding-top: 4px;
+
+  > summary {
+    cursor: pointer;
+    font-size: 11px;
+    font-weight: 600;
+    opacity: 0.8;
+  }
+
+  .ifx-advanced-body {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-top: 6px;
+
+    .resource-label { font-size: 11px; margin: 0; }
   }
 }
 
@@ -1973,6 +2360,8 @@
     align-items: center;
     gap: 5px;
     cursor: pointer;
+
+    > input[type='checkbox'] { @include vagabond-switch; }
   }
 
   /* Button-label field — boxed, theme-aware (same as item version) */

@@ -410,7 +410,7 @@
                     {{/if}}
                   </div>
                   <div class='eq-dmgtype'><i class='{{lookup @root.config.damageTypeIcons weapon.system.damageType}}'></i></div>
-                  <div class='eq-damage'>{{weapon.system.currentDamage}}</div>
+                  <div class='eq-damage'>{{explodeMark weapon.system.currentDamage weapon}}</div>
                   <div class='eq-grip'>
                     {{#if (eq weapon.system.grip '1H')}}<i class='fas fa-hand-fist'></i>
                     {{else if (eq weapon.system.grip '2H')}}<i class='fas fa-hands'></i>
@@ -488,7 +488,7 @@
                       {{/if}}
                     </div>
                     <div class='eq-dmgtype'><i class='{{lookup @root.config.damageTypeIcons item.system.damageType}}'></i></div>
-                    <div class='eq-damage'>{{item.system.damageAmount}}</div>
+                    <div class='eq-damage'>{{explodeMark item.system.damageAmount item}}</div>
                     <div class='eq-grip'>×{{item.system.quantity}}</div>
                     <div class='eq-row2'>
                       {{#if item.system.canExplode}}
@@ -582,7 +582,7 @@
                           {{/if}}
                         </div>
                         <div class='eq-dmgtype'><i class='{{lookup @root.config.damageTypeIcons item.system.damageType}}'></i></div>
-                        <div class='eq-damage'>{{item.system.currentDamage}}</div>
+                        <div class='eq-damage'>{{explodeMark item.system.currentDamage item}}</div>
                         <div class='eq-grip'>
                           {{#if (eq item.system.grip '1H')}}<i class='fas fa-hand-fist'></i>
                           {{else if (eq item.system.grip '2H')}}<i class='fas fa-hands'></i>
@@ -648,7 +648,7 @@
                           {{/if}}
                         </div>
                         <div class='eq-dmgtype'><i class='{{lookup @root.config.damageTypeIcons item.system.damageType}}'></i></div>
-                        <div class='eq-damage'>{{item.system.damageAmount}}</div>
+                        <div class='eq-damage'>{{explodeMark item.system.damageAmount item}}</div>
                         <div class='eq-grip'>×{{item.system.quantity}}</div>
                         <div class='eq-row2'>
                           {{#if item.system.canExplode}}
@@ -781,7 +781,7 @@
                              title='{{localize "VAGABOND.UI.Tooltips.ModifyDamageHint"}}'>
                           {{#unless (eq spell.system.damageType '-')}}
                              <div class="damage-display-group">
-                               <span class="spell-damage-dice">{{#if (lookup @root.spellStates spell._id)}}{{lookup (lookup @root.spellStates spell._id) 'damageDice'}}{{else}}1{{/if}}</span>d{{spell.effectiveDamageDieSize}}
+                               <span class="spell-damage-dice">{{#if (lookup @root.spellStates spell._id)}}{{lookup (lookup @root.spellStates spell._id) 'damageDice'}}{{else}}1{{/if}}</span>d{{spell.effectiveDamageDieSize}}{{#if (isExplodable spell)}}!{{/if}}
                              </div>
                            {{else}}
                              <span class="damage-placeholder">-</span>

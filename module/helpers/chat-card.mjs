@@ -1,4 +1,5 @@
 import { VagabondTextParser } from './text-parser.mjs';
+import { VagabondDamagePipeline } from './damage-pipeline.mjs';
 import { VagabondChatHelper } from './chat-helper.mjs';
 import { buildMacroButtonHTML } from './item-macro.mjs';
 import { resolveEffectDescription, effectDisplayImg } from './effects.mjs';
@@ -1007,10 +1008,10 @@ export class VagabondChatCard {
           // Show damage dice with icon if type exists, without icon if typeless ("-")
           if (dType && dType !== '-') {
               const icon = CONFIG.VAGABOND?.damageTypeIcons?.[dType] || 'fas fa-burst';
-              tags.push({ label: `${spellState.damageDice}d${dieSize}`, icon, cssClass: 'tag-damage' });
+              tags.push({ label: VagabondDamagePipeline.markExplode(`${spellState.damageDice}d${dieSize}`, spell, actor), icon, cssClass: 'tag-damage' });
           } else {
               // Typeless damage - show dice amount without damage type icon
-              tags.push({ label: `${spellState.damageDice}d${dieSize}`, cssClass: 'tag-damage' });
+              tags.push({ label: VagabondDamagePipeline.markExplode(`${spellState.damageDice}d${dieSize}`, spell, actor), cssClass: 'tag-damage' });
           }
       }
 
@@ -1082,6 +1083,8 @@ export class VagabondChatCard {
             type: 'cast',
             itemId: spell.id,
             manaSkillKey: manaSkillKey || null,
+            deliveryType: spellState.deliveryType || null,
+            deliveryIncrease: spellState.deliveryIncrease ?? 0,
             formula: roll?.formula || null,
             difficulty: difficulty
           },
@@ -1416,7 +1419,7 @@ export class VagabondChatCard {
 
     // Type-specific stats
     if (equipType === 'weapon') {
-      if (sys.currentDamage) stats.push({ label: i18n('VAGABOND.UI.Labels.Damage'), value: `${sys.currentDamage} ${this._getDamageTypeLabel(sys.currentDamageType)}` });
+      if (sys.currentDamage) stats.push({ label: i18n('VAGABOND.UI.Labels.Damage'), value: `${VagabondDamagePipeline.markExplode(sys.currentDamage, item)} ${this._getDamageTypeLabel(sys.currentDamageType)}` });
       if (sys.rangeDisplay) stats.push({ label: i18n('VAGABOND.UI.Labels.Range'), value: sys.rangeDisplay });
       if (sys.gripDisplay) stats.push({ label: i18n('VAGABOND.UI.Labels.Grip'), value: sys.gripDisplay });
       if (sys.weaponSkill) {
@@ -1437,12 +1440,12 @@ export class VagabondChatCard {
         stats.push({ label: i18n('VAGABOND.UI.Labels.TypeLabel'), value: typeKey ? i18n(typeKey) : sys.alchemicalType });
       }
       if (sys.damageAmount && sys.damageType !== '-') {
-        stats.push({ label: i18n('VAGABOND.UI.Labels.Damage'), value: `${sys.damageAmount} ${this._getDamageTypeLabel(sys.damageType)}` });
+        stats.push({ label: i18n('VAGABOND.UI.Labels.Damage'), value: `${VagabondDamagePipeline.markExplode(sys.damageAmount, item)} ${this._getDamageTypeLabel(sys.damageType)}` });
       }
     } else if (equipType === 'gear') {
       if (sys.gearCategory) stats.push({ label: i18n('VAGABOND.UI.Labels.Category'), value: sys.gearCategory });
       if (sys.damageAmount && sys.damageType !== '-') {
-        stats.push({ label: i18n('VAGABOND.UI.Labels.Damage'), value: `${sys.damageAmount} ${this._getDamageTypeLabel(sys.damageType)}` });
+        stats.push({ label: i18n('VAGABOND.UI.Labels.Damage'), value: `${VagabondDamagePipeline.markExplode(sys.damageAmount, item)} ${this._getDamageTypeLabel(sys.damageType)}` });
       }
     } else if (equipType === 'relic') {
       // Relic lore is now handled in metadata, not stats

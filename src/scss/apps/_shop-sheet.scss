@@ -221,10 +221,7 @@ $shop-font-number: $font-title;
       color: $c-text-1;
     }
 
-    input[type="checkbox"] {
-      flex: 0 0 auto;
-      margin: 0;
-    }
+    input[type="checkbox"] { @include vagabond-switch; }
   }
 
   // Purse | Stock settings in two columns

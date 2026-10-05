@@ -4081,6 +4081,10 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   white-space: nowrap;
   text-shadow: var(--vh-outline-2);
 }
+.vbd-hud .vh-name[contenteditable]:focus,
+.vbd-hud .vh-inv-wealth-num[contenteditable]:focus {
+  outline: none;
+}
 .vbd-hud .vh-hp-bar {
   width: 100%;
   height: 2px;
@@ -4474,6 +4478,17 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .vbd-hud .vh-inv-header .vh-inv-header-wealth .vh-inv-wealth-value .vh-inv-wealth-abbr {
   color: var(--vagabond-c-chat-yellow);
 }
+.vbd-hud .vh-inv-header .vh-inv-header-wealth .vh-inv-wealth-trade {
+  color: var(--vagabond-c-muted);
+  align-self: center;
+  margin-left: 4px;
+  opacity: 0.8;
+  font-size: 0.85rem;
+}
+.vbd-hud .vh-inv-header .vh-inv-header-wealth .vh-inv-wealth-trade:hover {
+  color: var(--vagabond-c-chat-yellow);
+  opacity: 1;
+}
 .vbd-hud .vh-inv-header .vh-inv-header-bounds {
   flex: 0 0 auto;
   display: flex;
@@ -4632,7 +4647,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   flex: 0 0 auto;
   font-family: "Ludlow", serif;
   font-size: calc(0.7rem * var(--vh-font-scale));
-  color: var(--vagabond-c-tan);
+  color: var(--vagabond-c-white);
   border: 1px solid var(--vagabond-dark-yellow);
   border-radius: 3px;
   padding: 0 3px;
@@ -10195,6 +10210,161 @@ ol#combat-tracker.directory-list {
   white-space: nowrap;
 }
 
+.vagabond-item-fx-picker .window-content {
+  padding: 0;
+}
+.vagabond-item-fx-picker .ifp-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+.vagabond-item-fx-picker .ifp-crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--vagabond-c-faint);
+}
+.vagabond-item-fx-picker .ifp-crumb {
+  width: auto;
+  height: auto;
+  line-height: normal;
+  padding: 2px 8px;
+  font-size: 12px;
+  border-radius: 10px;
+}
+.vagabond-item-fx-picker .ifp-crumb:last-child {
+  border-color: var(--vagabond-c-chat-yellow);
+  box-shadow: inset 0 0 0 1px var(--vagabond-c-chat-yellow);
+  font-weight: bold;
+}
+.vagabond-item-fx-picker .ifp-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px;
+}
+.vagabond-item-fx-picker .ifp-filter {
+  width: 100%;
+  margin-bottom: 4px;
+}
+.vagabond-item-fx-picker .ifp-choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.vagabond-item-fx-picker .ifp-choice {
+  width: auto;
+  height: auto;
+  line-height: normal;
+  padding: 3px 9px;
+  font-size: 12px;
+}
+.vagabond-item-fx-picker .ifp-choice[hidden] {
+  display: none;
+}
+.vagabond-item-fx-picker .ifp-choice.is-branch::after {
+  content: "›";
+  margin-left: 5px;
+  opacity: 0.6;
+}
+.vagabond-item-fx-picker .ifp-stage {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.vagabond-item-fx-picker .ifp-main {
+  background: #1a1a1a;
+  border-radius: 3px;
+  min-height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.vagabond-item-fx-picker .ifp-main-video {
+  max-width: 100%;
+  max-height: 260px;
+  display: block;
+}
+.vagabond-item-fx-picker .ifp-main-name {
+  font-size: 11px;
+  text-align: center;
+  opacity: 0.7;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.vagabond-item-fx-picker .ifp-tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
+  gap: 6px;
+}
+.vagabond-item-fx-picker .ifp-tile {
+  width: 100%;
+  height: 64px;
+  line-height: normal;
+  padding: 0;
+  overflow: hidden;
+  background: #1a1a1a;
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  border-radius: 3px;
+  cursor: pointer;
+}
+.vagabond-item-fx-picker .ifp-tile video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  pointer-events: none;
+}
+.vagabond-item-fx-picker .ifp-tile:hover, .vagabond-item-fx-picker .ifp-tile:focus-visible {
+  border-color: var(--vagabond-c-chat-yellow);
+  box-shadow: 0 0 8px -1px var(--vagabond-c-chat-yellow), inset 0 0 0 1px var(--vagabond-c-chat-yellow);
+}
+.vagabond-item-fx-picker .ifp-more,
+.vagabond-item-fx-picker .ifp-hint,
+.vagabond-item-fx-picker .ifp-empty {
+  margin: 0;
+  font-size: 11px;
+  opacity: 0.65;
+}
+.vagabond-item-fx-picker .ifp-footer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-top: 1px solid var(--vagabond-c-faint);
+  background: rgba(0, 0, 0, 0.04);
+}
+.vagabond-item-fx-picker .ifp-path {
+  flex: 1;
+  min-width: 0;
+  font-size: 11px;
+  opacity: 0.7;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.vagabond-item-fx-picker .ifp-use {
+  flex: 0 0 auto;
+  width: auto;
+  height: auto;
+  line-height: normal;
+  padding: 4px 12px;
+  font-size: 12px;
+  gap: 5px;
+}
+.vagabond-item-fx-picker .ifp-use:not(:disabled) {
+  border-color: var(--vagabond-c-chat-yellow);
+  box-shadow: inset 0 0 0 1px var(--vagabond-c-chat-yellow);
+  font-weight: bold;
+}
+
 #dsn-damage-appearance-config.dsn-damage-appearance-form .window-content {
   padding: 0;
   overflow: hidden;
@@ -11695,8 +11865,52 @@ ol#combat-tracker.directory-list {
   color: var(--vagabond-c-text-primary);
 }
 .vagabond.shop-sheet .shop-field input[type=checkbox] {
+  appearance: none;
+  -webkit-appearance: none;
   flex: 0 0 auto;
+  position: relative;
+  width: 30px;
+  height: 16px;
+  min-height: 0;
   margin: 0;
+  padding: 0;
+  border-radius: 8px;
+  border: 1px solid var(--vagabond-c-text-secondary);
+  background: rgba(128, 128, 128, 0.28);
+  box-shadow: none;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+.vagabond.shop-sheet .shop-field input[type=checkbox]::before {
+  content: none;
+  display: none;
+}
+.vagabond.shop-sheet .shop-field input[type=checkbox]::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--vagabond-c-text-secondary);
+  transition: transform 0.15s, background 0.15s;
+}
+.vagabond.shop-sheet .shop-field input[type=checkbox]:checked {
+  background: var(--vagabond-c-green);
+  border-color: var(--vagabond-c-green);
+}
+.vagabond.shop-sheet .shop-field input[type=checkbox]:checked::after {
+  background: #fff;
+  transform: translateX(14px);
+}
+.vagabond.shop-sheet .shop-field input[type=checkbox]:focus-visible {
+  outline: 2px solid var(--vagabond-c-chat-yellow);
+  outline-offset: 2px;
+}
+.vagabond.shop-sheet .shop-field input[type=checkbox]:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
 }
 .vagabond.shop-sheet .shop-split {
   display: grid;
@@ -16003,7 +16217,13 @@ ol#combat-tracker.directory-list {
   user-select: none;
 }
 .vagabond .property-dropdown .property-checkboxes .property-checkbox-item:hover {
-  background: var(--vagabond-inventory-hover);
+  background: color-mix(in srgb, var(--vagabond-c-text-primary) 10%, transparent);
+}
+.vagabond .property-dropdown .property-checkboxes .property-checkbox-item:has(input:checked) {
+  background: color-mix(in srgb, var(--vagabond-c-chat-yellow) 16%, transparent);
+}
+.vagabond .property-dropdown .property-checkboxes .property-checkbox-item:has(input:checked):hover {
+  background: color-mix(in srgb, var(--vagabond-c-chat-yellow) 26%, transparent);
 }
 .vagabond .property-tags {
   flex: 2;
@@ -17049,6 +17269,176 @@ ol#combat-tracker.directory-list {
 .vagabond .equip-cost-slots-row .currency-field input, .vagabond .equip-cost-slots-row .slots-field input, .vagabond .equip-cost-slots-row .quantity-field input {
   width: 100%;
 }
+.vagabond .handling-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 8px 14px;
+  align-items: center;
+}
+.vagabond .handling-grid .hands-required-field select {
+  width: 100%;
+}
+.vagabond .item-section-box .linked-consumable-field {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--vagabond-c-faint);
+}
+.vagabond .item-section-box .linked-consumable-field .resource-label {
+  display: block;
+  margin-bottom: 3px;
+}
+.vagabond.item .checkbox-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+.vagabond.item .checkbox-label > input[type=checkbox] {
+  appearance: none;
+  -webkit-appearance: none;
+  flex: 0 0 auto;
+  position: relative;
+  width: 30px;
+  height: 16px;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  border-radius: 8px;
+  border: 1px solid var(--vagabond-c-text-secondary);
+  background: rgba(128, 128, 128, 0.28);
+  box-shadow: none;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+.vagabond.item .checkbox-label > input[type=checkbox]::before {
+  content: none;
+  display: none;
+}
+.vagabond.item .checkbox-label > input[type=checkbox]::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--vagabond-c-text-secondary);
+  transition: transform 0.15s, background 0.15s;
+}
+.vagabond.item .checkbox-label > input[type=checkbox]:checked {
+  background: var(--vagabond-c-green);
+  border-color: var(--vagabond-c-green);
+}
+.vagabond.item .checkbox-label > input[type=checkbox]:checked::after {
+  background: #fff;
+  transform: translateX(14px);
+}
+.vagabond.item .checkbox-label > input[type=checkbox]:focus-visible {
+  outline: 2px solid var(--vagabond-c-chat-yellow);
+  outline-offset: 2px;
+}
+.vagabond.item .checkbox-label > input[type=checkbox]:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.vagabond.item .checkbox-label > span {
+  cursor: pointer;
+}
+.vagabond.item .checkbox-label.locked-toggle {
+  gap: 0;
+}
+.vagabond.item .property-checkbox-item input[type=checkbox],
+.vagabond.item .npc-immunity-checkbox-item input[type=checkbox],
+.vagabond.item .skill-checkbox-label input[type=checkbox] {
+  appearance: none;
+  -webkit-appearance: none;
+  position: relative;
+  flex: 0 0 auto;
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--vagabond-c-text-secondary);
+  border-radius: 3px;
+  background: var(--vagabond-c-input-bg);
+  box-shadow: none;
+  cursor: pointer;
+}
+.vagabond.item .property-checkbox-item input[type=checkbox]::before,
+.vagabond.item .npc-immunity-checkbox-item input[type=checkbox]::before,
+.vagabond.item .skill-checkbox-label input[type=checkbox]::before {
+  content: none;
+}
+.vagabond.item .property-checkbox-item input[type=checkbox]:checked,
+.vagabond.item .npc-immunity-checkbox-item input[type=checkbox]:checked,
+.vagabond.item .skill-checkbox-label input[type=checkbox]:checked {
+  background: var(--vagabond-c-chat-yellow);
+  border-color: var(--vagabond-c-chat-yellow);
+}
+.vagabond.item .property-checkbox-item input[type=checkbox]:checked::after,
+.vagabond.item .npc-immunity-checkbox-item input[type=checkbox]:checked::after,
+.vagabond.item .skill-checkbox-label input[type=checkbox]:checked::after {
+  content: "";
+  position: absolute;
+  inset: auto;
+  left: 50%;
+  top: 46%;
+  width: 5px;
+  height: 10px;
+  border: solid #1a1a1a;
+  border-width: 0 2.5px 2.5px 0;
+  background: none;
+  transform: translate(-50%, -55%) rotate(45deg);
+}
+.vagabond.item .property-checkbox-item input[type=checkbox]:focus-visible,
+.vagabond.item .npc-immunity-checkbox-item input[type=checkbox]:focus-visible,
+.vagabond.item .skill-checkbox-label input[type=checkbox]:focus-visible {
+  outline: 1px solid var(--vagabond-c-chat-yellow);
+  outline-offset: 1px;
+}
+.vagabond .supply-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px 12px;
+  align-items: center;
+}
+.vagabond .item-section-box .item-section-hint {
+  margin: 4px 0 0;
+  font-size: 0.8em;
+  font-style: italic;
+  color: var(--vagabond-c-text-secondary);
+}
+.vagabond .item-section-box .max-uses-field {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+}
+.vagabond .item-section-box .max-uses-field input[type=number] {
+  width: 50px;
+}
+.vagabond .item-section-box .max-uses-field .uses-pips {
+  display: inline-flex;
+  gap: 3px;
+  margin-left: 4px;
+}
+.vagabond .item-section-box .max-uses-field .uses-pips .uses-pip {
+  font-size: 13px;
+  cursor: pointer;
+}
+.vagabond .item-section-box .max-uses-field .uses-pips .uses-pip.filled {
+  color: var(--vagabond-c-chat-yellow);
+}
+.vagabond .item-section-box .max-uses-field .uses-pips .uses-pip.empty {
+  color: var(--vagabond-c-text-secondary);
+  opacity: 0.4;
+}
+.vagabond .item-section-box .max-uses-field .uses-pips .uses-pip:hover {
+  transform: scale(1.2);
+}
+.vagabond .item-section-box .linked-consumable-field select {
+  width: 100%;
+}
 .vagabond .consumable-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -18079,9 +18469,34 @@ ol#combat-tracker.directory-list {
 }
 .vagabond .item-fx-details {
   margin-top: 8px;
-  border: 1px solid rgba(0, 0, 0, 0.15);
+  border: 1px solid var(--vagabond-c-faint);
   border-radius: 4px;
-  background: rgba(0, 0, 0, 0.03);
+  background: var(--vagabond-c-surface);
+  color: var(--vagabond-c-text-primary);
+}
+.vagabond .item-fx-details input[type=text],
+.vagabond .item-fx-details input[type=number],
+.vagabond .item-fx-details select {
+  height: auto;
+  line-height: normal;
+  padding: 3px 6px;
+  border: 1px solid var(--vagabond-c-faint);
+  border-radius: 3px;
+  background: var(--vagabond-c-input-bg);
+  color: var(--vagabond-c-text-primary);
+}
+.vagabond .item-fx-details input[type=text]::placeholder,
+.vagabond .item-fx-details input[type=number]::placeholder,
+.vagabond .item-fx-details select::placeholder {
+  color: var(--vagabond-c-text-primary);
+  opacity: 0.45;
+  font-style: italic;
+}
+.vagabond .item-fx-details input[type=text]:focus,
+.vagabond .item-fx-details input[type=number]:focus,
+.vagabond .item-fx-details select:focus {
+  outline: none;
+  border-color: var(--vagabond-c-yellow);
 }
 .vagabond .item-fx-details .item-fx-summary {
   display: flex;
@@ -18181,14 +18596,15 @@ ol#combat-tracker.directory-list {
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--vagabond-c-faint);
   border-radius: 3px;
-  background: rgba(0, 0, 0, 0.04);
+  background: var(--vagabond-c-input-bg);
+  color: var(--vagabond-c-text-primary);
   cursor: pointer;
   font-size: 12px;
 }
 .vagabond .item-fx-file-row .item-fx-browse-btn:hover {
-  background: rgba(0, 0, 0, 0.1);
+  border-color: var(--vagabond-c-yellow);
 }
 .vagabond .item-fx-scale-row {
   display: flex;
@@ -18206,6 +18622,227 @@ ol#combat-tracker.directory-list {
   width: 60px;
   font-size: 12px;
   flex-shrink: 0;
+}
+.vagabond .item-fx-details .item-fx-summary .ifx-title {
+  flex: 0 0 auto;
+}
+.vagabond .item-fx-details .item-fx-summary .ifx-summary-line {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 400;
+  font-size: 12px;
+  opacity: 0.75;
+}
+.vagabond .item-fx-details .ifx-switch {
+  flex: 0 0 auto;
+  margin-left: auto;
+  width: 28px;
+  height: 16px;
+  min-height: 0;
+  padding: 0;
+  line-height: normal;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.35);
+  background: rgba(0, 0, 0, 0.18);
+  position: relative;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+.vagabond .item-fx-details .ifx-switch .ifx-switch-knob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform 0.15s;
+}
+.vagabond .item-fx-details .ifx-switch.is-on {
+  background: #2e7d32;
+  border-color: #2e7d32;
+}
+.vagabond .item-fx-details .ifx-switch.is-on .ifx-switch-knob {
+  transform: translateX(12px);
+}
+.vagabond .item-fx-details .ifx-summary-line + .ifx-chip + .ifx-switch,
+.vagabond .item-fx-details .ifx-summary-line + .ifx-switch {
+  margin-left: 4px;
+}
+.vagabond .ifx-chip {
+  flex: 0 0 auto;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+  padding: 2px 5px;
+  border-radius: 3px;
+  border: 1px solid var(--vagabond-c-chat-yellow);
+  color: inherit;
+  background: rgba(0, 0, 0, 0.05);
+}
+.vagabond .ifx-warning {
+  display: flex;
+  gap: 6px;
+  align-items: flex-start;
+  margin: 0;
+  padding: 5px 8px;
+  font-size: 11px;
+  border-left: 3px solid var(--vagabond-c-chat-yellow);
+  background: var(--vagabond-c-input-bg);
+}
+.vagabond .ifx-warning i {
+  margin-top: 2px;
+}
+.vagabond .ifx-warning span {
+  flex: 1;
+}
+.vagabond .ifx-warning .ifx-warning-btn {
+  flex: 0 0 auto;
+  width: auto;
+  height: auto;
+  line-height: normal;
+  padding: 3px 8px;
+  font-size: 11px;
+  border: 1px solid var(--vagabond-c-chat-yellow);
+  border-radius: 3px;
+  background: var(--vagabond-c-surface);
+  color: var(--vagabond-c-text-primary);
+  cursor: pointer;
+}
+.vagabond .ifx-warning .ifx-warning-btn:hover {
+  background: var(--vagabond-c-chat-yellow);
+  color: #1a1a1a;
+}
+.vagabond .ifx-slots {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 8px;
+}
+.vagabond .ifx-slot {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  padding: 6px 8px 8px;
+  border: 1px solid var(--vagabond-c-faint);
+  border-radius: 3px;
+  background: var(--vagabond-c-surface);
+}
+.vagabond .ifx-slot .ifx-slot-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px 6px;
+  min-height: 16px;
+}
+.vagabond .ifx-slot .ifx-slot-head .item-fx-hint {
+  flex: 1 1 100%;
+}
+.vagabond .ifx-slot .ifx-slot-title {
+  font-weight: 700;
+  font-size: 12px;
+}
+.vagabond .ifx-slot .ifx-slot-main {
+  display: flex;
+  gap: 8px;
+  align-items: stretch;
+}
+.vagabond .ifx-slot .ifx-clip {
+  flex: 0 0 64px;
+  width: 64px;
+  height: auto;
+  min-height: 56px;
+  line-height: normal;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  border: 1px solid var(--vagabond-c-faint);
+  border-radius: 3px;
+  background: var(--vagabond-c-input-bg);
+  color: var(--vagabond-c-text-primary);
+  font-size: 10px;
+  cursor: pointer;
+  transition: box-shadow 0.15s, border-color 0.15s;
+}
+.vagabond .ifx-slot .ifx-clip i {
+  font-size: 18px;
+}
+.vagabond .ifx-slot .ifx-clip:hover {
+  border-color: var(--vagabond-c-chat-yellow);
+  box-shadow: 0 0 8px -1px var(--vagabond-c-chat-yellow);
+}
+.vagabond .ifx-slot .ifx-clip.is-empty {
+  border-style: dashed;
+  opacity: 0.45;
+  cursor: default;
+  box-shadow: none;
+}
+.vagabond .ifx-slot .ifx-clip.is-empty:hover {
+  border-color: var(--vagabond-c-faint);
+}
+.vagabond .ifx-slot .ifx-slot-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  justify-content: space-between;
+}
+.vagabond .ifx-slot .ifx-crumbs {
+  font-size: 12px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.vagabond .ifx-slot .ifx-count,
+.vagabond .ifx-slot .ifx-none {
+  font-size: 11px;
+  opacity: 0.7;
+}
+.vagabond .ifx-slot .ifx-slot-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.vagabond .ifx-slot .ifx-slot-buttons button {
+  height: auto;
+  line-height: normal;
+  width: auto;
+  padding: 3px 7px;
+  font-size: 11px;
+  border: 1px solid var(--vagabond-c-faint);
+  border-radius: 3px;
+  background: var(--vagabond-c-input-bg);
+  color: var(--vagabond-c-text-primary);
+  cursor: pointer;
+}
+.vagabond .ifx-slot .ifx-slot-buttons button:hover {
+  border-color: var(--vagabond-c-chat-yellow);
+}
+.vagabond .ifx-advanced {
+  border-top: 1px dashed var(--vagabond-c-faint);
+  padding-top: 4px;
+}
+.vagabond .ifx-advanced > summary {
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 600;
+  opacity: 0.8;
+}
+.vagabond .ifx-advanced .ifx-advanced-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-top: 6px;
+}
+.vagabond .ifx-advanced .ifx-advanced-body .resource-label {
+  font-size: 11px;
+  margin: 0;
 }
 .vagabond .macro-section-box {
   /* (?) help icon sitting next to the "Macros" legend */
@@ -18439,6 +19076,54 @@ ol#combat-tracker.directory-list {
   align-items: center;
   gap: 5px;
   cursor: pointer;
+}
+.vagabond .npc-macro-config .npc-macro-toggle > input[type=checkbox] {
+  appearance: none;
+  -webkit-appearance: none;
+  flex: 0 0 auto;
+  position: relative;
+  width: 30px;
+  height: 16px;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  border-radius: 8px;
+  border: 1px solid var(--vagabond-c-text-secondary);
+  background: rgba(128, 128, 128, 0.28);
+  box-shadow: none;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+.vagabond .npc-macro-config .npc-macro-toggle > input[type=checkbox]::before {
+  content: none;
+  display: none;
+}
+.vagabond .npc-macro-config .npc-macro-toggle > input[type=checkbox]::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--vagabond-c-text-secondary);
+  transition: transform 0.15s, background 0.15s;
+}
+.vagabond .npc-macro-config .npc-macro-toggle > input[type=checkbox]:checked {
+  background: var(--vagabond-c-green);
+  border-color: var(--vagabond-c-green);
+}
+.vagabond .npc-macro-config .npc-macro-toggle > input[type=checkbox]:checked::after {
+  background: #fff;
+  transform: translateX(14px);
+}
+.vagabond .npc-macro-config .npc-macro-toggle > input[type=checkbox]:focus-visible {
+  outline: 2px solid var(--vagabond-c-chat-yellow);
+  outline-offset: 2px;
+}
+.vagabond .npc-macro-config .npc-macro-toggle > input[type=checkbox]:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
 }
 .vagabond .npc-macro-config .macro-label-input {
   width: 100%;
@@ -19336,6 +20021,16 @@ ol#combat-tracker.directory-list {
 .vagabond .inventory-section .wealth-section .wealth-title h5 {
   color: var(--vagabond-c-chat-yellow);
 }
+.vagabond .inventory-section .wealth-section .wealth-trade {
+  color: var(--vagabond-c-muted);
+  align-self: center;
+  margin-left: 4px;
+  opacity: 0.8;
+}
+.vagabond .inventory-section .wealth-section .wealth-trade:hover {
+  color: var(--vagabond-c-chat-yellow);
+  opacity: 1;
+}
 .vagabond .inventory-section .wealth-section .currency-field {
   display: flex;
   flex-direction: row;
@@ -19348,8 +20043,10 @@ ol#combat-tracker.directory-list {
 }
 .vagabond .inventory-section .wealth-section .currency-field input {
   color: var(--vagabond-c-chat-yellow);
-  min-width: 30px;
-  max-width: 50px;
+  flex: 0 0 auto;
+  width: 56px;
+  min-width: 56px;
+  max-width: 56px;
   text-align: center;
 }
 .vagabond .effects-header {
@@ -21359,6 +22056,54 @@ ol#combat-tracker.directory-list {
   font-size: 1em;
   font-weight: 400;
   white-space: nowrap;
+}
+.vagabond input[type=checkbox][name="system.flyingByDefault"] {
+  appearance: none;
+  -webkit-appearance: none;
+  flex: 0 0 auto;
+  position: relative;
+  width: 30px;
+  height: 16px;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  border-radius: 8px;
+  border: 1px solid var(--vagabond-c-text-secondary);
+  background: rgba(128, 128, 128, 0.28);
+  box-shadow: none;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+.vagabond input[type=checkbox][name="system.flyingByDefault"]::before {
+  content: none;
+  display: none;
+}
+.vagabond input[type=checkbox][name="system.flyingByDefault"]::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--vagabond-c-text-secondary);
+  transition: transform 0.15s, background 0.15s;
+}
+.vagabond input[type=checkbox][name="system.flyingByDefault"]:checked {
+  background: var(--vagabond-c-green);
+  border-color: var(--vagabond-c-green);
+}
+.vagabond input[type=checkbox][name="system.flyingByDefault"]:checked::after {
+  background: #fff;
+  transform: translateX(14px);
+}
+.vagabond input[type=checkbox][name="system.flyingByDefault"]:focus-visible {
+  outline: 2px solid var(--vagabond-c-chat-yellow);
+  outline-offset: 2px;
+}
+.vagabond input[type=checkbox][name="system.flyingByDefault"]:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
 }
 .vagabond .npc-speed-types-col {
   flex: 0 1 auto;
@@ -25108,11 +25853,74 @@ details[open] .vagabond .npc-immunity-toggle i {
 .vagabond .caused-status-row .caused-status-req {
   display: flex;
   align-items: center;
-  gap: 3px;
+  gap: 5px;
   font-size: 0.75em;
   white-space: nowrap;
   cursor: help;
   margin-left: auto;
+}
+.vagabond .caused-status-row .caused-status-dmg-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.75em;
+  white-space: nowrap;
+  cursor: help;
+}
+.vagabond .caused-status-row .caused-status-req > input[type=checkbox],
+.vagabond .caused-status-row .caused-status-dmg-toggle > input[type=checkbox] {
+  appearance: none;
+  -webkit-appearance: none;
+  flex: 0 0 auto;
+  position: relative;
+  width: 30px;
+  height: 16px;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  border-radius: 8px;
+  border: 1px solid var(--vagabond-c-text-secondary);
+  background: rgba(128, 128, 128, 0.28);
+  box-shadow: none;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+.vagabond .caused-status-row .caused-status-req > input[type=checkbox]::before,
+.vagabond .caused-status-row .caused-status-dmg-toggle > input[type=checkbox]::before {
+  content: none;
+  display: none;
+}
+.vagabond .caused-status-row .caused-status-req > input[type=checkbox]::after,
+.vagabond .caused-status-row .caused-status-dmg-toggle > input[type=checkbox]::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--vagabond-c-text-secondary);
+  transition: transform 0.15s, background 0.15s;
+}
+.vagabond .caused-status-row .caused-status-req > input[type=checkbox]:checked,
+.vagabond .caused-status-row .caused-status-dmg-toggle > input[type=checkbox]:checked {
+  background: var(--vagabond-c-green);
+  border-color: var(--vagabond-c-green);
+}
+.vagabond .caused-status-row .caused-status-req > input[type=checkbox]:checked::after,
+.vagabond .caused-status-row .caused-status-dmg-toggle > input[type=checkbox]:checked::after {
+  background: #fff;
+  transform: translateX(14px);
+}
+.vagabond .caused-status-row .caused-status-req > input[type=checkbox]:focus-visible,
+.vagabond .caused-status-row .caused-status-dmg-toggle > input[type=checkbox]:focus-visible {
+  outline: 2px solid var(--vagabond-c-chat-yellow);
+  outline-offset: 2px;
+}
+.vagabond .caused-status-row .caused-status-req > input[type=checkbox]:disabled,
+.vagabond .caused-status-row .caused-status-dmg-toggle > input[type=checkbox]:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
 }
 .vagabond .caused-status-row .caused-status-remove {
   flex: 0 0 auto;

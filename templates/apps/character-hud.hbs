@@ -123,10 +123,11 @@
       <div class="vh-inv-header">
         <div class="vh-inv-header-title">{{localize "VAGABOND.UI.Sections.Inventory"}} {{system.inventory.occupiedSlots}}/{{system.inventory.maxSlots}}</div>
         <div class="vh-inv-header-wealth">
-          <span class="vh-inv-wealth-label">{{localize "VAGABOND.UI.Sections.Wealth"}}:</span>
-          <span class="vh-inv-wealth-value">{{system.currency.gold}}<span class="vh-inv-wealth-abbr">{{localize "VAGABOND.Currency.Gold.abbr"}}</span></span>
-          <span class="vh-inv-wealth-value">{{system.currency.silver}}<span class="vh-inv-wealth-abbr">{{localize "VAGABOND.Currency.Silver.abbr"}}</span></span>
-          <span class="vh-inv-wealth-value">{{system.currency.copper}}<span class="vh-inv-wealth-abbr">{{localize "VAGABOND.Currency.Copper.abbr"}}</span></span>
+          <span class="vh-inv-wealth-label" data-hud-tip="{{localize 'VAGABOND.UI.Sections.Wealth'}}"><i class="fas fa-coins"></i></span>
+          <span class="vh-inv-wealth-value"><span class="vh-inv-wealth-num{{#if isOwner}} clickable{{/if}}" data-coin="gold"{{#if isOwner}} contenteditable="plaintext-only" spellcheck="false"{{/if}}>{{system.currency.gold}}</span><span class="vh-inv-wealth-abbr">{{localize "VAGABOND.Currency.Gold.abbr"}}</span></span>
+          <span class="vh-inv-wealth-value"><span class="vh-inv-wealth-num{{#if isOwner}} clickable{{/if}}" data-coin="silver"{{#if isOwner}} contenteditable="plaintext-only" spellcheck="false"{{/if}}>{{system.currency.silver}}</span><span class="vh-inv-wealth-abbr">{{localize "VAGABOND.Currency.Silver.abbr"}}</span></span>
+          <span class="vh-inv-wealth-value"><span class="vh-inv-wealth-num{{#if isOwner}} clickable{{/if}}" data-coin="copper"{{#if isOwner}} contenteditable="plaintext-only" spellcheck="false"{{/if}}>{{system.currency.copper}}</span><span class="vh-inv-wealth-abbr">{{localize "VAGABOND.Currency.Copper.abbr"}}</span></span>
+          {{#if isOwner}}<i class="fas fa-scale-balanced vh-inv-wealth-trade clickable" data-action="consolidateWealth" data-hud-tip="{{localize 'VAGABOND.Hud.ConsolidateWealth'}}"></i>{{/if}}
         </div>
         <div class="vh-inv-header-bounds">
           <span class="vh-inv-bounds-label">{{localize "VAGABOND.UI.Labels.Bounds"}}</span>
@@ -202,7 +203,7 @@
       </div>
 
       <div class="vh-center">
-        <div class="vh-name">{{name}}</div>
+        <div class="vh-name{{#if isOwner}} clickable{{/if}}"{{#if isOwner}} contenteditable="plaintext-only" spellcheck="false" data-edit-name{{/if}}>{{name}}</div>
         <div class="vh-hp-bar" data-hud-tip="{{hp.value}}/{{hp.max}}"><span class="vh-hp-bar-fill" style="width:{{hpBar.pct}}%;background-color:{{hpBar.color}};"></span></div>
 
         <div class="vh-controls">

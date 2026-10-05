@@ -354,6 +354,37 @@ export class VagabondDamagePipeline {
   }
 
   /**
+   * Can this item's damage dice explode for its owner, by ANY route (item
+   * authoring, actor global-explode effects, Potency)? Same check the roll uses,
+   * so display and behavior never disagree. Evaluated at call time — never cache
+   * on prepared data (actor bonuses derive after the item).
+   * @param {Item|null} item
+   * @param {Actor|null} [actor] - Defaults to the item's owner
+   * @returns {boolean}
+   */
+  static isExplodable(item, actor = item?.actor ?? null) {
+    if (!item) return false;
+    const sourceType = item.type === 'spell' ? 'spell'
+      : item.system?.equipmentType === 'alchemical' ? 'alchemical' : 'weapon';
+    return !!this.getExplodeValues(item, actor, sourceType);
+  }
+
+  /**
+   * Display notation for damage that can explode: "2d6" → "2d6!". "-", empty and
+   * non-string values pass through. Display only — never feed the result to a Roll.
+   * @param {string} formula
+   * @param {Item|null} item
+   * @param {Actor|null} [actor]
+   * @returns {string}
+   */
+  static markExplode(formula, item, actor = item?.actor ?? null) {
+    if (!formula || typeof formula !== 'string') return formula;
+    const f = formula.trim();
+    if (!f || f === '-' || f.endsWith('!')) return formula;
+    return this.isExplodable(item, actor) ? `${f}!` : formula;
+  }
+
+  /**
    * Count active die results in an evaluated roll (explosion dice included).
    * @param {Roll} roll
    * @returns {number}

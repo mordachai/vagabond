@@ -460,7 +460,7 @@ export class ShopApp extends HandlebarsApplicationMixin(ApplicationV2) {
       slots: EquipmentHelper.itemSlotCost(item),
       stock: unlimited ? null : stock,
       outOfStock,
-      stats: equipmentStats(item),
+      stats: equipmentStats(item, buyer?.system ? buyer : null),
       excerpt,
       searchText: `${item.name} ${excerpt}`.toLowerCase(),
       unitCopper: unit.unit,

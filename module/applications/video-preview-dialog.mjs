@@ -142,6 +142,8 @@ export class VideoPreviewDialog extends api.HandlebarsApplicationMixin(api.Appli
       hasVariants: group.files.length > 1,
       variantIndex: this.#fileIdx + 1,
       variantCount: group.files.length,
+      // Ranged clips ship one file per distance: label which range this one covers
+      variantFt: file.match(/_(\d+)ft_/i)?.[1] ?? '',
     };
   }
 

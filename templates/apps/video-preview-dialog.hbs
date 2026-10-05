@@ -15,7 +15,7 @@
       <button type="button" class="vpd-step-btn" data-action="stepVariant" data-dir="-1" data-tooltip="{{localize 'VAGABOND.VideoPreview.PrevVariant'}}">
         <i class="fas fa-chevron-left"></i>
       </button>
-      <span class="vpd-counter">{{variantIndex}} / {{variantCount}}</span>
+      <span class="vpd-counter">{{variantIndex}} / {{variantCount}}{{#if variantFt}} · {{variantFt}} ft{{/if}}</span>
       <button type="button" class="vpd-step-btn" data-action="stepVariant" data-dir="1" data-tooltip="{{localize 'VAGABOND.VideoPreview.NextVariant'}}">
         <i class="fas fa-chevron-right"></i>
       </button>

@@ -32,6 +32,7 @@ export class CraftCatalog {
     'system.metal', 'system.grip', 'system.damageOneHand', 'system.damageTypeOneHand',
     'system.damageTwoHands', 'system.damageTypeTwoHands', 'system.damageAmount', 'system.damageType',
     'system.armorRating', 'system.armorDamage', 'system.dieDamage',
+    'system.canExplode', 'system.explodeValues',
   ]);
 
   static categoryOf(equipmentType) {

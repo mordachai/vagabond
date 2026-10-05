@@ -14,6 +14,7 @@ import { buildEffectMenuItems } from '../helpers/effects.mjs';
 import { setupDragReorder } from '../helpers/drag-reorder.mjs';
 import * as ItemSections from '../helpers/item-sections.mjs';
 import { EquipmentHelper } from '../helpers/equipment-helper.mjs';
+import { VagabondDamagePipeline } from '../helpers/damage-pipeline.mjs';
 
 /** Inventory tab groupings, in display order, keyed by equipmentType. */
 const INV_GROUPS = [
@@ -111,6 +112,7 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
   #hookIds = [];
   #ctrl = null;
   #redrawTimer = null;
+  #redrawHeld = false;
   #idleTimer = null;
   #idleCtrl = null;
   /**
@@ -176,6 +178,7 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
       toggleFeature: this._onToggleAccordion,
       togglePerk: this._onToggleAccordion,
       openSheet: this._onOpenSheet,
+      consolidateWealth: this._onConsolidateWealth,
       slotUse: { handler: this._onSlotUse, buttons: [0, 2] },
       toggleWeaponGrip: this._onToggleWeaponGrip,
       itemMenu: this._onItemMenu,
@@ -344,6 +347,7 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
       system: sys,
       config: CONFIG.VAGABOND,
       name: actor.name,
+      isOwner: actor.isOwner,
       img: actor.img,
       activeTab: this._activeTab,
       panelOpen: !!this._activeTab,
@@ -592,7 +596,7 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
 
     const sys = item.system;
     const icon = CONFIG.VAGABOND.damageTypeIcons?.[sys.currentDamageType];
-    const damage = [esc(sys.currentDamage ?? ''), icon ? `<i class='${icon}'></i>` : ''].filter(Boolean).join(' ');
+    const damage = [esc(VagabondDamagePipeline.markExplode(sys.currentDamage ?? '', item)), icon ? `<i class='${icon}'></i>` : ''].filter(Boolean).join(' ');
     return `${name}: ${damage} | ${esc(sys.rangeAbbrev ?? '')} | ${slots}`;
   }
 
@@ -652,7 +656,7 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
       // Weapons expose the grip-derived type/damage; the universal `damageType`
       // stays at '-' for them, so prefer `currentDamageType`/`currentDamage`.
       damageType: isWeapon ? (item.system?.currentDamageType ?? '-') : (item.system?.damageType ?? '-'),
-      damage: item.system?.currentDamage ?? item.system?.damageAmount ?? '',
+      damage: VagabondDamagePipeline.markExplode(item.system?.currentDamage ?? item.system?.damageAmount ?? '', item),
       // Inline-accordion detail body — shared with the char-sheet mini-sheet.
       detailHtml: ItemSections.buildItemDetailSections(item),
     };
@@ -708,6 +712,8 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
 
     // Right-click the portrait region → HUD context menu (sheet / ping / close).
     if (handle) handle.addEventListener('contextmenu', (e) => this._openHudMenu(e), { signal });
+
+    this._bindInlineEdits(signal);
 
     // Status icons (left of portrait): right-click → Send to Chat / Remove Status.
     // Reuse the sheet's exact menu — left-click chat is handled by the statusClick action.
@@ -1063,7 +1069,61 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
    */
   _reDraw() {
     clearTimeout(this.#redrawTimer);
-    this.#redrawTimer = setTimeout(() => this.render(), 50);
+    this.#redrawTimer = setTimeout(() => {
+      // Hold while an inline field is being typed in; blur re-triggers it.
+      if (this.element?.querySelector('[contenteditable]:focus')) { this.#redrawHeld = true; return; }
+      this.render();
+    }, 50);
+  }
+
+  /**
+   * Inline-editable text (actor name, coin values). Plain contenteditable spans
+   * so they keep the exact look of the read-only text. Enter / blur commits,
+   * Escape reverts. A redraw that lands while a field has focus is held back
+   * until blur so it can't wipe what is being typed.
+   */
+  _bindInlineEdits(signal) {
+    const fields = this.element.querySelectorAll('[contenteditable]');
+    for (const el of fields) {
+      const isCoin = !!el.dataset.coin;
+      const original = el.textContent;
+
+      const commit = async () => {
+        const text = el.textContent.trim();
+        if (isCoin) {
+          const n = Math.max(0, Math.floor(Number(text)));
+          if (text === '' || !Number.isFinite(n) || n === Number(original)) { el.textContent = original; return; }
+          el.textContent = String(n);
+          await this.actor.update({ [`system.currency.${el.dataset.coin}`]: n });
+        } else {
+          if (!text || text === original) { el.textContent = original; return; }
+          await this.actor.update({ name: text });
+        }
+      };
+
+      el.addEventListener('focus', () => {
+        const range = document.createRange();
+        range.selectNodeContents(el);
+        const sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+      }, { signal });
+      el.addEventListener('blur', () => {
+        window.getSelection()?.removeAllRanges();
+        commit();
+        if (this.#redrawHeld) { this.#redrawHeld = false; this._reDraw(); }
+      }, { signal });
+      el.addEventListener('keydown', (e) => {
+        e.stopPropagation(); // keep Foundry / system keybindings out of typing
+        if (e.key === 'Enter') { e.preventDefault(); el.blur(); }
+        else if (e.key === 'Escape') { e.preventDefault(); el.textContent = original; el.blur(); }
+      }, { signal });
+      if (isCoin) {
+        el.addEventListener('beforeinput', (e) => {
+          if (e.data && /\D/.test(e.data)) e.preventDefault();
+        }, { signal });
+      }
+    }
   }
 
   _clearHooks() {
@@ -1168,6 +1228,9 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
 
   /** Open the actor sheet without closing the HUD. */
   static _onOpenSheet() { this.actor.sheet.render(true); }
+
+  /** Wealth trade icon: exchange copper→silver→gold into the largest coins. */
+  static _onConsolidateWealth(event, target) { return VagabondActorSheet._onConsolidateWealth.call(this, event, target); }
 
   /** Inventory row "⋮" button → the exact same context menu the sheet uses. */
   static _onItemMenu(event, target) {
