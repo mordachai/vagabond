@@ -144,4 +144,59 @@ export class AlchemyHelper {
     await actor.update({ 'system.craft.formulas': formulas });
     return { ok: true };
   }
+
+  /**
+   * One-time migration: Alchemist class items created before the book revision carry a single
+   * combined "Alchemist Features" effect, the invented Potency (L8) text and only one Eureka
+   * entry. Replaces description / levelFeatures / skillGrant / effects with the compendium's
+   * current set (one switchable effect per automated behavior). Items without the old
+   * "Alchemist Features" signature (homebrew edits, already migrated) are left alone; a
+   * disabled old effect keeps the new ones disabled. Active GM only; guarded by
+   * `alchemistClassMigrated`. If the compendium hasn't been rebuilt yet (no "Potency: Explode"
+   * effect) it aborts WITHOUT setting the guard, so it retries on the next load.
+   */
+  static async migrateAlchemistClass() {
+    if (game.user !== game.users.activeGM) return;
+    if (game.settings.get('vagabond', 'alchemistClassMigrated')) return;
+
+    const source = await game.packs.get('vagabond.classes')?.getDocument('4kXK5bZHEb3PMzLy');
+    if (!source?.effects.some(e => e.name === 'Potency: Explode')) return;
+
+    const safeItems = (doc) => { try { return Array.from(doc?.items ?? []); } catch { return []; } };
+    const candidates = [
+      ...game.items,
+      ...game.actors.contents.flatMap(safeItems),
+      ...game.scenes.contents.flatMap((s) => s.tokens.contents.filter((t) => !t.actorLink && t.actor)
+        .flatMap((t) => safeItems(t.actor))),
+    ];
+
+    for (const item of candidates) {
+      try {
+        if (item.type !== 'class' || item.name !== 'Alchemist') continue;
+        const old = item.effects.filter(e => e.name === 'Alchemist Features');
+        if (!old.length) continue;
+        const wasOff = old.some(e => e.disabled);
+
+        const effects = source.effects.map(e => {
+          const data = e.toObject();
+          delete data._id;
+          delete data._stats;
+          if (wasOff) data.disabled = true;
+          return data;
+        });
+        const s = source.system.toObject();
+        await item.update({
+          'system.description': s.description,
+          'system.levelFeatures': s.levelFeatures,
+          'system.skillGrant': s.skillGrant,
+        });
+        await item.deleteEmbeddedDocuments('ActiveEffect', item.effects.map(e => e.id));
+        await item.createEmbeddedDocuments('ActiveEffect', effects);
+      } catch (err) {
+        console.warn(`vagabond | migrateAlchemistClass: skipped ${item?.uuid ?? '(unknown)'}`, err);
+      }
+    }
+
+    await game.settings.set('vagabond', 'alchemistClassMigrated', true);
+  }
 }

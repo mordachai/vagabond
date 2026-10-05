@@ -3,7 +3,7 @@
   "type": "class",
   "img": "icons/consumables/potions/potion-flash-open-blue.webp",
   "system": {
-    "description": "<p><strong>Why respect knights when my potions can do anything that you can?</strong></p><p><em>— Justin Kuritzkes, Potion Seller</em></p><p>Often sequestered in a lab, alchemists study the essence of creation. They are as curious as they are resourceful, and always have \"just the thing for this.\"</p><h3>Iconic Alchemists</h3><ul><li><strong>The Colorman</strong>, <em>Sacré Bleu</em></li><li><strong>Dr. Jekyll</strong>, <em>Dr. Jekyll and Mr. Hyde</em></li><li><strong>Tessa Cade</strong>, <em>Defy the Night</em></li><li><strong>Walter White</strong>, <em>Breaking Bad</em></li></ul><h3>Playing Alchemist</h3><p>The alchemist is a low-defense, high-damage-and-utility blaster. It's recommended you stay Far from Enemies to use Alchemical Items.</p><p><strong>Action:</strong> Use (Craft &amp; Attack)<br /><strong>Move:</strong> Backline<br /><strong>Starting Pack:</strong> Alchemist or Assassin<br /><strong>Key Stat:</strong> Reason<br /><strong>Complexity:</strong> ★★★★☆</p><h3>Training</h3><p><strong>Weapons:</strong> –<br /><strong>Skills:</strong> Arcana, Craft, Medicine</p><h3>Class Features</h3><table class=\"NormalTable\"><tbody><tr><td rowspan=\"2\"><p><strong>Level</strong></p></td><td rowspan=\"2\"><p><strong>Features</strong></p></td><td colspan=\"2\"><p><strong>Formulae</strong></p></td></tr><tr><td><p><strong>Known</strong></p></td><td><p><strong>Value</strong></p></td></tr><tr><td><p>1st</p></td><td><p>Alchemy, Catalyze</p></td><td><p>4</p></td><td><p>50s</p></td></tr><tr><td><p>2nd</p></td><td><p>Eureka (10+)</p></td><td><p>4</p></td><td><p>1g</p></td></tr><tr><td><p>3rd</p></td><td><p>Perk</p></td><td><p>4</p></td><td><p>1g 50s</p></td></tr><tr><td><p>4th</p></td><td><p>Potency (highest)</p></td><td><p>5</p></td><td><p>2g</p></td></tr><tr><td><p>5th</p></td><td><p>Perk</p></td><td><p>5</p></td><td><p>2g 50s</p></td></tr><tr><td><p>6th</p></td><td><p>Mix, Eureka (9+)</p></td><td><p>5</p></td><td><p>3g</p></td></tr><tr><td><p>7th</p></td><td><p>Perk</p></td><td><p>6</p></td><td><p>3g 50s</p></td></tr><tr><td><p>8th</p></td><td><p>Potency (2 highest)</p></td><td><p>6</p></td><td><p>4g</p></td></tr><tr><td><p>9th</p></td><td><p>Perk</p></td><td><p>6</p></td><td><p>4g 50s</p></td></tr><tr><td><p>10th</p></td><td><p>Prima Materia, Eureka (8+)</p></td><td><p>7</p></td><td><p>5g</p></td></tr></tbody></table>",
+    "description": "<p><strong>Why respect knights when my potions can do anything that you can?</strong></p><p><em>—Justin Kuritzkes, Potion Seller</em></p><p>Often sequestered in a lab, alchemists study the essence of creation. They are as curious as they are resourceful, and always have “just the thing for this.”</p><h3>Iconic Alchemists</h3><ul><li><strong>The Colorman</strong>, <em>Sacré Bleu</em></li><li><strong>Dr. Jekyll</strong>, <em>Dr. Jekyll and Mr. Hyde</em></li><li><strong>Tessa Cade</strong>, <em>Defy the Night</em></li><li><strong>Walter White</strong>, <em>Breaking Bad</em></li></ul><h3>Playing Alchemist</h3><p>The alchemist is a low-defense, high-damage-and-utility blaster. It’s recommended you stay Far from Enemies to use Alchemical Items.</p><p><strong>Action:</strong> Use (Craft &amp; Attack)<br /><strong>Move:</strong> Backline<br /><strong>Starting Pack:</strong> Alchemist or Assassin<br /><strong>Key Stat:</strong> Reason<br /><strong>Complexity:</strong> ★★★★☆<br /><strong>Training:</strong> Arcana, Craft, Medicine</p><h3>Class Features</h3><table class=\"NormalTable\"><tbody><tr><td rowspan=\"2\"><p><strong>Level</strong></p></td><td rowspan=\"2\"><p><strong>Features</strong></p></td><td colspan=\"2\"><p><strong>Formulae</strong></p></td></tr><tr><td><p><strong>Known</strong></p></td><td><p><strong>Value</strong></p></td></tr><tr><td><p>1st</p></td><td><p>Alchemy, Catalyze</p></td><td><p>4</p></td><td><p>50s</p></td></tr><tr><td><p>2nd</p></td><td><p>Eureka (10+)</p></td><td><p>4</p></td><td><p>1g</p></td></tr><tr><td><p>3rd</p></td><td><p>Perk</p></td><td><p>4</p></td><td><p>1g 50s</p></td></tr><tr><td><p>4th</p></td><td><p>Potency (highest)</p></td><td><p>5</p></td><td><p>2g</p></td></tr><tr><td><p>5th</p></td><td><p>Perk</p></td><td><p>5</p></td><td><p>2g 50s</p></td></tr><tr><td><p>6th</p></td><td><p>Mix, Eureka (9+)</p></td><td><p>5</p></td><td><p>3g</p></td></tr><tr><td><p>7th</p></td><td><p>Perk</p></td><td><p>6</p></td><td><p>3g 50s</p></td></tr><tr><td><p>8th</p></td><td><p>Potency (2 highest)</p></td><td><p>6</p></td><td><p>4g</p></td></tr><tr><td><p>9th</p></td><td><p>Perk</p></td><td><p>6</p></td><td><p>4g 50s</p></td></tr><tr><td><p>10th</p></td><td><p>Prima Materia, Eureka (8+)</p></td><td><p>7</p></td><td><p>5g</p></td></tr></tbody></table>",
     "isSpellcaster": false,
     "levelFeatures": [
       {
@@ -32,7 +32,7 @@
       },
       {
         "level": 2,
-        "name": "Eureka",
+        "name": "Eureka (10+)",
         "description": "<p>When you pass a Craft Check by 10 or more, you gain a Studied die (p. 19). The roll required to do so is decreased by 1 every 4 Levels hereafter.</p>",
         "statBonusPoints": 1,
         "extraTraining": 0,
@@ -51,6 +51,18 @@
         "perkAmount": 1
       },
       {
+        "level": 4,
+        "name": "Potency (highest)",
+        "description": "<p>You have a +1 bonus to each of the damage and healing dice of your Alchemical Items, and they can Explode. This bonus increases by 1 every 4 Levels hereafter.</p>",
+        "statBonusPoints": 1,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "formulaAmount": 1,
+        "formulaValueCap": "@attributes.level.value * 50"
+      },
+      {
         "level": 5,
         "name": "Perk",
         "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
@@ -59,6 +71,26 @@
         "requiredSpells": [],
         "allowedPerks": [],
         "perkAmount": 1
+      },
+      {
+        "level": 6,
+        "name": "Mix",
+        "description": "<p>You can combine two Alchemical Items together with the Use Action by spending a Studied die, causing both Items to occur simultaneously when used. The combined Item goes inert at the start of your next Turn.</p>",
+        "statBonusPoints": 1,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0
+      },
+      {
+        "level": 6,
+        "name": "Eureka (9+)",
+        "description": "<p>When you pass a Craft Check by 10 or more, you gain a Studied die (p. 19). The roll required to do so is decreased by 1 every 4 Levels hereafter.</p>",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0
       },
       {
         "level": 7,
@@ -73,6 +105,16 @@
         "formulaValueCap": "@attributes.level.value * 50"
       },
       {
+        "level": 8,
+        "name": "Potency (2 highest)",
+        "description": "<p>You have a +1 bonus to each of the damage and healing dice of your Alchemical Items, and they can Explode. This bonus increases by 1 every 4 Levels hereafter.</p>",
+        "statBonusPoints": 1,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0
+      },
+      {
         "level": 9,
         "name": "Perk",
         "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
@@ -81,38 +123,6 @@
         "requiredSpells": [],
         "allowedPerks": [],
         "perkAmount": 1
-      },
-      {
-        "level": 4,
-        "name": "Potency",
-        "description": "<p>You have a +1 bonus to each of the damage and healing dice of your Alchemical Items, and they can Explode. This bonus increases by 1 every 4 Levels hereafter.</p>",
-        "statBonusPoints": 1,
-        "extraTraining": 0,
-        "requiredSpells": [],
-        "allowedPerks": [],
-        "perkAmount": 0,
-        "formulaAmount": 1,
-        "formulaValueCap": "@attributes.level.value * 50"
-      },
-      {
-        "level": 6,
-        "name": "Mix",
-        "description": "<p>You can combine two Alchemical Items together with the Use Action by spending a Studied die, causing both Items to occur simultaneously when used. The combined Item goes inert at the start of your next Turn.</p>",
-        "statBonusPoints": 1,
-        "extraTraining": 0,
-        "requiredSpells": [],
-        "allowedPerks": [],
-        "perkAmount": 0
-      },
-      {
-        "level": 8,
-        "name": "Potency",
-        "description": "<p>Your Potency bonus increases to +2 on each of the damage and healing dice of your Alchemical Items, and they Explode on their two highest values.</p>",
-        "statBonusPoints": 1,
-        "extraTraining": 0,
-        "requiredSpells": [],
-        "allowedPerks": [],
-        "perkAmount": 0
       },
       {
         "level": 10,
@@ -125,6 +135,16 @@
         "perkAmount": 0,
         "formulaAmount": 1,
         "formulaValueCap": "@attributes.level.value * 50"
+      },
+      {
+        "level": 10,
+        "name": "Eureka (8+)",
+        "description": "<p>When you pass a Craft Check by 10 or more, you gain a Studied die (p. 19). The roll required to do so is decreased by 1 every 4 Levels hereafter.</p>",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0
       }
     ],
     "manaSkill": null,
@@ -150,46 +170,16 @@
   },
   "effects": [
     {
-      "name": "Alchemist Features",
+      "name": "Catalyze",
       "origin": "Compendium.vagabond.classes.Item.4kXK5bZHEb3PMzLy",
       "img": "icons/svg/aura.svg",
-      "_id": "hS06DPzU7WEcUXrk",
+      "_id": "aLcH1CaTaLyZe001",
       "type": "base",
       "system": {
         "changes": [
           {
             "key": "system.craft.catalyze",
             "value": "1",
-            "priority": null,
-            "type": "add"
-          },
-          {
-            "key": "system.craft.eurekaMargin",
-            "value": "(@attributes.level.value >= 2) ? (10 - floor(max(0, @attributes.level.value - 2) / 4)) : 0",
-            "priority": null,
-            "type": "add"
-          },
-          {
-            "key": "system.alchemicalBonusPerDamageDie",
-            "value": "(@attributes.level.value >= 4) ? (1 + floor(max(0, @attributes.level.value - 4) / 4)) : 0",
-            "priority": null,
-            "type": "add"
-          },
-          {
-            "key": "system.craft.alchemicalExplode",
-            "value": "(@attributes.level.value >= 8) ? 2 : ((@attributes.level.value >= 4) ? 1 : 0)",
-            "priority": null,
-            "type": "add"
-          },
-          {
-            "key": "system.craft.mix",
-            "value": "(@attributes.level.value >= 6) ? 1 : 0",
-            "priority": null,
-            "type": "add"
-          },
-          {
-            "key": "system.craft.primaMateria",
-            "value": "(@attributes.level.value >= 10) ? 1 : 0",
             "priority": null,
             "type": "add"
           }
@@ -202,7 +192,7 @@
         "expiry": null,
         "expired": false
       },
-      "description": "Catalyze (L1), Eureka 10+/9+/8+ (L2/6/10), Potency +1 & explode highest (L4) / +2 & explode 2 highest (L8), Mix (L6), Prima Materia (L10) — all level-gated within this single effect.",
+      "description": "",
       "tint": "#ffffff",
       "transfer": true,
       "statuses": [],
@@ -213,20 +203,270 @@
         }
       },
       "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.44.0",
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null,
-        "coreVersion": "14.361",
-        "systemId": "vagabond",
-        "systemVersion": "5.42.1",
-        "createdTime": 1790353295025,
-        "modifiedTime": 1790353295025,
-        "lastModifiedBy": "13p65OEadZSZVLRk"
+        "createdTime": 1791300000000,
+        "modifiedTime": 1791300000000,
+        "lastModifiedBy": null
       },
       "start": null,
       "showIcon": 1,
       "folder": null,
-      "_key": "!items.effects!4kXK5bZHEb3PMzLy.hS06DPzU7WEcUXrk"
+      "_key": "!items.effects!4kXK5bZHEb3PMzLy.aLcH1CaTaLyZe001"
+    },
+    {
+      "name": "Eureka",
+      "origin": "Compendium.vagabond.classes.Item.4kXK5bZHEb3PMzLy",
+      "img": "icons/svg/aura.svg",
+      "_id": "aLcH2EuReKa00002",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.craft.eurekaMargin",
+            "value": "10 - floor(max(0, @lvl - 2) / 4)",
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent",
+          "minLevel": 2
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.44.0",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "createdTime": 1791300000000,
+        "modifiedTime": 1791300000000,
+        "lastModifiedBy": null
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!4kXK5bZHEb3PMzLy.aLcH2EuReKa00002"
+    },
+    {
+      "name": "Potency",
+      "origin": "Compendium.vagabond.classes.Item.4kXK5bZHEb3PMzLy",
+      "img": "icons/svg/aura.svg",
+      "_id": "aLcH3PoTeNcY0003",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.alchemicalBonusPerDamageDie",
+            "value": "floor(@lvl / 4)",
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent",
+          "minLevel": 4
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.44.0",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "createdTime": 1791300000000,
+        "modifiedTime": 1791300000000,
+        "lastModifiedBy": null
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!4kXK5bZHEb3PMzLy.aLcH3PoTeNcY0003"
+    },
+    {
+      "name": "Potency: Explode",
+      "origin": "Compendium.vagabond.classes.Item.4kXK5bZHEb3PMzLy",
+      "img": "icons/svg/aura.svg",
+      "_id": "aLcH4PoTeXpLd004",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.craft.alchemicalExplode",
+            "value": "min(2, floor(@lvl / 4))",
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent",
+          "minLevel": 4
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.44.0",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "createdTime": 1791300000000,
+        "modifiedTime": 1791300000000,
+        "lastModifiedBy": null
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!4kXK5bZHEb3PMzLy.aLcH4PoTeXpLd004"
+    },
+    {
+      "name": "Mix",
+      "origin": "Compendium.vagabond.classes.Item.4kXK5bZHEb3PMzLy",
+      "img": "icons/svg/aura.svg",
+      "_id": "aLcH5MiXfEaTuR005",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.craft.mix",
+            "value": "1",
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent",
+          "minLevel": 6
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.44.0",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "createdTime": 1791300000000,
+        "modifiedTime": 1791300000000,
+        "lastModifiedBy": null
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!4kXK5bZHEb3PMzLy.aLcH5MiXfEaTuR005"
+    },
+    {
+      "name": "Prima Materia",
+      "origin": "Compendium.vagabond.classes.Item.4kXK5bZHEb3PMzLy",
+      "img": "icons/svg/aura.svg",
+      "_id": "aLcH6PrImAmAtR006",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.craft.primaMateria",
+            "value": "1",
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent",
+          "minLevel": 10
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.44.0",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "createdTime": 1791300000000,
+        "modifiedTime": 1791300000000,
+        "lastModifiedBy": null
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!4kXK5bZHEb3PMzLy.aLcH6PrImAmAtR006"
     }
   ],
   "folder": null,

@@ -1,6 +1,7 @@
 {{!--
   Effects list — Active / Inactive sections of switch rows.
-  Context: `effects` = prepareEffectsView() → { active[], inactive[], editable }
+  Context: `effects` = prepareEffectsView() → { active[], inactive[], features[], editable }
+  `features` = class-feature effects (no switch, not in the HUD menu; see isClassFeatureEffect).
   Shared by the character/construct/party Effects tab and the NPC Effects accordion.
   Row actions are AppV2 actions on VagabondActorSheet: toggleEffect, toggleEffectDetails
   (name = accordion trigger), effectToChat, effectMenu (kebab), createEffect.
@@ -56,6 +57,7 @@
         </div>
 
         <div class='fx-actions'>
+          {{#unless effect.isFeature}}
           <span
             class='fx-switch-wrap'
             data-tooltip='{{#if effect.blocked}}{{localize (concat "VAGABOND.Effect.Suppressed." effect.blocked "Hint")}}{{else if effect.on}}{{localize "VAGABOND.Effect.Disable"}}{{else}}{{localize "VAGABOND.Effect.Enable"}}{{/if}}'
@@ -70,6 +72,7 @@
               {{#unless effect.canToggle}}disabled{{/unless}}
             ><span class='fx-switch-knob'></span></button>
           </span>
+          {{/unless}}
           <button
             type='button'
             class='fx-btn'
@@ -135,4 +138,13 @@
     </header>
     <ol class='fx-rows'>{{> fxRows rows=effects.inactive}}</ol>
   </section>
+
+  {{#if effects.features.length}}
+    <section class='fx-section' data-section='features'>
+      <header class='fx-section-header'>
+        <span class='fx-pill'>{{localize 'VAGABOND.Effect.ClassFeatures'}}</span>
+      </header>
+      <ol class='fx-rows'>{{> fxRows rows=effects.features}}</ol>
+    </section>
+  {{/if}}
 </div>

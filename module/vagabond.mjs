@@ -72,6 +72,7 @@ import { VagabondDamageHelper } from './helpers/damage-helper.mjs';
 import { VagabondDamagePipeline } from './helpers/damage-pipeline.mjs';
 import { StatusHelper } from './helpers/status-helper.mjs';
 import { RageHelper } from './helpers/rage-helper.mjs';
+import { AlchemyHelper } from './helpers/crafting/alchemy-helper.mjs';
 import { VagabondRollBuilder } from './helpers/roll-builder.mjs';
 import { CurrencyHelper } from './helpers/currency-helper.mjs';
 import { ShopPricing } from './helpers/shop-pricing.mjs';
@@ -1013,6 +1014,15 @@ function registerGameSettings() {
     requiresReload: false,
   });
 
+  // Setting 21f3: One-time migration guard (hidden) — see AlchemyHelper.migrateAlchemistClass().
+  game.settings.register('vagabond', 'alchemistClassMigrated', {
+    scope: 'world',
+    config: false,
+    type: Boolean,
+    default: false,
+    requiresReload: false,
+  });
+
   // Setting 21g: One-time migration guard (hidden) — see CurrencyHelper.migrateCopperScale().
   // Stored raw-copper amounts were ×10 too small after the 1s=100c ratio correction.
   game.settings.register('vagabond', 'copperScaleMigrated', {
@@ -1797,6 +1807,10 @@ Hooks.once('ready', function () {
   EquipmentHelper.migrateWeaponPropertyEffects();
   // One-time: Barbarian class items get the book-revision effect set (per-behavior switches).
   RageHelper.migrateBarbarianClass();
+  // Idempotent: hand-switch helper effects stay switchable now that other class effects are locked features.
+  RageHelper.flagSwitchableEffects();
+  // One-time: Alchemist class items get the book-revision effect set (per-behavior switches).
+  AlchemyHelper.migrateAlchemistClass();
   // One-time: stored copper amounts ×10 (ratio corrected to the book's 1s = 100c).
   CurrencyHelper.migrateCopperScale();
 });

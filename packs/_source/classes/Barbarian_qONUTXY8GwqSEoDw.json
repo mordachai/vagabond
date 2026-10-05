@@ -263,7 +263,8 @@
       "sort": 0,
       "flags": {
         "vagabond": {
-          "applicationMode": "permanent"
+          "applicationMode": "permanent",
+          "switchable": true
         }
       },
       "_stats": {
@@ -363,7 +364,8 @@
       "flags": {
         "vagabond": {
           "applicationMode": "permanent",
-          "minLevel": 2
+          "minLevel": 2,
+          "switchable": true
         }
       },
       "_stats": {
@@ -413,7 +415,8 @@
       "flags": {
         "vagabond": {
           "applicationMode": "permanent",
-          "minLevel": 2
+          "minLevel": 2,
+          "switchable": true
         }
       },
       "_stats": {

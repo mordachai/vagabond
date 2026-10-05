@@ -75,6 +75,20 @@ export function isStatusEffect(effect) {
   return [...effect.statuses].some((id) => defs.some((s) => s.id === id));
 }
 
+/**
+ * Is this a class-feature effect — a transferring effect on a class item that implements a book
+ * feature (Catalyze, Potency, Rage…)? These are always-on rules text, so they get no switch and stay
+ * out of the HUD menu. A class effect that exists to be flipped by hand (auto/manual helpers) opts
+ * out with `flags.vagabond.switchable`.
+ * @param {ActiveEffect} effect
+ * @returns {boolean}
+ */
+export function isClassFeatureEffect(effect) {
+  const item = effect?.parent;
+  if (item?.documentName !== 'Item' || item.type !== 'class') return false;
+  return !!effect.transfer && !effect.flags?.vagabond?.switchable;
+}
+
 /** Lowercase, strip a trailing "(…)" qualifier: "Hulking (Orc Trait)" → "hulking". */
 const normalizeName = (name) => String(name ?? '').replace(/\s*\(.*\)\s*$/, '').trim().toLowerCase();
 
@@ -228,6 +242,7 @@ async function buildEffectRow(effect, actor, editable, open) {
     duration: effect.isTemporary ? effect.duration?.label ?? '' : '',
     isItemEffect,
     isStatus,
+    isFeature: isClassFeatureEffect(effect),
     disabled: effect.disabled,
     open: !!open?.has(effect.id),
     suppression,
@@ -288,7 +303,7 @@ export async function toggleActorEffect(actor, effect) {
  */
 export function listEffectSwitches(actor) {
   return collectListedEffects(actor)
-    .filter((e) => !isStatusEffect(e))
+    .filter((e) => !isStatusEffect(e) && !isClassFeatureEffect(e))
     .sort((a, b) => (a.sort ?? 0) - (b.sort ?? 0))
     .map((effect) => ({
       effect,
@@ -335,7 +350,7 @@ export function buildEffectMenuItems(actor) {
  * @param {object} [options]
  * @param {boolean} [options.editable]  Whether the viewer may modify effects
  * @param {Set<string>} [options.open]  Ids of rows whose description is expanded (sheet-held state)
- * @returns {Promise<{active: object[], inactive: object[], total: number, editable: boolean}>}
+ * @returns {Promise<{active: object[], inactive: object[], features: object[], total: number, editable: boolean}>}
  */
 export async function prepareEffectsView(actor, { editable = actor.isOwner, open } = {}) {
   const effects = collectListedEffects(actor);
@@ -343,9 +358,12 @@ export async function prepareEffectsView(actor, { editable = actor.isOwner, open
   const rows = await Promise.all(effects.map((e) => buildEffectRow(e, actor, editable, open)));
   rows.sort((a, b) => a.sort - b.sort);
 
+  // Class features are listed apart (no switch); everything else splits Active / Inactive
+  const switchable = rows.filter((r) => !r.isFeature);
   return {
-    active: rows.filter((r) => r.on),
-    inactive: rows.filter((r) => !r.on),
+    active: switchable.filter((r) => r.on),
+    inactive: switchable.filter((r) => !r.on),
+    features: rows.filter((r) => r.isFeature),
     total: rows.length,
     editable,
   };

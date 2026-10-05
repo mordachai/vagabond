@@ -296,6 +296,21 @@ The Barbarian class item ships **one Active Effect per automated behavior**, so 
 > **`@combat.round`** = current Round of a started combat the actor is in, else 0 — formulas must read as "no bonus" at 0 so play never requires a tracker. `@combat.active` is 1/0.
 > **`globalExplodeValues = max`** resolves to each die's own max face at roll time. It only overrides an item's own explode faces while `globalExplode` is on.
 
+### Alchemist — Catalyze, Eureka, Potency, Mix, Prima Materia
+
+The Alchemist class item ships **one Active Effect per automated behavior** (all `system.craft.*` gates are formula-stack fields, evaluated > 0). Level gates use `flags.vagabond.minLevel`.
+
+| Effect | Key | Mode | Value |
+| --- | --- | --- | --- |
+| Catalyze | `system.craft.catalyze` | Add | `1` |
+| Eureka (Lv 2+) | `system.craft.eurekaMargin` | Add | `10 - floor(max(0, @lvl - 2) / 4)` (10+ / 9+ / 8+) |
+| Potency (Lv 4+) | `system.alchemicalBonusPerDamageDie` | Add | `floor(@lvl / 4)` (+1 at 4, +2 at 8) |
+| Potency: Explode (Lv 4+) | `system.craft.alchemicalExplode` | Add | `min(2, floor(@lvl / 4))` (face COUNT: highest, then 2 highest) |
+| Mix (Lv 6+) | `system.craft.mix` | Add | `1` |
+| Prima Materia (Lv 10+) | `system.craft.primaMateria` | Add | `1` |
+
+> **Don't start a formula with `(` and end it with `)`** — the evaluator strips one outer pair, so `(a) ? 2 : ((b) ? 1 : 0)` is mangled and reads as 0. End with a non-paren token or avoid the leading paren.
+
 ### Exalted — Bonus Per Damage Die (with Doubling vs Specific Being Types)
 
 Grants a flat bonus per damage die rolled. When attacking Undead (or other configured types), the bonus is doubled.

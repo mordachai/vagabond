@@ -141,6 +141,32 @@ export class RageHelper {
   }
 
   /**
+   * Idempotent sweep: Barbarian class items migrated before the "switchable" flag existed have
+   * their hand-switch helper effects (auto/manual twins) filed as plain class features, which
+   * have no switch. Flags those three by name. Active GM only; touches only unflagged ones.
+   */
+  static async flagSwitchableEffects() {
+    if (game.user !== game.users.activeGM) return;
+    const names = new Set(['Rage: Auto-Berserk', 'Aggressor: First Round (auto)', 'Aggressor: First Round (manual)']);
+    const safeItems = (doc) => { try { return Array.from(doc?.items ?? []); } catch { return []; } };
+    const candidates = [
+      ...game.items,
+      ...game.actors.contents.flatMap(safeItems),
+      ...game.scenes.contents.flatMap((sc) => sc.tokens.contents.filter((t) => !t.actorLink && t.actor)
+        .flatMap((t) => safeItems(t.actor))),
+    ];
+    for (const item of candidates) {
+      if (item.type !== 'class' || item.name !== 'Barbarian') continue;
+      const updates = item.effects
+        .filter((e) => names.has(e.name) && !e.flags?.vagabond?.switchable)
+        .map((e) => ({ _id: e.id, 'flags.vagabond.switchable': true }));
+      if (!updates.length) continue;
+      try { await item.updateEmbeddedDocuments('ActiveEffect', updates); }
+      catch (err) { console.warn(`vagabond | flagSwitchableEffects: skipped ${item.uuid}`, err); }
+    }
+  }
+
+  /**
    * Register the hooks. Synchronous, called once at module load.
    * - preUpdateActor stashes the HP before the write so updateActor can tell damage from healing
    *   (options travel with the update to every client).
