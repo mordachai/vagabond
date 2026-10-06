@@ -59,6 +59,20 @@ export class VagabondRollBuilder {
     return explode === true ? die.replace(/(\d*d\d+)(?![\dx])/, '$1x') : die;
   }
 
+  /**
+   * Base die for a save when the actor rolls it twice and keeps the higher
+   * (`system.saveRollsTwice` ADDs the save key, e.g. Dancer Footloose → reflex).
+   * `1d20` becomes `2d20kh`; Favor/Hinder dice and flat modifiers still add on top.
+   * @param {Actor} actor
+   * @param {string} saveKey
+   * @returns {string|null} The base die formula, or null when the save rolls normally
+   */
+  static saveBaseDie(actor, saveKey) {
+    if (!saveKey || !actor?.system?.saveRollsTwice?.includes(saveKey)) return null;
+    const base = CONFIG.VAGABOND?.homebrew?.dice?.baseCheck ?? '1d20';
+    return base.replace(/^\d*d(\d+)/, '2d$1kh');
+  }
+
   static buildD20Formula(actor, favorHinder, baseFormula = null) {
     const dice = CONFIG.VAGABOND?.homebrew?.dice;
     let formula = baseFormula ?? dice?.baseCheck ?? '1d20';

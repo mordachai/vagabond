@@ -191,6 +191,11 @@
       "Passed": "<strong>{name}</strong> se apresenta — o Grupo ganha <strong>{boon}</strong> pela Rodada.",
       "Overtuned": "Superafinado"
     },
+    "StepUp": {
+      "Title": "Passo à Frente",
+      "NotYours": "Apenas o dono do Dançarino pode usar Passo à Frente.",
+      "Failed": "O Passo à Frente de {name} não funciona."
+    },
     "Rage": {
       "Ended": "A Fúria de {name} se dissipa — nenhum ataque ou dano desde o último Turno."
     },

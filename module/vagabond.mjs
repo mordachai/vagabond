@@ -74,6 +74,7 @@ import { StatusHelper } from './helpers/status-helper.mjs';
 import { RageHelper } from './helpers/rage-helper.mjs';
 import { AlchemyHelper } from './helpers/crafting/alchemy-helper.mjs';
 import { BardHelper } from './helpers/bard-helper.mjs';
+import { DancerHelper } from './helpers/dancer-helper.mjs';
 import { consumeUsedEffects } from './helpers/use-effects.mjs';
 import { VagabondRollBuilder } from './helpers/roll-builder.mjs';
 import { CurrencyHelper } from './helpers/currency-helper.mjs';
@@ -1034,6 +1035,15 @@ function registerGameSettings() {
     requiresReload: false,
   });
 
+  // Setting 21f5: One-time migration guard (hidden) — see DancerHelper.migrateDancerClass().
+  game.settings.register('vagabond', 'dancerClassMigrated', {
+    scope: 'world',
+    config: false,
+    type: Boolean,
+    default: false,
+    requiresReload: false,
+  });
+
   // Setting 21g: One-time migration guard (hidden) — see CurrencyHelper.migrateCopperScale().
   // Stored raw-copper amounts were ×10 too small after the 1s=100c ratio correction.
   game.settings.register('vagabond', 'copperScaleMigrated', {
@@ -1662,6 +1672,7 @@ Hooks.once('ready', function () {
   registerSocketAction('virtuosoApply', (payload) => BardHelper.apply(payload));
   registerMacroHandler('bard.virtuoso', (scope) => BardHelper.virtuoso(scope));
   registerMacroHandler('bard.perform', (scope) => BardHelper.perform(scope));
+  registerMacroHandler('dancer.stepUp', (scope) => DancerHelper.stepUp(scope));
 
   registerSocketAction('grantLuck', async ({ actorUuid, amount }) => {
     const actor = await fromUuid(actorUuid);
@@ -1794,6 +1805,7 @@ Hooks.once('ready', function () {
       VagabondDamageHelper,
       StatusHelper,
       BardHelper,
+      DancerHelper,
       VagabondRollBuilder,
       // Stable read-only derived snapshot for modules/macros:
       // game.vagabond.api.readActor(actorOrTokenOrUuidOrId)
@@ -1830,6 +1842,8 @@ Hooks.once('ready', function () {
   AlchemyHelper.migrateAlchemistClass();
   // One-time: Bard class items get the book-revision features + Enjoy the Silence effect.
   BardHelper.migrateBardClass();
+  // One-time: Dancer class items get the book-revision features + Footloose / Don't Stop Me Now effects.
+  DancerHelper.migrateDancerClass();
   // One-time: stored copper amounts ×10 (ratio corrected to the book's 1s = 100c).
   CurrencyHelper.migrateCopperScale();
 });

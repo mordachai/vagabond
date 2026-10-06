@@ -3,40 +3,54 @@
   "type": "class",
   "img": "icons/magic/life/heart-pink.webp",
   "system": {
-    "description": "<p><strong>She moves abstract just like a shadow dancing on the edge, like a storm cloud passing overhead, hypnotizing me.</strong></p><p><em>– Dillinger Escape Plan, One of Us is the Killer</em></p><p>Practitioners of the alluring art of dance. They have a flair for enlivening their audience, drawing attention, and giving awe-inspiring shows.</p><h3>Iconic Dancers</h3><ul><li><strong>Apsalar</strong>, <em>Malazan Book of the Fallen</em></li><li><strong>Azura</strong>, <em>Fire Emblem Fates</em></li><li><strong>Sandilene fa Toren</strong>, <em>The Circle Opens</em></li></ul><h3>Playing Dancer</h3><p>The dancer is a low-defense support with a focus on action efficiency. Grant Actions through Step Up, as your main offenses will occur when you Crit on Reflex Saves.</p><p><strong>Action:</strong> Step Up<br /><strong>Move:</strong> Midline<br /><strong>Starting Pack:</strong> Courtesan or Musician<br /><strong>Key Stat:</strong> Dexterity<br /><strong>Complexity:</strong> ★★☆☆☆</p><h3>Training</h3><p><strong>Weapons:</strong> –<br /><strong>Skills:</strong> Finesse and Performance, and 2 from either Brawl, Influence, or Sneak</p><p></p><h3><span class=\"fontstyle0\">Class Features</span></h3><table class=\"NormalTable\"><tbody><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle0\" style=\"color:rgb(255,255,255);font-size:9pt\">Level</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle0\" style=\"color:rgb(255,255,255);font-size:9pt\">Features</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">1st</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Fleet of Foot, Step Up</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">2nd</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Evasive</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">3rd</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">4th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Don't Stop Me Now</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">5th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">6th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Choreographer</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">7th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">8th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Flash of Beauty</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">9th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">10th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Double Time</span></p></td></tr></tbody></table><p><br style=\"font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:normal;orphans:2;text-align:-webkit-auto;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-size-adjust:auto;-webkit-text-stroke-width:0px\" /></p>",
+    "description": "<p><strong>She moves abstract just like a shadow dancing on the edge, like a storm cloud passing overhead, hypnotizing me.</strong></p><p><em>—Dillinger Escape Plan, One of Us is the Killer</em></p><p>Dancers are practitioners of the alluring art of dance. They have a flair for enlivening their audience and giving awe-inspiring shows.</p><h3>Iconic Dancers</h3><ul><li><strong>Apsalar</strong>, <em>Malazan Book of the Fallen</em></li><li><strong>Azura</strong>, <em>Fire Emblem Fates</em></li><li><strong>Sandilene fa Toren</strong>, <em>The Circle Opens</em></li></ul><h3>Playing Dancer</h3><p>The dancer is a low-defense support with a focus on action efficiency. Grant Actions through Step Up, as your main offenses will occur when you Crit on Reflex Saves.</p><p><strong>Action:</strong> Attack<br /><strong>Move:</strong> Midline (Step Up)<br /><strong>Starting Pack:</strong> Courtesan or Musician<br /><strong>Key Stat:</strong> Dexterity<br /><strong>Complexity:</strong> ★★☆☆☆<br /><strong>Training:</strong> Finesse, Performance</p><h3>Class Features</h3><table class=\"NormalTable\"><tbody><tr><td><p><strong>Level</strong></p></td><td><p><strong>Features</strong></p></td></tr><tr><td><p>1st</p></td><td><p>Step Up, Footloose</p></td></tr><tr><td><p>2nd</p></td><td><p>Evasive (10’)</p></td></tr><tr><td><p>3rd</p></td><td><p>Perk</p></td></tr><tr><td><p>4th</p></td><td><p>Captivator (Cd4)</p></td></tr><tr><td><p>5th</p></td><td><p>Perk</p></td></tr><tr><td><p>6th</p></td><td><p>Evasive (15’), Don’t Stop Me Now</p></td></tr><tr><td><p>7th</p></td><td><p>Perk</p></td></tr><tr><td><p>8th</p></td><td><p>Captivator (Cd6)</p></td></tr><tr><td><p>9th</p></td><td><p>Perk</p></td></tr><tr><td><p>10th</p></td><td><p>Evasive (20’), Double Time</p></td></tr></tbody></table>",
     "isSpellcaster": false,
     "levelFeatures": [
       {
         "level": 1,
-        "name": "Fleet of Foot",
-        "description": "<p><span class=\"fontstyle0\">You gain the Treads Lightly Perk (p. 73), and the roll for you to Crit on Reflex Saves is reduced by an amount equal to (your Dancer Level divided by 4, round up).</span></p>",
+        "name": "Step Up",
+        "description": "<p>Once per Round when you Move, you can make a Finesse Check. On a pass, one Being of your choice other than yourself that sees you can immediately take an extra Action.</p>",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": [],
+        "action": {
+          "enabled": true,
+          "label": "Step Up",
+          "icon": "person-running",
+          "uuid": "",
+          "command": "system:dancer.stepUp",
+          "runAsGM": false
+        }
+      },
+      {
+        "level": 1,
+        "name": "Footloose",
+        "description": "<p>You gain the Fallaway Reverse Perk and, when you make a Reflex Save, roll two d20s and use the higher result.</p>",
         "statBonusPoints": 0,
         "extraTraining": 0,
         "requiredSpells": [],
         "allowedPerks": [
-          "Compendium.vagabond.perks.Item.uic2nm5LlKKwoFDQ"
+          "Compendium.vagabond.perks.Item.x4gPNuUuQbdpKNAB"
         ],
-        "perkAmount": 1
-      },
-      {
-        "level": 1,
-        "name": "Step Up",
-        "description": "<p><span class=\"fontstyle0\">Once per Turn, you can use your Action to perform an enlivening dance. Doing so allows you to roll a second d20 on Reflex Saves until the start of your next Turn and use the higher result, and it gives one Ally of your choice that sees you a second Action this Turn.</span></p>",
-        "statBonusPoints": 0,
-        "extraTraining": 0,
-        "requiredSpells": [],
-        "allowedPerks": [],
-        "perkAmount": 0
+        "perkAmount": 1,
+        "spellAmount": 0,
+        "skillChoices": []
       },
       {
         "level": 2,
-        "name": "Evasive",
-        "description": "<p><span class=\"fontstyle0\">While you aren't Incapacitated, you ignore Hinder on Reflex Saves and you ignore two of a Dodged attack's damage dice on a passed Save, rather than one.</span></p>",
+        "name": "Evasive (10’)",
+        "description": "<p>Once per Round after another Being uses an Action or Move, you can Move 10’ without using Speed and can continue moving using your remaining Speed. This free Speed increases by 5’ every 4 Levels hereafter.</p>",
         "statBonusPoints": 1,
         "extraTraining": 0,
         "requiredSpells": [],
         "allowedPerks": [],
-        "perkAmount": 0
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": []
       },
       {
         "level": 3,
@@ -46,17 +60,21 @@
         "extraTraining": 0,
         "requiredSpells": [],
         "allowedPerks": [],
-        "perkAmount": 1
+        "perkAmount": 1,
+        "spellAmount": 0,
+        "skillChoices": []
       },
       {
         "level": 4,
-        "name": "Don't Stop Me Now",
-        "description": "<p><span class=\"fontstyle0\">Your Speed is not affected by Difficult Terrain and you have Favor on Saves against being Paralyzed, Restrained, or moved.</span></p>",
+        "name": "Captivator (Cd4)",
+        "description": "<p>When you pass a Finesse Check or Crit on any Save, you can cause a Being that can see you to become Berserk, Charmed, Confused, or Frightened for Cd4 Rounds. Once this ends, they are immune to this Ability for the Shift.</p><p>This countdown die increases to a Cd6 at 8th Level.</p>",
         "statBonusPoints": 1,
         "extraTraining": 0,
         "requiredSpells": [],
         "allowedPerks": [],
-        "perkAmount": 0
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": []
       },
       {
         "level": 5,
@@ -66,17 +84,33 @@
         "extraTraining": 0,
         "requiredSpells": [],
         "allowedPerks": [],
-        "perkAmount": 1
+        "perkAmount": 1,
+        "spellAmount": 0,
+        "skillChoices": []
       },
       {
         "level": 6,
-        "name": "Choreographer",
-        "description": "<p><span class=\"fontstyle0\">When you use your Step Up Feature, the Ally gains Favor on the first Check they make with the Action you give them, and you both gain a 10 foot bonus to Speed for the Round.</span></p>",
+        "name": "Evasive (15’)",
+        "description": "<p>Once per Round after another Being uses an Action or Move, you can Move 10’ without using Speed and can continue moving using your remaining Speed. This free Speed increases by 5’ every 4 Levels hereafter.</p>",
         "statBonusPoints": 1,
         "extraTraining": 0,
         "requiredSpells": [],
         "allowedPerks": [],
-        "perkAmount": 0
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": []
+      },
+      {
+        "level": 6,
+        "name": "Don’t Stop Me Now",
+        "description": "<p>Difficult Terrain doesn’t impede your walking Speed, and you have Favor on Saves against being Paralyzed, Restrained, grappled, or moved.</p>",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": []
       },
       {
         "level": 7,
@@ -86,17 +120,21 @@
         "extraTraining": 0,
         "requiredSpells": [],
         "allowedPerks": [],
-        "perkAmount": 1
+        "perkAmount": 1,
+        "spellAmount": 0,
+        "skillChoices": []
       },
       {
         "level": 8,
-        "name": "Flash of Beauty",
-        "description": "<p><span class=\"fontstyle0\">When you Crit on a Save, you can take two Actions, rather than one.</span></p>",
+        "name": "Captivator (Cd6)",
+        "description": "<p>When you pass a Finesse Check or Crit on any Save, you can cause a Being that can see you to become Berserk, Charmed, Confused, or Frightened for Cd4 Rounds. Once this ends, they are immune to this Ability for the Shift.</p><p>This countdown die increases to a Cd6 at 8th Level.</p>",
         "statBonusPoints": 1,
         "extraTraining": 0,
         "requiredSpells": [],
         "allowedPerks": [],
-        "perkAmount": 0
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": []
       },
       {
         "level": 9,
@@ -106,38 +144,44 @@
         "extraTraining": 0,
         "requiredSpells": [],
         "allowedPerks": [],
-        "perkAmount": 1
+        "perkAmount": 1,
+        "spellAmount": 0,
+        "skillChoices": []
       },
       {
         "level": 10,
-        "name": "Double Time",
-        "description": "<p><span class=\"fontstyle0\">You can Target two Allies with your Step Up Feature, rather than one.</span></p>",
+        "name": "Evasive (20’)",
+        "description": "<p>Once per Round after another Being uses an Action or Move, you can Move 10’ without using Speed and can continue moving using your remaining Speed. This free Speed increases by 5’ every 4 Levels hereafter.</p>",
         "statBonusPoints": 1,
         "extraTraining": 0,
         "requiredSpells": [],
         "allowedPerks": [],
-        "perkAmount": 0
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": []
+      },
+      {
+        "level": 10,
+        "name": "Double Time",
+        "description": "<p>You can use Step Up twice per Round, rather than once, and the Beings you use it on can also Move up to 10’ without using their Speed that Turn.</p>",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": []
       }
     ],
     "manaSkill": null,
     "castingStat": null,
     "manaMultiplier": 0,
     "skillGrant": {
-      "choices": [
-        {
-          "count": 2,
-          "pool": [
-            "brawl",
-            "influence",
-            "sneak"
-          ],
-          "label": ""
-        }
-      ],
       "guaranteed": [
         "finesse",
         "performance"
-      ]
+      ],
+      "choices": []
     },
     "levelSpells": [],
     "keyStat": "dexterity",
@@ -149,7 +193,113 @@
       "Compendium.vagabond.starting-packs.Item.2nNcbg2WCi5XPKUC"
     ]
   },
-  "effects": [],
+  "effects": [
+    {
+      "name": "Footloose",
+      "origin": "Compendium.vagabond.classes.Item.8LqHA6iqYBgFmVfJ",
+      "img": "icons/svg/aura.svg",
+      "_id": "dAnCfOoTlOoSe001",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.saveRollsTwice",
+            "value": "reflex",
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent"
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.44.0",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "createdTime": 1791300000000,
+        "modifiedTime": 1791300000000,
+        "lastModifiedBy": null
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!8LqHA6iqYBgFmVfJ.dAnCfOoTlOoSe001"
+    },
+    {
+      "name": "Don’t Stop Me Now",
+      "origin": "Compendium.vagabond.classes.Item.8LqHA6iqYBgFmVfJ",
+      "img": "icons/svg/aura.svg",
+      "_id": "dAnCdOnTsToP0001",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.statusResistances",
+            "value": "paralyzed",
+            "priority": null,
+            "type": "add"
+          },
+          {
+            "key": "system.statusResistances",
+            "value": "restrained",
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent",
+          "minLevel": 6
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.44.0",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "createdTime": 1791300000000,
+        "modifiedTime": 1791300000000,
+        "lastModifiedBy": null
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!8LqHA6iqYBgFmVfJ.dAnCdOnTsToP0001"
+    }
+  ],
   "folder": null,
   "flags": {},
   "_stats": {

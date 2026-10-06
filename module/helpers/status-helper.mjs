@@ -218,7 +218,8 @@ export class StatusHelper {
       VagabondRollBuilder.checkFavorVote(actor, 'save')
     );
 
-    let formula = VagabondRollBuilder.buildD20Formula(actor, effectiveFavorHinder);
+    let formula = VagabondRollBuilder.buildD20Formula(
+      actor, effectiveFavorHinder, VagabondRollBuilder.saveBaseDie(actor, entry.saveType));
     const statusSaveBonus = VagabondRollBuilder.getSaveVsStatusBonus(actor, entry.statusId, entry.saveType);
     if (statusSaveBonus !== 0) formula += ` + ${statusSaveBonus}`;
     const roll = await VagabondRollBuilder.evaluateRoll(formula, actor, effectiveFavorHinder);

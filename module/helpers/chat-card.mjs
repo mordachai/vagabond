@@ -127,7 +127,9 @@ export class VagabondChatCard {
 
   static isRollCritical(roll, critNumber = 20) {
     const d20Term = roll.terms.find(term => term.constructor.name === 'Die' && term.faces === 20);
-    const d20Result = d20Term?.results?.[0]?.result || 0;
+    // Highest ACTIVE d20 (a kept-higher 2d20 save keeps one of two results)
+    const kept = (d20Term?.results ?? []).filter(r => r.active !== false).map(r => r.result);
+    const d20Result = kept.length ? Math.max(...kept) : 0;
     return d20Result >= critNumber;
   } 
 

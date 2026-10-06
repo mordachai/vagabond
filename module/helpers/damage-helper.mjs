@@ -1899,13 +1899,15 @@ ${npcOnly ? '' : `
 
     // Reflex Saves take a flat penalty equal to worn Armor's Slots (see
     // actor-character.mjs `reflexArmorPenalty`) — a numeric subtraction, not Hinder.
-    let baseFormula = null;
+    // A save rolled twice (Dancer Footloose) swaps the base die for `2d20kh`.
+    const twiceDie = VagabondRollBuilder.saveBaseDie(actor, saveType);
+    let baseFormula = twiceDie;
     if (saveType === 'reflex') {
       const penalty = actor.system.reflexArmorPenalty || 0;
       if (penalty > 0) {
         const dice = CONFIG.VAGABOND?.homebrew?.dice;
         const penaltyLabel = game.i18n.localize('VAGABOND.Chat.ArmorPenalty');
-        baseFormula = `${dice?.baseCheck ?? '1d20'} - ${penalty}[${penaltyLabel}]`;
+        baseFormula = `${twiceDie ?? dice?.baseCheck ?? '1d20'} - ${penalty}[${penaltyLabel}]`;
       }
     }
 

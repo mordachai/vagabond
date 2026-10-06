@@ -104,8 +104,10 @@ export class RollHandler {
         }
       }
       const _extraFormula = saveVsStatusBonus !== 0 ? ` + ${saveVsStatusBonus}` : '';
-      const _baseFormula = saveVsStatusBonus !== 0
-        ? (CONFIG.VAGABOND?.homebrew?.dice?.baseCheck ?? '1d20') + _extraFormula
+      // Saves rolled twice, keep higher (Dancer Footloose) swap the base die
+      const _saveBaseDie = rollType === 'save' ? VagabondRollBuilder.saveBaseDie(this.actor, rollKey) : null;
+      const _baseFormula = (saveVsStatusBonus !== 0 || _saveBaseDie)
+        ? (_saveBaseDie ?? CONFIG.VAGABOND?.homebrew?.dice?.baseCheck ?? '1d20') + _extraFormula
         : null;
 
       const roll = await VagabondRollBuilder.buildAndEvaluateD20(

@@ -367,6 +367,13 @@ export default class VagabondCharacter extends VagabondActorBase {
       { required: true, initial: [], label: "Favor On Checks" }
     );
 
+    // Saves that roll two d20s and keep the higher — AE ADDs a save key ('reflex').
+    // Read by VagabondRollBuilder.saveBaseDie at every save roll site.
+    schema.saveRollsTwice = new fields.ArrayField(
+      new fields.StringField({ required: true }),
+      { required: true, initial: [], label: "Saves Rolled Twice (keep higher)" }
+    );
+
     // Favor dice and healing bonus dice roll as exploding dice while this evaluates > 0.
     schema.bonusDiceExplode = new fields.ArrayField(
       new fields.StringField({ blank: true }),
@@ -770,6 +777,7 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.castWithHandsFull = false;
     this.attackFavorVs = [];
     this.favorChecks = [];
+    this.saveRollsTwice = [];
     this.bonusDiceExplode = [];
     this.healingBonusDice = [];
     this.rageTrigger = false;

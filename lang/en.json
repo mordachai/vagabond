@@ -191,6 +191,11 @@
       "Passed": "<strong>{name}</strong> performs — the Group gains <strong>{boon}</strong> for the Round.",
       "Overtuned": "Overtuned"
     },
+    "StepUp": {
+      "Title": "Step Up",
+      "NotYours": "Only the Dancer’s owner can Step Up.",
+      "Failed": "{name}’s Step Up falls flat."
+    },
     "Rage": {
       "Ended": "{name}'s Rage fades — no attack or damage since their last Turn."
     },

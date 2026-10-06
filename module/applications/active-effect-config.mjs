@@ -106,6 +106,7 @@ export default class VagabondActiveEffectConfig extends foundry.applications.she
     ]);
     const FAVOR_RULE_FIELDS = new Set(['system.attackFavorVs']);
     const FAVOR_CHECK_FIELDS = new Set(['system.favorChecks']);
+    const SAVE_KEY_FIELDS = new Set(['system.saveRollsTwice']);
 
     // v14: change rows are stored at system.changes.N.* (was top-level changes.N.*)
     const valueInputs = this.element.querySelectorAll('input[name^="system.changes."][name$=".value"]');
@@ -149,6 +150,14 @@ export default class VagabondActiveEffectConfig extends foundry.applications.she
             const option = document.createElement('option');
             option.value = kind;
             option.textContent = kind;
+            datalist.appendChild(option);
+          });
+        } else if (SAVE_KEY_FIELDS.has(keyValue)) {
+          input.setAttribute('placeholder', 'Save key (e.g., reflex)');
+          (CONFIG.VAGABOND.homebrew?.saves ?? []).forEach(save => {
+            const option = document.createElement('option');
+            option.value = save.key;
+            option.textContent = save.label ? game.i18n.localize(save.label) : save.key;
             datalist.appendChild(option);
           });
         } else {

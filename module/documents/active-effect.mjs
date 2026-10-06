@@ -248,6 +248,7 @@ export class VagabondActiveEffect extends ActiveEffect {
       'system.attackFavorVs': 'Attack Favor Rules (ADD a rule key, e.g. wounded = Bloodthirsty)',
       'system.rageTrigger': 'Auto-Berserk on damage taken / attack (Rage)',
       'system.favorChecks': 'Favor On Checks (ADD attack, cast or save)',
+      'system.saveRollsTwice': 'Saves Rolled Twice, keep higher d20 (ADD a save key, e.g. reflex)',
       'system.bonusDiceExplode': 'Favor + Healing Bonus Dice Explode (1 = on)',
       'system.healingBonusDice': 'Healing Rolls (Dice Bonus, e.g. 1d6)',
 
