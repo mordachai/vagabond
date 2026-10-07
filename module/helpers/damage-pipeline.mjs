@@ -436,6 +436,33 @@ export class VagabondDamagePipeline {
    * @param {number|undefined} steps
    * @returns {string}
    */
+  /**
+   * Defense property reduction roll: one combined roll of every given Defense Weapon's
+   * damage dice, with the same Defense-Weapon modifiers as an attack (Vanguard Wall die
+   * steps, Indestructible per-die bonus). Lives here so Defense dice change in ONE place.
+   * @param {Actor} actor - The defender (owner of the weapons)
+   * @param {Item[]} weapons
+   * @returns {Promise<Roll|null>} null when no weapon has damage
+   */
+  static async rollDefenseDice(actor, weapons) {
+    const formulas = weapons
+      .map(w => w.system?.currentDamage?.trim())
+      .filter(f => f && f !== '-')
+      .map(f => `(${this._stepDice(f, actor.system?.defenseWeaponDieStep)})`);
+    if (!formulas.length) return null;
+    const roll = new Roll(formulas.join(' + '), actor.getRollData());
+    await roll.evaluate();
+    const perDie = Number(actor.system?.defenseWeaponBonusPerDie) || 0;
+    if (perDie) {
+      const diceCount = this.countRolledDice(roll);
+      roll._perDieBonusPerDie = perDie;
+      roll._perDieBonusDiceCount = diceCount;
+      roll._perDieBonusTotal = perDie * diceCount;
+      roll._total += roll._perDieBonusTotal;
+    }
+    return roll;
+  }
+
   static _stepDice(formula, steps) {
     const n = Math.trunc(Number(steps));
     const table = CONFIG.VAGABOND?.weaponDieSteps;

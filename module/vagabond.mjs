@@ -81,6 +81,7 @@ import { FighterHelper } from './helpers/fighter-helper.mjs';
 import { GunslingerHelper } from './helpers/gunslinger-helper.mjs';
 import { HunterHelper } from './helpers/hunter-helper.mjs';
 import { PugilistHelper } from './helpers/pugilist-helper.mjs';
+import { DefenseHelper } from './helpers/defense-helper.mjs';
 import { RevelatorHelper } from './helpers/revelator-helper.mjs';
 import { RogueHelper } from './helpers/rogue-helper.mjs';
 import { DruidHelper } from './helpers/druid-helper.mjs';
@@ -385,8 +386,8 @@ function registerGameSettings() {
     requiresReload: false,
   });
 
-  // Defense weapon property: may a defender use BOTH Defense weapons in one
-  // Defense action? Gate lives in CONFIG.VAGABOND.defenseRuleHelpers.defenseWeaponLimit.
+  // Defense weapon property: does a passed Defense Check reduce by EVERY equipped Defense
+  // weapon's dice (RAW, on) or only the one that made the Check? Read by DefenseHelper.reductionWeapons.
   game.settings.register('vagabond', 'defenseWithBothWeapons', {
     name: 'VAGABOND.Settings.defenseWithBothWeapons.name',
     hint: 'VAGABOND.Settings.defenseWithBothWeapons.hint',
@@ -2009,6 +2010,8 @@ GunslingerHelper.registerHooks();
 // Hunter's Mark: Lethal Precision damage (inert unless an actor has a Mark and system.markDamageBonus)
 HunterHelper.registerHooks();
 PugilistHelper.registerHooks();
+// Defense property: Patience tracking (inert unless an actor has system.patienceDefense)
+DefenseHelper.registerHooks();
 RogueHelper.registerHooks();
 
 Hooks.on('updateJournalEntry', (journal, changes) => {
@@ -3661,7 +3664,17 @@ Hooks.on('renderChatMessageHTML', (message, html) => {
     button.addEventListener('click', (ev) => {
       ev.preventDefault();
       import('./helpers/damage-helper.mjs').then(({ VagabondDamageHelper }) => {
-        VagabondDamageHelper.handleDefenseWeapons(button);
+        VagabondDamageHelper.handleDefenseWeapons(button, ev);
+      });
+    });
+  });
+
+  // Protector perk: use your Defense property for a Close ally who failed a Reflex Save
+  html.querySelectorAll('.vagabond-protect-button').forEach(button => {
+    button.addEventListener('click', (ev) => {
+      ev.preventDefault();
+      import('./helpers/damage-helper.mjs').then(({ VagabondDamageHelper }) => {
+        VagabondDamageHelper.handleProtect(button, ev);
       });
     });
   });

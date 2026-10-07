@@ -1507,15 +1507,6 @@ VAGABOND.defenseRuleHelpers = {
     }) ?? []).sort((a, b) =>
       (a.getFlag('vagabond', 'equippedAt') ?? 0) - (b.getFlag('vagabond', 'equippedAt') ?? 0));
   },
-  /**
-   * Gate: how many Defense weapons the actor may use in ONE Defense action.
-   * 2 = may defend with both at once; 1 = one weapon per Defense. Single choke point —
-   * a future perk/feature that grants (or removes) "defend with both" hooks in here
-   * (e.g. an actor flag), nowhere else.
-   */
-  defenseWeaponLimit(actor) {
-    return game.settings.get('vagabond', 'defenseWithBothWeapons') ? 2 : 1;
-  },
 };
 
 /**

@@ -93,19 +93,30 @@
       "Total": "Total Damage",
       "Final": "Final Damage"
     },
+    "Defense": {
+      "Protect": "Protect",
+      "ProtectHint": "{name} uses the Defense property for {target} (Protector)",
+      "ProtectTitle": "Protector: {name} defends {target}",
+      "ProtectFailed": "The Check failed — the damage stands.",
+      "ProtectRestored": "{amount} HP restored to {target} (the damage was already applied).",
+      "ProtectReplacesApply": "Apply this damage instead of the one on the Reflex Save card.",
+      "NotYours": "Only the owner of {name} can use this.",
+      "NoWeapon": "{name} holds no Defense weapon."
+    },
     "DefendMechanics": {
       "DefendingTitle": "Defending options",
       "ReflexTitle": "Reflex",
       "DefenseTitle": "Defense",
       "CritTitle": "Crit",
       "ReflexDescription": "Save to avoid an Enemy Action. Pass, and it doesn't affect you.",
-      "DefenseDescription": "Roll the damage of your Defense weapon(s) instead of a d20. Add the result to your Armor against the attack.",
+      "DefenseDescription": "Make an Attack Check with a Defense weapon instead of the Reflex Save. Pass, and the damage is reduced by each equipped Defense weapon's damage dice.",
       "CritDescription": "You aren't affected by what provoked the Save, and can use an Action.",
       "CritToggleHint": "Click to toggle: Extra Damage or Gain Luck Point"
     },
     "Chat": {
       "Defense": "Defense",
       "DefenseBoth": "Both",
+      "DefenseCheck": "Defense (Attack Check)",
       "ArmorPenalty": "Armor Penalty"
     },
     "AttackTypes": {
@@ -961,8 +972,8 @@
         "hint": "When enabled, damage is automatically applied to HP after save rolls. When disabled, damage amounts are shown in chat but must be applied manually."
       },
       "defenseWithBothWeapons": {
-        "name": "Defend With Both Defense Weapons",
-        "hint": "When on, a defender holding two Defense weapons can use both in one Defense action (their damage rolls add together). When off, Defense uses one weapon at a time."
+        "name": "Defense Reduces With Every Defense Weapon",
+        "hint": "On (RAW): a passed Defense Attack Check reduces the damage by the dice of every equipped Defense weapon. Off: only the weapon that made the Check."
       },
       "automationMode": {
         "name": "Class Automation",
@@ -2256,7 +2267,7 @@
     },
     "PropertyHints": {
       "Cleave": "Ignores Vulnerable for this attack. Reduce its die one size to hit another Target within reach, per size reduction.",
-      "Defense": "Roll this weapon's damage die instead of a d20 for a Reflex Save, and add the result to your Armor against what forced the Save.",
+      "Defense": "When you make a Reflex Save, you can make an Attack Check instead. If you pass, you reduce the damage by each equipped Defense Weapons' damage dice.",
       "Grapple": "Can Grapple with this weapon's Attack Check.",
       "Keen": "Crits 1 lower on this weapon's Attack Check.",
       "Long": "Extended reach, can attack from 10ft away.",

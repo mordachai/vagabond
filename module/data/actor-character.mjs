@@ -789,6 +789,20 @@ export default class VagabondCharacter extends VagabondActorBase {
       label: "Weapon Counts as Trinket"
     });
 
+    // Protector perk: may use their Defense property for a Close ally who fails a Reflex Save
+    // (Protect button on the failed result card — DefenseHelper). Set via Active Effect.
+    schema.protectorDefense = new fields.BooleanField({
+      initial: false,
+      label: "Protector: Defense for Close Allies"
+    });
+
+    // Patience perk: an unused Brawl / Finesse / Melee weapon has the Defense property until
+    // the next Turn (DefenseHelper). Set via Active Effect.
+    schema.patienceDefense = new fields.BooleanField({
+      initial: false,
+      label: "Patience: Unused Weapons Gain Defense"
+    });
+
     // Homebrew: ignore the hand part of the trinket casting mode (e.g. a
     // Wizard who casts with a sword in hand) — only an equipped Trinket needed
     schema.castWithHandsFull = new fields.BooleanField({
@@ -963,6 +977,8 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.autoFailStats = [];
     this.autoFailAllRolls = false;
     this.weaponAsTrinket = false;
+    this.protectorDefense = false;
+    this.patienceDefense = false;
     this.castWithHandsFull = false;
     this.attackFavorVs = [];
     this.favorChecks = [];

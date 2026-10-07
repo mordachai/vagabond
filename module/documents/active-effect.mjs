@@ -262,6 +262,8 @@ export class VagabondActiveEffect extends ActiveEffect {
       'system.weaponLowExplodeBySkill': 'Weapon Dice Explode on Low Faces by skill (ADD "brawl: 2" = on 1 or 2, Title Holder)',
       'system.defenseWeaponDieStep': 'Defense Weapons: damage dice this many sizes larger (formula — Vanguard Wall)',
       'system.defenseWeaponBonusPerDie': 'Defense Weapons: flat bonus to each damage die (formula — Vanguard Indestructible)',
+      'system.protectorDefense': 'Protector: Protect button for Close allies that fail a Reflex Save (Override true)',
+      'system.patienceDefense': 'Patience: unused Brawl/Finesse/Melee weapons gain Defense (Override true)',
       'system.sneakAttackDice': 'Sneak Attack: number of extra d4 (formula — Rogue)',
       'system.sneakAttackExplode': 'Sneak Attack dice Explode (1 = on — Lethal Weapon)',
       'system.sneakAttackTrigger': 'Auto-Sneak Attack: first Favored hit each Turn with a Finesse / Keen / Ranged Weapon (Rogue)',

@@ -3,6 +3,7 @@ import { TargetHelper } from './target-helper.mjs';
 import { EquipmentHelper } from './equipment-helper.mjs';
 import { DruidHelper } from './druid-helper.mjs';
 import { HunterHelper } from './hunter-helper.mjs';
+import { DefenseHelper } from './defense-helper.mjs';
 
 /**
  * Universal Damage Helper
@@ -1257,13 +1258,12 @@ ${npcOnly ? '' : `
   }
 
   /**
-   * Build the Defense button row for the save-buttons grid. Empty string when no
-   * target holds a Defense weapon. Buttons carry `data-defense-slot` (`both` | `1` | `2`),
-   * never item ids, so every target resolves its OWN weapons at click time.
-   *  - 1 weapon            → one full-width "Defense" button
-   *  - 2 weapons, limit 2  → "Both" + one button per weapon
-   *  - 2 weapons, limit 1  → one button per weapon (pick one)
-   * Labels come from the target holding the most Defense weapons.
+   * Build the Defense button row. Empty string when no target has a Defense weapon
+   * (own property or Patience — `DefenseHelper.defenseWeapons`) or Reflex is not a
+   * configured Save. One button per weapon: the clicked weapon makes the Attack Check;
+   * the reduction uses every Defense weapon (see DefenseHelper.reductionWeapons).
+   * Buttons carry `data-defense-slot` (1-based index), never item ids, so every target
+   * resolves its OWN weapons at click time. Art comes from the target holding the most.
    * @param {Array<Object>} targetsAtRollTime - Stored target data (TargetHelper shape)
    * @param {string} sharedAttrs - data-* attribute string shared by every button
    * @returns {string}
@@ -1271,52 +1271,26 @@ ${npcOnly ? '' : `
    */
   static _buildDefenseRow(targetsAtRollTime, sharedAttrs) {
     if (!targetsAtRollTime?.length) return '';
-    const helpers = CONFIG.VAGABOND.defenseRuleHelpers;
+    if (!this.getConfiguredSaves().some(s => s.key === 'reflex')) return '';
     const tokens = this._resolveStoredTargets(targetsAtRollTime);
 
-    let best = null; // { weapons, limit } for the target with the most Defense weapons
+    let best = null; // Defense weapons of the target with the most
     for (const t of tokens) {
       if (!t.actor) continue;
-      const weapons = helpers.heldWeaponsWithProperty(t.actor, 'Defense');
-      if (weapons.length && (!best || weapons.length > best.weapons.length)) {
-        best = { weapons, limit: helpers.defenseWeaponLimit(t.actor) };
-      }
+      const weapons = DefenseHelper.defenseWeapons(t.actor);
+      if (weapons.length && (!best || weapons.length > best.length)) best = weapons;
     }
     if (!best) return '';
 
     const esc = (s) => foundry.utils.escapeHTML?.(s) ?? s;
     // Weapon art inside a shield-shaped mask (CSS). `title` carries the weapon name.
     const imgSrc = (weapon) => esc(encodeURI(weapon.img || 'icons/svg/sword.svg').replace(/'/g, '%27'));
-    const shield = (weapon) =>
-      `<span class="defense-shield"><img src="${imgSrc(weapon)}" alt="${esc(weapon.name)}" draggable="false"></span>`;
-    // "Both": one shield, the two weapons split along the diagonal
-    const shieldBoth = (w1, w2) =>
-      `<span class="defense-shield is-both"><img src="${imgSrc(w1)}" alt="${esc(w1.name)}" draggable="false"><img src="${imgSrc(w2)}" alt="${esc(w2.name)}" draggable="false"></span>`;
-    const button = (slot, title, shields) => `
-            <button class="vagabond-defense-button" data-defense-slot="${slot}" title="${esc(title)}"${sharedAttrs}>${shields}</button>`;
-
-    const defenseLabel = game.i18n.localize('VAGABOND.Chat.Defense');
-    const [w1, w2] = best.weapons;
-    let buttons;
-    let rowClass = 'defense-buttons-row';
-    if (!w2) {
-      buttons = button('1', `${defenseLabel}: ${w1.name}`, shield(w1));
-    } else if (best.limit >= 2) {
-      // Pyramid: "Both" on top, the two weapons below
-      rowClass += ' defense-stack';
-      buttons = button('both', `${game.i18n.localize('VAGABOND.Chat.DefenseBoth')}: ${w1.name} + ${w2.name}`, shieldBoth(w1, w2))
-        + `<div class="defense-pair">`
-        + button('1', `${defenseLabel}: ${w1.name}`, shield(w1))
-        + button('2', `${defenseLabel}: ${w2.name}`, shield(w2))
-        + `</div>`;
-    } else {
-      // Limit 1: pick one weapon
-      buttons = button('1', `${defenseLabel}: ${w1.name}`, shield(w1))
-        + button('2', `${defenseLabel}: ${w2.name}`, shield(w2));
-    }
+    const defenseLabel = game.i18n.localize('VAGABOND.Chat.DefenseCheck');
+    const buttons = best.map((w, i) => `
+            <button class="vagabond-defense-button" data-defense-slot="${i + 1}" title="${esc(`${defenseLabel}: ${w.name}`)}"${sharedAttrs}><span class="defense-shield"><img src="${imgSrc(w)}" alt="${esc(w.name)}" draggable="false"></span></button>`).join('');
 
     return `
-          <div class="${rowClass}">${buttons}
+          <div class="defense-buttons-row">${buttons}
           </div>`;
   }
 
@@ -1604,7 +1578,14 @@ ${npcOnly ? '' : `
         autoApply,
         autoApply ? null : statusContext,  // embed context only for manual-apply cards
         damageBreakdown.path,
-        flankedBonus
+        flankedBonus,
+        // Protector perk: a failed Reflex Save lets a Close ally use their Defense property
+        (saveType === 'reflex' && !isSuccess)
+          ? this.createProtectButtons(targetActor, {
+              incoming: damageAfterSave, damageType, actorId, itemId, actionIdx, attackWasCrit,
+              priorFinal: finalDamage, weakExtra: finalDamage - baseAfterFinal, autoApplied: autoApply,
+            })
+          : ''
       );
       // Luck is managed by the save-crit-toggle — do not auto-grant here
 
@@ -1728,121 +1709,272 @@ ${npcOnly ? '' : `
   }
 
   /**
-   * Handle the Defense buttons — Defense weapon property. No save, no d20: roll the
-   * chosen weapon(s)' damage and subtract the total from the incoming damage before
-   * Armor/Immune/Weak math. `data-defense-slot` picks the weapons per target:
-   * `both` = every held Defense weapon (capped by `defenseWeaponLimit`), `1`/`2` = that
-   * single weapon. Targets without a matching weapon are skipped. Otherwise mirrors
-   * handleApplyDirect (bypasses saves, applies on-hit statuses unconditionally).
-   * @param {HTMLElement} button - The clicked Defense button
+   * Handle a Defense button — Defense weapon property (Alpha 3): the defender makes an
+   * Attack Check with the clicked weapon INSTEAD of the Reflex Save. Pass → the damage is
+   * reduced by a roll of every Defense weapon's dice (DefenseHelper.reductionWeapons); fail →
+   * full damage. Then Armor / Immune / Weak as usual; applied per `autoApplySaveDamage`.
+   * On-hit statuses read the Check as the Reflex Save. A failed Check is a failed Reflex Save,
+   * so Close Protectors get a Protect button. Who rolls = `_resolveSaveActors` (like Saves).
+   * @param {HTMLElement} button - The clicked Defense button (`data-defense-slot` = 1-based)
+   * @param {Event|null} event - Click event (Shift = Favor, Ctrl = Hinder)
    */
-  static async handleDefenseWeapons(button) {
+  static async handleDefenseWeapons(button, event = null) {
     const damageAmount = parseInt(button.dataset.damageAmount);
     const damageType = button.dataset.damageType;
     const actorId = button.dataset.actorId;
     const itemId = button.dataset.itemId;
     const actionIndexRaw = button.dataset.actionIndex;
     const actionIdx = (actionIndexRaw !== '' && actionIndexRaw != null) ? parseInt(actionIndexRaw) : null;
+    const attackWasCrit = button.dataset.attackWasCrit === 'true';
+    const weaknessPreRolled = button.dataset.weaknessPreRolled === 'true';
 
+    const actorsToRoll = this._resolveSaveActors(button);
+    if (!actorsToRoll) return;
     const sourceActor = TargetHelper.resolveActorRef(actorId);
     const sourceItem = this._resolveSourceItem(sourceActor, itemId);
-
-    const storedTargets = this._getTargetsFromButton(button);
-    if (storedTargets.length === 0) {
-      ui.notifications.warn('No tokens targeted. Please target at least one token.');
-      return;
-    }
-    const targetedTokens = this._resolveStoredTargets(storedTargets);
-    if (targetedTokens.length === 0) {
-      ui.notifications.warn('None of the targeted tokens could be found on this scene.');
-      return;
-    }
+    const slot = Math.max(1, parseInt(button.dataset.defenseSlot) || 1);
 
     const { VagabondChatCard } = await import('./chat-card.mjs');
     const { StatusHelper } = await import('./status-helper.mjs');
 
-    for (const target of targetedTokens) {
-      const targetActor = target.actor;
-      if (!targetActor) continue;
+    for (const targetActor of actorsToRoll) {
+      if (!targetActor || targetActor.type === 'npc') continue;
+      if (!targetActor.isOwner && !game.user.isGM) continue;
+      const weapons = DefenseHelper.defenseWeapons(targetActor);
+      const weapon = weapons[slot - 1] ?? weapons[0];
+      if (!weapon) continue; // Only defenders holding a Defense weapon can use it
 
-      const helpers = CONFIG.VAGABOND.defenseRuleHelpers;
-      const held = helpers.heldWeaponsWithProperty(targetActor, 'Defense');
-      const slot = button.dataset.defenseSlot ?? 'both';
-      const defenseWeapons = slot === 'both'
-        ? held.slice(0, helpers.defenseWeaponLimit(targetActor))
-        : (held[parseInt(slot) - 1] ? [held[parseInt(slot) - 1]] : []);
-      if (defenseWeapons.length === 0) continue; // Only targets carrying a matching Defense weapon can use it
+      // The Check replaces the Reflex Save: Save-side votes apply (attacker modifier, status resistance)
+      const resistanceFavor = await this._hasStatusResistanceForSave(targetActor, 'reflex', {
+        sourceActor, sourceItem, actionIdx, attackWasCrit,
+      });
+      const check = await DefenseHelper.rollCheck(targetActor, weapon, {
+        attackerModifier: sourceActor?.system?.outgoingSavesModifier || 'none', resistanceFavor, event,
+      });
 
-      // "-" = no damage (not a valid Roll formula); several weapons roll as ONE combined Roll
-      const formulas = defenseWeapons
-        .map(w => w.system.currentDamage?.trim())
-        .filter(f => f && f !== '-');
-      let shieldReduction = 0;
       let shieldRoll = null;
-      if (formulas.length) {
-        shieldRoll = new Roll(formulas.map(f => `(${f})`).join(' + '), targetActor.getRollData());
-        await shieldRoll.evaluate();
-        shieldReduction = shieldRoll.total;
+      let shieldWeapons = [];
+      if (check.isSuccess) {
+        shieldWeapons = DefenseHelper.reductionWeapons(targetActor, weapon);
+        shieldRoll = await VagabondDamagePipeline.rollDefenseDice(targetActor, shieldWeapons);
+        await DefenseHelper.spendPatience(targetActor, shieldWeapons);
+        const { FighterHelper } = await import('./fighter-helper.mjs');
+        FighterHelper.onDefended(targetActor);
       }
-      const defenseWeaponNames = defenseWeapons.map(w => w.name).join(' + ');
+      const shieldReduction = shieldRoll?.total ?? 0;
 
-      const reducedDamage = Math.max(0, damageAmount - shieldReduction);
-
-      const breakdown = this.calculateFinalDamageDetailed(targetActor, reducedDamage, damageType, sourceItem, { attackerActor: sourceActor });
+      const breakdown = this.calculateFinalDamageDetailed(
+        targetActor, Math.max(0, damageAmount - shieldReduction), damageType, sourceItem, { attackerActor: sourceActor }
+      );
       let finalDamage = breakdown.final;
-      const weaknessPreRolled = button.dataset.weaknessPreRolled === 'true';
       if (!weaknessPreRolled && this._isWeakTo(targetActor, damageType, sourceItem, sourceActor)) {
-        const dieSize = this._getDamageSourceDieSize(sourceItem, actionIdx, sourceActor);
-        const weakRoll = new Roll(`1d${dieSize}`);
+        const weakRoll = new Roll(`1d${this._getDamageSourceDieSize(sourceItem, actionIdx, sourceActor)}`);
         await weakRoll.evaluate();
         finalDamage += weakRoll.total;
       }
+      const weakExtra = finalDamage - breakdown.final;
 
-      const _preCtx = { actor: targetActor, amount: finalDamage, damageType, sourceItem };
-      if (Hooks.call('vagabond.preDamageApply', _preCtx) === false) continue;
-      const _final = Math.max(0, _preCtx.amount);
-      const currentHP = targetActor.system.health?.value || 0;
-      const newHP = Math.max(0, currentHP - _final);
-      if (targetActor.isOwner || game.user.isGM) {
-        await targetActor.update({ 'system.health.value': newHP });
-      } else {
-        const { emitSocket } = await import('./socket-helper.mjs');
-        emitSocket('applyDamage', { actorUuid: targetActor.uuid, newHp: newHP });
-      }
-      Hooks.callAll('vagabond.postDamageApply', { actor: targetActor, amount: _final, damageType, sourceItem, attackerActor: sourceActor, oldHp: currentHP, newHp: newHP });
+      const autoApply = game.settings.get('vagabond', 'autoApplySaveDamage');
+      if (autoApply) await this._applyDamageToActor(targetActor, finalDamage, damageType, sourceItem, sourceActor);
 
-      await VagabondChatCard.applyResult(targetActor, {
-        type: 'damage',
-        rawAmount: damageAmount,
-        shieldReduction,
-        shieldRoll,
-        flankedBonus: breakdown.flankedBonus,
-        armorReduction: breakdown.armorReduction,
-        finalAmount: _final,
-        damageType,
-        previousValue: currentHP,
-        newValue: newHP,
-        sourceName: `${game.i18n.localize('VAGABOND.Chat.Defense')} (${defenseWeaponNames})`,
-        sourceIcon: defenseWeapons[0].img ?? targetActor.img ?? null,
-      });
-
-      const isCritical = button.dataset.attackWasCrit === 'true';
       const { entries: allStatusEntries, coatingEntries } = this.resolveIncomingStatusEntries({
-        sourceActor, sourceItem, actionIdx, attackWasCrit: isCritical,
+        sourceActor, sourceItem, actionIdx, attackWasCrit,
       });
-      if (allStatusEntries.length > 0) {
+      const statusContext = allStatusEntries.length > 0 ? {
+        sourceActorId: actorId, sourceItemId: itemId, sourceActionIndex: actionIdx,
+        saveType: 'reflex', saveSuccess: check.isSuccess, saveDifficulty: check.difficulty,
+        saveTotal: check.roll.total, attackWasCrit,
+      } : null;
+
+      // A failed Check is a failed Reflex Save → Close Protectors may step in
+      const protectHtml = check.isSuccess ? '' : this.createProtectButtons(targetActor, {
+        incoming: damageAmount, damageType, actorId, itemId, actionIdx, attackWasCrit,
+        priorFinal: finalDamage, weakExtra, autoApplied: autoApply,
+      });
+
+      const message = await this._postDefenseResult(targetActor, {
+        title: `${game.i18n.localize('VAGABOND.Chat.DefenseCheck')}: ${weapon.name}`,
+        check, shieldRoll, shieldWeapons, incoming: damageAmount, shieldReduction,
+        armorReduction: breakdown.armorReduction, finalDamage, damageType, path: breakdown.path,
+        flankedBonus: breakdown.flankedBonus, autoApplied: autoApply,
+        applyButton: !autoApply && finalDamage > 0
+          ? this.createApplySaveDamageButton(targetActor.uuid, targetActor.name, finalDamage, damageType, statusContext)
+          : '',
+        extraHtml: protectHtml,
+      });
+      if (check.isCritical) await VagabondChatCard._grantLuckOnCrit(targetActor, message, 'Critical');
+
+      if (autoApply && allStatusEntries.length > 0) {
         const sourceName = sourceItem?.name ?? (actionIdx !== null ? sourceActor?.system?.actions?.[actionIdx]?.name : '') ?? '';
-        const damageWasBlocked = finalDamage === 0;
         const sourceActorTokenName = canvas.tokens?.placeables?.find(t => t.actor?.id === sourceActor?.id)?.document.name || sourceActor?.name || '';
+        const preRolledSave = { saveType: 'reflex', roll: check.roll, total: check.roll.total, success: check.isSuccess, difficulty: check.difficulty };
         const statusResults = await StatusHelper.processCausedStatuses(
-          targetActor, allStatusEntries, damageWasBlocked, sourceName, { skipSaveRoll: true, sourceActorName: sourceActorTokenName }
+          targetActor, allStatusEntries, finalDamage === 0, sourceName, { preRolledSave, sourceActorName: sourceActorTokenName }
         );
-        if (coatingEntries.length > 0 && sourceActor.items.has(sourceItem.id)) {
+        if (coatingEntries.length > 0 && sourceActor?.items.has(sourceItem?.id)) {
           await sourceItem.update({ 'system.coating.charges': 0, 'system.coating.causedStatuses': [] });
         }
         await VagabondChatCard.statusResults(statusResults, targetActor, sourceName, sourceItem?.img ?? null);
       }
     }
+  }
+
+  /**
+   * Apply damage to an actor (preDamageApply / postDamageApply hooks; socket when not owner).
+   * @returns {Promise<number>} the damage actually applied
+   */
+  static async _applyDamageToActor(actor, amount, damageType, sourceItem = null, attackerActor = null) {
+    const ctx = { actor, amount, damageType, sourceItem };
+    if (Hooks.call('vagabond.preDamageApply', ctx) === false) return 0;
+    const final = Math.max(0, ctx.amount);
+    const currentHP = actor.system.health?.value || 0;
+    const newHP = Math.max(0, currentHP - final);
+    if (actor.isOwner || game.user.isGM) {
+      await actor.update({ 'system.health.value': newHP });
+    } else {
+      const { emitSocket } = await import('./socket-helper.mjs');
+      emitSocket('applyDamage', { actorUuid: actor.uuid, newHp: newHP });
+    }
+    Hooks.callAll('vagabond.postDamageApply', { actor, amount: final, damageType, sourceItem, attackerActor, oldHp: currentHP, newHp: newHP });
+    return final;
+  }
+
+  /**
+   * Protector perk: one button per Close ally who can use their Defense property for
+   * `defender` (DefenseHelper.protectorsFor). '' when nobody can.
+   * @param {Actor} defender - The Being that failed its Reflex Save
+   * @param {{incoming: number, damageType: string, actorId: string, itemId: string, actionIdx: number|null,
+   *   attackWasCrit: boolean, priorFinal: number, weakExtra: number, autoApplied: boolean}} ctx
+   * @returns {string}
+   */
+  static createProtectButtons(defender, ctx) {
+    const protectors = DefenseHelper.protectorsFor(defender);
+    if (!protectors.length) return '';
+    const esc = (s) => foundry.utils.escapeHTML?.(s) ?? s;
+    const label = game.i18n.localize('VAGABOND.Defense.Protect');
+    const buttons = protectors.map(p => `
+        <button class="vagabond-protect-button" title="${esc(game.i18n.format('VAGABOND.Defense.ProtectHint', { name: p.name, target: defender.name }))}"
+          data-protector-uuid="${p.uuid}" data-defender-uuid="${defender.uuid}"
+          data-incoming="${ctx.incoming}" data-damage-type="${ctx.damageType}"
+          data-source-actor-id="${ctx.actorId || ''}" data-source-item-id="${ctx.itemId || ''}"
+          data-action-index="${ctx.actionIdx ?? ''}" data-attack-was-crit="${!!ctx.attackWasCrit}"
+          data-prior-final="${ctx.priorFinal}" data-weak-extra="${ctx.weakExtra || 0}" data-auto-applied="${!!ctx.autoApplied}">
+          <i class="fa-solid fa-shield-heart"></i> ${esc(label)}: ${esc(p.name)}
+        </button>`).join('');
+    return `<div class="protect-buttons-row">${buttons}</div>`;
+  }
+
+  /**
+   * Handle a Protect button (Protector perk): the protector makes the Defense Attack Check
+   * with their first Defense weapon; on a pass the ally's incoming damage is reduced by the
+   * protector's Defense dice and the ally's Armor is applied again. If the damage was already
+   * applied, the difference is restored to the ally's HP; otherwise the card carries a new
+   * Apply button that replaces the Reflex card's. The ally's failed Save (statuses) stands.
+   * @param {HTMLElement} button
+   * @param {Event|null} event
+   */
+  static async handleProtect(button, event = null) {
+    const protector = TargetHelper.resolveActorRef(button.dataset.protectorUuid);
+    const defender = TargetHelper.resolveActorRef(button.dataset.defenderUuid);
+    if (!protector || !defender) return;
+    if (!protector.isOwner && !game.user.isGM) {
+      ui.notifications.warn(game.i18n.format('VAGABOND.Defense.NotYours', { name: protector.name }));
+      return;
+    }
+    const weapon = DefenseHelper.defenseWeapons(protector)[0];
+    if (!weapon) {
+      ui.notifications.warn(game.i18n.format('VAGABOND.Defense.NoWeapon', { name: protector.name }));
+      return;
+    }
+    button.disabled = true;
+
+    const incoming = parseInt(button.dataset.incoming) || 0;
+    const damageType = button.dataset.damageType;
+    const priorFinal = parseInt(button.dataset.priorFinal) || 0;
+    const weakExtra = parseInt(button.dataset.weakExtra) || 0;
+    const autoApplied = button.dataset.autoApplied === 'true';
+    const sourceActor = TargetHelper.resolveActorRef(button.dataset.sourceActorId);
+    const sourceItem = this._resolveSourceItem(sourceActor, button.dataset.sourceItemId);
+
+    const check = await DefenseHelper.rollCheck(protector, weapon, { event });
+    let shieldRoll = null;
+    let shieldWeapons = [];
+    if (check.isSuccess) {
+      shieldWeapons = DefenseHelper.reductionWeapons(protector, weapon);
+      shieldRoll = await VagabondDamagePipeline.rollDefenseDice(protector, shieldWeapons);
+      await DefenseHelper.spendPatience(protector, shieldWeapons);
+    }
+    const shieldReduction = shieldRoll?.total ?? 0;
+    const breakdown = this.calculateFinalDamageDetailed(
+      defender, Math.max(0, incoming - shieldReduction), damageType, sourceItem, { attackerActor: sourceActor }
+    );
+    const finalDamage = check.isSuccess ? breakdown.final + weakExtra : priorFinal;
+    const saved = Math.max(0, priorFinal - finalDamage);
+
+    // Already applied → give back what the Defense saved
+    if (autoApplied && saved > 0) {
+      const hp = defender.system.health?.value || 0;
+      const newHp = Math.min(defender.system.health?.max ?? hp + saved, hp + saved);
+      if (defender.isOwner || game.user.isGM) {
+        await defender.update({ 'system.health.value': newHp });
+      } else {
+        const { emitSocket } = await import('./socket-helper.mjs');
+        emitSocket('applyDamage', { actorUuid: defender.uuid, newHp });
+      }
+    }
+
+    const note = !check.isSuccess
+      ? game.i18n.localize('VAGABOND.Defense.ProtectFailed')
+      : autoApplied
+        ? game.i18n.format('VAGABOND.Defense.ProtectRestored', { target: defender.name, amount: saved })
+        : game.i18n.localize('VAGABOND.Defense.ProtectReplacesApply');
+    const message = await this._postDefenseResult(protector, {
+      title: game.i18n.format('VAGABOND.Defense.ProtectTitle', { name: protector.name, target: defender.name }),
+      check, shieldRoll, shieldWeapons, incoming, shieldReduction,
+      armorReduction: check.isSuccess ? breakdown.armorReduction : 0,
+      finalDamage, damageType, path: breakdown.path, flankedBonus: breakdown.flankedBonus,
+      autoApplied: false, damageActor: defender,
+      applyButton: check.isSuccess && !autoApplied && finalDamage > 0
+        ? this.createApplySaveDamageButton(defender.uuid, defender.name, finalDamage, damageType, null)
+        : '',
+      extraHtml: `<p class="defense-note">${note}</p>`,
+    });
+    if (check.isCritical) {
+      const { VagabondChatCard } = await import('./chat-card.mjs');
+      await VagabondChatCard._grantLuckOnCrit(protector, message, 'Critical');
+    }
+  }
+
+  /**
+   * Post a Defense (or Protect) result card: the Attack Check, then the damage line with
+   * the Defense dice as their own component.
+   * @param {Actor} actor - Who made the Check (card speaker)
+   * @param {Object} o
+   * @returns {Promise<ChatMessage>}
+   * @private
+   */
+  static async _postDefenseResult(actor, o) {
+    const { VagabondChatCard } = await import('./chat-card.mjs');
+    const damageActor = o.damageActor ?? actor;
+    const card = new VagabondChatCard()
+      .setType('save-roll')
+      .setActor(actor)
+      .setTitle(o.title)
+      .setSubtitle(actor.name)
+      .addRoll(o.check.roll, o.check.difficulty)
+      .setOutcome(o.check.isSuccess ? 'PASS' : 'FAIL', o.check.isCritical);
+
+    const names = o.shieldWeapons.map(w => w.name).join(' + ');
+    const shieldTitle = o.shieldRoll
+      ? `${names}: ${o.shieldRoll.formula}${o.shieldRoll._perDieBonusTotal ? ` + ${o.shieldRoll._perDieBonusTotal}` : ''} = ${o.shieldReduction}`
+      : '';
+    const calc = this._buildDamageCalculation(
+      o.incoming, 0, o.armorReduction, o.finalDamage, o.damageType, 'reflex', damageActor,
+      o.autoApplied, false, o.path, o.flankedBonus,
+      { title: game.i18n.localize('VAGABOND.Chat.Defense'), shieldReduction: o.shieldReduction, shieldTitle }
+    );
+    card.setDescription((card.data.description || '') + calc + (o.applyButton || '') + (o.extraHtml || ''));
+    return await card.send();
   }
 
   /**
@@ -2012,7 +2144,7 @@ ${npcOnly ? '' : `
    * @returns {Promise<ChatMessage>}
    * @private
    */
-  static async _postSaveResult(actor, saveType, roll, difficulty, isSuccess, isCritical, isHindered, originalDamage, saveReduction, armorReduction, finalDamage, damageType, autoApplied, statusContext = null, defensePath = null, flankedBonus = 0) {
+  static async _postSaveResult(actor, saveType, roll, difficulty, isSuccess, isCritical, isHindered, originalDamage, saveReduction, armorReduction, finalDamage, damageType, autoApplied, statusContext = null, defensePath = null, flankedBonus = 0, extraHtml = '') {
     const saveLabel = this.getConfiguredSaves().find(s => s.key === saveType)?.label
       || game.i18n.localize(`VAGABOND.Saves.${saveType.charAt(0).toUpperCase() + saveType.slice(1)}.name`);
 
@@ -2067,6 +2199,7 @@ ${npcOnly ? '' : `
         cardDescription += this.createApplySaveDamageButton(actor.uuid, actor.name, finalDamage, damageType, statusContext);
       }
     }
+    cardDescription += extraHtml;
 
     card.setDescription(cardDescription);
 
@@ -2151,7 +2284,7 @@ ${npcOnly ? '' : `
    * @returns {string} HTML string
    * @private
    */
-  static _buildDamageCalculation(originalDamage, saveReduction, armorReduction, finalDamage, damageType, saveType, actor, autoApplied, isHindered, defensePath = null, flankedBonus = 0) {
+  static _buildDamageCalculation(originalDamage, saveReduction, armorReduction, finalDamage, damageType, saveType, actor, autoApplied, isHindered, defensePath = null, flankedBonus = 0, extra = {}) {
     // Get save icon and label from the configured homebrew saves
     const configuredSave = this.getConfiguredSaves().find(s => s.key === saveType);
     const saveIcon = configuredSave?.icon || 'fa-solid fa-shield';
@@ -2190,7 +2323,7 @@ ${npcOnly ? '' : `
 
     // Build calculation line with title separator
     let calculationHTML = `<div class="save-damage-calculation">
-      <div class="damage-title">${game.i18n.localize('VAGABOND.Roll.SaveRoll')}</div>
+      <div class="damage-title">${extra.title ?? game.i18n.localize('VAGABOND.Roll.SaveRoll')}</div>
       <div class="damage-formula-line">
         <span class="damage-component" title="${game.i18n.localize('VAGABOND.Damage.Total')}">
           <i class="fa-solid fa-dice"></i> ${originalDamage}
@@ -2212,6 +2345,15 @@ ${npcOnly ? '' : `
         <span class="damage-operator">-</span>
         <span class="damage-component" title="${saveTooltip}">
           <i class="${saveIcon} ${saveIconClass}"></i> ${saveReduction}
+        </span>`;
+    }
+
+    // Defense property: the Defense Weapons' dice
+    if (extra.shieldReduction > 0) {
+      calculationHTML += `
+        <span class="damage-operator">-</span>
+        <span class="damage-component" title="${foundry.utils.escapeHTML?.(extra.shieldTitle ?? '') ?? ''}">
+          <i class="fa-solid fa-shield-halved"></i> ${extra.shieldReduction}
         </span>`;
     }
 

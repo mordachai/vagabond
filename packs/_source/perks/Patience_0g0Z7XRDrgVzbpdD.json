@@ -3,7 +3,7 @@
   "type": "perk",
   "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
   "system": {
-    "description": "<p>When you Hold with a Brawl, Finesse, or Melee Weapon Equipped, it has the Defend property until your next Turn or until you roll its damage die.</p>",
+    "description": "<p>If you end your Turn with a Brawl, Finesse, or Melee Weapon Equipped that you did not attack or Cast with, it has the Defense property until your next Turn or until you roll its damage die.</p>",
     "prerequisites": {
       "stats": [
         {
@@ -23,7 +23,53 @@
       "resourceOrGroups": []
     }
   },
-  "effects": [],
+  "effects": [
+    {
+      "name": "Patience",
+      "origin": "Compendium.vagabond.perks.Item.0g0Z7XRDrgVzbpdD",
+      "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
+      "_id": "UquUEbBOYEe5EFw1",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.patienceDefense",
+            "value": true,
+            "priority": null,
+            "type": "override"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "<p>Unused Brawl, Finesse or Melee Weapons gain the Defense property. In a started Combat they are armed at the end of your Turn if you did not attack with them; outside Combat they are always offered.</p>",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.42.0",
+        "createdTime": 1791394557239,
+        "modifiedTime": 1791394557239,
+        "lastModifiedBy": null
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!0g0Z7XRDrgVzbpdD.UquUEbBOYEe5EFw1"
+    }
+  ],
   "folder": null,
   "flags": {},
   "_stats": {

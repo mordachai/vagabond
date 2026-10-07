@@ -93,19 +93,30 @@
       "Total": "Dano Total",
       "Final": "Dano Final"
     },
+    "Defense": {
+      "Protect": "Proteger",
+      "ProtectHint": "{name} usa a propriedade Defesa por {target} (Protetor)",
+      "ProtectTitle": "Protetor: {name} defende {target}",
+      "ProtectFailed": "A Checagem falhou — o dano permanece.",
+      "ProtectRestored": "{amount} PV restaurados para {target} (o dano já tinha sido aplicado).",
+      "ProtectReplacesApply": "Aplique este dano em vez do cartão da Salvaguarda de Reflexo.",
+      "NotYours": "Só o dono de {name} pode usar isto.",
+      "NoWeapon": "{name} não empunha arma de Defesa."
+    },
     "DefendMechanics": {
       "DefendingTitle": "Opções de defesa",
       "ReflexTitle": "Reflexo",
       "DefenseTitle": "Defesa",
       "CritTitle": "Crítico",
       "ReflexDescription": "Salvaguarda para evitar uma Ação Inimiga. Se passar, não é afetado.",
-      "DefenseDescription": "Role o dano da(s) sua(s) arma(s) com Defesa em vez do d20. Some o resultado à sua Armadura contra o ataque.",
+      "DefenseDescription": "Faça uma Checagem de Ataque com uma arma de Defesa em vez da Salvaguarda de Reflexo. Se passar, o dano é reduzido pelos dados de dano de cada arma de Defesa equipada.",
       "CritDescription": "Você não é afetado pelo que causou a Salvaguarda, e pode usar uma Ação.",
       "CritToggleHint": "Clique para alternar: Dano Extra ou Ganhar Ponto de Sorte"
     },
     "Chat": {
       "Defense": "Defesa",
       "DefenseBoth": "Ambas",
+      "DefenseCheck": "Defesa (Checagem de Ataque)",
       "ArmorPenalty": "Penalidade de Armadura"
     },
     "AttackTypes": {
@@ -975,8 +986,8 @@
         "hint": "Quando ativado, o dano é aplicado automaticamente aos PV após rolagens de salvaguarda. Quando desativado, os valores de dano são mostrados no chat mas devem ser aplicados manualmente."
       },
       "defenseWithBothWeapons": {
-        "name": "Defender com Ambas as Armas de Defesa",
-        "hint": "Ligado: quem empunha duas armas com Defesa pode usar as duas em uma única ação de Defesa (os danos se somam). Desligado: a Defesa usa uma arma por vez."
+        "name": "Defesa Reduz com Todas as Armas de Defesa",
+        "hint": "Ligado (regra): uma Checagem de Ataque de Defesa bem-sucedida reduz o dano pelos dados de todas as armas de Defesa equipadas. Desligado: só a arma que fez a Checagem."
       },
       "automationMode": {
         "name": "Automação de Classe",
@@ -2270,7 +2281,7 @@
     },
     "PropertyHints": {
       "Cleave": "Ignora Vulnerável neste ataque. Reduza seu dado um tamanho para acertar outro Alvo ao alcance, por redução.",
-      "Defense": "Role o dado de dano desta arma em vez de um d20 para uma Salvaguarda de Reflexo, e some o resultado à sua Armadura contra o que causou a Salvaguarda.",
+      "Defense": "Ao fazer uma Salvaguarda de Reflexo, você pode fazer uma Checagem de Ataque em vez disso. Se passar, reduz o dano pelos dados de dano de cada Arma de Defesa equipada.",
       "Grapple": "Pode Agarrar com a Checagem de Ataque desta arma.",
       "Keen": "Crítico 1 ponto mais baixo na Checagem de Ataque desta arma.",
       "Long": "Alcance estendido, pode atacar de 10 pés de distância.",
