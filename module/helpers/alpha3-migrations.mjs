@@ -111,3 +111,50 @@ export async function migrateAlpha3Backpacks() {
 
   await game.settings.set('vagabond', 'alpha3BackpackMigrated', true);
 }
+
+/** Defense-property perks whose automation is an Active Effect (see DefenseHelper). */
+const DEFENSE_PERKS = [
+  { id: '0g0Z7XRDrgVzbpdD', name: 'Patience', key: 'system.patienceDefense' },
+  { id: 'aHBvA8INtAilA7zH', name: 'Protector', key: 'system.protectorDefense' },
+];
+
+/**
+ * Patience / Protector perk items already on actors predate their Alpha 3 rewrite: give them the
+ * compendium's book text and effect. Aborts WITHOUT setting the guard while the perks pack hasn't
+ * been rebuilt (compendium copy missing the effect). Copies that already carry the key are skipped.
+ */
+export async function migrateAlpha3DefensePerks() {
+  if (game.user !== game.users.activeGM) return;
+  if (game.settings.get('vagabond', 'alpha3DefensePerksMigrated')) return;
+
+  const pack = game.packs.get('vagabond.perks');
+  if (!pack) return;
+  const sources = new Map();
+  for (const def of DEFENSE_PERKS) {
+    const doc = await pack.getDocument(def.id);
+    if (!doc?.effects.some(e => e.system.changes?.some(c => c.key === def.key))) return; // pack not rebuilt yet
+    sources.set(def.name, { def, doc });
+  }
+
+  for (const item of worldItems()) {
+    try {
+      if (item.type !== 'perk') continue;
+      const src = sources.get(item.name);
+      if (!src) continue;
+      if (item.effects.some(e => e.system.changes?.some(c => c.key === src.def.key))) continue;
+
+      const effects = src.doc.effects.map(e => {
+        const data = e.toObject();
+        delete data._id;
+        delete data._stats;
+        return data;
+      });
+      await item.update({ 'system.description': src.doc.system.description });
+      await item.createEmbeddedDocuments('ActiveEffect', effects);
+    } catch (err) {
+      console.warn(`vagabond | migrate Alpha 3 Defense perks: skipped ${item?.uuid ?? '(unknown)'}`, err);
+    }
+  }
+
+  await game.settings.set('vagabond', 'alpha3DefensePerksMigrated', true);
+}

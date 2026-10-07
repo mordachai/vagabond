@@ -86,7 +86,7 @@ import { RevelatorHelper } from './helpers/revelator-helper.mjs';
 import { RogueHelper } from './helpers/rogue-helper.mjs';
 import { DruidHelper } from './helpers/druid-helper.mjs';
 import { migrateFighterClass, migrateDruidClass, migrateGunslingerClass, migrateHunterClass, migrateLuminaryClass, migrateMagusClass, migrateMerchantClass, migratePugilistClass, migrateRevelatorClass, migrateRogueClass, migrateSorcererClass, migrateVanguardClass, migrateWitchClass, migrateWizardClass, migrateAncestries } from './helpers/class-migrations.mjs';
-import { migrateAlpha3Statuses, migrateAlpha3Backpacks } from './helpers/alpha3-migrations.mjs';
+import { migrateAlpha3Statuses, migrateAlpha3Backpacks, migrateAlpha3DefensePerks } from './helpers/alpha3-migrations.mjs';
 import { consumeUsedEffects } from './helpers/use-effects.mjs';
 import { VagabondRollBuilder } from './helpers/roll-builder.mjs';
 import { CurrencyHelper } from './helpers/currency-helper.mjs';
@@ -1087,7 +1087,7 @@ function registerGameSettings() {
   }
 
   // Setting 21f7: One-time Alpha 3 migration guards (hidden) — see alpha3-migrations.mjs.
-  for (const key of ['alpha3StatusesMigrated', 'alpha3BackpackMigrated']) {
+  for (const key of ['alpha3StatusesMigrated', 'alpha3BackpackMigrated', 'alpha3DefensePerksMigrated']) {
     game.settings.register('vagabond', key, {
       scope: 'world',
       config: false,
@@ -1953,6 +1953,8 @@ Hooks.once('ready', function () {
   migrateAlpha3Statuses();
   // One-time: Backpacks become 1 Slot held / +3 Slots worn.
   migrateAlpha3Backpacks();
+  // One-time: Patience / Protector perks on actors get the Defense-property text + effect.
+  migrateAlpha3DefensePerks();
 });
 
 // Recompute realtime light timers on scene load (catches elapsed time during reloads).
