@@ -514,6 +514,16 @@ export default class VagabondCharacter extends VagabondActorBase {
       new fields.StringField({ blank: true }),
       { initial: [], label: "Extra Luck On Crit (Rogue Knack)" }
     );
+    // Vanguard, Defense Weapons only: damage dice grow this many sizes (Wall) and each die gets this flat
+    // bonus (Indestructible) — both formulas, read by the damage pipeline for weapons with the Defense property.
+    schema.defenseWeaponDieStep = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      { initial: [], label: "Defense Weapon Die Sizes Larger (Vanguard)" }
+    );
+    schema.defenseWeaponBonusPerDie = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      { initial: [], label: "Defense Weapon Bonus Per Damage Die (Vanguard)" }
+    );
     schema.critExplodeSkills = new fields.ArrayField(
       new fields.StringField({ required: true }),
       { required: true, initial: [], label: "Crit Damage Dice Explode (skills)" }
@@ -920,6 +930,8 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.deadeyeGrit = [];
     this.critExtraDiceBySkill = [];
     this.critExplodeSkills = [];
+    this.defenseWeaponDieStep = [];
+    this.defenseWeaponBonusPerDie = [];
     this.sneakAttackDice = [];
     this.sneakAttackExplode = [];
     this.sneakAttackTrigger = false;
@@ -1142,6 +1154,8 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.haymakerMargin = this._evaluateFormulaField(this.haymakerMargin, rollData);
     this.layOnHandsDie = this._evaluateFormulaField(this.layOnHandsDie, rollData);
     this.sneakAttackDice = this._evaluateFormulaField(this.sneakAttackDice, rollData);
+    this.defenseWeaponDieStep = this._evaluateFormulaField(this.defenseWeaponDieStep, rollData);
+    this.defenseWeaponBonusPerDie = this._evaluateFormulaField(this.defenseWeaponBonusPerDie, rollData);
     this.sneakAttackExplode = this._evaluateFormulaField(this.sneakAttackExplode, rollData);
     this.critLuckBonus = this._evaluateFormulaField(this.critLuckBonus, rollData);
     this.layOnHandsCures = this.layOnHandsCures.filter(s => !!s);

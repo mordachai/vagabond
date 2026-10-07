@@ -313,6 +313,20 @@ export function migrateSorcererClass() {
   });
 }
 
+/**
+ * Vanguard: old Guard / Rampant Charge / Unstoppable class → Crowd Control, Stalwart, Wall (Defense Weapon die size),
+ * Indestructible (per-die bonus), Armored Titan, Force Unrelenting.
+ */
+export function migrateVanguardClass() {
+  return migrateClass({
+    setting: 'vanguardClassMigrated',
+    classId: '8xsWpW29EzAAk100',
+    className: 'Vanguard',
+    probeFeature: 'Crowd Control',
+    isOld: (item) => item.system.levelFeatures?.some(lf => lf.name === 'Rampant Charge'),
+  });
+}
+
 /** Give perk items already in the world (copies) the effects the compendium perk now ships. */
 async function addPerkEffects(perkId, perkName) {
   const source = await game.packs.get('vagabond.perks')?.getDocument(perkId);

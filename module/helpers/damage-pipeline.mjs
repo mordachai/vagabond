@@ -105,6 +105,10 @@ export class VagabondDamagePipeline {
     // 2. Die-size bump (first NdX term only)
     formula = this._applyDieSizeBump(formula, dieSizeBonus);
 
+    // 2a. Defense Weapons (Vanguard Wall): the dice grow whole sizes along the weapon die table
+    const isDefenseWeapon = sourceType === 'weapon' && !!d.item?.system?.properties?.includes?.('Defense');
+    if (isDefenseWeapon) formula = this._stepDice(formula, actor.system?.defenseWeaponDieStep);
+
     // 2b. Skill-scoped die size (Pugilist Title Holder): that skill's weapon dice are at least this size
     if (sourceType === 'weapon' && d.skillKey) formula = this._raiseDiceTo(formula, actor.system?.weaponDieBySkill?.[d.skillKey]);
 
@@ -192,7 +196,9 @@ export class VagabondDamagePipeline {
         || (sourceType === 'npc' && weaponLinked ? actor.system[BONUS_BUCKETS.weapon.perDie] : 0)
         || 0;
       const universalPerDie = actor.system.bonusPerDamageDie || 0;
-      let totalPerDie = bucketPerDie + universalPerDie;
+      // Defense Weapons (Vanguard Indestructible) carry their own per-die bonus
+      const defensePerDie = isDefenseWeapon ? Number(actor.system?.defenseWeaponBonusPerDie) || 0 : 0;
+      let totalPerDie = bucketPerDie + universalPerDie + defensePerDie;
       if (totalPerDie !== 0 && this.shouldDoublePerDieBonus(actor, targets)) totalPerDie *= 2;
       if (totalPerDie !== 0) {
         const diceCount = this.countRolledDice(roll);
@@ -421,6 +427,24 @@ export class VagabondDamagePipeline {
       .map(v => v.startsWith('max') ? v : parseInt(v)))];
 
     return explodeValues.length > 0 ? explodeValues : null;
+  }
+
+  /**
+   * Grow (or shrink) every NdX term of a formula by whole sizes along `CONFIG.VAGABOND.weaponDieSteps`
+   * (d4 → d6 → d8 → d10 → d12), clamped to the table's ends; dice off the table are left alone.
+   * @param {string} formula
+   * @param {number|undefined} steps
+   * @returns {string}
+   */
+  static _stepDice(formula, steps) {
+    const n = Math.trunc(Number(steps));
+    const table = CONFIG.VAGABOND?.weaponDieSteps;
+    if (!n || !Array.isArray(table) || !table.length) return formula;
+    return formula.replace(/(\d*)d(\d+)/g, (match, count, faces) => {
+      const i = table.indexOf(Number(faces));
+      if (i < 0) return match;
+      return `${count}d${table[Math.min(table.length - 1, Math.max(0, i + n))]}`;
+    });
   }
 
   /**

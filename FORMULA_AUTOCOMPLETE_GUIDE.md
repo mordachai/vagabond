@@ -447,6 +447,13 @@ The Mark itself is an actor effect (`flags.vagabond.huntersMark`) created by the
 | Spell-Slinger: Die (Lv 4+) | `system.spellDamageDieSizeBonus` | Add | `2` (d6 → d8) |
 | Spell-Slinger: Crit (Lv 4+) | `system.castCritBonus` | Add | `0 - 1 - floor((@lvl - 4) / 4)` (Crit range on Cast Checks: −1 at 4, −2 at 8) |
 
+### Vanguard — Wall, Indestructible
+
+| Effect | Key | Mode | Value |
+| --- | --- | --- | --- |
+| Wall (Lv 2+) | `system.defenseWeaponDieStep` | Add | `1 + floor((@lvl - 2) / 4)` (Defense-property weapons roll their damage dice this many sizes larger) |
+| Indestructible (Lv 4+) | `system.defenseWeaponBonusPerDie` | Add | `@statuses.incapacitated ? 0 : (@armorWorn.slots > 0) ? 1 + floor((@lvl - 4) / 4) : 0` (flat bonus to each damage die of Defense-property weapons) |
+
 ### Exalted — Bonus Per Damage Die (with Doubling vs Specific Being Types)
 
 Grants a flat bonus per damage die rolled. When attacking Undead (or other configured types), the bonus is doubled.

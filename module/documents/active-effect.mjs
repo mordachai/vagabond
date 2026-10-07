@@ -260,6 +260,8 @@ export class VagabondActiveEffect extends ActiveEffect {
       'system.critExtraDiceBySkill': 'Extra Damage Dice on a Crit, by skill (ADD "ranged: formula" = dice matching the weapon die, e.g. Bad Medicine)',
       'system.weaponDieBySkill': 'Weapon Damage Die Size by skill (ADD "brawl: 6" = d6 at least, Title Holder)',
       'system.weaponLowExplodeBySkill': 'Weapon Dice Explode on Low Faces by skill (ADD "brawl: 2" = on 1 or 2, Title Holder)',
+      'system.defenseWeaponDieStep': 'Defense Weapons: damage dice this many sizes larger (formula — Vanguard Wall)',
+      'system.defenseWeaponBonusPerDie': 'Defense Weapons: flat bonus to each damage die (formula — Vanguard Indestructible)',
       'system.sneakAttackDice': 'Sneak Attack: number of extra d4 (formula — Rogue)',
       'system.sneakAttackExplode': 'Sneak Attack dice Explode (1 = on — Lethal Weapon)',
       'system.sneakAttackTrigger': 'Auto-Sneak Attack: first Favored hit each Turn with a Finesse / Keen / Ranged Weapon (Rogue)',

@@ -1,6 +1,9 @@
 # Changelog
 
 ## Unreleased
+- **Vanguard revised to the new book text.** Class description, the Class Features table, Crowd Control, Stalwart, Wall (Large / Huge / Giant), Indestructible (+1 / +2), Armored Titan and Force Unrelenting now read exactly as printed; Training is Brawl and Melee. Guard, Rampant Charge, Unstoppable and the old Immune-to-Physical Indestructible are gone.
+  - **Wall** and **Indestructible** are effects on Defense-property weapons: their damage dice are 1 / 2 / 3 sizes larger (Levels 2 / 6 / 10), and each die gets +1 / +2 while you wear Armor and aren't Incapacitated (new fields `defenseWeaponDieStep`, `defenseWeaponBonusPerDie`). Stalwart grants the Protector Perk.
+  - Everything about Shoves stays text (the system has no Shove rules). Existing Vanguard items are converted once on load. The `classes` compendium needs `npm run pack` first.
 - **Sorcerer revised to the new book text.** Class description, the Class Features table (with Spells, Mana and Cast Max), Glamour, Tap, Quickening (0 / 1 / 2 Mana) and Spell-Slinger (-1 / -2) now read exactly as printed; Training is Arcana and Influence and the Key Stat is Presence, Might. Arcane Anomaly, Spell Twinning and Overpowered are gone.
   - **Glamour:** Cast Max is 2 + your Level (an effect cancels the casting Stat the engine adds). **Tap** grants the Vehement Magic Perk (it was Secret of Mana).
   - **Spell-Slinger** is two effects: Spell damage die one size larger (d8) and Crit range on Cast Checks lowered by 1 / 2. The old Spell-Slinger effects wrote a field nothing reads (`spellCritBonus`); they now use `castCritBonus`.

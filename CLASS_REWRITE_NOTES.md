@@ -163,3 +163,24 @@ Book p. 57. Glamour (Influence casting, 4 × Level Mana, Cast Max 2 + Level), Ta
 - [ ] Spell-Slinger effects show Locked below Level 4.
 - [ ] Existing Sorcerer (old Spell Twinning class) migrates; Arcana trained; Vehement Magic added; the broken `spellCritBonus` effects are gone.
 
+## Vanguard
+
+Book p. 59. Crowd Control, Stalwart (Protector perk grant), Wall (Large / Huge / Giant), Indestructible (+1 / +2), Armored Titan, Force Unrelenting. Training Brawl + Melee (no choices). Guard, Rampant Charge, Unstoppable and the old Immune-to-Physical Indestructible are gone.
+
+**Doubts / course taken**
+- There is **no Shove system** in the code (Shoves are rolled by hand as Brawl Checks), so everything about Shoves — Crowd Control, the Wall size for Shoves, Armored Titan’s Shove bonus, Force Unrelenting, pushing into spaces — is text only.
+- Wall (Defense Weapon dice one size larger) is an effect: `defenseWeaponDieStep` = `1 + floor((@lvl - 2) / 4)` sizes (1 / 2 / 3 at Levels 2 / 6 / 10) along the weapon die table (d4 → d6 → d8 → d10 → d12, clamped at d12), applied in the damage pipeline only to weapons that carry the **Defense** property. The printed weapon die (sheet / HUD) is unchanged — the damage roll uses the larger die.
+- Indestructible "+1 bonus to the damage die of Defense Weapons": read as **+1 per damage die** (flat, like per-die bonuses elsewhere) — `defenseWeaponBonusPerDie`, with the conditions in the formula (not Incapacitated, wearing Armor = `@armorWorn.slots > 0`). Change if the table means +1 die size.
+- "while you have them Equipped" is implicit: attacks need an equipped weapon.
+
+**Text-only / deferred**
+- All Shove rules (Crowd Control, Wall for Shoves, Armored Titan bonus, Force Unrelenting Dazed + launch) and the 2H / Versatile Shield equip rules — text only.
+- Stalwart’s Hold Action extension — text only.
+
+**Tests to run in-world** (after `npm run pack`)
+- [ ] Builder: Vanguard Trained in Brawl and Melee without skill choices; Protector granted automatically.
+- [ ] Level 2: a Defense-property weapon (e.g. shield) rolls its damage die one size up (d6 → d8); Level 6 two sizes, Level 10 three; a non-Defense weapon is unchanged.
+- [ ] Level 4: +1 per damage die with a Defense weapon while wearing Armor and not Incapacitated; +2 at Level 8; 0 when unarmored or Incapacitated (the effect row shows the formula result).
+- [ ] Wall / Indestructible show Locked below Level 2 / 4.
+- [ ] Existing Vanguard (old Rampant Charge class) migrates.
+
