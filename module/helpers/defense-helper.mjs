@@ -78,10 +78,11 @@ export class DefenseHelper {
    * Roll the Defense Attack Check (replaces the Reflex Save).
    * @param {Actor} actor - Defender
    * @param {Item} weapon - Defense weapon making the Check
-   * @param {{attackerModifier?: string, resistanceFavor?: boolean, event?: Event}} opts
+   * @param {{attackerModifier?: string, resistanceFavor?: boolean, defenseVote?: string, event?: Event}} opts
+   *   defenseVote: the defender's Reflex-Save rules vote (`_evaluateDefenseRules`, e.g. Prone → 'hinder')
    * @returns {Promise<{roll: Roll, difficulty: number, isSuccess: boolean, isCritical: boolean, skillKey: string, favorHinder: string}>}
    */
-  static async rollCheck(actor, weapon, { attackerModifier = 'none', resistanceFavor = false, event = null } = {}) {
+  static async rollCheck(actor, weapon, { attackerModifier = 'none', resistanceFavor = false, defenseVote = 'none', event = null } = {}) {
     const skillKey = EquipmentHelper.attackSkillFor(weapon);
     const rollData = actor.getRollDataWithItemEffects(weapon);
     const difficulty = rollData.skills?.[skillKey]?.difficulty ?? rollData.saves?.[skillKey]?.difficulty ?? 10;
@@ -89,7 +90,8 @@ export class DefenseHelper {
       VagabondRollBuilder.calculateEffectiveFavorHinder(actor.system.favorHinder || 'none', !!event?.shiftKey, !!event?.ctrlKey),
       VagabondRollBuilder.checkFavorVote(actor, 'attack'),
       attackerModifier,
-      resistanceFavor ? 'favor' : 'none'
+      resistanceFavor ? 'favor' : 'none',
+      defenseVote
     );
     const roll = await VagabondRollBuilder.buildAndEvaluateD20WithRollData(rollData, favorHinder);
     const critNumber = VagabondRollBuilder.calculateCritThreshold(rollData, skillKey);

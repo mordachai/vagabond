@@ -320,27 +320,17 @@ VAGABOND.statusEffectDefinitions = [
     name: 'VAGABOND.StatusConditions.Prone',
     img: '/icons/magic/movement/chevrons-down-yellow.webp',
     statuses: ['prone'],
-    description: 'Speed = 0. Costs 10\' Speed to stand. Can crawl (2:1 ratio). Can\'t Rush. Vulnerable (attacks/saves Hindered, incoming attacks Favored). [AUTOMATED: Speed = 0, Vulnerable. MANUAL: Stand cost, crawl ratio]',
+    description: 'Drop or stand by using 10\' of Speed. Moves only by crawling (2\' of Speed per 1\'), can\'t Rush. Vulnerable for Melee attacks and Reflex Saves. [AUTOMATED: Speed halved; its Melee attacks and Reflex Saves Hindered, Melee attacks against it and Saves vs its Melee attacks Favored. MANUAL: stand cost, no Rush]',
     changes: [
       {
-        key: 'system.speed.bonus',
-        type: "add",
-        value: '-999'
+        key: 'system.speedHalved',
+        type: "override",
+        value: 'true'
       },
       {
-        key: 'system.favorHinder',
+        key: 'system.meleeReflexVulnerable',
         type: "override",
-        value: 'hinder'
-      },
-      {
-        key: 'system.incomingAttacksModifier',
-        type: "override",
-        value: 'favor'
-      },
-      {
-        key: 'system.outgoingSavesModifier',
-        type: "override",
-        value: 'favor'
+        value: 'true'
       }
     ]
   },
@@ -558,7 +548,7 @@ VAGABOND.statusEffectDefinitions = [
     name: 'VAGABOND.StatusConditions.Incapacitated',
     img: '/icons/skills/wounds/injury-eyes-blood-red-pink.webp',
     statuses: ['incapacitated'],
-    description: 'Can\'t Focus, use Actions, or Move. Automatically fails Might and Dexterity checks. Vulnerable. Speed = 0. [FULLY AUTOMATED]',
+    description: 'Can\'t Focus, use Actions, or Move. Fails all Might Checks, Dexterity Checks, and Reflex Saves. Vulnerable. Speed = 0. [FULLY AUTOMATED]',
     changes: [
       // Auto-fail Might/Dex
       {
@@ -570,6 +560,11 @@ VAGABOND.statusEffectDefinitions = [
         key: 'system.autoFailStats',
         type: "add",
         value: 'dexterity'
+      },
+      {
+        key: 'system.autoFailStats',
+        type: "add",
+        value: 'reflex'
       },
       // Speed = 0
       {
@@ -614,6 +609,11 @@ VAGABOND.statusEffectDefinitions = [
         value: 'dexterity'
       },
       {
+        key: 'system.autoFailStats',
+        type: "add",
+        value: 'reflex'
+      },
+      {
         key: 'system.speed.bonus',
         type: "add",
         value: '-999'
@@ -652,6 +652,11 @@ VAGABOND.statusEffectDefinitions = [
         key: 'system.autoFailStats',
         type: "add",
         value: 'dexterity'
+      },
+      {
+        key: 'system.autoFailStats',
+        type: "add",
+        value: 'reflex'
       },
       {
         key: 'system.speed.bonus',
@@ -1435,12 +1440,21 @@ VAGABOND.attackTypes = {
  *   condition    - optional (actor, attackType) => boolean; rule fires only when true
  *   negatedBy    - optional (actor, attackType) => boolean; rule is cancelled when true
  *
- * Empty per current RAW — Reflex/Endure no longer have a standing Hinder condition
- * (heavy armor now applies a flat Reflex penalty instead, see `reflexArmorPenalty`
- * in actor-character.mjs; Shield's ranged-hinder-negation is gone). Left in place
- * as the registry future hinder rules go in — never as inline branches.
+ * Armor has no standing Hinder (its Slots raise the Reflex Difficulty instead, see
+ * `reflexArmorPenalty` in actor-character.mjs; Shield's ranged-hinder-negation is gone).
+ * New hinder rules go here — never as inline branches. Also read by the Defense
+ * property's Attack Check (it replaces the Reflex Save).
  */
-VAGABOND.defenseRules = [];
+VAGABOND.defenseRules = [
+  // Prone (Alpha 3 p. 11): Vulnerable for the purposes of Reflex Saves → its Reflex Saves have Hinder
+  {
+    id: 'meleeReflexVulnerable',
+    save: 'reflex',
+    vsAttackTypes: '*',
+    effect: 'hinder',
+    condition: (actor) => !!actor?.system?.meleeReflexVulnerable
+  }
+];
 
 /**
  * Damage types that count as "non-Relic" damage for Immune: a Druid's Beast Mode attacks ignore

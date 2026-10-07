@@ -20,6 +20,13 @@
         "priority": null
       },
       {
+        "key": "system.autoFailStats",
+        "type": "add",
+        "value": "reflex",
+        "phase": "initial",
+        "priority": null
+      },
+      {
         "key": "system.speed.bonus",
         "type": "add",
         "value": "-999",
@@ -57,7 +64,7 @@
     "expiry": null,
     "expired": false
   },
-  "description": "<p>Can't Focus, use Actions, or Move. Auto-fails Might and Dexterity checks. Vulnerable. Speed = 0.</p>",
+  "description": "<p>Can't Focus, use Actions, or Move. Fails all Might Checks, Dexterity Checks, and Reflex Saves. Vulnerable. Speed = 0.</p>",
   "origin": null,
   "tint": "#ffffff",
   "transfer": false,

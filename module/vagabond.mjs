@@ -86,6 +86,7 @@ import { RevelatorHelper } from './helpers/revelator-helper.mjs';
 import { RogueHelper } from './helpers/rogue-helper.mjs';
 import { DruidHelper } from './helpers/druid-helper.mjs';
 import { migrateFighterClass, migrateDruidClass, migrateGunslingerClass, migrateHunterClass, migrateLuminaryClass, migrateMagusClass, migrateMerchantClass, migratePugilistClass, migrateRevelatorClass, migrateRogueClass, migrateSorcererClass, migrateVanguardClass, migrateWitchClass, migrateWizardClass, migrateAncestries } from './helpers/class-migrations.mjs';
+import { migrateAlpha3Statuses } from './helpers/alpha3-migrations.mjs';
 import { consumeUsedEffects } from './helpers/use-effects.mjs';
 import { VagabondRollBuilder } from './helpers/roll-builder.mjs';
 import { CurrencyHelper } from './helpers/currency-helper.mjs';
@@ -1085,6 +1086,17 @@ function registerGameSettings() {
     });
   }
 
+  // Setting 21f7: One-time Alpha 3 migration guards (hidden) — see alpha3-migrations.mjs.
+  for (const key of ['alpha3StatusesMigrated']) {
+    game.settings.register('vagabond', key, {
+      scope: 'world',
+      config: false,
+      type: Boolean,
+      default: false,
+      requiresReload: false,
+    });
+  }
+
   // Setting 21g: One-time migration guard (hidden) — see CurrencyHelper.migrateCopperScale().
   // Stored raw-copper amounts were ×10 too small after the 1s=100c ratio correction.
   game.settings.register('vagabond', 'copperScaleMigrated', {
@@ -1937,6 +1949,8 @@ Hooks.once('ready', function () {
   migrateAncestries();
   // One-time: stored copper amounts ×10 (ratio corrected to the book's 1s = 100c).
   CurrencyHelper.migrateCopperScale();
+  // One-time: status effects already on actors get the Alpha 3 changes.
+  migrateAlpha3Statuses();
 });
 
 // Recompute realtime light timers on scene load (catches elapsed time during reloads).

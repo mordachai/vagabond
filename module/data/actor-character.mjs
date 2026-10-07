@@ -793,6 +793,20 @@ export default class VagabondCharacter extends VagabondActorBase {
       label: "Auto-Fail All Rolls"
     });
 
+    // Prone (Alpha 3 p. 11): Vulnerable only for Melee attacks and Reflex Saves — its Melee
+    // attacks and Reflex Saves have Hinder; Melee attacks targeting it and Saves against its
+    // Melee attacks have Favor.
+    schema.meleeReflexVulnerable = new fields.BooleanField({
+      initial: false,
+      label: "Vulnerable (Melee attacks and Reflex Saves only)"
+    });
+
+    // Moves by crawling (Prone: 2' of Speed per 1' of movement) — Speed is halved
+    schema.speedHalved = new fields.BooleanField({
+      initial: false,
+      label: "Speed Halved (crawling)"
+    });
+
     // Gish support: equipped weapons satisfy the trinket casting requirement
     // (set via Active Effect, e.g. by the Gish perk)
     schema.weaponAsTrinket = new fields.BooleanField({
@@ -989,6 +1003,8 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.outgoingSavesModifier = 'none';
     this.autoFailStats = [];
     this.autoFailAllRolls = false;
+    this.meleeReflexVulnerable = false;
+    this.speedHalved = false;
     this.weaponAsTrinket = false;
     this.protectorDefense = false;
     this.patienceDefense = false;
@@ -1527,7 +1543,8 @@ export default class VagabondCharacter extends VagabondActorBase {
     const travelFormula = CONFIG.VAGABOND?.homebrew?.derivations?.travel ?? 'floor(@speed.base / 5)';
 
     this.speed = {
-      base:   baseSpeed,
+      // Crawling (Prone) halves the Speed you move with; Crawl / Travel paces keep the full value
+      base:   this.speedHalved ? Math.floor(baseSpeed / 2) : baseSpeed,
       raw:    rawSpeed,
       crawl:  Math.max(0, this._evaluateSingleFormula(crawlFormula,  speedRollData)),
       travel: Math.max(0, this._evaluateSingleFormula(travelFormula, speedRollData)),

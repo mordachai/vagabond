@@ -232,7 +232,7 @@ export class StatusHelper {
     const difficulty = actor.system.saves?.[entry.saveType]?.difficulty ?? 10;
 
     return {
-      success: roll.total >= difficulty,
+      success: !VagabondRollBuilder.autoFails(actor, entry.saveType) && roll.total >= difficulty,
       roll,
       total: roll.total,
       difficulty,

@@ -173,6 +173,18 @@ export class VagabondRollBuilder {
   }
 
   /**
+   * Whether a status forces this roll to fail (Dead: `autoFailAllRolls`; Incapacitated:
+   * `autoFailStats` holds Might, Dexterity and the Reflex Save). `key` is a stat or save key.
+   * The ONE check every Save path uses (sheet, chat-card Saves, Defense Check, status Saves).
+   * @param {Actor} actor
+   * @param {string} key
+   * @returns {boolean}
+   */
+  static autoFails(actor, key) {
+    return !!actor?.system?.autoFailAllRolls || !!(actor?.system?.autoFailStats ?? []).includes?.(key);
+  }
+
+  /**
    * One Favor vote from `system.favorChecks` — unconditional Favor on a whole category of
    * checks (an Active Effect ADDs 'attack' / 'cast' / 'save'). Independent of every other vote.
    * @param {Actor} actor

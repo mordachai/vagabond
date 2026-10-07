@@ -723,6 +723,11 @@ export class VagabondItem extends Item {
     // result again would collapse e.g. two Favors into one and drop votes added earlier.
     // Unconditional Favor on Attacks (system.favorChecks, e.g. Virtuoso: Valor, Fighter: Momentum)
     const votes = [favorHinder, VagabondRollBuilder.checkFavorVote(actor, 'attack')];
+    // Prone (meleeReflexVulnerable): Vulnerable for Melee attacks only — its own Melee attacks
+    // have Hinder, Melee attacks targeting it have Favor. A throw is never Melee.
+    const { VagabondChatCard } = await import('../helpers/chat-card.mjs');
+    const isMeleeAttack = !thrown && VagabondChatCard.attackTypeForWeaponSkill(weaponSkillKey) === 'melee';
+    if (isMeleeAttack && actor.system.meleeReflexVulnerable) votes.push('hinder');
     if (targets.length > 0) {
       // Attacker-side situational Favor (CONFIG.VAGABOND.attackFavorRules, e.g. Bloodthirsty)
       votes.push(VagabondRollBuilder.attackFavorVote(actor, targets.map(t => t.actor).filter(Boolean)));
@@ -731,6 +736,7 @@ export class VagabondItem extends Item {
         const targetModifier = targetActor.system.incomingAttacksModifier || 'none';
         const attackersAreBlinded = targetActor.system.defenderStatusModifiers?.attackersAreBlinded || false;
         votes.push(targetModifier, attackersAreBlinded ? 'hinder' : 'none');
+        if (isMeleeAttack && targetActor.system.meleeReflexVulnerable) votes.push('favor');
       }
     }
     const effectiveFavorHinder = VagabondRollBuilder.mergeFavorHinder(...votes);

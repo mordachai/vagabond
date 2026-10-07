@@ -6,23 +6,16 @@
   "system": {
     "changes": [
       {
-        "key": "system.speed.bonus",
-        "type": "add",
-        "value": "-999",
+        "key": "system.speedHalved",
+        "type": "override",
+        "value": "true",
         "phase": "initial",
         "priority": null
       },
       {
-        "key": "system.incomingMeleeAttacksModifier",
+        "key": "system.meleeReflexVulnerable",
         "type": "override",
-        "value": "favor",
-        "phase": "initial",
-        "priority": null
-      },
-      {
-        "key": "system.outgoingSavesModifier",
-        "type": "override",
-        "value": "favor",
+        "value": "true",
         "phase": "initial",
         "priority": null
       }
@@ -36,7 +29,7 @@
     "expiry": null,
     "expired": false
   },
-  "description": "<p>Speed = 0. Costs 10' Speed to stand. Can crawl (2:1 ratio). Can't Rush. Vulnerable.</p>",
+  "description": "<p>Drop or stand by using 10' of Speed. Moves only by crawling (2' of Speed for 1' of movement) and can't Rush. Vulnerable for the purposes of Melee attacks and Reflex Saves.</p>",
   "origin": null,
   "tint": "#ffffff",
   "transfer": false,

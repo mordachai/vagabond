@@ -381,6 +381,20 @@ export default class VagabondNPC extends VagabondActorBase {
       initial: false
     });
 
+    // Prone (Alpha 3 p. 11): Vulnerable only for Melee attacks and Reflex Saves — its Melee
+    // attacks and Reflex Saves have Hinder; Melee attacks targeting it and Saves against its
+    // Melee attacks have Favor.
+    schema.meleeReflexVulnerable = new fields.BooleanField({
+      initial: false,
+      label: "Vulnerable (Melee attacks and Reflex Saves only)"
+    });
+
+    // Moves by crawling (Prone: 2' of Speed per 1' of movement) — Speed is halved
+    schema.speedHalved = new fields.BooleanField({
+      initial: false,
+      label: "Speed Halved (crawling)"
+    });
+
     // Combat zone
     schema.zone = new fields.StringField({
       required: false,
@@ -576,6 +590,8 @@ export default class VagabondNPC extends VagabondActorBase {
     this.outgoingSavesModifier = 'none';
     this.autoFailStats = [];
     this.autoFailAllRolls = false;
+    this.meleeReflexVulnerable = false;
+    this.speedHalved = false;
   }
 
   /**
@@ -690,6 +706,8 @@ export default class VagabondNPC extends VagabondActorBase {
     // `{ bonus: '-999' }`, which renders as "[object Object]". All of those statuses
     // mean "speed reduced to 0", so coercing the object back to 0 is the correct value.
     if (typeof this.speed !== 'number') this.speed = Number(this.speed?.base ?? 0) || 0;
+    // Crawling (Prone): Speed halved
+    if (this.speedHalved) this.speed = Math.floor(this.speed / 2);
 
     // Calculate fatigueMax from homebrew config + bonus
     this.fatigueMax = (CONFIG.VAGABOND?.homebrew?.derivations?.fatigueNPCMax ?? 5) + (this.fatigueBonus || 0);

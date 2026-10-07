@@ -1244,7 +1244,7 @@ ${npcOnly ? '' : `
    * and the crit toggle (data-damage-crit/normal) treat them like any damage button.
    * @returns {string} HTML ('' when nothing to show)
    */
-  static createDefenseShields(damageAmount, damageType, actorId, itemId, targetsAtRollTime, actionIndex = null, attackWasCrit = false, critStatBonus = 0, weaknessPreRolled = false) {
+  static createDefenseShields(damageAmount, damageType, actorId, itemId, targetsAtRollTime, actionIndex = null, attackWasCrit = false, critStatBonus = 0, weaknessPreRolled = false, attackType = 'melee') {
     if (!targetsAtRollTime?.length || this.targetsAreAllNpc(targetsAtRollTime)) return '';
     const targetsJson = JSON.stringify(targetsAtRollTime).replace(/"/g, '&quot;');
     const critAttrs = (critStatBonus > 0 && attackWasCrit)
@@ -1258,6 +1258,7 @@ ${npcOnly ? '' : `
               data-action-index="${actionIndex ?? ''}"
               data-attack-was-crit="${attackWasCrit}"
               data-weakness-pre-rolled="${weaknessPreRolled}"
+              data-attack-type="${attackType}"
               data-targets="${targetsJson}"${critAttrs}`);
   }
 
@@ -1429,7 +1430,7 @@ ${npcOnly ? '' : `
     const isHindered = this._isSaveHindered(saveType, attackType, targetActor);
 
     // Attacker's outgoingSavesModifier (e.g., Confused: saves vs its attacks have Favor)
-    const attackerModifier = sourceActor?.system?.outgoingSavesModifier || 'none';
+    const attackerModifier = await this._attackerSaveVote(sourceActor, attackType);
 
     // Status resistance grants an independent Favor vote — checked BEFORE the dice roll
     const resistanceFavor = await this._hasStatusResistanceForSave(targetActor, saveType, {
@@ -1441,11 +1442,13 @@ ${npcOnly ? '' : `
     const saveRoll = await this._rollSave(targetActor, saveType, isHindered, shiftKey, ctrlKey, attackerModifier, resistanceFavor);
 
     const difficulty = targetActor.system.saves?.[saveType]?.difficulty || 10;
-    const isSuccess = saveRoll.total >= difficulty;
     const { VagabondChatCard } = await import('./chat-card.mjs');
     const { VagabondRollBuilder } = await import('./roll-builder.mjs');
+    // Statuses that fail this Save outright (Incapacitated → Reflex, Dead → all)
+    const autoFail = VagabondRollBuilder.autoFails(targetActor, saveType);
+    const isSuccess = !autoFail && saveRoll.total >= difficulty;
     const critNumber = VagabondRollBuilder.calculateCritThreshold(targetActor.getRollData(), saveType);
-    const isCritical = VagabondChatCard.isRollCritical(saveRoll, critNumber);
+    const isCritical = !autoFail && VagabondChatCard.isRollCritical(saveRoll, critNumber);
 
     // Fighter Momentum: passing a Save against an attack (inert unless system.momentumTrigger)
     if (isSuccess) {
@@ -1752,9 +1755,18 @@ ${npcOnly ? '' : `
       const resistanceFavor = await this._hasStatusResistanceForSave(targetActor, 'reflex', {
         sourceActor, sourceItem, actionIdx, attackWasCrit,
       });
+      const attackType = button.dataset.attackType || 'melee';
       const check = await DefenseHelper.rollCheck(targetActor, weapon, {
-        attackerModifier: sourceActor?.system?.outgoingSavesModifier || 'none', resistanceFavor, event,
+        attackerModifier: await this._attackerSaveVote(sourceActor, attackType), resistanceFavor, event,
+        // The defender's Reflex-Save rules (CONFIG.VAGABOND.defenseRules, e.g. Prone) apply to the Check
+        defenseVote: this._evaluateDefenseRules('reflex', attackType, targetActor),
       });
+      // The Check stands in for the Reflex Save: a status that fails Reflex (Incapacitated) fails it
+      const { VagabondRollBuilder } = await import('./roll-builder.mjs');
+      if (VagabondRollBuilder.autoFails(targetActor, 'reflex')) {
+        check.isSuccess = false;
+        check.isCritical = false;
+      }
 
       let shieldRoll = null;
       let shieldWeapons = [];
@@ -2005,6 +2017,22 @@ ${npcOnly ? '' : `
       else if (vote === 'hinder') net--;
     }
     return net > 0 ? 'favor' : net < 0 ? 'hinder' : 'none';
+  }
+
+  /**
+   * The attacker-side vote on a Save against its attack: its `outgoingSavesModifier`
+   * (Confused, Vulnerable) plus Prone's Melee-only Vulnerable (`meleeReflexVulnerable`:
+   * Saves against its Melee attacks have Favor), merged net-count.
+   * @param {Actor|null} sourceActor
+   * @param {string} attackType
+   * @returns {Promise<'favor'|'hinder'|'none'>}
+   */
+  static async _attackerSaveVote(sourceActor, attackType) {
+    const { VagabondRollBuilder } = await import('./roll-builder.mjs');
+    return VagabondRollBuilder.mergeFavorHinder(
+      sourceActor?.system?.outgoingSavesModifier || 'none',
+      (sourceActor?.system?.meleeReflexVulnerable && attackType === 'melee') ? 'favor' : 'none'
+    );
   }
 
   /**

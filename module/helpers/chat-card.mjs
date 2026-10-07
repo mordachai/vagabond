@@ -521,7 +521,7 @@ export class VagabondChatCard {
           if (!isRestorativeCard) {
             card.data.damage.defenseHtml = VagabondDamageHelper.createDefenseShields(
               damageRoll.total, damageType, actor.uuid, item?.id, targetsAtRollTime, actionIndex,
-              rollData?.isCritical ?? false, critStatBonus, effectiveWeaknessPreRolled
+              rollData?.isCritical ?? false, critStatBonus, effectiveWeaknessPreRolled, attackType
             );
           }
 
