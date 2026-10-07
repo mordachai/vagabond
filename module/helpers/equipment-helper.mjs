@@ -425,7 +425,7 @@ export class EquipmentHelper {
   }
 
   /**
-   * Degrading materials (Gold/Wood): "Armor decreases by 1 after taking damage,
+   * Degrading materials (Gold): "Armor decreases by 1 after taking damage,
    * breaking at 0." Not wired into the damage flow yet — no-op while
    * CONFIG.VAGABOND.materialDegradation is off.
    * @param {Item} item - armor made of a `degrades` material
@@ -448,7 +448,7 @@ export class EquipmentHelper {
   }
 
   /**
-   * Degrading materials (Gold/Wood): "Damage die is a countdown die" — steps the
+   * Degrading materials (Gold): "Damage die is a countdown die" — steps the
    * weapon's damage die down one size (broken once past d4). Not wired into the
    * damage roll yet — no-op while CONFIG.VAGABOND.materialDegradation is off.
    * @param {Item} item - weapon made of a `degrades` material

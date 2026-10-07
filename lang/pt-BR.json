@@ -2307,8 +2307,7 @@
       "Silver": "Prata",
       "Mythral": "Mythral",
       "Orichalcum": "Orichalcum",
-      "Steel": "Aço",
-      "Wood": "Madeira"
+      "Steel": "Aço"
     },
     "MetalDescriptions": {
       "Adamant": "Conta como 1 Espaço a mais para Equipar, +1 à Armadura (se Armadura) ou ao dano da Arma.",
@@ -2316,8 +2315,7 @@
       "Gold": "O dado de dano é um dado de contagem regressiva. A Armadura diminui 1 após sofrer dano, quebrando em 0.",
       "Silver": "Infernais, Licantropos e Mortos-vivos são Fracos ao seu dano.",
       "Mythral": "Conta como 1 Espaço a menos para Equipar, e Armas diminuem o dado de dano em um tamanho.",
-      "Orichalcum": "Conta como 1 Espaço a mais para Equipar, e Armas aumentam o dado de dano em um tamanho.",
-      "Wood": "O dado de dano é um dado de contagem regressiva. A Armadura diminui 1 após sofrer dano, quebrando em 0."
+      "Orichalcum": "Conta como 1 Espaço a mais para Equipar, e Armas aumentam o dado de dano em um tamanho."
     },
     "EquipmentTypes": {
       "weapon": "Arma",

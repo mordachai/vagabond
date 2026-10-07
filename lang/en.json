@@ -2293,8 +2293,7 @@
       "Silver": "Silver",
       "Mythral": "Mythral",
       "Orichalcum": "Orichalcum",
-      "Steel": "Steel",
-      "Wood": "Wood"
+      "Steel": "Steel"
     },
     "MetalDescriptions": {
       "Adamant": "Counts as 1 more Slot to Equip, +1 to Armor (if Armor) or Weapon damage.",
@@ -2302,8 +2301,7 @@
       "Gold": "Damage die is a countdown die. Armor decreases by 1 after taking damage, breaking at 0.",
       "Silver": "Hellspawn, Lycanthropes, and Undead are Weak to its damage.",
       "Mythral": "Counts as 1 less Slot to Equip, and Weapons decrease the damage die one size.",
-      "Orichalcum": "Counts as 1 more Slot to Equip, and Weapons increase the damage die one size.",
-      "Wood": "Damage die is a countdown die. Armor decreases by 1 after taking damage, breaking at 0."
+      "Orichalcum": "Counts as 1 more Slot to Equip, and Weapons increase the damage die one size."
     },
     "EquipmentTypes": {
       "weapon": "Weapon",

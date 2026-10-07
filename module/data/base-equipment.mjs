@@ -167,7 +167,7 @@ export default class VagabondEquipment extends VagabondItemBase {
       blank: false,
       initial: 'none',
       choices: ['none', 'adamant', 'bronze', 'coldIron', 'gold', 'iron', 'silver',
-        'mythral', 'orichalcum', 'steel', 'wood']
+        'mythral', 'orichalcum', 'steel']
     });
 
     // Damage Type - universal damage/healing type
@@ -301,7 +301,7 @@ export default class VagabondEquipment extends VagabondItemBase {
       required: true, nullable: false, integer: true, min: 0, initial: 1
     });
 
-    // Rating lost to damage — only counts for degrading materials (Gold/Wood).
+    // Rating lost to damage — only counts for degrading materials (Gold).
     // Prepared for a future breakage/repair feature: nothing writes it yet
     // (EquipmentHelper.damageArmor / repairItem, gated by materialDegradation).
     schema.armorDamage = new fields.NumberField({
@@ -309,7 +309,7 @@ export default class VagabondEquipment extends VagabondItemBase {
     });
 
     // Weapon damage-die sizes lost as a countdown die — only counts for
-    // degrading materials (Gold/Wood). Prepared, like armorDamage.
+    // degrading materials (Gold). Prepared, like armorDamage.
     schema.dieDamage = new fields.NumberField({
       required: true, nullable: false, integer: true, min: 0, initial: 0
     });
@@ -588,6 +588,8 @@ export default class VagabondEquipment extends VagabondItemBase {
     if (source.grip === 'F') source.grip = '1H';
     // Materials table replaced the generic "Common" metal — it maps to Iron.
     if (source.metal === 'common') source.metal = 'iron';
+    // Alpha 3 removed Wood from the Materials table (p. 86) — Wood items become Iron.
+    if (source.metal === 'wood') source.metal = 'iron';
     // Armor values used to be derived from the removed `armorType` field.
     // Fill each explicit field independently (a user may have persisted only
     // some of them) from the legacy type's RAW table.
@@ -813,7 +815,7 @@ export default class VagabondEquipment extends VagabondItemBase {
    * Apply a material cost multiplier. ×1 keeps the authored split; any other
    * multiplier converts through copper (CurrencyHelper) and re-splits into
    * the largest coins, rounding down to whole copper (1g 40s ×50 → 70g, not
-   * 50g 2000s; Wood ÷2: 1g → 50s).
+   * 50g 2000s; a fractional multiplier ÷2: 1g → 50s).
    * @param {{gold:number, silver:number, copper:number}} base
    * @param {number} multiplier
    */

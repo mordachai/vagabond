@@ -1039,14 +1039,13 @@ VAGABOND.metalTypes = {
   'silver': 'VAGABOND.Metal.Silver',
   'mythral': 'VAGABOND.Metal.Mythral',
   'orichalcum': 'VAGABOND.Metal.Orichalcum',
-  'steel': 'VAGABOND.Metal.Steel',
-  'wood': 'VAGABOND.Metal.Wood'
+  'steel': 'VAGABOND.Metal.Steel'
 };
 
 /**
  * Material rules — the single source for every material-driven number
  * (read by base-equipment.mjs `_getMetalData`). Fields:
- *   multiplier   - cost multiplier on the item's base Value (Wood ÷2 = 0.5)
+ *   multiplier   - cost multiplier on the item's base Value (fractions allowed, e.g. 0.5 = ÷2)
  *   slotDelta    - Slots added/removed "to Equip" (never reduces an item below 1 Slot)
  *   armorBonus   - added to Armor Rating
  *   weaponDamageBonus - flat bonus added to Weapon damage
@@ -1065,13 +1064,13 @@ VAGABOND.metalData = {
   'silver':     { multiplier: 10, effect: 'VAGABOND.MetalDescriptions.Silver' },
   'mythral':    { multiplier: 50, slotDelta: -1, weaponDieStep: -1, effect: 'VAGABOND.MetalDescriptions.Mythral' },
   'orichalcum': { multiplier: 50, slotDelta: 1, weaponDieStep: 1, effect: 'VAGABOND.MetalDescriptions.Orichalcum' },
-  'steel':      { multiplier: 1 },
-  'wood':       { multiplier: 0.5, degrades: true, effect: 'VAGABOND.MetalDescriptions.Wood' }
+  'steel':      { multiplier: 1 }
+  // Wood was removed in Alpha 3 (p. 86); base-equipment migrateData turns it into Iron.
 };
 
 /**
- * Hidden feature flag: material degradation (Gold/Wood armor losing Rating after
- * taking damage; Gold/Wood weapon damage die counting down) + the item Repair
+ * Hidden feature flag: material degradation (Gold armor losing Rating after
+ * taking damage; Gold weapon damage die counting down) + the item Repair
  * button. Data and helpers exist (`system.armorDamage` / `system.dieDamage`,
  * EquipmentHelper.damageArmor / damageWeaponDie / repairItem) but nothing
  * degrades automatically and the UI stays hidden while this is false.
@@ -1093,8 +1092,7 @@ VAGABOND.metalColors = {
   'silver': '#c0c0c0',      // Silver
   'mythral': '#e0e0ff',     // Light blue-white
   'orichalcum': '#daa520',  // Goldenrod
-  'steel': '#9aa4ad',       // Cool grey
-  'wood': '#8b5a2b'         // Wood brown
+  'steel': '#9aa4ad'        // Cool grey
 };
 
 /**
