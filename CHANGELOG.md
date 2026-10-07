@@ -1,6 +1,10 @@
 # Changelog
 
 ## Unreleased
+- **Sorcerer revised to the new book text.** Class description, the Class Features table (with Spells, Mana and Cast Max), Glamour, Tap, Quickening (0 / 1 / 2 Mana) and Spell-Slinger (-1 / -2) now read exactly as printed; Training is Arcana and Influence and the Key Stat is Presence, Might. Arcane Anomaly, Spell Twinning and Overpowered are gone.
+  - **Glamour:** Cast Max is 2 + your Level (an effect cancels the casting Stat the engine adds). **Tap** grants the Vehement Magic Perk (it was Secret of Mana).
+  - **Spell-Slinger** is two effects: Spell damage die one size larger (d8) and Crit range on Cast Checks lowered by 1 / 2. The old Spell-Slinger effects wrote a field nothing reads (`spellCritBonus`); they now use `castCritBonus`.
+  - Existing Sorcerer items are converted once on load (Arcana marked trained, Vehement Magic added). The `classes` compendium needs `npm run pack` first.
 - **Rogue revised to the new book text.** Class description, the Class Features table (with Sneak Attack), Sneak Attack, Infiltrator, Evasive (10’ / 15’ / 20’), Knack, Lethal Weapon and Waylay now read exactly as printed; Training is Ranged, Finesse and Sneak. Unflinching Luck is gone (the book table still prints it at 4th / 8th, but the feature there is Knack).
   - **Sneak Attack is an effect plus an automatic helper** ("Sneak Attack: Auto", switchable, follows the Class Automation setting): your first Favored hit each Turn (in a started Combat) with a Finesse, Keen or Ranged Weapon adds the extra d4s (they Explode with Lethal Weapon) and ignores that much Armor when the damage lands, with a "Sneak Attack" chat card.
   - **Knack** gives +1 Luck whenever you Crit (card "Knack"). Evasive, Waylay and Luck on Breather / Rest stay text.

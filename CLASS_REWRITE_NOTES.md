@@ -143,3 +143,23 @@ Book p. 55. Sneak Attack (extra d4s + Armor ignored), Infiltrator (Resourceful p
 - [ ] World Class Automation = Manual (or switching "Sneak Attack: Auto" off): no automatic dice; effects stay listed.
 - [ ] Existing Rogue (old Unflinching Luck class) migrates; Sneak Attack / Knack effects present.
 
+## Sorcerer
+
+Book p. 57. Glamour (Influence casting, 4 × Level Mana, Cast Max 2 + Level), Tap (Vehement Magic perk grant), Quickening (0 / 1 / 2 Mana), Spell-Slinger (-1 / -2). Training Arcana + Influence (no choices); Key Stat Presence, Might. Arcane Anomaly, Spell Twinning and Overpowered are gone.
+
+**Doubts / course taken**
+- The old class’s Spell-Slinger effects wrote `system.spellCritBonus`, a field nothing reads (dead) — the real field is `castCritBonus`, used now.
+- Spell-Slinger "one size larger": `spellDamageDieSizeBonus` +2 (d6 → d8, the engine adds die faces), from Level 4. The Crit part is `castCritBonus` = −1 at Levels 4–7, −2 at 8–11 (…, −3 at 12). The book also lowers the Crit roll for **Saves against Casts** — the system has no "save against a Cast" Crit field (only per-save ones), so that part is text.
+- Tap grants **Vehement Magic** (the book), not Secret of Mana (the old class, a guess). Spending HP as Mana (and cutting Max HP until Rest) is text: pay it by hand (lower Max HP via the sheet).
+- Quickening (skip your Move to Cast; upcast Mana limit 0 / 1 / 2) is text only.
+
+**Text-only / deferred**
+- Tap: HP → Mana conversion and the Max HP reduction until Rest — a "Tap" button (chat-card choice) is the natural follow-up.
+- Spell-Slinger Crit on Saves against Casts, and Quickening — text only.
+
+**Tests to run in-world** (after `npm run pack`)
+- [ ] Builder: Sorcerer learns 4 Spells (+1 every 2 Levels), Mana 4 × Level, Cast Max 2 + Level (3 at Level 1, 12 at Level 10); Vehement Magic granted; Training Arcana + Influence, no skill choices.
+- [ ] Level 4: Spell damage die is d8 (was d6) in the cast dialog and the damage roll; Crit on Cast Checks at 19+; Level 8: Crit at 18+.
+- [ ] Spell-Slinger effects show Locked below Level 4.
+- [ ] Existing Sorcerer (old Spell Twinning class) migrates; Arcana trained; Vehement Magic added; the broken `spellCritBonus` effects are gone.
+

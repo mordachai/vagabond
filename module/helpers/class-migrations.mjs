@@ -287,6 +287,32 @@ export function migrateRogueClass() {
   });
 }
 
+/**
+ * Sorcerer: old Spell Twinning / Overpowered class → Glamour (Cast Max 2 + Level), Tap (Vehement Magic), Quickening,
+ * Spell-Slinger (d8 + Crit range effects); Training Arcana + Influence.
+ */
+export function migrateSorcererClass() {
+  return migrateClass({
+    setting: 'sorcererClassMigrated',
+    classId: '2zrj3IvI0LFNDvEy',
+    className: 'Sorcerer',
+    probeFeature: 'Quickening (0 Mana)',
+    isOld: (item) => item.system.levelFeatures?.some(lf => lf.name === 'Spell Twinning'),
+    // caster tables / Mana come from the book revision too
+    extraUpdate: (item, s) => ({
+      'system.manaSkill': s.manaSkill,
+      'system.castingStat': s.castingStat,
+      'system.manaMultiplier': s.manaMultiplier,
+      'system.levelSpells': s.levelSpells,
+    }),
+    afterItem: async (item) => {
+      await trainGuaranteedSkills(item);
+      // Tap now grants Vehement Magic (the old class granted Secret of Mana)
+      await grantPerk(item.parent, 'UhI94xpNrdCln9jR', 'Vehement Magic');
+    },
+  });
+}
+
 /** Give perk items already in the world (copies) the effects the compendium perk now ships. */
 async function addPerkEffects(perkId, perkName) {
   const source = await game.packs.get('vagabond.perks')?.getDocument(perkId);

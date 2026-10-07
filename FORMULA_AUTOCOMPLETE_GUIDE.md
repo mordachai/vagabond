@@ -439,6 +439,14 @@ The Mark itself is an actor effect (`flags.vagabond.huntersMark`) created by the
 | Lethal Weapon (Lv 6+) | `system.sneakAttackExplode` | Add | `1` (the Sneak Attack dice Explode) |
 | Knack (Lv 4+) | `system.critLuckBonus` | Add | `1` (extra Luck whenever you Crit) |
 
+### Sorcerer — Glamour, Spell-Slinger
+
+| Effect | Key | Mode | Value |
+| --- | --- | --- | --- |
+| Glamour | `system.mana.castingMaxBonus` | Add | `2 + floor(@lvl / 2) - @stats.presence.total` (Cast Max is 2 + Level; the engine adds Presence + half Level, so both are cancelled) |
+| Spell-Slinger: Die (Lv 4+) | `system.spellDamageDieSizeBonus` | Add | `2` (d6 → d8) |
+| Spell-Slinger: Crit (Lv 4+) | `system.castCritBonus` | Add | `0 - 1 - floor((@lvl - 4) / 4)` (Crit range on Cast Checks: −1 at 4, −2 at 8) |
+
 ### Exalted — Bonus Per Damage Die (with Doubling vs Specific Being Types)
 
 Grants a flat bonus per damage die rolled. When attacking Undead (or other configured types), the bonus is doubled.
