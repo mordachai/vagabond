@@ -454,6 +454,12 @@ The Mark itself is an actor effect (`flags.vagabond.huntersMark`) created by the
 | Wall (Lv 2+) | `system.defenseWeaponDieStep` | Add | `1 + floor((@lvl - 2) / 4)` (Defense-property weapons roll their damage dice this many sizes larger) |
 | Indestructible (Lv 4+) | `system.defenseWeaponBonusPerDie` | Add | `@statuses.incapacitated ? 0 : (@armorWorn.slots > 0) ? 1 + floor((@lvl - 4) / 4) : 0` (flat bonus to each damage die of Defense-property weapons) |
 
+### Witch — Occultist
+
+| Effect | Key | Mode | Value |
+| --- | --- | --- | --- |
+| Occultist | `system.mana.castingMaxBonus` | Add | `2 + floor(@lvl / 2) - @stats.awareness.total` (Cast Max is 2 + Level; the engine adds Awareness + half Level, so both are cancelled) |
+
 ### Exalted — Bonus Per Damage Die (with Doubling vs Specific Being Types)
 
 Grants a flat bonus per damage die rolled. When attacking Undead (or other configured types), the bonus is doubled.

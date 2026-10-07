@@ -1,6 +1,9 @@
 # Changelog
 
 ## Unreleased
+- **Witch revised to the new book text.** Class description, the Class Features table (with Spells, Mana and Cast Max), Occultist, Hex, Widdershins (1 / 2 / 3) and Grudge Bearer (+1 / +2) now read exactly as printed; Training is Craft and Mysticism. Ritualism, Things Betwixt, Coventry and the old Widdershins are gone.
+  - **Occultist:** Cast Max is 2 + your Level (an effect cancels the casting Stat the engine adds); the Perk pick is the Mysticism-Training perks. Hex, Widdershins and Grudge Bearer are text (the system has no continual-Spell layer yet).
+  - Existing Witch items are converted once on load (Craft marked trained). The `classes` compendium needs `npm run pack` first.
 - **Vanguard revised to the new book text.** Class description, the Class Features table, Crowd Control, Stalwart, Wall (Large / Huge / Giant), Indestructible (+1 / +2), Armored Titan and Force Unrelenting now read exactly as printed; Training is Brawl and Melee. Guard, Rampant Charge, Unstoppable and the old Immune-to-Physical Indestructible are gone.
   - **Wall** and **Indestructible** are effects on Defense-property weapons: their damage dice are 1 / 2 / 3 sizes larger (Levels 2 / 6 / 10), and each die gets +1 / +2 while you wear Armor and aren't Incapacitated (new fields `defenseWeaponDieStep`, `defenseWeaponBonusPerDie`). Stalwart grants the Protector Perk.
   - Everything about Shoves stays text (the system has no Shove rules). Existing Vanguard items are converted once on load. The `classes` compendium needs `npm run pack` first.

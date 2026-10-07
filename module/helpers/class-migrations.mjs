@@ -327,6 +327,28 @@ export function migrateVanguardClass() {
   });
 }
 
+/**
+ * Witch: old Ritualism / Things Betwixt / Coventry class → Occultist (Cast Max 2 + Level), Hex, Widdershins,
+ * Grudge Bearer; Training Craft + Mysticism.
+ */
+export function migrateWitchClass() {
+  return migrateClass({
+    setting: 'witchClassMigrated',
+    classId: 'FtE7i0UBBvuMH5ZI',
+    className: 'Witch',
+    probeFeature: 'Widdershins (1)',
+    isOld: (item) => item.system.levelFeatures?.some(lf => lf.name === 'Coventry'),
+    // caster tables / Mana come from the book revision too
+    extraUpdate: (item, s) => ({
+      'system.manaSkill': s.manaSkill,
+      'system.castingStat': s.castingStat,
+      'system.manaMultiplier': s.manaMultiplier,
+      'system.levelSpells': s.levelSpells,
+    }),
+    afterItem: trainGuaranteedSkills,
+  });
+}
+
 /** Give perk items already in the world (copies) the effects the compendium perk now ships. */
 async function addPerkEffects(perkId, perkName) {
   const source = await game.packs.get('vagabond.perks')?.getDocument(perkId);

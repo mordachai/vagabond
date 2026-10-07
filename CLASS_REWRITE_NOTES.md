@@ -184,3 +184,19 @@ Book p. 59. Crowd Control, Stalwart (Protector perk grant), Wall (Large / Huge /
 - [ ] Wall / Indestructible show Locked below Level 2 / 4.
 - [ ] Existing Vanguard (old Rampant Charge class) migrates.
 
+## Witch
+
+Book p. 61. Occultist (Mysticism casting, 4 × Level Mana, Cast Max 2 + Level, a Perk with the Trained: Mysticism prerequisite), Hex, Widdershins (1 / 2 / 3), Grudge Bearer (+1 / +2). Training Craft + Mysticism (no choices). Ritualism, Things Betwixt, Coventry and the old Widdershins (Weak) are gone.
+
+**Doubts / course taken**
+- The Occultist Perk pool is every Perk whose prerequisites list Mysticism Training (13, unchanged since the perks rewrite); the perks’ own prerequisites still apply (the book does not say "ignoring other prerequisites").
+- Hex is **text only**: the system has no "continual (p. 91)" effect layer for Spells, and the Hex Target is not tracked. Widdershins (+1 Spell effect damage and effective Level against the hexed Target) and Grudge Bearer (more continual Spells; carrying them to a new Hex) depend on it, so they are text too. A Hunter’s-Mark-style Hex effect (target remembered on the actor) would be the first step; Widdershins damage could then hook `calculateFinalDamage` like Lethal Precision.
+- Cast Max is the only effect (2 + Level, Awareness cancelled).
+
+**Text-only / deferred**
+- Hex target tracking + continual Spells, Widdershins bonuses and Grudge Bearer — see above.
+
+**Tests to run in-world** (after `npm run pack`)
+- [ ] Builder: Witch learns 4 Spells (+1 every 2 Levels), Mana 4 × Level, Cast Max 2 + Level (3 at Level 1, 12 at Level 10); the Occultist Perk pick lists the 13 Mysticism perks; Training Craft + Mysticism, no skill choices.
+- [ ] Existing Witch (old Ritualism / Coventry class) migrates; Craft marked trained.
+
