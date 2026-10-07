@@ -3240,6 +3240,8 @@
       },
       "ShowAll": "Show All",
       "IgnorePrerequisites": "Ignore prerequisites",
+      "CreationPerkSource": "Hero Creation",
+      "CreationPerkFeature": "Take a Perk",
       "IgnorePrereqStats": "Stats",
       "IgnorePrereqSkills": "Skills",
       "IgnorePrereqSpells": "Spells",

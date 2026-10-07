@@ -3254,6 +3254,8 @@
       },
       "ShowAll": "Mostrar Tudo",
       "IgnorePrerequisites": "Ignorar pré-requisitos",
+      "CreationPerkSource": "Criação de Herói",
+      "CreationPerkFeature": "Escolha um Talento",
       "IgnorePrereqStats": "Atributos",
       "IgnorePrereqSkills": "Perícias",
       "IgnorePrereqSpells": "Magias",
