@@ -266,6 +266,7 @@ export class VagabondActiveEffect extends ActiveEffect {
       'system.saveRollsTwice': 'Saves Rolled Twice, keep higher d20 (ADD a save key, e.g. reflex)',
       'system.bonusDiceExplode': 'Favor + Healing Bonus Dice Explode (1 = on)',
       'system.healingBonusDice': 'Healing Rolls (Dice Bonus, e.g. 1d6)',
+      'system.healingExplode': 'Healing Spell Rolls Explode (ADD a face: 1, 2, max or max-1)',
 
       // -- Universal Crit Bonuses (stack on top of per-type bonuses) --
       'system.attackCritBonus': 'Crit: All Weapon Attacks (every weapon skill)',

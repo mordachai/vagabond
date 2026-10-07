@@ -391,6 +391,14 @@ The Mark itself is an actor effect (`flags.vagabond.huntersMark`) created by the
 | Lethal Precision (Lv 4+) | `system.markDamageBonus` | Add | `floor(@lvl / 4)` (extra damage the Mark takes from you / an Ally on your Turn) |
 | Apex Predator (Lv 10) | `system.markRules` | Add | `weak` (the Mark is Weak to your attacks) |
 
+### Luminary — Theurgy, Radiant Healer, Overheal
+
+| Effect | Key | Mode | Value |
+| --- | --- | --- | --- |
+| Theurgy | `system.mana.castingMaxBonus` | Add | `2 + floor(@lvl / 2) - @stats.awareness.total` (Cast Max is 2 + Level; the engine adds Stat + half Level, so both are cancelled) |
+| Radiant Healer | `system.healingExplode` | Add | `max` (HP-restoring Spell rolls also Explode on their highest face; ADD `1`, `2`, `max`, `max-1` — Assured Healer adds `1`) |
+| Overheal (Lv 2+) | `system.healingBonusDice` | Add | `floor(@lvl / 2)` (flat term appended to HP-restoring rolls) |
+
 ### Exalted — Bonus Per Damage Die (with Doubling vs Specific Being Types)
 
 Grants a flat bonus per damage die rolled. When attacking Undead (or other configured types), the bonus is doubled.

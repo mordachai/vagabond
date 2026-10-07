@@ -172,6 +172,11 @@ export class VagabondDamagePipeline {
       if (isCritical && d.skillKey && actor.system?.critExplodeSkills?.includes?.(d.skillKey)) {
         explodeValues = [...new Set([...(explodeValues ?? []), 'max'])];
       }
+      // Healing Spells explode on the extra faces from Assured Healer / Radiant Healer
+      if (sourceType === 'spell' && this._restoresHp(damageType)) {
+        const healingFaces = this.healingExplodeValues(actor);
+        if (healingFaces.length) explodeValues = [...new Set([...(explodeValues ?? []), ...healingFaces])];
+      }
       if (explodeValues) await this.manuallyExplodeDice(roll, explodeValues);
     }
 
@@ -413,6 +418,21 @@ export class VagabondDamagePipeline {
   }
 
   /**
+   * Faces the actor's HP-restoring Spell rolls also explode on (`system.healingExplode`):
+   * numbers or 'max' / 'max-N', same vocabulary as an item's explodeValues.
+   * @param {Actor|null} actor
+   * @returns {Array<number|string>}
+   */
+  static healingExplodeValues(actor) {
+    const raw = actor?.system?.healingExplode;
+    if (!Array.isArray(raw)) return [];
+    return [...new Set(raw
+      .map(v => String(v).trim().toLowerCase())
+      .filter(v => /^max(-\d+)?$/.test(v) || (v !== '' && !isNaN(v)))
+      .map(v => v.startsWith('max') ? v : parseInt(v)))];
+  }
+
+  /**
    * Can this item's damage dice explode for its owner, by ANY route (item
    * authoring, actor global-explode effects, Potency)? Same check the roll uses,
    * so display and behavior never disagree. Evaluated at call time — never cache
@@ -425,7 +445,8 @@ export class VagabondDamagePipeline {
     if (!item) return false;
     const sourceType = item.type === 'spell' ? 'spell'
       : item.system?.equipmentType === 'alchemical' ? 'alchemical' : 'weapon';
-    return !!this.getExplodeValues(item, actor, sourceType);
+    if (this.getExplodeValues(item, actor, sourceType)) return true;
+    return item.type === 'spell' && this._restoresHp(item.system?.damageType) && this.healingExplodeValues(actor).length > 0;
   }
 
   /**

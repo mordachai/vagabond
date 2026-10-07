@@ -81,7 +81,7 @@ import { FighterHelper } from './helpers/fighter-helper.mjs';
 import { GunslingerHelper } from './helpers/gunslinger-helper.mjs';
 import { HunterHelper } from './helpers/hunter-helper.mjs';
 import { DruidHelper } from './helpers/druid-helper.mjs';
-import { migrateFighterClass, migrateDruidClass, migrateGunslingerClass, migrateHunterClass, migrateAncestries } from './helpers/class-migrations.mjs';
+import { migrateFighterClass, migrateDruidClass, migrateGunslingerClass, migrateHunterClass, migrateLuminaryClass, migrateAncestries } from './helpers/class-migrations.mjs';
 import { consumeUsedEffects } from './helpers/use-effects.mjs';
 import { VagabondRollBuilder } from './helpers/roll-builder.mjs';
 import { CurrencyHelper } from './helpers/currency-helper.mjs';
@@ -1071,7 +1071,7 @@ function registerGameSettings() {
   });
 
   // Setting 21f6: One-time migration guards (hidden) — see class-migrations.mjs.
-  for (const key of ['fighterClassMigrated', 'druidClassMigrated', 'gunslingerClassMigrated', 'hunterClassMigrated', 'ancestriesMigrated']) {
+  for (const key of ['fighterClassMigrated', 'druidClassMigrated', 'gunslingerClassMigrated', 'hunterClassMigrated', 'luminaryClassMigrated', 'ancestriesMigrated']) {
     game.settings.register('vagabond', key, {
       scope: 'world',
       config: false,
@@ -1918,6 +1918,7 @@ Hooks.once('ready', function () {
   // One-time: Gunslinger / Hunter class items get the book-revision features + effects.
   migrateGunslingerClass();
   migrateHunterClass();
+  migrateLuminaryClass();
   // One-time: ancestry items get the book text, grants and effects (Dwarf also gets the Tough Perk).
   migrateAncestries();
   // One-time: stored copper amounts ×10 (ratio corrected to the book's 1s = 100c).

@@ -18,7 +18,53 @@
       "resourceOrGroups": []
     }
   },
-  "effects": [],
+  "effects": [
+    {
+      "name": "Assured Healer",
+      "origin": "Compendium.vagabond.perks.Item.tQ0QFm3jAAsu8y1i",
+      "img": "icons/svg/aura.svg",
+      "_id": "lZy8tqJ4pDf2dH1H",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.healingExplode",
+            "value": "1",
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.44.0",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "createdTime": 1791400000000,
+        "modifiedTime": 1791400000000,
+        "lastModifiedBy": null
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!tQ0QFm3jAAsu8y1i.lZy8tqJ4pDf2dH1H"
+    }
+  ],
   "folder": null,
   "flags": {},
   "_stats": {

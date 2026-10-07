@@ -26,18 +26,21 @@ function worldItems() {
  * @param {string} cfg.setting      hidden world setting guarding the run
  * @param {string} cfg.classId      compendium doc id in `vagabond.classes`
  * @param {string} cfg.className    item name to match
- * @param {string} cfg.probeEffect  effect name only present once the pack is rebuilt
+ * @param {string} [cfg.probeEffect]   effect name only present once the pack is rebuilt
+ * @param {string} [cfg.probeFeature]  level feature name only present once the pack is rebuilt
  * @param {(item: Item) => boolean} cfg.isOld  old-version signature
  * @param {(item: Item, source: Item) => object} [cfg.extraUpdate]  more item updates
  * @param {(item: Item) => Promise<void>} [cfg.afterItem]           follow-up per migrated item
  * @param {() => Promise<void>} [cfg.afterAll]                      follow-up once, after every item
  */
-async function migrateClass({ setting, classId, className, probeEffect, isOld, extraUpdate, afterItem, afterAll }) {
+async function migrateClass({ setting, classId, className, probeEffect, probeFeature, isOld, extraUpdate, afterItem, afterAll }) {
   if (game.user !== game.users.activeGM) return;
   if (game.settings.get('vagabond', setting)) return;
 
   const source = await game.packs.get('vagabond.classes')?.getDocument(classId);
-  if (!source?.effects.some(e => e.name === probeEffect)) return;
+  if (!source) return;
+  if (probeEffect && !source.effects.some(e => e.name === probeEffect)) return;
+  if (probeFeature && !source.system.levelFeatures.some(lf => lf.name === probeFeature)) return;
 
   for (const item of worldItems()) {
     try {
@@ -67,6 +70,20 @@ async function migrateClass({ setting, classId, className, probeEffect, isOld, e
   try { await afterAll?.(); } catch (err) { console.warn(`vagabond | migrate ${className}: afterAll failed`, err); }
 
   await game.settings.set('vagabond', setting, true);
+}
+
+/**
+ * Mark each Skill in the class's guaranteed Training as trained on the owning character
+ * (the Training line of a class can gain a Skill in a rewrite, e.g. Luminary's Influence).
+ */
+async function trainGuaranteedSkills(item) {
+  const actor = item.parent;
+  if (actor?.type !== 'character') return;
+  const update = {};
+  for (const key of item.system.skillGrant?.guaranteed ?? []) {
+    if (actor.system.skills?.[key] && !actor.system.skills[key].trained) update[`system.skills.${key}.trained`] = true;
+  }
+  if (Object.keys(update).length) await actor.update(update);
 }
 
 /** Fighter: old Fighting Style (Melee/Ranged Perk) / level-1 Valor → Momentum + Valor effects. */
@@ -127,6 +144,23 @@ export function migrateDruidClass() {
   });
 }
 
+/**
+ * Luminary: old Radiant Healer / Saving Grace / Ever-Cure class → Theurgy (Cast Max 2 + Level), Radiant Healer
+ * (healing Spells Explode), Overheal (+ half Level), Ever-Cure by Level, Training Influence + Mysticism.
+ * Assured Healer perks already on characters get their (new) Explode-on-1 effect.
+ */
+export function migrateLuminaryClass() {
+  return migrateClass({
+    setting: 'luminaryClassMigrated',
+    classId: 'RenZwwCL4aT5LFej',
+    className: 'Luminary',
+    probeFeature: 'Ever-Cure (1 Status)',
+    isOld: (item) => item.system.levelFeatures?.some(lf => lf.name === 'Saving Grace'),
+    afterItem: trainGuaranteedSkills,
+    afterAll: () => addPerkEffects('tQ0QFm3jAAsu8y1i', 'Assured Healer'),
+  });
+}
+
 /** Gunslinger: old Quick Draw / Skeet Shooter / High Noon class → Deadeye stacks, Shooting Irons, Grit, Bad Medicine. */
 export function migrateGunslingerClass() {
   return migrateClass({
@@ -154,6 +188,27 @@ export function migrateHunterClass() {
     probeEffect: 'Hunter’s Mark',
     isOld: (item) => item.system.levelFeatures?.some(lf => lf.name === 'Overwatch'),
   });
+}
+
+/** Give perk items already in the world (copies) the effects the compendium perk now ships. */
+async function addPerkEffects(perkId, perkName) {
+  const source = await game.packs.get('vagabond.perks')?.getDocument(perkId);
+  if (!source?.effects.size) return;
+  for (const perk of worldItems()) {
+    try {
+      if (perk.type !== 'perk' || perk.name !== perkName) continue;
+      const missing = source.effects.filter(e => !perk.effects.some(x => x.name === e.name));
+      if (!missing.length) continue;
+      await perk.createEmbeddedDocuments('ActiveEffect', missing.map(e => {
+        const data = e.toObject();
+        delete data._id;
+        delete data._stats;
+        return data;
+      }));
+    } catch (err) {
+      console.warn(`vagabond | migrate perk ${perkName}: skipped ${perk?.uuid ?? '(unknown)'}`, err);
+    }
+  }
 }
 
 /**

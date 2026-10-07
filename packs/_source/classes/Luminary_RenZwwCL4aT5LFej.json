@@ -3,18 +3,17 @@
   "type": "class",
   "img": "icons/magic/light/torch-fire-orange.webp",
   "system": {
-    "description": "<p><strong>Faith is about what you do. It's about aspiring to be better and nobler and kinder than you are.</strong></p><p><em>– Jim Butcher, Changes</em></p><p>Channelers of the magic of creation, luminaries are philosophers, muses, and healers of the people.</p><h3>Iconic Luminaries</h3><ul><li><strong>Aerith Gainsborough</strong>, <em>Final Fantasy VII</em></li><li><strong>Goldmoon</strong>, <em>Dragonlance</em></li><li><strong>Nynaeve Sedai</strong>, <em>The Wheel of Time series</em></li><li><strong>Ophilia Clement</strong>, <em>Octopath Traveler</em></li></ul><h3>Playing Luminary</h3><p>Luminary is a high support magic healer. It's recommended that you refrain from direct melee.</p><p><strong>Action:</strong> Cast<br /><strong>Move:</strong> Midline/Backline<br /><strong>Starting Pack:</strong> Devout<br /><strong>Key Stat:</strong> Awareness<br /><strong>Complexity:</strong> ★★★☆☆</p><h3>Training</h3><p><strong>Weapons:</strong> –<br /><strong>Skills:</strong> Mysticism, and 3 from either Arcana, Detect, Influence, Leadership, or Medicine</p><p></p><h3><span class=\"fontstyle0\">Class Features</span></h3><table class=\"NormalTable\"><tbody><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle0\" style=\"color:rgb(255,255,255);font-size:9pt\">Level</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle0\" style=\"color:rgb(255,255,255);font-size:9pt\">Features</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"82\"><p><span class=\"fontstyle0\" style=\"color:rgb(255,255,255);font-size:9pt\">Mana</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\"><p><span class=\"fontstyle0\" style=\"color:rgb(255,255,255);font-size:9pt\">Spells</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">1st</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Theurgy, Radiant Healer</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"82\"><p><span class=\"fontstyle2\">4</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\"><p><span class=\"fontstyle2\">4</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">2nd</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Overheal</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"82\"><p><span class=\"fontstyle2\">8</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\"><p><span class=\"fontstyle2\">4</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">3rd</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"82\"><p><span class=\"fontstyle2\">12</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\"><p><span class=\"fontstyle2\">5</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">4th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Ever-Cure</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"82\"><p><span class=\"fontstyle2\">16</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\"><p><span class=\"fontstyle2\">5</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">5th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"82\"><p><span class=\"fontstyle2\">20</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\"><p><span class=\"fontstyle2\">6</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">6th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Revivify</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"82\"><p><span class=\"fontstyle2\">24</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\"><p><span class=\"fontstyle2\">6</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">7th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"82\"><p><span class=\"fontstyle2\">28</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\"><p><span class=\"fontstyle2\">7</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">8th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Saving Grace</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"82\"><p><span class=\"fontstyle2\">32</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\"><p><span class=\"fontstyle2\">7</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">9th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"82\"><p><span class=\"fontstyle2\">36</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\"><p><span class=\"fontstyle2\">8</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">10th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Life-Giver</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"82\"><p><span class=\"fontstyle2\">40</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\"><p><span class=\"fontstyle2\">8</span></p></td></tr></tbody></table><p><br style=\"font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:normal;orphans:2;text-align:-webkit-auto;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-size-adjust:auto;-webkit-text-stroke-width:0px\" /></p>",
+    "description": "<p><strong>Faith is about what you do. It’s about aspiring to be better and nobler and kinder than you are.</strong></p><p><em>—Jim Butcher, Changes</em></p><p>Channelers of the magic of creation, luminaries are philosophers, muses, and healers.</p><h3>Iconic Luminaries</h3><ul><li><strong>Aerith Gainsborough</strong>, <em>Final Fantasy VII</em></li><li><strong>Goldmoon</strong>, <em>Dragonlance</em></li><li><strong>Nynaeve Sedai</strong>, <em>The Wheel of Time</em></li><li><strong>Ophilia Clement</strong>, <em>Octopath Traveler</em></li></ul><h3>Playing Luminary</h3><p>Luminary is a high-support healer. It’s recommended that you avoid direct melee.</p><p><strong>Action:</strong> Cast<br /><strong>Move:</strong> Midline/Backline<br /><strong>Starting Pack:</strong> Devout<br /><strong>Key Stat:</strong> Awareness<br /><strong>Complexity:</strong> ★★★☆☆<br /><strong>Training:</strong> Influence, Mysticism</p><h3>Class Features</h3><table class=\"NormalTable\"><tbody><tr><td><p><strong>Level</strong></p></td><td><p><strong>Features</strong></p></td><td><p><strong>Spells</strong></p></td><td><p><strong>Mana</strong></p></td><td><p><strong>Cast Max</strong></p></td></tr><tr><td><p>1st</p></td><td><p>Theurgy, Radiant Healer</p></td><td><p>4</p></td><td><p>4</p></td><td><p>3</p></td></tr><tr><td><p>2nd</p></td><td><p>Overheal</p></td><td><p>4</p></td><td><p>8</p></td><td><p>4</p></td></tr><tr><td><p>3rd</p></td><td><p>Perk</p></td><td><p>5</p></td><td><p>12</p></td><td><p>5</p></td></tr><tr><td><p>4th</p></td><td><p>Ever-Cure (1 Status)</p></td><td><p>5</p></td><td><p>16</p></td><td><p>6</p></td></tr><tr><td><p>5th</p></td><td><p>Perk</p></td><td><p>6</p></td><td><p>20</p></td><td><p>7</p></td></tr><tr><td><p>6th</p></td><td><p>Revivify</p></td><td><p>6</p></td><td><p>24</p></td><td><p>8</p></td></tr><tr><td><p>7th</p></td><td><p>Perk</p></td><td><p>7</p></td><td><p>28</p></td><td><p>9</p></td></tr><tr><td><p>8th</p></td><td><p>Ever-Cure (2 Statuses)</p></td><td><p>7</p></td><td><p>32</p></td><td><p>10</p></td></tr><tr><td><p>9th</p></td><td><p>Perk</p></td><td><p>8</p></td><td><p>36</p></td><td><p>11</p></td></tr><tr><td><p>10th</p></td><td><p>Life-Giver</p></td><td><p>8</p></td><td><p>40</p></td><td><p>12</p></td></tr></tbody></table>",
     "isSpellcaster": true,
     "levelFeatures": [
       {
         "level": 1,
         "name": "Theurgy",
-        "description": "<p><span class=\"fontstyle0\">You can Cast Spells using Mysticism.</span></p><p><span class=\"fontstyle2\"><strong>Spells:</strong> </span><span class=\"fontstyle0\">You learn 4 Spells, two of which must always be Life and Light. You learn 1 other Spell every 2 Luminary Levels hereafter.</span></p><p><span class=\"fontstyle2\"><strong>Mana:</strong> </span><span class=\"fontstyle0\">Your Maximum Mana is equal to (4 × your Luminary Level), and the highest amount of Mana you can spend to Cast a Spell is equal to (Awareness + half your Luminary Level, round up). You regain spent Mana when you Rest.</span></p>",
+        "description": "<p>You can Cast Spells using Mysticism.</p><p><strong>Spells:</strong> You learn 4 Spells, one of which must always be Life. You learn 1 other Spell every 2 Levels hereafter.</p><p><strong>Mana:</strong> Your Max Mana is equal to (4 × your Level), and your Cast Max for Spells is equal to (2 + your Level).</p>",
         "statBonusPoints": 0,
         "extraTraining": 0,
         "requiredSpells": [
-          "Compendium.vagabond.spells.Item.sBvdMIqhfJcydANC",
-          "Compendium.vagabond.spells.Item.M0HRBrZaRQ81vcAg"
+          "Compendium.vagabond.spells.Item.sBvdMIqhfJcydANC"
         ],
         "allowedPerks": [],
         "perkAmount": 0,
@@ -24,7 +23,7 @@
       {
         "level": 1,
         "name": "Radiant Healer",
-        "description": "<p><span class=\"fontstyle0\">You get the Assured Healer Perk (p. 67), and the healing rolls of your Spells can also explode on their highest value.</span></p><p></p>",
+        "description": "<p>You get the Assured Healer Perk (p. 64), and the healing rolls of your Spells can also Explode on their highest value.</p>",
         "statBonusPoints": 0,
         "extraTraining": 0,
         "requiredSpells": [],
@@ -38,7 +37,7 @@
       {
         "level": 2,
         "name": "Overheal",
-        "description": "<p><span class=\"fontstyle0\">If you restore HP that exceeds the Being's Max HP, you can give the excess to yourself or a Being you can see.</span></p>",
+        "description": "<p>When you restore HP, you add half your Level to the total HP restored and, if you restore HP that exceeds the Being’s Max HP, you can give the excess to yourself or a Being you can see.</p>",
         "statBonusPoints": 1,
         "extraTraining": 0,
         "requiredSpells": [],
@@ -61,8 +60,8 @@
       },
       {
         "level": 4,
-        "name": "Ever-Cure",
-        "description": "<p><span class=\"fontstyle0\">When you restore HP, you can end either a Charmed, Confused, Dazed, Frightened, or Sickened Status affecting the Target.</span></p>",
+        "name": "Ever-Cure (1 Status)",
+        "description": "<p>When you restore HP, you can chose to end one Status affecting the Target from either Berserk, Blinded, Charmed, Confused, Dazed, Frightened, Paralyzed, or Sickened. The number of Statuses you can remove at once this way increases by 1 every 4 Levels hereafter.</p>",
         "statBonusPoints": 1,
         "extraTraining": 0,
         "requiredSpells": [],
@@ -86,7 +85,7 @@
       {
         "level": 6,
         "name": "Revivify",
-        "description": "<p><span class=\"fontstyle0\">You can revive a Being with the Life Spell if it has been dead for as long as 1 hour. If you die, you are revived automatically. Afterward, you can't be revived by this Feature for 1 day.</span></p>",
+        "description": "<p>You can revive a Being with the Life Spell if it has been dead for as long as 1 Hour. If you die, you are instantly revived. Afterward, you can’t be revived by this Ability for 1 Day.</p>",
         "statBonusPoints": 1,
         "extraTraining": 0,
         "requiredSpells": [],
@@ -109,8 +108,8 @@
       },
       {
         "level": 8,
-        "name": "Saving Grace",
-        "description": "<p><span class=\"fontstyle0\">Your healing rolls can also explode on a 2.</span></p>",
+        "name": "Ever-Cure (2 Statuses)",
+        "description": "<p>When you restore HP, you can chose to end one Status affecting the Target from either Berserk, Blinded, Charmed, Confused, Dazed, Frightened, Paralyzed, or Sickened. The number of Statuses you can remove at once this way increases by 1 every 4 Levels hereafter.</p>",
         "statBonusPoints": 1,
         "extraTraining": 0,
         "requiredSpells": [],
@@ -134,7 +133,7 @@
       {
         "level": 10,
         "name": "Life-Giver",
-        "description": "<p><span class=\"fontstyle0\">Beings you revive are revived at 4 Fatigue if their Fatigue was previously higher, and don't gain Fatigue from your Life Spell.</span></p>",
+        "description": "<p>Beings you revive are revived at 4 Fatigue if their Fatigue was previously higher, and don’t gain Fatigue from your Life Spell.</p>",
         "statBonusPoints": 1,
         "extraTraining": 0,
         "requiredSpells": [],
@@ -149,21 +148,10 @@
     "manaMultiplier": 4,
     "skillGrant": {
       "guaranteed": [
+        "influence",
         "mysticism"
       ],
-      "choices": [
-        {
-          "count": 3,
-          "pool": [
-            "arcana",
-            "detect",
-            "influence",
-            "leadership",
-            "medicine"
-          ],
-          "label": ""
-        }
-      ]
+      "choices": []
     },
     "levelSpells": [
       {
@@ -214,7 +202,156 @@
       "Compendium.vagabond.starting-packs.Item.ALxq2xfC8nfF75iQ"
     ]
   },
-  "effects": [],
+  "effects": [
+    {
+      "name": "Theurgy",
+      "origin": "Compendium.vagabond.classes.Item.RenZwwCL4aT5LFej",
+      "img": "icons/svg/aura.svg",
+      "_id": "tfj0BXHQttReqAit",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.mana.castingMaxBonus",
+            "value": "2 + floor(@lvl / 2) - @stats.awareness.total",
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent"
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.44.0",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "createdTime": 1791400000000,
+        "modifiedTime": 1791400000000,
+        "lastModifiedBy": null
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!RenZwwCL4aT5LFej.tfj0BXHQttReqAit"
+    },
+    {
+      "name": "Radiant Healer",
+      "origin": "Compendium.vagabond.classes.Item.RenZwwCL4aT5LFej",
+      "img": "icons/svg/aura.svg",
+      "_id": "HgyD2DwYt5Wn2ZEj",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.healingExplode",
+            "value": "max",
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent"
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.44.0",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "createdTime": 1791400000000,
+        "modifiedTime": 1791400000000,
+        "lastModifiedBy": null
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!RenZwwCL4aT5LFej.HgyD2DwYt5Wn2ZEj"
+    },
+    {
+      "name": "Overheal",
+      "origin": "Compendium.vagabond.classes.Item.RenZwwCL4aT5LFej",
+      "img": "icons/svg/aura.svg",
+      "_id": "nDG8U4CigWtURhc4",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.healingBonusDice",
+            "value": "floor(@lvl / 2)",
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent",
+          "minLevel": 2
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.44.0",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "createdTime": 1791400000000,
+        "modifiedTime": 1791400000000,
+        "lastModifiedBy": null
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!RenZwwCL4aT5LFej.nDG8U4CigWtURhc4"
+    }
+  ],
   "folder": null,
   "flags": {},
   "_stats": {
