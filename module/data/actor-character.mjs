@@ -486,6 +486,15 @@ export default class VagabondCharacter extends VagabondActorBase {
       new fields.StringField({ blank: true }),
       { initial: [], label: "Haymaker Margin (Pugilist)" }
     );
+    // Revelator Lay on Hands: die size (formula, 0 = no Lay on Hands) and the Statuses it also cures (Divine Resolve)
+    schema.layOnHandsDie = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      { initial: [], label: "Lay on Hands Die (Revelator)" }
+    );
+    schema.layOnHandsCures = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      { initial: [], label: "Lay on Hands Also Cures (Statuses)" }
+    );
     schema.critExplodeSkills = new fields.ArrayField(
       new fields.StringField({ required: true }),
       { required: true, initial: [], label: "Crit Damage Dice Explode (skills)" }
@@ -892,6 +901,8 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.deadeyeGrit = [];
     this.critExtraDiceBySkill = [];
     this.critExplodeSkills = [];
+    this.layOnHandsDie = [];
+    this.layOnHandsCures = [];
     this.weaponDieBySkill = [];
     this.weaponLowExplodeBySkill = [];
     this.haymakerMargin = [];
@@ -1106,6 +1117,8 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.weaponDieBySkill = this._evaluateTypedReductions(this.weaponDieBySkill, rollData);
     this.weaponLowExplodeBySkill = this._evaluateTypedReductions(this.weaponLowExplodeBySkill, rollData);
     this.haymakerMargin = this._evaluateFormulaField(this.haymakerMargin, rollData);
+    this.layOnHandsDie = this._evaluateFormulaField(this.layOnHandsDie, rollData);
+    this.layOnHandsCures = this.layOnHandsCures.filter(s => !!s);
     this.markDamageBonus = this._evaluateFormulaField(this.markDamageBonus, rollData);
 
     // NOTE: Stat bonuses, Save bonuses, Skill bonuses, and Weapon Skill bonuses

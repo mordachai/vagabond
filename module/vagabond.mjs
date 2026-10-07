@@ -81,8 +81,9 @@ import { FighterHelper } from './helpers/fighter-helper.mjs';
 import { GunslingerHelper } from './helpers/gunslinger-helper.mjs';
 import { HunterHelper } from './helpers/hunter-helper.mjs';
 import { PugilistHelper } from './helpers/pugilist-helper.mjs';
+import { RevelatorHelper } from './helpers/revelator-helper.mjs';
 import { DruidHelper } from './helpers/druid-helper.mjs';
-import { migrateFighterClass, migrateDruidClass, migrateGunslingerClass, migrateHunterClass, migrateLuminaryClass, migrateMagusClass, migrateMerchantClass, migratePugilistClass, migrateAncestries } from './helpers/class-migrations.mjs';
+import { migrateFighterClass, migrateDruidClass, migrateGunslingerClass, migrateHunterClass, migrateLuminaryClass, migrateMagusClass, migrateMerchantClass, migratePugilistClass, migrateRevelatorClass, migrateAncestries } from './helpers/class-migrations.mjs';
 import { consumeUsedEffects } from './helpers/use-effects.mjs';
 import { VagabondRollBuilder } from './helpers/roll-builder.mjs';
 import { CurrencyHelper } from './helpers/currency-helper.mjs';
@@ -1072,7 +1073,7 @@ function registerGameSettings() {
   });
 
   // Setting 21f6: One-time migration guards (hidden) — see class-migrations.mjs.
-  for (const key of ['fighterClassMigrated', 'druidClassMigrated', 'gunslingerClassMigrated', 'hunterClassMigrated', 'luminaryClassMigrated', 'magusClassMigrated', 'merchantClassMigrated', 'pugilistClassMigrated', 'ancestriesMigrated']) {
+  for (const key of ['fighterClassMigrated', 'druidClassMigrated', 'gunslingerClassMigrated', 'hunterClassMigrated', 'luminaryClassMigrated', 'magusClassMigrated', 'merchantClassMigrated', 'pugilistClassMigrated', 'revelatorClassMigrated', 'ancestriesMigrated']) {
     game.settings.register('vagabond', key, {
       scope: 'world',
       config: false,
@@ -1719,6 +1720,7 @@ Hooks.once('ready', function () {
   registerMacroHandler('gunslinger.gritRemove', (scope) => GunslingerHelper.gritRemove(scope));
   registerMacroHandler('gunslinger.highNoon', (scope) => GunslingerHelper.highNoon(scope));
   registerMacroHandler('hunter.mark', (scope) => HunterHelper.mark(scope));
+  registerMacroHandler('revelator.layOnHands', (scope) => RevelatorHelper.layOnHands(scope));
 
   // Live state of feature buttons: glow while the effect is on, end it from the sheet / HUD
   // (right-click; Momentum is a pure toggle so a left click ends it too).
@@ -1923,6 +1925,7 @@ Hooks.once('ready', function () {
   migrateMagusClass();
   migrateMerchantClass();
   migratePugilistClass();
+  migrateRevelatorClass();
   // One-time: ancestry items get the book text, grants and effects (Dwarf also gets the Tough Perk).
   migrateAncestries();
   // One-time: stored copper amounts ×10 (ratio corrected to the book's 1s = 100c).

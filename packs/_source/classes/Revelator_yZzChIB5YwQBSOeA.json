@@ -3,18 +3,16 @@
   "type": "class",
   "img": "icons/skills/melee/strike-weapon-polearm-ice-blue.webp",
   "system": {
-    "description": "<p><strong>For he who comes in our time of need is not of mortal breed, he is the Destroyer, the right hand of our Creator and the one who brings fear where there is no hope.</strong></p>\n<p><em>– Corrax Tablet 3:13, Doom Eternal</em></p>\n<p>Oathsworn knights that hold an honorable vow that becomes its own sacred power. Revelators are warriors of radiance and justice.</p>\n\n<h3>Iconic Revelators</h3>\n<ul>\n<li><strong>Luke Skywalker</strong>, <em>Star Wars</em></li>\n<li><strong>Michael Carpenter</strong>, <em>Dresden Files</em></li>\n<li><strong>Wonder Woman</strong>, <em>DC Comics</em></li>\n</ul>\n\n<h3>Playing Revelator</h3>\n<p>Revelators are high defense frontline strikers. Stay in the frontline for melee attacks, and smite the transgressors.</p>\n<p><strong>Action:</strong> Attack/Cast<br />\n<strong>Move:</strong> Frontline<br />\n<strong>Starting Pack:</strong> Knight or Warrior<br />\n<strong>Key Stat:</strong> Might, Presence<br />\n<strong>Complexity:</strong> ★★★☆☆</p>\n\n<h3>Training</h3>\n<p><strong>Weapons:</strong> Melee<br />\n<strong>Skills:</strong> Leadership, and 3 from either Brawl, Detect, Influence, or Mysticism</p>\n\n<p></p>\n\n<h3><span class=\"fontstyle0\">Class Features</span></h3>\n<table class=\"NormalTable\"><tbody>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle0\" style=\"color:rgb(255,255,255);font-size:9pt\">Level</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle0\" style=\"color:rgb(255,255,255);font-size:9pt\">Features</span></p></td>\n  <td data-colwidth=\"82\"><p><span class=\"fontstyle0\" style=\"color:rgb(255,255,255);font-size:9pt\">Mana</span></p></td>\n  <td><p><span class=\"fontstyle0\" style=\"color:rgb(255,255,255);font-size:9pt\">Spells</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">1st</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Righteous, Selfless</span></p></td>\n  <td data-colwidth=\"82\"><p><span class=\"fontstyle2\">2</span></p></td>\n  <td><p><span class=\"fontstyle2\">2</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">2nd</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Lay on Hands</span></p></td>\n  <td data-colwidth=\"82\"><p><span class=\"fontstyle2\">4</span></p></td>\n  <td><p><span class=\"fontstyle2\">2</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">3rd</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td>\n  <td data-colwidth=\"82\"><p><span class=\"fontstyle2\">6</span></p></td>\n  <td><p><span class=\"fontstyle2\">2</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">4th</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Paragon's Aura</span></p></td>\n  <td data-colwidth=\"82\"><p><span class=\"fontstyle2\">8</span></p></td>\n  <td><p><span class=\"fontstyle2\">3</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">5th</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td>\n  <td data-colwidth=\"82\"><p><span class=\"fontstyle2\">10</span></p></td>\n  <td><p><span class=\"fontstyle2\">3</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">6th</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Divine Resolve</span></p></td>\n  <td data-colwidth=\"82\"><p><span class=\"fontstyle2\">12</span></p></td>\n  <td><p><span class=\"fontstyle2\">3</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">7th</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td>\n  <td data-colwidth=\"82\"><p><span class=\"fontstyle2\">14</span></p></td>\n  <td><p><span class=\"fontstyle2\">4</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">8th</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Holy Diver</span></p></td>\n  <td data-colwidth=\"82\"><p><span class=\"fontstyle2\">16</span></p></td>\n  <td><p><span class=\"fontstyle2\">4</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">9th</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td>\n  <td data-colwidth=\"82\"><p><span class=\"fontstyle2\">18</span></p></td>\n  <td><p><span class=\"fontstyle2\">4</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">10th</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Sacrosanct</span></p></td>\n  <td data-colwidth=\"82\"><p><span class=\"fontstyle2\">20</span></p></td>\n  <td><p><span class=\"fontstyle2\">5</span></p></td>\n</tr>\n</tbody></table>\n<p><br style=\"font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:normal;orphans:2;text-align:-webkit-auto;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-size-adjust:auto;-webkit-text-stroke-width:0px\" /></p>",
+    "description": "<p><strong>He who comes in our time of need is not of mortal breed, he is the Destroyer, the right hand of our Creator and the one who brings fear where there is no hope.</strong></p><p><em>—Corrax Tablet 3:13, Doom Eternal</em></p><p>Revelators are warriors of radiance and justice. These oathsworn knights hold an honorable vow that becomes its own power.</p><h3>Iconic Revelators</h3><ul><li><strong>Luke Skywalker</strong>, <em>Star Wars</em></li><li><strong>Michael Carpenter</strong>, <em>The Dresden Files</em></li><li><strong>She-Ra</strong>, <em>She-Ra: Princess of Power</em></li><li><strong>Wonder Woman</strong>, <em>DC Comics</em></li></ul><h3>Playing Revelator</h3><p>Revelators are high defense frontline strikers. Stay in the frontline for melee attacks, and smite the transgressors.</p><p><strong>Action:</strong> Attack/Cast<br /><strong>Move:</strong> Frontline<br /><strong>Starting Pack:</strong> Knight or Warrior<br /><strong>Key Stat:</strong> Might/Presence<br /><strong>Complexity:</strong> ★★★☆☆<br /><strong>Training:</strong> Leadership, Melee</p><h3>Class Features</h3><table class=\"NormalTable\"><tbody><tr><td><p><strong>Level</strong></p></td><td><p><strong>Features</strong></p></td><td><p><strong>Spells</strong></p></td><td><p><strong>Mana</strong></p></td><td><p><strong>Cast Max</strong></p></td></tr><tr><td><p>1st</p></td><td><p>Righteous, Enspell</p></td><td><p>2</p></td><td><p>2</p></td><td><p>2</p></td></tr><tr><td><p>2nd</p></td><td><p>Lay on Hands (d4)</p></td><td><p>2</p></td><td><p>4</p></td><td><p>2</p></td></tr><tr><td><p>3rd</p></td><td><p>Perk</p></td><td><p>2</p></td><td><p>6</p></td><td><p>3</p></td></tr><tr><td><p>4th</p></td><td><p>Paragon’s Aura (1 Mana)</p></td><td><p>3</p></td><td><p>8</p></td><td><p>3</p></td></tr><tr><td><p>5th</p></td><td><p>Perk</p></td><td><p>3</p></td><td><p>10</p></td><td><p>4</p></td></tr><tr><td><p>6th</p></td><td><p>Lay on Hands (d6), Divine Resolve</p></td><td><p>3</p></td><td><p>12</p></td><td><p>4</p></td></tr><tr><td><p>7th</p></td><td><p>Perk</p></td><td><p>4</p></td><td><p>14</p></td><td><p>5</p></td></tr><tr><td><p>8th</p></td><td><p>Paragon’s Aura (2 Mana)</p></td><td><p>4</p></td><td><p>16</p></td><td><p>5</p></td></tr><tr><td><p>9th</p></td><td><p>Perk</p></td><td><p>4</p></td><td><p>18</p></td><td><p>6</p></td></tr><tr><td><p>10th</p></td><td><p>Lay on Hands (d8), Holy Diver</p></td><td><p>5</p></td><td><p>20</p></td><td><p>6</p></td></tr></tbody></table>",
     "isSpellcaster": true,
     "levelFeatures": [
       {
         "level": 1,
         "name": "Righteous",
-        "description": "<p><span class=\"fontstyle0\">You gain the Gish Perk (p. 68) and can Cast Spells using Leadership.</span></p><p></p><p><span class=\"fontstyle2\"><strong>Spells:</strong> </span><span class=\"fontstyle0\">You learn 2 Spells, one of which must always be Exalt. You learn 1 other Spell every 3 Revelator Levels hereafter.</span></p><p><span class=\"fontstyle2\"><strong>Mana:</strong> </span><span class=\"fontstyle0\">Your Maximum Mana is equal to (2× your Revelator Level), and the highest amount of Mana you can spend to Cast a Spell is equal to (Presence + half your Revelator Level, round up). You regain spent Mana when you Rest.</span></p>",
+        "description": "<p>You gain the Gish Perk (p. 69), can Cast Spells using Leadership.</p><p><strong>Spells:</strong> You learn 2 Spells, one of which must always have a damage base. You learn 1 other Spell every 3 Levels hereafter.</p><p><strong>Mana:</strong> Your Max Mana is equal to (2 × your Level), and your Cast Max for Spells is equal to (1 + half your Level, round up).</p>",
         "statBonusPoints": 0,
         "extraTraining": 0,
-        "requiredSpells": [
-          "Compendium.vagabond.spells.Item.lSVkxtOolrInid6w"
-        ],
+        "requiredSpells": [],
         "allowedPerks": [
           "Compendium.vagabond.perks.Item.YVgf2kRWwn8JRq1X"
         ],
@@ -24,8 +22,8 @@
       },
       {
         "level": 1,
-        "name": "Selfless",
-        "description": "<p><span class=\"fontstyle0\">Once per Turn, when an Ally you can see takes damage, you can choose to take the damage instead. This can't be reduced in any way.</span></p>",
+        "name": "Enspell",
+        "description": "<p>You can have one Imbue Casting as continual duration on your Weapon, and can skip your Move to change the Spell.</p>",
         "statBonusPoints": 0,
         "extraTraining": 0,
         "requiredSpells": [],
@@ -36,15 +34,23 @@
       },
       {
         "level": 2,
-        "name": "Lay on Hands",
-        "description": "<p><span class=\"fontstyle0\">You can Touch a Being to restore (d6 + your Level) HP by using your Action or skipping your Move. You can do so twice, and regain spent uses after you Rest.</span></p>",
+        "name": "Lay on Hands (d4)",
+        "description": "<p>You can spend 1 Mana and use your Action or skip your Move to restore (d4 + your Level) HP to yourself or a Close Being. This die size increases by one size every 4 Levels hereafter.</p>",
         "statBonusPoints": 1,
         "extraTraining": 0,
         "requiredSpells": [],
         "allowedPerks": [],
         "perkAmount": 0,
         "spellAmount": 0,
-        "skillChoices": []
+        "skillChoices": [],
+        "action": {
+          "enabled": true,
+          "label": "Lay on Hands",
+          "icon": "hand-holding-heart",
+          "uuid": "",
+          "command": "system:revelator.layOnHands",
+          "runAsGM": false
+        }
       },
       {
         "level": 3,
@@ -60,8 +66,8 @@
       },
       {
         "level": 4,
-        "name": "Paragon's Aura",
-        "description": "<p><span class=\"fontstyle0\">It doesn’t cost you Mana to Cast a Spell as a 10’ Aura, and you can Focus on a Spell as an Aura and one as Imbue at the same time.</span></p>",
+        "name": "Paragon’s Aura (1 Mana)",
+        "description": "<p>You have a 2 Mana discount on the Aura Delivery.</p><p>Further, once per Round when you deliver a Spell with an Imbued Weapon, you can do so against one Target with a 1 Mana discount. This discount increases every 4 Levels hereafter.</p>",
         "statBonusPoints": 1,
         "extraTraining": 0,
         "requiredSpells": [],
@@ -84,9 +90,29 @@
       },
       {
         "level": 6,
-        "name": "Divine Resolve",
-        "description": "<p><span class=\"fontstyle0\">You can't be Blinded, Paralyzed, or Sickened. Further, when you restore a Being’s HP with your Lay on Hands Feature, they are cured of these Statuses as well.</span></p>",
+        "name": "Lay on Hands (d6)",
+        "description": "<p>You can spend 1 Mana and use your Action or skip your Move to restore (d4 + your Level) HP to yourself or a Close Being. This die size increases by one size every 4 Levels hereafter.</p>",
         "statBonusPoints": 1,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": [],
+        "action": {
+          "enabled": true,
+          "label": "Lay on Hands",
+          "icon": "hand-holding-heart",
+          "uuid": "",
+          "command": "system:revelator.layOnHands",
+          "runAsGM": false
+        }
+      },
+      {
+        "level": 6,
+        "name": "Divine Resolve",
+        "description": "<p>You can’t be Blinded, Paralyzed, or Sickened. Targets of your Lay on Hands Ability are cured of these Statuses.</p>",
+        "statBonusPoints": 0,
         "extraTraining": 0,
         "requiredSpells": [],
         "allowedPerks": [],
@@ -108,8 +134,8 @@
       },
       {
         "level": 8,
-        "name": "Holy Diver",
-        "description": "<p><span class=\"fontstyle0\">If you take damage for an Ally with your Selfless Feature, your next attack before the end of your next Turn has Favor and adds your Presence to the damage.</span></p>",
+        "name": "Paragon’s Aura (2 Mana)",
+        "description": "<p>You have a 2 Mana discount on the Aura Delivery.</p><p>Further, once per Round when you deliver a Spell with an Imbued Weapon, you can do so against one Target with a 1 Mana discount. This discount increases every 4 Levels hereafter.</p>",
         "statBonusPoints": 1,
         "extraTraining": 0,
         "requiredSpells": [],
@@ -132,9 +158,29 @@
       },
       {
         "level": 10,
-        "name": "Sacrosanct",
-        "description": "<p><span class=\"fontstyle0\">You have a +2 bonus to all Saves.</span></p>",
+        "name": "Lay on Hands (d8)",
+        "description": "<p>You can spend 1 Mana and use your Action or skip your Move to restore (d4 + your Level) HP to yourself or a Close Being. This die size increases by one size every 4 Levels hereafter.</p>",
         "statBonusPoints": 1,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": [],
+        "action": {
+          "enabled": true,
+          "label": "Lay on Hands",
+          "icon": "hand-holding-heart",
+          "uuid": "",
+          "command": "system:revelator.layOnHands",
+          "runAsGM": false
+        }
+      },
+      {
+        "level": 10,
+        "name": "Holy Diver",
+        "description": "<p>You and Weapons you wield are permanently under the effects of the Bless and Exalt Spells.</p>",
+        "statBonusPoints": 0,
         "extraTraining": 0,
         "requiredSpells": [],
         "allowedPerks": [],
@@ -148,21 +194,10 @@
     "manaMultiplier": 2,
     "skillGrant": {
       "guaranteed": [
-        "melee",
-        "leadership"
+        "leadership",
+        "melee"
       ],
-      "choices": [
-        {
-          "count": 3,
-          "pool": [
-            "brawl",
-            "detect",
-            "influence",
-            "mysticism"
-          ],
-          "label": ""
-        }
-      ]
+      "choices": []
     },
     "levelSpells": [
       {
@@ -182,7 +217,7 @@
         "level": 4
       },
       {
-        "spells": 0,
+        "spells": 3,
         "level": 5
       },
       {
@@ -215,7 +250,231 @@
       "Compendium.vagabond.starting-packs.Item.hW4AUwhRz98OJoDh"
     ]
   },
-  "effects": [],
+  "effects": [
+    {
+      "name": "Righteous",
+      "origin": "Compendium.vagabond.classes.Item.yZzChIB5YwQBSOeA",
+      "img": "icons/svg/aura.svg",
+      "_id": "zM0nV1jStK3zr2D1",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.mana.castingMaxBonus",
+            "value": "1 - @stats.presence.total",
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent"
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.44.0",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "createdTime": 1791400000000,
+        "modifiedTime": 1791400000000,
+        "lastModifiedBy": null
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!yZzChIB5YwQBSOeA.zM0nV1jStK3zr2D1"
+    },
+    {
+      "name": "Lay on Hands",
+      "origin": "Compendium.vagabond.classes.Item.yZzChIB5YwQBSOeA",
+      "img": "icons/svg/aura.svg",
+      "_id": "tNZOciWhGY9ryjDD",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.layOnHandsDie",
+            "value": "4 + 2 * floor((@lvl - 2) / 4)",
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent",
+          "minLevel": 2
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.44.0",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "createdTime": 1791400000000,
+        "modifiedTime": 1791400000000,
+        "lastModifiedBy": null
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!yZzChIB5YwQBSOeA.tNZOciWhGY9ryjDD"
+    },
+    {
+      "name": "Divine Resolve",
+      "origin": "Compendium.vagabond.classes.Item.yZzChIB5YwQBSOeA",
+      "img": "icons/svg/aura.svg",
+      "_id": "7l1tgnKdrTYe1QhY",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.statusImmunities",
+            "value": "blinded",
+            "priority": null,
+            "type": "add"
+          },
+          {
+            "key": "system.statusImmunities",
+            "value": "paralyzed",
+            "priority": null,
+            "type": "add"
+          },
+          {
+            "key": "system.statusImmunities",
+            "value": "sickened",
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent",
+          "minLevel": 6
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.44.0",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "createdTime": 1791400000000,
+        "modifiedTime": 1791400000000,
+        "lastModifiedBy": null
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!yZzChIB5YwQBSOeA.7l1tgnKdrTYe1QhY"
+    },
+    {
+      "name": "Divine Resolve: Lay on Hands",
+      "origin": "Compendium.vagabond.classes.Item.yZzChIB5YwQBSOeA",
+      "img": "icons/svg/aura.svg",
+      "_id": "im7KvMTWElc3lgM6",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.layOnHandsCures",
+            "value": "blinded",
+            "priority": null,
+            "type": "add"
+          },
+          {
+            "key": "system.layOnHandsCures",
+            "value": "paralyzed",
+            "priority": null,
+            "type": "add"
+          },
+          {
+            "key": "system.layOnHandsCures",
+            "value": "sickened",
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent",
+          "minLevel": 6
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.44.0",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "createdTime": 1791400000000,
+        "modifiedTime": 1791400000000,
+        "lastModifiedBy": null
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!yZzChIB5YwQBSOeA.im7KvMTWElc3lgM6"
+    }
+  ],
   "folder": null,
   "flags": {},
   "_stats": {

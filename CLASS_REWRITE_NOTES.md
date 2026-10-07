@@ -95,3 +95,26 @@ Book p. 51. Fisticuffs (Dusted Knuckle perk grant + Vicious on Brawl crits), Rop
 - [ ] Level 6: Brawl damage roll uses d6 (d8 at Level 10), a d4 Unarmed rolls d6, and the dice Explode on 1 or 2; the roll card shows the explosion.
 - [ ] Existing Pugilist (old Impact class) migrates: Influence trained, Dusted Knuckle added, Haymaker / Moxie / Title Holder effects present.
 
+## Revelator
+
+Book p. 53. Righteous (Gish perk grant, Leadership casting, 2 × Level Mana, Cast Max 1 + half Level), Enspell, Lay on Hands (d4 / d6 / d8), Paragon’s Aura, Divine Resolve, Holy Diver. Training Leadership + Melee (no choices). Old data had 0 Spells at Level 5 (typo) — the book’s 3 is used.
+
+**Doubts / course taken**
+- "one of which must always have a damage base" is text only (no required Spell), same as Magus.
+- Lay on Hands is a **feature button** (`system:revelator.layOnHands`, one per entry; it appears from Level 2): spends 1 Mana, rolls `1d{4|6|8} + Level` as a healing roll through the damage pipeline (so Healing bonuses like Virtuoso’s Inspiration die apply) and posts an action card with the Apply button for the Target. The Target is the first targeted token, else yourself; a targeted token must be Close (≤ 5 ft) or the button warns and does nothing. "Use your Action or skip your Move" is not enforced.
+- The die is the effect "Lay on Hands" (`system.layOnHandsDie` = `4 + 2 * floor((@lvl - 2) / 4)`); the feature button does nothing without it (switch it off = no Lay on Hands).
+- Divine Resolve is two effects: "Divine Resolve" (`statusImmunities` blinded, paralyzed, sickened — Level 6) and "Divine Resolve: Lay on Hands" (`layOnHandsCures`, the same three Statuses cured on the Target of the button).
+- Paragon’s Aura wording kept verbatim: "You have a 2 Mana discount on the Aura Delivery" then the Imbue discount that grows with the (1 Mana) / (2 Mana) entries.
+
+**Text-only / deferred**
+- Enspell (continual Imbue) and Paragon’s Aura (Aura Delivery discount + once-per-Round Imbue discount) — no Imbue-scoped discount hook; text only (same gap as Magus Arcane Surge).
+- Holy Diver (permanent Bless and Exalt on you and your Weapons) — text only.
+- Range check for Lay on Hands uses the token distance (≤ 5 ft = Close); no line-of-sight / reach rules.
+
+**Tests to run in-world** (after `npm run pack`)
+- [ ] Builder: Revelator learns 2 Spells (+1 at L4, L7, L10 — 3 at Level 5 now), Mana 2 × Level, Cast Max 1 + half Level round up using Presence; Gish granted; Training Leadership + Melee, no skill choices.
+- [ ] Level 2: the Lay on Hands button shows on the feature; click with a Close ally targeted → 1 Mana spent, card with `d4 + Level` healing and Apply button; with nothing targeted heals yourself; with a Far ally warns; with 0 Mana warns.
+- [ ] Level 6: Lay on Hands rolls a d6 and cures Blinded / Paralyzed / Sickened on the Target (card lists them); Revelator can’t be Blinded / Paralyzed / Sickened (status immunity).
+- [ ] Level 10: d8; an actor with Virtuoso Inspiration gets the extra d6 on the heal.
+- [ ] Existing Revelator (old class) migrates; Leadership + Melee stay trained.
+

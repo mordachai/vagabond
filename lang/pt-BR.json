@@ -242,6 +242,16 @@
       "Landed": "<strong>{name}</strong> acerta um Soco Devastador — <strong>{target}</strong> fica Atordoado até o início do Turno de {name}.",
       "Immune": "<strong>{name}</strong> acerta um Soco Devastador, mas <strong>{target}</strong> não pode ser Atordoado."
     },
+    "LayOnHands": {
+      "Title": "Imposição de Mãos",
+      "NotYours": "Apenas o dono do personagem pode usar a Imposição de Mãos.",
+      "NotAvailable": "Este personagem ainda não tem Imposição de Mãos.",
+      "NoMana": "A Imposição de Mãos custa 1 de Mana.",
+      "NoToken": "Nenhum token encontrado — mire em um, ou coloque o seu token na cena.",
+      "NotClose": "{target} não está Adjacente — a Imposição de Mãos alcança você mesmo ou um Ser Adjacente.",
+      "Lays": "<strong>{name}</strong> impõe as mãos sobre <strong>{target}</strong> (1 de Mana).",
+      "Cured": "Curado de: {statuses}."
+    },
     "Druid": {
       "NoMetamorph": "O módulo Metamorph não está ativo — a Polimorfia precisa ser jogada à mão.",
       "NotYours": "Apenas o dono do personagem pode fazer isso.",

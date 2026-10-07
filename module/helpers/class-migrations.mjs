@@ -252,6 +252,27 @@ export function migratePugilistClass() {
   });
 }
 
+/**
+ * Revelator: old class → Righteous, Lay on Hands (button + die effect), Paragon’s Aura, Divine Resolve,
+ * Holy Diver; Cast Max 1 + half Level; Level 5 Spell count fixed.
+ */
+export function migrateRevelatorClass() {
+  return migrateClass({
+    setting: 'revelatorClassMigrated',
+    classId: 'yZzChIB5YwQBSOeA',
+    className: 'Revelator',
+    probeFeature: 'Lay on Hands (d4)',
+    isOld: (item) => item.system.levelFeatures?.some(lf => lf.name === 'Sacrosanct'),
+    // caster tables / Mana come from the book revision too
+    extraUpdate: (item, s) => ({
+      'system.manaSkill': s.manaSkill,
+      'system.castingStat': s.castingStat,
+      'system.manaMultiplier': s.manaMultiplier,
+      'system.levelSpells': s.levelSpells,
+    }),
+  });
+}
+
 /** Give perk items already in the world (copies) the effects the compendium perk now ships. */
 async function addPerkEffects(perkId, perkName) {
   const source = await game.packs.get('vagabond.perks')?.getDocument(perkId);

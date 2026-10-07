@@ -1,6 +1,10 @@
 # Changelog
 
 ## Unreleased
+- **Revelator revised to the new book text.** Class description, the Class Features table (with Spells, Mana and Cast Max), Righteous, Enspell, Lay on Hands (d4 / d6 / d8), Paragon’s Aura, Divine Resolve and Holy Diver now read exactly as printed; Training is Leadership and Melee. The Level 5 Spell count is 3 (it was 0 by mistake).
+  - **Righteous** grants the Gish Perk; Cast Max is 1 + half your Level (an effect cancels the casting Stat the engine adds).
+  - **Lay on Hands has a button** (Level 2+): spends 1 Mana, rolls (d4 / d6 / d8 + Level) healing on yourself or a Close targeted Being, and posts a card with the Apply button; from Level 6 it also cures Blinded, Paralyzed and Sickened. **Divine Resolve** makes you immune to those three. New fields `layOnHandsDie` and `layOnHandsCures`.
+  - Existing Revelator items are converted once on load. The `classes` compendium needs `npm run pack` first.
 - **Pugilist revised to the new book text.** Class description, the Class Features table, Fisticuffs, Rope-a-Dope, Haymaker (10+ / 9+), Moxie (Cd4 / Cd6) and Title Holder (d6 / d8) now read exactly as printed; Training is Brawl and Influence. Check Hook, Beat Rush, Prowess and Impact are gone.
   - **Fisticuffs** grants the Dusted Knuckle Perk; **Vicious** is an effect (a Brawl Crit adds a die matching the weapon). **Moxie** gives Favor on Saves against Dazed, Frightened and Restrained.
   - **Title Holder** is an effect: Brawl weapon damage dice are at least a d6 (d8 at Level 10) and Explode on 1 or 2 (new fields `weaponDieBySkill` and `weaponLowExplodeBySkill`).

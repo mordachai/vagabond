@@ -421,6 +421,15 @@ The Mark itself is an actor effect (`flags.vagabond.huntersMark`) created by the
 | Title Holder: Die (Lv 6+) | `system.weaponDieBySkill` | Add | `brawl: 6 + 2 * floor(@lvl / 10)` (damage dice of that skill’s weapons are at least this size) |
 | Title Holder: Explode (Lv 6+) | `system.weaponLowExplodeBySkill` | Add | `brawl: 2` (those dice also Explode on 1 up to this face) |
 
+### Revelator — Righteous, Lay on Hands, Divine Resolve
+
+| Effect | Key | Mode | Value |
+| --- | --- | --- | --- |
+| Righteous | `system.mana.castingMaxBonus` | Add | `1 - @stats.presence.total` (Cast Max is 1 + half Level, round up; the engine adds Presence, so it is cancelled) |
+| Lay on Hands (Lv 2+) | `system.layOnHandsDie` | Add | `4 + 2 * floor((@lvl - 2) / 4)` (die size read by the Lay on Hands button: d4 / d6 / d8) |
+| Divine Resolve (Lv 6+) | `system.statusImmunities` | Add | `blinded`, `paralyzed`, `sickened` (one change each) |
+| Divine Resolve: Lay on Hands (Lv 6+) | `system.layOnHandsCures` | Add | `blinded`, `paralyzed`, `sickened` (Statuses the button cures on its Target) |
+
 ### Exalted — Bonus Per Damage Die (with Doubling vs Specific Being Types)
 
 Grants a flat bonus per damage die rolled. When attacking Undead (or other configured types), the bonus is doubled.
