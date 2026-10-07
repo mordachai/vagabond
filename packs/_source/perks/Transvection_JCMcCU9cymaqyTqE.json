@@ -3,14 +3,19 @@
   "type": "perk",
   "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
   "system": {
-    "description": "<p><span class=\"fontstyle0\">If you Cast Levitate on an Item of 2 Slots or less, it gains a Fly Speed of 30’ and you do not need to Focus on that Cast. It keeps this Speed until you use this Ability on another Item.</span><br style=\"font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:normal;orphans:2;text-align:-webkit-auto;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-size-adjust:auto;-webkit-text-stroke-width:0px\" /></p>",
+    "description": "<p>If you Cast Levitate on an Item, it gains Speed: 0’ (30’ Fly). This Casting is continual, but ends early if you use this Ability on another Item.</p>",
     "prerequisites": {
       "stats": [],
+      "statOrGroups": [],
       "trainedSkills": [],
+      "trainedSkillOrGroups": [],
       "spells": [
         "Compendium.vagabond.spells.Item.lyJBorVks7Y2tpgF"
       ],
-      "other": []
+      "spellOrGroups": [],
+      "hasAnySpell": false,
+      "resources": [],
+      "resourceOrGroups": []
     }
   },
   "effects": [],

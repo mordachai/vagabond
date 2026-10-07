@@ -1,6 +1,8 @@
 import { VagabondDamagePipeline } from './damage-pipeline.mjs';
 import { TargetHelper } from './target-helper.mjs';
 import { EquipmentHelper } from './equipment-helper.mjs';
+import { DruidHelper } from './druid-helper.mjs';
+import { HunterHelper } from './hunter-helper.mjs';
 
 /**
  * Universal Damage Helper
@@ -662,8 +664,9 @@ export class VagabondDamageHelper {
     let finalDamage;
 
     if (damageMode === 'flat') {
-      // Flat damage - authored value stays pure, no bonus fields apply
-      finalDamage = parseInt(damageValue);
+      // Flat damage - authored value stays pure, no bonus fields apply (only a Druid's Beast form
+      // adds its Savagery bonus, which belongs to the Druid, not the statblock)
+      finalDamage = parseInt(damageValue) + DruidHelper.beastDamageBonus(actor);
       damageRoll = null;
     } else {
       // Rolled damage goes through the unified pipeline: legacy universals +
@@ -913,6 +916,7 @@ export class VagabondDamageHelper {
    * @param {string} damageType - Damage type key ('-' for typeless)
    * @param {Item|null} attackingWeapon - For material weakness + berserk die count
    * @param {object} [opts]
+   * @param {Actor|null} [opts.attackerActor=null] - The attacker (Beast Mode: ignore non-Relic Immune)
    * @param {number|null} [opts.rolledDiceCount=null] - Actual dice count of the damage
    *   roll (explosions included) for the berserk reduction; falls back to counting the
    *   weapon's authored damageAmount formula when absent
@@ -921,7 +925,7 @@ export class VagabondDamageHelper {
    */
   static calculateFinalDamageDetailed(actor, damage, damageType, attackingWeapon = null, opts = {}) {
     const result = this._computeFinalDamage(actor, damage, damageType, attackingWeapon, opts);
-    Hooks.callAll('vagabond.calculateFinalDamage', { actor, damage, damageType, attackingWeapon, result });
+    Hooks.callAll('vagabond.calculateFinalDamage', { actor, damage, damageType, attackingWeapon, attackerActor: opts.attackerActor ?? null, result });
     result.final = Math.max(0, result.final);
     return result;
   }
@@ -977,12 +981,12 @@ export class VagabondDamageHelper {
     // RAW: Weak - Ignores Armor and Immune, and deals an extra damage die
     // (Extra die is handled at roll/apply time, not here — armor/immunity just bypassed.
     //  Weak targets also skip the berserk reduction: weakness bypasses all reductions.)
-    if (weaknesses.includes(normalizedType)) {
+    if (weaknesses.includes(normalizedType) || HunterHelper.isMarkWeak(opts.attackerActor, actor)) {
       return { final: finalDamage, armorReduction: 0, berserkReduction: 0, flankedBonus, path: 'weak' };
     }
 
-    // RAW: Immune - Unharmed by the damage type
-    if (immunities.includes(normalizedType)) {
+    // RAW: Immune - Unharmed by the damage type (Beast Mode attacks ignore non-Relic Immune)
+    if (immunities.includes(normalizedType) && !DruidHelper.ignoresNonRelicImmune(opts.attackerActor, normalizedType)) {
       return { final: 0, armorReduction: 0, berserkReduction: 0, flankedBonus: 0, path: 'immune' };
     }
 
@@ -1000,7 +1004,9 @@ export class VagabondDamageHelper {
     // Dice count prefers the ACTUAL rolled dice count (threaded from the damage roll,
     // explosions included) over counting the weapon's authored formula.
     let berserkReduction = 0;
-    const reductionPerDie = actor.system.incomingDamageReductionPerDie || 0;
+    // Typed reduction (Druid Tempest Within) stacks on the untyped one for matching damage types.
+    const reductionPerDie = (actor.system.incomingDamageReductionPerDie || 0)
+      + (actor.system.incomingDamageReductionPerDieByType?.[normalizedType] || 0);
     if (reductionPerDie > 0) {
       const numDice = opts.rolledDiceCount
         ?? VagabondDamageHelper._countDiceInFormula(attackingWeapon?.system?.damageAmount ?? '');
@@ -1025,8 +1031,8 @@ export class VagabondDamageHelper {
   }
 
   /** @see VagabondDamagePipeline.isWeakTo */
-  static _isWeakTo(targetActor, damageType, attackingWeapon = null) {
-    return VagabondDamagePipeline.isWeakTo(targetActor, damageType, attackingWeapon);
+  static _isWeakTo(targetActor, damageType, attackingWeapon = null, attacker = null) {
+    return VagabondDamagePipeline.isWeakTo(targetActor, damageType, attackingWeapon, attacker);
   }
 
 
@@ -1463,6 +1469,12 @@ ${npcOnly ? '' : `
     const critNumber = VagabondRollBuilder.calculateCritThreshold(targetActor.getRollData(), saveType);
     const isCritical = VagabondChatCard.isRollCritical(saveRoll, critNumber);
 
+    // Fighter Momentum: passing a Save against an attack (inert unless system.momentumTrigger)
+    if (isSuccess) {
+      const { FighterHelper } = await import('./fighter-helper.mjs');
+      FighterHelper.onDefended(targetActor);
+    }
+
     return { saveRoll, difficulty, isSuccess, isCritical, isHindered };
   }
 
@@ -1527,7 +1539,7 @@ ${npcOnly ? '' : `
       const rolledDiceCount = rollTermsData.terms.reduce((n, t) =>
         n + (t.type === 'Die' ? (t.results ?? []).filter(r => r.active !== false).length : 0), 0);
       const damageBreakdown = this.calculateFinalDamageDetailed(
-        targetActor, damageAfterSave, damageType, sourceItem, { rolledDiceCount }
+        targetActor, damageAfterSave, damageType, sourceItem, { rolledDiceCount, attackerActor: sourceActor }
       );
       const baseAfterFinal = damageBreakdown.final;
       const armorReduction = damageBreakdown.armorReduction;
@@ -1535,7 +1547,7 @@ ${npcOnly ? '' : `
       // RAW: Weak — bypass Armor/Immune + deal an extra damage die
       let finalDamage = baseAfterFinal;
       const weaknessPreRolledSave = button.dataset.weaknessPreRolled === 'true';
-      if (!weaknessPreRolledSave && this._isWeakTo(targetActor, damageType, sourceItem)) {
+      if (!weaknessPreRolledSave && this._isWeakTo(targetActor, damageType, sourceItem, sourceActor)) {
         const dieSize = this._getDamageSourceDieSize(sourceItem, actionIdx, sourceActor);
         const weakRoll = new Roll(`1d${dieSize}`);
         await weakRoll.evaluate();
@@ -1552,7 +1564,7 @@ ${npcOnly ? '' : `
           const currentHP = targetActor.system.health?.value || 0;
           const newHP = Math.max(0, currentHP - _autoFinal);
           await targetActor.update({ 'system.health.value': newHP });
-          Hooks.callAll('vagabond.postDamageApply', { actor: targetActor, amount: _autoFinal, damageType, sourceItem, oldHp: currentHP, newHp: newHP });
+          Hooks.callAll('vagabond.postDamageApply', { actor: targetActor, amount: _autoFinal, damageType, sourceItem, attackerActor: sourceActor, oldHp: currentHP, newHp: newHP });
         }
       }
 
@@ -1776,10 +1788,10 @@ ${npcOnly ? '' : `
 
       const reducedDamage = Math.max(0, damageAmount - shieldReduction);
 
-      const breakdown = this.calculateFinalDamageDetailed(targetActor, reducedDamage, damageType, sourceItem);
+      const breakdown = this.calculateFinalDamageDetailed(targetActor, reducedDamage, damageType, sourceItem, { attackerActor: sourceActor });
       let finalDamage = breakdown.final;
       const weaknessPreRolled = button.dataset.weaknessPreRolled === 'true';
-      if (!weaknessPreRolled && this._isWeakTo(targetActor, damageType, sourceItem)) {
+      if (!weaknessPreRolled && this._isWeakTo(targetActor, damageType, sourceItem, sourceActor)) {
         const dieSize = this._getDamageSourceDieSize(sourceItem, actionIdx, sourceActor);
         const weakRoll = new Roll(`1d${dieSize}`);
         await weakRoll.evaluate();
@@ -1797,7 +1809,7 @@ ${npcOnly ? '' : `
         const { emitSocket } = await import('./socket-helper.mjs');
         emitSocket('applyDamage', { actorUuid: targetActor.uuid, newHp: newHP });
       }
-      Hooks.callAll('vagabond.postDamageApply', { actor: targetActor, amount: _final, damageType, sourceItem, oldHp: currentHP, newHp: newHP });
+      Hooks.callAll('vagabond.postDamageApply', { actor: targetActor, amount: _final, damageType, sourceItem, attackerActor: sourceActor, oldHp: currentHP, newHp: newHP });
 
       await VagabondChatCard.applyResult(targetActor, {
         type: 'damage',
@@ -2404,12 +2416,12 @@ ${npcOnly ? '' : `
       const effectiveDamage = damageAmount;
 
       // Calculate final damage (armor/immune/weak)
-      const directBreakdown = this.calculateFinalDamageDetailed(targetActor, effectiveDamage, damageType, sourceItem);
+      const directBreakdown = this.calculateFinalDamageDetailed(targetActor, effectiveDamage, damageType, sourceItem, { attackerActor: sourceActor });
       const baseAfterFinalDirect = directBreakdown.final;
       // RAW: Weak — bypass Armor/Immune + deal an extra damage die
       let finalDamage = baseAfterFinalDirect;
       const weaknessPreRolledDirect = button.dataset.weaknessPreRolled === 'true';
-      if (!weaknessPreRolledDirect && this._isWeakTo(targetActor, damageType, sourceItem)) {
+      if (!weaknessPreRolledDirect && this._isWeakTo(targetActor, damageType, sourceItem, sourceActor)) {
         const dieSize = this._getDamageSourceDieSize(sourceItem, directActionIdx, sourceActor);
         const weakRoll = new Roll(`1d${dieSize}`);
         await weakRoll.evaluate();
@@ -2427,7 +2439,7 @@ ${npcOnly ? '' : `
         const { emitSocket } = await import('./socket-helper.mjs');
         emitSocket('applyDamage', { actorUuid: targetActor.uuid, newHp: newHP });
       }
-      Hooks.callAll('vagabond.postDamageApply', { actor: targetActor, amount: _directFinal, damageType, sourceItem, oldHp: currentHP, newHp: newHP });
+      Hooks.callAll('vagabond.postDamageApply', { actor: targetActor, amount: _directFinal, damageType, sourceItem, attackerActor: sourceActor, oldHp: currentHP, newHp: newHP });
 
       // Post damage result to chat
       const { VagabondChatCard: VCCDirect } = await import('./chat-card.mjs');

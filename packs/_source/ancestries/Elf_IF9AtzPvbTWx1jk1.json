@@ -9,21 +9,19 @@
     "traits": [
       {
         "name": "Ascendancy",
-        "description": "You are Trained in a Skill from either Arcana, Mysticism, Influence, or in Ranged Attacks.",
+        "description": "<p>You are Trained in Detect and 1 other Skill.</p>",
         "statBonusPoints": 0,
-        "extraTraining": 0,
+        "extraTraining": 1,
         "requiredSpells": [],
         "allowedPerks": [],
         "perkAmount": 0,
+        "ignorePerkPrereqs": "none",
         "spellAmount": 0,
         "skillChoices": [
           {
             "count": 1,
             "pool": [
-              "arcana",
-              "ranged",
-              "mysticism",
-              "influence"
+              "detect"
             ],
             "label": "Ascendancy"
           }
@@ -31,23 +29,25 @@
       },
       {
         "name": "Elven Eyes",
-        "description": "You have Favor on sight-based Detect Checks.",
+        "description": "<p>You have Favor on sight-based Detect Checks.</p>",
         "statBonusPoints": 0,
         "extraTraining": 0,
         "requiredSpells": [],
         "allowedPerks": [],
         "perkAmount": 0,
+        "ignorePerkPrereqs": "none",
         "spellAmount": 0,
         "skillChoices": []
       },
       {
         "name": "Naturally Attuned",
-        "description": "You know a Spell and can Cast it with a Skill of your choice.",
+        "description": "<p>You know a Spell of your choice and can Cast it with a Skill of your choice. Further, once per Round, you can Cast it with a 1 Mana discount on its Delivery.</p>",
         "statBonusPoints": 0,
         "extraTraining": 0,
         "requiredSpells": [],
         "allowedPerks": [],
         "perkAmount": 0,
+        "ignorePerkPrereqs": "none",
         "spellAmount": 1,
         "skillChoices": []
       }
@@ -55,7 +55,7 @@
   },
   "effects": [
     {
-      "name": "Naturally Attuned (Elf Trait)",
+      "name": "Naturally Attuned",
       "origin": "Compendium.vagabond.ancestries.Item.IF9AtzPvbTWx1jk1",
       "img": "icons/svg/aura.svg",
       "_id": "Bx67PMOTQ3Eyrfuj",
@@ -87,20 +87,20 @@
           "applicationMode": "permanent"
         }
       },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
       "_stats": {
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null,
         "coreVersion": "14.361",
         "systemId": "vagabond",
-        "systemVersion": "2.0.0",
+        "systemVersion": "5.42.0",
         "createdTime": 1766979796924,
         "modifiedTime": 1772212866954,
         "lastModifiedBy": "13p65OEadZSZVLRk"
       },
-      "start": null,
-      "showIcon": 1,
-      "folder": null,
       "_key": "!items.effects!IF9AtzPvbTWx1jk1.Bx67PMOTQ3Eyrfuj"
     }
   ],

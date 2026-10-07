@@ -1,0 +1,46 @@
+{
+  "name": "Dusted Knuckle",
+  "type": "perk",
+  "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
+  "system": {
+    "description": "<p>You can use a d4 for the damage dice of Brawl Weapons, and they Explode on a 1.</p>",
+    "prerequisites": {
+      "stats": [
+        {
+          "stat": "might",
+          "value": 4
+        }
+      ],
+      "statOrGroups": [],
+      "trainedSkills": [
+        "brawl"
+      ],
+      "trainedSkillOrGroups": [],
+      "spells": [],
+      "spellOrGroups": [],
+      "hasAnySpell": false,
+      "resources": [],
+      "resourceOrGroups": []
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "5.44.0",
+    "createdTime": 1791290616272,
+    "modifiedTime": 1791290616272,
+    "lastModifiedBy": null
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "Lb1ncXSPRRd1wq84",
+  "sort": 20260000,
+  "_key": "!items!Lb1ncXSPRRd1wq84"
+}

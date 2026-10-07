@@ -3,21 +3,45 @@
   "type": "ancestry",
   "img": "systems/vagabond/assets/ui/compendiums/draken.webp",
   "system": {
-    "description": "<p><span class=\"fontstyle0\">Resembling humanoid dragons, Draken are relatives of the terrifying dragons of legend. Their scales come in a variety of brilliant colors, their maws house fanged teeth that often serve as a serrated clamp, and their fingers resemble the talonlike claws of dragons.</span></p>",
+    "description": "<p>Resembling humanoid dragons, Draken are relatives of the terrifying dragons of legend. Their scales come in a variety of brilliant colors, their maws house fanged teeth that often serve as a serrated clamp, and their fingers resemble the talonlike claws of dragons.</p>",
     "size": "medium",
     "ancestryType": "Cryptid",
     "traits": [
       {
         "name": "Breath Attack",
-        "description": "You can attack with an Endure or Will Save to make a 15’ Cone of draconic breath that deals 2d6!"
+        "description": "<p>You have a Breath Attack that requires an Action to begin. On a subsequent Turn within the same Scene, you can then use an Action or skip your Move to exhale a 15’ Cone of energy that deals 2d6!, using an Endure or Will Save for the Check.</p>",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "ignorePerkPrereqs": "none",
+        "spellAmount": 0,
+        "skillChoices": []
       },
       {
         "name": "Scale",
-        "description": "You have a +1 bonus to Armor Rating."
+        "description": "<p>You have a +1 bonus to Armor.</p>",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "ignorePerkPrereqs": "none",
+        "spellAmount": 0,
+        "skillChoices": []
       },
       {
         "name": "Draconic Resilience",
-        "description": "You take half damage from a source of your choice from either Acid, Cold, Fire, or Shock."
+        "description": "<p>You take half damage from a source of your choice from either Acid, Cold, Fire, or Shock.</p>",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "ignorePerkPrereqs": "none",
+        "spellAmount": 0,
+        "skillChoices": []
       }
     ]
   },
@@ -50,21 +74,25 @@
       "transfer": true,
       "statuses": [],
       "sort": 0,
-      "flags": {},
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent"
+        }
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
       "_stats": {
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null,
         "coreVersion": "14.361",
         "systemId": "vagabond",
-        "systemVersion": "1.1.5",
+        "systemVersion": "5.42.0",
         "createdTime": 1765106300065,
         "modifiedTime": 1765107364534,
         "lastModifiedBy": "13p65OEadZSZVLRk"
       },
-      "start": null,
-      "showIcon": 1,
-      "folder": null,
       "_key": "!items.effects!LtZtoLKTbT5X3HZJ.1Ismbz8nwoNAFkNj"
     }
   ],

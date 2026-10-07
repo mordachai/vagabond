@@ -1,0 +1,39 @@
+{
+  "name": "Quality Assurance",
+  "type": "perk",
+  "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
+  "system": {
+    "description": "<p>If you spend Mana on a Casting and the Target is unaffected or the Cast Check fails, you regain half of the Mana that was spent.</p>",
+    "prerequisites": {
+      "stats": [],
+      "statOrGroups": [],
+      "trainedSkills": [],
+      "trainedSkillOrGroups": [],
+      "spells": [],
+      "spellOrGroups": [],
+      "hasAnySpell": true,
+      "resources": [],
+      "resourceOrGroups": []
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "5.44.0",
+    "createdTime": 1791290616286,
+    "modifiedTime": 1791290616286,
+    "lastModifiedBy": null
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "AbwXHJfBqQWZAW4K",
+  "sort": 20710000,
+  "_key": "!items!AbwXHJfBqQWZAW4K"
+}

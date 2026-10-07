@@ -375,15 +375,26 @@
               type="number"
               data-field="leveling.maxLevel"
               value="{{config.leveling.maxLevel}}"
-              min="1"
-              max="30"
+              min="0"
+              max="99"
               step="1"
             >
+            <p class="hb-hint">{{localize "VAGABOND.HomebrewSettings.Fields.MaxLevelHint"}}</p>
             <p class="hb-hint"><i class="fa-solid fa-rotate fa-xs"></i> {{localize "VAGABOND.HomebrewSettings.Fields.RequiresReloadHint"}}</p>
+          </div>
+          <div class="hb-form-group">
+            <label for="hb-pace">{{localize "VAGABOND.HomebrewSettings.Fields.PaceLabel"}}</label>
+            <select id="hb-pace" data-field="leveling.pace">
+              {{#each paceOptions}}
+              <option value="{{key}}" {{#if selected}}selected{{/if}}>{{label}}</option>
+              {{/each}}
+            </select>
+            <p class="hb-hint">{{localize "VAGABOND.HomebrewSettings.Fields.PaceHint"}}</p>
           </div>
         </fieldset>
 
-        {{!-- XP Per Level Table --}}
+        {{!-- XP Per Level Table (custom pace only) --}}
+        {{#if isCustomPace}}
         <fieldset class="hb-fieldset">
           <legend>{{localize "VAGABOND.HomebrewSettings.Fields.XpTableLegend"}}</legend>
           <p class="hb-hint">{{localize "VAGABOND.HomebrewSettings.Fields.XpTableHint"}}</p>
@@ -409,6 +420,7 @@
             </tbody>
           </table>
         </fieldset>
+        {{/if}}
 
         {{!-- XP Questionnaire --}}
         <fieldset class="hb-fieldset">

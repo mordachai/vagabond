@@ -4,7 +4,7 @@
   "_id": "n3pI3vkw5yjnNE6H",
   "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
   "system": {
-    "description": "<p>You can take the Cast Action to conjure a Summon, which is a non-Humanlike Being you have previously defeated with HD equal to or lower than your Level, spending Mana to do so equal to the Summon’s HD. You must conduct a 10-minute Ritual to choose which Being is your Summon before taking this Action.</p><p>The following rules apply to your Summon:</p><ul><li><p>It is an Ally that obeys your commands, which you issue as an Action or by skipping your Move.</p></li><li><p>It uses your Cast Skill for Checks and Saves.</p></li><li><p>You must Focus on the Summon, spending 1 Mana per Turn while it is conjured. Otherwise, the Summon is banished. When it is reduced to 0 HP or if you conjure another Summon, it is banished.</p></li><li><p>Whenever it is banished, any Abilities that would end on its death end.</p></li></ul>",
+    "description": "<p>You can take the Cast Action to conjure a Summon, a Being with HD: (your Level or lower), spending Mana to do so equal to its HD. You must conduct a 10-minute Ritual to determine your Summon before doing so. The following rules apply to your Summon:</p><ul><li><p>You command it as an Action or by skipping your Move.</p></li><li><p>It uses your Cast Skill for Checks and Saves.</p></li><li><p>You must Focus on it, spending 1 Mana to do so each Turn. Otherwise, it is banished.</p></li><li><p>When it is reduced to 0 HP, it is banished.</p></li><li><p>Abilities that recharge or have limited uses do not recharge by banishing and resummoning the same statblock.</p></li></ul>",
     "prerequisites": {
       "stats": [],
       "statOrGroups": [],

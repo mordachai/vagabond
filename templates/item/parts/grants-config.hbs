@@ -177,6 +177,15 @@
             class='grants-num-input' />
           <span class='grants-hint'>{{localize "VAGABOND.UI.Hints.AmountHint"}}</span>
         </div>
+        <div class='grants-row'>
+          <label>{{localize "VAGABOND.UI.Labels.IgnorePerkPrereqs"}}</label>
+          <select name='{{arrayPath}}.{{itemIndex}}.ignorePerkPrereqs'>
+            <option value='none' {{#if (eq grant.ignorePerkPrereqs 'none')}}selected{{/if}}>{{localize "VAGABOND.UI.Labels.IgnorePerkPrereqsNone"}}</option>
+            <option value='all' {{#if (eq grant.ignorePerkPrereqs 'all')}}selected{{/if}}>{{localize "VAGABOND.UI.Labels.IgnorePerkPrereqsAll"}}</option>
+            <option value='stats' {{#if (eq grant.ignorePerkPrereqs 'stats')}}selected{{/if}}>{{localize "VAGABOND.UI.Labels.IgnorePerkPrereqsStats"}}</option>
+          </select>
+          <span class='grants-hint'>{{localize "VAGABOND.UI.Hints.IgnorePerkPrereqsHint"}}</span>
+        </div>
         <div class='grants-list-section'>
           <label>{{localize "VAGABOND.UI.Labels.PerkPool"}} <span class='text-muted text-sm'>({{localize "VAGABOND.UI.Hints.EmptyForAny"}})</span></label>
           {{#if enrichedGrant.enrichedPerks.length}}

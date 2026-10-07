@@ -3,6 +3,7 @@ import { VagabondTextParser } from '../../helpers/text-parser.mjs';
 import { VagabondItemSequencer } from '../../helpers/item-sequencer.mjs';
 import { VagabondChatHelper } from '../../helpers/chat-helper.mjs';
 import { RageHelper } from '../../helpers/rage-helper.mjs';
+import { HunterHelper } from '../../helpers/hunter-helper.mjs';
 
 /**
  * Handler for roll-related functionality.
@@ -387,6 +388,8 @@ export class RollHandler {
       // Rage (optional, only when the actor's auto-Berserk effect is on): go Berserk as
       // part of the attack so the bonuses apply to this very roll.
       await RageHelper.onActivity(this.actor);
+      // Hunter (optional, only with the auto-Mark effect on): the Target becomes the Mark
+      await HunterHelper.onAttack(this.actor);
 
       const attackResult = await item.rollAttack(this.actor, _wpnEffectiveFavorHinder, _wpnDifficultyOverride, { allowUnequipped: thrown, skillKey: _wpnRollKey, thrown });
       if (!attackResult) return;

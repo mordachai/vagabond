@@ -728,6 +728,7 @@
     cursor: pointer;
 
     &:hover { color: $c-yellow; }
+    &.is-active { @include feature-action-active; }
   }
 }
 

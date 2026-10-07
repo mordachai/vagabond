@@ -3,13 +3,13 @@
   "type": "perk",
   "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
   "system": {
-    "description": "<p><span class=\"fontstyle0\">Increase one of your Stats by 1, but no higher than 7. You can take this Perk multiple times</span></p>",
+    "description": "<p>Increase one of your Stats by 1, but no higher than 7. You can take this Perk multiple times.</p>",
     "prerequisites": {
       "stats": [],
-      "trainedSkills": [],
-      "spells": [],
       "statOrGroups": [],
+      "trainedSkills": [],
       "trainedSkillOrGroups": [],
+      "spells": [],
       "spellOrGroups": [],
       "hasAnySpell": false,
       "resources": [],

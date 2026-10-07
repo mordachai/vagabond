@@ -3,27 +3,33 @@
   "type": "ancestry",
   "img": "systems/vagabond/assets/ui/compendiums/human.webp",
   "system": {
-    "description": "<p><span class=\"fontstyle0\">Humans are social beings that tend to be central in the development of major, diverse melting pot civilizations. Their tendency to develop wide, sprawling empires and a huge pool of cultures makes them extremely adaptable adventurers.</span> </p>",
+    "description": "<p>Humans are social beings that tend to be central in the development of major, diverse melting pot civilizations. Their tendency to develop wide, sprawling empires and a huge pool of cultures makes them extremely adaptable adventurers.</p>",
     "size": "medium",
     "ancestryType": "Humanlike",
     "traits": [
       {
         "name": "Knack",
-        "description": "You gain a Perk and a Training.",
+        "description": "<p>You gain a Perk and a Training.</p>",
         "statBonusPoints": 0,
         "extraTraining": 1,
-        "perkAmount": 1,
         "requiredSpells": [],
-        "allowedPerks": []
+        "allowedPerks": [],
+        "perkAmount": 1,
+        "ignorePerkPrereqs": "none",
+        "spellAmount": 0,
+        "skillChoices": []
       },
       {
         "name": "Strong Potential",
-        "description": "Increase one of your Stats by 1, but no higher than 7",
+        "description": "<p>Increase one of your Stats by 1, but no higher than 7.</p>",
         "statBonusPoints": 1,
         "extraTraining": 0,
-        "perkAmount": 0,
         "requiredSpells": [],
-        "allowedPerks": []
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "ignorePerkPrereqs": "none",
+        "spellAmount": 0,
+        "skillChoices": []
       }
     ]
   },

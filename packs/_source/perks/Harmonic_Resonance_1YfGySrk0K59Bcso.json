@@ -3,17 +3,19 @@
   "type": "perk",
   "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
   "system": {
-    "description": "<p><span class=\"fontstyle0\">You can use a Musical Instrument as a Trinket. When you do, you can Cast with a delivery of Aura or Cone if you otherwise couldn't, and you spend 1 less Mana on Aura and Cone delivery. This Casting still creates sound.</span> <br style=\"font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:normal;orphans:2;text-align:-webkit-auto;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-size-adjust:auto;-webkit-text-stroke-width:0px\" /></p>",
+    "description": "<p>You can use a Musical Instrument as a Trinket. When you do, you have a 1 Mana discount on Aura and Cone deliveries if the Spell isn’t Cast to deal damage.</p>",
     "prerequisites": {
       "stats": [],
+      "statOrGroups": [],
       "trainedSkills": [
         "performance"
       ],
-      "spells": [
-        ""
-      ],
-      "other": [],
-      "hasAnySpell": true
+      "trainedSkillOrGroups": [],
+      "spells": [],
+      "spellOrGroups": [],
+      "hasAnySpell": true,
+      "resources": [],
+      "resourceOrGroups": []
     }
   },
   "effects": [],

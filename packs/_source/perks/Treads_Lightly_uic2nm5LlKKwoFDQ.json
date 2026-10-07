@@ -3,7 +3,7 @@
   "type": "perk",
   "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
   "system": {
-    "description": "<p><span class=\"fontstyle0\">Your Speed isn’t impeded by nonmagical Difficult Terrain that isn’t water or a vertical surface, and you don’t trigger traps by walking on them.</span><br style=\"font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:normal;orphans:2;text-align:-webkit-auto;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-size-adjust:auto;-webkit-text-stroke-width:0px\" /></p>",
+    "description": "<p>Your Speed increases by 5’, and isn’t impeded by nonmagical Difficult Terrain that isn’t water or a vertical surface.</p><p>Further, you don’t trigger traps by walking on them. You can take this Perk multiple times.</p>",
     "prerequisites": {
       "stats": [
         {
@@ -11,9 +11,14 @@
           "value": 4
         }
       ],
+      "statOrGroups": [],
       "trainedSkills": [],
+      "trainedSkillOrGroups": [],
       "spells": [],
-      "other": []
+      "spellOrGroups": [],
+      "hasAnySpell": false,
+      "resources": [],
+      "resourceOrGroups": []
     }
   },
   "effects": [],

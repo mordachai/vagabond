@@ -3,7 +3,7 @@
   "type": "perk",
   "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
   "system": {
-    "description": "<p><span class=\"fontstyle0\">Enemies you hit with a Melee Attack can't Move for the rest of the Turn.</span> <br style=\"font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:normal;orphans:2;text-align:-webkit-auto;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-size-adjust:auto;-webkit-text-stroke-width:0px\" /></p>",
+    "description": "<p>Enemies within your reach that you could viably Grapple can’t Move for the rest of the Turn if you hit them with a Brawl or Melee attack.</p>",
     "prerequisites": {
       "stats": [
         {
@@ -11,11 +11,19 @@
           "value": 4
         }
       ],
-      "trainedSkills": [
-        "melee"
+      "statOrGroups": [],
+      "trainedSkills": [],
+      "trainedSkillOrGroups": [
+        [
+          "brawl",
+          "melee"
+        ]
       ],
       "spells": [],
-      "other": []
+      "spellOrGroups": [],
+      "hasAnySpell": false,
+      "resources": [],
+      "resourceOrGroups": []
     }
   },
   "effects": [],

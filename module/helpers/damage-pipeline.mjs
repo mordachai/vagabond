@@ -1,5 +1,7 @@
 import { VagabondDiceAppearance } from './dice-appearance.mjs';
 import { consumeUsedEffects } from './use-effects.mjs';
+import { DruidHelper } from './druid-helper.mjs';
+import { HunterHelper } from './hunter-helper.mjs';
 
 /**
  * Unified Damage Pipeline
@@ -59,6 +61,8 @@ export class VagabondDamagePipeline {
    * @param {string|null} [d.damageType=null] - Damage type key, or '-' for typeless
    * @param {boolean} [d.isCritical=false]
    * @param {string|null} [d.statKey=null] - Stat key for the crit damage bonus
+   * @param {string|null} [d.skillKey=null] - Skill the attack was rolled with (weapon attacks); scopes
+   *   the per-skill Crit rules (`critExtraDiceBySkill`, `critExplodeSkills`)
    * @param {object|null} [d.rollData=null] - Defaults to item-effects roll data when item given
    * @param {Array} [d.targets=[]] - targetsAtRollTime ({tokenId, sceneId} objects); gates weakness
    *   pre-roll and per-die doubling
@@ -95,7 +99,8 @@ export class VagabondDamagePipeline {
     let formula = String(baseFormula).trim();
 
     // Roll data: on-use item effects (Keen etc.) apply to the whole formula
-    const rollData = d.rollData ?? (item ? actor.getRollDataWithItemEffects(item) : actor.getRollData());
+    const rollData = d.rollData
+      ?? (item ? actor.getRollDataWithItemEffects(item, { targets: this.getTargetActorsFromStored(targets) }) : actor.getRollData());
 
     // 2. Die-size bump (first NdX term only)
     formula = this._applyDieSizeBump(formula, dieSizeBonus);
@@ -111,6 +116,9 @@ export class VagabondDamagePipeline {
       for (const bonus of this.collectCritAlwaysOnBonuses(rollData, formula)) {
         formula += ` + ${bonus.formula}`;
       }
+      // Skill-scoped extra crit dice (Gunslinger Bad Medicine): N dice matching the first die
+      const extraDice = this.critExtraDiceFor(actor, d.skillKey, formula);
+      if (extraDice) formula += ` + ${extraDice}`;
     }
 
     // 5. + 6. Universal bonuses (type bucket, then legacy)
@@ -123,6 +131,12 @@ export class VagabondDamagePipeline {
         formula = this._appendBonusFields(formula, actor.system[bucket.flat], actor.system[bucket.dice]);
       }
       formula = this._appendBonusFields(formula, actor.system.universalDamageBonus, actor.system.universalDamageDice);
+
+      // A Druid's Beast form (Metamorph copy) adds the Druid's Savagery bonus to its attacks
+      if (sourceType === 'npc') {
+        const beastBonus = DruidHelper.beastDamageBonus(actor);
+        if (beastBonus) formula += ` + ${beastBonus}`;
+      }
 
       // Healing bonus dice (e.g. Virtuoso: Inspiration) — HP-restoring rolls only; they explode
       // while `bonusDiceExplode` is on (Bard Climax).
@@ -138,7 +152,7 @@ export class VagabondDamagePipeline {
     let weaknessPreRolled = false;
     if (options.weaknessPreRoll && damageType && damageType !== '-' && targets.length > 0) {
       const targetActors = this.getTargetActorsFromStored(targets);
-      if (targetActors.length > 0 && targetActors.every(a => this.isWeakTo(a, damageType, item))) {
+      if (targetActors.length > 0 && targetActors.every(a => this.isWeakTo(a, damageType, item, actor))) {
         const weakDieSize = this.getDamageSourceDieSize(item, actionIndex, actor);
         formula += ` + 1d${weakDieSize}`;
         weaknessPreRolled = true;
@@ -153,7 +167,11 @@ export class VagabondDamagePipeline {
 
     // 9. Manual dice explosion
     if (options.explode) {
-      const explodeValues = this.getExplodeValues(item, actor, sourceType);
+      let explodeValues = this.getExplodeValues(item, actor, sourceType);
+      // Skill-scoped Explode on a Crit (Gunslinger Devastator): the highest face, on top of the item's own
+      if (isCritical && d.skillKey && actor.system?.critExplodeSkills?.includes?.(d.skillKey)) {
+        explodeValues = [...new Set([...(explodeValues ?? []), 'max'])];
+      }
       if (explodeValues) await this.manuallyExplodeDice(roll, explodeValues);
     }
 
@@ -252,6 +270,21 @@ export class VagabondDamagePipeline {
       if (entry) bonuses.push({ formula: entry });
     }
     return bonuses;
+  }
+
+  /**
+   * Extra crit dice for an attack rolled with `skillKey` — `actor.system.critExtraDiceBySkill`
+   * (`{ ranged: 2 }`): that many dice matching the first die of the formula built so far.
+   * @param {Actor} actor
+   * @param {string|null} skillKey
+   * @param {string} currentFormula
+   * @returns {string} e.g. "2d8", or '' when none
+   */
+  static critExtraDiceFor(actor, skillKey, currentFormula) {
+    const count = Math.trunc(Number(actor.system?.critExtraDiceBySkill?.[skillKey])) || 0;
+    if (!skillKey || count <= 0) return '';
+    const die = String(currentFormula).match(/d(\d+)/);
+    return die ? `${count}d${die[1]}` : '';
   }
 
   /* ------------------------------------------------------------------------ */
@@ -449,11 +482,13 @@ export class VagabondDamagePipeline {
    * @param {Actor} targetActor
    * @param {string} damageType
    * @param {Item|null} attackingWeapon
+   * @param {Actor|null} [attacker] - Hunter Apex Predator: the Mark is Weak to its Hunter's attacks
    * @returns {boolean}
    */
-  static isWeakTo(targetActor, damageType, attackingWeapon = null) {
+  static isWeakTo(targetActor, damageType, attackingWeapon = null, attacker = null) {
     const normalizedType = damageType.toLowerCase();
     if (normalizedType === '-') return false;
+    if (HunterHelper.isMarkWeak(attacker, targetActor)) return true;
     const weaknesses = targetActor.system.weaknesses || [];
     if (attackingWeapon?.system?.metal && weaknesses.includes(attackingWeapon.system.metal)) return true;
     return weaknesses.includes(normalizedType);

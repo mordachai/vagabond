@@ -1,0 +1,49 @@
+{
+  "name": "Cross Counter",
+  "type": "perk",
+  "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
+  "system": {
+    "description": "<p>Once per Round, you can choose to fail a Reflex Save against an attack from a Close Being to make an attack against them.</p>",
+    "prerequisites": {
+      "stats": [
+        {
+          "stat": "might",
+          "value": 7
+        }
+      ],
+      "statOrGroups": [],
+      "trainedSkills": [],
+      "trainedSkillOrGroups": [
+        [
+          "brawl",
+          "melee"
+        ]
+      ],
+      "spells": [],
+      "spellOrGroups": [],
+      "hasAnySpell": false,
+      "resources": [],
+      "resourceOrGroups": []
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "5.44.0",
+    "createdTime": 1791290616270,
+    "modifiedTime": 1791290616270,
+    "lastModifiedBy": null
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "5kAaWa6XyieTQmEm",
+  "sort": 20210000,
+  "_key": "!items!5kAaWa6XyieTQmEm"
+}

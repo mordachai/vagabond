@@ -3,27 +3,100 @@
   "type": "ancestry",
   "img": "systems/vagabond/assets/ui/compendiums/orc.webp",
   "system": {
-    "description": "<p><span class=\"fontstyle0\">Mutant nightkin that take on a variety of appearances. Some with snouts and tusks, or fur and horns, or those with calloused and verdigris skin. They typically settle in close-knit tribes where “might is right”, and have been known to establish themselves as commanders over goblin warbands.</span></p>",
+    "description": "<p>Orcs are mutant nightkin that take on a variety of appearances; some with snouts and tusks, or fur and horns, or those with calloused and verdigris skin. They typically settle in close-knit tribes where “might is right”, and have been known to establish themselves as commanders over goblin warbands.</p>",
     "size": "medium",
     "ancestryType": "Cryptid",
     "traits": [
       {
         "name": "Darksight",
-        "description": "You are not Blinded by Dark."
+        "description": "<p>You are not Blinded by Dark.</p>",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "ignorePerkPrereqs": "none",
+        "spellAmount": 0,
+        "skillChoices": []
       },
       {
         "name": "Beefy",
-        "description": "You make Saves against being Grappled or Shoved with Favor, and have Favor on Checks to Grapple or Shove."
+        "description": "<p>You make Saves against being Grappled or Shoved with Favor, and have Favor on Checks to Grapple or Shove.</p>",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "ignorePerkPrereqs": "none",
+        "spellAmount": 0,
+        "skillChoices": []
       },
       {
         "name": "Hulking",
-        "description": "You have a +2 bonus to Item Slots."
+        "description": "<p>You have a +2 bonus to Item Slots.</p>",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "ignorePerkPrereqs": "none",
+        "spellAmount": 0,
+        "skillChoices": []
       }
     ]
   },
   "effects": [
     {
-      "name": "Hulking (Orc Trait)",
+      "name": "Darksight",
+      "origin": "Compendium.vagabond.ancestries.Item.4b55ZN5hVR3goYRZ",
+      "img": "icons/svg/aura.svg",
+      "_id": "Dk3oOrcSightEf03",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.senses",
+            "value": "darksight",
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent"
+        }
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.42.0",
+        "createdTime": null,
+        "modifiedTime": null,
+        "lastModifiedBy": null
+      },
+      "_key": "!items.effects!4b55ZN5hVR3goYRZ.Dk3oOrcSightEf03"
+    },
+    {
+      "name": "Hulking",
       "origin": "Compendium.vagabond.ancestries.Item.4b55ZN5hVR3goYRZ",
       "img": "icons/svg/aura.svg",
       "_id": "TnpQ3eDF0qwfSsI3",
@@ -55,20 +128,20 @@
           "applicationMode": "permanent"
         }
       },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
       "_stats": {
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null,
         "coreVersion": "14.361",
         "systemId": "vagabond",
-        "systemVersion": "4.1.0",
+        "systemVersion": "5.42.0",
         "createdTime": 1765107522532,
         "modifiedTime": 1772319601492,
         "lastModifiedBy": "13p65OEadZSZVLRk"
       },
-      "start": null,
-      "showIcon": 1,
-      "folder": null,
       "_key": "!items.effects!4b55ZN5hVR3goYRZ.TnpQ3eDF0qwfSsI3"
     }
   ],

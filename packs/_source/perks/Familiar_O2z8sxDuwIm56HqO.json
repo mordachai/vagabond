@@ -3,20 +3,22 @@
   "type": "perk",
   "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
   "system": {
-    "description": "<p><span class=\"fontstyle0\">You can conduct a 10 minute Ritual to conjure a familiar, a loyal Ally to you that you control. The familiar can be any Small Being with HD: 1. It uses your Cast Skill for Checks and Saves, and you can Cast Spells using the familiar as a conduit for your Magic. If you do, you can deliver the Spell from the familiar as if it were originating from you. The familiar is banished when it drops to 0HP or if you conduct this Ritual again to create another familiar.</span> <br style=\"font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:normal;orphans:2;text-align:-webkit-auto;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-size-adjust:auto;-webkit-text-stroke-width:0px\" /></p>",
+    "description": "<p>You can conduct a Ritual (p. 10) to conjure a familiar that you control with your Action or by skipping your Move. The familiar can be any Small Being with HD: 1. It uses your Cast Skill for Checks, and you can Cast Spells from the familiar as if it were originating from you.</p><p>The familiar is banished when it drops to 0 HP or if you conduct this Ritual again to create another familiar.</p>",
     "prerequisites": {
       "stats": [],
+      "statOrGroups": [],
       "trainedSkills": [],
-      "spells": [],
-      "other": [
-        "Trained: Arcana or Mysticism"
-      ],
       "trainedSkillOrGroups": [
         [
           "arcana",
           "mysticism"
         ]
-      ]
+      ],
+      "spells": [],
+      "spellOrGroups": [],
+      "hasAnySpell": false,
+      "resources": [],
+      "resourceOrGroups": []
     }
   },
   "effects": [],

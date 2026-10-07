@@ -21,12 +21,12 @@
       {
         "level": 1,
         "name": "Tap",
-        "description": "<p><span class=\"fontstyle0\">You gain the Metamagic Perk (p. 70). Further, when you Cast, you can reduce your Max HP to regain Mana equal to (2 × the reduction). This reduction ends when you Rest. If you die from this reduction, the Cast resolves before your death, and your body is vaporized.</span></p><p></p>",
+        "description": "<p><span class=\"fontstyle0\">You gain the Secret of Mana Perk (p. 72). Further, when you Cast, you can reduce your Max HP to regain Mana equal to (2 × the reduction). This reduction ends when you Rest. If you die from this reduction, the Cast resolves before your death, and your body is vaporized.</span></p><p></p>",
         "statBonusPoints": 0,
         "extraTraining": 0,
         "requiredSpells": [],
         "allowedPerks": [
-          "Compendium.vagabond.perks.Item.WeJc28ayUfyamGiM"
+          "Compendium.vagabond.perks.Item.aOUEt5kDCIGtp9nn"
         ],
         "perkAmount": 1,
         "spellAmount": 0,

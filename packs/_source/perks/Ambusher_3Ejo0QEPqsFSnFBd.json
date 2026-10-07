@@ -3,7 +3,7 @@
   "type": "perk",
   "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
   "system": {
-    "description": "<p><span class=\"fontstyle0\">You have Favor on attacks to initiate a Combat and against Beings that haven't acted in that Combat.</span> <br style=\"font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:normal;orphans:2;text-align:-webkit-auto;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-size-adjust:auto;-webkit-text-stroke-width:0px\" /></p>",
+    "description": "<p>You have Favor on attacks to initiate Combat and against Beings that haven’t acted in that Combat.</p>",
     "prerequisites": {
       "stats": [
         {
@@ -11,15 +11,16 @@
           "value": 4
         }
       ],
+      "statOrGroups": [],
       "trainedSkills": [
         "sneak"
       ],
-      "spells": [
-        ""
-      ],
-      "other": [],
+      "trainedSkillOrGroups": [],
+      "spells": [],
       "spellOrGroups": [],
-      "hasAnySpell": false
+      "hasAnySpell": false,
+      "resources": [],
+      "resourceOrGroups": []
     }
   },
   "effects": [],

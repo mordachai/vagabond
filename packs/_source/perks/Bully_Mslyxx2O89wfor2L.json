@@ -3,19 +3,24 @@
   "type": "perk",
   "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
   "system": {
-    "description": "<p><span class=\"fontstyle0\">Checks you make to Grapple or Shove Targets that are smaller than you are Favored, and you can use them as a greatclub with the Brawl property that deals its damage to both the Target and itself on a hit. Your attacks with it count as maintaining the grapple.</span> <br style=\"font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:normal;orphans:2;text-align:-webkit-auto;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-size-adjust:auto;-webkit-text-stroke-width:0px\" /></p>",
+    "description": "<p>Your Checks to Grapple or Shove Targets that are smaller than you are Favored, and you can use Beings that are your size or smaller as a Greatshield with the Brawl property that deals its damage to both the Target and itself on a hit. If you reduce damage with a Being as a Shield, it still takes the full damage. Your attacks with it maintain the grapple.</p>",
     "prerequisites": {
       "stats": [
         {
           "stat": "might",
-          "value": 4
+          "value": 7
         }
       ],
+      "statOrGroups": [],
       "trainedSkills": [
         "brawl"
       ],
+      "trainedSkillOrGroups": [],
       "spells": [],
-      "other": []
+      "spellOrGroups": [],
+      "hasAnySpell": false,
+      "resources": [],
+      "resourceOrGroups": []
     }
   },
   "effects": [],

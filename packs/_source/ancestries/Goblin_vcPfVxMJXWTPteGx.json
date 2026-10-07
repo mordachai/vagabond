@@ -3,52 +3,98 @@
   "type": "ancestry",
   "img": "systems/vagabond/assets/ui/compendiums/goblin.webp",
   "system": {
-    "description": "<p><span class=\"fontstyle0\">Havoc wagers known to delight in chaos, goblins are smaller humanoids of a typically green, yellow, grey, or bluish skin color. This instinctual delight for chaos often puts them at-odds with the codes and laws of other societies, but goblin ingenuity can be an indispensable asset.</span></p>",
+    "description": "<p>Havoc-wagers known to delight in chaos, goblins are smaller humanoids of a typically green, yellow, grey, or bluish skin color. This instinctual delight for chaos often puts them at-odds with the codes and laws of other societies, but goblin ingenuity can be an indispensable asset.</p>",
     "size": "medium",
     "ancestryType": "Cryptid",
     "traits": [
       {
         "name": "Darksight",
-        "description": "You are not Blinded by Dark.",
+        "description": "<p>You are not Blinded by Dark.</p>",
         "statBonusPoints": 0,
         "extraTraining": 0,
         "requiredSpells": [],
         "allowedPerks": [],
         "perkAmount": 0,
+        "ignorePerkPrereqs": "none",
         "spellAmount": 0,
-        "skillChoices": [
-          {
-            "count": 1,
-            "pool": [],
-            "label": ""
-          }
-        ]
+        "skillChoices": []
       },
       {
         "name": "Nimble",
-        "description": "You have a 5 ft bonus to Speed and ignore Hinder on Reflex Saves if you aren’t Incapacitated.",
+        "description": "<p>You have a 5’ bonus to Speed and ignore Hinder on Reflex Saves.</p>",
         "statBonusPoints": 0,
         "extraTraining": 0,
         "requiredSpells": [],
         "allowedPerks": [],
         "perkAmount": 0,
+        "ignorePerkPrereqs": "none",
         "spellAmount": 0,
         "skillChoices": []
       },
       {
         "name": "Scavenger",
-        "description": "You have Favor on Endure Saves against being Sickened.",
+        "description": "<p>You have Favor on Endure Saves against being Sickened.</p>",
         "statBonusPoints": 0,
         "extraTraining": 0,
         "requiredSpells": [],
         "allowedPerks": [],
         "perkAmount": 0,
+        "ignorePerkPrereqs": "none",
         "spellAmount": 0,
         "skillChoices": []
       }
     ]
   },
   "effects": [
+    {
+      "name": "Darksight",
+      "origin": "Compendium.vagabond.ancestries.Item.vcPfVxMJXWTPteGx",
+      "img": "icons/svg/aura.svg",
+      "_id": "Dk2gGoblinSght02",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.senses",
+            "value": "darksight",
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent"
+        }
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.42.0",
+        "createdTime": null,
+        "modifiedTime": null,
+        "lastModifiedBy": null
+      },
+      "_key": "!items.effects!vcPfVxMJXWTPteGx.Dk2gGoblinSght02"
+    },
     {
       "name": "Nimble",
       "origin": "Compendium.vagabond.ancestries.Item.vcPfVxMJXWTPteGx",
@@ -77,22 +123,75 @@
       "transfer": true,
       "statuses": [],
       "sort": 0,
-      "flags": {},
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent"
+        }
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
       "_stats": {
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null,
         "coreVersion": "14.361",
         "systemId": "vagabond",
-        "systemVersion": "1.1.6",
+        "systemVersion": "5.42.0",
         "createdTime": 1765107430353,
         "modifiedTime": 1765107475581,
         "lastModifiedBy": "13p65OEadZSZVLRk"
       },
+      "_key": "!items.effects!vcPfVxMJXWTPteGx.sx07MuawyaLixpAt"
+    },
+    {
+      "name": "Scavenger",
+      "origin": "Compendium.vagabond.ancestries.Item.vcPfVxMJXWTPteGx",
+      "img": "icons/svg/aura.svg",
+      "_id": "Hq3vKd8YtNe2UoWb",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.statusResistances",
+            "value": "sickened",
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent"
+        }
+      },
       "start": null,
       "showIcon": 1,
       "folder": null,
-      "_key": "!items.effects!vcPfVxMJXWTPteGx.sx07MuawyaLixpAt"
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.42.0",
+        "createdTime": null,
+        "modifiedTime": null,
+        "lastModifiedBy": null
+      },
+      "_key": "!items.effects!vcPfVxMJXWTPteGx.Hq3vKd8YtNe2UoWb"
     }
   ],
   "folder": null,

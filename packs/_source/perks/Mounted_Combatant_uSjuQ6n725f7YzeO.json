@@ -3,7 +3,7 @@
   "type": "perk",
   "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
   "system": {
-    "description": "<p><span class=\"fontstyle0\">Any Check you make to avoid falling off a mount is Favored, and you can wield Weapons with the Versatile Grip as 1H while riding a mount and get the benefits of them being wielded in both hands.</span> <br style=\"font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:normal;orphans:2;text-align:-webkit-auto;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-size-adjust:auto;-webkit-text-stroke-width:0px\" /></p>",
+    "description": "<p>Checks to avoid falling off a mount are Favored, and you can wield Melee Weapons with the 2H or Versatile Grip as 1H while riding and get the benefits of them being wielded 2H.</p>",
     "prerequisites": {
       "stats": [
         {
@@ -11,11 +11,16 @@
           "value": 4
         }
       ],
+      "statOrGroups": [],
       "trainedSkills": [
         "survival"
       ],
+      "trainedSkillOrGroups": [],
       "spells": [],
-      "other": []
+      "spellOrGroups": [],
+      "hasAnySpell": false,
+      "resources": [],
+      "resourceOrGroups": []
     }
   },
   "effects": [],

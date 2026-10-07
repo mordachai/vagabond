@@ -9,6 +9,7 @@ import { VagabondItemSequencer } from '../helpers/item-sequencer.mjs';
 import { VagabondFXDb } from '../helpers/item-fx-db.mjs';
 import { EquipmentHelper } from '../helpers/equipment-helper.mjs';
 import { ItemFxPicker } from '../applications/item-fx-picker.mjs';
+import { levelTableCap } from '../helpers/homebrew-config.mjs';
 
 const { api, sheets } = foundry.applications;
 const DragDrop = foundry.applications.ux.DragDrop;
@@ -457,7 +458,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
         );
         // Prepare level groups (1–maxLevel) with their features
         context.levelGroups = [];
-        const maxLevel = CONFIG.VAGABOND.homebrew?.leveling?.maxLevel ?? 10;
+        const maxLevel = levelTableCap();
         const manaMultiplier = this.item.system.manaMultiplier || 2;
         // Create a working copy with all levels initialized
         const levelSpellsMap = new Map();

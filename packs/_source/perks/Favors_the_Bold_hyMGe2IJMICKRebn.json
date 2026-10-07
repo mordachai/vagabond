@@ -1,0 +1,44 @@
+{
+  "name": "Favors the Bold",
+  "type": "perk",
+  "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
+  "system": {
+    "description": "<p>If you use Luck to grant a bonus to a Check and that Check would have passed without the bonus, you regain the Luck.</p>",
+    "prerequisites": {
+      "stats": [
+        {
+          "stat": "luck",
+          "value": 7
+        }
+      ],
+      "statOrGroups": [],
+      "trainedSkills": [],
+      "trainedSkillOrGroups": [],
+      "spells": [],
+      "spellOrGroups": [],
+      "hasAnySpell": false,
+      "resources": [],
+      "resourceOrGroups": []
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "5.44.0",
+    "createdTime": 1791290616273,
+    "modifiedTime": 1791290616273,
+    "lastModifiedBy": null
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "hyMGe2IJMICKRebn",
+  "sort": 20320000,
+  "_key": "!items!hyMGe2IJMICKRebn"
+}

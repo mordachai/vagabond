@@ -3,120 +3,181 @@
   "type": "class",
   "img": "icons/weapons/bows/shortbow-recurve-yellow-blue.webp",
   "system": {
-    "description": "<p><strong>I will look for you, I will find you, and I will kill you.</strong></p><p><em>– Liam Neeson, Taken</em></p><p>Keepers of the old way, hunters are survival experts that specialize in exploiting their enemies' weaknesses.</p><h3>Iconic Hunters</h3><ul><li><strong>Aloy</strong>, <em>Horizon series</em></li><li><strong>Aragorn</strong>, <em>Lord of the Rings series</em></li><li><strong>Samus Aran</strong>, <em>Metroid</em></li><li><strong>San</strong>, <em>Princess Mononoke</em></li></ul><h3>Playing Hunter</h3><p>The hunter is a low defense, high-crit striker. They can be built for Melee or Ranged positions.</p><p><strong>Action:</strong> Attack<br /><strong>Move:</strong> Midline or Backline<br /><strong>Starting Pack:</strong> Scout or Warrior<br /><strong>Key Stat:</strong> Awareness<br /><strong>Complexity:</strong> ★★☆☆☆</p><h3>Training</h3><p><strong>Weapons:</strong> Melee, Ranged<br /><strong>Skills:</strong> Survival and 4 others</p><p></p><h3><span class=\"fontstyle0\">Class Features</span></h3><table class=\"NormalTable\"><tbody><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle0\" style=\"color:rgb(255,255,255);font-size:9pt\">Level</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle0\" style=\"color:rgb(255,255,255);font-size:9pt\">Features</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">1st</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Hunter's Mark, Survivalist</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">2nd</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Rover</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">3rd</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">4th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Overwatch</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">5th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">6th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Quarry</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">7th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">8th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Lethal Precision</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">9th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">10th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Apex Predator</span></p></td></tr></tbody></table><p><br style=\"font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:normal;orphans:2;text-align:-webkit-auto;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-size-adjust:auto;-webkit-text-stroke-width:0px\" /></p>",
+    "description": "<p><strong>I will look for you, I will find you, and I will kill you.</strong></p><p><em>—Liam Neeson, Taken</em></p><p>Keepers of the old way, hunters are survival experts that specialize in exploiting their enemies’ weaknesses.</p><h3>Iconic Hunters</h3><ul><li><strong>Aloy</strong>, <em>Horizon</em></li><li><strong>Aragorn</strong>, <em>The Lord of the Rings</em></li><li><strong>Samus Aran</strong>, <em>Metroid</em></li><li><strong>San</strong>, <em>Princess Mononoke</em></li></ul><h3>Playing Hunter</h3><p>The hunter is a low defense, high-crit striker. They can be built for Melee or Ranged positions.</p><p><strong>Action:</strong> Attack<br /><strong>Move:</strong> Midline or Backline<br /><strong>Starting Pack:</strong> Scout or Warrior<br /><strong>Key Stat:</strong> Awareness<br /><strong>Complexity:</strong> ★★☆☆☆<br /><strong>Training:</strong> Melee, Ranged, Survival</p><h3>Class Features</h3><table class=\"NormalTable\"><tbody><tr><td><p><strong>Level</strong></p></td><td><p><strong>Features</strong></p></td></tr><tr><td><p>1st</p></td><td><p>Hunter’s Mark, Survivalist</p></td></tr><tr><td><p>2nd</p></td><td><p>Rover (5’)</p></td></tr><tr><td><p>3rd</p></td><td><p>Perk</p></td></tr><tr><td><p>4th</p></td><td><p>Lethal Precision (+1 damage)</p></td></tr><tr><td><p>5th</p></td><td><p>Perk</p></td></tr><tr><td><p>6th</p></td><td><p>Rover (10’), Killer Instinct</p></td></tr><tr><td><p>7th</p></td><td><p>Perk</p></td></tr><tr><td><p>8th</p></td><td><p>Lethal Precision (+2 damage)</p></td></tr><tr><td><p>9th</p></td><td><p>Perk</p></td></tr><tr><td><p>10th</p></td><td><p>Rover (15’), Apex Predator</p></td></tr></tbody></table>",
     "isSpellcaster": false,
     "levelFeatures": [
       {
-        "name": "Hunter's Mark",
-        "description": "<p><span class=\"fontstyle0\">You can mark a Being when you attack it, or byskipping your Move if you can sense it. When you do, the following rules apply:</span></p><p><span class=\"fontstyle0\">• You must Focus on the mark.</span></p><p><span class=\"fontstyle0\">• When you attack it, roll two d20s and use the highest for the Check</span></p>",
         "level": 1,
+        "name": "Hunter’s Mark",
+        "description": "<p>You can choose a Target when you attack it or by skipping your Move, declaring it as your Mark until you declare a new Mark. The following rules apply while you have a Mark:</p><ul><li><p>Your attacks against it with Weapons that have the Keen or Vicious property also have the other property, and Crit if a Bonus causes the result to exceed your Crit range.</p></li><li><p>You roll two d20s on Checks to track it, and use the higher result.</p></li></ul>",
         "statBonusPoints": 0,
         "extraTraining": 0,
-        "perkAmount": 0,
         "requiredSpells": [],
-        "allowedPerks": []
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": [],
+        "action": {
+          "enabled": true,
+          "label": "Mark Target",
+          "icon": "crosshairs",
+          "uuid": "",
+          "command": "system:hunter.mark",
+          "runAsGM": false
+        }
       },
       {
+        "level": 1,
         "name": "Survivalist",
-        "description": "<p><span class=\"fontstyle0\">You gain the Padfoot Perk (p. 70), you have Favor on Checks to track and navigate, and you can Forage while Traveling at a Normal Pace.</span></p><p></p>",
-        "level": 1,
+        "description": "<p>You gain a Perk with Survival Training as a Prerequisite, ignoring other prerequisites for it.</p><p>Further, you have Favor on Checks to track, navigate, and against extreme temperatures, and you can Forage at a Normal Travel Pace.</p>",
         "statBonusPoints": 0,
         "extraTraining": 0,
-        "perkAmount": 1,
+        "requiredSpells": [],
         "allowedPerks": [
-          "Compendium.vagabond.perks.Item.7caGINuFjOymP59f"
+          "Compendium.vagabond.perks.Item.jj9U2ZlShLvJqTaj",
+          "Compendium.vagabond.perks.Item.oW0hPunyQ6B8nUZh",
+          "Compendium.vagabond.perks.Item.9qNLXkVLcjSbOFeq",
+          "Compendium.vagabond.perks.Item.yX9kfarJAkbU3v28",
+          "Compendium.vagabond.perks.Item.uSjuQ6n725f7YzeO",
+          "Compendium.vagabond.perks.Item.cZSBLLRDwqWonXsy",
+          "Compendium.vagabond.perks.Item.Tj6jKf0G9zutW1Or"
         ],
-        "requiredSpells": []
+        "perkAmount": 1,
+        "ignorePerkPrereqs": "all",
+        "spellAmount": 0,
+        "skillChoices": []
       },
       {
-        "name": "Rover",
-        "description": "<p><span class=\"fontstyle0\">Difficult Terrain doesn't impede your walking Speed, and you have Climb and Swim.</span></p>",
         "level": 2,
+        "name": "Rover (5’)",
+        "description": "<p>Difficult Terrain doesn’t impede your walking Speed, and you have Climb and Swim.</p><p>Further, you have a 5’ bonus to Speed, which increases by 5’ every 4 Levels hereafter.</p>",
         "statBonusPoints": 1,
         "extraTraining": 0,
-        "perkAmount": 0,
         "requiredSpells": [],
-        "allowedPerks": []
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": []
       },
       {
-        "name": "Perk",
-        "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
         "level": 3,
+        "name": "Perk",
+        "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
         "statBonusPoints": 0,
         "extraTraining": 0,
-        "perkAmount": 1,
         "requiredSpells": [],
-        "allowedPerks": []
+        "allowedPerks": [],
+        "perkAmount": 1,
+        "spellAmount": 0,
+        "skillChoices": []
       },
       {
-        "name": "Overwatch",
-        "description": "<p><span class=\"fontstyle0\">Your additional d20 for attacks with your Hunter's Mark also applies to your Saves provoked by the marked Target.</span></p>",
         "level": 4,
+        "name": "Lethal Precision (+1 damage)",
+        "description": "<p>When damage is dealt to your Mark by you or an Ally on your Turn, the Mark takes 1 extra damage. This extra damage increases by 1 every 4 Levels hereafter.</p>",
         "statBonusPoints": 1,
         "extraTraining": 0,
-        "perkAmount": 0,
         "requiredSpells": [],
-        "allowedPerks": []
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": []
       },
       {
-        "name": "Perk",
-        "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
         "level": 5,
+        "name": "Perk",
+        "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
         "statBonusPoints": 0,
         "extraTraining": 0,
-        "perkAmount": 1,
         "requiredSpells": [],
-        "allowedPerks": []
+        "allowedPerks": [],
+        "perkAmount": 1,
+        "spellAmount": 0,
+        "skillChoices": []
       },
       {
-        "name": "Quarry",
-        "description": "<p><span class=\"fontstyle0\">You can sense Beings within Far as if by Blindsight if they are missing any HP or that are marked by your Hunter’s Mark.</span></p>",
         "level": 6,
+        "name": "Rover (10’)",
+        "description": "<p>Difficult Terrain doesn’t impede your walking Speed, and you have Climb and Swim.</p><p>Further, you have a 5’ bonus to Speed, which increases by 5’ every 4 Levels hereafter.</p>",
         "statBonusPoints": 1,
         "extraTraining": 0,
-        "perkAmount": 0,
         "requiredSpells": [],
-        "allowedPerks": []
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": []
       },
       {
-        "name": "Perk",
-        "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+        "level": 6,
+        "name": "Killer Instinct",
+        "description": "<p>You can sense Beings within Far as if by Blindsight if they are missing any HP or are your Mark.</p>",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": []
+      },
+      {
         "level": 7,
-        "statBonusPoints": 0,
-        "extraTraining": 0,
-        "perkAmount": 1,
-        "requiredSpells": [],
-        "allowedPerks": []
-      },
-      {
-        "name": "Lethal Precision",
-        "description": "<p><span class=\"fontstyle0\">You now roll three d20s with your Hunter’s Mark and Overwatch Features and use the highest result.</span></p>",
-        "level": 8,
-        "statBonusPoints": 1,
-        "extraTraining": 0,
-        "perkAmount": 0,
-        "requiredSpells": [],
-        "allowedPerks": []
-      },
-      {
         "name": "Perk",
         "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
-        "level": 9,
         "statBonusPoints": 0,
         "extraTraining": 0,
-        "perkAmount": 1,
         "requiredSpells": [],
-        "allowedPerks": []
+        "allowedPerks": [],
+        "perkAmount": 1,
+        "spellAmount": 0,
+        "skillChoices": []
       },
       {
-        "name": "Apex Predator",
-        "description": "<p><span class=\"fontstyle0\">Damage you deal to the Target of your Hunter’s Mark ignores Immune and Armor.</span></p>",
-        "level": 10,
+        "level": 8,
+        "name": "Lethal Precision (+2 damage)",
+        "description": "<p>When damage is dealt to your Mark by you or an Ally on your Turn, the Mark takes 1 extra damage. This extra damage increases by 1 every 4 Levels hereafter.</p>",
         "statBonusPoints": 1,
         "extraTraining": 0,
-        "perkAmount": 0,
         "requiredSpells": [],
-        "allowedPerks": []
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": []
+      },
+      {
+        "level": 9,
+        "name": "Perk",
+        "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 1,
+        "spellAmount": 0,
+        "skillChoices": []
+      },
+      {
+        "level": 10,
+        "name": "Rover (15’)",
+        "description": "<p>Difficult Terrain doesn’t impede your walking Speed, and you have Climb and Swim.</p><p>Further, you have a 5’ bonus to Speed, which increases by 5’ every 4 Levels hereafter.</p>",
+        "statBonusPoints": 1,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": []
+      },
+      {
+        "level": 10,
+        "name": "Apex Predator",
+        "description": "<p>Your Mark is Weak to your attacks.</p>",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": []
       }
     ],
     "manaSkill": null,
@@ -128,13 +189,7 @@
         "ranged",
         "survival"
       ],
-      "choices": [
-        {
-          "count": 4,
-          "pool": [],
-          "label": ""
-        }
-      ]
+      "choices": []
     },
     "levelSpells": [],
     "keyStats": [
@@ -145,7 +200,263 @@
       "Compendium.vagabond.starting-packs.Item.hW4AUwhRz98OJoDh"
     ]
   },
-  "effects": [],
+  "effects": [
+    {
+      "name": "Hunter’s Mark",
+      "origin": "Compendium.vagabond.classes.Item.1qy5vhn6XcajyEZB",
+      "img": "icons/svg/aura.svg",
+      "_id": "hUnTeRmArK000001",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.markRules",
+            "value": "keenVicious",
+            "priority": null,
+            "type": "add"
+          },
+          {
+            "key": "system.markRules",
+            "value": "critByBonus",
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent"
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.44.0",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "createdTime": 1791400000000,
+        "modifiedTime": 1791400000000,
+        "lastModifiedBy": null
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!1qy5vhn6XcajyEZB.hUnTeRmArK000001"
+    },
+    {
+      "name": "Hunter’s Mark: Auto",
+      "origin": "Compendium.vagabond.classes.Item.1qy5vhn6XcajyEZB",
+      "img": "icons/svg/aura.svg",
+      "_id": "hUnTeRaUtOmArK01",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.huntersMarkTrigger",
+            "value": "true",
+            "priority": null,
+            "type": "override"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "Attacking a Target while you have no Mark makes it your Mark.",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent",
+          "switchable": true
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.44.0",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "createdTime": 1791400000000,
+        "modifiedTime": 1791400000000,
+        "lastModifiedBy": null
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!1qy5vhn6XcajyEZB.hUnTeRaUtOmArK01"
+    },
+    {
+      "name": "Rover",
+      "origin": "Compendium.vagabond.classes.Item.1qy5vhn6XcajyEZB",
+      "img": "icons/svg/aura.svg",
+      "_id": "hUnTeRrOvEr00001",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.speed.bonus",
+            "value": "5 * (1 + floor((@lvl - 2) / 4))",
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent",
+          "minLevel": 2
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.44.0",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "createdTime": 1791400000000,
+        "modifiedTime": 1791400000000,
+        "lastModifiedBy": null
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!1qy5vhn6XcajyEZB.hUnTeRrOvEr00001"
+    },
+    {
+      "name": "Lethal Precision",
+      "origin": "Compendium.vagabond.classes.Item.1qy5vhn6XcajyEZB",
+      "img": "icons/svg/aura.svg",
+      "_id": "hUnTeRlEtHaLpRe1",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.markDamageBonus",
+            "value": "floor(@lvl / 4)",
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent",
+          "minLevel": 4
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.44.0",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "createdTime": 1791400000000,
+        "modifiedTime": 1791400000000,
+        "lastModifiedBy": null
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!1qy5vhn6XcajyEZB.hUnTeRlEtHaLpRe1"
+    },
+    {
+      "name": "Apex Predator",
+      "origin": "Compendium.vagabond.classes.Item.1qy5vhn6XcajyEZB",
+      "img": "icons/svg/aura.svg",
+      "_id": "hUnTeRaPeXpReD01",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.markRules",
+            "value": "weak",
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent",
+          "minLevel": 10
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.44.0",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "createdTime": 1791400000000,
+        "modifiedTime": 1791400000000,
+        "lastModifiedBy": null
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!1qy5vhn6XcajyEZB.hUnTeRaPeXpReD01"
+    }
+  ],
   "folder": null,
   "flags": {},
   "_stats": {

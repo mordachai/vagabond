@@ -1,0 +1,44 @@
+{
+  "name": "Ritualist",
+  "type": "perk",
+  "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
+  "system": {
+    "description": "<p>Once per Shift, you can conduct a 10-minute Ritual as an Action.</p>",
+    "prerequisites": {
+      "stats": [],
+      "statOrGroups": [],
+      "trainedSkills": [],
+      "trainedSkillOrGroups": [
+        [
+          "arcana",
+          "mysticism"
+        ]
+      ],
+      "spells": [],
+      "spellOrGroups": [],
+      "hasAnySpell": false,
+      "resources": [],
+      "resourceOrGroups": []
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "5.44.0",
+    "createdTime": 1791290616288,
+    "modifiedTime": 1791290616288,
+    "lastModifiedBy": null
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "CuR545hY6HRsnycI",
+  "sort": 20770000,
+  "_key": "!items!CuR545hY6HRsnycI"
+}

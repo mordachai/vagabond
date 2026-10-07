@@ -176,7 +176,9 @@
       "Run": "Run",
       "AddToBelt": "Add to Belt",
       "RemoveFromBelt": "Remove from Belt",
-      "Missing": "This action is no longer available."
+      "Missing": "This action is no longer available.",
+      "TipActiveToggle": "Active. Click or right-click to end it.",
+      "TipActive": "Active. Left-click to use again, right-click to end it."
     },
     "Virtuoso": {
       "Title": "Virtuoso",
@@ -196,8 +198,63 @@
       "NotYours": "Only the Dancer’s owner can Step Up.",
       "Failed": "{name}’s Step Up falls flat."
     },
+    "RollExpiry": {
+      "Miss": "The attack missed.",
+      "Other": "They did something else."
+    },
+    "Momentum": {
+      "Title": "Momentum",
+      "NotYours": "Only the Fighter’s owner can claim Momentum.",
+      "Already": "{name} already has Momentum.",
+      "EffectText": "Your next attack is Favored, and that attack uses this up. In a Combat it also ends with your Turn. Right-click the Momentum button or delete this effect to end it by hand.",
+      "Gained": "<strong>{name}</strong> gains Momentum — the next attack is Favored.",
+      "Failed": "Could not give Momentum to {name} — see console.",
+      "Ended": "<strong>{name}</strong> lets Momentum go."
+    },
+    "Deadeye": {
+      "Title": "Deadeye",
+      "Tag": "Deadeye {n}",
+      "EffectText": "Ranged attacks Crit on a d20 roll of {crit} or higher ({n} of 3 stacks). Each Ranged hit adds a stack. A miss, or any roll that is not a Ranged hit or a Save, ends it, and so does ending your Turn in a Combat without a Ranged hit. Right-click its button or delete this effect to end it by hand.",
+      "NotYours": "Only the character’s owner can do that.",
+      "Max": "{name}’s Deadeye is already at its maximum (17).",
+      "Ended": "<strong>{name}</strong> lets Deadeye go.",
+      "AutoOn": "{name}’s Deadeye is automatic — switch off “Deadeye: Auto” to add stacks by hand.",
+      "Raised": "<strong>{name}</strong>’s Deadeye rises to {n}.",
+      "Reset": "<strong>{name}</strong> didn’t hit a Ranged attack — Deadeye resets.",
+      "GritTitle": "Grit",
+      "GritPick": "Choose a Status to remove (Deadeye +{n}).",
+      "GritDone": "<strong>{name}</strong> shakes off {status}. Deadeye is now {n}.",
+      "NoStatus": "{name} has no Status Grit can remove.",
+      "HighNoonTitle": "High Noon",
+      "HighNoonDone": "<strong>{name}</strong>’s Deadeye is set to 17."
+    },
+    "HuntersMark": {
+      "Title": "Hunter’s Mark",
+      "EffectText": "{target} is your Mark. Delete this effect to drop the Mark.",
+      "NotYours": "Only the Hunter’s owner can choose a Mark.",
+      "NoTarget": "Target a token to mark it.",
+      "Marked": "<strong>{name}</strong> marks <strong>{target}</strong>.",
+      "Failed": "Could not mark {name} — see console.",
+      "Dropped": "<strong>{name}</strong> drops the Mark on <strong>{target}</strong>."
+    },
+    "Druid": {
+      "NoMetamorph": "The Metamorph module is not active — Polymorph has to be played by hand.",
+      "NotYours": "Only the character’s owner can do that.",
+      "NoToken": "No token found for this character on the scene.",
+      "PolymorphTitle": "Polymorph",
+      "PickerTitle": "Polymorph — Beasts (HD ≤ {level})",
+      "Polymorphed": "<strong>{caster}</strong> polymorphs <strong>{name}</strong> into a <strong>{form}</strong>.",
+      "Reverted": "<strong>{name}</strong> returns to their own form.",
+      "Continual": "The duration is continual (Beast Mode): no Focus needed.",
+      "ForceTitle": "Force of Nature",
+      "ForcePicker": "Force of Nature — Beasts (HD ≤ {level})",
+      "ForceUsed": "{name} already used Force of Nature this Shift (a Rest renews it).",
+      "ForceNotZero": "Force of Nature triggers when {name} is reduced to 0 HP.",
+      "ForceDone": "<strong>{name}</strong> is reduced to 0 HP, polymorphs into a <strong>{form}</strong> and regains <strong>{hp}</strong> HP."
+    },
     "Rage": {
-      "Ended": "{name}'s Rage fades — no attack or damage since their last Turn."
+      "Ended": "{name}'s Rage fades — no attack or damage since their last Turn.",
+      "EndedRoll": "<strong>{name}</strong>’s Rage fades."
     },
     "BeingTypes": {
       "Humanlike": "Humanlike",
@@ -884,6 +941,13 @@
         "name": "Defend With Both Defense Weapons",
         "hint": "When on, a defender holding two Defense weapons can use both in one Defense action (their damage rolls add together). When off, Defense uses one weapon at a time."
       },
+      "automationMode": {
+        "name": "Class Automation",
+        "hint": "Who does the class tricks? Automatic: the game does them for you, but anything that counts Turns waits for a Combat. Only in Combat: the game helps during a fight, you do the rest. Manual: you press the buttons yourself.",
+        "auto": "Automatic",
+        "combat": "Automatic only in Combat",
+        "manual": "Manual (buttons and toggles only)"
+      },
       "trinketCastRequirement": {
         "name": "Trinket Casting Requirement",
         "hint": "How strictly the Trinket rule below is enforced when casting. Off: no check. Warn: notify but allow. Block: prevent the cast.",
@@ -1294,6 +1358,10 @@
         "AddDeliveryType": "Add Delivery Type",
         "GeneralLegend": "General",
         "MaxLevel": "Max Level",
+        "MaxLevelHint": "0 = no maximum Level (RAW). Beyond a class's listed Levels, Stats come on even Levels and Perks on odd Levels.",
+        "PaceLabel": "Level Pacing",
+        "PaceHint": "Quick: 5 XP per Level. Normal: 5 × next Level. Epic: 7 × next Level. Saga: 10 × next Level. Custom: edit the table.",
+        "Pace": { "quick": "Quick (5 per Level)", "normal": "Normal (5 × next Level)", "epic": "Epic (7 × next Level)", "saga": "Saga (10 × next Level)", "custom": "Custom (table)" },
         "RequiresReloadHint": "Requires world reload to take effect.",
         "XpTableLegend": "XP Per Level Table",
         "XpTableHint": "XP required to reach each level. Edit the values directly.",
@@ -2753,6 +2821,10 @@
         "StatBonusPoints": "Stat Bonus Points",
         "SpellAmount": "Spell Amount",
         "PerkAmount": "Perk Amount",
+        "IgnorePerkPrereqs": "Ignore Perk Prerequisites",
+        "IgnorePerkPrereqsNone": "None",
+        "IgnorePerkPrereqsAll": "All prerequisites",
+        "IgnorePerkPrereqsStats": "Stat minimums only",
         "SpellPool": "Spell Pool",
         "PerkPool": "Perk Pool",
         "FormulaAmount": "Formula Picks",
@@ -2794,6 +2866,7 @@
         "ExtraTrainingHint": "Unrestricted skill training choices (any skill)",
         "StatBonusHint": "Each point grants +1 to any stat below cap",
         "AmountHint": "How many the player picks from the pool",
+        "IgnorePerkPrereqsHint": "Perks taken through this grant skip the chosen prerequisites of the perk (empty pool = any perk)",
         "FormulaAmountHint": "How many Alchemical Item formulas this feature grants",
         "FormulaValueCapHint": "Formula. Silver value; each learned formula's item value must be ≤ this. e.g. @attributes.level.value * 50",
         "LabelPlaceholder": "e.g. Ascendancy",
@@ -3207,6 +3280,23 @@
       "TabPerks": "Perks",
       "TabSummary": "Summary",
       "GmOverrideTooltip": "Override even/odd level rules for stat & perk tabs",
+      "Questions": {
+        "Quest": "Did you complete a Quest?",
+        "Fail": "Did you Fail and allow the Fail to resolve?",
+        "Boss": "Did you defeat a Boss Enemy?",
+        "Hindered": "Did you pass a Hindered Check?",
+        "Discovery": "Did you make a discovery?",
+        "Loot": "Did you loot at least 50g of treasure?"
+      },
+      "TabClass": "Class",
+      "ChooseClass": "Choose a Class",
+      "ChooseClassInstruction": "Level 0 heroes have no Class yet. Choose one to reach Level 1.",
+      "ChooseClassFirst": "Choose a Class before leveling up.",
+      "ChecklistClass": "Choose a Class",
+      "SelectClass": "Select Class",
+      "GrantLevel": "Grant Level (Destiny)",
+      "GrantLevelTooltip": "Destiny Milestone completed: gain a Level without spending XP.",
+      "MaxLevelReached": "Maximum Level ({max}) reached!",
       "GM": "GM"
     },
     "Status": {

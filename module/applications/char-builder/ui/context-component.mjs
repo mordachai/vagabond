@@ -692,7 +692,7 @@ export class ContextComponent {
             group.pool.includes(skill) && !usedSkills.has(skill)
           );
 
-          if (validSkills.length < group.count) {
+          if (validSkills.length < Math.min(group.count, group.pool.filter(s => !usedSkills.has(s)).length)) {
             return false;
           }
 

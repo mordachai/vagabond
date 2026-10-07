@@ -3,22 +3,24 @@
   "type": "perk",
   "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
   "system": {
-    "description": "<p><span class=\"fontstyle0\">You can perform a 10-minute Ritual with the corpse of a Being that is not an Artificial or Undead, and that has HD no higher than your Level. Doing so raises it as an Undead as per the Raise Spell. It is under your control for one Shift, or until you perform this Ritual again. It uses either your Arcana, Craft, or Mysticism Skill for Checks and Saves.</span></p>",
+    "description": "<p>You can conduct a Ritual (p. 10) with a corpse that was not an Artificial or Undead, and that has HD no higher than your Level. Doing so raises it as per the Raise Spell (p. 97). It is under your control until you perform this Ritual again. It uses either your Arcana, Craft, or Mysticism Skill for Checks.</p>",
     "prerequisites": {
       "stats": [],
+      "statOrGroups": [],
       "trainedSkills": [
         "craft"
-      ],
-      "spells": [],
-      "other": [
-        "Trained: Craft & either Arcana or Mysticism"
       ],
       "trainedSkillOrGroups": [
         [
           "arcana",
           "mysticism"
         ]
-      ]
+      ],
+      "spells": [],
+      "spellOrGroups": [],
+      "hasAnySpell": false,
+      "resources": [],
+      "resourceOrGroups": []
     }
   },
   "effects": [],

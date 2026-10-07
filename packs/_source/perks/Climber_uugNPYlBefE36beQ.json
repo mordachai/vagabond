@@ -1,0 +1,44 @@
+{
+  "name": "Climber",
+  "type": "perk",
+  "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
+  "system": {
+    "description": "<p>You gain Climb.</p>",
+    "prerequisites": {
+      "stats": [
+        {
+          "stat": "dexterity",
+          "value": 4
+        }
+      ],
+      "statOrGroups": [],
+      "trainedSkills": [],
+      "trainedSkillOrGroups": [],
+      "spells": [],
+      "spellOrGroups": [],
+      "hasAnySpell": false,
+      "resources": [],
+      "resourceOrGroups": []
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "5.44.0",
+    "createdTime": 1791290616269,
+    "modifiedTime": 1791290616269,
+    "lastModifiedBy": null
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "uugNPYlBefE36beQ",
+  "sort": 20190000,
+  "_key": "!items!uugNPYlBefE36beQ"
+}

@@ -88,6 +88,69 @@ export function buildTokenSenseData(senses = [], sensesNote = '') {
 }
 
 export class NpcSenses {
+  static #characterTimers = new Map();
+
+  /**
+   * Debounced, active-GM-only re-sync of a character's tokens (call from any hook that can
+   * change `system.senses`: effects, items, actor updates).
+   * @param {Actor} actor
+   */
+  static queueCharacterSync(actor) {
+    if (actor?.type !== 'character' || !game.users.activeGM?.isSelf) return;
+    clearTimeout(this.#characterTimers.get(actor.uuid));
+    this.#characterTimers.set(actor.uuid, setTimeout(() => {
+      this.#characterTimers.delete(actor.uuid);
+      this.syncCharacterTokens(actor).catch((err) => console.warn('Vagabond | Senses sync failed:', err));
+    }, 150));
+  }
+
+  /**
+   * Character senses (derived `system.senses`, after Active Effects) → prototype token + placed
+   * linked tokens. Manual-first: a character with no senses is left alone; only vision this sync
+   * itself applied (`flags.vagabond.sensesApplied`) is reverted, so hand-tuned token vision is safe.
+   * No-op when the tokens already match, so the resulting updateActor doesn't loop.
+   * @param {Actor} actor
+   */
+  static async syncCharacterTokens(actor) {
+    const data = buildTokenSenseData(actor.system.senses ?? []);
+    const applied = !!actor.getFlag('vagabond', 'sensesApplied');
+    if (!data && !applied) return;
+
+    const build = (prefix, currentModes) => {
+      const update = {};
+      if (data) {
+        update[`${prefix}sight.enabled`] = true;
+        update[`${prefix}sight.range`] = data.sight.range;
+        update[`${prefix}sight.visionMode`] = data.sight.visionMode;
+      } else {
+        update[`${prefix}sight.range`] = 0;
+        update[`${prefix}sight.visionMode`] = 'basic';
+      }
+      for (const mode of MANAGED_DETECTION_MODES) {
+        if (data?.detectionModes[mode]) update[`${prefix}detectionModes.${mode}`] = data.detectionModes[mode];
+        else if (currentModes && mode in currentModes) update[`${prefix}detectionModes.-=${mode}`] = null;
+      }
+      return update;
+    };
+    // True when any value in the flat update differs from the target's current data
+    const differs = (target, update, prefix) => Object.entries(update).some(([k, v]) => {
+      const key = k.slice(prefix.length);
+      if (key.includes('-=')) return true;
+      return JSON.stringify(foundry.utils.getProperty(target, key)) !== JSON.stringify(v);
+    });
+
+    const protoSource = actor.prototypeToken.toObject();
+    const protoUpdate = build('prototypeToken.', protoSource.detectionModes);
+    if (differs(protoSource, protoUpdate, 'prototypeToken.') || applied !== !!data) {
+      await actor.update({ ...protoUpdate, 'flags.vagabond.sensesApplied': !!data });
+    }
+    for (const token of actor.getActiveTokens(false, true)) {
+      if (!token.actorLink) continue;
+      const update = build('', token._source.detectionModes);
+      if (differs(token._source, update, '')) await token.update(update);
+    }
+  }
+
   /**
    * Flat update object for one token-shaped target (actor prototypeToken or a TokenDocument).
    * @param {string} prefix        '' for a TokenDocument, 'prototypeToken.' for the actor

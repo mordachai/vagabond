@@ -152,6 +152,30 @@ export default class VagabondActiveEffectConfig extends foundry.applications.she
             option.textContent = kind;
             datalist.appendChild(option);
           });
+        } else if (keyValue === 'system.senses') {
+          input.setAttribute('placeholder', 'Sense key (e.g., darksight)');
+          Object.entries(CONFIG.VAGABOND.senses ?? {}).forEach(([senseKey, label]) => {
+            const option = document.createElement('option');
+            option.value = senseKey;
+            option.textContent = game.i18n.localize(label);
+            datalist.appendChild(option);
+          });
+        } else if (keyValue === 'system.markRules') {
+          input.setAttribute('placeholder', 'keenVicious, critByBonus or weak');
+          ['keenVicious', 'critByBonus', 'weak'].forEach(rule => {
+            const option = document.createElement('option');
+            option.value = rule;
+            option.textContent = rule;
+            datalist.appendChild(option);
+          });
+        } else if (keyValue === 'system.critExplodeSkills') {
+          input.setAttribute('placeholder', 'Weapon skill key (e.g., ranged)');
+          (CONFIG.VAGABOND.homebrew?.skills ?? []).filter(s => s.isWeaponSkill).forEach(skill => {
+            const option = document.createElement('option');
+            option.value = skill.key;
+            option.textContent = skill.label ? game.i18n.localize(skill.label) : skill.key;
+            datalist.appendChild(option);
+          });
         } else if (SAVE_KEY_FIELDS.has(keyValue)) {
           input.setAttribute('placeholder', 'Save key (e.g., reflex)');
           (CONFIG.VAGABOND.homebrew?.saves ?? []).forEach(save => {

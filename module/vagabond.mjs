@@ -67,6 +67,8 @@ import { VagabondItemSequencer } from './helpers/item-sequencer.mjs';
 import { VagabondFXResolver } from './helpers/fx-file-resolver.mjs';
 import { registerSocket, emitSocket, registerSocketAction } from './helpers/socket-helper.mjs';
 import { runMacroFromButton, executeItemMacro, registerMacroHandler } from './helpers/item-macro.mjs';
+import { FeatureAction } from './helpers/feature-action.mjs';
+import { RollExpiry } from './helpers/roll-expiry.mjs';
 import { LightSource } from './helpers/light-source.mjs';
 import { VagabondDamageHelper } from './helpers/damage-helper.mjs';
 import { VagabondDamagePipeline } from './helpers/damage-pipeline.mjs';
@@ -75,6 +77,11 @@ import { RageHelper } from './helpers/rage-helper.mjs';
 import { AlchemyHelper } from './helpers/crafting/alchemy-helper.mjs';
 import { BardHelper } from './helpers/bard-helper.mjs';
 import { DancerHelper } from './helpers/dancer-helper.mjs';
+import { FighterHelper } from './helpers/fighter-helper.mjs';
+import { GunslingerHelper } from './helpers/gunslinger-helper.mjs';
+import { HunterHelper } from './helpers/hunter-helper.mjs';
+import { DruidHelper } from './helpers/druid-helper.mjs';
+import { migrateFighterClass, migrateDruidClass, migrateGunslingerClass, migrateHunterClass, migrateAncestries } from './helpers/class-migrations.mjs';
 import { consumeUsedEffects } from './helpers/use-effects.mjs';
 import { VagabondRollBuilder } from './helpers/roll-builder.mjs';
 import { CurrencyHelper } from './helpers/currency-helper.mjs';
@@ -385,6 +392,25 @@ function registerGameSettings() {
     type: Boolean,
     default: true,
     requiresReload: false,
+  });
+
+  // Class automation mode (auto / combat / manual) — gates every class "Auto" helper effect
+  // at one choke point, see helpers/automation-mode.mjs.
+  game.settings.register('vagabond', 'automationMode', {
+    name: 'VAGABOND.Settings.automationMode.name',
+    hint: 'VAGABOND.Settings.automationMode.hint',
+    scope: 'world',
+    config: true,
+    type: String,
+    choices: {
+      auto: 'VAGABOND.Settings.automationMode.auto',
+      combat: 'VAGABOND.Settings.automationMode.combat',
+      manual: 'VAGABOND.Settings.automationMode.manual',
+    },
+    default: 'auto',
+    requiresReload: false,
+    // Re-prepare actors so the trigger fields / formulas pick the new mode up everywhere
+    onChange: () => _refreshClockDependents(),
   });
 
   // Trinket casting severity (off/warn/block); the rule itself is
@@ -1044,6 +1070,17 @@ function registerGameSettings() {
     requiresReload: false,
   });
 
+  // Setting 21f6: One-time migration guards (hidden) — see class-migrations.mjs.
+  for (const key of ['fighterClassMigrated', 'druidClassMigrated', 'gunslingerClassMigrated', 'hunterClassMigrated', 'ancestriesMigrated']) {
+    game.settings.register('vagabond', key, {
+      scope: 'world',
+      config: false,
+      type: Boolean,
+      default: false,
+      requiresReload: false,
+    });
+  }
+
   // Setting 21g: One-time migration guard (hidden) — see CurrencyHelper.migrateCopperScale().
   // Stored raw-copper amounts were ×10 too small after the 1s=100c ratio correction.
   game.settings.register('vagabond', 'copperScaleMigrated', {
@@ -1673,6 +1710,31 @@ Hooks.once('ready', function () {
   registerMacroHandler('bard.virtuoso', (scope) => BardHelper.virtuoso(scope));
   registerMacroHandler('bard.perform', (scope) => BardHelper.perform(scope));
   registerMacroHandler('dancer.stepUp', (scope) => DancerHelper.stepUp(scope));
+  registerMacroHandler('fighter.momentum', (scope) => FighterHelper.momentum(scope));
+  registerMacroHandler('druid.polymorph', (scope) => DruidHelper.polymorph(scope));
+  registerMacroHandler('druid.forceOfNature', (scope) => DruidHelper.forceOfNature(scope));
+  registerMacroHandler('gunslinger.deadeye', (scope) => GunslingerHelper.deadeye(scope));
+  registerMacroHandler('gunslinger.grit', (scope) => GunslingerHelper.grit(scope));
+  registerMacroHandler('gunslinger.gritRemove', (scope) => GunslingerHelper.gritRemove(scope));
+  registerMacroHandler('gunslinger.highNoon', (scope) => GunslingerHelper.highNoon(scope));
+  registerMacroHandler('hunter.mark', (scope) => HunterHelper.mark(scope));
+
+  // Live state of feature buttons: glow while the effect is on, end it from the sheet / HUD
+  // (right-click; Momentum is a pure toggle so a left click ends it too).
+  FeatureAction.registerState('gunslinger.deadeye', {
+    isActive: (actor) => GunslingerHelper.stacks(actor) > 0,
+    count: (actor) => GunslingerHelper.stacks(actor),
+    end: (actor) => GunslingerHelper.end(actor),
+  });
+  FeatureAction.registerState('fighter.momentum', {
+    isActive: (actor) => !!FighterHelper.momentumEffect(actor)?.active,
+    end: (actor) => FighterHelper.endMomentum(actor),
+    toggle: true,
+  });
+  FeatureAction.registerState('hunter.mark', {
+    isActive: (actor) => !!HunterHelper.markEffect(actor),
+    end: (actor) => HunterHelper.dropMark(actor),
+  });
 
   registerSocketAction('grantLuck', async ({ actorUuid, amount }) => {
     const actor = await fromUuid(actorUuid);
@@ -1806,6 +1868,10 @@ Hooks.once('ready', function () {
       StatusHelper,
       BardHelper,
       DancerHelper,
+      FighterHelper,
+      DruidHelper,
+      GunslingerHelper,
+      HunterHelper,
       VagabondRollBuilder,
       // Stable read-only derived snapshot for modules/macros:
       // game.vagabond.api.readActor(actorOrTokenOrUuidOrId)
@@ -1838,12 +1904,22 @@ Hooks.once('ready', function () {
   RageHelper.migrateBarbarianClass();
   // Idempotent: hand-switch helper effects stay switchable now that other class effects are locked features.
   RageHelper.flagSwitchableEffects();
+  // Idempotent: Aggressor auto/manual twins stop double-counting when both are on.
+  RageHelper.syncAggressorTwins();
   // One-time: Alchemist class items get the book-revision effect set (per-behavior switches).
   AlchemyHelper.migrateAlchemistClass();
   // One-time: Bard class items get the book-revision features + Enjoy the Silence effect.
   BardHelper.migrateBardClass();
   // One-time: Dancer class items get the book-revision features + Footloose / Don't Stop Me Now effects.
   DancerHelper.migrateDancerClass();
+  // One-time: Fighter / Druid class items get the book-revision features + effects.
+  migrateFighterClass();
+  migrateDruidClass();
+  // One-time: Gunslinger / Hunter class items get the book-revision features + effects.
+  migrateGunslingerClass();
+  migrateHunterClass();
+  // One-time: ancestry items get the book text, grants and effects (Dwarf also gets the Tough Perk).
+  migrateAncestries();
   // One-time: stored copper amounts ×10 (ratio corrected to the book's 1s = 100c).
   CurrencyHelper.migrateCopperScale();
 });
@@ -1907,6 +1983,17 @@ Hooks.once('ready', () => _queueCombatRefresh(game.combats?.active));
 
 // Barbarian Rage auto-Berserk (inert unless an actor has system.rageTrigger)
 RageHelper.registerHooks();
+
+// Fighter Momentum (inert unless an actor has system.momentumTrigger)
+FighterHelper.registerHooks();
+
+// Gunslinger Deadeye / High Noon (inert unless an actor has system.deadeyeTrigger / highNoonTrigger)
+// Roll expiry: effects that end on a miss / a different roll (rules registered by each helper below)
+RollExpiry.registerHooks();
+GunslingerHelper.registerHooks();
+
+// Hunter's Mark: Lethal Precision damage (inert unless an actor has a Mark and system.markDamageBonus)
+HunterHelper.registerHooks();
 
 Hooks.on('updateJournalEntry', (journal, changes) => {
   const pc = foundry.utils.getProperty(changes, 'flags.vagabond.progressClock');
@@ -2831,6 +2918,20 @@ const _armorSyncActor = (doc) => {
   if (actor instanceof Actor) EquipmentHelper.queueArmorRestrainedSync(actor);
 };
 Hooks.on('updateActor', (actor) => _armorSyncActor(actor));
+
+// Character senses (Darksight from an ancestry, etc.) → token vision. Same triggers as the armor
+// sync; debounced, active-GM-only, no-op when the tokens already match (NpcSenses.syncCharacterTokens).
+const _sensesSyncActor = (doc) => {
+  const actor = doc instanceof Actor ? doc : (doc?.parent instanceof Actor ? doc.parent : doc?.parent?.parent);
+  if (actor instanceof Actor) NpcSenses.queueCharacterSync(actor);
+};
+Hooks.on('updateActor', (actor) => _sensesSyncActor(actor));
+for (const hook of ['createItem', 'deleteItem', 'createActiveEffect', 'updateActiveEffect', 'deleteActiveEffect']) {
+  Hooks.on(hook, (doc) => _sensesSyncActor(doc));
+}
+Hooks.once('ready', () => {
+  for (const actor of game.actors) NpcSenses.queueCharacterSync(actor);
+});
 for (const hook of ['createItem', 'updateItem', 'deleteItem',
   'createActiveEffect', 'updateActiveEffect', 'deleteActiveEffect']) {
   Hooks.on(hook, (doc) => _armorSyncActor(doc));
@@ -3021,8 +3122,11 @@ const FLUKE_REROLL_ENTRY = {
       const weaponSkillKey = rerollData.weaponSkillKey;
       const weaponSkill = actor.system.skills?.[weaponSkillKey];
       const critType = VagabondRollBuilder.isWeaponSkillKey(weaponSkillKey) ? weaponSkillKey : null;
-      const critNumber = VagabondRollBuilder.calculateCritThreshold(actor.getRollDataWithItemEffects(weapon), critType);
-      const isCritical = VagabondChatCard.isRollCritical(roll, critNumber);
+      const rerollTarget = TargetHelper.resolveTargets(flags.targetsAtRollTime || [])[0]?.actor ?? null;
+      const critNumber = VagabondRollBuilder.calculateCritThreshold(
+        actor.getRollDataWithItemEffects(weapon, { targets: rerollTarget ? [rerollTarget] : [] }), critType);
+      const isCritical = VagabondChatCard.isRollCritical(roll, critNumber)
+        || (!!rerollTarget && HunterHelper.critsByBonus(actor, rerollTarget) && roll.total >= critNumber);
 
       const attackResult = {
         roll,

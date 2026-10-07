@@ -1,0 +1,47 @@
+{
+  "name": "Cryptozoologist",
+  "type": "perk",
+  "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
+  "system": {
+    "description": "<p>Choose a Being Type. You can use an Action or skip your Move to spend a Studied die and make those Beings Weak to your next damage instance this Round. You can take this Perk multiple times to choose other Being Types.</p>",
+    "prerequisites": {
+      "stats": [
+        {
+          "stat": "awareness",
+          "value": 4
+        }
+      ],
+      "statOrGroups": [],
+      "trainedSkills": [
+        "mysticism",
+        "survival"
+      ],
+      "trainedSkillOrGroups": [],
+      "spells": [],
+      "spellOrGroups": [],
+      "hasAnySpell": false,
+      "resources": [],
+      "resourceOrGroups": []
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "5.44.0",
+    "createdTime": 1791290616270,
+    "modifiedTime": 1791290616270,
+    "lastModifiedBy": null
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "oW0hPunyQ6B8nUZh",
+  "sort": 20220000,
+  "_key": "!items!oW0hPunyQ6B8nUZh"
+}

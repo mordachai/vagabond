@@ -1,0 +1,41 @@
+{
+  "name": "Selfless",
+  "type": "perk",
+  "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
+  "system": {
+    "description": "<p>Once per Turn, when an Ally you can see takes damage, you can choose to take the damage instead. This can’t be reduced by Armor.</p>",
+    "prerequisites": {
+      "stats": [],
+      "statOrGroups": [],
+      "trainedSkills": [],
+      "trainedSkillOrGroups": [],
+      "spells": [
+        "Compendium.vagabond.spells.Item.TyPnI7gEtbzuxFZm"
+      ],
+      "spellOrGroups": [],
+      "hasAnySpell": false,
+      "resources": [],
+      "resourceOrGroups": []
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "5.44.0",
+    "createdTime": 1791290616290,
+    "modifiedTime": 1791290616290,
+    "lastModifiedBy": null
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "sKrfyW14tiTgU56b",
+  "sort": 20830000,
+  "_key": "!items!sKrfyW14tiTgU56b"
+}

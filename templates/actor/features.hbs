@@ -141,7 +141,7 @@
               <div class='feature-header accordion-header clickable' data-action='toggleFeature' data-feature-id='{{feature._id}}'>
                 <h5 class='feature-name'>{{feature.name}}</h5>
                 {{#if feature.fx}}
-                  <button type='button' class='feature-action-btn' data-action='featureAction' data-action-key='{{feature.fx.key}}' data-tooltip='{{feature.fx.label}}'><i class='{{feature.fx.icon}}'></i></button>
+                  <button type='button' class='feature-action-btn{{#if feature.fx.active}} is-active{{/if}}' data-action='featureAction' data-action-key='{{feature.fx.key}}' data-tooltip='{{feature.fx.tip}}'{{#if feature.fx.count}} data-count='{{feature.fx.count}}'{{/if}}><i class='{{feature.fx.icon}}'></i></button>
                 {{/if}}
               </div>
               {{#if feature.enrichedDescription}}
@@ -164,7 +164,7 @@
               <div class='trait-header accordion-header clickable' data-action='toggleTrait' data-trait-id='{{trait._id}}'>
                 <h5 class='trait-name'>{{trait.name}}</h5>
                 {{#if trait.fx}}
-                  <button type='button' class='feature-action-btn' data-action='featureAction' data-action-key='{{trait.fx.key}}' data-tooltip='{{trait.fx.label}}'><i class='{{trait.fx.icon}}'></i></button>
+                  <button type='button' class='feature-action-btn{{#if trait.fx.active}} is-active{{/if}}' data-action='featureAction' data-action-key='{{trait.fx.key}}' data-tooltip='{{trait.fx.tip}}'{{#if trait.fx.count}} data-count='{{trait.fx.count}}'{{/if}}><i class='{{trait.fx.icon}}'></i></button>
                 {{/if}}
               </div>
               {{#if trait.enrichedDescription}}
@@ -184,7 +184,7 @@
               <div class='perk-header accordion-header clickable' data-action='togglePerk' data-perk-id='{{perk._id}}'>
                 <h5 class='perk-name'>{{perk.name}}</h5>
                 {{#if perk.fx}}
-                  <button type='button' class='feature-action-btn' data-action='featureAction' data-action-key='{{perk.fx.key}}' data-tooltip='{{perk.fx.label}}'><i class='{{perk.fx.icon}}'></i></button>
+                  <button type='button' class='feature-action-btn{{#if perk.fx.active}} is-active{{/if}}' data-action='featureAction' data-action-key='{{perk.fx.key}}' data-tooltip='{{perk.fx.tip}}'{{#if perk.fx.count}} data-count='{{perk.fx.count}}'{{/if}}><i class='{{perk.fx.icon}}'></i></button>
                 {{/if}}
               </div>
               <div class='perk-content accordion-content' data-perk-id='{{perk._id}}'>

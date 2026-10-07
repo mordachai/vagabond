@@ -1,0 +1,41 @@
+{
+  "name": "Celestial Illuminator",
+  "type": "perk",
+  "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
+  "system": {
+    "description": "<p>You can cause the light shed by Spells you Cast to be Moonlight or Sunlight.</p>",
+    "prerequisites": {
+      "stats": [],
+      "statOrGroups": [],
+      "trainedSkills": [],
+      "trainedSkillOrGroups": [],
+      "spells": [
+        "Compendium.vagabond.spells.Item.M0HRBrZaRQ81vcAg"
+      ],
+      "spellOrGroups": [],
+      "hasAnySpell": false,
+      "resources": [],
+      "resourceOrGroups": []
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "5.44.0",
+    "createdTime": 1791290616268,
+    "modifiedTime": 1791290616268,
+    "lastModifiedBy": null
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "WO2IpKIvE5BnW678",
+  "sort": 20160000,
+  "_key": "!items!WO2IpKIvE5BnW678"
+}

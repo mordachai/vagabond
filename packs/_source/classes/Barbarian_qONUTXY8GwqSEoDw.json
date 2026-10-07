@@ -343,9 +343,15 @@
         "changes": [
           {
             "key": "system.speed.bonus",
-            "value": "(@combat.round == 1) ? ((@lvl >= 2) ? 5 * (1 + floor((@lvl - 2) / 4)) : 0) : 0",
+            "value": "(@aggressorAuto > 0) ? ((@combat.round == 1) ? ((@lvl >= 2) ? 5 * (1 + floor((@lvl - 2) / 4)) : 0) : 0) : 0",
             "priority": null,
             "type": "add"
+          },
+          {
+            "key": "system.aggressorAuto",
+            "value": "1",
+            "priority": null,
+            "type": "override"
           }
         ]
       },
@@ -356,7 +362,7 @@
         "expiry": null,
         "expired": false
       },
-      "description": "Doubles the Aggressor bonus during the first Round of a started Combat.",
+      "description": "Doubles the Aggressor bonus during the first Round of a started Combat. While on, the manual twin does nothing.",
       "tint": "#ffffff",
       "transfer": true,
       "statuses": [],
@@ -394,7 +400,7 @@
         "changes": [
           {
             "key": "system.speed.bonus",
-            "value": "(@combat.round == 1) ? 0 : (@lvl >= 2) ? 5 * (1 + floor((@lvl - 2) / 4)) : 0",
+            "value": "(@aggressorAuto > 0) ? 0 : (@lvl >= 2) ? 5 * (1 + floor((@lvl - 2) / 4)) : 0",
             "priority": null,
             "type": "add"
           }
@@ -407,7 +413,7 @@
         "expiry": null,
         "expired": false
       },
-      "description": "Doubles the Aggressor bonus. For play without the combat tracker: turn it on when the fight starts and off after the first Round.",
+      "description": "Doubles the Aggressor bonus. For play without the combat tracker: turn it on when the fight starts and off after the first Round. Does nothing while the auto twin is on.",
       "tint": "#ffffff",
       "transfer": true,
       "statuses": [],

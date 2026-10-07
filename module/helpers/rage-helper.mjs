@@ -1,5 +1,6 @@
 import { StatusHelper } from './status-helper.mjs';
 import { combatRollData } from './rule-rolldata.mjs';
+import { RollExpiry } from './roll-expiry.mjs';
 
 const BERSERK = 'berserk';
 
@@ -44,6 +45,20 @@ export class RageHelper {
       && actor.getFlag('vagabond', 'rageActed') !== true) {
       await actor.update({ 'flags.vagabond.rageActed': true }, { render: false });
     }
+  }
+
+  /**
+   * End Rage's Berserk (roll rule). Only a Berserk this helper applied.
+   * @param {Actor} actor
+   */
+  static async endBerserk(actor) {
+    if (!this.autoEffect(actor)) return;
+    await StatusHelper.removeStatus(actor, BERSERK);
+    const { VagabondChatCard } = await import('./chat-card.mjs');
+    await VagabondChatCard.featureCard(actor, {
+      title: game.i18n.localize('VAGABOND.StatusConditions.Berserk'),
+      description: `<p>${game.i18n.format('VAGABOND.Rage.EndedRoll', { name: actor.name })}</p>`,
+    });
   }
 
   /**
@@ -167,6 +182,40 @@ export class RageHelper {
   }
 
   /**
+   * Idempotent sweep: Barbarian class items migrated before `system.aggressorAuto` existed have
+   * the old Aggressor First Round twins: both on doubled Speed permanently, and the world automation mode could not reach them.
+   * Copies the two twins' changes + description from the compendium (once it is rebuilt) onto
+   * items whose manual twin lacks the marker. The player's on/off choice is left alone.
+   */
+  static async syncAggressorTwins() {
+    if (game.user !== game.users.activeGM) return;
+    const source = await game.packs.get('vagabond.classes')?.getDocument('qONUTXY8GwqSEoDw');
+    const names = ['Aggressor: First Round (auto)', 'Aggressor: First Round (manual)'];
+    const fresh = names.map(n => source?.effects.find(e => e.name === n));
+    if (fresh.some(e => !e) || !fresh.every(e => e.system.changes.some(c => /@aggressorAuto/.test(String(c.value))))) return;
+
+    const safeItems = (doc) => { try { return Array.from(doc?.items ?? []); } catch { return []; } };
+    const candidates = [
+      ...game.items,
+      ...game.actors.contents.flatMap(safeItems),
+      ...game.scenes.contents.flatMap((sc) => sc.tokens.contents.filter((t) => !t.actorLink && t.actor)
+        .flatMap((t) => safeItems(t.actor))),
+    ];
+    for (const item of candidates) {
+      if (item.type !== 'class' || item.name !== 'Barbarian') continue;
+      const auto = item.effects.find(e => e.name === names[0]);
+      if (!auto || auto.system.changes.some(c => /@aggressorAuto/.test(String(c.value)))) continue;
+      const updates = [];
+      for (const src of fresh) {
+        const eff = item.effects.find(e => e.name === src.name);
+        if (eff) updates.push({ _id: eff.id, 'system.changes': src.toObject().system.changes, description: src.description });
+      }
+      try { await item.updateEmbeddedDocuments('ActiveEffect', updates); }
+      catch (err) { console.warn(`vagabond | syncAggressorTwins: skipped ${item.uuid}`, err); }
+    }
+  }
+
+  /**
    * Register the hooks. Synchronous, called once at module load.
    * - preUpdateActor stashes the HP before the write so updateActor can tell damage from healing
    *   (options travel with the update to every client).
@@ -185,9 +234,20 @@ export class RageHelper {
       const before = options?.vagabondHpBefore;
       const now = actor.system.health?.value ?? 0;
       if (before === undefined || now >= before || now <= 0) return; // not damage, or knocked out
+      // HP above the maximum was never real HP (a new character starts at 10 until the builder
+      // sets it to the max): lowering it to the max is not damage
+      if (before > (actor.system.health?.max ?? Infinity)) return;
       this.onActivity(actor);
     });
 
     Hooks.on('combatTurnChange', (combat, previous) => this.onTurnEnd(combat, previous));
+
+    // Roll rule, only where no started Combat counts Turns: Berserk lasts while you attack or
+    // roll Saves (damage means Saves); a skill / stat / cast roll means you stopped fighting.
+    RollExpiry.register('rage', {
+      applies: (actor) => this.isAuto(actor) && !!this.autoEffect(actor) && !combatRollData(actor).active,
+      decide: (ctx, kind) => (kind === 'check' || kind === 'cast') ? 'end' : undefined,
+      end: (actor) => this.endBerserk(actor),
+    });
   }
 }

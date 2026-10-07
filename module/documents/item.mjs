@@ -2,6 +2,7 @@ import { VagabondChatHelper } from '../helpers/chat-helper.mjs';
 import { effectModeToChangeType } from '../helpers/effects.mjs';
 import { EquipmentHelper } from '../helpers/equipment-helper.mjs';
 import { CurrencyHelper } from '../helpers/currency-helper.mjs';
+import { HunterHelper } from '../helpers/hunter-helper.mjs';
 
 /**
  * Extend the basic Item with some very simple modifications.
@@ -701,7 +702,8 @@ export class VagabondItem extends Item {
 
     // Get roll data WITH this item's "on-use" effects applied
     // This allows weapon properties like "Keen" to affect only this weapon's rolls
-    const rollData = actor.getRollDataWithItemEffects(this);
+    const targets = Array.from(game.user.targets);
+    const rollData = actor.getRollDataWithItemEffects(this, { targets: targets.map(t => t.actor).filter(Boolean) });
 
     // Get the weapon skill and difficulty
     // The weaponSkill field can be:
@@ -717,24 +719,21 @@ export class VagabondItem extends Item {
     // and Invisible (attackersAreBlinded → Hinder vote); merged net-count BEFORE rolling.
     // Only the first target is consulted (multi-target attacks ignore targets 2..n).
     const { VagabondRollBuilder } = await import('../helpers/roll-builder.mjs');
-    // Unconditional Favor on Attacks (system.favorChecks, e.g. Virtuoso: Valor)
-    let effectiveFavorHinder = VagabondRollBuilder.mergeFavorHinder(favorHinder, VagabondRollBuilder.checkFavorVote(actor, 'attack'));
-    const targets = Array.from(game.user.targets);
+    // Every Favor / Hinder vote is collected first and merged ONCE (net count). Merging a partial
+    // result again would collapse e.g. two Favors into one and drop votes added earlier.
+    // Unconditional Favor on Attacks (system.favorChecks, e.g. Virtuoso: Valor, Fighter: Momentum)
+    const votes = [favorHinder, VagabondRollBuilder.checkFavorVote(actor, 'attack')];
     if (targets.length > 0) {
       // Attacker-side situational Favor (CONFIG.VAGABOND.attackFavorRules, e.g. Bloodthirsty)
-      const attackerVote = VagabondRollBuilder.attackFavorVote(actor, targets.map(t => t.actor).filter(Boolean));
-      effectiveFavorHinder = VagabondRollBuilder.mergeFavorHinder(favorHinder, attackerVote);
+      votes.push(VagabondRollBuilder.attackFavorVote(actor, targets.map(t => t.actor).filter(Boolean)));
       const targetActor = targets[0].actor;
       if (targetActor) {
         const targetModifier = targetActor.system.incomingAttacksModifier || 'none';
         const attackersAreBlinded = targetActor.system.defenderStatusModifiers?.attackersAreBlinded || false;
-        effectiveFavorHinder = VagabondRollBuilder.mergeFavorHinder(
-          effectiveFavorHinder,
-          targetModifier,
-          attackersAreBlinded ? 'hinder' : 'none'
-        );
+        votes.push(targetModifier, attackersAreBlinded ? 'hinder' : 'none');
       }
     }
+    const effectiveFavorHinder = VagabondRollBuilder.mergeFavorHinder(...votes);
 
     // Use centralized roll builder with modified roll data and effective favor/hinder
     const roll = await VagabondRollBuilder.buildAndEvaluateD20WithRollData(rollData, effectiveFavorHinder);
@@ -761,7 +760,9 @@ export class VagabondItem extends Item {
     const critNumber = VagabondRollBuilder.calculateCritThreshold(rollData, weaponSkillKey);
     const d20Term = roll.terms.find(term => term.constructor.name === 'Die' && term.faces === 20);
     const d20Result = d20Term?.results?.[0]?.result || 0;
-    const isCritical = forceCritical || (d20Result >= critNumber);
+    // Hunter's Mark: against the Mark a Bonus can push the result into the Crit range
+    const critByBonus = !!targets[0]?.actor && HunterHelper.critsByBonus(actor, targets[0].actor);
+    const isCritical = forceCritical || (d20Result >= critNumber) || (critByBonus && roll.total >= critNumber);
 
     return {
       roll,
@@ -833,6 +834,7 @@ export class VagabondItem extends Item {
       isCritical,
       statKey,
       dieSizeBonus,
+      skillKey: weaponSkillKey,
       targets: targetsAtRollTime,
     });
   }

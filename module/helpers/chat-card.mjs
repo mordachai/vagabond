@@ -2,6 +2,7 @@ import { VagabondTextParser } from './text-parser.mjs';
 import { VagabondDamagePipeline } from './damage-pipeline.mjs';
 import { VagabondChatHelper } from './chat-helper.mjs';
 import { buildMacroButtonHTML } from './item-macro.mjs';
+import { DruidHelper } from './druid-helper.mjs';
 import { resolveEffectDescription, effectDisplayImg } from './effects.mjs';
 
 /**
@@ -1218,7 +1219,7 @@ export class VagabondChatCard {
         let finalDamage;
         if (preferFlat && action.flatDamage) {
             // Flat damage - authored value stays pure, no bonus fields apply
-            finalDamage = parseInt(action.flatDamage);
+            finalDamage = parseInt(action.flatDamage) + DruidHelper.beastDamageBonus(actor);
         } else if (action.rollDamage) {
             // Rolled damage through the unified pipeline (same as the manual damage button)
             const { VagabondDamagePipeline } = await import('./damage-pipeline.mjs');
@@ -1233,7 +1234,7 @@ export class VagabondChatCard {
             });
             finalDamage = damageRoll?.total ?? 0;
         } else {
-            finalDamage = parseInt(action.flatDamage);
+            finalDamage = parseInt(action.flatDamage) + DruidHelper.beastDamageBonus(actor);
         }
 
         // Flat damage has no Roll — the card builder wants one to read total/formula from

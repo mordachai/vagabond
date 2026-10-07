@@ -3,13 +3,13 @@
   "type": "class",
   "img": "icons/magic/nature/root-vine-thorns-poison-green.webp",
   "system": {
-    "description": "<p><strong>Why do birds suddenly appear, every time you are near?</strong></p><p><em>– Karen Carpenter, Close to You</em></p><p>Keepers of the wilderness, druids are mystics of nature that are adopted into beast-kind.</p><h3>Iconic Druids</h3><ul><li><strong>Beast Boy</strong>, <em>DC Comics</em></li><li><strong>Beorn</strong>, <em>Lord of the Rings series</em></li><li><strong>Frank Zhang</strong>, <em>Percy Jackson series</em></li><li><strong>Poison Ivy</strong>, <em>DC Comics</em></li></ul><h3>Playing Druid</h3><p>The druid is a mid-defense, mixed support and control class with a focus on Casting Spells and shapechanging to powerful beasts.</p><p><strong>Action:</strong> Cast or Beast Attacks<br /><strong>Move:</strong> Midline<br /><strong>Starting Pack:</strong> Hermit<br /><strong>Key Stat:</strong> Awareness<br /><strong>Complexity:</strong> ★★★☆☆</p><h3>Training</h3><p><strong>Weapons:</strong> –<br /><strong>Skills:</strong> Mysticism, and 3 from either Brawl, Craft, Detect, Medicine, or Survival</p><p></p><h3><span class=\"fontstyle0\">Class Features</span></h3><table class=\"NormalTable\"><tbody><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle0\" style=\"color:rgb(255,255,255);font-size:9pt\">Level</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle0\" style=\"color:rgb(255,255,255);font-size:9pt\">Features</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"82\"><p><span class=\"fontstyle0\" style=\"color:rgb(255,255,255);font-size:9pt\">Mana</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\"><p><span class=\"fontstyle0\" style=\"color:rgb(255,255,255);font-size:9pt\">Spells</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">1st</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Primal Mystic, Feral Shift</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"82\"><p><span class=\"fontstyle2\">4</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\"><p><span class=\"fontstyle2\">4</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">2nd</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Tempest Within</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"82\"><p><span class=\"fontstyle2\">8</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\"><p><span class=\"fontstyle2\">4</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">3rd</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"82\"><p><span class=\"fontstyle2\">12</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\"><p><span class=\"fontstyle2\">5</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">4th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Innervate</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"82\"><p><span class=\"fontstyle2\">16</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\"><p><span class=\"fontstyle2\">5</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">5th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"82\"><p><span class=\"fontstyle2\">20</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\"><p><span class=\"fontstyle2\">6</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">6th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Ancient Growth</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"82\"><p><span class=\"fontstyle2\">24</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\"><p><span class=\"fontstyle2\">6</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">7th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"82\"><p><span class=\"fontstyle2\">28</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\"><p><span class=\"fontstyle2\">7</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">8th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Savagery</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"82\"><p><span class=\"fontstyle2\">32</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\"><p><span class=\"fontstyle2\">7</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">9th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"82\"><p><span class=\"fontstyle2\">36</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\"><p><span class=\"fontstyle2\">8</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">10th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Force of Nature</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"82\"><p><span class=\"fontstyle2\">40</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\"><p><span class=\"fontstyle2\">8</span></p></td></tr></tbody></table><p><br style=\"font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:normal;orphans:2;text-align:-webkit-auto;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-size-adjust:auto;-webkit-text-stroke-width:0px\" /></p>",
+    "description": "<p><strong>Why do birds suddenly appear, every time you are near?</strong></p><p><em>—Karen Carpenter, Close to You</em></p><p>Keepers of the wilderness, druids are mystics of nature that are adopted into beast-kind.</p><h3>Iconic Druids</h3><ul><li><strong>Beast Boy</strong>, <em>DC Comics</em></li><li><strong>Beorn</strong>, <em>The Lord of the Rings</em></li><li><strong>Frank Zhang</strong>, <em>Percy Jackson</em></li><li><strong>Panne</strong>, <em>Fire Emblem Awakening</em></li></ul><h3>Playing Druid</h3><p>The druid is a mid-defense, mixed support and control class with a focus on Casting Spells and shapechanging to powerful beasts.</p><p><strong>Action:</strong> Cast or Beast Attacks<br /><strong>Move:</strong> Midline<br /><strong>Starting Pack:</strong> Hermit<br /><strong>Key Stat:</strong> Awareness<br /><strong>Complexity:</strong> ★★★☆☆<br /><strong>Training:</strong> Mysticism, Survival</p><h3>Class Features</h3><table class=\"NormalTable\"><tbody><tr><td><p><strong>Level</strong></p></td><td><p><strong>Features</strong></p></td><td><p><strong>Spells</strong></p></td><td><p><strong>Mana</strong></p></td><td><p><strong>Cast Max</strong></p></td></tr><tr><td><p>1st</p></td><td><p>Primal Mystic, Feral Shift</p></td><td><p>2</p></td><td><p>2</p></td><td><p>2</p></td></tr><tr><td><p>2nd</p></td><td><p>Savagery (+2)</p></td><td><p>2</p></td><td><p>4</p></td><td><p>2</p></td></tr><tr><td><p>3rd</p></td><td><p>Perk</p></td><td><p>2</p></td><td><p>6</p></td><td><p>3</p></td></tr><tr><td><p>4th</p></td><td><p>Tempest Within (1)</p></td><td><p>3</p></td><td><p>8</p></td><td><p>3</p></td></tr><tr><td><p>5th</p></td><td><p>Perk</p></td><td><p>3</p></td><td><p>10</p></td><td><p>4</p></td></tr><tr><td><p>6th</p></td><td><p>Savagery (+2), Beast Mode</p></td><td><p>3</p></td><td><p>12</p></td><td><p>4</p></td></tr><tr><td><p>7th</p></td><td><p>Perk</p></td><td><p>4</p></td><td><p>14</p></td><td><p>5</p></td></tr><tr><td><p>8th</p></td><td><p>Tempest Within (2)</p></td><td><p>4</p></td><td><p>16</p></td><td><p>5</p></td></tr><tr><td><p>9th</p></td><td><p>Perk</p></td><td><p>4</p></td><td><p>18</p></td><td><p>6</p></td></tr><tr><td><p>10th</p></td><td><p>Savagery (+3), Force of Nature</p></td><td><p>5</p></td><td><p>20</p></td><td><p>6</p></td></tr></tbody></table>",
     "isSpellcaster": true,
     "levelFeatures": [
       {
         "level": 1,
         "name": "Primal Mystic",
-        "description": "<p><span class=\"fontstyle0\">You can Cast Spells using Mysticism.</span></p><p><span class=\"fontstyle2\"><strong>Spells:</strong> </span><span class=\"fontstyle0\">You learn 4 Spells, one of which must always be Polymorph. You learn 1 other Spell every 2 Levels in this Class hereafter.</span></p><p><span class=\"fontstyle2\"><strong>Mana:</strong> </span><span class=\"fontstyle0\">Your Maximum Mana is equal to (4 × your Druid Level), and the highest amount of Mana you can spend to Cast a Spell is equal to (Awareness + half your Druid Level, round up). You regain spent Mana when you Rest.</span></p>",
+        "description": "<p>You can Cast Spells using Survival.</p><p><strong>Spells:</strong> You learn 2 Spells, one of which must always be Polymorph, and 1 other Spell every 3 Levels hereafter.</p><p><strong>Mana:</strong> Your Max Mana is equal to (2 × your Level), and your Cast Max for Spells is equal to (1 + half your Level, round up).</p>",
         "statBonusPoints": 0,
         "extraTraining": 0,
         "requiredSpells": [
@@ -23,7 +23,7 @@
       {
         "level": 1,
         "name": "Feral Shift",
-        "description": "<p><span class=\"fontstyle0\">You get the Shapechanger Perk (p. 72) and you can take an Action granted by the Beast you turn into as a part of the Cast Action.</span></p>",
+        "description": "<p>You get the Shapechanger Perk (p. 72) and, when you Cast Polymorph on yourself, you can also take an Action of the Beast.</p>",
         "statBonusPoints": 0,
         "extraTraining": 0,
         "requiredSpells": [],
@@ -36,8 +36,8 @@
       },
       {
         "level": 2,
-        "name": "Tempest Within",
-        "description": "<p><span class=\"fontstyle0\">You reduce Cold, Fire, and Shock damage you take by (half your Druid Level) per damage die.</span></p>",
+        "name": "Savagery (+2)",
+        "description": "<p>The damage you deal with the attacks of Beasts and your effective Level for the purposes of the Polymorph Spell are both increased by 1 now and every 4 Levels hereafter.</p>",
         "statBonusPoints": 1,
         "extraTraining": 0,
         "requiredSpells": [],
@@ -60,8 +60,8 @@
       },
       {
         "level": 4,
-        "name": "Innervate",
-        "description": "<p><span class=\"fontstyle0\">You can use your Action to give a Close Being some of your Mana, or to end one Status affecting it from either Charmed, Confused, Frightened, or Sickened. This can be yourself.</span></p>",
+        "name": "Tempest Within (1)",
+        "description": "<p>You reduce Cold, Fire, and Shock damage you take by 1 per damage die. This reduction is increased by 1 every 4 Levels hereafter.</p>",
         "statBonusPoints": 1,
         "extraTraining": 0,
         "requiredSpells": [],
@@ -84,9 +84,21 @@
       },
       {
         "level": 6,
-        "name": "Ancient Growth",
-        "description": "<p>While you Focus on a Casting of Polymorph that only Targets yourself, you can Focus one additional Spell. Further, your attacks as Beasts you polymorph into count as (+1) Relics. This bonus increases every 6 Druid Levels hereafter.</p>",
+        "name": "Savagery (+2)",
+        "description": "<p>The damage you deal with the attacks of Beasts and your effective Level for the purposes of the Polymorph Spell are both increased by 1 now and every 4 Levels hereafter.</p>",
         "statBonusPoints": 1,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": []
+      },
+      {
+        "level": 6,
+        "name": "Beast Mode",
+        "description": "<p>The attacks you make as Beasts ignore Immune to non-Relic damage.</p><p>Further, when you are the sole Target of a casting of your Polymorph Spell, you can make the duration continual (p. 10).</p>",
+        "statBonusPoints": 0,
         "extraTraining": 0,
         "requiredSpells": [],
         "allowedPerks": [],
@@ -108,8 +120,8 @@
       },
       {
         "level": 8,
-        "name": "Savagery",
-        "description": "<p><span class=\"fontstyle0\">While you are polymorphed into a Beast, you have a +1 bonus to Armor.</span></p>",
+        "name": "Tempest Within (2)",
+        "description": "<p>You reduce Cold, Fire, and Shock damage you take by 1 per damage die. This reduction is increased by 1 every 4 Levels hereafter.</p>",
         "statBonusPoints": 1,
         "extraTraining": 0,
         "requiredSpells": [],
@@ -132,8 +144,8 @@
       },
       {
         "level": 10,
-        "name": "Force of Nature",
-        "description": "<p><span class=\"fontstyle0\">If you are reduced to 0 HP, roll a d10. If the result is equal to or lower than your Awareness, you are instead at 1 HP.</span></p>",
+        "name": "Savagery (+3)",
+        "description": "<p>The damage you deal with the attacks of Beasts and your effective Level for the purposes of the Polymorph Spell are both increased by 1 now and every 4 Levels hereafter.</p>",
         "statBonusPoints": 1,
         "extraTraining": 0,
         "requiredSpells": [],
@@ -141,68 +153,77 @@
         "perkAmount": 0,
         "spellAmount": 0,
         "skillChoices": []
+      },
+      {
+        "level": 10,
+        "name": "Force of Nature",
+        "description": "<p>Once per Shift, if you are reduced to 0 HP, you can polymorph into a Beast and regain HP equal to that shown in its Statblock.</p>",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": [],
+        "action": {
+          "enabled": true,
+          "label": "Force of Nature",
+          "icon": "paw",
+          "uuid": "",
+          "command": "system:druid.forceOfNature",
+          "runAsGM": false
+        }
       }
     ],
-    "manaSkill": "mysticism",
+    "manaSkill": "survival",
     "castingStat": "awareness",
-    "manaMultiplier": 4,
+    "manaMultiplier": 2,
     "skillGrant": {
       "guaranteed": [
-        "mysticism"
+        "mysticism",
+        "survival"
       ],
-      "choices": [
-        {
-          "count": 3,
-          "pool": [
-            "brawl",
-            "craft",
-            "detect",
-            "medicine",
-            "survival"
-          ],
-          "label": ""
-        }
-      ]
+      "choices": []
     },
     "levelSpells": [
       {
-        "spells": 4,
+        "spells": 2,
         "level": 1
       },
       {
-        "spells": 4,
+        "spells": 2,
         "level": 2
       },
       {
-        "spells": 5,
+        "spells": 2,
         "level": 3
       },
       {
-        "spells": 5,
+        "spells": 3,
         "level": 4
       },
       {
-        "spells": 6,
+        "spells": 3,
         "level": 5
       },
       {
-        "spells": 6,
+        "spells": 3,
         "level": 6
       },
       {
-        "spells": 7,
+        "spells": 4,
         "level": 7
       },
       {
-        "spells": 7,
+        "spells": 4,
         "level": 8
       },
       {
-        "spells": 8,
+        "spells": 4,
         "level": 9
       },
       {
-        "spells": 8,
+        "spells": 5,
         "level": 10
       }
     ],
@@ -213,7 +234,307 @@
       "Compendium.vagabond.starting-packs.Item.miFQi5g9aXWERv3R"
     ]
   },
-  "effects": [],
+  "effects": [
+    {
+      "name": "Primal Mystic",
+      "origin": "Compendium.vagabond.classes.Item.YhELwGaQYbFGoKAB",
+      "img": "icons/svg/aura.svg",
+      "_id": "pRiMaLmYsTiC0001",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.mana.castingMaxBonus",
+            "value": "1 - @stats.awareness.total",
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent"
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.44.0",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "createdTime": 1791400000000,
+        "modifiedTime": 1791400000000,
+        "lastModifiedBy": null
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!YhELwGaQYbFGoKAB.pRiMaLmYsTiC0001"
+    },
+    {
+      "name": "Tempest Within",
+      "origin": "Compendium.vagabond.classes.Item.YhELwGaQYbFGoKAB",
+      "img": "icons/svg/aura.svg",
+      "_id": "tEmPeStWiThIn001",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.incomingDamageReductionPerDieByType",
+            "value": "cold,fire,shock: floor(@lvl / 4)",
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent",
+          "minLevel": 4
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.44.0",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "createdTime": 1791400000000,
+        "modifiedTime": 1791400000000,
+        "lastModifiedBy": null
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!YhELwGaQYbFGoKAB.tEmPeStWiThIn001"
+    },
+    {
+      "name": "Savagery: Damage",
+      "origin": "Compendium.vagabond.classes.Item.YhELwGaQYbFGoKAB",
+      "img": "icons/svg/aura.svg",
+      "_id": "sAvAgErYdMg00001",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.beastDamageBonus",
+            "value": "1 + floor((@lvl - 2) / 4)",
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent",
+          "minLevel": 2
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.44.0",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "createdTime": 1791400000000,
+        "modifiedTime": 1791400000000,
+        "lastModifiedBy": null
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!YhELwGaQYbFGoKAB.sAvAgErYdMg00001"
+    },
+    {
+      "name": "Savagery: Polymorph Level",
+      "origin": "Compendium.vagabond.classes.Item.YhELwGaQYbFGoKAB",
+      "img": "icons/svg/aura.svg",
+      "_id": "sAvAgErYlVl00001",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.polymorphLevelBonus",
+            "value": "1 + floor((@lvl - 2) / 4)",
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent",
+          "minLevel": 2
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.44.0",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "createdTime": 1791400000000,
+        "modifiedTime": 1791400000000,
+        "lastModifiedBy": null
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!YhELwGaQYbFGoKAB.sAvAgErYlVl00001"
+    },
+    {
+      "name": "Beast Mode: Ignore Immune",
+      "origin": "Compendium.vagabond.classes.Item.YhELwGaQYbFGoKAB",
+      "img": "icons/svg/aura.svg",
+      "_id": "bEaStMoDeImM0001",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.beastIgnoreImmune",
+            "value": "true",
+            "priority": null,
+            "type": "override"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent",
+          "minLevel": 6
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.44.0",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "createdTime": 1791400000000,
+        "modifiedTime": 1791400000000,
+        "lastModifiedBy": null
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!YhELwGaQYbFGoKAB.bEaStMoDeImM0001"
+    },
+    {
+      "name": "Beast Mode: Continual",
+      "origin": "Compendium.vagabond.classes.Item.YhELwGaQYbFGoKAB",
+      "img": "icons/svg/aura.svg",
+      "_id": "bEaStMoDeCoN0001",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.polymorphContinual",
+            "value": "true",
+            "priority": null,
+            "type": "override"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent",
+          "minLevel": 6
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.44.0",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "createdTime": 1791400000000,
+        "modifiedTime": 1791400000000,
+        "lastModifiedBy": null
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!YhELwGaQYbFGoKAB.bEaStMoDeCoN0001"
+    }
+  ],
   "folder": null,
   "flags": {},
   "_stats": {

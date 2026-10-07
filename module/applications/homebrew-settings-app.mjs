@@ -176,6 +176,12 @@ export class HomebrewSettingsApp extends api.HandlebarsApplicationMixin(api.Appl
       showMagic:       this.#activeTab === 'magic',
       deliveryTypeRows: (this.#config.magic?.deliveryTypes ?? []).map((dt, i) => ({ ...dt, index: i })),
       showLeveling:    this.#activeTab === 'leveling',
+      paceOptions:     ['quick', 'normal', 'epic', 'saga', 'custom'].map(key => ({
+        key,
+        label: game.i18n.localize(`VAGABOND.HomebrewSettings.Fields.Pace.${key}`),
+        selected: (this.#config.leveling?.pace ?? 'normal') === key,
+      })),
+      isCustomPace:    (this.#config.leveling?.pace ?? 'normal') === 'custom',
       showDerivations: this.#activeTab === 'derivations',
       showDamageTypes: this.#activeTab === 'damageTypes',
       showStatCap:     this.#activeTab === 'statCap',
@@ -297,9 +303,16 @@ export class HomebrewSettingsApp extends api.HandlebarsApplicationMixin(api.Appl
     const el = this.element;
 
     // Max level
+    // (0 = no maximum, per the book)
     el.querySelector('[data-field="leveling.maxLevel"]')?.addEventListener('change', (e) => {
-      this.#config.leveling.maxLevel = parseInt(e.target.value) || 10;
+      this.#config.leveling.maxLevel = Math.max(0, parseInt(e.target.value) || 0);
       this.#normalizeXpTable();
+      this.render();
+    });
+
+    // Level Pacing preset
+    el.querySelector('[data-field="leveling.pace"]')?.addEventListener('change', (e) => {
+      this.#config.leveling.pace = e.target.value;
       this.render();
     });
 
@@ -513,7 +526,8 @@ export class HomebrewSettingsApp extends api.HandlebarsApplicationMixin(api.Appl
    * Missing entries get a default value of 5 × level. Entries beyond maxLevel are removed.
    */
   #normalizeXpTable() {
-    const maxLevel = this.#config.leveling.maxLevel;
+    // maxLevel 0 = unlimited → the custom table still lists Levels 2–10 (beyond it falls back to Normal)
+    const maxLevel = this.#config.leveling.maxLevel > 0 ? this.#config.leveling.maxLevel : 10;
     const table = this.#config.leveling.xpTable;
     const existingLevels = new Set(table.map(t => t.level));
     for (let level = 2; level <= maxLevel; level++) {

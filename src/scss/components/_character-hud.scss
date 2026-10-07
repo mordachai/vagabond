@@ -332,6 +332,8 @@
     img { width: 100%; height: 100%; object-fit: cover; }
     // Pinned feature action: a Font Awesome glyph instead of item art
     &.vh-slot-action > i { font-size: 16px; color: $c-yellow; }
+    // Pinned action whose effect is on: running glow (inset ring — the slot clips overflow)
+    &.vh-slot-action.is-active { overflow: visible; @include feature-action-active(0); }
     &.filled { cursor: pointer; }
     &.filled:hover { border-color: $c-yellow; box-shadow: 0 0 5px $c-yellow; }
 
@@ -961,6 +963,7 @@
         font-size: calc(0.8rem * var(--vh-font-scale));
         cursor: pointer;
         &:hover { box-shadow: 0 0 5px $c-yellow; }
+        &.is-active { @include feature-action-active; }
       }
     }
     .accordion-icon { transition: transform 0.15s ease; color: $c-tan; font-size: calc(0.7rem * var(--vh-font-scale)); }

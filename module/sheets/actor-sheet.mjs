@@ -1239,6 +1239,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     const key = target.dataset.actionKey;
     if (!key) return;
     if (event.type === 'contextmenu' || event.button === 2) {
+      // A glowing (active) action: right-click ENDS it. Otherwise the run / pin menu.
+      if (await FeatureAction.end(this.actor, key)) return;
       ContextMenuHelper.closeAll();
       return ContextMenuHelper.create({
         position: { x: event.clientX, y: event.clientY },

@@ -1,0 +1,46 @@
+{
+  "name": "Beat Rush",
+  "type": "perk",
+  "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
+  "system": {
+    "description": "<p>If you take the Rush Action, you can also make one attack with a Brawl Weapon.</p>",
+    "prerequisites": {
+      "stats": [
+        {
+          "stat": "might",
+          "value": 4
+        }
+      ],
+      "statOrGroups": [],
+      "trainedSkills": [
+        "brawl"
+      ],
+      "trainedSkillOrGroups": [],
+      "spells": [],
+      "spellOrGroups": [],
+      "hasAnySpell": false,
+      "resources": [],
+      "resourceOrGroups": []
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "5.44.0",
+    "createdTime": 1791290616267,
+    "modifiedTime": 1791290616267,
+    "lastModifiedBy": null
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "qpPaybuOQ4US2SnY",
+  "sort": 20090000,
+  "_key": "!items!qpPaybuOQ4US2SnY"
+}

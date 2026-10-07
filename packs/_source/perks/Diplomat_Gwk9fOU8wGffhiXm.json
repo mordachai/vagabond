@@ -3,7 +3,7 @@
   "type": "perk",
   "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
   "system": {
-    "description": "<p><span class=\"fontstyle0\">You have Favor on Leadership Checks to negotiate and parley if you have not dealt damage to the Target in the last minute.</span> <br style=\"font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:normal;orphans:2;text-align:-webkit-auto;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-size-adjust:auto;-webkit-text-stroke-width:0px\" /></p>",
+    "description": "<p>Once per Shift, if you pass a Leadership Check to parley or end Combat peacefully by 10 or more, you gain a Studied die.</p>",
     "prerequisites": {
       "stats": [
         {
@@ -11,11 +11,16 @@
           "value": 4
         }
       ],
+      "statOrGroups": [],
       "trainedSkills": [
         "leadership"
       ],
+      "trainedSkillOrGroups": [],
       "spells": [],
-      "other": []
+      "spellOrGroups": [],
+      "hasAnySpell": false,
+      "resources": [],
+      "resourceOrGroups": []
     }
   },
   "effects": [],

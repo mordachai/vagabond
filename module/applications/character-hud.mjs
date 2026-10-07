@@ -523,7 +523,7 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
 
     context.itemSlots = [
       ...beltItems.map(item => this._slotEntry(item, item.type === 'spell' ? 'spell' : 'item')),
-      ...actionsShown.map(a => ({ filled: true, type: 'action', id: a.key, icon: a.icon, name: a.name })),
+      ...actionsShown.map(a => ({ filled: true, type: 'action', id: a.key, icon: a.icon, name: a.name, tip: a.tip, active: a.active, count: a.count })),
     ];
     while (context.itemSlots.length < slotCount) context.itemSlots.push(this._slotEntry(null, 'item'));
 
@@ -1284,11 +1284,16 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
     if (type === 'action') {
       if (event.type === 'contextmenu' || event.button === 2) {
         event.preventDefault();
-        const { ContextMenuHelper } = globalThis.vagabond.utils;
-        return ContextMenuHelper.create({
-          position: { x: event.clientX, y: event.clientY },
-          items: FeatureAction.menuItems(this.actor, id),
-          className: 'inventory-context-menu',
+        // A glowing (active) action: right-click ENDS it. Otherwise the run / unpin menu.
+        const { clientX: x, clientY: y } = event;
+        return FeatureAction.end(this.actor, id).then((ended) => {
+          if (ended) return;
+          const { ContextMenuHelper } = globalThis.vagabond.utils;
+          return ContextMenuHelper.create({
+            position: { x, y },
+            items: FeatureAction.menuItems(this.actor, id),
+            className: 'inventory-context-menu',
+          });
         });
       }
       return FeatureAction.run(this.actor, id);

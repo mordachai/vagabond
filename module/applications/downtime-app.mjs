@@ -105,6 +105,7 @@ export class DowntimeApp extends api.HandlebarsApplicationMixin(api.ApplicationV
       'system.health.value': maxHP,
       'system.mana.current': maxMana,
       'system.currentLuck': maxLuck,
+      'flags.vagabond.forceOfNatureUsed': false,
       'system.currency.gold': newWallet.gold,
       'system.currency.silver': newWallet.silver,
       'system.currency.copper': newWallet.copper

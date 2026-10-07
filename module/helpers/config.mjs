@@ -1443,6 +1443,14 @@ VAGABOND.attackTypes = {
 VAGABOND.defenseRules = [];
 
 /**
+ * Damage types that count as "non-Relic" damage for Immune: a Druid's Beast Mode attacks ignore
+ * the target's Immune to these (see DruidHelper.ignoresNonRelicImmune). Relics themselves are not
+ * modeled, so the physical types stand in for "damage that is not from a Relic".
+ * @type {string[]}
+ */
+VAGABOND.nonRelicImmuneTypes = ['physical', 'blunt', 'piercing', 'slashing'];
+
+/**
  * Attack-Favor rules: situational "your attacks are Favored against X" features
  * (e.g. Barbarian Bloodthirsty). An Active Effect ADDs a rule key to
  * `system.attackFavorVs`; `Item#rollAttack` casts ONE 'favor' vote (merged via

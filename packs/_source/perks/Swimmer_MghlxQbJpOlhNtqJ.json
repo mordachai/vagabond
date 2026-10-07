@@ -1,0 +1,44 @@
+{
+  "name": "Swimmer",
+  "type": "perk",
+  "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
+  "system": {
+    "description": "<p>You gain Swim. If you already have Swim, you do not begin Suffocating unless you have been without air for an entire Scene. You can take this Perk twice.</p>",
+    "prerequisites": {
+      "stats": [
+        {
+          "stat": "might",
+          "value": 4
+        }
+      ],
+      "statOrGroups": [],
+      "trainedSkills": [],
+      "trainedSkillOrGroups": [],
+      "spells": [],
+      "spellOrGroups": [],
+      "hasAnySpell": false,
+      "resources": [],
+      "resourceOrGroups": []
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "5.44.0",
+    "createdTime": 1791290616292,
+    "modifiedTime": 1791290616292,
+    "lastModifiedBy": null
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "MghlxQbJpOlhNtqJ",
+  "sort": 20950000,
+  "_key": "!items!MghlxQbJpOlhNtqJ"
+}

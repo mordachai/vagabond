@@ -40,6 +40,8 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
       toggleQuestion: LevelUpDialog._onToggleQuestion,
       awardXP: LevelUpDialog._onAwardXP,
       triggerLevelUp: LevelUpDialog._onTriggerLevelUp,
+      grantLevel: LevelUpDialog._onGrantLevel,
+      selectClass: LevelUpDialog._onSelectClass,
       selectStat: LevelUpDialog._onSelectStat,
       selectPerk: LevelUpDialog._onSelectPerk,
       addPerk: LevelUpDialog._onAddPerk,
@@ -81,6 +83,9 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
     // Whether the level has been incremented in this dialog session
     this.levelApplied = false;
 
+    // Level 0 → 1: Class chosen in the dialog (created when the level is gained)
+    this.selectedClassUuid = null;
+
     // Stat increase selection
     this.selectedStat = null;
 
@@ -98,6 +103,9 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
     // Cache
     this._perkCache = null;
     this._spellCache = null;
+
+    // A classless Level 0 hero starts on the Class pick
+    if (this.needsClass) this.activeTab = 'class';
   }
 
   /** @override */
@@ -125,14 +133,36 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
    * Total stat bonus points granted by class features at the new level
    */
   get statGrantsAtLevel() {
-    return this.newLevelFeatures.reduce((sum, f) => sum + (f.statBonusPoints || 0), 0);
+    const fromFeatures = this.newLevelFeatures.reduce((sum, f) => sum + (f.statBonusPoints || 0), 0);
+    // Past the class table (no max Level): RAW "On Even Levels, increase a Stat by 1"
+    return fromFeatures + (this.beyondClassTable && this.newLevel % 2 === 0 ? 1 : 0);
   }
 
   /**
    * Total perks granted by class features at the new level
    */
   get perkGrantsAtLevel() {
-    return this.newLevelFeatures.reduce((sum, f) => sum + (f.perkAmount || 0), 0);
+    const fromFeatures = this.newLevelFeatures.reduce((sum, f) => sum + (f.perkAmount || 0), 0);
+    // Past the class table: RAW "On Odd Levels after Level 1, gain one Perk"
+    return fromFeatures + (this.beyondClassTable && this.newLevel > 1 && this.newLevel % 2 === 1 ? 1 : 0);
+  }
+
+  /**
+   * True when the new Level is past every Level the class lists features for
+   * (Levels are unbounded — the class table only authors up to 10).
+   */
+  get beyondClassTable() {
+    const features = this.classItem?.system?.levelFeatures;
+    if (!features?.length) return false;
+    const top = Math.max(...features.map(f => f.level || 0));
+    return this.newLevel > top;
+  }
+
+  /**
+   * Level 0 hero with no Class yet — a Class must be picked to reach Level 1
+   */
+  get needsClass() {
+    return !this.classItem && this.currentLevel === 0 && !this.levelApplied;
   }
 
   /**
@@ -174,7 +204,12 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
    * Which tabs should be visible
    */
   get visibleTabs() {
-    const tabs = ['questionnaire'];
+    const tabs = [];
+
+    // Class pick (Level 0 → 1 only)
+    if (this.needsClass) tabs.push('class');
+
+    tabs.push('questionnaire');
 
     // Stat increase: driven by class feature statBonusPoints, or GM override
     if (this.statGrantsAtLevel > 0 || this.gmOverride) {
@@ -221,12 +256,19 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
     const canLevelFromXP = (sys.attributes.xp || 0) >= (sys.attributes.xpRequired || 10) && !this.levelApplied;
     context.showLevelUpBtn = (canLevelFromXP || (sys.attributes.canLevelUp && !this.levelApplied));
     context.showApplyBtn = this.levelApplied;
+    // Destiny: GM grants a Level for a completed Milestone, no XP needed
+    context.showGrantLevelBtn = game.user.isGM && !this.levelApplied;
     context.allChecklistDone = this._isChecklistComplete();
 
     // Tab state
     context.activeTab = this.activeTab;
     context.visibleTabs = this.visibleTabs;
     context.tabs = this._prepareTabData();
+
+    // Class pick (Level 0 → 1)
+    if (this.visibleTabs.includes('class')) {
+      context.classPick = await this._prepareClassContext();
+    }
 
     // XP Questionnaire
     context.questionnaire = this._prepareQuestionnaireContext();
@@ -255,6 +297,7 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
   _prepareTabData() {
     const visible = this.visibleTabs;
     const tabDefs = [
+      { id: 'class', label: game.i18n.localize('VAGABOND.LevelUp.TabClass'), icon: 'fas fa-shield-halved' },
       { id: 'questionnaire', label: game.i18n.localize('VAGABOND.LevelUp.TabXP'), icon: 'fas fa-star' },
       { id: 'stats', label: game.i18n.localize('VAGABOND.LevelUp.TabStats'), icon: 'fas fa-chart-bar' },
       { id: 'perks', label: game.i18n.localize('VAGABOND.LevelUp.TabPerks'), icon: 'fas fa-gem' },
@@ -275,7 +318,7 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
     const xpRequired = sys.attributes.xpRequired || 10;
     const projectedXP = currentXP + (this.xpAwarded ? 0 : xpGained);
     const canLevelUp = projectedXP >= xpRequired && !this.levelApplied;
-    const currentLevel = sys.attributes.level.value || 1;
+    const currentLevel = sys.attributes.level.value ?? 1;
     const xpProgress = Math.min(100, Math.round((projectedXP / xpRequired) * 100));
 
     return {
@@ -296,6 +339,30 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
       xpAwarded: this.xpAwarded,
       alreadyCanLevel: sys.attributes.canLevelUp && !this.levelApplied,
     };
+  }
+
+  async _prepareClassContext() {
+    await this.dataService.ensureDataLoaded(['classes']);
+    const all = this.dataService.getAllItems('classes') ?? [];
+    const classes = [...all]
+      .sort((a, b) => a.name.localeCompare(b.name))
+      .map(c => ({ uuid: c.uuid, name: c.name, img: c.img, isSelected: c.uuid === this.selectedClassUuid }));
+
+    let preview = null;
+    if (this.selectedClassUuid) {
+      const item = await fromUuid(this.selectedClassUuid);
+      if (item) {
+        preview = {
+          name: item.name,
+          img: item.img,
+          description: await foundry.applications.ux.TextEditor.enrichHTML(item.system.description || '', {
+            async: true,
+            secrets: false,
+          }),
+        };
+      }
+    }
+    return { classes, preview };
   }
 
   async _prepareSummaryContext() {
@@ -761,7 +828,25 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
 
   // ─── Prerequisite Checking ────────────────────────────────
 
+  /**
+   * Which prerequisites a feature unlocking at this level waives for this perk: 'all'
+   * (Fighter's Fighting Style, Hunter's Survivalist), 'stats' (Bard's Well-Versed) or 'none'.
+   * Applies when the perk is in the feature's pool (or the pool is empty = any perk).
+   */
+  _perkPrereqsIgnored(perkItem) {
+    const uuids = [perkItem.uuid, perkItem._stats?.compendiumSource].filter(Boolean);
+    const modes = this.newLevelFeatures
+      .filter(f => f.ignorePerkPrereqs && f.ignorePerkPrereqs !== 'none'
+        && (!f.allowedPerks?.length || f.allowedPerks.some(u => uuids.includes(u))))
+      .map(f => f.ignorePerkPrereqs);
+    return modes.includes('all') ? 'all' : modes.includes('stats') ? 'stats' : 'none';
+  }
+
   async _checkPerkPrerequisites(perkItem) {
+    const ignored = this._perkPrereqsIgnored(perkItem);
+    if (ignored === 'all') return { met: true, missing: [] };
+    const ignoreStats = ignored === 'stats';
+
     const prereqs = perkItem.system.prerequisites || {};
     const missing = [];
 
@@ -781,7 +866,7 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
     const sys = this.actor.system;
 
     // Check stat prerequisites
-    if (prereqs.stats?.length > 0) {
+    if (!ignoreStats && prereqs.stats?.length > 0) {
       for (const statReq of prereqs.stats) {
         const statValue = sys.stats?.[statReq.stat]?.total || 0;
         if (statValue < statReq.value) {
@@ -792,7 +877,7 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
     }
 
     // Check stat OR groups
-    if (prereqs.statOrGroups?.length > 0) {
+    if (!ignoreStats && prereqs.statOrGroups?.length > 0) {
       for (const group of prereqs.statOrGroups) {
         let groupMet = false;
         const groupLabels = [];
@@ -1122,22 +1207,60 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
   }
 
   static async _onTriggerLevelUp(event, target) {
+    await this._gainLevel();
+  }
+
+  /** GM-only Destiny Milestone: gain a Level without spending (or resetting) XP. */
+  static async _onGrantLevel(event, target) {
+    if (!game.user.isGM) return;
+    await this._gainLevel({ destiny: true });
+  }
+
+  static _onSelectClass(event, target) {
+    const uuid = target.dataset.uuid;
+    if (!uuid) return;
+    this.selectedClassUuid = uuid;
+    this.render();
+  }
+
+  /**
+   * Increment the Level. A classless Level 0 hero first receives the chosen Class item so the
+   * new Level's features/grants resolve. Normal level-ups reset XP; Destiny grants leave it alone.
+   * @param {{destiny?: boolean}} [options]
+   */
+  async _gainLevel({ destiny = false } = {}) {
     if (this.levelApplied) return;
 
     const currentLevel = this.actor.system.attributes.level.value;
     const newLevel = currentLevel + 1;
 
-    const maxLevel = CONFIG.VAGABOND?.homebrew?.leveling?.maxLevel ?? 10;
-    if (newLevel > maxLevel) {
-      ui.notifications.warn(`Maximum level (${maxLevel}) reached!`);
+    // maxLevel 0 = no maximum (RAW)
+    const maxLevel = CONFIG.VAGABOND?.homebrew?.leveling?.maxLevel ?? 0;
+    if (maxLevel > 0 && newLevel > maxLevel) {
+      ui.notifications.warn(game.i18n.format('VAGABOND.LevelUp.MaxLevelReached', { max: maxLevel }));
       return;
     }
 
-    // Increment level and reset XP
-    await this.actor.update({
-      'system.attributes.level.value': newLevel,
-      'system.attributes.xp': 0,
-    });
+    if (this.needsClass) {
+      if (!this.selectedClassUuid) {
+        ui.notifications.warn(game.i18n.localize('VAGABOND.LevelUp.ChooseClassFirst'));
+        this.activeTab = 'class';
+        this.render();
+        return;
+      }
+      const classDoc = await fromUuid(this.selectedClassUuid);
+      if (!classDoc || classDoc.type !== 'class') {
+        ui.notifications.error('Class not found.');
+        return;
+      }
+      const classData = classDoc.toObject();
+      foundry.utils.setProperty(classData, 'flags.core.sourceId', this.selectedClassUuid);
+      await this.actor.createEmbeddedDocuments('Item', [classData]);
+    }
+
+    const update = { 'system.attributes.level.value': newLevel };
+    if (!destiny) update['system.attributes.xp'] = 0;
+    await this.actor.update(update);
 
     this.levelApplied = true;
     this.xpAwarded = true; // prevent re-awarding

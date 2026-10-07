@@ -3,17 +3,20 @@
   "type": "perk",
   "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
   "system": {
-    "description": "<p><span class=\"fontstyle0\">You ignore Hinder on Ranged Weapon attacks if you can see the Target, and have Favor on Ranged Checks against Targets who haven't moved since the end of your last Turn.</span> <br style=\"font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:normal;orphans:2;text-align:-webkit-auto;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-size-adjust:auto;-webkit-text-stroke-width:0px\" /></p>",
+    "description": "<p>On your Turn, your Ranged attacks do +2 damage to Targets who haven’t Moved since your last Turn.</p>",
     "prerequisites": {
       "stats": [],
+      "statOrGroups": [],
       "trainedSkills": [
         "detect",
         "ranged"
       ],
+      "trainedSkillOrGroups": [],
       "spells": [],
-      "other": [
-        "Trained: Detect & Ranged"
-      ]
+      "spellOrGroups": [],
+      "hasAnySpell": false,
+      "resources": [],
+      "resourceOrGroups": []
     }
   },
   "effects": [],

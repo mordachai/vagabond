@@ -176,7 +176,9 @@
       "Run": "Executar",
       "AddToBelt": "Adicionar ao Cinto",
       "RemoveFromBelt": "Remover do Cinto",
-      "Missing": "Esta ação não está mais disponível."
+      "Missing": "Esta ação não está mais disponível.",
+      "TipActiveToggle": "Ativo. Clique ou clique com o botão direito para encerrar.",
+      "TipActive": "Ativo. Clique para usar de novo, botão direito para encerrar."
     },
     "Virtuoso": {
       "Title": "Virtuoso",
@@ -196,8 +198,63 @@
       "NotYours": "Apenas o dono do Dançarino pode usar Passo à Frente.",
       "Failed": "O Passo à Frente de {name} não funciona."
     },
+    "RollExpiry": {
+      "Miss": "O ataque errou.",
+      "Other": "Fez outra coisa."
+    },
+    "Momentum": {
+      "Title": "Ímpeto",
+      "NotYours": "Apenas o dono do personagem pode ganhar Ímpeto.",
+      "Already": "{name} já tem Ímpeto.",
+      "EffectText": "Seu próximo ataque tem Favor, e esse ataque gasta o efeito. Em Combate ele também termina com o seu Turno. Clique com o botão direito no botão de Ímpeto ou exclua este efeito para encerrar manualmente.",
+      "Gained": "<strong>{name}</strong> ganha Ímpeto — o próximo ataque tem Favor.",
+      "Failed": "Não foi possível dar Ímpeto a {name} — veja o console.",
+      "Ended": "<strong>{name}</strong> deixa o Ímpeto ir."
+    },
+    "Deadeye": {
+      "Title": "Olho de Águia",
+      "Tag": "Olho de Águia {n}",
+      "AutoOn": "O Olho de Águia de {name} é automático — desative “Deadeye: Auto” para adicionar acúmulos manualmente.",
+      "EffectText": "Ataques à Distância causam Crítico com um d20 de {crit} ou mais ({n} de 3 acúmulos). Cada acerto à Distância soma um acúmulo. Um erro, ou qualquer rolagem que não seja um acerto à Distância ou uma Salvaguarda, encerra o efeito, assim como terminar o seu Turno em Combate sem um acerto à Distância. Clique com o botão direito no botão ou exclua este efeito para encerrar manualmente.",
+      "NotYours": "Apenas o dono do personagem pode fazer isso.",
+      "Max": "O Olho de Águia de {name} já está no máximo (17).",
+      "Ended": "<strong>{name}</strong> deixa o Olho de Águia ir.",
+      "Raised": "O Olho de Águia de <strong>{name}</strong> sobe para {n}.",
+      "Reset": "<strong>{name}</strong> não acertou um ataque à Distância — o Olho de Águia reinicia.",
+      "GritTitle": "Fibra",
+      "GritPick": "Escolha uma Condição para remover (Olho de Águia +{n}).",
+      "GritDone": "<strong>{name}</strong> se livra de {status}. O Olho de Águia agora é {n}.",
+      "NoStatus": "{name} não tem nenhuma Condição que a Fibra possa remover.",
+      "HighNoonTitle": "Meio-Dia",
+      "HighNoonDone": "O Olho de Águia de <strong>{name}</strong> é definido como 17."
+    },
+    "HuntersMark": {
+      "Title": "Marca do Caçador",
+      "EffectText": "{target} é a sua Marca. Exclua este efeito para largar a Marca.",
+      "NotYours": "Apenas o dono do Caçador pode escolher uma Marca.",
+      "NoTarget": "Mire em um token para marcá-lo.",
+      "Marked": "<strong>{name}</strong> marca <strong>{target}</strong>.",
+      "Failed": "Não foi possível marcar {name} — veja o console.",
+      "Dropped": "<strong>{name}</strong> larga a Marca em <strong>{target}</strong>."
+    },
+    "Druid": {
+      "NoMetamorph": "O módulo Metamorph não está ativo — a Polimorfia precisa ser jogada à mão.",
+      "NotYours": "Apenas o dono do personagem pode fazer isso.",
+      "NoToken": "Nenhum token deste personagem foi encontrado na cena.",
+      "PolymorphTitle": "Polimorfia",
+      "PickerTitle": "Polimorfia — Feras (HD ≤ {level})",
+      "Polymorphed": "<strong>{caster}</strong> transforma <strong>{name}</strong> em <strong>{form}</strong>.",
+      "Reverted": "<strong>{name}</strong> volta à própria forma.",
+      "Continual": "A duração é contínua (Modo Fera): não precisa de Foco.",
+      "ForceTitle": "Força da Natureza",
+      "ForcePicker": "Força da Natureza — Feras (HD ≤ {level})",
+      "ForceUsed": "{name} já usou Força da Natureza neste Quarto de dia (um Descanso a renova).",
+      "ForceNotZero": "Força da Natureza dispara quando {name} chega a 0 PV.",
+      "ForceDone": "<strong>{name}</strong> chega a 0 PV, se transforma em <strong>{form}</strong> e recupera <strong>{hp}</strong> PV."
+    },
     "Rage": {
-      "Ended": "A Fúria de {name} se dissipa — nenhum ataque ou dano desde o último Turno."
+      "Ended": "A Fúria de {name} se dissipa — nenhum ataque ou dano desde o último Turno.",
+      "EndedRoll": "A Fúria de <strong>{name}</strong> se dissipa."
     },
     "BeingTypes": {
       "Humanlike": "Humanoide",
@@ -898,6 +955,13 @@
         "name": "Defender com Ambas as Armas de Defesa",
         "hint": "Ligado: quem empunha duas armas com Defesa pode usar as duas em uma única ação de Defesa (os danos se somam). Desligado: a Defesa usa uma arma por vez."
       },
+      "automationMode": {
+        "name": "Automação de Classe",
+        "hint": "Quem faz os truques da classe? Automática: o jogo faz por você, mas o que conta Turnos espera por um Combate. Só em Combate: o jogo ajuda durante a luta, o resto é com você. Manual: você aperta os botões.",
+        "auto": "Automática",
+        "combat": "Automática só em Combate",
+        "manual": "Manual (só botões e interruptores)"
+      },
       "trinketCastRequirement": {
         "name": "Requer Trinket para Conjurar",
         "hint": "Quão rigorosamente a regra de Trinket abaixo é aplicada ao conjurar. Desligado: sem verificação. Avisar: notifica mas permite. Bloquear: impede a conjuração.",
@@ -1308,6 +1372,10 @@
         "AddDeliveryType": "Adicionar Tipo de Entrega",
         "GeneralLegend": "Geral",
         "MaxLevel": "Nível Máximo",
+        "MaxLevelHint": "0 = sem Nível máximo (RAW). Além dos Níveis listados na classe, Atributos vêm em Níveis pares e Vantagens em Níveis ímpares.",
+        "PaceLabel": "Ritmo de Níveis",
+        "PaceHint": "Rápido: 5 XP por Nível. Normal: 5 × próximo Nível. Épico: 7 × próximo Nível. Saga: 10 × próximo Nível. Personalizado: edite a tabela.",
+        "Pace": { "quick": "Rápido (5 por Nível)", "normal": "Normal (5 × próximo Nível)", "epic": "Épico (7 × próximo Nível)", "saga": "Saga (10 × próximo Nível)", "custom": "Personalizado (tabela)" },
         "RequiresReloadHint": "Requer recarregar o mundo para ter efeito.",
         "XpTableLegend": "Tabela de XP por Nível",
         "XpTableHint": "XP necessário para alcançar cada nível. Edite os valores diretamente.",
@@ -2767,6 +2835,10 @@
         "StatBonusPoints": "Pontos de Bônus de Atributo",
         "SpellAmount": "Quantidade de Magias",
         "PerkAmount": "Quantidade de Talentos",
+        "IgnorePerkPrereqs": "Ignorar Pré-requisitos de Talentos",
+        "IgnorePerkPrereqsNone": "Nenhum",
+        "IgnorePerkPrereqsAll": "Todos os pré-requisitos",
+        "IgnorePerkPrereqsStats": "Apenas mínimos de atributo",
         "SpellPool": "Reserva de Magias",
         "PerkPool": "Reserva de Talentos",
         "FormulaAmount": "Escolhas de Fórmula",
@@ -2808,6 +2880,7 @@
         "ExtraTrainingHint": "Escolhas de treinamento de perícia irrestritas (qualquer perícia)",
         "StatBonusHint": "Cada ponto concede +1 a qualquer atributo abaixo do limite",
         "AmountHint": "Quantos o jogador escolhe da reserva",
+        "IgnorePerkPrereqsHint": "Talentos escolhidos por esta concessão ignoram os pré-requisitos selecionados do talento (reserva vazia = qualquer talento)",
         "FormulaAmountHint": "Quantas fórmulas de Item Alquímico esta característica concede",
         "FormulaValueCapHint": "Fórmula. Valor em prata; o valor do item de cada fórmula aprendida deve ser ≤ a isto. ex: @attributes.level.value * 50",
         "LabelPlaceholder": "ex: Ascendência",
@@ -3221,6 +3294,23 @@
       "TabPerks": "Vantagens",
       "TabSummary": "Resumo",
       "GmOverrideTooltip": "Ignorar regras de nível par/ímpar para as abas de atributo e vantagem",
+      "Questions": {
+        "Quest": "Você completou uma Missão?",
+        "Fail": "Você Falhou e deixou a Falha se resolver?",
+        "Boss": "Você derrotou um Inimigo Chefe?",
+        "Hindered": "Você passou em um Teste com Desvantagem?",
+        "Discovery": "Você fez uma descoberta?",
+        "Loot": "Você saqueou pelo menos 50g em tesouros?"
+      },
+      "TabClass": "Classe",
+      "ChooseClass": "Escolha uma Classe",
+      "ChooseClassInstruction": "Heróis de Nível 0 ainda não têm Classe. Escolha uma para alcançar o Nível 1.",
+      "ChooseClassFirst": "Escolha uma Classe antes de subir de nível.",
+      "ChecklistClass": "Escolher uma Classe",
+      "SelectClass": "Selecionar Classe",
+      "GrantLevel": "Conceder Nível (Destino)",
+      "GrantLevelTooltip": "Marco do Destino concluído: ganhe um Nível sem gastar XP.",
+      "MaxLevelReached": "Nível máximo ({max}) alcançado!",
       "GM": "Mestre"
     },
     "Status": {

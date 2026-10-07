@@ -805,7 +805,7 @@ export class ValidationEngine {
             group.pool.includes(skill) && !usedSkills.has(skill)
           );
 
-          if (validSkills.length < group.count) {
+          if (validSkills.length < Math.min(group.count, group.pool.filter(s => !usedSkills.has(s)).length)) {
             return { isValid: false };
           }
 
@@ -956,7 +956,7 @@ export class ValidationEngine {
         group.pool.includes(skill) && !usedSkills.has(skill)
       );
 
-      if (validSkills.length < group.count) {
+      if (validSkills.length < Math.min(group.count, group.pool.filter(s => !usedSkills.has(s)).length)) {
         return {
           isValid: false,
           errors: [`Need ${group.count} skills from group ${group.originalIndex + 1}, only have ${validSkills.length}`]

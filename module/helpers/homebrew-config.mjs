@@ -79,15 +79,20 @@ export const VAGABOND_HOMEBREW_DEFAULTS = {
 
   // --- Tab 4: Leveling (XP / questions: runtime; maxLevel: requires reload) ---
   leveling: {
-    maxLevel: 10,
+    // 0 = no maximum Level (RAW: "There is no maximum Level in Vagabond")
+    maxLevel: 0,
+    // Level Pacing preset (see LEVEL_PACES). 'custom' = use xpTable below.
+    pace: 'normal',
     xpQuestions: [
       { question: 'Did you complete a Quest?',                   xp: 1 },
       { question: 'Did you Fail and allow the Fail to resolve?', xp: 1 },
+      { question: 'Did you defeat a Boss Enemy?',                xp: 1 },
       { question: 'Did you pass a Hindered Check?',              xp: 1 },
       { question: 'Did you make a discovery?',                   xp: 1 },
       { question: 'Did you loot at least 50g of treasure?',      xp: 1 },
     ],
-    // XP required to reach each level (matches 'normal' pacing: 5 × next level)
+    // XP required to reach each level — only read when pace is 'custom'
+    // (defaults to 'normal' pacing: 5 × next level)
     xpTable: Array.from({ length: 9 }, (_, i) => ({ level: i + 2, xp: 5 * (i + 2) })),
   },
 
@@ -187,6 +192,67 @@ export const VAGABOND_HOMEBREW_DEFAULTS = {
   },
 };
 
+/**
+ * Level Pacing presets (RAW "Level Pacing" table). XP needed to reach `level` =
+ * `mult` (flat) or `mult × level` (scaled). Quick: 5 per Level; Normal: 5 × next Level;
+ * Epic: 7 × next Level; Saga: 10 × next Level.
+ */
+export const LEVEL_PACES = {
+  quick:  { mult: 5,  scaled: false },
+  normal: { mult: 5,  scaled: true  },
+  epic:   { mult: 7,  scaled: true  },
+  saga:   { mult: 10, scaled: true  },
+};
+
+/** XP required to reach `level` under a named pace (not 'custom'). */
+export function paceXp(pace, level) {
+  const p = LEVEL_PACES[pace] ?? LEVEL_PACES.normal;
+  return p.scaled ? p.mult * level : p.mult;
+}
+
+/**
+ * XP required to reach `level` from the previous Level, per the active homebrew config:
+ * a preset pace's formula, or (pace 'custom') the xpTable entry, falling back to Normal.
+ */
+export function xpRequiredForLevel(level) {
+  const lv = CONFIG.VAGABOND?.homebrew?.leveling ?? {};
+  const pace = lv.pace ?? 'normal';
+  if (pace !== 'custom') return paceXp(pace, level);
+  const entry = (lv.xpTable ?? []).find(t => t.level === level);
+  return entry ? (entry.xp || 0) : paceXp('normal', level);
+}
+
+/** Highest Level that has data entry rows (class tables, XP table). 0/unset max → 10. */
+export function levelTableCap() {
+  const max = CONFIG.VAGABOND?.homebrew?.leveling?.maxLevel ?? 0;
+  return max > 0 ? max : 10;
+}
+
+/** Schema upper bound for Level fields — effectively unbounded when maxLevel is 0. */
+export function levelSchemaMax() {
+  const max = CONFIG.VAGABOND?.homebrew?.leveling?.maxLevel ?? 0;
+  return max > 0 ? max : 99;
+}
+
+/** Default XP questionnaire text → lang key, so untouched defaults follow the active language. */
+const XP_QUESTION_I18N = {
+  'Did you complete a Quest?':                   'VAGABOND.LevelUp.Questions.Quest',
+  'Did you Fail and allow the Fail to resolve?': 'VAGABOND.LevelUp.Questions.Fail',
+  'Did you defeat a Boss Enemy?':                'VAGABOND.LevelUp.Questions.Boss',
+  'Did you pass a Hindered Check?':              'VAGABOND.LevelUp.Questions.Hindered',
+  'Did you make a discovery?':                   'VAGABOND.LevelUp.Questions.Discovery',
+  'Did you loot at least 50g of treasure?':      'VAGABOND.LevelUp.Questions.Loot',
+};
+
+/** The pre-Boss 5-question default list — worlds still holding exactly this get the new default. */
+const LEGACY_XP_QUESTIONS = [
+  'Did you complete a Quest?',
+  'Did you Fail and allow the Fail to resolve?',
+  'Did you pass a Hindered Check?',
+  'Did you make a discovery?',
+  'Did you loot at least 50g of treasure?',
+];
+
 /** PascalCase a homebrew key to match lang-file leaf keys (e.g. 'mysticism' -> 'Mysticism'). */
 function toPascal(key) {
   return key.charAt(0).toUpperCase() + key.slice(1);
@@ -271,6 +337,11 @@ function localizeUntouchedDefaults(config) {
     const def = D.magic.deliveryTypes.find(d => d.key === dl.key);
     if (!def) continue;
     if (dl.label === def.label) dl.label = tryLocalize(`VAGABOND.DeliveryTypes.${toPascal(dl.key)}.label`) ?? dl.label;
+  }
+
+  for (const q of (config.leveling?.xpQuestions ?? [])) {
+    const key = XP_QUESTION_I18N[q.question];
+    if (key) q.question = tryLocalize(key) ?? q.question;
   }
 
   // Terms (read directly from CONFIG by templates, e.g. luck-pool widget labels)
@@ -468,6 +539,22 @@ export function loadHomebrewConfig() {
     saved ?? {},
     { inplace: false, recursive: true }
   );
+
+  // Leveling migrations (runtime-only; persisted the next time the GM saves homebrew)
+  const savedLv = saved?.leveling;
+  if (savedLv) {
+    // Worlds still holding the old untouched 5 questions get the book's 6 (adds Boss Enemy)
+    const q = savedLv.xpQuestions;
+    if (Array.isArray(q) && q.length === LEGACY_XP_QUESTIONS.length
+        && q.every((e, i) => e.question === LEGACY_XP_QUESTIONS[i] && (e.xp ?? 1) === 1)) {
+      config.leveling.xpQuestions = foundry.utils.deepClone(VAGABOND_HOMEBREW_DEFAULTS.leveling.xpQuestions);
+    }
+    // Pre-pace worlds: a hand-edited XP table stays in force as 'custom'
+    if (!savedLv.pace && Array.isArray(savedLv.xpTable)
+        && savedLv.xpTable.some(t => t.xp !== paceXp('normal', t.level))) {
+      config.leveling.pace = 'custom';
+    }
+  }
 
   applyRuntimeHomebrewOverrides(config);
 }

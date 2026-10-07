@@ -3,7 +3,7 @@
   "type": "perk",
   "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
   "system": {
-    "description": "<p><span class=\"fontstyle0\">While you Focus on this Ability, you make Checks against illusions with Favor and you can see Invisible Beings if you aren’t otherwise Blinded.</span><br style=\"font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:normal;orphans:2;text-align:-webkit-auto;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-size-adjust:auto;-webkit-text-stroke-width:0px\" /></p>",
+    "description": "<p>You can use your Action or skip your Move to begin Focusing on this Ability to gain Allsight.</p>",
     "prerequisites": {
       "stats": [
         {
@@ -11,17 +11,19 @@
           "value": 4
         }
       ],
+      "statOrGroups": [],
       "trainedSkills": [],
-      "spells": [],
-      "other": [
-        "Trained: Arcana or Mysticism"
-      ],
       "trainedSkillOrGroups": [
         [
           "arcana",
           "mysticism"
         ]
-      ]
+      ],
+      "spells": [],
+      "spellOrGroups": [],
+      "hasAnySpell": false,
+      "resources": [],
+      "resourceOrGroups": []
     }
   },
   "effects": [],

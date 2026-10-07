@@ -19,6 +19,38 @@
   {{! Tab Content }}
   <div class="level-up-tab-content">
 
+    {{! ─── Class pick (Level 0 → 1) ─── }}
+    {{#if (eq activeTab 'class')}}
+      <section class="lu-tab lu-class">
+        <h3><i class="fas fa-shield-halved"></i> {{localize "VAGABOND.LevelUp.ChooseClass"}}</h3>
+        <p class="lu-instruction">{{localize "VAGABOND.LevelUp.ChooseClassInstruction"}}</p>
+
+        <div class="lu-two-col">
+          <div class="lu-list">
+            {{#each classPick.classes}}
+              <div class="lu-list-item {{#if isSelected}}chosen{{/if}}" data-action="selectClass" data-uuid="{{uuid}}">
+                <img src="{{img}}" alt="" class="lu-list-img" />
+                <span class="lu-list-name">{{name}}</span>
+                {{#if isSelected}}<span class="lu-badge owned"><i class="fas fa-check"></i></span>{{/if}}
+              </div>
+            {{/each}}
+          </div>
+
+          <div class="lu-preview">
+            {{#if classPick.preview}}
+              <div class="lu-preview-header">
+                <img src="{{classPick.preview.img}}" alt="" class="lu-preview-img" />
+                <h4>{{classPick.preview.name}}</h4>
+              </div>
+              <div class="lu-preview-body">{{{classPick.preview.description}}}</div>
+            {{else}}
+              <p class="lu-placeholder">{{localize "VAGABOND.LevelUp.ChooseClass"}}</p>
+            {{/if}}
+          </div>
+        </div>
+      </section>
+    {{/if}}
+
     {{! ─── XP Questionnaire ─── }}
     {{#if (eq activeTab 'questionnaire')}}
       <section class="lu-tab lu-questionnaire">
@@ -411,6 +443,11 @@
     {{#if showLevelUpBtn}}
       <button type="button" class="lu-btn lu-btn-accent lu-btn-large" data-action="triggerLevelUp">
         <i class="fas fa-arrow-up"></i> {{localize "VAGABOND.LevelUp.Title"}}
+      </button>
+    {{/if}}
+    {{#if showGrantLevelBtn}}
+      <button type="button" class="lu-btn lu-btn-large" data-action="grantLevel" data-tooltip="{{localize 'VAGABOND.LevelUp.GrantLevelTooltip'}}">
+        <i class="fas fa-flag-checkered"></i> {{localize "VAGABOND.LevelUp.GrantLevel"}}
       </button>
     {{/if}}
     {{#if showApplyBtn}}

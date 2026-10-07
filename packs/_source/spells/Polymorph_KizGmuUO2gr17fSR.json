@@ -9,7 +9,14 @@
     "crit": "",
     "favorite": false,
     "fxSchool": "arcane",
-    "locked": true
+    "locked": true,
+    "hitMacro": {
+      "enabled": true,
+      "uuid": "",
+      "command": "system:druid.polymorph",
+      "label": "Polymorph",
+      "runAsGM": false
+    }
   },
   "effects": [],
   "folder": null,

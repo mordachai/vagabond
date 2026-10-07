@@ -3,7 +3,7 @@
   "type": "perk",
   "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
   "system": {
-    "description": "<p><span class=\"fontstyle0\">You can use your Action or skip your Move to rebuke an Enemy, and make an Influence Check with a penalty equal to the Target’s Morale. If you pass, that Enemy is Vulnerable until your next Turn or until it deals damage. Beings without Morale can’t be affected by this Ability.</span></p>",
+    "description": "<p>You can use your Action or skip your Move to Target an Enemy and make an Influence Check with a penalty equal to their Morale. If you pass, it is Vulnerable until your next Turn or until it deals damage. Beings without Morale can’t be affected by this Ability.</p>",
     "prerequisites": {
       "stats": [
         {
@@ -11,11 +11,16 @@
           "value": 4
         }
       ],
+      "statOrGroups": [],
       "trainedSkills": [
         "influence"
       ],
+      "trainedSkillOrGroups": [],
       "spells": [],
-      "other": []
+      "spellOrGroups": [],
+      "hasAnySpell": false,
+      "resources": [],
+      "resourceOrGroups": []
     }
   },
   "effects": [],

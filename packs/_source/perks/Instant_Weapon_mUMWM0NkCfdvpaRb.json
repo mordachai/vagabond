@@ -1,0 +1,45 @@
+{
+  "name": "Instant Weapon",
+  "type": "perk",
+  "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
+  "system": {
+    "description": "<p>When you create a Weapon with a Spell, you can make one attack as a part of the Action.</p>",
+    "prerequisites": {
+      "stats": [],
+      "statOrGroups": [],
+      "trainedSkills": [],
+      "trainedSkillOrGroups": [],
+      "spells": [],
+      "spellOrGroups": [
+        [
+          "Compendium.vagabond.spells.Item.Jo4OZhfZO9Q1ROw6",
+          "Compendium.vagabond.spells.Item.zCbmg0XtBPziO4Yr",
+          "Compendium.vagabond.spells.Item.toYD8Nm61vMhBbZ7"
+        ]
+      ],
+      "hasAnySpell": false,
+      "resources": [],
+      "resourceOrGroups": []
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "5.44.0",
+    "createdTime": 1791290616277,
+    "modifiedTime": 1791290616277,
+    "lastModifiedBy": null
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "mUMWM0NkCfdvpaRb",
+  "sort": 20460000,
+  "_key": "!items!mUMWM0NkCfdvpaRb"
+}

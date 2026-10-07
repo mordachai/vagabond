@@ -1,0 +1,45 @@
+{
+  "name": "Bravado",
+  "type": "perk",
+  "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
+  "system": {
+    "description": "<p>If a Close Target of your attack is not Close to any of its Allies, the Target is considered Flanked for your attacks.</p>",
+    "prerequisites": {
+      "stats": [],
+      "statOrGroups": [],
+      "trainedSkills": [],
+      "trainedSkillOrGroups": [
+        [
+          "brawl",
+          "finesse",
+          "melee"
+        ]
+      ],
+      "spells": [],
+      "spellOrGroups": [],
+      "hasAnySpell": false,
+      "resources": [],
+      "resourceOrGroups": []
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "5.44.0",
+    "createdTime": 1791290616267,
+    "modifiedTime": 1791290616267,
+    "lastModifiedBy": null
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "P6XKqJ7InSQFEReK",
+  "sort": 20110000,
+  "_key": "!items!P6XKqJ7InSQFEReK"
+}

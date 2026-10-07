@@ -1,4 +1,5 @@
 import { armorWornRollData, combatRollData } from '../helpers/rule-rolldata.mjs';
+import { HunterHelper } from '../helpers/hunter-helper.mjs';
 
 /**
  * Extend the base Actor document by defining a custom roll data structure which is ideal for the Simple system.
@@ -155,9 +156,17 @@ export class VagabondActor extends Actor {
    * Apply temporary effect changes to roll data
    * This creates a temporary modified copy of actor data with item effects applied
    * @param {Item} item - The item whose effects should be applied
+   * @param {{targets?: Actor[]}} [options] - The roll's Targets: rules that only hold against a
+   *   particular Target (a Hunter's Mark) are applied for them
    * @returns {Object} Modified roll data with item effects
    */
-  getRollDataWithItemEffects(item) {
+  getRollDataWithItemEffects(item, { targets = [] } = {}) {
+    const data = this._applyItemEffectsToRollData(item);
+    return HunterHelper.applyToRollData(this, item, data, targets);
+  }
+
+  /** @private */
+  _applyItemEffectsToRollData(item) {
     const baseRollData = this.getRollData();
     const itemEffects = this.getItemEffects(item);
 

@@ -1,5 +1,6 @@
 import VagabondItemBase from './base-item.mjs';
 import { featureActionSchema } from './feature-action.mjs';
+import { levelSchemaMax } from '../helpers/homebrew-config.mjs';
 
 export default class VagabondClass extends VagabondItemBase {
   static LOCALIZATION_PREFIXES = [
@@ -81,7 +82,7 @@ export default class VagabondClass extends VagabondItemBase {
           required: true,
           initial: 1,
           min: 1,
-          max: CONFIG.VAGABOND.homebrew?.leveling?.maxLevel ?? 10,
+          max: levelSchemaMax(),
           integer: true
         }),
         name: new fields.StringField({ ...requiredString, initial: '' }),
@@ -107,6 +108,10 @@ export default class VagabondClass extends VagabondItemBase {
 
         // Perk amount - number of perks granted by this feature
         perkAmount: new fields.NumberField({ initial: 0, integer: true, min: 0, max: 10 }),
+
+        // Prerequisites waived for perks picked through this grant: 'all' (stat / Training / Spell,
+        // e.g. Fighter's Fighting Style) or 'stats' (Stat minimums only, e.g. Bard's Well-Versed).
+        ignorePerkPrereqs: new fields.StringField({ initial: 'none', choices: ['none', 'all', 'stats'] }),
 
         // Spell amount - number of spells player can choose from the requiredSpells pool
         spellAmount: new fields.NumberField({ initial: 0, integer: true, min: 0, max: 10 }),
@@ -154,7 +159,7 @@ export default class VagabondClass extends VagabondItemBase {
           required: true,
           initial: 1,
           min: 1,
-          max: CONFIG.VAGABOND.homebrew?.leveling?.maxLevel ?? 10,
+          max: levelSchemaMax(),
           integer: true
         }),
         spells: new fields.NumberField({

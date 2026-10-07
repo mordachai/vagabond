@@ -3,21 +3,24 @@
   "type": "perk",
   "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
   "system": {
-    "description": "<p><span class=\"fontstyle0\">Attacking a Close Target with a Ranged attack doesn’t Hinder the Check, and you can Move up to half your Speed when you skip our Move to make an attack.</span> <br style=\"font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:normal;orphans:2;text-align:-webkit-auto;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-size-adjust:auto;-webkit-text-stroke-width:0px\" /></p>",
+    "description": "<p>Your Ranged attacks don’t have Hinder due to Close Targets while you are dual wielding 1H Ranged Weapons.</p>",
     "prerequisites": {
       "stats": [
         {
-          "stat": "dexterity",
+          "stat": "awareness",
           "value": 4
         }
       ],
+      "statOrGroups": [],
       "trainedSkills": [
         "ranged"
       ],
+      "trainedSkillOrGroups": [],
       "spells": [],
-      "other": [],
+      "spellOrGroups": [],
+      "hasAnySpell": false,
       "resources": [],
-      "trainedSkillOrGroups": []
+      "resourceOrGroups": []
     }
   },
   "effects": [],

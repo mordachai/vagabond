@@ -3,15 +3,19 @@
   "type": "perk",
   "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
   "system": {
-    "description": "<p><span class=\"fontstyle0\">The Target of your Life Spell gains a cloak of etheral thorns while you Focus on it, giving it +1 Armor and dealing d6 to any Being who damages them with a Melee Attack.</span> <br style=\"font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:normal;orphans:2;text-align:-webkit-auto;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-size-adjust:auto;-webkit-text-stroke-width:0px\" /></p>",
+    "description": "<p>If the Target of a Life Spell you are Focusing on is damaged by a Melee attack, the attacker takes d6 damage.</p>",
     "prerequisites": {
       "stats": [],
+      "statOrGroups": [],
       "trainedSkills": [],
+      "trainedSkillOrGroups": [],
       "spells": [
         "Compendium.vagabond.spells.Item.sBvdMIqhfJcydANC"
       ],
-      "other": [],
-      "hasAnySpell": false
+      "spellOrGroups": [],
+      "hasAnySpell": false,
+      "resources": [],
+      "resourceOrGroups": []
     }
   },
   "effects": [],

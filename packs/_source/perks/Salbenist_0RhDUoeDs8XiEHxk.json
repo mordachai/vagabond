@@ -3,17 +3,20 @@
   "type": "perk",
   "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
   "system": {
-    "description": "<p><span class=\"fontstyle0\">You can perform a 10-minute Ritual with a Weapon and an oil. Upon concluding the Ritual, you gain the following benefits until you perform it again:</span></p><p><span class=\"fontstyle0\">• You can attack with it using Craft.</span></p><p><span class=\"fontstyle0\">• You can will the absorbed oil to coat it on your Turn (no Action). This doesn’t consume it, and it remains coated until you dismiss it, it leaves your hand, or until it is coated with another oil.</span></p>",
+    "description": "<p>You can conduct a Ritual (p. 10) with a Weapon and an oil. After the Ritual, the following rules apply until you perform it again:</p><ul><li><p>You can use Craft to attack with the Weapon.</p></li><li><p>You can will the absorbed oil to coat it on your Turn (no Action) which doesn’t consume the oil. The Weapon is coated until you dismiss it, it leaves your hand, or it is coated with another oil.</p></li></ul>",
     "prerequisites": {
       "stats": [],
+      "statOrGroups": [],
       "trainedSkills": [
         "craft",
         "mysticism"
       ],
+      "trainedSkillOrGroups": [],
       "spells": [],
-      "other": [
-        "Trained: Craft & Mysticism"
-      ]
+      "spellOrGroups": [],
+      "hasAnySpell": false,
+      "resources": [],
+      "resourceOrGroups": []
     }
   },
   "effects": [],

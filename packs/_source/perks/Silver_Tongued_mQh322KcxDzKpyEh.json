@@ -3,19 +3,24 @@
   "type": "perk",
   "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
   "system": {
-    "description": "<p>The roll required for you to Crit on Influence Checks made to deceive, intimidate, or persuade others is reduced by 1. You can take this Perk up to 4 times.</p>",
+    "description": "<p>The roll required for you to Crit on social Influence Checks is reduced by 1. You can take this Perk up to 4 times.</p><p>Further, once per Scene, if you fail a social Influence Check, you can reroll it.</p>",
     "prerequisites": {
       "stats": [
         {
           "stat": "presence",
-          "value": 4
+          "value": 7
         }
       ],
+      "statOrGroups": [],
       "trainedSkills": [
         "influence"
       ],
+      "trainedSkillOrGroups": [],
       "spells": [],
-      "other": []
+      "spellOrGroups": [],
+      "hasAnySpell": false,
+      "resources": [],
+      "resourceOrGroups": []
     }
   },
   "effects": [],

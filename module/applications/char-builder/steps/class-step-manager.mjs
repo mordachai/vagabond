@@ -2,6 +2,7 @@
  * Class Step Manager - Handles class selection logic
  */
 import { BaseStepManager } from './base-step-manager.mjs';
+import { levelTableCap } from '../../../helpers/homebrew-config.mjs';
 
 export class ClassStepManager extends BaseStepManager {
   constructor(stateManager, dataService, configSystem) {
@@ -366,7 +367,7 @@ export class ClassStepManager extends BaseStepManager {
     const levelSpells = classItem.system.levelSpells || [];
     const levelGroups = [];
 
-    const maxLevel = CONFIG.VAGABOND.homebrew?.leveling?.maxLevel ?? 10;
+    const maxLevel = levelTableCap();
     for (let level = 1; level <= maxLevel; level++) {
       const featuresAtLevel = levelFeatures.filter(f => f.level === level);
 

@@ -1,0 +1,47 @@
+{
+  "name": "Quick Draw",
+  "type": "perk",
+  "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
+  "system": {
+    "description": "<p>When Combat occurs, you can make one Ranged attack before the first Turn, which is Hindered if it is made with a 2H Weapon.</p>",
+    "prerequisites": {
+      "stats": [
+        {
+          "stat": "awareness",
+          "value": 7
+        }
+      ],
+      "statOrGroups": [],
+      "trainedSkills": [
+        "detect",
+        "ranged"
+      ],
+      "trainedSkillOrGroups": [],
+      "spells": [],
+      "spellOrGroups": [],
+      "hasAnySpell": false,
+      "resources": [],
+      "resourceOrGroups": []
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "5.44.0",
+    "createdTime": 1791290616286,
+    "modifiedTime": 1791290616286,
+    "lastModifiedBy": null
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "byBDvKpPkrK8ynkE",
+  "sort": 20720000,
+  "_key": "!items!byBDvKpPkrK8ynkE"
+}

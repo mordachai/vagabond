@@ -3,7 +3,7 @@
   "type": "perk",
   "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
   "system": {
-    "description": "<p><span class=\"fontstyle0\">You can use a deck of cards as a Trinket and can make attacks with cards drawn from a deck using your Cast Skill. The Deck must be used as a 2H Grip Weapon to do so. It deals d4, and has the Finesse and Thrown properties. Cards used for an attack magically reappear in the deck.</span> <br style=\"font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:normal;orphans:2;text-align:-webkit-auto;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-size-adjust:auto;-webkit-text-stroke-width:0px\" /></p>",
+    "description": "<p>You can use a deck of cards as a Trinket and can make attacks with the cards using your Cast Skill. The cards act as Daggers, and they are magically replenished when used.</p>",
     "prerequisites": {
       "stats": [
         {
@@ -11,12 +11,14 @@
           "value": 4
         }
       ],
+      "statOrGroups": [],
       "trainedSkills": [],
-      "spells": [
-        ""
-      ],
-      "other": [],
-      "hasAnySpell": true
+      "trainedSkillOrGroups": [],
+      "spells": [],
+      "spellOrGroups": [],
+      "hasAnySpell": true,
+      "resources": [],
+      "resourceOrGroups": []
     }
   },
   "effects": [],

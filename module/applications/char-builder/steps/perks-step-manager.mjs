@@ -242,6 +242,7 @@ export class PerksStepManager extends BaseStepManager {
                 featureName: trait.name,
                 allowedPerks: allowedPerks,
                 isGuaranteed: isGuaranteed,
+                ignorePrereqs: trait.ignorePerkPrereqs || 'none',
                 fulfilled: isGuaranteed ? (allowedPerks[i] ?? null) : null
               });
             }
@@ -276,6 +277,7 @@ export class PerksStepManager extends BaseStepManager {
                 featureName: feature.name,
                 allowedPerks: allowedPerks,
                 isGuaranteed: isGuaranteed,
+                ignorePrereqs: feature.ignorePerkPrereqs || 'none',
                 fulfilled: isGuaranteed ? (allowedPerks[i] ?? null) : null
               });
             }
@@ -388,16 +390,25 @@ export class PerksStepManager extends BaseStepManager {
         const perkItem = await fromUuid(perk.uuid);
         if (!perkItem) continue;
 
-        const prereqCheck = await this._checkPerkPrerequisites(perkItem, previewActor, allKnownSpells, ignorePrereqTypes);
         const isSelected = selectedPerks.includes(perk.uuid) || classPerks.includes(perk.uuid);
 
         // Check if explicitly allowed by grant (by direct UUID or compendium source)
         const isGrantAllowed = allowedPerkUuids.has(perk.uuid) ||
                               (perkItem._stats?.compendiumSource && allowedPerkUuids.has(perkItem._stats.compendiumSource));
 
+        // A grant with ignorePerkPrereqs waives prerequisites of the perks it offers (its pool, or any
+        // perk when the pool is empty): 'all' = Fighter's Fighting Style, 'stats' = Bard's Well-Versed.
+        const grantCoversPerk = !shouldFilter || isGrantAllowed;
+        const ignoreMode = grantCoversPerk ? (activeGrant?.ignorePrereqs ?? 'none') : 'none';
+        const grantIgnoresPrereqs = ignoreMode === 'all';
+        const effectiveIgnore = grantIgnoresPrereqs
+          ? { stats: true, skills: true, spells: true, resources: true }
+          : ignoreMode === 'stats' ? { ...ignorePrereqTypes, stats: true } : ignorePrereqTypes;
+        const prereqCheck = await this._checkPerkPrerequisites(perkItem, previewActor, allKnownSpells, effectiveIgnore);
+
         // Guaranteed grants (auto-fulfilled) bypass prerequisites — the feature overrides requirements.
         // Choice-pool grants (player picks from a list) still require prerequisites to be met.
-        const isGuaranteedAllowed = isGrantAllowed && activeGrant?.isGuaranteed;
+        const isGuaranteedAllowed = grantIgnoresPrereqs || (isGrantAllowed && activeGrant?.isGuaranteed);
 
         // Determine if perk is allowed by active grant
         const isAllowedByActiveGrant = !shouldFilter || isGrantAllowed || isSelected;

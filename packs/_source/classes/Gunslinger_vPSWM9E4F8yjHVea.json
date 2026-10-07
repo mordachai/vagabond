@@ -3,40 +3,54 @@
   "type": "class",
   "img": "icons/weapons/guns/gun-pistol-flintlock-white.webp",
   "system": {
-    "description": "<p><strong>This, is my BOOMSTICK!</strong></p><p><em>– Ash, Army of Darkness</em></p><p>Attitude and tenacity are as core to the gunslinger as ammo. They stare down challenges through iron sights, fortified by their inner grit.</p><h3>Iconic Gunslingers</h3><ul><li><strong>Arthur Morgan</strong>, <em>Red Dead Redemption 2</em></li><li><strong>Django</strong>, <em>Django Unchained</em></li><li><strong>Roland Deschain</strong>, <em>Dark Tower</em></li></ul><h3>Playing Gunslinger</h3><p>The gunslinger is a low defense, high crit striker. In combat, stay as far back as possible and keep the enemy under constant fire.</p><p><strong>Action:</strong> Attack<br /><strong>Move:</strong> Backline<br /><strong>Starting Pack:</strong> Bounty Hunter or Tinker<br /><strong>Key Stat:</strong> Awareness<br /><strong>Complexity:</strong> ★★★☆☆</p><h3>Training</h3><p><strong>Weapons:</strong> Ranged<br /><strong>Skills:</strong> Detect, and 3 from either Brawl, Finesse, Influence, Sneak, or Survival</p><p></p><h3><span class=\"fontstyle0\">Class Features</span></h3><table class=\"NormalTable\"><tbody><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle0\" style=\"color:rgb(255,255,255);font-size:9pt\">Level</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle0\" style=\"color:rgb(255,255,255);font-size:9pt\">Features</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">1st</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Quick Draw, Deadeye</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">2nd</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Skeet Shooter</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">3rd</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">4th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Grit</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">5th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">6th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Devastator</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">7th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">8th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Bad Medicine</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">9th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">10th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">High Noon</span></p></td></tr></tbody></table><p><br style=\"font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:normal;orphans:2;text-align:-webkit-auto;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-size-adjust:auto;-webkit-text-stroke-width:0px\" /></p>",
+    "description": "<p><strong>This... is my BOOMSTICK!</strong></p><p><em>—Ash, Army of Darkness</em></p><p>Attitude and tenacity are as core to the gunslinger as ammo. They stare down challenges through iron sights, fortified by their inner grit.</p><h3>Iconic Gunslingers</h3><ul><li><strong>Arthur Morgan</strong>, <em>Red Dead Redemption 2</em></li><li><strong>Django</strong>, <em>Django Unchained</em></li><li><strong>Roland Deschain</strong>, <em>Dark Tower</em></li></ul><h3>Playing Gunslinger</h3><p>The gunslinger is a low-defense, high-crit striker. In combat, stay as far back as possible and keep the enemy under constant fire.</p><p><strong>Action:</strong> Attack<br /><strong>Move:</strong> Backline<br /><strong>Starting Pack:</strong> Bounty Hunter or Tinker<br /><strong>Key Stat:</strong> Awareness<br /><strong>Complexity:</strong> ★★★☆☆<br /><strong>Training:</strong> Detect, Ranged</p><h3>Class Features</h3><table class=\"NormalTable\"><tbody><tr><td><p><strong>Level</strong></p></td><td><p><strong>Features</strong></p></td></tr><tr><td><p>1st</p></td><td><p>Deadeye, Shooting Irons</p></td></tr><tr><td><p>2nd</p></td><td><p>Bad Medicine</p></td></tr><tr><td><p>3rd</p></td><td><p>Perk</p></td></tr><tr><td><p>4th</p></td><td><p>Grit (3)</p></td></tr><tr><td><p>5th</p></td><td><p>Perk</p></td></tr><tr><td><p>6th</p></td><td><p>Bad Medicine (+2 dice)</p></td></tr><tr><td><p>7th</p></td><td><p>Perk</p></td></tr><tr><td><p>8th</p></td><td><p>Grit (2)</p></td></tr><tr><td><p>9th</p></td><td><p>Perk</p></td></tr><tr><td><p>10th</p></td><td><p>Bad Medicine (+3 dice), High Noon</p></td></tr></tbody></table>",
     "isSpellcaster": false,
     "levelFeatures": [
       {
         "level": 1,
-        "name": "Quick Draw",
-        "description": "<p><span class=\"fontstyle0\">You gain the Marksmanship Perk and, when Combat occurs, you can make one Ranged attack before the first Turn, which is Hindered if it is made with a 2H Weapon.</span></p><p></p>",
+        "name": "Deadeye",
+        "description": "<p>After you make a Ranged attack, you Crit on subsequent Ranged attacks on a d20 roll 1 lower, and this can stack up to 3 times. It resets at the end of your Turn if you didn’t hit a Ranged attack since the start of your last Turn.</p>",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": [],
+        "action": {
+          "enabled": true,
+          "label": "Deadeye",
+          "icon": "crosshairs",
+          "uuid": "",
+          "command": "system:gunslinger.deadeye",
+          "runAsGM": false
+        }
+      },
+      {
+        "level": 1,
+        "name": "Shooting Irons",
+        "description": "<p>You gain the Quick Draw Perk (p. 71) and, once per Round, you can make a Ranged attack against an attack that would hit you. If you pass, reduce the damage dealt by the Target’s attack by your attack’s damage.</p>",
         "statBonusPoints": 0,
         "extraTraining": 0,
         "requiredSpells": [],
         "allowedPerks": [
-          "Compendium.vagabond.perks.Item.xfYrdHhVTh03lkvz"
+          "Compendium.vagabond.perks.Item.byBDvKpPkrK8ynkE"
         ],
-        "perkAmount": 1
-      },
-      {
-        "level": 1,
-        "name": "Deadeye",
-        "description": "<p><span class=\"fontstyle0\">After you pass a Ranged Check, you Crit on subsequent Ranged attacks on a d20 roll 1 lower, but no lower than 17. This resets to 0 at the end of your Turn if you didn't pass a Ranged Check since your last Turn.</span></p>",
-        "statBonusPoints": 0,
-        "extraTraining": 0,
-        "requiredSpells": [],
-        "allowedPerks": [],
-        "perkAmount": 0
+        "perkAmount": 1,
+        "spellAmount": 0,
+        "skillChoices": []
       },
       {
         "level": 2,
-        "name": "Skeet Shooter",
-        "description": "<p><span class=\"fontstyle0\">Once per Round, you can make a Ranged attack on an Off-Turn to Target a projectile from an attack you can see. If you pass, reduce the damage of the triggering attack by the damage you would deal with your attack. The projectile falls out of the air if reduced to 0.</span></p>",
+        "name": "Bad Medicine",
+        "description": "<p>You deal an extra die of damage when you Crit with a Ranged Check. The number of extra dice increases by 1 every 4 Levels hereafter.</p>",
         "statBonusPoints": 1,
         "extraTraining": 0,
         "requiredSpells": [],
         "allowedPerks": [],
-        "perkAmount": 0
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": []
       },
       {
         "level": 3,
@@ -46,17 +60,29 @@
         "extraTraining": 0,
         "requiredSpells": [],
         "allowedPerks": [],
-        "perkAmount": 1
+        "perkAmount": 1,
+        "spellAmount": 0,
+        "skillChoices": []
       },
       {
         "level": 4,
-        "name": "Grit",
-        "description": "<p><span class=\"fontstyle0\">When you Crit on a Ranged attack, the damage dice can explode.</span></p>",
+        "name": "Grit (3)",
+        "description": "<p>At the start of your Turn, you can increase your Deadeye by 3 to remove a Status from yourself from either Blinded, Burning, Confused, Dazed, or Frightened.</p><p>The increase is reduced by 1 every 4 Levels hereafter (minimum 0).</p>",
         "statBonusPoints": 1,
         "extraTraining": 0,
         "requiredSpells": [],
         "allowedPerks": [],
-        "perkAmount": 0
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": [],
+        "action": {
+          "enabled": true,
+          "label": "Grit",
+          "icon": "heart-pulse",
+          "uuid": "",
+          "command": "system:gunslinger.grit",
+          "runAsGM": false
+        }
       },
       {
         "level": 5,
@@ -66,17 +92,33 @@
         "extraTraining": 0,
         "requiredSpells": [],
         "allowedPerks": [],
-        "perkAmount": 1
+        "perkAmount": 1,
+        "spellAmount": 0,
+        "skillChoices": []
       },
       {
         "level": 6,
-        "name": "Devastator",
-        "description": "<p><span class=\"fontstyle0\">When you reduce an Enemy to 0 HP, the roll on the d20 to Crit as per your Deadeye Feature is immediately set to 17.</span></p>",
+        "name": "Bad Medicine (+2 dice)",
+        "description": "<p>You deal an extra die of damage when you Crit with a Ranged Check. The number of extra dice increases by 1 every 4 Levels hereafter.</p>",
         "statBonusPoints": 1,
         "extraTraining": 0,
         "requiredSpells": [],
         "allowedPerks": [],
-        "perkAmount": 0
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": []
+      },
+      {
+        "level": 6,
+        "name": "Devastator",
+        "description": "<p>When you Crit with a Ranged Check, the damage dice can Explode.</p>",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": []
       },
       {
         "level": 7,
@@ -86,17 +128,21 @@
         "extraTraining": 0,
         "requiredSpells": [],
         "allowedPerks": [],
-        "perkAmount": 1
+        "perkAmount": 1,
+        "spellAmount": 0,
+        "skillChoices": []
       },
       {
         "level": 8,
-        "name": "Bad Medicine",
-        "description": "<p><span class=\"fontstyle0\">You deal an extra die of damage when you Crit with a Ranged Check.</span></p>",
+        "name": "Grit (2)",
+        "description": "<p>At the start of your Turn, you can increase your Deadeye by 3 to remove a Status from yourself from either Blinded, Burning, Confused, Dazed, or Frightened.</p><p>The increase is reduced by 1 every 4 Levels hereafter (minimum 0).</p>",
         "statBonusPoints": 1,
         "extraTraining": 0,
         "requiredSpells": [],
         "allowedPerks": [],
-        "perkAmount": 0
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": []
       },
       {
         "level": 9,
@@ -106,17 +152,41 @@
         "extraTraining": 0,
         "requiredSpells": [],
         "allowedPerks": [],
-        "perkAmount": 1
+        "perkAmount": 1,
+        "spellAmount": 0,
+        "skillChoices": []
       },
       {
         "level": 10,
-        "name": "High Noon",
-        "description": "<p><span class=\"fontstyle0\">Once per Turn, if you Crit on a Ranged Check, you can make one additional attack.</span></p>",
+        "name": "Bad Medicine (+3 dice)",
+        "description": "<p>You deal an extra die of damage when you Crit with a Ranged Check. The number of extra dice increases by 1 every 4 Levels hereafter.</p>",
         "statBonusPoints": 1,
         "extraTraining": 0,
         "requiredSpells": [],
         "allowedPerks": [],
-        "perkAmount": 0
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": []
+      },
+      {
+        "level": 10,
+        "name": "High Noon",
+        "description": "<p>When you kill an Enemy, your Deadeye is immediately set to 17.</p>",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": [],
+        "action": {
+          "enabled": true,
+          "label": "High Noon",
+          "icon": "sun",
+          "uuid": "",
+          "command": "system:gunslinger.highNoon",
+          "runAsGM": false
+        }
       }
     ],
     "manaSkill": null,
@@ -127,19 +197,7 @@
         "ranged",
         "detect"
       ],
-      "choices": [
-        {
-          "count": 3,
-          "pool": [
-            "brawl",
-            "finesse",
-            "influence",
-            "sneak",
-            "survival"
-          ],
-          "label": ""
-        }
-      ]
+      "choices": []
     },
     "levelSpells": [],
     "keyStats": [
@@ -150,7 +208,259 @@
       "Compendium.vagabond.starting-packs.Item.PnfmuSTuRLW0gjln"
     ]
   },
-  "effects": [],
+  "effects": [
+    {
+      "name": "Deadeye: Auto",
+      "origin": "Compendium.vagabond.classes.Item.vPSWM9E4F8yjHVea",
+      "img": "icons/svg/aura.svg",
+      "_id": "gUnSlDeAdEyEAut1",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.deadeyeTrigger",
+            "value": "true",
+            "priority": null,
+            "type": "override"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "Each Ranged hit adds a Deadeye stack, up to 3. A miss, or any roll that is not a Ranged hit or a Save, ends it, and so does ending your Turn in a Combat without a Ranged hit.",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent",
+          "switchable": true
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.44.0",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "createdTime": 1791400000000,
+        "modifiedTime": 1791400000000,
+        "lastModifiedBy": null
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!vPSWM9E4F8yjHVea.gUnSlDeAdEyEAut1"
+    },
+    {
+      "name": "Bad Medicine",
+      "origin": "Compendium.vagabond.classes.Item.vPSWM9E4F8yjHVea",
+      "img": "icons/svg/aura.svg",
+      "_id": "gUnSlBaDmEdIcIn1",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.critExtraDiceBySkill",
+            "value": "ranged: 1 + floor((@lvl - 2) / 4)",
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent",
+          "minLevel": 2
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.44.0",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "createdTime": 1791400000000,
+        "modifiedTime": 1791400000000,
+        "lastModifiedBy": null
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!vPSWM9E4F8yjHVea.gUnSlBaDmEdIcIn1"
+    },
+    {
+      "name": "Devastator",
+      "origin": "Compendium.vagabond.classes.Item.vPSWM9E4F8yjHVea",
+      "img": "icons/svg/aura.svg",
+      "_id": "gUnSlDeVaStAtOr1",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.critExplodeSkills",
+            "value": "ranged",
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent",
+          "minLevel": 6
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.44.0",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "createdTime": 1791400000000,
+        "modifiedTime": 1791400000000,
+        "lastModifiedBy": null
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!vPSWM9E4F8yjHVea.gUnSlDeVaStAtOr1"
+    },
+    {
+      "name": "Grit",
+      "origin": "Compendium.vagabond.classes.Item.vPSWM9E4F8yjHVea",
+      "img": "icons/svg/aura.svg",
+      "_id": "gUnSlGrItDeAdEy1",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.deadeyeGrit",
+            "value": "4 - floor(@lvl / 4)",
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent",
+          "minLevel": 4
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.44.0",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "createdTime": 1791400000000,
+        "modifiedTime": 1791400000000,
+        "lastModifiedBy": null
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!vPSWM9E4F8yjHVea.gUnSlGrItDeAdEy1"
+    },
+    {
+      "name": "High Noon: Auto",
+      "origin": "Compendium.vagabond.classes.Item.vPSWM9E4F8yjHVea",
+      "img": "icons/svg/aura.svg",
+      "_id": "gUnSlHiNoOnAuTo1",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.highNoonTrigger",
+            "value": "true",
+            "priority": null,
+            "type": "override"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "Killing an Enemy sets your Deadeye to 17.",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent",
+          "minLevel": 10,
+          "switchable": true
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.44.0",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "createdTime": 1791400000000,
+        "modifiedTime": 1791400000000,
+        "lastModifiedBy": null
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!vPSWM9E4F8yjHVea.gUnSlHiNoOnAuTo1"
+    }
+  ],
   "folder": null,
   "flags": {},
   "_stats": {

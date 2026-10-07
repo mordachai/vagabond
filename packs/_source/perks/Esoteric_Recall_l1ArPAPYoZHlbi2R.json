@@ -1,0 +1,44 @@
+{
+  "name": "Esoteric Recall",
+  "type": "perk",
+  "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
+  "system": {
+    "description": "<p>You can use your Action or skip your Move to change one of your Spells Known. You can’t use this Ability again until you Rest or take 1 Fatigue to use it again.</p>",
+    "prerequisites": {
+      "stats": [],
+      "statOrGroups": [],
+      "trainedSkills": [],
+      "trainedSkillOrGroups": [
+        [
+          "arcana",
+          "mysticism"
+        ]
+      ],
+      "spells": [],
+      "spellOrGroups": [],
+      "hasAnySpell": true,
+      "resources": [],
+      "resourceOrGroups": []
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "5.44.0",
+    "createdTime": 1791290616273,
+    "modifiedTime": 1791290616273,
+    "lastModifiedBy": null
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "l1ArPAPYoZHlbi2R",
+  "sort": 20280000,
+  "_key": "!items!l1ArPAPYoZHlbi2R"
+}

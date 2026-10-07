@@ -3,40 +3,43 @@
   "type": "ancestry",
   "img": "systems/vagabond/assets/ui/compendiums/halfling.webp",
   "system": {
-    "description": "<p><span class=\"fontstyle0\">Plucky, hill-dwelling folk of the shire. Halflings are known to live life to the fullest, rise to any challenge, and bask even in their failures. They are fearless, quick to respond, and always capable of turning things in their favor. Halflings settle on rolling hills, with food at the highest elevation, then homes, markets, and finally waste management at the lowest. It helps reduce the damage of floods, and keeps temperatures comfortable all year.</span></p>",
+    "description": "<p>Halflings are plucky, hill-dwelling folk of the shire. They are known to live life to the fullest, rise to any challenge, and bask even in their failures. They are fearless, quick to respond, and always capable of turning things in their favor.</p><p>Halflings settle on rolling hills, with food at the highest elevation, then homes, markets, and finally waste management at the lowest. It helps reduce the damage of floods, and keeps temperatures comfortable all year.</p>",
     "size": "medium",
     "ancestryType": "Humanlike",
     "traits": [
       {
         "name": "Nimble",
-        "description": "You have a 5 ft bonus to Speed and ignore Hinder on Reflex Saves if you aren’t Incapacitated.",
+        "description": "<p>You have a 5’ bonus to Speed and ignore Hinder on Reflex Saves.</p>",
         "statBonusPoints": 0,
         "extraTraining": 0,
         "requiredSpells": [],
         "allowedPerks": [],
         "perkAmount": 0,
+        "ignorePerkPrereqs": "none",
         "spellAmount": 0,
         "skillChoices": []
       },
       {
         "name": "Squat",
-        "description": "You can move through areas occupied by other Beings.",
+        "description": "<p>You can Move through spaces occupied by other Beings.</p>",
         "statBonusPoints": 0,
         "extraTraining": 0,
         "requiredSpells": [],
         "allowedPerks": [],
         "perkAmount": 0,
+        "ignorePerkPrereqs": "none",
         "spellAmount": 0,
         "skillChoices": []
       },
       {
         "name": "Tricksy",
-        "description": "When you regain Luck from a Rest, you gain 1 additional Luck.",
+        "description": "<p>When you regain Luck from a Rest, you gain 1 additional Luck.</p>",
         "statBonusPoints": 0,
         "extraTraining": 0,
         "requiredSpells": [],
         "allowedPerks": [],
         "perkAmount": 0,
+        "ignorePerkPrereqs": "none",
         "spellAmount": 0,
         "skillChoices": []
       }
@@ -71,21 +74,25 @@
       "transfer": true,
       "statuses": [],
       "sort": 0,
-      "flags": {},
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent"
+        }
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
       "_stats": {
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null,
         "coreVersion": "14.361",
         "systemId": "vagabond",
-        "systemVersion": "1.1.6",
+        "systemVersion": "5.42.0",
         "createdTime": 1765107479616,
         "modifiedTime": 1765107502441,
         "lastModifiedBy": "13p65OEadZSZVLRk"
       },
-      "start": null,
-      "showIcon": 1,
-      "folder": null,
       "_key": "!items.effects!L7eJ4jNysVVXHFOt.VOv5x6pMJ3UAh8pd"
     }
   ],

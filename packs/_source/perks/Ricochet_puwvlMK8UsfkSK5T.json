@@ -1,0 +1,46 @@
+{
+  "name": "Ricochet",
+  "type": "perk",
+  "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
+  "system": {
+    "description": "<p>Your attacks with Ranged and Thrown Weapons can Target around corners, provided you have at least seen or heard the Target in the last Round.</p>",
+    "prerequisites": {
+      "stats": [
+        {
+          "stat": "awareness",
+          "value": 4
+        }
+      ],
+      "statOrGroups": [],
+      "trainedSkills": [
+        "detect"
+      ],
+      "trainedSkillOrGroups": [],
+      "spells": [],
+      "spellOrGroups": [],
+      "hasAnySpell": false,
+      "resources": [],
+      "resourceOrGroups": []
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "5.44.0",
+    "createdTime": 1791290616287,
+    "modifiedTime": 1791290616287,
+    "lastModifiedBy": null
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "puwvlMK8UsfkSK5T",
+  "sort": 20760000,
+  "_key": "!items!puwvlMK8UsfkSK5T"
+}

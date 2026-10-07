@@ -1,6 +1,8 @@
 import VagabondActorBase from './base-actor.mjs';
 import { EquipmentHelper } from '../helpers/equipment-helper.mjs';
 import { armorWornRollData, combatRollData } from '../helpers/rule-rolldata.mjs';
+import { AutomationMode } from '../helpers/automation-mode.mjs';
+import { xpRequiredForLevel } from '../helpers/homebrew-config.mjs';
 
 export default class VagabondCharacter extends VagabondActorBase {
   static LOCALIZATION_PREFIXES = [
@@ -394,6 +396,105 @@ export default class VagabondCharacter extends VagabondActorBase {
       label: "Auto-Berserk (Rage)"
     });
 
+    // Barbarian Aggressor: set to 1 by the "First Round (auto)" effect so its manual twin
+    // ("First Round (manual)") steps aside instead of doubling the bonus again.
+    schema.aggressorAuto = new fields.NumberField({
+      required: true,
+      integer: true,
+      min: 0,
+      initial: 0,
+      label: "Aggressor Auto (First Round)"
+    });
+
+    // Fighter Momentum auto-trigger: when true (AE-set — switch that effect off to claim
+    // Momentum by hand), passing a Save against an attack or having its damage reduced to 0
+    // gives a Favored next attack. See fighter-helper.mjs.
+    schema.momentumTrigger = new fields.BooleanField({
+      required: true,
+      initial: false,
+      label: "Auto-Momentum (Fighter)"
+    });
+
+    // Druid (Metamorph forms, see druid-helper.mjs): Savagery adds flat damage to attacks made
+    // as a Beast and to the Level used for Polymorph; Beast Mode ignores non-Relic Immune on
+    // those attacks and makes a sole-Target self Polymorph continual.
+    schema.beastDamageBonus = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      { initial: [], label: "Beast Form Damage Bonus (Savagery)" }
+    );
+    schema.polymorphLevelBonus = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      { initial: [], label: "Polymorph Level Bonus (Savagery)" }
+    );
+    schema.beastIgnoreImmune = new fields.BooleanField({
+      required: true,
+      initial: false,
+      label: "Beast Attacks Ignore Non-Relic Immune (Beast Mode)"
+    });
+    schema.polymorphContinual = new fields.BooleanField({
+      required: true,
+      initial: false,
+      label: "Self Polymorph Is Continual (Beast Mode)"
+    });
+
+    // Gunslinger (see gunslinger-helper.mjs). Deadeye itself is an actor-owned effect that feeds
+    // `rangedCritBonus`; these are the class's AE-driven switches/numbers.
+    //   deadeyeTrigger / highNoonTrigger — optional automation (switch the AE off to play by hand)
+    //   deadeyeGrit        — Deadeye stacks Grit adds (formula)
+    //   critExtraDiceBySkill — "<skill>[,<skill>…]: <formula>" extra dice of damage on a Crit with
+    //                          that skill (Bad Medicine); derived into { skill: count }
+    //   critExplodeSkills  — skill keys whose Crit damage dice Explode (Devastator)
+    schema.deadeyeTrigger = new fields.BooleanField({
+      required: true,
+      initial: false,
+      label: "Auto-Deadeye (Gunslinger)"
+    });
+    schema.highNoonTrigger = new fields.BooleanField({
+      required: true,
+      initial: false,
+      label: "Auto-High Noon (Gunslinger)"
+    });
+    schema.deadeyeGrit = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      { initial: [], label: "Deadeye Stacks Gained By Grit" }
+    );
+    schema.critExtraDiceBySkill = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      { initial: [], label: "Extra Crit Damage Dice (by skill)" }
+    );
+    schema.critExplodeSkills = new fields.ArrayField(
+      new fields.StringField({ required: true }),
+      { required: true, initial: [], label: "Crit Damage Dice Explode (skills)" }
+    );
+
+    // Hunter (see hunter-helper.mjs). The Mark itself is an actor-owned effect.
+    //   huntersMarkTrigger — attacking a Target with no Mark makes it the Mark (optional automation)
+    //   markRules          — rules that apply against the Mark: 'keenVicious' (weapons gain the
+    //                        Keen/Vicious they lack), 'critByBonus' (a Bonus can push the result
+    //                        into the Crit range), 'weak' (the Mark is Weak to your attacks)
+    //   markDamageBonus    — extra damage the Mark takes when you / an Ally damage it (formula)
+    schema.huntersMarkTrigger = new fields.BooleanField({
+      required: true,
+      initial: false,
+      label: "Auto-Mark on Attack (Hunter)"
+    });
+    schema.markRules = new fields.ArrayField(
+      new fields.StringField({ required: true }),
+      { required: true, initial: [], label: "Hunter's Mark Rules" }
+    );
+    schema.markDamageBonus = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      { initial: [], label: "Extra Damage To The Mark" }
+    );
+
+    // Incoming damage reduction per damage die, limited to damage types. Each entry is
+    // "<type>[,<type>…]: <formula>" (e.g. Druid Tempest Within: "cold,fire,shock: floor(@lvl / 4)").
+    // Derived into { type: amount } in prepareDerivedData; read by _computeFinalDamage.
+    schema.incomingDamageReductionPerDieByType = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      { initial: [], label: "Incoming Damage Reduction Per Die (by damage type)" }
+    );
+
     // ---------------------
 
     // Crafting bonuses (Alchemist class features Eureka / Potency). The per-die
@@ -568,6 +669,13 @@ export default class VagabondCharacter extends VagabondActorBase {
     // Status condition resistances — save rolled with Favor when resisting these statuses
     // Managed via Active Effects (ADD mode appends to array)
     schema.statusResistances = new fields.ArrayField(
+      new fields.StringField({ required: true }),
+      { required: true, initial: [] }
+    );
+
+    // Senses (keys of CONFIG.VAGABOND.senses, e.g. 'darksight') — managed via Active Effects
+    // (ADD appends a key). Mapped onto the character's tokens by NpcSenses.syncCharacterTokens.
+    schema.senses = new fields.ArrayField(
       new fields.StringField({ required: true }),
       { required: true, initial: [] }
     );
@@ -754,6 +862,14 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.attackCritBonus = [];
     this.castCritBonus = [];
     this.incomingDamageReductionPerDie = [];
+    this.incomingDamageReductionPerDieByType = [];
+    this.beastDamageBonus = [];
+    this.polymorphLevelBonus = [];
+    this.deadeyeGrit = [];
+    this.critExtraDiceBySkill = [];
+    this.critExplodeSkills = [];
+    this.markRules = [];
+    this.markDamageBonus = [];
     this.bonuses.globalExplode = [];
 
     // --- 3. Loop: Reset All Stat & Save Bonuses ---
@@ -781,9 +897,39 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.bonusDiceExplode = [];
     this.healingBonusDice = [];
     this.rageTrigger = false;
+    this.aggressorAuto = 0;
+    this.momentumTrigger = false;
+    this.deadeyeTrigger = false;
+    this.highNoonTrigger = false;
+    this.huntersMarkTrigger = false;
+    this.beastIgnoreImmune = false;
+    this.polymorphContinual = false;
     this.defenderStatusModifiers.attackersAreBlinded = false;
     this.defenderStatusModifiers.closeAttacksAutoCrit = false;
     // Don't reset statusEffectData - it contains persistent state like charmerUuid
+  }
+
+  /**
+   * Turn "<type>[,<type>…]: <formula>" entries into { type: amount } (repeats sum). The split is on
+   * the FIRST colon, so the formula may itself use a ternary.
+   * @param {string[]} entries
+   * @param {object} rollData
+   * @returns {Object<string, number>}
+   * @private
+   */
+  _evaluateTypedReductions(entries, rollData) {
+    const out = {};
+    for (const entry of Array.isArray(entries) ? entries : []) {
+      const text = String(entry ?? '');
+      const i = text.indexOf(':');
+      if (i < 0) continue;
+      const amount = this._evaluateSingleFormula(text.slice(i + 1), rollData);
+      if (!amount) continue;
+      for (const type of text.slice(0, i).split(',').map(t => t.trim().toLowerCase()).filter(Boolean)) {
+        out[type] = (out[type] ?? 0) + amount;
+      }
+    }
+    return out;
   }
 
   /**
@@ -923,6 +1069,12 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.attackCritBonus = this._evaluateFormulaField(this.attackCritBonus, rollData);
     this.castCritBonus = this._evaluateFormulaField(this.castCritBonus, rollData);
     this.incomingDamageReductionPerDie = this._evaluateFormulaField(this.incomingDamageReductionPerDie, rollData);
+    this.incomingDamageReductionPerDieByType = this._evaluateTypedReductions(this.incomingDamageReductionPerDieByType, rollData);
+    this.beastDamageBonus = this._evaluateFormulaField(this.beastDamageBonus, rollData);
+    this.polymorphLevelBonus = this._evaluateFormulaField(this.polymorphLevelBonus, rollData);
+    this.deadeyeGrit = this._evaluateFormulaField(this.deadeyeGrit, rollData);
+    this.critExtraDiceBySkill = this._evaluateTypedReductions(this.critExtraDiceBySkill, rollData);
+    this.markDamageBonus = this._evaluateFormulaField(this.markDamageBonus, rollData);
 
     // NOTE: Stat bonuses, Save bonuses, Skill bonuses, and Weapon Skill bonuses
     // are NOT evaluated here - they're done inline in prepareDerivedData
@@ -934,6 +1086,10 @@ export default class VagabondCharacter extends VagabondActorBase {
    * This happens AFTER Active Effects.
    */
   prepareDerivedData() {
+    // World "class automation" mode: in manual (or out-of-combat for 'combat') the AE-set Auto
+    // triggers are cleared before any formula reads them.
+    AutomationMode.apply(this, this.parent);
+
     // Get roll data for formula evaluation (need base stat values)
     // Build minimal roll data for initial stat calculations
     const initialRollData = this.getRollData();
@@ -1369,14 +1525,13 @@ export default class VagabondCharacter extends VagabondActorBase {
   }
 
   _calculateXPRequirements() {
-    const currentLevel = this.attributes.level.value || 1;
+    // Level 0 is valid (RAW: no Class yet) — next Level is 1, not 2
+    const currentLevel = Math.max(0, this.attributes.level.value ?? 1);
     const nextLevel = currentLevel + 1;
     const currentXP = this.attributes.xp || 0;
 
-    // Read XP table from homebrew config; fall back to default 'normal' pacing formula
-    const xpTable = CONFIG.VAGABOND?.homebrew?.leveling?.xpTable ?? [];
-    const entry = xpTable.find(t => t.level === nextLevel);
-    const xpRequired = entry ? (entry.xp || 0) : 5 * nextLevel;
+    // Active pace preset (or custom XP table) from homebrew leveling config
+    const xpRequired = xpRequiredForLevel(nextLevel);
 
     this.attributes.xpRequired = xpRequired;
     this.attributes.xpProgress = currentXP;

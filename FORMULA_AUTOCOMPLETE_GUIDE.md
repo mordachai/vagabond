@@ -282,8 +282,9 @@ The Barbarian class item ships **one Active Effect per automated behavior**, so 
 | Rage | `system.incomingDamageReductionPerDie` | Add | `(@statuses.berserk) ? ((@armorWorn.slots <= 1) ? 1 : 0) : 0` (Light / no Armor) |
 | Rage: Auto-Berserk | `system.rageTrigger` | Override | `true` (damage taken / attacking applies Berserk — switch off for manual) |
 | Aggressor | `system.speed.bonus` | Add | `(@lvl >= 2) ? 5 * (1 + floor((@lvl - 2) / 4)) : 0` |
-| Aggressor: First Round (auto) | `system.speed.bonus` | Add | `(@combat.round == 1) ? (<Aggressor formula>) : 0` |
-| Aggressor: First Round (manual) | `system.speed.bonus` | Add | `(@combat.round == 1) ? 0 : <Aggressor formula>` — ships **disabled**; flip on at fight start |
+| Aggressor: First Round (auto) | `system.speed.bonus` | Add | `(@aggressorAuto > 0) ? ((@combat.round == 1) ? (<Aggressor formula>) : 0) : 0` |
+| Aggressor: First Round (auto) | `system.aggressorAuto` | Override | `1` (marker: makes the manual twin a no-op so both on never double-count; the world **Class Automation** setting clears it in manual mode / out of combat) |
+| Aggressor: First Round (manual) | `system.speed.bonus` | Add | `(@aggressorAuto > 0) ? 0 : <Aggressor formula>` — ships **disabled**; flip on at fight start, off after Round 1 |
 | Murder Mode: Immunities (Lv 4+) | `system.statusImmunities` | Add | `charmed`, `confused`, `frightened` |
 | Murder Mode: Fury (Lv 4+) | `system.bonuses.globalExplode` | Add | `(@statuses.berserk) ? 1 : 0` |
 | Murder Mode: Fury | `system.bonuses.globalExplodeValues` | Override | `max` |
@@ -326,6 +327,69 @@ The Bard class item ships Enjoy the Silence as a class feature, plus three **unt
 > The three benefit templates carry `flags.vagabond.consumeOn` (`['heal']`, `['save']`, `['attack','cast']`) — the recipient's effect is deleted after their next roll of that kind (`helpers/use-effects.mjs`). Delete the flag to make a benefit last the whole Round instead.
 
 > `system.favorChecks` is a general field: ADD `attack`, `cast` or `save` for an independent Favor vote on that whole category (merged net-count with every other vote). `system.bonusDiceExplode` > 0 turns the Favor die into `1d6x[favored]` and the healing bonus dice into exploding dice.
+
+### Dancer — Footloose, Don’t Stop Me Now
+
+The Dancer class item ships both as class features. Evasive, Captivator and Step Up's extra Action are text only (Step Up has a button that rolls the Finesse Check).
+
+| Effect | Key | Mode | Value |
+| --- | --- | --- | --- |
+| Footloose | `system.saveRollsTwice` | Add | `reflex` (Reflex Saves roll `2d20kh`) |
+| Don’t Stop Me Now (Lv 6+) | `system.statusResistances` | Add | `paralyzed`, `restrained` (one change each — Favor on Saves vs those Statuses; a grapple is Restrained) |
+
+> `system.saveRollsTwice` is a general field: ADD any save key (`reflex`, `endure`, `will`, or a homebrew save) to roll that Save with two d20s and keep the higher. Favor / Hinder dice and flat modifiers still add on top.
+
+### Fighter — Valor, Momentum
+
+The Fighter class item ships both. Fighting Style (perk grants), Muster for Battle and Harrying are not automated.
+
+| Effect | Key | Mode | Value |
+| --- | --- | --- | --- |
+| Valor (Lv 2+) | `system.attackCritBonus`, `system.reflexCritBonus`, `system.endureCritBonus` | Add | `0 - floor((@lvl + 2) / 4)` (-1 / -2 / -3 at Levels 2 / 6 / 10) |
+| Momentum: Auto (switchable) | `system.momentumTrigger` | Override | `true` (passing a Save against an attack, or its damage reduced to 0, gives a Favored next attack) |
+
+> The Momentum Favor itself is an actor effect (`system.favorChecks` = `attack`, `flags.vagabond.consumeOn: ["attack"]`) created by the feature button or the auto trigger.
+
+### Druid — Primal Mystic, Tempest Within, Savagery, Beast Mode
+
+| Effect | Key | Mode | Value |
+| --- | --- | --- | --- |
+| Primal Mystic | `system.mana.castingMaxBonus` | Add | `1 - @stats.awareness.total` (Cast Max is 1 + half Level; the engine adds the casting stat, so it is cancelled) |
+| Tempest Within (Lv 4+) | `system.incomingDamageReductionPerDieByType` | Add | `cold,fire,shock: floor(@lvl / 4)` |
+| Savagery: Damage (Lv 2+) | `system.beastDamageBonus` | Add | `1 + floor((@lvl - 2) / 4)` (flat damage on attacks made in a Metamorph Beast form) |
+| Savagery: Polymorph Level (Lv 2+) | `system.polymorphLevelBonus` | Add | `1 + floor((@lvl - 2) / 4)` (added to Level for the Polymorph button's HD limit) |
+| Beast Mode: Ignore Immune (Lv 6+) | `system.beastIgnoreImmune` | Override | `true` (Beast-form attacks ignore Immune to `CONFIG.VAGABOND.nonRelicImmuneTypes`) |
+| Beast Mode: Continual (Lv 6+) | `system.polymorphContinual` | Override | `true` (self Polymorph card notes it is continual) |
+
+> `system.incomingDamageReductionPerDieByType` is a general field: each entry is `<type>[,<type>…]: <formula>` and reduces incoming damage of those types per damage die, on top of `system.incomingDamageReductionPerDie`.
+
+> The Beast-form fields only matter for actors that are Metamorph copies (`flags.metamorph.temp.mainActorId`): the attacker's copy reads these values from its main (Druid) actor. Force of Nature and the Polymorph spell button need the Metamorph module.
+
+### Gunslinger — Deadeye, Bad Medicine, Devastator, Grit, High Noon
+
+Deadeye itself is an actor effect created by the feature button / auto trigger (`system.rangedCritBonus` add `-<stacks>`, flag `flags.vagabond.deadeye`). Shooting Irons is text-only.
+
+| Effect | Key | Mode | Value |
+| --- | --- | --- | --- |
+| Deadeye: Auto (switchable) | `system.deadeyeTrigger` | Override | `true` (each Ranged attack adds a stack; resets at the end of your Turn in a Combat without a Ranged hit) |
+| Bad Medicine (Lv 2+) | `system.critExtraDiceBySkill` | Add | `ranged: 1 + floor((@lvl - 2) / 4)` (extra dice matching the weapon's die on a Ranged Crit: 1 / 2 / 3) |
+| Devastator (Lv 6+) | `system.critExplodeSkills` | Add | `ranged` (Crit damage dice Explode on their highest face) |
+| Grit (Lv 4+) | `system.deadeyeGrit` | Add | `4 - floor(@lvl / 4)` (stacks the Grit button adds: 3 at Level 4, 2 at Level 8; the button clamps at 0) |
+| High Noon: Auto (Lv 10, switchable) | `system.highNoonTrigger` | Override | `true` (dropping a non-allied target to 0 HP sets Deadeye to 17) |
+
+> `system.critExtraDiceBySkill` is a general field: each entry is `<skill>[,<skill>…]: <formula>` = that many extra dice (matching the first die of the damage formula) on a Crit made with that weapon skill. `system.critExplodeSkills` ADDs weapon skill keys whose Crit damage dice Explode.
+
+### Hunter — Hunter’s Mark, Rover, Lethal Precision, Apex Predator
+
+The Mark itself is an actor effect (`flags.vagabond.huntersMark`) created by the Mark Target button / auto trigger.
+
+| Effect | Key | Mode | Value |
+| --- | --- | --- | --- |
+| Hunter’s Mark | `system.markRules` | Add | `keenVicious`, `critByBonus` (one change each — Keen / Vicious gained against the Mark; a Bonus can push the result into the Crit range) |
+| Hunter’s Mark: Auto (switchable) | `system.huntersMarkTrigger` | Override | `true` (attacking with no Mark marks the Target) |
+| Rover (Lv 2+) | `system.speed.bonus` | Add | `5 * (1 + floor((@lvl - 2) / 4))` (+5’ / +10’ / +15’) |
+| Lethal Precision (Lv 4+) | `system.markDamageBonus` | Add | `floor(@lvl / 4)` (extra damage the Mark takes from you / an Ally on your Turn) |
+| Apex Predator (Lv 10) | `system.markRules` | Add | `weak` (the Mark is Weak to your attacks) |
 
 ### Exalted — Bonus Per Damage Die (with Doubling vs Specific Being Types)
 

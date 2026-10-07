@@ -39,6 +39,10 @@ export function combatRollData(actor) {
   if (!actor) return none;
   const combat = game.combats?.active;
   if (!combat?.started) return none;
-  const inCombat = combat.combatants.some(c => c.actor === actor);
+  // Compare ids, never `c.actor`: for an unlinked token that getter builds a synthetic actor,
+  // whose data prep calls this function again → infinite recursion (stack overflow).
+  const inCombat = actor.isToken
+    ? combat.combatants.some(c => c.tokenId === actor.token?.id)
+    : combat.combatants.some(c => c.actorId === actor.id);
   return inCombat ? { active: 1, round: combat.round ?? 0 } : none;
 }

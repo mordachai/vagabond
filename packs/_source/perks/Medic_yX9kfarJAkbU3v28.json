@@ -1,0 +1,44 @@
+{
+  "name": "Medic",
+  "type": "perk",
+  "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
+  "system": {
+    "description": "<p>As an Action, or during a Breather, you can heal a Close Being for (d6 + AWR or RSN) HP and remove the Blinded or Sickened Status if they have it. Doing so as an Action requires a Medicine or Survival Check to succeed. If they are healed, they can’t be affected by this Ability for the rest of the Shift.</p>",
+    "prerequisites": {
+      "stats": [],
+      "statOrGroups": [],
+      "trainedSkills": [],
+      "trainedSkillOrGroups": [
+        [
+          "medicine",
+          "survival"
+        ]
+      ],
+      "spells": [],
+      "spellOrGroups": [],
+      "hasAnySpell": false,
+      "resources": [],
+      "resourceOrGroups": []
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "5.44.0",
+    "createdTime": 1791290616280,
+    "modifiedTime": 1791290616280,
+    "lastModifiedBy": null
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "yX9kfarJAkbU3v28",
+  "sort": 20560000,
+  "_key": "!items!yX9kfarJAkbU3v28"
+}

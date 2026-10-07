@@ -17,7 +17,7 @@
         <h4 class="vh-section-title">{{localize "VAGABOND.UI.Sections.Features"}}</h4>
         {{#each features}}
           <div class="accordion-item collapsed" data-accordion-id="hud-feature-{{_id}}">
-            <div class="accordion-header" data-action="toggleFeature"><i class="accordion-icon fas fa-chevron-right"></i><span class="vh-acc-name">{{name}}</span>{{#if fx}}<button type="button" class="vh-fx-btn" data-action="featureAction" data-action-key="{{fx.key}}" title="{{fx.label}}"><i class="{{fx.icon}}"></i></button>{{/if}}</div>
+            <div class="accordion-header" data-action="toggleFeature"><i class="accordion-icon fas fa-chevron-right"></i><span class="vh-acc-name">{{name}}</span>{{#if fx}}<button type="button" class="vh-fx-btn{{#if fx.active}} is-active{{/if}}" data-action="featureAction" data-action-key="{{fx.key}}" title="{{fx.tip}}"{{#if fx.count}} data-count="{{fx.count}}"{{/if}}><i class="{{fx.icon}}"></i></button>{{/if}}</div>
             <div class="accordion-content collapsed"><div class="vh-acc-body">{{{description}}}</div></div>
           </div>
         {{/each}}
@@ -26,7 +26,7 @@
         <h4 class="vh-section-title">{{localize "VAGABOND.UI.Sections.Traits"}}</h4>
         {{#each traits}}
           <div class="accordion-item collapsed" data-accordion-id="hud-trait-{{_id}}">
-            <div class="accordion-header" data-action="toggleTrait"><i class="accordion-icon fas fa-chevron-right"></i><span class="vh-acc-name">{{name}}</span>{{#if fx}}<button type="button" class="vh-fx-btn" data-action="featureAction" data-action-key="{{fx.key}}" title="{{fx.label}}"><i class="{{fx.icon}}"></i></button>{{/if}}</div>
+            <div class="accordion-header" data-action="toggleTrait"><i class="accordion-icon fas fa-chevron-right"></i><span class="vh-acc-name">{{name}}</span>{{#if fx}}<button type="button" class="vh-fx-btn{{#if fx.active}} is-active{{/if}}" data-action="featureAction" data-action-key="{{fx.key}}" title="{{fx.tip}}"{{#if fx.count}} data-count="{{fx.count}}"{{/if}}><i class="{{fx.icon}}"></i></button>{{/if}}</div>
             <div class="accordion-content collapsed"><div class="vh-acc-body">{{{description}}}</div></div>
           </div>
         {{/each}}
@@ -35,7 +35,7 @@
         <h4 class="vh-section-title">{{localize "VAGABOND.UI.Sections.Perks"}}</h4>
         {{#each perks}}
           <div class="accordion-item collapsed" data-accordion-id="hud-perk-{{_id}}">
-            <div class="accordion-header" data-action="togglePerk"><i class="accordion-icon fas fa-chevron-right"></i><span class="vh-acc-name">{{name}}</span>{{#if fx}}<button type="button" class="vh-fx-btn" data-action="featureAction" data-action-key="{{fx.key}}" title="{{fx.label}}"><i class="{{fx.icon}}"></i></button>{{/if}}</div>
+            <div class="accordion-header" data-action="togglePerk"><i class="accordion-icon fas fa-chevron-right"></i><span class="vh-acc-name">{{name}}</span>{{#if fx}}<button type="button" class="vh-fx-btn{{#if fx.active}} is-active{{/if}}" data-action="featureAction" data-action-key="{{fx.key}}" title="{{fx.tip}}"{{#if fx.count}} data-count="{{fx.count}}"{{/if}}><i class="{{fx.icon}}"></i></button>{{/if}}</div>
             <div class="accordion-content collapsed"><div class="vh-acc-body">{{{system.description}}}</div></div>
           </div>
         {{/each}}
@@ -217,7 +217,7 @@
 
         <div class="vh-slots">
           {{#each itemSlots}}
-            <div class="vh-slot {{#if filled}}filled{{/if}} {{#if (eq type 'action')}}vh-slot-action{{/if}} {{#if inert}}is-inert{{/if}} {{#if throwable}}{{#unless quantity}}empty{{/unless}}{{/if}}" data-slot-index="{{@index}}" {{#if filled}}data-action="slotUse" data-type="{{type}}" data-item-id="{{id}}" title="{{name}}{{#if throwable}} ×{{quantity}}{{/if}}"{{/if}}>
+            <div class="vh-slot {{#if filled}}filled{{/if}} {{#if (eq type 'action')}}vh-slot-action{{/if}} {{#if active}}is-active{{/if}} {{#if inert}}is-inert{{/if}} {{#if throwable}}{{#unless quantity}}empty{{/unless}}{{/if}}" data-slot-index="{{@index}}" {{#if filled}}data-action="slotUse" data-type="{{type}}" data-item-id="{{id}}" title="{{#if tip}}{{tip}}{{else}}{{name}}{{/if}}{{#if throwable}} ×{{quantity}}{{/if}}"{{/if}}{{#if count}} data-count="{{count}}"{{/if}}>
               {{#if filled}}{{#if icon}}<i class="{{icon}}"></i>{{else}}<img src="{{img}}" alt="{{name}}" draggable="false" />{{/if}}{{/if}}
             </div>
           {{/each}}

@@ -51,6 +51,10 @@ export default class VagabondAncestry extends VagabondItemBase {
         // Perk amount - number of perks granted by this trait
         perkAmount: new fields.NumberField({ initial: 0, integer: true, min: 0, max: 10 }),
 
+        // Prerequisites waived for perks picked through this grant: 'all' (stat / Training / Spell,
+        // e.g. Fighter's Fighting Style) or 'stats' (Stat minimums only, e.g. Bard's Well-Versed).
+        ignorePerkPrereqs: new fields.StringField({ initial: 'none', choices: ['none', 'all', 'stats'] }),
+
         // Spell amount - number of spells player can choose from the allowedSpells pool
         spellAmount: new fields.NumberField({ initial: 0, integer: true, min: 0, max: 10 }),
 

@@ -3,17 +3,25 @@
   "type": "perk",
   "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
   "system": {
-    "description": "<p><span class=\"fontstyle0\">You can’t get lost during Travel and, if you choose to Hunt, you can roll for the discovered game twice and use the roll of your choice.</span><br style=\"font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:normal;orphans:2;text-align:-webkit-auto;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-size-adjust:auto;-webkit-text-stroke-width:0px\" /></p>",
+    "description": "<p>You can Forage or Hunt while you spend a Shift to Travel, and you can’t get lost during Travel.</p><p>Further, you gain a Studied die when you spend a Shift to Travel.</p>",
     "prerequisites": {
-      "stats": [],
+      "stats": [
+        {
+          "stat": "awareness",
+          "value": 4
+        }
+      ],
+      "statOrGroups": [],
       "trainedSkills": [
         "detect",
         "survival"
       ],
+      "trainedSkillOrGroups": [],
       "spells": [],
-      "other": [
-        "Trained: Detect & Survival"
-      ]
+      "spellOrGroups": [],
+      "hasAnySpell": false,
+      "resources": [],
+      "resourceOrGroups": []
     }
   },
   "effects": [],
