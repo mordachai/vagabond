@@ -405,6 +405,12 @@ The Mark itself is an actor effect (`flags.vagabond.huntersMark`) created by the
 | --- | --- | --- | --- |
 | Arcanum | `system.mana.castingMaxBonus` | Add | `1 - @stats.reason.total` (Cast Max is 1 + half Level, round up; the engine adds Reason, so it is cancelled) |
 
+### Merchant — Deep Pockets
+
+| Effect | Key | Mode | Value |
+| --- | --- | --- | --- |
+| Deep Pockets | `system.inventory.bonusSlots` | Add | `2 + 2 * floor((@lvl - 1) / 3)` (2 Item Slots now and every 3 Levels hereafter) |
+
 ### Exalted — Bonus Per Damage Die (with Doubling vs Specific Being Types)
 
 Grants a flat bonus per damage die rolled. When attacking Undead (or other configured types), the bonus is doubled.

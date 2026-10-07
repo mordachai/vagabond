@@ -50,3 +50,24 @@ Book p. 47. Arcanum (Gish perk grant, Arcana casting, 2 × Level Mana, Cast Max 
 - [ ] Spell Parry / Arcane Surge entries show the right name per level in the level-up dialog and on the sheet.
 - [ ] Existing Magus (old Spellstriker class) migrates (Spellstriker feature gone, Arcanum effect present).
 
+## Merchant
+
+Book p. 49. Gold Sink, Deep Pockets (Deft Hands perk grant + 2 Item Slots now and every 3 Levels), Line Goes Up (+1/+2/+3 Luck), Diamond Hands (+1/+2), Opportunist, Top Shelf. Training Craft, Finesse, Influence (no choices); Key Stat Luck/Reason. Bang for Your Buck and Treasure Seeker are gone.
+
+**Doubts / course taken**
+- Deep Pockets Slots read as 2 at Levels 1–3, 4 at 4–6, 6 at 7–9, 8 at 10 ("now and every 3 Levels hereafter"): `2 + 2 * floor((@lvl - 1) / 3)`.
+- Line Goes Up is **text only**: Rest already refills Luck to its maximum (`downtime-app.mjs`) and the Luck pool is clamped to that maximum, so "1 extra Luck when you Rest" has no room to land and the Breather Luck gain has no hook. Needs a ruling (allow Luck above max? raise max?) before it can be an effect. Rogue Knack has the same extra-Luck-on-Rest wording.
+- Playing Merchant: the book line reads "a low-defense and damage character" in the PDF image — transcribed as seen, check the wording.
+- Key Stat is now Luck/Reason (old data: Reason, Presence).
+
+**Text-only / deferred**
+- Gold Sink (swap valuables in a container for an Item of equal or lesser value, 1 Luck) and Top Shelf (pull a Relic, +1 Luck per 250g) — container swap flow does not exist.
+- Line Goes Up (Luck on Breather / Craft / Travel / Rest) — see doubt above.
+- Diamond Hands (Items count as Relics with a +1 / +2 Bonus Relic Power while Equipped) — needs a relic-power layer on non-relic items.
+- Opportunist (Use Action after another Being acts) — text only.
+
+**Tests to run in-world** (after `npm run pack`)
+- [ ] Builder: Merchant is Trained in Craft, Finesse and Influence with no extra Skill choices; Deft Hands granted automatically.
+- [ ] Inventory: +2 Item Slots at Level 1 (on top of the Deft Hands perk), 4 at Level 4, 6 at Level 7, 8 at Level 10.
+- [ ] Existing Merchant (old Bang for Your Buck class) migrates; Finesse is marked trained; the old "Deep Pockets (Feature)" effect is replaced by "Deep Pockets".
+

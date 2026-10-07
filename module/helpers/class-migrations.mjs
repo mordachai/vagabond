@@ -211,6 +211,21 @@ export function migrateMagusClass() {
   });
 }
 
+/**
+ * Merchant: old Bang for Your Buck / Treasure Seeker class → Gold Sink, Deep Pockets (Slots effect), Line Goes Up,
+ * Diamond Hands, Opportunist, Top Shelf; Training Craft, Finesse, Influence.
+ */
+export function migrateMerchantClass() {
+  return migrateClass({
+    setting: 'merchantClassMigrated',
+    classId: 'F26CjqMxgd2fPbv5',
+    className: 'Merchant',
+    probeFeature: 'Line Goes Up (+1 Luck)',
+    isOld: (item) => item.system.levelFeatures?.some(lf => lf.name === 'Bang for Your Buck'),
+    afterItem: trainGuaranteedSkills,
+  });
+}
+
 /** Give perk items already in the world (copies) the effects the compendium perk now ships. */
 async function addPerkEffects(perkId, perkName) {
   const source = await game.packs.get('vagabond.perks')?.getDocument(perkId);

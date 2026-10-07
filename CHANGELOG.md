@@ -1,6 +1,9 @@
 # Changelog
 
 ## Unreleased
+- **Merchant revised to the new book text.** Class description, the Class Features table, Gold Sink, Deep Pockets, Line Goes Up (+1 / +2 / +3 Luck), Diamond Hands (+1 / +2), Opportunist and Top Shelf now read exactly as printed; Training is Craft, Finesse and Influence and the Key Stat is Luck/Reason. Bang for Your Buck and Treasure Seeker are gone.
+  - **Deep Pockets** grants the Deft Hands Perk and an effect gives 2 extra Item Slots now and every 3 Levels. The rest of the class is text (Line Goes Up needs a ruling on Luck above the maximum — see `CLASS_REWRITE_NOTES.md`).
+  - Existing Merchant items are converted once on load (Finesse is marked trained). The `classes` compendium needs `npm run pack` first.
 - **Magus revised to the new book text.** Class description, the Class Features table (with Spells, Mana and Cast Max), Arcanum, Enspell, Spell Parry (10+ / 9+ / 8+), Arcane Surge, Esoteric Flow and Sword & Sorcery now read exactly as printed; Training is Arcana and Melee. Spellstriker, Esoteric Eye, Arcane Recall and Aegis Obscura are gone.
   - **Arcanum:** grants the Gish Perk; Cast Max is 1 + half your Level (an effect cancels the casting Stat the engine adds). The rest of the class is text.
   - Existing Magus items are converted once on load. The `classes` compendium needs `npm run pack` first.
