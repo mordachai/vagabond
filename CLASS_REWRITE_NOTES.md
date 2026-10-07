@@ -6,6 +6,54 @@ Decisions that were not obvious are listed under **Doubts / course taken** for e
 
 Common to every class here: **Cast Max** is the book's own formula (`2 + Level` or `1 + half Level, round up`), but the engine always adds the casting Stat + half Level — so each caster has a class effect on `system.mana.castingMaxBonus` that cancels the Stat and adds the book formula (same trick as the Druid). A character whose casting Stat changes by an Active Effect stays correct, because `@stats.<key>.total` is read live.
 
+## Index and test order
+
+| Class | Commit | Automated (effect / helper) | Text only | Biggest doubt |
+| --- | --- | --- | --- | --- |
+| Luminary | 648e213 | Cast Max, healing Spells Explode, Overheal | Ever-Cure, excess healing, Revivify, Life-Giver | Overheal rounds half Level **down** |
+| Magus | 0bc275e | Cast Max, Gish grant | Enspell, Spell Parry, Arcane Surge, Esoteric Flow, Sword & Sorcery | no Imbue-scoped Mana discount |
+| Merchant | 86cc2fe | Item Slots, Deft Hands grant | Gold Sink, Line Goes Up, Diamond Hands, Opportunist, Top Shelf | extra Luck on Rest has no room (Luck capped, Rest refills) |
+| Pugilist | fc8c5a9 | Vicious on Brawl Crit, Moxie Favor, Title Holder dice, Haymaker auto-Daze | Defense, Rope-a-Dope, Fisticuffs choice, Moxie countdown | Title Holder = "at least" d6; Haymaker Dazed lifts only in Combat |
+| Revelator | aaa85a7 | Cast Max, Lay on Hands button, Divine Resolve | Enspell, Paragon’s Aura, Holy Diver | Lay on Hands needs Close target by token distance |
+| Rogue | 8e18185 | Sneak Attack (auto), Lethal Weapon, Knack Crit Luck | Evasive, Waylay, Luck on Breather / Rest | book table says Unflinching Luck, card says Knack |
+| Sorcerer | 5beaaa0 | Cast Max, Spell-Slinger die + Crit | Tap HP-as-Mana, Quickening, Crit on Saves vs Casts | Tap grants Vehement Magic (was Secret of Mana) |
+| Vanguard | eec5120 | Defense Weapon die size + per-die bonus | all Shove rules, Stalwart | Indestructible read as +1 **per die** |
+| Witch | 43f63b4 | Cast Max | Hex, Widdershins, Grudge Bearer | no continual-Spell layer exists |
+| Wizard | 8776383 | Cast Max, Focus max, upcasting discount | Page Master | "Delivery upcasting" = increase steps, not base cost |
+
+### Do this first
+
+1. `npm run pack` (**classes** and **perks** — Assured Healer got an effect).
+2. Reload the world as GM: each class is migrated once (guard settings `<class>ClassMigrated`). Open an old character of each class and check the effects list (Class Features section) and the level features.
+3. If a migration did not run, the probe feature was missing (pack not rebuilt) — rebuild and reload.
+
+### Engine changes in this batch (shared test surface)
+
+| Change | Where | Used by | Quick check |
+| --- | --- | --- | --- |
+| `system.healingExplode` (HP-restoring **Spell** rolls explode on extra faces) | damage pipeline step 9 | Luminary, Assured Healer perk | heal with a Spell: d6 explodes on 6 (and 1 with Assured Healer) |
+| `weaponDieBySkill` / `weaponLowExplodeBySkill` | pipeline steps 2b / 9 | Pugilist Title Holder | Brawl damage ≥ d6; explodes on 1–2 |
+| `defenseWeaponDieStep` / `defenseWeaponBonusPerDie` | pipeline steps 2a / 10 | Vanguard | Defense-property weapon dice larger; per-die bonus |
+| `bonuses.deliveryUpcastCostReduction` | cast dialog + spell handler cost math | Wizard Sculpt Spell | upcasting steps cost less; dialog preview = deduction |
+| `haymakerMargin` + `PugilistHelper` (postD20Roll, combatTurnChange) | `pugilist-helper.mjs` | Pugilist | Brawl hit by 10+ Dazes; lifted at the Pugilist’s Turn start |
+| `layOnHandsDie` / `layOnHandsCures` + `RevelatorHelper` button | `revelator-helper.mjs` | Revelator | button: 1 Mana, d4 + Level healing card, Apply |
+| `sneakAttack*`, `critLuckBonus` + `RogueHelper` (postD20Roll, preDamageRoll, calculateFinalDamage) | `rogue-helper.mjs` | Rogue | Favored hit adds dN d4 + ignores Armor; Crit +1 Luck |
+| roll-handler post-roll context now carries `targets` and `favorHinder` | `roll-handler.mjs` | Pugilist, Rogue | regression: every attack still posts its card |
+| `AutomationMode` gates `haymakerMargin` and `sneakAttackTrigger` | `automation-mode.mjs` | Pugilist, Rogue | Class Automation = Manual → both inert |
+| `migrateClass` takes `probeFeature`; shared `trainGuaranteedSkills` / `grantPerk` / `addPerkEffects` | `class-migrations.mjs` | all | see "Do this first" |
+
+### Cross-cutting tests
+
+- [ ] Every class: builder (Class step → spells / Mana / Cast Max numbers match the table; Training has no leftover skill choices; granted perk appears at the Perks step) and level-up at Levels 2, 4, 6, 8, 10.
+- [ ] Cast Max of every caster at Levels 1 / 5 / 10 against the table (the effect cancels the Stat, so changing the casting Stat by hand must not change it).
+- [ ] Effects list on a sheet: class effects under "Class Features" with no switch, except the switchable autos (Pugilist "Haymaker: Auto", Rogue "Sneak Attack: Auto"); level-gated effects show Locked below their Level.
+- [ ] Regression: ordinary weapon attack + damage roll for a non-class character (pipeline changes), spell damage and healing, Luck reroll.
+- [ ] Regression: the character HUD and sheet still open for a Fighter / Hunter (new schema fields).
+
+### Decisions to revisit (all marked under each class)
+
+Overheal rounding · Title Holder "at least" · Indestructible +1 per die · Sculpt Spell upcasting-only · Rogue Knack vs Unflinching Luck naming · Lay on Hands target distance · Luck above max (Merchant, Rogue Knack) · Witch Hex tracking · Enspell / Arcane Surge Imbue discounts (Magus, Revelator).
+
 ## Luminary
 
 Book p. 45. Theurgy (Mysticism casting, 4 × Level Mana, Cast Max 2 + Level, Life always known), Radiant Healer (Assured Healer perk + healing Spell rolls Explode on the highest face), Overheal, Ever-Cure, Revivify, Life-Giver. Training is now Influence + Mysticism (no choices).
