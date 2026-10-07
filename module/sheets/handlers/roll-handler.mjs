@@ -92,16 +92,12 @@ export class RollHandler {
       _rollDifficulty = _preCtx.difficulty;
       const _effectiveFavorHinder = _preCtx.favorHinder ?? favorHinder;
 
-      // For saves: apply per-status bonuses for every status currently active on the actor,
-      // plus the flat Reflex penalty from worn Armor's Slots (see actor-character.mjs
-      // `reflexArmorPenalty`) — a numeric subtraction, not Hinder.
+      // For saves: apply per-status bonuses for every status currently active on the actor.
+      // (Worn Armor's Reflex penalty is already in the Reflex Difficulty — Alpha 3 p. 26.)
       let saveVsStatusBonus = 0;
       if (rollType === 'save' && rollKey) {
         for (const statusId of (this.actor.statuses ?? [])) {
           saveVsStatusBonus += VagabondRollBuilder.getSaveVsStatusBonus(this.actor, statusId, rollKey);
-        }
-        if (rollKey === 'reflex') {
-          saveVsStatusBonus -= (this.actor.system.reflexArmorPenalty || 0);
         }
       }
       const _extraFormula = saveVsStatusBonus !== 0 ? ` + ${saveVsStatusBonus}` : '';

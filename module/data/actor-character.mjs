@@ -1294,6 +1294,10 @@ export default class VagabondCharacter extends VagabondActorBase {
       const stat1Total = this.stats[saveDef.stat1]?.total || 0;
       const stat2Total = this.stats[saveDef.stat2]?.total || 0;
       save.difficulty = saveDef.baseValue - stat1Total - stat2Total - bonus + (this.universalDifficultyBonus || 0);
+      // Alpha 3 p. 26: Reflex Difficulty = 20 - DEX - AWR + Slots occupied by worn Armor
+      // (`reflexArmorPenalty`, set in _calculateCombatValues). Lives in the Difficulty —
+      // never subtract it from the roll as well.
+      if (saveDef.key === 'reflex') save.difficulty += (this.reflexArmorPenalty || 0);
       save.label = saveDef.label;
       save.description = saveDef.description;
       const abbr1 = game.i18n.localize(CONFIG.VAGABOND.statAbbreviations[saveDef.stat1] ?? '') || saveDef.stat1.toUpperCase().slice(0, 3);
