@@ -3222,7 +3222,9 @@
         "RemoveAndReturnToPool": "Remover {value} e devolver ao conjunto",
         "BonusFromPerk": "Bônus de Vantagem",
         "ClickToRemoveBonus": "Clique para remover o bônus e reatribuir",
-        "ClickToApplyBonus": "Clique para aplicar +1 de bônus em {label}"
+        "ClickToApplyBonus": "Clique para aplicar +1 de bônus em {label}",
+        "ReasonTraining": "Treinamento por Raciocínio (metade do RCN, arredondado para cima)",
+        "ReasonTrainingFull": "Você só pode escolher {count} Treinamento(s) por Raciocínio"
       },
       "ClassDetails": "Detalhes",
       "Levels": "Características por Nível",
@@ -3312,6 +3314,9 @@
       "TrainingsSuffix": "treinamento(s)",
       "StatIncrease": "Aumento de Atributo",
       "ChooseStatInstruction": "Escolha um atributo para aumentar em +1 (máx {cap}):",
+      "ReasonTraining": "Escolha um Treinamento (aumento de Raciocínio)",
+      "ReasonTrainingInstruction": "Aumentar seu Raciocínio lhe dá direito a outro Treinamento (metade do RCN, arredondado para cima). Escolha uma Perícia:",
+      "ReasonTrainingChat": "Novo Treinamento (Raciocínio):",
       "ChooseAPerk": "Escolha uma Vantagem",
       "HideUnqualified": "Ocultar Não Qualificadas ({count})",
       "ShowAll": "Mostrar Todas ({count} ocultas)",

@@ -35,6 +35,7 @@ export class CharacterBuilderUIComponents {
         'skillSelections',  // CRITICAL: Track per-group skill selections for validation
         'skillGrant',  // CRITICAL: Track skill grant structure changes
         'extraTrainingCount',  // CRITICAL: Track extra training from ancestry/class grants
+        'reasonTrainingCount',  // CRITICAL: Trainings owed by Reason (stats step)
         'perks',
         'classPerks',
         'perkGrants',  // CRITICAL: Track grant fulfillment for perks step

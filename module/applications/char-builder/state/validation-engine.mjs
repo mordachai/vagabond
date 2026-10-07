@@ -830,7 +830,10 @@ export class ValidationEngine {
         const appliedBonusesCount = Object.keys(state.appliedBonuses || {}).length;
         const allBonusesApplied = appliedBonusesCount >= bonusStatsCount;
 
-        return { isValid: allStatsAssigned && arraySelected && allBonusesApplied };
+        // Trainings from Reason (count stored by the stats step: ceil(RSN / 2), capped by free skills)
+        const reasonTrainingsDone = (state.skillSelections?.reason ?? []).length >= (state.reasonTrainingCount || 0);
+
+        return { isValid: allStatsAssigned && arraySelected && allBonusesApplied && reasonTrainingsDone };
       }
 
       case 'spells':

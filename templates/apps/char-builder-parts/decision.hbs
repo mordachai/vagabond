@@ -110,6 +110,28 @@
 
         {{!-- Bonus Stats Selector - Reusable Partial --}}
         {{> "systems/vagabond/templates/shared/bonus-stats-selector.hbs"}}
+
+        {{!-- Trainings from Reason (half RSN, round up) --}}
+        {{#if reasonTraining}}
+        <div class="skill-decision skill-rows">
+            <div class="pool-box skill-row extra-training">
+                <strong>{{localize "VAGABOND.CharBuilder.Decision.ReasonTraining"}} <span class="skill-count {{#unless (eq reasonTraining.selected reasonTraining.count)}}incomplete{{/unless}}">{{localize "VAGABOND.CharBuilder.Decision.SelectedCount" selected=reasonTraining.selected count=reasonTraining.count}}</span>:</strong>
+                <div class="pool-options">
+                    {{#each reasonTraining.skills}}
+                        <label class="checkbox-label {{#if this.isDisabled}}disabled{{/if}}" title="{{#if this.isDisabled}}{{localize 'VAGABOND.CharBuilder.Decision.SelectedInAnotherGroup'}}{{/if}}">
+                            <input
+                                type="checkbox"
+                                value="{{this.key}}"
+                                {{#if this.isChecked}}checked{{/if}}
+                                {{#if this.isDisabled}}disabled{{/if}}
+                                data-action="toggleReasonTraining">
+                            {{this.label}}
+                        </label>
+                    {{/each}}
+                </div>
+            </div>
+        </div>
+        {{/if}}
     {{/if}}
 </div>
 </section>

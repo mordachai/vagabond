@@ -379,7 +379,8 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
       toggleIgnorePrereqType: VagabondCharBuilder.prototype._delegateToStepManager,
       applyStatBonus: VagabondCharBuilder.prototype._delegateToStepManager,
       removeStatBonus: VagabondCharBuilder.prototype._delegateToStepManager,
-      unassignStat: VagabondCharBuilder.prototype._delegateToStepManager
+      unassignStat: VagabondCharBuilder.prototype._delegateToStepManager,
+      toggleReasonTraining: VagabondCharBuilder.prototype._delegateToStepManager
     }
   };
 

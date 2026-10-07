@@ -43,6 +43,7 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
       grantLevel: LevelUpDialog._onGrantLevel,
       selectClass: LevelUpDialog._onSelectClass,
       selectStat: LevelUpDialog._onSelectStat,
+      selectReasonTraining: LevelUpDialog._onSelectReasonTraining,
       selectPerk: LevelUpDialog._onSelectPerk,
       addPerk: LevelUpDialog._onAddPerk,
       removePerk: LevelUpDialog._onRemovePerk,
@@ -88,6 +89,8 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
 
     // Stat increase selection
     this.selectedStat = null;
+    // Training gained by raising Reason past a half-RSN threshold (book p. 25)
+    this.reasonTrainingSkill = null;
 
     // Perk selection state
     this.selectedPerkUuid = null; // preview
@@ -127,6 +130,17 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
    */
   get currentLevel() {
     return this.actor.system.attributes.level.value - (this.levelApplied ? 1 : 0);
+  }
+
+  /**
+   * Book p. 25: Level 1 grants (half RSN, round up) extra Trainings; "if you later increase your
+   * Reason to qualify for another Training this way, you gain another Training". True when the
+   * chosen +1 Reason crosses that threshold (an even Reason total becoming odd).
+   */
+  get gainsReasonTraining() {
+    if (this.selectedStat !== 'reason') return false;
+    const total = this.actor.system.stats?.reason?.total ?? 0;
+    return Math.ceil((total + 1) / 2) > Math.ceil(total / 2);
   }
 
   /**
@@ -398,6 +412,14 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
       });
     }
 
+    if (this.gainsReasonTraining) {
+      checklist.push({
+        label: game.i18n.localize('VAGABOND.LevelUp.ReasonTraining'),
+        tab: 'stats',
+        done: !!this.reasonTrainingSkill,
+      });
+    }
+
     const hasPerkGrants = this.perkGrantsAtLevel > 0 || features.some(f => f.allowedPerks?.length > 0);
     if (hasPerkGrants || this.gmOverride) {
       checklist.push({
@@ -567,6 +589,14 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
         skills,
         weaponSkills,
       },
+      // Training from Reason: pick one untrained Skill
+      reasonTraining: this.gainsReasonTraining
+        ? allSkillEntries.filter(([, s]) => !s.trained).map(([key, s]) => ({
+          key,
+          label: s.label || key,
+          isSelected: this.reasonTrainingSkill === key,
+        }))
+        : null,
     };
   }
 
@@ -1126,6 +1156,7 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
 
     // Stat increase required?
     if (visible.includes('stats') && !this.selectedStat) return false;
+    if (this.gainsReasonTraining && !this.reasonTrainingSkill) return false;
 
     // Perk required?
     if (visible.includes('perks') && !this.chosenPerkUuid) return false;
@@ -1282,6 +1313,14 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
     }
 
     this.selectedStat = this.selectedStat === stat ? null : stat;
+    if (!this.gainsReasonTraining) this.reasonTrainingSkill = null;
+    this.render();
+  }
+
+  static _onSelectReasonTraining(event, target) {
+    const skill = target.dataset.skill;
+    if (!skill || !this.gainsReasonTraining) return;
+    this.reasonTrainingSkill = this.reasonTrainingSkill === skill ? null : skill;
     this.render();
   }
 
@@ -1393,6 +1432,7 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
 
       if (!visible.includes('stats')) {
         this.selectedStat = null;
+        this.reasonTrainingSkill = null;
       }
 
       if (!visible.includes('perks')) {
@@ -1445,6 +1485,12 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
     if (this.selectedStat) {
       const currentVal = this.actor.system.stats[this.selectedStat].value || 0;
       updates[`system.stats.${this.selectedStat}.value`] = currentVal + 1;
+    }
+    // Training from Reason
+    // (captured now: once Reason is raised the threshold check reads the new total)
+    this._appliedReasonTraining = this.gainsReasonTraining ? this.reasonTrainingSkill : null;
+    if (this._appliedReasonTraining) {
+      updates[`system.skills.${this._appliedReasonTraining}.trained`] = true;
     }
 
     // Apply stat updates first (affects HP/mana calculations)
@@ -1566,6 +1612,10 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
     if (this.selectedStat) {
       const label = game.i18n.localize(CONFIG.VAGABOND.stats[this.selectedStat]);
       description += `<p><strong>Stat Increase:</strong> ${label} +1</p>`;
+    }
+    if (this._appliedReasonTraining) {
+      const skillLabel = this.actor.system.skills?.[this._appliedReasonTraining]?.label ?? this._appliedReasonTraining;
+      description += `<p><strong>${game.i18n.localize('VAGABOND.LevelUp.ReasonTrainingChat')}</strong> ${skillLabel}</p>`;
     }
 
     // Perk

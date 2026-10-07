@@ -3210,7 +3210,9 @@
         "RemoveAndReturnToPool": "Remove {value} and return to pool",
         "BonusFromPerk": "Bonus from Perk",
         "ClickToRemoveBonus": "Click to remove bonus and reassign",
-        "ClickToApplyBonus": "Click to apply +1 bonus to {label}"
+        "ClickToApplyBonus": "Click to apply +1 bonus to {label}",
+        "ReasonTraining": "Training from Reason (half RSN, round up)",
+        "ReasonTrainingFull": "You can only pick {count} Training(s) from Reason"
       },
       "Instructions": {
         "Ancestry": "Choose your Ancestry. It grants you Traits shared by every member of that Ancestry, such as their Type and Size. ",
@@ -3298,6 +3300,9 @@
       "TrainingsSuffix": "training(s)",
       "StatIncrease": "Stat Increase",
       "ChooseStatInstruction": "Choose one stat to increase by +1 (max {cap}):",
+      "ReasonTraining": "Choose a Training (Reason increase)",
+      "ReasonTrainingInstruction": "Raising your Reason qualifies you for another Training (half RSN, round up). Choose a Skill:",
+      "ReasonTrainingChat": "New Training (Reason):",
       "ChooseAPerk": "Choose a Perk",
       "HideUnqualified": "Hide Unqualified ({count})",
       "ShowAll": "Show All ({count} hidden)",

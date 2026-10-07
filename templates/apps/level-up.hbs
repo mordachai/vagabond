@@ -187,6 +187,22 @@
           {{/each}}
         </div>
 
+        {{! Training from Reason (raising Reason past a half-RSN threshold) }}
+        {{#if statIncrease.reasonTraining}}
+          <p class="lu-instruction">{{localize "VAGABOND.LevelUp.ReasonTrainingInstruction"}}</p>
+          <div class="lu-stat-grid">
+            {{#each statIncrease.reasonTraining}}
+              <button type="button"
+                      class="lu-stat-card {{#if isSelected}}selected{{/if}}"
+                      data-action="selectReasonTraining"
+                      data-skill="{{key}}">
+                <span class="lu-stat-name">{{label}}</span>
+                {{#if isSelected}}<span class="lu-stat-delta"><i class="fas fa-check"></i></span>{{/if}}
+              </button>
+            {{/each}}
+          </div>
+        {{/if}}
+
         {{! Derived Stats Preview }}
         <div class="lu-derived-stats">
           <h4>{{localize "VAGABOND.LevelUp.CharacterStats"}}</h4>
