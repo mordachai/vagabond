@@ -1504,7 +1504,6 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   padding: 0 4px;
   /* DEFENSE SHIELDS — heraldic answer to the damage. Same double frame as the
      target avatars (yellow inside, black outside). Weapon art in a shield mask. */
-  /* Pyramid: "Both" on top, the two weapons side by side below */
   /* Dice + modifiers accordion: grid-rows 0fr -> 1fr animates the height */
   /* Modifier text (+6) scales down with the dice */
   /* THE DAMAGE TOTAL DISPLAY (Big Orange Number) — click opens the dice */
@@ -1516,17 +1515,6 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   gap: 5px;
   padding-left: 14px;
   border-left: 1px dashed color-mix(in srgb, var(--vagabond-c-dark-bluey) 55%, transparent);
-}
-.vagabond-chat-card-v2 .damage-section .defense-buttons-row.defense-stack {
-  flex-direction: column;
-  gap: 3px;
-}
-.vagabond-chat-card-v2 .damage-section .defense-buttons-row.defense-stack .defense-pair {
-  display: flex;
-  gap: 4px;
-}
-.vagabond-chat-card-v2 .damage-section .defense-buttons-row.defense-stack .defense-shield {
-  height: 34px;
 }
 .vagabond-chat-card-v2 .damage-section button.vagabond-defense-button {
   height: auto;
@@ -1567,7 +1555,6 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   mask: url("../assets/ui/chat/defense-shield-mask.svg") center/100% 100% no-repeat;
   /* yellow rim */
   /* weapon art */
-  /* Both weapons: one shield split along the diagonal, yellow seam between */
 }
 .vagabond-chat-card-v2 .damage-section .defense-shield::before,
 .vagabond-chat-card-v2 .damage-section .defense-shield img {
@@ -1587,18 +1574,6 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   object-fit: cover;
   border: none;
   pointer-events: none;
-}
-.vagabond-chat-card-v2 .damage-section .defense-shield.is-both img:nth-of-type(1) {
-  clip-path: polygon(0 0, 100% 0, 0 100%);
-}
-.vagabond-chat-card-v2 .damage-section .defense-shield.is-both img:nth-of-type(2) {
-  clip-path: polygon(100% 0, 100% 100%, 0 100%);
-}
-.vagabond-chat-card-v2 .damage-section .defense-shield.is-both::after {
-  content: "";
-  position: absolute;
-  inset: 4px;
-  background: linear-gradient(to bottom right, transparent calc(50% - 1px), var(--vagabond-c-chat-yellow) calc(50% - 1px), var(--vagabond-c-chat-yellow) calc(50% + 1px), transparent calc(50% + 1px));
 }
 .vagabond-chat-card-v2 .damage-section .damage-block {
   flex: 1 1 0;
@@ -2075,8 +2050,22 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   background: var(--vagabond-c-bluey);
 }
 
+/* Protector: Protect buttons on a failed Reflex / Defense result (same look as Apply) */
+.protect-buttons-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.defense-note {
+  margin: 2px 0 6px;
+  font-style: italic;
+  text-align: center;
+}
+
 /* Apply Save Damage Button (outside card-actions, in save result description) */
-.save-apply-button-container button.vagabond-apply-save-damage-button {
+.save-apply-button-container button.vagabond-apply-save-damage-button,
+.protect-buttons-row button.vagabond-protect-button {
   width: 100%;
   background: transparent !important;
   background-image: url("../assets/ui/chat/apply-direct-bg.webp") !important;
@@ -2101,15 +2090,18 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   text-align: center;
   line-height: 1.2;
 }
-.save-apply-button-container button.vagabond-apply-save-damage-button:hover {
+.save-apply-button-container button.vagabond-apply-save-damage-button:hover,
+.protect-buttons-row button.vagabond-protect-button:hover {
   filter: brightness(1.6);
 }
-.save-apply-button-container button.vagabond-apply-save-damage-button:disabled {
+.save-apply-button-container button.vagabond-apply-save-damage-button:disabled,
+.protect-buttons-row button.vagabond-protect-button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
   filter: grayscale(1);
 }
-.save-apply-button-container button.vagabond-apply-save-damage-button i {
+.save-apply-button-container button.vagabond-apply-save-damage-button i,
+.protect-buttons-row button.vagabond-protect-button i {
   color: var(--c-yellow-text) !important;
   flex-shrink: 0;
 }
