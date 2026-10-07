@@ -2126,7 +2126,8 @@
             "hands1": "Uma Mão",
             "hands2": "Duas Mãos"
           },
-          "isTrinket": {"label": "Trinket", "hint": "Permite conjurar magias enquanto equipado"}
+          "isTrinket": {"label": "Trinket", "hint": "Permite conjurar magias enquanto equipado"},
+          "noSlotsWhenWorn": {"label": "Sem Espaço quando vestido", "hint": "Não ocupa Espaço de Inventário enquanto vestido (ex.: uma Mochila: 1 Espaço carregada; vestida, aumenta a capacidade)"}
         },
         "IsSupply": "Ração",
         "IsBeverage": "Água / bebida",

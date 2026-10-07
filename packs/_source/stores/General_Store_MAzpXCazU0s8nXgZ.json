@@ -24053,7 +24053,7 @@
       "type": "equipment",
       "img": "icons/containers/bags/pack-leather-white-tan.webp",
       "system": {
-        "description": "<p>Add +2 slot to Inventory when equipped.</p>",
+        "description": "<p>1 Slot while held. Worn, it occupies no Slot and adds +3 Slots to your Inventory. You can only benefit from one at a time.</p>",
         "equipmentType": "gear",
         "locked": true,
         "equipped": false,
@@ -24063,7 +24063,7 @@
           "silver": 5,
           "copper": 0
         },
-        "baseSlots": 0,
+        "baseSlots": 1,
         "metal": "none",
         "damageType": "-",
         "damageAmount": "",
@@ -24183,7 +24183,8 @@
           "command": "",
           "label": "",
           "runAsGM": false
-        }
+        },
+        "noSlotsWhenWorn": true
       },
       "effects": [
         {
@@ -24196,7 +24197,7 @@
             "changes": [
               {
                 "key": "system.inventory.bonusSlots",
-                "value": 2,
+                "value": 3,
                 "priority": null,
                 "type": "add",
                 "phase": "initial"
@@ -24210,14 +24211,14 @@
             "expiry": null,
             "expired": false
           },
-          "description": "",
+          "description": "<p>Backpack: +3 Inventory Slots while worn.</p>",
           "tint": "#ffffff",
           "transfer": true,
           "statuses": [],
           "sort": 0,
           "flags": {
             "vagabond": {
-              "applicationMode": "permanent"
+              "applicationMode": "when-equipped"
             }
           },
           "_stats": {
@@ -39685,7 +39686,7 @@
       "type": "equipment",
       "img": "icons/containers/bags/pack-leather-white-tan.webp",
       "system": {
-        "description": "<p>Add +2 slot to Inventory when equipped.</p>",
+        "description": "<p>1 Slot while held. Worn, it occupies no Slot and adds +3 Slots to your Inventory. You can only benefit from one at a time.</p>",
         "equipmentType": "gear",
         "locked": true,
         "equipped": false,
@@ -39695,7 +39696,7 @@
           "silver": 5,
           "copper": 0
         },
-        "baseSlots": 0,
+        "baseSlots": 1,
         "metal": "none",
         "damageType": "-",
         "damageAmount": "",
@@ -39815,7 +39816,8 @@
           "command": "",
           "label": "",
           "runAsGM": false
-        }
+        },
+        "noSlotsWhenWorn": true
       },
       "effects": [
         {
@@ -39828,7 +39830,7 @@
             "changes": [
               {
                 "key": "system.inventory.bonusSlots",
-                "value": 2,
+                "value": 3,
                 "priority": null,
                 "type": "add",
                 "phase": "initial"
@@ -39842,14 +39844,14 @@
             "expiry": null,
             "expired": false
           },
-          "description": "",
+          "description": "<p>Backpack: +3 Inventory Slots while worn.</p>",
           "tint": "#ffffff",
           "transfer": true,
           "statuses": [],
           "sort": 0,
           "flags": {
             "vagabond": {
-              "applicationMode": "permanent"
+              "applicationMode": "when-equipped"
             }
           },
           "_stats": {

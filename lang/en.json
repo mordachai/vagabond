@@ -2112,7 +2112,8 @@
             "hands1": "One Hand",
             "hands2": "Two Hands"
           },
-          "isTrinket": {"label": "Trinket", "hint": "Enables spellcasting while equipped"}
+          "isTrinket": {"label": "Trinket", "hint": "Enables spellcasting while equipped"},
+          "noSlotsWhenWorn": {"label": "No Slot while worn", "hint": "Occupies no Inventory Slot while worn (e.g. a Backpack: 1 Slot carried, worn it adds capacity instead)"}
         },
         "IsSupply": "Rations",
         "IsBeverage": "Water / beverage",

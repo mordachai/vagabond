@@ -8,7 +8,7 @@
       {
         "key": "system.inventory.bonusSlots",
         "type": "add",
-        "value": "2",
+        "value": "3",
         "phase": "initial",
         "priority": null
       }
@@ -22,7 +22,7 @@
     "expiry": null,
     "expired": false
   },
-  "description": "<p>Backpack: +2 bonus inventory slots.</p>",
+  "description": "<p>Backpack: +3 Inventory Slots while worn.</p>",
   "origin": null,
   "tint": "#ffffff",
   "transfer": false,
@@ -31,7 +31,7 @@
   "folder": "vacatbuff000fold",
   "flags": {
     "vagabond": {
-      "applicationMode": "permanent",
+      "applicationMode": "when-equipped",
       "canonicalId": "bonus-inventory"
     }
   },

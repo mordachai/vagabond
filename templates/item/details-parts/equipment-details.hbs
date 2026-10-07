@@ -871,6 +871,12 @@
               </select>
             </div>
           {{/if}}
+          {{#if (eq system.equipmentType 'gear')}}
+            <label class='checkbox-label'>
+              <input type='checkbox' name='system.noSlotsWhenWorn' {{#if system.noSlotsWhenWorn}}checked{{/if}} data-dtype='Boolean'/>
+              <span data-tooltip='{{localize "VAGABOND.Item.Equipment.FIELDS.noSlotsWhenWorn.hint"}}'>{{localize 'VAGABOND.Item.Equipment.FIELDS.noSlotsWhenWorn.label'}}</span>
+            </label>
+          {{/if}}
           {{#unless (eq system.equipmentType 'armor')}}
             <label class='checkbox-label'>
               <input type='checkbox' name='system.isTrinket' {{#if system.isTrinket}}checked{{/if}} data-dtype='Boolean'/>

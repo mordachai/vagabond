@@ -135,13 +135,17 @@ export default class VagabondEquipment extends VagabondItemBase {
       usedThisQuest: new fields.BooleanField({ initial: false }),
     });
 
-    // Base slots (before metal modifier if applicable, can be negative for items like Backpack)
+    // Base slots (before metal modifier if applicable)
     schema.baseSlots = new fields.NumberField({
       required: true,
       nullable: false,
       integer: true,
       initial: 1
     });
+
+    // Occupies no Slot while worn (equipmentState 'worn') — Alpha 3 Backpack:
+    // "1 (held); +3 (worn)" = 1 Slot carried, 0 Slots + a when-equipped +3 capacity effect worn.
+    schema.noSlotsWhenWorn = new fields.BooleanField({ initial: false });
 
     // Grid position for inventory display (0-indexed)
     schema.gridPosition = new fields.NumberField({
@@ -682,7 +686,8 @@ export default class VagabondEquipment extends VagabondItemBase {
     const slotDelta = isRelic ? 0 : (this._materialRules().slotDelta ?? 0);
     if (slotDelta > 0) finalSlots += slotDelta;
     else if (slotDelta < 0) finalSlots = Math.max(Math.min(1, finalSlots), finalSlots + slotDelta);
-    this.slots = finalSlots;
+    // Worn containers (Backpack) take no Slot while worn
+    this.slots = (this.noSlotsWhenWorn && this.equipmentState === 'worn') ? 0 : finalSlots;
     // Net slot change from metal — armor's Reflex penalty follows it (RAW ties
     // the penalty to Slots occupied)
     this.metalSlotDelta = finalSlots - this.baseSlots;
