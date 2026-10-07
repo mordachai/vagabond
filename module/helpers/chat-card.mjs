@@ -499,7 +499,8 @@ export class VagabondChatCard {
           // save/apply buttons below still carry the raw roll and the real per-target
           // addition in _computeFinalDamage (damage-helper.mjs) stays the single
           // source of truth for the actual HP math.
-          if (!isRestorativeCard && targetsAtRollTime?.length) {
+          // (attacks only — a Cast never gets the Flanked +2)
+          if (!isRestorativeCard && targetsAtRollTime?.length && VagabondDamageHelper._isAttackSource(actor, item, actionIndex)) {
             const { TargetHelper } = await import('./target-helper.mjs');
             const firstTarget = TargetHelper.resolveTargets(targetsAtRollTime)[0];
             if (firstTarget?.actor?.statuses?.has('flanked')) {

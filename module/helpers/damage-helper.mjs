@@ -922,6 +922,8 @@ export class VagabondDamageHelper {
    * @param {Item|null} attackingWeapon - For material weakness + berserk die count
    * @param {object} [opts]
    * @param {Actor|null} [opts.attackerActor=null] - The attacker (Beast Mode: ignore non-Relic Immune)
+   * @param {number|null} [opts.actionIdx=null] - NPC action index (attack vs Cast for Flanked)
+   * @param {boolean} [opts.isAttack] - Override the attack-vs-Cast check (`_isAttackSource`)
    * @param {number|null} [opts.rolledDiceCount=null] - Actual dice count of the damage
    *   roll (explosions included) for the berserk reduction; falls back to counting the
    *   weapon's authored damageAmount formula when absent
@@ -937,10 +939,11 @@ export class VagabondDamageHelper {
 
   static _computeFinalDamage(actor, damage, damageType, attackingWeapon = null, opts = {}) {
     // Flanked: flat damage bonus applied before Armor/Immune/Weak math (RAW: "takes
-    // an extra 2 damage from attacks"). Single choke point — every damage-application
-    // path (save, Apply Direct, NPC damage, Shield reduction) routes through here.
+    // an extra 2 damage from attacks" — never from a Cast). Single choke point — every
+    // damage-application path (save, Apply Direct, NPC damage, Shield reduction) routes here.
+    const isAttack = opts.isAttack ?? this._isAttackSource(opts.attackerActor ?? null, attackingWeapon, opts.actionIdx ?? null);
     let flankedBonus = 0;
-    if (damage > 0 && actor.statuses?.has('flanked')) {
+    if (damage > 0 && isAttack && actor.statuses?.has('flanked')) {
       flankedBonus = CONFIG.VAGABOND?.homebrew?.derivations?.flankedDamageBonus ?? 2;
       damage += flankedBonus;
     }
@@ -1426,11 +1429,15 @@ ${npcOnly ? '' : `
    * @returns {Promise<{saveRoll: Roll, difficulty: number, isSuccess: boolean, isCritical: boolean, isHindered: boolean}>}
    */
   static async _computeSaveOutcome(targetActor, saveType, attackType, sourceActor, sourceCtx = {}, event = null) {
-    // Determine if save is Hindered by conditions (heavy armor, ranged attack, etc.)
-    const isHindered = this._isSaveHindered(saveType, attackType, targetActor);
+    // Is this a Save against an attack, or against a Cast? (Vulnerable & co. only touch attacks)
+    const isAttack = this._isAttackSource(sourceActor, sourceCtx.sourceItem, sourceCtx.actionIdx);
 
-    // Attacker's outgoingSavesModifier (e.g., Confused: saves vs its attacks have Favor)
-    const attackerModifier = await this._attackerSaveVote(sourceActor, attackType);
+    // Defender-side rules (CONFIG.VAGABOND.defenseRules: Vulnerable, Prone, Invisible, ...)
+    const defenseVote = this._evaluateDefenseRules(saveType, attackType, targetActor, { isAttack, sourceActor });
+    const isHindered = defenseVote === 'hinder';
+
+    // Attacker-side vote (Confused, Vulnerable, Prone, Invisible attacker)
+    const attackerModifier = await this._attackerSaveVote(sourceActor, attackType, isAttack);
 
     // Status resistance grants an independent Favor vote — checked BEFORE the dice roll
     const resistanceFavor = await this._hasStatusResistanceForSave(targetActor, saveType, {
@@ -1439,7 +1446,7 @@ ${npcOnly ? '' : `
 
     const shiftKey = event?.shiftKey || false;
     const ctrlKey = event?.ctrlKey || false;
-    const saveRoll = await this._rollSave(targetActor, saveType, isHindered, shiftKey, ctrlKey, attackerModifier, resistanceFavor);
+    const saveRoll = await this._rollSave(targetActor, saveType, defenseVote, shiftKey, ctrlKey, attackerModifier, resistanceFavor);
 
     const difficulty = targetActor.system.saves?.[saveType]?.difficulty || 10;
     const { VagabondChatCard } = await import('./chat-card.mjs');
@@ -1520,7 +1527,7 @@ ${npcOnly ? '' : `
       const rolledDiceCount = rollTermsData.terms.reduce((n, t) =>
         n + (t.type === 'Die' ? (t.results ?? []).filter(r => r.active !== false).length : 0), 0);
       const damageBreakdown = this.calculateFinalDamageDetailed(
-        targetActor, damageAfterSave, damageType, sourceItem, { rolledDiceCount, attackerActor: sourceActor }
+        targetActor, damageAfterSave, damageType, sourceItem, { rolledDiceCount, attackerActor: sourceActor, actionIdx }
       );
       const baseAfterFinal = damageBreakdown.final;
       const armorReduction = damageBreakdown.armorReduction;
@@ -1756,10 +1763,11 @@ ${npcOnly ? '' : `
         sourceActor, sourceItem, actionIdx, attackWasCrit,
       });
       const attackType = button.dataset.attackType || 'melee';
+      const isAttack = this._isAttackSource(sourceActor, sourceItem, actionIdx);
       const check = await DefenseHelper.rollCheck(targetActor, weapon, {
-        attackerModifier: await this._attackerSaveVote(sourceActor, attackType), resistanceFavor, event,
+        attackerModifier: await this._attackerSaveVote(sourceActor, attackType, isAttack), resistanceFavor, event,
         // The defender's Reflex-Save rules (CONFIG.VAGABOND.defenseRules, e.g. Prone) apply to the Check
-        defenseVote: this._evaluateDefenseRules('reflex', attackType, targetActor),
+        defenseVote: this._evaluateDefenseRules('reflex', attackType, targetActor, { isAttack, sourceActor }),
       });
       // The Check stands in for the Reflex Save: a status that fails Reflex (Incapacitated) fails it
       const { VagabondRollBuilder } = await import('./roll-builder.mjs');
@@ -1780,7 +1788,7 @@ ${npcOnly ? '' : `
       const shieldReduction = shieldRoll?.total ?? 0;
 
       const breakdown = this.calculateFinalDamageDetailed(
-        targetActor, Math.max(0, damageAmount - shieldReduction), damageType, sourceItem, { attackerActor: sourceActor }
+        targetActor, Math.max(0, damageAmount - shieldReduction), damageType, sourceItem, { attackerActor: sourceActor, actionIdx }
       );
       let finalDamage = breakdown.final;
       if (!weaknessPreRolled && this._isWeakTo(targetActor, damageType, sourceItem, sourceActor)) {
@@ -1998,17 +2006,20 @@ ${npcOnly ? '' : `
    * registry. Each matching rule contributes its `effect` vote; votes fold net-count.
    * @param {string} saveType
    * @param {string} attackType
-   * @param {Actor} actor
+   * @param {Actor} actor - The defender
+   * @param {{isAttack?: boolean, sourceActor?: Actor|null}} [ctx] - isAttack: the Save is against an
+   *   attack (not a Cast) — `attacksOnly` rules skip otherwise; sourceActor: the attacker
    * @returns {'favor'|'hinder'|'none'}
    */
-  static _evaluateDefenseRules(saveType, attackType, actor) {
+  static _evaluateDefenseRules(saveType, attackType, actor, ctx = {}) {
     const rules = CONFIG.VAGABOND.defenseRules ?? [];
     const votes = [];
     for (const rule of rules) {
       if (rule.save !== '*' && rule.save !== saveType) continue;
       if (rule.vsAttackTypes !== '*' && !rule.vsAttackTypes.includes(attackType)) continue;
-      if (rule.condition && !rule.condition(actor, attackType)) continue;
-      if (rule.negatedBy && rule.negatedBy(actor, attackType)) continue;
+      if (rule.attacksOnly && !ctx.isAttack) continue;
+      if (rule.condition && !rule.condition(actor, attackType, ctx)) continue;
+      if (rule.negatedBy && rule.negatedBy(actor, attackType, ctx)) continue;
       votes.push(rule.effect);
     }
     let net = 0;
@@ -2020,38 +2031,50 @@ ${npcOnly ? '' : `
   }
 
   /**
-   * The attacker-side vote on a Save against its attack: its `outgoingSavesModifier`
-   * (Confused, Vulnerable) plus Prone's Melee-only Vulnerable (`meleeReflexVulnerable`:
-   * Saves against its Melee attacks have Favor), merged net-count.
+   * Whether a damage card's source is an attack. The book keeps "Attack or Cast" distinct: a
+   * Spell or an NPC Cast action is not an attack. Imbue rides a Weapon attack card, so it counts.
    * @param {Actor|null} sourceActor
-   * @param {string} attackType
-   * @returns {Promise<'favor'|'hinder'|'none'>}
+   * @param {Item|null} sourceItem
+   * @param {number|null} actionIdx - NPC action index (no item)
+   * @returns {boolean}
    */
-  static async _attackerSaveVote(sourceActor, attackType) {
-    const { VagabondRollBuilder } = await import('./roll-builder.mjs');
-    return VagabondRollBuilder.mergeFavorHinder(
-      sourceActor?.system?.outgoingSavesModifier || 'none',
-      (sourceActor?.system?.meleeReflexVulnerable && attackType === 'melee') ? 'favor' : 'none'
-    );
+  static _isAttackSource(sourceActor, sourceItem, actionIdx) {
+    if (sourceItem) return sourceItem.type !== 'spell';
+    if (actionIdx !== null && actionIdx !== undefined) {
+      const action = sourceActor?.system?.actions?.[actionIdx];
+      return !String(action?.attackType ?? '').startsWith('cast');
+    }
+    return true;
   }
 
   /**
-   * Determine if a save should be Hindered (config-driven via VAGABOND.defenseRules)
-   * @param {string} saveType - Save key ('reflex', 'endure', ...)
-   * @param {string} attackType - 'melee' or 'ranged' or 'cast'
-   * @param {Actor} actor - The defending actor
-   * @returns {boolean} True if save is Hindered
-   * @private
+   * The attacker-side vote on a Save against its attack or Cast, merged net-count:
+   * - `outgoingSavesModifier` (Confused: Saves against its Actions have Favor, Casts too);
+   * - Vulnerable: Saves against its attacks have Favor;
+   * - Prone (`meleeReflexVulnerable`): Saves against its Melee attacks have Favor;
+   * - Invisible attacker (`attackersAreBlinded`): the defender can't see it and acts as Blinded
+   *   (Vulnerable), so its Saves against the attack have Hinder.
+   * @param {Actor|null} sourceActor
+   * @param {string} attackType
+   * @param {boolean} [isAttack=true]
+   * @returns {Promise<'favor'|'hinder'|'none'>}
    */
-  static _isSaveHindered(saveType, attackType, actor) {
-    return this._evaluateDefenseRules(saveType, attackType, actor) === 'hinder';
+  static async _attackerSaveVote(sourceActor, attackType, isAttack = true) {
+    const { VagabondRollBuilder } = await import('./roll-builder.mjs');
+    const sys = sourceActor?.system;
+    return VagabondRollBuilder.mergeFavorHinder(
+      sys?.outgoingSavesModifier || 'none',
+      (isAttack && sys?.vulnerable) ? 'favor' : 'none',
+      (isAttack && sys?.meleeReflexVulnerable && attackType === 'melee') ? 'favor' : 'none',
+      (isAttack && sys?.defenderStatusModifiers?.attackersAreBlinded) ? 'hinder' : 'none'
+    );
   }
 
   /**
    * Roll a save for an actor
    * @param {Actor} actor - The actor rolling the save
    * @param {string} saveType - 'reflex', 'endure', 'will'
-   * @param {boolean} isHindered - Whether the save is Hindered by conditions
+   * @param {'favor'|'hinder'|'none'} defenseVote - Defender-side rules vote (CONFIG.VAGABOND.defenseRules)
    * @param {boolean} shiftKey - Whether Shift key was pressed (Favor modifier)
    * @param {boolean} ctrlKey - Whether Ctrl key was pressed (Hinder modifier)
    * @param {string} attackerModifier - Attacker's outgoingSavesModifier ('none', 'favor', 'hinder')
@@ -2059,7 +2082,7 @@ ${npcOnly ? '' : `
    * @returns {Promise<Roll>} The save roll
    * @private
    */
-  static async _rollSave(actor, saveType, isHindered, shiftKey = false, ctrlKey = false, attackerModifier = 'none', resistanceFavor = false) {
+  static async _rollSave(actor, saveType, defenseVote = 'none', shiftKey = false, ctrlKey = false, attackerModifier = 'none', resistanceFavor = false) {
     // Use centralized roll builder for all favor/hinder logic
     const { VagabondRollBuilder } = await import('./roll-builder.mjs');
 
@@ -2070,7 +2093,8 @@ ${npcOnly ? '' : `
       VagabondRollBuilder.calculateEffectiveFavorHinder(systemState, shiftKey, ctrlKey),
       attackerModifier,
       resistanceFavor ? 'favor' : 'none',
-      VagabondRollBuilder.checkFavorVote(actor, 'save')
+      VagabondRollBuilder.checkFavorVote(actor, 'save'),
+      defenseVote
     );
 
     // Worn Armor's Reflex penalty lives in the Reflex Difficulty (Alpha 3 p. 26,
@@ -2078,12 +2102,11 @@ ${npcOnly ? '' : `
     // A save rolled twice (Dancer Footloose) swaps the base die for `2d20kh`.
     const baseFormula = VagabondRollBuilder.saveBaseDie(actor, saveType);
 
-    // Build and evaluate roll with conditional hinder support (defenseRules registry —
-    // empty by default per current RAW, available for future homebrew hinder rules)
+    // Every vote (defenseRules included) is already merged into effectiveFavorHinder
     const roll = await VagabondRollBuilder.buildAndEvaluateD20WithConditionalHinder(
       actor,
       effectiveFavorHinder,
-      isHindered,
+      false,
       baseFormula
     );
 
@@ -2584,7 +2607,7 @@ ${npcOnly ? '' : `
       const effectiveDamage = damageAmount;
 
       // Calculate final damage (armor/immune/weak)
-      const directBreakdown = this.calculateFinalDamageDetailed(targetActor, effectiveDamage, damageType, sourceItem, { attackerActor: sourceActor });
+      const directBreakdown = this.calculateFinalDamageDetailed(targetActor, effectiveDamage, damageType, sourceItem, { attackerActor: sourceActor, actionIdx: directActionIdx });
       const baseAfterFinalDirect = directBreakdown.final;
       // RAW: Weak — bypass Armor/Immune + deal an extra damage die
       let finalDamage = baseAfterFinalDirect;

@@ -728,15 +728,22 @@ export class VagabondItem extends Item {
     const { VagabondChatCard } = await import('../helpers/chat-card.mjs');
     const isMeleeAttack = !thrown && VagabondChatCard.attackTypeForWeaponSkill(weaponSkillKey) === 'melee';
     if (isMeleeAttack && actor.system.meleeReflexVulnerable) votes.push('hinder');
+    // Vulnerable (book p. 11): its attacks have Hinder
+    if (actor.system.vulnerable) votes.push('hinder');
     if (targets.length > 0) {
       // Attacker-side situational Favor (CONFIG.VAGABOND.attackFavorRules, e.g. Bloodthirsty)
       votes.push(VagabondRollBuilder.attackFavorVote(actor, targets.map(t => t.actor).filter(Boolean)));
       const targetActor = targets[0].actor;
       if (targetActor) {
         const targetModifier = targetActor.system.incomingAttacksModifier || 'none';
+        // Invisible target: the attacker can't see it and acts as Blinded (Vulnerable) → Hinder
         const attackersAreBlinded = targetActor.system.defenderStatusModifiers?.attackersAreBlinded || false;
         votes.push(targetModifier, attackersAreBlinded ? 'hinder' : 'none');
+        // Vulnerable target: attacks targeting it have Favor
+        if (targetActor.system.vulnerable) votes.push('favor');
         if (isMeleeAttack && targetActor.system.meleeReflexVulnerable) votes.push('favor');
+        // Invisible attacker: the target can't see it and acts as Blinded (Vulnerable) → Favor
+        if (actor.system.defenderStatusModifiers?.attackersAreBlinded) votes.push('favor');
       }
     }
     const effectiveFavorHinder = VagabondRollBuilder.mergeFavorHinder(...votes);

@@ -793,6 +793,14 @@ export default class VagabondCharacter extends VagabondActorBase {
       label: "Auto-Fail All Rolls"
     });
 
+    // Vulnerable (book p. 11): its attacks and its Saves against attacks have Hinder; attacks
+    // targeting it and Saves against its attacks have Favor. Attacks only — a Cast is not an
+    // attack (the book always says "Attack or Cast"), and other Checks / Saves are unaffected.
+    schema.vulnerable = new fields.BooleanField({
+      initial: false,
+      label: "Vulnerable (attacks and Saves against attacks)"
+    });
+
     // Prone (Alpha 3 p. 11): Vulnerable only for Melee attacks and Reflex Saves — its Melee
     // attacks and Reflex Saves have Hinder; Melee attacks targeting it and Saves against its
     // Melee attacks have Favor.
@@ -1003,6 +1011,7 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.outgoingSavesModifier = 'none';
     this.autoFailStats = [];
     this.autoFailAllRolls = false;
+    this.vulnerable = false;
     this.meleeReflexVulnerable = false;
     this.speedHalved = false;
     this.weaponAsTrinket = false;

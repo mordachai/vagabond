@@ -311,6 +311,7 @@ export class VagabondActiveEffect extends ActiveEffect {
       'system.autoFailAllRolls': 'Auto-Fail All Rolls (true/false)',
       'system.castWithHandsFull': 'Cast With Hands Full — ignore trinket hand mode (true/false)',
       'system.autoFailStats': 'Auto-Fail Specific Stats / Saves (ADD stat or save key, e.g. might, reflex)',
+      'system.vulnerable': 'Vulnerable — its attacks / Saves vs attacks Hindered, attacks at it / Saves vs its attacks Favored (true/false)',
       'system.meleeReflexVulnerable': 'Vulnerable for Melee attacks and Reflex Saves only — Prone (true/false)',
       'system.speedHalved': 'Speed Halved — crawling, Prone (true/false)',
       'system.defenderStatusModifiers.attackersAreBlinded': 'Defender: Attackers Are Blinded (true/false)',

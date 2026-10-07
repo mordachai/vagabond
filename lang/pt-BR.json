@@ -397,7 +397,7 @@
       "Incapacitated": "Não pode Concentrar-se/Agir/Mover-se. Falha em Testes de Força/Destreza e Salvaguardas de Reflexo. Vulnerável. Velocidade = 0 [AUTOMATIZADO]",
       "Paralyzed": "Incapacitado + Velocidade = 0 [AUTOMATIZADO]",
       "Unconscious": "Cego + Incapacitado + Caído. Ataques Próximos são críticos automáticos [AUTOMATIZADO]",
-      "Invisible": "Não pode ser visto. Atacantes agem como Cegos [AUTOMATIZADO]",
+      "Invisible": "Não pode ser visto por sentidos normais; quem não o vê age como Cego em Testes e Salvaguardas que o envolvem [AUTOMATIZADO: ataques]",
       "Berserk": "Não pode usar a Ação de Conjurar ou Concentrar-se, não pode ficar Amedrontado, e não faz Testes de Moral [PARCIAL - Rastreamento manual]",
       "Burning": "Sofre dano no início do turno [FUTURO - Requer ganchos do rastreador de combate]",
       "Charmed": "Não pode atacar voluntariamente quem o enfeitiçou [FUTURO - Requer validação de alvo]",

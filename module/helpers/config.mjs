@@ -388,22 +388,13 @@ VAGABOND.statusEffectDefinitions = [
     name: 'VAGABOND.StatusConditions.Vulnerable',
     img: '/icons/magic/movement/abstract-ribbons-red-orange.webp',
     statuses: ['vulnerable'],
-    description: 'Its attacks and saves have Hinder. Attacks targeting it have Favor. Saves against its attacks have Favor.',
+    description: 'Its attacks and its Saves against attacks have Hinder. Attacks targeting it and Saves against its attacks have Favor.',
     changes: [
+      // Vulnerable: attacks and Saves against attacks only (system.vulnerable)
       {
-        key: 'system.favorHinder',
+        key: 'system.vulnerable',
         type: "override",
-        value: 'hinder'
-      },
-      {
-        key: 'system.incomingAttacksModifier',
-        type: "override",
-        value: 'favor'
-      },
-      {
-        key: 'system.outgoingSavesModifier',
-        type: "override",
-        value: 'favor'
+        value: 'true'
       }
     ]
   },
@@ -423,20 +414,11 @@ VAGABOND.statusEffectDefinitions = [
     statuses: ['flanked'],
     description: 'Vulnerable (its attacks and Saves against attacks have Hinder; attacks targeting it and Saves against its attacks have Favor), and takes an extra 2 damage from attacks (before Armor).',
     changes: [
+      // Vulnerable: attacks and Saves against attacks only (system.vulnerable)
       {
-        key: 'system.favorHinder',
+        key: 'system.vulnerable',
         type: "override",
-        value: 'hinder'
-      },
-      {
-        key: 'system.incomingAttacksModifier',
-        type: "override",
-        value: 'favor'
-      },
-      {
-        key: 'system.outgoingSavesModifier',
-        type: "override",
-        value: 'favor'
+        value: 'true'
       }
     ]
   },
@@ -474,20 +456,11 @@ VAGABOND.statusEffectDefinitions = [
     description: 'Can\'t see. Vulnerable. [FULLY AUTOMATED]',
     changes: [
       // Same as Vulnerable
+      // Vulnerable: attacks and Saves against attacks only (system.vulnerable)
       {
-        key: 'system.favorHinder',
+        key: 'system.vulnerable',
         type: "override",
-        value: 'hinder'
-      },
-      {
-        key: 'system.incomingAttacksModifier',
-        type: "override",
-        value: 'favor'
-      },
-      {
-        key: 'system.outgoingSavesModifier',
-        type: "override",
-        value: 'favor'
+        value: 'true'
       }
     ]
   },
@@ -496,7 +469,7 @@ VAGABOND.statusEffectDefinitions = [
     name: 'VAGABOND.StatusConditions.Invisible',
     img: '/icons/magic/control/silhouette-hold-change-blue.webp',
     statuses: ['invisible'],
-    description: 'Can\'t be seen. Attackers act as Blinded (attacks Hindered). [FULLY AUTOMATED]',
+    description: 'Can\'t be seen by normal senses; those that can\'t see it act as Blinded for Checks and Saves involving it. [AUTOMATED: attacks against it Hindered, its attacks Favored, Saves against its attacks Hindered, its Saves against attacks Favored]',
     changes: [
       {
         key: 'system.defenderStatusModifiers.attackersAreBlinded',
@@ -518,20 +491,11 @@ VAGABOND.statusEffectDefinitions = [
         type: "add",
         value: '-999'
       },
+      // Vulnerable: attacks and Saves against attacks only (system.vulnerable)
       {
-        key: 'system.favorHinder',
+        key: 'system.vulnerable',
         type: "override",
-        value: 'hinder'
-      },
-      {
-        key: 'system.incomingAttacksModifier',
-        type: "override",
-        value: 'favor'
-      },
-      {
-        key: 'system.outgoingSavesModifier',
-        type: "override",
-        value: 'favor'
+        value: 'true'
       }
     ]
   },
@@ -573,20 +537,11 @@ VAGABOND.statusEffectDefinitions = [
         value: '-999'
       },
       // Vulnerable effects
+      // Vulnerable: attacks and Saves against attacks only (system.vulnerable)
       {
-        key: 'system.favorHinder',
+        key: 'system.vulnerable',
         type: "override",
-        value: 'hinder'
-      },
-      {
-        key: 'system.incomingAttacksModifier',
-        type: "override",
-        value: 'favor'
-      },
-      {
-        key: 'system.outgoingSavesModifier',
-        type: "override",
-        value: 'favor'
+        value: 'true'
       }
     ]
   },
@@ -618,20 +573,11 @@ VAGABOND.statusEffectDefinitions = [
         type: "add",
         value: '-999'
       },
+      // Vulnerable: attacks and Saves against attacks only (system.vulnerable)
       {
-        key: 'system.favorHinder',
+        key: 'system.vulnerable',
         type: "override",
-        value: 'hinder'
-      },
-      {
-        key: 'system.incomingAttacksModifier',
-        type: "override",
-        value: 'favor'
-      },
-      {
-        key: 'system.outgoingSavesModifier',
-        type: "override",
-        value: 'favor'
+        value: 'true'
       }
     ]
   },
@@ -663,20 +609,11 @@ VAGABOND.statusEffectDefinitions = [
         type: "add",
         value: '-999'
       },
+      // Vulnerable: attacks and Saves against attacks only (system.vulnerable)
       {
-        key: 'system.favorHinder',
+        key: 'system.vulnerable',
         type: "override",
-        value: 'hinder'
-      },
-      {
-        key: 'system.incomingAttacksModifier',
-        type: "override",
-        value: 'favor'
-      },
-      {
-        key: 'system.outgoingSavesModifier',
-        type: "override",
-        value: 'favor'
+        value: 'true'
       },
       // Plus: Close attacks auto-crit
       {
@@ -706,20 +643,11 @@ VAGABOND.statusEffectDefinitions = [
         value: '-999'
       },
       // Vulnerable effects
+      // Vulnerable: attacks and Saves against attacks only (system.vulnerable)
       {
-        key: 'system.favorHinder',
+        key: 'system.vulnerable',
         type: "override",
-        value: 'hinder'
-      },
-      {
-        key: 'system.incomingAttacksModifier',
-        type: "override",
-        value: 'favor'
-      },
-      {
-        key: 'system.outgoingSavesModifier',
-        type: "override",
-        value: 'favor'
+        value: 'true'
       }
     ]
   }
@@ -1434,9 +1362,11 @@ VAGABOND.attackTypes = {
  *   id           - unique string for reference/debugging
  *   save         - save key the rule applies to ('endure', 'reflex', ...), or '*' for all
  *   vsAttackTypes- array of attack types the rule fires against, or '*' for all
- *   effect       - tri-state vote the rule contributes ('hinder' today; 'favor' supported)
- *   condition    - optional (actor, attackType) => boolean; rule fires only when true
- *   negatedBy    - optional (actor, attackType) => boolean; rule is cancelled when true
+ *   attacksOnly  - only against attacks, never Casts (see VagabondDamageHelper._isAttackSource)
+ *   effect       - tri-state vote the rule contributes ('hinder' or 'favor')
+ *   condition    - optional (actor, attackType, ctx) => boolean; rule fires only when true
+ *                  (ctx = { isAttack, sourceActor })
+ *   negatedBy    - optional (actor, attackType, ctx) => boolean; rule is cancelled when true
  *
  * Armor has no standing Hinder (its Slots raise the Reflex Difficulty instead, see
  * `reflexArmorPenalty` in actor-character.mjs; Shield's ranged-hinder-negation is gone).
@@ -1444,13 +1374,33 @@ VAGABOND.attackTypes = {
  * property's Attack Check (it replaces the Reflex Save).
  */
 VAGABOND.defenseRules = [
-  // Prone (Alpha 3 p. 11): Vulnerable for the purposes of Reflex Saves → its Reflex Saves have Hinder
+  // Vulnerable (book p. 11): its Saves against attacks have Hinder (never against a Cast)
+  {
+    id: 'vulnerable',
+    save: '*',
+    vsAttackTypes: '*',
+    attacksOnly: true,
+    effect: 'hinder',
+    condition: (actor) => !!actor?.system?.vulnerable
+  },
+  // Prone (Alpha 3 p. 11): Vulnerable for the purposes of Reflex Saves (against attacks)
   {
     id: 'meleeReflexVulnerable',
     save: 'reflex',
     vsAttackTypes: '*',
+    attacksOnly: true,
     effect: 'hinder',
     condition: (actor) => !!actor?.system?.meleeReflexVulnerable
+  },
+  // Invisible defender: the attacker can't see it and acts as Blinded (Vulnerable),
+  // so Saves against that attacker's attacks have Favor
+  {
+    id: 'unseenDefender',
+    save: '*',
+    vsAttackTypes: '*',
+    attacksOnly: true,
+    effect: 'favor',
+    condition: (actor) => !!actor?.system?.defenderStatusModifiers?.attackersAreBlinded
   }
 ];
 

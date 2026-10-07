@@ -23,8 +23,18 @@ function worldItems() {
   return [...game.items.contents, ...worldActors().flatMap(safeItems)];
 }
 
-/** Statuses whose rules changed in Alpha 3 (Frightened / Sickened per die, Prone, Incapacitated family). */
-const ALPHA3_STATUSES = ['frightened', 'sickened', 'prone', 'incapacitated', 'paralyzed', 'unconscious'];
+/**
+ * Compendium doc id an item was made from (`_stats.compendiumSource` / legacy `flags.core.sourceId`),
+ * or ''. Matching on it instead of the name keeps translated (Babele) copies in scope.
+ */
+function sourceDocId(item) {
+  const uuid = item?._stats?.compendiumSource ?? item?.flags?.core?.sourceId ?? '';
+  return String(uuid).split('.').pop() ?? '';
+}
+
+/** Statuses whose rules changed in Alpha 3 (per-die penalties, Prone, Incapacitated family, attack-only Vulnerable). */
+const ALPHA3_STATUSES = ['frightened', 'sickened', 'prone', 'incapacitated', 'paralyzed', 'unconscious',
+  'vulnerable', 'flanked', 'blinded', 'restrained', 'dead', 'invisible'];
 
 /**
  * Status effects already on actors are copies made when the status was toggled — they keep the
@@ -68,11 +78,17 @@ export async function migrateAlpha3Statuses() {
   await game.settings.set('vagabond', 'alpha3StatusesMigrated', true);
 }
 
+/** Backpack docs: gear pack copies + the store copies (General Store, Supplier, Supplies). */
+const BACKPACK_IDS = new Set(['8o8KVSgpYsNFtGz2', 'NDwqdKvIY95hFuHy', 'PbVdtvsmVjSVzM29', 'mUD0JWpy3Yoo22E0',
+  'SOTe5HmmjmTYsljo', 'gKVay8flBKkBD7n9', 'mVXg0HeQ9ZOafMjz']);
+const BACKPACK_IMG = 'icons/containers/bags/pack-leather-white-tan.webp';
+
 const BACKPACK_DESC = '<p>1 Slot while held. Worn, it occupies no Slot and adds +3 Slots to your Inventory. You can only benefit from one at a time.</p>';
 
 /**
  * Backpack (p. 83): "1 (held); +3 (worn)". Old copies were 0 Slots with an always-on +2 Inventory
- * effect. Old signature: gear named Backpack whose "Bonus Inventory" effect adds 2 (edited copies are
+ * effect. Old signature: gear that is a Backpack (English name, compendium source or its icon — a
+ * translated copy still matches) with an effect adding 2 `inventory.bonusSlots` (edited copies are
  * left alone). New: 1 Slot carried, no Slot + when-equipped +3 worn. The first one on each actor is
  * put on (worn) so the character keeps the capacity it had.
  */
@@ -83,9 +99,10 @@ export async function migrateAlpha3Backpacks() {
   const wornOn = new Set();
   for (const item of worldItems()) {
     try {
-      if (item.type !== 'equipment' || item.system.equipmentType !== 'gear' || item.name !== 'Backpack') continue;
-      const effect = item.effects.find(e => e.name === 'Bonus Inventory'
-        && e.system.changes?.some(c => c.key === 'system.inventory.bonusSlots' && Number(c.value) === 2));
+      if (item.type !== 'equipment' || item.system.equipmentType !== 'gear') continue;
+      if (item.name !== 'Backpack' && !BACKPACK_IDS.has(sourceDocId(item)) && item.img !== BACKPACK_IMG) continue;
+      const effect = item.effects.find(e =>
+        e.system.changes?.some(c => c.key === 'system.inventory.bonusSlots' && Number(c.value) === 2));
       if (!effect) continue;
 
       const actor = item.parent;
@@ -133,13 +150,14 @@ export async function migrateAlpha3DefensePerks() {
   for (const def of DEFENSE_PERKS) {
     const doc = await pack.getDocument(def.id);
     if (!doc?.effects.some(e => e.system.changes?.some(c => c.key === def.key))) return; // pack not rebuilt yet
-    sources.set(def.name, { def, doc });
+    sources.set(def.id, { def, doc });
   }
 
   for (const item of worldItems()) {
     try {
       if (item.type !== 'perk') continue;
-      const src = sources.get(item.name);
+      // By compendium source first (translated copies), else the English name
+      const src = sources.get(sourceDocId(item)) ?? sources.get(DEFENSE_PERKS.find(d => d.name === item.name)?.id);
       if (!src) continue;
       if (item.effects.some(e => e.system.changes?.some(c => c.key === src.def.key))) continue;
 

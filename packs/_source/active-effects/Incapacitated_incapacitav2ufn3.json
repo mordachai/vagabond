@@ -34,23 +34,9 @@
         "priority": null
       },
       {
-        "key": "system.favorHinder",
+        "key": "system.vulnerable",
         "type": "override",
-        "value": "hinder",
-        "phase": "initial",
-        "priority": null
-      },
-      {
-        "key": "system.incomingAttacksModifier",
-        "type": "override",
-        "value": "favor",
-        "phase": "initial",
-        "priority": null
-      },
-      {
-        "key": "system.outgoingSavesModifier",
-        "type": "override",
-        "value": "favor",
+        "value": "true",
         "phase": "initial",
         "priority": null
       }

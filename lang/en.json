@@ -397,7 +397,7 @@
       "Incapacitated": "Can't Focus/Actions/Move. Fails Might/Dex Checks and Reflex Saves. Vulnerable. Speed = 0 [AUTOMATED]",
       "Paralyzed": "Incapacitated + Speed = 0 [AUTOMATED]",
       "Unconscious": "Blinded + Incapacitated + Prone. Close Attacks auto-crit [AUTOMATED]",
-      "Invisible": "Can't be seen. Attackers act as Blinded [AUTOMATED]",
+      "Invisible": "Can't be seen by normal senses; those that can't see it act as Blinded for Checks and Saves involving it [AUTOMATED: attacks]",
       "Berserk": "It can’t take the Cast Action or Focus, it can’t be Frightened, and it doesn’t make Morale Checks [PARTIAL - Manual tracking]",
       "Burning": "Takes damage at start of turn [FUTURE - Requires combat tracker hooks]",
       "Charmed": "Can't willingly attack the charmer [FUTURE - Requires target validation]",
