@@ -1074,7 +1074,7 @@ function registerGameSettings() {
   });
 
   // Setting 21f6: One-time migration guards (hidden) — see class-migrations.mjs.
-  for (const key of ['fighterClassMigrated', 'druidClassMigrated', 'gunslingerClassMigrated', 'hunterClassMigrated', 'luminaryClassMigrated', 'magusClassMigrated', 'merchantClassMigrated', 'pugilistClassMigrated', 'revelatorClassMigrated', 'rogueClassMigrated', 'sorcererClassMigrated', 'vanguardClassMigrated', 'witchClassMigrated', 'wizardClassMigrated', 'ancestriesMigrated']) {
+  for (const key of ['fighterClassMigrated', 'druidClassMigrated', 'gunslingerClassMigrated', 'hunterClassMigrated', 'luminaryClassMigrated', 'magusClassMigrated', 'merchantClassMigrated', 'pugilistClassMigrated', 'revelatorClassMigrated', 'rogueClassMigrated', 'sorcererClassMigrated', 'vanguardClassMigrated', 'witchClassMigrated', 'wizardClassMigrated', 'wizardSculptSpellMigrated', 'ancestriesMigrated']) {
     game.settings.register('vagabond', key, {
       scope: 'world',
       config: false,

@@ -351,10 +351,12 @@ export function migrateWitchClass() {
 
 /**
  * Wizard: old Extracurricular / Archwizard class → Spellcaster (Cast Max 2 + Level), Page Master, Manifold Mind (Focus),
- * Sculpt Spell (upcasting discount); Training Arcana + Craft + Mysticism.
+ * Sculpt Spell (discount on the total Spell cost); Training Arcana + Craft + Mysticism.
+ * The second pass re-keys Sculpt Spell for worlds that took the first pass while it still used the dropped
+ * `deliveryUpcastCostReduction` bonus.
  */
-export function migrateWizardClass() {
-  return migrateClass({
+export async function migrateWizardClass() {
+  await migrateClass({
     setting: 'wizardClassMigrated',
     classId: 'U3rAxH8vn8tzDblW',
     className: 'Wizard',
@@ -368,6 +370,13 @@ export function migrateWizardClass() {
       'system.levelSpells': s.levelSpells,
     }),
     afterItem: trainGuaranteedSkills,
+  });
+  await migrateClass({
+    setting: 'wizardSculptSpellMigrated',
+    classId: 'U3rAxH8vn8tzDblW',
+    className: 'Wizard',
+    probeFeature: 'Manifold Mind (+1)',
+    isOld: (item) => item.effects.some(e => e.system?.changes?.some(c => c.key === 'system.bonuses.deliveryUpcastCostReduction')),
   });
 }
 

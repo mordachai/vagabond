@@ -311,7 +311,7 @@
       "system": {
         "changes": [
           {
-            "key": "system.bonuses.deliveryUpcastCostReduction",
+            "key": "system.bonuses.spellManaCostReduction",
             "value": "1 + floor((@lvl - 4) / 4)",
             "priority": null,
             "type": "add"

@@ -100,8 +100,7 @@ export class SpellHandler {
     const increasePerStep = state.deliveryType
       ? CONFIG.VAGABOND.deliveryIncreaseCost[state.deliveryType]
       : 0;
-    const upcastReduction = this.actor.system.bonuses?.deliveryUpcastCostReduction || 0;
-    const deliveryIncreaseCost = Math.max(0, state.deliveryIncrease * increasePerStep - upcastReduction);
+    const deliveryIncreaseCost = state.deliveryIncrease * increasePerStep;
 
     let totalCost = damageCost + fxCost + deliveryBaseCost + deliveryIncreaseCost;
 

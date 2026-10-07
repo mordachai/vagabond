@@ -466,7 +466,7 @@ The Mark itself is an actor effect (`flags.vagabond.huntersMark`) created by the
 | --- | --- | --- | --- |
 | Spellcaster | `system.mana.castingMaxBonus` | Add | `2 + floor(@lvl / 2) - @stats.reason.total` (Cast Max is 2 + Level; the engine adds Reason + half Level, so both are cancelled) |
 | Manifold Mind (Lv 2+) | `system.focus.maxBonus` | Add | `1 + floor((@lvl - 2) / 4)` (Spells you can Focus on at once: 5 + this) |
-| Sculpt Spell (Lv 4+) | `system.bonuses.deliveryUpcastCostReduction` | Add | `1 + floor((@lvl - 4) / 4)` (Mana off the Delivery upcasting cost, never below 0) |
+| Sculpt Spell (Lv 4+) | `system.bonuses.spellManaCostReduction` | Add | `1 + floor((@lvl - 4) / 4)` (Mana off the total cost of a Cast — Delivery, extra Damage dice, Delivery increase, Effect; Focus is not part of it; never below 0) |
 
 ### Exalted — Bonus Per Damage Die (with Doubling vs Specific Being Types)
 

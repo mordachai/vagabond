@@ -19,7 +19,7 @@ Common to every class here: **Cast Max** is the book's own formula (`2 + Level` 
 | Sorcerer | 5beaaa0 | Cast Max, Spell-Slinger die + Crit | Tap HP-as-Mana, Quickening, Crit on Saves vs Casts | Tap grants Vehement Magic (was Secret of Mana) |
 | Vanguard | eec5120 | Defense Weapon die size + per-die bonus | all Shove rules, Stalwart | Indestructible read as +1 **per die** |
 | Witch | 43f63b4 | Cast Max | Hex, Widdershins, Grudge Bearer | no continual-Spell layer exists |
-| Wizard | 8776383 | Cast Max, Focus max, upcasting discount | Page Master | "Delivery upcasting" = increase steps, not base cost |
+| Wizard | 8776383 | Cast Max, Focus max, Sculpt Spell total-cost discount | Page Master | (settled by the book forum) Sculpt Spell discounts the whole Cast cost, not Focus |
 
 ### Do this first
 
@@ -34,7 +34,7 @@ Common to every class here: **Cast Max** is the book's own formula (`2 + Level` 
 | `system.healingExplode` (HP-restoring **Spell** rolls explode on extra faces) | damage pipeline step 9 | Luminary, Assured Healer perk | heal with a Spell: d6 explodes on 6 (and 1 with Assured Healer) |
 | `weaponDieBySkill` / `weaponLowExplodeBySkill` | pipeline steps 2b / 9 | Pugilist Title Holder | Brawl damage ≥ d6; explodes on 1–2 |
 | `defenseWeaponDieStep` / `defenseWeaponBonusPerDie` | pipeline steps 2a / 10 | Vanguard | Defense-property weapon dice larger; per-die bonus |
-| `bonuses.deliveryUpcastCostReduction` | cast dialog + spell handler cost math | Wizard Sculpt Spell | upcasting steps cost less; dialog preview = deduction |
+| `bonuses.spellManaCostReduction` (existing field, now used by Wizard Sculpt Spell) | cast dialog + spell handler cost math | Wizard | total Cast cost is lower; dialog preview = deduction |
 | `haymakerMargin` + `PugilistHelper` (postD20Roll, combatTurnChange) | `pugilist-helper.mjs` | Pugilist | Brawl hit by 10+ Dazes; lifted at the Pugilist’s Turn start |
 | `layOnHandsDie` / `layOnHandsCures` + `RevelatorHelper` button | `revelator-helper.mjs` | Revelator | button: 1 Mana, d4 + Level healing card, Apply |
 | `sneakAttack*`, `critLuckBonus` + `RogueHelper` (postD20Roll, preDamageRoll, calculateFinalDamage) | `rogue-helper.mjs` | Rogue | Favored hit adds dN d4 + ignores Armor; Crit +1 Luck |
@@ -52,7 +52,7 @@ Common to every class here: **Cast Max** is the book's own formula (`2 + Level` 
 
 ### Decisions to revisit (all marked under each class)
 
-Overheal rounding · Indestructible +1 per die · Sculpt Spell upcasting-only · Lay on Hands target distance · Witch Hex tracking · Enspell / Arcane Surge Imbue discounts (Magus, Revelator).
+Overheal rounding · Indestructible +1 per die · Lay on Hands target distance · Witch Hex tracking · Enspell / Arcane Surge Imbue discounts (Magus, Revelator).
 
 Settled by the user (2026-10-07): **Title Holder is "at least" d6** (Brawl weapons are a flat 1 or a d4, so d6 is already a big step); the Rogue table now prints **Knack** at 4th / 8th; **Luck stays capped at its maximum** (Merchant Line Goes Up and Knack's Rest Luck stay text; may change later); Sorcerer approved as is.
 
@@ -252,10 +252,10 @@ Book p. 61. Occultist (Mysticism casting, 4 × Level Mana, Cast Max 2 + Level, a
 
 ## Wizard
 
-Book p. 63. Spellcaster (Arcana casting, 4 × Level Mana, Cast Max 2 + Level), Page Master (Bookworm perk grant), Manifold Mind (+1 / +2 / +3 Focus), Sculpt Spell (-1 / -2 upcasting Mana). Training Arcana + Craft + Mysticism (no choices). Extracurricular, Archwizard and the old Sculpt Spell are gone.
+Book p. 63. Spellcaster (Arcana casting, 4 × Level Mana, Cast Max 2 + Level), Page Master (Bookworm perk grant), Manifold Mind (+1 / +2 / +3 Focus), Sculpt Spell (-1 / -2 Mana on every Cast). Training Arcana + Craft + Mysticism (no choices). Extracurricular, Archwizard and the old Sculpt Spell are gone.
 
 **Doubts / course taken**
-- **Sculpt Spell "pay 1 less Mana for Delivery upcasting"**: the old class (and a first reading) used `bonuses.deliveryManaCostReduction`, which cuts the Delivery **base** cost. "Upcasting" is the Delivery increase (extra steps), so a new field `bonuses.deliveryUpcastCostReduction` takes the mana off the **total** Delivery-increase cost (never below 0) in both cost calculators (cast dialog + spell handler): −1 at Levels 4–7, −2 at Level 8+. If the table means the whole Delivery cost, swap the effect key back to `deliveryManaCostReduction`.
+- **Sculpt Spell "pay 1 less Mana for Delivery upcasting" (settled by the book forum):** it discounts **any** Spell cost (Delivery, extra Damage dice, Delivery increase, Effect), not just the upcasting; Focus is not part of it. It now uses the existing `bonuses.spellManaCostReduction` (total Cast cost, never below 0). The upcasting-only field `deliveryUpcastCostReduction` is removed; worlds that took the first migration are re-keyed once (`wizardSculptSpellMigrated`). Not applied to the deferred Damage/Effect Mana paid at an Imbue delivery (same open Imbue-discount question as Magus / Revelator).
 - Manifold Mind raises `focus.maxBonus` (the Focus pool is 5 + bonus) by 1 / 2 / 3 at Levels 2 / 6 / 10 — the book says "the number of Spells you can Focus on at the same time", which this system tracks as the Focus maximum.
 - Page Master’s "spend a Studied die to learn a Spell for the Shift" is text only (the Studied die pool exists; the temporary Spell does not).
 
@@ -265,7 +265,8 @@ Book p. 63. Spellcaster (Arcana casting, 4 × Level Mana, Cast Max 2 + Level), P
 **Tests to run in-world** (after `npm run pack`)
 - [ ] Builder: Wizard learns 4 Spells (+1 every 2 Levels), Mana 4 × Level, Cast Max 2 + Level (3 → 12); Bookworm granted automatically; Training Arcana + Craft + Mysticism, no skill choices.
 - [ ] Level 2: Focus maximum 6 (7 at Level 6, 8 at Level 10); the Focus counter on the sheet reflects it.
-- [ ] Level 4: casting with Delivery upcasting costs 1 less Mana (2 less at Level 8), never below the base delivery cost; Level 3 or below unchanged; the cast dialog preview and the actual deduction agree.
+- [ ] Level 4: every Cast costs 1 less Mana in total (2 less at Level 8), never below 0 — try Delivery only, extra Damage dice, Delivery increase and Effect; Focus cost is unchanged; Level 3 or below unchanged; the cast dialog preview and the actual deduction agree.
+- [ ] A Wizard that already had the first migration: Sculpt Spell effect now reads `spellManaCostReduction` (check the effect row).
 - [ ] Sculpt Spell / Manifold Mind show Locked below Levels 4 / 2.
 - [ ] Existing Wizard (old Extracurricular class) migrates; Craft + Mysticism trained; old "lv2 - Sculpt Spell" effects gone.
 

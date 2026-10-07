@@ -296,7 +296,6 @@ export class VagabondActiveEffect extends ActiveEffect {
       'system.bonuses.hpPerLevel': 'Bonus: HP Per Level',
       'system.bonuses.spellManaCostReduction': 'Bonus: Spell Mana Cost Reduction',
       'system.bonuses.deliveryManaCostReduction': 'Bonus: Delivery Mana Cost Reduction',
-      'system.bonuses.deliveryUpcastCostReduction': 'Bonus: Delivery Upcasting Mana Cost Reduction (Sculpt Spell)',
 
       // -- Focus (Character spellcasters) --
       'system.focus.maxBonus': 'Focus: Max Bonus (ADD)',

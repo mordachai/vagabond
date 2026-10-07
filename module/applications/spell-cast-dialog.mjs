@@ -894,8 +894,7 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
     const incPerStep = state.deliveryType
       ? (CONFIG.VAGABOND.deliveryIncreaseCost[state.deliveryType] ?? 0)
       : 0;
-    const upcastReduce = actor.system.bonuses?.deliveryUpcastCostReduction || 0;
-    const deliveryIncreaseCost = Math.max(0, state.deliveryIncrease * incPerStep - upcastReduce);
+    const deliveryIncreaseCost = state.deliveryIncrease * incPerStep;
 
     // Imbue defers casting (Damage/Effect) mana to delivery-on-hit — the Attack
     // Check is the Cast Check, so the spell isn't cast (and its mana isn't owed)

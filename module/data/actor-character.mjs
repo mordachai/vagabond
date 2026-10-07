@@ -623,15 +623,6 @@ export default class VagabondCharacter extends VagabondActorBase {
           hint: "Reduces the total mana cost of spells. Can be a number or formula."
         }
       ),
-      // Wizard Sculpt Spell: mana taken off the upcasting (Delivery increase) part of a Cast, never below 0
-      deliveryUpcastCostReduction: new fields.ArrayField(
-        new fields.StringField({ blank: true }),
-        {
-          initial: [],
-          label: "Delivery Upcasting Mana Cost Reduction",
-          hint: "Reduces the upcasting (Delivery increase) portion of spell mana cost. Can be a number or formula."
-        }
-      ),
       deliveryManaCostReduction: new fields.ArrayField(
         new fields.StringField({ blank: true }),
         {
@@ -882,7 +873,6 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.bonuses.hpPerLevel = [];
     this.bonuses.spellManaCostReduction = [];
     this.bonuses.deliveryManaCostReduction = [];
-    this.bonuses.deliveryUpcastCostReduction = [];
 
     // --- 2. Reset Universal Bonuses (from Active Effects) ---
     this.universalCheckBonus = [];
@@ -1133,7 +1123,6 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.bonuses.hpPerLevel = this._evaluateFormulaField(this.bonuses.hpPerLevel, rollData);
     this.bonuses.spellManaCostReduction = this._evaluateFormulaField(this.bonuses.spellManaCostReduction, rollData);
     this.bonuses.deliveryManaCostReduction = this._evaluateFormulaField(this.bonuses.deliveryManaCostReduction, rollData);
-    this.bonuses.deliveryUpcastCostReduction = this._evaluateFormulaField(this.bonuses.deliveryUpcastCostReduction, rollData);
     this.bonuses.globalExplode = this._evaluateFormulaField(this.bonuses.globalExplode, rollData) > 0;
     
     // Evaluate specific die size bonuses
