@@ -1,5 +1,23 @@
 # Alpha 3 review (2026-10-07)
 
+## ▶ Resume here (last session ended 2026-10-07, commit `a959a2d`)
+
+1. **Test Phase 1** (packs rebuilt). Reload as GM → migrations run once. Checklist:
+   - Migrations: status AEs on actors updated; old Backpacks → 1 Slot carried / worn +3 (first one put on); Patience / Protector perks gain text + effect.
+   - Reflex Difficulty includes worn Armor Slots; no separate penalty on the roll.
+   - Frightened −2 per damage die (chat badge, die ≥ 0); Sickened −2 per healing die.
+   - Prone: Speed halved; its Melee attacks / Touch Casts Hindered; Melee / Touch at it Favored; its Reflex Saves Hindered.
+   - Vulnerable family: all its Checks / Saves Hindered; attacks + Cast Checks at it Favored; Saves vs its attacks / Casts Favored.
+   - Invisible both ways (PC and NPC). Incapacitated auto-fails Reflex (sheet, chat Save, Defense Check).
+   - Builder: Stats step Reason Trainings (ceil RSN/2); Perks step free "Hero Creation" Perk. Level-up: Reason even → odd = Training pick.
+   - Wood items load as Iron.
+   - Defense property checklist (Phase 6 below).
+2. **Report bugs** from the test, fix them.
+3. **Phase 2 — Classes** (below), then Phases 3 → 6.
+4. Later sessions: bestiary / humanlike statblocks, full gear audit.
+
+Rulings in force: book is source of truth (no old-flow switches); lowercase "attack" covers Casts; Vulnerable hampers all its Checks / Saves; Backpack "one at a time" left to the table.
+
 Everything in the system (classes, perks, ancestries, leveling, armor, weapons, alchemical items) was written from **Core Rulebook v3 Alpha 2**. This file lists what changed in **Alpha 3** (`docs/Vagabond - Core Rulebook v3 Alpha 3 [Interactive PDF].pdf`, local) and what the system must change. Page numbers are Alpha 3.
 
 How it was found: sentence diff Alpha 2 → Alpha 3 (PyMuPDF text), then every class feature / perk / ancestry trait / spell / alchemical item / relic description in `packs/_source` checked sentence by sentence against the Alpha 3 text.
