@@ -448,7 +448,7 @@ export class VagabondDamagePipeline {
   }
 
   /**
-   * Raise every NdX term of a formula to at least dY (never lowers a die). No-op for a missing / invalid size.
+   * Raise every NdX term of a formula to at least dY (never lowers a die; a flat number becomes 1dY). No-op for a missing / invalid size.
    * @param {string} formula
    * @param {number|undefined} size
    * @returns {string}
@@ -456,6 +456,8 @@ export class VagabondDamagePipeline {
   static _raiseDiceTo(formula, size) {
     const target = Math.trunc(Number(size));
     if (!target || target < 2) return formula;
+    // A flat weapon damage ("1", Unarmed) has no die to raise: it becomes one die of that size
+    if (/^\s*\d+\s*$/.test(formula)) return `1d${target}`;
     return formula.replace(/(\d*)d(\d+)/g, (match, count, faces) => (Number(faces) < target ? `${count}d${target}` : match));
   }
 

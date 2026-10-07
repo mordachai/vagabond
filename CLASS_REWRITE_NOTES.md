@@ -12,10 +12,10 @@ Common to every class here: **Cast Max** is the book's own formula (`2 + Level` 
 | --- | --- | --- | --- | --- |
 | Luminary | 648e213 | Cast Max, healing Spells Explode, Overheal | Ever-Cure, excess healing, Revivify, Life-Giver | Overheal rounds half Level **down** |
 | Magus | 0bc275e | Cast Max, Gish grant | Enspell, Spell Parry, Arcane Surge, Esoteric Flow, Sword & Sorcery | no Imbue-scoped Mana discount |
-| Merchant | 86cc2fe | Item Slots, Deft Hands grant | Gold Sink, Line Goes Up, Diamond Hands, Opportunist, Top Shelf | extra Luck on Rest has no room (Luck capped, Rest refills) |
-| Pugilist | fc8c5a9 | Vicious on Brawl Crit, Moxie Favor, Title Holder dice, Haymaker auto-Daze | Defense, Rope-a-Dope, Fisticuffs choice, Moxie countdown | Title Holder = "at least" d6; Haymaker Dazed lifts only in Combat |
+| Merchant | 86cc2fe | Item Slots, Deft Hands grant | Gold Sink, Line Goes Up, Diamond Hands, Opportunist, Top Shelf | (settled) Luck stays capped, so Line Goes Up is text for now |
+| Pugilist | fc8c5a9 | Vicious on Brawl Crit, Moxie Favor, Title Holder dice, Haymaker auto-Daze | Defense, Rope-a-Dope, Fisticuffs choice, Moxie countdown | Haymaker Dazed lifts only in Combat |
 | Revelator | aaa85a7 | Cast Max, Lay on Hands button, Divine Resolve | Enspell, Paragon’s Aura, Holy Diver | Lay on Hands needs Close target by token distance |
-| Rogue | 8e18185 | Sneak Attack (auto), Lethal Weapon, Knack Crit Luck | Evasive, Waylay, Luck on Breather / Rest | book table says Unflinching Luck, card says Knack |
+| Rogue | 8e18185 | Sneak Attack (auto), Lethal Weapon, Knack Crit Luck | Evasive, Waylay, Luck on Breather / Rest | (settled) table printed as Knack |
 | Sorcerer | 5beaaa0 | Cast Max, Spell-Slinger die + Crit | Tap HP-as-Mana, Quickening, Crit on Saves vs Casts | Tap grants Vehement Magic (was Secret of Mana) |
 | Vanguard | eec5120 | Defense Weapon die size + per-die bonus | all Shove rules, Stalwart | Indestructible read as +1 **per die** |
 | Witch | 43f63b4 | Cast Max | Hex, Widdershins, Grudge Bearer | no continual-Spell layer exists |
@@ -52,7 +52,9 @@ Common to every class here: **Cast Max** is the book's own formula (`2 + Level` 
 
 ### Decisions to revisit (all marked under each class)
 
-Overheal rounding · Title Holder "at least" · Indestructible +1 per die · Sculpt Spell upcasting-only · Rogue Knack vs Unflinching Luck naming · Lay on Hands target distance · Luck above max (Merchant, Rogue Knack) · Witch Hex tracking · Enspell / Arcane Surge Imbue discounts (Magus, Revelator).
+Overheal rounding · Indestructible +1 per die · Sculpt Spell upcasting-only · Lay on Hands target distance · Witch Hex tracking · Enspell / Arcane Surge Imbue discounts (Magus, Revelator).
+
+Settled by the user (2026-10-07): **Title Holder is "at least" d6** (Brawl weapons are a flat 1 or a d4, so d6 is already a big step); the Rogue table now prints **Knack** at 4th / 8th; **Luck stays capped at its maximum** (Merchant Line Goes Up and Knack's Rest Luck stay text; may change later); Sorcerer approved as is.
 
 ## Luminary
 
@@ -129,7 +131,7 @@ Book p. 51. Fisticuffs (Dusted Knuckle perk grant + Vicious on Brawl crits), Rop
 - Haymaker: the Dazed is applied with no Save and is lifted when the Pugilist’s next Turn starts **in a Combat** (the Pugilist actor remembers its Targets in `flags.vagabond.haymakerTargets`; the active GM lifts them). With no Combat nothing counts Turns, so it is removed by hand. The automatic part is the switchable effect "Haymaker: Auto" and obeys the world Class Automation setting; the formula is `10 - floor((@lvl - 2) / 6)` (9+ at Level 8, 8+ at Level 14).
 - Only the first Target of an attack can be Dazed (a Brawl attack has one Target).
 - Moxie Favor: the book lists Grappled and Restrained; Grappled applies Restrained here, so the effect resists Dazed, Frightened and Restrained. The Cd4 / Cd6 "0 HP doesn’t kill you" countdown is text.
-- Title Holder "You use a d6 for the damage dice": implemented as "at least a d6" (a weapon with a bigger die keeps it; never lowers). New fields `weaponDieBySkill` / `weaponLowExplodeBySkill` (typed "skill: value" like `critExtraDiceBySkill`). The d6 applies to the **damage roll** only: the number printed on the weapon / HUD still shows the weapon’s own die.
+- Title Holder "You use a d6 for the damage dice": implemented as "at least a d6" (a weapon with a bigger die keeps it; never lowers; user confirmed — Brawl weapons are a flat 1 or a d4). The Unarmed flat "1" becomes 1d6 (1d8 at Level 10). New fields `weaponDieBySkill` / `weaponLowExplodeBySkill` (typed "skill: value" like `critExtraDiceBySkill`). The d6 applies to the **damage roll** only: the number printed on the weapon / HUD still shows the weapon’s own die.
 
 **Text-only / deferred**
 - Fisticuffs second paragraph (after rolling Brawl damage dice: raise later Brawl dice one size, or Grapple / Shove) and Rope-a-Dope (free attack / 5’ Move after Defense reduces damage to 0) — text only.
@@ -171,7 +173,7 @@ Book p. 53. Righteous (Gish perk grant, Leadership casting, 2 × Level Mana, Cas
 Book p. 55. Sneak Attack (extra d4s + Armor ignored), Infiltrator (Resourceful perk grant), Evasive (+5’ every 4 Levels), Knack, Lethal Weapon, Waylay. Training Ranged, Finesse, Sneak (no choices). Unflinching Luck is gone.
 
 **Doubts / course taken**
-- **Knack vs Unflinching Luck:** the book’s Class Features table still prints "Unflinching Luck (d20)" at 4th and "(d12)" at 8th, but the feature card at those Levels is **Knack** (Luck on Breather / Crit / Rest). The table is kept verbatim in the class description, the level features are named **Knack** (their text is the card’s). If the table is right and the card is wrong, rename them and swap the text.
+- **Knack vs Unflinching Luck (settled by the user):** the book table printed "Unflinching Luck (d20)" / "(d12)" at 4th / 8th, but the feature card there is **Knack**; the class description table now prints **Knack** too.
 - **Evasive names:** entries are "Evasive" (2nd), "Evasive (15’)" (6th), "Evasive (20’)" (10th) as in the table; same card text on each.
 - **Sneak Attack automation** (effect "Sneak Attack: Auto", switchable, obeys the world Class Automation setting): the first hit with a **Favored** attack (the roll’s net Favor) using a Finesse-skill, Ranged-skill or Keen weapon arms the next damage roll of that weapon with the extra d4s (Explode "x" from Level 6 via "Lethal Weapon") and posts a "Sneak Attack" card. The Armor it ignores is given back when that damage is applied (the Rogue’s flag `sneakIgnore` lives until their next weapon attack). **Once per Turn** only inside a started Combat (key = Combat id : Round : Turn); with no Combat there are no Turns to count, so every qualifying hit counts. Without the Auto effect nothing is automatic — roll the d4s by hand.
 - A damage roll made through Luck / reroll flows loses the Sneak dice (they are consumed by the first roll of that weapon).
@@ -180,7 +182,7 @@ Book p. 55. Sneak Attack (extra d4s + Armor ignored), Infiltrator (Resourceful p
 
 **Text-only / deferred**
 - Evasive (free 10’ / 15’ / 20’ Move after another Being acts), Waylay (spend 1 Luck: immediate Action after a kill or Evasive) and Infiltrator’s Favor on ambush / traps — text only.
-- Knack: Luck on Breather / Craft / Travel and the extra Luck on Rest — needs a ruling on Luck above the maximum (see Merchant).
+- Knack: Luck on Breather / Craft / Travel and the extra Luck on Rest — Luck stays capped at its maximum for now (user decision, may change later).
 
 **Tests to run in-world** (after `npm run pack`)
 - [ ] Builder: Rogue Trained in Ranged, Finesse and Sneak without skill choices; Resourceful granted automatically.
