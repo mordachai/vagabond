@@ -22,7 +22,8 @@ import { HunterHelper } from './hunter-helper.mjs';
  *   8. Roll construction → colorset → evaluate → weakness-die marking
  *   9. manual dice explosion
  *  10. per-die flat bonus (counted post-explosion, doubled vs listed beingTypes)
- *  11. metadata stash (_weaknessPreRolled, _perDieBonus*)
+ *  10b. per-die penalty (Frightened: `damageDiePenalty`, harmful damage only, each die floors at 0)
+ *  11. metadata stash (_weaknessPreRolled, _perDieBonus*, _perDiePenalty*)
  *
  * This module must never import damage-helper.mjs or chat-card.mjs (no cycles).
  */
@@ -209,6 +210,12 @@ export class VagabondDamagePipeline {
       }
     }
 
+    // 10b. Per-die penalty on dealt damage (Frightened, Alpha 3 p. 11: "-2 penalty to each
+    // damage die it deals"). Harmful damage only; a die (plus its per-die bonus) floors at 0.
+    if (!this._isRestorative(damageType)) {
+      this.applyDiePenalty(roll, Number(actor.system?.damageDiePenalty) || 0, roll._perDieBonusPerDie || 0);
+    }
+
     // 11. Metadata stash
     roll._weaknessPreRolled = weaknessPreRolled;
 
@@ -230,6 +237,12 @@ export class VagabondDamagePipeline {
    * @param {string|null} damageType
    * @returns {boolean}
    */
+  static _isRestorative(damageType) {
+    const type = damageType?.toLowerCase() || '';
+    const configured = CONFIG.VAGABOND?.restorativeDamageTypes;
+    return !!(configured ? configured[type] : { healing: 'hp', recover: 'fatigue', recharge: 'mana' }[type]);
+  }
+
   static _restoresHp(damageType) {
     const type = damageType?.toLowerCase() || '';
     const configured = CONFIG.VAGABOND?.restorativeDamageTypes;
@@ -541,6 +554,72 @@ export class VagabondDamagePipeline {
    * @param {Roll} roll
    * @returns {number}
    */
+  /**
+   * Final value of every active rolled die (explosions included), in roll order.
+   * @param {Roll} roll
+   * @returns {number[]}
+   */
+  static rolledDieValues(roll) {
+    const values = [];
+    for (const term of roll?.terms ?? []) {
+      if (term.constructor.name !== 'Die') continue;
+      for (const result of (term.results ?? [])) {
+        if (result.active !== false) values.push(Number(result.result) || 0);
+      }
+    }
+    return values;
+  }
+
+  /**
+   * Total a per-die penalty removes from these dice: each die loses up to `penalty`, never
+   * dropping below 0 (`perDieBonus` already added to each die counts toward the floor).
+   * @param {number[]} dieValues
+   * @param {number} penalty - Positive amount per die
+   * @param {number} [perDieBonus=0]
+   * @returns {number} Positive reduction
+   */
+  static diePenaltyReduction(dieValues, penalty, perDieBonus = 0) {
+    if (!(penalty > 0)) return 0;
+    return dieValues.reduce((sum, v) => sum + Math.min(penalty, Math.max(0, v + perDieBonus)), 0);
+  }
+
+  /**
+   * Apply a per-die penalty to an evaluated roll in place (Frightened) and stash the
+   * `_perDiePenalty*` metadata the chat card's badge reads.
+   * @param {Roll} roll
+   * @param {number} penalty - Positive amount per die
+   * @param {number} [perDieBonus=0]
+   * @returns {number} Reduction applied
+   */
+  static applyDiePenalty(roll, penalty, perDieBonus = 0) {
+    if (!roll || !(penalty > 0)) return 0;
+    const values = this.rolledDieValues(roll);
+    const reduction = this.diePenaltyReduction(values, penalty, perDieBonus);
+    if (!reduction) return 0;
+    roll._perDiePenaltyPerDie = penalty;
+    roll._perDiePenaltyDiceCount = values.length;
+    roll._perDiePenaltyTotal = reduction;
+    roll._total = Math.max(0, roll._total - reduction);
+    return reduction;
+  }
+
+  /**
+   * Frightened on an NPC's flat (statblock) damage: the flat number stands in for the action's
+   * dice, so the penalty applies once per die of its roll formula (e.g. "3 (d6)" → -2), floored
+   * at 0. Without a roll formula there are no dice to penalize.
+   * @param {Actor} actor
+   * @param {number} flat
+   * @param {string} [rollFormula]
+   * @returns {number}
+   */
+  static flatDamageAfterDiePenalty(actor, flat, rollFormula) {
+    const penalty = Number(actor?.system?.damageDiePenalty) || 0;
+    if (!(penalty > 0) || !rollFormula) return flat;
+    let dice = 0;
+    for (const m of String(rollFormula).matchAll(/(\d*)d\d+/gi)) dice += parseInt(m[1] || '1', 10);
+    return Math.max(0, flat - penalty * dice);
+  }
+
   static countRolledDice(roll) {
     let count = 0;
     for (const term of roll.terms) {

@@ -254,6 +254,14 @@ export class VagabondChatCard {
       parts.push(`<span class="roll-modifier per-die-bonus" title="${perDieSign}${perDie} per ${dieWord} × ${count} ${dieWord}"><i class="fas fa-dice-d6"></i>${sign}${total}</span>`);
     }
 
+    // Per-die penalty badge (Frightened: -N per damage die, each die floored at 0)
+    if (isDamage && roll._perDiePenaltyTotal) {
+      const title = game.i18n.format('VAGABOND.Chat.DiePenaltyTitle', {
+        penalty: roll._perDiePenaltyPerDie, count: roll._perDiePenaltyDiceCount,
+      });
+      parts.push(`<span class="roll-modifier per-die-bonus per-die-penalty" title="${title}"><i class="fas fa-dice-d6"></i>-${roll._perDiePenaltyTotal}</span>`);
+    }
+
     return parts.join(' ');
   }
 
@@ -504,7 +512,7 @@ export class VagabondChatCard {
 
           const effectiveWeaknessPreRolled = weaknessPreRolled || (damageRoll?._weaknessPreRolled ?? false);
           let btns = isRestorativeCard
-            ? VagabondDamageHelper.createApplyDamageButton(damageRoll.total, key, actor.uuid, item?.id, targetsAtRollTime, actionIndex)
+            ? VagabondDamageHelper.createApplyDamageButton(damageRoll.total, key, actor.uuid, item?.id, targetsAtRollTime, actionIndex, VagabondDamagePipeline.rolledDieValues(damageRoll))
             : VagabondDamageHelper.createSaveButtons(damageRoll.total, damageType, damageRoll, actor.uuid, item?.id, attackType, targetsAtRollTime, actionIndex, rollData?.isCritical ?? false, statusSaveTypes, critStatBonus, effectiveWeaknessPreRolled);
 
           card.addFooterAction(btns);
@@ -1217,12 +1225,14 @@ export class VagabondChatCard {
     const rawType = action.damageType || 'physical';
     if (hasDamage && rollWithCheck) {
         let finalDamage;
+        const { VagabondDamagePipeline } = await import('./damage-pipeline.mjs');
         if (preferFlat && action.flatDamage) {
-            // Flat damage - authored value stays pure, no bonus fields apply
-            finalDamage = parseInt(action.flatDamage) + DruidHelper.beastDamageBonus(actor);
+            // Flat damage - authored value stays pure, no bonus fields apply (Frightened still
+            // costs its per-die penalty, counted from the action's dice)
+            finalDamage = VagabondDamagePipeline.flatDamageAfterDiePenalty(actor,
+                parseInt(action.flatDamage) + DruidHelper.beastDamageBonus(actor), action.rollDamage);
         } else if (action.rollDamage) {
             // Rolled damage through the unified pipeline (same as the manual damage button)
-            const { VagabondDamagePipeline } = await import('./damage-pipeline.mjs');
             damageRoll = await VagabondDamagePipeline.rollDamage({
                 actor,
                 actionIndex,
@@ -1234,7 +1244,8 @@ export class VagabondChatCard {
             });
             finalDamage = damageRoll?.total ?? 0;
         } else {
-            finalDamage = parseInt(action.flatDamage) + DruidHelper.beastDamageBonus(actor);
+            finalDamage = VagabondDamagePipeline.flatDamageAfterDiePenalty(actor,
+                parseInt(action.flatDamage) + DruidHelper.beastDamageBonus(actor), action.rollDamage);
         }
 
         // Flat damage has no Roll — the card builder wants one to read total/formula from

@@ -666,8 +666,10 @@ export class VagabondDamageHelper {
 
     if (damageMode === 'flat') {
       // Flat damage - authored value stays pure, no bonus fields apply (only a Druid's Beast form
-      // adds its Savagery bonus, which belongs to the Druid, not the statblock)
-      finalDamage = parseInt(damageValue) + DruidHelper.beastDamageBonus(actor);
+      // adds its Savagery bonus, which belongs to the Druid, not the statblock; Frightened still
+      // costs its per-die penalty, counted from the action's dice)
+      finalDamage = VagabondDamagePipeline.flatDamageAfterDiePenalty(actor,
+        parseInt(damageValue) + DruidHelper.beastDamageBonus(actor), action.rollDamage);
       damageRoll = null;
     } else {
       // Rolled damage goes through the unified pipeline: legacy universals +
@@ -771,9 +773,10 @@ export class VagabondDamageHelper {
    * @param {string} damageType - Restorative damage type KEY (not the localized label)
    * @param {string} actorId - Source actor ID
    * @param {string} itemId - Item ID (optional)
+   * @param {number[]} [dieValues=[]] - Rolled die values (Sickened: -N per healing die received)
    * @returns {string} HTML button string
    */
-  static createApplyDamageButton(damageAmount, damageType, actorId, itemId = null, targetsAtRollTime = [], actionIndex = null) {
+  static createApplyDamageButton(damageAmount, damageType, actorId, itemId = null, targetsAtRollTime = [], actionIndex = null, dieValues = []) {
     const resource = this.getRestorativeResource(damageType);
     let icon, text, buttonClass;
 
@@ -802,6 +805,7 @@ export class VagabondDamageHelper {
         data-actor-id="${actorId}"
         data-item-id="${itemId || ''}"
         data-action-index="${actionIndex ?? ''}"
+        data-die-values="${(dieValues ?? []).join(',')}"
         data-targets="${targetsJson}"
       >
         <i class="fas ${icon}"></i> ${text}
@@ -2443,9 +2447,12 @@ ${npcOnly ? '' : `
       const restoredResource = this.getRestorativeResource(damageType);
       if (restoredResource === 'hp') {
         // Healing: Increase HP (up to max)
-        // Apply incoming healing modifier (e.g., Sickened: -2)
+        // Sickened (Alpha 3 p. 11): -N to each healing die received, each die floored at 0;
+        // plus any flat incoming healing modifier.
+        const dieValues = (button.dataset.dieValues || '').split(',').filter(v => v !== '').map(Number);
+        const diePenalty = VagabondDamagePipeline.diePenaltyReduction(dieValues, Number(targetActor.system.healingDiePenalty) || 0);
         const healingModifier = targetActor.system.incomingHealingModifier || 0;
-        const modifiedAmount = Math.max(0, amountForTarget + healingModifier);
+        const modifiedAmount = Math.max(0, amountForTarget - diePenalty + healingModifier);
 
         const currentHP = targetActor.system.health?.value || 0;
         const maxHP = targetActor.system.health?.max || 0;

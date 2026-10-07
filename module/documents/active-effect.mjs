@@ -304,6 +304,8 @@ export class VagabondActiveEffect extends ActiveEffect {
 
       // -- Combat Modifiers (applied by status conditions, usable in AEs) --
       'system.incomingHealingModifier': 'Incoming Healing Modifier (number, e.g. -1 to block healing)',
+      'system.damageDiePenalty': 'Penalty to each damage die dealt (Frightened: 2; each die floors at 0)',
+      'system.healingDiePenalty': 'Penalty to each healing die received (Sickened: 2; each die floors at 0)',
       'system.incomingAttacksModifier': 'Incoming Attacks Modifier (none / favor / hinder)',
       'system.outgoingSavesModifier': 'Outgoing Saves Modifier (none / favor / hinder)',
       'system.autoFailAllRolls': 'Auto-Fail All Rolls (true/false)',

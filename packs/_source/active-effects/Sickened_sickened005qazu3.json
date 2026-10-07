@@ -6,9 +6,9 @@
   "system": {
     "changes": [
       {
-        "key": "system.incomingHealingModifier",
+        "key": "system.healingDiePenalty",
         "type": "add",
-        "value": "-2",
+        "value": "2",
         "phase": "initial",
         "priority": null
       }
@@ -22,7 +22,7 @@
     "expiry": null,
     "expired": false
   },
-  "description": "<p>-2 penalty to any healing received.</p>",
+  "description": "<p>It has a -2 penalty to each healing die received.</p>",
   "origin": null,
   "tint": "#ffffff",
   "transfer": false,

@@ -117,7 +117,8 @@
       "Defense": "Defense",
       "DefenseBoth": "Both",
       "DefenseCheck": "Defense (Attack Check)",
-      "ArmorPenalty": "Armor Penalty"
+      "ArmorPenalty": "Armor Penalty",
+      "DiePenaltyTitle": "-{penalty} per die ({count} dice), each die floored at 0"
     },
     "AttackTypes": {
       "Melee": "Melee",
@@ -380,13 +381,13 @@
       "Vulnerable": "Vulnerable"
     },
     "StatusConditionDescriptions": {
-      "Frightened": "-2 penalty to damage dealt [AUTOMATED]",
+      "Frightened": "-2 penalty to each damage die it deals [AUTOMATED]",
       "Dazed": "Can't Focus or Move unless uses an Action. Speed = 0 [PARTIAL - Speed automated]",
       "Dead": "Same as Incapacitated but automatically fails ALL rolls (stats, skills, saves, attacks) [FULLY AUTOMATED]",
       "Fatigued": "Each Fatigue occupies an Item Slot. At 3+: can't Rush. At 5: dies [PARTIAL - Slots automated]",
       "Prone": "Costs 10' Speed to stand. Crawl only (2:1 ratio), can't Rush, Vulnerable [PARTIAL - Speed automated]",
       "Confused": "Checks/Saves Hindered. Saves against its Actions Favored [AUTOMATED]",
-      "Sickened": "-2 penalty to healing received [AUTOMATED]",
+      "Sickened": "-2 penalty to each healing die received [AUTOMATED]",
       "Vulnerable": "Its attacks and its Saves against attacks have Hinder. Attacks targeting it and Saves against its attacks have Favor [AUTOMATED]",
       "Flanked": "Vulnerable (its attacks and Saves against attacks have Hinder; attacks targeting it and Saves against its attacks have Favor) and takes an extra 2 damage from attacks, before Armor [AUTOMATED]",
       "Flanking": "Flanking an adjacent Foe alongside an ally. +2 damage on attacks against it, and it is Vulnerable while two of you stay Close. [AUTOMATED]",

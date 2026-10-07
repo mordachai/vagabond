@@ -272,6 +272,17 @@ export default class VagabondCharacter extends VagabondActorBase {
       { initial: [], label: "Save vs Status Bonuses", hint: "Format: 'statusId:saveKey:value'. Use 'any' as saveKey to apply to all saves vs that status. Value supports formulas." }
     );
 
+    // Per-die penalties (Alpha 3 statuses): Frightened = -2 to each damage die it deals,
+    // Sickened = -2 to each healing die it receives. Positive numbers; a die never drops below 0.
+    schema.damageDiePenalty = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      { initial: [], label: "Damage Die Penalty", hint: "Penalty to each damage die this actor deals (Frightened: 2). Formula-capable." }
+    );
+    schema.healingDiePenalty = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      { initial: [], label: "Healing Die Penalty", hint: "Penalty to each healing die this actor receives (Sickened: 2). Formula-capable." }
+    );
+
     // Per-die flat bonuses (applied after rolling, scales with dice count including explosions)
     schema.bonusPerDamageDie = new fields.ArrayField(
       new fields.StringField({ blank: true }),
@@ -906,7 +917,9 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.bonusPerDamageDieDoubleVsBeingTypes = [];
     this.saveVsStatusBonuses = [];
 
-    // Reset per-die bonuses
+    // Reset per-die bonuses / penalties
+    this.damageDiePenalty = [];
+    this.healingDiePenalty = [];
     this.bonusPerDamageDie = [];
     this.weaponBonusPerDamageDie = [];
     this.spellBonusPerDamageDie = [];
@@ -1107,6 +1120,8 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.universalAlchemicalDamageBonus = this._evaluateFormulaField(this.universalAlchemicalDamageBonus, rollData);
 
     this.bonusPerDamageDie = this._evaluateFormulaField(this.bonusPerDamageDie, rollData);
+    this.damageDiePenalty = Math.max(0, this._evaluateFormulaField(this.damageDiePenalty, rollData));
+    this.healingDiePenalty = Math.max(0, this._evaluateFormulaField(this.healingDiePenalty, rollData));
     this.weaponBonusPerDamageDie = this._evaluateFormulaField(this.weaponBonusPerDamageDie, rollData);
     this.spellBonusPerDamageDie = this._evaluateFormulaField(this.spellBonusPerDamageDie, rollData);
     this.alchemicalBonusPerDamageDie = this._evaluateFormulaField(this.alchemicalBonusPerDamageDie, rollData);

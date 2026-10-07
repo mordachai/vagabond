@@ -351,12 +351,12 @@ VAGABOND.statusEffectDefinitions = [
     name: 'VAGABOND.StatusConditions.Frightened',
     img: '/icons/magic/control/fear-fright-monster-grin-purple-blue.webp',
     statuses: ['frightened'],
-    description: '-2 penalty to all damage dealt. [FULLY AUTOMATED]',
+    description: 'It has a -2 penalty to each damage die it deals. [FULLY AUTOMATED]',
     changes: [
       {
-        key: 'system.universalDamageBonus',
+        key: 'system.damageDiePenalty',
         type: "add",
-        value: '-2'
+        value: '2'
       }
     ]
   },
@@ -365,12 +365,12 @@ VAGABOND.statusEffectDefinitions = [
     name: 'VAGABOND.StatusConditions.Sickened',
     img: '/icons/magic/acid/dissolve-pool-bubbles.webp',
     statuses: ['sickened'],
-    description: '-2 penalty to any healing received. [FULLY AUTOMATED]',
+    description: 'It has a -2 penalty to each healing die received. [FULLY AUTOMATED]',
     changes: [
       {
-        key: 'system.incomingHealingModifier',
+        key: 'system.healingDiePenalty',
         type: "add",
-        value: '-2'
+        value: '2'
       }
     ]
   },
