@@ -127,7 +127,7 @@ Status 2026-10-07: rulings settled, Defense property done (`61c1973`). **Phase 1
 - 1.4 `autoFailStats` += `reflex` (Incapacitated / Paralyzed / Unconscious); `VagabondRollBuilder.autoFails()` now honored by chat-card Saves, Defense Check and status Saves (Dead too).
 - 1.5 Builder Stats step: Reason picker (`skillSelections.reason`, `reasonTrainingCount`). Level-up Stats tab: Training pick when +1 Reason makes an even total odd.
 - 1.6 Was already coded (`weaponSlotCap`, bump in `equipWithHandLimit` / `sanitizeHandLimit`) — no change.
-- 1.7 `CONFIG.VAGABOND.creationPerks = 1` → unrestricted "Hero Creation" grant in the Perks step.
+- 1.7 Unrestricted "Hero Creation" Perk grant in the builder Perks step (always on — book is the source of truth).
 - 1.8 Wood removed; `migrateData` wood → iron (no world migration needed).
 - 1.9 New `noSlotsWhenWorn` field; Backpack 1 Slot carried / 0 Slots + when-equipped +3 worn. "Only benefit from one at a time" is not enforced (two worn Backpacks stack).
 - Migrations (`helpers/alpha3-migrations.mjs`, guards `alpha3StatusesMigrated` / `alpha3BackpackMigrated` / `alpha3DefensePerksMigrated`): status AEs on actors rewritten; old Backpacks updated (first one per actor put on); Patience / Protector perks get text + effect (waits for `npm run pack`). Perk / Backpack matching is by English name — Babele-renamed world copies are skipped.

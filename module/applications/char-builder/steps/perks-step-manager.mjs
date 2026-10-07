@@ -288,21 +288,18 @@ export class PerksStepManager extends BaseStepManager {
       }
     }
 
-    // Hero creation step 4 (book p. 24, Alpha 3): every Hero takes a Perk — any Perk,
-    // on top of ancestry / class grants (Human Aptitude still adds its own).
-    const creationPerks = Math.max(0, Number(CONFIG.VAGABOND?.creationPerks ?? 1) || 0);
-    for (let i = 0; i < creationPerks; i++) {
-      grants.push({
-        id: `creation-perk-${i}`,
-        source: 'creation',
-        sourceName: game.i18n.localize('VAGABOND.CharBuilder.CreationPerkSource'),
-        featureName: game.i18n.localize('VAGABOND.CharBuilder.CreationPerkFeature'),
-        allowedPerks: [],
-        isGuaranteed: false,
-        ignorePrereqs: 'none',
-        fulfilled: null
-      });
-    }
+    // Hero creation step 4 (book p. 24): every Hero takes a Perk — any Perk, on top of
+    // ancestry / class grants (Human Aptitude still adds its own).
+    grants.push({
+      id: 'creation-perk-0',
+      source: 'creation',
+      sourceName: game.i18n.localize('VAGABOND.CharBuilder.CreationPerkSource'),
+      featureName: game.i18n.localize('VAGABOND.CharBuilder.CreationPerkFeature'),
+      allowedPerks: [],
+      isGuaranteed: false,
+      ignorePrereqs: 'none',
+      fulfilled: null
+    });
 
     // Sort grants: most restrictive first (fewer options), unrestricted (any) last
     grants.sort((a, b) => {

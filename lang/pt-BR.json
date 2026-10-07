@@ -117,7 +117,6 @@
       "Defense": "Defesa",
       "DefenseBoth": "Ambas",
       "DefenseCheck": "Defesa (Checagem de Ataque)",
-      "ArmorPenalty": "Penalidade de Armadura",
       "DiePenaltyTitle": "-{penalty} por dado ({count} dados), cada dado no mínimo 0"
     },
     "AttackTypes": {

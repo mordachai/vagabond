@@ -117,7 +117,6 @@
       "Defense": "Defense",
       "DefenseBoth": "Both",
       "DefenseCheck": "Defense (Attack Check)",
-      "ArmorPenalty": "Armor Penalty",
       "DiePenaltyTitle": "-{penalty} per die ({count} dice), each die floored at 0"
     },
     "AttackTypes": {

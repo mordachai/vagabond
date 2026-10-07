@@ -144,13 +144,6 @@ VAGABOND.maxEquippedWeaponSlots = 3;
 VAGABOND.zeroSlotStackSize = 10;
 
 /**
- * Hero creation (book p. 24, Alpha 3 step 4 "Take a Perk"): free Perks of any kind every Hero takes
- * in the character builder, on top of ancestry / class grants. 0 restores the Alpha 2 flow.
- * @type {number}
- */
-VAGABOND.creationPerks = 1;
-
-/**
  * Lodging expenses for Rest downtime activity
  * Cost is in silver pieces per day
  * @type {Object}
