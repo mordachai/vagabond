@@ -118,3 +118,28 @@ Book p. 53. Righteous (Gish perk grant, Leadership casting, 2 × Level Mana, Cas
 - [ ] Level 10: d8; an actor with Virtuoso Inspiration gets the extra d6 on the heal.
 - [ ] Existing Revelator (old class) migrates; Leadership + Melee stay trained.
 
+## Rogue
+
+Book p. 55. Sneak Attack (extra d4s + Armor ignored), Infiltrator (Resourceful perk grant), Evasive (+5’ every 4 Levels), Knack, Lethal Weapon, Waylay. Training Ranged, Finesse, Sneak (no choices). Unflinching Luck is gone.
+
+**Doubts / course taken**
+- **Knack vs Unflinching Luck:** the book’s Class Features table still prints "Unflinching Luck (d20)" at 4th and "(d12)" at 8th, but the feature card at those Levels is **Knack** (Luck on Breather / Crit / Rest). The table is kept verbatim in the class description, the level features are named **Knack** (their text is the card’s). If the table is right and the card is wrong, rename them and swap the text.
+- **Evasive names:** entries are "Evasive" (2nd), "Evasive (15’)" (6th), "Evasive (20’)" (10th) as in the table; same card text on each.
+- **Sneak Attack automation** (effect "Sneak Attack: Auto", switchable, obeys the world Class Automation setting): the first hit with a **Favored** attack (the roll’s net Favor) using a Finesse-skill, Ranged-skill or Keen weapon arms the next damage roll of that weapon with the extra d4s (Explode "x" from Level 6 via "Lethal Weapon") and posts a "Sneak Attack" card. The Armor it ignores is given back when that damage is applied (the Rogue’s flag `sneakIgnore` lives until their next weapon attack). **Once per Turn** only inside a started Combat (key = Combat id : Round : Turn); with no Combat there are no Turns to count, so every qualifying hit counts. Without the Auto effect nothing is automatic — roll the d4s by hand.
+- A damage roll made through Luck / reroll flows loses the Sneak dice (they are consumed by the first roll of that weapon).
+- **Knack** is only partly automated: the extra Luck **on a Crit** is an effect ("Knack", Level 4+, `critLuckBonus`; any d20 Crit). Luck on a Breather / Craft and the extra Luck on Rest are text: Rest already refills Luck to its maximum and the pool is clamped to that maximum (same gap as Merchant Line Goes Up).
+- Qualifying weapons are decided by the **attack skill** (Finesse or Ranged) or the Keen property — "Finesse Weapon" is not a weapon property in the system.
+
+**Text-only / deferred**
+- Evasive (free 10’ / 15’ / 20’ Move after another Being acts), Waylay (spend 1 Luck: immediate Action after a kill or Evasive) and Infiltrator’s Favor on ambush / traps — text only.
+- Knack: Luck on Breather / Craft / Travel and the extra Luck on Rest — needs a ruling on Luck above the maximum (see Merchant).
+
+**Tests to run in-world** (after `npm run pack`)
+- [ ] Builder: Rogue Trained in Ranged, Finesse and Sneak without skill choices; Resourceful granted automatically.
+- [ ] Level 1 with "Sneak Attack: Auto": a Favored hit with a Ranged / Finesse / Keen weapon → damage roll includes +1d4 (a "Sneak Attack" card appears); second Favored hit in the same Turn (in a started Combat) gets nothing; next Turn gets it again; a non-Favored hit or a Melee-only weapon gets nothing.
+- [ ] Armor: the Sneak Attack damage applied to a target with Armor 2 ignores 1 Armor at Level 1 (2 at Level 4); a normal attack afterwards does not.
+- [ ] Level 4+: 2d4 (Level 7: 3d4, Level 10: 4d4). Level 6+: the sneak dice Explode (roll `Nd4x` shows exploded dice).
+- [ ] Level 4+: a natural Crit gives +1 Luck (card "Knack"), capped at max Luck.
+- [ ] World Class Automation = Manual (or switching "Sneak Attack: Auto" off): no automatic dice; effects stay listed.
+- [ ] Existing Rogue (old Unflinching Luck class) migrates; Sneak Attack / Knack effects present.
+

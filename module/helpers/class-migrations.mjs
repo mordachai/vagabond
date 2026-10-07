@@ -273,6 +273,20 @@ export function migrateRevelatorClass() {
   });
 }
 
+/**
+ * Rogue: old Unflinching Luck / Lethal Weapon class → Sneak Attack effects (dice, auto, explode), Infiltrator,
+ * Evasive (10’ / 15’ / 20’), Knack (Crit Luck), Waylay.
+ */
+export function migrateRogueClass() {
+  return migrateClass({
+    setting: 'rogueClassMigrated',
+    classId: 'gwlbYvDMyO0cPA4U',
+    className: 'Rogue',
+    probeFeature: 'Knack',
+    isOld: (item) => item.system.levelFeatures?.some(lf => lf.name === 'Unflinching Luck (d12)'),
+  });
+}
+
 /** Give perk items already in the world (copies) the effects the compendium perk now ships. */
 async function addPerkEffects(perkId, perkName) {
   const source = await game.packs.get('vagabond.perks')?.getDocument(perkId);

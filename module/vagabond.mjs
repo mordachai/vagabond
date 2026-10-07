@@ -82,8 +82,9 @@ import { GunslingerHelper } from './helpers/gunslinger-helper.mjs';
 import { HunterHelper } from './helpers/hunter-helper.mjs';
 import { PugilistHelper } from './helpers/pugilist-helper.mjs';
 import { RevelatorHelper } from './helpers/revelator-helper.mjs';
+import { RogueHelper } from './helpers/rogue-helper.mjs';
 import { DruidHelper } from './helpers/druid-helper.mjs';
-import { migrateFighterClass, migrateDruidClass, migrateGunslingerClass, migrateHunterClass, migrateLuminaryClass, migrateMagusClass, migrateMerchantClass, migratePugilistClass, migrateRevelatorClass, migrateAncestries } from './helpers/class-migrations.mjs';
+import { migrateFighterClass, migrateDruidClass, migrateGunslingerClass, migrateHunterClass, migrateLuminaryClass, migrateMagusClass, migrateMerchantClass, migratePugilistClass, migrateRevelatorClass, migrateRogueClass, migrateAncestries } from './helpers/class-migrations.mjs';
 import { consumeUsedEffects } from './helpers/use-effects.mjs';
 import { VagabondRollBuilder } from './helpers/roll-builder.mjs';
 import { CurrencyHelper } from './helpers/currency-helper.mjs';
@@ -1073,7 +1074,7 @@ function registerGameSettings() {
   });
 
   // Setting 21f6: One-time migration guards (hidden) — see class-migrations.mjs.
-  for (const key of ['fighterClassMigrated', 'druidClassMigrated', 'gunslingerClassMigrated', 'hunterClassMigrated', 'luminaryClassMigrated', 'magusClassMigrated', 'merchantClassMigrated', 'pugilistClassMigrated', 'revelatorClassMigrated', 'ancestriesMigrated']) {
+  for (const key of ['fighterClassMigrated', 'druidClassMigrated', 'gunslingerClassMigrated', 'hunterClassMigrated', 'luminaryClassMigrated', 'magusClassMigrated', 'merchantClassMigrated', 'pugilistClassMigrated', 'revelatorClassMigrated', 'rogueClassMigrated', 'ancestriesMigrated']) {
     game.settings.register('vagabond', key, {
       scope: 'world',
       config: false,
@@ -1926,6 +1927,7 @@ Hooks.once('ready', function () {
   migrateMerchantClass();
   migratePugilistClass();
   migrateRevelatorClass();
+  migrateRogueClass();
   // One-time: ancestry items get the book text, grants and effects (Dwarf also gets the Tough Perk).
   migrateAncestries();
   // One-time: stored copper amounts ×10 (ratio corrected to the book's 1s = 100c).
@@ -2003,6 +2005,7 @@ GunslingerHelper.registerHooks();
 // Hunter's Mark: Lethal Precision damage (inert unless an actor has a Mark and system.markDamageBonus)
 HunterHelper.registerHooks();
 PugilistHelper.registerHooks();
+RogueHelper.registerHooks();
 
 Hooks.on('updateJournalEntry', (journal, changes) => {
   const pc = foundry.utils.getProperty(changes, 'flags.vagabond.progressClock');

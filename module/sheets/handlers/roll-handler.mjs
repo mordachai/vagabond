@@ -395,7 +395,7 @@ export class RollHandler {
       if (!attackResult) return;
 
       // Post-roll hook for weapon attack
-      const _wpnPostCtx = { actor: this.actor, item, rollKey: attackResult.weaponSkillKey, rollType: 'weapon', roll: attackResult.roll, difficulty: attackResult.difficulty, isSuccess: attackResult.isHit, isCritical: attackResult.isCritical, targets: targetsAtRollTime, extraMetadata: [], extraTags: [] };
+      const _wpnPostCtx = { actor: this.actor, item, rollKey: attackResult.weaponSkillKey, rollType: 'weapon', roll: attackResult.roll, difficulty: attackResult.difficulty, isSuccess: attackResult.isHit, isCritical: attackResult.isCritical, favorHinder: attackResult.favorHinder, targets: targetsAtRollTime, extraMetadata: [], extraTags: [] };
       if (throwRangeBand === 'far') {
         _wpnPostCtx.extraTags.push({ label: game.i18n.localize('VAGABOND.ContextMenu.ThrowFarTag'), cssClass: 'tag-range' });
       }

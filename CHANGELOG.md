@@ -1,6 +1,10 @@
 # Changelog
 
 ## Unreleased
+- **Rogue revised to the new book text.** Class description, the Class Features table (with Sneak Attack), Sneak Attack, Infiltrator, Evasive (10’ / 15’ / 20’), Knack, Lethal Weapon and Waylay now read exactly as printed; Training is Ranged, Finesse and Sneak. Unflinching Luck is gone (the book table still prints it at 4th / 8th, but the feature there is Knack).
+  - **Sneak Attack is an effect plus an automatic helper** ("Sneak Attack: Auto", switchable, follows the Class Automation setting): your first Favored hit each Turn (in a started Combat) with a Finesse, Keen or Ranged Weapon adds the extra d4s (they Explode with Lethal Weapon) and ignores that much Armor when the damage lands, with a "Sneak Attack" chat card.
+  - **Knack** gives +1 Luck whenever you Crit (card "Knack"). Evasive, Waylay and Luck on Breather / Rest stay text.
+  - Existing Rogue items are converted once on load. The `classes` compendium needs `npm run pack` first.
 - **Revelator revised to the new book text.** Class description, the Class Features table (with Spells, Mana and Cast Max), Righteous, Enspell, Lay on Hands (d4 / d6 / d8), Paragon’s Aura, Divine Resolve and Holy Diver now read exactly as printed; Training is Leadership and Melee. The Level 5 Spell count is 3 (it was 0 by mistake).
   - **Righteous** grants the Gish Perk; Cast Max is 1 + half your Level (an effect cancels the casting Stat the engine adds).
   - **Lay on Hands has a button** (Level 2+): spends 1 Mana, rolls (d4 / d6 / d8 + Level) healing on yourself or a Close targeted Being, and posts a card with the Apply button; from Level 6 it also cures Blinded, Paralyzed and Sickened. **Divine Resolve** makes you immune to those three. New fields `layOnHandsDie` and `layOnHandsCures`.

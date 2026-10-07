@@ -430,6 +430,15 @@ The Mark itself is an actor effect (`flags.vagabond.huntersMark`) created by the
 | Divine Resolve (Lv 6+) | `system.statusImmunities` | Add | `blinded`, `paralyzed`, `sickened` (one change each) |
 | Divine Resolve: Lay on Hands (Lv 6+) | `system.layOnHandsCures` | Add | `blinded`, `paralyzed`, `sickened` (Statuses the button cures on its Target) |
 
+### Rogue — Sneak Attack, Lethal Weapon, Knack
+
+| Effect | Key | Mode | Value |
+| --- | --- | --- | --- |
+| Sneak Attack | `system.sneakAttackDice` | Add | `1 + floor((@lvl - 1) / 3)` (number of extra d4s) |
+| Sneak Attack: Auto (switchable) | `system.sneakAttackTrigger` | Override | `true` (first Favored hit per Turn with a Finesse / Keen / Ranged Weapon adds the dice and ignores that much Armor; cleared by the Class Automation setting) |
+| Lethal Weapon (Lv 6+) | `system.sneakAttackExplode` | Add | `1` (the Sneak Attack dice Explode) |
+| Knack (Lv 4+) | `system.critLuckBonus` | Add | `1` (extra Luck whenever you Crit) |
+
 ### Exalted — Bonus Per Damage Die (with Doubling vs Specific Being Types)
 
 Grants a flat bonus per damage die rolled. When attacking Undead (or other configured types), the bonus is doubled.

@@ -252,6 +252,14 @@
       "Lays": "<strong>{name}</strong> lays hands on <strong>{target}</strong> (1 Mana).",
       "Cured": "Cured of: {statuses}."
     },
+    "SneakAttack": {
+      "Title": "Sneak Attack",
+      "Spent": "<strong>{name}</strong> sneak attacks: <strong>+{dice}d4</strong> damage and the attack ignores <strong>{armor}</strong> Armor."
+    },
+    "Knack": {
+      "Title": "Knack",
+      "Gained": "<strong>{name}</strong> gains <strong>{luck}</strong> Luck from the Crit."
+    },
     "Druid": {
       "NoMetamorph": "The Metamorph module is not active — Polymorph has to be played by hand.",
       "NotYours": "Only the character’s owner can do that.",

@@ -24,6 +24,7 @@ const TRIGGER_FIELDS = {
   highNoonTrigger: false,
   huntersMarkTrigger: false,
   haymakerMargin: 0,
+  sneakAttackTrigger: false,
   aggressorAuto: 0,
 };
 

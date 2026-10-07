@@ -495,6 +495,25 @@ export default class VagabondCharacter extends VagabondActorBase {
       new fields.StringField({ blank: true }),
       { initial: [], label: "Lay on Hands Also Cures (Statuses)" }
     );
+    // Rogue: Sneak Attack dice (number of d4s, formula), Lethal Weapon (> 0 = they Explode), the auto trigger
+    // ("Sneak Attack: Auto", cleared by the Class Automation mode) and Knack (extra Luck on a Crit).
+    schema.sneakAttackDice = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      { initial: [], label: "Sneak Attack Dice (Rogue)" }
+    );
+    schema.sneakAttackExplode = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      { initial: [], label: "Sneak Attack Dice Explode (Rogue)" }
+    );
+    schema.sneakAttackTrigger = new fields.BooleanField({
+      required: true,
+      initial: false,
+      label: "Auto-Sneak Attack (Rogue)"
+    });
+    schema.critLuckBonus = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      { initial: [], label: "Extra Luck On Crit (Rogue Knack)" }
+    );
     schema.critExplodeSkills = new fields.ArrayField(
       new fields.StringField({ required: true }),
       { required: true, initial: [], label: "Crit Damage Dice Explode (skills)" }
@@ -901,6 +920,10 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.deadeyeGrit = [];
     this.critExtraDiceBySkill = [];
     this.critExplodeSkills = [];
+    this.sneakAttackDice = [];
+    this.sneakAttackExplode = [];
+    this.sneakAttackTrigger = false;
+    this.critLuckBonus = [];
     this.layOnHandsDie = [];
     this.layOnHandsCures = [];
     this.weaponDieBySkill = [];
@@ -1118,6 +1141,9 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.weaponLowExplodeBySkill = this._evaluateTypedReductions(this.weaponLowExplodeBySkill, rollData);
     this.haymakerMargin = this._evaluateFormulaField(this.haymakerMargin, rollData);
     this.layOnHandsDie = this._evaluateFormulaField(this.layOnHandsDie, rollData);
+    this.sneakAttackDice = this._evaluateFormulaField(this.sneakAttackDice, rollData);
+    this.sneakAttackExplode = this._evaluateFormulaField(this.sneakAttackExplode, rollData);
+    this.critLuckBonus = this._evaluateFormulaField(this.critLuckBonus, rollData);
     this.layOnHandsCures = this.layOnHandsCures.filter(s => !!s);
     this.markDamageBonus = this._evaluateFormulaField(this.markDamageBonus, rollData);
 

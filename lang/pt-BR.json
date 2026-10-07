@@ -252,6 +252,14 @@
       "Lays": "<strong>{name}</strong> impõe as mãos sobre <strong>{target}</strong> (1 de Mana).",
       "Cured": "Curado de: {statuses}."
     },
+    "SneakAttack": {
+      "Title": "Ataque Furtivo",
+      "Spent": "<strong>{name}</strong> faz um Ataque Furtivo: <strong>+{dice}d4</strong> de dano e o ataque ignora <strong>{armor}</strong> de Armadura."
+    },
+    "Knack": {
+      "Title": "Jeito",
+      "Gained": "<strong>{name}</strong> ganha <strong>{luck}</strong> de Sorte com o Crítico."
+    },
     "Druid": {
       "NoMetamorph": "O módulo Metamorph não está ativo — a Polimorfia precisa ser jogada à mão.",
       "NotYours": "Apenas o dono do personagem pode fazer isso.",
