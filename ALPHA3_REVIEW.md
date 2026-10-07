@@ -16,7 +16,7 @@ Kind: **Code** = engine or effect change · **Pack** = text / data in `packs/_so
 | 4 | 25 | **Druids Cast with Survival** (skill text moved) | OK | Druid `manaSkill` is already `survival` |
 | 5 | 27 | Human trait **Knack → Aptitude** | Pack | rename trait in Human ancestry (+ pt-BR) |
 | 6 | 80 | **Defense property rewritten**: on a Reflex Save you can make an Attack Check instead; on a pass, reduce the damage by each equipped Defense Weapon's damage dice | **Done** | ruling: pass = Defense dice only (no highest-die removal); Wall / Indestructible now reach the Defense roll; Protector + Patience automated (see CLAUDE.md) |
-| 7 | 16 → 80 | **Dual-Wielding** moved to Weapons; the "up to 3 Slots of Equipped Weapons" limit **stays** (p. 20, p. 76) | Code | never coded — the hand pool only counts hands, not weapon Slots |
+| 7 | 16 → 80 | **Dual-Wielding** moved to Weapons; the "up to 3 Slots of Equipped Weapons" limit **stays** (p. 20, p. 76) | OK | already coded (`EquipmentHelper.weaponSlotCap`) |
 | 8 | 81 | Weapons: **Spear grip 1H → V**; **Staff gains Cleave** | Pack | weapons pack + shop items |
 | 9 | 79, 190 | Starting packs Gladiator / Sellsword: **buckler → shield**; treasure Shield table: Shield / Great Shield (no Buckler) | Pack | |
 | 10 | 83 | **Backpack**: "1 (held); +3 (worn)" (was "1; 0 while worn") | Pack + Code | ruling: +3 Slots of capacity while worn |
@@ -106,19 +106,32 @@ The **spells** pack (Adhere, Animate, Beast, Gas, Life, Tempo, Terraform, Ward, 
 
 ## 6. Work plan (next sessions)
 
-Status 2026-10-07: rulings settled, Defense property done (`61c1973`). Everything below is open. Each phase = its own session; one commit per numbered item group; every pack change ships with a guarded migration for existing worlds (see `helpers/class-migrations.mjs` pattern). Update pt-BR (`lang/pt-BR.json`) for every new / changed string.
+Status 2026-10-07: rulings settled, Defense property done (`61c1973`). **Phase 1 coded** (`a015d98`→`295a98b`, untested); Phases 2–6 open. Each phase = its own session; one commit per numbered item group; every pack change ships with a guarded migration for existing worlds (see `helpers/class-migrations.mjs` pattern). Update pt-BR (`lang/pt-BR.json`) for every new / changed string.
 
 ### Phase 1 — Core rules (engine)
-- [ ] **1.1 Reflex Difficulty includes Armor** — `saves.reflex.difficulty` += worn Armor Slots (`reflexArmorPenalty`) in `actor-character.mjs`; drop the `- N[Armor Penalty]` term from `_rollSave` and roll-handler (no double count); sheet / HUD / save card show the dynamic number. Defense Attack Check stays penalty-free.
-- [ ] **1.2 Frightened** −2 **per damage die** (status AE → per-die field, e.g. `bonusPerDamageDie`); **Sickened** −2 **per healing die received** (needs an incoming per-die healing modifier).
-- [ ] **1.3 Prone** — crawl (half Speed) instead of Speed 0; Vulnerable only for Melee attacks and Reflex Saves (new defender modifier scoped by attack type / save).
-- [ ] **1.4 Incapacitated** auto-fails Reflex Saves (verify `autoFailStats` covers saves).
-- [ ] **1.5 Bonus Trainings from Reason** — builder Level 1: extra Trainings = ceil(RSN / 2); level-up: raising RSN past a threshold grants one more Training.
-- [ ] **1.6 3 Slots of Equipped Weapons** — enforce in `EquipmentHelper.equipWithHandLimit` + `sanitizeHandLimit` (bump oldest weapon), warn on equip.
-- [ ] **1.7 Creation Perk step** — every Hero takes one Perk at creation (builder Perks step adds a free generic Perk; Human Aptitude still adds its own).
-- [ ] **1.8 Remove Wood** material — drop `metalData.wood`; migrate Wood items to Iron (guard setting).
-- [ ] **1.9 Backpack** — 1 Slot held, +3 Slots of capacity while worn (container / slot math + pack item).
-- [ ] **1.10 Defense follow-up** — migration adding the Patience / Protector effects to perk items already on actors.
+- [x] **1.1 Reflex Difficulty includes Armor** — `saves.reflex.difficulty` += worn Armor Slots (`reflexArmorPenalty`) in `actor-character.mjs`; drop the `- N[Armor Penalty]` term from `_rollSave` and roll-handler (no double count); sheet / HUD / save card show the dynamic number. Defense Attack Check stays penalty-free.
+- [x] **1.2 Frightened** −2 **per damage die** (status AE → per-die field, e.g. `bonusPerDamageDie`); **Sickened** −2 **per healing die received** (needs an incoming per-die healing modifier).
+- [x] **1.3 Prone** — crawl (half Speed) instead of Speed 0; Vulnerable only for Melee attacks and Reflex Saves (new defender modifier scoped by attack type / save).
+- [x] **1.4 Incapacitated** auto-fails Reflex Saves (verify `autoFailStats` covers saves).
+- [x] **1.5 Bonus Trainings from Reason** — builder Level 1: extra Trainings = ceil(RSN / 2); level-up: raising RSN past a threshold grants one more Training.
+- [x] **1.6 3 Slots of Equipped Weapons** — enforce in `EquipmentHelper.equipWithHandLimit` + `sanitizeHandLimit` (bump oldest weapon), warn on equip.
+- [x] **1.7 Creation Perk step** — every Hero takes one Perk at creation (builder Perks step adds a free generic Perk; Human Aptitude still adds its own).
+- [x] **1.8 Remove Wood** material — drop `metalData.wood`; migrate Wood items to Iron (guard setting).
+- [x] **1.9 Backpack** — 1 Slot held, +3 Slots of capacity while worn (container / slot math + pack item).
+- [x] **1.10 Defense follow-up** — migration adding the Patience / Protector effects to perk items already on actors.
+
+**Phase 1 — what was built (for testing):**
+- 1.1 `saves.reflex.difficulty` += `reflexArmorPenalty`; roll-handler / `_rollSave` no longer subtract it (status Saves now also see Armor, they didn't before).
+- 1.2 New actor fields `damageDiePenalty` (Frightened 2, pipeline step 10b, harmful damage only, each die floors at 0, chat badge) and `healingDiePenalty` (Sickened 2, healing button carries `data-die-values`). NPC flat damage: −2 × dice in the action's roll formula (`flatDamageAfterDiePenalty`).
+- 1.3 New fields `speedHalved` + `meleeReflexVulnerable` (Prone). Votes: its Melee attacks Hinder, Melee attacks at it Favor (`Item#rollAttack`), Saves vs its Melee attacks Favor (`_attackerSaveVote`), its Reflex Saves + Defense Check Hinder (`defenseRules` entry, `defenseVote`). Spell casts don't read target Vulnerable (pre-existing gap).
+- 1.4 `autoFailStats` += `reflex` (Incapacitated / Paralyzed / Unconscious); `VagabondRollBuilder.autoFails()` now honored by chat-card Saves, Defense Check and status Saves (Dead too).
+- 1.5 Builder Stats step: Reason picker (`skillSelections.reason`, `reasonTrainingCount`). Level-up Stats tab: Training pick when +1 Reason makes an even total odd.
+- 1.6 Was already coded (`weaponSlotCap`, bump in `equipWithHandLimit` / `sanitizeHandLimit`) — no change.
+- 1.7 `CONFIG.VAGABOND.creationPerks = 1` → unrestricted "Hero Creation" grant in the Perks step.
+- 1.8 Wood removed; `migrateData` wood → iron (no world migration needed).
+- 1.9 New `noSlotsWhenWorn` field; Backpack 1 Slot carried / 0 Slots + when-equipped +3 worn. "Only benefit from one at a time" is not enforced (two worn Backpacks stack).
+- Migrations (`helpers/alpha3-migrations.mjs`, guards `alpha3StatusesMigrated` / `alpha3BackpackMigrated` / `alpha3DefensePerksMigrated`): status AEs on actors rewritten; old Backpacks updated (first one per actor put on); Patience / Protector perks get text + effect (waits for `npm run pack`). Perk / Backpack matching is by English name — Babele-renamed world copies are skipped.
+- Known gap: Vulnerable / Confused statuses still set a blanket `favorHinder: hinder` (all Checks), the book limits it to attacks and Saves against attacks.
 
 ### Phase 2 — Classes (pack text + effects + migrations)
 - [ ] Alchemist: Eureka 15+ / 14+ / 13+ (margin field + names), Potency table names (+1) / (+2).
