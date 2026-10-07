@@ -190,6 +190,27 @@ export function migrateHunterClass() {
   });
 }
 
+/**
+ * Magus: old Spellstriker / Esoteric Eye / Aegis Obscura class → Arcanum (Cast Max 1 + half Level), Enspell,
+ * Spell Parry (10+ / 9+ / 8+), Arcane Surge, Esoteric Flow, Sword & Sorcery.
+ */
+export function migrateMagusClass() {
+  return migrateClass({
+    setting: 'magusClassMigrated',
+    classId: 'gSD4ww0S2NUBbnvo',
+    className: 'Magus',
+    probeFeature: 'Arcanum',
+    isOld: (item) => item.system.levelFeatures?.some(lf => lf.name === 'Spellstriker'),
+    // caster tables / Mana come from the book revision too
+    extraUpdate: (item, s) => ({
+      'system.manaSkill': s.manaSkill,
+      'system.castingStat': s.castingStat,
+      'system.manaMultiplier': s.manaMultiplier,
+      'system.levelSpells': s.levelSpells,
+    }),
+  });
+}
+
 /** Give perk items already in the world (copies) the effects the compendium perk now ships. */
 async function addPerkEffects(perkId, perkName) {
   const source = await game.packs.get('vagabond.perks')?.getDocument(perkId);

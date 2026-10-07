@@ -399,6 +399,12 @@ The Mark itself is an actor effect (`flags.vagabond.huntersMark`) created by the
 | Radiant Healer | `system.healingExplode` | Add | `max` (HP-restoring Spell rolls also Explode on their highest face; ADD `1`, `2`, `max`, `max-1` — Assured Healer adds `1`) |
 | Overheal (Lv 2+) | `system.healingBonusDice` | Add | `floor(@lvl / 2)` (flat term appended to HP-restoring rolls) |
 
+### Magus — Arcanum
+
+| Effect | Key | Mode | Value |
+| --- | --- | --- | --- |
+| Arcanum | `system.mana.castingMaxBonus` | Add | `1 - @stats.reason.total` (Cast Max is 1 + half Level, round up; the engine adds Reason, so it is cancelled) |
+
 ### Exalted — Bonus Per Damage Die (with Doubling vs Specific Being Types)
 
 Grants a flat bonus per damage die rolled. When attacking Undead (or other configured types), the bonus is doubled.

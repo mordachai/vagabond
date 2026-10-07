@@ -30,3 +30,23 @@ Book p. 45. Theurgy (Mysticism casting, 4 × Level Mana, Cast Max 2 + Level, Lif
 - [ ] Effects list: Theurgy / Radiant Healer / Overheal listed under Class Features (no switch).
 - [ ] Existing Luminary character (old Saving Grace class): migration converts it, marks Influence trained, adds the explode effect to its Assured Healer perk.
 
+## Magus
+
+Book p. 47. Arcanum (Gish perk grant, Arcana casting, 2 × Level Mana, Cast Max 1 + half Level round up), Enspell, Spell Parry (10+/9+/8+), Arcane Surge, Esoteric Flow, Sword & Sorcery. Training Arcana + Melee (no choices). Spellstriker, Esoteric Eye, Arcane Recall and Aegis Obscura are gone.
+
+**Doubts / course taken**
+- "one of which must always have a damage base" cannot be expressed as a required Spell (the old class forced Ward) → no required Spell; the rule is text only and the player chooses.
+- Spell Parry has one feature entry per level named with its threshold, as in the book table ((10+), (9+), (8+)); the text is the same on every entry.
+- Only Cast Max is an effect. The rest needs Imbue / Block hooks that do not exist (see deferred) and stays text, per manual-first.
+
+**Text-only / deferred**
+- Enspell (continual Imbue, change the Spell by skipping a Move) — the Imbue flow has no "continual" mode for a class.
+- Spell Parry (redirect a Cast you saved against by 10+ / 9+ / 8+) — no hook on the save result to retarget the Cast.
+- Arcane Surge (1 / 2 Mana discount on Imbued deliveries) — `bonuses.deliveryManaCostReduction` is global, not Imbue-scoped, so it was not used.
+- Esoteric Flow (attack uses the Imbued Spell’s damage base; permanent Blink) and Sword & Sorcery (Attack + Cast in one Turn) — text only.
+
+**Tests to run in-world** (after `npm run pack`)
+- [ ] Builder: Magus learns 2 Spells (+1 at L4, L7, L10), Mana 2 × Level, Cast Max 2 / 2 / 3 / 3 / 4 / 4 / 5 / 5 / 6 / 6 for L1–10; Gish granted automatically; Training Arcana + Melee.
+- [ ] Spell Parry / Arcane Surge entries show the right name per level in the level-up dialog and on the sheet.
+- [ ] Existing Magus (old Spellstriker class) migrates (Spellstriker feature gone, Arcanum effect present).
+

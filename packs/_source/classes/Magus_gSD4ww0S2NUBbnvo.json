@@ -3,18 +3,16 @@
   "type": "class",
   "img": "icons/weapons/swords/greatsword-evil-green.webp",
   "system": {
-    "description": "<p><strong>¿Por qué no los dos?</strong></p><p><em>– Mia Agraviador, El Paso Taco Commercial</em></p><p>Spellblades, gishes, arcane knights, and eldritch tricksters all. Magi are arcane specialists that blend magic and martial prowess.</p><h3>Iconic Magi</h3><ul><li><strong>Alucard</strong>, <em>Castlevania</em></li><li><strong>Elric of Melniboné</strong>, <em>Stormbringer</em></li><li><strong>Geralt of Rivia</strong>, <em>The Witcher series</em></li><li><strong>Twilight Suzuka</strong>, <em>Outlaw Star</em></li></ul><h3>Playing Magus</h3><p>The magus may be a bit more challenging for newer players. Their playstyle is more build-dependent than the other classes, with ranged and melee magi being possible to create.</p><p><strong>Action:</strong> Attack/Cast<br /><strong>Move:</strong> Flexible<br /><strong>Starting Pack:</strong> Knight, Gladiator, or Warrior<br /><strong>Key Stat:</strong> Reason<br /><strong>Complexity:</strong> ★★★★☆</p><h3>Training</h3><p><strong>Weapons:</strong> Melee<br /><strong>Skills:</strong> Arcana, and 3 from either Brawl, Detect, Finesse, Influence, Mysticism, Sneak</p><p></p><h3><span class=\"fontstyle0\">Class Features</span></h3><table class=\"NormalTable\"><tbody><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle0\" style=\"color:rgb(255,255,255);font-size:9pt\">Level</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle0\" style=\"color:rgb(255,255,255);font-size:9pt\">Features</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"82\"><p><span class=\"fontstyle0\" style=\"color:rgb(255,255,255);font-size:9pt\">Mana</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\"><p><span class=\"fontstyle0\" style=\"color:rgb(255,255,255);font-size:9pt\">Spells</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">1st</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Spellstriker, Esoteric Eye</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"82\"><p><span class=\"fontstyle2\">2</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\"><p><span class=\"fontstyle2\">2</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">2nd</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Spell Parry</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"82\"><p><span class=\"fontstyle2\">4</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\"><p><span class=\"fontstyle2\">2</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">3rd</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"82\"><p><span class=\"fontstyle2\">6</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\"><p><span class=\"fontstyle2\">2</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">4th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Arcane Recall</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"82\"><p><span class=\"fontstyle2\">8</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\"><p><span class=\"fontstyle2\">3</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">5th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"82\"><p><span class=\"fontstyle2\">10</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\"><p><span class=\"fontstyle2\">3</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">6th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Spell Surge</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"82\"><p><span class=\"fontstyle2\">12</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\"><p><span class=\"fontstyle2\">3</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">7th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"82\"><p><span class=\"fontstyle2\">14</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\"><p><span class=\"fontstyle2\">4</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">8th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Aegis Obscura</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"82\"><p><span class=\"fontstyle2\">16</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\"><p><span class=\"fontstyle2\">4</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">9th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"82\"><p><span class=\"fontstyle2\">18</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\"><p><span class=\"fontstyle2\">4</span></p></td></tr><tr><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"67\"><p><span class=\"fontstyle2\">10th</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"115\"><p><span class=\"fontstyle2\">Spell Surge (8+)</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\" data-colwidth=\"82\"><p><span class=\"fontstyle2\">20</span></p></td><td style=\"border-left-style:none;border-bottom-style:none;border-right-style:none;border-top-style:none\"><p><span class=\"fontstyle2\">5</span></p></td></tr></tbody></table><p><br style=\"font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:normal;orphans:2;text-align:-webkit-auto;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-size-adjust:auto;-webkit-text-stroke-width:0px\" /></p>",
+    "description": "<p><strong>¿Por qué no los dos?</strong></p><p><em>—Mia Agraviador, Old El Paso Taco Commercial</em></p><p>Spellblades, gishes, arcane knights, and eldritch tricksters all. Magi are arcane specialists that blend magic and martial prowess.</p><h3>Iconic Magi</h3><ul><li><strong>Alucard</strong>, <em>Castlevania</em></li><li><strong>Elric of Melniboné</strong>, <em>Stormbringer</em></li><li><strong>Geralt of Rivia</strong>, <em>The Witcher</em></li><li><strong>Twilight Suzuka</strong>, <em>Outlaw Star</em></li></ul><h3>Playing Magus</h3><p>The magus may be a bit more challenging for newer players. Their playstyle is more build-dependent than the other classes, allowing for backline blasters, midline harassers, and frontline strikers.</p><p><strong>Action:</strong> Attack/Cast<br /><strong>Move:</strong> Flexible<br /><strong>Starting Pack:</strong> Knight, Gladiator, or Warrior<br /><strong>Key Stat:</strong> Reason<br /><strong>Complexity:</strong> ★★★★☆<br /><strong>Training:</strong> Arcana, Melee</p><h3>Class Features</h3><table class=\"NormalTable\"><tbody><tr><td><p><strong>Level</strong></p></td><td><p><strong>Features</strong></p></td><td><p><strong>Spells</strong></p></td><td><p><strong>Mana</strong></p></td><td><p><strong>Cast Max</strong></p></td></tr><tr><td><p>1st</p></td><td><p>Arcanum, Enspell</p></td><td><p>2</p></td><td><p>2</p></td><td><p>2</p></td></tr><tr><td><p>2nd</p></td><td><p>Spell Parry (10+)</p></td><td><p>2</p></td><td><p>4</p></td><td><p>2</p></td></tr><tr><td><p>3rd</p></td><td><p>Perk</p></td><td><p>2</p></td><td><p>6</p></td><td><p>3</p></td></tr><tr><td><p>4th</p></td><td><p>Arcane Surge (1 Mana)</p></td><td><p>3</p></td><td><p>8</p></td><td><p>3</p></td></tr><tr><td><p>5th</p></td><td><p>Perk</p></td><td><p>3</p></td><td><p>10</p></td><td><p>4</p></td></tr><tr><td><p>6th</p></td><td><p>Spell Parry (9+), Esoteric Flow</p></td><td><p>3</p></td><td><p>12</p></td><td><p>4</p></td></tr><tr><td><p>7th</p></td><td><p>Perk</p></td><td><p>4</p></td><td><p>14</p></td><td><p>5</p></td></tr><tr><td><p>8th</p></td><td><p>Arcane Surge (2 Mana)</p></td><td><p>4</p></td><td><p>16</p></td><td><p>5</p></td></tr><tr><td><p>9th</p></td><td><p>Perk</p></td><td><p>4</p></td><td><p>18</p></td><td><p>6</p></td></tr><tr><td><p>10th</p></td><td><p>Spell Parry (8+), Sword & Sorcery</p></td><td><p>5</p></td><td><p>20</p></td><td><p>6</p></td></tr></tbody></table>",
     "isSpellcaster": true,
     "levelFeatures": [
       {
         "level": 1,
-        "name": "Spellstriker",
-        "description": "<p>You gain the Gish Perk and can Cast Spells using Arcana. Spells: You learn 2 Spells, one of which must always be Ward. You learn 1 other Spell every 3 Magus Levels hereafter. Mana: Your Maximum Mana is equal to (2 × your Magus Level), and the highest amount of Mana you can spend to Cast a Spell is equal to (Reason + half your Magus Level, round up). You regain spent Mana when you Rest.</p>",
+        "name": "Arcanum",
+        "description": "<p>You gain the Gish Perk (p. 69) and you can Cast Spells using Arcana.</p><p><strong>Spells:</strong> You learn 2 Spells, one of which must always have a damage base. You learn 1 other Spell every 3 Levels hereafter.</p><p><strong>Mana:</strong> Your Max Mana is equal to (2 × your Level), and your Cast Max for Spells is equal to (1 + half your Level, round up).</p>",
         "statBonusPoints": 0,
         "extraTraining": 0,
-        "requiredSpells": [
-          "Compendium.vagabond.spells.Item.L43XdoqLgQ8Wl6vM"
-        ],
+        "requiredSpells": [],
         "allowedPerks": [
           "Compendium.vagabond.perks.Item.YVgf2kRWwn8JRq1X"
         ],
@@ -24,8 +22,8 @@
       },
       {
         "level": 1,
-        "name": "Esoteric Eye",
-        "description": "<p>If you can see a Target, you can use your Action or skip your Move to learn if any magic is currently affecting it. You can do so once per Shift, but you can spend 1 Mana to do so again.</p>",
+        "name": "Enspell",
+        "description": "<p>You can have one Imbue Casting as continual duration on your Weapon, and can skip your Move to change the Spell.</p>",
         "statBonusPoints": 0,
         "extraTraining": 0,
         "requiredSpells": [],
@@ -36,8 +34,8 @@
       },
       {
         "level": 2,
-        "name": "Spell Parry",
-        "description": "<p>You can Block Casts that include you as a Target if it either calls for a Reflex Save or has a delivery of Touch or Remote. If you Crit to Block a Cast, you can dispel the effect.</p>",
+        "name": "Spell Parry (10+)",
+        "description": "<p>If the result of your Save against a Cast Action exceeds your Difficulty by 10, you can choose a different Target for it, ignoring Immunity. The number needed to exceed is reduced by 1 every 4 Levels hereafter.</p>",
         "statBonusPoints": 1,
         "extraTraining": 0,
         "requiredSpells": [],
@@ -49,7 +47,7 @@
       {
         "level": 3,
         "name": "Perk",
-        "description": "<p>Choose a new perk, <span class=\"fontstyle0\">you do not need to meet the Prerequisite to benefit from it.</span></p>",
+        "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
         "statBonusPoints": 0,
         "extraTraining": 0,
         "requiredSpells": [],
@@ -60,8 +58,8 @@
       },
       {
         "level": 4,
-        "name": "Arcane Recall",
-        "description": "<p>You can use your Action to open your esoteric eye of recall, allowing you to change one of your Spells Known that isn’t Ward. You can’t do so again until you Rest or take 1 Fatigue to do so.</p>",
+        "name": "Arcane Surge (1 Mana)",
+        "description": "<p>It costs 1 less Mana to Cast your Imbued Spell with other Deliveries.</p><p>Further, once per Round when you deliver a Spell with an Imbued Weapon, you can do so against one Target with a 1 Mana discount. This discount increases every 4 Levels hereafter.</p>",
         "statBonusPoints": 1,
         "extraTraining": 0,
         "requiredSpells": [],
@@ -73,7 +71,7 @@
       {
         "level": 5,
         "name": "Perk",
-        "description": "<p>Choose a new perk, <span class=\"fontstyle0\">you do not need to meet the Prerequisite to benefit from it.</span></p>",
+        "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
         "statBonusPoints": 0,
         "extraTraining": 0,
         "requiredSpells": [],
@@ -84,9 +82,21 @@
       },
       {
         "level": 6,
-        "name": "Spell Surge",
-        "description": "<p>If you pass a Check to Block a Cast by 10 or more, you can reflect the Cast back at the Caster. When you become a 10th Level Magus, it triggers if you pass by 8 or more.</p>",
+        "name": "Spell Parry (9+)",
+        "description": "<p>If the result of your Save against a Cast Action exceeds your Difficulty by 10, you can choose a different Target for it, ignoring Immunity. The number needed to exceed is reduced by 1 every 4 Levels hereafter.</p>",
         "statBonusPoints": 1,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": []
+      },
+      {
+        "level": 6,
+        "name": "Esoteric Flow",
+        "description": "<p>You can cause the damage of your attack to use the damage base of your Imbued Spell.</p><p>Further, you are permanently under the effects of the Blink Spell.</p>",
+        "statBonusPoints": 0,
         "extraTraining": 0,
         "requiredSpells": [],
         "allowedPerks": [],
@@ -97,7 +107,7 @@
       {
         "level": 7,
         "name": "Perk",
-        "description": "<p>Choose a new perk, <span class=\"fontstyle0\">you do not need to meet the Prerequisite to benefit from it.</span></p>",
+        "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
         "statBonusPoints": 0,
         "extraTraining": 0,
         "requiredSpells": [],
@@ -108,8 +118,8 @@
       },
       {
         "level": 8,
-        "name": "Aegis Obscura",
-        "description": "<p>You and the Target of your Ward Spell have Allsight and take half damage from magic-based sources.</p>",
+        "name": "Arcane Surge (2 Mana)",
+        "description": "<p>It costs 1 less Mana to Cast your Imbued Spell with other Deliveries.</p><p>Further, once per Round when you deliver a Spell with an Imbued Weapon, you can do so against one Target with a 1 Mana discount. This discount increases every 4 Levels hereafter.</p>",
         "statBonusPoints": 1,
         "extraTraining": 0,
         "requiredSpells": [],
@@ -121,7 +131,7 @@
       {
         "level": 9,
         "name": "Perk",
-        "description": "<p>Choose a new perk, <span class=\"fontstyle0\">you do not need to meet the Prerequisite to benefit from it.</span></p>",
+        "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
         "statBonusPoints": 0,
         "extraTraining": 0,
         "requiredSpells": [],
@@ -132,9 +142,21 @@
       },
       {
         "level": 10,
-        "name": "Spell Surge (8+)",
-        "description": "<p>If you pass a Check to Block a Cast by 8 or more, you can reflect the Cast back at the Caster.</p>",
+        "name": "Spell Parry (8+)",
+        "description": "<p>If the result of your Save against a Cast Action exceeds your Difficulty by 10, you can choose a different Target for it, ignoring Immunity. The number needed to exceed is reduced by 1 every 4 Levels hereafter.</p>",
         "statBonusPoints": 1,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": []
+      },
+      {
+        "level": 10,
+        "name": "Sword & Sorcery",
+        "description": "<p>Once per Round, when you take the Attack Action, you can also take the Cast Action, and vice versa.</p>",
+        "statBonusPoints": 0,
         "extraTraining": 0,
         "requiredSpells": [],
         "allowedPerks": [],
@@ -148,23 +170,10 @@
     "manaMultiplier": 2,
     "skillGrant": {
       "guaranteed": [
-        "melee",
-        "arcana"
+        "arcana",
+        "melee"
       ],
-      "choices": [
-        {
-          "count": 3,
-          "pool": [
-            "brawl",
-            "detect",
-            "finesse",
-            "influence",
-            "mysticism",
-            "sneak"
-          ],
-          "label": ""
-        }
-      ]
+      "choices": []
     },
     "levelSpells": [
       {
@@ -217,7 +226,57 @@
       "Compendium.vagabond.starting-packs.Item.hW4AUwhRz98OJoDh"
     ]
   },
-  "effects": [],
+  "effects": [
+    {
+      "name": "Arcanum",
+      "origin": "Compendium.vagabond.classes.Item.gSD4ww0S2NUBbnvo",
+      "img": "icons/svg/aura.svg",
+      "_id": "xcXaMIodOQhW8EWE",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.mana.castingMaxBonus",
+            "value": "1 - @stats.reason.total",
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent"
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.44.0",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "createdTime": 1791400000000,
+        "modifiedTime": 1791400000000,
+        "lastModifiedBy": null
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!gSD4ww0S2NUBbnvo.xcXaMIodOQhW8EWE"
+    }
+  ],
   "folder": null,
   "flags": {},
   "_stats": {

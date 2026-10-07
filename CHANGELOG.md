@@ -1,6 +1,9 @@
 # Changelog
 
 ## Unreleased
+- **Magus revised to the new book text.** Class description, the Class Features table (with Spells, Mana and Cast Max), Arcanum, Enspell, Spell Parry (10+ / 9+ / 8+), Arcane Surge, Esoteric Flow and Sword & Sorcery now read exactly as printed; Training is Arcana and Melee. Spellstriker, Esoteric Eye, Arcane Recall and Aegis Obscura are gone.
+  - **Arcanum:** grants the Gish Perk; Cast Max is 1 + half your Level (an effect cancels the casting Stat the engine adds). The rest of the class is text.
+  - Existing Magus items are converted once on load. The `classes` compendium needs `npm run pack` first.
 - **Luminary revised to the new book text.** Class description, the Class Features table (with Spells, Mana and Cast Max), Theurgy, Radiant Healer, Overheal, Ever-Cure, Revivify and Life-Giver now read exactly as printed; Training is Influence and Mysticism. Saving Grace is gone.
   - **Theurgy:** Cast Max is 2 + your Level (an effect cancels the casting Stat the engine adds); Life is the one Spell you must always know.
   - **Radiant Healer:** the healing rolls of your Spells also Explode on their highest face. New field `system.healingExplode`; the **Assured Healer** perk now has an effect that makes them Explode on a 1.
