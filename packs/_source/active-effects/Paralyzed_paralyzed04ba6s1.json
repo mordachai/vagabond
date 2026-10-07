@@ -34,6 +34,13 @@
         "priority": null
       },
       {
+        "key": "system.favorHinder",
+        "type": "override",
+        "value": "hinder",
+        "phase": "initial",
+        "priority": null
+      },
+      {
         "key": "system.vulnerable",
         "type": "override",
         "value": "true",

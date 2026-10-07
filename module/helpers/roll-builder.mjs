@@ -196,6 +196,31 @@ export class VagabondRollBuilder {
   }
 
   /**
+   * Status votes on an attack or Cast Check against a target (the book's lowercase "attack"
+   * covers Casts). The actor's own blanket Vulnerable Hinder rides `system.favorHinder`, not here.
+   * - Vulnerable target (`vulnerable`) / generic `incomingAttacksModifier`: Favor;
+   * - Invisible target (`attackersAreBlinded`): the attacker can't see it, acts as Blinded → Hinder;
+   * - Invisible attacker: the target can't see it, acts as Blinded (Vulnerable) → Favor;
+   * - Prone (`meleeReflexVulnerable`), Melee only: Prone target → Favor, Prone attacker → Hinder.
+   * @param {Actor} attacker
+   * @param {Actor|null} targetActor - first target (multi-target rolls consult only the first)
+   * @param {{melee?: boolean}} [opts] - melee: a Melee attack or a Close (Touch) Cast
+   * @returns {Array<'favor'|'hinder'|'none'>}
+   */
+  static targetingVotes(attacker, targetActor, { melee = false } = {}) {
+    const votes = [];
+    if (melee && attacker?.system?.meleeReflexVulnerable) votes.push('hinder');
+    if (!targetActor) return votes;
+    const t = targetActor.system ?? {};
+    votes.push(t.incomingAttacksModifier || 'none');
+    if (t.vulnerable) votes.push('favor');
+    if (t.defenderStatusModifiers?.attackersAreBlinded) votes.push('hinder');
+    if (attacker?.system?.defenderStatusModifiers?.attackersAreBlinded) votes.push('favor');
+    if (melee && t.meleeReflexVulnerable) votes.push('favor');
+    return votes;
+  }
+
+  /**
    * One attacker-side Favor vote from `CONFIG.VAGABOND.attackFavorRules`.
    * 'favor' when the actor carries at least one rule key in `system.attackFavorVs`
    * (granted by an Active Effect) whose test passes for the given targets; else 'none'.

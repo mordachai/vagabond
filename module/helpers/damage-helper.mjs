@@ -922,8 +922,6 @@ export class VagabondDamageHelper {
    * @param {Item|null} attackingWeapon - For material weakness + berserk die count
    * @param {object} [opts]
    * @param {Actor|null} [opts.attackerActor=null] - The attacker (Beast Mode: ignore non-Relic Immune)
-   * @param {number|null} [opts.actionIdx=null] - NPC action index (attack vs Cast for Flanked)
-   * @param {boolean} [opts.isAttack] - Override the attack-vs-Cast check (`_isAttackSource`)
    * @param {number|null} [opts.rolledDiceCount=null] - Actual dice count of the damage
    *   roll (explosions included) for the berserk reduction; falls back to counting the
    *   weapon's authored damageAmount formula when absent
@@ -939,11 +937,10 @@ export class VagabondDamageHelper {
 
   static _computeFinalDamage(actor, damage, damageType, attackingWeapon = null, opts = {}) {
     // Flanked: flat damage bonus applied before Armor/Immune/Weak math (RAW: "takes
-    // an extra 2 damage from attacks" — never from a Cast). Single choke point — every
+    // an extra 2 damage from attacks" — Casts included). Single choke point — every
     // damage-application path (save, Apply Direct, NPC damage, Shield reduction) routes here.
-    const isAttack = opts.isAttack ?? this._isAttackSource(opts.attackerActor ?? null, attackingWeapon, opts.actionIdx ?? null);
     let flankedBonus = 0;
-    if (damage > 0 && isAttack && actor.statuses?.has('flanked')) {
+    if (damage > 0 && actor.statuses?.has('flanked')) {
       flankedBonus = CONFIG.VAGABOND?.homebrew?.derivations?.flankedDamageBonus ?? 2;
       damage += flankedBonus;
     }
@@ -1429,15 +1426,12 @@ ${npcOnly ? '' : `
    * @returns {Promise<{saveRoll: Roll, difficulty: number, isSuccess: boolean, isCritical: boolean, isHindered: boolean}>}
    */
   static async _computeSaveOutcome(targetActor, saveType, attackType, sourceActor, sourceCtx = {}, event = null) {
-    // Is this a Save against an attack, or against a Cast? (Vulnerable & co. only touch attacks)
-    const isAttack = this._isAttackSource(sourceActor, sourceCtx.sourceItem, sourceCtx.actionIdx);
-
-    // Defender-side rules (CONFIG.VAGABOND.defenseRules: Vulnerable, Prone, Invisible, ...)
-    const defenseVote = this._evaluateDefenseRules(saveType, attackType, targetActor, { isAttack, sourceActor });
+    // Defender-side rules (CONFIG.VAGABOND.defenseRules: Prone, Invisible, ...)
+    const defenseVote = this._evaluateDefenseRules(saveType, attackType, targetActor, { sourceActor });
     const isHindered = defenseVote === 'hinder';
 
     // Attacker-side vote (Confused, Vulnerable, Prone, Invisible attacker)
-    const attackerModifier = await this._attackerSaveVote(sourceActor, attackType, isAttack);
+    const attackerModifier = await this._attackerSaveVote(sourceActor, attackType);
 
     // Status resistance grants an independent Favor vote — checked BEFORE the dice roll
     const resistanceFavor = await this._hasStatusResistanceForSave(targetActor, saveType, {
@@ -1527,7 +1521,7 @@ ${npcOnly ? '' : `
       const rolledDiceCount = rollTermsData.terms.reduce((n, t) =>
         n + (t.type === 'Die' ? (t.results ?? []).filter(r => r.active !== false).length : 0), 0);
       const damageBreakdown = this.calculateFinalDamageDetailed(
-        targetActor, damageAfterSave, damageType, sourceItem, { rolledDiceCount, attackerActor: sourceActor, actionIdx }
+        targetActor, damageAfterSave, damageType, sourceItem, { rolledDiceCount, attackerActor: sourceActor }
       );
       const baseAfterFinal = damageBreakdown.final;
       const armorReduction = damageBreakdown.armorReduction;
@@ -1763,11 +1757,10 @@ ${npcOnly ? '' : `
         sourceActor, sourceItem, actionIdx, attackWasCrit,
       });
       const attackType = button.dataset.attackType || 'melee';
-      const isAttack = this._isAttackSource(sourceActor, sourceItem, actionIdx);
       const check = await DefenseHelper.rollCheck(targetActor, weapon, {
-        attackerModifier: await this._attackerSaveVote(sourceActor, attackType, isAttack), resistanceFavor, event,
+        attackerModifier: await this._attackerSaveVote(sourceActor, attackType), resistanceFavor, event,
         // The defender's Reflex-Save rules (CONFIG.VAGABOND.defenseRules, e.g. Prone) apply to the Check
-        defenseVote: this._evaluateDefenseRules('reflex', attackType, targetActor, { isAttack, sourceActor }),
+        defenseVote: this._evaluateDefenseRules('reflex', attackType, targetActor, { sourceActor }),
       });
       // The Check stands in for the Reflex Save: a status that fails Reflex (Incapacitated) fails it
       const { VagabondRollBuilder } = await import('./roll-builder.mjs');
@@ -1788,7 +1781,7 @@ ${npcOnly ? '' : `
       const shieldReduction = shieldRoll?.total ?? 0;
 
       const breakdown = this.calculateFinalDamageDetailed(
-        targetActor, Math.max(0, damageAmount - shieldReduction), damageType, sourceItem, { attackerActor: sourceActor, actionIdx }
+        targetActor, Math.max(0, damageAmount - shieldReduction), damageType, sourceItem, { attackerActor: sourceActor }
       );
       let finalDamage = breakdown.final;
       if (!weaknessPreRolled && this._isWeakTo(targetActor, damageType, sourceItem, sourceActor)) {
@@ -2007,8 +2000,7 @@ ${npcOnly ? '' : `
    * @param {string} saveType
    * @param {string} attackType
    * @param {Actor} actor - The defender
-   * @param {{isAttack?: boolean, sourceActor?: Actor|null}} [ctx] - isAttack: the Save is against an
-   *   attack (not a Cast) — `attacksOnly` rules skip otherwise; sourceActor: the attacker
+   * @param {{sourceActor?: Actor|null}} [ctx] - sourceActor: the attacker / caster
    * @returns {'favor'|'hinder'|'none'}
    */
   static _evaluateDefenseRules(saveType, attackType, actor, ctx = {}) {
@@ -2017,7 +2009,6 @@ ${npcOnly ? '' : `
     for (const rule of rules) {
       if (rule.save !== '*' && rule.save !== saveType) continue;
       if (rule.vsAttackTypes !== '*' && !rule.vsAttackTypes.includes(attackType)) continue;
-      if (rule.attacksOnly && !ctx.isAttack) continue;
       if (rule.condition && !rule.condition(actor, attackType, ctx)) continue;
       if (rule.negatedBy && rule.negatedBy(actor, attackType, ctx)) continue;
       votes.push(rule.effect);
@@ -2031,42 +2022,25 @@ ${npcOnly ? '' : `
   }
 
   /**
-   * Whether a damage card's source is an attack. The book keeps "Attack or Cast" distinct: a
-   * Spell or an NPC Cast action is not an attack. Imbue rides a Weapon attack card, so it counts.
-   * @param {Actor|null} sourceActor
-   * @param {Item|null} sourceItem
-   * @param {number|null} actionIdx - NPC action index (no item)
-   * @returns {boolean}
-   */
-  static _isAttackSource(sourceActor, sourceItem, actionIdx) {
-    if (sourceItem) return sourceItem.type !== 'spell';
-    if (actionIdx !== null && actionIdx !== undefined) {
-      const action = sourceActor?.system?.actions?.[actionIdx];
-      return !String(action?.attackType ?? '').startsWith('cast');
-    }
-    return true;
-  }
-
-  /**
-   * The attacker-side vote on a Save against its attack or Cast, merged net-count:
-   * - `outgoingSavesModifier` (Confused: Saves against its Actions have Favor, Casts too);
+   * The attacker-side vote on a Save against its attack or Cast (the book's lowercase "attack"
+   * covers Casts), merged net-count:
+   * - `outgoingSavesModifier` (Confused: Saves against its Actions have Favor);
    * - Vulnerable: Saves against its attacks have Favor;
-   * - Prone (`meleeReflexVulnerable`): Saves against its Melee attacks have Favor;
+   * - Prone (`meleeReflexVulnerable`): Saves against its Melee attacks (Touch Casts too) have Favor;
    * - Invisible attacker (`attackersAreBlinded`): the defender can't see it and acts as Blinded
    *   (Vulnerable), so its Saves against the attack have Hinder.
    * @param {Actor|null} sourceActor
    * @param {string} attackType
-   * @param {boolean} [isAttack=true]
    * @returns {Promise<'favor'|'hinder'|'none'>}
    */
-  static async _attackerSaveVote(sourceActor, attackType, isAttack = true) {
+  static async _attackerSaveVote(sourceActor, attackType) {
     const { VagabondRollBuilder } = await import('./roll-builder.mjs');
     const sys = sourceActor?.system;
     return VagabondRollBuilder.mergeFavorHinder(
       sys?.outgoingSavesModifier || 'none',
-      (isAttack && sys?.vulnerable) ? 'favor' : 'none',
-      (isAttack && sys?.meleeReflexVulnerable && attackType === 'melee') ? 'favor' : 'none',
-      (isAttack && sys?.defenderStatusModifiers?.attackersAreBlinded) ? 'hinder' : 'none'
+      sys?.vulnerable ? 'favor' : 'none',
+      (sys?.meleeReflexVulnerable && attackType === 'melee') ? 'favor' : 'none',
+      sys?.defenderStatusModifiers?.attackersAreBlinded ? 'hinder' : 'none'
     );
   }
 
@@ -2607,7 +2581,7 @@ ${npcOnly ? '' : `
       const effectiveDamage = damageAmount;
 
       // Calculate final damage (armor/immune/weak)
-      const directBreakdown = this.calculateFinalDamageDetailed(targetActor, effectiveDamage, damageType, sourceItem, { attackerActor: sourceActor, actionIdx: directActionIdx });
+      const directBreakdown = this.calculateFinalDamageDetailed(targetActor, effectiveDamage, damageType, sourceItem, { attackerActor: sourceActor });
       const baseAfterFinalDirect = directBreakdown.final;
       // RAW: Weak — bypass Armor/Immune + deal an extra damage die
       let finalDamage = baseAfterFinalDirect;

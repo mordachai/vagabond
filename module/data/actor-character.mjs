@@ -793,12 +793,12 @@ export default class VagabondCharacter extends VagabondActorBase {
       label: "Auto-Fail All Rolls"
     });
 
-    // Vulnerable (book p. 11): its attacks and its Saves against attacks have Hinder; attacks
-    // targeting it and Saves against its attacks have Favor. Attacks only — a Cast is not an
-    // attack (the book always says "Attack or Cast"), and other Checks / Saves are unaffected.
+    // Vulnerable (book p. 11, ruling: "attack" covers Casts, and it is in a bad spot overall):
+    // its own Checks and Saves have Hinder through `favorHinder` (same status effect); this flag
+    // gives attacks / Casts targeting it and Saves against its attacks / Casts Favor.
     schema.vulnerable = new fields.BooleanField({
       initial: false,
-      label: "Vulnerable (attacks and Saves against attacks)"
+      label: "Vulnerable (attacks / Casts at it and Saves vs its attacks / Casts Favored)"
     });
 
     // Prone (Alpha 3 p. 11): Vulnerable only for Melee attacks and Reflex Saves — its Melee

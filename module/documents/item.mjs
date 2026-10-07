@@ -715,37 +715,22 @@ export class VagabondItem extends Item {
                       rollData.saves?.[weaponSkillKey];
     const difficulty = difficultyOverride ?? (weaponSkill?.difficulty || 10);
 
-    // Check target's incomingAttacksModifier (e.g., Vulnerable: incoming attacks Favored)
-    // and Invisible (attackersAreBlinded → Hinder vote); merged net-count BEFORE rolling.
+    // Status votes vs the target (Vulnerable, Invisible, Prone) are merged net-count BEFORE rolling.
     // Only the first target is consulted (multi-target attacks ignore targets 2..n).
     const { VagabondRollBuilder } = await import('../helpers/roll-builder.mjs');
     // Every Favor / Hinder vote is collected first and merged ONCE (net count). Merging a partial
     // result again would collapse e.g. two Favors into one and drop votes added earlier.
     // Unconditional Favor on Attacks (system.favorChecks, e.g. Virtuoso: Valor, Fighter: Momentum)
     const votes = [favorHinder, VagabondRollBuilder.checkFavorVote(actor, 'attack')];
-    // Prone (meleeReflexVulnerable): Vulnerable for Melee attacks only — its own Melee attacks
-    // have Hinder, Melee attacks targeting it have Favor. A throw is never Melee.
+    // Status votes vs the first target (Vulnerable, Invisible, Prone — VagabondRollBuilder.targetingVotes).
+    // A throw is never Melee.
     const { VagabondChatCard } = await import('../helpers/chat-card.mjs');
     const isMeleeAttack = !thrown && VagabondChatCard.attackTypeForWeaponSkill(weaponSkillKey) === 'melee';
-    if (isMeleeAttack && actor.system.meleeReflexVulnerable) votes.push('hinder');
-    // Vulnerable (book p. 11): its attacks have Hinder
-    if (actor.system.vulnerable) votes.push('hinder');
     if (targets.length > 0) {
       // Attacker-side situational Favor (CONFIG.VAGABOND.attackFavorRules, e.g. Bloodthirsty)
       votes.push(VagabondRollBuilder.attackFavorVote(actor, targets.map(t => t.actor).filter(Boolean)));
-      const targetActor = targets[0].actor;
-      if (targetActor) {
-        const targetModifier = targetActor.system.incomingAttacksModifier || 'none';
-        // Invisible target: the attacker can't see it and acts as Blinded (Vulnerable) → Hinder
-        const attackersAreBlinded = targetActor.system.defenderStatusModifiers?.attackersAreBlinded || false;
-        votes.push(targetModifier, attackersAreBlinded ? 'hinder' : 'none');
-        // Vulnerable target: attacks targeting it have Favor
-        if (targetActor.system.vulnerable) votes.push('favor');
-        if (isMeleeAttack && targetActor.system.meleeReflexVulnerable) votes.push('favor');
-        // Invisible attacker: the target can't see it and acts as Blinded (Vulnerable) → Favor
-        if (actor.system.defenderStatusModifiers?.attackersAreBlinded) votes.push('favor');
-      }
     }
+    votes.push(...VagabondRollBuilder.targetingVotes(actor, targets[0]?.actor ?? null, { melee: isMeleeAttack }));
     const effectiveFavorHinder = VagabondRollBuilder.mergeFavorHinder(...votes);
 
     // Use centralized roll builder with modified roll data and effective favor/hinder

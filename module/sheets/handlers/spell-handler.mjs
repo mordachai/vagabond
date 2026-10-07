@@ -640,7 +640,11 @@ export class SpellHandler {
           event.ctrlKey
         ),
         // Unconditional Favor on Casts (system.favorChecks, e.g. Virtuoso: Valor)
-        VagabondRollBuilder.checkFavorVote(this.actor, 'cast')
+        VagabondRollBuilder.checkFavorVote(this.actor, 'cast'),
+        // Status votes vs the first target (Vulnerable, Invisible; Prone for a Touch Cast)
+        ...VagabondRollBuilder.targetingVotes(this.actor, Array.from(game.user.targets)[0]?.actor ?? null, {
+          melee: (await import('../../helpers/chat-card.mjs')).VagabondChatCard.attackTypeForSpellDelivery(state.deliveryType) === 'melee',
+        })
       );
 
       // Pre-roll hook for spell cast — cancellable; modules may mutate ctx.difficulty / ctx.favorHinder
