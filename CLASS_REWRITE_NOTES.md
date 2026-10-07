@@ -71,3 +71,27 @@ Book p. 49. Gold Sink, Deep Pockets (Deft Hands perk grant + 2 Item Slots now an
 - [ ] Inventory: +2 Item Slots at Level 1 (on top of the Deft Hands perk), 4 at Level 4, 6 at Level 7, 8 at Level 10.
 - [ ] Existing Merchant (old Bang for Your Buck class) migrates; Finesse is marked trained; the old "Deep Pockets (Feature)" effect is replaced by "Deep Pockets".
 
+## Pugilist
+
+Book p. 51. Fisticuffs (Dusted Knuckle perk grant + Vicious on Brawl crits), Rope-a-Dope, Haymaker (10+ / 9+), Moxie (Cd4 / Cd6), Title Holder (d6 / d8). Training Brawl + Influence (no choices). Check Hook is no longer granted; Beat Rush, Prowess and Impact are gone.
+
+**Doubts / course taken**
+- "damace" (sic) in Fisticuffs is written "damage".
+- Fisticuffs gives Equipped Brawl Weapons the Defense and Vicious properties. Vicious is an effect on the character (`critExtraDiceBySkill` brawl: 1 = one extra die matching the weapon on a Brawl Crit); a Brawl weapon that already carries Vicious would add a second die (none of the pack Brawl weapons — Caestus, Katar, Unarmed — has it). Defense has no mechanic in the system, so it stays text.
+- Haymaker: the Dazed is applied with no Save and is lifted when the Pugilist’s next Turn starts **in a Combat** (the Pugilist actor remembers its Targets in `flags.vagabond.haymakerTargets`; the active GM lifts them). With no Combat nothing counts Turns, so it is removed by hand. The automatic part is the switchable effect "Haymaker: Auto" and obeys the world Class Automation setting; the formula is `10 - floor((@lvl - 2) / 6)` (9+ at Level 8, 8+ at Level 14).
+- Only the first Target of an attack can be Dazed (a Brawl attack has one Target).
+- Moxie Favor: the book lists Grappled and Restrained; Grappled applies Restrained here, so the effect resists Dazed, Frightened and Restrained. The Cd4 / Cd6 "0 HP doesn’t kill you" countdown is text.
+- Title Holder "You use a d6 for the damage dice": implemented as "at least a d6" (a weapon with a bigger die keeps it; never lowers). New fields `weaponDieBySkill` / `weaponLowExplodeBySkill` (typed "skill: value" like `critExtraDiceBySkill`). The d6 applies to the **damage roll** only: the number printed on the weapon / HUD still shows the weapon’s own die.
+
+**Text-only / deferred**
+- Fisticuffs second paragraph (after rolling Brawl damage dice: raise later Brawl dice one size, or Grapple / Shove) and Rope-a-Dope (free attack / 5’ Move after Defense reduces damage to 0) — text only.
+- Moxie’s 0-HP countdown — text only (a countdown die can be created by hand).
+
+**Tests to run in-world** (after `npm run pack`)
+- [ ] Builder: Pugilist Trained in Brawl and Influence without skill choices; Dusted Knuckle granted automatically.
+- [ ] Brawl attack Crit: one extra weapon die appears (Fisticuffs) even if the Luck benefit toggle is claimed.
+- [ ] Level 2+: a Brawl hit that beats Difficulty by 10 (9 at Level 8) Dazes the Target and posts a "Haymaker" card; Target already Dazed / immune → card says so; the Dazed is lifted when the Pugilist’s Turn starts in a Combat; switching "Haymaker: Auto" off, or the world Class Automation = Manual, stops it.
+- [ ] Level 4+: Favor on Saves against Dazed, Frightened and Restrained (status resistance shows in the effect).
+- [ ] Level 6: Brawl damage roll uses d6 (d8 at Level 10), a d4 Unarmed rolls d6, and the dice Explode on 1 or 2; the roll card shows the explosion.
+- [ ] Existing Pugilist (old Impact class) migrates: Influence trained, Dusted Knuckle added, Haymaker / Moxie / Title Holder effects present.
+

@@ -105,6 +105,9 @@ export class VagabondDamagePipeline {
     // 2. Die-size bump (first NdX term only)
     formula = this._applyDieSizeBump(formula, dieSizeBonus);
 
+    // 2b. Skill-scoped die size (Pugilist Title Holder): that skill's weapon dice are at least this size
+    if (sourceType === 'weapon' && d.skillKey) formula = this._raiseDiceTo(formula, actor.system?.weaponDieBySkill?.[d.skillKey]);
+
     // 3. Crit stat bonus (negatives included; 0 contributes nothing)
     if (isCritical && statKey) {
       const statValue = rollData.stats?.[statKey]?.value || 0;
@@ -172,6 +175,9 @@ export class VagabondDamagePipeline {
       if (isCritical && d.skillKey && actor.system?.critExplodeSkills?.includes?.(d.skillKey)) {
         explodeValues = [...new Set([...(explodeValues ?? []), 'max'])];
       }
+      // Skill-scoped low-face Explode (Pugilist Title Holder: 1 or 2)
+      const lowFaces = sourceType === 'weapon' && d.skillKey ? Math.trunc(Number(actor.system?.weaponLowExplodeBySkill?.[d.skillKey])) || 0 : 0;
+      if (lowFaces > 0) explodeValues = [...new Set([...(explodeValues ?? []), ...Array.from({ length: lowFaces }, (_, i) => i + 1)])];
       // Healing Spells explode on the extra faces from Assured Healer / Radiant Healer
       if (sourceType === 'spell' && this._restoresHp(damageType)) {
         const healingFaces = this.healingExplodeValues(actor);
@@ -418,6 +424,18 @@ export class VagabondDamagePipeline {
   }
 
   /**
+   * Raise every NdX term of a formula to at least dY (never lowers a die). No-op for a missing / invalid size.
+   * @param {string} formula
+   * @param {number|undefined} size
+   * @returns {string}
+   */
+  static _raiseDiceTo(formula, size) {
+    const target = Math.trunc(Number(size));
+    if (!target || target < 2) return formula;
+    return formula.replace(/(\d*)d(\d+)/g, (match, count, faces) => (Number(faces) < target ? `${count}d${target}` : match));
+  }
+
+  /**
    * Faces the actor's HP-restoring Spell rolls also explode on (`system.healingExplode`):
    * numbers or 'max' / 'max-N', same vocabulary as an item's explodeValues.
    * @param {Actor|null} actor
@@ -446,6 +464,7 @@ export class VagabondDamagePipeline {
     const sourceType = item.type === 'spell' ? 'spell'
       : item.system?.equipmentType === 'alchemical' ? 'alchemical' : 'weapon';
     if (this.getExplodeValues(item, actor, sourceType)) return true;
+    if (sourceType === 'weapon' && Number(actor?.system?.weaponLowExplodeBySkill?.[item.system?.weaponSkill]) > 0) return true;
     return item.type === 'spell' && this._restoresHp(item.system?.damageType) && this.healingExplodeValues(actor).length > 0;
   }
 

@@ -3,120 +3,154 @@
   "type": "class",
   "img": "icons/equipment/hand/gauntlet-simple-leather-brown-gold.webp",
   "system": {
-    "description": "<p><strong>I didn't hear no bell.</strong></p>\n<p><em>– Rocky Balboa, Rocky V</em></p>\n<p>Brawlers of determination and swagger. An ascetic may dedicate themselves to a single-focused blow, but a pugilist will break their fingers and keep punching with the bloody stump.</p>\n\n<h3>Iconic Pugilists</h3>\n<ul>\n<li><strong>Carl</strong>, <em>Dungeon Crawler Carl series</em></li>\n<li><strong>Rocky Balboa</strong>, <em>Rocky series</em></li>\n<li><strong>Hellboy</strong>, <em>Hellboy</em></li>\n<li><strong>Stiffener Medick</strong>, <em>Redwall</em></li>\n<li><strong>Tifa Lockhart</strong>, <em>Final Fantasy VII</em></li>\n</ul>\n\n<h3>Playing Pugilist</h3>\n<p>Pugilists are frontline bruisers. Stay in the frontline, even while at low HP.</p>\n<p><strong>Action:</strong> Attack (Brawl)<br />\n<strong>Move:</strong> Frontline<br />\n<strong>Starting Pack:</strong> Brawler or Monk<br />\n<strong>Key Stat:</strong> Might<br />\n<strong>Complexity:</strong> ★★★☆☆</p>\n\n<h3>Training</h3>\n<p><strong>Weapons:</strong> –<br />\n<strong>Skills:</strong> Brawl, and 3 from either Detect, Finesse, Influence, Medicine, or Sneak</p>\n\n<p></p>\n\n<h3><span class=\"fontstyle0\">Class Features</span></h3>\n<table class=\"NormalTable\"><tbody>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle0\" style=\"color:rgb(255,255,255);font-size:9pt\">Level</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle0\" style=\"color:rgb(255,255,255);font-size:9pt\">Features</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">1st</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Fisticuffs, Rope-a-Dope</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">2nd</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Beat Rush</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">3rd</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">4th</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Prowess</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">5th</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">6th</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Haymaker</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">7th</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">8th</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Impact</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">9th</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Perk</span></p></td>\n</tr>\n<tr>\n  <td data-colwidth=\"67\"><p><span class=\"fontstyle2\">10th</span></p></td>\n  <td data-colwidth=\"115\"><p><span class=\"fontstyle2\">Hard Knocks</span></p></td>\n</tr>\n</tbody></table>\n<p><br style=\"font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:normal;orphans:2;text-align:-webkit-auto;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;-webkit-text-size-adjust:auto;-webkit-text-stroke-width:0px\" /></p>",
+    "description": "<p><strong>I didn’t hear no bell.</strong></p><p><em>—Rocky Balboa, Rocky V</em></p><p>Pugilists are brawlers of swagger. While a monk may dedicate themself to a single focused blow, a pugilist will break their fingers and keep punching with the bloody stump.</p><h3>Iconic Pugilists</h3><ul><li><strong>Carl</strong>, <em>Dungeon Crawler Carl</em></li><li><strong>Rocky Balboa</strong>, <em>Rocky</em></li><li><strong>Hellboy</strong>, <em>Hellboy</em></li><li><strong>Stiffener Medick</strong>, <em>Redwall</em></li></ul><h3>Playing Pugilist</h3><p>Pugilists are frontline bruisers. Stay in the frontline, even while at low HP.</p><p><strong>Action:</strong> Attack (Brawl)<br /><strong>Move:</strong> Frontline<br /><strong>Starting Pack:</strong> Brawler or Monk<br /><strong>Key Stat:</strong> Might<br /><strong>Complexity:</strong> ★★☆☆☆<br /><strong>Training:</strong> Brawl, Influence</p><h3>Class Features</h3><table class=\"NormalTable\"><tbody><tr><td><p><strong>Level</strong></p></td><td><p><strong>Features</strong></p></td></tr><tr><td><p>1st</p></td><td><p>Fisticuffs, Rope-a-Dope</p></td></tr><tr><td><p>2nd</p></td><td><p>Haymaker (10+)</p></td></tr><tr><td><p>3rd</p></td><td><p>Perk</p></td></tr><tr><td><p>4th</p></td><td><p>Moxie (Cd4)</p></td></tr><tr><td><p>5th</p></td><td><p>Perk</p></td></tr><tr><td><p>6th</p></td><td><p>Title Holder (d6)</p></td></tr><tr><td><p>7th</p></td><td><p>Perk</p></td></tr><tr><td><p>8th</p></td><td><p>Haymaker (9+)</p></td></tr><tr><td><p>9th</p></td><td><p>Perk</p></td></tr><tr><td><p>10th</p></td><td><p>Moxie (Cd6), Title Holder (d8)</p></td></tr></tbody></table>",
     "isSpellcaster": false,
     "levelFeatures": [
       {
+        "level": 1,
         "name": "Fisticuffs",
-        "description": "<p><span class=\"fontstyle0\">While only using Brawl Weapons, you can use a d4 if the damage was previously lower and, once per Round, you can spend half your Speed to make a second attack rather than skip your Move.</span></p>\n<p><span class=\"fontstyle0\">Additionally, if you have Favor on a Brawl Attack Check and hit a Target you could viably Grapple or Shove, you can choose to Grapple or Shove them.</span></p>",
-        "level": 1,
+        "description": "<p>You have the Dusted Knuckle Perk (p. 68), and your Equipped Brawl Weapons have the Defense and Vicious properties.</p><p>Further, when you roll any damage dice for a Brawl Weapon, you can either:</p><ul><li><p>Increase your subsequent Brawl damage dice one size until the start of your Turn.</p></li><li><p>Grapple or Shove them if you viably could.</p></li></ul>",
         "statBonusPoints": 0,
         "extraTraining": 0,
-        "perkAmount": 0,
         "requiredSpells": [],
-        "allowedPerks": []
-      },
-      {
-        "name": "Rope-a-Dope",
-        "description": "<p><span class=\"fontstyle0\">You gain the Check Hook Perk (p. 67) and can make two attacks with it, rather than one.</span></p><p></p>",
-        "level": 1,
-        "statBonusPoints": 0,
-        "extraTraining": 0,
-        "perkAmount": 1,
         "allowedPerks": [
-          "Compendium.vagabond.perks.Item.SoMDviAp6pOFjJMk"
+          "Compendium.vagabond.perks.Item.Lb1ncXSPRRd1wq84"
         ],
-        "requiredSpells": []
+        "perkAmount": 1,
+        "spellAmount": 0,
+        "skillChoices": []
       },
       {
-        "name": "Beat Rush",
-        "description": "<p><span class=\"fontstyle0\">If you take the Rush Action, you can also make one attack with a Brawl Weapon that Action.</span></p>",
+        "level": 1,
+        "name": "Rope-a-Dope",
+        "description": "<p>If you reduce damage from a Close Enemy’s attack to 0 with the Defense property of a Brawl Weapon, you can immediately make one attack or Move 5’ without using Speed.</p>",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": []
+      },
+      {
         "level": 2,
+        "name": "Haymaker (10+)",
+        "description": "<p>If the result of your Brawl Check for an attack exceeds your Difficulty by 10, the Target is Dazed until the start of your Turn. The number needed to exceed is reduced by 1 every 6 Levels hereafter.</p>",
         "statBonusPoints": 1,
         "extraTraining": 0,
-        "perkAmount": 0,
         "requiredSpells": [],
-        "allowedPerks": []
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": []
       },
       {
-        "name": "Perk",
-        "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
         "level": 3,
+        "name": "Perk",
+        "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
         "statBonusPoints": 0,
         "extraTraining": 0,
-        "perkAmount": 1,
         "requiredSpells": [],
-        "allowedPerks": []
+        "allowedPerks": [],
+        "perkAmount": 1,
+        "spellAmount": 0,
+        "skillChoices": []
       },
       {
-        "name": "Prowess",
-        "description": "<p><span class=\"fontstyle0\">If you pass a Save to Block, you ignore two of the highest rolled damage dice, rather than one.</span></p>",
         "level": 4,
+        "name": "Moxie (Cd4)",
+        "description": "<p>You have Favor on Saves against being Dazed, Frightened, Grappled, or Restrained.</p><p>Further, being at 0 HP doesn’t kill you for Cd4 Rounds. Each time you take damage during this time, also roll this countdown die. At 10th Level, this starts at Cd6.</p>",
         "statBonusPoints": 1,
         "extraTraining": 0,
-        "perkAmount": 0,
         "requiredSpells": [],
-        "allowedPerks": []
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": []
       },
       {
-        "name": "Perk",
-        "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
         "level": 5,
+        "name": "Perk",
+        "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
         "statBonusPoints": 0,
         "extraTraining": 0,
-        "perkAmount": 1,
         "requiredSpells": [],
-        "allowedPerks": []
+        "allowedPerks": [],
+        "perkAmount": 1,
+        "spellAmount": 0,
+        "skillChoices": []
       },
       {
-        "name": "Haymaker",
-        "description": "<p>If you pass a Brawl Attack Check by 10 or more, the Target is Dazed until your next Turn. When you become a 10th Level Pugilist, it triggers if you roll 8 or more.</p>",
         "level": 6,
+        "name": "Title Holder (d6)",
+        "description": "<p>You use a d6 for the damage dice of your Brawl Weapons, and they Explode on a roll of 1 or 2. At 10th Level, this increases to a d8.</p>",
         "statBonusPoints": 1,
         "extraTraining": 0,
-        "perkAmount": 0,
         "requiredSpells": [],
-        "allowedPerks": []
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": []
       },
       {
-        "name": "Perk",
-        "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
         "level": 7,
-        "statBonusPoints": 0,
-        "extraTraining": 0,
-        "perkAmount": 1,
-        "requiredSpells": [],
-        "allowedPerks": []
-      },
-      {
-        "name": "Impact",
-        "description": "<p><span class=\"fontstyle0\">You use a d6 for the damage die of your Brawl weapons.</span></p>",
-        "level": 8,
-        "statBonusPoints": 1,
-        "extraTraining": 0,
-        "perkAmount": 0,
-        "requiredSpells": [],
-        "allowedPerks": []
-      },
-      {
         "name": "Perk",
         "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
-        "level": 9,
         "statBonusPoints": 0,
         "extraTraining": 0,
-        "perkAmount": 1,
         "requiredSpells": [],
-        "allowedPerks": []
+        "allowedPerks": [],
+        "perkAmount": 1,
+        "spellAmount": 0,
+        "skillChoices": []
       },
       {
-        "name": "Haymaker (8+)",
-        "description": "<p><span class=\"fontstyle0\">Your Haymaker Feature now triggers if you roll 8 or more, rather than 10 or more.</span></p>",
-        "level": 10,
+        "level": 8,
+        "name": "Haymaker (9+)",
+        "description": "<p>If the result of your Brawl Check for an attack exceeds your Difficulty by 10, the Target is Dazed until the start of your Turn. The number needed to exceed is reduced by 1 every 6 Levels hereafter.</p>",
         "statBonusPoints": 1,
         "extraTraining": 0,
-        "perkAmount": 0,
         "requiredSpells": [],
-        "allowedPerks": []
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": []
+      },
+      {
+        "level": 9,
+        "name": "Perk",
+        "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 1,
+        "spellAmount": 0,
+        "skillChoices": []
+      },
+      {
+        "level": 10,
+        "name": "Moxie (Cd6)",
+        "description": "<p>You have Favor on Saves against being Dazed, Frightened, Grappled, or Restrained.</p><p>Further, being at 0 HP doesn’t kill you for Cd4 Rounds. Each time you take damage during this time, also roll this countdown die. At 10th Level, this starts at Cd6.</p>",
+        "statBonusPoints": 1,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": []
+      },
+      {
+        "level": 10,
+        "name": "Title Holder (d8)",
+        "description": "<p>You use a d6 for the damage dice of your Brawl Weapons, and they Explode on a roll of 1 or 2. At 10th Level, this increases to a d8.</p>",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": []
       }
     ],
     "manaSkill": null,
@@ -124,21 +158,10 @@
     "manaMultiplier": 0,
     "skillGrant": {
       "guaranteed": [
-        "brawl"
+        "brawl",
+        "influence"
       ],
-      "choices": [
-        {
-          "count": 3,
-          "pool": [
-            "detect",
-            "finesse",
-            "influence",
-            "medicine",
-            "sneak"
-          ],
-          "label": ""
-        }
-      ]
+      "choices": []
     },
     "levelSpells": [],
     "keyStats": [
@@ -149,7 +172,270 @@
       "Compendium.vagabond.starting-packs.Item.jYBKVaOdxIVd8QuY"
     ]
   },
-  "effects": [],
+  "effects": [
+    {
+      "name": "Fisticuffs",
+      "origin": "Compendium.vagabond.classes.Item.znHJW6Ern6f463p2",
+      "img": "icons/svg/aura.svg",
+      "_id": "xLqTfVkWTqzT2P6Q",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.critExtraDiceBySkill",
+            "value": "brawl: 1",
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent"
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.44.0",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "createdTime": 1791400000000,
+        "modifiedTime": 1791400000000,
+        "lastModifiedBy": null
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!znHJW6Ern6f463p2.xLqTfVkWTqzT2P6Q"
+    },
+    {
+      "name": "Haymaker: Auto",
+      "origin": "Compendium.vagabond.classes.Item.znHJW6Ern6f463p2",
+      "img": "icons/svg/aura.svg",
+      "_id": "mq340eZdwQfrzEpl",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.haymakerMargin",
+            "value": "10 - floor((@lvl - 2) / 6)",
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "A Brawl attack that beats the Difficulty by enough Dazes its Target until the start of your Turn.",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent",
+          "minLevel": 2,
+          "switchable": true
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.44.0",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "createdTime": 1791400000000,
+        "modifiedTime": 1791400000000,
+        "lastModifiedBy": null
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!znHJW6Ern6f463p2.mq340eZdwQfrzEpl"
+    },
+    {
+      "name": "Moxie",
+      "origin": "Compendium.vagabond.classes.Item.znHJW6Ern6f463p2",
+      "img": "icons/svg/aura.svg",
+      "_id": "xPQ7beDQOIWcJD8e",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.statusResistances",
+            "value": "dazed",
+            "priority": null,
+            "type": "add"
+          },
+          {
+            "key": "system.statusResistances",
+            "value": "frightened",
+            "priority": null,
+            "type": "add"
+          },
+          {
+            "key": "system.statusResistances",
+            "value": "restrained",
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent",
+          "minLevel": 4
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.44.0",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "createdTime": 1791400000000,
+        "modifiedTime": 1791400000000,
+        "lastModifiedBy": null
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!znHJW6Ern6f463p2.xPQ7beDQOIWcJD8e"
+    },
+    {
+      "name": "Title Holder: Die",
+      "origin": "Compendium.vagabond.classes.Item.znHJW6Ern6f463p2",
+      "img": "icons/svg/aura.svg",
+      "_id": "aHgNziL6wsbJBvgl",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.weaponDieBySkill",
+            "value": "brawl: 6 + 2 * floor(@lvl / 10)",
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent",
+          "minLevel": 6
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.44.0",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "createdTime": 1791400000000,
+        "modifiedTime": 1791400000000,
+        "lastModifiedBy": null
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!znHJW6Ern6f463p2.aHgNziL6wsbJBvgl"
+    },
+    {
+      "name": "Title Holder: Explode",
+      "origin": "Compendium.vagabond.classes.Item.znHJW6Ern6f463p2",
+      "img": "icons/svg/aura.svg",
+      "_id": "iYLRqBF95WVcfjDB",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.weaponLowExplodeBySkill",
+            "value": "brawl: 2",
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent",
+          "minLevel": 6
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.44.0",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "createdTime": 1791400000000,
+        "modifiedTime": 1791400000000,
+        "lastModifiedBy": null
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!znHJW6Ern6f463p2.iYLRqBF95WVcfjDB"
+    }
+  ],
   "folder": null,
   "flags": {},
   "_stats": {

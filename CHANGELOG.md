@@ -1,6 +1,11 @@
 # Changelog
 
 ## Unreleased
+- **Pugilist revised to the new book text.** Class description, the Class Features table, Fisticuffs, Rope-a-Dope, Haymaker (10+ / 9+), Moxie (Cd4 / Cd6) and Title Holder (d6 / d8) now read exactly as printed; Training is Brawl and Influence. Check Hook, Beat Rush, Prowess and Impact are gone.
+  - **Fisticuffs** grants the Dusted Knuckle Perk; **Vicious** is an effect (a Brawl Crit adds a die matching the weapon). **Moxie** gives Favor on Saves against Dazed, Frightened and Restrained.
+  - **Title Holder** is an effect: Brawl weapon damage dice are at least a d6 (d8 at Level 10) and Explode on 1 or 2 (new fields `weaponDieBySkill` and `weaponLowExplodeBySkill`).
+  - **Haymaker: Auto** (switchable, follows the Class Automation setting): a Brawl attack that beats the Difficulty by 10 (9 from Level 8) Dazes the Target with a chat card; the Dazed ends when your next Turn starts in a Combat, otherwise by hand.
+  - Existing Pugilist items are converted once on load (Influence is marked trained, the Dusted Knuckle Perk is added). The `classes` compendium needs `npm run pack` first.
 - **Merchant revised to the new book text.** Class description, the Class Features table, Gold Sink, Deep Pockets, Line Goes Up (+1 / +2 / +3 Luck), Diamond Hands (+1 / +2), Opportunist and Top Shelf now read exactly as printed; Training is Craft, Finesse and Influence and the Key Stat is Luck/Reason. Bang for Your Buck and Treasure Seeker are gone.
   - **Deep Pockets** grants the Deft Hands Perk and an effect gives 2 extra Item Slots now and every 3 Levels. The rest of the class is text (Line Goes Up needs a ruling on Luck above the maximum — see `CLASS_REWRITE_NOTES.md`).
   - Existing Merchant items are converted once on load (Finesse is marked trained). The `classes` compendium needs `npm run pack` first.

@@ -237,6 +237,11 @@
       "Failed": "Não foi possível marcar {name} — veja o console.",
       "Dropped": "<strong>{name}</strong> larga a Marca em <strong>{target}</strong>."
     },
+    "Haymaker": {
+      "Title": "Soco Devastador",
+      "Landed": "<strong>{name}</strong> acerta um Soco Devastador — <strong>{target}</strong> fica Atordoado até o início do Turno de {name}.",
+      "Immune": "<strong>{name}</strong> acerta um Soco Devastador, mas <strong>{target}</strong> não pode ser Atordoado."
+    },
     "Druid": {
       "NoMetamorph": "O módulo Metamorph não está ativo — a Polimorfia precisa ser jogada à mão.",
       "NotYours": "Apenas o dono do personagem pode fazer isso.",

@@ -86,6 +86,13 @@ async function trainGuaranteedSkills(item) {
   if (Object.keys(update).length) await actor.update(update);
 }
 
+/** Give a character the Perk a rewritten class now grants (skipped when it already has one by that name). */
+async function grantPerk(actor, perkId, perkName) {
+  if (actor?.type !== 'character' || actor.items.some(i => i.type === 'perk' && i.name === perkName)) return;
+  const perk = await game.packs.get('vagabond.perks')?.getDocument(perkId);
+  if (perk) await actor.createEmbeddedDocuments('Item', [game.items.fromCompendium(perk)]);
+}
+
 /** Fighter: old Fighting Style (Melee/Ranged Perk) / level-1 Valor → Momentum + Valor effects. */
 export function migrateFighterClass() {
   return migrateClass({
@@ -223,6 +230,25 @@ export function migrateMerchantClass() {
     probeFeature: 'Line Goes Up (+1 Luck)',
     isOld: (item) => item.system.levelFeatures?.some(lf => lf.name === 'Bang for Your Buck'),
     afterItem: trainGuaranteedSkills,
+  });
+}
+
+/**
+ * Pugilist: old Impact / Prowess / Haymaker class → Fisticuffs (Dusted Knuckle, Vicious), Rope-a-Dope,
+ * Haymaker (10+ / 9+), Moxie, Title Holder; Training Brawl + Influence.
+ */
+export function migratePugilistClass() {
+  return migrateClass({
+    setting: 'pugilistClassMigrated',
+    classId: 'znHJW6Ern6f463p2',
+    className: 'Pugilist',
+    probeFeature: 'Moxie (Cd4)',
+    isOld: (item) => item.system.levelFeatures?.some(lf => lf.name === 'Impact'),
+    afterItem: async (item) => {
+      await trainGuaranteedSkills(item);
+      // Fisticuffs grants Dusted Knuckle (the old Rope-a-Dope granted Check Hook)
+      await grantPerk(item.parent, 'Lb1ncXSPRRd1wq84', 'Dusted Knuckle');
+    },
   });
 }
 

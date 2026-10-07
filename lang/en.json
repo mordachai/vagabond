@@ -237,6 +237,11 @@
       "Failed": "Could not mark {name} — see console.",
       "Dropped": "<strong>{name}</strong> drops the Mark on <strong>{target}</strong>."
     },
+    "Haymaker": {
+      "Title": "Haymaker",
+      "Landed": "<strong>{name}</strong> lands a Haymaker — <strong>{target}</strong> is Dazed until the start of {name}’s Turn.",
+      "Immune": "<strong>{name}</strong> lands a Haymaker, but <strong>{target}</strong> can’t be Dazed."
+    },
     "Druid": {
       "NoMetamorph": "The Metamorph module is not active — Polymorph has to be played by hand.",
       "NotYours": "Only the character’s owner can do that.",

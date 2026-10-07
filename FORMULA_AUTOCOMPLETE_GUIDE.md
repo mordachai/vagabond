@@ -411,6 +411,16 @@ The Mark itself is an actor effect (`flags.vagabond.huntersMark`) created by the
 | --- | --- | --- | --- |
 | Deep Pockets | `system.inventory.bonusSlots` | Add | `2 + 2 * floor((@lvl - 1) / 3)` (2 Item Slots now and every 3 Levels hereafter) |
 
+### Pugilist — Fisticuffs, Haymaker, Moxie, Title Holder
+
+| Effect | Key | Mode | Value |
+| --- | --- | --- | --- |
+| Fisticuffs | `system.critExtraDiceBySkill` | Add | `brawl: 1` (Vicious: a Brawl Crit adds one die matching the weapon) |
+| Haymaker: Auto (Lv 2+, switchable) | `system.haymakerMargin` | Add | `10 - floor((@lvl - 2) / 6)` (a Brawl attack beating the Difficulty by this much Dazes the Target; cleared by the Class Automation setting) |
+| Moxie (Lv 4+) | `system.statusResistances` | Add | `dazed`, `frightened`, `restrained` (one change each) |
+| Title Holder: Die (Lv 6+) | `system.weaponDieBySkill` | Add | `brawl: 6 + 2 * floor(@lvl / 10)` (damage dice of that skill’s weapons are at least this size) |
+| Title Holder: Explode (Lv 6+) | `system.weaponLowExplodeBySkill` | Add | `brawl: 2` (those dice also Explode on 1 up to this face) |
+
 ### Exalted — Bonus Per Damage Die (with Doubling vs Specific Being Types)
 
 Grants a flat bonus per damage die rolled. When attacking Undead (or other configured types), the bonus is doubled.

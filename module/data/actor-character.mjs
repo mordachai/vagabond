@@ -469,6 +469,23 @@ export default class VagabondCharacter extends VagabondActorBase {
       new fields.StringField({ blank: true }),
       { initial: [], label: "Extra Crit Damage Dice (by skill)" }
     );
+    // Weapon rules scoped to the skill the attack was rolled with (Pugilist Title Holder), "<skill>: <formula>":
+    //   weaponDieBySkill        — damage dice of that skill's weapons use at least this die size (6 = d6)
+    //   weaponLowExplodeBySkill — those dice also Explode on a 1 up to this face (2 = on 1 or 2)
+    schema.weaponDieBySkill = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      { initial: [], label: "Weapon Die Size (by skill)" }
+    );
+    schema.weaponLowExplodeBySkill = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      { initial: [], label: "Weapon Dice Explode On Low Faces (by skill)" }
+    );
+    // Pugilist Haymaker: a Brawl attack that beats the Difficulty by this much (formula, 0 = off) Dazes the Target.
+    // Cleared by the world Class Automation mode (TRIGGER_FIELDS).
+    schema.haymakerMargin = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      { initial: [], label: "Haymaker Margin (Pugilist)" }
+    );
     schema.critExplodeSkills = new fields.ArrayField(
       new fields.StringField({ required: true }),
       { required: true, initial: [], label: "Crit Damage Dice Explode (skills)" }
@@ -875,6 +892,9 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.deadeyeGrit = [];
     this.critExtraDiceBySkill = [];
     this.critExplodeSkills = [];
+    this.weaponDieBySkill = [];
+    this.weaponLowExplodeBySkill = [];
+    this.haymakerMargin = [];
     this.markRules = [];
     this.markDamageBonus = [];
     this.bonuses.globalExplode = [];
@@ -1083,6 +1103,9 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.polymorphLevelBonus = this._evaluateFormulaField(this.polymorphLevelBonus, rollData);
     this.deadeyeGrit = this._evaluateFormulaField(this.deadeyeGrit, rollData);
     this.critExtraDiceBySkill = this._evaluateTypedReductions(this.critExtraDiceBySkill, rollData);
+    this.weaponDieBySkill = this._evaluateTypedReductions(this.weaponDieBySkill, rollData);
+    this.weaponLowExplodeBySkill = this._evaluateTypedReductions(this.weaponLowExplodeBySkill, rollData);
+    this.haymakerMargin = this._evaluateFormulaField(this.haymakerMargin, rollData);
     this.markDamageBonus = this._evaluateFormulaField(this.markDamageBonus, rollData);
 
     // NOTE: Stat bonuses, Save bonuses, Skill bonuses, and Weapon Skill bonuses

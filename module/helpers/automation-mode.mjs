@@ -23,6 +23,7 @@ const TRIGGER_FIELDS = {
   deadeyeTrigger: false,
   highNoonTrigger: false,
   huntersMarkTrigger: false,
+  haymakerMargin: 0,
   aggressorAuto: 0,
 };
 
