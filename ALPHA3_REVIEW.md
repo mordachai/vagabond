@@ -13,10 +13,10 @@ Kind: **Code** = engine or effect change · **Pack** = text / data in `packs/_so
 | 1 | 24 | Hero creation is **five steps**: new step 4 "Take a Perk" — every Hero starts with a Perk | Code | char builder: generic 1-Perk grant at creation (Human Aptitude still gives a second one) |
 | 2 | 2, 24 | Armor "Reduces damage taken"; **damage from Statuses ignores Armor** | OK | `dealTickDamage` already bypasses Armor — verify nothing else applies it |
 | 3 | 26 | Reflex Difficulty formula now prints `+ Slots occupied by Armor` | OK | same rule as `reflexArmorPenalty` |
-| 4 | 25 | **Druids Cast with Survival** (skill text moved) | Pack | check Druid `manaSkill` |
+| 4 | 25 | **Druids Cast with Survival** (skill text moved) | OK | Druid `manaSkill` is already `survival` |
 | 5 | 27 | Human trait **Knack → Aptitude** | Pack | rename trait in Human ancestry (+ pt-BR) |
 | 6 | 80 | **Defense property rewritten**: on a Reflex Save you can make an Attack Check instead; on a pass, reduce the damage by each equipped Defense Weapon's damage dice | **Done** | ruling: pass = Defense dice only (no highest-die removal); Wall / Indestructible now reach the Defense roll; Protector + Patience automated (see CLAUDE.md) |
-| 7 | 16 → 80 | **Dual-Wielding** moved to Weapons; the "up to 3 Slots of Equipped Weapons" limit is gone | OK | never coded |
+| 7 | 16 → 80 | **Dual-Wielding** moved to Weapons; the "up to 3 Slots of Equipped Weapons" limit **stays** (p. 20, p. 76) | Code | never coded — the hand pool only counts hands, not weapon Slots |
 | 8 | 81 | Weapons: **Spear grip 1H → V**; **Staff gains Cleave** | Pack | weapons pack + shop items |
 | 9 | 79, 190 | Starting packs Gladiator / Sellsword: **buckler → shield**; treasure Shield table: Shield / Great Shield (no Buckler) | Pack | |
 | 10 | 83 | **Backpack**: "1 (held); +3 (worn)" (was "1; 0 while worn") | Pack + Code | ruling: +3 Slots of capacity while worn |
@@ -66,8 +66,8 @@ Kind: **Code** = engine or effect change · **Pack** = text / data in `packs/_so
 | Skirmisher | Armor Reflex penalty **reduced by 1** + 5' Speed; **can take up to 3 times** (verify which perk carries the "3 times" line) | Pack + effect |
 | Transvection | item gains 30' Fly; ends if used again | Pack |
 | Unfailing Guidance | Allies ignore Hinder on Saves **caused by the Target of your Guide Spell** | Pack |
-| Sharpshooter | prerequisite now **AWR 7** (was 4+) — verify | Pack |
-| Light-footed DEX 4+ perk(s) | prereq adds **Trained: Sneak** — verify which | Pack |
+| Situational Awareness | prerequisite **AWR 7** (was 4+) | Pack |
+| Treads Lightly | prereq adds **Trained: Sneak** | Pack |
 | Cardistry, Mounted Combatant, Scout, Strategist | small text drift found by the check (may predate Alpha 3) | Pack |
 
 ## 4. Items, spells, relics
@@ -87,10 +87,81 @@ Kind: **Code** = engine or effect change · **Pack** = text / data in `packs/_so
 
 The **spells** pack (Adhere, Animate, Beast, Gas, Life, Tempo, Terraform, Ward, …), several **alchemical items** (Speed / Control / Clairvoyance potions, flavor text the book doesn't have) and many **relics** (scrolls, Spell Book, Philosopher's Stone, Phoenix Down) do not match the book text even for Alpha 2. They were never part of the book rewrite. Ruling: **fix in this review** (book text wins).
 
-## 6. Order of work
+## 5b. Structured data check (numbers, not text) — 2026-10-07
 
-1. ~~Rulings~~ settled 2026-10-07 (see rows). Defense property done first.
-2. Pack text + data fixes (classes, perks, items) — one commit per area; class migrations re-run via new guard settings.
-3. Code: creation Perk step, Defense property, Pugilist formulas, Title Holder explode, Gunslinger Grit.
-4. New features: Sorcerer Twinned Spell / Overpowered, Witch Soul Link / Misery Business, Wizard Extracurricular / Archwizard, Merchant Midas Touch, Fluid Motion perk, Bloodletter.
-5. `npm run pack`, then the in-world tests in `CLASS_REWRITE_NOTES.md` plus the ones added here.
+| Area | Result |
+| --- | --- |
+| Saves (Endure MIT×2, Reflex DEX+AWR + Armor Slots, Will RSN+PRS), Check Difficulty `20 − Stat (×2 Trained)`, stat arrays, HP, Inventory Slots `8 + MIT`, Speed table, Crawl `3 × Speed`, Travel | **match** (`homebrew-config.mjs` defaults) |
+| Reflex Armor penalty | same math; code subtracts it from the roll, Alpha 3 prints it inside the Difficulty — optional display change (sheet Reflex Difficulty + Armor Slots) |
+| **Bonus Trainings from Reason** (Level 1: half RSN round up; later RSN increases add one) | **missing** in the builder and level-up — pre-existing gap (same text in Alpha 2) |
+| **3 Slots of Equipped Weapons** | **missing** (see #7) |
+| Weapons (42): type/skills, properties, range, grip, value, Slots, damage | match except Spear (grip V) and Staff (Cleave) — Alpha 3 changes |
+| Armor table (Light/Medium/Heavy rating, value, Slots, Might) | match |
+| Alchemical item values (84) | match (Oil, Vicious → Bloodletter rename only) |
+| Gear (427): 225 matched by name | mismatches: Backpack (Alpha 3), **Cauldron 0 → 2 Slots**, **Needle, Sack 1 → 0 Slots**, Bucket (book prints 5c and 5s in two tables). The other ~200 use different names (sub-items "Jar - Clay", trinket tables) — **manual pass needed** |
+| Class tables (Spells known, Mana, Training, casting skill) | match all 18 classes |
+| Perk prerequisites (108) | match except the Alpha 3 changes (Animal Companion, Situational Awareness, Treads Lightly) |
+| Statuses (`config.mjs`) vs p. 11 | **Frightened** −2 per damage die (code: −2 total); **Sickened** −2 per healing die (code: −2 total); **Prone** = crawl at half Speed + Vulnerable only for Melee attacks and Reflex Saves (code: Speed 0 + full Vulnerable); Incapacitated must also fail Reflex Saves — check |
+| Not yet checked | bestiary / humanlike statblocks (only the Alpha 3 text diffs are known), starting pack contents and prices, relic values, stores, trinket tables, spell numbers beyond the text check |
+
+## 6. Work plan (next sessions)
+
+Status 2026-10-07: rulings settled, Defense property done (`61c1973`). Everything below is open. Each phase = its own session; one commit per numbered item group; every pack change ships with a guarded migration for existing worlds (see `helpers/class-migrations.mjs` pattern). Update pt-BR (`lang/pt-BR.json`) for every new / changed string.
+
+### Phase 1 — Core rules (engine)
+- [ ] **1.1 Reflex Difficulty includes Armor** — `saves.reflex.difficulty` += worn Armor Slots (`reflexArmorPenalty`) in `actor-character.mjs`; drop the `- N[Armor Penalty]` term from `_rollSave` and roll-handler (no double count); sheet / HUD / save card show the dynamic number. Defense Attack Check stays penalty-free.
+- [ ] **1.2 Frightened** −2 **per damage die** (status AE → per-die field, e.g. `bonusPerDamageDie`); **Sickened** −2 **per healing die received** (needs an incoming per-die healing modifier).
+- [ ] **1.3 Prone** — crawl (half Speed) instead of Speed 0; Vulnerable only for Melee attacks and Reflex Saves (new defender modifier scoped by attack type / save).
+- [ ] **1.4 Incapacitated** auto-fails Reflex Saves (verify `autoFailStats` covers saves).
+- [ ] **1.5 Bonus Trainings from Reason** — builder Level 1: extra Trainings = ceil(RSN / 2); level-up: raising RSN past a threshold grants one more Training.
+- [ ] **1.6 3 Slots of Equipped Weapons** — enforce in `EquipmentHelper.equipWithHandLimit` + `sanitizeHandLimit` (bump oldest weapon), warn on equip.
+- [ ] **1.7 Creation Perk step** — every Hero takes one Perk at creation (builder Perks step adds a free generic Perk; Human Aptitude still adds its own).
+- [ ] **1.8 Remove Wood** material — drop `metalData.wood`; migrate Wood items to Iron (guard setting).
+- [ ] **1.9 Backpack** — 1 Slot held, +3 Slots of capacity while worn (container / slot math + pack item).
+- [ ] **1.10 Defense follow-up** — migration adding the Patience / Protector effects to perk items already on actors.
+
+### Phase 2 — Classes (pack text + effects + migrations)
+- [ ] Alchemist: Eureka 15+ / 14+ / 13+ (margin field + names), Potency table names (+1) / (+2).
+- [ ] Barbarian: Aggressor (15') entry at 10th.
+- [ ] Druid: Savagery (+1) name at 2nd.
+- [ ] Fighter: Fighting Style = **one** Perk, pool Brawl / Finesse / Melee / Ranged prerequisite.
+- [ ] Gunslinger: Grit = remove 3 Deadeye stacks (text + `deadeyeGrit` effect / helper).
+- [ ] Luminary: Overheal once per Action, excess once per Turn; Ever-Cure "choose".
+- [ ] Magus: Spell Parry 15+ / 14+ / 13+.
+- [ ] Merchant: Gold Sink, Diamond Hands rewritten; Top Shelf → Midas Touch.
+- [ ] Pugilist: Fisticuffs Vicious only; Rope-a-Dope; Haymaker 15+/14+/13+ at 2/6/10 (`haymakerMargin` formula, "until your next Turn"); Moxie 4th / 8th; Title Holder explodes on the **two highest** faces (pipeline: new high-explode by skill, drop low-explode).
+- [ ] Rogue: table Knack (1 Luck) / (2 Luck); Sneak Attack text (Level ÷ 3 round up).
+- [ ] Sorcerer: Quickening = Cast Max 0 (+1 / 4 Levels).
+- [ ] Vanguard: Wall entries (1 size) / (2 sizes) / (3 sizes).
+- [ ] Human: trait Knack → **Aptitude** (ancestry migration).
+
+### Phase 3 — New class features
+- [ ] Sorcerer **Twinned Spell** (6th: 2nd Cast of the same Spell in a Turn Favored) and **Overpowered** (10th: 1 Fatigue → Cd4 HP / Max HP / Cast Max countdown).
+- [ ] Witch **Hex target tracking** (prerequisite), then **Soul Link** (6th) and **Misery Business** (10th: hexed Target Weak to your damage).
+- [ ] Wizard **Extracurricular** (6th: Studied die adds another known Spell's effect) and **Archwizard** (10th: Cast unknown Spells, no upcast).
+- [ ] Merchant **Midas Touch** (Relic Bonus / Rank +1 while Equipped) and **Diamond Hands** (swap a held Relic's Power ≤ 250g × 5 per 4 Levels) — text first if the relic layer is missing.
+
+### Phase 4 — Perks, items, spells, relics (pack text + data)
+- [ ] Perks §3 (20+ text / prerequisite changes) + **new perk Fluid Motion**; effects for Dusted Knuckle (explode), Skirmisher (Reflex penalty −1, +5' Speed, take 3×).
+- [ ] Weapons: Spear grip V (+ `damageTwoHands`), Staff Cleave; shop copies too.
+- [ ] Starting packs: Gladiator / Sellsword buckler → shield; treasure Shield table.
+- [ ] Gear: Cauldron 2 Slots, Needle / Sack 0 Slots, Bucket value (book conflict — pick one).
+- [ ] Alchemical: Oil, Vicious → **Oil, Bloodletter** (explode on a 1); Crone's Ire explode on a 1.
+- [ ] Relics: Vicious → **Visceral**, Ace Thrown → **High Velocity** (Sunder, Undertow text), Protection ×10 values.
+- [ ] Spells: Kinesis, Ward upcast, Apoplex damage base + the older drift in §5 (Adhere, Animate, Beast, Gas, Life, Tempo, Terraform, …).
+- [ ] Alchemical / relic older drift in §5 (flavor text the book lacks, Speed / Control potions, scrolls, Spell Book, Philosopher's Stone, Phoenix Down).
+
+### Phase 5 — Build Guides (Appendix C, pp. 194–203)
+- [ ] Data model for 2–3 builds per class (stats array by level, Trainings, Starting Pack, Weapon / Armor, Spells, Perks by level) — likely `system.buildGuides` on the class item.
+- [ ] Builder: pick a build guide → pre-fill stats / Trainings / pack / Perks (always overridable).
+- [ ] Author all builds from the book.
+
+### Phase 6 — Test
+- [ ] `npm run pack`; reload as GM; migrations run once.
+- [ ] Defense: shield buttons, pass / fail / crit, Wall & Indestructible on the Defense roll, Protector refund + Apply, Patience in and out of Combat, setting off = chosen weapon only.
+- [ ] `CLASS_REWRITE_NOTES.md` checklists + every Phase 1–5 item.
+
+### Later sessions (out of this review)
+- Bestiary + humanlike statblocks against Alpha 3.
+- Full gear audit (~200 items whose names differ from the book tables).
+- Starting pack contents / prices, stores, trinket tables, relic values.
