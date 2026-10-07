@@ -349,6 +349,28 @@ export function migrateWitchClass() {
   });
 }
 
+/**
+ * Wizard: old Extracurricular / Archwizard class → Spellcaster (Cast Max 2 + Level), Page Master, Manifold Mind (Focus),
+ * Sculpt Spell (upcasting discount); Training Arcana + Craft + Mysticism.
+ */
+export function migrateWizardClass() {
+  return migrateClass({
+    setting: 'wizardClassMigrated',
+    classId: 'U3rAxH8vn8tzDblW',
+    className: 'Wizard',
+    probeFeature: 'Manifold Mind (+1)',
+    isOld: (item) => item.system.levelFeatures?.some(lf => lf.name === 'Extracurricular'),
+    // caster tables / Mana come from the book revision too
+    extraUpdate: (item, s) => ({
+      'system.manaSkill': s.manaSkill,
+      'system.castingStat': s.castingStat,
+      'system.manaMultiplier': s.manaMultiplier,
+      'system.levelSpells': s.levelSpells,
+    }),
+    afterItem: trainGuaranteedSkills,
+  });
+}
+
 /** Give perk items already in the world (copies) the effects the compendium perk now ships. */
 async function addPerkEffects(perkId, perkName) {
   const source = await game.packs.get('vagabond.perks')?.getDocument(perkId);

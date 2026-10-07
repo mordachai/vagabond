@@ -200,3 +200,22 @@ Book p. 61. Occultist (Mysticism casting, 4 × Level Mana, Cast Max 2 + Level, a
 - [ ] Builder: Witch learns 4 Spells (+1 every 2 Levels), Mana 4 × Level, Cast Max 2 + Level (3 at Level 1, 12 at Level 10); the Occultist Perk pick lists the 13 Mysticism perks; Training Craft + Mysticism, no skill choices.
 - [ ] Existing Witch (old Ritualism / Coventry class) migrates; Craft marked trained.
 
+## Wizard
+
+Book p. 63. Spellcaster (Arcana casting, 4 × Level Mana, Cast Max 2 + Level), Page Master (Bookworm perk grant), Manifold Mind (+1 / +2 / +3 Focus), Sculpt Spell (-1 / -2 upcasting Mana). Training Arcana + Craft + Mysticism (no choices). Extracurricular, Archwizard and the old Sculpt Spell are gone.
+
+**Doubts / course taken**
+- **Sculpt Spell "pay 1 less Mana for Delivery upcasting"**: the old class (and a first reading) used `bonuses.deliveryManaCostReduction`, which cuts the Delivery **base** cost. "Upcasting" is the Delivery increase (extra steps), so a new field `bonuses.deliveryUpcastCostReduction` takes the mana off the **total** Delivery-increase cost (never below 0) in both cost calculators (cast dialog + spell handler): −1 at Levels 4–7, −2 at Level 8+. If the table means the whole Delivery cost, swap the effect key back to `deliveryManaCostReduction`.
+- Manifold Mind raises `focus.maxBonus` (the Focus pool is 5 + bonus) by 1 / 2 / 3 at Levels 2 / 6 / 10 — the book says "the number of Spells you can Focus on at the same time", which this system tracks as the Focus maximum.
+- Page Master’s "spend a Studied die to learn a Spell for the Shift" is text only (the Studied die pool exists; the temporary Spell does not).
+
+**Text-only / deferred**
+- Page Master (learn a Spell for the Shift with a Studied die) — text only.
+
+**Tests to run in-world** (after `npm run pack`)
+- [ ] Builder: Wizard learns 4 Spells (+1 every 2 Levels), Mana 4 × Level, Cast Max 2 + Level (3 → 12); Bookworm granted automatically; Training Arcana + Craft + Mysticism, no skill choices.
+- [ ] Level 2: Focus maximum 6 (7 at Level 6, 8 at Level 10); the Focus counter on the sheet reflects it.
+- [ ] Level 4: casting with Delivery upcasting costs 1 less Mana (2 less at Level 8), never below the base delivery cost; Level 3 or below unchanged; the cast dialog preview and the actual deduction agree.
+- [ ] Sculpt Spell / Manifold Mind show Locked below Levels 4 / 2.
+- [ ] Existing Wizard (old Extracurricular class) migrates; Craft + Mysticism trained; old "lv2 - Sculpt Spell" effects gone.
+

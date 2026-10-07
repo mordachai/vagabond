@@ -234,6 +234,7 @@ export default class VagabondActiveEffectConfig extends foundry.applications.she
       // Mana Bonuses
       { value: '@bonuses.spellManaCostReduction', label: 'Spell Mana Cost Reduction' },
       { value: '@bonuses.deliveryManaCostReduction', label: 'Delivery Mana Cost Reduction' },
+      { value: '@bonuses.deliveryUpcastCostReduction', label: 'Delivery Upcasting Mana Cost Reduction' },
 
       // Damage Die Size Bonuses (per weapon skill, dynamic from homebrew skills config)
       ...(CONFIG.VAGABOND.homebrew?.skills ?? []).filter(s => s.isWeaponSkill).map(s => ({

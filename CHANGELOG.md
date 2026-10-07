@@ -1,6 +1,10 @@
 # Changelog
 
 ## Unreleased
+- **Wizard revised to the new book text.** Class description, the Class Features table (with Spells, Mana and Cast Max), Spellcaster, Page Master, Manifold Mind (+1 / +2 / +3) and Sculpt Spell (-1 / -2) now read exactly as printed; Training is Arcana, Craft and Mysticism. Extracurricular, Archwizard and the old Sculpt Spell are gone.
+  - **Spellcaster:** Cast Max is 2 + your Level (an effect cancels the casting Stat the engine adds); **Page Master** grants the Bookworm Perk. **Manifold Mind** raises the Focus maximum by 1 / 2 / 3.
+  - **Sculpt Spell** takes 1 (then 2) Mana off the Delivery upcasting cost — new bonus `deliveryUpcastCostReduction` (the old class reduced the whole Delivery cost).
+  - Existing Wizard items are converted once on load (Craft and Mysticism marked trained). The `classes` compendium needs `npm run pack` first.
 - **Witch revised to the new book text.** Class description, the Class Features table (with Spells, Mana and Cast Max), Occultist, Hex, Widdershins (1 / 2 / 3) and Grudge Bearer (+1 / +2) now read exactly as printed; Training is Craft and Mysticism. Ritualism, Things Betwixt, Coventry and the old Widdershins are gone.
   - **Occultist:** Cast Max is 2 + your Level (an effect cancels the casting Stat the engine adds); the Perk pick is the Mysticism-Training perks. Hex, Widdershins and Grudge Bearer are text (the system has no continual-Spell layer yet).
   - Existing Witch items are converted once on load (Craft marked trained). The `classes` compendium needs `npm run pack` first.
