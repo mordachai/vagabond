@@ -188,6 +188,9 @@
                 {{/if}}
               </div>
               <div class='perk-content accordion-content' data-perk-id='{{perk._id}}'>
+                {{#if perk.originLabel}}
+                  <span class='perk-origin'>{{perk.originLabel}}</span>
+                {{/if}}
                 {{#if perk.prerequisites}}
                   <div class='perk-prerequisites'>{{perk.prerequisites}}</div>
                 {{/if}}

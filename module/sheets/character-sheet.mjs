@@ -74,6 +74,28 @@ export class VagabondCharacterSheet extends VagabondActorSheet {
 
     bindHudTooltips(this.element, signal);
 
+    // Stat boxes display the TOTAL (base + perks/effects) but edit the BASE.
+    // Unfocused they carry no `name`, so form submits never write total into base.
+    for (const input of this.element.querySelectorAll('input.stat-score[data-stat-name]')) {
+      input.addEventListener('focus', () => {
+        input.name = input.dataset.statName;
+        input.value = input.dataset.base;
+        input.select();
+      }, { signal });
+      input.addEventListener('blur', () => {
+        input.removeAttribute('name');
+        input.value = input.dataset.total;
+      }, { signal });
+      input.addEventListener('change', (ev) => {
+        // Commit explicitly: blur strips the name before the form-level change handler could read it
+        ev.stopPropagation();
+        const value = Number(input.value);
+        if (Number.isFinite(value) && value !== Number(input.dataset.base)) {
+          this.actor.update({ [input.dataset.statName]: value });
+        }
+      }, { signal });
+    }
+
     // Self-heal any weapon hand-limit violation (legacy data, imports, macros)
     const { EquipmentHelper } = globalThis.vagabond.utils;
     EquipmentHelper.sanitizeHandLimit(this.actor).catch((err) =>

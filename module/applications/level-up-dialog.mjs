@@ -1506,6 +1506,8 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
           const perkData = perkItem.toObject();
           // Store source UUID for future duplicate detection
           foundry.utils.setProperty(perkData, 'flags.core.sourceId', this.chosenPerkUuid);
+          // Remember where the perk came from (shown on the sheet's Perks list)
+          foundry.utils.setProperty(perkData, 'flags.vagabond.perkOrigin', { type: 'level', level: this.newLevel });
 
           // Apply choice if present
           if (this.perkChoice && perkItem.system.choiceConfig?.type) {

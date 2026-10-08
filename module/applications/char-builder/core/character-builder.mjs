@@ -897,6 +897,13 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
       ...(state.gear || [])
     ].filter(uuid => uuid);
 
+    // Perk origin per uuid: grant source (ancestry / class / creation), else class-fixed perk
+    const perkOrigins = {};
+    for (const uuid of state.classPerks || []) perkOrigins[uuid] = { type: 'class' };
+    for (const g of state.perkGrants || []) {
+      if (g.fulfilled) perkOrigins[g.fulfilled] = { type: g.source === 'creation' ? 'level' : g.source, level: 1 };
+    }
+
     const validItems = [];
     for (const uuid of itemUuids) {
       try {
@@ -938,6 +945,9 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
         if (itemData.type === 'perk') {
           const perkChoices = state.perkChoices || {};
           const choice = perkChoices[item.uuid];
+
+          const origin = perkOrigins[item.uuid];
+          if (origin) foundry.utils.setProperty(itemData, 'flags.vagabond.perkOrigin', origin);
 
           console.log(`Vagabond | CharBuilder - Processing perk "${itemData.name}"`, {
             perkUuid: item.uuid,

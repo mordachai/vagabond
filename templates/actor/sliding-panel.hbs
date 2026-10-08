@@ -137,8 +137,10 @@
                           <div class='stat-item'>
                             <input
                               type='text'
-                              name='system.stats.{{key}}.value'
-                              value='{{stat.value}}'
+                              data-stat-name='system.stats.{{key}}.value'
+                              data-base='{{stat.value}}'
+                              data-total='{{stat.total}}'
+                              value='{{stat.total}}'
                               data-dtype='Number'
                               class='stat-score'
                               data-tooltip='{{#if (and stat.value (ne stat.value stat.total))}}{{localize "VAGABOND.UI.Tooltips.BaseTotal" base=stat.value total=stat.total}}{{else}}{{stat.total}}{{/if}}'

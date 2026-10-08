@@ -15,6 +15,7 @@ import { setupDragReorder } from '../helpers/drag-reorder.mjs';
 import * as ItemSections from '../helpers/item-sections.mjs';
 import { EquipmentHelper } from '../helpers/equipment-helper.mjs';
 import { FeatureAction } from '../helpers/feature-action.mjs';
+import { EnrichmentHelper } from '../helpers/enrichment-helper.mjs';
 import { VagabondDamagePipeline } from '../helpers/damage-pipeline.mjs';
 
 /** Inventory tab groupings, in display order, keyed by equipmentType. */
@@ -452,6 +453,8 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
             context.features.push(...item.system.levelFeatures
               .map((f, srcIndex) => ({ f, srcIndex }))
               .filter(({ f }) => f.level <= currentLevel)
+              // Bare "Perk" grants are listed under Perks instead
+              .filter(({ f }) => !EnrichmentHelper.isBarePerkGrant(f))
               .map(({ f, srcIndex }, index) => ({
                 ...f, index, _id: `${item.id}-feature-${index}`,
                 fx: FeatureAction.row(actor, item, `levelFeatures.${srcIndex}.action`, f.name),

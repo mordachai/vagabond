@@ -738,6 +738,18 @@
 
 .perks-list {
   .perk-content.accordion-content {
+    .perk-origin {
+      display: inline-block;
+      margin: 1px 0;
+      padding: 0 8px;
+      font-size: 0.85rem;
+      font-style: italic;
+      line-height: 1.2;
+      border: 1px solid currentColor;
+      border-radius: 10px;
+      opacity: 0.85;
+    }
+
     .perk-prerequisites {
       font-size: 14px;
       margin-bottom: 8px;

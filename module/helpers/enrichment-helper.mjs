@@ -7,6 +7,16 @@ import { FeatureAction } from './feature-action.mjs';
  */
 export class EnrichmentHelper {
   /**
+   * A class feature that only says "Perk" (grants a perk, nothing else).
+   * Those are listed under Perks, not Features.
+   * @param {Object} feature - A class levelFeatures entry
+   * @returns {boolean}
+   */
+  static isBarePerkGrant(feature) {
+    return feature?.perkAmount > 0 && /^\s*perks?\s*$/i.test(feature.name ?? '');
+  }
+
+  /**
    * Enrich class features with HTML content
    * @param {Object} context - The render context containing features
    * @param {Object} actor - The actor document
@@ -92,6 +102,10 @@ export class EnrichmentHelper {
         );
       }
       perk.fx = FeatureAction.row(actor, perk, 'action', perk.name);
+      const origin = perk.getFlag?.('vagabond', 'perkOrigin');
+      if (origin?.type === 'level') perk.originLabel = game.i18n.format('VAGABOND.UI.Sections.perkOriginLevel', { level: origin.level });
+      else if (origin?.type === 'ancestry') perk.originLabel = game.i18n.localize('VAGABOND.UI.Sections.perkOriginAncestry');
+      else if (origin?.type === 'class') perk.originLabel = game.i18n.localize('VAGABOND.UI.Sections.perkOriginClass');
       context.enrichedPerks.push(perk);
     }
   }

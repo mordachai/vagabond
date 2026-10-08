@@ -688,6 +688,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
             const classFeatures = item.system.levelFeatures
               .map((f, srcIndex) => ({ f, srcIndex }))
               .filter(({ f }) => f.level <= currentLevel)
+              // Bare "Perk" grants are listed under Perks instead
+              .filter(({ f }) => !EnrichmentHelper.isBarePerkGrant(f))
               .map(({ f, srcIndex }, index) => ({
                 ...f,
                 index: index,
