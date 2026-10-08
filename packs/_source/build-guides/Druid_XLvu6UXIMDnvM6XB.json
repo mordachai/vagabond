@@ -1293,7 +1293,72 @@
   "folder": null,
   "flags": {
     "vagabond": {
-      "buildGuide": true
+      "buildGuide": {
+        "title": "Druid",
+        "className": "Druid",
+        "stats": {
+          "1": {
+            "might": 5,
+            "dexterity": 4,
+            "awareness": 7,
+            "reason": 3,
+            "presence": 4,
+            "luck": 3
+          },
+          "10": {
+            "might": 7,
+            "dexterity": 6,
+            "awareness": 7,
+            "reason": 4,
+            "presence": 4,
+            "luck": 3
+          }
+        },
+        "perks": [
+          {
+            "level": 1,
+            "perks": [
+              "Shapechanger",
+              "Snareroot Trapper"
+            ]
+          },
+          {
+            "level": 3,
+            "perks": [
+              "Sixth Sense"
+            ]
+          },
+          {
+            "level": 5,
+            "perks": [
+              "Tough"
+            ]
+          },
+          {
+            "level": 7,
+            "perks": [
+              "Cross Counter"
+            ]
+          },
+          {
+            "level": 9,
+            "perks": [
+              "Heightened Cognition"
+            ]
+          }
+        ],
+        "spells": {
+          "start": [
+            "Polymorph",
+            "Sprout"
+          ],
+          "later": [
+            "Life",
+            "Terraform",
+            "Ward"
+          ]
+        }
+      }
     }
   },
   "sort": 0,

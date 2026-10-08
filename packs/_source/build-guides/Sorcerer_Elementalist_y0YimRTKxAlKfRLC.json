@@ -1142,7 +1142,75 @@
   "folder": null,
   "flags": {
     "vagabond": {
-      "buildGuide": true
+      "buildGuide": {
+        "title": "Sorcerer - Elementalist",
+        "className": "Sorcerer",
+        "stats": {
+          "1": {
+            "might": 5,
+            "dexterity": 3,
+            "awareness": 3,
+            "reason": 4,
+            "presence": 7,
+            "luck": 3
+          },
+          "10": {
+            "might": 7,
+            "dexterity": 3,
+            "awareness": 5,
+            "reason": 5,
+            "presence": 7,
+            "luck": 3
+          }
+        },
+        "perks": [
+          {
+            "level": 1,
+            "perks": [
+              "Quality Assurance",
+              "Vehement Magic"
+            ]
+          },
+          {
+            "level": 3,
+            "perks": [
+              "Secret of Mana"
+            ]
+          },
+          {
+            "level": 5,
+            "perks": [
+              "Secret of Mana"
+            ]
+          },
+          {
+            "level": 7,
+            "perks": [
+              "Endless Stamina"
+            ]
+          },
+          {
+            "level": 9,
+            "perks": [
+              "Heightened Magnetism"
+            ]
+          }
+        ],
+        "spells": {
+          "start": [
+            "Burn",
+            "Freeze",
+            "Disintegrate",
+            "Ward"
+          ],
+          "later": [
+            "Hold",
+            "Rust",
+            "Sleep",
+            "Tempo"
+          ]
+        }
+      }
     }
   },
   "sort": 0,

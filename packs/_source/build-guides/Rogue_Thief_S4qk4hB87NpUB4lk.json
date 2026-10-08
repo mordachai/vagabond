@@ -1210,7 +1210,65 @@
   "folder": null,
   "flags": {
     "vagabond": {
-      "buildGuide": true
+      "buildGuide": {
+        "title": "Rogue - Thief",
+        "className": "Rogue",
+        "stats": {
+          "1": {
+            "might": 3,
+            "dexterity": 6,
+            "awareness": 6,
+            "reason": 4,
+            "presence": 3,
+            "luck": 4
+          },
+          "10": {
+            "might": 3,
+            "dexterity": 7,
+            "awareness": 7,
+            "reason": 6,
+            "presence": 3,
+            "luck": 5
+          }
+        },
+        "perks": [
+          {
+            "level": 1,
+            "perks": [
+              "Resourceful",
+              "Skirmisher"
+            ]
+          },
+          {
+            "level": 3,
+            "perks": [
+              "Master Breaker"
+            ]
+          },
+          {
+            "level": 5,
+            "perks": [
+              "Deft Hands"
+            ]
+          },
+          {
+            "level": 7,
+            "perks": [
+              "Treads Lightly"
+            ]
+          },
+          {
+            "level": 9,
+            "perks": [
+              "Perfect Parry"
+            ]
+          }
+        ],
+        "spells": {
+          "start": [],
+          "later": []
+        }
+      }
     }
   },
   "sort": 0,

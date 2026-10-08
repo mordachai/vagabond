@@ -1195,7 +1195,78 @@
   "folder": null,
   "flags": {
     "vagabond": {
-      "buildGuide": true
+      "buildGuide": {
+        "title": "Fighter - Backline",
+        "className": "Fighter",
+        "stats": {
+          "1": {
+            "might": 4,
+            "dexterity": 5,
+            "awareness": 7,
+            "reason": 3,
+            "presence": 3,
+            "luck": 4
+          },
+          "10": {
+            "might": 4,
+            "dexterity": 7,
+            "awareness": 7,
+            "reason": 3,
+            "presence": 3,
+            "luck": 7
+          }
+        },
+        "perks": [
+          {
+            "level": 1,
+            "perks": [
+              "Marksmanship",
+              "Skirmisher",
+              "Steady Aim"
+            ]
+          },
+          {
+            "level": 3,
+            "perks": [
+              "Quick Draw"
+            ]
+          },
+          {
+            "level": 4,
+            "perks": [
+              "Sharpshooter"
+            ]
+          },
+          {
+            "level": 5,
+            "perks": [
+              "Guardian Angel"
+            ]
+          },
+          {
+            "level": 7,
+            "perks": [
+              "Ricochet"
+            ]
+          },
+          {
+            "level": 8,
+            "perks": [
+              "Sixth Sense"
+            ]
+          },
+          {
+            "level": 9,
+            "perks": [
+              "Steady Aim"
+            ]
+          }
+        ],
+        "spells": {
+          "start": [],
+          "later": []
+        }
+      }
     }
   },
   "sort": 0,

@@ -1214,7 +1214,72 @@
   "folder": null,
   "flags": {
     "vagabond": {
-      "buildGuide": true
+      "buildGuide": {
+        "title": "Revelator - Soak Tank",
+        "className": "Revelator",
+        "stats": {
+          "1": {
+            "might": 6,
+            "dexterity": 3,
+            "awareness": 4,
+            "reason": 4,
+            "presence": 6,
+            "luck": 3
+          },
+          "10": {
+            "might": 7,
+            "dexterity": 3,
+            "awareness": 5,
+            "reason": 5,
+            "presence": 7,
+            "luck": 4
+          }
+        },
+        "perks": [
+          {
+            "level": 1,
+            "perks": [
+              "Gish",
+              "Selfless"
+            ]
+          },
+          {
+            "level": 3,
+            "perks": [
+              "Tough"
+            ]
+          },
+          {
+            "level": 5,
+            "perks": [
+              "Protector"
+            ]
+          },
+          {
+            "level": 7,
+            "perks": [
+              "Rally"
+            ]
+          },
+          {
+            "level": 9,
+            "perks": [
+              "Heightened Magnetism"
+            ]
+          }
+        ],
+        "spells": {
+          "start": [
+            "Bless",
+            "Light"
+          ],
+          "later": [
+            "Life",
+            "Ward",
+            "Exalt"
+          ]
+        }
+      }
     }
   },
   "sort": 0,

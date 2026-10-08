@@ -518,7 +518,71 @@
   "folder": null,
   "flags": {
     "vagabond": {
-      "buildGuide": true
+      "buildGuide": {
+        "title": "Magus - Arcane Archer",
+        "className": "Magus",
+        "stats": {
+          "1": {
+            "might": 3,
+            "dexterity": 3,
+            "awareness": 7,
+            "reason": 4,
+            "presence": 5,
+            "luck": 3
+          },
+          "10": {
+            "might": 3,
+            "dexterity": 6,
+            "awareness": 7,
+            "reason": 6,
+            "presence": 6,
+            "luck": 3
+          }
+        },
+        "perks": [
+          {
+            "level": 1,
+            "perks": [
+              "Assured Healer",
+              "Vehement Magic"
+            ]
+          },
+          {
+            "level": 3,
+            "perks": [
+              "Briar Healer"
+            ]
+          },
+          {
+            "level": 5,
+            "perks": [
+              "Celestial Illuminator"
+            ]
+          },
+          {
+            "level": 7,
+            "perks": [
+              "Heightened Cognition"
+            ]
+          },
+          {
+            "level": 9,
+            "perks": [
+              "Secret of Mana"
+            ]
+          }
+        ],
+        "spells": {
+          "start": [
+            "Bless",
+            "Life"
+          ],
+          "later": [
+            "Guide",
+            "Moon"
+          ]
+        }
+      }
     }
   },
   "sort": 0,

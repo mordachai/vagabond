@@ -1018,7 +1018,65 @@
   "folder": null,
   "flags": {
     "vagabond": {
-      "buildGuide": true
+      "buildGuide": {
+        "title": "Rogue - Ensorcelled Blade",
+        "className": "Rogue",
+        "stats": {
+          "1": {
+            "might": 3,
+            "dexterity": 4,
+            "awareness": 5,
+            "reason": 6,
+            "presence": 3,
+            "luck": 5
+          },
+          "10": {
+            "might": 3,
+            "dexterity": 7,
+            "awareness": 6,
+            "reason": 7,
+            "presence": 3,
+            "luck": 5
+          }
+        },
+        "perks": [
+          {
+            "level": 1,
+            "perks": [
+              "Athame",
+              "Resourceful"
+            ]
+          },
+          {
+            "level": 3,
+            "perks": [
+              "Magical Secret (Blink)"
+            ]
+          },
+          {
+            "level": 5,
+            "perks": [
+              "Magical Secret (Knock)"
+            ]
+          },
+          {
+            "level": 7,
+            "perks": [
+              "Quick Draw"
+            ]
+          },
+          {
+            "level": 9,
+            "perks": [
+              "Perfect Parry"
+            ]
+          }
+        ],
+        "spells": {
+          "start": [],
+          "later": []
+        }
+      }
     }
   },
   "sort": 0,

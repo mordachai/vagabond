@@ -1272,7 +1272,65 @@
   "folder": null,
   "flags": {
     "vagabond": {
-      "buildGuide": true
+      "buildGuide": {
+        "title": "Hunter - Stalker",
+        "className": "Hunter",
+        "stats": {
+          "1": {
+            "might": 4,
+            "dexterity": 7,
+            "awareness": 5,
+            "reason": 4,
+            "presence": 3,
+            "luck": 3
+          },
+          "10": {
+            "might": 6,
+            "dexterity": 7,
+            "awareness": 7,
+            "reason": 4,
+            "presence": 3,
+            "luck": 4
+          }
+        },
+        "perks": [
+          {
+            "level": 1,
+            "perks": [
+              "Scout",
+              "Skirmisher"
+            ]
+          },
+          {
+            "level": 3,
+            "perks": [
+              "Strategist"
+            ]
+          },
+          {
+            "level": 5,
+            "perks": [
+              "Cryptozoologist"
+            ]
+          },
+          {
+            "level": 7,
+            "perks": [
+              "Fallaway Reverse"
+            ]
+          },
+          {
+            "level": 9,
+            "perks": [
+              "Heightened Cognition"
+            ]
+          }
+        ],
+        "spells": {
+          "start": [],
+          "later": []
+        }
+      }
     }
   },
   "sort": 0,

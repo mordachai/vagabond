@@ -1138,7 +1138,75 @@
   "folder": null,
   "flags": {
     "vagabond": {
-      "buildGuide": true
+      "buildGuide": {
+        "title": "Wizard - Abjurer",
+        "className": "Wizard",
+        "stats": {
+          "1": {
+            "might": 6,
+            "dexterity": 3,
+            "awareness": 3,
+            "reason": 6,
+            "presence": 4,
+            "luck": 4
+          },
+          "10": {
+            "might": 7,
+            "dexterity": 3,
+            "awareness": 3,
+            "reason": 7,
+            "presence": 7,
+            "luck": 4
+          }
+        },
+        "perks": [
+          {
+            "level": 1,
+            "perks": [
+              "Abjurer",
+              "Bookworm"
+            ]
+          },
+          {
+            "level": 3,
+            "perks": [
+              "Briar Healer"
+            ]
+          },
+          {
+            "level": 5,
+            "perks": [
+              "Assured Healer"
+            ]
+          },
+          {
+            "level": 7,
+            "perks": [
+              "Harmonic Resonance"
+            ]
+          },
+          {
+            "level": 9,
+            "perks": [
+              "Inspiring Presence"
+            ]
+          }
+        ],
+        "spells": {
+          "start": [
+            "Bless",
+            "Guide",
+            "Life",
+            "Ward"
+          ],
+          "later": [
+            "Cure",
+            "Dispel",
+            "Hymn",
+            "Truth"
+          ]
+        }
+      }
     }
   },
   "sort": 0,

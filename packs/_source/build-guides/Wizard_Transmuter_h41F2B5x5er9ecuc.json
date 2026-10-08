@@ -1140,7 +1140,75 @@
   "folder": null,
   "flags": {
     "vagabond": {
-      "buildGuide": true
+      "buildGuide": {
+        "title": "Wizard - Transmuter",
+        "className": "Wizard",
+        "stats": {
+          "1": {
+            "might": 3,
+            "dexterity": 4,
+            "awareness": 4,
+            "reason": 6,
+            "presence": 3,
+            "luck": 6
+          },
+          "10": {
+            "might": 3,
+            "dexterity": 6,
+            "awareness": 5,
+            "reason": 7,
+            "presence": 3,
+            "luck": 7
+          }
+        },
+        "perks": [
+          {
+            "level": 1,
+            "perks": [
+              "Bookworm",
+              "Resourceful"
+            ]
+          },
+          {
+            "level": 3,
+            "perks": [
+              "Arcane Artisan"
+            ]
+          },
+          {
+            "level": 5,
+            "perks": [
+              "Instant Weapon"
+            ]
+          },
+          {
+            "level": 7,
+            "perks": [
+              "Secret of Mana"
+            ]
+          },
+          {
+            "level": 9,
+            "perks": [
+              "Heightened Intellect"
+            ]
+          }
+        ],
+        "spells": {
+          "start": [
+            "Animate",
+            "Forge",
+            "Knock",
+            "Rust"
+          ],
+          "later": [
+            "Hold",
+            "Junk",
+            "Polymorph",
+            "Terraform"
+          ]
+        }
+      }
     }
   },
   "sort": 0,

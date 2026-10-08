@@ -1080,7 +1080,65 @@
   "folder": null,
   "flags": {
     "vagabond": {
-      "buildGuide": true
+      "buildGuide": {
+        "title": "Alchemist - Swordslick",
+        "className": "Alchemist",
+        "stats": {
+          "1": {
+            "might": 4,
+            "dexterity": 5,
+            "awareness": 4,
+            "reason": 7,
+            "presence": 3,
+            "luck": 3
+          },
+          "10": {
+            "might": 5,
+            "dexterity": 6,
+            "awareness": 6,
+            "reason": 7,
+            "presence": 3,
+            "luck": 4
+          }
+        },
+        "perks": [
+          {
+            "level": 1,
+            "perks": [
+              "Deft Hands",
+              "Salbenist"
+            ]
+          },
+          {
+            "level": 3,
+            "perks": [
+              "Skirmisher"
+            ]
+          },
+          {
+            "level": 5,
+            "perks": [
+              "Master Artisan"
+            ]
+          },
+          {
+            "level": 7,
+            "perks": [
+              "Poisoner"
+            ]
+          },
+          {
+            "level": 9,
+            "perks": [
+              "Ritualist"
+            ]
+          }
+        ],
+        "spells": {
+          "start": [],
+          "later": []
+        }
+      }
     }
   },
   "sort": 0,

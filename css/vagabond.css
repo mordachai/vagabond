@@ -9119,6 +9119,290 @@ ol#combat-tracker.directory-list {
 .level-up-dialog .lu-tray-item .lu-tray-remove:hover {
   color: var(--vagabond-c-damage-orange);
 }
+.level-up-dialog .lu-shell {
+  display: grid;
+  grid-template-columns: 152px minmax(0, 1fr);
+  gap: 14px;
+  align-items: start;
+}
+.level-up-dialog .lu-side {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.level-up-dialog .lu-side .profile-img {
+  cursor: default;
+}
+.level-up-dialog .lu-side .lu-side-btn {
+  width: 100%;
+  padding: 8px 6px;
+}
+.level-up-dialog .lu-main {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.level-up-dialog .lu-main .level-up-tabs {
+  padding: 0;
+  border-bottom: 0;
+}
+.level-up-dialog .lu-xpbox {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px;
+  text-align: center;
+  background: var(--vagabond-c-inset-1);
+  border: 1px solid var(--vagabond-c-dark);
+  border-radius: 4px;
+}
+.level-up-dialog .lu-xpbox-level {
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--vagabond-c-muted);
+}
+.level-up-dialog .lu-xpbox-text {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--vagabond-c-text-secondary);
+}
+.level-up-dialog .lu-xpbox-text.lu-ready i {
+  color: var(--vagabond-c-green);
+}
+.level-up-dialog .lu-xpbox-label {
+  font-size: 0.8rem;
+  color: var(--vagabond-c-muted);
+}
+.level-up-dialog .lu-xpbox-label.lu-pending {
+  color: var(--vagabond-c-green);
+  font-weight: 600;
+}
+.level-up-dialog .lu-tab-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-left: 6px;
+  border-radius: 50%;
+  background: var(--vagabond-c-chat-yellow);
+}
+.level-up-dialog .lu-tab-ok {
+  margin-left: 6px;
+  font-size: 0.8rem;
+  color: var(--vagabond-c-green);
+}
+.level-up-dialog .lu-dim {
+  color: var(--vagabond-c-muted);
+  font-weight: 400;
+}
+.level-up-dialog .lu-subhead {
+  margin: 10px 0 6px;
+  font-size: 0.95rem;
+  color: var(--vagabond-c-text-secondary);
+}
+.level-up-dialog .lu-one-row,
+.level-up-dialog .lu-goals {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  grid-template-columns: none;
+  gap: 8px;
+}
+.level-up-dialog .lu-goal {
+  padding: 6px 4px;
+  text-align: center;
+  font-size: 0.78rem;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 3px;
+}
+.level-up-dialog .lu-goal b {
+  display: block;
+  font-size: 1.05rem;
+  color: var(--vagabond-c-text-primary);
+}
+.level-up-dialog .lu-badge.guide {
+  padding: 1px 6px;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  border-radius: 2px;
+  background: var(--vagabond-c-chat-yellow);
+  color: var(--vagabond-c-black);
+}
+.level-up-dialog .lu-stat-card {
+  position: relative;
+}
+.level-up-dialog .lu-stat-card .lu-badge.guide {
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.level-up-dialog .lu-gains {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.level-up-dialog .lu-gain {
+  display: block;
+  width: 100%;
+  height: auto;
+  line-height: normal;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  font: inherit;
+  font-size: 0.9rem;
+  color: var(--vagabond-c-text-primary);
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 4px;
+}
+.level-up-dialog .lu-gain summary, .level-up-dialog .lu-gain:not(details) {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+}
+.level-up-dialog .lu-gain summary {
+  cursor: pointer;
+  list-style: none;
+}
+.level-up-dialog .lu-gain summary::-webkit-details-marker {
+  display: none;
+}
+.level-up-dialog .lu-gain summary::after {
+  content: "▸";
+  margin-left: auto;
+  color: var(--vagabond-c-text-primary);
+  transition: transform 0.15s;
+}
+.level-up-dialog .lu-gain[open] summary::after {
+  transform: rotate(90deg);
+}
+.level-up-dialog .lu-gain .lu-mark {
+  width: 1.2em;
+  text-align: center;
+  font-size: 0.8rem;
+}
+.level-up-dialog .lu-gain .lu-gain-label {
+  font-weight: 600;
+}
+.level-up-dialog .lu-gain.done .lu-mark {
+  color: var(--vagabond-c-green);
+}
+.level-up-dialog .lu-gain.pending .lu-mark {
+  color: var(--vagabond-c-chat-yellow);
+}
+.level-up-dialog .lu-gain.info .lu-mark {
+  color: var(--vagabond-c-text-secondary);
+}
+.level-up-dialog .lu-gain.lu-gain-link {
+  cursor: pointer;
+}
+.level-up-dialog .lu-gain.lu-gain-link:hover {
+  border-color: var(--vagabond-c-text-secondary);
+}
+.level-up-dialog .lu-gain-desc {
+  padding: 0 12px 10px 34px;
+  font-size: 0.88rem;
+  color: var(--vagabond-c-text-primary);
+  opacity: 0.9;
+}
+.level-up-dialog .lu-gain-desc p {
+  margin: 0 0 6px;
+}
+.level-up-dialog .lu-guide-cols {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 16px;
+  margin-top: 6px;
+}
+.level-up-dialog .lu-guide-cols.single {
+  grid-template-columns: minmax(0, 1fr);
+}
+.level-up-dialog .lu-road {
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr);
+  gap: 4px 10px;
+  font-size: 0.88rem;
+}
+.level-up-dialog .lu-road-lv {
+  color: var(--vagabond-c-muted);
+}
+.level-up-dialog .lu-road-lv.now {
+  color: var(--vagabond-c-chat-yellow);
+}
+.level-up-dialog .lu-road-pk {
+  color: var(--vagabond-c-text-primary);
+}
+.level-up-dialog .lu-road-pk.taken {
+  color: var(--vagabond-c-green);
+}
+.level-up-dialog .lu-road-pk.now {
+  font-weight: 700;
+}
+.level-up-dialog .lu-road-link {
+  height: auto;
+  line-height: normal;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  font: inherit;
+  font-weight: 700;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+.level-up-dialog .lu-road-link:hover {
+  text-decoration: underline;
+}
+.level-up-dialog .lu-guide-spells {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.88rem;
+}
+.level-up-dialog .lu-guide-k {
+  margin-top: 4px;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--vagabond-c-muted);
+}
+.level-up-dialog .lu-footer {
+  flex-direction: column;
+  align-items: stretch;
+}
+.level-up-dialog .lu-footer .lu-btn-large {
+  min-width: 150px;
+}
+.level-up-dialog .lu-footer-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+.level-up-dialog .lu-side-notice {
+  padding: 6px 8px;
+  font-size: 0.78rem;
+  line-height: 1.25;
+}
+.level-up-dialog .lu-notice {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 12px;
+  font-size: 0.86rem;
+  color: var(--vagabond-c-text-secondary);
+  background: color-mix(in srgb, var(--vagabond-c-chat-yellow) 14%, transparent);
+  border: 1px solid var(--vagabond-dark-yellow);
+  border-radius: 3px;
+}
 
 /* Homebrew Settings Dialog */
 #homebrew-settings.homebrew-settings-form .window-content {

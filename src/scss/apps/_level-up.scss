@@ -905,4 +905,319 @@
       &:hover { color: $c-damage; }
     }
   }
+
+  // ─── Layout: portrait + XP box | tabs + content ─────────────
+
+  .lu-shell {
+    display: grid;
+    grid-template-columns: 152px minmax(0, 1fr);
+    gap: 14px;
+    align-items: start;
+  }
+
+  .lu-side {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    .profile-img { cursor: default; }
+
+    .lu-side-btn {
+      width: 100%;
+      padding: 8px 6px;
+    }
+  }
+
+  .lu-main {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+
+    // Tabs start level with the top of the portrait
+    .level-up-tabs {
+      padding: 0;
+      border-bottom: 0;
+    }
+  }
+
+  .lu-xpbox {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 10px;
+    text-align: center;
+    background: $c-inset-1;
+    border: 1px solid $c-dark;
+    border-radius: 4px;
+  }
+
+  .lu-xpbox-level {
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: $c-muted;
+  }
+
+  .lu-xpbox-text {
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1.1;
+    color: $c-text-2;
+
+    &.lu-ready i { color: $c-green; }
+  }
+
+  .lu-xpbox-label {
+    font-size: 0.8rem;
+    color: $c-muted;
+
+    &.lu-pending {
+      color: $c-green;
+      font-weight: 600;
+    }
+  }
+
+  .lu-tab-dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    margin-left: 6px;
+    border-radius: 50%;
+    background: $c-yellow;
+  }
+
+  .lu-tab-ok {
+    margin-left: 6px;
+    font-size: 0.8rem;
+    color: $c-green;
+  }
+
+  .lu-dim { color: $c-muted; font-weight: 400; }
+
+  .lu-subhead {
+    margin: 10px 0 6px;
+    font-size: 0.95rem;
+    color: $c-text-2;
+  }
+
+  // Stats never wrap: one row whatever the number of Stats
+  .lu-one-row,
+  .lu-goals {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+    grid-template-columns: none;
+    gap: 8px;
+  }
+
+  .lu-goal {
+    padding: 6px 4px;
+    text-align: center;
+    font-size: 0.78rem;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 3px;
+
+    b {
+      display: block;
+      font-size: 1.05rem;
+      color: $c-text-1;
+    }
+  }
+
+  // "Guide pick" marker on stat cards, perks and spells
+  .lu-badge.guide {
+    padding: 1px 6px;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    border-radius: 2px;
+    background: $c-yellow;
+    color: $c-black;
+  }
+
+  .lu-stat-card {
+    position: relative;
+
+    .lu-badge.guide {
+      position: absolute;
+      top: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+  }
+
+  // ─── Summary: what the next Level gives ─────────────────────
+
+  .lu-gains {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .lu-gain {
+    display: block;
+    width: 100%;
+    height: auto;
+    line-height: normal;
+    margin: 0;
+    padding: 0;
+    text-align: left;
+    font: inherit;
+    font-size: 0.9rem;
+    color: $c-text-1;
+    // Solid dark row: the panel behind is lighter, so a translucent inset washed the text out
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 4px;
+
+    summary,
+    &:not(details) {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+    }
+
+    summary {
+      cursor: pointer;
+      list-style: none;
+
+      &::-webkit-details-marker { display: none; }
+
+      &::after {
+        content: '▸';
+        margin-left: auto;
+        color: $c-text-1;
+        transition: transform 0.15s;
+      }
+    }
+
+    &[open] summary::after { transform: rotate(90deg); }
+
+    .lu-mark {
+      width: 1.2em;
+      text-align: center;
+      font-size: 0.8rem;
+    }
+
+    .lu-gain-label { font-weight: 600; }
+
+    &.done .lu-mark { color: $c-green; }
+    &.pending .lu-mark { color: $c-yellow; }
+    &.info .lu-mark { color: $c-text-2; }
+
+    &.lu-gain-link {
+      cursor: pointer;
+
+      &:hover { border-color: $c-text-2; }
+    }
+  }
+
+  .lu-gain-desc {
+    padding: 0 12px 10px 34px;
+    font-size: 0.88rem;
+    color: $c-text-1;
+    opacity: 0.9;
+
+    p { margin: 0 0 6px; }
+  }
+
+  // ─── Build Guide tab ────────────────────────────────────────
+
+  .lu-guide-cols {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 16px;
+    margin-top: 6px;
+
+    &.single { grid-template-columns: minmax(0, 1fr); }
+  }
+
+  .lu-road {
+    display: grid;
+    grid-template-columns: 38px minmax(0, 1fr);
+    gap: 4px 10px;
+    font-size: 0.88rem;
+  }
+
+  .lu-road-lv {
+    color: $c-muted;
+
+    &.now { color: $c-yellow; }
+  }
+
+  .lu-road-pk {
+    color: $c-text-1;
+
+    &.taken { color: $c-green; }
+    &.now { font-weight: 700; }
+  }
+
+  .lu-road-link {
+    height: auto;
+    line-height: normal;
+    margin: 0;
+    padding: 0;
+    text-align: left;
+    font: inherit;
+    font-weight: 700;
+    background: none;
+    border: 0;
+    cursor: pointer;
+
+    &:hover { text-decoration: underline; }
+  }
+
+  .lu-guide-spells {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 0.88rem;
+  }
+
+  .lu-guide-k {
+    margin-top: 4px;
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $c-muted;
+  }
+
+  // ─── Footer: notice above the buttons ───────────────────────
+
+  .lu-footer {
+    flex-direction: column;
+    align-items: stretch;
+
+    .lu-btn-large { min-width: 150px; }
+  }
+
+  .lu-footer-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+  }
+
+  .lu-side-notice {
+    padding: 6px 8px;
+    font-size: 0.78rem;
+    line-height: 1.25;
+  }
+
+  .lu-notice {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 12px;
+    font-size: 0.86rem;
+    color: $c-text-2;
+    background: color-mix(in srgb, #{$c-yellow} 14%, transparent);
+    border: 1px solid $c-dark-yellow;
+    border-radius: 3px;
+  }
+
 }

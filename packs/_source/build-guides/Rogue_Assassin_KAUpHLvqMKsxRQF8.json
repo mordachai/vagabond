@@ -1238,7 +1238,65 @@
   "folder": null,
   "flags": {
     "vagabond": {
-      "buildGuide": true
+      "buildGuide": {
+        "title": "Rogue - Assassin",
+        "className": "Rogue",
+        "stats": {
+          "1": {
+            "might": 3,
+            "dexterity": 6,
+            "awareness": 6,
+            "reason": 4,
+            "presence": 3,
+            "luck": 4
+          },
+          "10": {
+            "might": 3,
+            "dexterity": 7,
+            "awareness": 7,
+            "reason": 6,
+            "presence": 3,
+            "luck": 5
+          }
+        },
+        "perks": [
+          {
+            "level": 1,
+            "perks": [
+              "Ambusher",
+              "Resourceful"
+            ]
+          },
+          {
+            "level": 3,
+            "perks": [
+              "Quick Draw"
+            ]
+          },
+          {
+            "level": 5,
+            "perks": [
+              "Knife Juggler"
+            ]
+          },
+          {
+            "level": 7,
+            "perks": [
+              "Poisoner"
+            ]
+          },
+          {
+            "level": 9,
+            "perks": [
+              "Bravado"
+            ]
+          }
+        ],
+        "spells": {
+          "start": [],
+          "later": []
+        }
+      }
     }
   },
   "sort": 0,

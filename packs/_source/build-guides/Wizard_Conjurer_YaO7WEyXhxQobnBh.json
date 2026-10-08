@@ -1111,7 +1111,75 @@
   "folder": null,
   "flags": {
     "vagabond": {
-      "buildGuide": true
+      "buildGuide": {
+        "title": "Wizard - Conjurer",
+        "className": "Wizard",
+        "stats": {
+          "1": {
+            "might": 3,
+            "dexterity": 4,
+            "awareness": 6,
+            "reason": 6,
+            "presence": 4,
+            "luck": 3
+          },
+          "10": {
+            "might": 4,
+            "dexterity": 5,
+            "awareness": 7,
+            "reason": 7,
+            "presence": 5,
+            "luck": 3
+          }
+        },
+        "perks": [
+          {
+            "level": 1,
+            "perks": [
+              "Bookworm",
+              "Conjurer"
+            ]
+          },
+          {
+            "level": 3,
+            "perks": [
+              "Ritualist"
+            ]
+          },
+          {
+            "level": 5,
+            "perks": [
+              "Familiar"
+            ]
+          },
+          {
+            "level": 7,
+            "perks": [
+              "Secret of Mana"
+            ]
+          },
+          {
+            "level": 9,
+            "perks": [
+              "Secret of Mana"
+            ]
+          }
+        ],
+        "spells": {
+          "start": [
+            "Beast",
+            "Blink",
+            "Forge",
+            "Portal"
+          ],
+          "later": [
+            "Aqua",
+            "Gas",
+            "Gust",
+            "Ward"
+          ]
+        }
+      }
     }
   },
   "sort": 0,

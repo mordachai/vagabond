@@ -1174,7 +1174,74 @@
   "folder": null,
   "flags": {
     "vagabond": {
-      "buildGuide": true
+      "buildGuide": {
+        "title": "Wizard - Evoker",
+        "className": "Wizard",
+        "stats": {
+          "1": {
+            "might": 3,
+            "dexterity": 4,
+            "awareness": 6,
+            "reason": 6,
+            "presence": 4,
+            "luck": 3
+          },
+          "10": {
+            "might": 3,
+            "dexterity": 4,
+            "awareness": 6,
+            "reason": 7,
+            "presence": 4,
+            "luck": 7
+          }
+        },
+        "perks": [
+          {
+            "level": 1,
+            "perks": [
+              "Bookworm",
+              "Vehement Magic"
+            ]
+          },
+          {
+            "level": 3,
+            "perks": [
+              "Secret of Mana"
+            ]
+          },
+          {
+            "level": 5,
+            "perks": [
+              "Secret of Mana"
+            ]
+          },
+          {
+            "level": 7,
+            "perks": [
+              "Secret of Mana"
+            ]
+          },
+          {
+            "level": 9,
+            "perks": [
+              "Secret of Mana"
+            ]
+          }
+        ],
+        "spells": {
+          "start": [
+            "Burn",
+            "Freeze",
+            "Gas",
+            "Zap"
+          ],
+          "later": [
+            "Aqua",
+            "Goop",
+            "Gust and Kinesis"
+          ]
+        }
+      }
     }
   },
   "sort": 0,

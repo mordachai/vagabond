@@ -1203,7 +1203,75 @@
   "folder": null,
   "flags": {
     "vagabond": {
-      "buildGuide": true
+      "buildGuide": {
+        "title": "Sorcerer - Mage Hand",
+        "className": "Sorcerer",
+        "stats": {
+          "1": {
+            "might": 7,
+            "dexterity": 2,
+            "awareness": 3,
+            "reason": 2,
+            "presence": 7,
+            "luck": 3
+          },
+          "10": {
+            "might": 7,
+            "dexterity": 5,
+            "awareness": 5,
+            "reason": 2,
+            "presence": 7,
+            "luck": 3
+          }
+        },
+        "perks": [
+          {
+            "level": 1,
+            "perks": [
+              "Gish",
+              "Vehement Magic"
+            ]
+          },
+          {
+            "level": 3,
+            "perks": [
+              "Dusted Knuckle"
+            ]
+          },
+          {
+            "level": 5,
+            "perks": [
+              "Ungarmax"
+            ]
+          },
+          {
+            "level": 7,
+            "perks": [
+              "Check Hook"
+            ]
+          },
+          {
+            "level": 9,
+            "perks": [
+              "Endless Stamina"
+            ]
+          }
+        ],
+        "spells": {
+          "start": [
+            "Apoplex",
+            "Fear",
+            "Light",
+            "Ward"
+          ],
+          "later": [
+            "Blink",
+            "Enchant",
+            "Exalt",
+            "Tempo"
+          ]
+        }
+      }
     }
   },
   "sort": 0,

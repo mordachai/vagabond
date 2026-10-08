@@ -1196,7 +1196,75 @@
   "folder": null,
   "flags": {
     "vagabond": {
-      "buildGuide": true
+      "buildGuide": {
+        "title": "Wizard - Diviner",
+        "className": "Wizard",
+        "stats": {
+          "1": {
+            "might": 3,
+            "dexterity": 4,
+            "awareness": 5,
+            "reason": 6,
+            "presence": 3,
+            "luck": 5
+          },
+          "10": {
+            "might": 3,
+            "dexterity": 4,
+            "awareness": 7,
+            "reason": 7,
+            "presence": 3,
+            "luck": 7
+          }
+        },
+        "perks": [
+          {
+            "level": 1,
+            "perks": [
+              "Bookworm",
+              "Cardistry"
+            ]
+          },
+          {
+            "level": 3,
+            "perks": [
+              "Telepath"
+            ]
+          },
+          {
+            "level": 5,
+            "perks": [
+              "Medium"
+            ]
+          },
+          {
+            "level": 7,
+            "perks": [
+              "Sage"
+            ]
+          },
+          {
+            "level": 9,
+            "perks": [
+              "Favors the Bold"
+            ]
+          }
+        ],
+        "spells": {
+          "start": [
+            "Guide",
+            "Kinesis",
+            "Speak",
+            "Truth"
+          ],
+          "later": [
+            "Bless",
+            "Dispel",
+            "Enchant",
+            "Ward"
+          ]
+        }
+      }
     }
   },
   "sort": 0,

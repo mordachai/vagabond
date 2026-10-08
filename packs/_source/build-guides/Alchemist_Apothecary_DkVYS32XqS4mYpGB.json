@@ -1050,7 +1050,65 @@
   "folder": null,
   "flags": {
     "vagabond": {
-      "buildGuide": true
+      "buildGuide": {
+        "title": "Alchemist - Apothecary",
+        "className": "Alchemist",
+        "stats": {
+          "1": {
+            "might": 3,
+            "dexterity": 4,
+            "awareness": 5,
+            "reason": 6,
+            "presence": 4,
+            "luck": 3
+          },
+          "10": {
+            "might": 4,
+            "dexterity": 6,
+            "awareness": 7,
+            "reason": 7,
+            "presence": 4,
+            "luck": 3
+          }
+        },
+        "perks": [
+          {
+            "level": 1,
+            "perks": [
+              "Deft Hands",
+              "Medic"
+            ]
+          },
+          {
+            "level": 3,
+            "perks": [
+              "Bookworm"
+            ]
+          },
+          {
+            "level": 5,
+            "perks": [
+              "Master Artisan"
+            ]
+          },
+          {
+            "level": 7,
+            "perks": [
+              "Sage"
+            ]
+          },
+          {
+            "level": 9,
+            "perks": [
+              "Heightened Intellect"
+            ]
+          }
+        ],
+        "spells": {
+          "start": [],
+          "later": []
+        }
+      }
     }
   },
   "sort": 0,

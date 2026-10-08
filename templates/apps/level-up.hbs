@@ -1,9 +1,39 @@
 <div class="level-up-wrapper">
+ <div class="lu-shell">
+  <aside class="lu-side">
+    <div class="char-image-container">
+      <img class="profile-img" src="{{portrait}}" alt="" />
+    </div>
+    <div class="lu-xpbox">
+      <span class="lu-xpbox-level">{{localize "VAGABOND.UI.Sections.Level"}} {{xpBox.from}} → {{xpBox.to}}</span>
+      {{#if xpBox.text}}
+        <span class="lu-xpbox-text {{#if xpBox.ready}}lu-ready{{/if}}">{{xpBox.text}}</span>
+      {{else}}
+        <span class="lu-xpbox-text lu-ready"><i class="fas fa-check"></i></span>
+      {{/if}}
+      <div class="lu-xp-bar"><div class="lu-xp-bar-fill {{#if xpBox.ready}}lu-ready{{/if}}" style="width: {{xpBox.percent}}%"></div></div>
+      <span class="lu-xpbox-label {{#if xpBox.pending}}lu-pending{{/if}}">{{xpBox.label}}</span>
+    </div>
+    {{#if questionnaire.xpGained}}
+      <button type="button" class="lu-btn lu-btn-primary lu-side-btn" data-action="awardXP">
+        <i class="fas fa-star"></i> {{localize "VAGABOND.LevelUp.AwardXP" xp=questionnaire.xpGained}}
+      </button>
+    {{/if}}
+    {{#if showLevelUpBtn}}
+      <button type="button" class="lu-btn lu-btn-accent lu-side-btn" data-action="triggerLevelUp">
+        <i class="fas fa-arrow-up"></i> {{localize "VAGABOND.LevelUp.Title"}}
+      </button>
+      <div class="lu-notice lu-side-notice"><i class="fas fa-circle-up"></i> {{levelUpNotice}}</div>
+    {{/if}}
+  </aside>
+
+  <div class="lu-main">
   {{! Tab Bar }}
   <nav class="level-up-tabs">
     {{#each tabs}}
       <button class="level-up-tab {{#if active}}active{{/if}}" data-action="changeTab" data-tab="{{id}}">
         <i class="{{icon}}"></i> {{label}}
+        {{#if (eq mark 'done')}}<i class="fas fa-check lu-tab-ok"></i>{{else if (eq mark 'pending')}}<span class="lu-tab-dot"></span>{{/if}}
       </button>
     {{/each}}
 
@@ -54,72 +84,18 @@
     {{! ─── XP Questionnaire ─── }}
     {{#if (eq activeTab 'questionnaire')}}
       <section class="lu-tab lu-questionnaire">
-        <div class="lu-xp-layout">
-          {{! Left: Questions }}
-          <div class="lu-xp-left">
-            <h3><i class="fas fa-star"></i> {{localize "VAGABOND.LevelUp.SessionXPQuestionnaire"}}</h3>
-            <p class="lu-instruction">{{localize "VAGABOND.LevelUp.Instruction"}}</p>
+        <h3><i class="fas fa-star"></i> {{localize "VAGABOND.LevelUp.SessionXPQuestionnaire"}}</h3>
+        <p class="lu-instruction">{{localize "VAGABOND.LevelUp.Instruction"}}</p>
 
-            <div class="lu-questions">
-              {{#each questionnaire.questions}}
-                <label class="lu-question {{#if checked}}checked{{/if}}" data-action="toggleQuestion" data-index="{{index}}">
-                  <span class="lu-checkbox">
-                    {{#if checked}}<i class="fas fa-check-square"></i>{{else}}<i class="far fa-square"></i>{{/if}}
-                  </span>
-                  <span class="lu-question-text">{{label}}</span>
-                </label>
-              {{/each}}
-            </div>
-
-            <div class="lu-actions">
-              {{#unless questionnaire.xpAwarded}}
-                <button type="button" class="lu-btn lu-btn-primary" data-action="awardXP" {{#unless questionnaire.xpGained}}disabled{{/unless}}>
-                  <i class="fas fa-star"></i> {{localize "VAGABOND.LevelUp.AwardXP" xp=questionnaire.xpGained}}
-                </button>
-              {{else}}
-                <span class="lu-awarded-badge"><i class="fas fa-check"></i> {{localize "VAGABOND.LevelUp.XPAwarded"}}</span>
-              {{/unless}}
-            </div>
-          </div>
-
-          {{! Right: Stats Panel }}
-          <div class="lu-xp-right">
-            <div class="lu-stats-panel">
-              <div class="lu-stats-panel-level">
-                <span class="lu-stats-label">{{localize "VAGABOND.UI.Sections.Level"}}</span>
-                <span class="lu-stats-big">{{questionnaire.currentLevel}}</span>
-              </div>
-
-              <div class="lu-stats-panel-divider"></div>
-
-              <div class="lu-stats-panel-xp">
-                <span class="lu-stats-label">{{localize "VAGABOND.LevelUp.Experience"}}</span>
-                <div class="lu-xp-numbers">
-                  <span class="lu-xp-current {{#if questionnaire.canLevelUp}}lu-ready{{/if}}">{{questionnaire.projectedXP}}</span>
-                  <span class="lu-xp-separator">/</span>
-                  <span class="lu-xp-required">{{questionnaire.xpRequired}}</span>
-                </div>
-                <div class="lu-xp-bar">
-                  <div class="lu-xp-bar-fill {{#if questionnaire.canLevelUp}}lu-ready{{/if}}" style="width: {{questionnaire.xpProgress}}%"></div>
-                </div>
-              </div>
-
-              <div class="lu-stats-panel-divider"></div>
-
-              <div class="lu-stats-panel-next">
-                <span class="lu-stats-label">{{localize "VAGABOND.LevelUp.NextLevel"}}</span>
-                <span class="lu-stats-big lu-next-level">{{questionnaire.nextLevel}}</span>
-              </div>
-
-              {{#if questionnaire.xpGained}}
-                <div class="lu-stats-panel-divider"></div>
-                <div class="lu-stats-panel-gain">
-                  <span class="lu-stats-label">{{localize "VAGABOND.LevelUp.SessionXP"}}</span>
-                  <span class="lu-stats-gain">+{{questionnaire.xpGained}}</span>
-                </div>
-              {{/if}}
-            </div>
-          </div>
+        <div class="lu-questions">
+          {{#each questionnaire.questions}}
+            <label class="lu-question {{#if checked}}checked{{/if}}" data-action="toggleQuestion" data-index="{{index}}">
+              <span class="lu-checkbox">
+                {{#if checked}}<i class="fas fa-check-square"></i>{{else}}<i class="far fa-square"></i>{{/if}}
+              </span>
+              <span class="lu-question-text">{{label}}</span>
+            </label>
+          {{/each}}
         </div>
       </section>
     {{/if}}
@@ -129,40 +105,77 @@
       <section class="lu-tab lu-summary">
         <h3><i class="fas fa-scroll"></i> {{localize "VAGABOND.LevelUp.LevelSummary" level=newLevel}}</h3>
 
-        {{#unless levelApplied}}
-          <p class="lu-warning"><i class="fas fa-exclamation-triangle"></i>{{localize "VAGABOND.LevelUp.HintLevelUp"}}</p>
-        {{/unless}}
+        {{#if summary.status}}<p class="lu-instruction">{{summary.status}}</p>{{/if}}
 
-        {{#if summary.hasFeatures}}
-          <div class="lu-features">
-            <h4>{{localize "VAGABOND.LevelUp.NewFeatures"}}</h4>
-            {{#each summary.features}}
-              <div class="lu-feature">
-                <strong>{{name}}</strong>
-                {{#if description}}<div class="lu-feature-desc">{{{description}}}</div>{{/if}}
-                {{#if statBonusPoints}}<span class="lu-feature-tag"><i class="fas fa-chart-bar"></i> +{{statBonusPoints}} {{localize "VAGABOND.LevelUp.StatPointsSuffix"}}</span>{{/if}}
-                {{#if perkAmount}}<span class="lu-feature-tag"><i class="fas fa-gem"></i> +{{perkAmount}} {{localize "VAGABOND.LevelUp.PerksSuffix"}}</span>{{/if}}
-                {{#if extraTraining}}<span class="lu-feature-tag"><i class="fas fa-graduation-cap"></i> +{{extraTraining}} {{localize "VAGABOND.LevelUp.TrainingsSuffix"}}</span>{{/if}}
+        <h4 class="lu-subhead">{{summary.gainTitle}}</h4>
+        <div class="lu-gains">
+          {{#each summary.rows}}
+            {{#if desc}}
+              <details class="lu-gain {{state}}">
+                <summary><span class="lu-mark"><i class="{{markIcon}}"></i></span><span class="lu-gain-label">{{label}}</span></summary>
+                <div class="lu-gain-desc">{{{desc}}}</div>
+              </details>
+            {{else if tab}}
+              <button type="button" class="lu-gain lu-gain-link {{state}}" data-action="changeTab" data-tab="{{tab}}" {{#if tip}}data-tooltip="{{tip}}"{{/if}}>
+                <span class="lu-mark"><i class="{{markIcon}}"></i></span><span class="lu-gain-label">{{label}}</span>
+              </button>
+            {{else}}
+              <div class="lu-gain {{state}}" {{#if tip}}data-tooltip="{{tip}}"{{/if}}>
+                <span class="lu-mark"><i class="{{markIcon}}"></i></span><span class="lu-gain-label">{{label}}</span>
               </div>
+            {{/if}}
+          {{/each}}
+        </div>
+      </section>
+    {{/if}}
+
+    {{! ─── Build Guide ─── }}
+    {{#if (eq activeTab 'guide')}}
+      <section class="lu-tab lu-guide">
+        <h3><i class="fas fa-route"></i> {{guide.title}}</h3>
+
+        {{#if guide.hasGoals}}
+          <h4 class="lu-subhead">{{localize "VAGABOND.LevelUp.GuideStatGoals"}}</h4>
+          <div class="lu-goals">
+            {{#each guide.goals}}
+              <div class="lu-goal"><span>{{abbr}}</span><b>{{current}} → {{target}}</b></div>
             {{/each}}
           </div>
         {{/if}}
 
-        {{#if summary.hasChecklist}}
-          <div class="lu-checklist">
-            <h4>{{localize "VAGABOND.LevelUp.ToDo"}}</h4>
-            {{#each summary.checklist}}
-              <div class="lu-checklist-item {{#if done}}done{{/if}}">
-                <span class="lu-check-icon">
-                  {{#if done}}<i class="fas fa-check-circle"></i>{{else}}<i class="far fa-circle"></i>{{/if}}
-                </span>
-                <span class="lu-check-label" data-action="changeTab" data-tab="{{tab}}">{{label}}</span>
-              </div>
-            {{/each}}
+        <div class="lu-guide-cols {{#unless guide.hasSpells}}single{{/unless}}">
+          <div>
+            <h4 class="lu-subhead">{{localize "VAGABOND.LevelUp.GuidePerks"}}</h4>
+            <div class="lu-road">
+              {{#each guide.levels}}
+                <span class="lu-road-lv {{#if now}}now{{/if}}">L{{level}}</span>
+                {{#if jump}}
+                  <button type="button" class="lu-road-pk lu-road-link now {{#if taken}}taken{{/if}}" data-action="changeTab" data-tab="perks" data-perk-name="{{jumpName}}">
+                    {{#if taken}}<i class="fas fa-check"></i> {{/if}}{{text}} <span class="lu-dim">→ {{localize "VAGABOND.LevelUp.TabPerks"}}</span>
+                  </button>
+                {{else}}
+                  <span class="lu-road-pk {{#if taken}}taken{{/if}} {{#if now}}now{{/if}}">{{#if taken}}<i class="fas fa-check"></i> {{/if}}{{#if text}}{{text}}{{else}}—{{/if}}</span>
+                {{/if}}
+              {{/each}}
+            </div>
           </div>
-        {{/if}}
 
-        {{!-- Apply button is in the persistent footer --}}
+          {{#if guide.hasSpells}}
+            <div>
+              <h4 class="lu-subhead">{{localize "VAGABOND.UI.Sections.Spells"}}</h4>
+              <div class="lu-guide-spells">
+                {{#if guide.start.length}}
+                  <span class="lu-guide-k">{{localize "VAGABOND.LevelUp.GuideStart"}}</span>
+                  {{#each guide.start}}<span>{{#if owned}}<i class="fas fa-check"></i> {{/if}}{{name}}</span>{{/each}}
+                {{/if}}
+                {{#if guide.later.length}}
+                  <span class="lu-guide-k">{{localize "VAGABOND.LevelUp.GuideLater"}}</span>
+                  {{#each guide.later}}<span>{{#if owned}}<i class="fas fa-check"></i> {{/if}}{{name}}</span>{{/each}}
+                {{/if}}
+              </div>
+            </div>
+          {{/if}}
+        </div>
       </section>
     {{/if}}
 
@@ -172,7 +185,7 @@
         <h3><i class="fas fa-chart-bar"></i> {{localize "VAGABOND.LevelUp.StatIncrease"}}</h3>
         <p class="lu-instruction">{{localize "VAGABOND.LevelUp.ChooseStatInstruction" cap=statIncrease.statCap}}</p>
 
-        <div class="lu-stat-grid">
+        <div class="lu-stat-grid lu-one-row">
           {{#each statIncrease.stats}}
             <button type="button"
                     class="lu-stat-card {{#if isSelected}}selected{{/if}} {{#if isMaxed}}maxed{{/if}}"
@@ -180,6 +193,7 @@
                     data-stat="{{key}}"
                     {{#if isMaxed}}disabled{{/if}}>
               <span class="lu-stat-name">{{label}}</span>
+              {{#if isGuidePick}}<span class="lu-badge guide">{{localize "VAGABOND.LevelUp.GuidePick"}}</span>{{/if}}
               <span class="lu-stat-value">{{current}}</span>
               {{#if isSelected}}<span class="lu-stat-delta">+1</span>{{/if}}
               {{#if isMaxed}}<span class="lu-stat-max">{{localize "VAGABOND.LevelUp.Max"}}</span>{{/if}}
@@ -328,6 +342,7 @@
                    data-action="selectPerk" data-uuid="{{uuid}}">
                 <img src="{{img}}" alt="" class="lu-list-img" />
                 <span class="lu-list-name">{{name}}</span>
+                {{#if isGuide}}<span class="lu-badge guide">{{localize "VAGABOND.LevelUp.GuidePick"}}</span>{{/if}}
                 {{#if isOwned}}<span class="lu-badge taken">{{localize "VAGABOND.LevelUp.Taken"}}{{#if ownedCount}} x{{ownedCount}}{{/if}}</span>{{/if}}
                 {{#unless prerequisitesMet}}<span class="lu-badge prereq"><i class="fas fa-lock"></i></span>{{/unless}}
               </div>
@@ -402,6 +417,7 @@
                 <span class="lu-list-name">{{name}}</span>
                 {{#if baseDamage}}<span class="lu-spell-info">{{baseDamage}}</span>{{/if}}
                 {{#if damageType}}<span class="lu-spell-dmg"><i class="{{damageTypeIcon}}"></i></span>{{/if}}
+                {{#if isGuide}}{{#unless isOwned}}<span class="lu-badge guide">{{localize "VAGABOND.LevelUp.GuidePick"}}</span>{{/unless}}{{/if}}
                 {{#if isOwned}}<span class="lu-badge owned">{{localize "VAGABOND.LevelUp.Known"}}</span>{{/if}}
                 {{#if isRequired}}<span class="lu-badge required">{{localize "VAGABOND.LevelUp.Required"}}</span>{{/if}}
               </div>
@@ -454,22 +470,25 @@
 
   </div>
 
+  </div>{{! lu-main }}
+ </div>{{! lu-shell }}
+
   {{! ─── Persistent Footer ─── }}
   <footer class="lu-footer">
-    {{#if showLevelUpBtn}}
-      <button type="button" class="lu-btn lu-btn-accent lu-btn-large" data-action="triggerLevelUp">
-        <i class="fas fa-arrow-up"></i> {{localize "VAGABOND.LevelUp.Title"}}
+    <div class="lu-footer-row">
+      {{#if showGrantLevelBtn}}
+        <button type="button" class="lu-btn lu-btn-large" data-action="grantLevel" data-tooltip="{{localize 'VAGABOND.LevelUp.GrantLevelTooltip'}}">
+          <i class="fas fa-flag-checkered"></i> {{localize "VAGABOND.LevelUp.GrantLevel"}}
+        </button>
+      {{/if}}
+      {{#if showApplyBtn}}
+        <button type="button" class="lu-btn lu-btn-accent lu-btn-large" data-action="applyLevelUp" {{#unless allChecklistDone}}disabled{{/unless}}>
+          <i class="fas fa-check-double"></i> {{localize "VAGABOND.LevelUp.ApplyAllChanges"}}
+        </button>
+      {{/if}}
+      <button type="button" class="lu-btn lu-btn-large {{#if closePrimary}}lu-btn-accent{{/if}}" data-action="closeDialog">
+        <i class="fas fa-xmark"></i> {{localize "VAGABOND.LevelUp.Close"}}
       </button>
-    {{/if}}
-    {{#if showGrantLevelBtn}}
-      <button type="button" class="lu-btn lu-btn-large" data-action="grantLevel" data-tooltip="{{localize 'VAGABOND.LevelUp.GrantLevelTooltip'}}">
-        <i class="fas fa-flag-checkered"></i> {{localize "VAGABOND.LevelUp.GrantLevel"}}
-      </button>
-    {{/if}}
-    {{#if showApplyBtn}}
-      <button type="button" class="lu-btn lu-btn-accent lu-btn-large" data-action="applyLevelUp" {{#unless allChecklistDone}}disabled{{/unless}}>
-        <i class="fas fa-check-double"></i> {{localize "VAGABOND.LevelUp.ApplyAllChanges"}}
-      </button>
-    {{/if}}
+    </div>
   </footer>
 </div>

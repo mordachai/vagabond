@@ -7,6 +7,10 @@
  * - Stat Increase (pick one stat to increase, even levels by default)
  * - Perks (choose a perk from class grants, odd levels > 1 by default)
  * - Spells (choose new spells if the class/perks/ancestry grants them)
+ * - Guide (heroes from the Build Guides pack: stat goals, perks by level, spells)
+ *
+ * Only what the player can act on right now is shown: the XP award first, and the Stat / Perk /
+ * Spell choices only once the Level has been gained.
  */
 
 import { CharacterBuilderDataService } from './char-builder/services/data-service.mjs';
@@ -29,7 +33,7 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
       resizable: true,
     },
     position: {
-      width: 720,
+      width: 960,
       height: 'auto',
     },
     form: {
@@ -54,6 +58,7 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
       toggleGmOverride: LevelUpDialog._onToggleGmOverride,
       toggleShowAllPerks: LevelUpDialog._onToggleShowAllPerks,
       applyLevelUp: LevelUpDialog._onApplyLevelUp,
+      closeDialog: LevelUpDialog._onCloseDialog,
     },
   };
 
@@ -113,7 +118,18 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
 
   /** @override */
   get title() {
-    return `${game.i18n.localize('VAGABOND.LevelUp.DialogTitle')} — ${this.actor.name}`;
+    const label = game.i18n.localize(this.levelApplied ? 'VAGABOND.LevelUp.TitleLevelUp' : 'VAGABOND.LevelUp.TitleXP');
+    const ancestry = this.actor.items.find(i => i.type === 'ancestry')?.name;
+    const details = [ancestry, this.classItem?.name].filter(Boolean).join(', ');
+    return `${label}: ${this.actor.name}${details ? ` — ${details}` : ''}`;
+  }
+
+  /** @override */
+  _onRender(context, options) {
+    super._onRender?.(context, options);
+    // The title changes once the Level is gained ("XP Award" -> "Level Up")
+    const title = this.window?.title;
+    if (title) title.textContent = this.title;
   }
 
   // ─── Tab & Level Helpers ──────────────────────────────────
@@ -186,6 +202,53 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
     return this.actor.items.find(i => i.type === 'class') ?? null;
   }
 
+  // ─── Build Guide ──────────────────────────────────────────
+
+  /**
+   * The Build Guide plan stored on the actor by the Build Guides pack
+   * (`flags.vagabond.buildGuide`), or null for heroes that did not start from a guide.
+   */
+  get guidePlan() {
+    const plan = this.actor.flags?.vagabond?.buildGuide;
+    return plan && typeof plan === 'object' && Array.isArray(plan.perks) ? plan : null;
+  }
+
+  /** Lower-cased names of the Perks the guide lists for the Level being gained */
+  get guidePerkNames() {
+    const plan = this.guidePlan;
+    if (!plan) return [];
+    return plan.perks.filter(p => p.level === this.newLevel).flatMap(p => p.perks).map(n => n.toLowerCase());
+  }
+
+  /** Lower-cased keys of every Spell the guide mentions (starting + learn-later) */
+  get guideSpellKeys() {
+    const sp = this.guidePlan?.spells;
+    return sp ? [...(sp.start ?? []), ...(sp.later ?? [])].map(n => LevelUpDialog._spellKey(n)) : [];
+  }
+
+  /** Strip the "+" / "-" of paired Spells (Tempo +, Tempo -) so they match the guide's plain name */
+  static _spellKey(name) {
+    return String(name).toLowerCase().replace(/\s*[+-]$/, '');
+  }
+
+  /**
+   * The Stat the guide wants next: the one furthest below its Level 10 goal.
+   * The book only lists Level 1 and Level 10 rows, so the order in between is the best fit.
+   */
+  get guideStatSuggestion() {
+    const goal = this.guidePlan?.stats?.['10'];
+    if (!goal) return null;
+    const cap = CONFIG.VAGABOND.homebrew?.statCap ?? 7;
+    let best = null;
+    let bestGap = 0;
+    for (const key of Object.keys(CONFIG.VAGABOND.stats)) {
+      const current = this.actor.system.stats?.[key]?.value || 0;
+      const gap = (goal[key] ?? 0) - current;
+      if (gap > bestGap && current < cap) { best = key; bestGap = gap; }
+    }
+    return best;
+  }
+
   /**
    * Check if actor is a spellcaster (from class, perks, or ancestry via Active Effects)
    */
@@ -215,38 +278,34 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
   }
 
   /**
-   * Which tabs should be visible
+   * The choices this Level asks of the player (Stat / Perk / Spell), whether or not the Level
+   * has been gained yet. GM override forces all three.
    */
-  get visibleTabs() {
+  get choiceTabs() {
     const tabs = [];
+    if (this.statGrantsAtLevel > 0 || this.gmOverride) tabs.push('stats');
 
-    // Class pick (Level 0 → 1 only)
-    if (this.needsClass) tabs.push('class');
-
-    tabs.push('questionnaire');
-
-    // Stat increase: driven by class feature statBonusPoints, or GM override
-    if (this.statGrantsAtLevel > 0 || this.gmOverride) {
-      tabs.push('stats');
-    }
-
-    // Perks: driven by class feature perkAmount or allowedPerks grants, or GM override
     const hasPerkGrants = this.perkGrantsAtLevel > 0 || this.newLevelFeatures.some(f => f.allowedPerks?.length > 0);
-    if (hasPerkGrants || this.gmOverride) {
-      tabs.push('perks');
-    }
+    if (hasPerkGrants || this.gmOverride) tabs.push('perks');
 
-    // Spells: if spellcaster gains new spells, or level features auto-grant or allow choosing spells
     const hasSpellGrants = this.newLevelFeatures.some(f =>
       (f.requiredSpells?.length || 0) > 0 || (f.spellAmount || 0) > 0
     );
-    if ((this.isSpellcaster && this.newSpellSlots > 0) || hasSpellGrants || this.gmOverride) {
-      tabs.push('spells');
-    }
+    if ((this.isSpellcaster && this.newSpellSlots > 0) || hasSpellGrants || this.gmOverride) tabs.push('spells');
+    return tabs;
+  }
 
-    // Summary is always last
+  /**
+   * Which tabs should be visible. The choice tabs only exist once the Level is gained: before
+   * that there is nothing to pick yet, only XP to award and what the next Level will give.
+   */
+  get visibleTabs() {
+    const tabs = [];
+    if (this.needsClass) tabs.push('class');
+    tabs.push('questionnaire');
+    if (this.guidePlan) tabs.push('guide');
+    if (this.levelApplied) tabs.push(...this.choiceTabs);
     tabs.push('summary');
-
     return tabs;
   }
 
@@ -260,21 +319,25 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
     // Basic info
     context.actor = this.actor;
     context.system = sys;
+    context.portrait = this.actor.img;
     context.currentLevel = this.currentLevel;
     context.newLevel = this.newLevel;
     context.isGM = game.user.isGM;
     context.gmOverride = this.gmOverride;
     context.levelApplied = this.levelApplied;
 
-    // Footer buttons — always visible
+    // Footer buttons
     const canLevelFromXP = (sys.attributes.xp || 0) >= (sys.attributes.xpRequired || 10) && !this.levelApplied;
     context.showLevelUpBtn = (canLevelFromXP || (sys.attributes.canLevelUp && !this.levelApplied));
     context.showApplyBtn = this.levelApplied;
     // Destiny: GM grants a Level for a completed Milestone, no XP needed
     context.showGrantLevelBtn = game.user.isGM && !this.levelApplied;
     context.allChecklistDone = this._isChecklistComplete();
+    context.levelUpNotice = context.showLevelUpBtn ? game.i18n.localize('VAGABOND.LevelUp.NoticeCanLevel') : null;
+    context.closePrimary = !this.levelApplied && !context.showLevelUpBtn && this.xpAwarded;
 
-    // Tab state
+    // Tab state (a tab that stopped being visible falls back to the first one)
+    if (!this.visibleTabs.includes(this.activeTab)) this.activeTab = this.visibleTabs[0];
     context.activeTab = this.activeTab;
     context.visibleTabs = this.visibleTabs;
     context.tabs = this._prepareTabData();
@@ -284,11 +347,17 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
       context.classPick = await this._prepareClassContext();
     }
 
-    // XP Questionnaire
+    // XP Questionnaire + the always-visible XP box
     context.questionnaire = this._prepareQuestionnaireContext();
+    context.xpBox = this._prepareXpBox(context.questionnaire);
 
     // Summary
     context.summary = await this._prepareSummaryContext();
+
+    // Build Guide
+    if (this.visibleTabs.includes('guide')) {
+      context.guide = this._prepareGuideContext();
+    }
 
     // Stat Increase
     if (this.visibleTabs.includes('stats')) {
@@ -308,11 +377,22 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
     return context;
   }
 
+  /** Is this choice made? */
+  _tabDone(id) {
+    switch (id) {
+      case 'stats': return !!this.selectedStat && (!this.gainsReasonTraining || !!this.reasonTrainingSkill);
+      case 'perks': return !!this.chosenPerkUuid;
+      case 'spells': return this.newSpellSlots <= 0 || this.chosenSpells.length >= this.newSpellSlots;
+      default: return null;
+    }
+  }
+
   _prepareTabData() {
     const visible = this.visibleTabs;
     const tabDefs = [
       { id: 'class', label: game.i18n.localize('VAGABOND.LevelUp.TabClass'), icon: 'fas fa-shield-halved' },
       { id: 'questionnaire', label: game.i18n.localize('VAGABOND.LevelUp.TabXP'), icon: 'fas fa-star' },
+      { id: 'guide', label: game.i18n.localize('VAGABOND.LevelUp.TabGuide'), icon: 'fas fa-route' },
       { id: 'stats', label: game.i18n.localize('VAGABOND.LevelUp.TabStats'), icon: 'fas fa-chart-bar' },
       { id: 'perks', label: game.i18n.localize('VAGABOND.LevelUp.TabPerks'), icon: 'fas fa-gem' },
       { id: 'spells', label: game.i18n.localize('VAGABOND.UI.Sections.Spells'), icon: 'fas fa-hat-wizard' },
@@ -320,7 +400,14 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
     ];
     return tabDefs
       .filter(t => visible.includes(t.id))
-      .map(t => ({ ...t, active: t.id === this.activeTab }));
+      .map(t => {
+        const done = this._tabDone(t.id);
+        return {
+          ...t,
+          active: t.id === this.activeTab,
+          mark: done === null ? null : (done ? 'done' : 'pending'),
+        };
+      });
   }
 
   _prepareQuestionnaireContext() {
@@ -330,9 +417,10 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
     const xpGained = xpQuestions.reduce((sum, q, i) => sum + (this.questions[i] ? (q.xp || 1) : 0), 0);
     const currentXP = sys.attributes.xp || 0;
     const xpRequired = sys.attributes.xpRequired || 10;
-    const projectedXP = currentXP + (this.xpAwarded ? 0 : xpGained);
+    // Awarded questions are cleared, so what is ticked is always still to be awarded
+    const projectedXP = currentXP + xpGained;
     const canLevelUp = projectedXP >= xpRequired && !this.levelApplied;
-    const currentLevel = sys.attributes.level.value ?? 1;
+    const currentLevel = this.currentLevel;
     const xpProgress = Math.min(100, Math.round((projectedXP / xpRequired) * 100));
 
     return {
@@ -348,10 +436,30 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
       projectedXP,
       xpProgress,
       currentLevel,
-      nextLevel: currentLevel + 1,
+      nextLevel: this.newLevel,
       canLevelUp,
       xpAwarded: this.xpAwarded,
       alreadyCanLevel: sys.attributes.canLevelUp && !this.levelApplied,
+    };
+  }
+
+  /** The XP box under the portrait: shown on every tab */
+  _prepareXpBox(q) {
+    const gained = this.levelApplied;
+    const ready = gained || q.projectedXP >= q.xpRequired;
+    let label;
+    if (gained) label = game.i18n.localize('VAGABOND.LevelUp.LevelGained');
+    else if (q.xpGained > 0) label = game.i18n.format('VAGABOND.LevelUp.XPPending', { n: q.xpGained });
+    else if (ready) label = game.i18n.localize('VAGABOND.LevelUp.XPReady');
+    else label = game.i18n.format('VAGABOND.LevelUp.XPToGo', { n: q.xpRequired - q.projectedXP });
+    return {
+      from: this.currentLevel,
+      to: this.newLevel,
+      text: gained ? '' : `${q.projectedXP} / ${q.xpRequired}`,
+      percent: gained ? 100 : q.xpProgress,
+      ready,
+      pending: !gained && q.xpGained > 0,
+      label,
     };
   }
 
@@ -379,72 +487,138 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
     return { classes, preview };
   }
 
+  /**
+   * "At Level N you gain": the class features, then one row per choice. Rows are plain
+   * explanations until the Level is gained; after that a pending choice links to its tab and
+   * a made choice opens its description.
+   */
   async _prepareSummaryContext() {
+    const L = (key, data) => game.i18n.format(`VAGABOND.LevelUp.${key}`, data ?? {});
+    const gained = this.levelApplied;
     const sys = this.actor.system;
-    const features = this.newLevelFeatures;
+    const enrich = (html, relativeTo) => foundry.applications.ux.TextEditor.enrichHTML(html || '', {
+      async: true, secrets: false, relativeTo,
+    });
+    const icons = { done: 'fas fa-check', pending: 'far fa-circle', info: 'fas fa-diamond' };
+    const rows = [];
+    const row = (state, label, extra = {}) => rows.push({ state, markIcon: icons[state], label, ...extra });
+    // A choice not made yet: a link to its tab once the Level is gained, plain text before
+    const pending = (tab, label, tip) => row(gained ? 'pending' : 'info', label, { tab: gained ? tab : null, tip });
 
-    // Enrich feature descriptions
-    const enrichedFeatures = [];
-    for (const f of features) {
-      const enriched = await foundry.applications.ux.TextEditor.enrichHTML(f.description || '', {
-        async: true,
-        secrets: false,
-      });
-      enrichedFeatures.push({
-        name: f.name,
-        description: enriched,
-        statBonusPoints: f.statBonusPoints || 0,
-        extraTraining: f.extraTraining || 0,
-        perkAmount: f.perkAmount || 0,
-      });
+    // Features (the bare "Perk" / "Stat" grant entries are covered by the choice rows below)
+    const grantOnly = /^(perks?|stats?|stat increase|spells?)$/i;
+    for (const f of this.newLevelFeatures) {
+      const grants = (f.perkAmount || f.statBonusPoints || f.spellAmount) > 0;
+      if (grants && grantOnly.test((f.name || '').trim())) continue;
+      row(gained ? 'done' : 'info', L('FeatureLabel', { name: f.name }), { desc: await enrich(f.description) });
     }
 
-    // Calculate projected changes
-    // We can't calculate exact new HP/mana without actually applying the level,
-    // so we show current values and what changes at the new level
-    const checklist = [];
+    const choices = this.choiceTabs;
 
-    if (this.statGrantsAtLevel > 0 || this.gmOverride) {
-      checklist.push({
-        label: 'Choose a stat to increase by +1',
-        tab: 'stats',
-        done: !!this.selectedStat,
-      });
+    if (choices.includes('stats')) {
+      const cap = CONFIG.VAGABOND.homebrew?.statCap ?? 7;
+      if (this.selectedStat) {
+        const abbr = game.i18n.localize(CONFIG.VAGABOND.statAbbreviations[this.selectedStat] || this.selectedStat);
+        const from = sys.stats?.[this.selectedStat]?.value || 0;
+        row('done', L('StatDone', { stat: abbr, from, to: from + 1 }), { desc: `<p>${L('StatDoneDesc')}</p>` });
+      } else {
+        pending('stats', L('PlusStat', { n: Math.max(1, this.statGrantsAtLevel) }), L('TipStat', { cap }));
+      }
     }
 
     if (this.gainsReasonTraining) {
-      checklist.push({
-        label: game.i18n.localize('VAGABOND.LevelUp.ReasonTraining'),
-        tab: 'stats',
-        done: !!this.reasonTrainingSkill,
-      });
+      if (this.reasonTrainingSkill) {
+        const skill = sys.skills?.[this.reasonTrainingSkill]?.label ?? this.reasonTrainingSkill;
+        row('done', L('TrainingDone', { skill }));
+      } else {
+        pending('stats', L('PlusTraining'), L('ReasonTrainingInstruction'));
+      }
     }
 
-    const hasPerkGrants = this.perkGrantsAtLevel > 0 || features.some(f => f.allowedPerks?.length > 0);
-    if (hasPerkGrants || this.gmOverride) {
-      checklist.push({
-        label: 'Choose a perk',
-        tab: 'perks',
-        done: !!this.chosenPerkUuid,
-      });
+    if (choices.includes('perks')) {
+      if (this.chosenPerkUuid) {
+        const item = await fromUuid(this.chosenPerkUuid);
+        if (item) {
+          const choiceLabel = this.perkChoice
+            ? await this._getChoiceLabel(this.perkChoice, item.system.choiceConfig?.type) : null;
+          row('done', L('PerkDone', { name: choiceLabel ? `${item.name} (${choiceLabel})` : item.name }),
+            { desc: await enrich(item.system.description, item) });
+        }
+      } else {
+        pending('perks', L('PlusPerk', { n: Math.max(1, this.perkGrantsAtLevel) }), L('TipPerk'));
+      }
     }
 
-    if ((this.isSpellcaster && this.newSpellSlots > 0) || this.gmOverride) {
-      checklist.push({
-        label: `Learn ${this.newSpellSlots || 'new'} spell(s)`,
-        tab: 'spells',
-        done: this.chosenSpells.length > 0,
-      });
+    if (choices.includes('spells')) {
+      for (const uuid of this.chosenSpells) {
+        const item = await fromUuid(uuid);
+        if (item) row('done', L('SpellDone', { name: item.name }), { desc: await enrich(item.system.description, item) });
+      }
+      const remaining = this.newSpellSlots - this.chosenSpells.length;
+      if (remaining > 0) pending('spells', L('PlusSpell', { n: remaining }), L('TipSpell'));
+    }
+
+    // What is still needed before there is anything to do
+    let status = null;
+    if (!gained) {
+      const q = this._prepareQuestionnaireContext();
+      status = (sys.attributes.canLevelUp || q.projectedXP >= q.xpRequired)
+        ? L('PressLevelUp')
+        : L('NeedXP', { n: Math.max(0, q.xpRequired - q.projectedXP) });
     }
 
     return {
       newLevel: this.newLevel,
-      features: enrichedFeatures,
-      hasFeatures: enrichedFeatures.length > 0,
-      checklist,
-      hasChecklist: checklist.length > 0,
-      isSpellcaster: this.isSpellcaster,
-      levelApplied: this.levelApplied,
+      gainTitle: L('AtLevelYouGain', { level: this.newLevel }),
+      status,
+      rows,
+      hasRows: rows.length > 0,
+    };
+  }
+
+  /** Build Guide tab: stat goals, perks by level, spells. Information only. */
+  _prepareGuideContext() {
+    const plan = this.guidePlan;
+    const sys = this.actor.system;
+    const goal = plan.stats?.['10'] ?? null;
+
+    const goals = goal ? Object.keys(CONFIG.VAGABOND.stats).map(key => ({
+      abbr: game.i18n.localize(CONFIG.VAGABOND.statAbbreviations[key] || key),
+      current: sys.stats?.[key]?.value || 0,
+      target: goal[key] ?? (sys.stats?.[key]?.value || 0),
+    })) : [];
+
+    const ownedPerks = new Set(this.actor.items.filter(i => i.type === 'perk')
+      .map(i => i.name.toLowerCase().replace(/\s*\(.*\)$/, '')));
+    const canJump = this.levelApplied && this.choiceTabs.includes('perks');
+    const levels = [...plan.perks].sort((a, b) => a.level - b.level).map(p => {
+      const now = p.level === this.newLevel;
+      const names = p.perks.length ? p.perks : [];
+      return {
+        level: p.level,
+        past: p.level < this.newLevel,
+        now,
+        names,
+        text: names.join(', '),
+        taken: names.length > 0 && names.every(n => ownedPerks.has(n.toLowerCase())),
+        jump: now && canJump && names.length > 0,
+        jumpName: names[0] ?? '',
+      };
+    });
+
+    const known = new Set(this.actor.items.filter(i => i.type === 'spell').map(i => LevelUpDialog._spellKey(i.name)));
+    const spellList = names => (names ?? []).map(name => ({ name, owned: known.has(LevelUpDialog._spellKey(name)) }));
+    const start = spellList(plan.spells?.start);
+    const later = spellList(plan.spells?.later);
+
+    return {
+      title: game.i18n.format('VAGABOND.LevelUp.GuideTitle', { title: plan.title }),
+      goals,
+      hasGoals: goals.length > 0,
+      levels,
+      start,
+      later,
+      hasSpells: start.length > 0 || later.length > 0,
     };
   }
 
@@ -465,6 +639,7 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
       const isMaxed = current >= (CONFIG.VAGABOND.homebrew?.statCap ?? 7);
       const isSelected = selected === key;
       return {
+        isGuidePick: !!this.guidePlan && key === this.guideStatSuggestion && this.statGrantsAtLevel > 0,
         key,
         label: game.i18n.localize(label),
         abbr: game.i18n.localize(CONFIG.VAGABOND.statAbbreviations[key] || ''),
@@ -628,7 +803,8 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
       ownedPerkNames[key] = (ownedPerkNames[key] || 0) + 1;
     }
 
-    // Build perk list
+    // Build perk list (the guide's picks for this Level float to the top)
+    const guidePerks = this.guidePerkNames;
     const perkList = [];
     for (const perk of allPerks.sort((a, b) => a.name.localeCompare(b.name))) {
       try {
@@ -654,6 +830,7 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
           ownedCount,
           isPreviewing: perk.uuid === this.selectedPerkUuid,
           isChosen: perk.uuid === this.chosenPerkUuid,
+          isGuide: guidePerks.includes(perk.name.toLowerCase()),
         });
       } catch (e) {
         console.warn(`Level Up | Failed to load perk ${perk.uuid}:`, e);
@@ -707,6 +884,7 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
     }
 
     // Split perks into those meeting prereqs and those that don't
+    perkList.sort((a, b) => Number(b.isGuide) - Number(a.isGuide));
     const metPrereqs = perkList.filter(p => p.prerequisitesMet);
     const failedPrereqs = perkList.filter(p => !p.prerequisitesMet);
     const displayPerks = this.showAllPerks ? perkList : metPrereqs;
@@ -754,7 +932,8 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
 
     const totalMaxSpells = maxNewSpells + grantSlots;
 
-    // Build spell list
+    // Build spell list (guide Spells float to the top)
+    const guideSpells = new Set(this.guideSpellKeys);
     const spellList = [];
     for (const spell of allSpells.sort((a, b) => a.name.localeCompare(b.name))) {
       const isOwned = existingSpellUuids.has(spell.uuid) || existingSpellNames.has(spell.name.toLowerCase());
@@ -784,6 +963,7 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
         isChosen,
         isRequired,
         isGrantEligible: grantPoolUuids.has(spell.uuid),
+        isGuide: guideSpells.has(LevelUpDialog._spellKey(spell.name)),
         isPreviewing: spell.uuid === this.selectedSpellUuid,
         damageTypeIcon: CONFIG.VAGABOND.damageTypeIcons?.[spell.damageType] || null,
         damageType: spell.damageType !== '-' ? spell.damageType : null,
@@ -791,6 +971,8 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
         crit,
       });
     }
+
+    spellList.sort((a, b) => Number(b.isGuide && !b.isOwned) - Number(a.isGuide && !a.isOwned));
 
     // Preview item
     let previewItem = null;
@@ -1152,21 +1334,11 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
    * Mirrors the checklist logic in _prepareSummaryContext.
    */
   _isChecklistComplete() {
-    const visible = this.visibleTabs;
-
-    // Stat increase required?
-    if (visible.includes('stats') && !this.selectedStat) return false;
+    const need = this.choiceTabs;
+    if (need.includes('stats') && !this.selectedStat) return false;
     if (this.gainsReasonTraining && !this.reasonTrainingSkill) return false;
-
-    // Perk required?
-    if (visible.includes('perks') && !this.chosenPerkUuid) return false;
-
-    // Spells required?
-    if (visible.includes('spells')) {
-      const maxNew = this.newSpellSlots;
-      if (maxNew > 0 && this.chosenSpells.length < maxNew) return false;
-    }
-
+    if (need.includes('perks') && !this.chosenPerkUuid) return false;
+    if (need.includes('spells') && !this._tabDone('spells')) return false;
     return true;
   }
 
@@ -1201,12 +1373,71 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
 
   // ─── Action Handlers ──────────────────────────────────────
 
-  static _onChangeTab(event, target) {
+  static async _onChangeTab(event, target) {
     const tab = target.dataset.tab;
-    if (tab) {
-      this.activeTab = tab;
-      this.render();
+    if (!tab) return;
+    this.activeTab = tab;
+    // Guide rows jump to the Perks tab with that perk previewed
+    const perkName = target.dataset.perkName;
+    if (tab === 'perks' && perkName) {
+      await this.dataService.ensureDataLoaded(['perks']);
+      const hit = this.dataService.getAllItems('perks').find(p => p.name.toLowerCase() === perkName.toLowerCase());
+      if (hit) this.selectedPerkUuid = hit.uuid;
     }
+    this.render();
+  }
+
+  /** Close button: the confirmations live in close() so the window's X behaves the same */
+  static _onCloseDialog() {
+    return this.close();
+  }
+
+  /** @override */
+  async close(options = {}) {
+    if (!(await this._confirmClose())) return this;
+    return super.close(options);
+  }
+
+  /**
+   * Ask before throwing work away: ticked-but-unawarded XP, or a gained Level whose choices
+   * were never applied. Resolves true when closing may go ahead.
+   */
+  async _confirmClose() {
+    const L = (key, data) => game.i18n.format(`VAGABOND.LevelUp.${key}`, data ?? {});
+    const { DialogV2 } = foundry.applications.api;
+
+    const ticked = this.questions.filter(Boolean).length;
+    if (!this.levelApplied && ticked > 0) {
+      const xpQuestions = CONFIG.VAGABOND?.homebrew?.leveling?.xpQuestions ?? [];
+      const xp = xpQuestions.reduce((sum, q, i) => sum + (this.questions[i] ? (q.xp || 1) : 0), 0);
+      const choice = await DialogV2.wait({
+        window: { title: L('CloseXPTitle'), icon: 'fas fa-star' },
+        content: `<p>${L('CloseXPBody', { n: ticked })}</p>`,
+        buttons: [
+          { action: 'award', label: L('AwardAndClose', { xp }), icon: 'fas fa-star', default: true },
+          { action: 'close', label: L('CloseWithoutXP'), icon: 'fas fa-xmark' },
+          { action: 'stay', label: L('KeepEditing'), icon: 'fas fa-pen' },
+        ],
+        rejectClose: false,
+      });
+      if (choice === 'award') {
+        await LevelUpDialog._onAwardXP.call(this);
+        return true;
+      }
+      return choice === 'close';
+    }
+
+    if (this.levelApplied && !this._isChecklistComplete()) {
+      const ok = await DialogV2.confirm({
+        window: { title: L('ClosePendingTitle'), icon: 'fas fa-triangle-exclamation' },
+        content: `<p>${L('ClosePendingBody', { level: this.newLevel })}</p>`,
+        yes: { label: L('CloseAnyway') },
+        no: { label: L('KeepEditing'), default: true },
+        rejectClose: false,
+      });
+      return !!ok;
+    }
+    return true;
   }
 
   static _onToggleQuestion(event, target) {
@@ -1295,7 +1526,7 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
 
     this.levelApplied = true;
     this.xpAwarded = true; // prevent re-awarding
-    this.activeTab = 'summary';
+    this.activeTab = this.choiceTabs[0] ?? 'summary';
 
     ui.notifications.info(`${this.actor.name} is now level ${newLevel}!`);
     this.render();
@@ -1428,7 +1659,7 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
 
     // When turning OFF override, clear selections for tabs that are no longer visible
     if (wasOverride && !this.gmOverride) {
-      const visible = this.visibleTabs;
+      const visible = this.choiceTabs;
 
       if (!visible.includes('stats')) {
         this.selectedStat = null;
@@ -1448,7 +1679,7 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
       }
 
       // If active tab was removed, go back to summary
-      if (!visible.includes(this.activeTab)) {
+      if (!this.visibleTabs.includes(this.activeTab)) {
         this.activeTab = 'summary';
       }
     }

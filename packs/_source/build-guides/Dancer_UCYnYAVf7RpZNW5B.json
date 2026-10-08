@@ -1155,7 +1155,65 @@
   "folder": null,
   "flags": {
     "vagabond": {
-      "buildGuide": true
+      "buildGuide": {
+        "title": "Dancer",
+        "className": "Dancer",
+        "stats": {
+          "1": {
+            "might": 4,
+            "dexterity": 7,
+            "awareness": 4,
+            "reason": 3,
+            "presence": 5,
+            "luck": 3
+          },
+          "10": {
+            "might": 5,
+            "dexterity": 7,
+            "awareness": 7,
+            "reason": 3,
+            "presence": 6,
+            "luck": 3
+          }
+        },
+        "perks": [
+          {
+            "level": 1,
+            "perks": [
+              "Fallaway Reverse",
+              "Skirmisher"
+            ]
+          },
+          {
+            "level": 3,
+            "perks": [
+              "Perfect Parry"
+            ]
+          },
+          {
+            "level": 5,
+            "perks": [
+              "Inspiring Presence"
+            ]
+          },
+          {
+            "level": 7,
+            "perks": [
+              "Bravado"
+            ]
+          },
+          {
+            "level": 9,
+            "perks": [
+              "Endless Stamina"
+            ]
+          }
+        ],
+        "spells": {
+          "start": [],
+          "later": []
+        }
+      }
     }
   },
   "sort": 0,

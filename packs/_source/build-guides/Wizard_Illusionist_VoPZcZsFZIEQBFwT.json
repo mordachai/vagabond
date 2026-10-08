@@ -1256,7 +1256,73 @@
   "folder": null,
   "flags": {
     "vagabond": {
-      "buildGuide": true
+      "buildGuide": {
+        "title": "Wizard - Illusionist",
+        "className": "Wizard",
+        "stats": {
+          "1": {
+            "might": 3,
+            "dexterity": 4,
+            "awareness": 6,
+            "reason": 6,
+            "presence": 4,
+            "luck": 3
+          },
+          "10": {
+            "might": 4,
+            "dexterity": 5,
+            "awareness": 7,
+            "reason": 7,
+            "presence": 4,
+            "luck": 4
+          }
+        },
+        "perks": [
+          {
+            "level": 1,
+            "perks": [
+              "Bookworm",
+              "Extrovert"
+            ]
+          },
+          {
+            "level": 3,
+            "perks": [
+              "Impersonator"
+            ]
+          },
+          {
+            "level": 5,
+            "perks": [
+              "Sage"
+            ]
+          },
+          {
+            "level": 7,
+            "perks": [
+              "Secret of Mana"
+            ]
+          },
+          {
+            "level": 9,
+            "perks": []
+          }
+        ],
+        "spells": {
+          "start": [
+            "Color",
+            "Fear",
+            "Mirage",
+            "Shade"
+          ],
+          "later": [
+            "Amplify",
+            "Blink",
+            "Confuse",
+            "Morph"
+          ]
+        }
+      }
     }
   },
   "sort": 0,

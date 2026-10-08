@@ -1068,7 +1068,65 @@
   "folder": null,
   "flags": {
     "vagabond": {
-      "buildGuide": true
+      "buildGuide": {
+        "title": "Hunter - Pathfinder",
+        "className": "Hunter",
+        "stats": {
+          "1": {
+            "might": 4,
+            "dexterity": 5,
+            "awareness": 7,
+            "reason": 4,
+            "presence": 3,
+            "luck": 3
+          },
+          "10": {
+            "might": 5,
+            "dexterity": 7,
+            "awareness": 7,
+            "reason": 4,
+            "presence": 4,
+            "luck": 4
+          }
+        },
+        "perks": [
+          {
+            "level": 1,
+            "perks": [
+              "Scout",
+              "Sharpshooter"
+            ]
+          },
+          {
+            "level": 3,
+            "perks": [
+              "Cryptozoologist"
+            ]
+          },
+          {
+            "level": 5,
+            "perks": [
+              "Ambusher"
+            ]
+          },
+          {
+            "level": 7,
+            "perks": [
+              "Marksmanship"
+            ]
+          },
+          {
+            "level": 9,
+            "perks": [
+              "Heightened Cognition"
+            ]
+          }
+        ],
+        "spells": {
+          "start": [],
+          "later": []
+        }
+      }
     }
   },
   "sort": 0,

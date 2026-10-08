@@ -1148,7 +1148,78 @@
   "folder": null,
   "flags": {
     "vagabond": {
-      "buildGuide": true
+      "buildGuide": {
+        "title": "Fighter - Frontline",
+        "className": "Fighter",
+        "stats": {
+          "1": {
+            "might": 7,
+            "dexterity": 5,
+            "awareness": 4,
+            "reason": 3,
+            "presence": 3,
+            "luck": 4
+          },
+          "10": {
+            "might": 7,
+            "dexterity": 7,
+            "awareness": 7,
+            "reason": 3,
+            "presence": 3,
+            "luck": 4
+          }
+        },
+        "perks": [
+          {
+            "level": 1,
+            "perks": [
+              "Bravado",
+              "Heavy Arms",
+              "Patience"
+            ]
+          },
+          {
+            "level": 3,
+            "perks": [
+              "Cross Counter"
+            ]
+          },
+          {
+            "level": 4,
+            "perks": [
+              "Limit Break"
+            ]
+          },
+          {
+            "level": 5,
+            "perks": [
+              "Sentinel"
+            ]
+          },
+          {
+            "level": 7,
+            "perks": [
+              "Endless Stamina"
+            ]
+          },
+          {
+            "level": 8,
+            "perks": [
+              "Tough"
+            ]
+          },
+          {
+            "level": 9,
+            "perks": [
+              "Second Wind"
+            ]
+          }
+        ],
+        "spells": {
+          "start": [],
+          "later": []
+        }
+      }
     }
   },
   "sort": 0,

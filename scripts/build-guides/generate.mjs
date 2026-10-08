@@ -331,7 +331,7 @@ for (const g of guides) {
     items,
     effects: [],
     folder: null,
-    flags: { vagabond: { buildGuide: true } },
+    flags: { vagabond: { buildGuide: buildGuidePlan(g, className) } },
     ownership: { default: 2 }, // compendium doc ownership is irrelevant to import; pack ownership lives in system.json
     sort: 0,
     _id: actorId,
@@ -346,6 +346,24 @@ for (const g of guides) {
 }
 
 // ---------------------------------------------------------------- output
+/**
+ * The guide's progression, stored on the actor so the Level Up dialog can preselect picks.
+ * `stats` holds the book's Level 1 and Level 10 rows; `perks` the book's Perk-by-Level list;
+ * `spells` splits "A, B; get C and D later" into the starting list and the later list.
+ */
+function buildGuidePlan(g, className) {
+  const cut = g.spells.trim() === '-' ? '' : g.spells;
+  const [start = '', rest = ''] = cut.split(';');
+  const names = t => t.replace(/^\s*get\s/i, '').replace(/\slater\.?\s*$/i, '').split(',')
+    .map(x => x.replace(/^\s*and\s/i, '').trim()).filter(Boolean);
+  return {
+    title: g.title,
+    className,
+    stats: g.stats,
+    perks: g.perks.map(p => ({ level: p.level, perks: [...p.perks] })),
+    spells: { start: names(start), later: names(rest) }
+  };
+}
 function foundry_setFlag(item, origin) {
   item.flags = item.flags ?? {};
   item.flags.vagabond = { ...(item.flags.vagabond ?? {}), perkOrigin: origin };

@@ -1105,7 +1105,75 @@
   "folder": null,
   "flags": {
     "vagabond": {
-      "buildGuide": true
+      "buildGuide": {
+        "title": "Magus - Card Thrower",
+        "className": "Magus",
+        "stats": {
+          "1": {
+            "might": 3,
+            "dexterity": 3,
+            "awareness": 7,
+            "reason": 4,
+            "presence": 5,
+            "luck": 3
+          },
+          "10": {
+            "might": 3,
+            "dexterity": 6,
+            "awareness": 7,
+            "reason": 4,
+            "presence": 5,
+            "luck": 5
+          }
+        },
+        "perks": [
+          {
+            "level": 1,
+            "perks": [
+              "Bookworm",
+              "Cardistry"
+            ]
+          },
+          {
+            "level": 3,
+            "perks": [
+              "Ambusher"
+            ]
+          },
+          {
+            "level": 5,
+            "perks": [
+              "Quick Draw"
+            ]
+          },
+          {
+            "level": 7,
+            "perks": [
+              "Ricochet"
+            ]
+          },
+          {
+            "level": 9,
+            "perks": [
+              "Esoteric Recall"
+            ]
+          }
+        ],
+        "spells": {
+          "start": [
+            "Guide",
+            "Kinesis",
+            "Speak",
+            "Truth"
+          ],
+          "later": [
+            "Bless",
+            "Dispel",
+            "Enchant",
+            "Ward"
+          ]
+        }
+      }
     }
   },
   "sort": 0,

@@ -1217,7 +1217,75 @@
   "folder": null,
   "flags": {
     "vagabond": {
-      "buildGuide": true
+      "buildGuide": {
+        "title": "Luminary - Savior",
+        "className": "Luminary",
+        "stats": {
+          "1": {
+            "might": 4,
+            "dexterity": 3,
+            "awareness": 7,
+            "reason": 4,
+            "presence": 5,
+            "luck": 3
+          },
+          "10": {
+            "might": 6,
+            "dexterity": 4,
+            "awareness": 7,
+            "reason": 5,
+            "presence": 6,
+            "luck": 3
+          }
+        },
+        "perks": [
+          {
+            "level": 1,
+            "perks": [
+              "Abjurer",
+              "Assured Healer"
+            ]
+          },
+          {
+            "level": 3,
+            "perks": [
+              "Medic"
+            ]
+          },
+          {
+            "level": 5,
+            "perks": [
+              "Bookworm"
+            ]
+          },
+          {
+            "level": 7,
+            "perks": [
+              "Heightened Cognition"
+            ]
+          },
+          {
+            "level": 9,
+            "perks": [
+              "Secret of Mana"
+            ]
+          }
+        ],
+        "spells": {
+          "start": [
+            "Bless",
+            "Life",
+            "Light",
+            "Ward"
+          ],
+          "later": [
+            "Guide",
+            "Hold",
+            "Hymn",
+            "Tempo"
+          ]
+        }
+      }
     }
   },
   "sort": 0,

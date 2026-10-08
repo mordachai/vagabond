@@ -1052,7 +1052,65 @@
   "folder": null,
   "flags": {
     "vagabond": {
-      "buildGuide": true
+      "buildGuide": {
+        "title": "Alchemist - Bomber",
+        "className": "Alchemist",
+        "stats": {
+          "1": {
+            "might": 4,
+            "dexterity": 5,
+            "awareness": 4,
+            "reason": 7,
+            "presence": 3,
+            "luck": 3
+          },
+          "10": {
+            "might": 5,
+            "dexterity": 6,
+            "awareness": 7,
+            "reason": 7,
+            "presence": 3,
+            "luck": 3
+          }
+        },
+        "perks": [
+          {
+            "level": 1,
+            "perks": [
+              "Deft Hands",
+              "Knife Juggler"
+            ]
+          },
+          {
+            "level": 3,
+            "perks": [
+              "Bookworm"
+            ]
+          },
+          {
+            "level": 5,
+            "perks": [
+              "Master Artisan"
+            ]
+          },
+          {
+            "level": 7,
+            "perks": [
+              "Heightened Intellect"
+            ]
+          },
+          {
+            "level": 9,
+            "perks": [
+              "Quick Draw"
+            ]
+          }
+        ],
+        "spells": {
+          "start": [],
+          "later": []
+        }
+      }
     }
   },
   "sort": 0,

@@ -912,7 +912,65 @@
   "folder": null,
   "flags": {
     "vagabond": {
-      "buildGuide": true
+      "buildGuide": {
+        "title": "Vanguard",
+        "className": "Vanguard",
+        "stats": {
+          "1": {
+            "might": 7,
+            "dexterity": 2,
+            "awareness": 6,
+            "reason": 3,
+            "presence": 4,
+            "luck": 3
+          },
+          "10": {
+            "might": 7,
+            "dexterity": 2,
+            "awareness": 7,
+            "reason": 3,
+            "presence": 7,
+            "luck": 4
+          }
+        },
+        "perks": [
+          {
+            "level": 1,
+            "perks": [
+              "Protector",
+              "Sentinel"
+            ]
+          },
+          {
+            "level": 3,
+            "perks": [
+              "Heavy Arms"
+            ]
+          },
+          {
+            "level": 5,
+            "perks": [
+              "Bully"
+            ]
+          },
+          {
+            "level": 7,
+            "perks": [
+              "Tough"
+            ]
+          },
+          {
+            "level": 9,
+            "perks": [
+              "Second Wind"
+            ]
+          }
+        ],
+        "spells": {
+          "start": [],
+          "later": []
+        }
+      }
     }
   },
   "sort": 0,

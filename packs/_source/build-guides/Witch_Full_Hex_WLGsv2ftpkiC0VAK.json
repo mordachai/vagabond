@@ -1389,7 +1389,75 @@
   "folder": null,
   "flags": {
     "vagabond": {
-      "buildGuide": true
+      "buildGuide": {
+        "title": "Witch - Full Hex",
+        "className": "Witch",
+        "stats": {
+          "1": {
+            "might": 3,
+            "dexterity": 4,
+            "awareness": 6,
+            "reason": 6,
+            "presence": 3,
+            "luck": 4
+          },
+          "10": {
+            "might": 4,
+            "dexterity": 5,
+            "awareness": 7,
+            "reason": 6,
+            "presence": 4,
+            "luck": 5
+          }
+        },
+        "perks": [
+          {
+            "level": 1,
+            "perks": [
+              "Athame",
+              "Familiar"
+            ]
+          },
+          {
+            "level": 3,
+            "perks": [
+              "Mesmer"
+            ]
+          },
+          {
+            "level": 5,
+            "perks": [
+              "Secret of Mana"
+            ]
+          },
+          {
+            "level": 7,
+            "perks": [
+              "Quality Assurance"
+            ]
+          },
+          {
+            "level": 9,
+            "perks": [
+              "Vehement Magic"
+            ]
+          }
+        ],
+        "spells": {
+          "start": [
+            "Burn",
+            "Charm",
+            "Fear",
+            "Hold"
+          ],
+          "later": [
+            "Dispel",
+            "Enflesh",
+            "Fade",
+            "Levitate"
+          ]
+        }
+      }
     }
   },
   "sort": 0,

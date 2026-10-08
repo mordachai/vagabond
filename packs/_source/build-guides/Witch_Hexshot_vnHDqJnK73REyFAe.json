@@ -1404,7 +1404,75 @@
   "folder": null,
   "flags": {
     "vagabond": {
-      "buildGuide": true
+      "buildGuide": {
+        "title": "Witch - Hexshot",
+        "className": "Witch",
+        "stats": {
+          "1": {
+            "might": 2,
+            "dexterity": 7,
+            "awareness": 7,
+            "reason": 2,
+            "presence": 3,
+            "luck": 3
+          },
+          "10": {
+            "might": 4,
+            "dexterity": 7,
+            "awareness": 7,
+            "reason": 2,
+            "presence": 4,
+            "luck": 5
+          }
+        },
+        "perks": [
+          {
+            "level": 1,
+            "perks": [
+              "Gish",
+              "Witchsight"
+            ]
+          },
+          {
+            "level": 3,
+            "perks": [
+              "Steady Aim"
+            ]
+          },
+          {
+            "level": 5,
+            "perks": [
+              "Akimbo Trigger"
+            ]
+          },
+          {
+            "level": 7,
+            "perks": [
+              "Marksmanship"
+            ]
+          },
+          {
+            "level": 9,
+            "perks": [
+              "Ricochet"
+            ]
+          }
+        ],
+        "spells": {
+          "start": [
+            "Blink",
+            "Fear",
+            "Guide",
+            "Hold"
+          ],
+          "later": [
+            "Dispel",
+            "Fade",
+            "Sleep",
+            "Zap"
+          ]
+        }
+      }
     }
   },
   "sort": 0,

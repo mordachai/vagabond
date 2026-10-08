@@ -1219,7 +1219,75 @@
   "folder": null,
   "flags": {
     "vagabond": {
-      "buildGuide": true
+      "buildGuide": {
+        "title": "Wizard - Mesmer",
+        "className": "Wizard",
+        "stats": {
+          "1": {
+            "might": 3,
+            "dexterity": 4,
+            "awareness": 4,
+            "reason": 6,
+            "presence": 6,
+            "luck": 3
+          },
+          "10": {
+            "might": 4,
+            "dexterity": 5,
+            "awareness": 5,
+            "reason": 7,
+            "presence": 7,
+            "luck": 3
+          }
+        },
+        "perks": [
+          {
+            "level": 1,
+            "perks": [
+              "Bookworm",
+              "Mesmer"
+            ]
+          },
+          {
+            "level": 3,
+            "perks": [
+              "Extrovert"
+            ]
+          },
+          {
+            "level": 5,
+            "perks": [
+              "Inspiring Presence"
+            ]
+          },
+          {
+            "level": 7,
+            "perks": [
+              "Diplomat"
+            ]
+          },
+          {
+            "level": 9,
+            "perks": [
+              "Ungarmax"
+            ]
+          }
+        ],
+        "spells": {
+          "start": [
+            "Apoplex",
+            "Charm",
+            "Fear",
+            "Zap"
+          ],
+          "later": [
+            "Babble",
+            "Confuse",
+            "Hold",
+            "Sleep"
+          ]
+        }
+      }
     }
   },
   "sort": 0,

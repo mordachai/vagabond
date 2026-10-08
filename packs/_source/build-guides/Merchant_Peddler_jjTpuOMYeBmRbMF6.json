@@ -1022,7 +1022,65 @@
   "folder": null,
   "flags": {
     "vagabond": {
-      "buildGuide": true
+      "buildGuide": {
+        "title": "Merchant - Peddler",
+        "className": "Merchant",
+        "stats": {
+          "1": {
+            "might": 3,
+            "dexterity": 3,
+            "awareness": 4,
+            "reason": 4,
+            "presence": 5,
+            "luck": 7
+          },
+          "10": {
+            "might": 3,
+            "dexterity": 3,
+            "awareness": 5,
+            "reason": 7,
+            "presence": 7,
+            "luck": 7
+          }
+        },
+        "perks": [
+          {
+            "level": 1,
+            "perks": [
+              "Deft Hands",
+              "Resourceful"
+            ]
+          },
+          {
+            "level": 3,
+            "perks": [
+              "Favors the Bold"
+            ]
+          },
+          {
+            "level": 5,
+            "perks": [
+              "Heightened Magnetism"
+            ]
+          },
+          {
+            "level": 7,
+            "perks": [
+              "Master Artisan"
+            ]
+          },
+          {
+            "level": 9,
+            "perks": [
+              "Advancement"
+            ]
+          }
+        ],
+        "spells": {
+          "start": [],
+          "later": []
+        }
+      }
     }
   },
   "sort": 0,

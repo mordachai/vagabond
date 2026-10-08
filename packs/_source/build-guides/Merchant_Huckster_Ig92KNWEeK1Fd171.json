@@ -1024,7 +1024,65 @@
   "folder": null,
   "flags": {
     "vagabond": {
-      "buildGuide": true
+      "buildGuide": {
+        "title": "Merchant - Huckster",
+        "className": "Merchant",
+        "stats": {
+          "1": {
+            "might": 3,
+            "dexterity": 5,
+            "awareness": 5,
+            "reason": 5,
+            "presence": 5,
+            "luck": 3
+          },
+          "10": {
+            "might": 3,
+            "dexterity": 7,
+            "awareness": 7,
+            "reason": 5,
+            "presence": 6,
+            "luck": 4
+          }
+        },
+        "perks": [
+          {
+            "level": 1,
+            "perks": [
+              "Deft Hands",
+              "Impersonator"
+            ]
+          },
+          {
+            "level": 3,
+            "perks": [
+              "Master Breaker"
+            ]
+          },
+          {
+            "level": 5,
+            "perks": [
+              "Knife Juggler"
+            ]
+          },
+          {
+            "level": 7,
+            "perks": [
+              "Resourceful"
+            ]
+          },
+          {
+            "level": 9,
+            "perks": [
+              "Ambusher"
+            ]
+          }
+        ],
+        "spells": {
+          "start": [],
+          "later": []
+        }
+      }
     }
   },
   "sort": 0,

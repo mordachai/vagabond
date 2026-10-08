@@ -1284,7 +1284,65 @@
   "folder": null,
   "flags": {
     "vagabond": {
-      "buildGuide": true
+      "buildGuide": {
+        "title": "Gunslinger - Maverick",
+        "className": "Gunslinger",
+        "stats": {
+          "1": {
+            "might": 4,
+            "dexterity": 4,
+            "awareness": 7,
+            "reason": 3,
+            "presence": 3,
+            "luck": 5
+          },
+          "10": {
+            "might": 5,
+            "dexterity": 7,
+            "awareness": 7,
+            "reason": 3,
+            "presence": 3,
+            "luck": 6
+          }
+        },
+        "perks": [
+          {
+            "level": 1,
+            "perks": [
+              "Ambusher",
+              "Quick Draw"
+            ]
+          },
+          {
+            "level": 3,
+            "perks": [
+              "Akimbo Trigger"
+            ]
+          },
+          {
+            "level": 5,
+            "perks": [
+              "Marksmanship"
+            ]
+          },
+          {
+            "level": 7,
+            "perks": [
+              "Ricochet"
+            ]
+          },
+          {
+            "level": 9,
+            "perks": [
+              "Sharpshooter"
+            ]
+          }
+        ],
+        "spells": {
+          "start": [],
+          "later": []
+        }
+      }
     }
   },
   "sort": 0,

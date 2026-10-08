@@ -1234,7 +1234,75 @@
   "folder": null,
   "flags": {
     "vagabond": {
-      "buildGuide": true
+      "buildGuide": {
+        "title": "Sorcerer - Blood Mage",
+        "className": "Sorcerer",
+        "stats": {
+          "1": {
+            "might": 7,
+            "dexterity": 2,
+            "awareness": 3,
+            "reason": 2,
+            "presence": 7,
+            "luck": 3
+          },
+          "10": {
+            "might": 7,
+            "dexterity": 5,
+            "awareness": 5,
+            "reason": 2,
+            "presence": 7,
+            "luck": 3
+          }
+        },
+        "perks": [
+          {
+            "level": 1,
+            "perks": [
+              "Tough",
+              "Vehement Magic"
+            ]
+          },
+          {
+            "level": 3,
+            "perks": [
+              "Endless Stamina"
+            ]
+          },
+          {
+            "level": 5,
+            "perks": [
+              "Mesmer"
+            ]
+          },
+          {
+            "level": 7,
+            "perks": [
+              "Tough"
+            ]
+          },
+          {
+            "level": 9,
+            "perks": [
+              "Secret of Mana"
+            ]
+          }
+        ],
+        "spells": {
+          "start": [
+            "Control",
+            "Enflesh",
+            "Leech",
+            "Ward"
+          ],
+          "later": [
+            "Fear",
+            "Hold",
+            "LIfe",
+            "Morph"
+          ]
+        }
+      }
     }
   },
   "sort": 0,
