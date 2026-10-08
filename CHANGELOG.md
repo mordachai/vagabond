@@ -2,7 +2,7 @@
 
 ## v6.0.1
 - Catalyze panel redesigned.
-- **Shorter Features list.** Scaling class features (Eureka 15+ / 14+ / 13+, Aggressor, Valor, Lay on Hands…) now show only the version you have reached on the sheet and the HUD, instead of one row per Level. Every feature shows Level badges for when you gained it and each of its upgrades. The Level Up dialog and the class sheet still list every Level.
+- **Shorter Features list.** Scaling features (Eureka, Valor, Lay on Hands…) show only your current version on the sheet and HUD, with Level badges.
 - Rogue's Level 2 feature is now labelled "Evasive (10’)" and Gunslinger's "Bad Medicine (+1 die)".
 - Fix: right-clicking a class feature on the sheet could open the wrong feature (Edit / To Chat).
 - Fix: the Workbench's Known Formulas showed the Alchemy craft cost as 50c; it now shows the book's 5s.
