@@ -17,7 +17,7 @@
     "morale": 7,
     "appearing": "",
     "speed": 35,
-    "senses": "",
+    "senses": [],
     "armor": 1,
     "armorDescription": "as Leather",
     "locked": true,

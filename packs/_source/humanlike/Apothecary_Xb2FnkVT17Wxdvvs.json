@@ -17,7 +17,7 @@
     "morale": 7,
     "appearing": "",
     "speed": 30,
-    "senses": "",
+    "senses": [],
     "armor": 0,
     "armorDescription": "as Unarmored",
     "locked": true,
@@ -35,7 +35,7 @@
         "flatDamage": "4",
         "rollDamage": "d6+1",
         "damageType": "healing",
-        "extraInfo": "HP."
+        "extraInfo": "Regain 4 (d6+1) HP"
       },
       {
         "name": "Panacea",
@@ -45,7 +45,7 @@
         "flatDamage": "",
         "rollDamage": "",
         "damageType": "-",
-        "extraInfo": "Cured of either Blinded or Sickened."
+        "extraInfo": "Cured of Blinded or Sickened."
       },
       {
         "name": "Crossbow",

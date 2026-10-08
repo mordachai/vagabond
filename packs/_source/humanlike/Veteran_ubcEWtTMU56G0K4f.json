@@ -9,7 +9,7 @@
     },
     "fatigue": 0,
     "biography": "",
-    "threatLevel": 2.4,
+    "threatLevel": 2.9,
     "size": "medium",
     "beingType": "Humanlike",
     "speedTypes": [],
@@ -17,7 +17,7 @@
     "morale": 9,
     "appearing": "",
     "speed": 25,
-    "senses": "",
+    "senses": [],
     "armor": 3,
     "armorDescription": "as Plate",
     "locked": true,
@@ -27,6 +27,18 @@
     "zone": "frontline",
     "description": "",
     "actions": [
+      {
+        "name": "Combo",
+        "note": "",
+        "recharge": "",
+        "attackType": "melee",
+        "flatDamage": "",
+        "rollDamage": "",
+        "damageType": "-",
+        "extraInfo": "2×Weapon",
+        "causedStatuses": [],
+        "critCausedStatuses": []
+      },
       {
         "name": "Weapon",
         "note": "Attack",

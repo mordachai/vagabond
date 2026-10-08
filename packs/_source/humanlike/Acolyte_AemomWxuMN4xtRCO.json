@@ -17,7 +17,7 @@
     "morale": 7,
     "appearing": "",
     "speed": 30,
-    "senses": "",
+    "senses": [],
     "armor": 0,
     "armorDescription": "as Unarmored",
     "locked": true,
@@ -29,7 +29,7 @@
     "actions": [
       {
         "name": "Cure Wounds",
-        "note": "Cast, Touch (damaged Ally)",
+        "note": "Cast, Touch (Ally)",
         "recharge": "3/Day",
         "attackType": "castClose",
         "flatDamage": "3",
@@ -40,32 +40,22 @@
         "critCausedStatuses": []
       },
       {
-        "name": "Turn Undead",
-        "note": "Cast, Aura Near",
-        "recharge": "2/Day",
-        "attackType": "castRanged",
+        "name": "Ward",
+        "note": "Cast, Aura Near | Focus",
+        "recharge": "1/Day",
+        "attackType": "castClose",
         "flatDamage": "",
         "rollDamage": "",
         "damageType": "-",
-        "extraInfo": "Undead Targets are Frightened (Cd4), ignoring Immunity",
-        "causedStatuses": [
-          {
-            "statusId": "frightened",
-            "saveType": "none",
-            "duration": "d4",
-            "tickDamageEnabled": false,
-            "requiresDamage": false,
-            "damageOnTick": "",
-            "damageType": "-"
-          }
-        ],
+        "extraInfo": "Targets reduce damage by d6. This reduction can occur 2 times per Round.",
+        "causedStatuses": [],
         "critCausedStatuses": []
       },
       {
-        "name": "Sacred Flame",
+        "name": "Holy Flame",
         "note": "Cast, Aura Near | Endure",
         "recharge": "",
-        "attackType": "melee",
+        "attackType": "castClose",
         "flatDamage": "7",
         "rollDamage": "2d6",
         "damageType": "-",
@@ -73,10 +63,10 @@
         "causedStatuses": [
           {
             "statusId": "blinded",
+            "requiresDamage": true,
             "saveType": "endure",
             "duration": "d4",
             "tickDamageEnabled": false,
-            "requiresDamage": false,
             "damageOnTick": "",
             "damageType": "-"
           }
@@ -85,7 +75,7 @@
       },
       {
         "name": "Mace",
-        "note": "",
+        "note": "Melee Attack",
         "recharge": "",
         "attackType": "melee",
         "flatDamage": "3",

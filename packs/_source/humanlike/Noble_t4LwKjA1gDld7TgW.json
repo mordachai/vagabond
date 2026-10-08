@@ -17,7 +17,7 @@
     "morale": 9,
     "appearing": "",
     "speed": 30,
-    "senses": "",
+    "senses": [],
     "armor": 1,
     "armorDescription": "as Leather",
     "locked": true,
@@ -35,7 +35,7 @@
         "flatDamage": "3",
         "rollDamage": "d6",
         "damageType": "-",
-        "extraInfo": ""
+        "extraInfo": "or 7 (2d6) if failed on a 1."
       },
       {
         "name": "Rally",

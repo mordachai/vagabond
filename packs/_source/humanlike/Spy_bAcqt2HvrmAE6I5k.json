@@ -25,7 +25,7 @@
       "phase": 0,
       "swim": 0
     },
-    "senses": "",
+    "senses": [],
     "armor": 1,
     "armorDescription": "as Leather",
     "universalDamageBonus": 0,
@@ -43,6 +43,18 @@
     "zone": "midline",
     "description": "",
     "actions": [
+      {
+        "name": "Combo",
+        "note": "",
+        "recharge": "",
+        "attackType": "melee",
+        "flatDamage": "",
+        "rollDamage": "",
+        "damageType": "-",
+        "extraInfo": "1×Garrote and 1×Dagger",
+        "causedStatuses": [],
+        "critCausedStatuses": []
+      },
       {
         "name": "Garrote",
         "note": "Melee Attack",
@@ -66,12 +78,8 @@
     ],
     "abilities": [
       {
-        "name": "Combo",
-        "description": ""
-      },
-      {
         "name": "Sneak Attack",
-        "description": ""
+        "description": "(1/Turn): It deals 2 (d4) additional damage with an attack against a Vulnerable Target. This attack ignores Armor and can Explode."
       }
     ]
   },

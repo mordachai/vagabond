@@ -25,7 +25,7 @@
       "phase": 0,
       "swim": 0
     },
-    "senses": "",
+    "senses": [],
     "armor": 1,
     "armorDescription": "as Leather",
     "universalDamageBonus": 0,
@@ -67,7 +67,7 @@
     "abilities": [
       {
         "name": "Hunter's Mark",
-        "description": ""
+        "description": "[a Being it senses] (Focus): It rolls an extra damage die if the Save is failed as a 1 or 2."
       }
     ]
   },

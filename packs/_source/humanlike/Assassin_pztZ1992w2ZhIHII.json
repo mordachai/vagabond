@@ -18,7 +18,7 @@
     "morale": 7,
     "appearing": "",
     "speed": 35,
-    "senses": "",
+    "senses": [],
     "armor": 1,
     "armorDescription": "as Leather",
     "locked": true,
@@ -29,30 +29,30 @@
     "description": "",
     "actions": [
       {
-        "name": "Flurry",
-        "note": "Multi-Attack",
+        "name": "Combo",
+        "note": "",
         "recharge": "",
         "attackType": "melee",
         "flatDamage": "",
         "rollDamage": "",
         "damageType": "-",
-        "extraInfo": "Two Daggers"
+        "extraInfo": "2×Daggers"
       },
       {
         "name": "Dagger",
-        "note": "",
+        "note": "Melee Attack, Thrown",
         "recharge": "",
         "attackType": "melee",
         "flatDamage": "2",
         "rollDamage": "d4",
         "damageType": "-",
-        "extraInfo": ""
+        "extraInfo": "and Sneak Attack"
       }
     ],
     "abilities": [
       {
         "name": "Sneak Attack",
-        "description": "Once per Turn, it deals 2 (d4) additional damage with an attack against a Vulnerable Target. This attack ignores Armor and can explode."
+        "description": "(1/Turn): It deals 2 (d4) additional damage with an attack against a Vulnerable Target. This attack ignores Armor and can Explode."
       }
     ],
     "universalDamageBonus": 0,

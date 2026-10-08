@@ -25,7 +25,7 @@
       "phase": 0,
       "swim": 0
     },
-    "senses": "",
+    "senses": [],
     "armor": 1,
     "armorDescription": "as Leather",
     "universalDamageBonus": 0,
@@ -43,16 +43,6 @@
     "zone": "midline",
     "description": "",
     "actions": [
-      {
-        "name": "Mime",
-        "note": "Action (after an Ally takes an Action)",
-        "recharge": "4/Day",
-        "extraInfo": "It mimes the Action that Ally did this Turn, effectively repeating it.",
-        "flatDamage": "",
-        "rollDamage": "",
-        "damageType": "-",
-        "attackType": "melee"
-      },
       {
         "name": "Dagger",
         "note": "Melee Attack, Thrown",

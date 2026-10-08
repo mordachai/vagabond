@@ -17,7 +17,7 @@
     "morale": 7,
     "appearing": "",
     "speed": 30,
-    "senses": "",
+    "senses": [],
     "armor": 0,
     "armorDescription": "as Unarmored",
     "locked": true,

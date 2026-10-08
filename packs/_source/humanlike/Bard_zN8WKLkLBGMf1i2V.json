@@ -17,7 +17,7 @@
     "morale": 9,
     "appearing": "",
     "speed": 30,
-    "senses": "",
+    "senses": [],
     "armor": 1,
     "armorDescription": "as Leather",
     "locked": true,
@@ -35,7 +35,7 @@
         "flatDamage": "0",
         "rollDamage": "",
         "damageType": "-",
-        "extraInfo": "Grants all of its Allies who can hear it a d4 bonus to their damage rolls and Will Saves for 1 Round.It can't use this Action if it doesn't have a Musical Instrument equipped."
+        "extraInfo": "Grants all of its Allies who can hear it Favor on their next healing roll, Save, or damage roll this Round."
       },
       {
         "name": "Rapier",

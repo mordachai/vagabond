@@ -17,7 +17,7 @@
     "morale": 3,
     "appearing": "",
     "speed": 30,
-    "senses": "",
+    "senses": [],
     "armor": 1,
     "armorDescription": "as Leather",
     "locked": true,
@@ -39,7 +39,7 @@
       },
       {
         "name": "Dagger",
-        "note": "Melee Attack",
+        "note": "Melee Attack, Thrown",
         "recharge": "",
         "attackType": "melee",
         "flatDamage": "2",

@@ -14,10 +14,10 @@
     "beingType": "Humanlike",
     "speedTypes": [],
     "hd": 1,
-    "morale": 4,
+    "morale": 8,
     "appearing": "",
     "speed": 30,
-    "senses": "",
+    "senses": [],
     "armor": 0,
     "armorDescription": "as Unarmored",
     "locked": true,
@@ -29,13 +29,13 @@
     "actions": [
       {
         "name": "Blizzard",
-        "note": "Cast, 20-foot Sphere (Focus) | Endure",
-        "recharge": "Cd6",
+        "note": "Cast, 20-foot Sphere | Endure | Focus",
+        "recharge": "1/Day",
         "attackType": "castRanged",
         "flatDamage": "10",
         "rollDamage": "3d6",
         "damageType": "-",
-        "extraInfo": "filling the area with snow (Difficult Terrain)."
+        "extraInfo": "and filling the area with snow (Difficult Terrain)"
       },
       {
         "name": "Ice Knife",
@@ -45,7 +45,7 @@
         "flatDamage": "7",
         "rollDamage": "2d6",
         "damageType": "-",
-        "extraInfo": "its Speed is reduced by half for the duration."
+        "extraInfo": "and its Speed is reduced by half for the duration"
       }
     ],
     "abilities": [],

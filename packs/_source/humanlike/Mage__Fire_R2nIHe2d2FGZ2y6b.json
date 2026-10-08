@@ -17,7 +17,7 @@
     "morale": 8,
     "appearing": "",
     "speed": 30,
-    "senses": "",
+    "senses": [],
     "armor": 0,
     "armorDescription": "as Unarmored",
     "locked": true,
@@ -35,7 +35,7 @@
         "flatDamage": "10",
         "rollDamage": "3d6",
         "damageType": "fire",
-        "extraInfo": "Burning (Cd4)",
+        "extraInfo": "and Burning (Cd4, or Cd6 if failed as a 1)",
         "causedStatuses": [
           {
             "statusId": "burning",
@@ -51,13 +51,13 @@
       },
       {
         "name": "Firebolt",
-        "note": "Cast, Remote (Focus) | Reflex",
+        "note": "Cast, Remote | Reflex",
         "recharge": "",
         "attackType": "castRanged",
         "flatDamage": "7",
         "rollDamage": "2d6",
         "damageType": "fire",
-        "extraInfo": "Burning(Cd4)",
+        "extraInfo": "and Burning (Cd4, or Cd6 if failed as a 1)",
         "causedStatuses": [
           {
             "statusId": "burning",

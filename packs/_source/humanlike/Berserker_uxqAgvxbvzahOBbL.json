@@ -17,7 +17,7 @@
     "morale": 8,
     "appearing": "",
     "speed": 40,
-    "senses": "",
+    "senses": [],
     "armor": 1,
     "armorDescription": "as Leather",
     "locked": true,
@@ -35,13 +35,13 @@
         "flatDamage": "6",
         "rollDamage": "d12",
         "damageType": "-",
-        "extraInfo": "or 13 (2d12!) if this Being is Berserker."
+        "extraInfo": "or 13 (2d12!) if this Being is Berserk"
       }
     ],
     "abilities": [
       {
         "name": "Rage",
-        "description": "It goes Berserk when it is attacked or as part of making an Attack. While Berserk by any means, it reduces damage by 1 per damage die."
+        "description": "Goes Berserk when it takes damage or when attacking. While Berserk, it reduces damage by 1 per die."
       }
     ],
     "universalDamageBonus": 0,

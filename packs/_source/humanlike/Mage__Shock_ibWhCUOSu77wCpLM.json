@@ -17,7 +17,7 @@
     "morale": 4,
     "appearing": "",
     "speed": 30,
-    "senses": "",
+    "senses": [],
     "armor": 0,
     "armorDescription": "as Unarmored",
     "locked": true,
@@ -30,12 +30,12 @@
       {
         "name": "Lightning Bolt",
         "note": "Cast, 30-foot Line | Reflex",
-        "recharge": "Cd6",
+        "recharge": "1/Day",
         "attackType": "castRanged",
         "flatDamage": "10",
         "rollDamage": "3d6",
         "damageType": "-",
-        "extraInfo": "Dazed (Cd4)",
+        "extraInfo": "and Dazed (Cd4, or Cd6 if failed as a 1)",
         "causedStatuses": [
           {
             "statusId": "dazed",
@@ -51,13 +51,13 @@
       },
       {
         "name": "Zap",
-        "note": "Cast, Remote (Focus) | Reflex",
+        "note": "Cast, Remote | Reflex",
         "recharge": "",
         "attackType": "castRanged",
         "flatDamage": "7",
         "rollDamage": "2d6",
         "damageType": "-",
-        "extraInfo": "Dazed for the duration.",
+        "extraInfo": "and Dazed (Cd4, or Cd6 if failed as a 1)",
         "causedStatuses": [
           {
             "statusId": "dazed",
