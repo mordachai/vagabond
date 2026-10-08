@@ -19,13 +19,14 @@
     "morale": 4,
     "appearing": "d4",
     "speed": 30,
-    "senses": "",
+    "senses": [],
     "armor": 2,
     "armorDescription": "as (+1) Leather",
     "locked": true,
     "immunities": [],
     "weaknesses": [
-      "shock"
+      "shock",
+      "coldIron"
     ],
     "statusImmunities": [],
     "zone": "midline",
@@ -59,7 +60,7 @@
       },
       {
         "name": "Magic Ward I",
-        "description": "The first time it is unwillingly affected by a Spell each Round, the Caster must spend an extra 1 Mana to affect it."
+        "description": "It is not affected by Casts it is unwillingly subjected to unless the Caster's Check exceeds their difficulty by 1 or more."
       },
       {
         "name": "Terror I",

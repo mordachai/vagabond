@@ -20,7 +20,7 @@
     "morale": 10,
     "appearing": "1",
     "speed": 20,
-    "senses": "",
+    "senses": [],
     "armor": 4,
     "armorDescription": "as Plate plus Shield",
     "locked": true,
@@ -30,11 +30,12 @@
     ],
     "statusImmunities": [
       "berserk",
-      "frightened",
-      "confused",
-      "prone",
       "blinded",
-      "charmed"
+      "charmed",
+      "confused",
+      "frightened",
+      "prone",
+      "restrained"
     ],
     "zone": "frontline",
     "description": "A formless, writhing mass of dark black smoke. Its only distinguishing characteristic is a pair of bright red eyes in the center of the mass.",

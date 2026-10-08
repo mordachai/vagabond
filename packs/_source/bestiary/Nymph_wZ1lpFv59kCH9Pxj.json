@@ -19,7 +19,7 @@
     "morale": 4,
     "appearing": "d4",
     "speed": 30,
-    "senses": "",
+    "senses": [],
     "armor": 0,
     "armorDescription": "as Unarmored",
     "locked": true,
@@ -29,15 +29,15 @@
     ],
     "statusImmunities": [],
     "zone": "frontline",
-    "description": "The 'Lady of the Lake' stories, nymphs are feminine spirits of freshwater.",
+    "description": "The source of \"Lady of the Lake\" stories, nymphs are feminine spirits of freshwater.",
     "actions": [
       {
-        "name": "Nymph’s Kiss",
+        "name": "Nymph's Kiss",
         "note": "Cast, Touch | Will",
         "attackType": "castClose",
         "flatDamage": "0",
         "rollDamage": "",
-        "extraInfo": "Cursed (Cd8 Rounds, immediately suffocating and can only breathe water).",
+        "extraInfo": "Cursed (Cd8 Rounds, can only breathe water).",
         "recharge": "",
         "damageType": null
       }
@@ -49,7 +49,7 @@
       },
       {
         "name": "Magic Ward I",
-        "description": "The first time it is unwillingly affected by a Spell each Round, the Caster must spend an extra 1 Mana to affect it."
+        "description": "It is not affected by Casts it is unwillingly subjected to unless the Caster's Check exceeds their difficulty by 1 or more."
       }
     ],
     "universalDamageBonus": 0,

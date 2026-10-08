@@ -22,7 +22,7 @@
       "allsight",
       "telepathy"
     ],
-    "sensesNote": "Telepathy (Far)",
+    "sensesNote": "",
     "armor": 3,
     "armorDescription": "as (+1) Chain",
     "locked": true,
@@ -56,7 +56,7 @@
         "rollDamage": "",
         "damageType": "-",
         "attackType": "melee",
-        "extraInfo": "2xHoof and 1xHorn"
+        "extraInfo": "2×Hoof and 1×Horn"
       },
       {
         "name": "Hoof",
@@ -92,7 +92,7 @@
     "abilities": [
       {
         "name": "Magic Ward III",
-        "description": "The first time it is unwillingly affected by a Spell each Round, the Caster must spend an extra 3 Mana to affect it."
+        "description": "It is not affected by Casts it is unwillingly subjected to unless the Caster's Check exceeds their difficulty by 3 or more."
       },
       {
         "name": "Regenerate I",

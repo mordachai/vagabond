@@ -36,14 +36,14 @@
     "description": "(Wyrm) A bane of pirates, the serpentine beisht kione is a horrifying fae of the sea. Its jaws and mouth match the length of its nearly equine mane, and it can open these jaws to swallow most small boats whole. Stories say, if treasure is ever lost overboard, it now belongs to the beisht, as attempts to dredge it up will incur its greedy wrath.",
     "actions": [
       {
-        "name": "Multi-Attack",
+        "name": "Combo",
         "note": "",
         "recharge": "",
         "attackType": "melee",
-        "flatDamage": "0",
+        "flatDamage": "",
         "rollDamage": "",
         "damageType": "-",
-        "extraInfo": "1xBite and 1xSlam",
+        "extraInfo": "1×Bite and 1×Slam",
         "causedStatuses": [],
         "critCausedStatuses": []
       },

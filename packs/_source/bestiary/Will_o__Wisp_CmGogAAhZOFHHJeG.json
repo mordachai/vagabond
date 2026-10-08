@@ -33,14 +33,16 @@
       "coldIron"
     ],
     "statusImmunities": [
-      "fatigued",
-      "prone",
       "charmed",
+      "fatigued",
+      "paralyzed",
+      "prone",
+      "restrained",
       "sickened",
-      "paralyzed"
+      "suffocating"
     ],
     "zone": "backline",
-    "description": "Chaotic spirit motes that dwell in swamps. They can sent a burst of spiritual energy that zaps the essence from a mortal.",
+    "description": "Chaotic spirit motes that dwell in swamps. They can send a burst of spiritual energy that zaps the essence from a mortal.",
     "actions": [
       {
         "name": "Life Zap",
@@ -74,7 +76,7 @@
       },
       {
         "name": "Illuminating",
-        "description": "Sheds Light out to 30 feet."
+        "description": "Sheds Light out to 30'."
       }
     ],
     "universalDamageBonus": 0,

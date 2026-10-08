@@ -18,7 +18,7 @@
     "morale": 7,
     "appearing": "2d6+1",
     "speed": 40,
-    "senses": "",
+    "senses": [],
     "armor": 3,
     "armorDescription": "as Plate",
     "locked": true,
@@ -68,7 +68,7 @@
       },
       {
         "name": "Magic Ward I",
-        "description": "The first time it is unwillingly affected by a Spell each Round, the Caster must spend an extra 1 Mana to affect it."
+        "description": "It is not affected by Casts it is unwillingly subjected to unless the Caster's Check exceeds their difficulty by 1 or more."
       }
     ],
     "universalDamageBonus": 0,

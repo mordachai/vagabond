@@ -14,7 +14,7 @@
     "size": "small",
     "beingType": "Fae",
     "speedTypes": [
-      "fly 60"
+      "fly"
     ],
     "hd": 1,
     "morale": 7,
@@ -48,8 +48,16 @@
     ],
     "abilities": [
       {
-        "description": "The first time it is unwillingly affected by a Spell each Round, the Caster must spend an extra 1 Mana to affect it.",
-        "name": ""
+        "description": "It is not affected by Casts it is unwillingly subjected to unless the Caster's Check exceeds their difficulty by 1 or more.",
+        "name": "Magic Ward I"
+      },
+      {
+        "name": "Major Invisibility",
+        "description": "(Focus): It can magically become Invisible during its Turn (no Action)."
+      },
+      {
+        "name": "Pixie Dust",
+        "description": "[Item]: It can produce one dose of Pixie Dust once per Day, which gives a Medium or smaller Being Fly for 1 Hour."
       }
     ],
     "universalDamageBonus": 0,
@@ -57,7 +65,7 @@
     "speedValues": {
       "climb": 0,
       "cling": 0,
-      "fly": 0,
+      "fly": 60,
       "phase": 0,
       "swim": 0
     },

@@ -103,3 +103,15 @@ Alpha 3 statblocks therefore stopped printing `Weak: Silvered Weapons` / `Cold I
 adds `coldIron` to every Fae (incl. `Cryptid/Fae`) and `silver` to every Undead (incl. `Artificial (Undead)`), Hellspawn and
 Lycanthrope (Werewolf, Werewolf Dire, Wererat) on top of the printed `Weak:` line. Pieces of Parts 2/4 touched by this:
 Necrophidius, Scarecrow (+Silver), Gremlin (+Cold Iron), Werewolf / Werewolf Dire / Wererat (+Silver).
+
+---
+
+## Part 5 — Fae (book pp. 151-153) — 15 statblocks, none new, none deleted
+
+- Cold Iron weakness stays on every Fae (type rule above); Hag, Sea gets it too (was missing).
+- Beisht Kione Dhoo `Multi-Attack` -> `Combo`; Hag, Grove / Unicorn Combo text; Unicorn Telepathy qualifier dropped (book: plain `Allsight, Telepathy`), Heal / Teleport wording.
+- Brollachan gains Restrained immunity, Will o' Wisp gains Restrained + Suffocating immunities.
+- Pixie: `fly 60` string -> `fly` + 60 value; abilities Major Invisibility (Focus) and Pixie Dust added; Satyr: Panpipes added.
+  The book prints `It casn't use Sleep, Charm, or Fear` — typo fixed to *can't*.
+- Pixie / Satyr had an **unnamed** Magic Ward ability: now named `Magic Ward I` with the Alpha 3 text.
+- Nymph's Kiss: "can only breathe water" (no longer "immediately suffocating"); Mermaid Immortal of the Sea: "in contact with a body of water".

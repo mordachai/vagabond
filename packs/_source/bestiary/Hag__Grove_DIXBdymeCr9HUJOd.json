@@ -42,7 +42,7 @@
         "rollDamage": "",
         "damageType": "-",
         "attackType": "melee",
-        "extraInfo": "2xClaw and 1xBite. A Being hit by all three is Restrained and takes 18 (4d8) damage at the start of this Being's Turns."
+        "extraInfo": "2×Claw and 1×Bite. A Being hit by all three is Restrained and takes 18 (4d8) damage at the start of this Being's Turns."
       },
       {
         "name": "Bite",
@@ -82,7 +82,7 @@
       },
       {
         "name": "Magic Ward I",
-        "description": "The first time it is unwillingly affected by a Spell each Round, the Caster must spend an extra 1 Mana to affect it."
+        "description": "It is not affected by Casts it is unwillingly subjected to unless the Caster's Check exceeds their difficulty by 1 or more."
       },
       {
         "name": "Terror I",

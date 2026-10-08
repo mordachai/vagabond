@@ -17,7 +17,7 @@
     "morale": 9,
     "appearing": "2d4",
     "speed": 35,
-    "senses": "",
+    "senses": [],
     "armor": 2,
     "armorDescription": "as Chain",
     "locked": true,
@@ -110,8 +110,12 @@
     ],
     "abilities": [
       {
-        "description": "The first time it is unwillingly affected by a Spell each Round, the Caster must spend an extra 1 Mana to affect it.",
-        "name": ""
+        "description": "It is not affected by Casts it is unwillingly subjected to unless the Caster's Check exceeds their difficulty by 1 or more.",
+        "name": "Magic Ward I"
+      },
+      {
+        "name": "Panpipes",
+        "description": "[Item]: It can't use Sleep, Charm, or Fear without its panpipes."
       }
     ],
     "universalDamageBonus": 0,

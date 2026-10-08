@@ -19,7 +19,7 @@
     "morale": 2,
     "appearing": "1",
     "speed": 10,
-    "senses": "",
+    "senses": [],
     "armor": 2,
     "armorDescription": "as (+1) Leather",
     "locked": true,
@@ -32,7 +32,7 @@
     ],
     "statusImmunities": [],
     "zone": "backline",
-    "description": "Half-human half-piscine fae who are venerated by all creatures of the sea. Their enrapturing beauty captivates all, notably the horrors of the sea that serve mermaids without question.",
+    "description": "Half-human half-piscine fae who are venerated by all creatures of the sea.",
     "actions": [
       {
         "name": "Call Terror",
@@ -82,7 +82,7 @@
       },
       {
         "name": "Magic Ward I",
-        "description": "The first time it is unwillingly affected by a Spell each Round, the Caster must spend an extra 1 Mana to affect it."
+        "description": "It is not affected by Casts it is unwillingly subjected to unless the Caster's Check exceeds their difficulty by 1 or more."
       },
       {
         "name": "Enchanting Song",
@@ -90,7 +90,7 @@
       },
       {
         "name": "Immortal of the Sea",
-        "description": "It can’t be reduced below 1 HP while it is even partially submerged in a body of water."
+        "description": "It can’t be reduced below 1 HP while in contact with a body of water."
       },
       {
         "name": "Terror-Bound",
