@@ -21,7 +21,7 @@
     "morale": 2,
     "appearing": "2d6",
     "speed": 20,
-    "senses": "",
+    "senses": [],
     "armor": 0,
     "armorDescription": "as Unarmored",
     "locked": true,
@@ -37,7 +37,7 @@
         "attackType": "melee",
         "flatDamage": "",
         "rollDamage": "",
-        "extraInfo": "",
+        "extraInfo": "0",
         "recharge": "",
         "damageType": null
       }

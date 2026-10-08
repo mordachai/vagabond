@@ -17,7 +17,7 @@
     "morale": 10,
     "appearing": "1",
     "speed": 50,
-    "senses": "",
+    "senses": [],
     "armor": 2,
     "armorDescription": "as Chain",
     "locked": true,
@@ -28,8 +28,8 @@
     "description": "",
     "actions": [
       {
-        "name": "Maul",
-        "note": "Multi-Attack",
+        "name": "Combo",
+        "note": "",
         "attackType": "melee",
         "flatDamage": "",
         "rollDamage": "",
@@ -61,7 +61,7 @@
     "abilities": [
       {
         "name": "Pack Hunter",
-        "description": "Targets within 5 feet of one of this Being's Allies are Vulnerable to its attacks."
+        "description": "Targets within 5' of one of this Being's Allies are Vulnerable to its attacks."
       },
       {
         "name": "Pounce",

@@ -59,7 +59,7 @@
       },
       {
         "name": "Pack Hunter",
-        "description": "Targets within 5 feet of one of this Being's Allies are Vulnerable to its attacks."
+        "description": "Targets within 5' of one of this Being's Allies are Vulnerable to its attacks."
       }
     ],
     "universalDamageBonus": 0,

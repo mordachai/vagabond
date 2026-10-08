@@ -19,7 +19,7 @@
     "morale": 11,
     "appearing": "1",
     "speed": 0,
-    "senses": "",
+    "senses": [],
     "armor": 3,
     "armorDescription": "as (+1) Chain",
     "locked": true,

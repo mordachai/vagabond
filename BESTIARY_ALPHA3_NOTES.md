@@ -50,3 +50,21 @@ Judgement calls
 Not modelled (rules gap, text only in the book)
 - `Physical from non-Relics` / `Relic Weapons weaker than (+2)`: stored as plain `physical` immunity — the damage code has no Relic exception
   (only Druid Beast Mode ignores it).
+
+---
+
+## Part 3 — Beasts (book pp. 121-133) — 72 statblocks, none new, none deleted
+
+- **Combo**: Alpha 2 `Maul` / `Multi-Attack` / `Pin` / `Snip-Snip` multi-attack actions are now the book's `Combo` line (`2×Claws and 1×Bite ...`):
+  Ape, Ape Giant, Badger, Bear, Crayfish Giant, Mantis Giant, Sabre-tooth Tiger, Scorpion Giant. Their action order now follows the book.
+- **Pack Hunter** (Cat Great, Rat, Rat Giant, Sabre-tooth Tiger, Velociraptor, Weasel Giant, Wolf, Dire, Winter) and **Aggressor** (Hippo, Behemoth):
+  `feet` -> `'` wording. Same for several descriptions (Ant, Bee, Beetle Bombardier, T. Rex).
+- Electric Eel loses the `Aquatic` ability (Alpha 3 p. 131 note); Octopus Giant gets Swim 30'; Frog/Toad Bite and Cobra Venom Spit reworded
+  (Cobra's text really starts with `0 and, if failed by 5 or more, Blinded` in the book — kept literally).
+- **Dog**: the book prints one `Dog [Small/Medium]` statblock (TL 0.2/0.5, HD 1/1, Speed 30'/40', Morale 3/7, Bite 1/2). The pack keeps the two
+  documents (`Dog, Small`, `Dog, Medium`); both already match those numbers, so they are unchanged.
+- **Kept on purpose**: Chicken (`Fly 1` stands in for Flutter) and Giant Draco Lizard (`Fly 70` stands in for "70' with Glide") — the book
+  has no Fly speed for them, but the engine has no Glide/Flutter, so their Fly speed type was left alone.
+- Slug Giant: `Blunt from non-Relics` -> plain `blunt` immunity (Relic exception not modelled, see Part 2).
+- The old `Animated Armor` copy in the Beasts folder (id `IWiL8vs9JwuriDcX`, mentioned in the translation notes) is no longer in the pack source;
+  the book only has Animated Armor under Artificials.

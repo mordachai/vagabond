@@ -17,7 +17,7 @@
     "morale": 7,
     "appearing": "2d6+2",
     "speed": 60,
-    "senses": "",
+    "senses": [],
     "armor": 3,
     "armorDescription": "as (+1) Chain",
     "locked": true,
@@ -25,7 +25,7 @@
     "weaknesses": [],
     "statusImmunities": [],
     "zone": "frontline",
-    "description": "The incredibly hardy ant, increased to massive proportions. Their tunnels are the size of mine shafts, and an infestation of giant ants can topple a city.",
+    "description": "The incredibly hardy ant, increased to massive proportions. Their tunnels are the size of mineshafts, and an infestation of giant ants can topple a city.",
     "actions": [
       {
         "name": "Bite",

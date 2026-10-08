@@ -34,7 +34,7 @@
     "description": "",
     "actions": [
       {
-        "name": "Multi-Attack",
+        "name": "Combo",
         "note": "",
         "attackType": "melee",
         "flatDamage": "",

@@ -19,7 +19,7 @@
     "morale": 7,
     "appearing": "3d6",
     "speed": 10,
-    "senses": "",
+    "senses": [],
     "armor": 0,
     "armorDescription": "as Unarmored",
     "locked": true,

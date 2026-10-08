@@ -19,7 +19,7 @@
     "morale": 7,
     "appearing": "1",
     "speed": 10,
-    "senses": "",
+    "senses": [],
     "armor": 1,
     "armorDescription": "as Unarmored plus Shield",
     "locked": true,

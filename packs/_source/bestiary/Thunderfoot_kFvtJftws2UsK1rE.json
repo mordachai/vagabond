@@ -17,7 +17,7 @@
     "morale": 9,
     "appearing": "d12",
     "speed": 30,
-    "senses": "",
+    "senses": [],
     "armor": 4,
     "armorDescription": "as (+3) Leather",
     "locked": true,

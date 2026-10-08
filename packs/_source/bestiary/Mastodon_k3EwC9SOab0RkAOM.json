@@ -17,7 +17,7 @@
     "morale": 4,
     "appearing": "d4",
     "speed": 40,
-    "senses": "",
+    "senses": [],
     "armor": 3,
     "armorDescription": "as Plate",
     "locked": true,

@@ -19,7 +19,7 @@
     "morale": 7,
     "appearing": "2d4",
     "speed": 20,
-    "senses": "",
+    "senses": [],
     "armor": 0,
     "armorDescription": "as Unarmored",
     "locked": true,

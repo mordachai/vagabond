@@ -19,7 +19,7 @@
     "morale": 8,
     "appearing": "d4+1",
     "speed": 40,
-    "senses": "",
+    "senses": [],
     "armor": 1,
     "armorDescription": "as Leather",
     "locked": true,
@@ -30,12 +30,12 @@
     "description": "",
     "actions": [
       {
-        "name": "Maul",
-        "note": "Multi-Attack",
+        "name": "Combo",
+        "note": "",
         "attackType": "melee",
         "flatDamage": "",
         "rollDamage": "",
-        "extraInfo": "Two Claws and a Bite. If both Claws hit the same Target, the Bite can automatically hit that Target.",
+        "extraInfo": "2×Claws and 1×Bite. If both Claws hit the same Target, the Bite can automatically hit the Target.",
         "recharge": "",
         "damageType": null
       },

@@ -19,7 +19,7 @@
     "morale": 3,
     "appearing": "2d6",
     "speed": 0,
-    "senses": "",
+    "senses": [],
     "armor": 0,
     "armorDescription": "as Unarmored",
     "locked": true,
@@ -54,12 +54,7 @@
         "critCausedStatuses": []
       }
     ],
-    "abilities": [
-      {
-        "name": "Aquatic",
-        "description": "Can only breathe water."
-      }
-    ],
+    "abilities": [],
     "universalDamageBonus": 0,
     "universalDamageDice": "",
     "speedValues": {

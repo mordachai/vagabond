@@ -17,7 +17,7 @@
     "morale": 9,
     "appearing": "d4",
     "speed": 50,
-    "senses": "",
+    "senses": [],
     "armor": 2,
     "armorDescription": "as (+1) Leather",
     "locked": true,
@@ -55,7 +55,7 @@
     "abilities": [
       {
         "name": "Pack Hunter",
-        "description": "Targets within 5 feet of one of this Being's Allies are Vulnerable to its attacks."
+        "description": "Targets within 5' of one of this Being's Allies are Vulnerable to its attacks."
       },
       {
         "name": "Pounce",

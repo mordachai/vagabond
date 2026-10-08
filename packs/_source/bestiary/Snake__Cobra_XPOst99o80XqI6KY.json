@@ -17,7 +17,7 @@
     "morale": 7,
     "appearing": "1",
     "speed": 20,
-    "senses": "",
+    "senses": [],
     "armor": 1,
     "armorDescription": "as Leather",
     "locked": true,
@@ -35,7 +35,7 @@
         "flatDamage": "",
         "rollDamage": "",
         "damageType": "-",
-        "extraInfo": "and, if failed by 5 or more, Blinded",
+        "extraInfo": "0 and, if failed by 5 or more, Blinded",
         "causedStatuses": [
           {
             "statusId": "blinded",

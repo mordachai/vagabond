@@ -93,7 +93,10 @@
       }
     ],
     "universalDamageBonus": 0,
-    "universalDamageDice": ""
+    "universalDamageDice": "",
+    "speedValues": {
+      "swim": 30
+    }
   },
   "prototypeToken": {
     "name": "Octopus, Giant",

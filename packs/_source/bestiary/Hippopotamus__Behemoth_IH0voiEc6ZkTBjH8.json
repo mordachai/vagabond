@@ -19,7 +19,7 @@
     "morale": 9,
     "appearing": "1",
     "speed": 30,
-    "senses": "",
+    "senses": [],
     "armor": 3,
     "armorDescription": "as Plate",
     "locked": true,
@@ -55,7 +55,7 @@
     "abilities": [
       {
         "name": "Aggressor",
-        "description": "The first time it Moves at least 10 feet toward an Enemy on a Turn, it regains that Speed."
+        "description": "The first time it Moves at least 10' toward an Enemy on a Turn, it regains that Speed."
       }
     ],
     "universalDamageBonus": 0,

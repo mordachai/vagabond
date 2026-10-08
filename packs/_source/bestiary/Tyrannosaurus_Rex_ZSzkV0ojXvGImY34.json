@@ -17,7 +17,7 @@
     "morale": 11,
     "appearing": "1",
     "speed": 50,
-    "senses": "",
+    "senses": [],
     "armor": 2,
     "armorDescription": "as Chain",
     "locked": true,
@@ -25,7 +25,7 @@
     "weaknesses": [],
     "statusImmunities": [],
     "zone": "frontline",
-    "description": "The tyrant lizard that dominates regions that have been 'lost to time.' Its massive jaws are nearly unstoppable by man.",
+    "description": "The tyrant lizard that dominates regions that have been \"lost to time.\" Its massive jaws are nearly unstoppable by man.",
     "actions": [
       {
         "name": "Bite",

@@ -17,7 +17,7 @@
     "morale": 10,
     "appearing": "2d6",
     "speed": 45,
-    "senses": "",
+    "senses": [],
     "armor": 1,
     "armorDescription": "as Leather",
     "locked": true,
@@ -41,7 +41,7 @@
     "abilities": [
       {
         "name": "Pack Hunter",
-        "description": "Targets within 5 feet of one of this Being's Allies are Vulnerable to its attacks."
+        "description": "Targets within 5' of one of this Being's Allies are Vulnerable to its attacks."
       }
     ],
     "universalDamageBonus": 0,

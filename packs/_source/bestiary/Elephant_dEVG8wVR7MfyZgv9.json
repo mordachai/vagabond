@@ -17,7 +17,7 @@
     "morale": 8,
     "appearing": "d20",
     "speed": 40,
-    "senses": "",
+    "senses": [],
     "armor": 2,
     "armorDescription": "as Chain",
     "locked": true,

@@ -19,7 +19,7 @@
     "morale": 11,
     "appearing": "d6",
     "speed": 30,
-    "senses": "",
+    "senses": [],
     "armor": 3,
     "armorDescription": "as (+1) Chain",
     "locked": true,
@@ -30,8 +30,8 @@
     "description": "Scorpions roughly the size of a cow. Extremely aggressive predators that kill on-sight.",
     "actions": [
       {
-        "name": "Pin",
-        "note": "Multi-Attack",
+        "name": "Combo",
+        "note": "",
         "recharge": "",
         "attackType": "melee",
         "flatDamage": "",

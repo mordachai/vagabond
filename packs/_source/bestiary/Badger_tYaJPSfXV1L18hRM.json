@@ -17,7 +17,7 @@
     "morale": 4,
     "appearing": "d4+1",
     "speed": 25,
-    "senses": "",
+    "senses": [],
     "armor": 0,
     "armorDescription": "as Unarmored",
     "locked": true,
@@ -30,8 +30,8 @@
     "description": "",
     "actions": [
       {
-        "name": "Maul",
-        "note": "Multi-Attack",
+        "name": "Combo",
+        "note": "",
         "recharge": "",
         "attackType": "melee",
         "flatDamage": "",

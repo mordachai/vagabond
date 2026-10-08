@@ -20,7 +20,7 @@
     "morale": 9,
     "appearing": "2d6",
     "speed": 10,
-    "senses": "",
+    "senses": [],
     "armor": 0,
     "armorDescription": "as Unarmored",
     "locked": true,
@@ -28,7 +28,7 @@
     "weaknesses": [],
     "statusImmunities": [],
     "zone": "midline",
-    "description": "Roughly 1 foot in length, these giant bees are extremely territorial, but otherwise non-aggressive.",
+    "description": "Roughly 1' in length, these giant bees are extremely territorial, but otherwise non-aggressive.",
     "actions": [
       {
         "name": "Sting",
