@@ -38,7 +38,10 @@ export const AlchemyMode = {
 
     const cost = 50; // 5s, RAW-fixed regardless of the item's own value
     const materialsOk = MaterialsHelper.totalValue(actor) >= cost;
-    checks.push({ ok: materialsOk, key: 'materials', label: 'VAGABOND.Craft.Checks.Materials' });
+    checks.push({
+      ok: materialsOk, key: 'materials', label: 'VAGABOND.Craft.Checks.Materials',
+      detail: materialsOk ? undefined : MaterialsHelper.shortfallDetail(actor, cost),
+    });
 
     return { ok: checks.every(c => c.ok), checks, cost: { copper: cost, materials: cost, studiedDice: 0, action: 'use' } };
   },

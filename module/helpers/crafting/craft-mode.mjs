@@ -53,7 +53,10 @@ export const CraftMode = {
     const add = Math.min(amount, Math.max(0, value - progress));
     const materialsCost = ProjectHelper.materialsFor(value, progress, paid, add);
     const materialsOk = MaterialsHelper.totalValue(actor) >= materialsCost;
-    checks.push({ ok: materialsOk, key: 'materials', label: 'VAGABOND.Craft.Checks.Materials' });
+    checks.push({
+      ok: materialsOk, key: 'materials', label: 'VAGABOND.Craft.Checks.Materials',
+      detail: materialsOk ? undefined : MaterialsHelper.shortfallDetail(actor, materialsCost),
+    });
 
     const ok = checks.every(c => c.ok);
     return { ok, checks, cost: { copper: materialsCost, materials: materialsCost, studiedDice: 0, action: null } };

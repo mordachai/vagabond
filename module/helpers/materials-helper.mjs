@@ -30,6 +30,14 @@ export class MaterialsHelper {
     return this.itemsOf(actor, key).reduce((sum, i) => sum + i.system.craftMaterial.value, 0);
   }
 
+  /** "need 5s, have 3s" text for a failed Materials check. */
+  static shortfallDetail(actor, needed) {
+    return game.i18n.format('VAGABOND.Craft.Errors.needHave', {
+      need: CurrencyHelper.format(needed),
+      have: CurrencyHelper.format(this.totalValue(actor)),
+    });
+  }
+
   /**
    * Pure planner: spend `copper` from a cheapest-first list of `{id, value}`.
    * @returns {{ok: boolean, updates: Array<{id: string, value: number}>, deletes: string[]}}

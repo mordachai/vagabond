@@ -248,11 +248,11 @@
               </div>
             </div>
           </div>
-          <div class="wb-alchemy-notice{{#if catalyzeOn}} is-empty{{/if}}">
-            {{#unless catalyzeOn}}
+          <div class="wb-alchemy-notice{{#unless alchemyNotice}} is-empty{{/unless}}">
+            {{#if alchemyNotice}}
             <i class="fa-solid fa-triangle-exclamation"></i>
-            <span>{{localize "VAGABOND.Craft.Workbench.NoCatalyze"}}</span>
-            {{/unless}}
+            <span>{{alchemyNotice}}</span>
+            {{/if}}
           </div>
 
           <fieldset class="wb-fieldset">
@@ -288,7 +288,7 @@
                   </div>
                 </div>
                 <button type="button" class="wb-known-craft" data-action="craftFormula">
-                  <i class="fa-solid fa-flask"></i> {{localize "VAGABOND.Craft.Workbench.CraftCostHint" cost=craftCostLabel}}
+                  <i class="fa-solid fa-flask"></i> {{{localize "VAGABOND.Craft.Workbench.CraftCostHint" cost=craftCostLabel}}}
                 </button>
               </article>
               {{/if}}
@@ -320,11 +320,11 @@
                      title="{{#if overCap}}{{localize 'VAGABOND.Craft.Workbench.OverValueCap'}}{{/if}}">
                   <span class="wb-formula-row-icon">
                     <img src="{{img}}" alt="">
-                    {{#if ownedQty}}<span class="wb-formula-row-badge" data-tooltip="{{localize 'VAGABOND.Craft.Workbench.OwnedQty'}}">{{ownedQty}}</span>{{/if}}
+                    {{#if ownedQty}}<span class="wb-formula-row-badge" data-tooltip="{{localize 'VAGABOND.Craft.Workbench.OwnedQty' qty=ownedQty}}">{{ownedQty}}</span>{{/if}}
                   </span>
                   <span class="wb-formula-row-name">{{name}}</span>
+                  {{#if known}}<span class="wb-formula-row-craftcost{{#unless @root.canAffordFormula}} is-short{{/unless}}" data-tooltip="{{localize 'VAGABOND.Craft.Workbench.CraftCostHint' cost=@root.alchemyCraftCostText}}">{{@root.alchemyCraftCostText}}</span>{{/if}}
                   <span class="wb-formula-row-cost">{{costLabel}}</span>
-                  {{#if known}}<i class="fa-solid fa-check wb-formula-row-known" title="{{localize 'VAGABOND.Craft.Workbench.KnownFormulas'}}"></i>{{/if}}
                   <i class="fa-solid fa-chevron-right wb-formula-row-caret"></i>
                 </div>
                 {{#if selected}}

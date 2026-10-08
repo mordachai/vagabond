@@ -126,6 +126,22 @@ export class CraftingHelper {
   }
 
   /**
+   * Player-facing text for a failed `execute()` result. A `checksFailed` result
+   * names exactly what is missing (with need/have detail where a check carries one);
+   * anything else falls back to {@link reasonLabel}.
+   */
+  static failureMessage(result) {
+    if (result?.reason === 'checksFailed') {
+      const missing = (result.checks ?? []).filter(c => !c.ok).map(c => {
+        const label = game.i18n.localize(c.label);
+        return c.detail ? `${label} (${c.detail})` : label;
+      });
+      if (missing.length) return game.i18n.format('VAGABOND.Craft.Errors.missing', { list: missing.join(', ') });
+    }
+    return this.reasonLabel(result?.reason);
+  }
+
+  /**
    * "Work a Shift": spend `actor`'s Value/Shift budget across one or more `craft`
    * allocations, then post a single summary chat card (plan §4.7). Unlike
    * `request()`, this always runs directly (no GM-approval gate) —
@@ -170,7 +186,7 @@ export class CraftingHelper {
       const result = await this.execute(actor, req.modeKey, req.recipe, req.opts);
       resultText = result.ok
         ? game.i18n.localize('VAGABOND.Craft.Approval.Approved')
-        : `${game.i18n.localize('VAGABOND.Craft.Approval.Failed')} (${this.reasonLabel(result.reason)})`;
+        : `${game.i18n.localize('VAGABOND.Craft.Approval.Failed')} (${this.failureMessage(result)})`;
     }
 
     const newContent = message.content.replace(
@@ -232,8 +248,7 @@ export class CraftingHelper {
   static async #postShiftSummary(actor, budget, spent, results) {
     const lines = await Promise.all(results.map(async ({ allocation, result }) => {
       if (!result.ok) {
-        const failedCheck = result.reason === 'checksFailed' ? result.checks?.find(c => !c.ok) : null;
-        const reason = failedCheck ? game.i18n.localize(failedCheck.label) : this.reasonLabel(result.reason);
+        const reason = this.failureMessage(result);
         return `<li>${game.i18n.format('VAGABOND.Craft.Shift.LineFailed', {
           amount: CurrencyHelper.format(allocation.amount), reason,
         })}</li>`;

@@ -492,6 +492,8 @@
     transition: box-shadow 0.15s;
 
     &:hover { box-shadow: 0 0 8px -1px $c-yellow, inset 0 0 0 1px $c-yellow; }
+
+    .wb-cost.is-short { color: $c-red; }
   }
 
   /* Alchemy tab: center (budget/notice/known) + right sidebar (full catalog + detail).
@@ -611,7 +613,12 @@
 
     &.is-over-cap { opacity: 0.5; }
 
-    &.is-known { opacity: 0.7; }
+    // Known formulas: green tint (stays after .is-selected so the yellow outline still marks the pick)
+    &.is-known {
+      background: color-mix(in srgb, #{$c-green} 22%, transparent);
+
+      &:hover { background: color-mix(in srgb, #{$c-green} 32%, transparent); }
+    }
   }
 
   .wb-formula-row-icon {
@@ -636,9 +643,10 @@
     background: $c-yellow;
     color: $c-black;
     border-radius: 7px;
-    font-size: 0.6rem;
+    font-size: 0.7rem;
     font-weight: 700;
     line-height: 1;
+    font-family: $font-title;
     cursor: help;
   }
 
@@ -651,8 +659,16 @@
     text-overflow: ellipsis;
   }
 
-  .wb-formula-row-cost { font-size: 0.68rem; opacity: 0.75; flex-shrink: 0; }
-  .wb-formula-row-known { font-size: 0.7rem; color: $c-yellow; flex-shrink: 0; }
+  .wb-formula-row-cost { font-family: $font-title; color: $c-yellow; font-size: 0.95rem; opacity: 0.75; flex-shrink: 0; }
+  // Known formulas: flat craft cost shown in front of the item's value
+  .wb-formula-row-craftcost {
+    font-family: $font-title;
+    color: $c-green;
+    font-size: 0.95rem;
+    flex-shrink: 0;
+
+    &.is-short { color: $c-red; }
+  }
 
   .wb-formula-row-caret {
     font-size: 0.65rem;

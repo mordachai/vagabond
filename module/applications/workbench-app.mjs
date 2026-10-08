@@ -130,6 +130,8 @@ export class WorkbenchApp extends api.HandlebarsApplicationMixin(api.Application
   #formulaEditMode = false;
   #savedScroll = new Map();
   #savedSearch = '';
+  /** Alchemy tab: last failure text, shown in the notice strip until the next successful action / tab switch. */
+  #alchemyNotice = '';
   /** Mix tab: the two picked ingredient item ids (null = empty slot) + list search text. */
   #mixSlots = [null, null];
   #mixSearch = '';
@@ -196,7 +198,9 @@ export class WorkbenchApp extends api.HandlebarsApplicationMixin(api.Application
     const formulaPicksRemaining = AlchemyHelper.formulaPicksRemaining(this.actor);
     const formulaValueCapCopper = AlchemyHelper.formulaValueCapCopper(this.actor);
     const knownCount = this.actor.system.craft?.formulas?.length ?? 0;
-    const alchemyCraftCostLabel = CurrencyHelper.format(50); // flat 5s, RAW-fixed (AlchemyMode)
+    const alchemyCraftCost = 50; // flat 5s, RAW-fixed (AlchemyMode)
+    const canAffordFormula = materials >= alchemyCraftCost;
+    const alchemyCraftCostLabel = `<span class="wb-cost${canAffordFormula ? '' : ' is-short'}">${CurrencyHelper.format(alchemyCraftCost)}</span>`;
     // `fromUuidSync` only returns full `system` data for compendium items Foundry has
     // already fully loaded (otherwise just the index shape — no damageAmount/damageType).
     // `fromUuid` always resolves the complete document, so damage never depends on
@@ -280,6 +284,16 @@ export class WorkbenchApp extends api.HandlebarsApplicationMixin(api.Application
     // Known Formulas render as a fixed slot grid (RAW: picks are limited by class
     // level) — filled slots show the known item, the rest render empty so the
     // player can see at a glance how many more they still need to pick on the right.
+    // Notice strip: the last failed action wins; otherwise whatever currently blocks
+    // crafting a known formula (everything except "formula known" — that's per-card).
+    let alchemyNotice = this.#alchemyNotice;
+    if (!alchemyNotice && this.#tab === 'alchemy' && catalyzeOn && knownFormulas.length) {
+      const evaluation = CraftingHelper.evaluate(this.actor, 'alchemy', { formulaUuid: knownFormulas[0].uuid });
+      const blocking = evaluation.checks.filter(c => !c.ok && c.key !== 'formula');
+      if (blocking.length) alchemyNotice = CraftingHelper.failureMessage({ reason: 'checksFailed', checks: blocking });
+    }
+    if (!catalyzeOn) alchemyNotice = alchemyNotice || game.i18n.localize('VAGABOND.Craft.Workbench.NoCatalyze');
+
     const formulaSlots = Array.from({ length: Math.max(formulaGrants, knownFormulas.length) }, (_, i) => knownFormulas[i] ?? { empty: true });
 
     return {
@@ -289,6 +303,9 @@ export class WorkbenchApp extends api.HandlebarsApplicationMixin(api.Application
       showCraft: this.#tab === 'craft',
       showScrap: this.#tab === 'scrap',
       showAlchemy: this.#tab === 'alchemy',
+      alchemyNotice,
+      canAffordFormula,
+      alchemyCraftCostText: CurrencyHelper.format(alchemyCraftCost),
       showMix: this.#tab === 'mix',
       mixOn, mix,
       isGM: game.user.isGM,
@@ -478,6 +495,7 @@ export class WorkbenchApp extends api.HandlebarsApplicationMixin(api.Application
 
   static #onSwitchTab(event, target) {
     this.#tab = target.dataset.tab;
+    this.#alchemyNotice = '';
     this.render();
   }
 
@@ -527,7 +545,7 @@ export class WorkbenchApp extends api.HandlebarsApplicationMixin(api.Application
   static async #onUnregisterRecipe(event, target) {
     const item = await fromUuid(target.dataset.uuid);
     const result = await CraftCatalog.unregister(item);
-    if (!result.ok) ui.notifications.warn(CraftingHelper.reasonLabel(result.reason));
+    if (!result.ok) ui.notifications.warn(CraftingHelper.failureMessage(result));
     this.#catalog = null;
     this.render();
   }
@@ -593,7 +611,7 @@ export class WorkbenchApp extends api.HandlebarsApplicationMixin(api.Application
     const uuid = target.closest('[data-formula-uuid]')?.dataset.formulaUuid;
     if (!uuid) return;
     const result = await CraftingHelper.request(this.actor, 'alchemy', { formulaUuid: uuid });
-    if (!result.ok) ui.notifications.warn(CraftingHelper.reasonLabel(result.reason));
+    this.#alchemyNotice = result.ok ? '' : CraftingHelper.failureMessage(result);
     this.render();
   }
 
@@ -604,7 +622,7 @@ export class WorkbenchApp extends api.HandlebarsApplicationMixin(api.Application
     // PrimaMateriaMode.evaluate reads the source synchronously — prime the cache.
     await fromUuid(uuid);
     const result = await CraftingHelper.request(this.actor, 'primaMateria', { itemUuid: uuid });
-    if (!result.ok) ui.notifications.warn(CraftingHelper.reasonLabel(result.reason));
+    this.#alchemyNotice = result.ok ? '' : CraftingHelper.failureMessage(result);
     this.render();
   }
 
@@ -633,7 +651,7 @@ export class WorkbenchApp extends api.HandlebarsApplicationMixin(api.Application
     });
     if (!confirmed) return;
     const result = await AlchemyHelper.forgetFormula(this.actor, uuid);
-    if (!result.ok) ui.notifications.warn(CraftingHelper.reasonLabel(result.reason));
+    this.#alchemyNotice = result.ok ? '' : CraftingHelper.failureMessage(result);
     this.render();
   }
 
@@ -641,7 +659,7 @@ export class WorkbenchApp extends api.HandlebarsApplicationMixin(api.Application
     const uuid = target.closest('[data-formula-uuid]')?.dataset.formulaUuid;
     if (!uuid) return;
     const result = await AlchemyHelper.learnFormula(this.actor, uuid);
-    if (!result.ok) ui.notifications.warn(CraftingHelper.reasonLabel(result.reason));
+    this.#alchemyNotice = result.ok ? '' : CraftingHelper.failureMessage(result);
     this.render();
   }
 
@@ -744,7 +762,7 @@ export class WorkbenchApp extends api.HandlebarsApplicationMixin(api.Application
     const [itemIdA, itemIdB] = this.#mixSlots;
     const result = await CraftingHelper.request(this.actor, 'mix', { itemIdA, itemIdB });
     if (!result.ok) {
-      ui.notifications.warn(CraftingHelper.reasonLabel(result.reason));
+      ui.notifications.warn(CraftingHelper.failureMessage(result));
       return;
     }
     this.#mixSlots = [null, null];
@@ -773,7 +791,7 @@ export class WorkbenchApp extends api.HandlebarsApplicationMixin(api.Application
     });
     if (!confirmed) return;
     const result = await CraftingHelper.request(this.actor, 'scrap', { itemId });
-    if (!result.ok) ui.notifications.warn(CraftingHelper.reasonLabel(result.reason));
+    if (!result.ok) ui.notifications.warn(CraftingHelper.failureMessage(result));
     this.render();
   }
 
@@ -800,7 +818,7 @@ export class WorkbenchApp extends api.HandlebarsApplicationMixin(api.Application
 
     const result = await CraftingHelper.workShift(this.actor, allocations);
     if (!result.ok) {
-      ui.notifications.warn(CraftingHelper.reasonLabel(result.reason));
+      ui.notifications.warn(CraftingHelper.failureMessage(result));
       return;
     }
     this.#staged = this.#staged.filter(s => !stagedWorked.includes(s.key));
@@ -829,7 +847,7 @@ export class WorkbenchApp extends api.HandlebarsApplicationMixin(api.Application
       }
       if (game.user.isGM && !source.pack && !source.parent && !CraftCatalog.isRecipe(source)) {
         const result = await CraftCatalog.register(source);
-        if (!result.ok) ui.notifications.warn(CraftingHelper.reasonLabel(result.reason));
+        if (!result.ok) ui.notifications.warn(CraftingHelper.failureMessage(result));
         else {
           ui.notifications.info(game.i18n.format('VAGABOND.Craft.Workbench.RecipeAdded', { name: source.name }));
           this.#catalog = null;
