@@ -224,7 +224,8 @@
       "fly": 160,
       "phase": 0,
       "swim": 0
-    }
+    },
+    "relicImmunityMin": 2
   },
   "prototypeToken": {
     "name": "Sphinx",

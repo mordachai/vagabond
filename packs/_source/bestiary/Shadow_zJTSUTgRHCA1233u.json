@@ -68,7 +68,9 @@
       }
     ],
     "universalDamageBonus": 0,
-    "universalDamageDice": ""
+    "universalDamageDice": "",
+    "relicImmunityMin": 0,
+    "sunlightHarm": "burnIncapacitated"
   },
   "prototypeToken": {
     "name": "Shadow",

@@ -24,7 +24,8 @@
     "immunities": [],
     "weaknesses": [
       "fire",
-      "poison"
+      "poison",
+      "axe"
     ],
     "statusImmunities": [],
     "zone": "frontline",

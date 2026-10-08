@@ -216,7 +216,9 @@
     "universalDamageDice": "",
     "speedValues": {
       "fly": 60
-    }
+    },
+    "relicImmunityMin": 2,
+    "regenPerTurn": "3d8"
   },
   "prototypeToken": {
     "name": "Pit Fiend",

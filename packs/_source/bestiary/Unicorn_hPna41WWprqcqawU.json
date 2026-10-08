@@ -113,7 +113,8 @@
     "universalSpellDamageBonus": 0,
     "universalSpellDamageDice": "",
     "universalAlchemicalDamageBonus": 0,
-    "universalAlchemicalDamageDice": ""
+    "universalAlchemicalDamageDice": "",
+    "regenPerTurn": "d8"
   },
   "prototypeToken": {
     "name": "Unicorn",

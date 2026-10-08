@@ -122,7 +122,9 @@
     "universalDamageDice": "",
     "speedValues": {
       "fly": 60
-    }
+    },
+    "relicImmunityMin": 0,
+    "hpFloor": "zombie"
   },
   "prototypeToken": {
     "name": "Zombie Dragon",

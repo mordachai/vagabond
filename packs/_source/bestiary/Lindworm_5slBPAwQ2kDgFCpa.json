@@ -108,7 +108,8 @@
       }
     ],
     "universalDamageBonus": 0,
-    "universalDamageDice": ""
+    "universalDamageDice": "",
+    "regenPerTurn": "2d8"
   },
   "prototypeToken": {
     "name": "Lindworm",

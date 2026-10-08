@@ -136,7 +136,11 @@
     "universalSpellDamageBonus": 0,
     "universalSpellDamageDice": "",
     "universalAlchemicalDamageBonus": 0,
-    "universalAlchemicalDamageDice": ""
+    "universalAlchemicalDamageDice": "",
+    "relicImmunityMin": 0,
+    "sunlightHarm": "burn",
+    "regenPerTurn": "3",
+    "regenStopsInSunlight": true
   },
   "prototypeToken": {
     "name": "Vampire",

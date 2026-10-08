@@ -250,7 +250,9 @@
     "alchemicalBonusPerDamageDie": [],
     "cleaveTargets": [],
     "reflexCritBonus": [],
-    "endureCritBonus": []
+    "endureCritBonus": [],
+    "relicImmunityMin": 2,
+    "hpFloor": "always"
   },
   "prototypeToken": {
     "name": "Angel",

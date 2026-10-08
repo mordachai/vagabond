@@ -84,7 +84,9 @@
     "universalDamageDice": "",
     "speedValues": {
       "fly": 40
-    }
+    },
+    "relicImmunityMin": 0,
+    "sunlightHarm": "burnIncapacitated"
   },
   "prototypeToken": {
     "name": "Ghost",

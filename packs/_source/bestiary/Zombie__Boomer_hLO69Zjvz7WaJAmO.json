@@ -63,7 +63,9 @@
       }
     ],
     "universalDamageBonus": 0,
-    "universalDamageDice": ""
+    "universalDamageDice": "",
+    "hpFloor": "zombie",
+    "sunlightHarm": "burnIncapacitated"
   },
   "prototypeToken": {
     "name": "Zombie, Boomer",

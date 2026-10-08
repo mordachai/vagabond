@@ -138,7 +138,8 @@
     "universalDamageDice": "",
     "speedValues": {
       "fly": 80
-    }
+    },
+    "relicImmunityMin": 2
   },
   "prototypeToken": {
     "name": "Dragon, Ancient - Blue",

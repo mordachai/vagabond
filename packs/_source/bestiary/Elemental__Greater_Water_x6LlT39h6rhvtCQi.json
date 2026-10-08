@@ -62,7 +62,8 @@
     "universalDamageDice": "",
     "speedValues": {
       "swim": 50
-    }
+    },
+    "relicImmunityMin": 0
   },
   "prototypeToken": {
     "name": "Elemental, Greater Water",

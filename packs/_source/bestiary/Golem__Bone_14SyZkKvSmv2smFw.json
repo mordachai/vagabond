@@ -77,7 +77,8 @@
       }
     ],
     "universalDamageBonus": 0,
-    "universalDamageDice": ""
+    "universalDamageDice": "",
+    "relicImmunityMin": 0
   },
   "prototypeToken": {
     "name": "Golem, Bone",

@@ -124,7 +124,8 @@
     "universalDamageDice": "",
     "speedValues": {
       "fly": 80
-    }
+    },
+    "regenPerTurn": "2d8"
   },
   "prototypeToken": {
     "name": "Efreeti",

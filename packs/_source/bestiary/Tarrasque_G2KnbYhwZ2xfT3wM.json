@@ -137,7 +137,9 @@
       }
     ],
     "universalDamageBonus": 0,
-    "universalDamageDice": ""
+    "universalDamageDice": "",
+    "relicImmunityMin": 0,
+    "regenPerTurn": "2d8"
   },
   "prototypeToken": {
     "name": "Tarrasque",

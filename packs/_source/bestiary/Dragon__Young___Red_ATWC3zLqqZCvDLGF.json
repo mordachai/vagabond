@@ -134,7 +134,8 @@
     "universalDamageDice": "",
     "speedValues": {
       "fly": 80
-    }
+    },
+    "relicImmunityMin": 0
   },
   "prototypeToken": {
     "name": "Dragon, Young - Red",

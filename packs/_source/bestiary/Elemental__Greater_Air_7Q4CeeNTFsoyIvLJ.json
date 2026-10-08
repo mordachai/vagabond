@@ -66,7 +66,8 @@
     "universalDamageDice": "",
     "speedValues": {
       "fly": 120
-    }
+    },
+    "relicImmunityMin": 0
   },
   "prototypeToken": {
     "name": "Elemental, Greater Air",

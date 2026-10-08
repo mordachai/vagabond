@@ -129,7 +129,9 @@
     "universalAlchemicalDamageDice": "",
     "speedValues": {
       "fly": 160
-    }
+    },
+    "relicImmunityMin": 0,
+    "regenPerTurn": "3d8"
   },
   "prototypeToken": {
     "name": "Demon",

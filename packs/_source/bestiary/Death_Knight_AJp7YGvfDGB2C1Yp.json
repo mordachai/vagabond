@@ -125,7 +125,9 @@
       }
     ],
     "universalDamageBonus": 0,
-    "universalDamageDice": ""
+    "universalDamageDice": "",
+    "relicImmunityMin": 0,
+    "hpFloor": "zombie"
   },
   "prototypeToken": {
     "name": "Death Knight",

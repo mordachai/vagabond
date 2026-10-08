@@ -57,7 +57,8 @@
       }
     ],
     "universalDamageBonus": 0,
-    "universalDamageDice": ""
+    "universalDamageDice": "",
+    "sunlightHarm": "burnIncapacitated"
   },
   "prototypeToken": {
     "name": "Skeleton",

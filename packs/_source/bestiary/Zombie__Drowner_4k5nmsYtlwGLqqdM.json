@@ -86,7 +86,8 @@
       }
     ],
     "universalDamageBonus": 0,
-    "universalDamageDice": ""
+    "universalDamageDice": "",
+    "hpFloor": "zombie"
   },
   "prototypeToken": {
     "name": "Zombie, Drowner",

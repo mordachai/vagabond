@@ -70,7 +70,8 @@
     "universalDamageDice": "",
     "speedValues": {
       "fly": 30
-    }
+    },
+    "relicImmunityMin": 0
   },
   "prototypeToken": {
     "name": "Gremlin",

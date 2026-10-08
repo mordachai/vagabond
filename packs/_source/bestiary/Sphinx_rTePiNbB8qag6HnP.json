@@ -133,7 +133,8 @@
         "name": "Magic Ward II",
         "description": "It is not affected by Casts it is unwillingly subjected to unless the Caster's Check exceeds their difficulty by 2 or more."
       }
-    ]
+    ],
+    "relicImmunityMin": 0
   },
   "prototypeToken": {
     "name": "Sphinx",

@@ -178,4 +178,24 @@ book: HD 1 = 4 HP, Knight 13), Animated Armor `9/10 -> 9/9`, Weasel Giant `13/12
 - Translation (Babele `translationWork/*`) lives outside this repo: new names/text to translate = Brawler, Druid, Sellsword, Kobold Normal,
   Ward/Holy Flame (Acolyte), Gaze (Basilisk), Doom Magnet, Effectively Immune, Major Invisibility, Pixie Dust, Panpipes, Combo wording, Magic Ward text, `Zotz Demon`.
 - `npm run pack` (Foundry closed) is required before any of this shows up in the world; existing world actors are copies and are not touched.
-- Engine gaps found while reading the book (data is in, behavior is not): Relic exception on `Physical` immunity, axe weakness, Nightwalker/Sunlight, Vampiric.
+- Engine gaps found while reading the book are built in Part 10 below (Relic immunity, axe weakness, Sunlight / Nightwalker / Zombie / Vampiric / Regenerate). Still text only: Soul Jar, Vampire reforming, salt lines, Troll Sunlight Aversion, Mermaid Immortal of the Sea, Tick damage vs the Zombie floor.
+
+---
+
+## Part 10 — engine rules for the statblock text (built after the data pass)
+
+All code is in `module/helpers/npc-rules.mjs` (+ `weapon-rules.mjs`), fed by new NPC fields in `actor-npc.mjs`, editable in the NPC sheet (unlocked → *Special Rules*; locked view prints a line per active rule).
+
+| Rule | Field | Behaviour | Shipped on |
+|---|---|---|---|
+| Relic exception | `relicImmunityMin` (`null` / 0-5) | A **Relic weapon** (full Relic or a weapon with crafted Powers; `(+N)` = its `bonusWeapon` Power rank) ignores the physical-family Immunity if `(+N) >= min`. 0 = "from non-Relics", 2 = "... and Relic Weapons weaker than (+2)". Spells / mundane weapons never bypass. | Golems, Elementals, Angel (2), Pit Fiend (2), Sphinx Archon (2), Sphinx, Chort, Phoenix, Stolas, Zotz, Slug, Vortex, Vampire, Wight, Lich, Mummy, ... |
+| Axe weakness | weakness key `axe` | Battleaxe / Greataxe / Handaxe (by compendium source id; name only for source-less copies) ignore Armor + Immune like Cold Iron / Silver. | Treant, Viper Tree |
+| Sunlight | status `sunlit` ("In Sunlight", manual toggle from the token HUD; not a book Status) | read by the rules below — nothing guesses lighting | — |
+| Nightwalker / Sunlight Hypersensitivity | `sunlightHarm` `burn` / `burnIncapacitated` | start of its Turn while `sunlit`: Burning (1d8 fire, honors Fire Immune, always applied + chat card). `burnIncapacitated` also keeps one flagged Incapacitated effect while `sunlit` (never touches a manual one). Active GM only. | Banshee, Ghost, Shadow, Skeleton(s), Wight, Wraith, Zombie, Zombie Boomer (burnIncapacitated); Vampire (burn) |
+| Zombie / Grace | `hpFloor` `zombie` / `always` | `vagabond.calculateFinalDamage` listener caps damage so HP stays >= 1. `zombie` lets a **Crit**, **Weak** (type or material/axe) damage, or `sunlit` through. Crit comes from the attack card (`data-attack-was-crit`). | Zombies, Ghoul, Death Knight, Mummy, Mummy Lord, Zombie Dragon (zombie); Angel (always) |
+| Vampiric / Regenerate N | `regenPerTurn` (dice or number), `regenStopsInSunlight` | start of its Turn: heal that much (capped at Max HP) + chat card. | Vampire `3` (not in Sunlight); Lindworm, Tarrasque, Efreeti `2d8`; Unicorn `d8`; Oni `2d8`; Pit Fiend, Stolas `3d8` |
+
+Notes
+- Burning ticks and other status ticks write HP directly, so the Zombie floor does not cap them.
+- `Troll` (Sunlight Aversion suspends Regenerate) and Mermaid / Soul Jar / Vampire reforming stay text — set the fields by hand if wanted.
+- Lang: `VAGABOND.Actor.NPC.Rules.*`, `StatusConditions.Sunlit`, `MaterialWeaknesses.Axe` (en + pt-BR).
