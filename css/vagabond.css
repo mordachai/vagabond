@@ -14007,6 +14007,9 @@ ol#combat-tracker.directory-list {
 .workbench-app .wb-known-craft:hover {
   box-shadow: 0 0 8px -1px var(--vagabond-c-chat-yellow), inset 0 0 0 1px var(--vagabond-c-chat-yellow);
 }
+.workbench-app .wb-known-craft .wb-cost.is-short {
+  color: var(--vagabond-c-red);
+}
 .workbench-app .wb-alchemy-tab {
   height: 100%;
   display: flex;
@@ -14112,7 +14115,10 @@ ol#combat-tracker.directory-list {
   opacity: 0.5;
 }
 .workbench-app .wb-formula-row.is-known {
-  opacity: 0.7;
+  background: color-mix(in srgb, var(--vagabond-c-green) 22%, transparent);
+}
+.workbench-app .wb-formula-row.is-known:hover {
+  background: color-mix(in srgb, var(--vagabond-c-green) 32%, transparent);
 }
 .workbench-app .wb-formula-row-icon {
   position: relative;
@@ -14139,9 +14145,10 @@ ol#combat-tracker.directory-list {
   background: var(--vagabond-c-chat-yellow);
   color: var(--vagabond-c-black);
   border-radius: 7px;
-  font-size: 0.6rem;
+  font-size: 0.7rem;
   font-weight: 700;
   line-height: 1;
+  font-family: "Germania", serif;
   cursor: help;
 }
 .workbench-app .wb-formula-row-name {
@@ -14153,14 +14160,20 @@ ol#combat-tracker.directory-list {
   text-overflow: ellipsis;
 }
 .workbench-app .wb-formula-row-cost {
-  font-size: 0.68rem;
+  font-family: "Germania", serif;
+  color: var(--vagabond-c-chat-yellow);
+  font-size: 0.95rem;
   opacity: 0.75;
   flex-shrink: 0;
 }
-.workbench-app .wb-formula-row-known {
-  font-size: 0.7rem;
-  color: var(--vagabond-c-chat-yellow);
+.workbench-app .wb-formula-row-craftcost {
+  font-family: "Germania", serif;
+  color: var(--vagabond-c-green);
+  font-size: 0.95rem;
   flex-shrink: 0;
+}
+.workbench-app .wb-formula-row-craftcost.is-short {
+  color: var(--vagabond-c-red);
 }
 .workbench-app .wb-formula-row-caret {
   font-size: 0.65rem;
@@ -17089,6 +17102,17 @@ ol#combat-tracker.directory-list {
 }
 .vagabond .traits-list {
   margin-bottom: 16px;
+}
+.vagabond .perks-list .perk-content.accordion-content .perk-origin {
+  display: inline-block;
+  margin: 1px 0;
+  padding: 0 8px;
+  font-size: 0.85rem;
+  font-style: italic;
+  line-height: 1.2;
+  border: 1px solid currentColor;
+  border-radius: 10px;
+  opacity: 0.85;
 }
 .vagabond .perks-list .perk-content.accordion-content .perk-prerequisites {
   font-size: 14px;
