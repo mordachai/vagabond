@@ -37,7 +37,9 @@
       "frightened",
       "paralyzed",
       "prone",
-      "sickened"
+      "restrained",
+      "sickened",
+      "suffocating"
     ],
     "zone": "frontline",
     "description": "Wispy shades of pure malice and anti-life. Where it moves, blight follows.",

@@ -147,3 +147,19 @@ Not modelled
 - Magmot: invalid `burrow` speed type removed (the `Tunneler` ability already says it).
 - Focus is now a note tag (`... | Focus`) on Efreeti Wall of Fire / Invisibility and Treant Animate Trees instead of a trailing `(Focus)` in the text.
 - Book typo `Prmordial` (Hydrangean size line) recognised as Primordial; `Sufffocating` -> suffocating.
+
+---
+
+## Part 8 — Undead (book pp. 177-181; the Zombies are on p. 181) — 22 statblocks, none new, none deleted
+
+- **Suffocating** added to every Undead's Status Immunities (and Restrained to Banshee, Ghost, Shadow, Wraith, Skeleton family ...).
+- Silver weakness is no longer printed (type rule above) — the pack already had it everywhere except Crawling Claw and Death Knight, which now get it.
+  Explicit `Weak:` lines stay (Skeleton `Blunt`, Mummy `Fire`, Zombie Drowner `Shock` ...).
+- Lich: `Immune` now `Poison; Physical from non-Relics` (was Poison only), Fly 60'; Vampire Fly 30'. Lich Dominator rows kept, wording updated.
+- Mummy gains `Doom Magnet` and `Zombie`; its unnamed Magic Ward is named. Mummy Lord / Vampire / Wight / ... Magic Ward text (Alpha 3).
+- Crawling Claw HD 2 -> **1** (1 HP). Church Grim loses its `(Beast)` tag. Ghost keeps the spelling `Possession` (the book prints "Posession").
+- Book typo `Spd:` on the Mummy Lord statblock read as Speed (30').
+- Zombie, Zombie Boomer, Zombie Drowner, Zombie Dragon are on p. 181, just outside the page range you gave; included because the Undead chapter continues there.
+
+Not modelled
+- Vampire / Lich / Wight / Wraith / Ghost / Banshee `Nightwalker` and Sunlight rules, Zombie "can't be reduced below 1 HP", Soul Jar, Vampiric — text only.

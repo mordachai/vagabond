@@ -32,7 +32,8 @@
     "statusImmunities": [
       "charmed",
       "frightened",
-      "sickened"
+      "sickened",
+      "suffocating"
     ],
     "zone": "frontline",
     "description": "A frenzied zombie with hate for all things living.",

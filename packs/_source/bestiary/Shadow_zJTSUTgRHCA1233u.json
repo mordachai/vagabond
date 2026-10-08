@@ -38,7 +38,9 @@
       "frightened",
       "paralyzed",
       "prone",
+      "restrained",
       "sickened",
+      "suffocating",
       "unconscious"
     ],
     "zone": "frontline",

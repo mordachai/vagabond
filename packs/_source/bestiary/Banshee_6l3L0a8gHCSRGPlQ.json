@@ -41,7 +41,9 @@
       "frightened",
       "paralyzed",
       "prone",
-      "sickened"
+      "restrained",
+      "sickened",
+      "suffocating"
     ],
     "zone": "midline",
     "description": "The feminine spirit of an evil elf, known to kill with its scream. Often has a sort of guardianship over fae creatures.",

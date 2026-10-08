@@ -17,7 +17,7 @@
     "morale": 12,
     "appearing": "d6",
     "speed": 30,
-    "senses": "",
+    "senses": [],
     "armor": 1,
     "armorDescription": "as Leather",
     "locked": true,
@@ -33,6 +33,7 @@
     "statusImmunities": [
       "fatigued",
       "sickened",
+      "suffocating",
       "unconscious"
     ],
     "zone": "midline",

@@ -35,7 +35,8 @@
       "confused",
       "fatigued",
       "frightened",
-      "sickened"
+      "sickened",
+      "suffocating"
     ],
     "zone": "frontline",
     "description": "",

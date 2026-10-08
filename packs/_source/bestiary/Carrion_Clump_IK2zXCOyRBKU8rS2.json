@@ -33,7 +33,8 @@
     "statusImmunities": [
       "charmed",
       "fatigued",
-      "sickened"
+      "sickened",
+      "suffocating"
     ],
     "zone": "frontline",
     "description": "A writhing mass of fetid bones, tissue, and viscera.",

@@ -38,7 +38,8 @@
       "confused",
       "fatigued",
       "frightened",
-      "sickened"
+      "sickened",
+      "suffocating"
     ],
     "zone": "frontline",
     "description": "Corpses are at risk of becoming drowners if they are tossed to the sea, being reanimated by some unknown forces that lurk in the depths.",

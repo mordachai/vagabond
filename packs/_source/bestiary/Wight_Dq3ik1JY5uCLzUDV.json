@@ -36,7 +36,8 @@
       "confused",
       "fatigued",
       "frightened",
-      "sickened"
+      "sickened",
+      "suffocating"
     ],
     "zone": "frontline",
     "description": "Life-draining spirits in the body of a dead humanoid.",

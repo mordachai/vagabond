@@ -17,7 +17,7 @@
     "morale": 12,
     "appearing": "1",
     "speed": 30,
-    "senses": "",
+    "senses": [],
     "armor": 2,
     "armorDescription": "as Chain",
     "locked": true,
@@ -33,6 +33,7 @@
     "statusImmunities": [
       "fatigued",
       "sickened",
+      "suffocating",
       "unconscious"
     ],
     "zone": "frontline",

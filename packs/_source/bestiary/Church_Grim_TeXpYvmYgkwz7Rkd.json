@@ -32,10 +32,11 @@
     "statusImmunities": [
       "charmed",
       "fatigued",
-      "sickened"
+      "sickened",
+      "suffocating"
     ],
     "zone": "frontline",
-    "description": "(Beast) An animal buried in the walls of a church, and brought back to life as a guardian of the building.",
+    "description": "An animal buried in the walls of a church, and brought back to life as a guardian of the building.",
     "actions": [
       {
         "name": "Combo",

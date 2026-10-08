@@ -38,7 +38,8 @@
       "confused",
       "fatigued",
       "frightened",
-      "sickened"
+      "sickened",
+      "suffocating"
     ],
     "zone": "midline",
     "description": "Undead humanoid wrapped in enchanted bandages.",
@@ -89,8 +90,16 @@
     ],
     "abilities": [
       {
-        "description": "The first time it is unwillingly affected by a Spell each Round, the Caster must spend an extra 1 Mana to affect it.",
-        "name": ""
+        "description": "It is not affected by Casts it is unwillingly subjected to unless the Caster's Check exceeds their difficulty by 1 or more.",
+        "name": "Magic Ward I"
+      },
+      {
+        "name": "Doom Magnet",
+        "description": "Near Enemies can't gain Favor."
+      },
+      {
+        "name": "Zombie",
+        "description": "It can't be reduced below 1 HP unless damaged by a Crit, damage it is Weak to, or while in Sunlight."
       }
     ],
     "universalDamageBonus": 0,

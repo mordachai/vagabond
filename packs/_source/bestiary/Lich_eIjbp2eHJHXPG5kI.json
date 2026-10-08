@@ -27,9 +27,12 @@
     "armorDescription": "as (+1) Plate",
     "locked": true,
     "immunities": [
-      "poison"
+      "poison",
+      "physical"
     ],
-    "weaknesses": [],
+    "weaknesses": [
+      "silver"
+    ],
     "statusImmunities": [
       "berserk",
       "charmed",
@@ -52,7 +55,7 @@
         "flatDamage": "",
         "rollDamage": "",
         "damageType": "-",
-        "extraInfo": "1d6",
+        "extraInfo": "",
         "causedStatuses": [],
         "critCausedStatuses": []
       },
@@ -164,7 +167,7 @@
       },
       {
         "name": "Magic Ward V",
-        "description": "The first time it is unwillingly affected by a Spell each Round, the Caster must spend an extra 5 Mana to affect it."
+        "description": "It is not affected by Casts it is unwillingly subjected to unless the Caster's Check exceeds their difficulty by 5 or more."
       },
       {
         "name": "Soul Jar",
@@ -176,7 +179,7 @@
     "speedValues": {
       "climb": 0,
       "cling": 0,
-      "fly": 0,
+      "fly": 60,
       "phase": 0,
       "swim": 0
     },

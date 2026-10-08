@@ -42,7 +42,9 @@
       "fatigued",
       "paralyzed",
       "prone",
-      "sickened"
+      "restrained",
+      "sickened",
+      "suffocating"
     ],
     "zone": "frontline",
     "description": "The spirit of someone who died under extremely tragic or harrowing circumstances.",
@@ -65,7 +67,7 @@
         "flatDamage": "",
         "rollDamage": "",
         "damageType": "-",
-        "extraInfo": "This Being gains control of the Target while it is alive, unless forced out by an effect that turns Undead or dispels magic"
+        "extraInfo": "This Being gains control of the Target while it is alive, unless forced out by an effect that turns Undead or dispells magic"
       }
     ],
     "abilities": [

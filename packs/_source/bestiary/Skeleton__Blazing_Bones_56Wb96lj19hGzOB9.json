@@ -17,7 +17,7 @@
     "morale": 12,
     "appearing": "1",
     "speed": 30,
-    "senses": "",
+    "senses": [],
     "armor": 1,
     "armorDescription": "as Leather",
     "locked": true,
@@ -33,7 +33,8 @@
     ],
     "statusImmunities": [
       "fatigued",
-      "sickened"
+      "sickened",
+      "suffocating"
     ],
     "zone": "frontline",
     "description": "A charred skeleton which burns with an eternal flame for as long as the skeleton has animus. Something seems to keep them in constant pain, as they never stop screaming.",

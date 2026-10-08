@@ -39,13 +39,14 @@
       "confused",
       "fatigued",
       "frightened",
-      "sickened"
+      "sickened",
+      "suffocating"
     ],
     "zone": "frontline",
     "description": "(Cryptid, Wyrm) The animated husk of a living myth, dripping with rot and misery.",
     "actions": [
       {
-        "name": "Multi-Attack",
+        "name": "Combo",
         "note": "",
         "recharge": "",
         "attackType": "melee",

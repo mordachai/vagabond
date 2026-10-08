@@ -29,11 +29,14 @@
       "poison",
       "physical"
     ],
-    "weaknesses": [],
+    "weaknesses": [
+      "silver"
+    ],
     "statusImmunities": [
       "fatigued",
       "frightened",
-      "sickened"
+      "sickened",
+      "suffocating"
     ],
     "zone": "frontline",
     "description": "An oathbroken knight, their soul corrupted by necromantic manipulation.",
