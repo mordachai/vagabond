@@ -1,0 +1,1474 @@
+{
+  "name": "Druid",
+  "type": "character",
+  "img": "icons/magic/nature/root-vine-thorns-poison-green.webp",
+  "system": {
+    "attributes": {
+      "level": {
+        "value": 1
+      }
+    },
+    "stats": {
+      "might": {
+        "value": 5
+      },
+      "dexterity": {
+        "value": 4
+      },
+      "awareness": {
+        "value": 7
+      },
+      "reason": {
+        "value": 3
+      },
+      "presence": {
+        "value": 4
+      },
+      "luck": {
+        "value": 3
+      }
+    },
+    "skills": {
+      "brawl": {
+        "trained": true
+      },
+      "detect": {
+        "trained": true
+      },
+      "mysticism": {
+        "trained": true
+      },
+      "survival": {
+        "trained": true
+      }
+    },
+    "health": {
+      "value": 5
+    },
+    "currentLuck": 3,
+    "currency": {
+      "gold": 0,
+      "silver": 0,
+      "copper": 0
+    },
+    "biography": "<h2>Druid — Build Guide</h2>\n<p><em>Core Rulebook v3 Alpha 3, Appendix C. This Hero is built at Level 1 with no Ancestry — pick one, rename the Hero, and adjust anything you like.</em></p>\n<p><strong>Bought with the Starting Pack's silver:</strong> Trinket (50s), Medium Armor (1g).</p>\n<p><em>The build's gear costs 45s more than the Starting Pack's money; it starts with no coins left.</em></p>\n<h3>Stats at Level 10</h3>\n<p><strong>MIT</strong> 7 · <strong>DEX</strong> 6 · <strong>AWR</strong> 7 · <strong>RSN</strong> 4 · <strong>PRS</strong> 4 · <strong>LUK</strong> 3</p>\n<h3>Perks by Level</h3><ul>\n<li><strong>1st:</strong> Shapechanger, Snareroot Trapper <em>(already on this sheet)</em></li>\n<li><strong>3rd:</strong> Sixth Sense</li>\n<li><strong>5th:</strong> Tough</li>\n<li><strong>7th:</strong> Cross Counter</li>\n<li><strong>9th:</strong> Heightened Cognition</li>\n</ul>\n<h3>Spells</h3><p>Polymorph, Sprout; get Life, Terraform, and Ward later.</p>",
+    "details": {
+      "constructed": true,
+      "builderDismissed": false
+    },
+    "mana": {
+      "current": 2
+    }
+  },
+  "prototypeToken": {
+    "name": "Druid",
+    "actorLink": true,
+    "disposition": 1,
+    "texture": {
+      "src": "icons/magic/nature/root-vine-thorns-poison-green.webp"
+    },
+    "bar1": {
+      "attribute": "health"
+    }
+  },
+  "items": [
+    {
+      "name": "Backpack",
+      "type": "equipment",
+      "img": "icons/containers/bags/pack-leather-white-tan.webp",
+      "system": {
+        "description": "<p>1 Slot while held. Worn, it occupies no Slot and adds +3 Slots to your Inventory. You can only benefit from one at a time.</p>",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 5,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Outdoors",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "noSlotsWhenWorn": true,
+        "handsRequired": 0
+      },
+      "effects": [
+        {
+          "name": "Bonus Inventory",
+          "origin": "Compendium.vagabond.gear.Item.8o8KVSgpYsNFtGz2",
+          "img": "icons/svg/aura.svg",
+          "_id": "YJlQPYRINJ72Nf57",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.inventory.bonusSlots",
+                "value": 3,
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "<p>Backpack: +3 Inventory Slots while worn.</p>",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "when-equipped"
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!XLvu6UXIMDnvM6XB.lSzfEyWHobitEsa8.YJlQPYRINJ72Nf57"
+        }
+      ],
+      "flags": {},
+      "_id": "lSzfEyWHobitEsa8",
+      "_key": "!actors.items!XLvu6UXIMDnvM6XB.lSzfEyWHobitEsa8"
+    },
+    {
+      "name": "Bedroll",
+      "type": "equipment",
+      "img": "icons/sundries/survival/bedroll-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Personal Items",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "sDI4VDpsqzAofDQB",
+      "_key": "!actors.items!XLvu6UXIMDnvM6XB.sDI4VDpsqzAofDQB"
+    },
+    {
+      "name": "Rations (1 day)",
+      "type": "equipment",
+      "img": "icons/consumables/food/cooked-grilled-ham-hock-glazed-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Cooking & Food",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "isSupply": true
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "4bR1yJKs7Sc9DR6y",
+      "_key": "!actors.items!XLvu6UXIMDnvM6XB.4bR1yJKs7Sc9DR6y"
+    },
+    {
+      "name": "Rations (1 day)",
+      "type": "equipment",
+      "img": "icons/consumables/food/cooked-grilled-ham-hock-glazed-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Cooking & Food",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "isSupply": true
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "nk6CCMHKoDW3h0uU",
+      "_key": "!actors.items!XLvu6UXIMDnvM6XB.nk6CCMHKoDW3h0uU"
+    },
+    {
+      "name": "Rations (1 day)",
+      "type": "equipment",
+      "img": "icons/consumables/food/cooked-grilled-ham-hock-glazed-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Cooking & Food",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "isSupply": true
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "gZ6ANZetn4WQMUvL",
+      "_key": "!actors.items!XLvu6UXIMDnvM6XB.gZ6ANZetn4WQMUvL"
+    },
+    {
+      "name": "Rations (1 day)",
+      "type": "equipment",
+      "img": "icons/consumables/food/cooked-grilled-ham-hock-glazed-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Cooking & Food",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "isSupply": true
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "mBNwxNiWXPkbitOK",
+      "_key": "!actors.items!XLvu6UXIMDnvM6XB.mBNwxNiWXPkbitOK"
+    },
+    {
+      "name": "Rations (1 day)",
+      "type": "equipment",
+      "img": "icons/consumables/food/cooked-grilled-ham-hock-glazed-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Cooking & Food",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "isSupply": true
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "N9eWXxiOGuCnLsxG",
+      "_key": "!actors.items!XLvu6UXIMDnvM6XB.N9eWXxiOGuCnLsxG"
+    },
+    {
+      "name": "Torch",
+      "type": "equipment",
+      "img": "icons/sundries/lights/torch-brown-lit.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Outdoors",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "macro": {
+          "enabled": true,
+          "uuid": "",
+          "command": "game.vagabond.lightSource.use({ actor, item, token, light: {\"bright\": 25, \"dim\": 30, \"angle\": 360, \"color\": \"#ff9329\", \"alpha\": 0.65, \"attenuation\": 0.25, \"shadows\": 0.2, \"animation\": {\"type\": \"torch\", \"speed\": 5, \"intensity\": 5}}, durationMin: 60, clockOptions: ['lit','realtime','hour'] });",
+          "label": "Ignite",
+          "runAsGM": false
+        },
+        "handsRequired": 1
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "yWAQXx0l33DqjpPA",
+      "_key": "!actors.items!XLvu6UXIMDnvM6XB.yWAQXx0l33DqjpPA"
+    },
+    {
+      "name": "Torch",
+      "type": "equipment",
+      "img": "icons/sundries/lights/torch-brown-lit.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Outdoors",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "macro": {
+          "enabled": true,
+          "uuid": "",
+          "command": "game.vagabond.lightSource.use({ actor, item, token, light: {\"bright\": 25, \"dim\": 30, \"angle\": 360, \"color\": \"#ff9329\", \"alpha\": 0.65, \"attenuation\": 0.25, \"shadows\": 0.2, \"animation\": {\"type\": \"torch\", \"speed\": 5, \"intensity\": 5}}, durationMin: 60, clockOptions: ['lit','realtime','hour'] });",
+          "label": "Ignite",
+          "runAsGM": false
+        },
+        "handsRequired": 1
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "YToQiaF38OjsrKfZ",
+      "_key": "!actors.items!XLvu6UXIMDnvM6XB.YToQiaF38OjsrKfZ"
+    },
+    {
+      "name": "Waterskin",
+      "type": "equipment",
+      "img": "icons/sundries/survival/waterskin-leather-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 2,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Personal Items",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isBeverage": true
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "eo0QERb0Mc7rZ92a",
+      "_key": "!actors.items!XLvu6UXIMDnvM6XB.eo0QERb0Mc7rZ92a"
+    },
+    {
+      "name": "Staff",
+      "type": "equipment",
+      "img": "icons/weapons/staves/staff-simple.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "weapon",
+        "locked": true,
+        "equipped": true,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 10,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "properties": [
+          "Cleave"
+        ],
+        "weaponSkill": "finesse",
+        "range": "close",
+        "grip": "V",
+        "damageOneHand": "d4",
+        "damageTwoHands": "d6",
+        "equipmentState": "oneHand",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "itemFx": {
+          "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Melee/Quarterstaff*",
+          "enabled": true,
+          "hitOffsetX": -100,
+          "hitDuration": 1000
+        },
+        "damageTypeOneHand": "blunt",
+        "damageTypeTwoHands": "blunt",
+        "altSkills": [
+          "melee"
+        ]
+      },
+      "effects": [],
+      "flags": {
+        "vagabond": {
+          "preferredSkill": ""
+        }
+      },
+      "_id": "LwYKzQ972tylczMF",
+      "_key": "!actors.items!XLvu6UXIMDnvM6XB.LwYKzQ972tylczMF"
+    },
+    {
+      "name": "Herbalism Tools",
+      "type": "equipment",
+      "img": "icons/tools/cooking/mortar-herbs-yellow.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 50,
+          "copper": 0
+        },
+        "baseSlots": 2,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Tools",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "toolKind": "herbalism"
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "5Hed41I0BljiaeGP",
+      "_key": "!actors.items!XLvu6UXIMDnvM6XB.5Hed41I0BljiaeGP"
+    },
+    {
+      "name": "Materials (50s)",
+      "type": "equipment",
+      "img": "icons/commodities/materials/powder-red-green-yellow.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 50,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Alchemy & Medicine",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "craftMaterial": {
+          "enabled": true,
+          "key": "",
+          "value": 5000
+        },
+        "toolKind": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "0m3Lf4mWXE0hTKrC",
+      "_key": "!actors.items!XLvu6UXIMDnvM6XB.0m3Lf4mWXE0hTKrC"
+    },
+    {
+      "name": "Lantern, hooded",
+      "type": "equipment",
+      "img": "icons/sundries/lights/lantern-iron-lit-yellow.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 50,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Outdoors",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "macro": {
+          "enabled": true,
+          "uuid": "",
+          "command": "game.vagabond.lightSource.use({ actor, item, token, light: {\"bright\": 25, \"dim\": 30, \"angle\": 180, \"color\": \"#ffc480\", \"alpha\": 0.65, \"attenuation\": 0.25, \"shadows\": 0.2, \"animation\": {\"type\": \"torch\", \"speed\": 2, \"intensity\": 2}}, durationMin: 60, clockOptions: ['lit','realtime','quarter'] });",
+          "label": "Ignite",
+          "runAsGM": false
+        },
+        "isConsumable": true,
+        "handsRequired": 1
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "amzP4b9GmC9jDOe5",
+      "_key": "!actors.items!XLvu6UXIMDnvM6XB.amzP4b9GmC9jDOe5"
+    },
+    {
+      "name": "Cards - deck, tarot",
+      "type": "equipment",
+      "img": "icons/sundries/gaming/rune-card.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 20,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Games & Toys",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "Q9R5QMIHUzPwcD7i",
+      "_key": "!actors.items!XLvu6UXIMDnvM6XB.Q9R5QMIHUzPwcD7i"
+    },
+    {
+      "name": "Trinket",
+      "type": "equipment",
+      "img": "icons/commodities/treasure/trinket-totem-bone-green.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": true,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 50,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "oneHand",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Books & Magic",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "handsRequired": 1,
+        "isTrinket": true
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "q3FuoVrFf65B6tDn",
+      "_key": "!actors.items!XLvu6UXIMDnvM6XB.q3FuoVrFf65B6tDn"
+    },
+    {
+      "name": "Medium Armor",
+      "type": "equipment",
+      "img": "icons/equipment/chest/breastplate-scale-grey.webp",
+      "system": {
+        "description": "<p>Chain, scale</p><h4><span class=\"fontstyle0\">Equipping Armor</span></h4><p><span class=\"fontstyle2\">Equipping or unequipping Armor requires a Scene (10 minutes) to complete.</span> </p>",
+        "equipmentType": "armor",
+        "locked": true,
+        "equipped": true,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 1,
+          "silver": 0,
+          "copper": 0
+        },
+        "baseSlots": 2,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "worn",
+        "immunities": [],
+        "gearCategory": "",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "armorRating": 2,
+        "mightRequirement": 4,
+        "reflexPenalty": 2
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "tFOy3N5R7ETA4htG",
+      "_key": "!actors.items!XLvu6UXIMDnvM6XB.tFOy3N5R7ETA4htG"
+    },
+    {
+      "name": "Druid",
+      "type": "class",
+      "img": "icons/magic/nature/root-vine-thorns-poison-green.webp",
+      "system": {
+        "description": "<p><strong>Why do birds suddenly appear, every time you are near?</strong></p><p><em>—Karen Carpenter, Close to You</em></p><p>Keepers of the wilderness, druids are mystics of nature that are adopted into beast-kind.</p><h3>Iconic Druids</h3><ul><li><strong>Beast Boy</strong>, <em>DC Comics</em></li><li><strong>Beorn</strong>, <em>The Lord of the Rings</em></li><li><strong>Frank Zhang</strong>, <em>Percy Jackson</em></li><li><strong>Panne</strong>, <em>Fire Emblem Awakening</em></li></ul><h3>Playing Druid</h3><p>The druid is a mid-defense, mixed support and control class with a focus on Casting Spells and shapechanging to powerful beasts.</p><p><strong>Action:</strong> Cast or Beast Attacks<br /><strong>Move:</strong> Midline<br /><strong>Starting Pack:</strong> Hermit<br /><strong>Key Stat:</strong> Awareness<br /><strong>Complexity:</strong> ★★★☆☆<br /><strong>Training:</strong> Mysticism, Survival</p><h3>Class Features</h3><table class=\"NormalTable\"><tbody><tr><td><p><strong>Level</strong></p></td><td><p><strong>Features</strong></p></td><td><p><strong>Spells</strong></p></td><td><p><strong>Mana</strong></p></td><td><p><strong>Cast Max</strong></p></td></tr><tr><td><p>1st</p></td><td><p>Primal Mystic, Feral Shift</p></td><td><p>2</p></td><td><p>2</p></td><td><p>2</p></td></tr><tr><td><p>2nd</p></td><td><p>Savagery (+1)</p></td><td><p>2</p></td><td><p>4</p></td><td><p>2</p></td></tr><tr><td><p>3rd</p></td><td><p>Perk</p></td><td><p>2</p></td><td><p>6</p></td><td><p>3</p></td></tr><tr><td><p>4th</p></td><td><p>Tempest Within (1)</p></td><td><p>3</p></td><td><p>8</p></td><td><p>3</p></td></tr><tr><td><p>5th</p></td><td><p>Perk</p></td><td><p>3</p></td><td><p>10</p></td><td><p>4</p></td></tr><tr><td><p>6th</p></td><td><p>Savagery (+2), Beast Mode</p></td><td><p>3</p></td><td><p>12</p></td><td><p>4</p></td></tr><tr><td><p>7th</p></td><td><p>Perk</p></td><td><p>4</p></td><td><p>14</p></td><td><p>5</p></td></tr><tr><td><p>8th</p></td><td><p>Tempest Within (2)</p></td><td><p>4</p></td><td><p>16</p></td><td><p>5</p></td></tr><tr><td><p>9th</p></td><td><p>Perk</p></td><td><p>4</p></td><td><p>18</p></td><td><p>6</p></td></tr><tr><td><p>10th</p></td><td><p>Savagery (+3), Force of Nature</p></td><td><p>5</p></td><td><p>20</p></td><td><p>6</p></td></tr></tbody></table>",
+        "isSpellcaster": true,
+        "levelFeatures": [
+          {
+            "level": 1,
+            "name": "Primal Mystic",
+            "description": "<p>You can Cast Spells using Survival.</p><p><strong>Spells:</strong> You learn 2 Spells, one of which must always be Polymorph. You learn 1 other Spell every 3 Levels hereafter.</p><p><strong>Mana:</strong> Your Max Mana is equal to (2 × your Level), and your Cast Max for Spells is equal to (1 + half your Level, round up).</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [
+              "Compendium.vagabond.spells.Item.KizGmuUO2gr17fSR"
+            ],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 1,
+            "name": "Feral Shift",
+            "description": "<p>You get the Shapechanger Perk (p. 72) and, when you Cast Polymorph on yourself, you can also take an Action of the Beast.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [
+              "Compendium.vagabond.perks.Item.JaiyEsxypeEWxtlz"
+            ],
+            "perkAmount": 1,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 2,
+            "name": "Savagery (+1)",
+            "description": "<p>The damage you deal with the attacks of Beasts and your effective Level for the purposes of the Polymorph Spell are both increased by 1 now and every 4 Levels hereafter.</p>",
+            "statBonusPoints": 1,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 3,
+            "name": "Perk",
+            "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 1,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 4,
+            "name": "Tempest Within (1)",
+            "description": "<p>You reduce Cold, Fire, and Shock damage you take by 1 per damage die. This reduction is increased by 1 every 4 Levels hereafter.</p>",
+            "statBonusPoints": 1,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 5,
+            "name": "Perk",
+            "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 1,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 6,
+            "name": "Savagery (+2)",
+            "description": "<p>The damage you deal with the attacks of Beasts and your effective Level for the purposes of the Polymorph Spell are both increased by 1 now and every 4 Levels hereafter.</p>",
+            "statBonusPoints": 1,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 6,
+            "name": "Beast Mode",
+            "description": "<p>The attacks you make as Beasts ignore Immune to non-Relic damage.</p><p>Further, when you are the sole Target of a casting of your Polymorph Spell, you can make the duration continual (p. 10).</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 7,
+            "name": "Perk",
+            "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 1,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 8,
+            "name": "Tempest Within (2)",
+            "description": "<p>You reduce Cold, Fire, and Shock damage you take by 1 per damage die. This reduction is increased by 1 every 4 Levels hereafter.</p>",
+            "statBonusPoints": 1,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 9,
+            "name": "Perk",
+            "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 1,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 10,
+            "name": "Savagery (+3)",
+            "description": "<p>The damage you deal with the attacks of Beasts and your effective Level for the purposes of the Polymorph Spell are both increased by 1 now and every 4 Levels hereafter.</p>",
+            "statBonusPoints": 1,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 10,
+            "name": "Force of Nature",
+            "description": "<p>Once per Shift, if you are reduced to 0 HP, you can polymorph into a Beast and regain HP equal to that shown in its Statblock.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": [],
+            "action": {
+              "enabled": true,
+              "label": "Force of Nature",
+              "icon": "paw",
+              "uuid": "",
+              "command": "system:druid.forceOfNature",
+              "runAsGM": false
+            }
+          }
+        ],
+        "manaSkill": "survival",
+        "castingStat": "awareness",
+        "manaMultiplier": 2,
+        "skillGrant": {
+          "guaranteed": [
+            "mysticism",
+            "survival"
+          ],
+          "choices": []
+        },
+        "levelSpells": [
+          {
+            "spells": 2,
+            "level": 1
+          },
+          {
+            "spells": 2,
+            "level": 2
+          },
+          {
+            "spells": 2,
+            "level": 3
+          },
+          {
+            "spells": 3,
+            "level": 4
+          },
+          {
+            "spells": 3,
+            "level": 5
+          },
+          {
+            "spells": 3,
+            "level": 6
+          },
+          {
+            "spells": 4,
+            "level": 7
+          },
+          {
+            "spells": 4,
+            "level": 8
+          },
+          {
+            "spells": 4,
+            "level": 9
+          },
+          {
+            "spells": 5,
+            "level": 10
+          }
+        ],
+        "keyStats": [
+          "awareness"
+        ],
+        "suggestedStartingPacks": [
+          "Compendium.vagabond.starting-packs.Item.miFQi5g9aXWERv3R"
+        ]
+      },
+      "effects": [
+        {
+          "name": "Primal Mystic",
+          "origin": "Compendium.vagabond.classes.Item.YhELwGaQYbFGoKAB",
+          "img": "icons/svg/aura.svg",
+          "_id": "pRiMaLmYsTiC0001",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.mana.castingMaxBonus",
+                "value": "1 - @stats.awareness.total",
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "permanent"
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!XLvu6UXIMDnvM6XB.to0kXbfMjZiES4T1.pRiMaLmYsTiC0001"
+        },
+        {
+          "name": "Tempest Within",
+          "origin": "Compendium.vagabond.classes.Item.YhELwGaQYbFGoKAB",
+          "img": "icons/svg/aura.svg",
+          "_id": "tEmPeStWiThIn001",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.incomingDamageReductionPerDieByType",
+                "value": "cold,fire,shock: floor(@lvl / 4)",
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "permanent",
+              "minLevel": 4
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!XLvu6UXIMDnvM6XB.to0kXbfMjZiES4T1.tEmPeStWiThIn001"
+        },
+        {
+          "name": "Savagery: Damage",
+          "origin": "Compendium.vagabond.classes.Item.YhELwGaQYbFGoKAB",
+          "img": "icons/svg/aura.svg",
+          "_id": "sAvAgErYdMg00001",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.beastDamageBonus",
+                "value": "1 + floor((@lvl - 2) / 4)",
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "permanent",
+              "minLevel": 2
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!XLvu6UXIMDnvM6XB.to0kXbfMjZiES4T1.sAvAgErYdMg00001"
+        },
+        {
+          "name": "Savagery: Polymorph Level",
+          "origin": "Compendium.vagabond.classes.Item.YhELwGaQYbFGoKAB",
+          "img": "icons/svg/aura.svg",
+          "_id": "sAvAgErYlVl00001",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.polymorphLevelBonus",
+                "value": "1 + floor((@lvl - 2) / 4)",
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "permanent",
+              "minLevel": 2
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!XLvu6UXIMDnvM6XB.to0kXbfMjZiES4T1.sAvAgErYlVl00001"
+        },
+        {
+          "name": "Beast Mode: Ignore Immune",
+          "origin": "Compendium.vagabond.classes.Item.YhELwGaQYbFGoKAB",
+          "img": "icons/svg/aura.svg",
+          "_id": "bEaStMoDeImM0001",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.beastIgnoreImmune",
+                "value": "true",
+                "priority": null,
+                "type": "override"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "permanent",
+              "minLevel": 6
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!XLvu6UXIMDnvM6XB.to0kXbfMjZiES4T1.bEaStMoDeImM0001"
+        },
+        {
+          "name": "Beast Mode: Continual",
+          "origin": "Compendium.vagabond.classes.Item.YhELwGaQYbFGoKAB",
+          "img": "icons/svg/aura.svg",
+          "_id": "bEaStMoDeCoN0001",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.polymorphContinual",
+                "value": "true",
+                "priority": null,
+                "type": "override"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "permanent",
+              "minLevel": 6
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!XLvu6UXIMDnvM6XB.to0kXbfMjZiES4T1.bEaStMoDeCoN0001"
+        }
+      ],
+      "flags": {},
+      "_id": "to0kXbfMjZiES4T1",
+      "_key": "!actors.items!XLvu6UXIMDnvM6XB.to0kXbfMjZiES4T1"
+    },
+    {
+      "name": "Shapechanger",
+      "type": "perk",
+      "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
+      "system": {
+        "description": "<p>When you are a Target of your Polymorph Spell, you use your Cast Skill for its Actions, and it doesn’t cost you Mana to Focus on it as per the Spell’s description.</p>",
+        "prerequisites": {
+          "stats": [],
+          "statOrGroups": [],
+          "trainedSkills": [],
+          "trainedSkillOrGroups": [],
+          "spells": [
+            "Compendium.vagabond.spells.Item.KizGmuUO2gr17fSR"
+          ],
+          "spellOrGroups": [],
+          "hasAnySpell": false,
+          "resources": [],
+          "resourceOrGroups": []
+        }
+      },
+      "effects": [],
+      "flags": {
+        "vagabond": {
+          "perkOrigin": {
+            "type": "level",
+            "level": 1
+          }
+        }
+      },
+      "_id": "9dgWHhkLTSmu84d9",
+      "_key": "!actors.items!XLvu6UXIMDnvM6XB.9dgWHhkLTSmu84d9"
+    },
+    {
+      "name": "Snareroot Trapper",
+      "type": "perk",
+      "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
+      "system": {
+        "description": "<p>You can have one Casting of Sprout with a Glyph Delivery active without Focusing. This Casting costs no Mana for the Delivery.</p>",
+        "prerequisites": {
+          "stats": [],
+          "statOrGroups": [],
+          "trainedSkills": [],
+          "trainedSkillOrGroups": [],
+          "spells": [
+            "Compendium.vagabond.spells.Item.oGdK9T2toIepnctx"
+          ],
+          "spellOrGroups": [],
+          "hasAnySpell": false,
+          "resources": [],
+          "resourceOrGroups": []
+        }
+      },
+      "effects": [],
+      "flags": {
+        "vagabond": {
+          "perkOrigin": {
+            "type": "level",
+            "level": 1
+          }
+        }
+      },
+      "_id": "DVMn9OFfuqA1ULYk",
+      "_key": "!actors.items!XLvu6UXIMDnvM6XB.DVMn9OFfuqA1ULYk"
+    },
+    {
+      "name": "Polymorph",
+      "type": "spell",
+      "img": "icons/magic/unholy/hand-fire-skeleton-pink.webp",
+      "system": {
+        "description": "<p><span class=\"fontstyle0\">The Target becomes a Beast of your choice with HD no higher than your Level for the duration. If the Target is unwilling and its HD are higher than your Level, the Spell fails. During this time, the Target uses:</span></p><ul><li><span class=\"fontstyle0\">The Beast's Speed, Passives, Senses, Armor, Immune, Weak, Actions, and Abilities.</span></li><li><span class=\"fontstyle0\">The Target's HP and, if possible, its Actions and Abilities.</span></li></ul><p><span class=\"fontstyle0\">You must spend 1 Mana on your Turns to Focus on this Spell, even for willing Targets.</span></p>",
+        "damageType": "-",
+        "duration": "Until your next turn",
+        "crit": "",
+        "favorite": true,
+        "fxSchool": "arcane",
+        "locked": true,
+        "hitMacro": {
+          "enabled": true,
+          "uuid": "",
+          "command": "system:druid.polymorph",
+          "label": "Polymorph",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "uvA7M6bBlxioLsYN",
+      "_key": "!actors.items!XLvu6UXIMDnvM6XB.uvA7M6bBlxioLsYN"
+    },
+    {
+      "name": "Sprout",
+      "type": "spell",
+      "img": "icons/magic/nature/vines-thorned-entwined-glow-green.webp",
+      "system": {
+        "description": "<p><span class=\"fontstyle0\">You create growing plants on the Target, causing Difficult Terrain out to Close from it.</span></p><p><span class=\"fontstyle0\">Alternatively, you can cause up to a 5' square patch of plants or fungus to magically grow to optimal harvesting and foraging.</span></p>",
+        "damageType": "blunt",
+        "duration": "Until your next turn",
+        "crit": "The Target is Restrained.",
+        "favorite": true,
+        "noRollRequired": false,
+        "fxSchool": "nature",
+        "locked": true,
+        "critCausedStatuses": [
+          {
+            "statusId": "restrained",
+            "requiresDamage": true,
+            "saveType": "reflex",
+            "duration": "focusing",
+            "tickDamageEnabled": false,
+            "damageOnTick": "",
+            "damageType": "-"
+          }
+        ]
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "1AddlKXwSBPqisp5",
+      "_key": "!actors.items!XLvu6UXIMDnvM6XB.1AddlKXwSBPqisp5"
+    }
+  ],
+  "effects": [],
+  "folder": null,
+  "flags": {
+    "vagabond": {
+      "buildGuide": true
+    }
+  },
+  "sort": 0,
+  "_id": "XLvu6UXIMDnvM6XB",
+  "_key": "!actors!XLvu6UXIMDnvM6XB"
+}

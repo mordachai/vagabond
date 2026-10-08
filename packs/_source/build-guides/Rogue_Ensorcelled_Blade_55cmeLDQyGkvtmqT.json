@@ -1,0 +1,1199 @@
+{
+  "name": "Rogue - Ensorcelled Blade",
+  "type": "character",
+  "img": "icons/weapons/daggers/dagger-ritual-crooked-crystal.webp",
+  "system": {
+    "attributes": {
+      "level": {
+        "value": 1
+      }
+    },
+    "stats": {
+      "might": {
+        "value": 3
+      },
+      "dexterity": {
+        "value": 4
+      },
+      "awareness": {
+        "value": 5
+      },
+      "reason": {
+        "value": 6
+      },
+      "presence": {
+        "value": 3
+      },
+      "luck": {
+        "value": 5
+      }
+    },
+    "skills": {
+      "arcana": {
+        "trained": true
+      },
+      "craft": {
+        "trained": true
+      },
+      "detect": {
+        "trained": true
+      },
+      "finesse": {
+        "trained": true
+      },
+      "ranged": {
+        "trained": true
+      },
+      "sneak": {
+        "trained": true
+      }
+    },
+    "health": {
+      "value": 3
+    },
+    "currentLuck": 5,
+    "currency": {
+      "gold": 1,
+      "silver": 55,
+      "copper": 0
+    },
+    "biography": "<h2>Rogue - Ensorcelled Blade — Build Guide</h2>\n<p><em>Core Rulebook v3 Alpha 3, Appendix C. This Hero is built at Level 1 with no Ancestry — pick one, rename the Hero, and adjust anything you like.</em></p>\n<h3>Stats at Level 10</h3>\n<p><strong>MIT</strong> 3 · <strong>DEX</strong> 7 · <strong>AWR</strong> 6 · <strong>RSN</strong> 7 · <strong>PRS</strong> 3 · <strong>LUK</strong> 5</p>\n<h3>Perks by Level</h3><ul>\n<li><strong>1st:</strong> Athame, Resourceful <em>(already on this sheet)</em></li>\n<li><strong>3rd:</strong> Magical Secret (Blink)</li>\n<li><strong>5th:</strong> Magical Secret (Knock)</li>\n<li><strong>7th:</strong> Quick Draw</li>\n<li><strong>9th:</strong> Perfect Parry</li>\n</ul>",
+    "details": {
+      "constructed": true,
+      "builderDismissed": false
+    }
+  },
+  "prototypeToken": {
+    "name": "Rogue - Ensorcelled Blade",
+    "actorLink": true,
+    "disposition": 1,
+    "texture": {
+      "src": "icons/weapons/daggers/dagger-ritual-crooked-crystal.webp"
+    },
+    "bar1": {
+      "attribute": "health"
+    }
+  },
+  "items": [
+    {
+      "name": "Backpack",
+      "type": "equipment",
+      "img": "icons/containers/bags/pack-leather-white-tan.webp",
+      "system": {
+        "description": "<p>1 Slot while held. Worn, it occupies no Slot and adds +3 Slots to your Inventory. You can only benefit from one at a time.</p>",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 5,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Outdoors",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "noSlotsWhenWorn": true,
+        "handsRequired": 0
+      },
+      "effects": [
+        {
+          "name": "Bonus Inventory",
+          "origin": "Compendium.vagabond.gear.Item.8o8KVSgpYsNFtGz2",
+          "img": "icons/svg/aura.svg",
+          "_id": "YJlQPYRINJ72Nf57",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.inventory.bonusSlots",
+                "value": 3,
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "<p>Backpack: +3 Inventory Slots while worn.</p>",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "when-equipped"
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!55cmeLDQyGkvtmqT.Gk3hB00pm2wmPi0W.YJlQPYRINJ72Nf57"
+        }
+      ],
+      "flags": {},
+      "_id": "Gk3hB00pm2wmPi0W",
+      "_key": "!actors.items!55cmeLDQyGkvtmqT.Gk3hB00pm2wmPi0W"
+    },
+    {
+      "name": "Bedroll",
+      "type": "equipment",
+      "img": "icons/sundries/survival/bedroll-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Personal Items",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "neg7aAdEBekdkrL2",
+      "_key": "!actors.items!55cmeLDQyGkvtmqT.neg7aAdEBekdkrL2"
+    },
+    {
+      "name": "Rations (1 day)",
+      "type": "equipment",
+      "img": "icons/consumables/food/cooked-grilled-ham-hock-glazed-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Cooking & Food",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "isSupply": true
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "3eyqOVrKlUrGeqVG",
+      "_key": "!actors.items!55cmeLDQyGkvtmqT.3eyqOVrKlUrGeqVG"
+    },
+    {
+      "name": "Rations (1 day)",
+      "type": "equipment",
+      "img": "icons/consumables/food/cooked-grilled-ham-hock-glazed-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Cooking & Food",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "isSupply": true
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "AgVXdAJVEFOyTpsw",
+      "_key": "!actors.items!55cmeLDQyGkvtmqT.AgVXdAJVEFOyTpsw"
+    },
+    {
+      "name": "Rations (1 day)",
+      "type": "equipment",
+      "img": "icons/consumables/food/cooked-grilled-ham-hock-glazed-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Cooking & Food",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "isSupply": true
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "TlsqEdCuykDnDRtk",
+      "_key": "!actors.items!55cmeLDQyGkvtmqT.TlsqEdCuykDnDRtk"
+    },
+    {
+      "name": "Rations (1 day)",
+      "type": "equipment",
+      "img": "icons/consumables/food/cooked-grilled-ham-hock-glazed-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Cooking & Food",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "isSupply": true
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "fn8vnk41dHJmcCBy",
+      "_key": "!actors.items!55cmeLDQyGkvtmqT.fn8vnk41dHJmcCBy"
+    },
+    {
+      "name": "Rations (1 day)",
+      "type": "equipment",
+      "img": "icons/consumables/food/cooked-grilled-ham-hock-glazed-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Cooking & Food",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "isSupply": true
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "FEXALLnD4Iyx4pFs",
+      "_key": "!actors.items!55cmeLDQyGkvtmqT.FEXALLnD4Iyx4pFs"
+    },
+    {
+      "name": "Torch",
+      "type": "equipment",
+      "img": "icons/sundries/lights/torch-brown-lit.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Outdoors",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "macro": {
+          "enabled": true,
+          "uuid": "",
+          "command": "game.vagabond.lightSource.use({ actor, item, token, light: {\"bright\": 25, \"dim\": 30, \"angle\": 360, \"color\": \"#ff9329\", \"alpha\": 0.65, \"attenuation\": 0.25, \"shadows\": 0.2, \"animation\": {\"type\": \"torch\", \"speed\": 5, \"intensity\": 5}}, durationMin: 60, clockOptions: ['lit','realtime','hour'] });",
+          "label": "Ignite",
+          "runAsGM": false
+        },
+        "handsRequired": 1
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "CsJFV5G1iWghQZXF",
+      "_key": "!actors.items!55cmeLDQyGkvtmqT.CsJFV5G1iWghQZXF"
+    },
+    {
+      "name": "Torch",
+      "type": "equipment",
+      "img": "icons/sundries/lights/torch-brown-lit.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Outdoors",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "macro": {
+          "enabled": true,
+          "uuid": "",
+          "command": "game.vagabond.lightSource.use({ actor, item, token, light: {\"bright\": 25, \"dim\": 30, \"angle\": 360, \"color\": \"#ff9329\", \"alpha\": 0.65, \"attenuation\": 0.25, \"shadows\": 0.2, \"animation\": {\"type\": \"torch\", \"speed\": 5, \"intensity\": 5}}, durationMin: 60, clockOptions: ['lit','realtime','hour'] });",
+          "label": "Ignite",
+          "runAsGM": false
+        },
+        "handsRequired": 1
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "chktxyhrAea48Ha4",
+      "_key": "!actors.items!55cmeLDQyGkvtmqT.chktxyhrAea48Ha4"
+    },
+    {
+      "name": "Waterskin",
+      "type": "equipment",
+      "img": "icons/sundries/survival/waterskin-leather-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 2,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Personal Items",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isBeverage": true
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "HNChnLSBltJJpfFD",
+      "_key": "!actors.items!55cmeLDQyGkvtmqT.HNChnLSBltJJpfFD"
+    },
+    {
+      "name": "Dagger",
+      "type": "equipment",
+      "img": "icons/weapons/daggers/dagger-curved-guard-black.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "weapon",
+        "locked": true,
+        "equipped": true,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 10,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "properties": [
+          "Keen",
+          "Thrown"
+        ],
+        "weaponSkill": "melee",
+        "altSkills": [
+          "finesse"
+        ],
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d4",
+        "damageTwoHands": "d4",
+        "equipmentState": "oneHand",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "itemFx": {
+          "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Melee/Dagger02_01_Regular_White_800x600.webm",
+          "hitDuration": 1000,
+          "enabled": true,
+          "hitOffsetX": 100
+        },
+        "damageTypeOneHand": "slashing"
+      },
+      "effects": [
+        {
+          "name": "Keen",
+          "img": "icons/svg/aura.svg",
+          "_id": "YPRQ4g9bO44O221J",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.attackCritBonus",
+                "type": "subtract",
+                "value": "1"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "Crits 1 lower on this weapon's Attack Check.",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "on-use"
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!55cmeLDQyGkvtmqT.r3ShdXhefvutGeGR.YPRQ4g9bO44O221J"
+        }
+      ],
+      "flags": {},
+      "_id": "r3ShdXhefvutGeGR",
+      "_key": "!actors.items!55cmeLDQyGkvtmqT.r3ShdXhefvutGeGR"
+    },
+    {
+      "name": "Makeup kit",
+      "type": "equipment",
+      "img": "icons/commodities/materials/bowl-powder-pink.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 50,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Clothing, Hygiene, & Textiles",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "bDG5r39JDxc0ySWr",
+      "_key": "!actors.items!55cmeLDQyGkvtmqT.bDG5r39JDxc0ySWr"
+    },
+    {
+      "name": "Light Armor",
+      "type": "equipment",
+      "img": "icons/equipment/chest/breastplate-quilted-brown.webp",
+      "system": {
+        "description": "<p><span class=\"fontstyle0\">Leather, hide, padded.</span></p><h4><span class=\"fontstyle0\">Equipping Armor</span></h4><p><span class=\"fontstyle2\">Equipping or unequipping Armor requires a Scene (10 minutes) to complete.</span> </p>",
+        "equipmentType": "armor",
+        "locked": true,
+        "equipped": true,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 50,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "worn",
+        "immunities": [],
+        "gearCategory": "",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 1
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "p7G5BG2yA2DKjIzE",
+      "_key": "!actors.items!55cmeLDQyGkvtmqT.p7G5BG2yA2DKjIzE"
+    },
+    {
+      "name": "Clothes, formal",
+      "type": "equipment",
+      "img": "icons/equipment/chest/coat-collared-red-gold.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 1,
+          "silver": 50,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Clothing, Hygiene, & Textiles",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "hUUxGGYyYEv90CyJ",
+      "_key": "!actors.items!55cmeLDQyGkvtmqT.hUUxGGYyYEv90CyJ"
+    },
+    {
+      "name": "Rogue",
+      "type": "class",
+      "img": "icons/weapons/daggers/dagger-ritual-crooked-crystal.webp",
+      "system": {
+        "description": "<p><strong>I may be a burglar… but I’m an honest one, I hope, more or less.</strong></p><p><em>—Bilbo Baggins, The Hobbit</em></p><p>Rogues are the back-alley urchins, gutterborn scum, and shadowed assassins. To hammers, every problem looks like a nail. Rogues are blades, and every problem is a throat.</p><h3>Iconic Rogues</h3><ul><li><strong>Locke Lamora</strong>, <em>Gentleman Bastard Sequence</em></li><li><strong>Nona Grey</strong>, <em>Book of the Ancestor</em></li><li><strong>Vin</strong>, <em>Mistborn</em></li><li><strong>Zidane Tribal</strong>, <em>Final Fantasy IX</em></li></ul><h3>Playing Rogue</h3><p>Rogues are low-defense, midline harassers that focus on one single, deadly shot. They are given Features that reinforce attempting to gain Favor on their Attacks.</p><p><strong>Action:</strong> Attack<br /><strong>Move:</strong> Midline<br /><strong>Starting Pack:</strong> Assassin, Conman, Investigator, or Scout<br /><strong>Key Stat:</strong> Dexterity/Awareness, Luck<br /><strong>Complexity:</strong> ★★☆☆☆<br /><strong>Training:</strong> Ranged, Finesse, Sneak</p><h3>Class Features</h3><table class=\"NormalTable\"><tbody><tr><td><p><strong>Level</strong></p></td><td><p><strong>Features</strong></p></td><td><p><strong>Sneak Attack</strong></p></td></tr><tr><td><p>1st</p></td><td><p>Sneak Attack, Infiltrator</p></td><td><p>1d4</p></td></tr><tr><td><p>2nd</p></td><td><p>Evasive</p></td><td><p>1d4</p></td></tr><tr><td><p>3rd</p></td><td><p>Perk</p></td><td><p>1d4</p></td></tr><tr><td><p>4th</p></td><td><p>Knack (1 Luck)</p></td><td><p>2d4</p></td></tr><tr><td><p>5th</p></td><td><p>Perk</p></td><td><p>2d4</p></td></tr><tr><td><p>6th</p></td><td><p>Evasive (15’), Lethal Weapon</p></td><td><p>2d4</p></td></tr><tr><td><p>7th</p></td><td><p>Perk</p></td><td><p>3d4</p></td></tr><tr><td><p>8th</p></td><td><p>Knack (2 Luck)</p></td><td><p>3d4</p></td></tr><tr><td><p>9th</p></td><td><p>Perk</p></td><td><p>3d4</p></td></tr><tr><td><p>10th</p></td><td><p>Evasive (20’), Waylay</p></td><td><p>4d4</p></td></tr></tbody></table>",
+        "isSpellcaster": false,
+        "levelFeatures": [
+          {
+            "level": 1,
+            "name": "Sneak Attack",
+            "description": "<p>The first time you hit with a Favored attack on a Turn with a Finesse, Keen, or Ranged Weapon, it deals extra damage. This extra damage is a number of d4s equal to (your Level divided by 3, round up). The attack also ignores an amount of Armor equal to this number of extra dice.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 1,
+            "name": "Infiltrator",
+            "description": "<p>You gain the Resourceful Perk (p. 71), and you have Favor on Checks made to ambush and against traps that you are aware of.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [
+              "Compendium.vagabond.perks.Item.Pwvw4buZkkB6eqKN"
+            ],
+            "perkAmount": 1,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 2,
+            "name": "Evasive",
+            "description": "<p>Once per Round after another Being uses an Action or Move, you can Move 10’ without using Speed and can continue moving using your remaining Speed. This free Speed increases by 5’ every 4 Levels hereafter.</p>",
+            "statBonusPoints": 1,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 3,
+            "name": "Perk",
+            "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 1,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 4,
+            "name": "Knack (1 Luck)",
+            "description": "<p>You gain 1 Luck during a Breather and when you Crit, in addition to other Crit benefits.</p><p>Further, when you Rest, you gain 1 extra Luck. This extra Luck gained from a Rest increases by 1 every 4 Levels hereafter.</p>",
+            "statBonusPoints": 1,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 5,
+            "name": "Perk",
+            "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 1,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 6,
+            "name": "Evasive (15’)",
+            "description": "<p>Once per Round after another Being uses an Action or Move, you can Move 10’ without using Speed and can continue moving using your remaining Speed. This free Speed increases by 5’ every 4 Levels hereafter.</p>",
+            "statBonusPoints": 1,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 6,
+            "name": "Lethal Weapon",
+            "description": "<p>Your Sneak Attack dice can Explode.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 7,
+            "name": "Perk",
+            "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 1,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 8,
+            "name": "Knack (2 Luck)",
+            "description": "<p>You gain 1 Luck during a Breather and when you Crit, in addition to other Crit benefits.</p><p>Further, when you Rest, you gain 1 extra Luck. This extra Luck gained from a Rest increases by 1 every 4 Levels hereafter.</p>",
+            "statBonusPoints": 1,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 9,
+            "name": "Perk",
+            "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 1,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 10,
+            "name": "Evasive (20’)",
+            "description": "<p>Once per Round after another Being uses an Action or Move, you can Move 10’ without using Speed and can continue moving using your remaining Speed. This free Speed increases by 5’ every 4 Levels hereafter.</p>",
+            "statBonusPoints": 1,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 10,
+            "name": "Waylay",
+            "description": "<p>When you kill an Enemy or use your Evasive Ability, you can spend 1 Luck to immediately take an Action. You can’t spend more than 1 Luck on this Ability at a time.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          }
+        ],
+        "manaSkill": null,
+        "castingStat": null,
+        "manaMultiplier": 0,
+        "skillGrant": {
+          "guaranteed": [
+            "ranged",
+            "finesse",
+            "sneak"
+          ],
+          "choices": []
+        },
+        "levelSpells": [],
+        "keyStats": [
+          "dexterity",
+          "awareness",
+          "luck"
+        ],
+        "suggestedStartingPacks": [
+          "Compendium.vagabond.starting-packs.Item.JXGh2kMRaR4Wyh5w",
+          "Compendium.vagabond.starting-packs.Item.GjPcdjZKPh8PBfMj",
+          "Compendium.vagabond.starting-packs.Item.pxZec7iLwT00gl0P",
+          "Compendium.vagabond.starting-packs.Item.u632eTgHBKam3ZBc"
+        ]
+      },
+      "effects": [
+        {
+          "name": "Sneak Attack",
+          "origin": "Compendium.vagabond.classes.Item.gwlbYvDMyO0cPA4U",
+          "img": "icons/svg/aura.svg",
+          "_id": "wAchBKCrJcF82331",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.sneakAttackDice",
+                "value": "1 + floor((@lvl - 1) / 3)",
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "permanent"
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!55cmeLDQyGkvtmqT.12RUPVHN2LbIgRzo.wAchBKCrJcF82331"
+        },
+        {
+          "name": "Sneak Attack: Auto",
+          "origin": "Compendium.vagabond.classes.Item.gwlbYvDMyO0cPA4U",
+          "img": "icons/svg/aura.svg",
+          "_id": "HTHq1z8RfTxtfuQ3",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.sneakAttackTrigger",
+                "value": "true",
+                "priority": null,
+                "type": "override"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "Your first Favored hit each Turn with a Finesse, Keen or Ranged Weapon rolls the extra d4s and ignores that much Armor for you.",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "permanent",
+              "switchable": true
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!55cmeLDQyGkvtmqT.12RUPVHN2LbIgRzo.HTHq1z8RfTxtfuQ3"
+        },
+        {
+          "name": "Lethal Weapon",
+          "origin": "Compendium.vagabond.classes.Item.gwlbYvDMyO0cPA4U",
+          "img": "icons/svg/aura.svg",
+          "_id": "Fxy7iwPFHJanhpB0",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.sneakAttackExplode",
+                "value": "1",
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "permanent",
+              "minLevel": 6
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!55cmeLDQyGkvtmqT.12RUPVHN2LbIgRzo.Fxy7iwPFHJanhpB0"
+        },
+        {
+          "name": "Knack",
+          "origin": "Compendium.vagabond.classes.Item.gwlbYvDMyO0cPA4U",
+          "img": "icons/svg/aura.svg",
+          "_id": "aMPO96GdCosgFsAo",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.critLuckBonus",
+                "value": "1",
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "permanent",
+              "minLevel": 4
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!55cmeLDQyGkvtmqT.12RUPVHN2LbIgRzo.aMPO96GdCosgFsAo"
+        }
+      ],
+      "flags": {},
+      "_id": "12RUPVHN2LbIgRzo",
+      "_key": "!actors.items!55cmeLDQyGkvtmqT.12RUPVHN2LbIgRzo"
+    },
+    {
+      "name": "Athame",
+      "type": "perk",
+      "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
+      "system": {
+        "description": "<p>You can conduct a Ritual (p. 10) with a Dagger, making it your athame until you conduct this ritual again. Your athame is a Relic with the Loyalty Power, and it can be used as a Trinket.</p>",
+        "prerequisites": {
+          "stats": [],
+          "statOrGroups": [],
+          "trainedSkills": [],
+          "trainedSkillOrGroups": [
+            [
+              "arcana",
+              "mysticism"
+            ]
+          ],
+          "spells": [],
+          "spellOrGroups": [],
+          "hasAnySpell": false,
+          "resources": [],
+          "resourceOrGroups": []
+        }
+      },
+      "effects": [],
+      "flags": {
+        "vagabond": {
+          "perkOrigin": {
+            "type": "level",
+            "level": 1
+          }
+        }
+      },
+      "_id": "gzfsYSXD1Qn6Z4Ns",
+      "_key": "!actors.items!55cmeLDQyGkvtmqT.gzfsYSXD1Qn6Z4Ns"
+    },
+    {
+      "name": "Resourceful",
+      "type": "perk",
+      "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
+      "system": {
+        "description": "<p>You can spend 1 Luck to recall having packed an Item in your inventory with a value as high as 50s. It doesn’t “appear,” it was always there. You can do so as an Action or by skipping your Move.</p>",
+        "prerequisites": {
+          "stats": [
+            {
+              "stat": "luck",
+              "value": 4
+            }
+          ],
+          "statOrGroups": [],
+          "trainedSkills": [
+            "craft"
+          ],
+          "trainedSkillOrGroups": [],
+          "spells": [],
+          "spellOrGroups": [],
+          "hasAnySpell": false,
+          "resources": [],
+          "resourceOrGroups": []
+        }
+      },
+      "effects": [],
+      "flags": {
+        "vagabond": {
+          "perkOrigin": {
+            "type": "level",
+            "level": 1
+          }
+        }
+      },
+      "_id": "GViDfQDB8G6tw5aY",
+      "_key": "!actors.items!55cmeLDQyGkvtmqT.GViDfQDB8G6tw5aY"
+    }
+  ],
+  "effects": [],
+  "folder": null,
+  "flags": {
+    "vagabond": {
+      "buildGuide": true
+    }
+  },
+  "sort": 0,
+  "_id": "55cmeLDQyGkvtmqT",
+  "_key": "!actors!55cmeLDQyGkvtmqT"
+}

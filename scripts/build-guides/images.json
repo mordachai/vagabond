@@ -1,0 +1,6 @@
+{
+  "_help": "Portrait (img) and token art for the Build Guides Actors. Lookup order: guides[title] -> classes[className] -> default -> the Class item's own image. Paths are Foundry data paths. Re-run `node scripts/build-guides/generate.mjs` then `npm run pack` after editing.",
+  "default": {},
+  "classes": {},
+  "guides": {}
+}

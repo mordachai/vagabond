@@ -1,0 +1,1572 @@
+{
+  "name": "Merchant - Peddler",
+  "type": "character",
+  "img": "icons/environment/settlement/market-stall.webp",
+  "system": {
+    "attributes": {
+      "level": {
+        "value": 1
+      }
+    },
+    "stats": {
+      "might": {
+        "value": 3
+      },
+      "dexterity": {
+        "value": 3
+      },
+      "awareness": {
+        "value": 4
+      },
+      "reason": {
+        "value": 4
+      },
+      "presence": {
+        "value": 5
+      },
+      "luck": {
+        "value": 7
+      }
+    },
+    "skills": {
+      "arcana": {
+        "trained": true
+      },
+      "craft": {
+        "trained": true
+      },
+      "influence": {
+        "trained": true
+      },
+      "performance": {
+        "trained": true
+      },
+      "finesse": {
+        "trained": true
+      }
+    },
+    "health": {
+      "value": 3
+    },
+    "currentLuck": 7,
+    "currency": {
+      "gold": 1,
+      "silver": 45,
+      "copper": 0
+    },
+    "biography": "<h2>Merchant - Peddler — Build Guide</h2>\n<p><em>Core Rulebook v3 Alpha 3, Appendix C. This Hero is built at Level 1 with no Ancestry — pick one, rename the Hero, and adjust anything you like.</em></p>\n<h3>Stats at Level 10</h3>\n<p><strong>MIT</strong> 3 · <strong>DEX</strong> 3 · <strong>AWR</strong> 5 · <strong>RSN</strong> 7 · <strong>PRS</strong> 7 · <strong>LUK</strong> 7</p>\n<h3>Perks by Level</h3><ul>\n<li><strong>1st:</strong> Deft Hands, Resourceful <em>(already on this sheet)</em></li>\n<li><strong>3rd:</strong> Favors the Bold</li>\n<li><strong>5th:</strong> Heightened Magnetism</li>\n<li><strong>7th:</strong> Master Artisan</li>\n<li><strong>9th:</strong> Advancement</li>\n</ul>",
+    "details": {
+      "constructed": true,
+      "builderDismissed": false
+    }
+  },
+  "prototypeToken": {
+    "name": "Merchant - Peddler",
+    "actorLink": true,
+    "disposition": 1,
+    "texture": {
+      "src": "icons/environment/settlement/market-stall.webp"
+    },
+    "bar1": {
+      "attribute": "health"
+    }
+  },
+  "items": [
+    {
+      "name": "Backpack",
+      "type": "equipment",
+      "img": "icons/containers/bags/pack-leather-white-tan.webp",
+      "system": {
+        "description": "<p>1 Slot while held. Worn, it occupies no Slot and adds +3 Slots to your Inventory. You can only benefit from one at a time.</p>",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 5,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Outdoors",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "noSlotsWhenWorn": true,
+        "handsRequired": 0
+      },
+      "effects": [
+        {
+          "name": "Bonus Inventory",
+          "origin": "Compendium.vagabond.gear.Item.8o8KVSgpYsNFtGz2",
+          "img": "icons/svg/aura.svg",
+          "_id": "YJlQPYRINJ72Nf57",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.inventory.bonusSlots",
+                "value": 3,
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "<p>Backpack: +3 Inventory Slots while worn.</p>",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "when-equipped"
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!jjTpuOMYeBmRbMF6.OZIYFesC3tcoZbwg.YJlQPYRINJ72Nf57"
+        }
+      ],
+      "flags": {},
+      "_id": "OZIYFesC3tcoZbwg",
+      "_key": "!actors.items!jjTpuOMYeBmRbMF6.OZIYFesC3tcoZbwg"
+    },
+    {
+      "name": "Bedroll",
+      "type": "equipment",
+      "img": "icons/sundries/survival/bedroll-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Personal Items",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "7lLshH97xucSGBmt",
+      "_key": "!actors.items!jjTpuOMYeBmRbMF6.7lLshH97xucSGBmt"
+    },
+    {
+      "name": "Rations (1 day)",
+      "type": "equipment",
+      "img": "icons/consumables/food/cooked-grilled-ham-hock-glazed-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Cooking & Food",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "isSupply": true
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "yrhZMA9VfHr3CfoJ",
+      "_key": "!actors.items!jjTpuOMYeBmRbMF6.yrhZMA9VfHr3CfoJ"
+    },
+    {
+      "name": "Rations (1 day)",
+      "type": "equipment",
+      "img": "icons/consumables/food/cooked-grilled-ham-hock-glazed-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Cooking & Food",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "isSupply": true
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "mCYCEp2HA7KVVbxz",
+      "_key": "!actors.items!jjTpuOMYeBmRbMF6.mCYCEp2HA7KVVbxz"
+    },
+    {
+      "name": "Rations (1 day)",
+      "type": "equipment",
+      "img": "icons/consumables/food/cooked-grilled-ham-hock-glazed-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Cooking & Food",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "isSupply": true
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "nbVhoslQh8fd4cvO",
+      "_key": "!actors.items!jjTpuOMYeBmRbMF6.nbVhoslQh8fd4cvO"
+    },
+    {
+      "name": "Rations (1 day)",
+      "type": "equipment",
+      "img": "icons/consumables/food/cooked-grilled-ham-hock-glazed-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Cooking & Food",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "isSupply": true
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "HN7uHuZymdzkfiH7",
+      "_key": "!actors.items!jjTpuOMYeBmRbMF6.HN7uHuZymdzkfiH7"
+    },
+    {
+      "name": "Rations (1 day)",
+      "type": "equipment",
+      "img": "icons/consumables/food/cooked-grilled-ham-hock-glazed-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Cooking & Food",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "isSupply": true
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "LkZmTrBdvdORGFd2",
+      "_key": "!actors.items!jjTpuOMYeBmRbMF6.LkZmTrBdvdORGFd2"
+    },
+    {
+      "name": "Torch",
+      "type": "equipment",
+      "img": "icons/sundries/lights/torch-brown-lit.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Outdoors",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "macro": {
+          "enabled": true,
+          "uuid": "",
+          "command": "game.vagabond.lightSource.use({ actor, item, token, light: {\"bright\": 25, \"dim\": 30, \"angle\": 360, \"color\": \"#ff9329\", \"alpha\": 0.65, \"attenuation\": 0.25, \"shadows\": 0.2, \"animation\": {\"type\": \"torch\", \"speed\": 5, \"intensity\": 5}}, durationMin: 60, clockOptions: ['lit','realtime','hour'] });",
+          "label": "Ignite",
+          "runAsGM": false
+        },
+        "handsRequired": 1
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "Dwz2cpCRvTRpcbXe",
+      "_key": "!actors.items!jjTpuOMYeBmRbMF6.Dwz2cpCRvTRpcbXe"
+    },
+    {
+      "name": "Torch",
+      "type": "equipment",
+      "img": "icons/sundries/lights/torch-brown-lit.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Outdoors",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "macro": {
+          "enabled": true,
+          "uuid": "",
+          "command": "game.vagabond.lightSource.use({ actor, item, token, light: {\"bright\": 25, \"dim\": 30, \"angle\": 360, \"color\": \"#ff9329\", \"alpha\": 0.65, \"attenuation\": 0.25, \"shadows\": 0.2, \"animation\": {\"type\": \"torch\", \"speed\": 5, \"intensity\": 5}}, durationMin: 60, clockOptions: ['lit','realtime','hour'] });",
+          "label": "Ignite",
+          "runAsGM": false
+        },
+        "handsRequired": 1
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "D7shlHng8guI2iJg",
+      "_key": "!actors.items!jjTpuOMYeBmRbMF6.D7shlHng8guI2iJg"
+    },
+    {
+      "name": "Waterskin",
+      "type": "equipment",
+      "img": "icons/sundries/survival/waterskin-leather-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 2,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Personal Items",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isBeverage": true
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "3qHfru2ZUUyKfTBN",
+      "_key": "!actors.items!jjTpuOMYeBmRbMF6.3qHfru2ZUUyKfTBN"
+    },
+    {
+      "name": "Shortsword",
+      "type": "equipment",
+      "img": "icons/weapons/swords/sword-guard-worn-purple.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "weapon",
+        "locked": true,
+        "equipped": true,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 20,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "properties": [
+          "Keen"
+        ],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d6",
+        "equipmentState": "oneHand",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "itemFx": {
+          "enabled": true,
+          "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Melee/Group01/MeleeAttack01_ShortSword01*",
+          "hitOffsetX": -100,
+          "hitDuration": 1000
+        },
+        "damageTypeOneHand": "slashing",
+        "altSkills": [
+          "finesse"
+        ]
+      },
+      "effects": [
+        {
+          "name": "Keen",
+          "img": "icons/svg/aura.svg",
+          "_id": "KadvCH38xZ3ez7Kr",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.attackCritBonus",
+                "type": "subtract",
+                "value": "1"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "Crits 1 lower on this weapon's Attack Check.",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "on-use"
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!jjTpuOMYeBmRbMF6.zP8HgvsFC0DKxyEA.KadvCH38xZ3ez7Kr"
+        }
+      ],
+      "flags": {
+        "vagabond": {
+          "preferredSkill": ""
+        }
+      },
+      "_id": "zP8HgvsFC0DKxyEA",
+      "_key": "!actors.items!jjTpuOMYeBmRbMF6.zP8HgvsFC0DKxyEA"
+    },
+    {
+      "name": "Light Armor",
+      "type": "equipment",
+      "img": "icons/equipment/chest/breastplate-quilted-brown.webp",
+      "system": {
+        "description": "<p><span class=\"fontstyle0\">Leather, hide, padded.</span></p><h4><span class=\"fontstyle0\">Equipping Armor</span></h4><p><span class=\"fontstyle2\">Equipping or unequipping Armor requires a Scene (10 minutes) to complete.</span> </p>",
+        "equipmentType": "armor",
+        "locked": true,
+        "equipped": true,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 50,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "worn",
+        "immunities": [],
+        "gearCategory": "",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 1
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "eFlRH7sBQdFBxaiB",
+      "_key": "!actors.items!jjTpuOMYeBmRbMF6.eFlRH7sBQdFBxaiB"
+    },
+    {
+      "name": "Case, map/scroll",
+      "type": "equipment",
+      "img": "icons/containers/bags/case-scroll-leather-tan.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 10,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Books & Magic",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "myPW51w1riLvny80",
+      "_key": "!actors.items!jjTpuOMYeBmRbMF6.myPW51w1riLvny80"
+    },
+    {
+      "name": "Quill",
+      "type": "equipment",
+      "img": "icons/tools/scribal/ink-quill-red.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 5,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Books & Magic",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "ARTfNYLIEQWrguVs",
+      "_key": "!actors.items!jjTpuOMYeBmRbMF6.ARTfNYLIEQWrguVs"
+    },
+    {
+      "name": "Parchment (1 sheet)",
+      "type": "equipment",
+      "img": "icons/sundries/documents/parchment-plain-tan.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Books & Magic",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "zjQSEdAmhAo1ormf",
+      "_key": "!actors.items!jjTpuOMYeBmRbMF6.zjQSEdAmhAo1ormf"
+    },
+    {
+      "name": "Parchment (1 sheet)",
+      "type": "equipment",
+      "img": "icons/sundries/documents/parchment-plain-tan.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Books & Magic",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "898yUaGVuThaJc4V",
+      "_key": "!actors.items!jjTpuOMYeBmRbMF6.898yUaGVuThaJc4V"
+    },
+    {
+      "name": "Parchment (1 sheet)",
+      "type": "equipment",
+      "img": "icons/sundries/documents/parchment-plain-tan.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Books & Magic",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "TZFR0SKzcWpNnTrM",
+      "_key": "!actors.items!jjTpuOMYeBmRbMF6.TZFR0SKzcWpNnTrM"
+    },
+    {
+      "name": "Parchment (1 sheet)",
+      "type": "equipment",
+      "img": "icons/sundries/documents/parchment-plain-tan.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Books & Magic",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "JAweanSOCeTP7njO",
+      "_key": "!actors.items!jjTpuOMYeBmRbMF6.JAweanSOCeTP7njO"
+    },
+    {
+      "name": "Parchment (1 sheet)",
+      "type": "equipment",
+      "img": "icons/sundries/documents/parchment-plain-tan.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Books & Magic",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "BOeQuFyusKhVi7DU",
+      "_key": "!actors.items!jjTpuOMYeBmRbMF6.BOeQuFyusKhVi7DU"
+    },
+    {
+      "name": "Parchment (1 sheet)",
+      "type": "equipment",
+      "img": "icons/sundries/documents/parchment-plain-tan.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Books & Magic",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "aADKXHVGUZ2Od7yK",
+      "_key": "!actors.items!jjTpuOMYeBmRbMF6.aADKXHVGUZ2Od7yK"
+    },
+    {
+      "name": "Parchment (1 sheet)",
+      "type": "equipment",
+      "img": "icons/sundries/documents/parchment-plain-tan.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Books & Magic",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "ZsBDDim4InVP6NvN",
+      "_key": "!actors.items!jjTpuOMYeBmRbMF6.ZsBDDim4InVP6NvN"
+    },
+    {
+      "name": "Parchment (1 sheet)",
+      "type": "equipment",
+      "img": "icons/sundries/documents/parchment-plain-tan.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Books & Magic",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "rDSgOEZ7RwKahxVJ",
+      "_key": "!actors.items!jjTpuOMYeBmRbMF6.rDSgOEZ7RwKahxVJ"
+    },
+    {
+      "name": "Parchment (1 sheet)",
+      "type": "equipment",
+      "img": "icons/sundries/documents/parchment-plain-tan.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Books & Magic",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "u4tzvIFHLCQGlsd4",
+      "_key": "!actors.items!jjTpuOMYeBmRbMF6.u4tzvIFHLCQGlsd4"
+    },
+    {
+      "name": "Parchment (1 sheet)",
+      "type": "equipment",
+      "img": "icons/sundries/documents/parchment-plain-tan.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Books & Magic",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "b7OmxTBmX0v8IyEF",
+      "_key": "!actors.items!jjTpuOMYeBmRbMF6.b7OmxTBmX0v8IyEF"
+    },
+    {
+      "name": "Ink, writing (1 oz)",
+      "type": "equipment",
+      "img": "icons/tools/scribal/ink-quill-pink.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 10,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Books & Magic",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "rTuZODYdJ3kDrqzh",
+      "_key": "!actors.items!jjTpuOMYeBmRbMF6.rTuZODYdJ3kDrqzh"
+    },
+    {
+      "name": "Merchant",
+      "type": "class",
+      "img": "icons/environment/settlement/market-stall.webp",
+      "system": {
+        "description": "<p><strong>Lamp oil? Rope? Bombs? You want it? It’s yours my friend, as long as you have enough rubies.</strong></p><p><em>—Morshu, Link: The Faces of Evil</em></p><p>May they be an appraiser of rare magic items, peddler of illicit substances, or bookkeeper for the court, merchants are masters of exchange.</p><h3>Iconic Merchants</h3><ul><li><strong>Anna</strong>, <em>Fire Emblem</em></li><li><strong>Marco Polo</strong>, <em>Venetian merchant</em></li><li><strong>Torneko Taloon</strong>, <em>Dragon Quest IV</em></li><li><strong>Tressa Colzione</strong>, <em>Octopath Traveler</em></li></ul><h3>Playing Merchant</h3><p>The merchant is a low-defense and damage character, who provides high-support through a wider inventory pool and optimizing your party’s resources. In combat, you should look out for allies in need of assistance and strategize what items to use.</p><p><strong>Action:</strong> Use<br /><strong>Move:</strong> Flexible (skip to Use)<br /><strong>Starting Pack:</strong> Blacksmith, Cook, or Tinker<br /><strong>Key Stat:</strong> Luck/Reason<br /><strong>Complexity:</strong> ★★★☆☆<br /><strong>Training:</strong> Craft, Finesse, Influence</p><h3>Class Features</h3><table class=\"NormalTable\"><tbody><tr><td><p><strong>Level</strong></p></td><td><p><strong>Features</strong></p></td></tr><tr><td><p>1st</p></td><td><p>Gold Sink, Deep Pockets</p></td></tr><tr><td><p>2nd</p></td><td><p>Line Goes Up (+1 Luck)</p></td></tr><tr><td><p>3rd</p></td><td><p>Perk</p></td></tr><tr><td><p>4th</p></td><td><p>Diamond Hands (+1)</p></td></tr><tr><td><p>5th</p></td><td><p>Perk</p></td></tr><tr><td><p>6th</p></td><td><p>Line Goes Up (+2 Luck), Opportunist</p></td></tr><tr><td><p>7th</p></td><td><p>Perk</p></td></tr><tr><td><p>8th</p></td><td><p>Diamond Hands (+2)</p></td></tr><tr><td><p>9th</p></td><td><p>Perk</p></td></tr><tr><td><p>10th</p></td><td><p>Line Goes Up (+3 Luck), Midas Touch</p></td></tr></tbody></table>",
+        "isSpellcaster": false,
+        "manaMultiplier": 0,
+        "manaSkill": null,
+        "castingStat": null,
+        "keyStats": [
+          "luck",
+          "reason"
+        ],
+        "skillGrant": {
+          "guaranteed": [
+            "craft",
+            "finesse",
+            "influence"
+          ],
+          "choices": []
+        },
+        "levelFeatures": [
+          {
+            "level": 1,
+            "name": "Gold Sink",
+            "description": "<p>You can take the Use Action to place Item(s) that aren’t Fabled Relics inside a container and choose one Item with a value no higher than the Item(s) placed inside. The chosen Item replaces the originals. If the value exceeds 1g, you must spend 1 Luck to do so.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 1,
+            "name": "Deep Pockets",
+            "description": "<p>You gain the Deft Hands Perk (p. 68), and you gain 2 extra Item Slots now and every 3 Levels hereafter.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [
+              "Compendium.vagabond.perks.Item.vtNfeEdWNUWvaeRM"
+            ],
+            "perkAmount": 1,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 2,
+            "name": "Line Goes Up (+1 Luck)",
+            "description": "<p>You gain 1 Luck during a Breather and when you spend a Shift to Craft or Travel.</p><p>Further, when you Rest, you gain 1 extra Luck. This extra Luck gained from a Rest increases by 1 every 4 Levels hereafter.</p>",
+            "statBonusPoints": 1,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 3,
+            "name": "Perk",
+            "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 1,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 4,
+            "name": "Diamond Hands (+1)",
+            "description": "<p>You can take the Use Action to change the Power of a Relic you are holding to another Power of equal or lesser value. The Powers must be valued at 250g or lower. This value is multiplied by 5 every 4 Levels hereafter.</p>",
+            "statBonusPoints": 1,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 5,
+            "name": "Perk",
+            "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 1,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 6,
+            "name": "Line Goes Up (+2 Luck)",
+            "description": "<p>You gain 1 Luck during a Breather and when you spend a Shift to Craft or Travel.</p><p>Further, when you Rest, you gain 1 extra Luck. This extra Luck gained from a Rest increases by 1 every 4 Levels hereafter.</p>",
+            "statBonusPoints": 1,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 6,
+            "name": "Opportunist",
+            "description": "<p>Once per Round after another Being uses an Action or Move, you can immediately take the Use Action.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 7,
+            "name": "Perk",
+            "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 1,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 8,
+            "name": "Diamond Hands (+2)",
+            "description": "<p>You can take the Use Action to change the Power of a Relic you are holding to another Power of equal or lesser value. The Powers must be valued at 250g or lower. This value is multiplied by 5 every 4 Levels hereafter.</p>",
+            "statBonusPoints": 1,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 9,
+            "name": "Perk",
+            "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 1,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 10,
+            "name": "Line Goes Up (+3 Luck)",
+            "description": "<p>You gain 1 Luck during a Breather and when you spend a Shift to Craft or Travel.</p><p>Further, when you Rest, you gain 1 extra Luck. This extra Luck gained from a Rest increases by 1 every 4 Levels hereafter.</p>",
+            "statBonusPoints": 1,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 10,
+            "name": "Midas Touch",
+            "description": "<p>Any Relic Item Bonus or Rank is increased by 1 while you have it Equipped.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          }
+        ],
+        "suggestedStartingPacks": [
+          "Compendium.vagabond.starting-packs.Item.tyaq3NHo9Iqzxwxn",
+          "Compendium.vagabond.starting-packs.Item.TLrZRlyo8yuVb5it",
+          "Compendium.vagabond.starting-packs.Item.PnfmuSTuRLW0gjln"
+        ],
+        "levelSpells": []
+      },
+      "effects": [
+        {
+          "name": "Deep Pockets",
+          "origin": "Compendium.vagabond.classes.Item.F26CjqMxgd2fPbv5",
+          "img": "icons/svg/aura.svg",
+          "_id": "6HrnXhQTmczbuegN",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.inventory.bonusSlots",
+                "value": "2 + 2 * floor((@lvl - 1) / 3)",
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "permanent"
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!jjTpuOMYeBmRbMF6.SupNofMM6HjVQSD5.6HrnXhQTmczbuegN"
+        },
+        {
+          "name": "Midas Touch",
+          "origin": "Compendium.vagabond.classes.Item.F26CjqMxgd2fPbv5",
+          "img": "icons/svg/aura.svg",
+          "_id": "mErChMiDaSToUch1",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.relicBoost",
+                "value": "1",
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "permanent",
+              "minLevel": 10
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!jjTpuOMYeBmRbMF6.SupNofMM6HjVQSD5.mErChMiDaSToUch1"
+        }
+      ],
+      "flags": {},
+      "_id": "SupNofMM6HjVQSD5",
+      "_key": "!actors.items!jjTpuOMYeBmRbMF6.SupNofMM6HjVQSD5"
+    },
+    {
+      "name": "Deft Hands",
+      "type": "perk",
+      "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
+      "system": {
+        "description": "<p>You can skip your Move to take the Use Action.</p>",
+        "prerequisites": {
+          "stats": [
+            {
+              "stat": "dexterity",
+              "value": 4
+            }
+          ],
+          "statOrGroups": [],
+          "trainedSkills": [
+            "finesse"
+          ],
+          "trainedSkillOrGroups": [],
+          "spells": [],
+          "spellOrGroups": [],
+          "hasAnySpell": false,
+          "resources": [],
+          "resourceOrGroups": []
+        }
+      },
+      "effects": [],
+      "flags": {
+        "vagabond": {
+          "perkOrigin": {
+            "type": "level",
+            "level": 1
+          }
+        }
+      },
+      "_id": "8gtHCGUlHXC19Q0q",
+      "_key": "!actors.items!jjTpuOMYeBmRbMF6.8gtHCGUlHXC19Q0q"
+    },
+    {
+      "name": "Resourceful",
+      "type": "perk",
+      "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
+      "system": {
+        "description": "<p>You can spend 1 Luck to recall having packed an Item in your inventory with a value as high as 50s. It doesn’t “appear,” it was always there. You can do so as an Action or by skipping your Move.</p>",
+        "prerequisites": {
+          "stats": [
+            {
+              "stat": "luck",
+              "value": 4
+            }
+          ],
+          "statOrGroups": [],
+          "trainedSkills": [
+            "craft"
+          ],
+          "trainedSkillOrGroups": [],
+          "spells": [],
+          "spellOrGroups": [],
+          "hasAnySpell": false,
+          "resources": [],
+          "resourceOrGroups": []
+        }
+      },
+      "effects": [],
+      "flags": {
+        "vagabond": {
+          "perkOrigin": {
+            "type": "level",
+            "level": 1
+          }
+        }
+      },
+      "_id": "5K6skNyN2vOfT7JL",
+      "_key": "!actors.items!jjTpuOMYeBmRbMF6.5K6skNyN2vOfT7JL"
+    }
+  ],
+  "effects": [],
+  "folder": null,
+  "flags": {
+    "vagabond": {
+      "buildGuide": true
+    }
+  },
+  "sort": 0,
+  "_id": "jjTpuOMYeBmRbMF6",
+  "_key": "!actors!jjTpuOMYeBmRbMF6"
+}

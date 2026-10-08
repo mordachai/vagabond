@@ -1,0 +1,1285 @@
+{
+  "name": "Pugilist",
+  "type": "character",
+  "img": "icons/equipment/hand/gauntlet-simple-leather-brown-gold.webp",
+  "system": {
+    "attributes": {
+      "level": {
+        "value": 1
+      }
+    },
+    "stats": {
+      "might": {
+        "value": 7
+      },
+      "dexterity": {
+        "value": 5
+      },
+      "awareness": {
+        "value": 4
+      },
+      "reason": {
+        "value": 3
+      },
+      "presence": {
+        "value": 3
+      },
+      "luck": {
+        "value": 4
+      }
+    },
+    "skills": {
+      "brawl": {
+        "trained": true
+      },
+      "detect": {
+        "trained": true
+      },
+      "influence": {
+        "trained": true
+      },
+      "sneak": {
+        "trained": true
+      }
+    },
+    "health": {
+      "value": 7
+    },
+    "currentLuck": 4,
+    "currency": {
+      "gold": 1,
+      "silver": 96,
+      "copper": 0
+    },
+    "biography": "<h2>Pugilist — Build Guide</h2>\n<p><em>Core Rulebook v3 Alpha 3, Appendix C. This Hero is built at Level 1 with no Ancestry — pick one, rename the Hero, and adjust anything you like.</em></p>\n<p><strong>Traded in:</strong> the Starting Pack's Medium Armor (refunded at cost) for the Armor below.</p>\n<p><strong>Bought with the Starting Pack's silver:</strong> Light Armor (50s).</p>\n<h3>Stats at Level 10</h3>\n<p><strong>MIT</strong> 7 · <strong>DEX</strong> 6 · <strong>AWR</strong> 5 · <strong>RSN</strong> 3 · <strong>PRS</strong> 5 · <strong>LUK</strong> 5</p>\n<h3>Perks by Level</h3><ul>\n<li><strong>1st:</strong> Bully, Dusted Knuckle <em>(already on this sheet)</em></li>\n<li><strong>3rd:</strong> Check Hook</li>\n<li><strong>5th:</strong> Patience</li>\n<li><strong>7th:</strong> Tough</li>\n<li><strong>9th:</strong> Sentinel</li>\n</ul>",
+    "details": {
+      "constructed": true,
+      "builderDismissed": false
+    }
+  },
+  "prototypeToken": {
+    "name": "Pugilist",
+    "actorLink": true,
+    "disposition": 1,
+    "texture": {
+      "src": "icons/equipment/hand/gauntlet-simple-leather-brown-gold.webp"
+    },
+    "bar1": {
+      "attribute": "health"
+    }
+  },
+  "items": [
+    {
+      "name": "Backpack",
+      "type": "equipment",
+      "img": "icons/containers/bags/pack-leather-white-tan.webp",
+      "system": {
+        "description": "<p>1 Slot while held. Worn, it occupies no Slot and adds +3 Slots to your Inventory. You can only benefit from one at a time.</p>",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 5,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Outdoors",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "noSlotsWhenWorn": true,
+        "handsRequired": 0
+      },
+      "effects": [
+        {
+          "name": "Bonus Inventory",
+          "origin": "Compendium.vagabond.gear.Item.8o8KVSgpYsNFtGz2",
+          "img": "icons/svg/aura.svg",
+          "_id": "YJlQPYRINJ72Nf57",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.inventory.bonusSlots",
+                "value": 3,
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "<p>Backpack: +3 Inventory Slots while worn.</p>",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "when-equipped"
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!uB7coVtVsAWCctZ9.QQ5XJE0kFMIKlBOJ.YJlQPYRINJ72Nf57"
+        }
+      ],
+      "flags": {},
+      "_id": "QQ5XJE0kFMIKlBOJ",
+      "_key": "!actors.items!uB7coVtVsAWCctZ9.QQ5XJE0kFMIKlBOJ"
+    },
+    {
+      "name": "Bedroll",
+      "type": "equipment",
+      "img": "icons/sundries/survival/bedroll-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Personal Items",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "2NX5UfBUvBihO7Md",
+      "_key": "!actors.items!uB7coVtVsAWCctZ9.2NX5UfBUvBihO7Md"
+    },
+    {
+      "name": "Rations (1 day)",
+      "type": "equipment",
+      "img": "icons/consumables/food/cooked-grilled-ham-hock-glazed-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Cooking & Food",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "isSupply": true
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "IFymnxug57HXgQFr",
+      "_key": "!actors.items!uB7coVtVsAWCctZ9.IFymnxug57HXgQFr"
+    },
+    {
+      "name": "Rations (1 day)",
+      "type": "equipment",
+      "img": "icons/consumables/food/cooked-grilled-ham-hock-glazed-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Cooking & Food",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "isSupply": true
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "n0Co1EG8L9P2OCrJ",
+      "_key": "!actors.items!uB7coVtVsAWCctZ9.n0Co1EG8L9P2OCrJ"
+    },
+    {
+      "name": "Rations (1 day)",
+      "type": "equipment",
+      "img": "icons/consumables/food/cooked-grilled-ham-hock-glazed-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Cooking & Food",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "isSupply": true
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "3RKiWBYnSuuanfcq",
+      "_key": "!actors.items!uB7coVtVsAWCctZ9.3RKiWBYnSuuanfcq"
+    },
+    {
+      "name": "Rations (1 day)",
+      "type": "equipment",
+      "img": "icons/consumables/food/cooked-grilled-ham-hock-glazed-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Cooking & Food",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "isSupply": true
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "pMvkutANqvPMP783",
+      "_key": "!actors.items!uB7coVtVsAWCctZ9.pMvkutANqvPMP783"
+    },
+    {
+      "name": "Rations (1 day)",
+      "type": "equipment",
+      "img": "icons/consumables/food/cooked-grilled-ham-hock-glazed-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Cooking & Food",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "isSupply": true
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "FyqdG2CAbIvXHYEN",
+      "_key": "!actors.items!uB7coVtVsAWCctZ9.FyqdG2CAbIvXHYEN"
+    },
+    {
+      "name": "Torch",
+      "type": "equipment",
+      "img": "icons/sundries/lights/torch-brown-lit.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Outdoors",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "macro": {
+          "enabled": true,
+          "uuid": "",
+          "command": "game.vagabond.lightSource.use({ actor, item, token, light: {\"bright\": 25, \"dim\": 30, \"angle\": 360, \"color\": \"#ff9329\", \"alpha\": 0.65, \"attenuation\": 0.25, \"shadows\": 0.2, \"animation\": {\"type\": \"torch\", \"speed\": 5, \"intensity\": 5}}, durationMin: 60, clockOptions: ['lit','realtime','hour'] });",
+          "label": "Ignite",
+          "runAsGM": false
+        },
+        "handsRequired": 1
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "Blu2Ccfa67RkEifX",
+      "_key": "!actors.items!uB7coVtVsAWCctZ9.Blu2Ccfa67RkEifX"
+    },
+    {
+      "name": "Torch",
+      "type": "equipment",
+      "img": "icons/sundries/lights/torch-brown-lit.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Outdoors",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "macro": {
+          "enabled": true,
+          "uuid": "",
+          "command": "game.vagabond.lightSource.use({ actor, item, token, light: {\"bright\": 25, \"dim\": 30, \"angle\": 360, \"color\": \"#ff9329\", \"alpha\": 0.65, \"attenuation\": 0.25, \"shadows\": 0.2, \"animation\": {\"type\": \"torch\", \"speed\": 5, \"intensity\": 5}}, durationMin: 60, clockOptions: ['lit','realtime','hour'] });",
+          "label": "Ignite",
+          "runAsGM": false
+        },
+        "handsRequired": 1
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "98nYhkzhiLYp9EWE",
+      "_key": "!actors.items!uB7coVtVsAWCctZ9.98nYhkzhiLYp9EWE"
+    },
+    {
+      "name": "Waterskin",
+      "type": "equipment",
+      "img": "icons/sundries/survival/waterskin-leather-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 2,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Personal Items",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isBeverage": true
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "fHKaFWQx8BWfyZz5",
+      "_key": "!actors.items!uB7coVtVsAWCctZ9.fHKaFWQx8BWfyZz5"
+    },
+    {
+      "name": "Caestus / Gauntlet",
+      "type": "equipment",
+      "img": "icons/equipment/hand/gauntlet-armored-leather-teal-orange.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "weapon",
+        "locked": true,
+        "equipped": true,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 20,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "properties": [
+          "Grapple"
+        ],
+        "weaponSkill": "brawl",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d4",
+        "damageTwoHands": "d4",
+        "equipmentState": "oneHand",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "itemFx": {
+          "enabled": true,
+          "hitFile": "modules/JB2A_DnD5e/Library/Generic/Creature/Fist/CreatureAttackFist*",
+          "hitOffsetX": -100,
+          "hitDuration": 1000
+        },
+        "damageTypeOneHand": "blunt",
+        "altSkills": []
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "Jdw9v1YQJiXUT9Hs",
+      "_key": "!actors.items!uB7coVtVsAWCctZ9.Jdw9v1YQJiXUT9Hs"
+    },
+    {
+      "name": "Caestus / Gauntlet",
+      "type": "equipment",
+      "img": "icons/equipment/hand/gauntlet-armored-leather-teal-orange.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "weapon",
+        "locked": true,
+        "equipped": true,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 20,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "properties": [
+          "Grapple"
+        ],
+        "weaponSkill": "brawl",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d4",
+        "damageTwoHands": "d4",
+        "equipmentState": "oneHand",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "itemFx": {
+          "enabled": true,
+          "hitFile": "modules/JB2A_DnD5e/Library/Generic/Creature/Fist/CreatureAttackFist*",
+          "hitOffsetX": -100,
+          "hitDuration": 1000
+        },
+        "damageTypeOneHand": "blunt",
+        "altSkills": []
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "6IgAl030v4do0YM7",
+      "_key": "!actors.items!uB7coVtVsAWCctZ9.6IgAl030v4do0YM7"
+    },
+    {
+      "name": "Tankard",
+      "type": "equipment",
+      "img": "icons/containers/kitchenware/mug-simple-wooden-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Cooking & Food",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "FbxQpo38JDl23tfx",
+      "_key": "!actors.items!uB7coVtVsAWCctZ9.FbxQpo38JDl23tfx"
+    },
+    {
+      "name": "Light Armor",
+      "type": "equipment",
+      "img": "icons/equipment/chest/breastplate-quilted-brown.webp",
+      "system": {
+        "description": "<p><span class=\"fontstyle0\">Leather, hide, padded.</span></p><h4><span class=\"fontstyle0\">Equipping Armor</span></h4><p><span class=\"fontstyle2\">Equipping or unequipping Armor requires a Scene (10 minutes) to complete.</span> </p>",
+        "equipmentType": "armor",
+        "locked": true,
+        "equipped": true,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 50,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "worn",
+        "immunities": [],
+        "gearCategory": "",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 1
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "e5m4FK97FGYKjKf9",
+      "_key": "!actors.items!uB7coVtVsAWCctZ9.e5m4FK97FGYKjKf9"
+    },
+    {
+      "name": "Pugilist",
+      "type": "class",
+      "img": "icons/equipment/hand/gauntlet-simple-leather-brown-gold.webp",
+      "system": {
+        "description": "<p><strong>I didn’t hear no bell.</strong></p><p><em>—Rocky Balboa, Rocky V</em></p><p>Pugilists are brawlers of swagger. While a monk may dedicate themself to a single focused blow, a pugilist will break their fingers and keep punching with the bloody stump.</p><h3>Iconic Pugilists</h3><ul><li><strong>Carl</strong>, <em>Dungeon Crawler Carl</em></li><li><strong>Rocky Balboa</strong>, <em>Rocky</em></li><li><strong>Hellboy</strong>, <em>Hellboy</em></li><li><strong>Stiffener Medick</strong>, <em>Redwall</em></li></ul><h3>Playing Pugilist</h3><p>Pugilists are frontline bruisers. Stay in the frontline, even while at low HP.</p><p><strong>Action:</strong> Attack (Brawl)<br /><strong>Move:</strong> Frontline<br /><strong>Starting Pack:</strong> Brawler or Monk<br /><strong>Key Stat:</strong> Might<br /><strong>Complexity:</strong> ★★☆☆☆<br /><strong>Training:</strong> Brawl, Influence</p><h3>Class Features</h3><table class=\"NormalTable\"><tbody><tr><td><p><strong>Level</strong></p></td><td><p><strong>Features</strong></p></td></tr><tr><td><p>1st</p></td><td><p>Fisticuffs, Rope-a-Dope</p></td></tr><tr><td><p>2nd</p></td><td><p>Haymaker (15+)</p></td></tr><tr><td><p>3rd</p></td><td><p>Perk</p></td></tr><tr><td><p>4th</p></td><td><p>Moxie (Cd4)</p></td></tr><tr><td><p>5th</p></td><td><p>Perk</p></td></tr><tr><td><p>6th</p></td><td><p>Title Holder (d6), Haymaker (14+)</p></td></tr><tr><td><p>7th</p></td><td><p>Perk</p></td></tr><tr><td><p>8th</p></td><td><p>Moxie (Cd6)</p></td></tr><tr><td><p>9th</p></td><td><p>Perk</p></td></tr><tr><td><p>10th</p></td><td><p>Haymaker (13+), Title Holder (d8)</p></td></tr></tbody></table>",
+        "isSpellcaster": false,
+        "levelFeatures": [
+          {
+            "level": 1,
+            "name": "Fisticuffs",
+            "description": "<p>You have the Dusted Knuckle Perk (p. 68), and your Equipped Brawl Weapons have the Vicious property.</p><p>Further, when a damage die of your Brawl Weapon resolves, you can either:</p><ul><li><p>Increase your subsequent Brawl damage dice one size until the start of your Turn.</p></li><li><p>Grapple or Shove them if you viably could.</p></li></ul>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [
+              "Compendium.vagabond.perks.Item.Lb1ncXSPRRd1wq84"
+            ],
+            "perkAmount": 1,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 1,
+            "name": "Rope-a-Dope",
+            "description": "<p>If you don’t take damage from a Close Enemy’s attack, you can immediately make one attack or Move 5’ without using Speed.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 2,
+            "name": "Haymaker (15+)",
+            "description": "<p>If the result of your Brawl Check for an attack exceeds your Difficulty by 15, the Target is Dazed until your next Turn. The number needed to exceed is reduced by 1 every 4 Levels hereafter.</p>",
+            "statBonusPoints": 1,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 3,
+            "name": "Perk",
+            "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 1,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 4,
+            "name": "Moxie (Cd4)",
+            "description": "<p>You have Favor on Saves against being Dazed, Frightened, Grappled, or Restrained.</p><p>Further, being at 0 HP doesn’t kill you for Cd4 Rounds. Each time you take damage during this time, also roll this countdown die. At 8th Level, this starts at Cd6.</p>",
+            "statBonusPoints": 1,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 5,
+            "name": "Perk",
+            "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 1,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 6,
+            "name": "Title Holder (d6)",
+            "description": "<p>You use a d6 for the damage dice of your Brawl Weapons, and they can Explode on a roll of their two highest values. At 10th Level, this increases to a d8.</p>",
+            "statBonusPoints": 1,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 6,
+            "name": "Haymaker (14+)",
+            "description": "<p>If the result of your Brawl Check for an attack exceeds your Difficulty by 15, the Target is Dazed until your next Turn. The number needed to exceed is reduced by 1 every 4 Levels hereafter.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 7,
+            "name": "Perk",
+            "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 1,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 8,
+            "name": "Moxie (Cd6)",
+            "description": "<p>You have Favor on Saves against being Dazed, Frightened, Grappled, or Restrained.</p><p>Further, being at 0 HP doesn’t kill you for Cd4 Rounds. Each time you take damage during this time, also roll this countdown die. At 8th Level, this starts at Cd6.</p>",
+            "statBonusPoints": 1,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 9,
+            "name": "Perk",
+            "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 1,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 10,
+            "name": "Haymaker (13+)",
+            "description": "<p>If the result of your Brawl Check for an attack exceeds your Difficulty by 15, the Target is Dazed until your next Turn. The number needed to exceed is reduced by 1 every 4 Levels hereafter.</p>",
+            "statBonusPoints": 1,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 10,
+            "name": "Title Holder (d8)",
+            "description": "<p>You use a d6 for the damage dice of your Brawl Weapons, and they can Explode on a roll of their two highest values. At 10th Level, this increases to a d8.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          }
+        ],
+        "manaSkill": null,
+        "castingStat": null,
+        "manaMultiplier": 0,
+        "skillGrant": {
+          "guaranteed": [
+            "brawl",
+            "influence"
+          ],
+          "choices": []
+        },
+        "levelSpells": [],
+        "keyStats": [
+          "might"
+        ],
+        "suggestedStartingPacks": [
+          "Compendium.vagabond.starting-packs.Item.2pgitsw4mqFLgBnZ",
+          "Compendium.vagabond.starting-packs.Item.jYBKVaOdxIVd8QuY"
+        ]
+      },
+      "effects": [
+        {
+          "name": "Fisticuffs",
+          "origin": "Compendium.vagabond.classes.Item.znHJW6Ern6f463p2",
+          "img": "icons/svg/aura.svg",
+          "_id": "xLqTfVkWTqzT2P6Q",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.critExtraDiceBySkill",
+                "value": "brawl: 1",
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "permanent"
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!uB7coVtVsAWCctZ9.ShCPAKbAhcB0Babp.xLqTfVkWTqzT2P6Q"
+        },
+        {
+          "name": "Haymaker: Auto",
+          "origin": "Compendium.vagabond.classes.Item.znHJW6Ern6f463p2",
+          "img": "icons/svg/aura.svg",
+          "_id": "mq340eZdwQfrzEpl",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.haymakerMargin",
+                "value": "15 - floor((@lvl - 2) / 4)",
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "A Brawl attack that beats the Difficulty by enough Dazes its Target until your next Turn.",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "permanent",
+              "minLevel": 2,
+              "switchable": true
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!uB7coVtVsAWCctZ9.ShCPAKbAhcB0Babp.mq340eZdwQfrzEpl"
+        },
+        {
+          "name": "Moxie",
+          "origin": "Compendium.vagabond.classes.Item.znHJW6Ern6f463p2",
+          "img": "icons/svg/aura.svg",
+          "_id": "xPQ7beDQOIWcJD8e",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.statusResistances",
+                "value": "dazed",
+                "priority": null,
+                "type": "add"
+              },
+              {
+                "key": "system.statusResistances",
+                "value": "frightened",
+                "priority": null,
+                "type": "add"
+              },
+              {
+                "key": "system.statusResistances",
+                "value": "restrained",
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "permanent",
+              "minLevel": 4
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!uB7coVtVsAWCctZ9.ShCPAKbAhcB0Babp.xPQ7beDQOIWcJD8e"
+        },
+        {
+          "name": "Title Holder: Die",
+          "origin": "Compendium.vagabond.classes.Item.znHJW6Ern6f463p2",
+          "img": "icons/svg/aura.svg",
+          "_id": "aHgNziL6wsbJBvgl",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.weaponDieBySkill",
+                "value": "brawl: 6 + 2 * floor(@lvl / 10)",
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "permanent",
+              "minLevel": 6
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!uB7coVtVsAWCctZ9.ShCPAKbAhcB0Babp.aHgNziL6wsbJBvgl"
+        },
+        {
+          "name": "Title Holder: Explode",
+          "origin": "Compendium.vagabond.classes.Item.znHJW6Ern6f463p2",
+          "img": "icons/svg/aura.svg",
+          "_id": "iYLRqBF95WVcfjDB",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.weaponHighExplodeBySkill",
+                "value": "brawl: 2",
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "permanent",
+              "minLevel": 6
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!uB7coVtVsAWCctZ9.ShCPAKbAhcB0Babp.iYLRqBF95WVcfjDB"
+        }
+      ],
+      "flags": {},
+      "_id": "ShCPAKbAhcB0Babp",
+      "_key": "!actors.items!uB7coVtVsAWCctZ9.ShCPAKbAhcB0Babp"
+    },
+    {
+      "name": "Bully",
+      "type": "perk",
+      "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
+      "system": {
+        "description": "<p>Your Checks to Grapple or Shove Targets that are smaller than you are Favored, and you can use Beings that are your size or smaller as a 2H Grip d4 Brawl Weapon with the Defense property that deals its damage to both the Target and itself on a hit. If you reduce damage with a Being this way, it still takes the full damage. Your attacks with it maintain the grapple.</p>",
+        "prerequisites": {
+          "stats": [
+            {
+              "stat": "might",
+              "value": 7
+            }
+          ],
+          "statOrGroups": [],
+          "trainedSkills": [
+            "brawl"
+          ],
+          "trainedSkillOrGroups": [],
+          "spells": [],
+          "spellOrGroups": [],
+          "hasAnySpell": false,
+          "resources": [],
+          "resourceOrGroups": []
+        }
+      },
+      "effects": [],
+      "flags": {
+        "vagabond": {
+          "perkOrigin": {
+            "type": "level",
+            "level": 1
+          }
+        }
+      },
+      "_id": "fyZwOCzCyO8JJp1a",
+      "_key": "!actors.items!uB7coVtVsAWCctZ9.fyZwOCzCyO8JJp1a"
+    },
+    {
+      "name": "Dusted Knuckle",
+      "type": "perk",
+      "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
+      "system": {
+        "description": "<p>You can use a d4 for the damage dice of Brawl Weapons, and they can Explode.</p>",
+        "prerequisites": {
+          "stats": [
+            {
+              "stat": "might",
+              "value": 4
+            }
+          ],
+          "statOrGroups": [],
+          "trainedSkills": [
+            "brawl"
+          ],
+          "trainedSkillOrGroups": [],
+          "spells": [],
+          "spellOrGroups": [],
+          "hasAnySpell": false,
+          "resources": [],
+          "resourceOrGroups": []
+        }
+      },
+      "effects": [
+        {
+          "name": "Dusted Knuckle: Die",
+          "origin": "Compendium.vagabond.perks.Item.Lb1ncXSPRRd1wq84",
+          "img": "icons/svg/aura.svg",
+          "_id": "dUsTkNuCkLeDie001",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.weaponDieBySkill",
+                "value": "brawl: 4",
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "permanent"
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!uB7coVtVsAWCctZ9.2r0YefPn21FBNSMN.dUsTkNuCkLeDie001"
+        },
+        {
+          "name": "Dusted Knuckle: Explode",
+          "origin": "Compendium.vagabond.perks.Item.Lb1ncXSPRRd1wq84",
+          "img": "icons/svg/aura.svg",
+          "_id": "dUsTkNuCkLeExp001",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.weaponHighExplodeBySkill",
+                "value": "brawl: 1",
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "permanent"
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!uB7coVtVsAWCctZ9.2r0YefPn21FBNSMN.dUsTkNuCkLeExp001"
+        }
+      ],
+      "flags": {
+        "vagabond": {
+          "perkOrigin": {
+            "type": "level",
+            "level": 1
+          }
+        }
+      },
+      "_id": "2r0YefPn21FBNSMN",
+      "_key": "!actors.items!uB7coVtVsAWCctZ9.2r0YefPn21FBNSMN"
+    }
+  ],
+  "effects": [],
+  "folder": null,
+  "flags": {
+    "vagabond": {
+      "buildGuide": true
+    }
+  },
+  "sort": 0,
+  "_id": "uB7coVtVsAWCctZ9",
+  "_key": "!actors!uB7coVtVsAWCctZ9"
+}

@@ -1,0 +1,1395 @@
+{
+  "name": "Revelator - Soak Tank",
+  "type": "character",
+  "img": "icons/skills/melee/strike-weapon-polearm-ice-blue.webp",
+  "system": {
+    "attributes": {
+      "level": {
+        "value": 1
+      }
+    },
+    "stats": {
+      "might": {
+        "value": 6
+      },
+      "dexterity": {
+        "value": 3
+      },
+      "awareness": {
+        "value": 4
+      },
+      "reason": {
+        "value": 4
+      },
+      "presence": {
+        "value": 6
+      },
+      "luck": {
+        "value": 3
+      }
+    },
+    "skills": {
+      "influence": {
+        "trained": true
+      },
+      "leadership": {
+        "trained": true
+      },
+      "melee": {
+        "trained": true
+      },
+      "medicine": {
+        "trained": true
+      }
+    },
+    "health": {
+      "value": 6
+    },
+    "currentLuck": 3,
+    "currency": {
+      "gold": 0,
+      "silver": 20,
+      "copper": 0
+    },
+    "biography": "<h2>Revelator - Soak Tank — Build Guide</h2>\n<p><em>Core Rulebook v3 Alpha 3, Appendix C. This Hero is built at Level 1 with no Ancestry — pick one, rename the Hero, and adjust anything you like.</em></p>\n<h3>Stats at Level 10</h3>\n<p><strong>MIT</strong> 7 · <strong>DEX</strong> 3 · <strong>AWR</strong> 5 · <strong>RSN</strong> 5 · <strong>PRS</strong> 7 · <strong>LUK</strong> 4</p>\n<h3>Perks by Level</h3><ul>\n<li><strong>1st:</strong> Gish, Selfless <em>(already on this sheet)</em></li>\n<li><strong>3rd:</strong> Tough</li>\n<li><strong>5th:</strong> Protector</li>\n<li><strong>7th:</strong> Rally</li>\n<li><strong>9th:</strong> Heightened Magnetism</li>\n</ul>\n<h3>Spells</h3><p>Bless, Light; get Life, Ward, and Exalt later</p>",
+    "details": {
+      "constructed": true,
+      "builderDismissed": false
+    },
+    "mana": {
+      "current": 2
+    }
+  },
+  "prototypeToken": {
+    "name": "Revelator - Soak Tank",
+    "actorLink": true,
+    "disposition": 1,
+    "texture": {
+      "src": "icons/skills/melee/strike-weapon-polearm-ice-blue.webp"
+    },
+    "bar1": {
+      "attribute": "health"
+    }
+  },
+  "items": [
+    {
+      "name": "Backpack",
+      "type": "equipment",
+      "img": "icons/containers/bags/pack-leather-white-tan.webp",
+      "system": {
+        "description": "<p>1 Slot while held. Worn, it occupies no Slot and adds +3 Slots to your Inventory. You can only benefit from one at a time.</p>",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 5,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Outdoors",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "noSlotsWhenWorn": true,
+        "handsRequired": 0
+      },
+      "effects": [
+        {
+          "name": "Bonus Inventory",
+          "origin": "Compendium.vagabond.gear.Item.8o8KVSgpYsNFtGz2",
+          "img": "icons/svg/aura.svg",
+          "_id": "YJlQPYRINJ72Nf57",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.inventory.bonusSlots",
+                "value": 3,
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "<p>Backpack: +3 Inventory Slots while worn.</p>",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "when-equipped"
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!WSGynwLGc2UH5id5.IxCJMU1ogfEk3b96.YJlQPYRINJ72Nf57"
+        }
+      ],
+      "flags": {},
+      "_id": "IxCJMU1ogfEk3b96",
+      "_key": "!actors.items!WSGynwLGc2UH5id5.IxCJMU1ogfEk3b96"
+    },
+    {
+      "name": "Bedroll",
+      "type": "equipment",
+      "img": "icons/sundries/survival/bedroll-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Personal Items",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "h09TZFHOCq8sMlnx",
+      "_key": "!actors.items!WSGynwLGc2UH5id5.h09TZFHOCq8sMlnx"
+    },
+    {
+      "name": "Rations (1 day)",
+      "type": "equipment",
+      "img": "icons/consumables/food/cooked-grilled-ham-hock-glazed-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Cooking & Food",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "isSupply": true
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "LiIAkYuJsJT8Ewft",
+      "_key": "!actors.items!WSGynwLGc2UH5id5.LiIAkYuJsJT8Ewft"
+    },
+    {
+      "name": "Rations (1 day)",
+      "type": "equipment",
+      "img": "icons/consumables/food/cooked-grilled-ham-hock-glazed-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Cooking & Food",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "isSupply": true
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "t3SlZJtWKv0lnSkG",
+      "_key": "!actors.items!WSGynwLGc2UH5id5.t3SlZJtWKv0lnSkG"
+    },
+    {
+      "name": "Rations (1 day)",
+      "type": "equipment",
+      "img": "icons/consumables/food/cooked-grilled-ham-hock-glazed-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Cooking & Food",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "isSupply": true
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "s9mtA2pFEzUXF9TR",
+      "_key": "!actors.items!WSGynwLGc2UH5id5.s9mtA2pFEzUXF9TR"
+    },
+    {
+      "name": "Rations (1 day)",
+      "type": "equipment",
+      "img": "icons/consumables/food/cooked-grilled-ham-hock-glazed-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Cooking & Food",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "isSupply": true
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "2aWOSs4Y012AppLD",
+      "_key": "!actors.items!WSGynwLGc2UH5id5.2aWOSs4Y012AppLD"
+    },
+    {
+      "name": "Rations (1 day)",
+      "type": "equipment",
+      "img": "icons/consumables/food/cooked-grilled-ham-hock-glazed-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Cooking & Food",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "isSupply": true
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "uVbQyCvKIGUWUxsr",
+      "_key": "!actors.items!WSGynwLGc2UH5id5.uVbQyCvKIGUWUxsr"
+    },
+    {
+      "name": "Torch",
+      "type": "equipment",
+      "img": "icons/sundries/lights/torch-brown-lit.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Outdoors",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "macro": {
+          "enabled": true,
+          "uuid": "",
+          "command": "game.vagabond.lightSource.use({ actor, item, token, light: {\"bright\": 25, \"dim\": 30, \"angle\": 360, \"color\": \"#ff9329\", \"alpha\": 0.65, \"attenuation\": 0.25, \"shadows\": 0.2, \"animation\": {\"type\": \"torch\", \"speed\": 5, \"intensity\": 5}}, durationMin: 60, clockOptions: ['lit','realtime','hour'] });",
+          "label": "Ignite",
+          "runAsGM": false
+        },
+        "handsRequired": 1
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "nUCec31305Y2fZzN",
+      "_key": "!actors.items!WSGynwLGc2UH5id5.nUCec31305Y2fZzN"
+    },
+    {
+      "name": "Torch",
+      "type": "equipment",
+      "img": "icons/sundries/lights/torch-brown-lit.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Outdoors",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "macro": {
+          "enabled": true,
+          "uuid": "",
+          "command": "game.vagabond.lightSource.use({ actor, item, token, light: {\"bright\": 25, \"dim\": 30, \"angle\": 360, \"color\": \"#ff9329\", \"alpha\": 0.65, \"attenuation\": 0.25, \"shadows\": 0.2, \"animation\": {\"type\": \"torch\", \"speed\": 5, \"intensity\": 5}}, durationMin: 60, clockOptions: ['lit','realtime','hour'] });",
+          "label": "Ignite",
+          "runAsGM": false
+        },
+        "handsRequired": 1
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "AEE2KPhfcKZctulc",
+      "_key": "!actors.items!WSGynwLGc2UH5id5.AEE2KPhfcKZctulc"
+    },
+    {
+      "name": "Waterskin",
+      "type": "equipment",
+      "img": "icons/sundries/survival/waterskin-leather-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 2,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Personal Items",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isBeverage": true
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "1wXFAYlEeHNaNqcG",
+      "_key": "!actors.items!WSGynwLGc2UH5id5.1wXFAYlEeHNaNqcG"
+    },
+    {
+      "name": "Longsword",
+      "type": "equipment",
+      "img": "icons/weapons/swords/sword-guard-blue.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "weapon",
+        "locked": true,
+        "equipped": true,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 40,
+          "copper": 0
+        },
+        "baseSlots": 2,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "properties": [
+          "Keen"
+        ],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "V",
+        "damageOneHand": "d8",
+        "damageTwoHands": "d10",
+        "equipmentState": "oneHand",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "itemFx": {
+          "enabled": true,
+          "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Melee/Sword01*",
+          "hitDuration": 1000,
+          "hitOffsetX": -100
+        },
+        "damageTypeOneHand": "slashing",
+        "damageTypeTwoHands": "slashing"
+      },
+      "effects": [
+        {
+          "name": "Keen",
+          "img": "icons/svg/aura.svg",
+          "_id": "qoutjj8Zgl0SCZVB",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.attackCritBonus",
+                "type": "subtract",
+                "value": "1"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "Crits 1 lower on this weapon's Attack Check.",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "on-use"
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!WSGynwLGc2UH5id5.53ZgJXM0fBYLcGkv.qoutjj8Zgl0SCZVB"
+        }
+      ],
+      "flags": {},
+      "_id": "53ZgJXM0fBYLcGkv",
+      "_key": "!actors.items!WSGynwLGc2UH5id5.53ZgJXM0fBYLcGkv"
+    },
+    {
+      "name": "Shield",
+      "type": "equipment",
+      "img": "icons/equipment/shield/round-wooden-boss-steel-yellow-blue.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "weapon",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 75,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "properties": [
+          "Defense"
+        ],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d4",
+        "damageTwoHands": "d4",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "itemFx": {
+          "enabled": true,
+          "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Melee/Group06/MeleeAttack06_Shield01*",
+          "hitOffsetX": -100,
+          "hitDuration": 1000,
+          "animType": "auto",
+          "hitScale": 1,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "damageTypeOneHand": "blunt",
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "gridPosition": 0,
+        "containerId": null,
+        "canExplode": false,
+        "explodeValues": "",
+        "altSkills": [
+          "finesse"
+        ],
+        "damageTypeTwoHands": "-",
+        "isSupply": false,
+        "isBeverage": false,
+        "isConsumable": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "critThresholdMod": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "vTP7ExxbGJi8rN1h",
+      "_key": "!actors.items!WSGynwLGc2UH5id5.vTP7ExxbGJi8rN1h"
+    },
+    {
+      "name": "Heavy Armor",
+      "type": "equipment",
+      "img": "icons/equipment/chest/breastplate-cuirass-steel-grey.webp",
+      "system": {
+        "description": "<p><span class=\"fontstyle0\">Plate, splint.</span> </p><h4><span class=\"fontstyle0\">Equipping Armor</span></h4><p><span class=\"fontstyle2\">Equipping or unequipping Armor requires a Scene (10 minutes) to complete.</span> </p>",
+        "equipmentType": "armor",
+        "locked": true,
+        "equipped": true,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 2,
+          "silver": 0,
+          "copper": 0
+        },
+        "baseSlots": 3,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "worn",
+        "immunities": [],
+        "gearCategory": "",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "armorRating": 3,
+        "mightRequirement": 6,
+        "reflexPenalty": 3
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "ZqU9oA2rEGUuqqKU",
+      "_key": "!actors.items!WSGynwLGc2UH5id5.ZqU9oA2rEGUuqqKU"
+    },
+    {
+      "name": "Revelator",
+      "type": "class",
+      "img": "icons/skills/melee/strike-weapon-polearm-ice-blue.webp",
+      "system": {
+        "description": "<p><strong>For he who comes in our time of need is not of mortal breed, he is the Destroyer, the right hand of our Creator and the one who brings fear where there is no hope.</strong></p><p><em>—Corrax Tablet 3:13, Doom Eternal</em></p><p>Revelators are warriors of radiance and justice. These oathsworn knights hold an honorable vow that becomes its own power.</p><h3>Iconic Revelators</h3><ul><li><strong>Luke Skywalker</strong>, <em>Star Wars</em></li><li><strong>Michael Carpenter</strong>, <em>The Dresden Files</em></li><li><strong>She-Ra</strong>, <em>She-Ra: Princess of Power</em></li><li><strong>Wonder Woman</strong>, <em>DC Comics</em></li></ul><h3>Playing Revelator</h3><p>Revelators are high defense frontline strikers. Stay in the frontline for melee attacks, and smite the transgressors.</p><p><strong>Action:</strong> Attack/Cast<br /><strong>Move:</strong> Frontline<br /><strong>Starting Pack:</strong> Knight or Warrior<br /><strong>Key Stat:</strong> Might/Presence<br /><strong>Complexity:</strong> ★★★☆☆<br /><strong>Training:</strong> Leadership, Melee</p><h3>Class Features</h3><table class=\"NormalTable\"><tbody><tr><td><p><strong>Level</strong></p></td><td><p><strong>Features</strong></p></td><td><p><strong>Spells</strong></p></td><td><p><strong>Mana</strong></p></td><td><p><strong>Cast Max</strong></p></td></tr><tr><td><p>1st</p></td><td><p>Righteous, Enspell</p></td><td><p>2</p></td><td><p>2</p></td><td><p>2</p></td></tr><tr><td><p>2nd</p></td><td><p>Lay on Hands (d4)</p></td><td><p>2</p></td><td><p>4</p></td><td><p>2</p></td></tr><tr><td><p>3rd</p></td><td><p>Perk</p></td><td><p>2</p></td><td><p>6</p></td><td><p>3</p></td></tr><tr><td><p>4th</p></td><td><p>Paragon’s Aura (1 Mana)</p></td><td><p>3</p></td><td><p>8</p></td><td><p>3</p></td></tr><tr><td><p>5th</p></td><td><p>Perk</p></td><td><p>3</p></td><td><p>10</p></td><td><p>4</p></td></tr><tr><td><p>6th</p></td><td><p>Lay on Hands (d6), Divine Resolve</p></td><td><p>3</p></td><td><p>12</p></td><td><p>4</p></td></tr><tr><td><p>7th</p></td><td><p>Perk</p></td><td><p>4</p></td><td><p>14</p></td><td><p>5</p></td></tr><tr><td><p>8th</p></td><td><p>Paragon’s Aura (2 Mana)</p></td><td><p>4</p></td><td><p>16</p></td><td><p>5</p></td></tr><tr><td><p>9th</p></td><td><p>Perk</p></td><td><p>4</p></td><td><p>18</p></td><td><p>6</p></td></tr><tr><td><p>10th</p></td><td><p>Lay on Hands (d8), Holy Diver</p></td><td><p>5</p></td><td><p>20</p></td><td><p>6</p></td></tr></tbody></table>",
+        "isSpellcaster": true,
+        "levelFeatures": [
+          {
+            "level": 1,
+            "name": "Righteous",
+            "description": "<p>You gain the Gish Perk (p. 69), can Cast Spells using Leadership.</p><p><strong>Spells:</strong> You learn 2 Spells, one of which must always have a damage base. You learn 1 other Spell every 3 Levels hereafter.</p><p><strong>Mana:</strong> Your Max Mana is equal to (2 × your Level), and your Cast Max for Spells is equal to (1 + half your Level, round up).</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [
+              "Compendium.vagabond.perks.Item.YVgf2kRWwn8JRq1X"
+            ],
+            "perkAmount": 1,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 1,
+            "name": "Enspell",
+            "description": "<p>You can have one Imbue Casting as continual duration on your Weapon, and can skip your Move to change the Spell.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 2,
+            "name": "Lay on Hands (d4)",
+            "description": "<p>You can spend 1 Mana and use your Action or skip your Move to restore (d4 + your Level) HP to yourself or a Close Being. This die size increases by one size every 4 Levels hereafter.</p>",
+            "statBonusPoints": 1,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": [],
+            "action": {
+              "enabled": true,
+              "label": "Lay on Hands",
+              "icon": "hand-holding-heart",
+              "uuid": "",
+              "command": "system:revelator.layOnHands",
+              "runAsGM": false
+            }
+          },
+          {
+            "level": 3,
+            "name": "Perk",
+            "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 1,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 4,
+            "name": "Paragon’s Aura (1 Mana)",
+            "description": "<p>You have a 2 Mana discount on the Aura Delivery.</p><p>Further, once per Round when you deliver a Spell with an Imbued Weapon, you can do so against one Target with a 1 Mana discount. This discount increases every 4 Levels hereafter.</p>",
+            "statBonusPoints": 1,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 5,
+            "name": "Perk",
+            "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 1,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 6,
+            "name": "Lay on Hands (d6)",
+            "description": "<p>You can spend 1 Mana and use your Action or skip your Move to restore (d4 + your Level) HP to yourself or a Close Being. This die size increases by one size every 4 Levels hereafter.</p>",
+            "statBonusPoints": 1,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": [],
+            "action": {
+              "enabled": true,
+              "label": "Lay on Hands",
+              "icon": "hand-holding-heart",
+              "uuid": "",
+              "command": "system:revelator.layOnHands",
+              "runAsGM": false
+            }
+          },
+          {
+            "level": 6,
+            "name": "Divine Resolve",
+            "description": "<p>You can’t be Blinded, Paralyzed, or Sickened. Targets of your Lay on Hands Ability are cured of these Statuses.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 7,
+            "name": "Perk",
+            "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 1,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 8,
+            "name": "Paragon’s Aura (2 Mana)",
+            "description": "<p>You have a 2 Mana discount on the Aura Delivery.</p><p>Further, once per Round when you deliver a Spell with an Imbued Weapon, you can do so against one Target with a 1 Mana discount. This discount increases every 4 Levels hereafter.</p>",
+            "statBonusPoints": 1,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 9,
+            "name": "Perk",
+            "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 1,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 10,
+            "name": "Lay on Hands (d8)",
+            "description": "<p>You can spend 1 Mana and use your Action or skip your Move to restore (d4 + your Level) HP to yourself or a Close Being. This die size increases by one size every 4 Levels hereafter.</p>",
+            "statBonusPoints": 1,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": [],
+            "action": {
+              "enabled": true,
+              "label": "Lay on Hands",
+              "icon": "hand-holding-heart",
+              "uuid": "",
+              "command": "system:revelator.layOnHands",
+              "runAsGM": false
+            }
+          },
+          {
+            "level": 10,
+            "name": "Holy Diver",
+            "description": "<p>You and Weapons you wield are permanently under the effects of the Bless and Exalt Spells.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          }
+        ],
+        "manaSkill": "leadership",
+        "castingStat": "presence",
+        "manaMultiplier": 2,
+        "skillGrant": {
+          "guaranteed": [
+            "leadership",
+            "melee"
+          ],
+          "choices": []
+        },
+        "levelSpells": [
+          {
+            "spells": 2,
+            "level": 1
+          },
+          {
+            "spells": 2,
+            "level": 2
+          },
+          {
+            "spells": 2,
+            "level": 3
+          },
+          {
+            "spells": 3,
+            "level": 4
+          },
+          {
+            "spells": 3,
+            "level": 5
+          },
+          {
+            "spells": 3,
+            "level": 6
+          },
+          {
+            "spells": 4,
+            "level": 7
+          },
+          {
+            "spells": 4,
+            "level": 8
+          },
+          {
+            "spells": 4,
+            "level": 9
+          },
+          {
+            "spells": 5,
+            "level": 10
+          }
+        ],
+        "keyStats": [
+          "might",
+          "presence"
+        ],
+        "suggestedStartingPacks": [
+          "Compendium.vagabond.starting-packs.Item.KoynpKyutYoL8KOX",
+          "Compendium.vagabond.starting-packs.Item.hW4AUwhRz98OJoDh"
+        ]
+      },
+      "effects": [
+        {
+          "name": "Righteous",
+          "origin": "Compendium.vagabond.classes.Item.yZzChIB5YwQBSOeA",
+          "img": "icons/svg/aura.svg",
+          "_id": "zM0nV1jStK3zr2D1",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.mana.castingMaxBonus",
+                "value": "1 - @stats.presence.total",
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "permanent"
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!WSGynwLGc2UH5id5.7wrZ0Gbpydc1XSnT.zM0nV1jStK3zr2D1"
+        },
+        {
+          "name": "Lay on Hands",
+          "origin": "Compendium.vagabond.classes.Item.yZzChIB5YwQBSOeA",
+          "img": "icons/svg/aura.svg",
+          "_id": "tNZOciWhGY9ryjDD",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.layOnHandsDie",
+                "value": "4 + 2 * floor((@lvl - 2) / 4)",
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "permanent",
+              "minLevel": 2
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!WSGynwLGc2UH5id5.7wrZ0Gbpydc1XSnT.tNZOciWhGY9ryjDD"
+        },
+        {
+          "name": "Divine Resolve",
+          "origin": "Compendium.vagabond.classes.Item.yZzChIB5YwQBSOeA",
+          "img": "icons/svg/aura.svg",
+          "_id": "7l1tgnKdrTYe1QhY",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.statusImmunities",
+                "value": "blinded",
+                "priority": null,
+                "type": "add"
+              },
+              {
+                "key": "system.statusImmunities",
+                "value": "paralyzed",
+                "priority": null,
+                "type": "add"
+              },
+              {
+                "key": "system.statusImmunities",
+                "value": "sickened",
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "permanent",
+              "minLevel": 6
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!WSGynwLGc2UH5id5.7wrZ0Gbpydc1XSnT.7l1tgnKdrTYe1QhY"
+        },
+        {
+          "name": "Divine Resolve: Lay on Hands",
+          "origin": "Compendium.vagabond.classes.Item.yZzChIB5YwQBSOeA",
+          "img": "icons/svg/aura.svg",
+          "_id": "im7KvMTWElc3lgM6",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.layOnHandsCures",
+                "value": "blinded",
+                "priority": null,
+                "type": "add"
+              },
+              {
+                "key": "system.layOnHandsCures",
+                "value": "paralyzed",
+                "priority": null,
+                "type": "add"
+              },
+              {
+                "key": "system.layOnHandsCures",
+                "value": "sickened",
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "permanent",
+              "minLevel": 6
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!WSGynwLGc2UH5id5.7wrZ0Gbpydc1XSnT.im7KvMTWElc3lgM6"
+        }
+      ],
+      "flags": {},
+      "_id": "7wrZ0Gbpydc1XSnT",
+      "_key": "!actors.items!WSGynwLGc2UH5id5.7wrZ0Gbpydc1XSnT"
+    },
+    {
+      "name": "Gish",
+      "type": "perk",
+      "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
+      "system": {
+        "description": "<p>You can use Weapons as Trinkets.</p>",
+        "prerequisites": {
+          "stats": [],
+          "statOrGroups": [],
+          "trainedSkills": [],
+          "trainedSkillOrGroups": [
+            [
+              "melee",
+              "ranged"
+            ]
+          ],
+          "spells": [],
+          "spellOrGroups": [],
+          "hasAnySpell": true,
+          "resources": [],
+          "resourceOrGroups": []
+        }
+      },
+      "effects": [
+        {
+          "name": "Active Effect",
+          "origin": "Compendium.vagabond.perks.Item.YVgf2kRWwn8JRq1X",
+          "img": "icons/svg/aura.svg",
+          "_id": "imf2mRfowH7GpgJt",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.attributes.isSpellcaster",
+                "value": true,
+                "priority": null,
+                "type": "override"
+              },
+              {
+                "key": "system.weaponAsTrinket",
+                "value": true,
+                "priority": null,
+                "type": "override"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {},
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!WSGynwLGc2UH5id5.65K66pSwJ27ukTla.imf2mRfowH7GpgJt"
+        }
+      ],
+      "flags": {
+        "vagabond": {
+          "perkOrigin": {
+            "type": "level",
+            "level": 1
+          }
+        }
+      },
+      "_id": "65K66pSwJ27ukTla",
+      "_key": "!actors.items!WSGynwLGc2UH5id5.65K66pSwJ27ukTla"
+    },
+    {
+      "name": "Selfless",
+      "type": "perk",
+      "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
+      "system": {
+        "description": "<p>Once per Turn, when a Near Ally takes damage, you can take the damage instead. This damage can’t be reduced.</p>",
+        "prerequisites": {
+          "stats": [],
+          "statOrGroups": [],
+          "trainedSkills": [],
+          "trainedSkillOrGroups": [],
+          "spells": [
+            "Compendium.vagabond.spells.Item.TyPnI7gEtbzuxFZm"
+          ],
+          "spellOrGroups": [],
+          "hasAnySpell": false,
+          "resources": [],
+          "resourceOrGroups": []
+        }
+      },
+      "effects": [],
+      "flags": {
+        "vagabond": {
+          "perkOrigin": {
+            "type": "level",
+            "level": 1
+          }
+        }
+      },
+      "_id": "iMIIuKwTL4Havol7",
+      "_key": "!actors.items!WSGynwLGc2UH5id5.iMIIuKwTL4Havol7"
+    },
+    {
+      "name": "Bless",
+      "type": "spell",
+      "img": "icons/magic/holy/prayer-hands-glowing-yellow.webp",
+      "system": {
+        "description": "<p><span class=\"fontstyle0\">For the duration, Targeted Objects count as Silvered (p. 82), and Targeted Beings of your choice have a d4 bonus to Saves.</span></p><p><span class=\"fontstyle0\">Further, if the Target is freestanding water, it permanently becomes holy water.</span></p>",
+        "damageType": "-",
+        "duration": "Until your next turn",
+        "crit": "",
+        "favorite": true,
+        "noRollRequired": true,
+        "fxSchool": "radiant",
+        "locked": true,
+        "causedStatuses": []
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "zmsLaX1lw1vpH0Ac",
+      "_key": "!actors.items!WSGynwLGc2UH5id5.zmsLaX1lw1vpH0Ac"
+    },
+    {
+      "name": "Light",
+      "type": "spell",
+      "img": "icons/magic/light/explosion-star-glow-yellow.webp",
+      "system": {
+        "description": "<p><span class=\"fontstyle0\">The Target sheds Light out to Near for the duration. You can choose to do so by creating a floating mote of light that follows the Target.</span></p>",
+        "damageType": "fire",
+        "duration": "Until your next turn",
+        "crit": "Beings of your choice within the Light when you Cast the Spell are Blinded (Cd4).",
+        "favorite": true,
+        "noRollRequired": false,
+        "fxSchool": "radiant",
+        "locked": true,
+        "critCausedStatuses": [
+          {
+            "statusId": "blinded",
+            "requiresDamage": true,
+            "saveType": "none",
+            "duration": "d4",
+            "tickDamageEnabled": false,
+            "damageOnTick": "",
+            "damageType": "-"
+          }
+        ]
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "VB4LjPAANmSeW5lm",
+      "_key": "!actors.items!WSGynwLGc2UH5id5.VB4LjPAANmSeW5lm"
+    }
+  ],
+  "effects": [],
+  "folder": null,
+  "flags": {
+    "vagabond": {
+      "buildGuide": true
+    }
+  },
+  "sort": 0,
+  "_id": "WSGynwLGc2UH5id5",
+  "_key": "!actors!WSGynwLGc2UH5id5"
+}

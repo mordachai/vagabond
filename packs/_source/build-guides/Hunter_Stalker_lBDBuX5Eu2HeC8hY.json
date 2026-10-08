@@ -1,0 +1,1453 @@
+{
+  "name": "Hunter - Stalker",
+  "type": "character",
+  "img": "icons/weapons/bows/shortbow-recurve-yellow-blue.webp",
+  "system": {
+    "attributes": {
+      "level": {
+        "value": 1
+      }
+    },
+    "stats": {
+      "might": {
+        "value": 4
+      },
+      "dexterity": {
+        "value": 7
+      },
+      "awareness": {
+        "value": 5
+      },
+      "reason": {
+        "value": 4
+      },
+      "presence": {
+        "value": 3
+      },
+      "luck": {
+        "value": 3
+      }
+    },
+    "skills": {
+      "finesse": {
+        "trained": true
+      },
+      "leadership": {
+        "trained": true
+      },
+      "melee": {
+        "trained": true
+      },
+      "ranged": {
+        "trained": true
+      },
+      "survival": {
+        "trained": true
+      }
+    },
+    "health": {
+      "value": 4
+    },
+    "currentLuck": 3,
+    "currency": {
+      "gold": 0,
+      "silver": 75,
+      "copper": 0
+    },
+    "biography": "<h2>Hunter - Stalker — Build Guide</h2>\n<p><em>Core Rulebook v3 Alpha 3, Appendix C. This Hero is built at Level 1 with no Ancestry — pick one, rename the Hero, and adjust anything you like.</em></p>\n<p><strong>Bought with the Starting Pack's silver:</strong> Shortsword (20s).</p>\n<h3>Stats at Level 10</h3>\n<p><strong>MIT</strong> 6 · <strong>DEX</strong> 7 · <strong>AWR</strong> 7 · <strong>RSN</strong> 4 · <strong>PRS</strong> 3 · <strong>LUK</strong> 4</p>\n<h3>Perks by Level</h3><ul>\n<li><strong>1st:</strong> Scout, Skirmisher <em>(already on this sheet)</em></li>\n<li><strong>3rd:</strong> Strategist</li>\n<li><strong>5th:</strong> Cryptozoologist</li>\n<li><strong>7th:</strong> Fallaway Reverse</li>\n<li><strong>9th:</strong> Heightened Cognition</li>\n</ul>",
+    "details": {
+      "constructed": true,
+      "builderDismissed": false
+    }
+  },
+  "prototypeToken": {
+    "name": "Hunter - Stalker",
+    "actorLink": true,
+    "disposition": 1,
+    "texture": {
+      "src": "icons/weapons/bows/shortbow-recurve-yellow-blue.webp"
+    },
+    "bar1": {
+      "attribute": "health"
+    }
+  },
+  "items": [
+    {
+      "name": "Backpack",
+      "type": "equipment",
+      "img": "icons/containers/bags/pack-leather-white-tan.webp",
+      "system": {
+        "description": "<p>1 Slot while held. Worn, it occupies no Slot and adds +3 Slots to your Inventory. You can only benefit from one at a time.</p>",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 5,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Outdoors",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "noSlotsWhenWorn": true,
+        "handsRequired": 0
+      },
+      "effects": [
+        {
+          "name": "Bonus Inventory",
+          "origin": "Compendium.vagabond.gear.Item.8o8KVSgpYsNFtGz2",
+          "img": "icons/svg/aura.svg",
+          "_id": "YJlQPYRINJ72Nf57",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.inventory.bonusSlots",
+                "value": 3,
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "<p>Backpack: +3 Inventory Slots while worn.</p>",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "when-equipped"
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!lBDBuX5Eu2HeC8hY.EU2TU0bCv2CnfMZA.YJlQPYRINJ72Nf57"
+        }
+      ],
+      "flags": {},
+      "_id": "EU2TU0bCv2CnfMZA",
+      "_key": "!actors.items!lBDBuX5Eu2HeC8hY.EU2TU0bCv2CnfMZA"
+    },
+    {
+      "name": "Bedroll",
+      "type": "equipment",
+      "img": "icons/sundries/survival/bedroll-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Personal Items",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "yQw59drQh3UTgUCD",
+      "_key": "!actors.items!lBDBuX5Eu2HeC8hY.yQw59drQh3UTgUCD"
+    },
+    {
+      "name": "Rations (1 day)",
+      "type": "equipment",
+      "img": "icons/consumables/food/cooked-grilled-ham-hock-glazed-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Cooking & Food",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "isSupply": true
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "OihGnoLtdzTPZPyc",
+      "_key": "!actors.items!lBDBuX5Eu2HeC8hY.OihGnoLtdzTPZPyc"
+    },
+    {
+      "name": "Rations (1 day)",
+      "type": "equipment",
+      "img": "icons/consumables/food/cooked-grilled-ham-hock-glazed-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Cooking & Food",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "isSupply": true
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "Zyk2OslhxopCaLtu",
+      "_key": "!actors.items!lBDBuX5Eu2HeC8hY.Zyk2OslhxopCaLtu"
+    },
+    {
+      "name": "Rations (1 day)",
+      "type": "equipment",
+      "img": "icons/consumables/food/cooked-grilled-ham-hock-glazed-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Cooking & Food",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "isSupply": true
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "rwiZBeu1FOVRb8Kn",
+      "_key": "!actors.items!lBDBuX5Eu2HeC8hY.rwiZBeu1FOVRb8Kn"
+    },
+    {
+      "name": "Rations (1 day)",
+      "type": "equipment",
+      "img": "icons/consumables/food/cooked-grilled-ham-hock-glazed-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Cooking & Food",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "isSupply": true
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "OdOI62x5ZJJyhZdP",
+      "_key": "!actors.items!lBDBuX5Eu2HeC8hY.OdOI62x5ZJJyhZdP"
+    },
+    {
+      "name": "Rations (1 day)",
+      "type": "equipment",
+      "img": "icons/consumables/food/cooked-grilled-ham-hock-glazed-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Cooking & Food",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "isSupply": true
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "Lwfvtit4aUtCYCfy",
+      "_key": "!actors.items!lBDBuX5Eu2HeC8hY.Lwfvtit4aUtCYCfy"
+    },
+    {
+      "name": "Torch",
+      "type": "equipment",
+      "img": "icons/sundries/lights/torch-brown-lit.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Outdoors",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "macro": {
+          "enabled": true,
+          "uuid": "",
+          "command": "game.vagabond.lightSource.use({ actor, item, token, light: {\"bright\": 25, \"dim\": 30, \"angle\": 360, \"color\": \"#ff9329\", \"alpha\": 0.65, \"attenuation\": 0.25, \"shadows\": 0.2, \"animation\": {\"type\": \"torch\", \"speed\": 5, \"intensity\": 5}}, durationMin: 60, clockOptions: ['lit','realtime','hour'] });",
+          "label": "Ignite",
+          "runAsGM": false
+        },
+        "handsRequired": 1
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "d4lnew5aVFenFrIF",
+      "_key": "!actors.items!lBDBuX5Eu2HeC8hY.d4lnew5aVFenFrIF"
+    },
+    {
+      "name": "Torch",
+      "type": "equipment",
+      "img": "icons/sundries/lights/torch-brown-lit.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Outdoors",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "macro": {
+          "enabled": true,
+          "uuid": "",
+          "command": "game.vagabond.lightSource.use({ actor, item, token, light: {\"bright\": 25, \"dim\": 30, \"angle\": 360, \"color\": \"#ff9329\", \"alpha\": 0.65, \"attenuation\": 0.25, \"shadows\": 0.2, \"animation\": {\"type\": \"torch\", \"speed\": 5, \"intensity\": 5}}, durationMin: 60, clockOptions: ['lit','realtime','hour'] });",
+          "label": "Ignite",
+          "runAsGM": false
+        },
+        "handsRequired": 1
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "GUKBSCjDIRq8Ce1P",
+      "_key": "!actors.items!lBDBuX5Eu2HeC8hY.GUKBSCjDIRq8Ce1P"
+    },
+    {
+      "name": "Waterskin",
+      "type": "equipment",
+      "img": "icons/sundries/survival/waterskin-leather-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 2,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Personal Items",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isBeverage": true
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "xKC6Ol4EsHfBLYjt",
+      "_key": "!actors.items!lBDBuX5Eu2HeC8hY.xKC6Ol4EsHfBLYjt"
+    },
+    {
+      "name": "Longsword",
+      "type": "equipment",
+      "img": "icons/weapons/swords/sword-guard-blue.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "weapon",
+        "locked": true,
+        "equipped": true,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 40,
+          "copper": 0
+        },
+        "baseSlots": 2,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "properties": [
+          "Keen"
+        ],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "V",
+        "damageOneHand": "d8",
+        "damageTwoHands": "d10",
+        "equipmentState": "oneHand",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "itemFx": {
+          "enabled": true,
+          "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Melee/Sword01*",
+          "hitDuration": 1000,
+          "hitOffsetX": -100
+        },
+        "damageTypeOneHand": "slashing",
+        "damageTypeTwoHands": "slashing"
+      },
+      "effects": [
+        {
+          "name": "Keen",
+          "img": "icons/svg/aura.svg",
+          "_id": "qoutjj8Zgl0SCZVB",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.attackCritBonus",
+                "type": "subtract",
+                "value": "1"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "Crits 1 lower on this weapon's Attack Check.",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "on-use"
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!lBDBuX5Eu2HeC8hY.nh6b9zj3TKU25FEv.qoutjj8Zgl0SCZVB"
+        }
+      ],
+      "flags": {},
+      "_id": "nh6b9zj3TKU25FEv",
+      "_key": "!actors.items!lBDBuX5Eu2HeC8hY.nh6b9zj3TKU25FEv"
+    },
+    {
+      "name": "Shield",
+      "type": "equipment",
+      "img": "icons/equipment/shield/round-wooden-boss-steel-yellow-blue.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "weapon",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 75,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "properties": [
+          "Defense"
+        ],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d4",
+        "damageTwoHands": "d4",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "itemFx": {
+          "enabled": true,
+          "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Melee/Group06/MeleeAttack06_Shield01*",
+          "hitOffsetX": -100,
+          "hitDuration": 1000,
+          "animType": "auto",
+          "hitScale": 1,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "damageTypeOneHand": "blunt",
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "gridPosition": 0,
+        "containerId": null,
+        "canExplode": false,
+        "explodeValues": "",
+        "altSkills": [
+          "finesse"
+        ],
+        "damageTypeTwoHands": "-",
+        "isSupply": false,
+        "isBeverage": false,
+        "isConsumable": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "critThresholdMod": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "x5RyyWIyADxOtENw",
+      "_key": "!actors.items!lBDBuX5Eu2HeC8hY.x5RyyWIyADxOtENw"
+    },
+    {
+      "name": "Medium Armor",
+      "type": "equipment",
+      "img": "icons/equipment/chest/breastplate-scale-grey.webp",
+      "system": {
+        "description": "<p>Chain, scale</p><h4><span class=\"fontstyle0\">Equipping Armor</span></h4><p><span class=\"fontstyle2\">Equipping or unequipping Armor requires a Scene (10 minutes) to complete.</span> </p>",
+        "equipmentType": "armor",
+        "locked": true,
+        "equipped": true,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 1,
+          "silver": 0,
+          "copper": 0
+        },
+        "baseSlots": 2,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "worn",
+        "immunities": [],
+        "gearCategory": "",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "armorRating": 2,
+        "mightRequirement": 4,
+        "reflexPenalty": 2
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "w5Kv8E6tZT7H1pZn",
+      "_key": "!actors.items!lBDBuX5Eu2HeC8hY.w5Kv8E6tZT7H1pZn"
+    },
+    {
+      "name": "Shortsword",
+      "type": "equipment",
+      "img": "icons/weapons/swords/sword-guard-worn-purple.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "weapon",
+        "locked": true,
+        "equipped": true,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 20,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "properties": [
+          "Keen"
+        ],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d6",
+        "equipmentState": "oneHand",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "itemFx": {
+          "enabled": true,
+          "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Melee/Group01/MeleeAttack01_ShortSword01*",
+          "hitOffsetX": -100,
+          "hitDuration": 1000
+        },
+        "damageTypeOneHand": "slashing",
+        "altSkills": [
+          "finesse"
+        ]
+      },
+      "effects": [
+        {
+          "name": "Keen",
+          "img": "icons/svg/aura.svg",
+          "_id": "KadvCH38xZ3ez7Kr",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.attackCritBonus",
+                "type": "subtract",
+                "value": "1"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "Crits 1 lower on this weapon's Attack Check.",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "on-use"
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!lBDBuX5Eu2HeC8hY.7ILTf56FLfuI3Gbj.KadvCH38xZ3ez7Kr"
+        }
+      ],
+      "flags": {
+        "vagabond": {
+          "preferredSkill": ""
+        }
+      },
+      "_id": "7ILTf56FLfuI3Gbj",
+      "_key": "!actors.items!lBDBuX5Eu2HeC8hY.7ILTf56FLfuI3Gbj"
+    },
+    {
+      "name": "Hunter",
+      "type": "class",
+      "img": "icons/weapons/bows/shortbow-recurve-yellow-blue.webp",
+      "system": {
+        "description": "<p><strong>I will look for you, I will find you, and I will kill you.</strong></p><p><em>—Liam Neeson, Taken</em></p><p>Keepers of the old way, hunters are survival experts that specialize in exploiting their enemies’ weaknesses.</p><h3>Iconic Hunters</h3><ul><li><strong>Aloy</strong>, <em>Horizon</em></li><li><strong>Aragorn</strong>, <em>The Lord of the Rings</em></li><li><strong>Samus Aran</strong>, <em>Metroid</em></li><li><strong>San</strong>, <em>Princess Mononoke</em></li></ul><h3>Playing Hunter</h3><p>The hunter is a low defense, high-crit striker. They can be built for Melee or Ranged positions.</p><p><strong>Action:</strong> Attack<br /><strong>Move:</strong> Midline/Backline<br /><strong>Starting Pack:</strong> Scout or Warrior<br /><strong>Key Stat:</strong> Awareness<br /><strong>Complexity:</strong> ★★☆☆☆<br /><strong>Training:</strong> Melee, Ranged, Survival</p><h3>Class Features</h3><table class=\"NormalTable\"><tbody><tr><td><p><strong>Level</strong></p></td><td><p><strong>Features</strong></p></td></tr><tr><td><p>1st</p></td><td><p>Hunter’s Mark, Survivalist</p></td></tr><tr><td><p>2nd</p></td><td><p>Rover (5’)</p></td></tr><tr><td><p>3rd</p></td><td><p>Perk</p></td></tr><tr><td><p>4th</p></td><td><p>Lethal Precision (+1 damage)</p></td></tr><tr><td><p>5th</p></td><td><p>Perk</p></td></tr><tr><td><p>6th</p></td><td><p>Rover (10’), Killer Instinct</p></td></tr><tr><td><p>7th</p></td><td><p>Perk</p></td></tr><tr><td><p>8th</p></td><td><p>Lethal Precision (+2 damage)</p></td></tr><tr><td><p>9th</p></td><td><p>Perk</p></td></tr><tr><td><p>10th</p></td><td><p>Rover (15’), Apex Predator</p></td></tr></tbody></table>",
+        "isSpellcaster": false,
+        "levelFeatures": [
+          {
+            "level": 1,
+            "name": "Hunter’s Mark",
+            "description": "<p>You can choose a Target when you attack it or by skipping your Move, declaring it as your Mark until you declare a new Mark. The following rules apply while you have a Mark:</p><ul><li><p>Your attacks against it with Weapons that have the Keen or Vicious property also have the other property, and Crit if a Bonus causes the result to exceed your Crit range.</p></li><li><p>You roll two d20s on Checks to track it, and use the higher result.</p></li></ul>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": [],
+            "action": {
+              "enabled": true,
+              "label": "Mark Target",
+              "icon": "crosshairs",
+              "uuid": "",
+              "command": "system:hunter.mark",
+              "runAsGM": false
+            }
+          },
+          {
+            "level": 1,
+            "name": "Survivalist",
+            "description": "<p>You gain a Perk with Survival Training as a Prerequisite, ignoring other prerequisites for it.</p><p>Further, you have Favor on Checks to track, navigate, and against extreme temperatures, and you can Forage at a Normal Travel Pace.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [
+              "Compendium.vagabond.perks.Item.jj9U2ZlShLvJqTaj",
+              "Compendium.vagabond.perks.Item.oW0hPunyQ6B8nUZh",
+              "Compendium.vagabond.perks.Item.9qNLXkVLcjSbOFeq",
+              "Compendium.vagabond.perks.Item.yX9kfarJAkbU3v28",
+              "Compendium.vagabond.perks.Item.uSjuQ6n725f7YzeO",
+              "Compendium.vagabond.perks.Item.cZSBLLRDwqWonXsy",
+              "Compendium.vagabond.perks.Item.Tj6jKf0G9zutW1Or"
+            ],
+            "perkAmount": 1,
+            "ignorePerkPrereqs": "all",
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 2,
+            "name": "Rover (5’)",
+            "description": "<p>Difficult Terrain doesn’t impede your walking Speed, and you have Climb and Swim.</p><p>Further, you have a 5’ bonus to Speed, which increases by 5’ every 4 Levels hereafter.</p>",
+            "statBonusPoints": 1,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 3,
+            "name": "Perk",
+            "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 1,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 4,
+            "name": "Lethal Precision (+1 damage)",
+            "description": "<p>When damage is dealt to your Mark by you or an Ally on your Turn, the Mark takes 1 extra damage. This extra damage increases by 1 every 4 Levels hereafter.</p>",
+            "statBonusPoints": 1,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 5,
+            "name": "Perk",
+            "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 1,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 6,
+            "name": "Rover (10’)",
+            "description": "<p>Difficult Terrain doesn’t impede your walking Speed, and you have Climb and Swim.</p><p>Further, you have a 5’ bonus to Speed, which increases by 5’ every 4 Levels hereafter.</p>",
+            "statBonusPoints": 1,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 6,
+            "name": "Killer Instinct",
+            "description": "<p>You can sense Beings within Far as if by Blindsight if they are missing any HP or are your Mark.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 7,
+            "name": "Perk",
+            "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 1,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 8,
+            "name": "Lethal Precision (+2 damage)",
+            "description": "<p>When damage is dealt to your Mark by you or an Ally on your Turn, the Mark takes 1 extra damage. This extra damage increases by 1 every 4 Levels hereafter.</p>",
+            "statBonusPoints": 1,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 9,
+            "name": "Perk",
+            "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 1,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 10,
+            "name": "Rover (15’)",
+            "description": "<p>Difficult Terrain doesn’t impede your walking Speed, and you have Climb and Swim.</p><p>Further, you have a 5’ bonus to Speed, which increases by 5’ every 4 Levels hereafter.</p>",
+            "statBonusPoints": 1,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 10,
+            "name": "Apex Predator",
+            "description": "<p>Your Mark is Weak to your attacks.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          }
+        ],
+        "manaSkill": null,
+        "castingStat": null,
+        "manaMultiplier": 0,
+        "skillGrant": {
+          "guaranteed": [
+            "melee",
+            "ranged",
+            "survival"
+          ],
+          "choices": []
+        },
+        "levelSpells": [],
+        "keyStats": [
+          "awareness"
+        ],
+        "suggestedStartingPacks": [
+          "Compendium.vagabond.starting-packs.Item.u632eTgHBKam3ZBc",
+          "Compendium.vagabond.starting-packs.Item.hW4AUwhRz98OJoDh"
+        ]
+      },
+      "effects": [
+        {
+          "name": "Hunter’s Mark",
+          "origin": "Compendium.vagabond.classes.Item.1qy5vhn6XcajyEZB",
+          "img": "icons/svg/aura.svg",
+          "_id": "hUnTeRmArK000001",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.markRules",
+                "value": "keenVicious",
+                "priority": null,
+                "type": "add"
+              },
+              {
+                "key": "system.markRules",
+                "value": "critByBonus",
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "permanent"
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!lBDBuX5Eu2HeC8hY.7CHLfwfeNwA15x5o.hUnTeRmArK000001"
+        },
+        {
+          "name": "Hunter’s Mark: Auto",
+          "origin": "Compendium.vagabond.classes.Item.1qy5vhn6XcajyEZB",
+          "img": "icons/svg/aura.svg",
+          "_id": "hUnTeRaUtOmArK01",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.huntersMarkTrigger",
+                "value": "true",
+                "priority": null,
+                "type": "override"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "Attacking a Target while you have no Mark makes it your Mark.",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "permanent",
+              "switchable": true
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!lBDBuX5Eu2HeC8hY.7CHLfwfeNwA15x5o.hUnTeRaUtOmArK01"
+        },
+        {
+          "name": "Rover",
+          "origin": "Compendium.vagabond.classes.Item.1qy5vhn6XcajyEZB",
+          "img": "icons/svg/aura.svg",
+          "_id": "hUnTeRrOvEr00001",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.speed.bonus",
+                "value": "5 * (1 + floor((@lvl - 2) / 4))",
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "permanent",
+              "minLevel": 2
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!lBDBuX5Eu2HeC8hY.7CHLfwfeNwA15x5o.hUnTeRrOvEr00001"
+        },
+        {
+          "name": "Lethal Precision",
+          "origin": "Compendium.vagabond.classes.Item.1qy5vhn6XcajyEZB",
+          "img": "icons/svg/aura.svg",
+          "_id": "hUnTeRlEtHaLpRe1",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.markDamageBonus",
+                "value": "floor(@lvl / 4)",
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "permanent",
+              "minLevel": 4
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!lBDBuX5Eu2HeC8hY.7CHLfwfeNwA15x5o.hUnTeRlEtHaLpRe1"
+        },
+        {
+          "name": "Apex Predator",
+          "origin": "Compendium.vagabond.classes.Item.1qy5vhn6XcajyEZB",
+          "img": "icons/svg/aura.svg",
+          "_id": "hUnTeRaPeXpReD01",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.markRules",
+                "value": "weak",
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "permanent",
+              "minLevel": 10
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!lBDBuX5Eu2HeC8hY.7CHLfwfeNwA15x5o.hUnTeRaPeXpReD01"
+        }
+      ],
+      "flags": {},
+      "_id": "7CHLfwfeNwA15x5o",
+      "_key": "!actors.items!lBDBuX5Eu2HeC8hY.7CHLfwfeNwA15x5o"
+    },
+    {
+      "name": "Scout",
+      "type": "perk",
+      "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
+      "system": {
+        "description": "<p>You can Forage or Hunt while you spend a Shift to Travel, and you can’t get lost during Travel.</p><p>Further, you gain a Studied die when you spend a Shift to Travel.</p>",
+        "prerequisites": {
+          "stats": [
+            {
+              "stat": "awareness",
+              "value": 4
+            }
+          ],
+          "statOrGroups": [],
+          "trainedSkills": [
+            "detect",
+            "survival"
+          ],
+          "trainedSkillOrGroups": [],
+          "spells": [],
+          "spellOrGroups": [],
+          "hasAnySpell": false,
+          "resources": [],
+          "resourceOrGroups": []
+        }
+      },
+      "effects": [],
+      "flags": {
+        "vagabond": {
+          "perkOrigin": {
+            "type": "level",
+            "level": 1
+          }
+        }
+      },
+      "_id": "HbmqDJFqLfqwwWuf",
+      "_key": "!actors.items!lBDBuX5Eu2HeC8hY.HbmqDJFqLfqwwWuf"
+    },
+    {
+      "name": "Skirmisher",
+      "type": "perk",
+      "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
+      "system": {
+        "description": "<p>Your penalty to Reflex Saves from Armor is reduced by 1, and you have a 5’ bonus to Speed.</p><p>Further, you can Move through spaces occupied by Beings.</p><p>You can take this Perk up to 3 times.</p>",
+        "prerequisites": {
+          "stats": [
+            {
+              "stat": "dexterity",
+              "value": 4
+            }
+          ],
+          "statOrGroups": [],
+          "trainedSkills": [],
+          "trainedSkillOrGroups": [
+            [
+              "finesse",
+              "melee"
+            ]
+          ],
+          "spells": [],
+          "spellOrGroups": [],
+          "hasAnySpell": false,
+          "resources": [],
+          "resourceOrGroups": []
+        }
+      },
+      "effects": [
+        {
+          "name": "Skirmisher: Reflex Penalty",
+          "origin": "Compendium.vagabond.perks.Item.hJjjazBCtdV7YIc5",
+          "img": "icons/svg/aura.svg",
+          "_id": "sKiRmReflexPen001",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.reflexPenaltyReduction",
+                "value": "1",
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "permanent"
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!lBDBuX5Eu2HeC8hY.d0FkBsuxnjaJYCKE.sKiRmReflexPen001"
+        },
+        {
+          "name": "Skirmisher: Speed",
+          "origin": "Compendium.vagabond.perks.Item.hJjjazBCtdV7YIc5",
+          "img": "icons/svg/aura.svg",
+          "_id": "sKiRmSpeedBonus001",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.speed.bonus",
+                "value": "5",
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "permanent"
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!lBDBuX5Eu2HeC8hY.d0FkBsuxnjaJYCKE.sKiRmSpeedBonus001"
+        }
+      ],
+      "flags": {
+        "vagabond": {
+          "perkOrigin": {
+            "type": "level",
+            "level": 1
+          }
+        }
+      },
+      "_id": "d0FkBsuxnjaJYCKE",
+      "_key": "!actors.items!lBDBuX5Eu2HeC8hY.d0FkBsuxnjaJYCKE"
+    }
+  ],
+  "effects": [],
+  "folder": null,
+  "flags": {
+    "vagabond": {
+      "buildGuide": true
+    }
+  },
+  "sort": 0,
+  "_id": "lBDBuX5Eu2HeC8hY",
+  "_key": "!actors!lBDBuX5Eu2HeC8hY"
+}

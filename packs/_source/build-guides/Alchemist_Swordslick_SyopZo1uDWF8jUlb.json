@@ -1,0 +1,1261 @@
+{
+  "name": "Alchemist - Swordslick",
+  "type": "character",
+  "img": "icons/consumables/potions/potion-flash-open-blue.webp",
+  "system": {
+    "attributes": {
+      "level": {
+        "value": 1
+      }
+    },
+    "stats": {
+      "might": {
+        "value": 4
+      },
+      "dexterity": {
+        "value": 5
+      },
+      "awareness": {
+        "value": 4
+      },
+      "reason": {
+        "value": 7
+      },
+      "presence": {
+        "value": 3
+      },
+      "luck": {
+        "value": 3
+      }
+    },
+    "skills": {
+      "arcana": {
+        "trained": true
+      },
+      "craft": {
+        "trained": true
+      },
+      "detect": {
+        "trained": true
+      },
+      "finesse": {
+        "trained": true
+      },
+      "medicine": {
+        "trained": true
+      },
+      "mysticism": {
+        "trained": true
+      },
+      "sneak": {
+        "trained": true
+      }
+    },
+    "health": {
+      "value": 4
+    },
+    "currentLuck": 3,
+    "currency": {
+      "gold": 0,
+      "silver": 47,
+      "copper": 0
+    },
+    "biography": "<h2>Alchemist - Swordslick — Build Guide</h2>\n<p><em>Core Rulebook v3 Alpha 3, Appendix C. This Hero is built at Level 1 with no Ancestry — pick one, rename the Hero, and adjust anything you like.</em></p>\n<p><strong>Starting Pack note:</strong> Alchemist (buy Longsword)</p>\n<p><strong>Bought with the Starting Pack's silver:</strong> Longsword (40s).</p>\n<h3>Stats at Level 10</h3>\n<p><strong>MIT</strong> 5 · <strong>DEX</strong> 6 · <strong>AWR</strong> 6 · <strong>RSN</strong> 7 · <strong>PRS</strong> 3 · <strong>LUK</strong> 4</p>\n<h3>Perks by Level</h3><ul>\n<li><strong>1st:</strong> Deft Hands, Salbenist <em>(already on this sheet)</em></li>\n<li><strong>3rd:</strong> Skirmisher</li>\n<li><strong>5th:</strong> Master Artisan</li>\n<li><strong>7th:</strong> Poisoner</li>\n<li><strong>9th:</strong> Ritualist</li>\n</ul>",
+    "details": {
+      "constructed": true,
+      "builderDismissed": false
+    }
+  },
+  "prototypeToken": {
+    "name": "Alchemist - Swordslick",
+    "actorLink": true,
+    "disposition": 1,
+    "texture": {
+      "src": "icons/consumables/potions/potion-flash-open-blue.webp"
+    },
+    "bar1": {
+      "attribute": "health"
+    }
+  },
+  "items": [
+    {
+      "name": "Backpack",
+      "type": "equipment",
+      "img": "icons/containers/bags/pack-leather-white-tan.webp",
+      "system": {
+        "description": "<p>1 Slot while held. Worn, it occupies no Slot and adds +3 Slots to your Inventory. You can only benefit from one at a time.</p>",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 5,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Outdoors",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "noSlotsWhenWorn": true,
+        "handsRequired": 0
+      },
+      "effects": [
+        {
+          "name": "Bonus Inventory",
+          "origin": "Compendium.vagabond.gear.Item.8o8KVSgpYsNFtGz2",
+          "img": "icons/svg/aura.svg",
+          "_id": "YJlQPYRINJ72Nf57",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.inventory.bonusSlots",
+                "value": 3,
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "<p>Backpack: +3 Inventory Slots while worn.</p>",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "when-equipped"
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!SyopZo1uDWF8jUlb.6qkq5XhoCgEVKuLI.YJlQPYRINJ72Nf57"
+        }
+      ],
+      "flags": {},
+      "_id": "6qkq5XhoCgEVKuLI",
+      "_key": "!actors.items!SyopZo1uDWF8jUlb.6qkq5XhoCgEVKuLI"
+    },
+    {
+      "name": "Bedroll",
+      "type": "equipment",
+      "img": "icons/sundries/survival/bedroll-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Personal Items",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "ZTOsN1KDQT6gGfUa",
+      "_key": "!actors.items!SyopZo1uDWF8jUlb.ZTOsN1KDQT6gGfUa"
+    },
+    {
+      "name": "Rations (1 day)",
+      "type": "equipment",
+      "img": "icons/consumables/food/cooked-grilled-ham-hock-glazed-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Cooking & Food",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "isSupply": true
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "o3ewwVXHtT0ZFqc3",
+      "_key": "!actors.items!SyopZo1uDWF8jUlb.o3ewwVXHtT0ZFqc3"
+    },
+    {
+      "name": "Rations (1 day)",
+      "type": "equipment",
+      "img": "icons/consumables/food/cooked-grilled-ham-hock-glazed-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Cooking & Food",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "isSupply": true
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "AGR9l6tvQ7oIsDL0",
+      "_key": "!actors.items!SyopZo1uDWF8jUlb.AGR9l6tvQ7oIsDL0"
+    },
+    {
+      "name": "Rations (1 day)",
+      "type": "equipment",
+      "img": "icons/consumables/food/cooked-grilled-ham-hock-glazed-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Cooking & Food",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "isSupply": true
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "qOEl3PikqGSMVnOi",
+      "_key": "!actors.items!SyopZo1uDWF8jUlb.qOEl3PikqGSMVnOi"
+    },
+    {
+      "name": "Rations (1 day)",
+      "type": "equipment",
+      "img": "icons/consumables/food/cooked-grilled-ham-hock-glazed-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Cooking & Food",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "isSupply": true
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "D5fiDGNaRfJvDyAL",
+      "_key": "!actors.items!SyopZo1uDWF8jUlb.D5fiDGNaRfJvDyAL"
+    },
+    {
+      "name": "Rations (1 day)",
+      "type": "equipment",
+      "img": "icons/consumables/food/cooked-grilled-ham-hock-glazed-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Cooking & Food",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "isSupply": true
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "JFEDAqVoZGcpbaHb",
+      "_key": "!actors.items!SyopZo1uDWF8jUlb.JFEDAqVoZGcpbaHb"
+    },
+    {
+      "name": "Torch",
+      "type": "equipment",
+      "img": "icons/sundries/lights/torch-brown-lit.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Outdoors",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "macro": {
+          "enabled": true,
+          "uuid": "",
+          "command": "game.vagabond.lightSource.use({ actor, item, token, light: {\"bright\": 25, \"dim\": 30, \"angle\": 360, \"color\": \"#ff9329\", \"alpha\": 0.65, \"attenuation\": 0.25, \"shadows\": 0.2, \"animation\": {\"type\": \"torch\", \"speed\": 5, \"intensity\": 5}}, durationMin: 60, clockOptions: ['lit','realtime','hour'] });",
+          "label": "Ignite",
+          "runAsGM": false
+        },
+        "handsRequired": 1
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "BKyJoqHDCu2chpTR",
+      "_key": "!actors.items!SyopZo1uDWF8jUlb.BKyJoqHDCu2chpTR"
+    },
+    {
+      "name": "Torch",
+      "type": "equipment",
+      "img": "icons/sundries/lights/torch-brown-lit.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Outdoors",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "macro": {
+          "enabled": true,
+          "uuid": "",
+          "command": "game.vagabond.lightSource.use({ actor, item, token, light: {\"bright\": 25, \"dim\": 30, \"angle\": 360, \"color\": \"#ff9329\", \"alpha\": 0.65, \"attenuation\": 0.25, \"shadows\": 0.2, \"animation\": {\"type\": \"torch\", \"speed\": 5, \"intensity\": 5}}, durationMin: 60, clockOptions: ['lit','realtime','hour'] });",
+          "label": "Ignite",
+          "runAsGM": false
+        },
+        "handsRequired": 1
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "PI0DLzGkdb6B64n5",
+      "_key": "!actors.items!SyopZo1uDWF8jUlb.PI0DLzGkdb6B64n5"
+    },
+    {
+      "name": "Waterskin",
+      "type": "equipment",
+      "img": "icons/sundries/survival/waterskin-leather-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 2,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Personal Items",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isBeverage": true
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "nbittOfyN9oC7q5l",
+      "_key": "!actors.items!SyopZo1uDWF8jUlb.nbittOfyN9oC7q5l"
+    },
+    {
+      "name": "Alchemy Tools",
+      "type": "equipment",
+      "img": "icons/tools/laboratory/vials-blue-pink.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 50,
+          "copper": 0
+        },
+        "baseSlots": 2,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Tools",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "toolKind": "alchemy"
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "yrpOH1UNPPf6aBaG",
+      "_key": "!actors.items!SyopZo1uDWF8jUlb.yrpOH1UNPPf6aBaG"
+    },
+    {
+      "name": "Materials (1g)",
+      "type": "equipment",
+      "img": "icons/commodities/materials/powder-red-green-yellow.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 1,
+          "silver": 0,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Alchemy & Medicine",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "craftMaterial": {
+          "enabled": true,
+          "key": "",
+          "value": 10000
+        },
+        "toolKind": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "daMbprGzDR3k8Wn2",
+      "_key": "!actors.items!SyopZo1uDWF8jUlb.daMbprGzDR3k8Wn2"
+    },
+    {
+      "name": "Light Armor",
+      "type": "equipment",
+      "img": "icons/equipment/chest/breastplate-quilted-brown.webp",
+      "system": {
+        "description": "<p><span class=\"fontstyle0\">Leather, hide, padded.</span></p><h4><span class=\"fontstyle0\">Equipping Armor</span></h4><p><span class=\"fontstyle2\">Equipping or unequipping Armor requires a Scene (10 minutes) to complete.</span> </p>",
+        "equipmentType": "armor",
+        "locked": true,
+        "equipped": true,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 50,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "worn",
+        "immunities": [],
+        "gearCategory": "",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 1
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "ajpUjmtr5xwI9zEN",
+      "_key": "!actors.items!SyopZo1uDWF8jUlb.ajpUjmtr5xwI9zEN"
+    },
+    {
+      "name": "Longsword",
+      "type": "equipment",
+      "img": "icons/weapons/swords/sword-guard-blue.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "weapon",
+        "locked": true,
+        "equipped": true,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 40,
+          "copper": 0
+        },
+        "baseSlots": 2,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "properties": [
+          "Keen"
+        ],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "V",
+        "damageOneHand": "d8",
+        "damageTwoHands": "d10",
+        "equipmentState": "oneHand",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "itemFx": {
+          "enabled": true,
+          "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Melee/Sword01*",
+          "hitDuration": 1000,
+          "hitOffsetX": -100
+        },
+        "damageTypeOneHand": "slashing",
+        "damageTypeTwoHands": "slashing"
+      },
+      "effects": [
+        {
+          "name": "Keen",
+          "img": "icons/svg/aura.svg",
+          "_id": "qoutjj8Zgl0SCZVB",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.attackCritBonus",
+                "type": "subtract",
+                "value": "1"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "Crits 1 lower on this weapon's Attack Check.",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "on-use"
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!SyopZo1uDWF8jUlb.2kDcjGLV70wke0io.qoutjj8Zgl0SCZVB"
+        }
+      ],
+      "flags": {},
+      "_id": "2kDcjGLV70wke0io",
+      "_key": "!actors.items!SyopZo1uDWF8jUlb.2kDcjGLV70wke0io"
+    },
+    {
+      "name": "Alchemist",
+      "type": "class",
+      "img": "icons/consumables/potions/potion-flash-open-blue.webp",
+      "system": {
+        "description": "<p><strong>Why respect knights when my potions can do anything that you can?</strong></p><p><em>—Justin Kuritzkes, Potion Seller</em></p><p>Often sequestered in a lab, alchemists study the essence of creation. They are as curious as they are resourceful, and always have “just the thing for this.”</p><h3>Iconic Alchemists</h3><ul><li><strong>The Colorman</strong>, <em>Sacré Bleu</em></li><li><strong>Dr. Jekyll</strong>, <em>Dr. Jekyll and Mr. Hyde</em></li><li><strong>Tessa Cade</strong>, <em>Defy the Night</em></li><li><strong>Walter White</strong>, <em>Breaking Bad</em></li></ul><h3>Playing Alchemist</h3><p>The alchemist is a low-defense, high-damage-and-utility blaster. It’s recommended you stay Far from Enemies to use Alchemical Items.</p><p><strong>Action:</strong> Use (Craft &amp; Attack)<br /><strong>Move:</strong> Backline<br /><strong>Starting Pack:</strong> Alchemist or Assassin<br /><strong>Key Stat:</strong> Reason<br /><strong>Complexity:</strong> ★★★★☆<br /><strong>Training:</strong> Arcana, Craft, Medicine</p><h3>Class Features</h3><table class=\"NormalTable\"><tbody><tr><td rowspan=\"2\"><p><strong>Level</strong></p></td><td rowspan=\"2\"><p><strong>Features</strong></p></td><td colspan=\"2\"><p><strong>Formulae</strong></p></td></tr><tr><td><p><strong>Known</strong></p></td><td><p><strong>Value</strong></p></td></tr><tr><td><p>1st</p></td><td><p>Alchemy, Catalyze</p></td><td><p>4</p></td><td><p>50s</p></td></tr><tr><td><p>2nd</p></td><td><p>Eureka (15+)</p></td><td><p>4</p></td><td><p>1g</p></td></tr><tr><td><p>3rd</p></td><td><p>Perk</p></td><td><p>4</p></td><td><p>1g 50s</p></td></tr><tr><td><p>4th</p></td><td><p>Potency (+1)</p></td><td><p>5</p></td><td><p>2g</p></td></tr><tr><td><p>5th</p></td><td><p>Perk</p></td><td><p>5</p></td><td><p>2g 50s</p></td></tr><tr><td><p>6th</p></td><td><p>Mix, Eureka (14+)</p></td><td><p>5</p></td><td><p>3g</p></td></tr><tr><td><p>7th</p></td><td><p>Perk</p></td><td><p>6</p></td><td><p>3g 50s</p></td></tr><tr><td><p>8th</p></td><td><p>Potency (+2)</p></td><td><p>6</p></td><td><p>4g</p></td></tr><tr><td><p>9th</p></td><td><p>Perk</p></td><td><p>6</p></td><td><p>4g 50s</p></td></tr><tr><td><p>10th</p></td><td><p>Prima Materia, Eureka (13+)</p></td><td><p>7</p></td><td><p>5g</p></td></tr></tbody></table>",
+        "isSpellcaster": false,
+        "levelFeatures": [
+          {
+            "level": 1,
+            "name": "Alchemy",
+            "description": "<p>Choose 4 Alchemical Items (p. 84) with a value no higher than (your Level × 50s). You only need 5s of Materials and Alchemy Tools equipped to Craft them.</p><p>You learn to Craft 1 other Alchemical Item this way every 3 Levels hereafter.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "formulaAmount": 4,
+            "formulaValueCap": "@attributes.level.value * 50"
+          },
+          {
+            "level": 1,
+            "name": "Catalyze",
+            "description": "<p>You gain the Deft Hands Perk (p. 68), and can Craft Alchemical Items with the Use Action.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [
+              "Compendium.vagabond.perks.Item.vtNfeEdWNUWvaeRM"
+            ],
+            "perkAmount": 1
+          },
+          {
+            "level": 2,
+            "name": "Eureka (15+)",
+            "description": "<p>When you pass a Craft Check by 15 or more, you gain a Studied die (p. 19). The roll required to do so is decreased by 1 every 4 Levels hereafter.</p>",
+            "statBonusPoints": 1,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0
+          },
+          {
+            "level": 3,
+            "name": "Perk",
+            "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 1
+          },
+          {
+            "level": 4,
+            "name": "Potency (+1)",
+            "description": "<p>You have a +1 bonus to each of the damage and healing dice of your Alchemical Items, and they can Explode. This bonus increases by 1 every 4 Levels hereafter.</p>",
+            "statBonusPoints": 1,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "formulaAmount": 1,
+            "formulaValueCap": "@attributes.level.value * 50"
+          },
+          {
+            "level": 5,
+            "name": "Perk",
+            "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 1
+          },
+          {
+            "level": 6,
+            "name": "Mix",
+            "description": "<p>You can combine two Alchemical Items together with the Use Action by spending a Studied die, causing both Items to occur simultaneously when used. The combined Item goes inert at the start of your next Turn.</p>",
+            "statBonusPoints": 1,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0
+          },
+          {
+            "level": 6,
+            "name": "Eureka (14+)",
+            "description": "<p>When you pass a Craft Check by 15 or more, you gain a Studied die (p. 19). The roll required to do so is decreased by 1 every 4 Levels hereafter.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0
+          },
+          {
+            "level": 7,
+            "name": "Perk",
+            "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 1,
+            "formulaAmount": 1,
+            "formulaValueCap": "@attributes.level.value * 50"
+          },
+          {
+            "level": 8,
+            "name": "Potency (+2)",
+            "description": "<p>You have a +1 bonus to each of the damage and healing dice of your Alchemical Items, and they can Explode. This bonus increases by 1 every 4 Levels hereafter.</p>",
+            "statBonusPoints": 1,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0
+          },
+          {
+            "level": 9,
+            "name": "Perk",
+            "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 1
+          },
+          {
+            "level": 10,
+            "name": "Prima Materia",
+            "description": "<p>You can spend a Studied die to Craft any Alchemical Item with a value as high as 10g without Materials.</p>",
+            "statBonusPoints": 1,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "formulaAmount": 1,
+            "formulaValueCap": "@attributes.level.value * 50"
+          },
+          {
+            "level": 10,
+            "name": "Eureka (13+)",
+            "description": "<p>When you pass a Craft Check by 15 or more, you gain a Studied die (p. 19). The roll required to do so is decreased by 1 every 4 Levels hereafter.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0
+          }
+        ],
+        "manaSkill": null,
+        "castingStat": null,
+        "manaMultiplier": 0,
+        "skillGrant": {
+          "guaranteed": [
+            "arcana",
+            "craft",
+            "medicine"
+          ],
+          "choices": []
+        },
+        "levelSpells": [],
+        "keyStat": "reason",
+        "keyStats": [
+          "reason"
+        ],
+        "suggestedStartingPacks": [
+          "Compendium.vagabond.starting-packs.Item.Km7GTFMeCkOvr986",
+          "Compendium.vagabond.starting-packs.Item.JXGh2kMRaR4Wyh5w"
+        ]
+      },
+      "effects": [
+        {
+          "name": "Catalyze",
+          "origin": "Compendium.vagabond.classes.Item.4kXK5bZHEb3PMzLy",
+          "img": "icons/svg/aura.svg",
+          "_id": "aLcH1CaTaLyZe001",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.craft.catalyze",
+                "value": "1",
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "permanent"
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!SyopZo1uDWF8jUlb.Of1pciAAeGu2U7CR.aLcH1CaTaLyZe001"
+        },
+        {
+          "name": "Eureka",
+          "origin": "Compendium.vagabond.classes.Item.4kXK5bZHEb3PMzLy",
+          "img": "icons/svg/aura.svg",
+          "_id": "aLcH2EuReKa00002",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.craft.eurekaMargin",
+                "value": "15 - floor(max(0, @lvl - 2) / 4)",
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "permanent",
+              "minLevel": 2
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!SyopZo1uDWF8jUlb.Of1pciAAeGu2U7CR.aLcH2EuReKa00002"
+        },
+        {
+          "name": "Potency",
+          "origin": "Compendium.vagabond.classes.Item.4kXK5bZHEb3PMzLy",
+          "img": "icons/svg/aura.svg",
+          "_id": "aLcH3PoTeNcY0003",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.alchemicalBonusPerDamageDie",
+                "value": "floor(@lvl / 4)",
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "permanent",
+              "minLevel": 4
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!SyopZo1uDWF8jUlb.Of1pciAAeGu2U7CR.aLcH3PoTeNcY0003"
+        },
+        {
+          "name": "Potency: Explode",
+          "origin": "Compendium.vagabond.classes.Item.4kXK5bZHEb3PMzLy",
+          "img": "icons/svg/aura.svg",
+          "_id": "aLcH4PoTeXpLd004",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.craft.alchemicalExplode",
+                "value": "min(1, floor(@lvl / 4))",
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "permanent",
+              "minLevel": 4
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!SyopZo1uDWF8jUlb.Of1pciAAeGu2U7CR.aLcH4PoTeXpLd004"
+        },
+        {
+          "name": "Mix",
+          "origin": "Compendium.vagabond.classes.Item.4kXK5bZHEb3PMzLy",
+          "img": "icons/svg/aura.svg",
+          "_id": "aLcH5MiXfEaTuR05",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.craft.mix",
+                "value": "1",
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "permanent",
+              "minLevel": 6
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!SyopZo1uDWF8jUlb.Of1pciAAeGu2U7CR.aLcH5MiXfEaTuR05"
+        },
+        {
+          "name": "Prima Materia",
+          "origin": "Compendium.vagabond.classes.Item.4kXK5bZHEb3PMzLy",
+          "img": "icons/svg/aura.svg",
+          "_id": "aLcH6PrImAmAtR06",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.craft.primaMateria",
+                "value": "1",
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "permanent",
+              "minLevel": 10
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!SyopZo1uDWF8jUlb.Of1pciAAeGu2U7CR.aLcH6PrImAmAtR06"
+        }
+      ],
+      "flags": {},
+      "_id": "Of1pciAAeGu2U7CR",
+      "_key": "!actors.items!SyopZo1uDWF8jUlb.Of1pciAAeGu2U7CR"
+    },
+    {
+      "name": "Deft Hands",
+      "type": "perk",
+      "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
+      "system": {
+        "description": "<p>You can skip your Move to take the Use Action.</p>",
+        "prerequisites": {
+          "stats": [
+            {
+              "stat": "dexterity",
+              "value": 4
+            }
+          ],
+          "statOrGroups": [],
+          "trainedSkills": [
+            "finesse"
+          ],
+          "trainedSkillOrGroups": [],
+          "spells": [],
+          "spellOrGroups": [],
+          "hasAnySpell": false,
+          "resources": [],
+          "resourceOrGroups": []
+        }
+      },
+      "effects": [],
+      "flags": {
+        "vagabond": {
+          "perkOrigin": {
+            "type": "level",
+            "level": 1
+          }
+        }
+      },
+      "_id": "pELs5jLtVesDnldL",
+      "_key": "!actors.items!SyopZo1uDWF8jUlb.pELs5jLtVesDnldL"
+    },
+    {
+      "name": "Salbenist",
+      "type": "perk",
+      "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
+      "system": {
+        "description": "<p>You can conduct a Ritual (p. 10) with a Weapon and an oil. After the Ritual, the following rules apply until you perform it again:</p><ul><li><p>You can use Craft to attack with the Weapon.</p></li><li><p>You can will the oil to coat the Weapon on your Turn (no Action) which doesn’t consume it. It remains coated until you dismiss it or when it is coated with another oil.</p></li></ul>",
+        "prerequisites": {
+          "stats": [],
+          "statOrGroups": [],
+          "trainedSkills": [
+            "craft",
+            "mysticism"
+          ],
+          "trainedSkillOrGroups": [],
+          "spells": [],
+          "spellOrGroups": [],
+          "hasAnySpell": false,
+          "resources": [],
+          "resourceOrGroups": []
+        }
+      },
+      "effects": [],
+      "flags": {
+        "vagabond": {
+          "perkOrigin": {
+            "type": "level",
+            "level": 1
+          }
+        }
+      },
+      "_id": "X9IzjBzgczsnQGX1",
+      "_key": "!actors.items!SyopZo1uDWF8jUlb.X9IzjBzgczsnQGX1"
+    }
+  ],
+  "effects": [],
+  "folder": null,
+  "flags": {
+    "vagabond": {
+      "buildGuide": true
+    }
+  },
+  "sort": 0,
+  "_id": "SyopZo1uDWF8jUlb",
+  "_key": "!actors!SyopZo1uDWF8jUlb"
+}

@@ -1,0 +1,2616 @@
+[
+  {
+    "title": "Alchemist - Apothecary",
+    "stats": {
+      "1": {
+        "might": 3,
+        "dexterity": 4,
+        "awareness": 5,
+        "reason": 6,
+        "presence": 4,
+        "luck": 3
+      },
+      "10": {
+        "might": 4,
+        "dexterity": 6,
+        "awareness": 7,
+        "reason": 7,
+        "presence": 4,
+        "luck": 3
+      }
+    },
+    "training": [
+      "Arcana",
+      "Craft",
+      "Detect",
+      "Finesse",
+      "Medicine",
+      "Ranged",
+      "Survival"
+    ],
+    "startingPack": "Alchemist",
+    "weapon": "Alchemy Tools, Alchemist's Fire",
+    "armor": "Light Armor",
+    "spells": "-",
+    "perks": [
+      {
+        "level": 1,
+        "perks": [
+          "Deft Hands",
+          "Medic"
+        ]
+      },
+      {
+        "level": 3,
+        "perks": [
+          "Bookworm"
+        ]
+      },
+      {
+        "level": 5,
+        "perks": [
+          "Master Artisan"
+        ]
+      },
+      {
+        "level": 7,
+        "perks": [
+          "Sage"
+        ]
+      },
+      {
+        "level": 9,
+        "perks": [
+          "Heightened Intellect"
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Alchemist - Bomber",
+    "stats": {
+      "1": {
+        "might": 4,
+        "dexterity": 5,
+        "awareness": 4,
+        "reason": 7,
+        "presence": 3,
+        "luck": 3
+      },
+      "10": {
+        "might": 5,
+        "dexterity": 6,
+        "awareness": 7,
+        "reason": 7,
+        "presence": 3,
+        "luck": 3
+      }
+    },
+    "training": [
+      "Arcana",
+      "Craft",
+      "Detect",
+      "Finesse",
+      "Medicine",
+      "Ranged",
+      "Sneak"
+    ],
+    "startingPack": "Alchemist",
+    "weapon": "Alchemy Tools, Alchemist's Fire",
+    "armor": "Light Armor",
+    "spells": "-",
+    "perks": [
+      {
+        "level": 1,
+        "perks": [
+          "Deft Hands",
+          "Knife Juggler"
+        ]
+      },
+      {
+        "level": 3,
+        "perks": [
+          "Bookworm"
+        ]
+      },
+      {
+        "level": 5,
+        "perks": [
+          "Master Artisan"
+        ]
+      },
+      {
+        "level": 7,
+        "perks": [
+          "Heightened Intellect"
+        ]
+      },
+      {
+        "level": 9,
+        "perks": [
+          "Quick Draw"
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Alchemist - Swordslick",
+    "stats": {
+      "1": {
+        "might": 4,
+        "dexterity": 5,
+        "awareness": 4,
+        "reason": 7,
+        "presence": 3,
+        "luck": 3
+      },
+      "10": {
+        "might": 5,
+        "dexterity": 6,
+        "awareness": 6,
+        "reason": 7,
+        "presence": 3,
+        "luck": 4
+      }
+    },
+    "training": [
+      "Arcana",
+      "Craft",
+      "Detect",
+      "Finesse",
+      "Medicine",
+      "Mysticism",
+      "Sneak"
+    ],
+    "startingPack": "Alchemist (buy Longsword)",
+    "weapon": "Longsword",
+    "armor": "Light Armor",
+    "spells": "-",
+    "perks": [
+      {
+        "level": 1,
+        "perks": [
+          "Deft Hands",
+          "Salbenist"
+        ]
+      },
+      {
+        "level": 3,
+        "perks": [
+          "Skirmisher"
+        ]
+      },
+      {
+        "level": 5,
+        "perks": [
+          "Master Artisan"
+        ]
+      },
+      {
+        "level": 7,
+        "perks": [
+          "Poisoner"
+        ]
+      },
+      {
+        "level": 9,
+        "perks": [
+          "Ritualist"
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Barbarian",
+    "stats": {
+      "1": {
+        "might": 7,
+        "dexterity": 5,
+        "awareness": 4,
+        "reason": 3,
+        "presence": 3,
+        "luck": 4
+      },
+      "10": {
+        "might": 7,
+        "dexterity": 7,
+        "awareness": 7,
+        "reason": 3,
+        "presence": 3,
+        "luck": 4
+      }
+    },
+    "training": [
+      "Brawl",
+      "Melee",
+      "Survival",
+      "Stealth"
+    ],
+    "startingPack": "Warrior",
+    "weapon": "Greataxe",
+    "armor": "Light Armor",
+    "spells": "-",
+    "perks": [
+      {
+        "level": 1,
+        "perks": [
+          "Interceptor",
+          "Tough"
+        ]
+      },
+      {
+        "level": 3,
+        "perks": [
+          "Heavy Arms"
+        ]
+      },
+      {
+        "level": 5,
+        "perks": [
+          "Sentinel"
+        ]
+      },
+      {
+        "level": 7,
+        "perks": [
+          "Second Wind"
+        ]
+      },
+      {
+        "level": 9,
+        "perks": [
+          "Limit Break"
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Bard",
+    "stats": {
+      "1": {
+        "might": 3,
+        "dexterity": 5,
+        "awareness": 4,
+        "reason": 3,
+        "presence": 7,
+        "luck": 4
+      },
+      "10": {
+        "might": 4,
+        "dexterity": 6,
+        "awareness": 4,
+        "reason": 3,
+        "presence": 7,
+        "luck": 7
+      }
+    },
+    "training": [
+      "Finesse",
+      "Influence",
+      "Leadership",
+      "Performance",
+      "Stealth"
+    ],
+    "startingPack": "Musician",
+    "weapon": "Rapier",
+    "armor": "Light Armor",
+    "spells": "-",
+    "perks": [
+      {
+        "level": 1,
+        "perks": [
+          "Heightened Magnetism",
+          "Silver Tongued"
+        ]
+      },
+      {
+        "level": 3,
+        "perks": [
+          "Rally"
+        ]
+      },
+      {
+        "level": 5,
+        "perks": [
+          "Impersonator"
+        ]
+      },
+      {
+        "level": 7,
+        "perks": [
+          "Inspiring Presence"
+        ]
+      },
+      {
+        "level": 9,
+        "perks": [
+          "Favors the Bold"
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Dancer",
+    "stats": {
+      "1": {
+        "might": 4,
+        "dexterity": 7,
+        "awareness": 4,
+        "reason": 3,
+        "presence": 5,
+        "luck": 3
+      },
+      "10": {
+        "might": 5,
+        "dexterity": 7,
+        "awareness": 7,
+        "reason": 3,
+        "presence": 6,
+        "luck": 3
+      }
+    },
+    "training": [
+      "Finesse",
+      "Influence",
+      "Performance",
+      "Stealth"
+    ],
+    "startingPack": "Courtesan (buy Light Armor)",
+    "weapon": "Dagger (2)",
+    "armor": "Light Armor",
+    "spells": "-",
+    "perks": [
+      {
+        "level": 1,
+        "perks": [
+          "Fallaway Reverse",
+          "Skirmisher"
+        ]
+      },
+      {
+        "level": 3,
+        "perks": [
+          "Perfect Parry"
+        ]
+      },
+      {
+        "level": 5,
+        "perks": [
+          "Inspiring Presence"
+        ]
+      },
+      {
+        "level": 7,
+        "perks": [
+          "Bravado"
+        ]
+      },
+      {
+        "level": 9,
+        "perks": [
+          "Endless Stamina"
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Druid",
+    "stats": {
+      "1": {
+        "might": 5,
+        "dexterity": 4,
+        "awareness": 7,
+        "reason": 3,
+        "presence": 4,
+        "luck": 3
+      },
+      "10": {
+        "might": 7,
+        "dexterity": 6,
+        "awareness": 7,
+        "reason": 4,
+        "presence": 4,
+        "luck": 3
+      }
+    },
+    "training": [
+      "Brawl",
+      "Detect",
+      "Mysticism",
+      "Survival"
+    ],
+    "startingPack": "Hermit",
+    "weapon": "Staff, Trinket",
+    "armor": "Medium Armor",
+    "spells": "Polymorph, Sprout; get Life, Terraform, and Ward later.",
+    "perks": [
+      {
+        "level": 1,
+        "perks": [
+          "Shapechanger",
+          "Snareroot Trapper"
+        ]
+      },
+      {
+        "level": 3,
+        "perks": [
+          "Sixth Sense"
+        ]
+      },
+      {
+        "level": 5,
+        "perks": [
+          "Tough"
+        ]
+      },
+      {
+        "level": 7,
+        "perks": [
+          "Cross Counter"
+        ]
+      },
+      {
+        "level": 9,
+        "perks": [
+          "Heightened Cognition"
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Fighter - Frontline",
+    "stats": {
+      "1": {
+        "might": 7,
+        "dexterity": 5,
+        "awareness": 4,
+        "reason": 3,
+        "presence": 3,
+        "luck": 4
+      },
+      "10": {
+        "might": 7,
+        "dexterity": 7,
+        "awareness": 7,
+        "reason": 3,
+        "presence": 3,
+        "luck": 4
+      }
+    },
+    "training": [
+      "Brawl",
+      "Detect",
+      "Melee",
+      "Ranged"
+    ],
+    "startingPack": "Sellsword",
+    "weapon": "Longsword, Shield",
+    "armor": "Medium Armor",
+    "spells": "-",
+    "perks": [
+      {
+        "level": 1,
+        "perks": [
+          "Bravado",
+          "Heavy Arms",
+          "Patience"
+        ]
+      },
+      {
+        "level": 3,
+        "perks": [
+          "Cross Counter"
+        ]
+      },
+      {
+        "level": 4,
+        "perks": [
+          "Limit Break"
+        ]
+      },
+      {
+        "level": 5,
+        "perks": [
+          "Sentinel"
+        ]
+      },
+      {
+        "level": 7,
+        "perks": [
+          "Endless Stamina"
+        ]
+      },
+      {
+        "level": 8,
+        "perks": [
+          "Tough"
+        ]
+      },
+      {
+        "level": 9,
+        "perks": [
+          "Second Wind"
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Fighter - Backline",
+    "stats": {
+      "1": {
+        "might": 4,
+        "dexterity": 5,
+        "awareness": 7,
+        "reason": 3,
+        "presence": 3,
+        "luck": 4
+      },
+      "10": {
+        "might": 4,
+        "dexterity": 7,
+        "awareness": 7,
+        "reason": 3,
+        "presence": 3,
+        "luck": 7
+      }
+    },
+    "training": [
+      "Detect",
+      "Melee",
+      "Ranged",
+      "Survival"
+    ],
+    "startingPack": "Scout",
+    "weapon": "Longbow",
+    "armor": "Medium Armor",
+    "spells": "-",
+    "perks": [
+      {
+        "level": 1,
+        "perks": [
+          "Marksmanship",
+          "Skirmisher",
+          "Steady Aim"
+        ]
+      },
+      {
+        "level": 3,
+        "perks": [
+          "Quick Draw"
+        ]
+      },
+      {
+        "level": 4,
+        "perks": [
+          "Sharpshooter"
+        ]
+      },
+      {
+        "level": 5,
+        "perks": [
+          "Guardian Angel"
+        ]
+      },
+      {
+        "level": 7,
+        "perks": [
+          "Ricochet"
+        ]
+      },
+      {
+        "level": 8,
+        "perks": [
+          "Sixth Sense"
+        ]
+      },
+      {
+        "level": 9,
+        "perks": [
+          "Steady Aim"
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Gunslinger - Maverick",
+    "stats": {
+      "1": {
+        "might": 4,
+        "dexterity": 4,
+        "awareness": 7,
+        "reason": 3,
+        "presence": 3,
+        "luck": 5
+      },
+      "10": {
+        "might": 5,
+        "dexterity": 7,
+        "awareness": 7,
+        "reason": 3,
+        "presence": 3,
+        "luck": 6
+      }
+    },
+    "training": [
+      "Detect",
+      "Finesse",
+      "Ranged",
+      "Survival"
+    ],
+    "startingPack": "Highwayman",
+    "weapon": "Shotgun",
+    "armor": "Light Armor",
+    "spells": "-",
+    "perks": [
+      {
+        "level": 1,
+        "perks": [
+          "Ambusher",
+          "Quick Draw"
+        ]
+      },
+      {
+        "level": 3,
+        "perks": [
+          "Akimbo Trigger"
+        ]
+      },
+      {
+        "level": 5,
+        "perks": [
+          "Marksmanship"
+        ]
+      },
+      {
+        "level": 7,
+        "perks": [
+          "Ricochet"
+        ]
+      },
+      {
+        "level": 9,
+        "perks": [
+          "Sharpshooter"
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Gunslinger - Sniper",
+    "stats": {
+      "1": {
+        "might": 4,
+        "dexterity": 4,
+        "awareness": 7,
+        "reason": 3,
+        "presence": 3,
+        "luck": 5
+      },
+      "10": {
+        "might": 5,
+        "dexterity": 7,
+        "awareness": 7,
+        "reason": 3,
+        "presence": 3,
+        "luck": 6
+      }
+    },
+    "training": [
+      "Detect",
+      "Ranged",
+      "Sneak",
+      "Survival"
+    ],
+    "startingPack": "Bounty Hunter",
+    "weapon": "Rifle",
+    "armor": "Light Armor",
+    "spells": "-",
+    "perks": [
+      {
+        "level": 1,
+        "perks": [
+          "Ambusher",
+          "Quick Draw"
+        ]
+      },
+      {
+        "level": 3,
+        "perks": [
+          "Sharpshooter"
+        ]
+      },
+      {
+        "level": 5,
+        "perks": [
+          "Marksmanship"
+        ]
+      },
+      {
+        "level": 7,
+        "perks": [
+          "Guardian Angel"
+        ]
+      },
+      {
+        "level": 9,
+        "perks": [
+          "Steady Aim"
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Hunter - Pathfinder",
+    "stats": {
+      "1": {
+        "might": 4,
+        "dexterity": 5,
+        "awareness": 7,
+        "reason": 4,
+        "presence": 3,
+        "luck": 3
+      },
+      "10": {
+        "might": 5,
+        "dexterity": 7,
+        "awareness": 7,
+        "reason": 4,
+        "presence": 4,
+        "luck": 4
+      }
+    },
+    "training": [
+      "Detect",
+      "Melee",
+      "Ranged",
+      "Sneak",
+      "Survival"
+    ],
+    "startingPack": "Scout",
+    "weapon": "Longbow",
+    "armor": "Light Armor",
+    "spells": "-",
+    "perks": [
+      {
+        "level": 1,
+        "perks": [
+          "Scout",
+          "Sharpshooter"
+        ]
+      },
+      {
+        "level": 3,
+        "perks": [
+          "Cryptozoologist"
+        ]
+      },
+      {
+        "level": 5,
+        "perks": [
+          "Ambusher"
+        ]
+      },
+      {
+        "level": 7,
+        "perks": [
+          "Marksmanship"
+        ]
+      },
+      {
+        "level": 9,
+        "perks": [
+          "Heightened Cognition"
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Hunter - Stalker",
+    "stats": {
+      "1": {
+        "might": 4,
+        "dexterity": 7,
+        "awareness": 5,
+        "reason": 4,
+        "presence": 3,
+        "luck": 3
+      },
+      "10": {
+        "might": 6,
+        "dexterity": 7,
+        "awareness": 7,
+        "reason": 4,
+        "presence": 3,
+        "luck": 4
+      }
+    },
+    "training": [
+      "Finesse",
+      "Leadership",
+      "Melee",
+      "Ranged",
+      "Survival"
+    ],
+    "startingPack": "Sellsword",
+    "weapon": "Longsword, Shortsword",
+    "armor": "Medium Armor",
+    "spells": "-",
+    "perks": [
+      {
+        "level": 1,
+        "perks": [
+          "Scout",
+          "Skirmisher"
+        ]
+      },
+      {
+        "level": 3,
+        "perks": [
+          "Strategist"
+        ]
+      },
+      {
+        "level": 5,
+        "perks": [
+          "Cryptozoologist"
+        ]
+      },
+      {
+        "level": 7,
+        "perks": [
+          "Fallaway Reverse"
+        ]
+      },
+      {
+        "level": 9,
+        "perks": [
+          "Heightened Cognition"
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Luminary - Savior",
+    "stats": {
+      "1": {
+        "might": 4,
+        "dexterity": 3,
+        "awareness": 7,
+        "reason": 4,
+        "presence": 5,
+        "luck": 3
+      },
+      "10": {
+        "might": 6,
+        "dexterity": 4,
+        "awareness": 7,
+        "reason": 5,
+        "presence": 6,
+        "luck": 3
+      }
+    },
+    "training": [
+      "Influence",
+      "Medicine",
+      "Melee",
+      "Mysticism"
+    ],
+    "startingPack": "Devout",
+    "weapon": "Mace, Trinket",
+    "armor": "Medium Armor",
+    "spells": "Bless, Life, Light, Ward; get Guide, Hold, Hymn, and Tempo later",
+    "perks": [
+      {
+        "level": 1,
+        "perks": [
+          "Abjurer",
+          "Assured Healer"
+        ]
+      },
+      {
+        "level": 3,
+        "perks": [
+          "Medic"
+        ]
+      },
+      {
+        "level": 5,
+        "perks": [
+          "Bookworm"
+        ]
+      },
+      {
+        "level": 7,
+        "perks": [
+          "Heightened Cognition"
+        ]
+      },
+      {
+        "level": 9,
+        "perks": [
+          "Secret of Mana"
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Luminary - Theurge",
+    "stats": {
+      "1": {
+        "might": 3,
+        "dexterity": 3,
+        "awareness": 7,
+        "reason": 4,
+        "presence": 5,
+        "luck": 3
+      },
+      "10": {
+        "might": 3,
+        "dexterity": 6,
+        "awareness": 7,
+        "reason": 6,
+        "presence": 6,
+        "luck": 3
+      }
+    },
+    "training": [
+      "Influence",
+      "Medicine",
+      "Melee",
+      "Mysticism"
+    ],
+    "startingPack": "Devout",
+    "weapon": "Mace, Trinket",
+    "armor": "Light Armor",
+    "spells": "Bless, Life, Light, Tempo; get Enchant, Exalt, Guide, and Moon later",
+    "perks": [
+      {
+        "level": 1,
+        "perks": [
+          "Assured Healer",
+          "Vehement Magic"
+        ]
+      },
+      {
+        "level": 3,
+        "perks": [
+          "Briar Healer"
+        ]
+      },
+      {
+        "level": 5,
+        "perks": [
+          "Celestial Illuminator"
+        ]
+      },
+      {
+        "level": 7,
+        "perks": [
+          "Heightened Cognition"
+        ]
+      },
+      {
+        "level": 9,
+        "perks": [
+          "Secret of Mana"
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Magus - Arcane Archer",
+    "stats": {
+      "1": {
+        "might": 3,
+        "dexterity": 3,
+        "awareness": 7,
+        "reason": 4,
+        "presence": 5,
+        "luck": 3
+      },
+      "10": {
+        "might": 3,
+        "dexterity": 6,
+        "awareness": 7,
+        "reason": 6,
+        "presence": 6,
+        "luck": 3
+      }
+    },
+    "training": [],
+    "startingPack": "",
+    "weapon": "",
+    "armor": "Light Armor",
+    "spells": "Bless, Life; get Guide, and Moon later",
+    "perks": [
+      {
+        "level": 1,
+        "perks": [
+          "Assured Healer",
+          "Vehement Magic"
+        ]
+      },
+      {
+        "level": 3,
+        "perks": [
+          "Briar Healer"
+        ]
+      },
+      {
+        "level": 5,
+        "perks": [
+          "Celestial Illuminator"
+        ]
+      },
+      {
+        "level": 7,
+        "perks": [
+          "Heightened Cognition"
+        ]
+      },
+      {
+        "level": 9,
+        "perks": [
+          "Secret of Mana"
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Magus - Card Thrower",
+    "stats": {
+      "1": {
+        "might": 3,
+        "dexterity": 3,
+        "awareness": 7,
+        "reason": 4,
+        "presence": 5,
+        "luck": 3
+      },
+      "10": {
+        "might": 3,
+        "dexterity": 6,
+        "awareness": 7,
+        "reason": 4,
+        "presence": 5,
+        "luck": 5
+      }
+    },
+    "training": [
+      "Craft",
+      "Detect",
+      "Finesse",
+      "Influence",
+      "Mysticism"
+    ],
+    "startingPack": "Fortune Teller",
+    "weapon": "Tarot Cards",
+    "armor": "Light Armor",
+    "spells": "Guide, Kinesis, Speak, Truth; get Bless, Dispel, Enchant, and Ward later",
+    "perks": [
+      {
+        "level": 1,
+        "perks": [
+          "Bookworm",
+          "Cardistry"
+        ]
+      },
+      {
+        "level": 3,
+        "perks": [
+          "Ambusher"
+        ]
+      },
+      {
+        "level": 5,
+        "perks": [
+          "Quick Draw"
+        ]
+      },
+      {
+        "level": 7,
+        "perks": [
+          "Ricochet"
+        ]
+      },
+      {
+        "level": 9,
+        "perks": [
+          "Esoteric Recall"
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Magus - Spellblade",
+    "stats": {
+      "1": {
+        "might": 3,
+        "dexterity": 3,
+        "awareness": 7,
+        "reason": 4,
+        "presence": 5,
+        "luck": 3
+      },
+      "10": {
+        "might": 3,
+        "dexterity": 6,
+        "awareness": 7,
+        "reason": 6,
+        "presence": 6,
+        "luck": 3
+      }
+    },
+    "training": [
+      "Influence",
+      "Medicine",
+      "Melee",
+      "Mysticism"
+    ],
+    "startingPack": "Devout",
+    "weapon": "Mace, Trinket",
+    "armor": "Light Armor",
+    "spells": "Bless, Life, Light, Tempo; get Enchant, Exalt, Guide, and Moon later",
+    "perks": [
+      {
+        "level": 1,
+        "perks": [
+          "Assured Healer",
+          "Vehement Magic"
+        ]
+      },
+      {
+        "level": 3,
+        "perks": [
+          "Briar Healer"
+        ]
+      },
+      {
+        "level": 5,
+        "perks": [
+          "Celestial Illuminator"
+        ]
+      },
+      {
+        "level": 7,
+        "perks": [
+          "Heightened Cognition"
+        ]
+      },
+      {
+        "level": 9,
+        "perks": [
+          "Secret of Mana"
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Merchant - Huckster",
+    "stats": {
+      "1": {
+        "might": 3,
+        "dexterity": 5,
+        "awareness": 5,
+        "reason": 5,
+        "presence": 5,
+        "luck": 3
+      },
+      "10": {
+        "might": 3,
+        "dexterity": 7,
+        "awareness": 7,
+        "reason": 5,
+        "presence": 6,
+        "luck": 4
+      }
+    },
+    "training": [
+      "Craft",
+      "Finesse",
+      "Influence",
+      "Ranged",
+      "Sneak"
+    ],
+    "startingPack": "Conman",
+    "weapon": "Dagger",
+    "armor": "Light Armor",
+    "spells": "-",
+    "perks": [
+      {
+        "level": 1,
+        "perks": [
+          "Deft Hands",
+          "Impersonator"
+        ]
+      },
+      {
+        "level": 3,
+        "perks": [
+          "Master Breaker"
+        ]
+      },
+      {
+        "level": 5,
+        "perks": [
+          "Knife Juggler"
+        ]
+      },
+      {
+        "level": 7,
+        "perks": [
+          "Resourceful"
+        ]
+      },
+      {
+        "level": 9,
+        "perks": [
+          "Ambusher"
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Merchant - Peddler",
+    "stats": {
+      "1": {
+        "might": 3,
+        "dexterity": 3,
+        "awareness": 4,
+        "reason": 4,
+        "presence": 5,
+        "luck": 7
+      },
+      "10": {
+        "might": 3,
+        "dexterity": 3,
+        "awareness": 5,
+        "reason": 7,
+        "presence": 7,
+        "luck": 7
+      }
+    },
+    "training": [
+      "Arcana",
+      "Craft",
+      "Influence",
+      "Performance"
+    ],
+    "startingPack": "Envoy",
+    "weapon": "Shortsword",
+    "armor": "Light Armor",
+    "spells": "-",
+    "perks": [
+      {
+        "level": 1,
+        "perks": [
+          "Deft Hands",
+          "Resourceful"
+        ]
+      },
+      {
+        "level": 3,
+        "perks": [
+          "Favors the Bold"
+        ]
+      },
+      {
+        "level": 5,
+        "perks": [
+          "Heightened Magnetism"
+        ]
+      },
+      {
+        "level": 7,
+        "perks": [
+          "Master Artisan"
+        ]
+      },
+      {
+        "level": 9,
+        "perks": [
+          "Advancement"
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Pugilist",
+    "stats": {
+      "1": {
+        "might": 7,
+        "dexterity": 5,
+        "awareness": 4,
+        "reason": 3,
+        "presence": 3,
+        "luck": 4
+      },
+      "10": {
+        "might": 7,
+        "dexterity": 6,
+        "awareness": 5,
+        "reason": 3,
+        "presence": 5,
+        "luck": 5
+      }
+    },
+    "training": [
+      "Brawl",
+      "Detect",
+      "Influence",
+      "Sneak"
+    ],
+    "startingPack": "Brawler",
+    "weapon": "Caestus (2)",
+    "armor": "Light Armor",
+    "spells": "-",
+    "perks": [
+      {
+        "level": 1,
+        "perks": [
+          "Bully",
+          "Dusted Knuckle"
+        ]
+      },
+      {
+        "level": 3,
+        "perks": [
+          "Check Hook"
+        ]
+      },
+      {
+        "level": 5,
+        "perks": [
+          "Patience"
+        ]
+      },
+      {
+        "level": 7,
+        "perks": [
+          "Tough"
+        ]
+      },
+      {
+        "level": 9,
+        "perks": [
+          "Sentinel"
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Revelator - Soak Tank",
+    "stats": {
+      "1": {
+        "might": 6,
+        "dexterity": 3,
+        "awareness": 4,
+        "reason": 4,
+        "presence": 6,
+        "luck": 3
+      },
+      "10": {
+        "might": 7,
+        "dexterity": 3,
+        "awareness": 5,
+        "reason": 5,
+        "presence": 7,
+        "luck": 4
+      }
+    },
+    "training": [
+      "Influence",
+      "Leadership",
+      "Melee",
+      "Medicine"
+    ],
+    "startingPack": "Knight",
+    "weapon": "Longsword",
+    "armor": "Heavy Armor",
+    "spells": "Bless, Light; get Life, Ward, and Exalt later",
+    "perks": [
+      {
+        "level": 1,
+        "perks": [
+          "Gish",
+          "Selfless"
+        ]
+      },
+      {
+        "level": 3,
+        "perks": [
+          "Tough"
+        ]
+      },
+      {
+        "level": 5,
+        "perks": [
+          "Protector"
+        ]
+      },
+      {
+        "level": 7,
+        "perks": [
+          "Rally"
+        ]
+      },
+      {
+        "level": 9,
+        "perks": [
+          "Heightened Magnetism"
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Revelator - Smite Beacon",
+    "stats": {
+      "1": {
+        "might": 6,
+        "dexterity": 3,
+        "awareness": 4,
+        "reason": 4,
+        "presence": 6,
+        "luck": 3
+      },
+      "10": {
+        "might": 7,
+        "dexterity": 3,
+        "awareness": 5,
+        "reason": 5,
+        "presence": 7,
+        "luck": 4
+      }
+    },
+    "training": [
+      "Detect",
+      "Influence",
+      "Leadership",
+      "Melee"
+    ],
+    "startingPack": "Knight",
+    "weapon": "Longsword",
+    "armor": "Heavy Armor",
+    "spells": "Guide, Light; get Life, Ward, and Exalt later",
+    "perks": [
+      {
+        "level": 1,
+        "perks": [
+          "Gish",
+          "Strategist"
+        ]
+      },
+      {
+        "level": 3,
+        "perks": [
+          "Rally"
+        ]
+      },
+      {
+        "level": 5,
+        "perks": [
+          "Tough"
+        ]
+      },
+      {
+        "level": 7,
+        "perks": [
+          "Interceptor"
+        ]
+      },
+      {
+        "level": 9,
+        "perks": [
+          "Inspiring Presence"
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Rogue - Assassin",
+    "stats": {
+      "1": {
+        "might": 3,
+        "dexterity": 6,
+        "awareness": 6,
+        "reason": 4,
+        "presence": 3,
+        "luck": 4
+      },
+      "10": {
+        "might": 3,
+        "dexterity": 7,
+        "awareness": 7,
+        "reason": 6,
+        "presence": 3,
+        "luck": 5
+      }
+    },
+    "training": [
+      "Craft",
+      "Detect",
+      "Ranged",
+      "Finesse",
+      "Sneak"
+    ],
+    "startingPack": "Assassin (buy Shortbow)",
+    "weapon": "Dagger (2), Shortbow",
+    "armor": "Light Armor",
+    "spells": "-",
+    "perks": [
+      {
+        "level": 1,
+        "perks": [
+          "Ambusher",
+          "Resourceful"
+        ]
+      },
+      {
+        "level": 3,
+        "perks": [
+          "Quick Draw"
+        ]
+      },
+      {
+        "level": 5,
+        "perks": [
+          "Knife Juggler"
+        ]
+      },
+      {
+        "level": 7,
+        "perks": [
+          "Poisoner"
+        ]
+      },
+      {
+        "level": 9,
+        "perks": [
+          "Bravado"
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Rogue - Thief",
+    "stats": {
+      "1": {
+        "might": 3,
+        "dexterity": 6,
+        "awareness": 6,
+        "reason": 4,
+        "presence": 3,
+        "luck": 4
+      },
+      "10": {
+        "might": 3,
+        "dexterity": 7,
+        "awareness": 7,
+        "reason": 6,
+        "presence": 3,
+        "luck": 5
+      }
+    },
+    "training": [
+      "Craft",
+      "Detect",
+      "Ranged",
+      "Finesse",
+      "Sneak"
+    ],
+    "startingPack": "Tinker (buy Dagger and Armor)",
+    "weapon": "Dagger, Crossbow",
+    "armor": "Light Armor",
+    "spells": "-",
+    "perks": [
+      {
+        "level": 1,
+        "perks": [
+          "Resourceful",
+          "Skirmisher"
+        ]
+      },
+      {
+        "level": 3,
+        "perks": [
+          "Master Breaker"
+        ]
+      },
+      {
+        "level": 5,
+        "perks": [
+          "Deft Hands"
+        ]
+      },
+      {
+        "level": 7,
+        "perks": [
+          "Treads Lightly"
+        ]
+      },
+      {
+        "level": 9,
+        "perks": [
+          "Perfect Parry"
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Rogue - Ensorcelled Blade",
+    "stats": {
+      "1": {
+        "might": 3,
+        "dexterity": 4,
+        "awareness": 5,
+        "reason": 6,
+        "presence": 3,
+        "luck": 5
+      },
+      "10": {
+        "might": 3,
+        "dexterity": 7,
+        "awareness": 6,
+        "reason": 7,
+        "presence": 3,
+        "luck": 5
+      }
+    },
+    "training": [
+      "Arcana",
+      "Craft",
+      "Detect",
+      "Finesse",
+      "Ranged",
+      "Sneak"
+    ],
+    "startingPack": "Spy",
+    "weapon": "Dagger",
+    "armor": "Light Armor",
+    "spells": "-",
+    "perks": [
+      {
+        "level": 1,
+        "perks": [
+          "Athame",
+          "Resourceful"
+        ]
+      },
+      {
+        "level": 3,
+        "perks": [
+          "Magical Secret (Blink)"
+        ]
+      },
+      {
+        "level": 5,
+        "perks": [
+          "Magical Secret (Knock)"
+        ]
+      },
+      {
+        "level": 7,
+        "perks": [
+          "Quick Draw"
+        ]
+      },
+      {
+        "level": 9,
+        "perks": [
+          "Perfect Parry"
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Sorcerer - Blood Mage",
+    "stats": {
+      "1": {
+        "might": 7,
+        "dexterity": 2,
+        "awareness": 3,
+        "reason": 2,
+        "presence": 7,
+        "luck": 3
+      },
+      "10": {
+        "might": 7,
+        "dexterity": 5,
+        "awareness": 5,
+        "reason": 2,
+        "presence": 7,
+        "luck": 3
+      }
+    },
+    "training": [
+      "Brawl",
+      "Influence",
+      "Leadership",
+      "Survival"
+    ],
+    "startingPack": "Devout (buy Armor)",
+    "weapon": "Trinket",
+    "armor": "Medium Armor",
+    "spells": "Control, Enflesh, Leech, Ward; get Fear, Hold, LIfe, and Morph later",
+    "perks": [
+      {
+        "level": 1,
+        "perks": [
+          "Tough",
+          "Vehement Magic"
+        ]
+      },
+      {
+        "level": 3,
+        "perks": [
+          "Endless Stamina"
+        ]
+      },
+      {
+        "level": 5,
+        "perks": [
+          "Mesmer"
+        ]
+      },
+      {
+        "level": 7,
+        "perks": [
+          "Tough"
+        ]
+      },
+      {
+        "level": 9,
+        "perks": [
+          "Secret of Mana"
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Sorcerer - Elementalist",
+    "stats": {
+      "1": {
+        "might": 5,
+        "dexterity": 3,
+        "awareness": 3,
+        "reason": 4,
+        "presence": 7,
+        "luck": 3
+      },
+      "10": {
+        "might": 7,
+        "dexterity": 3,
+        "awareness": 5,
+        "reason": 5,
+        "presence": 7,
+        "luck": 3
+      }
+    },
+    "training": [
+      "Arcana",
+      "Brawl",
+      "Influence",
+      "Leadership"
+    ],
+    "startingPack": "Mage",
+    "weapon": "Trinket",
+    "armor": "-",
+    "spells": "Burn, Freeze, Disintegrate, Ward; get Hold, Rust, Sleep, and Tempo later",
+    "perks": [
+      {
+        "level": 1,
+        "perks": [
+          "Quality Assurance",
+          "Vehement Magic"
+        ]
+      },
+      {
+        "level": 3,
+        "perks": [
+          "Secret of Mana"
+        ]
+      },
+      {
+        "level": 5,
+        "perks": [
+          "Secret of Mana"
+        ]
+      },
+      {
+        "level": 7,
+        "perks": [
+          "Endless Stamina"
+        ]
+      },
+      {
+        "level": 9,
+        "perks": [
+          "Heightened Magnetism"
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Sorcerer - Mage Hand",
+    "stats": {
+      "1": {
+        "might": 7,
+        "dexterity": 2,
+        "awareness": 3,
+        "reason": 2,
+        "presence": 7,
+        "luck": 3
+      },
+      "10": {
+        "might": 7,
+        "dexterity": 5,
+        "awareness": 5,
+        "reason": 2,
+        "presence": 7,
+        "luck": 3
+      }
+    },
+    "training": [
+      "Brawl",
+      "Influence",
+      "Leadership",
+      "Melee"
+    ],
+    "startingPack": "Brawler",
+    "weapon": "Caestus (2)",
+    "armor": "Medium Armor",
+    "spells": "Apoplex, Fear, Light, Ward; get Blink, Enchant, Exalt, and Tempo later",
+    "perks": [
+      {
+        "level": 1,
+        "perks": [
+          "Gish",
+          "Vehement Magic"
+        ]
+      },
+      {
+        "level": 3,
+        "perks": [
+          "Dusted Knuckle"
+        ]
+      },
+      {
+        "level": 5,
+        "perks": [
+          "Ungarmax"
+        ]
+      },
+      {
+        "level": 7,
+        "perks": [
+          "Check Hook"
+        ]
+      },
+      {
+        "level": 9,
+        "perks": [
+          "Endless Stamina"
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Vanguard",
+    "stats": {
+      "1": {
+        "might": 7,
+        "dexterity": 2,
+        "awareness": 6,
+        "reason": 3,
+        "presence": 4,
+        "luck": 3
+      },
+      "10": {
+        "might": 7,
+        "dexterity": 2,
+        "awareness": 7,
+        "reason": 3,
+        "presence": 7,
+        "luck": 4
+      }
+    },
+    "training": [
+      "Brawl",
+      "Detect",
+      "Leadership",
+      "Melee"
+    ],
+    "startingPack": "Sentinel",
+    "weapon": "Greatshield",
+    "armor": "Heavy Armor",
+    "spells": "-",
+    "perks": [
+      {
+        "level": 1,
+        "perks": [
+          "Protector",
+          "Sentinel"
+        ]
+      },
+      {
+        "level": 3,
+        "perks": [
+          "Heavy Arms"
+        ]
+      },
+      {
+        "level": 5,
+        "perks": [
+          "Bully"
+        ]
+      },
+      {
+        "level": 7,
+        "perks": [
+          "Tough"
+        ]
+      },
+      {
+        "level": 9,
+        "perks": [
+          "Second Wind"
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Witch - Full Hex",
+    "stats": {
+      "1": {
+        "might": 3,
+        "dexterity": 4,
+        "awareness": 6,
+        "reason": 6,
+        "presence": 3,
+        "luck": 4
+      },
+      "10": {
+        "might": 4,
+        "dexterity": 5,
+        "awareness": 7,
+        "reason": 6,
+        "presence": 4,
+        "luck": 5
+      }
+    },
+    "training": [
+      "Craft",
+      "Detect",
+      "Medicine",
+      "Mysticism",
+      "Survival"
+    ],
+    "startingPack": "Occultist",
+    "weapon": "Dagger (2)",
+    "armor": "Light Armor",
+    "spells": "Burn, Charm, Fear, Hold; get Dispel, Enflesh, Fade, and Levitate later",
+    "perks": [
+      {
+        "level": 1,
+        "perks": [
+          "Athame",
+          "Familiar"
+        ]
+      },
+      {
+        "level": 3,
+        "perks": [
+          "Mesmer"
+        ]
+      },
+      {
+        "level": 5,
+        "perks": [
+          "Secret of Mana"
+        ]
+      },
+      {
+        "level": 7,
+        "perks": [
+          "Quality Assurance"
+        ]
+      },
+      {
+        "level": 9,
+        "perks": [
+          "Vehement Magic"
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Witch - Hexshot",
+    "stats": {
+      "1": {
+        "might": 2,
+        "dexterity": 7,
+        "awareness": 7,
+        "reason": 2,
+        "presence": 3,
+        "luck": 3
+      },
+      "10": {
+        "might": 4,
+        "dexterity": 7,
+        "awareness": 7,
+        "reason": 2,
+        "presence": 4,
+        "luck": 5
+      }
+    },
+    "training": [
+      "Craft",
+      "Detect",
+      "Mysticism",
+      "Ranged"
+    ],
+    "startingPack": "Bounty Hunter",
+    "weapon": "Rifle",
+    "armor": "Light Armor",
+    "spells": "Blink, Fear, Guide, Hold; get Dispel, Fade, Sleep, and Zap later",
+    "perks": [
+      {
+        "level": 1,
+        "perks": [
+          "Gish",
+          "Witchsight"
+        ]
+      },
+      {
+        "level": 3,
+        "perks": [
+          "Steady Aim"
+        ]
+      },
+      {
+        "level": 5,
+        "perks": [
+          "Akimbo Trigger"
+        ]
+      },
+      {
+        "level": 7,
+        "perks": [
+          "Marksmanship"
+        ]
+      },
+      {
+        "level": 9,
+        "perks": [
+          "Ricochet"
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Wizard - Abjurer",
+    "stats": {
+      "1": {
+        "might": 6,
+        "dexterity": 3,
+        "awareness": 3,
+        "reason": 6,
+        "presence": 4,
+        "luck": 4
+      },
+      "10": {
+        "might": 7,
+        "dexterity": 3,
+        "awareness": 3,
+        "reason": 7,
+        "presence": 7,
+        "luck": 4
+      }
+    },
+    "training": [
+      "Arcana",
+      "Craft",
+      "Influence",
+      "Leadership",
+      "Medicine",
+      "Mysticism"
+    ],
+    "startingPack": "Devout (buy Armor)",
+    "weapon": "Trinket",
+    "armor": "Medium Armor",
+    "spells": "Bless, Guide, Life, Ward; get Cure, Dispel, Hymn, and Truth later",
+    "perks": [
+      {
+        "level": 1,
+        "perks": [
+          "Abjurer",
+          "Bookworm"
+        ]
+      },
+      {
+        "level": 3,
+        "perks": [
+          "Briar Healer"
+        ]
+      },
+      {
+        "level": 5,
+        "perks": [
+          "Assured Healer"
+        ]
+      },
+      {
+        "level": 7,
+        "perks": [
+          "Harmonic Resonance"
+        ]
+      },
+      {
+        "level": 9,
+        "perks": [
+          "Inspiring Presence"
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Wizard - Conjurer",
+    "stats": {
+      "1": {
+        "might": 3,
+        "dexterity": 4,
+        "awareness": 6,
+        "reason": 6,
+        "presence": 4,
+        "luck": 3
+      },
+      "10": {
+        "might": 4,
+        "dexterity": 5,
+        "awareness": 7,
+        "reason": 7,
+        "presence": 5,
+        "luck": 3
+      }
+    },
+    "training": [
+      "Arcana",
+      "Craft",
+      "Detect",
+      "Influence",
+      "Medicine",
+      "Mysticism"
+    ],
+    "startingPack": "Mage",
+    "weapon": "Trinket",
+    "armor": "-",
+    "spells": "Beast, Blink, Forge, Portal; get Aqua, Gas, Gust, and Ward later",
+    "perks": [
+      {
+        "level": 1,
+        "perks": [
+          "Bookworm",
+          "Conjurer"
+        ]
+      },
+      {
+        "level": 3,
+        "perks": [
+          "Ritualist"
+        ]
+      },
+      {
+        "level": 5,
+        "perks": [
+          "Familiar"
+        ]
+      },
+      {
+        "level": 7,
+        "perks": [
+          "Secret of Mana"
+        ]
+      },
+      {
+        "level": 9,
+        "perks": [
+          "Secret of Mana"
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Wizard - Diviner",
+    "stats": {
+      "1": {
+        "might": 3,
+        "dexterity": 4,
+        "awareness": 5,
+        "reason": 6,
+        "presence": 3,
+        "luck": 5
+      },
+      "10": {
+        "might": 3,
+        "dexterity": 4,
+        "awareness": 7,
+        "reason": 7,
+        "presence": 3,
+        "luck": 7
+      }
+    },
+    "training": [
+      "Arcana",
+      "Craft",
+      "Detect",
+      "Influence",
+      "Leadership",
+      "Mysticism"
+    ],
+    "startingPack": "Fortune Teller",
+    "weapon": "Tarot Cards",
+    "armor": "Light Armor",
+    "spells": "Guide, Kinesis, Speak, Truth; get Bless, Dispel, Enchant, and Ward later",
+    "perks": [
+      {
+        "level": 1,
+        "perks": [
+          "Bookworm",
+          "Cardistry"
+        ]
+      },
+      {
+        "level": 3,
+        "perks": [
+          "Telepath"
+        ]
+      },
+      {
+        "level": 5,
+        "perks": [
+          "Medium"
+        ]
+      },
+      {
+        "level": 7,
+        "perks": [
+          "Sage"
+        ]
+      },
+      {
+        "level": 9,
+        "perks": [
+          "Favors the Bold"
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Wizard - Evoker",
+    "stats": {
+      "1": {
+        "might": 3,
+        "dexterity": 4,
+        "awareness": 6,
+        "reason": 6,
+        "presence": 4,
+        "luck": 3
+      },
+      "10": {
+        "might": 3,
+        "dexterity": 4,
+        "awareness": 6,
+        "reason": 7,
+        "presence": 4,
+        "luck": 7
+      }
+    },
+    "training": [
+      "Arcana",
+      "Craft",
+      "Detect",
+      "Influence",
+      "Medicine",
+      "Mysticism"
+    ],
+    "startingPack": "Mage",
+    "weapon": "Trinket",
+    "armor": "-",
+    "spells": "Burn, Freeze, Gas, Zap; get Aqua, Goop, Gust and Kinesis later",
+    "perks": [
+      {
+        "level": 1,
+        "perks": [
+          "Bookworm",
+          "Vehement Magic"
+        ]
+      },
+      {
+        "level": 3,
+        "perks": [
+          "Secret of Mana"
+        ]
+      },
+      {
+        "level": 5,
+        "perks": [
+          "Secret of Mana"
+        ]
+      },
+      {
+        "level": 7,
+        "perks": [
+          "Secret of Mana"
+        ]
+      },
+      {
+        "level": 9,
+        "perks": [
+          "Secret of Mana"
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Wizard - Illusionist",
+    "stats": {
+      "1": {
+        "might": 3,
+        "dexterity": 4,
+        "awareness": 6,
+        "reason": 6,
+        "presence": 4,
+        "luck": 3
+      },
+      "10": {
+        "might": 4,
+        "dexterity": 5,
+        "awareness": 7,
+        "reason": 7,
+        "presence": 4,
+        "luck": 4
+      }
+    },
+    "training": [
+      "Arcana",
+      "Craft",
+      "Detect",
+      "Influence",
+      "Mysticism",
+      "Survival"
+    ],
+    "startingPack": "Fortune Teller",
+    "weapon": "Trinket",
+    "armor": "Light Armor",
+    "spells": "Color, Fear, Mirage, Shade; get Amplify, Blink, Confuse, and Morph later",
+    "perks": [
+      {
+        "level": 1,
+        "perks": [
+          "Bookworm",
+          "Extrovert"
+        ]
+      },
+      {
+        "level": 3,
+        "perks": [
+          "Impersonator"
+        ]
+      },
+      {
+        "level": 5,
+        "perks": [
+          "Sage"
+        ]
+      },
+      {
+        "level": 7,
+        "perks": [
+          "Secret of Mana"
+        ]
+      },
+      {
+        "level": 9,
+        "perks": []
+      }
+    ]
+  },
+  {
+    "title": "Wizard - Mesmer",
+    "stats": {
+      "1": {
+        "might": 3,
+        "dexterity": 4,
+        "awareness": 4,
+        "reason": 6,
+        "presence": 6,
+        "luck": 3
+      },
+      "10": {
+        "might": 4,
+        "dexterity": 5,
+        "awareness": 5,
+        "reason": 7,
+        "presence": 7,
+        "luck": 3
+      }
+    },
+    "training": [
+      "Arcana",
+      "Craft",
+      "Influence",
+      "Leadership",
+      "Mysticism",
+      "Performance"
+    ],
+    "startingPack": "Mage",
+    "weapon": "Trinket",
+    "armor": "-",
+    "spells": "Apoplex, Charm, Fear, Zap; get Babble, Confuse, Hold, and Sleep later",
+    "perks": [
+      {
+        "level": 1,
+        "perks": [
+          "Bookworm",
+          "Mesmer"
+        ]
+      },
+      {
+        "level": 3,
+        "perks": [
+          "Extrovert"
+        ]
+      },
+      {
+        "level": 5,
+        "perks": [
+          "Inspiring Presence"
+        ]
+      },
+      {
+        "level": 7,
+        "perks": [
+          "Diplomat"
+        ]
+      },
+      {
+        "level": 9,
+        "perks": [
+          "Ungarmax"
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Wizard - Necromancer",
+    "stats": {
+      "1": {
+        "might": 6,
+        "dexterity": 3,
+        "awareness": 4,
+        "reason": 6,
+        "presence": 3,
+        "luck": 4
+      },
+      "10": {
+        "might": 7,
+        "dexterity": 3,
+        "awareness": 5,
+        "reason": 7,
+        "presence": 5,
+        "luck": 4
+      }
+    },
+    "training": [
+      "Arcana",
+      "Craft",
+      "Influence",
+      "Medicine",
+      "Mysticism",
+      "Survival"
+    ],
+    "startingPack": "Devout (buy Armor)",
+    "weapon": "Trinket",
+    "armor": "Medium Armor",
+    "spells": "Disintegrate, Enflesh, Gas, Raise; get Dispel, Frostburn, Leech, and Portal later",
+    "perks": [
+      {
+        "level": 1,
+        "perks": [
+          "Bookworm",
+          "Necromancer"
+        ]
+      },
+      {
+        "level": 3,
+        "perks": [
+          "Grim Harvest"
+        ]
+      },
+      {
+        "level": 5,
+        "perks": [
+          "Infesting Burst"
+        ]
+      },
+      {
+        "level": 7,
+        "perks": [
+          "Medium"
+        ]
+      },
+      {
+        "level": 9,
+        "perks": [
+          "Reanimator"
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Wizard - Transmuter",
+    "stats": {
+      "1": {
+        "might": 3,
+        "dexterity": 4,
+        "awareness": 4,
+        "reason": 6,
+        "presence": 3,
+        "luck": 6
+      },
+      "10": {
+        "might": 3,
+        "dexterity": 6,
+        "awareness": 5,
+        "reason": 7,
+        "presence": 3,
+        "luck": 7
+      }
+    },
+    "training": [
+      "Arcana",
+      "Craft",
+      "Finesse",
+      "Medicine",
+      "Mysticism",
+      "Stealth"
+    ],
+    "startingPack": "Tinker (buy Trinket)",
+    "weapon": "Trinket",
+    "armor": "-",
+    "spells": "Animate, Forge, Knock, Rust; get Hold, Junk, Polymorph, and Terraform later",
+    "perks": [
+      {
+        "level": 1,
+        "perks": [
+          "Bookworm",
+          "Resourceful"
+        ]
+      },
+      {
+        "level": 3,
+        "perks": [
+          "Arcane Artisan"
+        ]
+      },
+      {
+        "level": 5,
+        "perks": [
+          "Instant Weapon"
+        ]
+      },
+      {
+        "level": 7,
+        "perks": [
+          "Secret of Mana"
+        ]
+      },
+      {
+        "level": 9,
+        "perks": [
+          "Heightened Intellect"
+        ]
+      }
+    ]
+  }
+]

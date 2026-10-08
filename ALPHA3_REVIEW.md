@@ -176,9 +176,11 @@ Status 2026-10-07: rulings settled, Defense property done (`61c1973`). **Phase 1
 - [x] Alchemical / relic older drift in §5 (flavor text the book lacks, Speed / Control potions, scrolls, Spell Book, Philosopher's Stone, Phoenix Down).
 
 ### Phase 5 — Build Guides (Appendix C, pp. 194–203)
-- [ ] Data model for 2–3 builds per class (stats array by level, Trainings, Starting Pack, Weapon / Armor, Spells, Perks by level) — likely `system.buildGuides` on the class item.
-- [ ] Builder: pick a build guide → pre-fill stats / Trainings / pack / Perks (always overridable).
-- [ ] Author all builds from the book.
+Ruling: no `system.buildGuides` data model — a **"Build Guides" Actor compendium** (`packs/characters/build-guides`, players OBSERVER so they can import) of 40 finished Level-1 characters, one per book build. Name = guide name (player renames after import). Level-10 Stats, Perks by level and later Spells live in `system.biography`.
+- [x] `scripts/build-guides/extract-from-pdf.py` → `build-guides.json` (book data, reviewed).
+- [x] `scripts/build-guides/generate.mjs` → `packs/_source/build-guides/*.json` (deterministic ids; `--report` = dry run). Images: `scripts/build-guides/images.json`.
+- [ ] `npm run pack`, import a few guides in Foundry and check them (sheet, HP, hands, spells, Perks).
+- [ ] Pick per-class / per-guide portrait + token art in `images.json`, regenerate, pack.
 
 ### Phase 6 — Test
 - [ ] `npm run pack`; reload as GM; migrations run once.

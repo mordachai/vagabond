@@ -295,6 +295,19 @@
       "flags": {}
     },
     {
+      "name": "build-guides",
+      "label": "Build Guides",
+      "system": "vagabond",
+      "path": "packs/characters/build-guides",
+      "type": "Actor",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      },
+      "private": false,
+      "flags": {}
+    },
+    {
       "name": "stores",
       "label": "Stores",
       "system": "vagabond",
@@ -374,6 +387,7 @@
           "packs": [
             "bestiary",
             "humanlike",
+            "build-guides",
             "stores"
           ],
           "folders": []

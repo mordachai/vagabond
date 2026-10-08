@@ -1,0 +1,527 @@
+{
+  "name": "Magus - Arcane Archer",
+  "type": "character",
+  "img": "icons/weapons/swords/greatsword-evil-green.webp",
+  "system": {
+    "attributes": {
+      "level": {
+        "value": 1
+      }
+    },
+    "stats": {
+      "might": {
+        "value": 3
+      },
+      "dexterity": {
+        "value": 3
+      },
+      "awareness": {
+        "value": 7
+      },
+      "reason": {
+        "value": 4
+      },
+      "presence": {
+        "value": 5
+      },
+      "luck": {
+        "value": 3
+      }
+    },
+    "skills": {
+      "arcana": {
+        "trained": true
+      },
+      "melee": {
+        "trained": true
+      }
+    },
+    "health": {
+      "value": 3
+    },
+    "currentLuck": 3,
+    "currency": {
+      "gold": 0,
+      "silver": 0,
+      "copper": 0
+    },
+    "biography": "<h2>Magus - Arcane Archer — Build Guide</h2>\n<p><em>Core Rulebook v3 Alpha 3, Appendix C. This Hero is built at Level 1 with no Ancestry — pick one, rename the Hero, and adjust anything you like.</em></p>\n<p><strong>Bought with the Starting Pack's silver:</strong> Light Armor (50s).</p>\n<p><em>The build's gear costs 50s more than the Starting Pack's money; it starts with no coins left.</em></p>\n<h3>Stats at Level 10</h3>\n<p><strong>MIT</strong> 3 · <strong>DEX</strong> 6 · <strong>AWR</strong> 7 · <strong>RSN</strong> 6 · <strong>PRS</strong> 6 · <strong>LUK</strong> 3</p>\n<h3>Perks by Level</h3><ul>\n<li><strong>1st:</strong> Assured Healer, Vehement Magic <em>(already on this sheet)</em></li>\n<li><strong>3rd:</strong> Briar Healer</li>\n<li><strong>5th:</strong> Celestial Illuminator</li>\n<li><strong>7th:</strong> Heightened Cognition</li>\n<li><strong>9th:</strong> Secret of Mana</li>\n</ul>\n<h3>Spells</h3><p>Bless, Life; get Guide, and Moon later</p>\n<p><em>Book note: the book leaves Training / Starting Pack / Weapon blank for this build; its Perk list is identical to Magus - Spellblade in the book.</em></p>",
+    "details": {
+      "constructed": true,
+      "builderDismissed": false
+    },
+    "mana": {
+      "current": 2
+    }
+  },
+  "prototypeToken": {
+    "name": "Magus - Arcane Archer",
+    "actorLink": true,
+    "disposition": 1,
+    "texture": {
+      "src": "icons/weapons/swords/greatsword-evil-green.webp"
+    },
+    "bar1": {
+      "attribute": "health"
+    }
+  },
+  "items": [
+    {
+      "name": "Light Armor",
+      "type": "equipment",
+      "img": "icons/equipment/chest/breastplate-quilted-brown.webp",
+      "system": {
+        "description": "<p><span class=\"fontstyle0\">Leather, hide, padded.</span></p><h4><span class=\"fontstyle0\">Equipping Armor</span></h4><p><span class=\"fontstyle2\">Equipping or unequipping Armor requires a Scene (10 minutes) to complete.</span> </p>",
+        "equipmentType": "armor",
+        "locked": true,
+        "equipped": true,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 50,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "worn",
+        "immunities": [],
+        "gearCategory": "",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 1
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "fhA7HQ4uBYCAiU8I",
+      "_key": "!actors.items!Y0RYSnxBpoxtJaSu.fhA7HQ4uBYCAiU8I"
+    },
+    {
+      "name": "Magus",
+      "type": "class",
+      "img": "icons/weapons/swords/greatsword-evil-green.webp",
+      "system": {
+        "description": "<p><strong>¿Por qué no los dos?</strong></p><p><em>—Mia Agraviador, Old El Paso Taco Commercial</em></p><p>Spellblades, gishes, arcane knights, and eldritch tricksters all. Magi are arcane specialists that blend magic and martial prowess.</p><h3>Iconic Magi</h3><ul><li><strong>Alucard</strong>, <em>Castlevania</em></li><li><strong>Elric of Melniboné</strong>, <em>Stormbringer</em></li><li><strong>Geralt of Rivia</strong>, <em>The Witcher</em></li><li><strong>Twilight Suzuka</strong>, <em>Outlaw Star</em></li></ul><h3>Playing Magus</h3><p>The magus may be a bit more challenging for newer players. Their playstyle is more build-dependent than the other classes, allowing for backline blasters, midline harassers, and frontline strikers.</p><p><strong>Action:</strong> Attack/Cast<br /><strong>Move:</strong> Flexible<br /><strong>Starting Pack:</strong> Knight, Gladiator, or Warrior<br /><strong>Key Stat:</strong> Reason<br /><strong>Complexity:</strong> ★★★★☆<br /><strong>Training:</strong> Arcana, Melee</p><h3>Class Features</h3><table class=\"NormalTable\"><tbody><tr><td><p><strong>Level</strong></p></td><td><p><strong>Features</strong></p></td><td><p><strong>Spells</strong></p></td><td><p><strong>Mana</strong></p></td><td><p><strong>Cast Max</strong></p></td></tr><tr><td><p>1st</p></td><td><p>Arcanum, Enspell</p></td><td><p>2</p></td><td><p>2</p></td><td><p>2</p></td></tr><tr><td><p>2nd</p></td><td><p>Spell Parry (15+)</p></td><td><p>2</p></td><td><p>4</p></td><td><p>2</p></td></tr><tr><td><p>3rd</p></td><td><p>Perk</p></td><td><p>2</p></td><td><p>6</p></td><td><p>3</p></td></tr><tr><td><p>4th</p></td><td><p>Arcane Surge (1 Mana)</p></td><td><p>3</p></td><td><p>8</p></td><td><p>3</p></td></tr><tr><td><p>5th</p></td><td><p>Perk</p></td><td><p>3</p></td><td><p>10</p></td><td><p>4</p></td></tr><tr><td><p>6th</p></td><td><p>Spell Parry (14+), Esoteric Flow</p></td><td><p>3</p></td><td><p>12</p></td><td><p>4</p></td></tr><tr><td><p>7th</p></td><td><p>Perk</p></td><td><p>4</p></td><td><p>14</p></td><td><p>5</p></td></tr><tr><td><p>8th</p></td><td><p>Arcane Surge (2 Mana)</p></td><td><p>4</p></td><td><p>16</p></td><td><p>5</p></td></tr><tr><td><p>9th</p></td><td><p>Perk</p></td><td><p>4</p></td><td><p>18</p></td><td><p>6</p></td></tr><tr><td><p>10th</p></td><td><p>Spell Parry (13+), Sword & Sorcery</p></td><td><p>5</p></td><td><p>20</p></td><td><p>6</p></td></tr></tbody></table>",
+        "isSpellcaster": true,
+        "levelFeatures": [
+          {
+            "level": 1,
+            "name": "Arcanum",
+            "description": "<p>You gain the Gish Perk (p. 69) and can Cast Spells using Arcana.</p><p><strong>Spells:</strong> You learn 2 Spells, one of which must always have a damage base. You learn 1 other Spell every 3 Levels hereafter.</p><p><strong>Mana:</strong> Your Max Mana is equal to (2 × your Level), and your Cast Max for Spells is equal to (1 + half your Level, round up).</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [
+              "Compendium.vagabond.perks.Item.YVgf2kRWwn8JRq1X"
+            ],
+            "perkAmount": 1,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 1,
+            "name": "Enspell",
+            "description": "<p>You can have one Imbue Casting as continual duration on your Weapon, and can skip your Move to change the Spell.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 2,
+            "name": "Spell Parry (15+)",
+            "description": "<p>If the result of your Save against a Cast Action exceeds your Difficulty by 15, you can choose a different Target for it, ignoring Immunity. The number needed to exceed is reduced by 1 every 4 Levels hereafter.</p>",
+            "statBonusPoints": 1,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 3,
+            "name": "Perk",
+            "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 1,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 4,
+            "name": "Arcane Surge (1 Mana)",
+            "description": "<p>It costs 1 less Mana to Cast your Imbued Spell with other Deliveries.</p><p>Further, once per Round when you deliver a Spell with an Imbued Weapon, you can do so against one Target with a 1 Mana discount. This discount increases every 4 Levels hereafter.</p>",
+            "statBonusPoints": 1,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 5,
+            "name": "Perk",
+            "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 1,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 6,
+            "name": "Spell Parry (14+)",
+            "description": "<p>If the result of your Save against a Cast Action exceeds your Difficulty by 15, you can choose a different Target for it, ignoring Immunity. The number needed to exceed is reduced by 1 every 4 Levels hereafter.</p>",
+            "statBonusPoints": 1,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 6,
+            "name": "Esoteric Flow",
+            "description": "<p>You can cause the damage of your attack to use the damage base of your Imbued Spell.</p><p>Further, you are permanently under the effects of the Blink Spell.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 7,
+            "name": "Perk",
+            "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 1,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 8,
+            "name": "Arcane Surge (2 Mana)",
+            "description": "<p>It costs 1 less Mana to Cast your Imbued Spell with other Deliveries.</p><p>Further, once per Round when you deliver a Spell with an Imbued Weapon, you can do so against one Target with a 1 Mana discount. This discount increases every 4 Levels hereafter.</p>",
+            "statBonusPoints": 1,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 9,
+            "name": "Perk",
+            "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 1,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 10,
+            "name": "Spell Parry (13+)",
+            "description": "<p>If the result of your Save against a Cast Action exceeds your Difficulty by 15, you can choose a different Target for it, ignoring Immunity. The number needed to exceed is reduced by 1 every 4 Levels hereafter.</p>",
+            "statBonusPoints": 1,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 10,
+            "name": "Sword & Sorcery",
+            "description": "<p>Once per Round, when you take the Attack Action, you can also take the Cast Action, and vice versa.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          }
+        ],
+        "manaSkill": "arcana",
+        "castingStat": "reason",
+        "manaMultiplier": 2,
+        "skillGrant": {
+          "guaranteed": [
+            "arcana",
+            "melee"
+          ],
+          "choices": []
+        },
+        "levelSpells": [
+          {
+            "spells": 2,
+            "level": 1
+          },
+          {
+            "spells": 2,
+            "level": 2
+          },
+          {
+            "spells": 2,
+            "level": 3
+          },
+          {
+            "spells": 3,
+            "level": 4
+          },
+          {
+            "spells": 3,
+            "level": 5
+          },
+          {
+            "spells": 3,
+            "level": 6
+          },
+          {
+            "spells": 4,
+            "level": 7
+          },
+          {
+            "spells": 4,
+            "level": 8
+          },
+          {
+            "spells": 4,
+            "level": 9
+          },
+          {
+            "spells": 5,
+            "level": 10
+          }
+        ],
+        "keyStats": [
+          "reason"
+        ],
+        "suggestedStartingPacks": [
+          "Compendium.vagabond.starting-packs.Item.KoynpKyutYoL8KOX",
+          "Compendium.vagabond.starting-packs.Item.pXpaYfCavubGOicv",
+          "Compendium.vagabond.starting-packs.Item.hW4AUwhRz98OJoDh"
+        ]
+      },
+      "effects": [
+        {
+          "name": "Arcanum",
+          "origin": "Compendium.vagabond.classes.Item.gSD4ww0S2NUBbnvo",
+          "img": "icons/svg/aura.svg",
+          "_id": "xcXaMIodOQhW8EWE",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.mana.castingMaxBonus",
+                "value": "1 - @stats.reason.total",
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "permanent"
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!Y0RYSnxBpoxtJaSu.sgYsozqJNWXtFYnn.xcXaMIodOQhW8EWE"
+        }
+      ],
+      "flags": {},
+      "_id": "sgYsozqJNWXtFYnn",
+      "_key": "!actors.items!Y0RYSnxBpoxtJaSu.sgYsozqJNWXtFYnn"
+    },
+    {
+      "name": "Assured Healer",
+      "type": "perk",
+      "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
+      "system": {
+        "description": "<p>Healing rolls of your Spells Explode on a 1.</p>",
+        "prerequisites": {
+          "stats": [],
+          "statOrGroups": [],
+          "trainedSkills": [],
+          "trainedSkillOrGroups": [],
+          "spells": [
+            "Compendium.vagabond.spells.Item.sBvdMIqhfJcydANC"
+          ],
+          "spellOrGroups": [],
+          "hasAnySpell": false,
+          "resources": [],
+          "resourceOrGroups": []
+        }
+      },
+      "effects": [
+        {
+          "name": "Assured Healer",
+          "origin": "Compendium.vagabond.perks.Item.tQ0QFm3jAAsu8y1i",
+          "img": "icons/svg/aura.svg",
+          "_id": "lZy8tqJ4pDf2dH1H",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.healingExplode",
+                "value": "1",
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {},
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!Y0RYSnxBpoxtJaSu.rmYFGGH80HJFFL8s.lZy8tqJ4pDf2dH1H"
+        }
+      ],
+      "flags": {
+        "vagabond": {
+          "perkOrigin": {
+            "type": "level",
+            "level": 1
+          }
+        }
+      },
+      "_id": "rmYFGGH80HJFFL8s",
+      "_key": "!actors.items!Y0RYSnxBpoxtJaSu.rmYFGGH80HJFFL8s"
+    },
+    {
+      "name": "Vehement Magic",
+      "type": "perk",
+      "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
+      "system": {
+        "description": "<p>Damage rolls from Spells you Cast Explode on a roll of 1.</p>",
+        "prerequisites": {
+          "stats": [],
+          "statOrGroups": [],
+          "trainedSkills": [],
+          "trainedSkillOrGroups": [],
+          "spells": [],
+          "spellOrGroups": [],
+          "hasAnySpell": true,
+          "resources": [],
+          "resourceOrGroups": []
+        }
+      },
+      "effects": [],
+      "flags": {
+        "vagabond": {
+          "perkOrigin": {
+            "type": "level",
+            "level": 1
+          }
+        }
+      },
+      "_id": "zBZK6rLENIwSPhmY",
+      "_key": "!actors.items!Y0RYSnxBpoxtJaSu.zBZK6rLENIwSPhmY"
+    },
+    {
+      "name": "Bless",
+      "type": "spell",
+      "img": "icons/magic/holy/prayer-hands-glowing-yellow.webp",
+      "system": {
+        "description": "<p><span class=\"fontstyle0\">For the duration, Targeted Objects count as Silvered (p. 82), and Targeted Beings of your choice have a d4 bonus to Saves.</span></p><p><span class=\"fontstyle0\">Further, if the Target is freestanding water, it permanently becomes holy water.</span></p>",
+        "damageType": "-",
+        "duration": "Until your next turn",
+        "crit": "",
+        "favorite": true,
+        "noRollRequired": true,
+        "fxSchool": "radiant",
+        "locked": true,
+        "causedStatuses": []
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "YI1uHH5pZHvMLbfE",
+      "_key": "!actors.items!Y0RYSnxBpoxtJaSu.YI1uHH5pZHvMLbfE"
+    },
+    {
+      "name": "Life",
+      "type": "spell",
+      "img": "icons/magic/life/heart-area-circle-red-green.webp",
+      "system": {
+        "description": "<p><span class=\"fontstyle0\">You revive a Target that died from damage after the end of your last Turn, reviving it with 1 HP and +1 Fatigue. This Spell does not regenerate missing parts, and revives them at the start of your Turn if you are Focusing on this Spell.</span></p><p><span class=\"fontstyle0\">In addition, you can upcast this Spell to heal Target(s) for d6 HP per Mana spent to do so.</span></p>",
+        "damageType": "healing",
+        "duration": "Until your next turn",
+        "crit": "",
+        "favorite": true,
+        "noRollRequired": true,
+        "fxSchool": "healing",
+        "locked": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "BM60ibulXsT9wWsE",
+      "_key": "!actors.items!Y0RYSnxBpoxtJaSu.BM60ibulXsT9wWsE"
+    }
+  ],
+  "effects": [],
+  "folder": null,
+  "flags": {
+    "vagabond": {
+      "buildGuide": true
+    }
+  },
+  "sort": 0,
+  "_id": "Y0RYSnxBpoxtJaSu",
+  "_key": "!actors!Y0RYSnxBpoxtJaSu"
+}

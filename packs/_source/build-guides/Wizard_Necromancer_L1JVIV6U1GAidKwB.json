@@ -1,0 +1,2077 @@
+{
+  "name": "Wizard - Necromancer",
+  "type": "character",
+  "img": "icons/magic/symbols/star-rising-purple.webp",
+  "system": {
+    "attributes": {
+      "level": {
+        "value": 1
+      }
+    },
+    "stats": {
+      "might": {
+        "value": 6
+      },
+      "dexterity": {
+        "value": 3
+      },
+      "awareness": {
+        "value": 4
+      },
+      "reason": {
+        "value": 6
+      },
+      "presence": {
+        "value": 3
+      },
+      "luck": {
+        "value": 4
+      }
+    },
+    "skills": {
+      "arcana": {
+        "trained": true
+      },
+      "craft": {
+        "trained": true
+      },
+      "influence": {
+        "trained": true
+      },
+      "medicine": {
+        "trained": true
+      },
+      "mysticism": {
+        "trained": true
+      },
+      "survival": {
+        "trained": true
+      }
+    },
+    "health": {
+      "value": 6
+    },
+    "currentLuck": 4,
+    "currency": {
+      "gold": 0,
+      "silver": 41,
+      "copper": 0
+    },
+    "biography": "<h2>Wizard - Necromancer — Build Guide</h2>\n<p><em>Core Rulebook v3 Alpha 3, Appendix C. This Hero is built at Level 1 with no Ancestry — pick one, rename the Hero, and adjust anything you like.</em></p>\n<p><strong>Starting Pack note:</strong> Devout (buy Armor)</p>\n<p><strong>Traded in:</strong> the Starting Pack's Light Armor (refunded at cost) for the Armor below.</p>\n<p><strong>Bought with the Starting Pack's silver:</strong> Medium Armor (1g).</p>\n<h3>Stats at Level 10</h3>\n<p><strong>MIT</strong> 7 · <strong>DEX</strong> 3 · <strong>AWR</strong> 5 · <strong>RSN</strong> 7 · <strong>PRS</strong> 5 · <strong>LUK</strong> 4</p>\n<h3>Perks by Level</h3><ul>\n<li><strong>1st:</strong> Bookworm, Necromancer <em>(already on this sheet)</em></li>\n<li><strong>3rd:</strong> Grim Harvest</li>\n<li><strong>5th:</strong> Infesting Burst</li>\n<li><strong>7th:</strong> Medium</li>\n<li><strong>9th:</strong> Reanimator</li>\n</ul>\n<h3>Spells</h3><p>Disintegrate, Enflesh, Gas, Raise; get Dispel, Frostburn, Leech, and Portal later</p>",
+    "details": {
+      "constructed": true,
+      "builderDismissed": false
+    },
+    "mana": {
+      "current": 4
+    }
+  },
+  "prototypeToken": {
+    "name": "Wizard - Necromancer",
+    "actorLink": true,
+    "disposition": 1,
+    "texture": {
+      "src": "icons/magic/symbols/star-rising-purple.webp"
+    },
+    "bar1": {
+      "attribute": "health"
+    }
+  },
+  "items": [
+    {
+      "name": "Backpack",
+      "type": "equipment",
+      "img": "icons/containers/bags/pack-leather-white-tan.webp",
+      "system": {
+        "description": "<p>1 Slot while held. Worn, it occupies no Slot and adds +3 Slots to your Inventory. You can only benefit from one at a time.</p>",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 5,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Outdoors",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "noSlotsWhenWorn": true,
+        "handsRequired": 0
+      },
+      "effects": [
+        {
+          "name": "Bonus Inventory",
+          "origin": "Compendium.vagabond.gear.Item.8o8KVSgpYsNFtGz2",
+          "img": "icons/svg/aura.svg",
+          "_id": "YJlQPYRINJ72Nf57",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.inventory.bonusSlots",
+                "value": 3,
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "<p>Backpack: +3 Inventory Slots while worn.</p>",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "when-equipped"
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!L1JVIV6U1GAidKwB.noNRABShIW1VgNtC.YJlQPYRINJ72Nf57"
+        }
+      ],
+      "flags": {},
+      "_id": "noNRABShIW1VgNtC",
+      "_key": "!actors.items!L1JVIV6U1GAidKwB.noNRABShIW1VgNtC"
+    },
+    {
+      "name": "Bedroll",
+      "type": "equipment",
+      "img": "icons/sundries/survival/bedroll-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Personal Items",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "eworeVNbwdYlQJdm",
+      "_key": "!actors.items!L1JVIV6U1GAidKwB.eworeVNbwdYlQJdm"
+    },
+    {
+      "name": "Rations (1 day)",
+      "type": "equipment",
+      "img": "icons/consumables/food/cooked-grilled-ham-hock-glazed-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Cooking & Food",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "isSupply": true
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "sjskQIJ2Vt1dR8As",
+      "_key": "!actors.items!L1JVIV6U1GAidKwB.sjskQIJ2Vt1dR8As"
+    },
+    {
+      "name": "Rations (1 day)",
+      "type": "equipment",
+      "img": "icons/consumables/food/cooked-grilled-ham-hock-glazed-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Cooking & Food",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "isSupply": true
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "JvFNxcJurEhnZ90i",
+      "_key": "!actors.items!L1JVIV6U1GAidKwB.JvFNxcJurEhnZ90i"
+    },
+    {
+      "name": "Rations (1 day)",
+      "type": "equipment",
+      "img": "icons/consumables/food/cooked-grilled-ham-hock-glazed-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Cooking & Food",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "isSupply": true
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "JhHPjVsLnJ7C2VzA",
+      "_key": "!actors.items!L1JVIV6U1GAidKwB.JhHPjVsLnJ7C2VzA"
+    },
+    {
+      "name": "Rations (1 day)",
+      "type": "equipment",
+      "img": "icons/consumables/food/cooked-grilled-ham-hock-glazed-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Cooking & Food",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "isSupply": true
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "U9bO3uYdRubQLKBs",
+      "_key": "!actors.items!L1JVIV6U1GAidKwB.U9bO3uYdRubQLKBs"
+    },
+    {
+      "name": "Rations (1 day)",
+      "type": "equipment",
+      "img": "icons/consumables/food/cooked-grilled-ham-hock-glazed-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Cooking & Food",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "isSupply": true
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "Uom4mGMgcJQhxpDK",
+      "_key": "!actors.items!L1JVIV6U1GAidKwB.Uom4mGMgcJQhxpDK"
+    },
+    {
+      "name": "Torch",
+      "type": "equipment",
+      "img": "icons/sundries/lights/torch-brown-lit.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Outdoors",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "macro": {
+          "enabled": true,
+          "uuid": "",
+          "command": "game.vagabond.lightSource.use({ actor, item, token, light: {\"bright\": 25, \"dim\": 30, \"angle\": 360, \"color\": \"#ff9329\", \"alpha\": 0.65, \"attenuation\": 0.25, \"shadows\": 0.2, \"animation\": {\"type\": \"torch\", \"speed\": 5, \"intensity\": 5}}, durationMin: 60, clockOptions: ['lit','realtime','hour'] });",
+          "label": "Ignite",
+          "runAsGM": false
+        },
+        "handsRequired": 1
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "pEVVvXezappyBLra",
+      "_key": "!actors.items!L1JVIV6U1GAidKwB.pEVVvXezappyBLra"
+    },
+    {
+      "name": "Torch",
+      "type": "equipment",
+      "img": "icons/sundries/lights/torch-brown-lit.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Outdoors",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "macro": {
+          "enabled": true,
+          "uuid": "",
+          "command": "game.vagabond.lightSource.use({ actor, item, token, light: {\"bright\": 25, \"dim\": 30, \"angle\": 360, \"color\": \"#ff9329\", \"alpha\": 0.65, \"attenuation\": 0.25, \"shadows\": 0.2, \"animation\": {\"type\": \"torch\", \"speed\": 5, \"intensity\": 5}}, durationMin: 60, clockOptions: ['lit','realtime','hour'] });",
+          "label": "Ignite",
+          "runAsGM": false
+        },
+        "handsRequired": 1
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "tgERpCOqULlKIbnO",
+      "_key": "!actors.items!L1JVIV6U1GAidKwB.tgERpCOqULlKIbnO"
+    },
+    {
+      "name": "Waterskin",
+      "type": "equipment",
+      "img": "icons/sundries/survival/waterskin-leather-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 2,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Personal Items",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isBeverage": true
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "mjwKdCTvg0bCNLeG",
+      "_key": "!actors.items!L1JVIV6U1GAidKwB.mjwKdCTvg0bCNLeG"
+    },
+    {
+      "name": "Trinket",
+      "type": "equipment",
+      "img": "icons/commodities/treasure/trinket-totem-bone-green.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": true,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 50,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "oneHand",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Personal Items",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "handsRequired": 1,
+        "isTrinket": true
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "DfRKnKGwYSi85CUZ",
+      "_key": "!actors.items!L1JVIV6U1GAidKwB.DfRKnKGwYSi85CUZ"
+    },
+    {
+      "name": "Incense (stick)",
+      "type": "equipment",
+      "img": "icons/commodities/wood/kindling-stick-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 0,
+          "copper": 5
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Books & Magic",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "JK9bpdlcu5KdvBiA",
+      "_key": "!actors.items!L1JVIV6U1GAidKwB.JK9bpdlcu5KdvBiA"
+    },
+    {
+      "name": "Incense (stick)",
+      "type": "equipment",
+      "img": "icons/commodities/wood/kindling-stick-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 0,
+          "copper": 5
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Books & Magic",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "vO0SJEptsDzhbZsf",
+      "_key": "!actors.items!L1JVIV6U1GAidKwB.vO0SJEptsDzhbZsf"
+    },
+    {
+      "name": "Incense (stick)",
+      "type": "equipment",
+      "img": "icons/commodities/wood/kindling-stick-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 0,
+          "copper": 5
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Books & Magic",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "YeeK8YXJCiAM5Zlo",
+      "_key": "!actors.items!L1JVIV6U1GAidKwB.YeeK8YXJCiAM5Zlo"
+    },
+    {
+      "name": "Incense (stick)",
+      "type": "equipment",
+      "img": "icons/commodities/wood/kindling-stick-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 0,
+          "copper": 5
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Books & Magic",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "QMwcP1DQC2pbIrUJ",
+      "_key": "!actors.items!L1JVIV6U1GAidKwB.QMwcP1DQC2pbIrUJ"
+    },
+    {
+      "name": "Incense (stick)",
+      "type": "equipment",
+      "img": "icons/commodities/wood/kindling-stick-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 0,
+          "copper": 5
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Books & Magic",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "mINrFYa9KQmB5Ppe",
+      "_key": "!actors.items!L1JVIV6U1GAidKwB.mINrFYa9KQmB5Ppe"
+    },
+    {
+      "name": "Incense (stick)",
+      "type": "equipment",
+      "img": "icons/commodities/wood/kindling-stick-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 0,
+          "copper": 5
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Books & Magic",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "KmqsX7oxDlatrMoN",
+      "_key": "!actors.items!L1JVIV6U1GAidKwB.KmqsX7oxDlatrMoN"
+    },
+    {
+      "name": "Incense (stick)",
+      "type": "equipment",
+      "img": "icons/commodities/wood/kindling-stick-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 0,
+          "copper": 5
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Books & Magic",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "fEuMdHZfF2anMNfy",
+      "_key": "!actors.items!L1JVIV6U1GAidKwB.fEuMdHZfF2anMNfy"
+    },
+    {
+      "name": "Incense (stick)",
+      "type": "equipment",
+      "img": "icons/commodities/wood/kindling-stick-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 0,
+          "copper": 5
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Books & Magic",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "9WPZhDRJcVkx9GJR",
+      "_key": "!actors.items!L1JVIV6U1GAidKwB.9WPZhDRJcVkx9GJR"
+    },
+    {
+      "name": "Incense (stick)",
+      "type": "equipment",
+      "img": "icons/commodities/wood/kindling-stick-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 0,
+          "copper": 5
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Books & Magic",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "KRo2cudq6nz5R3yN",
+      "_key": "!actors.items!L1JVIV6U1GAidKwB.KRo2cudq6nz5R3yN"
+    },
+    {
+      "name": "Incense (stick)",
+      "type": "equipment",
+      "img": "icons/commodities/wood/kindling-stick-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 0,
+          "copper": 5
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Books & Magic",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "SCl4ZU1Cd5CnQwND",
+      "_key": "!actors.items!L1JVIV6U1GAidKwB.SCl4ZU1Cd5CnQwND"
+    },
+    {
+      "name": "Incense (stick)",
+      "type": "equipment",
+      "img": "icons/commodities/wood/kindling-stick-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 0,
+          "copper": 5
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Books & Magic",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "XXiWKFmkmGe73XUU",
+      "_key": "!actors.items!L1JVIV6U1GAidKwB.XXiWKFmkmGe73XUU"
+    },
+    {
+      "name": "Incense (stick)",
+      "type": "equipment",
+      "img": "icons/commodities/wood/kindling-stick-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 0,
+          "copper": 5
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Books & Magic",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "lPRFGirdx3gltlCq",
+      "_key": "!actors.items!L1JVIV6U1GAidKwB.lPRFGirdx3gltlCq"
+    },
+    {
+      "name": "Incense (stick)",
+      "type": "equipment",
+      "img": "icons/commodities/wood/kindling-stick-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 0,
+          "copper": 5
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Books & Magic",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "9gALcwCN4YLYCdIk",
+      "_key": "!actors.items!L1JVIV6U1GAidKwB.9gALcwCN4YLYCdIk"
+    },
+    {
+      "name": "Incense (stick)",
+      "type": "equipment",
+      "img": "icons/commodities/wood/kindling-stick-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 0,
+          "copper": 5
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Books & Magic",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "6C5iWwAkaPA6QAAT",
+      "_key": "!actors.items!L1JVIV6U1GAidKwB.6C5iWwAkaPA6QAAT"
+    },
+    {
+      "name": "Incense (stick)",
+      "type": "equipment",
+      "img": "icons/commodities/wood/kindling-stick-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 0,
+          "copper": 5
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Books & Magic",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "ALKLZfP0LQA4UJZK",
+      "_key": "!actors.items!L1JVIV6U1GAidKwB.ALKLZfP0LQA4UJZK"
+    },
+    {
+      "name": "Incense (stick)",
+      "type": "equipment",
+      "img": "icons/commodities/wood/kindling-stick-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 0,
+          "copper": 5
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Books & Magic",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "bLRQ1LnJjqedUIP2",
+      "_key": "!actors.items!L1JVIV6U1GAidKwB.bLRQ1LnJjqedUIP2"
+    },
+    {
+      "name": "Incense (stick)",
+      "type": "equipment",
+      "img": "icons/commodities/wood/kindling-stick-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 0,
+          "copper": 5
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Books & Magic",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "1FUHe81qcoZy22uu",
+      "_key": "!actors.items!L1JVIV6U1GAidKwB.1FUHe81qcoZy22uu"
+    },
+    {
+      "name": "Incense (stick)",
+      "type": "equipment",
+      "img": "icons/commodities/wood/kindling-stick-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 0,
+          "copper": 5
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Books & Magic",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "9armXILaQY5AcDVQ",
+      "_key": "!actors.items!L1JVIV6U1GAidKwB.9armXILaQY5AcDVQ"
+    },
+    {
+      "name": "Incense (stick)",
+      "type": "equipment",
+      "img": "icons/commodities/wood/kindling-stick-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 0,
+          "copper": 5
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Books & Magic",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "NGsT77UN0ErJnF24",
+      "_key": "!actors.items!L1JVIV6U1GAidKwB.NGsT77UN0ErJnF24"
+    },
+    {
+      "name": "Incense (stick)",
+      "type": "equipment",
+      "img": "icons/commodities/wood/kindling-stick-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 0,
+          "copper": 5
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Books & Magic",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "MBGCpQPYO1vywqKs",
+      "_key": "!actors.items!L1JVIV6U1GAidKwB.MBGCpQPYO1vywqKs"
+    },
+    {
+      "name": "Holy Water",
+      "type": "equipment",
+      "img": "icons/magic/holy/chalice-glowing-yellow-blue.webp",
+      "system": {
+        "description": "<p><span class=\"fontstyle0\">Undead and Hellspawn hit with it take d6 damage and are Burning (Cd4).</span></p>",
+        "equipmentType": "alchemical",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 50,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "fire",
+        "damageAmount": "d6",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "7TbGvhuTPRzcgg63",
+      "_key": "!actors.items!L1JVIV6U1GAidKwB.7TbGvhuTPRzcgg63"
+    },
+    {
+      "name": "Oil, Anointing",
+      "type": "equipment",
+      "img": "icons/consumables/potions/potion-bottle-corked-stopper-ornate-yellow.webp",
+      "system": {
+        "description": "<p><span class=\"fontstyle0\">Acts as basic oil. However, when coated on a Weapon that is then ignited, the Weapon counts as Silvered (p. 79).</span></p>",
+        "equipmentType": "alchemical",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 50,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "fire",
+        "damageAmount": "d6",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "",
+        "alchemicalType": "oil",
+        "lore": "",
+        "isConsumable": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "di4yhRTXaSfXkDCt",
+      "_key": "!actors.items!L1JVIV6U1GAidKwB.di4yhRTXaSfXkDCt"
+    },
+    {
+      "name": "Medium Armor",
+      "type": "equipment",
+      "img": "icons/equipment/chest/breastplate-scale-grey.webp",
+      "system": {
+        "description": "<p>Chain, scale</p><h4><span class=\"fontstyle0\">Equipping Armor</span></h4><p><span class=\"fontstyle2\">Equipping or unequipping Armor requires a Scene (10 minutes) to complete.</span> </p>",
+        "equipmentType": "armor",
+        "locked": true,
+        "equipped": true,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 1,
+          "silver": 0,
+          "copper": 0
+        },
+        "baseSlots": 2,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "worn",
+        "immunities": [],
+        "gearCategory": "",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "armorRating": 2,
+        "mightRequirement": 4,
+        "reflexPenalty": 2
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "eCJsCPCluxtZ9VrB",
+      "_key": "!actors.items!L1JVIV6U1GAidKwB.eCJsCPCluxtZ9VrB"
+    },
+    {
+      "name": "Wizard",
+      "type": "class",
+      "img": "icons/magic/symbols/star-rising-purple.webp",
+      "system": {
+        "description": "<p><strong>In a way, we are magicians. We are alchemists, sorcerers and wizards. We are a very strange bunch. But there is great fun in being a wizard. And great power, too.</strong></p><p><em>—Billy Joel, Berklee College of Music Commencement 1993</em></p><p>Wizards are students of the arcane arts who research and develop spells as academic pursuit.</p><h3>Iconic Wizards</h3><ul><li><strong>Harry Dresden</strong>, <em>The Dresden Files</em></li><li><strong>Merlyn</strong>, <em>Arthurian legend</em></li><li><strong>Sparrowhawk</strong>, <em>Earthsea</em></li><li><strong>Sypha Belnades</strong>, <em>Castlevania</em></li></ul><h3>Playing Wizard</h3><p>The wizard is a squishy blaster focused on Casting Spells. Stay in safety to Cast your Spells and discover Enemy weaknesses.</p><p><strong>Action:</strong> Cast<br /><strong>Move:</strong> Backline<br /><strong>Starting Pack:</strong> Astronomer or Mage<br /><strong>Key Stat:</strong> Reason<br /><strong>Complexity:</strong> ★★★☆☆<br /><strong>Training:</strong> Arcana, Craft, Mysticism</p><h3>Class Features</h3><table class=\"NormalTable\"><tbody><tr><td><p><strong>Level</strong></p></td><td><p><strong>Features</strong></p></td><td><p><strong>Spells</strong></p></td><td><p><strong>Mana</strong></p></td><td><p><strong>Cast Max</strong></p></td></tr><tr><td><p>1st</p></td><td><p>Spellcaster, Page Master</p></td><td><p>4</p></td><td><p>4</p></td><td><p>3</p></td></tr><tr><td><p>2nd</p></td><td><p>Manifold Mind (+1)</p></td><td><p>4</p></td><td><p>8</p></td><td><p>4</p></td></tr><tr><td><p>3rd</p></td><td><p>Perk</p></td><td><p>5</p></td><td><p>12</p></td><td><p>5</p></td></tr><tr><td><p>4th</p></td><td><p>Sculpt Spell (-1)</p></td><td><p>5</p></td><td><p>16</p></td><td><p>6</p></td></tr><tr><td><p>5th</p></td><td><p>Perk</p></td><td><p>6</p></td><td><p>20</p></td><td><p>7</p></td></tr><tr><td><p>6th</p></td><td><p>Manifold Mind (+2), Extracurricular</p></td><td><p>6</p></td><td><p>24</p></td><td><p>8</p></td></tr><tr><td><p>7th</p></td><td><p>Perk</p></td><td><p>7</p></td><td><p>28</p></td><td><p>9</p></td></tr><tr><td><p>8th</p></td><td><p>Sculpt Spell (-2)</p></td><td><p>7</p></td><td><p>32</p></td><td><p>10</p></td></tr><tr><td><p>9th</p></td><td><p>Perk</p></td><td><p>8</p></td><td><p>36</p></td><td><p>11</p></td></tr><tr><td><p>10th</p></td><td><p>Manifold Mind (+3), Archwizard</p></td><td><p>8</p></td><td><p>40</p></td><td><p>12</p></td></tr></tbody></table>",
+        "isSpellcaster": true,
+        "levelFeatures": [
+          {
+            "level": 1,
+            "name": "Spellcaster",
+            "description": "<p>You can Cast Spells using Arcana.</p><p><strong>Spells:</strong> You learn 4 Spells, and 1 other Spell every 2 Levels hereafter.</p><p><strong>Mana:</strong> Your Max Mana is equal to (4 × your Level), and your Cast Max for Spells is equal to (2 + your Level).</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 1,
+            "name": "Page Master",
+            "description": "<p>You gain the Bookworm Perk (p. 67), and you can spend a Studied die to learn a Spell for the Shift.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [
+              "Compendium.vagabond.perks.Item.lDzaNi9ay6p8y0Ay"
+            ],
+            "perkAmount": 1,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 2,
+            "name": "Manifold Mind (+1)",
+            "description": "<p>The number of Spells you can Focus on at the same time increases by 1 now and every 4 Levels hereafter.</p>",
+            "statBonusPoints": 1,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 3,
+            "name": "Perk",
+            "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 1,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 4,
+            "name": "Sculpt Spell (-1)",
+            "description": "<p>You pay 1 less Mana for Delivery upcasting. This discount is increased by 1 every 4 Levels hereafter.</p>",
+            "statBonusPoints": 1,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 5,
+            "name": "Perk",
+            "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 1,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 6,
+            "name": "Manifold Mind (+2)",
+            "description": "<p>The number of Spells you can Focus on at the same time increases by 1 now and every 4 Levels hereafter.</p>",
+            "statBonusPoints": 1,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 6,
+            "name": "Extracurricular",
+            "description": "<p>When you successfully Cast a Spell, you can spend a Studied die to add the effect of another Spell you know to that Casting.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": [],
+            "action": {
+              "enabled": true,
+              "label": "Extracurricular",
+              "icon": "book-open",
+              "uuid": "",
+              "command": "system:wizard.extracurricular",
+              "runAsGM": false
+            }
+          },
+          {
+            "level": 7,
+            "name": "Perk",
+            "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 1,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 8,
+            "name": "Sculpt Spell (-2)",
+            "description": "<p>You pay 1 less Mana for Delivery upcasting. This discount is increased by 1 every 4 Levels hereafter.</p>",
+            "statBonusPoints": 1,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 9,
+            "name": "Perk",
+            "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 1,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 10,
+            "name": "Manifold Mind (+3)",
+            "description": "<p>The number of Spells you can Focus on at the same time increases by 1 now and every 4 Levels hereafter.</p>",
+            "statBonusPoints": 1,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 10,
+            "name": "Archwizard",
+            "description": "<p>You can Cast Spells you do not know, but you cannot spend Mana to upcast them.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": [],
+            "action": {
+              "enabled": true,
+              "label": "Archwizard",
+              "icon": "hat-wizard",
+              "uuid": "",
+              "command": "system:wizard.archwizard",
+              "runAsGM": false
+            }
+          }
+        ],
+        "manaSkill": "arcana",
+        "castingStat": "reason",
+        "manaMultiplier": 4,
+        "skillGrant": {
+          "guaranteed": [
+            "arcana",
+            "craft",
+            "mysticism"
+          ],
+          "choices": []
+        },
+        "levelSpells": [
+          {
+            "spells": 4,
+            "level": 1
+          },
+          {
+            "spells": 4,
+            "level": 2
+          },
+          {
+            "spells": 5,
+            "level": 3
+          },
+          {
+            "spells": 5,
+            "level": 4
+          },
+          {
+            "spells": 6,
+            "level": 5
+          },
+          {
+            "spells": 6,
+            "level": 6
+          },
+          {
+            "spells": 7,
+            "level": 7
+          },
+          {
+            "spells": 7,
+            "level": 8
+          },
+          {
+            "spells": 8,
+            "level": 9
+          },
+          {
+            "spells": 8,
+            "level": 10
+          }
+        ],
+        "keyStats": [
+          "reason"
+        ],
+        "suggestedStartingPacks": [
+          "Compendium.vagabond.starting-packs.Item.2G3GnGMuSzqQwaxo",
+          "Compendium.vagabond.starting-packs.Item.hje865DkzVVguhdT"
+        ]
+      },
+      "effects": [
+        {
+          "name": "Spellcaster",
+          "origin": "Compendium.vagabond.classes.Item.U3rAxH8vn8tzDblW",
+          "img": "icons/svg/aura.svg",
+          "_id": "LhQd4jo4zbMaWqwe",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.mana.castingMaxBonus",
+                "value": "2 + floor(@lvl / 2) - @stats.reason.total",
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "permanent"
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!L1JVIV6U1GAidKwB.lzH2lD508zUZ3Njk.LhQd4jo4zbMaWqwe"
+        },
+        {
+          "name": "Manifold Mind",
+          "origin": "Compendium.vagabond.classes.Item.U3rAxH8vn8tzDblW",
+          "img": "icons/svg/aura.svg",
+          "_id": "5Cu5bGDyggWTV2Dd",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.focus.maxBonus",
+                "value": "1 + floor((@lvl - 2) / 4)",
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "permanent",
+              "minLevel": 2
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!L1JVIV6U1GAidKwB.lzH2lD508zUZ3Njk.5Cu5bGDyggWTV2Dd"
+        },
+        {
+          "name": "Sculpt Spell",
+          "origin": "Compendium.vagabond.classes.Item.U3rAxH8vn8tzDblW",
+          "img": "icons/svg/aura.svg",
+          "_id": "APvMlM7qPiAjkkTF",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.bonuses.spellManaCostReduction",
+                "value": "1 + floor((@lvl - 4) / 4)",
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "permanent",
+              "minLevel": 4
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!L1JVIV6U1GAidKwB.lzH2lD508zUZ3Njk.APvMlM7qPiAjkkTF"
+        }
+      ],
+      "flags": {},
+      "_id": "lzH2lD508zUZ3Njk",
+      "_key": "!actors.items!L1JVIV6U1GAidKwB.lzH2lD508zUZ3Njk"
+    },
+    {
+      "name": "Bookworm",
+      "type": "perk",
+      "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
+      "system": {
+        "description": "<p>You gain an extra Studied die when you Study (p. 19). You can take this Perk multiple times.</p>",
+        "prerequisites": {
+          "stats": [
+            {
+              "stat": "reason",
+              "value": 4
+            }
+          ],
+          "statOrGroups": [],
+          "trainedSkills": [],
+          "trainedSkillOrGroups": [],
+          "spells": [],
+          "spellOrGroups": [],
+          "hasAnySpell": false,
+          "resources": [],
+          "resourceOrGroups": []
+        }
+      },
+      "effects": [],
+      "flags": {
+        "vagabond": {
+          "perkOrigin": {
+            "type": "level",
+            "level": 1
+          }
+        }
+      },
+      "_id": "4TpJJCmDWCvXhSgw",
+      "_key": "!actors.items!L1JVIV6U1GAidKwB.4TpJJCmDWCvXhSgw"
+    },
+    {
+      "name": "Necromancer",
+      "type": "perk",
+      "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
+      "system": {
+        "description": "<p>When you Focus on Raise, you can choose an Undead you control. The Target regains HP equal to (half your Level, round up).</p>",
+        "prerequisites": {
+          "stats": [],
+          "statOrGroups": [],
+          "trainedSkills": [],
+          "trainedSkillOrGroups": [],
+          "spells": [
+            "Compendium.vagabond.spells.Item.GaL1pCOL67Vf586b"
+          ],
+          "spellOrGroups": [],
+          "hasAnySpell": false,
+          "resources": [],
+          "resourceOrGroups": []
+        }
+      },
+      "effects": [],
+      "flags": {
+        "vagabond": {
+          "perkOrigin": {
+            "type": "level",
+            "level": 1
+          }
+        }
+      },
+      "_id": "FCHM94aevCTaZf3t",
+      "_key": "!actors.items!L1JVIV6U1GAidKwB.FCHM94aevCTaZf3t"
+    },
+    {
+      "name": "Disintegrate",
+      "type": "spell",
+      "img": "icons/magic/lightning/barrier-shield-orb-pink.webp",
+      "system": {
+        "description": "<p><span class=\"fontstyle0\">A nonmagical, non-metal Target of 1 or fewer Slots is destroyed. The Slots of the Target can increase by spending Mana, increasing by 1 per Mana spent to do so. Any Target reduced to 0 HP or destroyed by this Spell is reduced to ash.</span></p>",
+        "damageType": "shock",
+        "duration": "Until your next turn",
+        "crit": "",
+        "favorite": true,
+        "locked": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "k29QyHiBX1k02gg6",
+      "_key": "!actors.items!L1JVIV6U1GAidKwB.k29QyHiBX1k02gg6"
+    },
+    {
+      "name": "Enflesh",
+      "type": "spell",
+      "img": "icons/magic/light/hand-sparks-smoke-teal.webp",
+      "system": {
+        "description": "<p><span class=\"fontstyle0\">Targeted, non-Relic fabric, stone, metal, or wood is turned to hair, tissue, and bone for the duration. Alternatively, if the Target is turned to stone through a curse or magic, the effect ends.</span></p>",
+        "damageType": "acid",
+        "duration": "Until your next turn",
+        "crit": "Duration is continual.",
+        "favorite": true,
+        "noRollRequired": true,
+        "fxSchool": "necrotic",
+        "locked": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "Wqu2psAwftD2LJZs",
+      "_key": "!actors.items!L1JVIV6U1GAidKwB.Wqu2psAwftD2LJZs"
+    },
+    {
+      "name": "Gas",
+      "type": "spell",
+      "img": "icons/magic/air/fog-gas-smoke-swirling-green.webp",
+      "system": {
+        "description": "<p><span class=\"fontstyle0\">You create a cloud of gas in an area equal to the size of the delivery (minimum 5' cube) and causing those within to be Sickened (Vulnerable) while in the area. This effect is dispersed by strong winds.</span></p>",
+        "damageType": "poison",
+        "duration": "Until your next turn",
+        "crit": "The effect lasts 1 Hour unless dispersed.",
+        "favorite": true,
+        "noRollRequired": true,
+        "fxSchool": "poison",
+        "locked": true,
+        "causedStatuses": [
+          {
+            "statusId": "sickened",
+            "requiresDamage": true,
+            "saveType": "endure",
+            "duration": "focusing",
+            "tickDamageEnabled": false,
+            "damageOnTick": "",
+            "damageType": "-"
+          }
+        ],
+        "critCausedStatuses": [
+          {
+            "statusId": "sickened",
+            "requiresDamage": true,
+            "saveType": "endure",
+            "duration": "",
+            "tickDamageEnabled": false,
+            "damageOnTick": "",
+            "damageType": "-"
+          }
+        ]
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "NRj8i5KWiHdReMIp",
+      "_key": "!actors.items!L1JVIV6U1GAidKwB.NRj8i5KWiHdReMIp"
+    },
+    {
+      "name": "Raise",
+      "type": "spell",
+      "img": "icons/magic/death/skeleton-glow-yellow-black.webp",
+      "system": {
+        "description": "<p><span class=\"fontstyle0\">Corpses in the area of non-Artificial or Undead Beings with cumulative HD no higher than your Level rise as an Undead under your control for the duration. Afterward, any Undead you raised this way die and can't be raised by this Spell again. You can command your raised Undead when you Focus on this Cast, using your Cast Skill for Checks they make. The Undead you raise this way use their original statblock with the following changes:</span></p><ul><li><span class=\"fontstyle0\">It is an Undead</span></li><li><span class=\"fontstyle0\">It has Darksight, is Immune to Poison, Weak to Silvered Weapons, and can't be Sickened.</span></li></ul>",
+        "damageType": "-",
+        "duration": "Until your next turn",
+        "crit": "",
+        "favorite": true,
+        "noRollRequired": true,
+        "fxSchool": "necrotic",
+        "locked": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "1tHiFTrK4cKPmEip",
+      "_key": "!actors.items!L1JVIV6U1GAidKwB.1tHiFTrK4cKPmEip"
+    }
+  ],
+  "effects": [],
+  "folder": null,
+  "flags": {
+    "vagabond": {
+      "buildGuide": true
+    }
+  },
+  "sort": 0,
+  "_id": "L1JVIV6U1GAidKwB",
+  "_key": "!actors!L1JVIV6U1GAidKwB"
+}

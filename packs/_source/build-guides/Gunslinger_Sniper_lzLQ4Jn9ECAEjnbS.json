@@ -1,0 +1,1495 @@
+{
+  "name": "Gunslinger - Sniper",
+  "type": "character",
+  "img": "icons/weapons/guns/gun-pistol-flintlock-white.webp",
+  "system": {
+    "attributes": {
+      "level": {
+        "value": 1
+      }
+    },
+    "stats": {
+      "might": {
+        "value": 4
+      },
+      "dexterity": {
+        "value": 4
+      },
+      "awareness": {
+        "value": 7
+      },
+      "reason": {
+        "value": 3
+      },
+      "presence": {
+        "value": 3
+      },
+      "luck": {
+        "value": 5
+      }
+    },
+    "skills": {
+      "detect": {
+        "trained": true
+      },
+      "ranged": {
+        "trained": true
+      },
+      "sneak": {
+        "trained": true
+      },
+      "survival": {
+        "trained": true
+      }
+    },
+    "health": {
+      "value": 4
+    },
+    "currentLuck": 5,
+    "currency": {
+      "gold": 0,
+      "silver": 15,
+      "copper": 0
+    },
+    "biography": "<h2>Gunslinger - Sniper — Build Guide</h2>\n<p><em>Core Rulebook v3 Alpha 3, Appendix C. This Hero is built at Level 1 with no Ancestry — pick one, rename the Hero, and adjust anything you like.</em></p>\n<h3>Stats at Level 10</h3>\n<p><strong>MIT</strong> 5 · <strong>DEX</strong> 7 · <strong>AWR</strong> 7 · <strong>RSN</strong> 3 · <strong>PRS</strong> 3 · <strong>LUK</strong> 6</p>\n<h3>Perks by Level</h3><ul>\n<li><strong>1st:</strong> Ambusher, Quick Draw <em>(already on this sheet)</em></li>\n<li><strong>3rd:</strong> Sharpshooter</li>\n<li><strong>5th:</strong> Marksmanship</li>\n<li><strong>7th:</strong> Guardian Angel</li>\n<li><strong>9th:</strong> Steady Aim</li>\n</ul>",
+    "details": {
+      "constructed": true,
+      "builderDismissed": false
+    }
+  },
+  "prototypeToken": {
+    "name": "Gunslinger - Sniper",
+    "actorLink": true,
+    "disposition": 1,
+    "texture": {
+      "src": "icons/weapons/guns/gun-pistol-flintlock-white.webp"
+    },
+    "bar1": {
+      "attribute": "health"
+    }
+  },
+  "items": [
+    {
+      "name": "Backpack",
+      "type": "equipment",
+      "img": "icons/containers/bags/pack-leather-white-tan.webp",
+      "system": {
+        "description": "<p>1 Slot while held. Worn, it occupies no Slot and adds +3 Slots to your Inventory. You can only benefit from one at a time.</p>",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 5,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Outdoors",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "noSlotsWhenWorn": true,
+        "handsRequired": 0
+      },
+      "effects": [
+        {
+          "name": "Bonus Inventory",
+          "origin": "Compendium.vagabond.gear.Item.8o8KVSgpYsNFtGz2",
+          "img": "icons/svg/aura.svg",
+          "_id": "YJlQPYRINJ72Nf57",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.inventory.bonusSlots",
+                "value": 3,
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "<p>Backpack: +3 Inventory Slots while worn.</p>",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "when-equipped"
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!lzLQ4Jn9ECAEjnbS.JdmGfgzUcfgkfa7v.YJlQPYRINJ72Nf57"
+        }
+      ],
+      "flags": {},
+      "_id": "JdmGfgzUcfgkfa7v",
+      "_key": "!actors.items!lzLQ4Jn9ECAEjnbS.JdmGfgzUcfgkfa7v"
+    },
+    {
+      "name": "Bedroll",
+      "type": "equipment",
+      "img": "icons/sundries/survival/bedroll-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Personal Items",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "zjvtSsbH9iC85trT",
+      "_key": "!actors.items!lzLQ4Jn9ECAEjnbS.zjvtSsbH9iC85trT"
+    },
+    {
+      "name": "Rations (1 day)",
+      "type": "equipment",
+      "img": "icons/consumables/food/cooked-grilled-ham-hock-glazed-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Cooking & Food",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "isSupply": true
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "1r7iF35DCWsnJYHv",
+      "_key": "!actors.items!lzLQ4Jn9ECAEjnbS.1r7iF35DCWsnJYHv"
+    },
+    {
+      "name": "Rations (1 day)",
+      "type": "equipment",
+      "img": "icons/consumables/food/cooked-grilled-ham-hock-glazed-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Cooking & Food",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "isSupply": true
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "9o6LPHEmz7DkkgUR",
+      "_key": "!actors.items!lzLQ4Jn9ECAEjnbS.9o6LPHEmz7DkkgUR"
+    },
+    {
+      "name": "Rations (1 day)",
+      "type": "equipment",
+      "img": "icons/consumables/food/cooked-grilled-ham-hock-glazed-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Cooking & Food",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "isSupply": true
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "6UsEwrt6PhHU9c8l",
+      "_key": "!actors.items!lzLQ4Jn9ECAEjnbS.6UsEwrt6PhHU9c8l"
+    },
+    {
+      "name": "Rations (1 day)",
+      "type": "equipment",
+      "img": "icons/consumables/food/cooked-grilled-ham-hock-glazed-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Cooking & Food",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "isSupply": true
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "y7quUGz3EOqKeENQ",
+      "_key": "!actors.items!lzLQ4Jn9ECAEjnbS.y7quUGz3EOqKeENQ"
+    },
+    {
+      "name": "Rations (1 day)",
+      "type": "equipment",
+      "img": "icons/consumables/food/cooked-grilled-ham-hock-glazed-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Cooking & Food",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "isSupply": true
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "zLWcG8LA8IaUQdAa",
+      "_key": "!actors.items!lzLQ4Jn9ECAEjnbS.zLWcG8LA8IaUQdAa"
+    },
+    {
+      "name": "Torch",
+      "type": "equipment",
+      "img": "icons/sundries/lights/torch-brown-lit.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Outdoors",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "macro": {
+          "enabled": true,
+          "uuid": "",
+          "command": "game.vagabond.lightSource.use({ actor, item, token, light: {\"bright\": 25, \"dim\": 30, \"angle\": 360, \"color\": \"#ff9329\", \"alpha\": 0.65, \"attenuation\": 0.25, \"shadows\": 0.2, \"animation\": {\"type\": \"torch\", \"speed\": 5, \"intensity\": 5}}, durationMin: 60, clockOptions: ['lit','realtime','hour'] });",
+          "label": "Ignite",
+          "runAsGM": false
+        },
+        "handsRequired": 1
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "LCDT6stKCWoIeh4P",
+      "_key": "!actors.items!lzLQ4Jn9ECAEjnbS.LCDT6stKCWoIeh4P"
+    },
+    {
+      "name": "Torch",
+      "type": "equipment",
+      "img": "icons/sundries/lights/torch-brown-lit.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Outdoors",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "macro": {
+          "enabled": true,
+          "uuid": "",
+          "command": "game.vagabond.lightSource.use({ actor, item, token, light: {\"bright\": 25, \"dim\": 30, \"angle\": 360, \"color\": \"#ff9329\", \"alpha\": 0.65, \"attenuation\": 0.25, \"shadows\": 0.2, \"animation\": {\"type\": \"torch\", \"speed\": 5, \"intensity\": 5}}, durationMin: 60, clockOptions: ['lit','realtime','hour'] });",
+          "label": "Ignite",
+          "runAsGM": false
+        },
+        "handsRequired": 1
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "dkaQGH6NC52izhfN",
+      "_key": "!actors.items!lzLQ4Jn9ECAEjnbS.dkaQGH6NC52izhfN"
+    },
+    {
+      "name": "Waterskin",
+      "type": "equipment",
+      "img": "icons/sundries/survival/waterskin-leather-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 2,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Personal Items",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isBeverage": true
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "P5BCBClTAiyjFKDT",
+      "_key": "!actors.items!lzLQ4Jn9ECAEjnbS.P5BCBClTAiyjFKDT"
+    },
+    {
+      "name": "Handgun",
+      "type": "equipment",
+      "img": "icons/weapons/guns/gun-pistol-flintlock.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "weapon",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 40,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "properties": [
+          "Keen"
+        ],
+        "weaponSkill": "ranged",
+        "range": "far",
+        "grip": "1H",
+        "damageOneHand": "d4",
+        "damageTwoHands": "d4",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "itemFx": {
+          "hitFile": "modules/JB2A_DnD5e/Library/Generic/Template/Line/Projectile/VolleyProjectileBullet001_001_01_Line_OrangeYellow_15ft_1000x400.webm",
+          "enabled": true
+        },
+        "damageTypeOneHand": "piercing"
+      },
+      "effects": [
+        {
+          "name": "Keen",
+          "img": "icons/svg/aura.svg",
+          "_id": "YuB6FpOUDADeR9xX",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.attackCritBonus",
+                "type": "subtract",
+                "value": "1"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "Crits 1 lower on this weapon's Attack Check.",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "on-use"
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!lzLQ4Jn9ECAEjnbS.ddgCTivQmlbiXOG9.YuB6FpOUDADeR9xX"
+        }
+      ],
+      "flags": {},
+      "_id": "ddgCTivQmlbiXOG9",
+      "_key": "!actors.items!lzLQ4Jn9ECAEjnbS.ddgCTivQmlbiXOG9"
+    },
+    {
+      "name": "Box of bullets",
+      "type": "equipment",
+      "_id": "WBAn6d1GcOacz6az",
+      "img": "icons/weapons/ammunition/shot-round-lead.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 10,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Ammo",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {},
+      "_key": "!actors.items!lzLQ4Jn9ECAEjnbS.WBAn6d1GcOacz6az"
+    },
+    {
+      "name": "Rope (50 feet)",
+      "type": "equipment",
+      "img": "icons/sundries/survival/rope-coiled-tan.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 10,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Outdoors",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "2YpGv9Q7Fbk3rN1r",
+      "_key": "!actors.items!lzLQ4Jn9ECAEjnbS.2YpGv9Q7Fbk3rN1r"
+    },
+    {
+      "name": "Manacles",
+      "type": "equipment",
+      "img": "icons/sundries/survival/cuffs-shackles-steel.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 20,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Hardware",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "4Kzosae4qQNBDC6G",
+      "_key": "!actors.items!lzLQ4Jn9ECAEjnbS.4Kzosae4qQNBDC6G"
+    },
+    {
+      "name": "Lockpick",
+      "type": "equipment",
+      "img": "icons/tools/hand/lockpicks-steel-grey.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 5,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Hardware",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "FwYBDiJULgbPXleD",
+      "_key": "!actors.items!lzLQ4Jn9ECAEjnbS.FwYBDiJULgbPXleD"
+    },
+    {
+      "name": "Lockpick",
+      "type": "equipment",
+      "img": "icons/tools/hand/lockpicks-steel-grey.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 5,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Hardware",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "iulVYelHE0jqsS4W",
+      "_key": "!actors.items!lzLQ4Jn9ECAEjnbS.iulVYelHE0jqsS4W"
+    },
+    {
+      "name": "Lockpick",
+      "type": "equipment",
+      "img": "icons/tools/hand/lockpicks-steel-grey.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 5,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Hardware",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "iXXnN2ul06mxIVX6",
+      "_key": "!actors.items!lzLQ4Jn9ECAEjnbS.iXXnN2ul06mxIVX6"
+    },
+    {
+      "name": "Light Armor",
+      "type": "equipment",
+      "img": "icons/equipment/chest/breastplate-quilted-brown.webp",
+      "system": {
+        "description": "<p><span class=\"fontstyle0\">Leather, hide, padded.</span></p><h4><span class=\"fontstyle0\">Equipping Armor</span></h4><p><span class=\"fontstyle2\">Equipping or unequipping Armor requires a Scene (10 minutes) to complete.</span> </p>",
+        "equipmentType": "armor",
+        "locked": true,
+        "equipped": true,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 50,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "worn",
+        "immunities": [],
+        "gearCategory": "",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 1
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "7HWF7DjPsV86BDYX",
+      "_key": "!actors.items!lzLQ4Jn9ECAEjnbS.7HWF7DjPsV86BDYX"
+    },
+    {
+      "name": "Rifle",
+      "type": "equipment",
+      "img": "icons/weapons/guns/gun-purple.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "weapon",
+        "locked": true,
+        "equipped": true,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 2,
+          "silver": 20,
+          "copper": 0
+        },
+        "baseSlots": 2,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "properties": [
+          "Keen"
+        ],
+        "weaponSkill": "ranged",
+        "range": "far",
+        "grip": "2H",
+        "damageOneHand": "d8",
+        "damageTwoHands": "d8",
+        "equipmentState": "twoHands",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "itemFx": {
+          "enabled": true,
+          "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Ranged/Bullet_01_Regular_Orange_15ft_1000x400.webm",
+          "hitDuration": 1000
+        },
+        "damageTypeOneHand": "piercing",
+        "damageTypeTwoHands": "piercing"
+      },
+      "effects": [
+        {
+          "name": "Keen",
+          "img": "icons/svg/aura.svg",
+          "_id": "59QW6jvL3nLRmTZg",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.attackCritBonus",
+                "type": "subtract",
+                "value": "1"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "Crits 1 lower on this weapon's Attack Check.",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "on-use"
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!lzLQ4Jn9ECAEjnbS.rauWzvOvKqltIZSQ.59QW6jvL3nLRmTZg"
+        }
+      ],
+      "flags": {},
+      "_id": "rauWzvOvKqltIZSQ",
+      "_key": "!actors.items!lzLQ4Jn9ECAEjnbS.rauWzvOvKqltIZSQ"
+    },
+    {
+      "name": "Gunslinger",
+      "type": "class",
+      "img": "icons/weapons/guns/gun-pistol-flintlock-white.webp",
+      "system": {
+        "description": "<p><strong>This... is my BOOMSTICK!</strong></p><p><em>—Ash, Army of Darkness</em></p><p>Attitude and tenacity are as core to the gunslinger as ammo. They stare down challenges through iron sights, fortified by their inner grit.</p><h3>Iconic Gunslingers</h3><ul><li><strong>Arthur Morgan</strong>, <em>Red Dead Redemption 2</em></li><li><strong>Django</strong>, <em>Django Unchained</em></li><li><strong>Roland Deschain</strong>, <em>Dark Tower</em></li></ul><h3>Playing Gunslinger</h3><p>The gunslinger is a low-defense, high-crit striker. In combat, stay as far back as possible and keep the enemy under constant fire.</p><p><strong>Action:</strong> Attack<br /><strong>Move:</strong> Backline<br /><strong>Starting Pack:</strong> Bounty Hunter or Tinker<br /><strong>Key Stat:</strong> Awareness<br /><strong>Complexity:</strong> ★★★☆☆<br /><strong>Training:</strong> Detect, Ranged</p><h3>Class Features</h3><table class=\"NormalTable\"><tbody><tr><td><p><strong>Level</strong></p></td><td><p><strong>Features</strong></p></td></tr><tr><td><p>1st</p></td><td><p>Deadeye, Shooting Irons</p></td></tr><tr><td><p>2nd</p></td><td><p>Bad Medicine</p></td></tr><tr><td><p>3rd</p></td><td><p>Perk</p></td></tr><tr><td><p>4th</p></td><td><p>Grit (3)</p></td></tr><tr><td><p>5th</p></td><td><p>Perk</p></td></tr><tr><td><p>6th</p></td><td><p>Bad Medicine (+2 dice)</p></td></tr><tr><td><p>7th</p></td><td><p>Perk</p></td></tr><tr><td><p>8th</p></td><td><p>Grit (2)</p></td></tr><tr><td><p>9th</p></td><td><p>Perk</p></td></tr><tr><td><p>10th</p></td><td><p>Bad Medicine (+3 dice), High Noon</p></td></tr></tbody></table>",
+        "isSpellcaster": false,
+        "levelFeatures": [
+          {
+            "level": 1,
+            "name": "Deadeye",
+            "description": "<p>After you make a Ranged attack, you Crit on subsequent Ranged attacks on a d20 roll 1 lower, and can stack up to 3 times. It resets at the end of your Turn if you didn’t hit a Ranged attack since the start of your last Turn.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": [],
+            "action": {
+              "enabled": true,
+              "label": "Deadeye",
+              "icon": "crosshairs",
+              "uuid": "",
+              "command": "system:gunslinger.deadeye",
+              "runAsGM": false
+            }
+          },
+          {
+            "level": 1,
+            "name": "Shooting Irons",
+            "description": "<p>You gain the Quick Draw Perk (p. 71) and, once per Round, you can make a Ranged attack against an attack that would hit. If you pass, reduce the damage dealt by the Target’s attack by your attack’s damage.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [
+              "Compendium.vagabond.perks.Item.byBDvKpPkrK8ynkE"
+            ],
+            "perkAmount": 1,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 2,
+            "name": "Bad Medicine",
+            "description": "<p>You deal an extra die of damage when you Crit with a Ranged Check. The number of extra dice increases by 1 every 4 Levels hereafter.</p>",
+            "statBonusPoints": 1,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 3,
+            "name": "Perk",
+            "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 1,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 4,
+            "name": "Grit (3)",
+            "description": "<p>At the start of your Turn, you can remove 3 Deadeye stacks to remove a Status from yourself from either Blinded, Burning, Confused, Dazed, or Frightened.</p><p>The Deadeye stacks removed by this Ability are reduced by 1 every 4 Levels hereafter (minimum 0).</p>",
+            "statBonusPoints": 1,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": [],
+            "action": {
+              "enabled": true,
+              "label": "Grit",
+              "icon": "heart-pulse",
+              "uuid": "",
+              "command": "system:gunslinger.grit",
+              "runAsGM": false
+            }
+          },
+          {
+            "level": 5,
+            "name": "Perk",
+            "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 1,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 6,
+            "name": "Bad Medicine (+2 dice)",
+            "description": "<p>You deal an extra die of damage when you Crit with a Ranged Check. The number of extra dice increases by 1 every 4 Levels hereafter.</p>",
+            "statBonusPoints": 1,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 6,
+            "name": "Devastator",
+            "description": "<p>When you Crit with a Ranged Check, the damage dice can Explode.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 7,
+            "name": "Perk",
+            "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 1,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 8,
+            "name": "Grit (2)",
+            "description": "<p>At the start of your Turn, you can remove 3 Deadeye stacks to remove a Status from yourself from either Blinded, Burning, Confused, Dazed, or Frightened.</p><p>The Deadeye stacks removed by this Ability are reduced by 1 every 4 Levels hereafter (minimum 0).</p>",
+            "statBonusPoints": 1,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 9,
+            "name": "Perk",
+            "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 1,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 10,
+            "name": "Bad Medicine (+3 dice)",
+            "description": "<p>You deal an extra die of damage when you Crit with a Ranged Check. The number of extra dice increases by 1 every 4 Levels hereafter.</p>",
+            "statBonusPoints": 1,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 10,
+            "name": "High Noon",
+            "description": "<p>When you kill an Enemy, your Deadeye is immediately set to 17.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": [],
+            "action": {
+              "enabled": true,
+              "label": "High Noon",
+              "icon": "sun",
+              "uuid": "",
+              "command": "system:gunslinger.highNoon",
+              "runAsGM": false
+            }
+          }
+        ],
+        "manaSkill": null,
+        "castingStat": null,
+        "manaMultiplier": 0,
+        "skillGrant": {
+          "guaranteed": [
+            "ranged",
+            "detect"
+          ],
+          "choices": []
+        },
+        "levelSpells": [],
+        "keyStats": [
+          "awareness"
+        ],
+        "suggestedStartingPacks": [
+          "Compendium.vagabond.starting-packs.Item.j0veMJ1duvnOwNOa",
+          "Compendium.vagabond.starting-packs.Item.PnfmuSTuRLW0gjln"
+        ]
+      },
+      "effects": [
+        {
+          "name": "Deadeye: Auto",
+          "origin": "Compendium.vagabond.classes.Item.vPSWM9E4F8yjHVea",
+          "img": "icons/svg/aura.svg",
+          "_id": "gUnSlDeAdEyEAut1",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.deadeyeTrigger",
+                "value": "true",
+                "priority": null,
+                "type": "override"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "Each Ranged hit adds a Deadeye stack, up to 3. A miss, or any roll that is not a Ranged hit or a Save, ends it, and so does ending your Turn in a Combat without a Ranged hit.",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "permanent",
+              "switchable": true
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!lzLQ4Jn9ECAEjnbS.lQYDjfuRa8Jv1fKw.gUnSlDeAdEyEAut1"
+        },
+        {
+          "name": "Bad Medicine",
+          "origin": "Compendium.vagabond.classes.Item.vPSWM9E4F8yjHVea",
+          "img": "icons/svg/aura.svg",
+          "_id": "gUnSlBaDmEdIcIn1",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.critExtraDiceBySkill",
+                "value": "ranged: 1 + floor((@lvl - 2) / 4)",
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "permanent",
+              "minLevel": 2
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!lzLQ4Jn9ECAEjnbS.lQYDjfuRa8Jv1fKw.gUnSlBaDmEdIcIn1"
+        },
+        {
+          "name": "Devastator",
+          "origin": "Compendium.vagabond.classes.Item.vPSWM9E4F8yjHVea",
+          "img": "icons/svg/aura.svg",
+          "_id": "gUnSlDeVaStAtOr1",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.critExplodeSkills",
+                "value": "ranged",
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "permanent",
+              "minLevel": 6
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!lzLQ4Jn9ECAEjnbS.lQYDjfuRa8Jv1fKw.gUnSlDeVaStAtOr1"
+        },
+        {
+          "name": "Grit",
+          "origin": "Compendium.vagabond.classes.Item.vPSWM9E4F8yjHVea",
+          "img": "icons/svg/aura.svg",
+          "_id": "gUnSlGrItDeAdEy1",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.deadeyeGrit",
+                "value": "max(0, 4 - floor(@lvl / 4))",
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "permanent",
+              "minLevel": 4
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!lzLQ4Jn9ECAEjnbS.lQYDjfuRa8Jv1fKw.gUnSlGrItDeAdEy1"
+        },
+        {
+          "name": "High Noon: Auto",
+          "origin": "Compendium.vagabond.classes.Item.vPSWM9E4F8yjHVea",
+          "img": "icons/svg/aura.svg",
+          "_id": "gUnSlHiNoOnAuTo1",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.highNoonTrigger",
+                "value": "true",
+                "priority": null,
+                "type": "override"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "Killing an Enemy sets your Deadeye to 17.",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "permanent",
+              "minLevel": 10,
+              "switchable": true
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!lzLQ4Jn9ECAEjnbS.lQYDjfuRa8Jv1fKw.gUnSlHiNoOnAuTo1"
+        }
+      ],
+      "flags": {},
+      "_id": "lQYDjfuRa8Jv1fKw",
+      "_key": "!actors.items!lzLQ4Jn9ECAEjnbS.lQYDjfuRa8Jv1fKw"
+    },
+    {
+      "name": "Ambusher",
+      "type": "perk",
+      "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
+      "system": {
+        "description": "<p>You have Favor on attacks to initiate Combat and against Beings that haven’t acted in that Combat.</p>",
+        "prerequisites": {
+          "stats": [
+            {
+              "stat": "awareness",
+              "value": 4
+            }
+          ],
+          "statOrGroups": [],
+          "trainedSkills": [
+            "sneak"
+          ],
+          "trainedSkillOrGroups": [],
+          "spells": [],
+          "spellOrGroups": [],
+          "hasAnySpell": false,
+          "resources": [],
+          "resourceOrGroups": []
+        }
+      },
+      "effects": [],
+      "flags": {
+        "vagabond": {
+          "perkOrigin": {
+            "type": "level",
+            "level": 1
+          }
+        }
+      },
+      "_id": "XA8DNmSIhT2MzbY2",
+      "_key": "!actors.items!lzLQ4Jn9ECAEjnbS.XA8DNmSIhT2MzbY2"
+    },
+    {
+      "name": "Quick Draw",
+      "type": "perk",
+      "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
+      "system": {
+        "description": "<p>When Combat occurs, you can make one Ranged or Thrown attack before the first Turn, which is Hindered if it is made with a 2H Weapon.</p>",
+        "prerequisites": {
+          "stats": [
+            {
+              "stat": "awareness",
+              "value": 7
+            }
+          ],
+          "statOrGroups": [],
+          "trainedSkills": [
+            "detect",
+            "ranged"
+          ],
+          "trainedSkillOrGroups": [],
+          "spells": [],
+          "spellOrGroups": [],
+          "hasAnySpell": false,
+          "resources": [],
+          "resourceOrGroups": []
+        }
+      },
+      "effects": [],
+      "flags": {
+        "vagabond": {
+          "perkOrigin": {
+            "type": "level",
+            "level": 1
+          }
+        }
+      },
+      "_id": "HbPUd8zyChuFspR9",
+      "_key": "!actors.items!lzLQ4Jn9ECAEjnbS.HbPUd8zyChuFspR9"
+    }
+  ],
+  "effects": [],
+  "folder": null,
+  "flags": {
+    "vagabond": {
+      "buildGuide": true
+    }
+  },
+  "sort": 0,
+  "_id": "lzLQ4Jn9ECAEjnbS",
+  "_key": "!actors!lzLQ4Jn9ECAEjnbS"
+}

@@ -1002,6 +1002,18 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
     // Mark character as constructed (hides builder button)
     actorData.system.details.constructed = true;
 
+    // Class art for Heroes that still have the stock placeholder (portrait and/or token);
+    // anything the player/GM already chose is left alone. Works for homebrew classes too.
+    const classArt = classItemObj?.img;
+    if (classArt && classArt !== classItemObj.constructor.DEFAULT_ICON) {
+      const defaultPortrait = foundry.documents.Actor.DEFAULT_ICON;
+      if (!actorData.img || actorData.img === defaultPortrait) actorData.img = classArt;
+      const tokenTexture = actorData.prototypeToken?.texture;
+      if (tokenTexture && (!tokenTexture.src || tokenTexture.src === CONST.DEFAULT_TOKEN)) {
+        tokenTexture.src = classArt;
+      }
+    }
+
     // Update the actor (first update to apply stats and items, which triggers prepareDerivedData)
     await this.actor.update(actorData);
 

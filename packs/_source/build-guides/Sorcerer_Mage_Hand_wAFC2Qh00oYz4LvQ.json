@@ -1,0 +1,1384 @@
+{
+  "name": "Sorcerer - Mage Hand",
+  "type": "character",
+  "img": "icons/magic/fire/flame-burning-hand-white.webp",
+  "system": {
+    "attributes": {
+      "level": {
+        "value": 1
+      }
+    },
+    "stats": {
+      "might": {
+        "value": 7
+      },
+      "dexterity": {
+        "value": 2
+      },
+      "awareness": {
+        "value": 3
+      },
+      "reason": {
+        "value": 2
+      },
+      "presence": {
+        "value": 7
+      },
+      "luck": {
+        "value": 3
+      }
+    },
+    "skills": {
+      "brawl": {
+        "trained": true
+      },
+      "influence": {
+        "trained": true
+      },
+      "leadership": {
+        "trained": true
+      },
+      "melee": {
+        "trained": true
+      },
+      "arcana": {
+        "trained": true
+      }
+    },
+    "health": {
+      "value": 7
+    },
+    "currentLuck": 3,
+    "currency": {
+      "gold": 1,
+      "silver": 46,
+      "copper": 0
+    },
+    "biography": "<h2>Sorcerer - Mage Hand — Build Guide</h2>\n<p><em>Core Rulebook v3 Alpha 3, Appendix C. This Hero is built at Level 1 with no Ancestry — pick one, rename the Hero, and adjust anything you like.</em></p>\n<h3>Stats at Level 10</h3>\n<p><strong>MIT</strong> 7 · <strong>DEX</strong> 5 · <strong>AWR</strong> 5 · <strong>RSN</strong> 2 · <strong>PRS</strong> 7 · <strong>LUK</strong> 3</p>\n<h3>Perks by Level</h3><ul>\n<li><strong>1st:</strong> Gish, Vehement Magic <em>(already on this sheet)</em></li>\n<li><strong>3rd:</strong> Dusted Knuckle</li>\n<li><strong>5th:</strong> Ungarmax</li>\n<li><strong>7th:</strong> Check Hook</li>\n<li><strong>9th:</strong> Endless Stamina</li>\n</ul>\n<h3>Spells</h3><p>Apoplex, Fear, Light, Ward; get Blink, Enchant, Exalt, and Tempo later</p>",
+    "details": {
+      "constructed": true,
+      "builderDismissed": false
+    },
+    "mana": {
+      "current": 4
+    }
+  },
+  "prototypeToken": {
+    "name": "Sorcerer - Mage Hand",
+    "actorLink": true,
+    "disposition": 1,
+    "texture": {
+      "src": "icons/magic/fire/flame-burning-hand-white.webp"
+    },
+    "bar1": {
+      "attribute": "health"
+    }
+  },
+  "items": [
+    {
+      "name": "Backpack",
+      "type": "equipment",
+      "img": "icons/containers/bags/pack-leather-white-tan.webp",
+      "system": {
+        "description": "<p>1 Slot while held. Worn, it occupies no Slot and adds +3 Slots to your Inventory. You can only benefit from one at a time.</p>",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 5,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Outdoors",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "noSlotsWhenWorn": true,
+        "handsRequired": 0
+      },
+      "effects": [
+        {
+          "name": "Bonus Inventory",
+          "origin": "Compendium.vagabond.gear.Item.8o8KVSgpYsNFtGz2",
+          "img": "icons/svg/aura.svg",
+          "_id": "YJlQPYRINJ72Nf57",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.inventory.bonusSlots",
+                "value": 3,
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "<p>Backpack: +3 Inventory Slots while worn.</p>",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "when-equipped"
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!wAFC2Qh00oYz4LvQ.wQ17BNEbYFgMGgzF.YJlQPYRINJ72Nf57"
+        }
+      ],
+      "flags": {},
+      "_id": "wQ17BNEbYFgMGgzF",
+      "_key": "!actors.items!wAFC2Qh00oYz4LvQ.wQ17BNEbYFgMGgzF"
+    },
+    {
+      "name": "Bedroll",
+      "type": "equipment",
+      "img": "icons/sundries/survival/bedroll-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Personal Items",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "iSQfXprC4NHwxZMb",
+      "_key": "!actors.items!wAFC2Qh00oYz4LvQ.iSQfXprC4NHwxZMb"
+    },
+    {
+      "name": "Rations (1 day)",
+      "type": "equipment",
+      "img": "icons/consumables/food/cooked-grilled-ham-hock-glazed-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Cooking & Food",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "isSupply": true
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "zN3pMCjmqqMnqWbn",
+      "_key": "!actors.items!wAFC2Qh00oYz4LvQ.zN3pMCjmqqMnqWbn"
+    },
+    {
+      "name": "Rations (1 day)",
+      "type": "equipment",
+      "img": "icons/consumables/food/cooked-grilled-ham-hock-glazed-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Cooking & Food",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "isSupply": true
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "oKWK5ACWD9JIAcKX",
+      "_key": "!actors.items!wAFC2Qh00oYz4LvQ.oKWK5ACWD9JIAcKX"
+    },
+    {
+      "name": "Rations (1 day)",
+      "type": "equipment",
+      "img": "icons/consumables/food/cooked-grilled-ham-hock-glazed-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Cooking & Food",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "isSupply": true
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "jwf2n2QJKacQ00k8",
+      "_key": "!actors.items!wAFC2Qh00oYz4LvQ.jwf2n2QJKacQ00k8"
+    },
+    {
+      "name": "Rations (1 day)",
+      "type": "equipment",
+      "img": "icons/consumables/food/cooked-grilled-ham-hock-glazed-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Cooking & Food",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "isSupply": true
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "7Dxz525S5XTn7l8R",
+      "_key": "!actors.items!wAFC2Qh00oYz4LvQ.7Dxz525S5XTn7l8R"
+    },
+    {
+      "name": "Rations (1 day)",
+      "type": "equipment",
+      "img": "icons/consumables/food/cooked-grilled-ham-hock-glazed-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Cooking & Food",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "isSupply": true
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "fm6I4z2iLkHPBwxs",
+      "_key": "!actors.items!wAFC2Qh00oYz4LvQ.fm6I4z2iLkHPBwxs"
+    },
+    {
+      "name": "Torch",
+      "type": "equipment",
+      "img": "icons/sundries/lights/torch-brown-lit.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Outdoors",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "macro": {
+          "enabled": true,
+          "uuid": "",
+          "command": "game.vagabond.lightSource.use({ actor, item, token, light: {\"bright\": 25, \"dim\": 30, \"angle\": 360, \"color\": \"#ff9329\", \"alpha\": 0.65, \"attenuation\": 0.25, \"shadows\": 0.2, \"animation\": {\"type\": \"torch\", \"speed\": 5, \"intensity\": 5}}, durationMin: 60, clockOptions: ['lit','realtime','hour'] });",
+          "label": "Ignite",
+          "runAsGM": false
+        },
+        "handsRequired": 1
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "2aPNVIpY45Q0J91b",
+      "_key": "!actors.items!wAFC2Qh00oYz4LvQ.2aPNVIpY45Q0J91b"
+    },
+    {
+      "name": "Torch",
+      "type": "equipment",
+      "img": "icons/sundries/lights/torch-brown-lit.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Outdoors",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isConsumable": true,
+        "macro": {
+          "enabled": true,
+          "uuid": "",
+          "command": "game.vagabond.lightSource.use({ actor, item, token, light: {\"bright\": 25, \"dim\": 30, \"angle\": 360, \"color\": \"#ff9329\", \"alpha\": 0.65, \"attenuation\": 0.25, \"shadows\": 0.2, \"animation\": {\"type\": \"torch\", \"speed\": 5, \"intensity\": 5}}, durationMin: 60, clockOptions: ['lit','realtime','hour'] });",
+          "label": "Ignite",
+          "runAsGM": false
+        },
+        "handsRequired": 1
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "bpIr4zyOIc25B6Uo",
+      "_key": "!actors.items!wAFC2Qh00oYz4LvQ.bpIr4zyOIc25B6Uo"
+    },
+    {
+      "name": "Waterskin",
+      "type": "equipment",
+      "img": "icons/sundries/survival/waterskin-leather-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 2,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Personal Items",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "isBeverage": true
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "HbH4XI5nNPEaU8y3",
+      "_key": "!actors.items!wAFC2Qh00oYz4LvQ.HbH4XI5nNPEaU8y3"
+    },
+    {
+      "name": "Caestus / Gauntlet",
+      "type": "equipment",
+      "img": "icons/equipment/hand/gauntlet-armored-leather-teal-orange.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "weapon",
+        "locked": true,
+        "equipped": true,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 20,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "properties": [
+          "Grapple"
+        ],
+        "weaponSkill": "brawl",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d4",
+        "damageTwoHands": "d4",
+        "equipmentState": "oneHand",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "itemFx": {
+          "enabled": true,
+          "hitFile": "modules/JB2A_DnD5e/Library/Generic/Creature/Fist/CreatureAttackFist*",
+          "hitOffsetX": -100,
+          "hitDuration": 1000
+        },
+        "damageTypeOneHand": "blunt",
+        "altSkills": []
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "fTUJo9LDCmhfhqJv",
+      "_key": "!actors.items!wAFC2Qh00oYz4LvQ.fTUJo9LDCmhfhqJv"
+    },
+    {
+      "name": "Caestus / Gauntlet",
+      "type": "equipment",
+      "img": "icons/equipment/hand/gauntlet-armored-leather-teal-orange.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "weapon",
+        "locked": true,
+        "equipped": true,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 20,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "properties": [
+          "Grapple"
+        ],
+        "weaponSkill": "brawl",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d4",
+        "damageTwoHands": "d4",
+        "equipmentState": "oneHand",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "itemFx": {
+          "enabled": true,
+          "hitFile": "modules/JB2A_DnD5e/Library/Generic/Creature/Fist/CreatureAttackFist*",
+          "hitOffsetX": -100,
+          "hitDuration": 1000
+        },
+        "damageTypeOneHand": "blunt",
+        "altSkills": []
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "nmNxCxG5HoaDyjnk",
+      "_key": "!actors.items!wAFC2Qh00oYz4LvQ.nmNxCxG5HoaDyjnk"
+    },
+    {
+      "name": "Medium Armor",
+      "type": "equipment",
+      "img": "icons/equipment/chest/breastplate-scale-grey.webp",
+      "system": {
+        "description": "<p>Chain, scale</p><h4><span class=\"fontstyle0\">Equipping Armor</span></h4><p><span class=\"fontstyle2\">Equipping or unequipping Armor requires a Scene (10 minutes) to complete.</span> </p>",
+        "equipmentType": "armor",
+        "locked": true,
+        "equipped": true,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 1,
+          "silver": 0,
+          "copper": 0
+        },
+        "baseSlots": 2,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "worn",
+        "immunities": [],
+        "gearCategory": "",
+        "alchemicalType": "concoction",
+        "lore": "",
+        "armorRating": 2,
+        "mightRequirement": 4,
+        "reflexPenalty": 2
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "xutg3F2cMAj0lJgR",
+      "_key": "!actors.items!wAFC2Qh00oYz4LvQ.xutg3F2cMAj0lJgR"
+    },
+    {
+      "name": "Tankard",
+      "type": "equipment",
+      "img": "icons/containers/kitchenware/mug-simple-wooden-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Cooking & Food",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {}
+      },
+      "_id": "g9uIbGiFHOhBhIJG",
+      "_key": "!actors.items!wAFC2Qh00oYz4LvQ.g9uIbGiFHOhBhIJG"
+    },
+    {
+      "name": "Sorcerer",
+      "type": "class",
+      "img": "icons/magic/fire/flame-burning-hand-white.webp",
+      "system": {
+        "description": "<p><strong>She said sorcery is a sword without a hilt. There is no safe way to grasp it.</strong></p><p><em>—Melisandre, A Dance with Dragons</em></p><p>Arcanists given a precious gift of magical prowess, sorcerers can tap into their own inner reserves to provide more Mana for casting.</p><h3>Iconic Sorcerers</h3><ul><li><strong>Yennefer</strong>, <em>The Witcher</em></li><li><strong>Elsa</strong>, <em>Frozen</em></li><li><strong>Ganondorf</strong>, <em>The Legend of Zelda</em></li><li><strong>Storm</strong>, <em>X-Men</em></li></ul><h3>Playing Sorcerer</h3><p>The sorcerer is a squishy blaster focused on Casting Spells for instant burst damage. You should stay in safety to Cast.</p><p><strong>Action:</strong> Cast<br /><strong>Move:</strong> Backline<br /><strong>Starting Pack:</strong> Mage or Occultist<br /><strong>Key Stat:</strong> Presence, Might<br /><strong>Complexity:</strong> ★★★☆☆<br /><strong>Training:</strong> Arcana, Influence</p><h3>Class Features</h3><table class=\"NormalTable\"><tbody><tr><td><p><strong>Level</strong></p></td><td><p><strong>Features</strong></p></td><td><p><strong>Spells</strong></p></td><td><p><strong>Mana</strong></p></td><td><p><strong>Cast Max</strong></p></td></tr><tr><td><p>1st</p></td><td><p>Glamour, Tap</p></td><td><p>4</p></td><td><p>4</p></td><td><p>3</p></td></tr><tr><td><p>2nd</p></td><td><p>Quickening (0 Mana)</p></td><td><p>4</p></td><td><p>8</p></td><td><p>4</p></td></tr><tr><td><p>3rd</p></td><td><p>Perk</p></td><td><p>5</p></td><td><p>12</p></td><td><p>5</p></td></tr><tr><td><p>4th</p></td><td><p>Spell-Slinger (-1)</p></td><td><p>5</p></td><td><p>16</p></td><td><p>6</p></td></tr><tr><td><p>5th</p></td><td><p>Perk</p></td><td><p>6</p></td><td><p>20</p></td><td><p>7</p></td></tr><tr><td><p>6th</p></td><td><p>Quickening (1 Mana), Twinned Spell</p></td><td><p>6</p></td><td><p>24</p></td><td><p>8</p></td></tr><tr><td><p>7th</p></td><td><p>Perk</p></td><td><p>7</p></td><td><p>28</p></td><td><p>9</p></td></tr><tr><td><p>8th</p></td><td><p>Spell-Slinger (-2)</p></td><td><p>7</p></td><td><p>32</p></td><td><p>10</p></td></tr><tr><td><p>9th</p></td><td><p>Perk</p></td><td><p>8</p></td><td><p>36</p></td><td><p>11</p></td></tr><tr><td><p>10th</p></td><td><p>Quickening (2 Mana), Overpowered</p></td><td><p>8</p></td><td><p>40</p></td><td><p>12</p></td></tr></tbody></table>",
+        "isSpellcaster": true,
+        "levelFeatures": [
+          {
+            "level": 1,
+            "name": "Glamour",
+            "description": "<p>You can Cast Spells using Influence.</p><p><strong>Spells:</strong> You learn 4 Spells. You learn 1 other Spell every 2 Levels hereafter.</p><p><strong>Mana:</strong> Your Max Mana is equal to (4 × your Level), and your Cast Max for Spells is equal to (2 + your Level).</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 1,
+            "name": "Tap",
+            "description": "<p>You gain the Vehement Magic Perk (p. 73), and you can spend your HP as Mana, which also reduces your Max HP by the same amount until you Rest. If you die from this reduction, the Cast still resolves and your body is vaporized.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [
+              "Compendium.vagabond.perks.Item.UhI94xpNrdCln9jR"
+            ],
+            "perkAmount": 1,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 2,
+            "name": "Quickening (0 Mana)",
+            "description": "<p>You can skip your Move to Cast a Spell. This Casting has a Cast Max of 0. The Cast Max increases by 1 every 4 Levels hereafter.</p>",
+            "statBonusPoints": 1,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 3,
+            "name": "Perk",
+            "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 1,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 4,
+            "name": "Spell-Slinger (-1)",
+            "description": "<p>The damage die of your Spells is one size larger.</p><p>Further, the roll required for you to Crit on Cast Checks and Saves against Casts is reduced by 1, and is reduced by 1 more every 4 Levels hereafter.</p>",
+            "statBonusPoints": 1,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 5,
+            "name": "Perk",
+            "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 1,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 6,
+            "name": "Quickening (1 Mana)",
+            "description": "<p>You can skip your Move to Cast a Spell. This Casting has a Cast Max of 0. The Cast Max increases by 1 every 4 Levels hereafter.</p>",
+            "statBonusPoints": 1,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 6,
+            "name": "Twinned Spell",
+            "description": "<p>If you Cast the same Spell twice on a turn, the second Cast Check is Favored.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 7,
+            "name": "Perk",
+            "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 1,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 8,
+            "name": "Spell-Slinger (-2)",
+            "description": "<p>The damage die of your Spells is one size larger.</p><p>Further, the roll required for you to Crit on Cast Checks and Saves against Casts is reduced by 1, and is reduced by 1 more every 4 Levels hereafter.</p>",
+            "statBonusPoints": 1,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 9,
+            "name": "Perk",
+            "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 1,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 10,
+            "name": "Quickening (2 Mana)",
+            "description": "<p>You can skip your Move to Cast a Spell. This Casting has a Cast Max of 0. The Cast Max increases by 1 every 4 Levels hereafter.</p>",
+            "statBonusPoints": 1,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": []
+          },
+          {
+            "level": 10,
+            "name": "Overpowered",
+            "description": "<p>When you Cast, you can choose to gain 1 Fatigue. If you do, you regain Cd4! HP and Max HP at the start of your Turns and have a bonus to your Cast Max each Turn equal to the roll. If using an Ability would kill you during this countdown, including Fatigue gained from this Ability, you do not die until the countdown ends, after which your body is vaporized.</p>",
+            "statBonusPoints": 0,
+            "extraTraining": 0,
+            "requiredSpells": [],
+            "allowedPerks": [],
+            "perkAmount": 0,
+            "spellAmount": 0,
+            "skillChoices": [],
+            "action": {
+              "enabled": true,
+              "label": "Overpowered",
+              "icon": "bolt",
+              "uuid": "",
+              "command": "system:sorcerer.overpowered",
+              "runAsGM": false
+            }
+          }
+        ],
+        "manaSkill": "influence",
+        "castingStat": "presence",
+        "manaMultiplier": 4,
+        "skillGrant": {
+          "guaranteed": [
+            "arcana",
+            "influence"
+          ],
+          "choices": []
+        },
+        "levelSpells": [
+          {
+            "spells": 4,
+            "level": 1
+          },
+          {
+            "spells": 4,
+            "level": 2
+          },
+          {
+            "spells": 5,
+            "level": 3
+          },
+          {
+            "spells": 5,
+            "level": 4
+          },
+          {
+            "spells": 6,
+            "level": 5
+          },
+          {
+            "spells": 6,
+            "level": 6
+          },
+          {
+            "spells": 7,
+            "level": 7
+          },
+          {
+            "spells": 7,
+            "level": 8
+          },
+          {
+            "spells": 8,
+            "level": 9
+          },
+          {
+            "spells": 8,
+            "level": 10
+          }
+        ],
+        "keyStats": [
+          "presence",
+          "might"
+        ],
+        "suggestedStartingPacks": [
+          "Compendium.vagabond.starting-packs.Item.hje865DkzVVguhdT",
+          "Compendium.vagabond.starting-packs.Item.NmrCbvZNNhHz1Nem"
+        ]
+      },
+      "effects": [
+        {
+          "name": "Glamour",
+          "origin": "Compendium.vagabond.classes.Item.2zrj3IvI0LFNDvEy",
+          "img": "icons/svg/aura.svg",
+          "_id": "UBgBEEmvGIg45rwE",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.mana.castingMaxBonus",
+                "value": "2 + floor(@lvl / 2) - @stats.presence.total",
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "permanent"
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!wAFC2Qh00oYz4LvQ.2FmBx8BY3cEZkZeL.UBgBEEmvGIg45rwE"
+        },
+        {
+          "name": "Spell-Slinger: Die",
+          "origin": "Compendium.vagabond.classes.Item.2zrj3IvI0LFNDvEy",
+          "img": "icons/svg/aura.svg",
+          "_id": "gQ5l2gWzAuZ2SBNy",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.spellDamageDieSizeBonus",
+                "value": "2",
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "permanent",
+              "minLevel": 4
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!wAFC2Qh00oYz4LvQ.2FmBx8BY3cEZkZeL.gQ5l2gWzAuZ2SBNy"
+        },
+        {
+          "name": "Spell-Slinger: Crit",
+          "origin": "Compendium.vagabond.classes.Item.2zrj3IvI0LFNDvEy",
+          "img": "icons/svg/aura.svg",
+          "_id": "UwnARSNy3d2u9odv",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.castCritBonus",
+                "value": "0 - 1 - floor((@lvl - 4) / 4)",
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "permanent",
+              "minLevel": 4
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!wAFC2Qh00oYz4LvQ.2FmBx8BY3cEZkZeL.UwnARSNy3d2u9odv"
+        },
+        {
+          "name": "Twinned Spell: Auto",
+          "origin": "Compendium.vagabond.classes.Item.2zrj3IvI0LFNDvEy",
+          "img": "icons/svg/aura.svg",
+          "_id": "sOrCtWiNnEdSp001",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.twinnedSpellTrigger",
+                "value": "true",
+                "priority": null,
+                "type": "override"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "Inside a started Combat, casting a Spell you already cast earlier this Turn makes its Cast Check Favored.",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "permanent",
+              "minLevel": 6,
+              "switchable": true
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!wAFC2Qh00oYz4LvQ.2FmBx8BY3cEZkZeL.sOrCtWiNnEdSp001"
+        }
+      ],
+      "flags": {},
+      "_id": "2FmBx8BY3cEZkZeL",
+      "_key": "!actors.items!wAFC2Qh00oYz4LvQ.2FmBx8BY3cEZkZeL"
+    },
+    {
+      "name": "Gish",
+      "type": "perk",
+      "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
+      "system": {
+        "description": "<p>You can use Weapons as Trinkets.</p>",
+        "prerequisites": {
+          "stats": [],
+          "statOrGroups": [],
+          "trainedSkills": [],
+          "trainedSkillOrGroups": [
+            [
+              "melee",
+              "ranged"
+            ]
+          ],
+          "spells": [],
+          "spellOrGroups": [],
+          "hasAnySpell": true,
+          "resources": [],
+          "resourceOrGroups": []
+        }
+      },
+      "effects": [
+        {
+          "name": "Active Effect",
+          "origin": "Compendium.vagabond.perks.Item.YVgf2kRWwn8JRq1X",
+          "img": "icons/svg/aura.svg",
+          "_id": "imf2mRfowH7GpgJt",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.attributes.isSpellcaster",
+                "value": true,
+                "priority": null,
+                "type": "override"
+              },
+              {
+                "key": "system.weaponAsTrinket",
+                "value": true,
+                "priority": null,
+                "type": "override"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {},
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!wAFC2Qh00oYz4LvQ.Cxa9PGTJLrahXo15.imf2mRfowH7GpgJt"
+        }
+      ],
+      "flags": {
+        "vagabond": {
+          "perkOrigin": {
+            "type": "level",
+            "level": 1
+          }
+        }
+      },
+      "_id": "Cxa9PGTJLrahXo15",
+      "_key": "!actors.items!wAFC2Qh00oYz4LvQ.Cxa9PGTJLrahXo15"
+    },
+    {
+      "name": "Vehement Magic",
+      "type": "perk",
+      "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
+      "system": {
+        "description": "<p>Damage rolls from Spells you Cast Explode on a roll of 1.</p>",
+        "prerequisites": {
+          "stats": [],
+          "statOrGroups": [],
+          "trainedSkills": [],
+          "trainedSkillOrGroups": [],
+          "spells": [],
+          "spellOrGroups": [],
+          "hasAnySpell": true,
+          "resources": [],
+          "resourceOrGroups": []
+        }
+      },
+      "effects": [],
+      "flags": {
+        "vagabond": {
+          "perkOrigin": {
+            "type": "level",
+            "level": 1
+          }
+        }
+      },
+      "_id": "pG3RVVJ6E1J2oto1",
+      "_key": "!actors.items!wAFC2Qh00oYz4LvQ.pG3RVVJ6E1J2oto1"
+    },
+    {
+      "name": "Apoplex",
+      "type": "spell",
+      "img": "icons/magic/control/fear-fright-monster-red.webp",
+      "system": {
+        "description": "<p><span class=\"fontstyle0\">The Target is Berserk for the duration.</span></p>",
+        "damageType": "-",
+        "duration": "Until your next turn",
+        "crit": "Duration is continual.",
+        "favorite": true,
+        "locked": true,
+        "causedStatuses": [
+          {
+            "statusId": "berserk",
+            "requiresDamage": false,
+            "saveType": "none",
+            "duration": "focusing",
+            "tickDamageEnabled": false,
+            "damageOnTick": "",
+            "damageType": "-"
+          },
+          {
+            "statusId": "berserk",
+            "requiresDamage": false,
+            "saveType": "none",
+            "duration": "",
+            "tickDamageEnabled": false,
+            "damageOnTick": "",
+            "damageType": "-"
+          }
+        ],
+        "hitMacro": {
+          "enabled": true,
+          "uuid": "",
+          "command": "const tgts = (typeof targets !== \"undefined\" && targets?.length)\n  ? targets\n  : Array.from(game.user.targets);\nif (!tgts.length) return ui.notifications.warn(\"No token targeted.\");\n\nfor (const t of tgts) {\n  await t.actor.toggleStatusEffect(\"berserk\", { active: true });\n}\n\n//ui.notifications.info(`Apoplex applied to ${tgts.length} target(s).`);",
+          "label": "Apoplex",
+          "runAsGM": true
+        }
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "Z4yTLA30fL8vkIyf",
+      "_key": "!actors.items!wAFC2Qh00oYz4LvQ.Z4yTLA30fL8vkIyf"
+    },
+    {
+      "name": "Fear",
+      "type": "spell",
+      "img": "icons/magic/control/fear-fright-monster-grin-purple-blue.webp",
+      "system": {
+        "description": "<p><span class=\"fontstyle0\">The Target is Frightened of another visible Target you choose for the duration, ending early if you Cast this Spell again.</span></p>",
+        "damageType": "-",
+        "duration": "Until your next turn",
+        "crit": "Duration is continual.",
+        "favorite": true,
+        "fxSchool": "shadow",
+        "locked": true,
+        "critCausedStatuses": [
+          {
+            "statusId": "frightened",
+            "requiresDamage": false,
+            "saveType": "will",
+            "duration": "",
+            "tickDamageEnabled": false,
+            "damageOnTick": "",
+            "damageType": "-"
+          }
+        ],
+        "causedStatuses": [
+          {
+            "statusId": "frightened",
+            "requiresDamage": false,
+            "saveType": "will",
+            "duration": "focusing",
+            "tickDamageEnabled": false,
+            "damageOnTick": "",
+            "damageType": "-"
+          }
+        ],
+        "hitMacro": {
+          "enabled": true,
+          "uuid": "",
+          "command": "const tgts = (typeof targets !== \"undefined\" && targets?.length)\n  ? targets\n  : Array.from(game.user.targets);\nif (!tgts.length) return ui.notifications.warn(\"No token targeted.\");\n\nfor (const t of tgts) {\n  await t.actor.toggleStatusEffect(\"frightened\", { active: true });\n}\n\n//ui.notifications.info(`Fear applied to ${tgts.length} target(s).`);",
+          "label": "Fear",
+          "runAsGM": true
+        }
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "Sim04UfFMlvjqmrq",
+      "_key": "!actors.items!wAFC2Qh00oYz4LvQ.Sim04UfFMlvjqmrq"
+    },
+    {
+      "name": "Light",
+      "type": "spell",
+      "img": "icons/magic/light/explosion-star-glow-yellow.webp",
+      "system": {
+        "description": "<p><span class=\"fontstyle0\">The Target sheds Light out to Near for the duration. You can choose to do so by creating a floating mote of light that follows the Target.</span></p>",
+        "damageType": "fire",
+        "duration": "Until your next turn",
+        "crit": "Beings of your choice within the Light when you Cast the Spell are Blinded (Cd4).",
+        "favorite": true,
+        "noRollRequired": false,
+        "fxSchool": "radiant",
+        "locked": true,
+        "critCausedStatuses": [
+          {
+            "statusId": "blinded",
+            "requiresDamage": true,
+            "saveType": "none",
+            "duration": "d4",
+            "tickDamageEnabled": false,
+            "damageOnTick": "",
+            "damageType": "-"
+          }
+        ]
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "pWhbZU8hea1At8lo",
+      "_key": "!actors.items!wAFC2Qh00oYz4LvQ.pWhbZU8hea1At8lo"
+    },
+    {
+      "name": "Ward",
+      "type": "spell",
+      "img": "icons/magic/defensive/shield-barrier-blue.webp",
+      "system": {
+        "description": "<p><span class=\"fontstyle0\">The Target has +1 Armor.</span></p><p><span class=\"fontstyle0\">You must spend 1 Mana per Target to Focus on this Spell, even for willing Targets.</span></p><p><strong>Upcast:</strong> When the Target takes damage from an attack or Cast, you can upcast this Spell to make a Cast Check to reduce the damage taken by 1d6 per Mana spent on the upcast if you pass.</p>",
+        "damageType": "-",
+        "duration": "Until your next turn",
+        "crit": "",
+        "favorite": true,
+        "fxSchool": "defense",
+        "locked": true
+      },
+      "effects": [],
+      "flags": {},
+      "_id": "NGyy4cwZI7nwD6SE",
+      "_key": "!actors.items!wAFC2Qh00oYz4LvQ.NGyy4cwZI7nwD6SE"
+    }
+  ],
+  "effects": [],
+  "folder": null,
+  "flags": {
+    "vagabond": {
+      "buildGuide": true
+    }
+  },
+  "sort": 0,
+  "_id": "wAFC2Qh00oYz4LvQ",
+  "_key": "!actors!wAFC2Qh00oYz4LvQ"
+}
