@@ -1,3 +1,4 @@
+import { isCopyOf } from '../source-id.mjs';
 import { CurrencyHelper } from '../currency-helper.mjs';
 
 /**
@@ -172,7 +173,7 @@ export class AlchemyHelper {
 
     for (const item of candidates) {
       try {
-        if (item.type !== 'class' || item.name !== 'Alchemist') continue;
+        if (item.type !== 'class' || !isCopyOf(item, '4kXK5bZHEb3PMzLy', 'Alchemist')) continue;
         const old = item.effects.filter(e => e.name === 'Alchemist Features');
         if (!old.length) continue;
         const wasOff = old.some(e => e.disabled);

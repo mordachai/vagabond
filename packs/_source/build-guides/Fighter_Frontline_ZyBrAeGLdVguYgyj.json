@@ -1176,48 +1176,73 @@
               "Bravado",
               "Heavy Arms",
               "Patience"
+            ],
+            "perkIds": [
+              "P6XKqJ7InSQFEReK",
+              "ValeBbspVEfTTmvQ",
+              "0g0Z7XRDrgVzbpdD"
             ]
           },
           {
             "level": 3,
             "perks": [
               "Cross Counter"
+            ],
+            "perkIds": [
+              "5kAaWa6XyieTQmEm"
             ]
           },
           {
             "level": 4,
             "perks": [
               "Limit Break"
+            ],
+            "perkIds": [
+              "mbB4v9dJGRQTlanN"
             ]
           },
           {
             "level": 5,
             "perks": [
               "Sentinel"
+            ],
+            "perkIds": [
+              "t2kiBSjqMvPZ6Vbd"
             ]
           },
           {
             "level": 7,
             "perks": [
               "Endless Stamina"
+            ],
+            "perkIds": [
+              "a3nkW4FHWp8N3DUK"
             ]
           },
           {
             "level": 8,
             "perks": [
               "Tough"
+            ],
+            "perkIds": [
+              "FiyuMtwyxLqRdOWm"
             ]
           },
           {
             "level": 9,
             "perks": [
               "Second Wind"
+            ],
+            "perkIds": [
+              "x1EA997D11L9zp7J"
             ]
           }
         ],
         "spells": {
           "start": [],
-          "later": []
+          "later": [],
+          "startIds": [],
+          "laterIds": []
         }
       }
     }

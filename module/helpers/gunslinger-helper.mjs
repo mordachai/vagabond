@@ -1,3 +1,4 @@
+import { classFeatureText } from './feature-text.mjs';
 import { StatusHelper } from './status-helper.mjs';
 import { RollExpiry } from './roll-expiry.mjs';
 
@@ -82,8 +83,8 @@ export class GunslingerHelper {
 
   /** Book text of a class feature by (prefix of its) name, for chat cards. */
   static #featureText(actor, name) {
-    const item = actor.items.find(i => i.type === 'class');
-    return item?.system?.levelFeatures?.find(f => f.name === name || f.name.startsWith(`${name} (`))?.description ?? '';
+    const command = { Deadeye: 'gunslinger.deadeye', 'High Noon': 'gunslinger.highNoon', Grit: 'gunslinger.grit' }[name];
+    return classFeatureText(actor, { command, name });
   }
 
   /** Effect data for `stacks` Deadeye. */

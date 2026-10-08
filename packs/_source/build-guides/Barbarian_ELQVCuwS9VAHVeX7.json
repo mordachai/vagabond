@@ -1303,36 +1303,54 @@
             "perks": [
               "Interceptor",
               "Tough"
+            ],
+            "perkIds": [
+              "i8ipAygu2JALmYKI",
+              "FiyuMtwyxLqRdOWm"
             ]
           },
           {
             "level": 3,
             "perks": [
               "Heavy Arms"
+            ],
+            "perkIds": [
+              "ValeBbspVEfTTmvQ"
             ]
           },
           {
             "level": 5,
             "perks": [
               "Sentinel"
+            ],
+            "perkIds": [
+              "t2kiBSjqMvPZ6Vbd"
             ]
           },
           {
             "level": 7,
             "perks": [
               "Second Wind"
+            ],
+            "perkIds": [
+              "x1EA997D11L9zp7J"
             ]
           },
           {
             "level": 9,
             "perks": [
               "Limit Break"
+            ],
+            "perkIds": [
+              "mbB4v9dJGRQTlanN"
             ]
           }
         ],
         "spells": {
           "start": [],
-          "later": []
+          "later": [],
+          "startIds": [],
+          "laterIds": []
         }
       }
     }

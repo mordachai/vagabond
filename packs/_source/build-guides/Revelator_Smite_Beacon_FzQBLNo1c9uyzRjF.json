@@ -1245,30 +1245,46 @@
             "perks": [
               "Gish",
               "Strategist"
+            ],
+            "perkIds": [
+              "YVgf2kRWwn8JRq1X",
+              "OcNVWEpuZEDDdlUu"
             ]
           },
           {
             "level": 3,
             "perks": [
               "Rally"
+            ],
+            "perkIds": [
+              "AYgEsFexlPAI9DYH"
             ]
           },
           {
             "level": 5,
             "perks": [
               "Tough"
+            ],
+            "perkIds": [
+              "FiyuMtwyxLqRdOWm"
             ]
           },
           {
             "level": 7,
             "perks": [
               "Interceptor"
+            ],
+            "perkIds": [
+              "i8ipAygu2JALmYKI"
             ]
           },
           {
             "level": 9,
             "perks": [
               "Inspiring Presence"
+            ],
+            "perkIds": [
+              "OO8rtGe3vqQmFbLc"
             ]
           }
         ],
@@ -1281,6 +1297,25 @@
             "Life",
             "Ward",
             "Exalt"
+          ],
+          "startIds": [
+            [
+              "K0iy3DCtjDZzLMm6"
+            ],
+            [
+              "M0HRBrZaRQ81vcAg"
+            ]
+          ],
+          "laterIds": [
+            [
+              "sBvdMIqhfJcydANC"
+            ],
+            [
+              "L43XdoqLgQ8Wl6vM"
+            ],
+            [
+              "lSVkxtOolrInid6w"
+            ]
           ]
         }
       }

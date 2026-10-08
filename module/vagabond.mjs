@@ -87,6 +87,7 @@ import { RogueHelper } from './helpers/rogue-helper.mjs';
 import { SorcererHelper } from './helpers/sorcerer-helper.mjs';
 import { WitchHelper } from './helpers/witch-helper.mjs';
 import { WizardHelper } from './helpers/wizard-helper.mjs';
+import { AlchemistHelper } from './helpers/alchemist-helper.mjs';
 import { DruidHelper } from './helpers/druid-helper.mjs';
 import { migrateFighterClass, migrateDruidClass, migrateGunslingerClass, migrateHunterClass, migrateLuminaryClass, migrateMagusClass, migrateMerchantClass, migratePugilistClass, migrateRevelatorClass, migrateRogueClass, migrateSorcererClass, migrateVanguardClass, migrateWitchClass, migrateWizardClass, migrateAncestries } from './helpers/class-migrations.mjs';
 import { migrateAlpha3Statuses, migrateAlpha3Backpacks, migrateAlpha3Rations, migrateAlpha3DefensePerks, migrateAlpha3ClassPerks, migrateAlpha3Perks, migrateAlpha3Classes, migrateAlpha3Ancestries } from './helpers/alpha3-migrations.mjs';
@@ -1726,6 +1727,7 @@ Hooks.once('ready', function () {
 
   // Bard Virtuoso — players route the benefit copy onto Group members through the GM.
   registerSocketAction('virtuosoApply', (payload) => BardHelper.apply(payload));
+  registerMacroHandler('alchemist.catalyze', (scope) => AlchemistHelper.catalyze(scope));
   registerMacroHandler('bard.virtuoso', (scope) => BardHelper.virtuoso(scope));
   registerMacroHandler('bard.perform', (scope) => BardHelper.perform(scope));
   registerMacroHandler('dancer.stepUp', (scope) => DancerHelper.stepUp(scope));

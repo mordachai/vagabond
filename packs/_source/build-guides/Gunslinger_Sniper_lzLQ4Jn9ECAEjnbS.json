@@ -1259,36 +1259,54 @@
             "perks": [
               "Ambusher",
               "Quick Draw"
+            ],
+            "perkIds": [
+              "3Ejo0QEPqsFSnFBd",
+              "byBDvKpPkrK8ynkE"
             ]
           },
           {
             "level": 3,
             "perks": [
               "Sharpshooter"
+            ],
+            "perkIds": [
+              "LP1K8ZSBIEuu3AgF"
             ]
           },
           {
             "level": 5,
             "perks": [
               "Marksmanship"
+            ],
+            "perkIds": [
+              "xfYrdHhVTh03lkvz"
             ]
           },
           {
             "level": 7,
             "perks": [
               "Guardian Angel"
+            ],
+            "perkIds": [
+              "xXQvKOlRtCsc0oLq"
             ]
           },
           {
             "level": 9,
             "perks": [
               "Steady Aim"
+            ],
+            "perkIds": [
+              "9ChcXEGqz39efjBH"
             ]
           }
         ],
         "spells": {
           "start": [],
-          "later": []
+          "later": [],
+          "startIds": [],
+          "laterIds": []
         }
       }
     }

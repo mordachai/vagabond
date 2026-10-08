@@ -1051,36 +1051,54 @@
             "perks": [
               "Deft Hands",
               "Impersonator"
+            ],
+            "perkIds": [
+              "vtNfeEdWNUWvaeRM",
+              "AwFov4YDGerC3iAi"
             ]
           },
           {
             "level": 3,
             "perks": [
               "Master Breaker"
+            ],
+            "perkIds": [
+              "eNAvLBvJPluNHD0W"
             ]
           },
           {
             "level": 5,
             "perks": [
               "Knife Juggler"
+            ],
+            "perkIds": [
+              "pOiPXKHX7O90AsId"
             ]
           },
           {
             "level": 7,
             "perks": [
               "Resourceful"
+            ],
+            "perkIds": [
+              "Pwvw4buZkkB6eqKN"
             ]
           },
           {
             "level": 9,
             "perks": [
               "Ambusher"
+            ],
+            "perkIds": [
+              "3Ejo0QEPqsFSnFBd"
             ]
           }
         ],
         "spells": {
           "start": [],
-          "later": []
+          "later": [],
+          "startIds": [],
+          "laterIds": []
         }
       }
     }

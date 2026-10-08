@@ -1138,30 +1138,46 @@
             "perks": [
               "Bookworm",
               "Conjurer"
+            ],
+            "perkIds": [
+              "lDzaNi9ay6p8y0Ay",
+              "n3pI3vkw5yjnNE6H"
             ]
           },
           {
             "level": 3,
             "perks": [
               "Ritualist"
+            ],
+            "perkIds": [
+              "CuR545hY6HRsnycI"
             ]
           },
           {
             "level": 5,
             "perks": [
               "Familiar"
+            ],
+            "perkIds": [
+              "O2z8sxDuwIm56HqO"
             ]
           },
           {
             "level": 7,
             "perks": [
               "Secret of Mana"
+            ],
+            "perkIds": [
+              "aOUEt5kDCIGtp9nn"
             ]
           },
           {
             "level": 9,
             "perks": [
               "Secret of Mana"
+            ],
+            "perkIds": [
+              "aOUEt5kDCIGtp9nn"
             ]
           }
         ],
@@ -1177,6 +1193,34 @@
             "Gas",
             "Gust",
             "Ward"
+          ],
+          "startIds": [
+            [
+              "sObsXPGpVI0rIGYu"
+            ],
+            [
+              "HYFlMtBHdF5W6LF6"
+            ],
+            [
+              "Jo4OZhfZO9Q1ROw6"
+            ],
+            [
+              "XHmLcGAXQKoFVzUA"
+            ]
+          ],
+          "laterIds": [
+            [
+              "KjHS9r9cSkBhUc5R"
+            ],
+            [
+              "0SVJ6QW8j6i3JkGe"
+            ],
+            [
+              "IHsIFbBxkBLuFNV9"
+            ],
+            [
+              "L43XdoqLgQ8Wl6vM"
+            ]
           ]
         }
       }

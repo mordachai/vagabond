@@ -1132,30 +1132,46 @@
             "perks": [
               "Bookworm",
               "Cardistry"
+            ],
+            "perkIds": [
+              "lDzaNi9ay6p8y0Ay",
+              "yrYjdipnKbGr8tvq"
             ]
           },
           {
             "level": 3,
             "perks": [
               "Ambusher"
+            ],
+            "perkIds": [
+              "3Ejo0QEPqsFSnFBd"
             ]
           },
           {
             "level": 5,
             "perks": [
               "Quick Draw"
+            ],
+            "perkIds": [
+              "byBDvKpPkrK8ynkE"
             ]
           },
           {
             "level": 7,
             "perks": [
               "Ricochet"
+            ],
+            "perkIds": [
+              "puwvlMK8UsfkSK5T"
             ]
           },
           {
             "level": 9,
             "perks": [
               "Esoteric Recall"
+            ],
+            "perkIds": [
+              "l1ArPAPYoZHlbi2R"
             ]
           }
         ],
@@ -1171,6 +1187,34 @@
             "Dispel",
             "Enchant",
             "Ward"
+          ],
+          "startIds": [
+            [
+              "K0iy3DCtjDZzLMm6"
+            ],
+            [
+              "Z46O80kXCKWgshq2"
+            ],
+            [
+              "cUWBly8MHK4MhNcw"
+            ],
+            [
+              "FyLP7OY1vyxxvxA0"
+            ]
+          ],
+          "laterIds": [
+            [
+              "TyPnI7gEtbzuxFZm"
+            ],
+            [
+              "7iglZS7HDksMctFu"
+            ],
+            [
+              "o1OhAEoFdpHDDmEL"
+            ],
+            [
+              "L43XdoqLgQ8Wl6vM"
+            ]
           ]
         }
       }

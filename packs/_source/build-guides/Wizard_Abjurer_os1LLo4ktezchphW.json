@@ -1165,30 +1165,46 @@
             "perks": [
               "Abjurer",
               "Bookworm"
+            ],
+            "perkIds": [
+              "ZTlEF3gIWZQN3ZPe",
+              "lDzaNi9ay6p8y0Ay"
             ]
           },
           {
             "level": 3,
             "perks": [
               "Briar Healer"
+            ],
+            "perkIds": [
+              "jHHNUgfORW2cvR4X"
             ]
           },
           {
             "level": 5,
             "perks": [
               "Assured Healer"
+            ],
+            "perkIds": [
+              "tQ0QFm3jAAsu8y1i"
             ]
           },
           {
             "level": 7,
             "perks": [
               "Harmonic Resonance"
+            ],
+            "perkIds": [
+              "1YfGySrk0K59Bcso"
             ]
           },
           {
             "level": 9,
             "perks": [
               "Inspiring Presence"
+            ],
+            "perkIds": [
+              "OO8rtGe3vqQmFbLc"
             ]
           }
         ],
@@ -1204,6 +1220,34 @@
             "Dispel",
             "Hymn",
             "Truth"
+          ],
+          "startIds": [
+            [
+              "TyPnI7gEtbzuxFZm"
+            ],
+            [
+              "K0iy3DCtjDZzLMm6"
+            ],
+            [
+              "sBvdMIqhfJcydANC"
+            ],
+            [
+              "L43XdoqLgQ8Wl6vM"
+            ]
+          ],
+          "laterIds": [
+            [
+              "whw1OLRUOKvxo014"
+            ],
+            [
+              "7iglZS7HDksMctFu"
+            ],
+            [
+              "ebEsafpKK3vkvvYJ"
+            ],
+            [
+              "FyLP7OY1vyxxvxA0"
+            ]
           ]
         }
       }

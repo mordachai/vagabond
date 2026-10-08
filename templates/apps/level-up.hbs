@@ -151,7 +151,7 @@
               {{#each guide.levels}}
                 <span class="lu-road-lv {{#if now}}now{{/if}}">L{{level}}</span>
                 {{#if jump}}
-                  <button type="button" class="lu-road-pk lu-road-link now {{#if taken}}taken{{/if}}" data-action="changeTab" data-tab="perks" data-perk-name="{{jumpName}}">
+                  <button type="button" class="lu-road-pk lu-road-link now {{#if taken}}taken{{/if}}" data-action="changeTab" data-tab="perks" data-perk-name="{{jumpName}}" data-perk-id="{{jumpId}}">
                     {{#if taken}}<i class="fas fa-check"></i> {{/if}}{{text}} <span class="lu-dim">→ {{localize "VAGABOND.LevelUp.TabPerks"}}</span>
                   </button>
                 {{else}}

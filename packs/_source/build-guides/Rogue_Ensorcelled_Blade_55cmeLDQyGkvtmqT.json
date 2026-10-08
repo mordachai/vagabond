@@ -1045,36 +1045,54 @@
             "perks": [
               "Athame",
               "Resourceful"
+            ],
+            "perkIds": [
+              "ZpxPOAaeveIIQUpU",
+              "Pwvw4buZkkB6eqKN"
             ]
           },
           {
             "level": 3,
             "perks": [
               "Magical Secret (Blink)"
+            ],
+            "perkIds": [
+              null
             ]
           },
           {
             "level": 5,
             "perks": [
               "Magical Secret (Knock)"
+            ],
+            "perkIds": [
+              null
             ]
           },
           {
             "level": 7,
             "perks": [
               "Quick Draw"
+            ],
+            "perkIds": [
+              "byBDvKpPkrK8ynkE"
             ]
           },
           {
             "level": 9,
             "perks": [
               "Perfect Parry"
+            ],
+            "perkIds": [
+              "lo6rixhWIVJkR80Z"
             ]
           }
         ],
         "spells": {
           "start": [],
-          "later": []
+          "later": [],
+          "startIds": [],
+          "laterIds": []
         }
       }
     }

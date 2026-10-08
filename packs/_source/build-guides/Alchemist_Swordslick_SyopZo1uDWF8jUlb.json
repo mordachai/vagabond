@@ -626,7 +626,15 @@
             "allowedPerks": [
               "Compendium.vagabond.perks.Item.vtNfeEdWNUWvaeRM"
             ],
-            "perkAmount": 1
+            "perkAmount": 1,
+            "action": {
+              "enabled": true,
+              "label": "Catalyze",
+              "icon": "flask",
+              "uuid": "",
+              "command": "system:alchemist.catalyze",
+              "runAsGM": false
+            }
           },
           {
             "level": 2,
@@ -1107,36 +1115,54 @@
             "perks": [
               "Deft Hands",
               "Salbenist"
+            ],
+            "perkIds": [
+              "vtNfeEdWNUWvaeRM",
+              "0RhDUoeDs8XiEHxk"
             ]
           },
           {
             "level": 3,
             "perks": [
               "Skirmisher"
+            ],
+            "perkIds": [
+              "hJjjazBCtdV7YIc5"
             ]
           },
           {
             "level": 5,
             "perks": [
               "Master Artisan"
+            ],
+            "perkIds": [
+              "DlqVD05dVoVhNotv"
             ]
           },
           {
             "level": 7,
             "perks": [
               "Poisoner"
+            ],
+            "perkIds": [
+              "OvYijC6ubI4a1nAf"
             ]
           },
           {
             "level": 9,
             "perks": [
               "Ritualist"
+            ],
+            "perkIds": [
+              "CuR545hY6HRsnycI"
             ]
           }
         ],
         "spells": {
           "start": [],
-          "later": []
+          "later": [],
+          "startIds": [],
+          "laterIds": []
         }
       }
     }

@@ -1,3 +1,4 @@
+import { isCopyOf } from './source-id.mjs';
 import { combatRollData } from './rule-rolldata.mjs';
 import { emitSocket } from './socket-helper.mjs';
 
@@ -263,7 +264,7 @@ export class BardHelper {
 
     for (const item of candidates) {
       try {
-        if (item.type !== 'class' || item.name !== 'Bard') continue;
+        if (item.type !== 'class' || !isCopyOf(item, BARD_CLASS_ID, 'Bard')) continue;
         if (!item.system.levelFeatures?.some(lf => lf.name === 'Song of Rest')) continue;
 
         const effects = source.effects.map(e => {

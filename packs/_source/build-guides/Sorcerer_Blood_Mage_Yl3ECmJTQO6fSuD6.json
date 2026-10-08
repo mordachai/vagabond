@@ -1261,30 +1261,46 @@
             "perks": [
               "Tough",
               "Vehement Magic"
+            ],
+            "perkIds": [
+              "FiyuMtwyxLqRdOWm",
+              "UhI94xpNrdCln9jR"
             ]
           },
           {
             "level": 3,
             "perks": [
               "Endless Stamina"
+            ],
+            "perkIds": [
+              "a3nkW4FHWp8N3DUK"
             ]
           },
           {
             "level": 5,
             "perks": [
               "Mesmer"
+            ],
+            "perkIds": [
+              "rG1e4FJwMwly5Zbr"
             ]
           },
           {
             "level": 7,
             "perks": [
               "Tough"
+            ],
+            "perkIds": [
+              "FiyuMtwyxLqRdOWm"
             ]
           },
           {
             "level": 9,
             "perks": [
               "Secret of Mana"
+            ],
+            "perkIds": [
+              "aOUEt5kDCIGtp9nn"
             ]
           }
         ],
@@ -1300,6 +1316,34 @@
             "Hold",
             "LIfe",
             "Morph"
+          ],
+          "startIds": [
+            [
+              "E2B43fRes5XOet6V"
+            ],
+            [
+              "v1lykxYXBCYgDn68"
+            ],
+            [
+              "9zgRzjajKw7N0bD9"
+            ],
+            [
+              "L43XdoqLgQ8Wl6vM"
+            ]
+          ],
+          "laterIds": [
+            [
+              "pD5LaocIkQaIyEFN"
+            ],
+            [
+              "Hwmj6RwmUigPTFAv"
+            ],
+            [
+              "sBvdMIqhfJcydANC"
+            ],
+            [
+              "fz3TUK8XlrLpG4eo"
+            ]
           ]
         }
       }

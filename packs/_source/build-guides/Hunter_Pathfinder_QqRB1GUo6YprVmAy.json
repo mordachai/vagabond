@@ -1095,36 +1095,54 @@
             "perks": [
               "Scout",
               "Sharpshooter"
+            ],
+            "perkIds": [
+              "cZSBLLRDwqWonXsy",
+              "LP1K8ZSBIEuu3AgF"
             ]
           },
           {
             "level": 3,
             "perks": [
               "Cryptozoologist"
+            ],
+            "perkIds": [
+              "oW0hPunyQ6B8nUZh"
             ]
           },
           {
             "level": 5,
             "perks": [
               "Ambusher"
+            ],
+            "perkIds": [
+              "3Ejo0QEPqsFSnFBd"
             ]
           },
           {
             "level": 7,
             "perks": [
               "Marksmanship"
+            ],
+            "perkIds": [
+              "xfYrdHhVTh03lkvz"
             ]
           },
           {
             "level": 9,
             "perks": [
               "Heightened Cognition"
+            ],
+            "perkIds": [
+              "6oY0VmQBej8yjZjp"
             ]
           }
         ],
         "spells": {
           "start": [],
-          "later": []
+          "later": [],
+          "startIds": [],
+          "laterIds": []
         }
       }
     }

@@ -1131,36 +1131,54 @@
             "perks": [
               "Bully",
               "Dusted Knuckle"
+            ],
+            "perkIds": [
+              "Mslyxx2O89wfor2L",
+              "Lb1ncXSPRRd1wq84"
             ]
           },
           {
             "level": 3,
             "perks": [
               "Check Hook"
+            ],
+            "perkIds": [
+              "SoMDviAp6pOFjJMk"
             ]
           },
           {
             "level": 5,
             "perks": [
               "Patience"
+            ],
+            "perkIds": [
+              "0g0Z7XRDrgVzbpdD"
             ]
           },
           {
             "level": 7,
             "perks": [
               "Tough"
+            ],
+            "perkIds": [
+              "FiyuMtwyxLqRdOWm"
             ]
           },
           {
             "level": 9,
             "perks": [
               "Sentinel"
+            ],
+            "perkIds": [
+              "t2kiBSjqMvPZ6Vbd"
             ]
           }
         ],
         "spells": {
           "start": [],
-          "later": []
+          "later": [],
+          "startIds": [],
+          "laterIds": []
         }
       }
     }

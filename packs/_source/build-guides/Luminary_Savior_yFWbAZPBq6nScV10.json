@@ -1244,30 +1244,46 @@
             "perks": [
               "Abjurer",
               "Assured Healer"
+            ],
+            "perkIds": [
+              "ZTlEF3gIWZQN3ZPe",
+              "tQ0QFm3jAAsu8y1i"
             ]
           },
           {
             "level": 3,
             "perks": [
               "Medic"
+            ],
+            "perkIds": [
+              "yX9kfarJAkbU3v28"
             ]
           },
           {
             "level": 5,
             "perks": [
               "Bookworm"
+            ],
+            "perkIds": [
+              "lDzaNi9ay6p8y0Ay"
             ]
           },
           {
             "level": 7,
             "perks": [
               "Heightened Cognition"
+            ],
+            "perkIds": [
+              "6oY0VmQBej8yjZjp"
             ]
           },
           {
             "level": 9,
             "perks": [
               "Secret of Mana"
+            ],
+            "perkIds": [
+              "aOUEt5kDCIGtp9nn"
             ]
           }
         ],
@@ -1283,6 +1299,35 @@
             "Hold",
             "Hymn",
             "Tempo"
+          ],
+          "startIds": [
+            [
+              "TyPnI7gEtbzuxFZm"
+            ],
+            [
+              "sBvdMIqhfJcydANC"
+            ],
+            [
+              "M0HRBrZaRQ81vcAg"
+            ],
+            [
+              "L43XdoqLgQ8Wl6vM"
+            ]
+          ],
+          "laterIds": [
+            [
+              "K0iy3DCtjDZzLMm6"
+            ],
+            [
+              "Hwmj6RwmUigPTFAv"
+            ],
+            [
+              "ebEsafpKK3vkvvYJ"
+            ],
+            [
+              "sAkNbpjb2X6CsJ4Y",
+              "vVHD6kTqq2V277RU"
+            ]
           ]
         }
       }

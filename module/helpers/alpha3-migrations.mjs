@@ -6,6 +6,8 @@
  * blocks the rest, guard set only after the full pass.
  */
 
+import { isCopyOf, sourceDocId } from './source-id.mjs';
+
 const safeEffects = (doc) => { try { return Array.from(doc?.effects ?? []); } catch { return []; } };
 
 /** Every actor in the world: sidebar actors + unlinked token actors on every scene. */
@@ -21,15 +23,6 @@ const safeItems = (doc) => { try { return Array.from(doc?.items ?? []); } catch 
 /** Every item in the world: sidebar items, actor items, unlinked token actor items. */
 function worldItems() {
   return [...game.items.contents, ...worldActors().flatMap(safeItems)];
-}
-
-/**
- * Compendium doc id an item was made from (`_stats.compendiumSource` / legacy `flags.core.sourceId`),
- * or ''. Matching on it instead of the name keeps translated (Babele) copies in scope.
- */
-function sourceDocId(item) {
-  const uuid = item?._stats?.compendiumSource ?? item?.flags?.core?.sourceId ?? '';
-  return String(uuid).split('.').pop() ?? '';
 }
 
 /** Statuses whose rules changed in Alpha 3 (per-die penalties, Prone, Incapacitated family, attack-only Vulnerable). */
@@ -223,7 +216,7 @@ export async function migrateAlpha3DefensePerks() {
  */
 const lfNames = (item) => (item.system.levelFeatures ?? []).map((lf) => lf.name);
 const ALPHA3_CLASSES = {
-  Alchemist: { id: '4kXK5bZHEb3PMzLy', isOld: (i) => lfNames(i).includes('Eureka (10+)') },
+  Alchemist: { id: '4kXK5bZHEb3PMzLy', isOld: (i) => lfNames(i).includes('Eureka (10+)') || !i.system.levelFeatures?.some((lf) => lf.action?.command === 'system:alchemist.catalyze') },
   Barbarian: { id: 'qONUTXY8GwqSEoDw', isOld: (i) => (String(i.system.description).includes('>Rip and Tear</span>') && !String(i.system.description).includes('Aggressor (15’), Rip and Tear')) || i.effects?.some((e) => e.system?.changes?.some((c) => c.key === 'system.spellDamageDieSizeBonus')) },
   Dancer: { id: '8LqHA6iqYBgFmVfJ', isOld: (i) => String(i.system.description).includes('Sandilene') },
   Druid: { id: 'YhELwGaQYbFGoKAB', isOld: (i) => i.system.levelFeatures?.some((lf) => lf.level === 2 && lf.name === 'Savagery (+2)') },
@@ -264,9 +257,12 @@ export async function migrateAlpha3Classes() {
 
   for (const item of worldItems()) {
     try {
-      const mig = ALPHA3_CLASSES[item.name];
-      const source = sources[item.name];
-      if (item.type !== 'class' || !mig || !source || !mig.isOld(item)) continue;
+      if (item.type !== 'class') continue;
+      // By compendium doc id first (a translated copy has a translated name), by name for hand-made copies
+      const className = Object.keys(ALPHA3_CLASSES).find((n) => ALPHA3_CLASSES[n].id === sourceDocId(item)) ?? item.name;
+      const mig = ALPHA3_CLASSES[className];
+      const source = sources[className];
+      if (!mig || !source || !mig.isOld(item)) continue;
 
       const wasOff = new Map(item.effects.map((e) => [e.name, e.disabled]));
       const effects = source.effects.map((e) => {
@@ -401,7 +397,7 @@ export async function migrateAlpha3Ancestries() {
 
   for (const item of worldItems()) {
     try {
-      if (item.type !== 'ancestry' || item.name !== 'Human') continue;
+      if (item.type !== 'ancestry' || !isCopyOf(item, 'kYLA215krVXIgmnd', 'Human')) continue;
       const traits = item.system.toObject().traits;
       if (!traits.some((t) => t.name === 'Knack')) continue;
       await item.update({ 'system.traits': traits.map((t) => (t.name === 'Knack' ? { ...t, name: 'Aptitude' } : t)) });

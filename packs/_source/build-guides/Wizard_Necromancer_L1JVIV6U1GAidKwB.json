@@ -1185,30 +1185,46 @@
             "perks": [
               "Bookworm",
               "Necromancer"
+            ],
+            "perkIds": [
+              "lDzaNi9ay6p8y0Ay",
+              "N5GRj7612EvMw5Z5"
             ]
           },
           {
             "level": 3,
             "perks": [
               "Grim Harvest"
+            ],
+            "perkIds": [
+              "tegoLkMvfTZPShtI"
             ]
           },
           {
             "level": 5,
             "perks": [
               "Infesting Burst"
+            ],
+            "perkIds": [
+              "XHMK2NVz58trGLKR"
             ]
           },
           {
             "level": 7,
             "perks": [
               "Medium"
+            ],
+            "perkIds": [
+              "AjP1wBwolTK06wBs"
             ]
           },
           {
             "level": 9,
             "perks": [
               "Reanimator"
+            ],
+            "perkIds": [
+              "Bg61LXm2yYZAD1EC"
             ]
           }
         ],
@@ -1224,6 +1240,34 @@
             "Frostburn",
             "Leech",
             "Portal"
+          ],
+          "startIds": [
+            [
+              "aUuqluCeFulvPlNR"
+            ],
+            [
+              "v1lykxYXBCYgDn68"
+            ],
+            [
+              "0SVJ6QW8j6i3JkGe"
+            ],
+            [
+              "GaL1pCOL67Vf586b"
+            ]
+          ],
+          "laterIds": [
+            [
+              "7iglZS7HDksMctFu"
+            ],
+            [
+              "kBgikH1zuMoqe4qj"
+            ],
+            [
+              "9zgRzjajKw7N0bD9"
+            ],
+            [
+              "XHmLcGAXQKoFVzUA"
+            ]
           ]
         }
       }

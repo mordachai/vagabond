@@ -1,3 +1,4 @@
+import { isCopyOf } from './source-id.mjs';
 import { StatusHelper } from './status-helper.mjs';
 import { combatRollData } from './rule-rolldata.mjs';
 import { RollExpiry } from './roll-expiry.mjs';
@@ -127,7 +128,7 @@ export class RageHelper {
 
     for (const item of candidates) {
       try {
-        if (item.type !== 'class' || item.name !== 'Barbarian') continue;
+        if (item.type !== 'class' || !isCopyOf(item, 'qONUTXY8GwqSEoDw', 'Barbarian')) continue;
         const old = item.effects.filter(e => e.name === 'Rage feature');
         if (!old.length) continue;
         const rageWasOff = old.some(e => e.disabled);
@@ -171,7 +172,7 @@ export class RageHelper {
         .flatMap((t) => safeItems(t.actor))),
     ];
     for (const item of candidates) {
-      if (item.type !== 'class' || item.name !== 'Barbarian') continue;
+      if (item.type !== 'class' || !isCopyOf(item, 'qONUTXY8GwqSEoDw', 'Barbarian')) continue;
       const updates = item.effects
         .filter((e) => names.has(e.name) && !e.flags?.vagabond?.switchable)
         .map((e) => ({ _id: e.id, 'flags.vagabond.switchable': true }));
@@ -202,7 +203,7 @@ export class RageHelper {
         .flatMap((t) => safeItems(t.actor))),
     ];
     for (const item of candidates) {
-      if (item.type !== 'class' || item.name !== 'Barbarian') continue;
+      if (item.type !== 'class' || !isCopyOf(item, 'qONUTXY8GwqSEoDw', 'Barbarian')) continue;
       const auto = item.effects.find(e => e.name === names[0]);
       if (!auto || auto.system.changes.some(c => /@aggressorAuto/.test(String(c.value)))) continue;
       const updates = [];

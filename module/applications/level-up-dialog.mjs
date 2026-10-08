@@ -220,6 +220,32 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
     return plan.perks.filter(p => p.level === this.newLevel).flatMap(p => p.perks).map(n => n.toLowerCase());
   }
 
+  /**
+   * Last segment of a compendium uuid / source (the doc id). Perks and Spells are matched by it first because
+   * translated (Babele) worlds rename every document; names are only the fallback for guides without ids.
+   */
+  static _docId(source) {
+    return String(source ?? '').split('.').pop() ?? '';
+  }
+
+  /** Doc ids of the Perks the guide lists for the Level being gained */
+  get guidePerkIds() {
+    const plan = this.guidePlan;
+    if (!plan) return new Set();
+    return new Set(plan.perks.filter(p => p.level === this.newLevel).flatMap(p => p.perkIds ?? []).filter(Boolean));
+  }
+
+  /** Doc ids of every Spell the guide mentions (starting + learn-later) */
+  get guideSpellIds() {
+    const sp = this.guidePlan?.spells;
+    return new Set([...(sp?.startIds ?? []), ...(sp?.laterIds ?? [])].flat().filter(Boolean));
+  }
+
+  /** Compendium name of a guide Perk / Spell (translated when the world is), else the book's English name */
+  static _guideName(pack, id, fallback) {
+    return (id && fromUuidSync(`Compendium.vagabond.${pack}.Item.${id}`)?.name) || fallback;
+  }
+
   /** Lower-cased keys of every Spell the guide mentions (starting + learn-later) */
   get guideSpellKeys() {
     const sp = this.guidePlan?.spells;
@@ -588,28 +614,40 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
       target: goal[key] ?? (sys.stats?.[key]?.value || 0),
     })) : [];
 
-    const ownedPerks = new Set(this.actor.items.filter(i => i.type === 'perk')
-      .map(i => i.name.toLowerCase().replace(/\s*\(.*\)$/, '')));
+    const ownedPerkItems = this.actor.items.filter(i => i.type === 'perk');
+    const ownedPerks = new Set(ownedPerkItems.map(i => i.name.toLowerCase().replace(/\s*\(.*\)$/, '')));
+    const ownedPerkIds = new Set(ownedPerkItems.map(i => LevelUpDialog._docId(i._stats?.compendiumSource ?? i.flags?.core?.sourceId)));
     const canJump = this.levelApplied && this.choiceTabs.includes('perks');
     const levels = [...plan.perks].sort((a, b) => a.level - b.level).map(p => {
       const now = p.level === this.newLevel;
-      const names = p.perks.length ? p.perks : [];
+      const ids = p.perkIds ?? [];
+      const names = (p.perks ?? []).map((n, i) => LevelUpDialog._guideName('perks', ids[i], n));
       return {
         level: p.level,
         past: p.level < this.newLevel,
         now,
         names,
         text: names.join(', '),
-        taken: names.length > 0 && names.every(n => ownedPerks.has(n.toLowerCase())),
+        taken: names.length > 0 && p.perks.every((n, i) => (ids[i] && ownedPerkIds.has(ids[i])) || ownedPerks.has(n.toLowerCase())),
         jump: now && canJump && names.length > 0,
         jumpName: names[0] ?? '',
+        jumpId: ids[0] ?? '',
       };
     });
 
-    const known = new Set(this.actor.items.filter(i => i.type === 'spell').map(i => LevelUpDialog._spellKey(i.name)));
-    const spellList = names => (names ?? []).map(name => ({ name, owned: known.has(LevelUpDialog._spellKey(name)) }));
-    const start = spellList(plan.spells?.start);
-    const later = spellList(plan.spells?.later);
+    const ownedSpells = this.actor.items.filter(i => i.type === 'spell');
+    const known = new Set(ownedSpells.map(i => LevelUpDialog._spellKey(i.name)));
+    const knownIds = new Set(ownedSpells.map(i => LevelUpDialog._docId(i._stats?.compendiumSource ?? i.flags?.core?.sourceId)));
+    // `ids[i]` = every doc of that guide Spell (paired Spells like Tempo +/- have two)
+    const spellList = (names, idLists) => (names ?? []).map((name, i) => {
+      const ids = idLists?.[i] ?? [];
+      return {
+        name: ids.length ? ids.map(id => LevelUpDialog._guideName('spells', id, name)).join(' / ') : name,
+        owned: (ids.length > 0 && ids.every(id => knownIds.has(id))) || known.has(LevelUpDialog._spellKey(name)),
+      };
+    });
+    const start = spellList(plan.spells?.start, plan.spells?.startIds);
+    const later = spellList(plan.spells?.later, plan.spells?.laterIds);
 
     return {
       title: game.i18n.format('VAGABOND.LevelUp.GuideTitle', { title: plan.title }),
@@ -805,6 +843,7 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
 
     // Build perk list (the guide's picks for this Level float to the top)
     const guidePerks = this.guidePerkNames;
+    const guidePerkIds = this.guidePerkIds;
     const perkList = [];
     for (const perk of allPerks.sort((a, b) => a.name.localeCompare(b.name))) {
       try {
@@ -830,7 +869,7 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
           ownedCount,
           isPreviewing: perk.uuid === this.selectedPerkUuid,
           isChosen: perk.uuid === this.chosenPerkUuid,
-          isGuide: guidePerks.includes(perk.name.toLowerCase()),
+          isGuide: guidePerkIds.has(LevelUpDialog._docId(perk.uuid)) || guidePerks.includes(perk.name.toLowerCase()),
         });
       } catch (e) {
         console.warn(`Level Up | Failed to load perk ${perk.uuid}:`, e);
@@ -934,6 +973,7 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
 
     // Build spell list (guide Spells float to the top)
     const guideSpells = new Set(this.guideSpellKeys);
+    const guideSpellIds = this.guideSpellIds;
     const spellList = [];
     for (const spell of allSpells.sort((a, b) => a.name.localeCompare(b.name))) {
       const isOwned = existingSpellUuids.has(spell.uuid) || existingSpellNames.has(spell.name.toLowerCase());
@@ -963,7 +1003,7 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
         isChosen,
         isRequired,
         isGrantEligible: grantPoolUuids.has(spell.uuid),
-        isGuide: guideSpells.has(LevelUpDialog._spellKey(spell.name)),
+        isGuide: guideSpellIds.has(LevelUpDialog._docId(spell.uuid)) || guideSpells.has(LevelUpDialog._spellKey(spell.name)),
         isPreviewing: spell.uuid === this.selectedSpellUuid,
         damageTypeIcon: CONFIG.VAGABOND.damageTypeIcons?.[spell.damageType] || null,
         damageType: spell.damageType !== '-' ? spell.damageType : null,
@@ -1379,9 +1419,12 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
     this.activeTab = tab;
     // Guide rows jump to the Perks tab with that perk previewed
     const perkName = target.dataset.perkName;
-    if (tab === 'perks' && perkName) {
+    const perkId = target.dataset.perkId;
+    if (tab === 'perks' && (perkId || perkName)) {
       await this.dataService.ensureDataLoaded(['perks']);
-      const hit = this.dataService.getAllItems('perks').find(p => p.name.toLowerCase() === perkName.toLowerCase());
+      const all = this.dataService.getAllItems('perks');
+      const hit = (perkId && all.find(p => LevelUpDialog._docId(p.uuid) === perkId))
+        ?? all.find(p => p.name.toLowerCase() === perkName?.toLowerCase());
       if (hit) this.selectedPerkUuid = hit.uuid;
     }
     this.render();

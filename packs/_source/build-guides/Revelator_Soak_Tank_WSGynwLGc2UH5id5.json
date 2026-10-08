@@ -1241,30 +1241,46 @@
             "perks": [
               "Gish",
               "Selfless"
+            ],
+            "perkIds": [
+              "YVgf2kRWwn8JRq1X",
+              "sKrfyW14tiTgU56b"
             ]
           },
           {
             "level": 3,
             "perks": [
               "Tough"
+            ],
+            "perkIds": [
+              "FiyuMtwyxLqRdOWm"
             ]
           },
           {
             "level": 5,
             "perks": [
               "Protector"
+            ],
+            "perkIds": [
+              "aHBvA8INtAilA7zH"
             ]
           },
           {
             "level": 7,
             "perks": [
               "Rally"
+            ],
+            "perkIds": [
+              "AYgEsFexlPAI9DYH"
             ]
           },
           {
             "level": 9,
             "perks": [
               "Heightened Magnetism"
+            ],
+            "perkIds": [
+              "CdryeyzeoaDj2bVO"
             ]
           }
         ],
@@ -1277,6 +1293,25 @@
             "Life",
             "Ward",
             "Exalt"
+          ],
+          "startIds": [
+            [
+              "TyPnI7gEtbzuxFZm"
+            ],
+            [
+              "M0HRBrZaRQ81vcAg"
+            ]
+          ],
+          "laterIds": [
+            [
+              "sBvdMIqhfJcydANC"
+            ],
+            [
+              "L43XdoqLgQ8Wl6vM"
+            ],
+            [
+              "lSVkxtOolrInid6w"
+            ]
           ]
         }
       }

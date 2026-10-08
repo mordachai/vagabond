@@ -1,3 +1,4 @@
+import { classFeatureText } from './feature-text.mjs';
 import { combatRollData } from './rule-rolldata.mjs';
 import { RollExpiry } from './roll-expiry.mjs';
 
@@ -87,8 +88,7 @@ export class FighterHelper {
     }
 
     const { VagabondChatCard } = await import('./chat-card.mjs');
-    const classItem = actor.items.find(i => i.type === 'class');
-    const text = classItem?.system?.levelFeatures?.find(f => f.name === 'Momentum')?.description ?? '';
+    const text = classFeatureText(actor, { command: 'fighter.momentum', name: 'Momentum' });
     await VagabondChatCard.featureCard(actor, {
       title,
       description: `<p>${game.i18n.format('VAGABOND.Momentum.Gained', { name: actor.name })}</p>${text}`,

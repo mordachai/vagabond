@@ -1265,36 +1265,54 @@
             "perks": [
               "Ambusher",
               "Resourceful"
+            ],
+            "perkIds": [
+              "3Ejo0QEPqsFSnFBd",
+              "Pwvw4buZkkB6eqKN"
             ]
           },
           {
             "level": 3,
             "perks": [
               "Quick Draw"
+            ],
+            "perkIds": [
+              "byBDvKpPkrK8ynkE"
             ]
           },
           {
             "level": 5,
             "perks": [
               "Knife Juggler"
+            ],
+            "perkIds": [
+              "pOiPXKHX7O90AsId"
             ]
           },
           {
             "level": 7,
             "perks": [
               "Poisoner"
+            ],
+            "perkIds": [
+              "OvYijC6ubI4a1nAf"
             ]
           },
           {
             "level": 9,
             "perks": [
               "Bravado"
+            ],
+            "perkIds": [
+              "P6XKqJ7InSQFEReK"
             ]
           }
         ],
         "spells": {
           "start": [],
-          "later": []
+          "later": [],
+          "startIds": [],
+          "laterIds": []
         }
       }
     }

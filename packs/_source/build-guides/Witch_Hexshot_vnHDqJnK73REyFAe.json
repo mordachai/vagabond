@@ -1431,30 +1431,46 @@
             "perks": [
               "Gish",
               "Witchsight"
+            ],
+            "perkIds": [
+              "YVgf2kRWwn8JRq1X",
+              "MMFem3lhaPwAUnrj"
             ]
           },
           {
             "level": 3,
             "perks": [
               "Steady Aim"
+            ],
+            "perkIds": [
+              "9ChcXEGqz39efjBH"
             ]
           },
           {
             "level": 5,
             "perks": [
               "Akimbo Trigger"
+            ],
+            "perkIds": [
+              "vIYaWIYHSvdSpDFT"
             ]
           },
           {
             "level": 7,
             "perks": [
               "Marksmanship"
+            ],
+            "perkIds": [
+              "xfYrdHhVTh03lkvz"
             ]
           },
           {
             "level": 9,
             "perks": [
               "Ricochet"
+            ],
+            "perkIds": [
+              "puwvlMK8UsfkSK5T"
             ]
           }
         ],
@@ -1470,6 +1486,34 @@
             "Fade",
             "Sleep",
             "Zap"
+          ],
+          "startIds": [
+            [
+              "HYFlMtBHdF5W6LF6"
+            ],
+            [
+              "pD5LaocIkQaIyEFN"
+            ],
+            [
+              "K0iy3DCtjDZzLMm6"
+            ],
+            [
+              "Hwmj6RwmUigPTFAv"
+            ]
+          ],
+          "laterIds": [
+            [
+              "7iglZS7HDksMctFu"
+            ],
+            [
+              "AGORAq1SsE2AbQGn"
+            ],
+            [
+              "x0G7WvOldTzluuYy"
+            ],
+            [
+              "zqTI6h7qOnAnVTfP"
+            ]
           ]
         }
       }

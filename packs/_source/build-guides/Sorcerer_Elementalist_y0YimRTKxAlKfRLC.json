@@ -1169,30 +1169,46 @@
             "perks": [
               "Quality Assurance",
               "Vehement Magic"
+            ],
+            "perkIds": [
+              "AbwXHJfBqQWZAW4K",
+              "UhI94xpNrdCln9jR"
             ]
           },
           {
             "level": 3,
             "perks": [
               "Secret of Mana"
+            ],
+            "perkIds": [
+              "aOUEt5kDCIGtp9nn"
             ]
           },
           {
             "level": 5,
             "perks": [
               "Secret of Mana"
+            ],
+            "perkIds": [
+              "aOUEt5kDCIGtp9nn"
             ]
           },
           {
             "level": 7,
             "perks": [
               "Endless Stamina"
+            ],
+            "perkIds": [
+              "a3nkW4FHWp8N3DUK"
             ]
           },
           {
             "level": 9,
             "perks": [
               "Heightened Magnetism"
+            ],
+            "perkIds": [
+              "CdryeyzeoaDj2bVO"
             ]
           }
         ],
@@ -1208,6 +1224,35 @@
             "Rust",
             "Sleep",
             "Tempo"
+          ],
+          "startIds": [
+            [
+              "YfsJ1lDezffaKVmk"
+            ],
+            [
+              "toYD8Nm61vMhBbZ7"
+            ],
+            [
+              "aUuqluCeFulvPlNR"
+            ],
+            [
+              "L43XdoqLgQ8Wl6vM"
+            ]
+          ],
+          "laterIds": [
+            [
+              "Hwmj6RwmUigPTFAv"
+            ],
+            [
+              "gGlJubpqoZ0WMQbG"
+            ],
+            [
+              "x0G7WvOldTzluuYy"
+            ],
+            [
+              "sAkNbpjb2X6CsJ4Y",
+              "vVHD6kTqq2V277RU"
+            ]
           ]
         }
       }

@@ -1223,30 +1223,46 @@
             "perks": [
               "Bookworm",
               "Cardistry"
+            ],
+            "perkIds": [
+              "lDzaNi9ay6p8y0Ay",
+              "yrYjdipnKbGr8tvq"
             ]
           },
           {
             "level": 3,
             "perks": [
               "Telepath"
+            ],
+            "perkIds": [
+              "jmhv9Tnc6FnwqSY9"
             ]
           },
           {
             "level": 5,
             "perks": [
               "Medium"
+            ],
+            "perkIds": [
+              "AjP1wBwolTK06wBs"
             ]
           },
           {
             "level": 7,
             "perks": [
               "Sage"
+            ],
+            "perkIds": [
+              "YjYof8YJYhR30yu5"
             ]
           },
           {
             "level": 9,
             "perks": [
               "Favors the Bold"
+            ],
+            "perkIds": [
+              "hyMGe2IJMICKRebn"
             ]
           }
         ],
@@ -1262,6 +1278,34 @@
             "Dispel",
             "Enchant",
             "Ward"
+          ],
+          "startIds": [
+            [
+              "K0iy3DCtjDZzLMm6"
+            ],
+            [
+              "Z46O80kXCKWgshq2"
+            ],
+            [
+              "cUWBly8MHK4MhNcw"
+            ],
+            [
+              "FyLP7OY1vyxxvxA0"
+            ]
+          ],
+          "laterIds": [
+            [
+              "TyPnI7gEtbzuxFZm"
+            ],
+            [
+              "7iglZS7HDksMctFu"
+            ],
+            [
+              "o1OhAEoFdpHDDmEL"
+            ],
+            [
+              "L43XdoqLgQ8Wl6vM"
+            ]
           ]
         }
       }

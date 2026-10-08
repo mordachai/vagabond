@@ -1182,36 +1182,54 @@
             "perks": [
               "Fallaway Reverse",
               "Skirmisher"
+            ],
+            "perkIds": [
+              "x4gPNuUuQbdpKNAB",
+              "hJjjazBCtdV7YIc5"
             ]
           },
           {
             "level": 3,
             "perks": [
               "Perfect Parry"
+            ],
+            "perkIds": [
+              "lo6rixhWIVJkR80Z"
             ]
           },
           {
             "level": 5,
             "perks": [
               "Inspiring Presence"
+            ],
+            "perkIds": [
+              "OO8rtGe3vqQmFbLc"
             ]
           },
           {
             "level": 7,
             "perks": [
               "Bravado"
+            ],
+            "perkIds": [
+              "P6XKqJ7InSQFEReK"
             ]
           },
           {
             "level": 9,
             "perks": [
               "Endless Stamina"
+            ],
+            "perkIds": [
+              "a3nkW4FHWp8N3DUK"
             ]
           }
         ],
         "spells": {
           "start": [],
-          "later": []
+          "later": [],
+          "startIds": [],
+          "laterIds": []
         }
       }
     }

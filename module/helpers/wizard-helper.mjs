@@ -1,3 +1,4 @@
+import { classFeatureText } from './feature-text.mjs';
 import { buildMacroButtonHTML } from './item-macro.mjs';
 
 /**
@@ -32,7 +33,7 @@ export class WizardHelper {
 
   /** Book text of the Extracurricular feature, for the cards. */
   static #featureText(actor) {
-    return actor.items.find(i => i.type === 'class')?.system?.levelFeatures?.find(f => f.name === 'Extracurricular')?.description ?? '';
+    return classFeatureText(actor, { command: 'wizard.extracurricular', name: 'Extracurricular' });
   }
 
   /**

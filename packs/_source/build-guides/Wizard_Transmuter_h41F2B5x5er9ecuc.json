@@ -1167,30 +1167,46 @@
             "perks": [
               "Bookworm",
               "Resourceful"
+            ],
+            "perkIds": [
+              "lDzaNi9ay6p8y0Ay",
+              "Pwvw4buZkkB6eqKN"
             ]
           },
           {
             "level": 3,
             "perks": [
               "Arcane Artisan"
+            ],
+            "perkIds": [
+              "JjMAJz1bVTvyRV4J"
             ]
           },
           {
             "level": 5,
             "perks": [
               "Instant Weapon"
+            ],
+            "perkIds": [
+              "mUMWM0NkCfdvpaRb"
             ]
           },
           {
             "level": 7,
             "perks": [
               "Secret of Mana"
+            ],
+            "perkIds": [
+              "aOUEt5kDCIGtp9nn"
             ]
           },
           {
             "level": 9,
             "perks": [
               "Heightened Intellect"
+            ],
+            "perkIds": [
+              "H99o70lTa5RBtokg"
             ]
           }
         ],
@@ -1206,6 +1222,34 @@
             "Junk",
             "Polymorph",
             "Terraform"
+          ],
+          "startIds": [
+            [
+              "tpmMtwrz5IZ4ZkHp"
+            ],
+            [
+              "Jo4OZhfZO9Q1ROw6"
+            ],
+            [
+              "8SNiWbOUiwPKrYkg"
+            ],
+            [
+              "gGlJubpqoZ0WMQbG"
+            ]
+          ],
+          "laterIds": [
+            [
+              "Hwmj6RwmUigPTFAv"
+            ],
+            [
+              "zCbmg0XtBPziO4Yr"
+            ],
+            [
+              "KizGmuUO2gr17fSR"
+            ],
+            [
+              "esyFdjFw1BqejR8X"
+            ]
           ]
         }
       }

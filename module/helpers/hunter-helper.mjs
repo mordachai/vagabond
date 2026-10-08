@@ -1,3 +1,5 @@
+import { classFeatureText } from './feature-text.mjs';
+
 /**
  * Hunter — Hunter’s Mark, Lethal Precision, Apex Predator (optional automation + feature button).
  *
@@ -120,8 +122,7 @@ export class HunterHelper {
     }
 
     const { VagabondChatCard } = await import('./chat-card.mjs');
-    const classItem = hunter.items.find(i => i.type === 'class');
-    const text = classItem?.system?.levelFeatures?.find(f => f.name === title)?.description ?? '';
+    const text = classFeatureText(hunter, { command: 'hunter.mark', name: title });
     await VagabondChatCard.featureCard(hunter, {
       title,
       description: `<p>${this.#L('Marked', { name: hunter.name, target: foundry.utils.escapeHTML(name) })}</p>${text}`,

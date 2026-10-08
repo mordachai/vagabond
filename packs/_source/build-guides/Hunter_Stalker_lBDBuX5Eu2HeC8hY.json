@@ -1299,36 +1299,54 @@
             "perks": [
               "Scout",
               "Skirmisher"
+            ],
+            "perkIds": [
+              "cZSBLLRDwqWonXsy",
+              "hJjjazBCtdV7YIc5"
             ]
           },
           {
             "level": 3,
             "perks": [
               "Strategist"
+            ],
+            "perkIds": [
+              "OcNVWEpuZEDDdlUu"
             ]
           },
           {
             "level": 5,
             "perks": [
               "Cryptozoologist"
+            ],
+            "perkIds": [
+              "oW0hPunyQ6B8nUZh"
             ]
           },
           {
             "level": 7,
             "perks": [
               "Fallaway Reverse"
+            ],
+            "perkIds": [
+              "x4gPNuUuQbdpKNAB"
             ]
           },
           {
             "level": 9,
             "perks": [
               "Heightened Cognition"
+            ],
+            "perkIds": [
+              "6oY0VmQBej8yjZjp"
             ]
           }
         ],
         "spells": {
           "start": [],
-          "later": []
+          "later": [],
+          "startIds": [],
+          "laterIds": []
         }
       }
     }

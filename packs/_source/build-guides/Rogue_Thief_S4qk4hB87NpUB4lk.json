@@ -1237,36 +1237,54 @@
             "perks": [
               "Resourceful",
               "Skirmisher"
+            ],
+            "perkIds": [
+              "Pwvw4buZkkB6eqKN",
+              "hJjjazBCtdV7YIc5"
             ]
           },
           {
             "level": 3,
             "perks": [
               "Master Breaker"
+            ],
+            "perkIds": [
+              "eNAvLBvJPluNHD0W"
             ]
           },
           {
             "level": 5,
             "perks": [
               "Deft Hands"
+            ],
+            "perkIds": [
+              "vtNfeEdWNUWvaeRM"
             ]
           },
           {
             "level": 7,
             "perks": [
               "Treads Lightly"
+            ],
+            "perkIds": [
+              "uic2nm5LlKKwoFDQ"
             ]
           },
           {
             "level": 9,
             "perks": [
               "Perfect Parry"
+            ],
+            "perkIds": [
+              "lo6rixhWIVJkR80Z"
             ]
           }
         ],
         "spells": {
           "start": [],
-          "later": []
+          "later": [],
+          "startIds": [],
+          "laterIds": []
         }
       }
     }

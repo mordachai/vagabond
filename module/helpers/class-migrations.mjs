@@ -1,3 +1,4 @@
+import { isCopyOf, sourceDocId } from './source-id.mjs';
 /**
  * One-time migrations that bring existing class items in a world up to the compendium's book
  * revision. Class items on actors are copies — editing the pack never reaches them.
@@ -44,7 +45,7 @@ async function migrateClass({ setting, classId, className, probeEffect, probeFea
 
   for (const item of worldItems()) {
     try {
-      if (item.type !== 'class' || item.name !== className || !isOld(item)) continue;
+      if (item.type !== 'class' || !isCopyOf(item, classId, className) || !isOld(item)) continue;
 
       const effects = source.effects.map(e => {
         const data = e.toObject();
@@ -88,7 +89,7 @@ async function trainGuaranteedSkills(item) {
 
 /** Give a character the Perk a rewritten class now grants (skipped when it already has one by that name). */
 async function grantPerk(actor, perkId, perkName) {
-  if (actor?.type !== 'character' || actor.items.some(i => i.type === 'perk' && i.name === perkName)) return;
+  if (actor?.type !== 'character' || actor.items.some(i => i.type === 'perk' && isCopyOf(i, perkId, perkName))) return;
   const perk = await game.packs.get('vagabond.perks')?.getDocument(perkId);
   if (perk) await actor.createEmbeddedDocuments('Item', [game.items.fromCompendium(perk)]);
 }
@@ -130,7 +131,7 @@ export function migrateDruidClass() {
       if (!hitMacro?.enabled) return;
       for (const spell of worldItems()) {
         try {
-          if (spell.type !== 'spell' || spell.name !== 'Polymorph' || spell.system.hitMacro?.enabled) continue;
+          if (spell.type !== 'spell' || !isCopyOf(spell, 'KizGmuUO2gr17fSR', 'Polymorph') || spell.system.hitMacro?.enabled) continue;
           await spell.update({ 'system.hitMacro': hitMacro });
         } catch (err) {
           console.warn(`vagabond | migrate Druid: skipped spell ${spell?.uuid ?? '(unknown)'}`, err);
@@ -179,7 +180,7 @@ export function migrateGunslingerClass() {
     // Quick Draw used to be a class feature; Shooting Irons now grants it as a Perk
     afterItem: async (item) => {
       const actor = item.parent;
-      if (actor?.type !== 'character' || actor.items.some(i => i.type === 'perk' && i.name === 'Quick Draw')) return;
+      if (actor?.type !== 'character' || actor.items.some(i => i.type === 'perk' && isCopyOf(i, 'byBDvKpPkrK8ynkE', 'Quick Draw'))) return;
       const perk = await game.packs.get('vagabond.perks')?.getDocument('byBDvKpPkrK8ynkE');
       if (perk) await actor.createEmbeddedDocuments('Item', [game.items.fromCompendium(perk)]);
     },
@@ -436,9 +437,12 @@ export async function migrateAncestries() {
 
   for (const item of worldItems()) {
     try {
-      const mig = ANCESTRY_MIGRATIONS[item.name];
-      const source = sources[item.name];
-      if (item.type !== 'ancestry' || !mig || !source || !mig.isOld(item.system.traits ?? [])) continue;
+      if (item.type !== 'ancestry') continue;
+      // By compendium doc id first (translated copies are renamed), by name for hand-made copies
+      const ancestry = Object.keys(ANCESTRY_MIGRATIONS).find(n => ANCESTRY_MIGRATIONS[n].id === sourceDocId(item)) ?? item.name;
+      const mig = ANCESTRY_MIGRATIONS[ancestry];
+      const source = sources[ancestry];
+      if (!mig || !source || !mig.isOld(item.system.traits ?? [])) continue;
 
       const effects = source.effects.map(e => {
         const data = e.toObject();
@@ -458,7 +462,7 @@ export async function migrateAncestries() {
 
       // Dwarf: the Tough trait effect became the Tough Perk
       const actor = item.parent;
-      if (item.name === 'Dwarf' && actor?.type === 'character') {
+      if (isCopyOf(item, ANCESTRY_MIGRATIONS.Dwarf.id, 'Dwarf') && actor?.type === 'character') {
         const perk = await game.packs.get('vagabond.perks')?.getDocument('FiyuMtwyxLqRdOWm');
         if (perk) await actor.createEmbeddedDocuments('Item', [game.items.fromCompendium(perk)]);
       }

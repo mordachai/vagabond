@@ -282,6 +282,18 @@
       "SpellTitle": "Extracurricular: {spell}",
       "Added": "<strong>{name}</strong> gasta um dado de Estudo ({left} restantes) para adicionar à Conjuração o efeito de <strong>{spell}</strong>:"
     },
+    "Catalyze": {
+      "Title": "Catalisar",
+      "NotYours": "Apenas o dono do personagem pode fazer isso.",
+      "NoCatalyze": "{name} não tem Catalisar.",
+      "NoFormulas": "{name} ainda não conhece nenhuma fórmula. Aprenda na aba Alquimia da Bancada.",
+      "Hint": "Crie um Item Alquímico que você conhece com sua Ação de Usar. Custo: {cost} de Materiais (você tem {have}).",
+      "Missing": "Ainda não dá para Criar — faltando: {list}",
+      "Craft": "Criar",
+      "LimitTitle": "Já criou neste Turno",
+      "LimitCatalyze": "<strong>{name}</strong> já usou a Ação de Usar para Criar neste Turno ({used}/{allowed}). Criar mesmo assim?",
+      "LimitDeft": "<strong>{name}</strong> já Criou {used}/{allowed} vezes neste Turno (Ação de Usar + Mãos Hábeis, que abre mão do Movimento). Criar mesmo assim?"
+    },
     "HuntersMark": {
       "Title": "Marca do Caçador",
       "EffectText": "{target} é a sua Marca. Exclua este efeito para largar a Marca.",

@@ -4,6 +4,9 @@ import { VagabondChatCard } from '../chat-card.mjs';
 import { AlchemyHelper } from './alchemy-helper.mjs';
 import { craftingConfig } from './config.mjs';
 
+/** RAW Alchemy: 5s of Materials per Craft (copper), whatever the item's own value. */
+const ALCHEMY_COST = 5 * CurrencyHelper.RATES.silver;
+
 /** Any equipped item satisfying the 'alchemy' tool kind (RAW: Alchemy Tools). */
 function hasAlchemyTools(actor) {
   return actor.items.some(i => i.type === 'equipment' && i.system.equipped && i.system.toolKind === 'alchemy');
@@ -36,7 +39,7 @@ export const AlchemyMode = {
     const toolsOk = requirement !== 'block' || hasAlchemyTools(actor);
     checks.push({ ok: toolsOk, key: 'tools', label: 'VAGABOND.Craft.Checks.AlchemyTools' });
 
-    const cost = 50; // 5s, RAW-fixed regardless of the item's own value
+    const cost = ALCHEMY_COST; // 5s, RAW-fixed regardless of the item's own value
     const materialsOk = MaterialsHelper.totalValue(actor) >= cost;
     checks.push({
       ok: materialsOk, key: 'materials', label: 'VAGABOND.Craft.Checks.Materials',
@@ -58,7 +61,7 @@ export const AlchemyMode = {
     const source = await fromUuid(recipe.formulaUuid);
     if (!source) return { ok: false, reason: 'noActor' };
 
-    const spend = await MaterialsHelper.spend(actor, 50);
+    const spend = await MaterialsHelper.spend(actor, ALCHEMY_COST);
     if (!spend.ok) return { ok: false, reason: 'materials' };
 
     const created = await grantAlchemical(actor, recipe.formulaUuid, source, 'VAGABOND.Craft.Modes.Alchemy.Label');

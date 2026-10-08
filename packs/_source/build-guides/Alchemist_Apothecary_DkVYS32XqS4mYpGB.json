@@ -594,7 +594,15 @@
             "allowedPerks": [
               "Compendium.vagabond.perks.Item.vtNfeEdWNUWvaeRM"
             ],
-            "perkAmount": 1
+            "perkAmount": 1,
+            "action": {
+              "enabled": true,
+              "label": "Catalyze",
+              "icon": "flask",
+              "uuid": "",
+              "command": "system:alchemist.catalyze",
+              "runAsGM": false
+            }
           },
           {
             "level": 2,
@@ -1077,36 +1085,54 @@
             "perks": [
               "Deft Hands",
               "Medic"
+            ],
+            "perkIds": [
+              "vtNfeEdWNUWvaeRM",
+              "yX9kfarJAkbU3v28"
             ]
           },
           {
             "level": 3,
             "perks": [
               "Bookworm"
+            ],
+            "perkIds": [
+              "lDzaNi9ay6p8y0Ay"
             ]
           },
           {
             "level": 5,
             "perks": [
               "Master Artisan"
+            ],
+            "perkIds": [
+              "DlqVD05dVoVhNotv"
             ]
           },
           {
             "level": 7,
             "perks": [
               "Sage"
+            ],
+            "perkIds": [
+              "YjYof8YJYhR30yu5"
             ]
           },
           {
             "level": 9,
             "perks": [
               "Heightened Intellect"
+            ],
+            "perkIds": [
+              "H99o70lTa5RBtokg"
             ]
           }
         ],
         "spells": {
           "start": [],
-          "later": []
+          "later": [],
+          "startIds": [],
+          "laterIds": []
         }
       }
     }

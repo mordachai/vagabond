@@ -1201,30 +1201,46 @@
             "perks": [
               "Bookworm",
               "Vehement Magic"
+            ],
+            "perkIds": [
+              "lDzaNi9ay6p8y0Ay",
+              "UhI94xpNrdCln9jR"
             ]
           },
           {
             "level": 3,
             "perks": [
               "Secret of Mana"
+            ],
+            "perkIds": [
+              "aOUEt5kDCIGtp9nn"
             ]
           },
           {
             "level": 5,
             "perks": [
               "Secret of Mana"
+            ],
+            "perkIds": [
+              "aOUEt5kDCIGtp9nn"
             ]
           },
           {
             "level": 7,
             "perks": [
               "Secret of Mana"
+            ],
+            "perkIds": [
+              "aOUEt5kDCIGtp9nn"
             ]
           },
           {
             "level": 9,
             "perks": [
               "Secret of Mana"
+            ],
+            "perkIds": [
+              "aOUEt5kDCIGtp9nn"
             ]
           }
         ],
@@ -1239,6 +1255,29 @@
             "Aqua",
             "Goop",
             "Gust and Kinesis"
+          ],
+          "startIds": [
+            [
+              "YfsJ1lDezffaKVmk"
+            ],
+            [
+              "toYD8Nm61vMhBbZ7"
+            ],
+            [
+              "0SVJ6QW8j6i3JkGe"
+            ],
+            [
+              "zqTI6h7qOnAnVTfP"
+            ]
+          ],
+          "laterIds": [
+            [
+              "KjHS9r9cSkBhUc5R"
+            ],
+            [
+              "3H1Rh1UMaBZHunID"
+            ],
+            []
           ]
         }
       }

@@ -1320,30 +1320,46 @@
             "perks": [
               "Shapechanger",
               "Snareroot Trapper"
+            ],
+            "perkIds": [
+              "JaiyEsxypeEWxtlz",
+              "J3XVdZlRGj7bZNVL"
             ]
           },
           {
             "level": 3,
             "perks": [
               "Sixth Sense"
+            ],
+            "perkIds": [
+              "07tq67JlrIrvq2AG"
             ]
           },
           {
             "level": 5,
             "perks": [
               "Tough"
+            ],
+            "perkIds": [
+              "FiyuMtwyxLqRdOWm"
             ]
           },
           {
             "level": 7,
             "perks": [
               "Cross Counter"
+            ],
+            "perkIds": [
+              "5kAaWa6XyieTQmEm"
             ]
           },
           {
             "level": 9,
             "perks": [
               "Heightened Cognition"
+            ],
+            "perkIds": [
+              "6oY0VmQBej8yjZjp"
             ]
           }
         ],
@@ -1356,6 +1372,25 @@
             "Life",
             "Terraform",
             "Ward"
+          ],
+          "startIds": [
+            [
+              "KizGmuUO2gr17fSR"
+            ],
+            [
+              "oGdK9T2toIepnctx"
+            ]
+          ],
+          "laterIds": [
+            [
+              "sBvdMIqhfJcydANC"
+            ],
+            [
+              "esyFdjFw1BqejR8X"
+            ],
+            [
+              "L43XdoqLgQ8Wl6vM"
+            ]
           ]
         }
       }

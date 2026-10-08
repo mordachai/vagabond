@@ -1280,36 +1280,54 @@
             "perks": [
               "Heightened Magnetism",
               "Silver Tongued"
+            ],
+            "perkIds": [
+              "CdryeyzeoaDj2bVO",
+              "mQh322KcxDzKpyEh"
             ]
           },
           {
             "level": 3,
             "perks": [
               "Rally"
+            ],
+            "perkIds": [
+              "AYgEsFexlPAI9DYH"
             ]
           },
           {
             "level": 5,
             "perks": [
               "Impersonator"
+            ],
+            "perkIds": [
+              "AwFov4YDGerC3iAi"
             ]
           },
           {
             "level": 7,
             "perks": [
               "Inspiring Presence"
+            ],
+            "perkIds": [
+              "OO8rtGe3vqQmFbLc"
             ]
           },
           {
             "level": 9,
             "perks": [
               "Favors the Bold"
+            ],
+            "perkIds": [
+              "hyMGe2IJMICKRebn"
             ]
           }
         ],
         "spells": {
           "start": [],
-          "later": []
+          "later": [],
+          "startIds": [],
+          "laterIds": []
         }
       }
     }

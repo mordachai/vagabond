@@ -1416,30 +1416,46 @@
             "perks": [
               "Athame",
               "Familiar"
+            ],
+            "perkIds": [
+              "ZpxPOAaeveIIQUpU",
+              "O2z8sxDuwIm56HqO"
             ]
           },
           {
             "level": 3,
             "perks": [
               "Mesmer"
+            ],
+            "perkIds": [
+              "rG1e4FJwMwly5Zbr"
             ]
           },
           {
             "level": 5,
             "perks": [
               "Secret of Mana"
+            ],
+            "perkIds": [
+              "aOUEt5kDCIGtp9nn"
             ]
           },
           {
             "level": 7,
             "perks": [
               "Quality Assurance"
+            ],
+            "perkIds": [
+              "AbwXHJfBqQWZAW4K"
             ]
           },
           {
             "level": 9,
             "perks": [
               "Vehement Magic"
+            ],
+            "perkIds": [
+              "UhI94xpNrdCln9jR"
             ]
           }
         ],
@@ -1455,6 +1471,34 @@
             "Enflesh",
             "Fade",
             "Levitate"
+          ],
+          "startIds": [
+            [
+              "YfsJ1lDezffaKVmk"
+            ],
+            [
+              "lS7PlTGD7VFNLKhD"
+            ],
+            [
+              "pD5LaocIkQaIyEFN"
+            ],
+            [
+              "Hwmj6RwmUigPTFAv"
+            ]
+          ],
+          "laterIds": [
+            [
+              "7iglZS7HDksMctFu"
+            ],
+            [
+              "v1lykxYXBCYgDn68"
+            ],
+            [
+              "AGORAq1SsE2AbQGn"
+            ],
+            [
+              "lyJBorVks7Y2tpgF"
+            ]
           ]
         }
       }

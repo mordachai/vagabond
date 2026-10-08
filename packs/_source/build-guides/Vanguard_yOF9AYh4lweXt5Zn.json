@@ -939,36 +939,54 @@
             "perks": [
               "Protector",
               "Sentinel"
+            ],
+            "perkIds": [
+              "aHBvA8INtAilA7zH",
+              "t2kiBSjqMvPZ6Vbd"
             ]
           },
           {
             "level": 3,
             "perks": [
               "Heavy Arms"
+            ],
+            "perkIds": [
+              "ValeBbspVEfTTmvQ"
             ]
           },
           {
             "level": 5,
             "perks": [
               "Bully"
+            ],
+            "perkIds": [
+              "Mslyxx2O89wfor2L"
             ]
           },
           {
             "level": 7,
             "perks": [
               "Tough"
+            ],
+            "perkIds": [
+              "FiyuMtwyxLqRdOWm"
             ]
           },
           {
             "level": 9,
             "perks": [
               "Second Wind"
+            ],
+            "perkIds": [
+              "x1EA997D11L9zp7J"
             ]
           }
         ],
         "spells": {
           "start": [],
-          "later": []
+          "later": [],
+          "startIds": [],
+          "laterIds": []
         }
       }
     }

@@ -356,12 +356,22 @@ function buildGuidePlan(g, className) {
   const [start = '', rest = ''] = cut.split(';');
   const names = t => t.replace(/^\s*get\s/i, '').replace(/\slater\.?\s*$/i, '').split(',')
     .map(x => x.replace(/^\s*and\s/i, '').trim()).filter(Boolean);
+  // Compendium doc ids next to the English names: translated (Babele) worlds rename every Perk / Spell,
+  // so the Level Up dialog matches by id and only falls back to the name.
+  const perkId = n => byName('perks', n)[0]?._id ?? null;
+  const spellIds = n => {
+    let hits = byName('spells', n);
+    if (!hits.length) hits = packs.spells.filter(d => norm(d.name).replace(/\s*[+-]$/, '') === norm(n));
+    return hits.map(d => d._id);
+  };
+  const startNames = names(start);
+  const laterNames = names(rest);
   return {
     title: g.title,
     className,
     stats: g.stats,
-    perks: g.perks.map(p => ({ level: p.level, perks: [...p.perks] })),
-    spells: { start: names(start), later: names(rest) }
+    perks: g.perks.map(p => ({ level: p.level, perks: [...p.perks], perkIds: p.perks.map(perkId) })),
+    spells: { start: startNames, later: laterNames, startIds: startNames.map(spellIds), laterIds: laterNames.map(spellIds) }
   };
 }
 function foundry_setFlag(item, origin) {

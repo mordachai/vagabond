@@ -1049,36 +1049,54 @@
             "perks": [
               "Deft Hands",
               "Resourceful"
+            ],
+            "perkIds": [
+              "vtNfeEdWNUWvaeRM",
+              "Pwvw4buZkkB6eqKN"
             ]
           },
           {
             "level": 3,
             "perks": [
               "Favors the Bold"
+            ],
+            "perkIds": [
+              "hyMGe2IJMICKRebn"
             ]
           },
           {
             "level": 5,
             "perks": [
               "Heightened Magnetism"
+            ],
+            "perkIds": [
+              "CdryeyzeoaDj2bVO"
             ]
           },
           {
             "level": 7,
             "perks": [
               "Master Artisan"
+            ],
+            "perkIds": [
+              "DlqVD05dVoVhNotv"
             ]
           },
           {
             "level": 9,
             "perks": [
               "Advancement"
+            ],
+            "perkIds": [
+              "6lfwEoF90Jgoqhg8"
             ]
           }
         ],
         "spells": {
           "start": [],
-          "later": []
+          "later": [],
+          "startIds": [],
+          "laterIds": []
         }
       }
     }

@@ -1230,30 +1230,46 @@
             "perks": [
               "Gish",
               "Vehement Magic"
+            ],
+            "perkIds": [
+              "YVgf2kRWwn8JRq1X",
+              "UhI94xpNrdCln9jR"
             ]
           },
           {
             "level": 3,
             "perks": [
               "Dusted Knuckle"
+            ],
+            "perkIds": [
+              "Lb1ncXSPRRd1wq84"
             ]
           },
           {
             "level": 5,
             "perks": [
               "Ungarmax"
+            ],
+            "perkIds": [
+              "5JQf59fkqTzUDlyd"
             ]
           },
           {
             "level": 7,
             "perks": [
               "Check Hook"
+            ],
+            "perkIds": [
+              "SoMDviAp6pOFjJMk"
             ]
           },
           {
             "level": 9,
             "perks": [
               "Endless Stamina"
+            ],
+            "perkIds": [
+              "a3nkW4FHWp8N3DUK"
             ]
           }
         ],
@@ -1269,6 +1285,35 @@
             "Enchant",
             "Exalt",
             "Tempo"
+          ],
+          "startIds": [
+            [
+              "x2wHc3r9nD8Ubo1S"
+            ],
+            [
+              "pD5LaocIkQaIyEFN"
+            ],
+            [
+              "M0HRBrZaRQ81vcAg"
+            ],
+            [
+              "L43XdoqLgQ8Wl6vM"
+            ]
+          ],
+          "laterIds": [
+            [
+              "HYFlMtBHdF5W6LF6"
+            ],
+            [
+              "o1OhAEoFdpHDDmEL"
+            ],
+            [
+              "lSVkxtOolrInid6w"
+            ],
+            [
+              "sAkNbpjb2X6CsJ4Y",
+              "vVHD6kTqq2V277RU"
+            ]
           ]
         }
       }

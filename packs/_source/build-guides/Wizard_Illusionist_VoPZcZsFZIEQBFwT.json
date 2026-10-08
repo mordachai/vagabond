@@ -1283,29 +1283,43 @@
             "perks": [
               "Bookworm",
               "Extrovert"
+            ],
+            "perkIds": [
+              "lDzaNi9ay6p8y0Ay",
+              "PmtHyDieLWnMmciY"
             ]
           },
           {
             "level": 3,
             "perks": [
               "Impersonator"
+            ],
+            "perkIds": [
+              "AwFov4YDGerC3iAi"
             ]
           },
           {
             "level": 5,
             "perks": [
               "Sage"
+            ],
+            "perkIds": [
+              "YjYof8YJYhR30yu5"
             ]
           },
           {
             "level": 7,
             "perks": [
               "Secret of Mana"
+            ],
+            "perkIds": [
+              "aOUEt5kDCIGtp9nn"
             ]
           },
           {
             "level": 9,
-            "perks": []
+            "perks": [],
+            "perkIds": []
           }
         ],
         "spells": {
@@ -1320,6 +1334,34 @@
             "Blink",
             "Confuse",
             "Morph"
+          ],
+          "startIds": [
+            [
+              "DNSJEgesm0XMCjoj"
+            ],
+            [
+              "pD5LaocIkQaIyEFN"
+            ],
+            [
+              "ZOrZoNqGak1QmI5y"
+            ],
+            [
+              "U2WgIrN79eiuYEzx"
+            ]
+          ],
+          "laterIds": [
+            [
+              "EJErE9ajMczEHl41"
+            ],
+            [
+              "HYFlMtBHdF5W6LF6"
+            ],
+            [
+              "T1WYf4YiYEEYYOnh"
+            ],
+            [
+              "fz3TUK8XlrLpG4eo"
+            ]
           ]
         }
       }

@@ -282,6 +282,18 @@
       "SpellTitle": "Extracurricular: {spell}",
       "Added": "<strong>{name}</strong> spends a Studied die ({left} left) to add the effect of <strong>{spell}</strong> to the Casting:"
     },
+    "Catalyze": {
+      "Title": "Catalyze",
+      "NotYours": "Only the character’s owner can do that.",
+      "NoCatalyze": "{name} doesn’t have Catalyze.",
+      "NoFormulas": "{name} knows no formulas yet. Learn them in the Workbench Alchemy tab.",
+      "Hint": "Craft one Alchemical Item you know with your Use Action. Cost: {cost} of Materials (you have {have}).",
+      "Missing": "Can’t Craft yet — missing: {list}",
+      "Craft": "Craft",
+      "LimitTitle": "Already crafted this Turn",
+      "LimitCatalyze": "<strong>{name}</strong> already used the Use Action to Craft this Turn ({used}/{allowed}). Craft anyway?",
+      "LimitDeft": "<strong>{name}</strong> already Crafted {used}/{allowed} times this Turn (Use Action + Deft Hands, which skips your Move). Craft anyway?"
+    },
     "HuntersMark": {
       "Title": "Hunter’s Mark",
       "EffectText": "{target} is your Mark. Delete this effect to drop the Mark.",

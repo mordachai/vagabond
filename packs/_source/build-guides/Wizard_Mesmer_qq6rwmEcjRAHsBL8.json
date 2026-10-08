@@ -1246,30 +1246,46 @@
             "perks": [
               "Bookworm",
               "Mesmer"
+            ],
+            "perkIds": [
+              "lDzaNi9ay6p8y0Ay",
+              "rG1e4FJwMwly5Zbr"
             ]
           },
           {
             "level": 3,
             "perks": [
               "Extrovert"
+            ],
+            "perkIds": [
+              "PmtHyDieLWnMmciY"
             ]
           },
           {
             "level": 5,
             "perks": [
               "Inspiring Presence"
+            ],
+            "perkIds": [
+              "OO8rtGe3vqQmFbLc"
             ]
           },
           {
             "level": 7,
             "perks": [
               "Diplomat"
+            ],
+            "perkIds": [
+              "Gwk9fOU8wGffhiXm"
             ]
           },
           {
             "level": 9,
             "perks": [
               "Ungarmax"
+            ],
+            "perkIds": [
+              "5JQf59fkqTzUDlyd"
             ]
           }
         ],
@@ -1285,6 +1301,34 @@
             "Confuse",
             "Hold",
             "Sleep"
+          ],
+          "startIds": [
+            [
+              "x2wHc3r9nD8Ubo1S"
+            ],
+            [
+              "lS7PlTGD7VFNLKhD"
+            ],
+            [
+              "pD5LaocIkQaIyEFN"
+            ],
+            [
+              "zqTI6h7qOnAnVTfP"
+            ]
+          ],
+          "laterIds": [
+            [
+              "utqWkcOdK7WVqv7N"
+            ],
+            [
+              "T1WYf4YiYEEYYOnh"
+            ],
+            [
+              "Hwmj6RwmUigPTFAv"
+            ],
+            [
+              "x0G7WvOldTzluuYy"
+            ]
           ]
         }
       }

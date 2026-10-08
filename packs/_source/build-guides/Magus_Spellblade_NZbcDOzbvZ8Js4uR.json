@@ -1189,30 +1189,46 @@
             "perks": [
               "Assured Healer",
               "Vehement Magic"
+            ],
+            "perkIds": [
+              "tQ0QFm3jAAsu8y1i",
+              "UhI94xpNrdCln9jR"
             ]
           },
           {
             "level": 3,
             "perks": [
               "Briar Healer"
+            ],
+            "perkIds": [
+              "jHHNUgfORW2cvR4X"
             ]
           },
           {
             "level": 5,
             "perks": [
               "Celestial Illuminator"
+            ],
+            "perkIds": [
+              "WO2IpKIvE5BnW678"
             ]
           },
           {
             "level": 7,
             "perks": [
               "Heightened Cognition"
+            ],
+            "perkIds": [
+              "6oY0VmQBej8yjZjp"
             ]
           },
           {
             "level": 9,
             "perks": [
               "Secret of Mana"
+            ],
+            "perkIds": [
+              "aOUEt5kDCIGtp9nn"
             ]
           }
         ],
@@ -1228,6 +1244,35 @@
             "Exalt",
             "Guide",
             "Moon"
+          ],
+          "startIds": [
+            [
+              "TyPnI7gEtbzuxFZm"
+            ],
+            [
+              "sBvdMIqhfJcydANC"
+            ],
+            [
+              "M0HRBrZaRQ81vcAg"
+            ],
+            [
+              "sAkNbpjb2X6CsJ4Y",
+              "vVHD6kTqq2V277RU"
+            ]
+          ],
+          "laterIds": [
+            [
+              "o1OhAEoFdpHDDmEL"
+            ],
+            [
+              "lSVkxtOolrInid6w"
+            ],
+            [
+              "K0iy3DCtjDZzLMm6"
+            ],
+            [
+              "0SXybjqa7puxI7fK"
+            ]
           ]
         }
       }

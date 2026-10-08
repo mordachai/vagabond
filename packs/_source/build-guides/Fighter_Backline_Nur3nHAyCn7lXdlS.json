@@ -1223,48 +1223,73 @@
               "Marksmanship",
               "Skirmisher",
               "Steady Aim"
+            ],
+            "perkIds": [
+              "xfYrdHhVTh03lkvz",
+              "hJjjazBCtdV7YIc5",
+              "9ChcXEGqz39efjBH"
             ]
           },
           {
             "level": 3,
             "perks": [
               "Quick Draw"
+            ],
+            "perkIds": [
+              "byBDvKpPkrK8ynkE"
             ]
           },
           {
             "level": 4,
             "perks": [
               "Sharpshooter"
+            ],
+            "perkIds": [
+              "LP1K8ZSBIEuu3AgF"
             ]
           },
           {
             "level": 5,
             "perks": [
               "Guardian Angel"
+            ],
+            "perkIds": [
+              "xXQvKOlRtCsc0oLq"
             ]
           },
           {
             "level": 7,
             "perks": [
               "Ricochet"
+            ],
+            "perkIds": [
+              "puwvlMK8UsfkSK5T"
             ]
           },
           {
             "level": 8,
             "perks": [
               "Sixth Sense"
+            ],
+            "perkIds": [
+              "07tq67JlrIrvq2AG"
             ]
           },
           {
             "level": 9,
             "perks": [
               "Steady Aim"
+            ],
+            "perkIds": [
+              "9ChcXEGqz39efjBH"
             ]
           }
         ],
         "spells": {
           "start": [],
-          "later": []
+          "later": [],
+          "startIds": [],
+          "laterIds": []
         }
       }
     }

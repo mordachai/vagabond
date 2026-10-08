@@ -28,7 +28,15 @@
         "allowedPerks": [
           "Compendium.vagabond.perks.Item.vtNfeEdWNUWvaeRM"
         ],
-        "perkAmount": 1
+        "perkAmount": 1,
+        "action": {
+          "enabled": true,
+          "label": "Catalyze",
+          "icon": "flask",
+          "uuid": "",
+          "command": "system:alchemist.catalyze",
+          "runAsGM": false
+        }
       },
       {
         "level": 2,

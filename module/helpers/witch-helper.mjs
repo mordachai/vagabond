@@ -1,3 +1,4 @@
+import { classFeatureText } from './feature-text.mjs';
 import { combatRollData } from './rule-rolldata.mjs';
 
 /**
@@ -190,8 +191,7 @@ export class WitchHelper {
     await this.#setHexedStatus(target, true, this.#L('HexedBy', { name: witch.name }));
 
     const { VagabondChatCard } = await import('./chat-card.mjs');
-    const classItem = witch.items.find(i => i.type === 'class');
-    const text = classItem?.system?.levelFeatures?.find(f => f.name === title)?.description ?? '';
+    const text = classFeatureText(witch, { command: 'witch.hex', name: title });
     await VagabondChatCard.featureCard(witch, {
       title,
       description: `<p>${this.#L('Hexed', { name: witch.name, target: foundry.utils.escapeHTML(name) })}</p>${text}`,

@@ -1,3 +1,6 @@
+import { isCopyOf } from './source-id.mjs';
+import { classFeatureText } from './feature-text.mjs';
+
 const DANCER_CLASS_ID = '8LqHA6iqYBgFmVfJ';
 
 /**
@@ -39,10 +42,10 @@ export class DancerHelper {
     }
 
     const level = actor.system.attributes?.level?.value ?? 1;
-    const text = (name) => item?.system?.levelFeatures?.find(f => f.name === name)?.description ?? '';
+    const text = (key) => classFeatureText(actor, key);
     await VagabondChatCard.featureCard(actor, {
       title,
-      description: text('Step Up') + (level >= 10 ? text('Double Time') : ''),
+      description: text({ command: 'dancer.stepUp', name: 'Step Up' }) + (level >= 10 ? text({ name: 'Double Time', lastAtLevel: 10 }) : ''),
     });
   }
 
@@ -76,7 +79,7 @@ export class DancerHelper {
 
     for (const item of candidates) {
       try {
-        if (item.type !== 'class' || item.name !== 'Dancer') continue;
+        if (item.type !== 'class' || !isCopyOf(item, DANCER_CLASS_ID, 'Dancer')) continue;
         if (!item.system.levelFeatures?.some(lf => lf.name === 'Fleet of Foot')) continue;
 
         const effects = source.effects.map(e => {
