@@ -48,7 +48,7 @@
         "note": "Melee Attack",
         "recharge": "",
         "flatDamage": "2",
-        "rollDamage": "2d4",
+        "rollDamage": "d4",
         "damageType": "-",
         "attackType": "melee",
         "extraInfo": ""

@@ -27,7 +27,7 @@
     "weaknesses": [],
     "statusImmunities": [],
     "zone": "frontline",
-    "description": "",
+    "description": "(Wyrm)",
     "actions": [
       {
         "name": "Combo",

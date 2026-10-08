@@ -27,7 +27,7 @@
     "weaknesses": [],
     "statusImmunities": [],
     "zone": "frontline",
-    "description": "A multi-headed drake with incredible regenerative properties.",
+    "description": "(Wyrm) A multi-headed drake with incredible regenerative properties.",
     "actions": [
       {
         "name": "Combo",

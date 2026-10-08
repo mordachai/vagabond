@@ -54,7 +54,10 @@
     ],
     "abilities": [],
     "universalDamageBonus": 0,
-    "universalDamageDice": ""
+    "universalDamageDice": "",
+    "speedValues": {
+      "fly": 30
+    }
   },
   "prototypeToken": {
     "name": "Darkmantle",

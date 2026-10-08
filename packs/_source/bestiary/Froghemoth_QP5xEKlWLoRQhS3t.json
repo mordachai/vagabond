@@ -13,7 +13,7 @@
     "size": "huge",
     "beingType": "Cryptid",
     "speedTypes": [
-      "swim 60"
+      "swim"
     ],
     "hd": 16,
     "morale": 9,
@@ -32,20 +32,8 @@
     "weaknesses": [],
     "statusImmunities": [],
     "zone": "frontline",
-    "description": "20 foot tall mix of frog, octopus, and hate.",
+    "description": "(Beast) 20' tall mix of frog, octopus, and hate.",
     "actions": [
-      {
-        "name": "Combo",
-        "note": "",
-        "recharge": "",
-        "attackType": "melee",
-        "flatDamage": "",
-        "rollDamage": "",
-        "damageType": "-",
-        "extraInfo": "2xTentacle",
-        "causedStatuses": [],
-        "critCausedStatuses": []
-      },
       {
         "name": "Bite",
         "note": "Melee Attack",
@@ -55,6 +43,18 @@
         "rollDamage": "3d10",
         "damageType": "-",
         "extraInfo": "",
+        "causedStatuses": [],
+        "critCausedStatuses": []
+      },
+      {
+        "name": "Combo",
+        "note": "",
+        "recharge": "",
+        "attackType": "melee",
+        "flatDamage": "",
+        "rollDamage": "",
+        "damageType": "-",
+        "extraInfo": "2xTentacle",
         "causedStatuses": [],
         "critCausedStatuses": []
       },
@@ -110,7 +110,10 @@
       }
     ],
     "universalDamageBonus": 0,
-    "universalDamageDice": ""
+    "universalDamageDice": "",
+    "speedValues": {
+      "swim": 60
+    }
   },
   "prototypeToken": {
     "name": "Froghemoth",

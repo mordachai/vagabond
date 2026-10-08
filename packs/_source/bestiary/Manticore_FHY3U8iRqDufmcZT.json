@@ -32,7 +32,7 @@
     "description": "Flying, quilled hybrids of a lion and bat, with a scorpion tail.",
     "actions": [
       {
-        "name": "Multi-Attack 1",
+        "name": "Combo 1",
         "note": "",
         "recharge": "1/Day",
         "attackType": "ranged",
@@ -42,7 +42,7 @@
         "damageType": null
       },
       {
-        "name": "Multi-Attack 2",
+        "name": "Combo 2",
         "note": "",
         "attackType": "melee",
         "flatDamage": "",

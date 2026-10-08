@@ -19,7 +19,7 @@
     "morale": 9,
     "appearing": "d2",
     "speed": 10,
-    "senses": "",
+    "senses": [],
     "armor": 3,
     "armorDescription": "as (+1) Chain",
     "locked": true,
@@ -27,7 +27,7 @@
     "weaknesses": [],
     "statusImmunities": [],
     "zone": "frontline",
-    "description": "The arcane fusion of a lion, goat, and dragon.",
+    "description": "(All) The arcane fusion of a lion, goat, and dragon.",
     "actions": [
       {
         "name": "Combo",
@@ -60,7 +60,7 @@
         "extraInfo": ""
       },
       {
-        "name": "Lion’s Bite",
+        "name": "Lion's Bite",
         "note": "Melee Attack",
         "recharge": "",
         "flatDamage": "4",
@@ -80,7 +80,7 @@
         "extraInfo": ""
       },
       {
-        "name": "Dragon’s Bite",
+        "name": "Dragon's Bite",
         "note": "Melee Attack",
         "recharge": "",
         "flatDamage": "",
@@ -92,7 +92,10 @@
     ],
     "abilities": [],
     "universalDamageBonus": 0,
-    "universalDamageDice": ""
+    "universalDamageDice": "",
+    "speedValues": {
+      "fly": 30
+    }
   },
   "prototypeToken": {
     "name": "Chimera",

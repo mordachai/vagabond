@@ -13,7 +13,7 @@
     "size": "medium",
     "beingType": "Cryptid",
     "speedTypes": [
-      "fly 60"
+      "fly"
     ],
     "hd": 5,
     "morale": 8,
@@ -31,26 +31,26 @@
     "weaknesses": [],
     "statusImmunities": [],
     "zone": "frontline",
-    "description": "",
+    "description": "(Wyrm)",
     "actions": [
       {
         "name": "Breath Attack",
         "note": "Attack, Close Aura | Endure | Half damage on a pass",
         "recharge": "Cd6",
         "attackType": "castClose",
-        "flatDamage": "10",
-        "rollDamage": "3d6",
+        "flatDamage": "7",
+        "rollDamage": "2d6",
         "damageType": "poison",
-        "extraInfo": "Take an Action to begin this Attack, which occurs on this Being's next Turn. Effect: and Sickened (Cd4 dmg) if failed",
+        "extraInfo": "Begins this Attack, which occurs on its next Turn. Effect: and Sickened (Cd4 dmg)",
         "causedStatuses": [
           {
             "statusId": "sickened",
+            "requiresDamage": true,
             "saveType": "any",
             "duration": "d4",
             "tickDamageEnabled": true,
-            "damageType": "poison",
             "damageOnTick": "",
-            "requiresDamage": true
+            "damageType": "poison"
           }
         ],
         "critCausedStatuses": []
@@ -94,7 +94,10 @@
     ],
     "abilities": [],
     "universalDamageBonus": 0,
-    "universalDamageDice": ""
+    "universalDamageDice": "",
+    "speedValues": {
+      "fly": 60
+    }
   },
   "prototypeToken": {
     "name": "Dragon, Hatchling - Green",

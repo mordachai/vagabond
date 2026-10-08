@@ -13,7 +13,7 @@
     "size": "small",
     "beingType": "Cryptid",
     "speedTypes": [
-      "fly 30"
+      "fly"
     ],
     "hd": 1,
     "morale": 2,
@@ -31,7 +31,7 @@
     "weaknesses": [],
     "statusImmunities": [],
     "zone": "midline",
-    "description": "Tiny, goblinoid fae that are associated with sudden misfortunes and calamity.",
+    "description": "(Fae) Tiny, goblinoid fae that are associated with sudden misfortunes and calamity.",
     "actions": [
       {
         "name": "Sabotage",
@@ -65,7 +65,10 @@
       }
     ],
     "universalDamageBonus": 0,
-    "universalDamageDice": ""
+    "universalDamageDice": "",
+    "speedValues": {
+      "fly": 30
+    }
   },
   "prototypeToken": {
     "name": "Gremlin",

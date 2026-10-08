@@ -68,3 +68,29 @@ Not modelled (rules gap, text only in the book)
 - Slug Giant: `Blunt from non-Relics` -> plain `blunt` immunity (Relic exception not modelled, see Part 2).
 - The old `Animated Armor` copy in the Beasts folder (id `IWiL8vs9JwuriDcX`, mentioned in the translation notes) is no longer in the pack source;
   the book only has Animated Armor under Artificials.
+
+---
+
+## Part 4 — Cryptids (book pp. 134-150) — 98 + 1 new, none deleted
+
+The book merges several families into one statblock with a "Type" table. The pack keeps one document per variant (ids unchanged);
+each variant is the base statblock + its table row.
+
+| Family | Documents | What changed |
+|---|---|---|
+| Dragon (Ancient / Elder / Young / Hatchling) x Red / Blue / Green / White / Black | 20 | Breath Attack rebuilt from the table row (shape, damage, effect, Cd) — text now "Begins this Attack, which occurs on its next Turn. Effect: ..."; Magic Ward III/IV wording; speed stored as `fly` + `speedValues.fly` (was `"fly 80"` in `speedTypes`); `(Wyrm)` tag |
+| Giant (Cyclops / Hill / Stone) | 3 | already matched (Stone Armor `3 [as (+1) Chain]`, Cyclops `One-Eyed`) |
+| Goblin (Archer / Mage / Warrior) | 3 | Warrior's `Dagger` + `Dagger (Thrown)` merged into one `Dagger [Melee Attack, Thrown]` |
+| Kobold (Alchemist / Warrior) | 2 | Pack Instincts wording, `(Wyrm)` tag |
+| **Kobold, Normal** | **NEW** `y4VoKYmnXJcnPgLJ` | the book's Kobold "Normal" row (Sling + Dagger) had no document; created from the base Kobold statblock |
+
+Other changes
+- Speed types written as `"swim 40"` / `"fly 30"` strings (Dobar-Chú, Froghemoth, Gremlin, Griffon, Harpy, Hippogriff, Kraken, Sea Serpent, Amphiptere, Chimera, Cockatrice, Darkmantle)
+  are now proper `speedTypes` keys + `speedValues`.
+- **Combo**: Dragon Turtle, Manticore (Combo 1 / 2), Roc, Sea Lion, Snallygaster, Tarrasque, Wyvern, Aurumvorax, Froghemoth reordered/renamed to the book's `Combo`.
+- Basilisk `Glare` -> `Gaze` (+ Bite text); Pseudodragon HD 2 -> 1 (1 HP), Morale 7, Magic Ward I ability name restored (was blank);
+  Tarrasque Magic Ward VI -> **X**, Suffocating immunity; Werewolf / Wererat / Werewolf Dire: new `Effectively Immune` ability and the **Fire weakness is gone** (not printed in Alpha 3).
+- `(Beast)` / `(Wyrm)` / `(Fae)` / `(All)` size-line tags now prefix the description (Agropelter, Almiraj, Owl Bear, Sea Lion, Froghemoth, Flail Snail, Hydra, Drake,
+  Dragon Turtle, Amphiptere, Basilisk, Cockatrice, Chimera, Gremlin ...). Darkmantle / Kraken keep their old flavor text (the book prints none).
+- Rot Grub description rewritten as in the book; `feet` -> `'` wording (Achaierai, Aurumvorax, Froghemoth, Hippogriff, Mimic ...).
+- Gremlin is `Small Cryptid/Fae`: stays a Cryptid, `(Fae)` tag in the description.

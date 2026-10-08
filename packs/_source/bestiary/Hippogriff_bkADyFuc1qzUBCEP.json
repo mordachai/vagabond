@@ -13,13 +13,13 @@
     "size": "large",
     "beingType": "Cryptid",
     "speedTypes": [
-      "fly 60"
+      "fly"
     ],
     "hd": 4,
     "morale": 8,
     "appearing": "2d8",
     "speed": 25,
-    "senses": "",
+    "senses": [],
     "armor": 1,
     "armorDescription": "as Leather",
     "locked": true,
@@ -29,7 +29,7 @@
     ],
     "statusImmunities": [],
     "zone": "frontline",
-    "description": "Smaller, griffon-like creatures with the hindquarters of horses rather than lions.",
+    "description": "Smaller, griffon-like creatures with the hind quarters of horses rather than lions.",
     "actions": [
       {
         "name": "Combo",
@@ -64,7 +64,10 @@
     ],
     "abilities": [],
     "universalDamageBonus": 0,
-    "universalDamageDice": ""
+    "universalDamageDice": "",
+    "speedValues": {
+      "fly": 60
+    }
   },
   "prototypeToken": {
     "name": "Hippogriff",

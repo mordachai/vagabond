@@ -19,7 +19,7 @@
     "morale": 10,
     "appearing": "d4",
     "speed": 30,
-    "senses": "",
+    "senses": [],
     "armor": 2,
     "armorDescription": "as Chain",
     "locked": true,
@@ -32,7 +32,7 @@
     ],
     "statusImmunities": [],
     "zone": "frontline",
-    "description": "A fearsome creature with a monkey-like head, gruesome claws and fangs, spikes along its back, and a mix of alligator scales and damp green fur. They’re known to have a taste for small dogs.",
+    "description": "A fearsome creature with a monkey-like head, gruesome claws and fangs, spikes along its back, and a mix of alligator scales and damp green fur. They're known to have a taste for small dogs.",
     "actions": [
       {
         "name": "Fire Breath",

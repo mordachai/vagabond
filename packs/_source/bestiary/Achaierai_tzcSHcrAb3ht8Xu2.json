@@ -27,7 +27,7 @@
     "weaknesses": [],
     "statusImmunities": [],
     "zone": "frontline",
-    "description": "15 feet tall, four-legged avians incapable of flight. They appear to be a head on four chicken legs, with the wings only serving to help with balance.",
+    "description": "15' tall, four-legged avians incapable of flight. They appear to be a head on four chicken legs, with the wings only serving to help with balance.",
     "actions": [
       {
         "name": "Smoky Escape",
@@ -37,7 +37,7 @@
         "rollDamage": "2d6",
         "damageType": "-",
         "attackType": "melee",
-        "extraInfo": "Fills a 10-foot sphere with black smoke. Other Beings in the area must pass [Endure] or take damage."
+        "extraInfo": "Fills a 10-foot sphere with black smoke. Other Beings in the area must pass [Endure] or take 7 (2d6)."
       },
       {
         "name": "Combo",

@@ -4,8 +4,8 @@
   "img": "systems/vagabond/assets/ui/default-npc.svg",
   "system": {
     "health": {
-      "value": 2,
-      "max": 2
+      "value": 1,
+      "max": 1
     },
     "fatigue": 0,
     "biography": "",
@@ -15,7 +15,7 @@
     "speedTypes": [
       "fly"
     ],
-    "hd": 2,
+    "hd": 1,
     "morale": 7,
     "appearing": "d6",
     "speed": 10,
@@ -81,8 +81,8 @@
     ],
     "abilities": [
       {
-        "description": "The first time it is unwillingly affected by a Spell each Round, the Caster must spend an extra 1 Mana to affect it.",
-        "name": ""
+        "description": "It is not affected by Casts it is unwillingly subjected to unless the Caster's Check exceeds their difficulty by 1 or more.",
+        "name": "Magic Ward I"
       }
     ],
     "universalDamageBonus": 0,

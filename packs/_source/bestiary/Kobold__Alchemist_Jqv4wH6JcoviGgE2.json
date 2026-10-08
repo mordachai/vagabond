@@ -27,10 +27,10 @@
     "weaknesses": [],
     "statusImmunities": [],
     "zone": "midline",
-    "description": "",
+    "description": "(Wyrm)",
     "actions": [
       {
-        "name": "Alchemist’s Fire",
+        "name": "Alchemist's Fire",
         "note": "Melee Attack, Thrown",
         "recharge": "5/Day",
         "attackType": "ranged",
@@ -67,7 +67,7 @@
     "abilities": [
       {
         "name": "Pack Instincts",
-        "description": "If one of its Allies is within 5 feet of a Target of this Being’s Attack, that Target is Vulnerable against the Attack."
+        "description": "If one of its Allies is within 5' of a Target of this Being's Attack, that Target is Vulnerable against the Attack."
       }
     ],
     "universalDamageBonus": 0,

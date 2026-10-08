@@ -19,7 +19,7 @@
     "morale": 10,
     "appearing": "1",
     "speed": 30,
-    "senses": "",
+    "senses": [],
     "armor": 3,
     "armorDescription": "as Plate",
     "locked": true,
@@ -32,7 +32,7 @@
     "description": "(Wyrm) A lesser wyrm with a scorpion-like stinger for a tail.",
     "actions": [
       {
-        "name": "Multi-Attack",
+        "name": "Combo",
         "note": "",
         "attackType": "melee",
         "flatDamage": "",

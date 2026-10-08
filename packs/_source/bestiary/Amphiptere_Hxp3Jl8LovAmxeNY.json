@@ -31,7 +31,7 @@
     "weaknesses": [],
     "statusImmunities": [],
     "zone": "midline",
-    "description": "A winged serpent of moderate size that shoots fire.",
+    "description": "(Wyrm) A winged serpent of moderate size that shoots fire.",
     "actions": [
       {
         "name": "Fireball",
@@ -70,7 +70,10 @@
     ],
     "abilities": [],
     "universalDamageBonus": 0,
-    "universalDamageDice": ""
+    "universalDamageDice": "",
+    "speedValues": {
+      "fly": 30
+    }
   },
   "prototypeToken": {
     "name": "Amphiptere",

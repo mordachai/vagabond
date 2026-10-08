@@ -17,7 +17,7 @@
     "morale": 9,
     "appearing": "1",
     "speed": 30,
-    "senses": "",
+    "senses": [],
     "armor": 2,
     "armorDescription": "as Leather plus Shield",
     "locked": true,
@@ -41,7 +41,7 @@
     "abilities": [
       {
         "name": "Tactical",
-        "description": "Targets Save against its attacks as if Vulnerable if at least one of this Being's Allies are within 5 feet of the Target."
+        "description": "Targets Save against its attacks as if Vulnerable if at least one of this Being's Allies are within 5' of the Target."
       }
     ],
     "universalDamageBonus": 0,

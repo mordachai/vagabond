@@ -64,6 +64,10 @@
     ],
     "abilities": [
       {
+        "name": "Effectively Immune",
+        "description": "Damage only kills it if it is Weak to the damage."
+      },
+      {
         "name": "Shapechanger",
         "description": "This is a form that a Humanlike cursed with lycanthropy can become when the curse takes hold. They revert automatically if they die."
       }

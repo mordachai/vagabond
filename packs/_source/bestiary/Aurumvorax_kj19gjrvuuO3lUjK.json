@@ -21,7 +21,7 @@
       "darksight",
       "seismicsense"
     ],
-    "sensesNote": "Seismicsense 60 feet",
+    "sensesNote": "Seismicsense 60'",
     "armor": 3,
     "armorDescription": "as (+2) Leather",
     "locked": true,
@@ -34,7 +34,7 @@
       "sickened"
     ],
     "zone": "frontline",
-    "description": "The eight-legged golden gorger is a vicious gold furred honeybadger-like creature with an appetite for metal.",
+    "description": "The eight-legged golden gorger is a vicious gold-furred honeybadger-like creature with an appetite for metal.",
     "actions": [
       {
         "name": "Combo",
@@ -49,18 +49,6 @@
         "critCausedStatuses": []
       },
       {
-        "name": "Claw",
-        "note": "Melee Attack",
-        "recharge": "",
-        "attackType": "melee",
-        "flatDamage": "3",
-        "rollDamage": "1d6",
-        "damageType": "-",
-        "extraInfo": "",
-        "causedStatuses": [],
-        "critCausedStatuses": []
-      },
-      {
         "name": "Jaw Lock",
         "note": "Melee Attack",
         "recharge": "",
@@ -68,7 +56,7 @@
         "flatDamage": "5",
         "rollDamage": "2d4",
         "damageType": "-",
-        "extraInfo": "and Restrained until this Being dies.",
+        "extraInfo": "and Restrained (Continual).",
         "causedStatuses": [
           {
             "statusId": "restrained",
@@ -80,6 +68,18 @@
             "damageType": "-"
           }
         ],
+        "critCausedStatuses": []
+      },
+      {
+        "name": "Claw",
+        "note": "Melee Attack",
+        "recharge": "",
+        "attackType": "melee",
+        "flatDamage": "3",
+        "rollDamage": "1d6",
+        "damageType": "-",
+        "extraInfo": "",
+        "causedStatuses": [],
         "critCausedStatuses": []
       }
     ],

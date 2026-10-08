@@ -33,17 +33,18 @@
     ],
     "weaknesses": [],
     "statusImmunities": [
-      "confused",
       "charmed",
-      "sickened",
+      "confused",
       "frightened",
-      "paralyzed"
+      "paralyzed",
+      "sickened",
+      "suffocating"
     ],
     "zone": "frontline",
     "description": "A four-legged reptile of gargantuan proportions. It slumbers for centuries, then awakes to eat for weeks before returning to its sleep. During this time, it leaves destruction in its wake.",
     "actions": [
       {
-        "name": "Multi-Attack",
+        "name": "Combo",
         "note": "",
         "recharge": "",
         "attackType": "melee",
@@ -116,7 +117,11 @@
     "abilities": [
       {
         "name": "Charge",
-        "description": "If it Moves at least 30 feet in a straight line then makes a Horn Attack on the same Turn, that attack deals double damage."
+        "description": "If it Moves at least 30' in a straight line then makes a Horn Attack on the same Turn, that attack deals double damage."
+      },
+      {
+        "name": "Magic Ward X",
+        "description": "It is not affected by Casts it is unwillingly subjected to unless the Caster's Check exceeds their difficulty by 10 or more."
       },
       {
         "name": "Mythic",
@@ -124,15 +129,11 @@
       },
       {
         "name": "Reflective Carapace",
-        "description": "When Targeted with a Spell, roll d6. On a 1, the Spell is reflected back at its source. On a 2 or 3, the Spell is dispelled. On a 4 to 6, the Spell works as normal."
+        "description": "When Targeted with a Spell, roll d6. 1: the Spell is reflected back at the source. 2–3: the Spell is dispelled. 4–6, the Spell works as normal."
       },
       {
         "name": "Regenerate II",
         "description": "Regains 9 (2d8) HP on each of its Turns."
-      },
-      {
-        "name": "Magic Ward VI",
-        "description": "The first time it is unwillingly affected by a Spell each Round, the Caster must spend an extra 6 Mana to affect it."
       }
     ],
     "universalDamageBonus": 0,

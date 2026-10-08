@@ -27,16 +27,16 @@
     "weaknesses": [],
     "statusImmunities": [],
     "zone": "midline",
-    "description": "Reptilian horrors with the ability to turn flesh to stone with a mere gaze.",
+    "description": "(Wyrm) Reptilian horrors with the ability to turn flesh to stone with a mere gaze.",
     "actions": [
       {
-        "name": "Glare",
+        "name": "Gaze",
         "note": "Cast, a Being looking at it | Endure",
         "recharge": "Cd4",
         "attackType": "castClose",
         "flatDamage": "",
         "rollDamage": "",
-        "extraInfo": "Cursed (turned to stone until this Being dies)",
+        "extraInfo": "Cursed (Continual, turned to stone)",
         "damageType": null
       },
       {
@@ -45,7 +45,7 @@
         "attackType": "melee",
         "flatDamage": "5",
         "rollDamage": "1d10",
-        "extraInfo": "and pass an [Endure] Save or be Cursed (turned to stone until this Being dies)",
+        "extraInfo": "and pass an [Endure] Save or be Cursed (Continual, turned to stone)",
         "recharge": "",
         "damageType": null
       }

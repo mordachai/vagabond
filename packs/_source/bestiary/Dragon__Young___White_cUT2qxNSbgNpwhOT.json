@@ -13,7 +13,7 @@
     "size": "large",
     "beingType": "Cryptid",
     "speedTypes": [
-      "fly 80"
+      "fly"
     ],
     "hd": 10,
     "morale": 10,
@@ -37,7 +37,7 @@
       "charmed"
     ],
     "zone": "frontline",
-    "description": "",
+    "description": "(Wyrm)",
     "actions": [
       {
         "name": "Breath Attack",
@@ -47,14 +47,14 @@
         "flatDamage": "10",
         "rollDamage": "3d6",
         "damageType": "cold",
-        "extraInfo": "Take an Action to begin this Attack, which occurs on this Being's next Turn. Effect: and Dazed (Cd4, Speed reduced by 15') if failed",
+        "extraInfo": "Begins this Attack, which occurs on its next Turn. Effect: and Dazed (Cd4, Speed reduced by 15') if failed",
         "causedStatuses": [
           {
             "statusId": "dazed",
+            "requiresDamage": true,
             "saveType": "any",
             "duration": "d4",
             "tickDamageEnabled": false,
-            "requiresDamage": true,
             "damageOnTick": "",
             "damageType": "-"
           }
@@ -127,11 +127,14 @@
       },
       {
         "name": "Magic Ward II",
-        "description": "The first time it is unwillingly affected by a Spell each Round, the Caster must spend an extra 2 Mana to affect it."
+        "description": "It is not affected by Casts it is unwillingly subjected to unless the Caster's Check exceeds their difficulty by 2 or more."
       }
     ],
     "universalDamageBonus": 0,
-    "universalDamageDice": ""
+    "universalDamageDice": "",
+    "speedValues": {
+      "fly": 80
+    }
   },
   "prototypeToken": {
     "name": "Dragon, Young - White",

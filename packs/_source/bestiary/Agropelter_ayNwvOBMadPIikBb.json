@@ -19,7 +19,7 @@
     "morale": 5,
     "appearing": "d6",
     "speed": 30,
-    "senses": "",
+    "senses": [],
     "armor": 1,
     "armorDescription": "as Leather",
     "locked": true,
@@ -27,7 +27,7 @@
     "weaknesses": [],
     "statusImmunities": [],
     "zone": "backline",
-    "description": "A spindly, rubbery-limbed primate, known to attack from treetops. They have a particular distaste of woodcutters and, as the stories go, if you find a dead lumberjack with a log nearby, beware of agropelters in the area.",
+    "description": "(Beast) A spindly, rubbery-limbed primate, known to attack from treetops. They have a particular distaste of woodcutters and, as the stories go, if you find a dead lumberjack with a log nearby, beware of agropelters in the area.",
     "actions": [
       {
         "name": "Log Throw",

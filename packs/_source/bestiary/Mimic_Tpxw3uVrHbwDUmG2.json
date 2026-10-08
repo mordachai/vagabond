@@ -27,7 +27,7 @@
     "weaknesses": [],
     "statusImmunities": [],
     "zone": "frontline",
-    "description": "Tends to shapeshift into chests, chairs, and doors, lying in wait for undiscerning prey.",
+    "description": "Tends to shapeshift into chests, chairs, and doors, lying in wait for undiscerning prey. Some adventurers tell tales of intelligent mimics that have helped them on their journey.",
     "actions": [
       {
         "name": "Bite",

@@ -19,7 +19,7 @@
     "morale": 9,
     "appearing": "2d4",
     "speed": 40,
-    "senses": "",
+    "senses": [],
     "armor": 2,
     "armorDescription": "as (+1) Leather",
     "locked": true,
@@ -45,7 +45,7 @@
     "abilities": [
       {
         "name": "Dive Bomb",
-        "description": "If it flies at least 20 feet toward a Target before making an attack, the attack deals an extra die of damage."
+        "description": "If it flies at least 20' toward a Target before making an attack, the attack deals an extra die of damage."
       }
     ],
     "universalDamageBonus": 0,

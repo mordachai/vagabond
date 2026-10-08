@@ -29,7 +29,7 @@
     "weaknesses": [],
     "statusImmunities": [],
     "zone": "frontline",
-    "description": "Born from an egg laid by a rooster and brooded by an adder, the cockatrice is a cursed wyrm famous for the petrifying bite.",
+    "description": "(Wyrm) Born from an egg laid by a rooster and brooded by an adder, the cockatrice is a cursed wyrm famous for the petrifying bite.",
     "actions": [
       {
         "name": "Beak",
@@ -44,7 +44,10 @@
     ],
     "abilities": [],
     "universalDamageBonus": 0,
-    "universalDamageDice": ""
+    "universalDamageDice": "",
+    "speedValues": {
+      "fly": 60
+    }
   },
   "prototypeToken": {
     "name": "Cockatrice",

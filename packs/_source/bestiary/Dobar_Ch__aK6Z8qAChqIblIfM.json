@@ -13,13 +13,13 @@
     "size": "large",
     "beingType": "Cryptid",
     "speedTypes": [
-      "swim 40"
+      "swim"
     ],
     "hd": 6,
     "morale": 9,
     "appearing": "d3",
     "speed": 30,
-    "senses": "",
+    "senses": [],
     "armor": 2,
     "armorDescription": "as Chain",
     "locked": true,
@@ -29,7 +29,7 @@
     ],
     "statusImmunities": [],
     "zone": "frontline",
-    "description": "The 'water devil' is a semi-aquatic mammal that appears to be a huge otter",
+    "description": "The \"water devil\" is a semi-aquatic mammal that appears to be a huge otter",
     "actions": [
       {
         "name": "Combo",
@@ -64,7 +64,10 @@
     ],
     "abilities": [],
     "universalDamageBonus": 0,
-    "universalDamageDice": ""
+    "universalDamageDice": "",
+    "speedValues": {
+      "swim": 40
+    }
   },
   "prototypeToken": {
     "name": "Dobar-Chú",

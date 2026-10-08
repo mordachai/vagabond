@@ -17,7 +17,7 @@
     "morale": 8,
     "appearing": "d4",
     "speed": 30,
-    "senses": "",
+    "senses": [],
     "armor": 0,
     "armorDescription": "as Unarmored",
     "locked": true,
@@ -67,7 +67,7 @@
     "abilities": [
       {
         "name": "Petrifying Visage",
-        "description": "Beings that look at it for the first time on their Turns must pass [Endure] against Sickened or take 1 Fatigue. A Being with 3 or more Fatigue that gains another Fatigue this way is cursed (petrified as a stone statue until this medusa dies)."
+        "description": "Beings that look at it for the first time on their Turns must pass [Endure] against Sickened or take 1 Fatigue. A Being with 3 or more Fatigue that gains another Fatigue this way is cursed (Continual, turned to stone)."
       }
     ],
     "universalDamageBonus": 0,

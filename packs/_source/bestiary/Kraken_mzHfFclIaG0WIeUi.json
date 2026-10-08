@@ -13,13 +13,13 @@
     "size": "colossal",
     "beingType": "Cryptid",
     "speedTypes": [
-      "swim 60"
+      "swim"
     ],
     "hd": 20,
     "morale": 11,
     "appearing": "1",
     "speed": 20,
-    "senses": "",
+    "senses": [],
     "armor": 4,
     "armorDescription": "as (+1) Plate",
     "locked": true,
@@ -86,7 +86,10 @@
       }
     ],
     "universalDamageBonus": 0,
-    "universalDamageDice": ""
+    "universalDamageDice": "",
+    "speedValues": {
+      "swim": 60
+    }
   },
   "prototypeToken": {
     "name": "Kraken",

@@ -34,7 +34,7 @@
     "description": "(Wyrm) A one-eyed chimeria with a taste for booze. Other than its reptilian tail and claws, it otherwise resembles a plucked chicken... and there's an array of octopus-like tentacles writhing from its beak.",
     "actions": [
       {
-        "name": "Multi-Attack",
+        "name": "Combo",
         "note": "",
         "recharge": "",
         "attackType": "melee",

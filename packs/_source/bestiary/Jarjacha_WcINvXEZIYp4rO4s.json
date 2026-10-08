@@ -17,7 +17,7 @@
     "morale": 7,
     "appearing": "1",
     "speed": 40,
-    "senses": "",
+    "senses": [],
     "armor": 0,
     "armorDescription": "as Unarmored",
     "locked": true,
@@ -35,7 +35,7 @@
         "flatDamage": "3",
         "rollDamage": "1d4+1",
         "damageType": "-",
-        "extraInfo": "Gains Fatigue."
+        "extraInfo": "Gains 3 (d4+1) Fatigue."
       },
       {
         "name": "Stomp",

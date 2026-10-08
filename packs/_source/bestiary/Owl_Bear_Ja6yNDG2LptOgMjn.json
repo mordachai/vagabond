@@ -29,7 +29,7 @@
     "weaknesses": [],
     "statusImmunities": [],
     "zone": "frontline",
-    "description": "Monsters with the head of an owl and body of a bear. Often found in forests and caves.",
+    "description": "(Beast) Monsters with the head of an owl and body of a bear. Often found in forests and caves.",
     "actions": [
       {
         "name": "Combo",

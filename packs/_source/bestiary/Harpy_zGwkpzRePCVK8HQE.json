@@ -13,13 +13,13 @@
     "size": "medium",
     "beingType": "Cryptid",
     "speedTypes": [
-      "fly 30"
+      "fly"
     ],
     "hd": 3,
     "morale": 2,
     "appearing": "2d6",
     "speed": 10,
-    "senses": "",
+    "senses": [],
     "armor": 1,
     "armorDescription": "as Leather",
     "locked": true,
@@ -78,7 +78,10 @@
     ],
     "abilities": [],
     "universalDamageBonus": 0,
-    "universalDamageDice": ""
+    "universalDamageDice": "",
+    "speedValues": {
+      "fly": 30
+    }
   },
   "prototypeToken": {
     "name": "Harpy",

@@ -31,10 +31,10 @@
     "weaknesses": [],
     "statusImmunities": [],
     "zone": "frontline",
-    "description": "",
+    "description": "(Wyrm)",
     "actions": [
       {
-        "name": "Multi-Attack",
+        "name": "Combo",
         "note": "",
         "recharge": "",
         "flatDamage": "",

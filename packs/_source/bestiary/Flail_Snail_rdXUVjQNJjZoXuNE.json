@@ -19,7 +19,7 @@
     "morale": 10,
     "appearing": "1",
     "speed": 10,
-    "senses": "",
+    "senses": [],
     "armor": 4,
     "armorDescription": "as (+1) Plate",
     "locked": true,
@@ -30,7 +30,7 @@
     "weaknesses": [],
     "statusImmunities": [],
     "zone": "frontline",
-    "description": "",
+    "description": "(Beast)",
     "actions": [
       {
         "name": "Combo",

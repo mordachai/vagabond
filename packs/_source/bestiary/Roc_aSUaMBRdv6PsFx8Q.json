@@ -34,7 +34,7 @@
     "description": "(Beast) Birds of legend, rocs are known to prey on elephants, and have the power to sink ships.",
     "actions": [
       {
-        "name": "Multi-Attack",
+        "name": "Combo",
         "note": "",
         "attackType": "melee",
         "flatDamage": "",

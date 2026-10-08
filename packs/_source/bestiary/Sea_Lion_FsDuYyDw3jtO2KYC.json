@@ -19,7 +19,7 @@
     "morale": 11,
     "appearing": "d4",
     "speed": 10,
-    "senses": "",
+    "senses": [],
     "armor": 2,
     "armorDescription": "as Chain",
     "locked": true,
@@ -30,10 +30,10 @@
     ],
     "statusImmunities": [],
     "zone": "frontline",
-    "description": "A lion with the hind quarters of a shark or similar fish, and the ferocity of both.",
+    "description": "(Beast) A lion with the hind quarters of a shark or similar fish, and the ferocity of both.",
     "actions": [
       {
-        "name": "Multi-Attack",
+        "name": "Combo",
         "note": "",
         "attackType": "melee",
         "flatDamage": "",
@@ -70,7 +70,7 @@
       },
       {
         "name": "Pack Hunter",
-        "description": "Targets within 5 feet of one of this Being's Allies are Vulnerable to its attacks."
+        "description": "Targets within 5' of one of this Being's Allies are Vulnerable to its attacks."
       },
       {
         "name": "Pounce",

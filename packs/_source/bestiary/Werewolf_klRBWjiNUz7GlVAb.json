@@ -26,9 +26,7 @@
     "immunities": [
       "physical"
     ],
-    "weaknesses": [
-      "fire"
-    ],
+    "weaknesses": [],
     "statusImmunities": [],
     "zone": "frontline",
     "description": "(Shapechanger) A half-wolf, half-humanlike monster with a taste for blood. They usually only transform under a full moon and return to their normal form in sunlight.",
@@ -68,6 +66,10 @@
       {
         "name": "Bloodthirst",
         "description": "It is Berserk and Beings at or below half HP make Checks against it as if Vulnerable."
+      },
+      {
+        "name": "Effectively Immune",
+        "description": "Damage only kills it if it is Weak to the damage."
       },
       {
         "name": "Shapechanger",

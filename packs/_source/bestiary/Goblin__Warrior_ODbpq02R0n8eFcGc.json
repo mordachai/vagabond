@@ -31,22 +31,12 @@
     "actions": [
       {
         "name": "Dagger",
-        "note": "Melee Attack",
+        "note": "Melee Attack, Thrown",
         "recharge": "",
         "flatDamage": "2",
         "rollDamage": "1d4",
         "damageType": "-",
         "attackType": "melee",
-        "extraInfo": ""
-      },
-      {
-        "name": "Dagger (Thrown)",
-        "note": "Ranged Attack",
-        "recharge": "",
-        "flatDamage": "2",
-        "rollDamage": "1d4",
-        "damageType": "-",
-        "attackType": "ranged",
         "extraInfo": ""
       }
     ],

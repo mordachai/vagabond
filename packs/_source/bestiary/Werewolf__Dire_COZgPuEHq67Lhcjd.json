@@ -26,9 +26,7 @@
     "immunities": [
       "physical"
     ],
-    "weaknesses": [
-      "fire"
-    ],
+    "weaknesses": [],
     "statusImmunities": [],
     "zone": "frontline",
     "description": "(Shapechanger) Werewolves that live longer in their lycanthopic form than they have as a person lose themselves to the curse, becoming a dire and losing their humanity.",
@@ -68,6 +66,10 @@
       {
         "name": "Bloodthirst",
         "description": "It is Berserk and Beings at or below half HP make Checks against it as if Vulnerable."
+      },
+      {
+        "name": "Effectively Immune",
+        "description": "Damage only kills it if it is Weak to the damage."
       }
     ],
     "universalDamageBonus": 0,
