@@ -3,7 +3,7 @@
   "type": "spell",
   "img": "icons/magic/nature/vines-thorned-entwined-glow-green.webp",
   "system": {
-    "description": "<p><span class=\"fontstyle0\">You create growing plants on the Target, causing Difficult Terrain out to Close from it. Alternatively, you can cause up to a 5-foot square patch of plants or fungus to magically grow to optimal harvesting and foraging.</span></p>",
+    "description": "<p><span class=\"fontstyle0\">You create growing plants on the Target, causing Difficult Terrain out to Close from it.</span></p><p><span class=\"fontstyle0\">Alternatively, you can cause up to a 5' square patch of plants or fungus to magically grow to optimal harvesting and foraging.</span></p>",
     "damageType": "blunt",
     "duration": "Until your next turn",
     "crit": "The Target is Restrained.",

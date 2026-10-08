@@ -3,7 +3,7 @@
   "type": "spell",
   "img": "icons/magic/symbols/runes-star-pentagon-orange-purple.webp",
   "system": {
-    "description": "<p><span class=\"fontstyle0\">Targeted non-Relic Objects in the Area are repaired on your Turns for the duration, if you can provide 5s of Material per d8 HP or 1 Slot of Items repaired. This Spell can reassemble a broken Item if the pieces of it are held together during the Casting. This Spell also functions as a Life Spell, but only for Artificials.</span></p>",
+    "description": "<p><span class=\"fontstyle0\">Targeted non-Relic Objects in the area are repaired on your Turns for the duration, if you can provide 5s of Material per d8 HP or 1 Slot of Items repaired. This Spell can reassemble a broken Item if the pieces of it are held together during the Casting. This Spell also functions as a Life Spell, but only for Artificials.</span></p>",
     "damageType": "-",
     "duration": "Until your next turn",
     "crit": "",

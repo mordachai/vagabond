@@ -3,10 +3,10 @@
   "type": "spell",
   "img": "icons/magic/air/fog-gas-smoke-swirling-green.webp",
   "system": {
-    "description": "<p><span class=\"fontstyle0\">You create a cloud of gas in an Area equal to the size of the delivery (minimum 5-foot cube). Targets act as Sickened (Vulnerable) while in the Area.</span></p>",
+    "description": "<p><span class=\"fontstyle0\">You create a cloud of gas in an area equal to the size of the delivery (minimum 5' cube) and causing those within to be Sickened (Vulnerable) while in the area. This effect is dispersed by strong winds.</span></p>",
     "damageType": "poison",
     "duration": "Until your next turn",
-    "crit": "The effect lasts 1 Hour, but can be dispersed by strong winds.",
+    "crit": "The effect lasts 1 Hour unless dispersed.",
     "favorite": false,
     "noRollRequired": true,
     "fxSchool": "poison",

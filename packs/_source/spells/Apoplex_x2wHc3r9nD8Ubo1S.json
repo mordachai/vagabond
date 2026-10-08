@@ -3,8 +3,8 @@
   "type": "spell",
   "img": "icons/magic/control/fear-fright-monster-red.webp",
   "system": {
-    "description": "<p><span class=\"fontstyle0\">The Target is Berserked for the duration.</span></p>",
-    "damageType": "fire",
+    "description": "<p><span class=\"fontstyle0\">The Target is Berserk for the duration.</span></p>",
+    "damageType": "-",
     "duration": "Until your next turn",
     "crit": "Duration is continual.",
     "favorite": false,
@@ -12,7 +12,7 @@
     "causedStatuses": [
       {
         "statusId": "berserk",
-        "requiresDamage": true,
+        "requiresDamage": false,
         "saveType": "none",
         "duration": "focusing",
         "tickDamageEnabled": false,
@@ -21,7 +21,7 @@
       },
       {
         "statusId": "berserk",
-        "requiresDamage": true,
+        "requiresDamage": false,
         "saveType": "none",
         "duration": "",
         "tickDamageEnabled": false,

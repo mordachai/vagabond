@@ -3,10 +3,10 @@
   "type": "spell",
   "img": "icons/magic/time/clock-stopwatch-white-blue.webp",
   "system": {
-    "description": "<p><span class=\"fontstyle0\">The Target's Speed increases by 5 feet for the duration. The Caster can increase this amount by a further 5 feet for every 1 additional Mana spent on the Cast (each cast die = +5 feet).</span></p>",
+    "description": "<p><span class=\"fontstyle0\">The Target's Speed increases or decreases by 5' for the duration. The Caster can increase or decrease this amount by 5' by spending additional Mana on the Cast for every 1 Mana spent to do so.</span></p>",
     "damageType": "-",
     "duration": "Until your next turn",
-    "crit": "Duration is 1 minute (no Focus required).",
+    "crit": "Duration is 1 Minute (no Focus required).",
     "favorite": false,
     "fxSchool": "arcane",
     "usesDiceScaling": true,

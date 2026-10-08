@@ -6,7 +6,7 @@
     "description": "<p><span class=\"fontstyle0\">The Target's size and damage dice are reduced by one size for the duration.</span></p>",
     "damageType": "-",
     "duration": "Until your next turn",
-    "crit": "Duration is 1 minute (no Focus required).",
+    "crit": "Duration is 1 Minute (no Focus required).",
     "favorite": false,
     "fxSchool": "genericdark",
     "locked": true,

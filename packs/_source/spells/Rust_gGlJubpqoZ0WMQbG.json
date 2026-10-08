@@ -3,7 +3,7 @@
   "type": "spell",
   "img": "icons/magic/unholy/strike-beam-blood-small-red-teal.webp",
   "system": {
-    "description": "<p><span class=\"fontstyle0\">Non-Relic metal Objects within the Area rust for the duration. Each Turn when you Focus on this Spell, roll a d6 for each Item. On a roll of 1, the Item breaks. If the Item that breaks is larger than Medium, this creates a 1-foot square hole that is 1-foot deep in it.</span></p>",
+    "description": "<p><span class=\"fontstyle0\">Non-Relic metal Objects within the area rust for the duration. Each Turn when you Focus on this Spell, roll a d6 for each Item. On a roll of 1, the Item breaks. If the Item that breaks is larger than Medium, this creates a 1' square hole that is 1' deep in it.</span></p>",
     "damageType": "acid",
     "duration": "Until your next turn",
     "crit": "",

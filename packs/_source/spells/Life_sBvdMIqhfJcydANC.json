@@ -3,7 +3,7 @@
   "type": "spell",
   "img": "icons/magic/life/heart-area-circle-red-green.webp",
   "system": {
-    "description": "<p><span class=\"fontstyle0\">You revive a Target that died from damage in the last Round, restoring it with 1 HP and giving it 1 Fatigue. This Spell does not regenerate missing body parts.</span></p><p><span class=\"fontstyle0\">In addition, you can spend Mana with this Spell to heal a Target for d6 HP per Mana spent to do so.</span></p>",
+    "description": "<p><span class=\"fontstyle0\">You revive a Target that died from damage after the end of your last Turn, reviving it with 1 HP and +1 Fatigue. This Spell does not regenerate missing parts, and revives them at the start of your Turn if you are Focusing on this Spell.</span></p><p><span class=\"fontstyle0\">In addition, you can upcast this Spell to heal Target(s) for d6 HP per Mana spent to do so.</span></p>",
     "damageType": "healing",
     "duration": "Until your next turn",
     "crit": "",

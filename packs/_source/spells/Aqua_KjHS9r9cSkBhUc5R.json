@@ -3,7 +3,7 @@
   "type": "spell",
   "img": "icons/magic/water/wave-water-blue.webp",
   "system": {
-    "description": "<p>This Spell can create and destroy fresh water in the following ways:</p><p><strong>Area:</strong> The space within is emptied or filled with water. If the Area is occupied by a Being, this requires a Cast Check. You choose if this water remains or dries up after the duration.</p><p><strong>Target:</strong> This can push an Item that occupies 1 or less Slots, or a Being with Level or HD 1 or lower. You can increase this number by spending additional Mana on the Cast, increasing it by 1 per Mana spent to do so.</p><p><strong>Distance:</strong> This pushes the Target 5', and you can increase the distance pushed by spending Mana, increasing the distance by 5' per Mana spent to do so.</p>",
+    "description": "<p><span class=\"fontstyle0\">This Spell can create and destroy fresh water in the following ways:</span></p><p><strong>Area:</strong> The space within is emptied or filled with water. If the area is occupied by a Being, this requires a Cast Check. You choose if this water remains or dries up after the duration.</p><p><strong>Target:</strong> This can push an Item that occupies 1 or fewer Slots, or a Being with Level or HD 1 or lower. You can upcast this Spell to increase this number by 1 per Mana spent to do so.</p><p><strong>Distance:</strong> This pushes the Target 5', and you can upcast this Spell to increase the distance pushed by 5' per Mana spent to do so.</p>",
     "damageType": "-",
     "duration": "Until your next turn",
     "crit": "",

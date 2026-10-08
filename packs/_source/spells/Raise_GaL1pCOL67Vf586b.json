@@ -3,7 +3,7 @@
   "type": "spell",
   "img": "icons/magic/death/skeleton-glow-yellow-black.webp",
   "system": {
-    "description": "<p>Corpses in the Area of non-Artificial or Undead Beings with cumulative HD no higher than your Level rise as an Undead under your control for the duration. Afterward, any Undead you raised this way die and can’t be raised by this Spell again. You can command your raised Undead when you Focus on this Cast, using your Cast Skill for Checks they make. The Undead you raise this way use their original statblock with the following changes:</p><p>• It is an Undead</p><p>• It has Darksight, is Immune to Poison, Weak to Silvered Weapons, and can’t be Sickened.</p>",
+    "description": "<p><span class=\"fontstyle0\">Corpses in the area of non-Artificial or Undead Beings with cumulative HD no higher than your Level rise as an Undead under your control for the duration. Afterward, any Undead you raised this way die and can't be raised by this Spell again. You can command your raised Undead when you Focus on this Cast, using your Cast Skill for Checks they make. The Undead you raise this way use their original statblock with the following changes:</span></p><ul><li><span class=\"fontstyle0\">It is an Undead</span></li><li><span class=\"fontstyle0\">It has Darksight, is Immune to Poison, Weak to Silvered Weapons, and can't be Sickened.</span></li></ul>",
     "damageType": "-",
     "duration": "Until your next turn",
     "crit": "",

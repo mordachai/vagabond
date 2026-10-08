@@ -3,7 +3,7 @@
   "type": "spell",
   "img": "icons/magic/earth/projectile-stone-boulder-blue.webp",
   "system": {
-    "description": "<p><span class=\"fontstyle0\">You shoot an unsecured Target of 1 or less HD or Slots at a Target you can see within Near. If it strikes a Target, it hits them harmlessly unless this is Cast to deal damage.</span></p><p><span class=\"fontstyle0\">You can spend Mana to increase the Targetable HD or Slots by 1 per Mana spent to do so for that Casting.</span></p>",
+    "description": "<p><span class=\"fontstyle0\">You shoot an unsecured Target of 1 or less HD or Slots to a point within Near. If the point is a Being or Object, this Cast deals the Spell's damage to both.</span></p><p><span class=\"fontstyle0\">You can spend Mana to increase the Targetable HD or Slots by 1 per Mana spent to do so for that Casting.</span></p>",
     "damageType": "blunt",
     "duration": "Until your next turn",
     "crit": "",

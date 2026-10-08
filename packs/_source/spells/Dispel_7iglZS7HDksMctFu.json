@@ -3,7 +3,7 @@
   "type": "spell",
   "img": "icons/magic/defensive/shield-barrier-glowing-triangle-blue.webp",
   "system": {
-    "description": "<p><span class=\"fontstyle0\">You suspend a magic effect for the duration, treating it as an unwilling Target (p. 90).</span></p>",
+    "description": "<p><span class=\"fontstyle0\">You suspend a magic effect for the duration, treating it as an unwilling Target (p. 91).</span></p>",
     "damageType": "-",
     "duration": "Until your next turn",
     "crit": "The effect is completely dispelled if it is not a Relic's Power.",

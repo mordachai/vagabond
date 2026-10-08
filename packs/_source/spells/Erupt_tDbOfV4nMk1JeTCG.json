@@ -3,10 +3,10 @@
   "type": "spell",
   "img": "icons/magic/earth/lava-explosion-orange.webp",
   "system": {
-    "description": "<p><span class=\"fontstyle0\">Magma coats the nearest surface to the Target for the duration (minimum 5-foot square), causing it to be Difficult Terrain that deals d6 first time a Being enters the Area on a Turn and when it ends its Turn in the Area.</span></p>",
+    "description": "<p><span class=\"fontstyle0\">Magma coats the nearest surface to the Target for the duration (minimum 5' square), causing it to be Difficult Terrain that deals d6 the first time a Being enters the area on a Turn and when it ends its Turn in the area.</span></p>",
     "damageType": "fire",
     "duration": "Until your next turn",
-    "crit": "Targets Burning (Cd4 while in the Area).",
+    "crit": "Targets Burning (Cd4 while in the area).",
     "favorite": false,
     "noRollRequired": true,
     "fxSchool": "lava",

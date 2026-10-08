@@ -6,7 +6,7 @@
     "description": "<p><span class=\"fontstyle0\">Checks that rely on sight made against the Target have Favor for the duration.</span></p>",
     "damageType": "-",
     "duration": "Until your next turn",
-    "crit": "Duration is 1 minute (no Focus required).",
+    "crit": "Duration is 1 Minute (no Focus required).",
     "favorite": false,
     "noRollRequired": true,
     "fxSchool": "radiant",

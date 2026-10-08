@@ -3,7 +3,7 @@
   "type": "spell",
   "img": "icons/magic/water/tendrils-ice-growth.webp",
   "system": {
-    "description": "<p><span class=\"fontstyle0\">If the Target isn't Immune to Cold, they are Burning (d4, Speed reduced by 10') for the duration, ending early if they take damage from fire or heat.</span></p>",
+    "description": "<p><span class=\"fontstyle0\">If the Target isn't Immune to Cold, they are Burning (d4, Speed reduced by 10') for the duration, ending early in extreme heat.</span></p>",
     "damageType": "cold",
     "duration": "Until your next turn",
     "crit": "Target is instead Burning (d6).",

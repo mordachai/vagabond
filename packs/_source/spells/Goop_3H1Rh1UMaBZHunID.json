@@ -3,10 +3,10 @@
   "type": "spell",
   "img": "icons/creatures/slimes/slime-movement-dripping-pseudopods-green.webp",
   "system": {
-    "description": "<p><span class=\"fontstyle0\">A glob of sticky, acidic sludge coats the nearest surface to the Target (minimum 5-foot square) for the duration, causing it to be Difficult Terrain.</span></p><p><span class=\"fontstyle0\">If also Cast to deal damage, the caustic acid causes those in the Area to be Burning (d6).</span></p>",
+    "description": "<p><span class=\"fontstyle0\">A glob of acidic sludge coats the nearest surface to the Target (minimum 5' square) for the duration, causing it to be Difficult Terrain.</span></p><p><span class=\"fontstyle0\">If also Cast to deal damage, those in the area are Burning (d6).</span></p>",
     "damageType": "acid",
     "duration": "Until your next turn",
-    "crit": "Targets in the Area are also Restrained.",
+    "crit": "Targets in the area are also Restrained.",
     "favorite": false,
     "locked": true,
     "causedStatuses": [

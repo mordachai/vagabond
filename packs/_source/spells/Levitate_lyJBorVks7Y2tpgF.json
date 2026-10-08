@@ -3,7 +3,7 @@
   "type": "spell",
   "img": "icons/skills/movement/feet-winged-boots-glowing-yellow.webp",
   "system": {
-    "description": "<p><span class=\"fontstyle0\">The Target flutters up to 1 foot in the air if they have solid ground below them for the duration. The Target can still Move in the air as if walking. If the Target is a secured Object or an Item that occupies more than 2 Slots, it is unaffected.</span></p>",
+    "description": "<p><span class=\"fontstyle0\">The Target flutters up to 1' in the air if they have solid ground below them for the duration. The Target can still Move in the air as if walking. If the Target is a secured Object or an Item that occupies more than 2 Slots, it is unaffected.</span></p>",
     "damageType": "-",
     "duration": "Until your next turn",
     "crit": "",

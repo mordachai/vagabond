@@ -3,10 +3,10 @@
   "type": "spell",
   "img": "icons/magic/defensive/shield-barrier-blue.webp",
   "system": {
-    "description": "<p><span class=\"fontstyle0\">If the Target takes damage, make a Cast Check. On a pass, you reduce that damage by d6, and you can spend Mana to reduce it by an additional d6 per Mana spent to do so.</span></p>",
+    "description": "<p><span class=\"fontstyle0\">The Target has +1 Armor.</span></p><p><span class=\"fontstyle0\">You must spend 1 Mana per Target to Focus on this Spell, even for willing Targets.</span></p><p><strong>Upcast:</strong> When the Target takes damage from an attack or Cast, you can upcast this Spell to make a Cast Check to reduce the damage taken by 1d6 per Mana spent on the upcast if you pass.</p>",
     "damageType": "-",
     "duration": "Until your next turn",
-    "crit": "The Target takes no damage.",
+    "crit": "",
     "favorite": false,
     "fxSchool": "defense",
     "locked": true

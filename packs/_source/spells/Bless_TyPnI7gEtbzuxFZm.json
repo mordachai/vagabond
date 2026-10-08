@@ -3,7 +3,7 @@
   "type": "spell",
   "img": "icons/magic/holy/prayer-hands-glowing-yellow.webp",
   "system": {
-    "description": "<p><span class=\"fontstyle0\">For the duration, Targeted Objects count as Silvered, and Targeted Beings of your choice have a d4 bonus to Saves.</span></p><p><span class=\"fontstyle0\">Further, if the Target is freestanding water, it permanently becomes holy water.</span></p>",
+    "description": "<p><span class=\"fontstyle0\">For the duration, Targeted Objects count as Silvered (p. 82), and Targeted Beings of your choice have a d4 bonus to Saves.</span></p><p><span class=\"fontstyle0\">Further, if the Target is freestanding water, it permanently becomes holy water.</span></p>",
     "damageType": "-",
     "duration": "Until your next turn",
     "crit": "",

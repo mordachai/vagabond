@@ -3,7 +3,7 @@
   "type": "spell",
   "img": "icons/magic/earth/barrier-stone-explosion-debris.webp",
   "system": {
-    "description": "<p><span class=\"fontstyle0\">You manipulate the loose earth or stone around the Target in the following ways:</span></p><p><span class=\"fontstyle2\"><strong>Area:</strong> </span><span class=\"fontstyle0\">You can manipulate terrain in the Area, either causing it to be Difficult Terrain or a Structure that can fit within the area of effect of the Cast for the duration. This magic can't move any terrain that supports an Object.</span></p><p><span class=\"fontstyle2\"><strong>Being or Object:</strong> </span><span class=\"fontstyle0\">Close earth or stone is Difficult Terrain for the duration.</span></p>",
+    "description": "<p><span class=\"fontstyle0\">You manipulate the loose earth or stone around the Target in the following ways:</span></p><p><strong>Area:</strong> You can manipulate terrain in the area, either causing it to be Difficult Terrain or a Structure that can fit within the area for the duration. This magic can't move any terrain supporting an Object.</p><p><strong>Being or Object:</strong> Close earth or stone is Difficult Terrain for the duration.</p>",
     "damageType": "blunt",
     "duration": "Until your next turn",
     "crit": "",

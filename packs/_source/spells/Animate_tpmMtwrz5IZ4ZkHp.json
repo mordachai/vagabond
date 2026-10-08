@@ -3,7 +3,7 @@
   "type": "spell",
   "img": "icons/magic/movement/pinwheel-turning-blue.webp",
   "system": {
-    "description": "<p><span class=\"fontstyle0\">You animate an Item that occupies no more than 1 Slot in the Area or carried by the Target. For the duration, the Item gains a Speed of 30' (Fly), and uses the Object Armor &amp; HP rules (p. 12) for its Stats. It obeys your commands, which you can issue when you Focus on this Spell. If it is a Weapon, it can make Attacks using your Cast Skill.</span></p>",
+    "description": "<p><span class=\"fontstyle0\">You animate up to 1 Slot of Items in the delivery or that are carried by the Target. For the duration, the Item gains a Speed of 30' (Fly), uses the Object Armor &amp; HP rules (p. 10), and uses your Cast Skill for Checks.</span></p><p><span class=\"fontstyle0\">These Items obey your commands, which you can issue when you Focus on this Spell. If you command an Item to take an Action, you must spend 1 Mana to do so for each Item.</span></p><p><strong>Upcast:</strong> You can animate one additional Slot's worth of Item(s) per Mana spent to do so.</p>",
     "damageType": "-",
     "duration": "Until your next turn",
     "crit": "",

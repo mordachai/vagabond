@@ -3,7 +3,7 @@
   "type": "spell",
   "img": "icons/magic/air/fog-gas-smoke-dense-gray.webp",
   "system": {
-    "description": "<p><span class=\"fontstyle0\">The Caster creates a cloud that obscures an Area equal to the size of the delivery (minimum 5-foot cube). It Hinders Checks relying on sight of a Target within the fog and Checks made by Beings within the fog relying on sight.</span></p>",
+    "description": "<p><span class=\"fontstyle0\">The Caster creates a cloud that obscures an area equal to the size of the delivery (minimum 5' cube). It Hinders Checks relying on sight of a Target within the fog and Checks made by Beings within the fog relying on sight.</span></p>",
     "damageType": "cold",
     "duration": "Until your next turn",
     "crit": "",
