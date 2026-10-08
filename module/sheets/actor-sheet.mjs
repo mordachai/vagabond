@@ -351,6 +351,12 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         .filter(i => i.system.equipped && !EquipmentHelper.isBeltExcluded(i));
       const wornPanelItems = panelEquipped.filter(i => i.system.equipmentState === 'worn');
       context.hasBeltItems = wornPanelItems.length > 0;
+      context.hasHandItems = panelEquipped.some(i => i.system.equipmentState !== 'worn');
+
+      // Feature / trait / perk actions pinned to the Belt (same list the HUD Belt shows)
+      context.beltActions = FeatureAction.beltEntries(this.actor);
+      context.hasBeltZone = context.hasBeltItems || context.beltActions.length > 0;
+      if (context.beltActions.length) context.hasEquippedItems = true;
 
       // Belt is a single freely-reorderable list (drag-drop, same
       // `flags.vagabond.beltOrder` the HUD Belt row reads/writes) — unlike
@@ -785,6 +791,13 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
     // Belt drag-to-reorder (sliding panel's Equipped > Belt list)
     this._setupBeltReorderListeners();
+
+    // Feature / trait / perk action buttons: drag onto the sliding panel's Equipped section to pin to the Belt
+    FeatureAction.bindDrag(this.element, this.actor);
+    FeatureAction.bindBeltDrop(this.element.querySelector('.right-column-scrollable'), this.actor);
+
+    // Inventory items / spells: drag onto the Equipped section to equip / favorite them
+    this._setupEquipDrop();
 
     // Setup status icon listeners
     this._setupStatusIconListeners();
@@ -2221,6 +2234,79 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       onDrop: (orderedIds) => EquipmentHelper.saveBeltOrder(this.actor, orderedIds),
     });
     for (const el of zone.querySelectorAll('.equipped-item')) reorder.bindItem(el);
+  }
+
+  /**
+   * Drag an own inventory item or spell onto the sliding panel's Equipped section: equipment is
+   * equipped to its default state (hand limit enforced by `equipWithHandLimit`), a spell is
+   * favorited. Anything else (external drops, containers, already-equipped items) keeps bubbling
+   * to the sheet's normal `_onDrop`.
+   * @private
+   */
+  _setupEquipDrop() {
+    const root = this.element;
+    const zone = root.querySelector('.right-column-scrollable');
+    if (!zone || !this.actor.isOwner) return;
+
+    // Which own item is being dragged (the payload is unreadable during dragover)
+    if (!root.dataset.equipDragTrack) {
+      root.dataset.equipDragTrack = '1';
+      root.addEventListener('dragstart', (e) => {
+        this._dragEquipId = e.target?.closest?.('[data-item-id]')?.dataset.itemId ?? null;
+      }, true);
+    }
+
+    if (zone.dataset.equipDrop) return;
+    zone.dataset.equipDrop = '1';
+    const HL = 'fx-drop-target';
+
+    /**
+     * What dropping `item` anywhere on the panel would do, or null when it is not ours to handle.
+     * Drops auto-sort: spells → Spells (favorite), hand-occupying equipment → Hands, worn → Belt.
+     */
+    const planFor = (item) => {
+      if (!item || item.parent?.uuid !== this.actor.uuid) return null;
+      if (item.type === 'spell') return item.system.favorite ? null : { kind: 'favorite', zone: '.equipped-spells-zone' };
+      if (item.type === 'equipment' && !EquipmentHelper.isEquipped(item)) {
+        const worn = EquipmentHelper.defaultEquipState(item) === 'worn';
+        return { kind: 'equip', zone: worn ? '.equipped-zone-belt' : '.equipped-zone-hands' };
+      }
+      return null;
+    };
+
+    const clearHighlight = () => {
+      zone.classList.remove(HL);
+      for (const el of zone.querySelectorAll(`.${HL}`)) el.classList.remove(HL);
+    };
+
+    zone.addEventListener('dragover', (e) => {
+      const plan = planFor(this.actor.items.get(this._dragEquipId));
+      if (!plan) return;
+      e.preventDefault();
+      e.stopPropagation();
+      e.dataTransfer.dropEffect = 'move';
+      // Light up the section the item will land in; the whole panel when that section isn't drawn yet
+      const target = zone.querySelector(plan.zone);
+      clearHighlight();
+      (target ?? zone).classList.add(HL);
+    });
+    zone.addEventListener('dragleave', (e) => {
+      if (!zone.contains(e.relatedTarget)) clearHighlight();
+    });
+    zone.addEventListener('drop', (e) => {
+      clearHighlight();
+      const data = foundry.applications.ux.TextEditor.getDragEventData(e);
+      if (data?.type !== 'Item' || !data.uuid) return;
+      const item = fromUuidSync(data.uuid);
+      const plan = planFor(item);
+      if (!plan) return;
+      e.preventDefault();
+      e.stopPropagation();
+      const op = plan.kind === 'favorite'
+        ? item.update({ 'system.favorite': true })
+        : EquipmentHelper.equipWithHandLimit(this.actor, item.id, EquipmentHelper.defaultEquipState(item));
+      Promise.resolve(op).catch((err) => console.error('Vagabond | Equipped drop failed:', err));
+    });
   }
 
   /**

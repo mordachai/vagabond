@@ -149,6 +149,76 @@ export class FeatureAction {
     });
   }
 
+  /** Pin an action to the Belt (idempotent). Returns true when it was newly pinned. */
+  static async pin(actor, key) {
+    if (!this.resolve(actor, key)) return false;
+    const keys = this.beltKeys(actor);
+    if (keys.includes(key)) return false;
+    await actor.setFlag('vagabond', this.BELT_FLAG, [...keys, key]);
+    return true;
+  }
+
+  /* -------------------------------------------- */
+  /*  Drag & drop → Belt                          */
+  /* -------------------------------------------- */
+
+  /** Custom drag type: lets dragover claim the gesture without reading the (protected) payload. */
+  static DRAG_MIME = 'application/x-vagabond-feature-action';
+
+  /**
+   * Make every action button under `root` draggable. The payload carries the actor uuid + key, so a
+   * Belt drop target only accepts actions of its own actor. Safe to call on every render (guarded).
+   * @param {HTMLElement} root
+   * @param {Actor} actor
+   */
+  static bindDrag(root, actor) {
+    if (!root || !actor?.isOwner) return;
+    for (const btn of root.querySelectorAll('[data-action="featureAction"][data-action-key]')) {
+      if (btn.dataset.fxDrag) continue;
+      btn.dataset.fxDrag = '1';
+      btn.setAttribute('draggable', 'true');
+      btn.addEventListener('dragstart', (e) => {
+        const payload = { type: 'VagabondFeatureAction', actorUuid: actor.uuid, key: btn.dataset.actionKey };
+        e.dataTransfer.setData('text/plain', JSON.stringify(payload));
+        e.dataTransfer.setData(this.DRAG_MIME, payload.key);
+        e.dataTransfer.effectAllowed = 'copy';
+      });
+    }
+  }
+
+  /**
+   * Make `zone` a Belt drop target: dropping one of this actor's action buttons pins it. Claims only
+   * action drags (items etc. keep bubbling to the sheet / HUD handlers). Guarded per element.
+   * @param {HTMLElement} zone
+   * @param {Actor} actor
+   * @param {string} [highlightClass]  class toggled on `zone` while a valid drag hovers it
+   */
+  static bindBeltDrop(zone, actor, highlightClass = 'fx-drop-target') {
+    if (!zone || !actor?.isOwner || zone.dataset.fxDrop) return;
+    zone.dataset.fxDrop = '1';
+    const isFx = (e) => e.dataTransfer?.types?.includes(this.DRAG_MIME);
+    zone.addEventListener('dragover', (e) => {
+      if (!isFx(e)) return;
+      e.preventDefault();
+      e.stopPropagation();
+      e.dataTransfer.dropEffect = 'copy';
+      zone.classList.add(highlightClass);
+    });
+    zone.addEventListener('dragleave', (e) => {
+      if (!zone.contains(e.relatedTarget)) zone.classList.remove(highlightClass);
+    });
+    zone.addEventListener('drop', (e) => {
+      if (!isFx(e)) return;
+      e.preventDefault();
+      e.stopPropagation();
+      zone.classList.remove(highlightClass);
+      let data;
+      try { data = JSON.parse(e.dataTransfer.getData('text/plain')); } catch { return; }
+      if (data?.type !== 'VagabondFeatureAction' || data.actorUuid !== actor.uuid) return;
+      this.pin(actor, data.key).catch((err) => console.error('Vagabond | Belt pin failed:', err));
+    });
+  }
+
   static async toggleBelt(actor, key) {
     const keys = this.beltKeys(actor);
     const next = keys.includes(key) ? keys.filter(k => k !== key) : [...keys, key];

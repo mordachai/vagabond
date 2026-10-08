@@ -2765,6 +2765,7 @@
         "EquippedHands": "Mãos",
         "EquippedBelt": "Vestido",
         "equippedPlaceholder": "Nenhum item equipado ainda. Clique com o botão direito nos itens do Inventário para equipar.",
+        "equippedDropHere": "Solte itens aqui",
         "Features": "Características",
         "featuresPlaceholder": "Ainda sem características. Características são concedidas pela sua classe ao subir de nível.",
         "Traits": "Traços",

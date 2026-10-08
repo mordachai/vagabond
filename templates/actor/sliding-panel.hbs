@@ -391,8 +391,7 @@
             {{localize "VAGABOND.UI.Sections.Equipped"}}
           </h4>
 
-          {{!-- Check if any items are equipped --}}
-          {{#if hasEquippedItems}}
+          {{!-- Hands + Worn zones always draw (even empty) so they stay valid drop targets --}}
 
             {{! Rows for one zone: worn=false → Hands, worn=true → Belt }}
             {{#*inline 'vgEquippedRows'}}
@@ -553,19 +552,19 @@
 
             {{/inline}}
 
-            <div class='equipped-zone'>
+            <div class='equipped-zone equipped-zone-hands'>
               <div class='equipped-zone-label'>{{localize 'VAGABOND.UI.Sections.EquippedHands'}}</div>
               <div class='equipped-zone-rows'>
                 {{> vgEquippedRows worn=false}}
+                {{#unless hasHandItems}}<div class='equipped-zone-empty'>{{localize 'VAGABOND.UI.Sections.equippedDropHere'}}</div>{{/unless}}
               </div>
             </div>
 
-            {{#if hasBeltItems}}
-              {{! Belt is one freely drag-reorderable list (flattened + sorted in JS via
+            {{! Belt is one freely drag-reorderable list (flattened + sorted in JS via
                   `context.beltItems`, same flags.vagabond.beltOrder the HUD Belt row uses)
                   — unlike Hands above, items here are NOT locked to a weapon/relic/
                   alchemical/gear category order. }}
-              <div class='equipped-zone'>
+              <div class='equipped-zone equipped-zone-belt'>
               <div class='equipped-zone-label'>{{localize 'VAGABOND.UI.Sections.EquippedBelt'}}</div>
               <div class='equipped-zone-rows equipped-belt-zone'>
                 {{#each beltItems as |entry|}}
@@ -702,9 +701,17 @@
                     {{/if}}
                   {{/with}}
                 {{/each}}
+                {{! Pinned feature / trait / perk actions — not part of the item reorder list }}
+                {{#each beltActions as |act|}}
+                  <div class='equipped-action' title='{{act.tip}}'>
+                    <button type='button' class='eq-action-btn{{#if act.active}} is-active{{/if}}' data-action='featureAction' data-action-key='{{act.key}}'{{#if act.count}} data-count='{{act.count}}'{{/if}}><i class='{{act.icon}}'></i></button>
+                    <label class='eq-name rollable' data-action='featureAction' data-action-key='{{act.key}}'>{{act.name}}</label>
+                    <span class='eq-action-source'>{{act.source}}</span>
+                  </div>
+                {{/each}}
+                {{#unless hasBeltZone}}<div class='equipped-zone-empty'>{{localize 'VAGABOND.UI.Sections.equippedDropHere'}}</div>{{/unless}}
               </div>
               </div>
-            {{/if}}
 
             {{! 5. Equipped Armor - COMMENTED OUT }}
             {{!--
@@ -717,14 +724,9 @@
             {{/each}}
             --}}
 
-          {{else}}
-            {{!-- Placeholder Text for Equipped --}}
-            <div class="no-perks italic py-2-px-8">{{localize 'VAGABOND.UI.Sections.equippedPlaceholder'}}</div>
-          {{/if}}
-
           {{! Spells Section }}
           {{#if hasFavoritedSpells}}
-            <div class='weapon-skills flexcol mt-10'>
+            <div class='weapon-skills flexcol mt-10 equipped-spells-zone'>
               <div class="title-container">
                 {{! Focus Pips — left of title }}
                 <div class="focus-pips">

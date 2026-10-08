@@ -950,6 +950,9 @@
         margin-left: auto;
         width: 20px;
         height: 20px;
+        min-width: 0;
+        min-height: 0; // Foundry buttons force min-height: var(--button-size)
+        box-sizing: border-box;
         line-height: normal;
         padding: 0;
         display: inline-flex;

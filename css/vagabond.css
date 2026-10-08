@@ -4899,6 +4899,9 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   margin-left: auto;
   width: 20px;
   height: 20px;
+  min-width: 0;
+  min-height: 0;
+  box-sizing: border-box;
   line-height: normal;
   padding: 0;
   display: inline-flex;
@@ -16901,6 +16904,11 @@ ol#combat-tracker.directory-list {
   overflow-y: auto;
   overflow-x: hidden;
 }
+.vagabond .right-column .right-column-scrollable.fx-drop-target {
+  outline: 2px dashed var(--vagabond-c-chat-yellow);
+  outline-offset: -3px;
+  background-color: color-mix(in srgb, var(--vagabond-c-chat-yellow) 6%, transparent);
+}
 .vagabond .right-column .right-column-scrollable.has-scroll {
   padding-right: 10px;
 }
@@ -17173,6 +17181,107 @@ ol#combat-tracker.directory-list {
   display: flex;
   flex-direction: column;
 }
+.vagabond .favorites-section .equipped-zone-empty {
+  padding: 4px 8px;
+  font-size: 0.85em;
+  font-style: italic;
+  opacity: 0.55;
+}
+.vagabond .favorites-section .equipped-action {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 5px;
+  margin: 3px 0;
+  min-height: 26px;
+  color: var(--vagabond-c-text-primary);
+}
+.vagabond .favorites-section .equipped-action .eq-action-btn {
+  width: 22px;
+  height: 22px;
+  min-width: 0;
+  min-height: 0;
+  box-sizing: border-box;
+  line-height: normal;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--vagabond-c-text-primary);
+  background: none;
+  border: 1px solid currentColor;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.vagabond .favorites-section .equipped-action .eq-action-btn:hover {
+  color: var(--vagabond-c-chat-yellow);
+}
+.vagabond .favorites-section .equipped-action .eq-action-btn.is-active {
+  position: relative;
+  color: var(--vagabond-c-chat-yellow);
+  box-shadow: 0 0 8px 1px var(--vagabond-c-chat-yellow);
+}
+.vagabond .favorites-section .equipped-action .eq-action-btn.is-active::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  padding: 2px;
+  border-radius: inherit;
+  background: conic-gradient(from var(--vg-fx-angle), transparent 0 45%, var(--vagabond-c-chat-yellow) 80%, #fff 100%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: vg-fx-run 1.6s linear infinite;
+  pointer-events: none;
+}
+.vagabond .favorites-section .equipped-action .eq-action-btn.is-active[data-count]::after {
+  content: attr(data-count);
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  min-width: 13px;
+  height: 13px;
+  padding: 0 3px;
+  box-sizing: border-box;
+  border-radius: 7px;
+  background: var(--vagabond-c-chat-yellow);
+  color: #000;
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 13px;
+  text-align: center;
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .vagabond .favorites-section .equipped-action .eq-action-btn.is-active::before {
+    animation: none;
+  }
+}
+.vagabond .favorites-section .equipped-action .eq-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: "Germania", serif;
+  font-size: 1.1em;
+  cursor: pointer;
+}
+.vagabond .favorites-section .equipped-action .eq-action-source {
+  flex-shrink: 0;
+  max-width: 40%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.8em;
+  font-style: italic;
+  opacity: 0.7;
+}
+.vagabond .favorites-section .fx-drop-target {
+  outline: 2px dashed var(--vagabond-c-chat-yellow);
+  outline-offset: 2px;
+}
 .vagabond .favorites-section .title-container {
   display: flex;
   flex-direction: row;
@@ -17360,6 +17469,9 @@ ol#combat-tracker.directory-list {
   margin-left: auto;
   width: 22px;
   height: 22px;
+  min-width: 0;
+  min-height: 0;
+  box-sizing: border-box;
   line-height: normal;
   padding: 0;
   display: inline-flex;

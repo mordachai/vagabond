@@ -2751,6 +2751,7 @@
         "EquippedHands": "Hands",
         "EquippedBelt": "Worn",
         "equippedPlaceholder": "No items equipped yet. Right click on the items in the Inventory to equip.",
+        "equippedDropHere": "Drop items here",
         "Features": "Features",
         "featuresPlaceholder": "No features yet. Features are granted by your class as you level up.",
         "Traits": "Traits",

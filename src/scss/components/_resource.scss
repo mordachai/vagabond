@@ -177,6 +177,13 @@
     overflow-y: auto;
     overflow-x: hidden;
 
+    // Drag-drop feedback (Equipped section): the scroll container clips an outer outline, so draw it inside
+    &.fx-drop-target {
+      outline: 2px dashed $c-yellow;
+      outline-offset: -3px;
+      background-color: color-mix(in srgb, #{$c-yellow} 6%, transparent);
+    }
+
     &.has-scroll {
       padding-right: 10px;
     }
@@ -500,6 +507,75 @@
     }
   }
 
+  // Empty Hands / Worn zone: faint drop hint
+  .equipped-zone-empty {
+    padding: 4px 8px;
+    font-size: 0.85em;
+    font-style: italic;
+    opacity: 0.55;
+  }
+
+  // Pinned feature / trait / perk action on the Equipped > Belt list
+  .equipped-action {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0 5px;
+    margin: 3px 0;
+    min-height: 26px;
+    color: $c-text-1;
+
+    .eq-action-btn {
+      width: 22px;
+      height: 22px;
+      min-width: 0;
+      min-height: 0; // Foundry buttons force min-height: var(--button-size)
+      box-sizing: border-box;
+      line-height: normal;
+      padding: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: $c-text-1;
+      background: none;
+      border: 1px solid currentColor;
+      border-radius: 3px;
+      cursor: pointer;
+
+      &:hover { color: $c-yellow; }
+      &.is-active { @include feature-action-active; }
+    }
+
+    .eq-name {
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-family: $font-title;
+      font-size: 1.1em;
+      cursor: pointer;
+    }
+
+    .eq-action-source {
+      flex-shrink: 0;
+      max-width: 40%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 0.8em;
+      font-style: italic;
+      opacity: 0.7;
+    }
+  }
+
+  // Belt drop highlight while dragging a feature action over the Equipped section
+  .fx-drop-target {
+    outline: 2px dashed $c-yellow;
+    outline-offset: 2px;
+  }
+
   .title-container{
     display: flex;
     flex-direction: row;
@@ -715,6 +791,9 @@
     margin-left: auto;
     width: 22px;
     height: 22px;
+    min-width: 0;
+    min-height: 0; // Foundry buttons force min-height: var(--button-size)
+    box-sizing: border-box;
     line-height: normal;
     padding: 0;
     display: inline-flex;

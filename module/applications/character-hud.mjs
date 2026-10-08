@@ -776,6 +776,10 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
     // order via `flags.vagabond.beltOrder`, shared with the sheet's Equipped
     // Belt list so reordering either one updates both).
     const beltRow = this.element.querySelector('.vh-slots');
+    // Feature / trait / perk action buttons: drag onto the HUD to pin them to the Belt. Reuses the
+    // HUD's own drop outline (`vh-drop-active`, cleared by the document dragend/drop listeners below).
+    FeatureAction.bindDrag(this.element, this.actor);
+    FeatureAction.bindBeltDrop(this.element, this.actor, 'vh-drop-active');
     if (beltRow) {
       const { EquipmentHelper } = globalThis.vagabond.utils;
       const beltReorder = setupDragReorder({
