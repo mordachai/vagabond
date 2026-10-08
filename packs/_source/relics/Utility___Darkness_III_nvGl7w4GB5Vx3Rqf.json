@@ -37,7 +37,7 @@
     "isConsumable": false,
     "linkedConsumable": "",
     "alchemicalType": "concoction",
-    "lore": "Magical quirks other than Combat and Mobility"
+    "lore": "Magical quirks other than Combat and Mobility."
   },
   "effects": [],
   "flags": {},

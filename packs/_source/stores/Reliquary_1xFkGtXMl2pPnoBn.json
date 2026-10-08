@@ -479,7 +479,7 @@
       "type": "equipment",
       "img": "icons/magic/control/buff-flight-wings-blue.webp",
       "system": {
-        "description": "<p>Wearer gains a bonus +10 feet to Speed.</p>",
+        "description": "<p><span class=\"fontstyle0\">Wearer gains a bonus +10' to Speed.</span></p>",
         "equipmentType": "relic",
         "locked": true,
         "equipped": false,
@@ -913,7 +913,7 @@
       "type": "equipment",
       "img": "icons/magic/control/buff-flight-wings-purple.webp",
       "system": {
-        "description": "<p>Grants All-Sight (Bound).</p>",
+        "description": "<p><span class=\"fontstyle0\">Grants Allsight (Bound).</span></p>",
         "equipmentType": "relic",
         "locked": true,
         "equipped": false,
@@ -1410,7 +1410,7 @@
       "type": "equipment",
       "img": "icons/magic/control/buff-flight-wings-blue.webp",
       "system": {
-        "description": "<p>Wearer gains a bonus +5 feet to Speed.</p>",
+        "description": "<p><span class=\"fontstyle0\">Wearer gains a bonus +5' to Speed.</span></p>",
         "equipmentType": "relic",
         "locked": true,
         "equipped": false,
@@ -2151,7 +2151,7 @@
         "immunities": [],
         "gearCategory": "",
         "alchemicalType": "concoction",
-        "lore": "Magical quirks other than Combat and Mobility",
+        "lore": "Magical quirks other than Combat and Mobility.",
         "gridPosition": 0,
         "containerId": null,
         "damageTypeOneHand": "-",
@@ -3117,7 +3117,7 @@
       "_key": "!actors.items!1xFkGtXMl2pPnoBn.2FsmNwqwU46IDv6w"
     },
     {
-      "name": "Fabled - Vicious",
+      "name": "Fabled - Visceral",
       "type": "equipment",
       "img": "icons/magic/control/buff-flight-wings-runes-purple-orange.webp",
       "system": {
@@ -4116,7 +4116,7 @@
       "type": "equipment",
       "img": "icons/magic/symbols/circled-gem-pink.webp",
       "system": {
-        "description": "<p><span class=\"fontstyle0\">Trident that must be Bound to to access its Powers, which are as follows:</span></p><ul><li><span class=\"fontstyle2\">(+3) Weapon:</span><span class=\"fontstyle0\"> Deals an extra +3 damage.</span></li><li><span class=\"fontstyle2\">Aqua Lung:</span><span class=\"fontstyle0\"> They can breathe water.</span></li><li><span class=\"fontstyle2\">Fish Command:</span><span class=\"fontstyle0\"> (3 charges) You can Target a Beast with a Swim Speed and spend 1 charge to attempt to cause it to be Charmed for 1 minute, giving you control of it.</span></li><li><span class=\"fontstyle2\">Marine Ambassador:</span><span class=\"fontstyle0\"> They can speak with Beasts with a Swim Speed.</span></li><li><span class=\"fontstyle2\">Safe Space:</span><span class=\"fontstyle0\"> Create an impenetrable barrier out to Close. This barrier has 36 HP, which is regained each day. The barrier ignores the results of damage rolls, and instead only takes 1 damage per die used for the damage. While the barrier has HP, the area within is safe, comfortable, nothing can enter or exit the barrier, and nothing within can be affected by any attacks or magic from outside it. Action to activate or deactivate.</span></li><li><span class=\"fontstyle2\">Vicious:</span><span class=\"fontstyle0\"> On a Crit Attack, the Target takes extra damage equal to (2 × its HD).</span></li><li><span class=\"fontstyle2\">Warning:</span><span class=\"fontstyle0\"> You can't be surprised while conscious, and it awakens you if you are asleep if Enemies are within Near.</span></li></ul>",
+        "description": "<p><span class=\"fontstyle0\">Trident that must be Bound to to access its Powers, which are as follows:</span></p><ul><li><span class=\"fontstyle2\">(+3) Weapon:</span><span class=\"fontstyle0\"> Deals an extra +3 damage.</span></li><li><span class=\"fontstyle2\">Aqua Lung:</span><span class=\"fontstyle0\"> They can breathe water.</span></li><li><span class=\"fontstyle2\">Fish Command:</span><span class=\"fontstyle0\"> (3 charges) You can Target a Beast with a Swim Speed and spend 1 charge to attempt to cause it to be Charmed for 1 Minute, giving you control of it.</span></li><li><span class=\"fontstyle2\">Marine Ambassador:</span><span class=\"fontstyle0\"> They can speak with Beasts with a Swim Speed.</span></li><li><span class=\"fontstyle2\">Safe Space:</span><span class=\"fontstyle0\"> Create an impenetrable barrier out to Close. This barrier has 36 HP, which is regained each day. The barrier ignores the results of damage rolls, and instead only takes 1 damage per die used for the damage. While the barrier has HP, the area within is safe, comfortable, nothing can enter or exit the barrier, and nothing within can be affected by any attacks or magic from outside it. Action to activate or deactivate.</span></li><li><span class=\"fontstyle2\">Visceral:</span><span class=\"fontstyle0\"> On a Crit Attack, the Target takes extra damage equal to (2 × its HD).</span></li><li><span class=\"fontstyle2\">Warning:</span><span class=\"fontstyle0\"> You can't be surprised while conscious, and it awakens you if you are asleep if Enemies are within Near.</span></li></ul>",
         "equipmentType": "relic",
         "locked": true,
         "equipped": false,
@@ -4670,7 +4670,7 @@
         "equipped": false,
         "quantity": 1,
         "baseCost": {
-          "gold": 2000,
+          "gold": 2100,
           "silver": 0,
           "copper": 0
         },
@@ -4829,7 +4829,7 @@
       "type": "container",
       "img": "icons/containers/bags/sack-leather-blue.webp",
       "system": {
-        "description": "<h3><span class=\"fontstyle0\">RELIC BAG</span></h3><p><span class=\"fontstyle0\"><br>A bag that contains its own pocket dimension, granting it the following Power:</span></p><ul><li><span class=\"fontstyle2\"><strong>Holding V:</strong></span><span class=\"fontstyle0\"> Occupies 1 Inventory Slot, but can hold 5 Slots of Items without counting against the carrier's Inventory Slots.</span></li></ul>",
+        "description": "<h3><span class=\"fontstyle0\">RELIC BAG</span></h3><p><span class=\"fontstyle0\"><br />A bag that contains its own pocket dimension, granting it the following Power:</span></p><ul><li><span class=\"fontstyle2\"><strong>Holding V:</strong></span><span class=\"fontstyle0\"> Occupies 1 Inventory Slot, but can hold 5 Slots of Items without counting against the carrier's Inventory Slots.</span></li></ul>",
         "slots": 1,
         "capacity": 5,
         "gridPosition": 0,
@@ -5594,7 +5594,7 @@
         "equipped": false,
         "quantity": 1,
         "baseCost": {
-          "gold": 1000,
+          "gold": 1000000,
           "silver": 0,
           "copper": 0
         },
@@ -6724,7 +6724,7 @@
         "immunities": [],
         "gearCategory": "",
         "alchemicalType": "concoction",
-        "lore": "Magical quirks other than Combat and Mobility",
+        "lore": "Magical quirks other than Combat and Mobility.",
         "gridPosition": 0,
         "containerId": null,
         "damageTypeOneHand": "-",
@@ -6860,7 +6860,7 @@
       "_key": "!actors.items!1xFkGtXMl2pPnoBn.V1KlvteXwZMsrgz6"
     },
     {
-      "name": "Armor of Vulnerability",
+      "name": "Armor of Vulnerability (-1)",
       "type": "equipment",
       "img": "icons/magic/symbols/circled-gem-pink.webp",
       "system": {
@@ -7023,6 +7023,336 @@
       "_id": "dP1sMemUolK6kSbZ",
       "sort": 0,
       "_key": "!actors.items!1xFkGtXMl2pPnoBn.dP1sMemUolK6kSbZ"
+    },
+    {
+      "name": "Armor of Vulnerability (-2)",
+      "type": "equipment",
+      "img": "icons/magic/symbols/circled-gem-pink.webp",
+      "system": {
+        "description": "<p><span class=\"fontstyle0\">Cursed Armor that can't be unbonded from except by powers that can remove curses. It bears the following Curse:</span></p><ul><li><span class=\"fontstyle2\">Vulnerability (Armor):</span><span class=\"fontstyle0\"> Does not grant its Armor and instead increases Attack damage taken by the number indicated.</span></li></ul><p><span class=\"fontstyle0\">Any attempts to identify it only reveals it to be a Relic Armor with the opposite \"plus.\"</span></p>",
+        "equipmentType": "relic",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 600,
+          "silver": 0,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "",
+        "alchemicalType": "",
+        "lore": "Cursed Relic Armor (Bound)",
+        "requiresBound": true,
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 1,
+        "relic": {
+          "requiresBond": true,
+          "powers": [],
+          "fabled": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "handsRequired": 0,
+        "isTrinket": false,
+        "bound": false,
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "canExplode": false,
+        "explodeValues": "",
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "isConsumable": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.relics.Item.Q7Ym1DivfmQPID03"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.44.0",
+        "createdTime": 1791169386572,
+        "modifiedTime": 1791169386572,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "ownership": {
+        "default": 0,
+        "F8lCaC2xBa4wgj43": 3
+      },
+      "folder": null,
+      "_id": "jwA84XtmLZKi3qDc",
+      "sort": 0,
+      "_key": "!actors.items!1xFkGtXMl2pPnoBn.jwA84XtmLZKi3qDc"
+    },
+    {
+      "name": "Armor of Vulnerability (-3)",
+      "type": "equipment",
+      "img": "icons/magic/symbols/circled-gem-pink.webp",
+      "system": {
+        "description": "<p><span class=\"fontstyle0\">Cursed Armor that can't be unbonded from except by powers that can remove curses. It bears the following Curse:</span></p><ul><li><span class=\"fontstyle2\">Vulnerability (Armor):</span><span class=\"fontstyle0\"> Does not grant its Armor and instead increases Attack damage taken by the number indicated.</span></li></ul><p><span class=\"fontstyle0\">Any attempts to identify it only reveals it to be a Relic Armor with the opposite \"plus.\"</span></p>",
+        "equipmentType": "relic",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 2400,
+          "silver": 0,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "",
+        "alchemicalType": "",
+        "lore": "Cursed Relic Armor (Bound)",
+        "requiresBound": true,
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 1,
+        "relic": {
+          "requiresBond": true,
+          "powers": [],
+          "fabled": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "handsRequired": 0,
+        "isTrinket": false,
+        "bound": false,
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "canExplode": false,
+        "explodeValues": "",
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "isConsumable": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.relics.Item.Y8ogD7RYQqqvt7Iy"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.44.0",
+        "createdTime": 1791169386572,
+        "modifiedTime": 1791169386572,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "ownership": {
+        "default": 0,
+        "F8lCaC2xBa4wgj43": 3
+      },
+      "folder": null,
+      "_id": "YK51FMMQnN7atMaX",
+      "sort": 0,
+      "_key": "!actors.items!1xFkGtXMl2pPnoBn.YK51FMMQnN7atMaX"
     },
     {
       "name": "Cursed - Vulnerability -2",
@@ -7246,7 +7576,7 @@
       "type": "equipment",
       "img": "icons/magic/symbols/circled-gem-pink.webp",
       "system": {
-        "description": "<p><span class=\"fontstyle0\">Greatsword that a Being must Bind themselves to to access its Powers, which are as follows:</span></p><ul><li><span class=\"fontstyle2\">(+3) Weapon:</span><span class=\"fontstyle0\"> Deals an extra +3 damage.</span></li><li><span class=\"fontstyle2\">Haste:</span><span class=\"fontstyle0\"> (1/Day) For 1 minute, the Wielder's Speed is doubled, they gain Favor on Reflex Saves, and can take a second Action each Round.</span></li><li><span class=\"fontstyle2\">Lifesteal:</span><span class=\"fontstyle0\"> Killing a foe with it heals the Wielder for 4 (d8) HP. If the slain foe is an Artificial or Undead Being, it instead deals 4 (d8) damage to the Wielder.</span></li><li><span class=\"fontstyle2\">Resolve:</span><span class=\"fontstyle0\"> The Wielder is Immune to Charmed and Frightened.</span></li><li><span class=\"fontstyle2\">Sense Life:</span><span class=\"fontstyle0\"> Detects Small and larger living Beings within Far.</span></li><li><span class=\"fontstyle2\">Soul Eater:</span><span class=\"fontstyle0\"> It devours the soul of foes it slays. Those who have their soul eaten can't be resurrected unless a wish is granted to do so.</span></li></ul>",
+        "description": "<p><span class=\"fontstyle0\">Greatsword that a Being must Bind themselves to to access its Powers, which are as follows:</span></p><ul><li><span class=\"fontstyle2\">(+3) Weapon:</span><span class=\"fontstyle0\"> Deals an extra +3 damage.</span></li><li><span class=\"fontstyle2\">Haste:</span><span class=\"fontstyle0\"> (1/Day) For 1 Minute, the Wielder's Speed is doubled, they gain Favor on Reflex Saves, and can take a second Action each Round.</span></li><li><span class=\"fontstyle2\">Lifesteal:</span><span class=\"fontstyle0\"> Killing a foe with it heals the Wielder for 4 (d8) HP. If the slain foe is an Artificial or Undead Being, it instead deals 4 (d8) damage to the Wielder.</span></li><li><span class=\"fontstyle2\">Resolve:</span><span class=\"fontstyle0\"> The Wielder is Immune to Charmed and Frightened.</span></li><li><span class=\"fontstyle2\">Sense Life:</span><span class=\"fontstyle0\"> Detects Small and larger living Beings within Far.</span></li><li><span class=\"fontstyle2\">Soul Eater:</span><span class=\"fontstyle0\"> It devours the soul of foes it slays. Those who have their soul eaten can't be resurrected unless a wish is granted to do so.</span></li></ul>",
         "equipmentType": "relic",
         "locked": true,
         "equipped": false,
@@ -7411,13 +7741,13 @@
       "type": "equipment",
       "img": "icons/magic/symbols/circled-gem-pink.webp",
       "system": {
-        "description": "<p><span class=\"fontstyle0\">This item can be placed on the corpse of a recently deceased Being to return them to life at half HP. The Phoenix Down is consumed in this process.</span></p><p><span class=\"fontstyle2\"><strong>Material:</strong></span><span class=\"fontstyle0\"> 50g worth of phoenix's feathers</span></p><ul><li><span class=\"fontstyle2\">Resurrection:</span><span class=\"fontstyle0\"> (one use)</span></li></ul>",
+        "description": "<p><span class=\"fontstyle0\">This item can be placed on the corpse of a dead Being to return them to life at full HP. This does not work on Constructs or Undead. The Phoenix Down is consumed in this process.</span></p><ul><li><span class=\"fontstyle2\">Resurrection:</span><span class=\"fontstyle0\"> (one use)</span></li></ul>",
         "equipmentType": "relic",
         "locked": true,
         "equipped": false,
         "quantity": 1,
         "baseCost": {
-          "gold": 100,
+          "gold": 2500,
           "silver": 0,
           "copper": 0
         },
@@ -7902,172 +8232,6 @@
       "_id": "JADHkIXfrqO8aaMj",
       "sort": 0,
       "_key": "!actors.items!1xFkGtXMl2pPnoBn.JADHkIXfrqO8aaMj"
-    },
-    {
-      "name": "Ace - Long",
-      "type": "equipment",
-      "img": "icons/magic/control/buff-flight-wings-runes-red.webp",
-      "system": {
-        "description": "<p>Its Range is 10 feet further, rather than 5 feet further.</p>",
-        "equipmentType": "relic",
-        "locked": true,
-        "equipped": false,
-        "quantity": 1,
-        "baseCost": {
-          "gold": 1000,
-          "silver": 0,
-          "copper": 0
-        },
-        "baseSlots": 0,
-        "metal": "none",
-        "damageType": "-",
-        "damageAmount": "",
-        "canExplode": false,
-        "explodeValues": "",
-        "properties": [],
-        "weaponSkill": "melee",
-        "range": "close",
-        "grip": "1H",
-        "damageOneHand": "d6",
-        "damageTwoHands": "d8",
-        "equipmentState": "oneHand",
-        "immunities": [],
-        "gearCategory": "",
-        "alchemicalType": "concoction",
-        "lore": "Enhances a Weapon Property.",
-        "gridPosition": 0,
-        "containerId": null,
-        "damageTypeOneHand": "-",
-        "damageTypeTwoHands": "-",
-        "isConsumable": false,
-        "linkedConsumable": "",
-        "armorRating": 1,
-        "mightRequirement": 2,
-        "reflexPenalty": 0,
-        "handsRequired": 0,
-        "isTrinket": false,
-        "requiresBound": false,
-        "bound": false,
-        "relic": {
-          "powers": [],
-          "fabled": false,
-          "requiresBond": false,
-          "boundTo": "",
-          "cursed": false,
-          "consumable": false,
-          "sockets": []
-        },
-        "relicPower": {
-          "enabled": false,
-          "targets": [
-            "any"
-          ],
-          "family": "",
-          "rank": 1,
-          "requiredMaterials": []
-        },
-        "crystal": {
-          "type": "",
-          "bonus": 0,
-          "payloadUuid": "",
-          "usedThisQuest": false
-        },
-        "altSkills": [],
-        "armorDamage": 0,
-        "dieDamage": 0,
-        "craftMaterial": {
-          "enabled": false,
-          "key": "",
-          "value": 0
-        },
-        "toolKind": "",
-        "isSupply": false,
-        "isBeverage": false,
-        "uses": {
-          "max": 0,
-          "value": 0
-        },
-        "passiveCausedStatuses": [],
-        "causedStatuses": [],
-        "critCausedStatuses": [],
-        "blockedStatuses": [],
-        "resistedStatuses": [],
-        "coating": {
-          "sourceName": "",
-          "charges": 0,
-          "causedStatuses": []
-        },
-        "imbuedSpell": {
-          "active": false,
-          "sourceActorUuid": "",
-          "sourceActorName": "",
-          "spellUuid": "",
-          "spellName": "",
-          "spellImg": "",
-          "damageTypeKey": "",
-          "dieSize": 0,
-          "damageDice": 0,
-          "deferredMana": 0,
-          "deferredPayment": false,
-          "manaSkillKey": ""
-        },
-        "itemFx": {
-          "enabled": false,
-          "animType": "auto",
-          "hitFile": "",
-          "hitScale": 1,
-          "hitOffsetX": 0,
-          "hitDuration": 800,
-          "hitSound": "",
-          "missFile": "",
-          "missScale": 1,
-          "missDuration": 600,
-          "missSound": "",
-          "soundVolume": 0.6
-        },
-        "macro": {
-          "enabled": false,
-          "uuid": "",
-          "command": "",
-          "label": "",
-          "runAsGM": false
-        },
-        "hitMacro": {
-          "enabled": false,
-          "uuid": "",
-          "command": "",
-          "label": "",
-          "runAsGM": false
-        }
-      },
-      "effects": [],
-      "flags": {
-        "vagabond": {
-          "shop": {
-            "sourceUuid": "Compendium.vagabond.relics.Item.I23zi1OQaQnTa5wN",
-            "category": "Ace"
-          }
-        }
-      },
-      "_stats": {
-        "coreVersion": "14.368",
-        "systemId": "vagabond",
-        "systemVersion": "5.44.0",
-        "createdTime": 1791169386572,
-        "modifiedTime": 1791169386572,
-        "lastModifiedBy": "F8lCaC2xBa4wgj43",
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null
-      },
-      "ownership": {
-        "default": 0,
-        "F8lCaC2xBa4wgj43": 3
-      },
-      "folder": null,
-      "_id": "Zifcsx5UcleWtTIz",
-      "sort": 0,
-      "_key": "!actors.items!1xFkGtXMl2pPnoBn.Zifcsx5UcleWtTIz"
     },
     {
       "name": "Movement - Jumping II",
@@ -9119,7 +9283,7 @@
       "type": "equipment",
       "img": "icons/magic/control/buff-flight-wings-blue.webp",
       "system": {
-        "description": "<p>Wearer gains a bonus +15 feet to Speed.</p>",
+        "description": "<p><span class=\"fontstyle0\">Wearer gains a bonus +15' to Speed.</span></p>",
         "equipmentType": "relic",
         "locked": true,
         "equipped": false,
@@ -10379,14 +10543,14 @@
       "type": "equipment",
       "img": "icons/magic/symbols/circled-gem-pink.webp",
       "system": {
-        "description": "<p><span class=\"fontstyle0\">A Protection Scroll can be read to create an Aura out to 10' from the reader for 1 Hour that moves with them. Doing so causes the Scroll to vaporize. Those in the Aura have Favor on Saves forced by Beings designated by the scroll's name: Protection from Evil: Hellspawn, Undead Protection from Good: Divines, Fae</span></p>",
+        "description": "<p><span class=\"fontstyle0\">Can be read to create an Aura out to 10' from the reader for 1 Hour that moves with them. Doing so causes the Scroll to vaporize. Those in the Aura have Favor on Saves forced by Beings designated by the scroll's name:</span></p><ul><li><span class=\"fontstyle2\">Protection from Evil:</span><span class=\"fontstyle0\"> Hellspawn, Undead</span></li><li><span class=\"fontstyle2\">Protection from Good:</span><span class=\"fontstyle0\"> Divines, Fae</span></li></ul>",
         "equipmentType": "relic",
         "locked": true,
         "equipped": false,
         "quantity": 1,
         "baseCost": {
-          "gold": 0,
-          "silver": 10,
+          "gold": 10,
+          "silver": 0,
           "copper": 0
         },
         "baseSlots": 1,
@@ -10403,7 +10567,7 @@
         "immunities": [],
         "gearCategory": "",
         "alchemicalType": "",
-        "lore": "Eccentric Parchment (Consumable)",
+        "lore": "Relic Parchment (Consumable)",
         "isConsumable": true,
         "armorRating": 1,
         "mightRequirement": 2,
@@ -10881,7 +11045,7 @@
         "equipped": false,
         "quantity": 1,
         "baseCost": {
-          "gold": 1000,
+          "gold": 10000,
           "silver": 0,
           "copper": 0
         },
@@ -11628,7 +11792,7 @@
         "immunities": [],
         "gearCategory": "",
         "alchemicalType": "concoction",
-        "lore": "Magical quirks other than Combat and Mobility",
+        "lore": "Magical quirks other than Combat and Mobility.",
         "gridPosition": 0,
         "containerId": null,
         "damageTypeOneHand": "-",
@@ -11792,7 +11956,7 @@
         "immunities": [],
         "gearCategory": "",
         "alchemicalType": "",
-        "lore": "Fabled Relic Standard Shield (Bound)",
+        "lore": "Relic Standard Shield (Bound)",
         "requiresBound": true,
         "armorRating": 1,
         "mightRequirement": 2,
@@ -11965,7 +12129,7 @@
         "isConsumable": false,
         "linkedConsumable": "",
         "alchemicalType": "concoction",
-        "lore": "Magical quirks other than Combat and Mobility",
+        "lore": "Magical quirks other than Combat and Mobility.",
         "armorRating": 1,
         "mightRequirement": 2,
         "reflexPenalty": 0,
@@ -13145,7 +13309,7 @@
       "type": "equipment",
       "img": "icons/magic/control/buff-flight-wings-runes-red.webp",
       "system": {
-        "description": "<p>Can deal full damage to two Targets.</p>",
+        "description": "<p><span class=\"fontstyle0\">The damage die is one size larger when using the Cleave property.</span></p>",
         "equipmentType": "relic",
         "locked": true,
         "equipped": false,
@@ -13311,7 +13475,7 @@
       "type": "equipment",
       "img": "icons/magic/symbols/circled-gem-pink.webp",
       "system": {
-        "description": "<p><span class=\"fontstyle0\">Warhammer that must be Bound to to access its Powers, which are as follows:</span></p><ul><li><span class=\"fontstyle2\">(+3) Bonus:</span><span class=\"fontstyle0\"> Deals an extra +3 damage.</span></li><li><span class=\"fontstyle2\">Giants Bane:</span><span class=\"fontstyle0\"> Deals an extra damage die to giants.</span></li><li><span class=\"fontstyle2\">Earth Shaker:</span><span class=\"fontstyle0\"> (1/Day) Strike the earth to cause all Near foes to be Dazed (d4 Rounds).</span></li><li><span class=\"fontstyle2\">Loyalty:</span><span class=\"fontstyle0\"> Can be thrown to attack. It then magically returns to the Wielder's hand after the attack.</span></li><li><span class=\"fontstyle2\">Sense Valuables:</span><span class=\"fontstyle0\"> Senses gold and gems within Near.</span></li><li><span class=\"fontstyle2\">Thrown Ace:</span><span class=\"fontstyle0\"> Deals an extra damage die with thrown attacks.</span></li></ul>",
+        "description": "<p><span class=\"fontstyle0\">Warhammer that must be Bound to to access its Powers, which are as follows:</span></p><ul><li><span class=\"fontstyle2\">(+3) Bonus:</span><span class=\"fontstyle0\"> Deals an extra +3 damage.</span></li><li><span class=\"fontstyle2\">Giants Bane:</span><span class=\"fontstyle0\"> Deals an extra damage die to giants.</span></li><li><span class=\"fontstyle2\">Earth Shaker:</span><span class=\"fontstyle0\"> (1/Day) Strike the earth to cause all Near foes to be Dazed (d4 Rounds).</span></li><li><span class=\"fontstyle2\">Loyalty:</span><span class=\"fontstyle0\"> Can be thrown to attack. It then magically returns to the Wielder's hand after the attack.</span></li><li><span class=\"fontstyle2\">Sense Valuables:</span><span class=\"fontstyle0\"> Senses gold and gems within Near.</span></li><li><span class=\"fontstyle2\">High Velocity:</span><span class=\"fontstyle0\"> Deals an extra damage die with thrown attacks.</span></li></ul>",
         "equipmentType": "relic",
         "locked": true,
         "equipped": false,
@@ -14020,11 +14184,11 @@
       "_key": "!actors.items!1xFkGtXMl2pPnoBn.Os3MQgtzTry5YohN"
     },
     {
-      "name": "Magistaff",
+      "name": "Magistaff (Common)",
       "type": "equipment",
       "img": "icons/magic/symbols/circled-gem-pink.webp",
       "system": {
-        "description": "<p><span class=\"fontstyle0\">A 10 minute Ritual can be conducted while it is held by a willing Being that knows a Spell. During the Ritual, that Being chooses a Spell and chooses how they would Cast it. Their Maximum Mana is reduced by the cost it would take to Cast it, which is only restored if the Bond to the magistaff ends.</span></p><p><span class=\"fontstyle0\">After the Ritual, the Bound wielder can spend a charge from the staff to Cast that Spell as it was Cast during the Ritual, using a Skill of their choice. The number of Charges corresponds to the rarity of the magistaff, as shown below, and its Countdown die resets at dawn.</span></p><ul><li><span class=\"fontstyle2\">Common:</span><span class=\"fontstyle0\"> Cd4 Charges</span></li><li><span class=\"fontstyle2\">Rare:</span><span class=\"fontstyle0\"> Cd6 Charges</span></li><li><span class=\"fontstyle2\">Legendary:</span><span class=\"fontstyle0\"> Cd8 Charges</span></li></ul>",
+        "description": "<p><span class=\"fontstyle0\">A 10 Minute Ritual can be conducted while it is held by a willing Being that knows a Spell. During the Ritual, that Being chooses a Spell and chooses how they would Cast it. Their Maximum Mana is reduced by the cost it would take to Cast it, which is only restored if the Bond to the magistaff ends.</span></p><p><span class=\"fontstyle0\">After the Ritual, the Bound wielder can spend a charge from the staff to Cast that Spell as it was Cast during the Ritual, using a Skill of their choice. The number of Charges corresponds to the rarity of the magistaff, as shown below, and its Countdown die resets at dawn.</span></p><ul><li><span class=\"fontstyle2\">Common:</span><span class=\"fontstyle0\"> Cd4 Charges</span></li><li><span class=\"fontstyle2\">Rare:</span><span class=\"fontstyle0\"> Cd6 Charges</span></li><li><span class=\"fontstyle2\">Legendary:</span><span class=\"fontstyle0\"> Cd8 Charges</span></li></ul>",
         "equipmentType": "relic",
         "locked": true,
         "equipped": false,
@@ -14183,6 +14347,336 @@
       "_id": "ebxph1sTCwltEnD9",
       "sort": 0,
       "_key": "!actors.items!1xFkGtXMl2pPnoBn.ebxph1sTCwltEnD9"
+    },
+    {
+      "name": "Magistaff (Rare)",
+      "type": "equipment",
+      "img": "icons/magic/symbols/circled-gem-pink.webp",
+      "system": {
+        "description": "<p><span class=\"fontstyle0\">A 10 Minute Ritual can be conducted while it is held by a willing Being that knows a Spell. During the Ritual, that Being chooses a Spell and chooses how they would Cast it. Their Maximum Mana is reduced by the cost it would take to Cast it, which is only restored if the Bond to the magistaff ends.</span></p><p><span class=\"fontstyle0\">After the Ritual, the Bound wielder can spend a charge from the staff to Cast that Spell as it was Cast during the Ritual, using a Skill of their choice. The number of Charges corresponds to the rarity of the magistaff, as shown below, and its Countdown die resets at dawn.</span></p><ul><li><span class=\"fontstyle2\">Common:</span><span class=\"fontstyle0\"> Cd4 Charges</span></li><li><span class=\"fontstyle2\">Rare:</span><span class=\"fontstyle0\"> Cd6 Charges</span></li><li><span class=\"fontstyle2\">Legendary:</span><span class=\"fontstyle0\"> Cd8 Charges</span></li></ul>",
+        "equipmentType": "relic",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 15000,
+          "silver": 0,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "",
+        "alchemicalType": "",
+        "lore": "Relic Staff (Bound)",
+        "requiresBound": true,
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 1,
+        "relic": {
+          "requiresBond": true,
+          "powers": [],
+          "fabled": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "handsRequired": 0,
+        "isTrinket": false,
+        "bound": false,
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "canExplode": false,
+        "explodeValues": "",
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "isConsumable": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.relics.Item.yE1P5c3HDzmCBmKH"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.44.0",
+        "createdTime": 1791169386572,
+        "modifiedTime": 1791169386572,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "ownership": {
+        "default": 0,
+        "F8lCaC2xBa4wgj43": 3
+      },
+      "folder": null,
+      "_id": "u4Hv7Mi0VcXQrF6e",
+      "sort": 0,
+      "_key": "!actors.items!1xFkGtXMl2pPnoBn.u4Hv7Mi0VcXQrF6e"
+    },
+    {
+      "name": "Magistaff (Legendary)",
+      "type": "equipment",
+      "img": "icons/magic/symbols/circled-gem-pink.webp",
+      "system": {
+        "description": "<p><span class=\"fontstyle0\">A 10 Minute Ritual can be conducted while it is held by a willing Being that knows a Spell. During the Ritual, that Being chooses a Spell and chooses how they would Cast it. Their Maximum Mana is reduced by the cost it would take to Cast it, which is only restored if the Bond to the magistaff ends.</span></p><p><span class=\"fontstyle0\">After the Ritual, the Bound wielder can spend a charge from the staff to Cast that Spell as it was Cast during the Ritual, using a Skill of their choice. The number of Charges corresponds to the rarity of the magistaff, as shown below, and its Countdown die resets at dawn.</span></p><ul><li><span class=\"fontstyle2\">Common:</span><span class=\"fontstyle0\"> Cd4 Charges</span></li><li><span class=\"fontstyle2\">Rare:</span><span class=\"fontstyle0\"> Cd6 Charges</span></li><li><span class=\"fontstyle2\">Legendary:</span><span class=\"fontstyle0\"> Cd8 Charges</span></li></ul>",
+        "equipmentType": "relic",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 50000,
+          "silver": 0,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "",
+        "alchemicalType": "",
+        "lore": "Relic Staff (Bound)",
+        "requiresBound": true,
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 1,
+        "relic": {
+          "requiresBond": true,
+          "powers": [],
+          "fabled": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "handsRequired": 0,
+        "isTrinket": false,
+        "bound": false,
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "canExplode": false,
+        "explodeValues": "",
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "isConsumable": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.relics.Item.2r0PVv2JDxvmFA0f"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.44.0",
+        "createdTime": 1791169386572,
+        "modifiedTime": 1791169386572,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "ownership": {
+        "default": 0,
+        "F8lCaC2xBa4wgj43": 3
+      },
+      "folder": null,
+      "_id": "pz23Gvh0YtpH6bNj",
+      "sort": 0,
+      "_key": "!actors.items!1xFkGtXMl2pPnoBn.pz23Gvh0YtpH6bNj"
     },
     {
       "name": "Senses - Echolocation",
@@ -14719,7 +15213,7 @@
         "isConsumable": false,
         "linkedConsumable": "",
         "alchemicalType": "concoction",
-        "lore": "Magical quirks other than Combat and Mobility",
+        "lore": "Magical quirks other than Combat and Mobility.",
         "armorRating": 1,
         "mightRequirement": 2,
         "reflexPenalty": 0,
@@ -14885,7 +15379,7 @@
         "isConsumable": false,
         "linkedConsumable": "",
         "alchemicalType": "concoction",
-        "lore": "Magical quirks other than Combat and Mobility",
+        "lore": "Magical quirks other than Combat and Mobility.",
         "armorRating": 1,
         "mightRequirement": 2,
         "reflexPenalty": 0,
@@ -15015,7 +15509,7 @@
       "_key": "!actors.items!1xFkGtXMl2pPnoBn.iNWEbPsrGekxpkIz"
     },
     {
-      "name": "Cursed - Gulibility",
+      "name": "Cursed - Gullibility",
       "type": "equipment",
       "img": "icons/magic/control/buff-flight-wings-runes-red-yellow.webp",
       "system": {
@@ -15185,7 +15679,7 @@
       "type": "equipment",
       "img": "icons/magic/control/buff-flight-wings-purple.webp",
       "system": {
-        "description": "<p>Grants All-Sight to see a Being Type (Bound).</p>",
+        "description": "<p><span class=\"fontstyle0\">Grants Allsight to see a Being Type (Bound).</span></p>",
         "equipmentType": "relic",
         "locked": true,
         "equipped": false,
@@ -15564,18 +16058,18 @@
       "_key": "!actors.items!1xFkGtXMl2pPnoBn.373C5Gm5UuNbri4E"
     },
     {
-      "name": "Spell Book",
+      "name": "Spellbook",
       "type": "equipment",
       "img": "icons/magic/symbols/circled-gem-pink.webp",
       "system": {
-        "description": "<p><span class=\"fontstyle0\">A spellbook functions as a Trinket and contains the knowledge of how to Cast at least one Spell. The Spell can be Cast from it by the person who created it without issue. Otherwise, it requires the reader to pass an Arcana Check to do so. If the Arcana Check is a 1, the spellbook dissolves.</span></p>",
+        "description": "<p><span class=\"fontstyle0\">The reader can Cast a Spell within as if they knew it. Crafting a Spell Book requires that the crafter knows the Spell(s) when crafting it, and can be done with the Study activity.</span></p>",
         "equipmentType": "relic",
         "locked": true,
         "equipped": false,
         "quantity": 1,
         "baseCost": {
-          "gold": 0,
-          "silver": 25,
+          "gold": 30,
+          "silver": 0,
           "copper": 0
         },
         "baseSlots": 1,
@@ -15592,7 +16086,7 @@
         "immunities": [],
         "gearCategory": "",
         "alchemicalType": "",
-        "lore": "Relic Book",
+        "lore": "Relic Trinket Book",
         "armorRating": 1,
         "mightRequirement": 2,
         "reflexPenalty": 1,
@@ -16420,7 +16914,7 @@
         "immunities": [],
         "gearCategory": "",
         "alchemicalType": "",
-        "lore": "Eccentric Trinket (Orb, Bound)",
+        "lore": "Relic Trinket (Orb, Bound)",
         "requiresBound": true,
         "armorRating": 1,
         "mightRequirement": 2,
@@ -16727,7 +17221,7 @@
       "type": "equipment",
       "img": "icons/magic/symbols/circled-gem-pink.webp",
       "system": {
-        "description": "<p><span class=\"fontstyle0\">Deck of 22 cards in a box. Each card depicts an esoteric image and is decorated with filigree of magical glyphs. A Being can draw up to 4 cards from the deck, and is affected by the magic effects of the card. Afterward, those cards return to the deck.</span></p><p><span class=\"fontstyle0\">You can use a deck of Tarot cards to represent the Deck, using only the Major Arcana to represent it. Those cards are indicated in parenthesis.</span></p><ul><li><span class=\"fontstyle2\">Balance (Justice):</span><span class=\"fontstyle0\"> Any three Relics of their choice with a bonus increase the bonus by 1.</span></li><li><span class=\"fontstyle2\">Comet (The World):</span><span class=\"fontstyle0\"> By themselves, they must defeat the next Enemy they encounter to gain a Level.</span></li><li><span class=\"fontstyle2\">Donjon (The Empress):</span><span class=\"fontstyle0\"> They drop their inventory, forget how to Cast any Spells, and are teleported to a prison. The deck then disappears and no cards can be drawn.</span></li><li><span class=\"fontstyle2\">Fates (The Lovers):</span><span class=\"fontstyle0\"> They can choose to avoid one situation or the outcome of a situation at one point in the future.</span></li><li><span class=\"fontstyle2\">Flames (The Devil):</span><span class=\"fontstyle0\"> A powerful Hellspawn takes a dedicated interest in them. It is now their Enemy, and will seek to ruin their life.</span></li><li><span class=\"fontstyle2\">Fool (The Fool):</span><span class=\"fontstyle0\"> They lose 1 Level and draw another card. The Fool disappears forever.</span></li><li><span class=\"fontstyle2\">Gem (The Wheel of Fortune):</span><span class=\"fontstyle0\"> (d66) gems worth 100g each and (d66) pieces of jewelry worth 200g each appear around them.</span></li><li><span class=\"fontstyle2\">Idiot (Temperance):</span><span class=\"fontstyle0\"> Their Reason decreases by d6. If reduced to 0, they die. They can draw another card.</span></li><li><span class=\"fontstyle2\">Jester (The Hierophant):</span><span class=\"fontstyle0\"> They gain 1 Level or draw two cards. The Jester disappears from the deck forever.</span></li><li><span class=\"fontstyle2\">Key (The High Priestess):</span><span class=\"fontstyle0\"> A Fabled Relic of their choice that isn't the Deck of Many Things appears in their hand.</span></li><li><span class=\"fontstyle2\">Knight (Strength):</span><span class=\"fontstyle0\"> You gain the service of an Ally champion, which obeys your commands as a companion.</span></li><li><span class=\"fontstyle2\">Medusa (The Magician):</span><span class=\"fontstyle0\"> They are cursed, causing a -2 penalty to all Saves.</span></li><li><span class=\"fontstyle2\">Moon (The Moon):</span><span class=\"fontstyle0\"> They gain three wishes, which must be made within 10 minutes.</span></li><li><span class=\"fontstyle2\">Rogue (The Hanged Man):</span><span class=\"fontstyle0\"> A friend to them now permanently hates them. This hatred is only revealed at the worst possible time.</span></li><li><span class=\"fontstyle2\">Ruin (The Tower):</span><span class=\"fontstyle0\"> They lose all of their land, possessions, and wealth.</span></li><li><span class=\"fontstyle2\">Skull (Death):</span><span class=\"fontstyle0\"> A grim reaper appears and attacks them. If any other Being attempts to help them, another grim reaper appears and attacks that Being </span>@UUID[Compendium.world.special.Actor.r8vxaZFzJzbTKJmf]{Grim Reaper}</li><li><span class=\"fontstyle2\">Star (The Star):</span><span class=\"fontstyle0\"> A Stat of their choice increases by 1.</span></li><li><span class=\"fontstyle2\">Sun (The Sun):</span><span class=\"fontstyle0\"> They gain 1 Level and one Relic of their choice that isn't a Fabled Relic.</span></li><li><span class=\"fontstyle2\">Talons (Judgement):</span><span class=\"fontstyle0\"> Any Relics owned by them disappear instantly and permanently.</span></li><li><span class=\"fontstyle2\">Throne (The Emperor):</span><span class=\"fontstyle0\"> Their Presence increases to 7 and they become the owner of a keep.</span></li><li><span class=\"fontstyle2\">Vizier (The Hermit):</span><span class=\"fontstyle0\"> They can ask one question of their choice either now or in the future, and are given the most true and thorough answer to that question by the GM.</span></li><li><span class=\"fontstyle2\">Void (The Chariot):</span><span class=\"fontstyle0\"> Their soul is ripped from their body, leaving behind a husk. The soul is trapped in a prison of the GM's choice, and may be saved by questing for it. The deck of many things then disappears and no other cards may be drawn from it.</span></li></ul>",
+        "description": "<p><span class=\"fontstyle0\">Deck of 22 cards in a box. Each card depicts an esoteric image and is decorated with filigree of magical glyphs. A Being can draw up to 4 cards from the deck, and is affected by the magic effects of the card. Afterward, those cards return to the deck.</span></p><p><span class=\"fontstyle0\">You can use a deck of Tarot cards to represent the Deck, using only the Major Arcana to represent it. Those cards are indicated in parenthesis.</span></p><ul><li><span class=\"fontstyle2\">Balance (Justice):</span><span class=\"fontstyle0\"> Any three Relics of their choice with a bonus increase the bonus by 1.</span></li><li><span class=\"fontstyle2\">Comet (The World):</span><span class=\"fontstyle0\"> By themselves, they must defeat the next Enemy they encounter to gain a Level.</span></li><li><span class=\"fontstyle2\">Donjon (The Empress):</span><span class=\"fontstyle0\"> They drop their inventory, forget how to Cast any Spells, and are teleported to a prison. The deck then disappears and no cards can be drawn.</span></li><li><span class=\"fontstyle2\">Fates (The Lovers):</span><span class=\"fontstyle0\"> They can choose to avoid one situation or the outcome of a situation at one point in the future.</span></li><li><span class=\"fontstyle2\">Flames (The Devil):</span><span class=\"fontstyle0\"> A powerful Hellspawn takes a dedicated interest in them. It is now their Enemy, and will seek to ruin their life.</span></li><li><span class=\"fontstyle2\">Fool (The Fool):</span><span class=\"fontstyle0\"> They lose 1 Level and draw another card. The Fool disappears forever.</span></li><li><span class=\"fontstyle2\">Gem (The Wheel of Fortune):</span><span class=\"fontstyle0\"> (d66) gems worth 100g each and (d66) pieces of jewelry worth 200g each appear around them.</span></li><li><span class=\"fontstyle2\">Idiot (Temperance):</span><span class=\"fontstyle0\"> Their Reason decreases by d6. If reduced to 0, they die. They can draw another card.</span></li><li><span class=\"fontstyle2\">Jester (The Hierophant):</span><span class=\"fontstyle0\"> They gain 1 Level or draw two cards. The Jester disappears from the deck forever.</span></li><li><span class=\"fontstyle2\">Key (The High Priestess):</span><span class=\"fontstyle0\"> A Fabled Relic of their choice that isn't the Deck of Many Things appears in their hand.</span></li><li><span class=\"fontstyle2\">Knight (Strength):</span><span class=\"fontstyle0\"> You gain the service of an Ally champion, which obeys your commands as a companion.</span></li><li><span class=\"fontstyle2\">Medusa (The Magician):</span><span class=\"fontstyle0\"> They are cursed, causing a -2 penalty to all Saves.</span></li><li><span class=\"fontstyle2\">Moon (The Moon):</span><span class=\"fontstyle0\"> They gain three wishes, which must be made within 10 Minutes.</span></li><li><span class=\"fontstyle2\">Rogue (The Hanged Man):</span><span class=\"fontstyle0\"> A friend to them now permanently hates them. This hatred is only revealed at the worst possible time.</span></li><li><span class=\"fontstyle2\">Ruin (The Tower):</span><span class=\"fontstyle0\"> They lose all of their land, possessions, and wealth.</span></li><li><span class=\"fontstyle2\">Skull (Death):</span><span class=\"fontstyle0\"> A grim reaper appears and attacks them. If any other Being attempts to help them, another grim reaper appears and attacks that Being.</span> @UUID[Compendium.world.special.Actor.r8vxaZFzJzbTKJmf]{Grim Reaper}</li><li><span class=\"fontstyle2\">Star (The Star):</span><span class=\"fontstyle0\"> A Stat of their choice increases by 1.</span></li><li><span class=\"fontstyle2\">Sun (The Sun):</span><span class=\"fontstyle0\"> They gain 1 Level and one Relic of their choice that isn't a Fabled Relic.</span></li><li><span class=\"fontstyle2\">Talons (Judgement):</span><span class=\"fontstyle0\"> Any Relics owned by them disappear instantly and permanently.</span></li><li><span class=\"fontstyle2\">Throne (The Emperor):</span><span class=\"fontstyle0\"> Their Presence increases to 7 and they become the owner of a keep.</span></li><li><span class=\"fontstyle2\">Vizier (The Hermit):</span><span class=\"fontstyle0\"> They can ask one question of their choice either now or in the future, and are given the most true and thorough answer to that question by the GM.</span></li><li><span class=\"fontstyle2\">Void (The Chariot):</span><span class=\"fontstyle0\"> Their soul is ripped from their body, leaving behind a husk. The soul is trapped in a prison of the GM's choice, and may be saved by questing for it. The deck of many things then disappears and no other cards may be drawn from it.</span></li></ul>",
         "equipmentType": "relic",
         "locked": true,
         "equipped": false,
@@ -17058,7 +17552,7 @@
       "type": "equipment",
       "img": "icons/magic/control/buff-flight-wings-runes-red.webp",
       "system": {
-        "description": "<p>Deals an extra damage die from the Vicious Property.</p>",
+        "description": "<p><span class=\"fontstyle0\">Deals an extra damage die from Vicious.</span></p>",
         "equipmentType": "relic",
         "locked": true,
         "equipped": false,
@@ -17390,7 +17884,7 @@
       "type": "equipment",
       "img": "icons/magic/control/buff-flight-wings-runes-red.webp",
       "system": {
-        "description": "<p>Crit on Attack Checks 2 lower, rather than 1 lower.</p>",
+        "description": "<p><span class=\"fontstyle0\">Crits 2 lower rather than 1 lower from Keen.</span></p>",
         "equipmentType": "relic",
         "locked": true,
         "equipped": false,
@@ -17919,7 +18413,7 @@
         "isConsumable": false,
         "linkedConsumable": "",
         "alchemicalType": "concoction",
-        "lore": "Magical quirks other than Combat and Mobility",
+        "lore": "Magical quirks other than Combat and Mobility.",
         "armorRating": 1,
         "mightRequirement": 2,
         "reflexPenalty": 0,
@@ -18270,14 +18764,14 @@
       "type": "equipment",
       "img": "icons/magic/symbols/circled-gem-pink.webp",
       "system": {
-        "description": "<p><span class=\"fontstyle0\">You can Use a single use of pixie dust to sprinkle on a Being, giving it a Fly Speed equal to its Walk Speed for 1 minute.</span></p>",
+        "description": "<p><span class=\"fontstyle0\">You can Use a single use of pixie dust to sprinkle on a Being, giving it a Fly Speed equal to its Walk Speed for 1 Minute.</span></p>",
         "equipmentType": "relic",
         "locked": true,
         "equipped": false,
         "quantity": 1,
         "baseCost": {
-          "gold": 0,
-          "silver": 10,
+          "gold": 10,
+          "silver": 0,
           "copper": 0
         },
         "baseSlots": 1,
@@ -18435,7 +18929,7 @@
       "type": "equipment",
       "img": "icons/magic/control/buff-flight-wings-runes-red.webp",
       "system": {
-        "description": "<p>Deals an extra damage die when attacking by throwing it.</p>",
+        "description": "<p><span class=\"fontstyle0\">Far Thrown attacks aren't Hindered with it.</span></p>",
         "equipmentType": "relic",
         "locked": true,
         "equipped": false,
@@ -18633,7 +19127,7 @@
         "isConsumable": false,
         "linkedConsumable": "",
         "alchemicalType": "concoction",
-        "lore": "Magical quirks other than Combat and Mobility",
+        "lore": "Magical quirks other than Combat and Mobility.",
         "armorRating": 1,
         "mightRequirement": 2,
         "reflexPenalty": 0,
@@ -19477,18 +19971,18 @@
       "_key": "!actors.items!1xFkGtXMl2pPnoBn.34mHWok8SJHRIPal"
     },
     {
-      "name": "Scroll, Spell",
+      "name": "Scroll, Spell - 0 Mana",
       "type": "equipment",
-      "img": "icons/magic/symbols/circled-gem-pink.webp",
+      "img": "icons/sundries/scrolls/scroll-plain-tan.webp",
       "system": {
-        "description": "<p><span class=\"fontstyle0\">A Spell Scroll can be read to cast the spell from it as specified. Doing so costs no Mana and causes the Scroll to vaporize.</span></p>",
+        "description": "<p><span class=\"fontstyle0\">Can be read to produce the Casting of a Spell, with the reader declaring the Target(s). Doing so costs no Mana, doesn't require a Check, and causes the scroll to vaporize.</span></p><p><span class=\"fontstyle0\">Crafting a Spell Scroll requires that the crafter knows the Spell and would be able to perform that Casting of it when crafting it, and can be done with the Study activity.</span></p>",
         "equipmentType": "relic",
         "locked": true,
         "equipped": false,
         "quantity": 1,
         "baseCost": {
-          "gold": 0,
-          "silver": 5,
+          "gold": 10,
+          "silver": 0,
           "copper": 0
         },
         "baseSlots": 1,
@@ -19617,7 +20111,8 @@
       "flags": {
         "vagabond": {
           "shop": {
-            "sourceUuid": "Compendium.vagabond.relics.Item.peT071btiVZw72Of"
+            "sourceUuid": "Compendium.vagabond.relics.Item.peT071btiVZw72Of",
+            "category": "Scroll, Spell"
           }
         }
       },
@@ -19642,11 +20137,1173 @@
       "_key": "!actors.items!1xFkGtXMl2pPnoBn.L0mMBlGii2DMePXK"
     },
     {
+      "name": "Scroll, Spell - 1 Mana",
+      "type": "equipment",
+      "img": "icons/sundries/scrolls/scroll-rolled-tan.webp",
+      "system": {
+        "description": "<p><span class=\"fontstyle0\">Can be read to produce the Casting of a Spell, with the reader declaring the Target(s). Doing so costs no Mana, doesn't require a Check, and causes the scroll to vaporize.</span></p><p><span class=\"fontstyle0\">Crafting a Spell Scroll requires that the crafter knows the Spell and would be able to perform that Casting of it when crafting it, and can be done with the Study activity.</span></p>",
+        "equipmentType": "relic",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 25,
+          "silver": 0,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "",
+        "alchemicalType": "",
+        "lore": "Relic Parchment (Consumable)",
+        "isConsumable": true,
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 1,
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "canExplode": false,
+        "explodeValues": "",
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.relics.Item.hgANayBGRG230mb8",
+            "category": "Scroll, Spell"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.44.0",
+        "createdTime": 1791169386572,
+        "modifiedTime": 1791169386572,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "ownership": {
+        "default": 0,
+        "F8lCaC2xBa4wgj43": 3
+      },
+      "folder": null,
+      "_id": "4iOxLqET0qWP0wOa",
+      "sort": 0,
+      "_key": "!actors.items!1xFkGtXMl2pPnoBn.4iOxLqET0qWP0wOa"
+    },
+    {
+      "name": "Scroll, Spell - 2 Mana",
+      "type": "equipment",
+      "img": "icons/sundries/scrolls/scroll-writing-tan.webp",
+      "system": {
+        "description": "<p><span class=\"fontstyle0\">Can be read to produce the Casting of a Spell, with the reader declaring the Target(s). Doing so costs no Mana, doesn't require a Check, and causes the scroll to vaporize.</span></p><p><span class=\"fontstyle0\">Crafting a Spell Scroll requires that the crafter knows the Spell and would be able to perform that Casting of it when crafting it, and can be done with the Study activity.</span></p>",
+        "equipmentType": "relic",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 250,
+          "silver": 0,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "",
+        "alchemicalType": "",
+        "lore": "Relic Parchment (Consumable)",
+        "isConsumable": true,
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 1,
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "canExplode": false,
+        "explodeValues": "",
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.relics.Item.G9wPIKxfsUR3luIX",
+            "category": "Scroll, Spell"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.44.0",
+        "createdTime": 1791169386572,
+        "modifiedTime": 1791169386572,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "ownership": {
+        "default": 0,
+        "F8lCaC2xBa4wgj43": 3
+      },
+      "folder": null,
+      "_id": "1OgIzsYVaDH7xLIo",
+      "sort": 0,
+      "_key": "!actors.items!1xFkGtXMl2pPnoBn.1OgIzsYVaDH7xLIo"
+    },
+    {
+      "name": "Scroll, Spell - 3 Mana",
+      "type": "equipment",
+      "img": "icons/sundries/scrolls/scroll-runed-brown.webp",
+      "system": {
+        "description": "<p><span class=\"fontstyle0\">Can be read to produce the Casting of a Spell, with the reader declaring the Target(s). Doing so costs no Mana, doesn't require a Check, and causes the scroll to vaporize.</span></p><p><span class=\"fontstyle0\">Crafting a Spell Scroll requires that the crafter knows the Spell and would be able to perform that Casting of it when crafting it, and can be done with the Study activity.</span></p>",
+        "equipmentType": "relic",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 500,
+          "silver": 0,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "",
+        "alchemicalType": "",
+        "lore": "Relic Parchment (Consumable)",
+        "isConsumable": true,
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 1,
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "canExplode": false,
+        "explodeValues": "",
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.relics.Item.bayZvHRgm5s8WNHf",
+            "category": "Scroll, Spell"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.44.0",
+        "createdTime": 1791169386572,
+        "modifiedTime": 1791169386572,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "ownership": {
+        "default": 0,
+        "F8lCaC2xBa4wgj43": 3
+      },
+      "folder": null,
+      "_id": "jrLD1dByLLGzW9Bv",
+      "sort": 0,
+      "_key": "!actors.items!1xFkGtXMl2pPnoBn.jrLD1dByLLGzW9Bv"
+    },
+    {
+      "name": "Scroll, Spell - 4 Mana",
+      "type": "equipment",
+      "img": "icons/sundries/scrolls/scroll-bound-sealed-red.webp",
+      "system": {
+        "description": "<p><span class=\"fontstyle0\">Can be read to produce the Casting of a Spell, with the reader declaring the Target(s). Doing so costs no Mana, doesn't require a Check, and causes the scroll to vaporize.</span></p><p><span class=\"fontstyle0\">Crafting a Spell Scroll requires that the crafter knows the Spell and would be able to perform that Casting of it when crafting it, and can be done with the Study activity.</span></p>",
+        "equipmentType": "relic",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 1000,
+          "silver": 0,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "",
+        "alchemicalType": "",
+        "lore": "Relic Parchment (Consumable)",
+        "isConsumable": true,
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 1,
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "canExplode": false,
+        "explodeValues": "",
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.relics.Item.hOiZKzp8xceXy69U",
+            "category": "Scroll, Spell"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.44.0",
+        "createdTime": 1791169386572,
+        "modifiedTime": 1791169386572,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "ownership": {
+        "default": 0,
+        "F8lCaC2xBa4wgj43": 3
+      },
+      "folder": null,
+      "_id": "dGiBnTpYs4cIhvHv",
+      "sort": 0,
+      "_key": "!actors.items!1xFkGtXMl2pPnoBn.dGiBnTpYs4cIhvHv"
+    },
+    {
+      "name": "Scroll, Spell - 5 Mana",
+      "type": "equipment",
+      "img": "icons/sundries/scrolls/scroll-bound-sealed-red-gold.webp",
+      "system": {
+        "description": "<p><span class=\"fontstyle0\">Can be read to produce the Casting of a Spell, with the reader declaring the Target(s). Doing so costs no Mana, doesn't require a Check, and causes the scroll to vaporize.</span></p><p><span class=\"fontstyle0\">Crafting a Spell Scroll requires that the crafter knows the Spell and would be able to perform that Casting of it when crafting it, and can be done with the Study activity.</span></p>",
+        "equipmentType": "relic",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 5000,
+          "silver": 0,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "",
+        "alchemicalType": "",
+        "lore": "Relic Parchment (Consumable)",
+        "isConsumable": true,
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 1,
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "canExplode": false,
+        "explodeValues": "",
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.relics.Item.tto3wnouyQIJoFzS",
+            "category": "Scroll, Spell"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.44.0",
+        "createdTime": 1791169386572,
+        "modifiedTime": 1791169386572,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "ownership": {
+        "default": 0,
+        "F8lCaC2xBa4wgj43": 3
+      },
+      "folder": null,
+      "_id": "RaJadVH8MIe9xZ7w",
+      "sort": 0,
+      "_key": "!actors.items!1xFkGtXMl2pPnoBn.RaJadVH8MIe9xZ7w"
+    },
+    {
+      "name": "Scroll, Spell - 6 Mana",
+      "type": "equipment",
+      "img": "icons/sundries/scrolls/scroll-plain-red.webp",
+      "system": {
+        "description": "<p><span class=\"fontstyle0\">Can be read to produce the Casting of a Spell, with the reader declaring the Target(s). Doing so costs no Mana, doesn't require a Check, and causes the scroll to vaporize.</span></p><p><span class=\"fontstyle0\">Crafting a Spell Scroll requires that the crafter knows the Spell and would be able to perform that Casting of it when crafting it, and can be done with the Study activity.</span></p>",
+        "equipmentType": "relic",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 10000,
+          "silver": 0,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "",
+        "alchemicalType": "",
+        "lore": "Relic Parchment (Consumable)",
+        "isConsumable": true,
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 1,
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "canExplode": false,
+        "explodeValues": "",
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.relics.Item.hicUxKFl03UuRGSd",
+            "category": "Scroll, Spell"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.44.0",
+        "createdTime": 1791169386572,
+        "modifiedTime": 1791169386572,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "ownership": {
+        "default": 0,
+        "F8lCaC2xBa4wgj43": 3
+      },
+      "folder": null,
+      "_id": "qKUsW2dPvZWKA0gB",
+      "sort": 0,
+      "_key": "!actors.items!1xFkGtXMl2pPnoBn.qKUsW2dPvZWKA0gB"
+    },
+    {
+      "name": "Scroll, Spell - 7+ Mana",
+      "type": "equipment",
+      "img": "icons/sundries/scrolls/scroll-yellow-teal.webp",
+      "system": {
+        "description": "<p><span class=\"fontstyle0\">Can be read to produce the Casting of a Spell, with the reader declaring the Target(s). Doing so costs no Mana, doesn't require a Check, and causes the scroll to vaporize.</span></p><p><span class=\"fontstyle0\">Crafting a Spell Scroll requires that the crafter knows the Spell and would be able to perform that Casting of it when crafting it, and can be done with the Study activity.</span></p>",
+        "equipmentType": "relic",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 20000,
+          "silver": 0,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "",
+        "alchemicalType": "",
+        "lore": "Relic Parchment (Consumable)",
+        "isConsumable": true,
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 1,
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "gridPosition": 0,
+        "containerId": null,
+        "canExplode": false,
+        "explodeValues": "",
+        "altSkills": [],
+        "damageTypeOneHand": "-",
+        "damageTypeTwoHands": "-",
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.relics.Item.j88P41LYjxNCLZ6C",
+            "category": "Scroll, Spell"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.44.0",
+        "createdTime": 1791169386572,
+        "modifiedTime": 1791169386572,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "ownership": {
+        "default": 0,
+        "F8lCaC2xBa4wgj43": 3
+      },
+      "folder": null,
+      "_id": "FC3Q3SBeonBvdnMb",
+      "sort": 0,
+      "_key": "!actors.items!1xFkGtXMl2pPnoBn.FC3Q3SBeonBvdnMb"
+    },
+    {
       "name": "Fabled - Precision",
       "type": "equipment",
       "img": "icons/magic/control/buff-flight-wings-runes-purple-orange.webp",
       "system": {
-        "description": "<p>Once per day, gain Favor on attacks for 1 minute, or until you miss.</p>",
+        "description": "<p><span class=\"fontstyle0\">Once per day, gain Favor on attacks for 1 Minute, or until you miss.</span></p>",
         "equipmentType": "relic",
         "locked": true,
         "equipped": false,
@@ -20200,7 +21857,7 @@
         "equipped": false,
         "quantity": 1,
         "baseCost": {
-          "gold": 1000,
+          "gold": 100000,
           "silver": 0,
           "copper": 0
         },
@@ -20808,7 +22465,7 @@
       "type": "equipment",
       "img": "icons/magic/symbols/circled-gem-pink.webp",
       "system": {
-        "description": "<p><span class=\"fontstyle0\">Crossbow of dark-stained wood, adorned in pitch black feathers. The crossbow grants the user the following powers while equipped:</span></p><ul><li><span class=\"fontstyle2\">Nightvision:</span><span class=\"fontstyle0\"> They have Darksight.</span></li></ul><p><span class=\"fontstyle0\">Further, the crossbow can also be activated to grant the following Power for 1 minute:</span></p><ul><li><span class=\"fontstyle2\">Darkness II:</span><span class=\"fontstyle0\"> Darkens non-magical light within Near while Equipped.</span></li></ul>",
+        "description": "<p><span class=\"fontstyle0\">Crossbow of dark-stained wood, adorned in pitch black feathers. The crossbow grants the user the following powers while equipped:</span></p><ul><li><span class=\"fontstyle2\">Nightvision:</span><span class=\"fontstyle0\"> They have Darksight.</span></li></ul><p><span class=\"fontstyle0\">Further, the crossbow can also be activated to grant the following Power for 1 Minute:</span></p><ul><li><span class=\"fontstyle2\">Darkness II:</span><span class=\"fontstyle0\"> Darkens non-magical light within Near while Equipped.</span></li></ul>",
         "equipmentType": "relic",
         "locked": true,
         "equipped": false,
@@ -20832,7 +22489,7 @@
         "immunities": [],
         "gearCategory": "",
         "alchemicalType": "",
-        "lore": "Relic Light Crossbow",
+        "lore": "Relic Light Crossbow (Bound)",
         "requiresBound": true,
         "armorRating": 1,
         "mightRequirement": 2,
@@ -22180,6 +23837,504 @@
       "_key": "!actors.items!1xFkGtXMl2pPnoBn.SAKUACbJupR8Vxvf"
     },
     {
+      "name": "Utility - Piercing I",
+      "type": "equipment",
+      "img": "icons/magic/control/buff-flight-wings-runes-blue-white.webp",
+      "system": {
+        "description": "<p><span class=\"fontstyle0\">Attacks with it ignore 1 Armor.</span></p>",
+        "equipmentType": "relic",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 150,
+          "silver": 0,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "gridPosition": 0,
+        "containerId": null,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTypeOneHand": "-",
+        "damageTwoHands": "d8",
+        "damageTypeTwoHands": "-",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "",
+        "isConsumable": false,
+        "linkedConsumable": "",
+        "alchemicalType": "concoction",
+        "lore": "Magical quirks other than Combat and Mobility.",
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 0,
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "altSkills": [],
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.relics.Item.scCpjrf9TntYRTnA",
+            "category": "Utility"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.44.0",
+        "createdTime": 1791169386572,
+        "modifiedTime": 1791169386572,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "ownership": {
+        "default": 0,
+        "F8lCaC2xBa4wgj43": 3
+      },
+      "folder": null,
+      "_id": "lSuBQWets4whKX4x",
+      "sort": 0,
+      "_key": "!actors.items!1xFkGtXMl2pPnoBn.lSuBQWets4whKX4x"
+    },
+    {
+      "name": "Utility - Piercing II",
+      "type": "equipment",
+      "img": "icons/magic/control/buff-flight-wings-runes-blue-white.webp",
+      "system": {
+        "description": "<p><span class=\"fontstyle0\">Attacks with it ignore 2 Armor.</span></p>",
+        "equipmentType": "relic",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 1875,
+          "silver": 0,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "gridPosition": 0,
+        "containerId": null,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTypeOneHand": "-",
+        "damageTwoHands": "d8",
+        "damageTypeTwoHands": "-",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "",
+        "isConsumable": false,
+        "linkedConsumable": "",
+        "alchemicalType": "concoction",
+        "lore": "Magical quirks other than Combat and Mobility.",
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 0,
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "altSkills": [],
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.relics.Item.hKVDbzxopsCdmfJ0",
+            "category": "Utility"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.44.0",
+        "createdTime": 1791169386572,
+        "modifiedTime": 1791169386572,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "ownership": {
+        "default": 0,
+        "F8lCaC2xBa4wgj43": 3
+      },
+      "folder": null,
+      "_id": "cpVXXOmDtrUi79bp",
+      "sort": 0,
+      "_key": "!actors.items!1xFkGtXMl2pPnoBn.cpVXXOmDtrUi79bp"
+    },
+    {
+      "name": "Utility - Piercing III",
+      "type": "equipment",
+      "img": "icons/magic/control/buff-flight-wings-runes-blue-white.webp",
+      "system": {
+        "description": "<p><span class=\"fontstyle0\">Attacks with it ignore 3 Armor.</span></p>",
+        "equipmentType": "relic",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 7500,
+          "silver": 0,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "gridPosition": 0,
+        "containerId": null,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTypeOneHand": "-",
+        "damageTwoHands": "d8",
+        "damageTypeTwoHands": "-",
+        "equipmentState": "unequipped",
+        "immunities": [],
+        "gearCategory": "",
+        "isConsumable": false,
+        "linkedConsumable": "",
+        "alchemicalType": "concoction",
+        "lore": "Magical quirks other than Combat and Mobility.",
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 0,
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": []
+        },
+        "relicPower": {
+          "enabled": false,
+          "targets": [
+            "any"
+          ],
+          "family": "",
+          "rank": 1,
+          "requiredMaterials": []
+        },
+        "crystal": {
+          "type": "",
+          "bonus": 0,
+          "payloadUuid": "",
+          "usedThisQuest": false
+        },
+        "altSkills": [],
+        "armorDamage": 0,
+        "dieDamage": 0,
+        "craftMaterial": {
+          "enabled": false,
+          "key": "",
+          "value": 0
+        },
+        "toolKind": "",
+        "isSupply": false,
+        "isBeverage": false,
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "itemFx": {
+          "enabled": false,
+          "animType": "auto",
+          "hitFile": "",
+          "hitScale": 1,
+          "hitOffsetX": 0,
+          "hitDuration": 800,
+          "hitSound": "",
+          "missFile": "",
+          "missScale": 1,
+          "missDuration": 600,
+          "missSound": "",
+          "soundVolume": 0.6
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        }
+      },
+      "effects": [],
+      "flags": {
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.relics.Item.3sQzFDDdaZweWFev",
+            "category": "Utility"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.368",
+        "systemId": "vagabond",
+        "systemVersion": "5.44.0",
+        "createdTime": 1791169386572,
+        "modifiedTime": 1791169386572,
+        "lastModifiedBy": "F8lCaC2xBa4wgj43",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "ownership": {
+        "default": 0,
+        "F8lCaC2xBa4wgj43": 3
+      },
+      "folder": null,
+      "_id": "RJgraDqVGoM2v6hI",
+      "sort": 0,
+      "_key": "!actors.items!1xFkGtXMl2pPnoBn.RJgraDqVGoM2v6hI"
+    },
+    {
       "name": "Ace - Grapple",
       "type": "equipment",
       "img": "icons/magic/control/buff-flight-wings-runes-red.webp",
@@ -23402,8 +25557,8 @@
         "equipped": false,
         "quantity": 1,
         "baseCost": {
-          "gold": 0,
-          "silver": 50,
+          "gold": 50,
+          "silver": 0,
           "copper": 0
         },
         "baseSlots": 1,

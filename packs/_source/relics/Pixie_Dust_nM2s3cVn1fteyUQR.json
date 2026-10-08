@@ -3,14 +3,14 @@
   "type": "equipment",
   "img": "icons/magic/symbols/circled-gem-pink.webp",
   "system": {
-    "description": "<p><span class=\"fontstyle0\">You can Use a single use of pixie dust to sprinkle on a Being, giving it a Fly Speed equal to its Walk Speed for 1 minute.</span></p>",
+    "description": "<p><span class=\"fontstyle0\">You can Use a single use of pixie dust to sprinkle on a Being, giving it a Fly Speed equal to its Walk Speed for 1 Minute.</span></p>",
     "equipmentType": "relic",
     "locked": true,
     "equipped": false,
     "quantity": 1,
     "baseCost": {
-      "gold": 0,
-      "silver": 10,
+      "gold": 10,
+      "silver": 0,
       "copper": 0
     },
     "baseSlots": 1,

@@ -1,0 +1,62 @@
+{
+  "folder": "pW8e9eDngjkWtJJp",
+  "name": "Utility - Piercing II",
+  "type": "equipment",
+  "img": "icons/magic/control/buff-flight-wings-runes-blue-white.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">Attacks with it ignore 2 Armor.</span></p>",
+    "equipmentType": "relic",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 1875,
+      "silver": 0,
+      "copper": 0
+    },
+    "baseSlots": 0,
+    "gridPosition": 0,
+    "containerId": null,
+    "metal": "none",
+    "damageType": "-",
+    "damageAmount": "",
+    "canExplode": false,
+    "explodeValues": "",
+    "properties": [],
+    "weaponSkill": "melee",
+    "range": "close",
+    "grip": "1H",
+    "damageOneHand": "d6",
+    "damageTypeOneHand": "-",
+    "damageTwoHands": "d8",
+    "damageTypeTwoHands": "-",
+    "equipmentState": "unequipped",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "",
+    "isConsumable": false,
+    "linkedConsumable": "",
+    "alchemicalType": "concoction",
+    "lore": "Magical quirks other than Combat and Mobility."
+  },
+  "effects": [],
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.368",
+    "systemId": "vagabond",
+    "systemVersion": "2.8.1",
+    "createdTime": 1769766913362,
+    "modifiedTime": 1790436398455,
+    "lastModifiedBy": "F8lCaC2xBa4wgj43"
+  },
+  "_id": "hKVDbzxopsCdmfJ0",
+  "ownership": {
+    "default": 0,
+    "13p65OEadZSZVLRk": 3
+  },
+  "sort": 200002,
+  "_key": "!items!hKVDbzxopsCdmfJ0"
+}

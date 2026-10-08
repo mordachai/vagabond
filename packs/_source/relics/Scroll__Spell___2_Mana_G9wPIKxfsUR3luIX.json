@@ -1,0 +1,55 @@
+{
+  "name": "Scroll, Spell - 2 Mana",
+  "type": "equipment",
+  "img": "icons/sundries/scrolls/scroll-writing-tan.webp",
+  "system": {
+    "description": "<p><span class=\"fontstyle0\">Can be read to produce the Casting of a Spell, with the reader declaring the Target(s). Doing so costs no Mana, doesn't require a Check, and causes the scroll to vaporize.</span></p><p><span class=\"fontstyle0\">Crafting a Spell Scroll requires that the crafter knows the Spell and would be able to perform that Casting of it when crafting it, and can be done with the Study activity.</span></p>",
+    "equipmentType": "relic",
+    "locked": true,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 250,
+      "silver": 0,
+      "copper": 0
+    },
+    "baseSlots": 1,
+    "metal": "none",
+    "damageType": "-",
+    "damageAmount": "",
+    "properties": [],
+    "weaponSkill": "melee",
+    "range": "close",
+    "grip": "1H",
+    "damageOneHand": "d6",
+    "damageTwoHands": "d8",
+    "equipmentState": "unequipped",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "",
+    "alchemicalType": "",
+    "lore": "Relic Parchment (Consumable)",
+    "isConsumable": true
+  },
+  "effects": [],
+  "folder": "Vn5EILQwBIyOgY0A",
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "vagabond",
+    "systemVersion": "3.3.1",
+    "createdTime": 1764967025119,
+    "modifiedTime": 1771087853287,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "_id": "G9wPIKxfsUR3luIX",
+  "ownership": {
+    "default": 0,
+    "vJkLjvlErdx6ZHoC": 3
+  },
+  "sort": 3600002,
+  "_key": "!items!G9wPIKxfsUR3luIX"
+}

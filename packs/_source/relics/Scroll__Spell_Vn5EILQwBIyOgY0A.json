@@ -1,0 +1,23 @@
+{
+  "type": "Item",
+  "folder": null,
+  "name": "Scroll, Spell",
+  "color": null,
+  "sorting": "a",
+  "_id": "Vn5EILQwBIyOgY0A",
+  "description": "",
+  "sort": 3600000,
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.368",
+    "systemId": "vagabond",
+    "systemVersion": "5.43.0",
+    "createdTime": 1790434588884,
+    "modifiedTime": 1790435855124,
+    "lastModifiedBy": "F8lCaC2xBa4wgj43",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!folders!Vn5EILQwBIyOgY0A"
+}

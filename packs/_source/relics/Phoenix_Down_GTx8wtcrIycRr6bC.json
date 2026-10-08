@@ -3,13 +3,13 @@
   "type": "equipment",
   "img": "icons/magic/symbols/circled-gem-pink.webp",
   "system": {
-    "description": "<p><span class=\"fontstyle0\">This item can be placed on the corpse of a recently deceased Being to return them to life at half HP. The Phoenix Down is consumed in this process.</span></p><p><span class=\"fontstyle2\"><strong>Material:</strong></span><span class=\"fontstyle0\"> 50g worth of phoenix's feathers</span></p><ul><li><span class=\"fontstyle2\">Resurrection:</span><span class=\"fontstyle0\"> (one use)</span></li></ul>",
+    "description": "<p><span class=\"fontstyle0\">This item can be placed on the corpse of a dead Being to return them to life at full HP. This does not work on Constructs or Undead. The Phoenix Down is consumed in this process.</span></p><ul><li><span class=\"fontstyle2\">Resurrection:</span><span class=\"fontstyle0\"> (one use)</span></li></ul>",
     "equipmentType": "relic",
     "locked": true,
     "equipped": false,
     "quantity": 1,
     "baseCost": {
-      "gold": 100,
+      "gold": 2500,
       "silver": 0,
       "copper": 0
     },

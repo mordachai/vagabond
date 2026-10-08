@@ -3,7 +3,7 @@
   "type": "equipment",
   "img": "icons/magic/symbols/circled-gem-pink.webp",
   "system": {
-    "description": "<p><span class=\"fontstyle0\">Crossbow of dark-stained wood, adorned in pitch black feathers. The crossbow grants the user the following powers while equipped:</span></p><ul><li><span class=\"fontstyle2\">Nightvision:</span><span class=\"fontstyle0\"> They have Darksight.</span></li></ul><p><span class=\"fontstyle0\">Further, the crossbow can also be activated to grant the following Power for 1 minute:</span></p><ul><li><span class=\"fontstyle2\">Darkness II:</span><span class=\"fontstyle0\"> Darkens non-magical light within Near while Equipped.</span></li></ul>",
+    "description": "<p><span class=\"fontstyle0\">Crossbow of dark-stained wood, adorned in pitch black feathers. The crossbow grants the user the following powers while equipped:</span></p><ul><li><span class=\"fontstyle2\">Nightvision:</span><span class=\"fontstyle0\"> They have Darksight.</span></li></ul><p><span class=\"fontstyle0\">Further, the crossbow can also be activated to grant the following Power for 1 Minute:</span></p><ul><li><span class=\"fontstyle2\">Darkness II:</span><span class=\"fontstyle0\"> Darkens non-magical light within Near while Equipped.</span></li></ul>",
     "equipmentType": "relic",
     "locked": true,
     "equipped": false,
@@ -28,7 +28,7 @@
     "immunities": [],
     "gearCategory": "",
     "alchemicalType": "",
-    "lore": "Relic Light Crossbow",
+    "lore": "Relic Light Crossbow (Bound)",
     "requiresBound": true
   },
   "effects": [],
