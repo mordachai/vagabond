@@ -1,0 +1,165 @@
+{{#*inline "vshRow"}}
+  {{#if isSetting}}
+  <div class="vsh-row{{#if isCheckbox}} vsh-row--check{{/if}}" data-search="{{search}}"{{#if dep}} data-dep="{{dep}}"{{/if}}{{#if hasDepNot}} data-dep-not="{{depNot}}"{{/if}}{{#if depInvert}} data-dep-invert{{/if}}{{#if locked}} data-locked{{/if}}>
+    <div class="vsh-row-text">
+      <label for="{{id}}">{{label}}{{#if reload}} <span class="vsh-reload" data-tooltip="{{localize 'VAGABOND.SettingsHub.ReloadTooltip'}}"><i class="fas fa-rotate"></i> {{localize 'VAGABOND.SettingsHub.Reload'}}</span>{{/if}}</label>
+      {{#if hint}}<p class="vsh-hint">{{hint}}</p>{{/if}}
+    </div>
+    <div class="vsh-ctl">
+      {{#if isCheckbox}}
+        <input type="checkbox" id="{{id}}" data-setting="{{key}}"{{#if path}} data-path="{{path}}"{{/if}} {{checked value}} {{disabled disabled}}>
+      {{else if isSelect}}
+        <select id="{{id}}" data-setting="{{key}}"{{#if path}} data-path="{{path}}"{{/if}} {{disabled disabled}}>
+          {{#each options}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}
+        </select>
+      {{else if isRange}}
+        <div class="vsh-range">
+          <input type="range" id="{{id}}" data-setting="{{key}}"{{#if path}} data-path="{{path}}"{{/if}} data-format="{{format}}" min="{{min}}" max="{{max}}" step="{{step}}" value="{{value}}" {{disabled disabled}}>
+          <span class="vsh-range-val">{{display}}</span>
+        </div>
+      {{else if isNumber}}
+        <input type="number" id="{{id}}" data-setting="{{key}}"{{#if path}} data-path="{{path}}"{{/if}} min="{{min}}" max="{{max}}" step="{{step}}" value="{{value}}" {{disabled disabled}}>
+      {{else}}
+        <input type="text" id="{{id}}" class="{{#if mono}}vsh-mono{{/if}}" data-setting="{{key}}"{{#if path}} data-path="{{path}}"{{/if}} value="{{value}}" spellcheck="false" {{disabled disabled}}>
+      {{/if}}
+    </div>
+  </div>
+
+  {{else if isOverride}}
+  <div class="vsh-row" data-search="{{search}}">
+    <div class="vsh-row-text">
+      <label for="{{id}}">{{label}}</label>
+      {{#if hint}}<p class="vsh-hint">{{hint}}</p>{{/if}}
+    </div>
+    <div class="vsh-ctl vsh-ctl--override">
+      <label class="vsh-ovr">
+        <input type="checkbox" data-override="{{key}}" data-of="{{of}}"{{#if flag}} data-flag="{{flag}}"{{/if}} {{checked inherit}}>
+        {{localize 'VAGABOND.SettingsHub.UseTableDefault'}} <b data-default-of="{{of}}" data-format="{{format}}">{{defaultDisplay}}</b>
+      </label>
+      <div class="vsh-ovr-ctl" {{#if inherit}}hidden{{/if}}>
+        {{#if isRange}}
+          <div class="vsh-range">
+            <input type="range" id="{{id}}" data-setting="{{key}}" data-format="{{format}}" min="{{min}}" max="{{max}}" step="{{step}}" value="{{value}}">
+            <span class="vsh-range-val">{{display}}</span>
+          </div>
+        {{else}}
+          <select id="{{id}}" data-setting="{{key}}">
+            {{#each options}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}
+          </select>
+        {{/if}}
+      </div>
+    </div>
+  </div>
+
+  {{else if isFactions}}
+  <div class="vsh-factions" data-search="{{search}}">
+    {{#each factions}}
+    <div class="vsh-faction">
+      <label for="vsh-{{nameKey}}">{{label}}</label>
+      <input type="text" id="vsh-{{nameKey}}" data-setting="{{nameKey}}" value="{{name}}" {{disabled ../disabled}}>
+      <input type="color" data-setting="{{colorKey}}" value="{{color}}" aria-label="{{label}}" {{disabled ../disabled}}>
+      <span class="vsh-chip" data-chip="{{nameKey}}" style="background: {{color}}">{{name}}</span>
+    </div>
+    {{/each}}
+  </div>
+
+  {{else if isLauncher}}
+  <div class="vsh-launch" data-search="{{search}}">
+    <span class="vsh-launch-icon"><i class="fas {{icon}}"></i></span>
+    <div class="vsh-row-text">
+      <span class="vsh-label">{{label}}</span>
+      {{#if hint}}<p class="vsh-hint">{{hint}}</p>{{/if}}
+    </div>
+    <button type="button" class="vsh-btn" data-action="launch" data-app="{{app}}">
+      <i class="fas fa-up-right-from-square"></i> {{localize 'VAGABOND.SettingsHub.OpenWindow'}}
+    </button>
+  </div>
+
+  {{else if isAction}}
+  <div class="vsh-row" data-search="{{search}}">
+    <div class="vsh-row-text">
+      <span class="vsh-label">{{label}}</span>
+      {{#if hint}}<p class="vsh-hint">{{hint}}</p>{{/if}}
+    </div>
+    <div class="vsh-ctl">
+      <button type="button" class="vsh-btn" data-action="{{action}}"><i class="fas {{icon}}"></i> {{button}}</button>
+    </div>
+  </div>
+  {{/if}}
+{{/inline}}
+
+<div class="vsh-root">
+  <nav class="vsh-nav" aria-label="{{localize 'VAGABOND.SettingsHub.Title'}}">
+    {{#each groups}}
+    <span class="vsh-grp">{{label}}</span>
+    {{#each subjects}}
+    <button type="button" class="vsh-nav-btn{{#if active}} active{{/if}}" data-action="selectSubject" data-subject="{{id}}">
+      <span class="vsh-icon subj-{{id}}"><i class="fas {{icon}}"></i></span>
+      <span class="vsh-nav-name">{{name}}</span>
+      {{#if count}}<span class="vsh-count">{{count}}</span>{{/if}}
+    </button>
+    {{/each}}
+    {{/each}}
+  </nav>
+
+  <div class="vsh-main">
+    <div class="vsh-tools">
+      <label class="vsh-search">
+        <i class="fas fa-magnifying-glass"></i>
+        <input type="search" value="{{query}}" placeholder="{{localize 'VAGABOND.SettingsHub.Search'}}" aria-label="{{localize 'VAGABOND.SettingsHub.Search'}}">
+      </label>
+    </div>
+
+    <div class="vsh-body">
+      {{#each subjects}}
+      <section class="vsh-panel" data-subject="{{id}}" {{#unless active}}hidden{{/unless}}>
+        <header class="vsh-sub-head">
+          <span class="vsh-icon vsh-icon--lg subj-{{id}}"><i class="fas {{icon}}"></i></span>
+          <div>
+            <h2>{{name}}</h2>
+            <p>{{desc}}</p>
+          </div>
+        </header>
+
+        {{#each sections}}
+        {{#if readOnly}}
+        <details class="vsh-sec vsh-sec--readonly" data-readonly>
+          <summary class="vsh-sec-head">
+            <span class="vsh-sec-title">{{title}}</span>
+            <span class="vsh-badge vsh-badge--table"><i class="fas fa-lock"></i> {{localize 'VAGABOND.SettingsHub.Badge.SetByGM'}}</span>
+          </summary>
+          <div class="vsh-rows">{{#each rows}}{{> vshRow}}{{/each}}</div>
+        </details>
+        {{else}}
+        <section class="vsh-sec">
+          <header class="vsh-sec-head">
+            <h3 class="vsh-sec-title">{{title}}</h3>
+            {{#if isWorld}}
+            <span class="vsh-badge vsh-badge--table" data-tooltip="{{localize 'VAGABOND.SettingsHub.Badge.TableTooltip'}}"><i class="fas fa-crown"></i> {{localize 'VAGABOND.SettingsHub.Badge.Table'}}</span>
+            {{else}}
+            <span class="vsh-badge vsh-badge--personal" data-tooltip="{{localize 'VAGABOND.SettingsHub.Badge.PersonalTooltip'}}"><i class="fas fa-user"></i> {{localize 'VAGABOND.SettingsHub.Badge.Personal'}}</span>
+            {{/if}}
+          </header>
+          {{#if note}}<p class="vsh-note">{{note}}</p>{{/if}}
+          <div class="vsh-rows">{{#each rows}}{{> vshRow}}{{/each}}</div>
+        </section>
+        {{/if}}
+        {{/each}}
+      </section>
+      {{/each}}
+      <p class="vsh-empty" hidden>{{localize 'VAGABOND.SettingsHub.NoResults'}}</p>
+    </div>
+
+    <footer class="vsh-foot">
+      <span class="vsh-saved"><i class="fas fa-floppy-disk"></i> {{localize 'VAGABOND.SettingsHub.SavesInstantly'}}</span>
+      <span class="vsh-reload-notice" {{#unless pendingReload}}hidden{{/unless}}>
+        <i class="fas fa-rotate"></i> {{localize 'VAGABOND.SettingsHub.ReloadNeeded'}}
+        <button type="button" class="vsh-btn" data-action="reloadNow">{{localize 'VAGABOND.SettingsHub.ReloadNow'}}</button>
+      </span>
+      <span class="vsh-spacer"></span>
+      <button type="button" class="vsh-reset" data-action="resetSubject">
+        <i class="fas fa-arrow-rotate-left"></i> {{localize 'VAGABOND.SettingsHub.ResetSubject'}}
+      </button>
+    </footer>
+  </div>
+</div>

@@ -3076,6 +3076,111 @@
       "FlankedBy": "Flanked by {names}. Takes an extra {bonus} damage from attacks (before Armor) and is Vulnerable — attacks against it and Saves against its attacks have Favor; its own attacks and Saves against attacks have Hinder.",
       "FlankedNoNames": "Flanked. Takes an extra {bonus} damage from attacks (before Armor) and is Vulnerable — attacks against it and Saves against its attacks have Favor; its own attacks and Saves against attacks have Hinder."
     },
+    "SettingsHub": {
+      "Title": "Vagabond Settings",
+      "Open": "Open",
+      "OpenAll": "Open Vagabond Settings",
+      "MenuHint": "Every Vagabond setting in one window: Rules, Magic, Combat & Encounters, Statuses & Tokens, Visual FX, Interface, Economy, Content & Homebrew.",
+      "OpenWindow": "Open",
+      "Search": "Search settings…",
+      "NoResults": "No setting matches your search.",
+      "SavesInstantly": "Changes save as you make them",
+      "ResetSubject": "Reset this page to defaults",
+      "ResetTitle": "Reset to Defaults",
+      "ResetConfirm": "Put every setting on the {subject} page back to its default?",
+      "ResetDone": "{subject} settings reset to defaults.",
+      "SaveFailed": "Could not save the setting: {error}",
+      "Reload": "reload",
+      "ReloadTooltip": "Takes effect after a reload.",
+      "ReloadNeeded": "Some changes need a reload.",
+      "ReloadNow": "Reload now",
+      "UseTableDefault": "Use GM default:",
+      "OverrideHint": "Untick to choose your own.",
+      "On": "On",
+      "Off": "Off",
+      "Badge": {
+        "Table": "GM",
+        "TableTooltip": "World setting. The GM sets it for everyone.",
+        "Personal": "You",
+        "PersonalTooltip": "Client setting. Only changes your screen.",
+        "SetByGM": "Set by the GM"
+      },
+      "Groups": {
+        "game": "Game",
+        "presentation": "Presentation",
+        "world": "World"
+      },
+      "Subjects": {
+        "rules": {
+          "name": "Rules",
+          "desc": "Rolls, damage, Defense, hands, class automation."
+        },
+        "magic": {
+          "name": "Magic",
+          "desc": "Casting rules, cast dialog, spell areas."
+        },
+        "combat": {
+          "name": "Combat & Encounters",
+          "desc": "Initiative, factions, Combat Carousel."
+        },
+        "statuses": {
+          "name": "Statuses & Tokens",
+          "desc": "Condition set, status display, token rings."
+        },
+        "fx": {
+          "name": "Visual FX",
+          "desc": "Animations and Dice So Nice colors."
+        },
+        "interface": {
+          "name": "Interface",
+          "desc": "Your HUD, chat cards and clocks."
+        },
+        "economy": {
+          "name": "Economy",
+          "desc": "Shops, crafting, relics."
+        },
+        "content": {
+          "name": "Content & Homebrew",
+          "desc": "Homebrew rules, Character Builder compendiums."
+        }
+      },
+      "Sections": {
+        "rolls": "Rolls & Damage",
+        "defense": "Defense",
+        "equipment": "Equipment",
+        "automation": "Class Automation",
+        "casting": "Casting Rules",
+        "areas": "Spell Areas",
+        "artwork": "Area Artwork",
+        "castDialog": "Your Cast Dialog",
+        "areaDisplay": "Your Spell Areas",
+        "initiative": "Initiative & Turns",
+        "factions": "Factions",
+        "carousel": "Combat Carousel",
+        "carouselMine": "Your Combat Carousel",
+        "npcs": "NPC Information",
+        "conditions": "Conditions",
+        "statusDisplay": "Display",
+        "fxWorld": "World Animations",
+        "fxMine": "Your Screen",
+        "hud": "Character HUD",
+        "hudLook": "HUD Appearance",
+        "chatClocks": "Chat & Clocks",
+        "shops": "Shops",
+        "crafting": "Crafting & Relics",
+        "homebrew": "Homebrew",
+        "builder": "Character Builder"
+      },
+      "Notes": {
+        "areas": "Outline and opacity are defaults. Players can override them."
+      },
+      "Rows": {
+        "hudAutoOpenOnSelect": {
+          "name": "Open the HUD when I select a token",
+          "hint": "Same switch as the Auto-open HUD scene control."
+        }
+      }
+    },
     "StatusSettings": {
       "Title": "Status Effects",
       "MenuName": "Status Effects",

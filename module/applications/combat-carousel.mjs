@@ -733,8 +733,7 @@ export class CombatCarousel extends api.HandlebarsApplicationMixin(api.Applicati
   }
 
   static async #onOpenConfig() {
-    const { EncounterSettings } = globalThis.vagabond.applications;
-    new EncounterSettings().render(true);
+    return globalThis.vagabond.applications.VagabondSettingsHub.open('combat');
   }
 
   static async #onPreviousRound() { return game.combat?.previousRound(); }

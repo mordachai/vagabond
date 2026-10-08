@@ -3090,6 +3090,111 @@
       "FlankedBy": "Flanqueado por {names}. Sofre {bonus} de dano extra de ataques (antes da Armadura) e fica Vulnerável — ataques contra ele e Salvaguardas contra seus ataques têm Vantagem; seus próprios ataques e Salvaguardas contra ataques têm Desvantagem.",
       "FlankedNoNames": "Flanqueado. Sofre {bonus} de dano extra de ataques (antes da Armadura) e fica Vulnerável — ataques contra ele e Salvaguardas contra seus ataques têm Vantagem; seus próprios ataques e Salvaguardas contra ataques têm Desvantagem."
     },
+    "SettingsHub": {
+      "Title": "Configurações do Vagabond",
+      "Open": "Abrir",
+      "OpenAll": "Abrir Configurações do Vagabond",
+      "MenuHint": "Todas as configurações do Vagabond em uma janela: Regras, Magia, Combate e Encontros, Condições e Tokens, Efeitos Visuais, Interface, Economia, Conteúdo e Regras Caseiras.",
+      "OpenWindow": "Abrir",
+      "Search": "Buscar configurações…",
+      "NoResults": "Nenhuma configuração corresponde à busca.",
+      "SavesInstantly": "As alterações são salvas na hora",
+      "ResetSubject": "Restaurar esta página ao padrão",
+      "ResetTitle": "Restaurar Padrões",
+      "ResetConfirm": "Restaurar todas as configurações da página {subject} para o padrão?",
+      "ResetDone": "Configurações de {subject} restauradas ao padrão.",
+      "SaveFailed": "Não foi possível salvar a configuração: {error}",
+      "Reload": "recarregar",
+      "ReloadTooltip": "Só vale depois de recarregar.",
+      "ReloadNeeded": "Algumas alterações exigem recarregar.",
+      "ReloadNow": "Recarregar agora",
+      "UseTableDefault": "Usar padrão do Mestre:",
+      "OverrideHint": "Desmarque para escolher o seu.",
+      "On": "Ligado",
+      "Off": "Desligado",
+      "Badge": {
+        "Table": "Mestre",
+        "TableTooltip": "Configuração do mundo. O Mestre define para todos.",
+        "Personal": "Você",
+        "PersonalTooltip": "Configuração do cliente. Só muda a sua tela.",
+        "SetByGM": "Definido pelo Mestre"
+      },
+      "Groups": {
+        "game": "Jogo",
+        "presentation": "Apresentação",
+        "world": "Mundo"
+      },
+      "Subjects": {
+        "rules": {
+          "name": "Regras",
+          "desc": "Rolagens, dano, Defesa, mãos, automação de classes."
+        },
+        "magic": {
+          "name": "Magia",
+          "desc": "Regras de conjuração, janela de conjuração, áreas de magia."
+        },
+        "combat": {
+          "name": "Combate e Encontros",
+          "desc": "Iniciativa, facções, Carrossel de Combate."
+        },
+        "statuses": {
+          "name": "Condições e Tokens",
+          "desc": "Conjunto de condições, exibição, anéis dos tokens."
+        },
+        "fx": {
+          "name": "Efeitos Visuais",
+          "desc": "Animações e cores do Dice So Nice."
+        },
+        "interface": {
+          "name": "Interface",
+          "desc": "Seu HUD, cartões de chat e relógios."
+        },
+        "economy": {
+          "name": "Economia",
+          "desc": "Lojas, criação, relíquias."
+        },
+        "content": {
+          "name": "Conteúdo e Regras Caseiras",
+          "desc": "Regras caseiras, compêndios do Criador de Personagens."
+        }
+      },
+      "Sections": {
+        "rolls": "Rolagens e Dano",
+        "defense": "Defesa",
+        "equipment": "Equipamento",
+        "automation": "Automação de Classes",
+        "casting": "Regras de Conjuração",
+        "areas": "Áreas de Magia",
+        "artwork": "Arte das Áreas",
+        "castDialog": "Sua Janela de Conjuração",
+        "areaDisplay": "Suas Áreas de Magia",
+        "initiative": "Iniciativa e Turnos",
+        "factions": "Facções",
+        "carousel": "Carrossel de Combate",
+        "carouselMine": "Seu Carrossel de Combate",
+        "npcs": "Informações de NPCs",
+        "conditions": "Condições",
+        "statusDisplay": "Exibição",
+        "fxWorld": "Animações do Mundo",
+        "fxMine": "Sua Tela",
+        "hud": "HUD do Personagem",
+        "hudLook": "Aparência do HUD",
+        "chatClocks": "Chat e Relógios",
+        "shops": "Lojas",
+        "crafting": "Criação e Relíquias",
+        "homebrew": "Regras Caseiras",
+        "builder": "Criador de Personagens"
+      },
+      "Notes": {
+        "areas": "Contorno e opacidade são padrões. Jogadores podem mudá-los."
+      },
+      "Rows": {
+        "hudAutoOpenOnSelect": {
+          "name": "Abrir o HUD ao selecionar um token",
+          "hint": "Mesmo interruptor do controle de cena Abrir HUD Automaticamente."
+        }
+      }
+    },
     "StatusSettings": {
       "Title": "Efeitos de Status",
       "MenuName": "Efeitos de Status",
