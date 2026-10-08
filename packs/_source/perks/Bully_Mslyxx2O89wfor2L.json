@@ -3,7 +3,7 @@
   "type": "perk",
   "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
   "system": {
-    "description": "<p>Your Checks to Grapple or Shove Targets that are smaller than you are Favored, and you can use Beings that are your size or smaller as a Greatshield with the Brawl property that deals its damage to both the Target and itself on a hit. If you reduce damage with a Being as a Shield, it still takes the full damage. Your attacks with it maintain the grapple.</p>",
+    "description": "<p>Your Checks to Grapple or Shove Targets that are smaller than you are Favored, and you can use Beings that are your size or smaller as a 2H Grip d4 Brawl Weapon with the Defense property that deals its damage to both the Target and itself on a hit. If you reduce damage with a Being this way, it still takes the full damage. Your attacks with it maintain the grapple.</p>",
     "prerequisites": {
       "stats": [
         {

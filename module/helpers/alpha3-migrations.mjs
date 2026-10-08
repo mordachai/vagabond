@@ -298,6 +298,56 @@ export async function migrateAlpha3ClassPerks() {
   await game.settings.set('vagabond', 'alpha3ClassPerksMigrated', true);
 }
 
+/** Perks whose book text / prerequisites changed in Alpha 3 (Perks §3, Phase 4). */
+const ALPHA3_PERKS = ['Animal Companion', 'Archaeologist', 'Bully', 'Cardistry', 'Diplomat', 'Extrovert', 'Heavy Arms',
+  'Mage Slayer', 'Marksmanship', 'Master Chef', 'Medic', 'Medium', 'Mesmer', 'Mounted Combatant', 'Peerless Athlete',
+  'Perfect Parry', 'Sage', 'Salbenist', 'Selfless', 'Situational Awareness', 'Skirmisher', 'Strategist', 'Transvection',
+  'Treads Lightly', 'Unfailing Guidance'];
+
+/**
+ * Perk items already on actors / in the world predate the Alpha 3 text: swap in the compendium's book text and
+ * prerequisites and (re)create its effects (Skirmisher's Reflex-penalty and Speed effects). Aborts WITHOUT setting
+ * the guard while the perks pack hasn't been rebuilt (Skirmisher must carry its effects). A copy already holding
+ * the compendium text is skipped.
+ */
+export async function migrateAlpha3Perks() {
+  if (game.user !== game.users.activeGM) return;
+  if (game.settings.get('vagabond', 'alpha3PerksMigrated')) return;
+
+  const pack = game.packs.get('vagabond.perks');
+  if (!pack) return;
+  const docs = await pack.getDocuments();
+  const sources = new Map(docs.filter((d) => ALPHA3_PERKS.includes(d.name)).map((d) => [d.name, d]));
+  if (!sources.get('Skirmisher')?.effects.size) return; // pack not rebuilt yet
+  const byId = new Map([...sources.values()].map((d) => [d.id, d]));
+
+  for (const item of worldItems()) {
+    try {
+      if (item.type !== 'perk') continue;
+      const src = byId.get(sourceDocId(item)) ?? sources.get(item.name);
+      if (!src || item.system.description === src.system.description) continue;
+
+      await item.update({
+        'system.description': src.system.description,
+        'system.prerequisites': src.system.toObject().prerequisites,
+      });
+      const missing = src.effects.filter((e) => !item.effects.some((x) => x.name === e.name));
+      if (missing.length) {
+        await item.createEmbeddedDocuments('ActiveEffect', missing.map((e) => {
+          const data = e.toObject();
+          delete data._id;
+          delete data._stats;
+          return data;
+        }));
+      }
+    } catch (err) {
+      console.warn(`vagabond | migrate Alpha 3 perks: skipped ${item?.uuid ?? '(unknown)'}`, err);
+    }
+  }
+
+  await game.settings.set('vagabond', 'alpha3PerksMigrated', true);
+}
+
 /**
  * Human trait Knack → Aptitude (p. 27). The trait text and grants are unchanged, only the name: rename it on
  * Human ancestry items already in the world. Aborts WITHOUT setting the guard while the ancestries pack hasn't been

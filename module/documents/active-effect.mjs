@@ -406,6 +406,7 @@ export class VagabondActiveEffect extends ActiveEffect {
       'system.senses': 'NPC: Senses',
       'system.armor': 'NPC: Armor Value',
       'system.armorBonus': 'Armor: Global Bonus (Flat Add)',
+      'system.reflexPenaltyReduction': 'Armor: Reflex Penalty Reduction (Flat Add)',
       'system.armorDescription': 'NPC: Armor Description',
       'system.zone': 'NPC: Combat Zone',
 

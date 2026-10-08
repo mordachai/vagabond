@@ -3,7 +3,7 @@
   "type": "perk",
   "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
   "system": {
-    "description": "<p><em>The knight has made you vigilant.</em></p><p>If you roll a 1 or 2 on the damage dice of a single Weapon held with both hands, you can reroll it.</p><p>Further, when you make a 2H Melee attack and roll 10 above your Difficulty, you can also Shove the Target as part of the attack.</p>",
+    "description": "<p><em>The knight has made you vigilant.</em></p><p>If you roll a 1 or 2 on the damage dice of a single Weapon held with both hands, you can reroll it.</p><p>Further, when you make a 2H Melee attack and roll 15 above your Difficulty, you can also Shove the Target as part of the attack.</p>",
     "prerequisites": {
       "stats": [
         {

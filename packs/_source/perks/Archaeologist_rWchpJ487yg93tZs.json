@@ -3,7 +3,7 @@
   "type": "perk",
   "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
   "system": {
-    "description": "<p>Your Checks and Saves against traps have Favor, and, when you are subjected to a Curse (p. 99), you can make a Will Save to try to instantly break the curse’s hold on you.</p>",
+    "description": "<p>Your Checks and Saves against traps have Favor and, when you are subjected to a Curse (p. 99), you can make a Will Save to try to instantly break the curse’s hold on you.</p>",
     "prerequisites": {
       "stats": [
         {

@@ -3,7 +3,7 @@
   "type": "perk",
   "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
   "system": {
-    "description": "<p>You ignore Reflex Save penalties from Light Armor, and you have a 5’ bonus to Speed while you don’t have a penalty to Reflex Saves.</p><p>Further, you can Move through spaces occupied by Beings.</p>",
+    "description": "<p>Your penalty to Reflex Saves from Armor is reduced by 1, and you have a 5’ bonus to Speed.</p><p>Further, you can Move through spaces occupied by Beings.</p><p>You can take this Perk up to 3 times.</p>",
     "prerequisites": {
       "stats": [
         {
@@ -26,7 +26,106 @@
       "resourceOrGroups": []
     }
   },
-  "effects": [],
+  "effects": [
+    {
+      "name": "Skirmisher: Reflex Penalty",
+      "origin": "Compendium.vagabond.perks.Item.hJjjazBCtdV7YIc5",
+      "img": "icons/svg/aura.svg",
+      "_id": "sKiRmReflexPen001",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.reflexPenaltyReduction",
+            "value": "1",
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent"
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.44.0",
+        "createdTime": 1780000000000,
+        "modifiedTime": 1780000000000,
+        "lastModifiedBy": "13p65OEadZSZVLRk"
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!hJjjazBCtdV7YIc5.sKiRmReflexPen001"
+    },
+    {
+      "name": "Skirmisher: Speed",
+      "origin": "Compendium.vagabond.perks.Item.hJjjazBCtdV7YIc5",
+      "img": "icons/svg/aura.svg",
+      "_id": "sKiRmSpeedBonus001",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.speed.bonus",
+            "value": "5",
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent"
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.44.0",
+        "createdTime": 1780000000000,
+        "modifiedTime": 1780000000000,
+        "lastModifiedBy": "13p65OEadZSZVLRk"
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!hJjjazBCtdV7YIc5.sKiRmSpeedBonus001"
+    }
+  ],
   "folder": null,
   "flags": {},
   "_stats": {

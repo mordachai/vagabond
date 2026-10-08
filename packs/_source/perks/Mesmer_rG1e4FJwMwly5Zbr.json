@@ -3,7 +3,7 @@
   "type": "perk",
   "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
   "system": {
-    "description": "<p>If you pass a Cast Check by 10 or more to cause a Target to be Charmed or Frightened, you can also cause it to act in one of the following ways in a manner of your choice on its next Turn:</p><ul><li><p>Move up to half its Speed.</p></li><li><p>Attack a Target (it can attack itself).</p></li><li><p>Drop or pick up an Item.</p></li></ul>",
+    "description": "<p>If you pass a Cast Check by 15 or more to cause a Target to be Charmed or Frightened, you can also cause it to act in one of the following ways in a manner of your choice on its next Turn:</p><ul><li><p>Move up to half its Speed.</p></li><li><p>Attack a Target (it can attack itself).</p></li><li><p>Drop or pick up an Item.</p></li></ul>",
     "prerequisites": {
       "stats": [],
       "statOrGroups": [],

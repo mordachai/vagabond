@@ -3,7 +3,7 @@
   "type": "perk",
   "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
   "system": {
-    "description": "<p>You can give an Ally that can see or hear you one of your Studied dice as an Action or by skipping your Move. Studied dice used from this Ability count as granting the Ally Favor.</p>",
+    "description": "<p>You can give an Ally that can see or hear you one of your Studied dice as an Action or by skipping your Move.</p>",
     "prerequisites": {
       "stats": [
         {

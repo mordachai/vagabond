@@ -151,6 +151,16 @@ export default class VagabondCharacter extends VagabondActorBase {
     // Studied Die - tracks number of dice available to player
     schema.studiedDice = new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 });
 
+    // Reduction of the worn Armor's Reflex penalty (Skirmisher: -1 per copy)
+    schema.reflexPenaltyReduction = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      {
+        initial: [],
+        label: "Armor Reflex Penalty Reduction",
+        hint: "Number or formula subtracted from the worn Armor's Reflex penalty (never below 0)"
+      }
+    );
+
     // Armor Bonus from Active Effects
     schema.armorBonus = new fields.ArrayField(
       new fields.StringField({ blank: true }),
@@ -951,6 +961,7 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.focus.maxBonus = [];
     this.speed.bonus = [];
     this.armorBonus = [];
+    this.reflexPenaltyReduction = [];
     this.bonusLuck = [];
     this.health.bonus = [];
     this.fatigueBonus = [];
@@ -1637,7 +1648,8 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.armor = (wornArmor?.system.finalRating ?? 0) + armorBonus;
     // Item's explicit Reflex penalty (already shifted by metal slot modifiers —
     // see base-equipment.mjs `finalReflexPenalty`).
-    this.reflexArmorPenalty = wornArmor?.system.finalReflexPenalty ?? 0;
+    const reflexReduction = this._evaluateFormulaField(this.reflexPenaltyReduction, rollData);
+    this.reflexArmorPenalty = Math.max(0, (wornArmor?.system.finalReflexPenalty ?? 0) - reflexReduction);
     // RAW: Might below the worn Armor's score → Restrained. Applied as a status
     // by EquipmentHelper.syncArmorRestrained (GM-side hooks in vagabond.mjs).
     this.armorMightDeficit = wornArmor

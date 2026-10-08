@@ -3,7 +3,7 @@
   "type": "perk",
   "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
   "system": {
-    "description": "<p>Once per Turn, when an Ally you can see takes damage, you can choose to take the damage instead. This can’t be reduced by Armor.</p>",
+    "description": "<p>Once per Turn, when a Near Ally takes damage, you can take the damage instead. This damage can’t be reduced.</p>",
     "prerequisites": {
       "stats": [],
       "statOrGroups": [],

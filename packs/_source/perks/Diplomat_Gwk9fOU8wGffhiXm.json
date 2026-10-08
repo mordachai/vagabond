@@ -3,7 +3,7 @@
   "type": "perk",
   "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
   "system": {
-    "description": "<p>Once per Shift, if you pass a Leadership Check to parley or end Combat peacefully by 10 or more, you gain a Studied die.</p>",
+    "description": "<p>Once per Shift, if you pass a Leadership Check to parley or end Combat peacefully by 15 or more, you gain a Studied die.</p>",
     "prerequisites": {
       "stats": [
         {

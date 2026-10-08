@@ -3,7 +3,7 @@
   "type": "perk",
   "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
   "system": {
-    "description": "<p>When you damage a Focusing Being, the damage rolls can Explode, and if the result of your d20 roll on the Check is 10 or higher than your Difficulty, the Focus ends.</p>",
+    "description": "<p>When you damage a Focusing Being, the damage rolls can Explode, and if the result of your d20 roll on the Check is 15 or higher than your Difficulty, the Focus ends.</p>",
     "prerequisites": {
       "stats": [],
       "statOrGroups": [],

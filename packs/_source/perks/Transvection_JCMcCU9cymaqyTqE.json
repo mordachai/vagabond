@@ -3,7 +3,7 @@
   "type": "perk",
   "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
   "system": {
-    "description": "<p>If you Cast Levitate on an Item, it gains Speed: 0’ (30’ Fly). This Casting is continual, but ends early if you use this Ability on another Item.</p>",
+    "description": "<p>If you Cast Levitate on an Item, it gains 30’ Fly Speed. This Casting is continual, but ends early if you use this Ability again.</p>",
     "prerequisites": {
       "stats": [],
       "statOrGroups": [],

@@ -1,0 +1,44 @@
+{
+  "name": "Fluid Motion",
+  "type": "perk",
+  "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
+  "system": {
+    "description": "<p>During your Move, you can walk on liquid surfaces and along walls, sinking or falling if you end the Move off solid ground.</p>",
+    "prerequisites": {
+      "stats": [
+        {
+          "stat": "dexterity",
+          "value": 7
+        }
+      ],
+      "statOrGroups": [],
+      "trainedSkills": [],
+      "trainedSkillOrGroups": [],
+      "spells": [],
+      "spellOrGroups": [],
+      "hasAnySpell": false,
+      "resources": [],
+      "resourceOrGroups": []
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "5.44.0",
+    "createdTime": 1780000000000,
+    "modifiedTime": 1780000000000,
+    "lastModifiedBy": null
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "FlUiDmOt10nPerk1",
+  "sort": 20320000,
+  "_key": "!items!FlUiDmOt10nPerk1"
+}

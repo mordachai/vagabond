@@ -165,15 +165,15 @@ Status 2026-10-07: rulings settled, Defense property done (`61c1973`). **Phase 1
 - [x] Wizard **Extracurricular** (button: Studied die + another Spell's text) and **Archwizard** (text).
 - [x] Merchant **Midas Touch** and **Diamond Hands** — text first, as planned (no relic-power layer; ruling #9).
 
-### Phase 4 — Perks, items, spells, relics (pack text + data)
-- [ ] Perks §3 (20+ text / prerequisite changes) + **new perk Fluid Motion**; effects for Dusted Knuckle (explode), Skirmisher (Reflex penalty −1, +5' Speed, take 3×).
-- [ ] Weapons: Spear grip V (+ `damageTwoHands`), Staff Cleave; shop copies too.
-- [ ] Starting packs: Gladiator / Sellsword buckler → shield; treasure Shield table.
-- [ ] Gear: Cauldron 2 Slots, Needle / Sack 0 Slots, Bucket value (book conflict — pick one).
-- [ ] Alchemical: Oil, Vicious → **Oil, Bloodletter** (explode on a 1); Crone's Ire explode on a 1.
-- [ ] Relics: Vicious → **Visceral**, Ace Thrown → **High Velocity** (Sunder, Undertow text), Protection ×10 values.
-- [ ] Spells: Kinesis, Ward upcast, Apoplex damage base + the older drift in §5 (Adhere, Animate, Beast, Gas, Life, Tempo, Terraform, …).
-- [ ] Alchemical / relic older drift in §5 (flavor text the book lacks, Speed / Control potions, scrolls, Spell Book, Philosopher's Stone, Phoenix Down).
+### Phase 4 — Perks, items, spells, relics (pack text + data) — DONE (items/spells/relics via the gear audit, db85105)
+- [x] Perks §3 — DONE 2026-10-08: 25 perks re-texted/re-prereq'd from the A3 PDF (script diff, every perk checked), **Fluid Motion** added, Skirmisher gets two effects (`system.reflexPenaltyReduction` −1 new actor field, `system.speed.bonus` +5; each copy stacks, "up to 3 times" is table-enforced — the perk pickers already count owned copies). World copies: `migrateAlpha3Perks` (guard `alpha3PerksMigrated`, needs `npm run pack` for perks first). Skipped book typos: Panache (missing comma), Scout (garbled sentence), Dusted Knuckle ("the the").
+- [x] Weapons: Spear grip V (+ `damageTwoHands`), Staff Cleave; shop copies too.
+- [x] Starting packs: Gladiator / Sellsword buckler → shield; treasure Shield table.
+- [x] Gear: Cauldron 2 Slots, Needle / Sack 0 Slots, Bucket value (book conflict — pick one).
+- [x] Alchemical: Oil, Vicious → **Oil, Bloodletter** (explode on a 1); Crone's Ire explode on a 1.
+- [x] Relics: Vicious → **Visceral**, Ace Thrown → **High Velocity** (Sunder, Undertow text), Protection ×10 values.
+- [x] Spells: Kinesis, Ward upcast, Apoplex damage base + the older drift in §5 (Adhere, Animate, Beast, Gas, Life, Tempo, Terraform, …).
+- [x] Alchemical / relic older drift in §5 (flavor text the book lacks, Speed / Control potions, scrolls, Spell Book, Philosopher's Stone, Phoenix Down).
 
 ### Phase 5 — Build Guides (Appendix C, pp. 194–203)
 - [ ] Data model for 2–3 builds per class (stats array by level, Trainings, Starting Pack, Weapon / Armor, Spells, Perks by level) — likely `system.buildGuides` on the class item.

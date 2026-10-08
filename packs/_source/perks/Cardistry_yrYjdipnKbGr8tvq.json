@@ -3,7 +3,7 @@
   "type": "perk",
   "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
   "system": {
-    "description": "<p>You can use a deck of cards as a Trinket and can make attacks with the cards using your Cast Skill. The cards act as Daggers, and they are magically replenished when used.</p>",
+    "description": "<p>You can use a deck of cards as a Trinket and can make attacks with the cards using your Cast Skill. The cards attack as Daggers, and they are magically replenished when used.</p>",
     "prerequisites": {
       "stats": [
         {

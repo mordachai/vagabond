@@ -3,7 +3,7 @@
   "type": "perk",
   "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
   "system": {
-    "description": "<p>You can conduct a Ritual (p. 10) with a Weapon and an oil. After the Ritual, the following rules apply until you perform it again:</p><ul><li><p>You can use Craft to attack with the Weapon.</p></li><li><p>You can will the absorbed oil to coat it on your Turn (no Action) which doesn’t consume the oil. The Weapon is coated until you dismiss it, it leaves your hand, or it is coated with another oil.</p></li></ul>",
+    "description": "<p>You can conduct a Ritual (p. 10) with a Weapon and an oil. After the Ritual, the following rules apply until you perform it again:</p><ul><li><p>You can use Craft to attack with the Weapon.</p></li><li><p>You can will the oil to coat the Weapon on your Turn (no Action) which doesn’t consume it. It remains coated until you dismiss it or when it is coated with another oil.</p></li></ul>",
     "prerequisites": {
       "stats": [],
       "statOrGroups": [],

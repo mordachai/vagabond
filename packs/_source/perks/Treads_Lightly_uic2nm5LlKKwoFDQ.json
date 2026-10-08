@@ -12,7 +12,9 @@
         }
       ],
       "statOrGroups": [],
-      "trainedSkills": [],
+      "trainedSkills": [
+        "sneak"
+      ],
       "trainedSkillOrGroups": [],
       "spells": [],
       "spellOrGroups": [],
