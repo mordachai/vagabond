@@ -8461,6 +8461,7 @@ ol#combat-tracker.directory-list {
 .level-up-dialog .lu-btn-primary {
   background: var(--vagabond-c-dark-bluey);
   color: var(--vagabond-c-lite);
+  border: 1px solid var(--vagabond-c-chat-yellow);
 }
 .level-up-dialog .lu-btn-accent {
   background: var(--vagabond-c-green);
@@ -8966,6 +8967,31 @@ ol#combat-tracker.directory-list {
   gap: 10px;
   margin-bottom: 10px;
 }
+.level-up-dialog .lu-preview .lu-preview-header .lu-preview-title {
+  display: flex;
+  flex: 1;
+  align-self: stretch;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+.level-up-dialog .lu-preview .lu-preview-header .lu-preview-title h4 {
+  margin: 0;
+}
+.level-up-dialog .lu-preview .lu-preview-header .lu-preview-type {
+  align-self: flex-end;
+  white-space: nowrap;
+  font-size: 0.85rem;
+  text-transform: capitalize;
+}
+.level-up-dialog .lu-preview .lu-preview-header .lu-preview-type strong {
+  color: var(--vagabond-c-text-secondary);
+  text-transform: none;
+}
+.level-up-dialog .lu-preview .lu-preview-header .lu-preview-type i {
+  margin: 0 2px;
+}
 .level-up-dialog .lu-preview .lu-preview-header .lu-preview-img {
   width: 44px;
   height: 44px;
@@ -9301,8 +9327,14 @@ ol#combat-tracker.directory-list {
 .level-up-dialog .lu-gain.info .lu-mark {
   color: var(--vagabond-c-text-secondary);
 }
+.level-up-dialog .lu-gain .lu-gain-must {
+  font-size: 0.82rem;
+  font-style: italic;
+  color: var(--vagabond-c-text-secondary);
+}
 .level-up-dialog .lu-gain.lu-gain-link {
   cursor: pointer;
+  justify-content: flex-start;
 }
 .level-up-dialog .lu-gain.lu-gain-link:hover {
   border-color: var(--vagabond-c-text-secondary);

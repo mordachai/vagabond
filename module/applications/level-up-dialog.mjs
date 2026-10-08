@@ -503,7 +503,7 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
     const rows = [];
     const row = (state, label, extra = {}) => rows.push({ state, markIcon: icons[state], label, ...extra });
     // A choice not made yet: a link to its tab once the Level is gained, plain text before
-    const pending = (tab, label, tip) => row(gained ? 'pending' : 'info', label, { tab: gained ? tab : null, tip });
+    const pending = (tab, label, tip, must) => row(gained ? 'pending' : 'info', label, { tab: gained ? tab : null, tip, must: gained ? must : null });
 
     // Features (the bare "Perk" / "Stat" grant entries are covered by the choice rows below)
     const grantOnly = /^(perks?|stats?|stat increase|spells?)$/i;
@@ -522,7 +522,7 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
         const from = sys.stats?.[this.selectedStat]?.value || 0;
         row('done', L('StatDone', { stat: abbr, from, to: from + 1 }), { desc: `<p>${L('StatDoneDesc')}</p>` });
       } else {
-        pending('stats', L('PlusStat', { n: Math.max(1, this.statGrantsAtLevel) }), L('TipStat', { cap }));
+        pending('stats', L('PlusStat', { n: Math.max(1, this.statGrantsAtLevel) }), L('TipStat', { cap }), L('MustStat'));
       }
     }
 
@@ -531,7 +531,7 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
         const skill = sys.skills?.[this.reasonTrainingSkill]?.label ?? this.reasonTrainingSkill;
         row('done', L('TrainingDone', { skill }));
       } else {
-        pending('stats', L('PlusTraining'), L('ReasonTrainingInstruction'));
+        pending('stats', L('PlusTraining'), L('ReasonTrainingInstruction'), L('MustTraining'));
       }
     }
 
@@ -545,7 +545,7 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
             { desc: await enrich(item.system.description, item) });
         }
       } else {
-        pending('perks', L('PlusPerk', { n: Math.max(1, this.perkGrantsAtLevel) }), L('TipPerk'));
+        pending('perks', L('PlusPerk', { n: Math.max(1, this.perkGrantsAtLevel) }), L('TipPerk'), L('MustPerk'));
       }
     }
 
@@ -555,7 +555,7 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
         if (item) row('done', L('SpellDone', { name: item.name }), { desc: await enrich(item.system.description, item) });
       }
       const remaining = this.newSpellSlots - this.chosenSpells.length;
-      if (remaining > 0) pending('spells', L('PlusSpell', { n: remaining }), L('TipSpell'));
+      if (remaining > 0) pending('spells', L('PlusSpell', { n: remaining }), L('TipSpell'), L('MustSpell'));
     }
 
     // What is still needed before there is anything to do

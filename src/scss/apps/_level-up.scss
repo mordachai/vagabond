@@ -147,6 +147,7 @@
   .lu-btn-primary {
     background: $c-dark-bluey;
     color: $c-lite;
+    border: 1px solid $c-yellow;
   }
 
   .lu-btn-accent {
@@ -741,6 +742,33 @@
       gap: 10px;
       margin-bottom: 10px;
 
+      // Title on the left; the Type at the far end of the row, on the header's bottom edge
+      .lu-preview-title {
+        display: flex;
+        flex: 1;
+        align-self: stretch;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        min-width: 0;
+
+        h4 { margin: 0; }
+      }
+
+      .lu-preview-type {
+        align-self: flex-end;
+        white-space: nowrap;
+        font-size: 0.85rem;
+        text-transform: capitalize;
+
+        strong {
+          color: $c-text-2;
+          text-transform: none;
+        }
+
+        i { margin: 0 2px; }
+      }
+
       .lu-preview-img {
         width: 44px;
         height: 44px;
@@ -1109,8 +1137,15 @@
     &.pending .lu-mark { color: $c-yellow; }
     &.info .lu-mark { color: $c-text-2; }
 
+    .lu-gain-must {
+      font-size: 0.82rem;
+      font-style: italic;
+      color: $c-text-2;
+    }
+
     &.lu-gain-link {
       cursor: pointer;
+      justify-content: flex-start;
 
       &:hover { border-color: $c-text-2; }
     }

@@ -118,6 +118,7 @@
             {{else if tab}}
               <button type="button" class="lu-gain lu-gain-link {{state}}" data-action="changeTab" data-tab="{{tab}}" {{#if tip}}data-tooltip="{{tip}}"{{/if}}>
                 <span class="lu-mark"><i class="{{markIcon}}"></i></span><span class="lu-gain-label">{{label}}</span>
+                {{#if must}}<span class="lu-gain-must">{{must}}</span>{{/if}}
               </button>
             {{else}}
               <div class="lu-gain {{state}}" {{#if tip}}data-tooltip="{{tip}}"{{/if}}>
@@ -429,17 +430,19 @@
             {{#if spells.previewItem}}
               <div class="lu-preview-header">
                 <img src="{{spells.previewItem.img}}" alt="" class="lu-preview-img" />
-                <h4>{{spells.previewItem.name}}</h4>
+                <div class="lu-preview-title">
+                  <h4>{{spells.previewItem.name}}</h4>
+                  {{#if spells.previewItem.damageType}}
+                    <span class="lu-preview-type">
+                      <strong>{{localize "VAGABOND.UI.Labels.TypeLabel"}}:</strong>
+                      {{#if spells.previewItem.damageTypeIcon}}<i class="{{spells.previewItem.damageTypeIcon}}"></i>{{/if}}
+                      {{spells.previewItem.damageType}}
+                    </span>
+                  {{/if}}
+                </div>
               </div>
               <div class="lu-spell-details">
                 {{#if spells.previewItem.baseDamage}}<div class="lu-spell-detail"><strong>{{localize "VAGABOND.UI.Labels.DamageBase"}}:</strong> {{spells.previewItem.baseDamage}}</div>{{/if}}
-                {{#if spells.previewItem.damageType}}
-                  <div class="lu-spell-detail">
-                    <strong>{{localize "VAGABOND.UI.Labels.TypeLabel"}}:</strong>
-                    {{#if spells.previewItem.damageTypeIcon}}<i class="{{spells.previewItem.damageTypeIcon}}"></i>{{/if}}
-                    {{spells.previewItem.damageType}}
-                  </div>
-                {{/if}}
                 {{#if spells.previewItem.manaCost}}<div class="lu-spell-detail"><strong>{{localize "VAGABOND.Item.Spell.FIELDS.delivery.cost.label"}}:</strong> {{spells.previewItem.manaCost}}</div>{{/if}}
                 {{#if spells.previewItem.deliveryLabel}}<div class="lu-spell-detail"><strong>{{localize "VAGABOND.UI.Labels.Delivery"}}:</strong> {{spells.previewItem.deliveryLabel}}</div>{{/if}}
                 {{#if spells.previewItem.range}}<div class="lu-spell-detail"><strong>{{localize "VAGABOND.UI.Labels.Range"}}:</strong> {{spells.previewItem.range}}</div>{{/if}}
