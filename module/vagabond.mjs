@@ -89,7 +89,7 @@ import { WitchHelper } from './helpers/witch-helper.mjs';
 import { WizardHelper } from './helpers/wizard-helper.mjs';
 import { DruidHelper } from './helpers/druid-helper.mjs';
 import { migrateFighterClass, migrateDruidClass, migrateGunslingerClass, migrateHunterClass, migrateLuminaryClass, migrateMagusClass, migrateMerchantClass, migratePugilistClass, migrateRevelatorClass, migrateRogueClass, migrateSorcererClass, migrateVanguardClass, migrateWitchClass, migrateWizardClass, migrateAncestries } from './helpers/class-migrations.mjs';
-import { migrateAlpha3Statuses, migrateAlpha3Backpacks, migrateAlpha3DefensePerks, migrateAlpha3ClassPerks, migrateAlpha3Perks, migrateAlpha3Classes, migrateAlpha3Ancestries } from './helpers/alpha3-migrations.mjs';
+import { migrateAlpha3Statuses, migrateAlpha3Backpacks, migrateAlpha3Rations, migrateAlpha3DefensePerks, migrateAlpha3ClassPerks, migrateAlpha3Perks, migrateAlpha3Classes, migrateAlpha3Ancestries } from './helpers/alpha3-migrations.mjs';
 import { consumeUsedEffects } from './helpers/use-effects.mjs';
 import { VagabondRollBuilder } from './helpers/roll-builder.mjs';
 import { CurrencyHelper } from './helpers/currency-helper.mjs';
@@ -1090,7 +1090,7 @@ function registerGameSettings() {
   }
 
   // Setting 21f7: One-time Alpha 3 migration guards (hidden) — see alpha3-migrations.mjs.
-  for (const key of ['alpha3StatusesMigrated', 'alpha3BackpackMigrated', 'alpha3DefensePerksMigrated', 'alpha3ClassPerksMigrated', 'alpha3PerksMigrated', 'alpha3ClassesMigrated', 'alpha3AncestriesMigrated']) {
+  for (const key of ['alpha3StatusesMigrated', 'alpha3BackpackMigrated', 'alpha3RationsMigrated', 'alpha3DefensePerksMigrated', 'alpha3ClassPerksMigrated', 'alpha3PerksMigrated', 'alpha3ClassesMigrated', 'alpha3AncestriesMigrated']) {
     game.settings.register('vagabond', key, {
       scope: 'world',
       config: false,
@@ -1970,6 +1970,8 @@ Hooks.once('ready', function () {
   migrateAlpha3Statuses();
   // One-time: Backpacks become 1 Slot held / +3 Slots worn.
   migrateAlpha3Backpacks();
+  // One-time: "Rations (1 day)" copies become "Ration 1d" (name + icon from the gear pack).
+  migrateAlpha3Rations();
   // One-time: Patience / Protector perks on actors get the Defense-property text + effect.
   migrateAlpha3DefensePerks();
   // One-time: Dusted Knuckle / Quick Draw perks on actors get the Alpha 3 text (+ Dusted Knuckle effects).

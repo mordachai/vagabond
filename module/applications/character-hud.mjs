@@ -510,7 +510,7 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
     // consumable/hands flag but still belongs in the Belt).
     const favSpells = spells.filter(s => s.system.favorite);
     const wornItems = allEquipment
-      .filter(i => i.system.equipmentState === 'worn' && i.system.equipmentType !== 'armor')
+      .filter(i => i.system.equipmentState === 'worn' && !EquipmentHelper.isBeltExcluded(i))
       .sort((a, b) => (a.getFlag('vagabond', 'equippedAt') || 0) - (b.getFlag('vagabond', 'equippedAt') || 0));
 
     // Feature / trait / perk actions pinned to the Belt (FeatureAction): after the favorited

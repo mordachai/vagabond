@@ -80,6 +80,18 @@ export class EquipmentHelper {
     return item?.type === 'container';
   }
 
+  /**
+   * Items worn for their own effect, never listed in the sheet's Belt or the HUD item slots:
+   * Armor, container-type equipment and Backpacks (no Slot while worn).
+   * @param {Object} item
+   * @returns {boolean}
+   */
+  static isBeltExcluded(item) {
+    if (item?.type === 'container') return true;
+    const sys = item?.system;
+    return sys?.equipmentType === 'armor' || sys?.equipmentType === 'container' || !!sys?.noSlotsWhenWorn;
+  }
+
   // ===========================
   // Equipment State Methods
   // ===========================

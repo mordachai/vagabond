@@ -129,6 +129,45 @@ export async function migrateAlpha3Backpacks() {
   await game.settings.set('vagabond', 'alpha3BackpackMigrated', true);
 }
 
+/** "Rations (1 day)" gear pack doc (now "Ration 1d") + the id its older copies were made from. */
+const RATION_ID = 'BhUNyj2nflyVUPIo';
+const RATION_OLD_IDS = new Set([RATION_ID, '1aDHjn4GzdhNatAa']);
+const RATION_OLD_NAME = 'Rations (1 day)';
+
+/**
+ * "Rations (1 day)" became "Ration 1d" (bread loaf icon). Copies already on actors / in the Items
+ * directory keep the old name and icon: sync name + img from the gear pack doc and make sure they
+ * count as party Supply. Matches on compendium source (so translated copies are covered) or the old
+ * English name. Quantity and everything else the player may have edited is left alone. Aborts
+ * WITHOUT setting the guard while the gear pack can't be read.
+ */
+export async function migrateAlpha3Rations() {
+  if (game.user !== game.users.activeGM) return;
+  if (game.settings.get('vagabond', 'alpha3RationsMigrated')) return;
+
+  const source = await game.packs.get('vagabond.gear')?.getDocument(RATION_ID);
+  if (!source) {
+    console.warn('vagabond | migrate Alpha 3 Rations: gear pack Ration doc not found, will retry next load');
+    return;
+  }
+
+  for (const item of worldItems()) {
+    try {
+      if (item.type !== 'equipment') continue;
+      if (!RATION_OLD_IDS.has(sourceDocId(item)) && item.name !== RATION_OLD_NAME) continue;
+      await item.update({
+        name: source.name,
+        img: source.img,
+        'system.isSupply': true,
+      });
+    } catch (err) {
+      console.warn(`vagabond | migrate Alpha 3 Rations: skipped ${item?.uuid ?? '(unknown)'}`, err);
+    }
+  }
+
+  await game.settings.set('vagabond', 'alpha3RationsMigrated', true);
+}
+
 /** Defense-property perks whose automation is an Active Effect (see DefenseHelper). */
 const DEFENSE_PERKS = [
   { id: '0g0Z7XRDrgVzbpdD', name: 'Patience', key: 'system.patienceDefense' },

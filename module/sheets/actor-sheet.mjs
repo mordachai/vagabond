@@ -347,7 +347,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         (context.armor && context.armor.some(i => i.system.equipped));
 
       // Equipped panel is soft-divided: Hands (oneHand/twoHands) and Belt ('worn')
-      const panelEquipped = [...(context.weapons ?? []), ...(context.gear ?? [])].filter(i => i.system.equipped);
+      const panelEquipped = [...(context.weapons ?? []), ...(context.gear ?? [])]
+        .filter(i => i.system.equipped && !EquipmentHelper.isBeltExcluded(i));
       const wornPanelItems = panelEquipped.filter(i => i.system.equipmentState === 'worn');
       context.hasBeltItems = wornPanelItems.length > 0;
 
