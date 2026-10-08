@@ -89,8 +89,17 @@ Other changes
   are now proper `speedTypes` keys + `speedValues`.
 - **Combo**: Dragon Turtle, Manticore (Combo 1 / 2), Roc, Sea Lion, Snallygaster, Tarrasque, Wyvern, Aurumvorax, Froghemoth reordered/renamed to the book's `Combo`.
 - Basilisk `Glare` -> `Gaze` (+ Bite text); Pseudodragon HD 2 -> 1 (1 HP), Morale 7, Magic Ward I ability name restored (was blank);
-  Tarrasque Magic Ward VI -> **X**, Suffocating immunity; Werewolf / Wererat / Werewolf Dire: new `Effectively Immune` ability and the **Fire weakness is gone** (not printed in Alpha 3).
+  Tarrasque Magic Ward VI -> **X**, Suffocating immunity; Werewolf / Wererat / Werewolf Dire: new `Effectively Immune` ability; the Alpha 2 **Fire weakness is gone** and they are Weak to Silver (Lycanthrope rule below).
 - `(Beast)` / `(Wyrm)` / `(Fae)` / `(All)` size-line tags now prefix the description (Agropelter, Almiraj, Owl Bear, Sea Lion, Froghemoth, Flail Snail, Hydra, Drake,
   Dragon Turtle, Amphiptere, Basilisk, Cockatrice, Chimera, Gremlin ...). Darkmantle / Kraken keep their old flavor text (the book prints none).
 - Rot Grub description rewritten as in the book; `feet` -> `'` wording (Achaierai, Aurumvorax, Froghemoth, Hippogriff, Mimic ...).
 - Gremlin is `Small Cryptid/Fae`: stays a Cryptid, `(Fae)` tag in the description.
+
+### Cross-cutting rule found in Part 5 — type-wide Silver / Cold Iron weakness (book p. 82, Materials table)
+
+> Cold Iron: *Fae are Weak to its damage.* — Silver: *Hellspawn, Lycanthropes, and Undead are Weak to its damage.*
+
+Alpha 3 statblocks therefore stopped printing `Weak: Silvered Weapons` / `Cold Iron`. Instead of dropping the data, the converter now
+adds `coldIron` to every Fae (incl. `Cryptid/Fae`) and `silver` to every Undead (incl. `Artificial (Undead)`), Hellspawn and
+Lycanthrope (Werewolf, Werewolf Dire, Wererat) on top of the printed `Weak:` line. Pieces of Parts 2/4 touched by this:
+Necrophidius, Scarecrow (+Silver), Gremlin (+Cold Iron), Werewolf / Werewolf Dire / Wererat (+Silver).

@@ -28,7 +28,9 @@
     "immunities": [
       "physical"
     ],
-    "weaknesses": [],
+    "weaknesses": [
+      "coldIron"
+    ],
     "statusImmunities": [],
     "zone": "midline",
     "description": "(Fae) Tiny, goblinoid fae that are associated with sudden misfortunes and calamity.",

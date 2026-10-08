@@ -26,7 +26,9 @@
     "immunities": [
       "physical"
     ],
-    "weaknesses": [],
+    "weaknesses": [
+      "silver"
+    ],
     "statusImmunities": [],
     "zone": "frontline",
     "description": "(Shapechanger) A half-wolf, half-humanlike monster with a taste for blood. They usually only transform under a full moon and return to their normal form in sunlight.",

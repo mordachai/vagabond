@@ -27,7 +27,8 @@
       "poison"
     ],
     "weaknesses": [
-      "fire"
+      "fire",
+      "silver"
     ],
     "statusImmunities": [
       "blinded",

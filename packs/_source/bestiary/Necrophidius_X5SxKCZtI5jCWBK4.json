@@ -27,7 +27,8 @@
       "poison"
     ],
     "weaknesses": [
-      "blunt"
+      "blunt",
+      "silver"
     ],
     "statusImmunities": [
       "fatigued",
