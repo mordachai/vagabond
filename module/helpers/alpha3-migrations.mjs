@@ -288,6 +288,46 @@ export async function migrateAlpha3Classes() {
   await game.settings.set('vagabond', 'alpha3ClassesMigrated', true);
 }
 
+/**
+ * Class items already in the world predate `levelFeatures[].scaleKey` (the scaling-chain id the actor sheet / HUD
+ * collapse on, see EnrichmentHelper.classFeatureRows). Copy it by index from the compendium doc (matched by source
+ * id, so translated copies are covered) wherever the Level lines up. A copy still holding the old bare English
+ * label ("Evasive", "Bad Medicine") gets the pack's labelled name; translated names are left alone. Aborts WITHOUT
+ * setting the guard while the classes pack hasn't been rebuilt. Runs after migrateAlpha3Classes.
+ */
+export async function migrateClassFeatureScaleKeys() {
+  if (game.user !== game.users.activeGM) return;
+  if (game.settings.get('vagabond', 'classFeatureScaleKeysMigrated')) return;
+
+  const pack = game.packs.get('vagabond.classes');
+  if (!pack) return;
+  const docs = await pack.getDocuments();
+  if (!docs.some((d) => d.system.levelFeatures?.some((lf) => lf.scaleKey))) return; // pack not rebuilt yet
+  const byId = new Map(docs.map((d) => [d.id, d]));
+
+  for (const item of worldItems()) {
+    try {
+      if (item.type !== 'class') continue;
+      const source = byId.get(sourceDocId(item));
+      if (!source) continue;
+      const srcFeatures = source.system.levelFeatures;
+      let changed = false;
+      const levelFeatures = item.system.toObject().levelFeatures.map((lf, i) => {
+        const src = srcFeatures[i];
+        if (!src?.scaleKey || src.level !== lf.level || lf.scaleKey) return lf;
+        changed = true;
+        const name = src.name.startsWith(`${lf.name} (`) ? src.name : lf.name;
+        return { ...lf, name, scaleKey: src.scaleKey };
+      });
+      if (changed) await item.update({ 'system.levelFeatures': levelFeatures });
+    } catch (err) {
+      console.warn(`vagabond | migrate class feature scale keys: skipped ${item?.uuid ?? '(unknown)'}`, err);
+    }
+  }
+
+  await game.settings.set('vagabond', 'classFeatureScaleKeysMigrated', true);
+}
+
 /** Class-granted perks whose book text / effects changed in Alpha 3 (Dusted Knuckle explode, Quick Draw Thrown). */
 const CLASS_PERKS = [
   { id: 'Lb1ncXSPRRd1wq84', name: 'Dusted Knuckle' },

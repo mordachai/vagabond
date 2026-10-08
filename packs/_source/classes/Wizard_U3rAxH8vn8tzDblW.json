@@ -42,7 +42,8 @@
         "allowedPerks": [],
         "perkAmount": 0,
         "spellAmount": 0,
-        "skillChoices": []
+        "skillChoices": [],
+        "scaleKey": "manifold-mind"
       },
       {
         "level": 3,
@@ -66,7 +67,8 @@
         "allowedPerks": [],
         "perkAmount": 0,
         "spellAmount": 0,
-        "skillChoices": []
+        "skillChoices": [],
+        "scaleKey": "sculpt-spell"
       },
       {
         "level": 5,
@@ -90,7 +92,8 @@
         "allowedPerks": [],
         "perkAmount": 0,
         "spellAmount": 0,
-        "skillChoices": []
+        "skillChoices": [],
+        "scaleKey": "manifold-mind"
       },
       {
         "level": 6,
@@ -134,7 +137,8 @@
         "allowedPerks": [],
         "perkAmount": 0,
         "spellAmount": 0,
-        "skillChoices": []
+        "skillChoices": [],
+        "scaleKey": "sculpt-spell"
       },
       {
         "level": 9,
@@ -158,7 +162,8 @@
         "allowedPerks": [],
         "perkAmount": 0,
         "spellAmount": 0,
-        "skillChoices": []
+        "skillChoices": [],
+        "scaleKey": "manifold-mind"
       },
       {
         "level": 10,

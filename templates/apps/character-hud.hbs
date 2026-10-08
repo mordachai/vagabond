@@ -18,7 +18,7 @@
         {{#each features}}
           <div class="accordion-item collapsed" data-accordion-id="hud-feature-{{_id}}">
             <div class="accordion-header" data-action="toggleFeature"><i class="accordion-icon fas fa-chevron-right"></i><span class="vh-acc-name">{{name}}</span>{{#if fx}}<button type="button" class="vh-fx-btn{{#if fx.active}} is-active{{/if}}" data-action="featureAction" data-action-key="{{fx.key}}" title="{{fx.tip}}"{{#if fx.count}} data-count="{{fx.count}}"{{/if}}><i class="{{fx.icon}}"></i></button>{{/if}}</div>
-            <div class="accordion-content collapsed"><div class="vh-acc-body">{{{description}}}</div></div>
+            <div class="accordion-content collapsed"><div class="vh-acc-body">{{#if levelLabels.length}}<div class="vh-feature-levels">{{#each levelLabels}}<span class="vh-feature-level">{{this}}</span>{{/each}}</div>{{/if}}{{{description}}}</div></div>
           </div>
         {{/each}}
       {{/if}}

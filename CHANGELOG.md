@@ -1,142 +1,83 @@
 # Changelog
 
-## Unreleased
-- **Classes updated to Core Rulebook v3 Alpha 3.** Every class was re-read against the Alpha 3 text (level tables, feature wording, effects); the details and the open rulings are in `ALPHA3_CLASSES_NOTES.md`.
-  - **Numbers and names:** Alchemist Eureka 15+ / 14+ / 13+ and Potency (+1) / (+2) (Potency Explode is the highest face only); Barbarian table gains Aggressor (15’); Druid Savagery (+1) at 2nd; Magus Spell Parry 15+ / 14+ / 13+; Pugilist Haymaker 15+ / 14+ / 13+ at 2 / 6 / 10, Moxie at 4 / 8, Title Holder Explodes on the two highest values (field `weaponLowExplodeBySkill` is now `weaponHighExplodeBySkill`); Rogue Knack (1 Luck) / (2 Luck); Vanguard Wall (1 size) / (2 sizes) / (3 sizes); Prima Materia cap is now 10g (it was 1g).
-  - **Rewrites:** Fighter Fighting Style is one Perk with a Brawl / Finesse / Melee / Ranged Training prerequisite; Gunslinger Grit removes Deadeye stacks instead of adding them; Luminary Overheal once per Action; Merchant Gold Sink, Diamond Hands and Midas Touch (replaces Top Shelf; text only); Pugilist Fisticuffs (Vicious only) and Rope-a-Dope; Sorcerer Quickening is a Cast Max of 0; Valor, Primal Mystic, Arcanum, Tap, Shooting Irons wording; Dusted Knuckle (d4, can Explode — now an effect) and Quick Draw (Ranged or Thrown) perks.
-  - **New features:** Sorcerer **Twinned Spell** (switchable "Twinned Spell: Auto": the second Cast Check of a Spell on a Turn is Favored, Combat only) and **Overpowered** (button: +1 Fatigue and a Cd4 countdown die); Witch **Hex** tracking (button, like Hunter’s Mark), **Soul Link** (damage also lands on the hexed Target) and **Misery Business** (hexed Target is Weak); Wizard **Extracurricular** (button: spend a Studied die, post another known Spell’s effect) and **Archwizard** (text).
-  - **Merchant Midas Touch** (Lv 10, switchable effect): Bonus - Weapon / Armor / Protection / Trinket and Movement - Swiftness relics you have Equipped give +1 more Bonus (+5 Speed for a Swiftness Rank) through the new `system.relicBoost` and the `flags.vagabond.relicBoost` flag on a relic effect. Re-import relics already in a world to pick up the flag. Bonus - Protection +2 now applies only while Equipped, like +1 and +3.
-  - Existing class items are converted once on load (`alpha3ClassesMigrated`, after the earlier class migrations; effect on/off choices are kept), Dusted Knuckle / Quick Draw perks too. The `classes` and `perks` compendiums need `npm run pack` first.
-- **Wizard revised to the new book text.** Class description, the Class Features table (with Spells, Mana and Cast Max), Spellcaster, Page Master, Manifold Mind (+1 / +2 / +3) and Sculpt Spell (-1 / -2) now read exactly as printed; Training is Arcana, Craft and Mysticism. Extracurricular, Archwizard and the old Sculpt Spell are gone.
-  - **Spellcaster:** Cast Max is 2 + your Level (an effect cancels the casting Stat the engine adds); **Page Master** grants the Bookworm Perk. **Manifold Mind** raises the Focus maximum by 1 / 2 / 3.
-  - **Sculpt Spell** takes 1 (then 2) Mana off the total cost of a Cast (Delivery, extra Damage dice, Delivery increase and Effect; Focus is not part of it) through the existing `spellManaCostReduction` bonus. Worlds that already took the first Wizard migration are re-keyed once.
-  - Existing Wizard items are converted once on load (Craft and Mysticism marked trained). The `classes` compendium needs `npm run pack` first.
-- **Witch revised to the new book text.** Class description, the Class Features table (with Spells, Mana and Cast Max), Occultist, Hex, Widdershins (1 / 2 / 3) and Grudge Bearer (+1 / +2) now read exactly as printed; Training is Craft and Mysticism. Ritualism, Things Betwixt, Coventry and the old Widdershins are gone.
-  - **Occultist:** Cast Max is 2 + your Level (an effect cancels the casting Stat the engine adds); the Perk pick is the Mysticism-Training perks. Hex, Widdershins and Grudge Bearer are text (the system has no continual-Spell layer yet).
-  - Existing Witch items are converted once on load (Craft marked trained). The `classes` compendium needs `npm run pack` first.
-- **Vanguard revised to the new book text.** Class description, the Class Features table, Crowd Control, Stalwart, Wall (Large / Huge / Giant), Indestructible (+1 / +2), Armored Titan and Force Unrelenting now read exactly as printed; Training is Brawl and Melee. Guard, Rampant Charge, Unstoppable and the old Immune-to-Physical Indestructible are gone.
-  - **Wall** and **Indestructible** are effects on Defense-property weapons: their damage dice are 1 / 2 / 3 sizes larger (Levels 2 / 6 / 10), and each die gets +1 / +2 while you wear Armor and aren't Incapacitated (new fields `defenseWeaponDieStep`, `defenseWeaponBonusPerDie`). Stalwart grants the Protector Perk.
-  - Everything about Shoves stays text (the system has no Shove rules). Existing Vanguard items are converted once on load. The `classes` compendium needs `npm run pack` first.
-- **Sorcerer revised to the new book text.** Class description, the Class Features table (with Spells, Mana and Cast Max), Glamour, Tap, Quickening (0 / 1 / 2 Mana) and Spell-Slinger (-1 / -2) now read exactly as printed; Training is Arcana and Influence and the Key Stat is Presence, Might. Arcane Anomaly, Spell Twinning and Overpowered are gone.
-  - **Glamour:** Cast Max is 2 + your Level (an effect cancels the casting Stat the engine adds). **Tap** grants the Vehement Magic Perk (it was Secret of Mana).
-  - **Spell-Slinger** is two effects: Spell damage die one size larger (d8) and Crit range on Cast Checks lowered by 1 / 2. The old Spell-Slinger effects wrote a field nothing reads (`spellCritBonus`); they now use `castCritBonus`.
-  - Existing Sorcerer items are converted once on load (Arcana marked trained, Vehement Magic added). The `classes` compendium needs `npm run pack` first.
-- **Rogue revised to the new book text.** Class description, the Class Features table (with Sneak Attack), Sneak Attack, Infiltrator, Evasive (10’ / 15’ / 20’), Knack, Lethal Weapon and Waylay now read exactly as printed; Training is Ranged, Finesse and Sneak. Unflinching Luck is gone (the book table still prints it at 4th / 8th, but the feature there is Knack).
-  - **Sneak Attack is an effect plus an automatic helper** ("Sneak Attack: Auto", switchable, follows the Class Automation setting): your first Favored hit each Turn (in a started Combat) with a Finesse, Keen or Ranged Weapon adds the extra d4s (they Explode with Lethal Weapon) and ignores that much Armor when the damage lands, with a "Sneak Attack" chat card.
-  - **Knack** gives +1 Luck whenever you Crit (card "Knack"). Evasive, Waylay and Luck on Breather / Rest stay text.
-  - Existing Rogue items are converted once on load. The `classes` compendium needs `npm run pack` first.
-- **Revelator revised to the new book text.** Class description, the Class Features table (with Spells, Mana and Cast Max), Righteous, Enspell, Lay on Hands (d4 / d6 / d8), Paragon’s Aura, Divine Resolve and Holy Diver now read exactly as printed; Training is Leadership and Melee. The Level 5 Spell count is 3 (it was 0 by mistake).
-  - **Righteous** grants the Gish Perk; Cast Max is 1 + half your Level (an effect cancels the casting Stat the engine adds).
-  - **Lay on Hands has a button** (Level 2+): spends 1 Mana, rolls (d4 / d6 / d8 + Level) healing on yourself or a Close targeted Being, and posts a card with the Apply button; from Level 6 it also cures Blinded, Paralyzed and Sickened. **Divine Resolve** makes you immune to those three. New fields `layOnHandsDie` and `layOnHandsCures`.
-  - Existing Revelator items are converted once on load. The `classes` compendium needs `npm run pack` first.
-- **Pugilist revised to the new book text.** Class description, the Class Features table, Fisticuffs, Rope-a-Dope, Haymaker (10+ / 9+), Moxie (Cd4 / Cd6) and Title Holder (d6 / d8) now read exactly as printed; Training is Brawl and Influence. Check Hook, Beat Rush, Prowess and Impact are gone.
-  - **Fisticuffs** grants the Dusted Knuckle Perk; **Vicious** is an effect (a Brawl Crit adds a die matching the weapon). **Moxie** gives Favor on Saves against Dazed, Frightened and Restrained.
-  - **Title Holder** is an effect: Brawl weapon damage dice are at least a d6 (d8 at Level 10) and Explode on 1 or 2 (new fields `weaponDieBySkill` and `weaponLowExplodeBySkill`).
-  - **Haymaker: Auto** (switchable, follows the Class Automation setting): a Brawl attack that beats the Difficulty by 10 (9 from Level 8) Dazes the Target with a chat card; the Dazed ends when your next Turn starts in a Combat, otherwise by hand.
-  - Existing Pugilist items are converted once on load (Influence is marked trained, the Dusted Knuckle Perk is added). The `classes` compendium needs `npm run pack` first.
-- **Merchant revised to the new book text.** Class description, the Class Features table, Gold Sink, Deep Pockets, Line Goes Up (+1 / +2 / +3 Luck), Diamond Hands (+1 / +2), Opportunist and Top Shelf now read exactly as printed; Training is Craft, Finesse and Influence and the Key Stat is Luck/Reason. Bang for Your Buck and Treasure Seeker are gone.
-  - **Deep Pockets** grants the Deft Hands Perk and an effect gives 2 extra Item Slots now and every 3 Levels. The rest of the class is text (Line Goes Up needs a ruling on Luck above the maximum — see `CLASS_REWRITE_NOTES.md`).
-  - Existing Merchant items are converted once on load (Finesse is marked trained). The `classes` compendium needs `npm run pack` first.
-- **Magus revised to the new book text.** Class description, the Class Features table (with Spells, Mana and Cast Max), Arcanum, Enspell, Spell Parry (10+ / 9+ / 8+), Arcane Surge, Esoteric Flow and Sword & Sorcery now read exactly as printed; Training is Arcana and Melee. Spellstriker, Esoteric Eye, Arcane Recall and Aegis Obscura are gone.
-  - **Arcanum:** grants the Gish Perk; Cast Max is 1 + half your Level (an effect cancels the casting Stat the engine adds). The rest of the class is text.
-  - Existing Magus items are converted once on load. The `classes` compendium needs `npm run pack` first.
-- **Luminary revised to the new book text.** Class description, the Class Features table (with Spells, Mana and Cast Max), Theurgy, Radiant Healer, Overheal, Ever-Cure, Revivify and Life-Giver now read exactly as printed; Training is Influence and Mysticism. Saving Grace is gone.
-  - **Theurgy:** Cast Max is 2 + your Level (an effect cancels the casting Stat the engine adds); Life is the one Spell you must always know.
-  - **Radiant Healer:** the healing rolls of your Spells also Explode on their highest face. New field `system.healingExplode`; the **Assured Healer** perk now has an effect that makes them Explode on a 1.
-  - **Countdown dice Explode:** typing `Cd4!` (any `Cd#!`) in a description creates an Exploding countdown die (rolled as `1d4!`, a 1 on the first die still shrinks it). The create dialog has no Explode option. Sorcerer Overpowered uses it.
-  - **Wizard:** Extracurricular’s card shows the extra Spell’s macro buttons; Archwizard is a button with a Spell compendium selector (4 columns, 32px images) that casts the pick from a temporary copy (the button glows while it exists and the copy removes itself once the Cast is resolved).
-  - **Widdershins** damage: your Spell damage against your hexed Target is increased by 1 (+1 every 4 Levels) before Armor (effect); the effective-Level half stays text.
-  - **Hexed status** (token HUD condition, `runes-triangle-blue` icon): applied to the Being a Witch hexes (description names the Witch), removed when the Hex ends; also toggleable by hand.
-  - **Overheal** adds half your Level to every HP-restoring roll (effect); the new “Overheal: Excess” effect reports healing beyond the Target's Max HP on the apply card (you give it away by hand); Ever-Cure and Revivify stay text.
-  - Existing Luminary items are converted once on load (Influence is marked trained). Compendiums `classes` and `perks` need `npm run pack` first.
-- **New Barbarians no longer start Berserk.** A new character starts at 10 HP and the builder then sets it to its real maximum; for a low-Might character that looked like taking damage and tripped Rage’s auto-Berserk. HP above the maximum is no longer counted as damage.
-- **Effects that end "on a failure / next Turn" now also end on your next roll, with no Combat needed.** One shared rule (`roll-expiry.mjs`) looks at each d20 roll you make and ends the effects that rule says. Deadeye: a Ranged hit adds a stack; a miss, another attack or any skill / stat / cast roll resets it (Saves are ignored); the end-of-Turn reset stays as a backup inside a Combat, and Deadeye Auto now works outside a Combat too. Rage (Auto-Berserk): where no Combat counts Turns, a skill / stat / cast roll ends Berserk. Fighter Momentum (Auto): a skill / stat / cast roll ends it before you attack. A chat card says what ended and why.
-- **Feature buttons show and end their effect.** Deadeye, Momentum and Hunter’s Mark buttons (sheet, HUD and HUD Belt) now glow with a running border while their effect is on; Deadeye shows its stacks on the button. Right-click an active button to end it (Momentum also ends with a plain click); a chat card says what ended. Works with no Combat and in every automation mode. Deadeye’s automatic stacking now only runs inside a started Combat you’re in, because its reset waits for the end of your Turn — outside a Combat use the button to add stacks and right-click to clear them. A switched-off Deadeye counts as none, and an expired Momentum no longer blocks a new one.
-- **New world setting: Class Automation** (Automatic / Automatic only in Combat / Manual). One switch for the GM to keep every player on the same footing: in Manual every class "Auto" effect (Rage auto-Berserk, Aggressor first Round, Momentum, Deadeye, High Noon, Hunter’s Mark) is inert and the feature buttons + status toggles do everything; "Only in Combat" turns Auto on only while the character is in a started Combat. The Auto effects themselves are untouched, and the setting applies instantly.
-- **Auto / manual twins no longer double-count.** Gunslinger’s Deadeye button now tells you Deadeye is automatic (and does nothing) while "Deadeye: Auto" is on, instead of adding a second stack per shot. Barbarian’s "Aggressor: First Round (manual)" now steps aside while the auto twin is on (before, both on doubled Speed in every Round) and now works in Round 1 of a tracked Combat when the auto twin is off. Existing Barbarian items are updated on load once the classes pack is rebuilt.
-- **Effects made by code now carry a short description.** The Deadeye stack effect ("Crit on 18+, 2 of 3 stacks…") and Hunter’s Mark ("<Target> is your Mark…") explain themselves in the effects list.
-- **Ancestries revised to the new book text.** Human, Dwarf, Elf, Halfling, Draken, Goblin and Orc descriptions and traits now read exactly as printed.
-  - **Dwarf:** Sturdy is now Favor (not +1) on Saves against being Frightened or Sickened (an effect; Shoved stays text), and Tough grants the Tough Perk instead of carrying its own effect.
-  - **Darksight (Dwarf, Goblin, Orc)** is an effect that adds the `darksight` sense to your character, and your token (prototype and placed linked tokens) switches to Darkvision with unlimited range. Remove the effect and the token goes back to normal vision (vision you set by hand on a character with no senses is never touched). New reusable effect field: `system.senses` (ADD a sense key from the NPC senses list).
-  - **Elf:** Ascendancy is Trained in Detect plus 1 other Skill of your choice; Naturally Attuned adds the once-per-Round 1 Mana Delivery discount (text only).
-  - **Halfling / Goblin:** Nimble no longer has the "if you aren’t Incapacitated" clause; Goblin’s Scavenger is an effect (Favor on saves against Sickened).
-  - **Draken:** Breath Attack now reads as a two-step Action (begin, then exhale on a later Turn); Scale is +1 Armor. Draconic Resilience (half damage) stays text.
-  - **Character builder:** a Skill choice group whose whole pool is already Trained (e.g. an Elf Gunslinger already Trained in Detect) no longer blocks the Class step.
-  - Existing ancestry items are converted once on load; Dwarf characters get the Tough Perk. The ancestries compendium needs `npm run pack` first.
-- **Perks rewritten to the new book (Perks p. 64–73).** All 108 perks now read as printed, with prerequisites re-checked against the book (stat, Training, OR-groups, Spells; a book "Spell: Any" is `hasAnySpell`).
-  - **New:** Beat Rush, Bravado, Celestial Illuminator, Climber, Cross Counter, Cryptozoologist, Dusted Knuckle, Esoteric Recall, Favors the Bold, Instant Weapon, Medic, Quality Assurance, Quick Draw, Ricochet, Ritualist, Selfless, Swimmer.
-  - **Removed (not in the book):** Botanical Mediciner and Combat Medic (replaced by Medic), Moonlight Sonata and Solar Flare (replaced by Celestial Illuminator), Duelist, Full Swing, Metamagic, Owl-Blasted, Padfoot, Scrapper's Delight (folded into Arcane Artisan), Smooth Talker (folded into Silver Tongued), Spin-to-Win, Tactician.
-  - **Effects:** Secret of Mana is now +2 Max Mana and +1 Cast Max; Mithridatism gets its Sickened Favor and Poison per-die reduction; Gish also sets Weapon Counts as Trinket; the empty Second Wind effect is gone.
-  - **Class grants follow the new perks:** Fighter (Melee/Ranged Training perks), Hunter (Survival), Witch (Mysticism) pick lists were rebuilt by the Training rule; Gunslinger's Shooting Irons grants Quick Draw; Sorcerer's Tap grants Secret of Mana instead of the removed Metamagic.
-  - **New grant option "Ignore Perk Prerequisites"** (class level features and ancestry traits, Perks section of the grant). Perks taken through that grant skip all their prerequisites (or only the Stat minimums, with "Stat minimums only") in the character builder and the level-up dialog. Fighter's Fighting Style and Hunter's Survivalist use "All"; the Bard's Well-Versed and every Bard Perk pick use "Stat minimums only".
-  - Perk items already on characters are copies and keep their old text; the compendium needs `npm run pack` first.
-- **Gunslinger revised to the new book text.** Class description, the Class Features table, Deadeye, Shooting Irons, Bad Medicine (+1 / +2 / +3 dice at Levels 2 / 6 / 10), Grit (3) / (2), Devastator and High Noon now read exactly as printed; training is Detect and Ranged. Quick Draw / Skeet Shooter are gone.
-  - **Deadeye is an effect on your character** ("Deadeye (n)", up to 3 stacks = Crit on 19 / 18 / 17 with Ranged attacks). The Deadeye button on the feature adds a stack by hand; delete the effect to reset. The **Deadeye: Auto** effect (switchable) builds a stack on every Ranged attack (shown as a tag on the attack card) and, inside a Combat, resets it at the end of your Turn unless you hit a Ranged attack since the start of your last Turn.
-  - **Grit has a button** (Lv 4): a chat card with one button per Status you have among Blinded, Burning, Confused, Dazed and Frightened; picking one removes it and raises Deadeye by 3 (2 at Level 8).
-  - **High Noon has a button** (Lv 10) that sets Deadeye to 17; the **High Noon: Auto** effect (switchable) does it when your attack drops a non-allied target to 0 HP.
-  - **Bad Medicine** and **Devastator** are Active Effects: a Crit with a Ranged Check adds the extra damage dice (matching the weapon's die) and lets the damage dice Explode.
-  - Shooting Irons grants the Quick Draw Perk (now in the Perks compendium), and the Gunslinger migration adds that Perk to existing Gunslinger characters. The Off-Turn Ranged attack stays with the table.
-  - New reusable effect fields: `system.deadeyeTrigger`, `system.highNoonTrigger`, `system.deadeyeGrit`, `system.critExtraDiceBySkill` (ADD `<skill>: <formula>`), `system.critExplodeSkills` (ADD a weapon skill key).
-  - Existing Gunslinger class items are converted once on load.
-- **Hunter revised to the new book text.** Class description, the Class Features table, Hunter’s Mark, Survivalist, Rover (5’ / 10’ / 15’), Lethal Precision (+1 / +2 damage), Killer Instinct and Apex Predator now read exactly as printed; training is Melee, Ranged and Survival. Overwatch, Quarry and the three-d20 Lethal Precision are gone.
-  - **Hunter’s Mark has a Mark Target button**: your first Target becomes your Mark (an effect "Hunter’s Mark: <name>" on your character; delete it to drop the Mark). The **Hunter’s Mark: Auto** effect (switchable) marks the Target of your attack when you have no Mark.
-  - **Mark rules** (Active Effect on the class): against your Mark, a weapon with only Keen gains Vicious and one with only Vicious gains Keen, and a Bonus (Favor die…) that pushes the result into your Crit range makes it a Crit. Rolling two d20s to track and the Survivalist Favor stay text.
-  - **Lethal Precision** (Lv 4): damage that lands on your Mark from you or an Ally of yours makes it take 1 extra damage (2 at Level 8). Inside a started Combat you are in, only on your own Turn; with no Combat it always applies.
-  - **Apex Predator** (Lv 10): your Mark is Weak to your attacks (ignores Armor and Immune, plus the extra die).
-  - **Rover** is an Active Effect: Speed +5’ (+10’ at Level 6, +15’ at Level 10). Climb, Swim, Difficult Terrain and Killer Instinct's senses stay text.
-  - Survivalist grants one Perk from the Survival-Trained Perks (ignoring other prerequisites).
-  - New reusable effect fields: `system.huntersMarkTrigger`, `system.markRules` (ADD `keenVicious`, `critByBonus` or `weak`), `system.markDamageBonus`.
-  - Existing Hunter class items are converted once on load.
-- **Fighter revised to the new book text.** Class description, the Class Features table, Fighting Style (4th and 8th Level), Momentum, Valor (-1 / -2 / -3 to Crit at Levels 2 / 6 / 10), Muster for Battle and Harrying now read exactly as printed; training is Melee and Ranged. Fighting Style grants two Perks with the Melee or Ranged Training Prerequisite at Level 1 and one more at 4 and 8.
-  - **Valor** is an Active Effect under Class Features: your Attack Checks and Reflex / Endure Saves Crit on a lower roll (-1, then -2, then -3).
-  - **Momentum has a button** (character sheet Features list, or pinned to the HUD Belt): your next attack is Favored. It is spent by your next attack and, inside a Combat, ends with your own Turn. The **Momentum: Auto** effect (switchable) gives it by itself when you pass a Save against an attack or its damage is reduced to 0; switch it off to claim it by hand.
-  - Muster for Battle and Harrying are text-only.
-  - New reusable effect field: `system.momentumTrigger`.
-  - Existing Fighter class items are converted once on load.
-- **Druid revised to the new book text.** Class description, the Class Features table (now with Spells, Mana and Cast Max), Primal Mystic, Feral Shift, Savagery, Tempest Within, Beast Mode and Force of Nature now read exactly as printed; training is Mysticism and Survival. Innervate and Ancient Growth are gone.
-  - **Primal Mystic**: the Druid now casts with Survival, Max Mana is 2 × Level and Cast Max is 1 + half your Level (round up) — no Awareness added. Spells known are 2 at Level 1 and one more every 3 Levels.
-  - **Tempest Within** is an Active Effect: Cold, Fire and Shock damage you take is reduced per damage die (1 at Level 4, 2 at Level 8).
-  - **Polymorph runs through the Metamorph module** (optional): the Polymorph spell's cast card has a Polymorph button that opens Metamorph's Beast picker (Beasts with HD no higher than your Level plus Savagery) and swaps the token. Without Metamorph it stays text.
-  - **Savagery** (Active Effects): attacks made in a Beast form (a Metamorph copy) deal the Druid's Savagery bonus (+1 at Level 2, +2 at 6, +3 at 10) as extra damage, and the same bonus raises the Level used for Polymorph's HD limit.
-  - **Beast Mode** (Active Effects, Lv 6): Beast-form attacks ignore the target's Immune to physical damage (physical, blunt, piercing, slashing — Relics are not modeled), and a sole-Target self Polymorph's card notes it is continual (no Focus).
-  - **Force of Nature has a button** (Lv 10): at 0 HP, once per Shift (a Rest renews it), pick a Beast and morph into it; your HP is set to its Statblock HP. Feral Shift's extra Beast Action stays text.
-  - New reusable effect fields: `system.beastDamageBonus`, `system.polymorphLevelBonus`, `system.beastIgnoreImmune`, `system.polymorphContinual`. The Polymorph spell on existing characters gets the button on load.
-  - New reusable effect field: `system.incomingDamageReductionPerDieByType` (ADD `cold,fire,shock: <formula>`).
-  - Existing Druid class items are converted once on load; characters still using Mysticism as their Mana Skill are moved to Survival, and Mysticism and Survival are marked trained.
-- **Dancer revised to the new book text.** Class description, the Class Features table, Step Up, Footloose, Evasive at Levels 2 / 6 / 10 (10’ / 15’ / 20’), Captivator at 4 / 8 (Cd4 / Cd6), Don’t Stop Me Now and Double Time now read exactly as printed; training is Finesse and Performance. Fleet of Foot, Choreographer and Flash of Beauty are gone; Footloose grants the Fallaway Reverse Perk.
-  - **Step Up has a button** (character sheet Features list, or pinned to the HUD Belt): rolls the Finesse Check and posts a chat card with the book text on a pass (plus Double Time from Level 10). Handing out the extra Action stays with the table.
-  - **Footloose** is an Active Effect under Class Features: your Reflex Saves roll two d20s and keep the higher (works for chat-card saves, sheet saves and saves against Statuses; a Crit is read from the kept die).
-  - **Don’t Stop Me Now** (Lv 6) is an Active Effect: Favor on Saves against Paralyzed and Restrained (which covers being grappled). Difficult Terrain and being moved stay text. Evasive and Captivator are text-only.
-  - New reusable effect field: `system.saveRollsTwice` (ADD a save key to roll that Save with two d20s, keep the higher).
-  - Existing Dancer class items are converted once on load.
-- **Action buttons on features, traits and perks.** Any class feature, ancestry trait or perk can now define an action button in its item sheet (Action Button section: label, Font Awesome icon, macro UUID or embedded script, Allow Players). It shows on the character sheet's Features / Traits / Perks lists; right-click it to **Add to Belt** and it appears in the HUD Belt (click runs it, right-click: Run / Remove from Belt). Runs through the item-macro scope (`actor`, `item`, `token`, `targets`, `speaker`).
-- **Effects can be spent on use.** An Active Effect flagged `consumeOn` (`attack`, `cast`, `save`, `heal`) is removed from its actor right after a roll of that kind.
-- **Bard revised to the new book text.** Class description, Overtuned at Levels 2 / 6 / 10 (21+ / 20+ / 19+), Audacity at 4 / 8 (Cd4 / Cd6), Enjoy the Silence, Climax and Well-Versed now read exactly as printed; training is Finesse, Influence and Performance. Song of Rest, Starstruck, Bravado and Starstruck Enhancement are gone.
-  - **Virtuoso is playable.** The Virtuoso feature has a **Perform** button (character sheet Features list, or pinned to the HUD Belt). It posts a chat card with Inspiration / Resolve / Valor buttons; picking one rolls Performance and, on a pass, applies the benefit to your Group (the Party sheet's members, else you plus your Targets). Inspiration = +1d6 on HP-restoring rolls; Resolve = Favor on Saves; Valor = Favor on Attack and Cast Checks. Performing again replaces your previous benefit.
-  - **Benefits are spent when used:** each one is removed from the recipient after their next roll of that kind (healing roll / Save / Attack or Cast). Manual-first: it is an ordinary effect with an on/off switch; inside a started combat it also ends at the end of that Round, with no combat it lasts until used or switched off.
-  - **Climax (Lv 10)** makes the Favor die and the healing d6 of the benefit you grant explode. **Overtuned** gives you 1 Luck when the Favor die from your Virtuoso lifts a d20 from below the threshold to at-or-above it.
-  - **Enjoy the Silence** is an Active Effect under Class Features (Lv 6): Favor on Saves against Berserk, Charmed, Confused and Frightened. Audacity is text-only.
-  - New reusable effect fields: `system.favorChecks` (Favor on all attack / cast / save checks), `system.healingBonusDice`, `system.bonusDiceExplode`.
-  - Removed the dead Bravado and Climax library effects (they pointed at fields nothing read).
-  - Existing Bard class items are converted once on load.
-- **Effects list: Class Features category.** Class-feature effects (Catalyze, Potency, Rage…) are listed in their own "Class Features" section without an on/off switch and no longer clutter the HUD effect menu. Helper effects meant to be flipped by hand (Rage: Auto-Berserk, Aggressor first-Round twins) stay in Active / Inactive and the HUD.
-- **Alchemist revised to the new book text.** Class description, Eureka at Levels 2 / 6 / 10 (10+ / 9+ / 8+), Potency at 4 / 8 and every other feature now read exactly as printed; training is Arcana, Craft and Medicine.
-  - **Every automated piece is its own Active Effect** under Class Features: Catalyze, Eureka, Potency (+1 per die, +2 at 8), Potency: Explode, Mix and Prima Materia. Each Level-gated one shows its **Lv N** badge until you reach it.
-  - Fix: Potency's Explode never applied — its formula was mangled by the outer-parenthesis cleanup, so Alchemical dice only exploded if the item itself said so.
-  - Existing Alchemist class items are converted once on load (a disabled effect stays disabled).
-- **Barbarian revised to the new book text.** Rage (Berserk: bigger attack dice; −1 damage per die in Light or no Armor), Wrath, Aggressor (+5' Speed at 2, +5' every 4 Levels, doubled in the first Round), Murder Mode (immune to Charmed / Confused / Frightened; Berserk dice Explode with a +1/+2 bonus), Bloodthirsty (Favor vs targets missing HP) and Rip and Tear. Fearmonger and Mindless Rancor are gone; training is now Melee and Survival.
-  - **Every automated piece is its own Active Effect** — Berserk, Aggressor's first-Round doubling and the rest all work by hand. New **Rage: Auto-Berserk** effect (off = manual Berserk): attacking or taking damage applies Berserk for 1 minute, and it ends if you finish a Turn without attacking or taking damage. **Aggressor: First Round (manual)** ships disabled for tables without the combat tracker.
-  - **Armor weight is read in Slots** (`@armorWorn.slots`): Adamant / Orichalcum light armor no longer counts as Light for Rage; Mythral medium armor does. New formula values `@armorWorn.slots|rating|might` and `@combat.round` (0 outside combat); effects can be level-gated (`minLevel`), and Active Effects can grant situational attack Favor (`system.attackFavorVs`).
-  - Fix: Rage's exploding dice never actually exploded on weapons without their own explode setting. A global explode value no longer overrides an item's own faces while global explode is off.
-  - Effects tied to a class Level show a **Lv N** badge in the effects list (yellow while still locked).
-  - Existing Barbarian class items are converted once on load (your Rage on/off choice is kept). The 7 unused Barbarian library effects are removed and the library Rage effect is now conditional on Berserk.
-- **Exploding damage shows `!`** (e.g. `2d6!`) everywhere damage is displayed, when the dice can explode for that character (item setting, global explode effect or Alchemist Potency). Display only.
-- **Trade up:** new icon beside the coins (sheet and HUD) exchanges copper → silver → gold into the largest coins.
-- **HUD:** edit the character name and coin amounts in place; Wealth label is now a coin icon.
-- **Thrown attack animations:** throws now fly a projectile to the target (auto-recognised, e.g. the JB2A dagger throw); a thrown miss lands wide. New optional **Throw** animation slot on Thrown weapons and thrown alchemicals. Also applies to Roll Damage button, Luck rerolls and Force Crit.
-- **Item FX section:** matches the sheet theme; each slot has a Preview button (the inline mini-player is gone). Ranged clips picked in the FX picker keep choosing the file by distance to the target; the preview shows each file's range.
-- **Automated Animations:** the duplicate-animation warning now has a GM "Turn it off" button for its auto-recognition and hides once it's off.
-- **Weapon Properties dropdown:** closes on outside click; cleaner checkboxes and selected-row highlight.
+## v6.0.1
+- Catalyze panel redesigned.
+- **Shorter Features list.** Scaling class features (Eureka 15+ / 14+ / 13+, Aggressor, Valor, Lay on Hands…) now show only the version you have reached on the sheet and the HUD, instead of one row per Level. Every feature shows Level badges for when you gained it and each of its upgrades. The Level Up dialog and the class sheet still list every Level.
+- Rogue's Level 2 feature is now labelled "Evasive (10’)" and Gunslinger's "Bad Medicine (+1 die)".
+- Fix: right-clicking a class feature on the sheet could open the wrong feature (Edit / To Chat).
+- Fix: the Workbench's Known Formulas showed the Alchemy craft cost as 50c; it now shows the book's 5s.
+
+## v6.0.0
+**Core Rulebook v3 Alpha 3 update.** Classes, ancestries, perks, statuses, gear, spells and the bestiary now follow the book. Existing worlds are converted once on first load by the GM: items already on characters are updated and your effect on/off choices are kept.
+
+### Settings
+- **One Settings Hub.** Foundry's Vagabond settings tab now has a single **Open Vagabond Settings** button. Every setting lives in 8 subjects (Rules, Magic, Combat & Encounters, Statuses & Tokens, Visual FX, Interface, Economy, Content & Homebrew), with search, GM / You badges, per-player overrides of GM defaults and save-on-change. Saved values carry over. The old Spell, Encounter, Status Effects and HUD Display dialogs are gone.
+- **New world setting: Class Automation** (Automatic / Only in Combat / Manual). Manual turns off every class "Auto" effect; feature buttons and status toggles do the work.
+
+### Classes
+- **All 18 classes rewritten to the book**: description, Class Features table, Training and every feature's text as printed.
+- **Manual-first automation.** Each automated behavior is its own Active Effect, listed in a new **Class Features** section of the effects list with a **Lv N** badge until you reach it. Switch any of them off to play it by hand. Nothing requires a Combat.
+- **Feature buttons** on the sheet's Features list (pin them to the HUD Belt): Alchemist Catalyze, Bard Perform, Dancer Step Up, Druid Force of Nature, Fighter Momentum, Gunslinger Deadeye / Grit / High Noon, Hunter Mark Target, Revelator Lay on Hands, Sorcerer Overpowered, Witch Hex, Wizard Extracurricular / Archwizard. Active buttons glow; right-click one to end its effect.
+- **Highlights:**
+  - **Alchemist:** Catalyze crafts a known formula (1 per Turn in Combat, 2 with Deft Hands); Eureka, Potency (its Explode now works), Prima Materia (10g cap).
+  - **Barbarian:** Rage auto-Berserk (attacking or taking damage applies it; a Turn without either ends it); "Light Armor" is read from the armor's Slots.
+  - **Bard:** Virtuoso grants Inspiration, Resolve or Valor to your Group, spent when used; Climax, Overtuned, Enjoy the Silence.
+  - **Dancer:** Footloose rolls Reflex Saves twice, keeps the higher; Don't Stop Me Now.
+  - **Druid:** casts with Survival; Polymorph opens a Beast picker through the optional Metamorph module; Savagery, Beast Mode, Tempest Within.
+  - **Fighter:** Fighting Style perk, Valor crit range, Momentum.
+  - **Gunslinger:** Deadeye stacks (auto or by hand), Grit removes stacks, Bad Medicine and Devastator crit dice, High Noon.
+  - **Hunter:** Hunter's Mark, Lethal Precision, Apex Predator (Mark is Weak to you), Rover.
+  - **Luminary:** healing Spells Explode; Overheal.
+  - **Merchant:** Deep Pockets Item Slots; Midas Touch boosts equipped Bonus relics.
+  - **Pugilist:** Title Holder Brawl dice, Haymaker auto-Daze, Moxie.
+  - **Revelator / Magus:** Righteous and Arcanum grant Gish; Lay on Hands heals and cures.
+  - **Rogue:** Sneak Attack (auto, ignores Armor), Knack grants Luck on a Crit.
+  - **Sorcerer:** Twinned Spell, Overpowered, Spell-Slinger.
+  - **Vanguard:** Wall and Indestructible grow your Defense weapon dice.
+  - **Witch:** Hex with a new **Hexed** status, Soul Link, Misery Business, Widdershins.
+  - **Wizard:** Sculpt Spell discounts the whole Cast; Manifold Mind raises Focus.
+  - Spellcasters' Cast Max follows each class table.
+- **"Ends on a failure / next Turn" effects also end on your next roll**, with no Combat needed (Deadeye, Rage, Momentum). A chat card says what ended.
+- **Exploding countdown dice:** `Cd4!` in a description creates a die that rolls `1d4!`.
+- Fix: new Barbarians no longer start Berserk.
+
+### Ancestries, perks and character creation
+- **Ancestries** rewritten to the book. Darksight gives your token Darkvision; Dwarf Tough grants the Tough perk.
+- **Perks** rewritten to the book text and prerequisites. New: Beat Rush, Bravado, Celestial Illuminator, Climber, Cross Counter, Cryptozoologist, Dusted Knuckle, Esoteric Recall, Favors the Bold, Fluid Motion, Instant Weapon, Medic, Quality Assurance, Quick Draw, Ricochet, Ritualist, Selfless, Swimmer. Perks not in the book are removed or folded into others.
+- **Grants can ignore perk prerequisites** (all, or only Stat minimums).
+- **Character Builder:** one free Perk at creation; bonus Trainings from Reason; the Class art becomes the portrait and token when they are still the placeholder.
+- **Level Up dialog redesigned:** award XP first, then Stat / Perk / Spell tabs once the Level is gained; a summary of what the next Level gives; extra Training when Reason crosses a threshold.
+- **Build Guides compendium:** 40 ready-to-play Level 1 characters, one per book build, with a Guide tab on Level Up panel.
+- Sheet: perks show where they came from (Level / Ancestry / Class); Stat boxes show the total and edit the base.
+
+### Combat and statuses
+- **Defense property:** make an Attack Check with the Defense weapon instead of the Reflex Save; a pass subtracts every equipped Defense weapon's dice. Protector and Patience perks are automated.
+- **Reflex Difficulty** includes your worn Armor's penalty.
+- **Frightened / Sickened:** -2 to each damage / healing die.
+- **Prone:** half Speed; Vulnerable only to Melee attacks and on Reflex Saves.
+- **Incapacitated** and its family auto-fail every Might and Dexterity Skill and Save, including chat-card Saves and the Defense Check.
+- **Vulnerable** is Hindered on its own Checks and Saves; attacks and Casts at it are Favored. Invisible works both ways, Cast Checks now read target statuses and Flanked +2 applies to Casts.
+- Exploding damage shows `!` (e.g. `2d6!`).
+- Effects can be spent on use (after an attack, Cast, Save or heal).
+- Fix: Luck reroll and Force Crit work on items consumed by the attack (thrown alchemical, last dagger).
+
+### NPCs and bestiary
+- **Every statblock aligned with the book**: HP matches the HD line; Silver / Cold Iron weakness by type.
+- **Statblock rules automated** (NPC sheet, Special Rules): Relic weapons bypass Immune, Weak to axes, Sunlight harm (new manual **Sunlit** status), Zombie / always HP floor, Regenerate.
+
+### Gear, inventory and crafting
+- Gear, weapons, alchemicals, trinkets, relics, spells and starting packs aligned with the book. Cart and Wagon are Construct actors.
+- **Backpack:** 1 Slot consumed when held, +3 Slots when worn.
+- **0-Slot items stack** (10 = 1 Slot) and split automatically; empty items fade. Rations (1 day) are now Ration 1d.
+- **Drag and drop** feature buttons, items and spells onto the Equipped column or the HUD Belt. The "Belt" section is now **Worn**; backpacks and containers are hidden from it.
+- **Action buttons** on any feature, trait or perk (macro or script), pinnable to the HUD Belt.
+- **Workbench:** owned quantity, shortfall messages, Materials need / have.
+- **Coins:** Trade Up button exchanges coins into the largest denominations.
+- **Animations:** thrown attacks fly a projectile (new Throw slot); Item FX slots get a Preview button; Automated Animations warning has a "Turn it off" button.
+
+### For effect and macro authors
+- Renamed: `weaponLowExplodeBySkill` → `weaponHighExplodeBySkill`; Spell-Slinger now uses `castCritBonus` (`spellCritBonus` is not read).
+- New formula values `@armorWorn.slots|rating|might` and `@combat.round` / `@combat.active` (0 outside Combat). Effects can be Level-gated (`minLevel` flag).
 
 ## v5.44.0
 - **Compact damage card.** Damage dice and modifiers fold away under the total — click the number to open them. Defense now sits inside the damage section as **weapon-art shields** (one shield per weapon; with two Defense weapons a "Both" shield on top and one per weapon below). Saves share one row, sized to your configured saves; the info button uses a plain info icon.

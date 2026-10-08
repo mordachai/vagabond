@@ -809,6 +809,25 @@
     &:hover { color: $c-yellow; }
     &.is-active { @include feature-action-active; }
   }
+
+  // Levels a feature (and its scaling copies) was gained at — same pill as .perk-origin
+  .feature-levels {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin: 1px 0 4px;
+  }
+
+  .feature-level {
+    display: inline-block;
+    padding: 0 8px;
+    font-size: 0.85rem;
+    font-style: italic;
+    line-height: 1.2;
+    border: 1px solid currentColor;
+    border-radius: 10px;
+    opacity: 0.85;
+  }
 }
 
 .traits-list {

@@ -694,22 +694,14 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
           perks.push(item);
           break;
         case 'class':
-          // Get features for current level and below
-          if (item.system.levelFeatures) {
-            const classFeatures = item.system.levelFeatures
-              .map((f, srcIndex) => ({ f, srcIndex }))
-              .filter(({ f }) => f.level <= currentLevel)
-              // Bare "Perk" grants are listed under Perks instead
-              .filter(({ f }) => !EnrichmentHelper.isBarePerkGrant(f))
-              .map(({ f, srcIndex }, index) => ({
-                ...f,
-                index: index,
-                srcIndex,
-                _id: `${item.id}-feature-${index}`,
-                sourceItem: item
-              }));
-            context.features.push(...classFeatures);
-          }
+          // Features up to the current level, scaling copies collapsed to the newest one.
+          // `index` = position in levelFeatures (the context menu reads levelFeatures[index]).
+          context.features.push(...EnrichmentHelper.classFeatureRows(item, currentLevel).map(row => ({
+            ...row,
+            index: row.srcIndex,
+            _id: `${item.id}-feature-${row.firstIndex}`,
+            sourceItem: item
+          })));
           break;
         case 'ancestry':
           // Get all ancestry traits

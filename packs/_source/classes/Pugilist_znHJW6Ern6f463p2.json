@@ -42,7 +42,8 @@
         "allowedPerks": [],
         "perkAmount": 0,
         "spellAmount": 0,
-        "skillChoices": []
+        "skillChoices": [],
+        "scaleKey": "haymaker"
       },
       {
         "level": 3,
@@ -66,7 +67,8 @@
         "allowedPerks": [],
         "perkAmount": 0,
         "spellAmount": 0,
-        "skillChoices": []
+        "skillChoices": [],
+        "scaleKey": "moxie"
       },
       {
         "level": 5,
@@ -90,7 +92,8 @@
         "allowedPerks": [],
         "perkAmount": 0,
         "spellAmount": 0,
-        "skillChoices": []
+        "skillChoices": [],
+        "scaleKey": "title-holder"
       },
       {
         "level": 6,
@@ -102,7 +105,8 @@
         "allowedPerks": [],
         "perkAmount": 0,
         "spellAmount": 0,
-        "skillChoices": []
+        "skillChoices": [],
+        "scaleKey": "haymaker"
       },
       {
         "level": 7,
@@ -126,7 +130,8 @@
         "allowedPerks": [],
         "perkAmount": 0,
         "spellAmount": 0,
-        "skillChoices": []
+        "skillChoices": [],
+        "scaleKey": "moxie"
       },
       {
         "level": 9,
@@ -150,7 +155,8 @@
         "allowedPerks": [],
         "perkAmount": 0,
         "spellAmount": 0,
-        "skillChoices": []
+        "skillChoices": [],
+        "scaleKey": "haymaker"
       },
       {
         "level": 10,
@@ -162,7 +168,8 @@
         "allowedPerks": [],
         "perkAmount": 0,
         "spellAmount": 0,
-        "skillChoices": []
+        "skillChoices": [],
+        "scaleKey": "title-holder"
       }
     ],
     "manaSkill": null,

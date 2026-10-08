@@ -68,7 +68,8 @@
         "allowedPerks": [],
         "perkAmount": 0,
         "spellAmount": 0,
-        "skillChoices": []
+        "skillChoices": [],
+        "scaleKey": "ever-cure"
       },
       {
         "level": 5,
@@ -116,7 +117,8 @@
         "allowedPerks": [],
         "perkAmount": 0,
         "spellAmount": 0,
-        "skillChoices": []
+        "skillChoices": [],
+        "scaleKey": "ever-cure"
       },
       {
         "level": 9,

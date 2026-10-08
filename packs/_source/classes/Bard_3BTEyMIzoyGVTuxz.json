@@ -49,7 +49,8 @@
         "allowedPerks": [],
         "perkAmount": 0,
         "spellAmount": 0,
-        "skillChoices": []
+        "skillChoices": [],
+        "scaleKey": "overtuned"
       },
       {
         "level": 3,
@@ -74,7 +75,8 @@
         "allowedPerks": [],
         "perkAmount": 0,
         "spellAmount": 0,
-        "skillChoices": []
+        "skillChoices": [],
+        "scaleKey": "audacity"
       },
       {
         "level": 5,
@@ -99,7 +101,8 @@
         "allowedPerks": [],
         "perkAmount": 0,
         "spellAmount": 0,
-        "skillChoices": []
+        "skillChoices": [],
+        "scaleKey": "overtuned"
       },
       {
         "level": 6,
@@ -136,7 +139,8 @@
         "allowedPerks": [],
         "perkAmount": 0,
         "spellAmount": 0,
-        "skillChoices": []
+        "skillChoices": [],
+        "scaleKey": "audacity"
       },
       {
         "level": 9,
@@ -161,7 +165,8 @@
         "allowedPerks": [],
         "perkAmount": 0,
         "spellAmount": 0,
-        "skillChoices": []
+        "skillChoices": [],
+        "scaleKey": "overtuned"
       },
       {
         "level": 10,

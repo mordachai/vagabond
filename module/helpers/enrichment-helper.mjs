@@ -17,6 +17,35 @@ export class EnrichmentHelper {
   }
 
   /**
+   * Class features to list on the actor sheet / HUD at `level`. Bare "Perk" grants are dropped (listed under
+   * Perks), and a scaling feature (Eureka 15+ / 14+ / 13+) collapses to the copy gained most recently, kept at
+   * the position of its first copy. Copies are tied by `scaleKey`, else by identical description (homebrew or
+   * un-migrated class items) — never by name (translated worlds).
+   * @param {Item} classItem
+   * @param {number} level
+   * @returns {Array<Object>} levelFeatures entries + `srcIndex` (newest copy's index in levelFeatures),
+   *   `firstIndex` (first copy's index, stable across level-ups) and `levelLabels` ("Level 2", "Level 6", …)
+   */
+  static classFeatureRows(classItem, level) {
+    const rows = new Map();
+    (classItem?.system?.levelFeatures ?? []).forEach((f, srcIndex) => {
+      if (f.level > level || this.isBarePerkGrant(f)) return;
+      const desc = f.description?.trim();
+      const key = f.scaleKey ? `key:${f.scaleKey}` : desc ? `desc:${desc}` : `idx:${srcIndex}`;
+      const row = rows.get(key);
+      const levels = [...(row?.levels ?? []), f.level];
+      if (!row) rows.set(key, { ...f, srcIndex, firstIndex: srcIndex, levels });
+      else if (f.level >= row.level) rows.set(key, { ...f, srcIndex, firstIndex: row.firstIndex, levels });
+      else row.levels = levels;
+    });
+    return [...rows.values()].map(({ levels, ...row }) => ({
+      ...row,
+      levelLabels: [...new Set(levels)].sort((a, b) => a - b)
+        .map(l => game.i18n.format('VAGABOND.UI.Sections.perkOriginLevel', { level: l })),
+    }));
+  }
+
+  /**
    * Enrich class features with HTML content
    * @param {Object} context - The render context containing features
    * @param {Object} actor - The actor document

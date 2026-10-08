@@ -985,6 +985,7 @@ export function registerGameSettings({ refreshClockDependents, applyTokenEffectV
     'witchClassMigrated', 'wizardClassMigrated', 'wizardSculptSpellMigrated', 'ancestriesMigrated',
     'alpha3StatusesMigrated', 'alpha3BackpackMigrated', 'alpha3RationsMigrated', 'alpha3DefensePerksMigrated',
     'alpha3ClassPerksMigrated', 'alpha3PerksMigrated', 'alpha3ClassesMigrated', 'alpha3AncestriesMigrated',
+    'classFeatureScaleKeysMigrated',
   ];
   for (const key of MIGRATION_GUARDS) {
     game.settings.register('vagabond', key, {

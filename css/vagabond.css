@@ -4982,6 +4982,21 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .vbd-hud .accordion-item .vh-acc-body p {
   margin: 0 0 4px;
 }
+.vbd-hud .accordion-item .vh-acc-body .vh-feature-levels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 2px 0 4px;
+}
+.vbd-hud .accordion-item .vh-acc-body .vh-feature-level {
+  padding: 0 7px;
+  font-size: 0.8em;
+  font-style: italic;
+  line-height: 1.3;
+  border: 1px solid currentColor;
+  border-radius: 10px;
+  opacity: 0.8;
+}
 
 .vh-key-badge {
   display: inline-block;
@@ -12402,6 +12417,211 @@ ol#combat-tracker.directory-list {
   color: var(--vagabond-c-text-primary);
 }
 
+.catalyze-dialog {
+  --cz-accent: #7a6a00;
+  --cz-glow: var(--vagabond-c-chat-yellow);
+  --cz-muted: rgba(0, 0, 0, 0.4);
+  --cz-hint: #555;
+  --cz-card-bg: rgba(0, 0, 0, 0.05);
+  --cz-card-border: rgba(0, 0, 0, 0.25);
+  --cz-error: #9d2b2b;
+}
+
+.theme-dark .catalyze-dialog,
+.catalyze-dialog.theme-dark {
+  --cz-accent: var(--vagabond-c-chat-yellow);
+  --cz-glow: var(--vagabond-c-chat-yellow);
+  --cz-muted: rgba(255, 255, 255, 0.35);
+  --cz-hint: var(--vagabond-c-tan);
+  --cz-card-bg: rgba(0, 0, 0, 0.18);
+  --cz-card-border: rgba(0, 0, 0, 0.4);
+  --cz-error: #d07a7a;
+}
+
+.catalyze-dialog.theme-light {
+  --cz-accent: #7a6a00;
+  --cz-glow: var(--vagabond-c-chat-yellow);
+  --cz-muted: rgba(0, 0, 0, 0.4);
+  --cz-hint: #555;
+  --cz-card-bg: rgba(0, 0, 0, 0.05);
+  --cz-card-border: rgba(0, 0, 0, 0.25);
+  --cz-error: #9d2b2b;
+}
+
+.catalyze-dialog .catalyze-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.catalyze-dialog .catalyze-hint {
+  margin: 0;
+  font-family: "Manofa", serif;
+  font-size: 0.75rem;
+  line-height: 1.35;
+  color: var(--cz-hint);
+  text-align: center;
+}
+.catalyze-dialog .catalyze-missing {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--cz-error);
+  text-align: center;
+}
+.catalyze-dialog .catalyze-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  max-height: 420px;
+  overflow-y: auto;
+  padding: 2px;
+}
+.catalyze-dialog .catalyze-option {
+  height: auto;
+  line-height: normal;
+  position: relative;
+  min-width: 0;
+  padding: 8px 6px 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  background: var(--cz-card-bg);
+  border: 1px solid var(--cz-card-border);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: filter 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+}
+.catalyze-dialog .catalyze-option:hover {
+  border-color: var(--cz-glow);
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+.catalyze-dialog .catalyze-option.is-selected {
+  border-color: var(--cz-glow);
+  box-shadow: 0 0 8px -1px var(--cz-glow), inset 0 0 0 1px var(--cz-glow);
+}
+.catalyze-dialog .catalyze-option.is-selected .catalyze-name {
+  color: var(--cz-accent);
+}
+.catalyze-dialog .catalyze-art {
+  width: 72px;
+  height: 72px;
+  flex: none;
+  object-fit: cover;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  border-radius: 4px;
+  display: block;
+}
+.catalyze-dialog .catalyze-owned {
+  position: absolute;
+  top: 5px;
+  right: 7px;
+  font-family: "Eskapade", serif;
+  font-weight: bold;
+  font-size: 1.1rem;
+  line-height: 1;
+  color: var(--cz-accent);
+}
+.catalyze-dialog .catalyze-owned.is-zero {
+  color: var(--cz-muted);
+}
+.catalyze-dialog .catalyze-name {
+  width: 100%;
+  font-family: "Eskapade", serif;
+  font-weight: bold;
+  font-size: 0.9rem;
+  line-height: 1.15;
+  color: var(--vagabond-c-text-primary);
+  text-align: center;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+#tooltip.catalyze-tip {
+  --cz-tip-bg: #f4f1ea;
+  --cz-tip-text: #2b2b2b;
+  --cz-tip-sub: #666;
+  --cz-tip-rule: rgba(0, 0, 0, 0.15);
+  --cz-tip-chip: rgba(0, 0, 0, 0.06);
+}
+
+.theme-dark #tooltip.catalyze-tip {
+  --cz-tip-bg: rgba(18, 20, 24, 0.97);
+  --cz-tip-text: #e6e3da;
+  --cz-tip-sub: #a8a49a;
+  --cz-tip-rule: rgba(255, 255, 255, 0.15);
+  --cz-tip-chip: rgba(255, 255, 255, 0.07);
+}
+
+#tooltip.catalyze-tip {
+  max-width: 300px;
+  padding: 0;
+  background: var(--cz-tip-bg);
+  border: 2px solid var(--vagabond-c-green);
+  border-radius: 6px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+  color: var(--cz-tip-text);
+  text-align: left;
+}
+#tooltip.catalyze-tip .cz-tip {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px 10px;
+}
+#tooltip.catalyze-tip .cz-tip-head {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 5px;
+  border-bottom: 1px solid var(--cz-tip-rule);
+}
+#tooltip.catalyze-tip .cz-tip-head strong {
+  font-family: "Eskapade", serif;
+  font-size: 1rem;
+  line-height: 1.2;
+}
+#tooltip.catalyze-tip .cz-tip-head span {
+  font-size: 0.75rem;
+  color: var(--cz-tip-sub);
+}
+#tooltip.catalyze-tip .cz-tip-damage {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+#tooltip.catalyze-tip .cz-tip-dice {
+  padding: 1px 8px;
+  border: 1px solid var(--vagabond-c-green);
+  border-radius: 10px;
+  font-family: "Eskapade", serif;
+  font-weight: bold;
+  font-size: 0.9rem;
+  color: var(--vagabond-c-green);
+}
+#tooltip.catalyze-tip .cz-tip-dtype {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 1px 8px;
+  border-radius: 10px;
+  background: var(--cz-tip-chip);
+  font-size: 0.8rem;
+}
+#tooltip.catalyze-tip .cz-tip-desc {
+  max-height: 220px;
+  overflow: hidden;
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+#tooltip.catalyze-tip .cz-tip-desc p {
+  margin: 0 0 4px;
+}
+#tooltip.catalyze-tip .cz-tip-desc p:last-child {
+  margin-bottom: 0;
+}
+
 .vagabond.shop-sheet .window-content {
   padding: 0;
 }
@@ -17817,6 +18037,22 @@ ol#combat-tracker.directory-list {
   .vagabond .features-list .feature-action-btn.is-active::before {
     animation: none;
   }
+}
+.vagabond .features-list .feature-levels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 1px 0 4px;
+}
+.vagabond .features-list .feature-level {
+  display: inline-block;
+  padding: 0 8px;
+  font-size: 0.85rem;
+  font-style: italic;
+  line-height: 1.2;
+  border: 1px solid currentColor;
+  border-radius: 10px;
+  opacity: 0.85;
 }
 .vagabond .traits-list {
   margin-bottom: 16px;

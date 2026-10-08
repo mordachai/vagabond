@@ -86,7 +86,7 @@ import { WizardHelper } from './helpers/wizard-helper.mjs';
 import { AlchemistHelper } from './helpers/alchemist-helper.mjs';
 import { DruidHelper } from './helpers/druid-helper.mjs';
 import { migrateFighterClass, migrateDruidClass, migrateGunslingerClass, migrateHunterClass, migrateLuminaryClass, migrateMagusClass, migrateMerchantClass, migratePugilistClass, migrateRevelatorClass, migrateRogueClass, migrateSorcererClass, migrateVanguardClass, migrateWitchClass, migrateWizardClass, migrateAncestries } from './helpers/class-migrations.mjs';
-import { migrateAlpha3Statuses, migrateAlpha3Backpacks, migrateAlpha3Rations, migrateAlpha3DefensePerks, migrateAlpha3ClassPerks, migrateAlpha3Perks, migrateAlpha3Classes, migrateAlpha3Ancestries } from './helpers/alpha3-migrations.mjs';
+import { migrateAlpha3Statuses, migrateAlpha3Backpacks, migrateAlpha3Rations, migrateAlpha3DefensePerks, migrateAlpha3ClassPerks, migrateAlpha3Perks, migrateAlpha3Classes, migrateAlpha3Ancestries, migrateClassFeatureScaleKeys } from './helpers/alpha3-migrations.mjs';
 import { consumeUsedEffects } from './helpers/use-effects.mjs';
 import { VagabondRollBuilder } from './helpers/roll-builder.mjs';
 import { CurrencyHelper } from './helpers/currency-helper.mjs';
@@ -897,7 +897,8 @@ Hooks.once('ready', function () {
   // One-time: Human trait Knack -> Aptitude.
   migrateAlpha3Ancestries();
   // One-time: class items get the Alpha 3 deltas (runs after every earlier class migration settled).
-  Promise.allSettled(classRuns).then(() => migrateAlpha3Classes());
+  // Then: class items get the scaling-chain ids (scaleKey) the sheet / HUD collapse features on.
+  Promise.allSettled(classRuns).then(() => migrateAlpha3Classes()).then(() => migrateClassFeatureScaleKeys());
 });
 
 // Recompute realtime light timers on scene load (catches elapsed time during reloads).

@@ -981,6 +981,23 @@
       color: $c-lite;
       padding: 2px 16px 8px 14px;
       p { margin: 0 0 4px; }
+
+      // Levels a class feature (and its scaling copies) was gained at
+      .vh-feature-levels {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        margin: 2px 0 4px;
+      }
+      .vh-feature-level {
+        padding: 0 7px;
+        font-size: 0.8em;
+        font-style: italic;
+        line-height: 1.3;
+        border: 1px solid currentColor;
+        border-radius: 10px;
+        opacity: 0.8;
+      }
     }
   }
 }

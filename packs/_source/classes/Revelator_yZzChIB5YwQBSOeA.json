@@ -50,7 +50,8 @@
           "uuid": "",
           "command": "system:revelator.layOnHands",
           "runAsGM": false
-        }
+        },
+        "scaleKey": "lay-on-hands"
       },
       {
         "level": 3,
@@ -74,7 +75,8 @@
         "allowedPerks": [],
         "perkAmount": 0,
         "spellAmount": 0,
-        "skillChoices": []
+        "skillChoices": [],
+        "scaleKey": "paragons-aura"
       },
       {
         "level": 5,
@@ -106,7 +108,8 @@
           "uuid": "",
           "command": "system:revelator.layOnHands",
           "runAsGM": false
-        }
+        },
+        "scaleKey": "lay-on-hands"
       },
       {
         "level": 6,
@@ -142,7 +145,8 @@
         "allowedPerks": [],
         "perkAmount": 0,
         "spellAmount": 0,
-        "skillChoices": []
+        "skillChoices": [],
+        "scaleKey": "paragons-aura"
       },
       {
         "level": 9,
@@ -174,7 +178,8 @@
           "uuid": "",
           "command": "system:revelator.layOnHands",
           "runAsGM": false
-        }
+        },
+        "scaleKey": "lay-on-hands"
       },
       {
         "level": 10,

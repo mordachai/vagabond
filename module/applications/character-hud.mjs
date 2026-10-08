@@ -449,17 +449,11 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
           perks.push(item);
           break;
         case 'class':
-          if (item.system.levelFeatures) {
-            context.features.push(...item.system.levelFeatures
-              .map((f, srcIndex) => ({ f, srcIndex }))
-              .filter(({ f }) => f.level <= currentLevel)
-              // Bare "Perk" grants are listed under Perks instead
-              .filter(({ f }) => !EnrichmentHelper.isBarePerkGrant(f))
-              .map(({ f, srcIndex }, index) => ({
-                ...f, index, _id: `${item.id}-feature-${index}`,
-                fx: FeatureAction.row(actor, item, `levelFeatures.${srcIndex}.action`, f.name),
-              })));
-          }
+          // Scaling copies collapsed to the newest one (EnrichmentHelper.classFeatureRows)
+          context.features.push(...EnrichmentHelper.classFeatureRows(item, currentLevel).map(row => ({
+            ...row, index: row.srcIndex, _id: `${item.id}-feature-${row.firstIndex}`,
+            fx: FeatureAction.row(actor, item, `levelFeatures.${row.srcIndex}.action`, row.name),
+          })));
           break;
         case 'ancestry':
           if (item.system.traits) {

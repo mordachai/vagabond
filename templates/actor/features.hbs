@@ -139,16 +139,19 @@
         <h4 class="left-col">{{localize "VAGABOND.UI.Sections.Features"}}</h4>
         <ul class='features-list'>
           {{#each enrichedFeatures as |feature id|}}
-            <li class='feature accordion-item collapsed' data-feature-level='{{feature.level}}' data-feature-index='{{feature.index}}' data-source-type='class' data-accordion-id='feature-{{feature.index}}'>
+            <li class='feature accordion-item collapsed' data-feature-level='{{feature.level}}' data-feature-index='{{feature.index}}' data-source-type='class' data-accordion-id='feature-{{feature.firstIndex}}'>
               <div class='feature-header accordion-header clickable' data-action='toggleFeature' data-feature-id='{{feature._id}}'>
                 <h5 class='feature-name'>{{feature.name}}</h5>
                 {{#if feature.fx}}
                   <button type='button' class='feature-action-btn{{#if feature.fx.active}} is-active{{/if}}' data-action='featureAction' data-action-key='{{feature.fx.key}}' data-tooltip='{{feature.fx.tip}}'{{#if feature.fx.count}} data-count='{{feature.fx.count}}'{{/if}}><i class='{{feature.fx.icon}}'></i></button>
                 {{/if}}
               </div>
-              {{#if feature.enrichedDescription}}
-                <div class='feature-description accordion-content' data-feature-id='{{feature._id}}'>{{{feature.enrichedDescription}}}</div>
-              {{/if}}
+              <div class='feature-description accordion-content' data-feature-id='{{feature._id}}'>
+                {{#if feature.levelLabels.length}}
+                  <div class='feature-levels'>{{#each feature.levelLabels}}<span class='feature-level'>{{this}}</span>{{/each}}</div>
+                {{/if}}
+                {{{feature.enrichedDescription}}}
+              </div>
             </li>
           {{else}}
             <li class='no-features'>{{localize 'VAGABOND.UI.Sections.featuresPlaceholder'}}</li>
