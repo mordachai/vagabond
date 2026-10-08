@@ -117,7 +117,8 @@
       "Defense": "Defesa",
       "DefenseBoth": "Ambas",
       "DefenseCheck": "Defesa (Checagem de Ataque)",
-      "DiePenaltyTitle": "-{penalty} por dado ({count} dados), cada dado no mínimo 0"
+      "DiePenaltyTitle": "{status}: -{penalty} em cada dado de dano ({dice}) = -{total}",
+      "HealPenaltyTitle": "{status}: -{penalty} em cada dado de cura ({dice}) = -{total}"
     },
     "AttackTypes": {
       "Melee": "Corpo a Corpo",
@@ -394,7 +395,7 @@
       "Restrained": "Vulnerável + Velocidade = 0 [AUTOMATIZADO]",
       "Grappling": "Contendo um alvo. Velocidade reduzida à metade a menos que o alvo seja menor. [PARCIALMENTE AUTOMATIZADO]",
       "Blinded": "Não pode ver. Vulnerável [AUTOMATIZADO]",
-      "Incapacitated": "Não pode Concentrar-se/Agir/Mover-se. Falha em Testes de Força/Destreza e Salvaguardas de Reflexo. Vulnerável. Velocidade = 0 [AUTOMATIZADO]",
+      "Incapacitated": "Não pode Concentrar-se/Agir/Mover-se. Falha em Perícias e Salvaguardas que usam Força ou Destreza. Vulnerável. Velocidade = 0 [AUTOMATIZADO]",
       "Paralyzed": "Incapacitado + Velocidade = 0 [AUTOMATIZADO]",
       "Unconscious": "Cego + Incapacitado + Caído. Ataques Próximos são críticos automáticos [AUTOMATIZADO]",
       "Invisible": "Não pode ser visto por sentidos normais; quem não o vê age como Cego em Testes e Salvaguardas que o envolvem [AUTOMATIZADO: ataques e Conjurações]",

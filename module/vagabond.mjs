@@ -3151,7 +3151,8 @@ const FLUKE_REROLL_ENTRY = {
     // Route based on reroll type
     if (rerollData.type === 'attack') {
       // Weapon attack reroll - reconstruct full attack card
-      const weapon = actor.items.get(rerollData.itemId);
+      // Consumed items (thrown alchemical, last dagger) fall back to the card's snapshot
+      const weapon = VagabondDamageHelper._resolveSourceItem(actor, rerollData.itemId);
       if (!weapon) {
         ui.notifications.error('Weapon not found.');
         return;
@@ -3234,7 +3235,7 @@ const FORCE_CRIT_ENTRY = {
     const targetsAtRollTime = flags.targetsAtRollTime || [];
 
     if (rerollData.type === 'attack') {
-      const weapon = actor.items.get(rerollData.itemId);
+      const weapon = VagabondDamageHelper._resolveSourceItem(actor, rerollData.itemId);
       if (!weapon) { ui.notifications.error('Weapon not found.'); return; }
 
       const weaponSkillKey = rerollData.weaponSkillKey;

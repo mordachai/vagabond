@@ -257,7 +257,8 @@ export class VagabondChatCard {
     // Per-die penalty badge (Frightened: -N per damage die, each die floored at 0)
     if (isDamage && roll._perDiePenaltyTotal) {
       const title = game.i18n.format('VAGABOND.Chat.DiePenaltyTitle', {
-        penalty: roll._perDiePenaltyPerDie, count: roll._perDiePenaltyDiceCount,
+        status: game.i18n.localize('VAGABOND.StatusConditions.Frightened'),
+        penalty: roll._perDiePenaltyPerDie, dice: (roll._perDiePenaltyDice ?? []).join(', '), total: roll._perDiePenaltyTotal,
       });
       parts.push(`<span class="roll-modifier per-die-bonus per-die-penalty" title="${title}"><i class="fas fa-dice-d6"></i>-${roll._perDiePenaltyTotal}</span>`);
     }
@@ -1973,6 +1974,7 @@ export class VagabondChatCard {
     shieldReduction = 0,
     shieldRoll = null,
     flankedBonus = 0,
+    healPenalty = null,
     finalAmount = 0,
     damageType = null,
     previousValue = 0,
@@ -2035,8 +2037,21 @@ export class VagabondChatCard {
 
     } else if (type === 'heal') {
       title = `${effective} Healed`;
+      // Sickened: show what the penalty took off the rolled amount (rolled - penalty = healed)
+      let healBreakdown = '';
+      if (healPenalty?.total > 0) {
+        const tip = game.i18n.format('VAGABOND.Chat.HealPenaltyTitle', {
+          status: game.i18n.localize('VAGABOND.StatusConditions.Sickened'),
+          penalty: healPenalty.perDie, dice: healPenalty.dice.join(', '), total: healPenalty.total,
+        });
+        healBreakdown = `
+          <span class="damage-component" title="Healing"><i class="fa-solid fa-dice"></i> ${raw}</span>
+          <span class="damage-operator">-</span>
+          <span class="damage-component" title="${tip}"><i class="fas fa-dice-d6"></i> ${healPenalty.total}</span>
+          <span class="damage-operator">=</span>`;
+      }
       descriptionHTML = `<div class="save-damage-calculation">
-        <div class="damage-formula-line">
+        <div class="damage-formula-line">${healBreakdown}
           <span class="damage-final"><i class="fa-solid fa-heart"></i> +${effective}</span>
         </div>
         <div class="damage-application-note">HP restored —<strong> ${previousValue}</strong> →<strong> ${newValue}</strong></div>

@@ -590,9 +590,9 @@ export class SpellHandler {
       return;
     }
 
-    // Check for auto-fail conditions (Dead status)
-    const autoFailAllRolls = this.actor.system.autoFailAllRolls || false;
-    if (autoFailAllRolls) {
+    // Check for auto-fail conditions (Dead, or the casting skill is built on a failed Stat)
+    const { VagabondRollBuilder: _AutoFailRB } = await import('../../helpers/roll-builder.mjs');
+    if (_AutoFailRB.autoFails(this.actor, manaSkill)) {
       // Import chat card helper
       const { VagabondChatCard } = await import('../../helpers/chat-card.mjs');
 

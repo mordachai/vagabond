@@ -20,13 +20,6 @@
         "priority": null
       },
       {
-        "key": "system.autoFailStats",
-        "type": "add",
-        "value": "reflex",
-        "phase": "initial",
-        "priority": null
-      },
-      {
         "key": "system.speed.bonus",
         "type": "add",
         "value": "-999",

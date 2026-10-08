@@ -172,16 +172,32 @@ export class VagabondRollBuilder {
     return net > 0 ? 'favor' : net < 0 ? 'hinder' : 'none';
   }
 
+  /** Stats a skill / save key is built on (a Skill has one, a Save has stat1 + stat2). */
+  static _statsOf(actor, key) {
+    const skill = actor?.system?.skills?.[key] ?? CONFIG.VAGABOND?.homebrew?.skills?.find(s => s.key === key);
+    if (skill?.stat) return [skill.stat];
+    const save = CONFIG.VAGABOND?.homebrew?.saves?.find(s => s.key === key);
+    return save ? [save.stat1, save.stat2] : [];
+  }
+
   /**
    * Whether a status forces this roll to fail (Dead: `autoFailAllRolls`; Incapacitated:
-   * `autoFailStats` holds Might, Dexterity and the Reflex Save). `key` is a stat or save key.
-   * The ONE check every Save path uses (sheet, chat-card Saves, Defense Check, status Saves).
+   * `autoFailStats` holds Might and Dexterity). Stats are never rolled in Vagabond, so a
+   * "Might Check" is any Skill or Save built on Might: it fails when its Stat (a Skill's
+   * `stat`, a Save's `stat1` / `stat2`) is listed, or when its own key is. `key` is a stat,
+   * skill or save key. The ONE check every roll path uses (sheet, attacks, casts, chat-card
+   * Saves, Defense Check, status Saves).
    * @param {Actor} actor
    * @param {string} key
    * @returns {boolean}
    */
   static autoFails(actor, key) {
-    return !!actor?.system?.autoFailAllRolls || !!(actor?.system?.autoFailStats ?? []).includes?.(key);
+    if (actor?.system?.autoFailAllRolls) return true;
+    const failing = actor?.system?.autoFailStats ?? [];
+    if (!failing.length) return false;
+    if (failing.includes(key)) return true;
+    const stats = this._statsOf(actor, key);
+    return stats.some(stat => stat && failing.includes(stat));
   }
 
   /**

@@ -598,6 +598,7 @@ export class VagabondDamagePipeline {
     if (!reduction) return 0;
     roll._perDiePenaltyPerDie = penalty;
     roll._perDiePenaltyDiceCount = values.length;
+    roll._perDiePenaltyDice = values;
     roll._perDiePenaltyTotal = reduction;
     roll._total = Math.max(0, roll._total - reduction);
     return reduction;

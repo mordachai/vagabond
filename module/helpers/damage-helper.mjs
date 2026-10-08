@@ -2490,6 +2490,11 @@ ${npcOnly ? '' : `
         await VCCHeal.applyResult(targetActor, {
           type: 'heal',
           rawAmount: amount,
+          healPenalty: {
+            total: diePenalty,
+            perDie: Number(targetActor.system.healingDiePenalty) || 0,
+            dice: dieValues,
+          },
           finalAmount: actualHealing,
           previousValue: currentHP,
           newValue: newHP,

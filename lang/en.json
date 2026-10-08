@@ -117,7 +117,8 @@
       "Defense": "Defense",
       "DefenseBoth": "Both",
       "DefenseCheck": "Defense (Attack Check)",
-      "DiePenaltyTitle": "-{penalty} per die ({count} dice), each die floored at 0"
+      "DiePenaltyTitle": "{status}: -{penalty} to each damage die ({dice}) = -{total}",
+      "HealPenaltyTitle": "{status}: -{penalty} to each healing die ({dice}) = -{total}"
     },
     "AttackTypes": {
       "Melee": "Melee",
@@ -394,7 +395,7 @@
       "Restrained": "Vulnerable + Speed = 0 [AUTOMATED]",
       "Grappling": "Restraining a target. Speed halved unless target is smaller. [PARTIALLY AUTOMATED]",
       "Blinded": "Can't see. Vulnerable [AUTOMATED]",
-      "Incapacitated": "Can't Focus/Actions/Move. Fails Might/Dex Checks and Reflex Saves. Vulnerable. Speed = 0 [AUTOMATED]",
+      "Incapacitated": "Can't Focus/Actions/Move. Fails Skills and Saves that use Might or Dexterity. Vulnerable. Speed = 0 [AUTOMATED]",
       "Paralyzed": "Incapacitated + Speed = 0 [AUTOMATED]",
       "Unconscious": "Blinded + Incapacitated + Prone. Close Attacks auto-crit [AUTOMATED]",
       "Invisible": "Can't be seen by normal senses; those that can't see it act as Blinded for Checks and Saves involving it [AUTOMATED: attacks and Casts]",

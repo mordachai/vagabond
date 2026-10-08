@@ -536,7 +536,7 @@ VAGABOND.statusEffectDefinitions = [
     name: 'VAGABOND.StatusConditions.Incapacitated',
     img: '/icons/skills/wounds/injury-eyes-blood-red-pink.webp',
     statuses: ['incapacitated'],
-    description: 'Can\'t Focus, use Actions, or Move. Fails all Might Checks, Dexterity Checks, and Reflex Saves. Vulnerable. Speed = 0. [FULLY AUTOMATED]',
+    description: 'Can\'t Focus, use Actions, or Move. Fails all Skills and Saves that use Might or Dexterity. Vulnerable. Speed = 0. [FULLY AUTOMATED]',
     changes: [
       // Auto-fail Might/Dex
       {
@@ -548,11 +548,6 @@ VAGABOND.statusEffectDefinitions = [
         key: 'system.autoFailStats',
         type: "add",
         value: 'dexterity'
-      },
-      {
-        key: 'system.autoFailStats',
-        type: "add",
-        value: 'reflex'
       },
       // Speed = 0
       {
@@ -594,11 +589,6 @@ VAGABOND.statusEffectDefinitions = [
         value: 'dexterity'
       },
       {
-        key: 'system.autoFailStats',
-        type: "add",
-        value: 'reflex'
-      },
-      {
         key: 'system.speed.bonus',
         type: "add",
         value: '-999'
@@ -634,11 +624,6 @@ VAGABOND.statusEffectDefinitions = [
         key: 'system.autoFailStats',
         type: "add",
         value: 'dexterity'
-      },
-      {
-        key: 'system.autoFailStats',
-        type: "add",
-        value: 'reflex'
       },
       {
         key: 'system.speed.bonus',

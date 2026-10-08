@@ -38,7 +38,7 @@
         "duration": "d4",
         "tickDamageEnabled": true,
         "damageOnTick": "",
-        "damageType": "fire"
+        "damageType": "acid"
       }
     ],
     "itemFx": {

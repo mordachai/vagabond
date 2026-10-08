@@ -1,20 +1,10 @@
 # Alpha 3 review (2026-10-07)
 
-## ▶ Resume here (last session ended 2026-10-07, commit `a959a2d`)
+## ▶ Resume here (updated 2026-10-08)
 
-1. **Test Phase 1** (packs rebuilt). Reload as GM → migrations run once. Checklist:
-   - Migrations: status AEs on actors updated; old Backpacks → 1 Slot carried / worn +3 (first one put on); Patience / Protector perks gain text + effect.
-   - Reflex Difficulty includes worn Armor Slots; no separate penalty on the roll.
-   - Frightened −2 per damage die (chat badge, die ≥ 0); Sickened −2 per healing die.
-   - Prone: Speed halved; its Melee attacks / Touch Casts Hindered; Melee / Touch at it Favored; its Reflex Saves Hindered.
-   - Vulnerable family: all its Checks / Saves Hindered; attacks + Cast Checks at it Favored; Saves vs its attacks / Casts Favored.
-   - Invisible both ways (PC and NPC). Incapacitated auto-fails Reflex (sheet, chat Save, Defense Check).
-   - Builder: Stats step Reason Trainings (ceil RSN/2); Perks step free "Hero Creation" Perk. Level-up: Reason even → odd = Training pick.
-   - Wood items load as Iron.
-   - Defense property checklist (Phase 6 below).
-2. **Report bugs** from the test, fix them.
-3. **Phase 2 — Classes** (below), then Phases 3 → 6.
-4. Later sessions: bestiary / humanlike statblocks, full gear audit.
+1. **Phase 1 tested and signed off** (user, 2026-10-08) — bugs found in testing are fixed (Luck reroll of consumed items, Sickened/Frightened chat annotations, Incapacitated auto-fail on every Skill/Save built on Might/Dexterity, Acid Basic Burning = acid). Checklist kept below for regression only.
+2. **Phase 2 — Classes** (below), then Phases 3 → 6.
+3. Later sessions: bestiary / humanlike statblocks, full gear audit.
 
 Rulings in force: book is source of truth (no old-flow switches); lowercase "attack" covers Casts; Vulnerable hampers all its Checks / Saves; Backpack "one at a time" left to the table.
 

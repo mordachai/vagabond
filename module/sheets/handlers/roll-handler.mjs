@@ -48,11 +48,9 @@ export class RollHandler {
       const rollType = dataset.type; // 'skill' or 'save' or 'stat'
 
       // Check for auto-fail conditions
-      const autoFailAllRolls = this.actor.system.autoFailAllRolls || false;
-      const autoFailStats = this.actor.system.autoFailStats || [];
-
-      // Auto-fail if Dead (autoFailAllRolls) or if specific stat is in autoFailStats array
-      if (autoFailAllRolls || autoFailStats.includes(rollKey)) {
+      // Auto-fail if Dead (autoFailAllRolls) or the roll is built on a failed Stat (a Save with
+      // Might / Dexterity under Incapacitated) — see VagabondRollBuilder.autoFails
+      if (VagabondRollBuilder.autoFails(this.actor, rollKey)) {
         // Import chat card helper
         const { VagabondChatCard } = await import('../../helpers/chat-card.mjs');
 
@@ -326,8 +324,9 @@ export class RollHandler {
       }
 
       // Check for auto-fail conditions before rolling weapon attack
-      const autoFailAllRolls = this.actor.system.autoFailAllRolls || false;
-      if (autoFailAllRolls) {
+      // (Dead, or the attack skill is built on a failed Stat — Incapacitated: Might / Dexterity)
+      const { VagabondRollBuilder: _AutoFailRB } = await import('../../helpers/roll-builder.mjs');
+      if (_AutoFailRB.autoFails(this.actor, EquipmentHelper.attackSkillFor(item, { skillKey }))) {
         // Import chat card helper
         const { VagabondChatCard } = await import('../../helpers/chat-card.mjs');
 
