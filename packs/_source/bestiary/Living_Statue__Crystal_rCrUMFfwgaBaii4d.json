@@ -17,7 +17,7 @@
     "morale": 11,
     "appearing": "d4",
     "speed": 30,
-    "senses": "",
+    "senses": [],
     "armor": 3,
     "armorDescription": "as (+1) Chain",
     "locked": true,
@@ -29,8 +29,9 @@
     ],
     "statusImmunities": [
       "blinded",
-      "unconscious",
-      "fatigued"
+      "fatigued",
+      "suffocating",
+      "unconscious"
     ],
     "zone": "frontline",
     "description": "An animated crystal statue, capable of moving and attacking.",

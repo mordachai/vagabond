@@ -31,10 +31,11 @@
     ],
     "statusImmunities": [
       "blinded",
-      "sickened"
+      "sickened",
+      "suffocating"
     ],
     "zone": "frontline",
-    "description": "A straw effigy meant to deter pests, now being given animus by spirit possession.",
+    "description": "(Undead) A straw effigy meant to deter pests, now being given animus by spirit possession.",
     "actions": [
       {
         "name": "Scream",

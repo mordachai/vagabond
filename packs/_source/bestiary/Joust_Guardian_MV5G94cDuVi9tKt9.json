@@ -17,7 +17,7 @@
     "morale": null,
     "appearing": "1",
     "speed": 30,
-    "senses": "",
+    "senses": [],
     "armor": 3,
     "armorDescription": "as Plate",
     "locked": true,
@@ -26,26 +26,27 @@
     ],
     "weaknesses": [],
     "statusImmunities": [
-      "unconscious",
+      "berserk",
+      "charmed",
+      "confused",
       "fatigued",
       "frightened",
+      "unconscious",
       "sickened",
-      "confused",
-      "berserk",
-      "charmed"
+      "suffocating"
     ],
     "zone": "frontline",
     "description": "A mechanical warrior from eons past, typically found guarding ruins of fallen advanced societies.",
     "actions": [
       {
-        "name": "Assault",
-        "note": "Multi-Attack",
+        "name": "Combo",
+        "note": "",
         "recharge": "",
         "attackType": "melee",
         "flatDamage": "",
         "rollDamage": "",
         "damageType": "-",
-        "extraInfo": "Lance and Cannon attack."
+        "extraInfo": "1×Lance and 1×Cannon"
       },
       {
         "name": "Lance",
@@ -59,7 +60,7 @@
       },
       {
         "name": "Cannon",
-        "note": "Ranged Attack (Sphere 10 foot)",
+        "note": "Ranged Attack (Sphere 10')",
         "recharge": "",
         "attackType": "ranged",
         "flatDamage": "11",

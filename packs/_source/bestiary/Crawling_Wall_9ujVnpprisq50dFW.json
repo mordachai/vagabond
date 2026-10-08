@@ -17,7 +17,7 @@
     "morale": null,
     "appearing": "1",
     "speed": 20,
-    "senses": "",
+    "senses": [],
     "armor": 3,
     "armorDescription": "as Plate",
     "locked": true,

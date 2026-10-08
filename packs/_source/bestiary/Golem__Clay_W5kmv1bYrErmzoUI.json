@@ -9,7 +9,7 @@
     },
     "fatigue": 0,
     "biography": "",
-    "threatLevel": 9.5,
+    "threatLevel": 4.4,
     "size": "large",
     "beingType": "Artificials",
     "speedTypes": [],
@@ -27,12 +27,15 @@
       "poison",
       "physical"
     ],
-    "weaknesses": [],
+    "weaknesses": [
+      "adamant"
+    ],
     "statusImmunities": [
-      "sickened",
-      "fatigued",
       "charmed",
-      "paralyzed"
+      "fatigued",
+      "paralyzed",
+      "sickened",
+      "suffocating"
     ],
     "zone": "frontline",
     "description": "",
@@ -69,7 +72,7 @@
       },
       {
         "name": "Magic Ward I",
-        "description": "The first time it is unwillingly affected by a Spell each Round, the Caster must spend an extra 1 Mana to affect it."
+        "description": "It is not affected by Casts it is unwillingly subjected to unless the Caster's Check exceeds their difficulty by 1 or more."
       },
       {
         "name": "Unbaked",

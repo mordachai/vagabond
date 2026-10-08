@@ -30,9 +30,11 @@
     ],
     "weaknesses": [],
     "statusImmunities": [
-      "frightened",
       "charmed",
-      "sickened"
+      "confused",
+      "frightened",
+      "sickened",
+      "suffocating"
     ],
     "zone": "frontline",
     "description": "An enchanted sword that dances through the air.",

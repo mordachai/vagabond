@@ -29,8 +29,9 @@
     ],
     "weaknesses": [],
     "statusImmunities": [
+      "fatigued",
       "sickened",
-      "fatigued"
+      "suffocating"
     ],
     "zone": "frontline",
     "description": "Tunneling automatons known to wreak havoc on structures by undermining its foundation. They can cut through solid rock and earth with ease.",

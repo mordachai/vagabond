@@ -30,11 +30,12 @@
       "blunt"
     ],
     "statusImmunities": [
+      "fatigued",
       "sickened",
-      "fatigued"
+      "suffocating"
     ],
     "zone": "frontline",
-    "description": "Slithering, animated bones with a serpentine form and humanoid head.",
+    "description": "(Undead) Slithering, animated bones with a serpentine form and humanoid head.",
     "actions": [
       {
         "name": "Dance of Death",

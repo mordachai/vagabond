@@ -384,6 +384,7 @@
       "Piercing": "Piercing"
     },
     "MaterialWeaknesses": {
+      "Adamant": "Adamant",
       "ColdIron": "Cold Iron",
       "Silver": "Silver"
     },

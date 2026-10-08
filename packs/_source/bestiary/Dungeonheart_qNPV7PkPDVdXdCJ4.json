@@ -17,7 +17,7 @@
     "morale": null,
     "appearing": "1",
     "speed": 0,
-    "senses": "",
+    "senses": [],
     "armor": 1,
     "armorDescription": "as Leather",
     "locked": true,
@@ -106,7 +106,7 @@
         "rollDamage": "",
         "damageType": "-",
         "attackType": "melee",
-        "extraInfo": "@UUID[Compendium.vagabond.bestiary.Actor.XJXb7O120A5ewg1N]{Warp Beast}"
+        "extraInfo": "@UUID[Compendium.vagabond.bestiary.Actor.FYjFBtN4C5lXvFLA]{Gelatinous Cube}"
       }
     ],
     "abilities": [],

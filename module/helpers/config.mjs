@@ -199,6 +199,7 @@ VAGABOND.damageTypes = {
  * @type {Object}
  */
 VAGABOND.materialWeaknesses = {
+  'adamant': 'VAGABOND.MaterialWeaknesses.Adamant',
   'coldIron': 'VAGABOND.MaterialWeaknesses.ColdIron',
   'silver': 'VAGABOND.MaterialWeaknesses.Silver'
 };
@@ -1068,6 +1069,7 @@ VAGABOND.metalColors = {
  * @type {Object}
  */
 VAGABOND.materialWeaknessIcons = {
+  'adamant': 'fa-solid fa-square-a',
   'coldIron': 'fa-solid fa-square-i',
   'silver': 'fa-solid fa-square-s'
 };

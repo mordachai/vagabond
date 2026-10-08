@@ -27,12 +27,15 @@
       "physical",
       "poison"
     ],
-    "weaknesses": [],
+    "weaknesses": [
+      "adamant"
+    ],
     "statusImmunities": [
       "charmed",
       "fatigued",
+      "paralyzed",
       "sickened",
-      "paralyzed"
+      "suffocating"
     ],
     "zone": "frontline",
     "description": "Man-like stone statues, typically used as guardians of tombs and sacred sites.",
@@ -91,7 +94,7 @@
       },
       {
         "name": "Magic Ward I",
-        "description": "The first time it is unwillingly affected by a Spell each Round, the Caster must spend an extra 1 Mana to affect it."
+        "description": "It is not affected by Casts it is unwillingly subjected to unless the Caster's Check exceeds their difficulty by 1 or more."
       }
     ],
     "universalDamageBonus": 0,

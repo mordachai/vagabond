@@ -17,7 +17,7 @@
     "morale": 7,
     "appearing": "2d6",
     "speed": 15,
-    "senses": "",
+    "senses": [],
     "armor": 2,
     "armorDescription": "as Chain",
     "locked": true,
@@ -27,8 +27,9 @@
     ],
     "weaknesses": [],
     "statusImmunities": [
+      "fatigued",
       "sickened",
-      "fatigued"
+      "suffocating"
     ],
     "zone": "frontline",
     "description": "A living pot, likely once held soup.",

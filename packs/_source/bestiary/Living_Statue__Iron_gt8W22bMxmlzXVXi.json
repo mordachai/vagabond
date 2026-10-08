@@ -17,7 +17,7 @@
     "morale": 11,
     "appearing": "d4",
     "speed": 10,
-    "senses": "",
+    "senses": [],
     "armor": 3,
     "armorDescription": "as Plate",
     "locked": true,
@@ -27,8 +27,9 @@
     "weaknesses": [],
     "statusImmunities": [
       "blinded",
-      "unconscious",
-      "fatigued"
+      "fatigued",
+      "suffocating",
+      "unconscious"
     ],
     "zone": "frontline",
     "description": "An animated iron statue. Slow, but more sturdy than crystal living statues.",

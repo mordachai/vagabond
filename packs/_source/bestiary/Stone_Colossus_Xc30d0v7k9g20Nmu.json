@@ -17,7 +17,7 @@
     "morale": null,
     "appearing": "1",
     "speed": 50,
-    "senses": "",
+    "senses": [],
     "armor": 6,
     "armorDescription": "as (+3) Plate",
     "locked": true,
@@ -27,25 +27,38 @@
     ],
     "weaknesses": [],
     "statusImmunities": [
-      "paralyzed",
-      "confused",
-      "sickened",
+      "berserk",
       "charmed",
+      "confused",
       "frightened",
-      "berserk"
+      "paralyzed",
+      "sickened",
+      "suffocating"
     ],
     "zone": "frontline",
-    "description": "Runic titans created by ancient, shockingly advanced civilizations, colossus are golems that indicate a peoples’ arcane advancements far outpaced their desire for diplomacy.",
+    "description": "Runic titans created by ancient, shockingly-advanced civilizations, colossus are golems that indicate a peoples' arcane advancements far outpaced their desire for diplomacy.",
     "actions": [
       {
-        "name": "Combo",
+        "name": "Combo (A)",
         "note": "",
         "recharge": "",
         "attackType": "melee",
         "flatDamage": "",
         "rollDamage": "",
         "damageType": "-",
-        "extraInfo": "1xLaser and 1xSlam, or 2xSlams",
+        "extraInfo": "1×Laser and 1×Slam",
+        "causedStatuses": [],
+        "critCausedStatuses": []
+      },
+      {
+        "name": "Combo (B)",
+        "note": "",
+        "recharge": "",
+        "attackType": "melee",
+        "flatDamage": "",
+        "rollDamage": "",
+        "damageType": "-",
+        "extraInfo": "2×Slams",
         "causedStatuses": [],
         "critCausedStatuses": []
       },
@@ -95,7 +108,7 @@
       },
       {
         "name": "Magic Ward IV",
-        "description": "The first time it is unwillingly affected by a Spell each Round, the Caster must spend an extra 4 Mana to affect it."
+        "description": "It is not affected by Casts it is unwillingly subjected to unless the Caster's Check exceeds their difficulty by 4 or more."
       },
       {
         "name": "Self-Destruct",

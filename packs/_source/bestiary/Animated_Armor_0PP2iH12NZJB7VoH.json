@@ -19,7 +19,7 @@
     "morale": null,
     "appearing": "d4",
     "speed": 30,
-    "senses": "",
+    "senses": [],
     "armor": 3,
     "armorDescription": "as Plate",
     "universalDamageBonus": 0,

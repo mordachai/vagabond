@@ -28,16 +28,18 @@
       "physical"
     ],
     "weaknesses": [
-      "blunt"
+      "blunt",
+      "silver"
     ],
     "statusImmunities": [
-      "sickened",
-      "fatigued",
       "charmed",
-      "paralyzed"
+      "fatigued",
+      "paralyzed",
+      "sickened",
+      "suffocating"
     ],
     "zone": "frontline",
-    "description": "A pile of animated bones, given animus as a configuration of corpses rather than a single entity. They typically serve as guardians to tombs.",
+    "description": "(Undead) A pile of animated bones, given animus as a configuration of corpses rather than a single entity. They typically serve as guardians to tombs.",
     "actions": [
       {
         "name": "Combo",
@@ -71,7 +73,7 @@
       },
       {
         "name": "Magic Ward I",
-        "description": "The first time it is unwillingly affected by a Spell each Round, the Caster must spend an extra 1 Mana to affect it."
+        "description": "It is not affected by Casts it is unwillingly subjected to unless the Caster's Check exceeds their difficulty by 1 or more."
       }
     ],
     "universalDamageBonus": 0,

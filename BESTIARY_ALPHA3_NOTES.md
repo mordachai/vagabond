@@ -32,3 +32,21 @@ Judgement calls
 - **Cultist** keeps `statusImmunities` charmed + frightened: the book prints it only as the Zealot ability text, and the
   automation would be lost otherwise.
 - Sellsword Armor is printed `2 [as Chain plus Shield]` — stored exactly like that.
+
+---
+
+## Part 2 — Artificials (book pp. 118-120) — 23 statblocks, none new, none deleted
+
+- **Status Immunities**: Alpha 3 adds `Suffocating` to every Artificial (and Berserk/Charmed/Confused/Frightened to Gargoyle,
+  Joust Guardian / Flying Sword gain Confused ...). Gargoyle loses Psychic Immune, gains Fly 30' value and `# Appearing d4`.
+- **Weak: Adamant Weapons** (Golem Clay / Iron / Stone) — new material weakness key `adamant`
+  (`CONFIG.VAGABOND.materialWeaknesses` + icon + lang en/pt-BR). Damage code already matches `weaknesses.includes(weapon.system.metal)`,
+  so an Adamant weapon now ignores Armor/Immune on them. Golem, Bone: `Silvered Weapons` -> `silver`.
+- **Magic Ward I/II/IV** ability text -> Alpha 3 wording ("not affected by Casts ... unless the Caster's Check exceeds their difficulty by N").
+- Golem, Clay TL 9.5 -> 4.4 (source typo). Joust Guardian Combo/Cannon reworded + reordered. Stone Colossus now has Combo (A) + Combo (B).
+- Golem, Bone / Necrophidius / Scarecrow are `Artificial/Undead` (`Artificial (Undead)`): description now starts with `(Undead)`.
+- **Dungeonheart**: Spawn d6 rows (with the `@UUID` links) kept; row 6 pointed at Warp Beast -> now Gelatinous Cube (`XJXb7O120A5ewg1N` was wrong).
+
+Not modelled (rules gap, text only in the book)
+- `Physical from non-Relics` / `Relic Weapons weaker than (+2)`: stored as plain `physical` immunity — the damage code has no Relic exception
+  (only Druid Beast Mode ignores it).

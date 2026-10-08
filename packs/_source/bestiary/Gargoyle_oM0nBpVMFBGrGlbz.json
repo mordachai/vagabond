@@ -17,22 +17,26 @@
     ],
     "hd": 4,
     "morale": 11,
-    "appearing": "1",
+    "appearing": "d4",
     "speed": 15,
-    "senses": "",
+    "senses": [],
     "armor": 2,
     "armorDescription": "as Chain",
     "locked": true,
     "immunities": [
-      "poison",
-      "psychic"
+      "poison"
     ],
     "weaknesses": [
       "blunt"
     ],
     "statusImmunities": [
+      "berserk",
+      "charmed",
+      "confused",
       "fatigued",
-      "sickened"
+      "frightened",
+      "sickened",
+      "suffocating"
     ],
     "zone": "frontline",
     "description": "A flying statue with a demonic appearance.",
@@ -75,7 +79,10 @@
       }
     ],
     "universalDamageBonus": 0,
-    "universalDamageDice": ""
+    "universalDamageDice": "",
+    "speedValues": {
+      "fly": 30
+    }
   },
   "prototypeToken": {
     "name": "Gargoyle",
