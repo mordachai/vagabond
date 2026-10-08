@@ -150,7 +150,7 @@ Not modelled
 
 ---
 
-## Part 8 — Undead (book pp. 177-181; the Zombies are on p. 181) — 22 statblocks, none new, none deleted
+## Part 8 — Undead (book pp. 177-181; the Zombies are on p. 181) — 21 statblocks, none new, none deleted
 
 - **Suffocating** added to every Undead's Status Immunities (and Restrained to Banshee, Ghost, Shadow, Wraith, Skeleton family ...).
 - Silver weakness is no longer printed (type rule above) — the pack already had it everywhere except Crawling Claw and Death Knight, which now get it.
@@ -163,3 +163,19 @@ Not modelled
 
 Not modelled
 - Vampire / Lich / Wight / Wraith / Ghost / Banshee `Nightwalker` and Sunlight rules, Zombie "can't be reduced below 1 HP", Soul Jar, Vampiric — text only.
+
+---
+
+## Part 9 — Stored HP sweep (all parts)
+
+Every statblock prints `HD: n (X HP)`. A final pass compared that X with the stored `system.health` and fixed the leftovers:
+17 Humanlike (the old pack had Bandit/Bard/Brigand/Commoner/Cultist/Mages/Noble/Scout/Thug/Trader at 5 HP and Acolyte/Apothecary/Assassin at max 10, Knight 14;
+book: HD 1 = 4 HP, Knight 13), Animated Armor `9/10 -> 9/9`, Weasel Giant `13/12 -> 12/12`, Kraken `90/89 -> 89/89`, Sphinx Archon `108/10` (Part 6).
+
+## Not touched / open
+
+- **Grim Reaper** (Specials, book p. 105 in the Magic chapter) and the **Cart / Wagon** constructs are outside the page ranges — unchanged.
+- Translation (Babele `translationWork/*`) lives outside this repo: new names/text to translate = Brawler, Druid, Sellsword, Kobold Normal,
+  Ward/Holy Flame (Acolyte), Gaze (Basilisk), Doom Magnet, Effectively Immune, Major Invisibility, Pixie Dust, Panpipes, Combo wording, Magic Ward text, `Zotz Demon`.
+- `npm run pack` (Foundry closed) is required before any of this shows up in the world; existing world actors are copies and are not touched.
+- Engine gaps found while reading the book (data is in, behavior is not): Relic exception on `Physical` immunity, axe weakness, Nightwalker/Sunlight, Vampiric.

@@ -4,7 +4,7 @@
   "img": "systems/vagabond/assets/ui/default-npc.svg",
   "system": {
     "health": {
-      "value": 90,
+      "value": 89,
       "max": 89
     },
     "fatigue": 0,

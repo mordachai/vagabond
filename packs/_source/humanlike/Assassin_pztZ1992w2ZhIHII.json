@@ -5,7 +5,7 @@
   "system": {
     "health": {
       "value": 4,
-      "max": 10,
+      "max": 4,
       "bonus": 0
     },
     "fatigue": 0,
