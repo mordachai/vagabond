@@ -58,26 +58,53 @@ export class AlchemistHelper {
     return key && used?.key === key ? (used.count ?? 0) : 0;
   }
 
-  /** Markup of the picker: a grid of known formulas (32px art + name + owned count), one selectable. */
+  /** Markup of the picker: a card grid of known formulas (big art, owned-count badge, name below), one selectable. */
   static #pickerHTML(entries, evaluation, actor) {
     const esc = (s) => foundry.utils.escapeHTML(String(s ?? ''));
     const missing = evaluation.checks.filter(c => !c.ok).map(c => {
       const label = game.i18n.localize(c.label);
       return c.detail ? `${label} (${c.detail})` : label;
     });
-    const opt = (e) => `<button type="button" class="catalyze-option" data-uuid="${esc(e.uuid)}"
-        style="display:flex;align-items:center;gap:6px;height:auto;line-height:normal;padding:3px 5px;text-align:left;min-width:0;">
-        <img src="${esc(e.img)}" width="32" height="32" style="width:32px;height:32px;flex:none;border:0;object-fit:cover;">
-        <span style="overflow:hidden;text-overflow:ellipsis;flex:1;">${esc(e.name)}</span>
-        <span style="flex:none;opacity:.7;">×${e.owned}</span>
+    const opt = (e) => `<button type="button" class="catalyze-option" data-uuid="${esc(e.uuid)}">
+        <span class="catalyze-owned${e.owned ? '' : ' is-zero'}">×${e.owned}</span>
+        <img class="catalyze-art" src="${esc(e.img)}" alt="">
+        <span class="catalyze-name">${esc(e.name)}</span>
       </button>`;
-    return `<div class="catalyze-picker" style="display:flex;flex-direction:column;gap:6px;">
-      <p style="margin:0;">${esc(this.#L('Hint', { cost: CurrencyHelper.format(evaluation.cost.copper), have: CurrencyHelper.format(MaterialsHelper.totalValue(actor)) }))}</p>
-      ${missing.length ? `<p class="notes" style="margin:0;color:var(--color-level-error,#c0392b);">${esc(this.#L('Missing', { list: missing.join(', ') }))}</p>` : ''}
+    return `<div class="catalyze-picker">
+      <p class="catalyze-hint">${esc(this.#L('Hint', { cost: CurrencyHelper.format(evaluation.cost.copper), have: CurrencyHelper.format(MaterialsHelper.totalValue(actor)) }))}</p>
+      ${missing.length ? `<p class="catalyze-missing">${esc(this.#L('Missing', { list: missing.join(', ') }))}</p>` : ''}
       <input type="hidden" name="formulaUuid" value="">
-      <div class="catalyze-grid" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px;max-height:380px;overflow-y:auto;">
+      <div class="catalyze-grid">
         ${entries.map(opt).join('')}
       </div>
+    </div>`;
+  }
+
+  /** Hover card of a formula: name + alchemical type, damage with its type, then the enriched description. */
+  static async #detailHTML(doc) {
+    const esc = (s) => foundry.utils.escapeHTML(String(s ?? ''));
+    const sys = doc.system ?? {};
+    const typeKey = sys.alchemicalType;
+    const typeLabel = typeKey ? game.i18n.localize(CONFIG.VAGABOND.alchemicalTypes?.[typeKey] ?? typeKey) : '';
+    const dmgType = sys.damageType && sys.damageType !== '-' ? sys.damageType : '';
+    const dmgTypeLabel = dmgType ? game.i18n.localize(CONFIG.VAGABOND.damageTypes?.[dmgType] ?? dmgType) : '';
+    const dmgIcon = dmgType ? CONFIG.VAGABOND.damageTypeIcons?.[dmgType] : '';
+    const damage = sys.damageAmount
+      ? `<div class="cz-tip-damage">
+          <span class="cz-tip-dice">${esc(sys.damageAmount)}</span>
+          ${dmgTypeLabel ? `<span class="cz-tip-dtype">${dmgIcon ? `<i class="${esc(dmgIcon)}"></i>` : ''}${esc(dmgTypeLabel)}</span>` : ''}
+        </div>`
+      : '';
+    const description = sys.description
+      ? await foundry.applications.ux.TextEditor.implementation.enrichHTML(sys.description, { relativeTo: doc })
+      : '';
+    return `<div class="cz-tip">
+      <header class="cz-tip-head">
+        <strong>${esc(doc.name)}</strong>
+        ${typeLabel ? `<span>${esc(typeLabel)}</span>` : ''}
+      </header>
+      ${damage}
+      ${description ? `<div class="cz-tip-desc">${description}</div>` : ''}
     </div>`;
   }
 
@@ -100,16 +127,18 @@ export class AlchemistHelper {
       ui.notifications.warn(this.#L('NoFormulas', { name: actor.name }));
       return;
     }
-    const entries = sources
-      .map(({ uuid, doc }) => ({ uuid, name: doc.name, img: doc.img, owned: this.#owned(actor, uuid) }))
-      .sort((a, b) => a.name.localeCompare(b.name));
+    const entries = (await Promise.all(sources.map(async ({ uuid, doc }) => ({
+      uuid, name: doc.name, img: doc.img, owned: this.#owned(actor, uuid), detail: await this.#detailHTML(doc),
+    })))).sort((a, b) => a.name.localeCompare(b.name));
+    const detailByUuid = new Map(entries.map(e => [e.uuid, e.detail]));
 
     // Same for every formula the actor knows: Catalyze, Alchemy Tools, 5s of Materials.
     const evaluation = CraftingHelper.evaluate(actor, 'alchemy', { formulaUuid: entries[0].uuid });
 
     const uuid = await foundry.applications.api.DialogV2.prompt({
       window: { title: this.#L('Title'), icon: 'fa-solid fa-flask' },
-      position: { width: 460 },
+      classes: ['catalyze-dialog'],
+      position: { width: 340 },
       content: this.#pickerHTML(entries, evaluation, actor),
       ok: {
         label: this.#L('Craft'),
@@ -122,16 +151,31 @@ export class AlchemistHelper {
         const okButton = root.querySelector('button[data-action="ok"]');
         if (okButton && !evaluation.ok) okButton.disabled = true;
         const options = Array.from(root.querySelectorAll('.catalyze-option'));
+        // Hover card after 1s (own delay — core data-tooltip shows after 500ms); gone on leave / click.
+        let hoverTimer = null;
+        const hideTip = () => {
+          window.clearTimeout(hoverTimer);
+          if (game.tooltip.tooltip?.classList.contains('catalyze-tip')) game.tooltip.deactivate();
+        };
         for (const o of options) {
+          o.addEventListener('pointerenter', () => {
+            window.clearTimeout(hoverTimer);
+            hoverTimer = window.setTimeout(() => game.tooltip.activate(o, {
+              html: detailByUuid.get(o.dataset.uuid), cssClass: 'catalyze-tip', direction: 'RIGHT',
+            }), 1000);
+          });
+          o.addEventListener('pointerleave', hideTip);
           o.addEventListener('click', () => {
+            hideTip();
             hidden.value = o.dataset.uuid;
-            for (const x of options) x.style.outline = x === o ? '2px solid var(--color-warm-2, #c9a227)' : '';
+            for (const x of options) x.classList.toggle('is-selected', x === o);
           });
           o.addEventListener('dblclick', () => okButton?.click());
         }
       },
       rejectClose: false,
     });
+    if (game.tooltip.tooltip?.classList.contains('catalyze-tip')) game.tooltip.deactivate();
     if (!uuid) return;
 
     // Soft guard (in Combat only): Catalyze = 1 craft per Turn, Deft Hands = 2 (the 2nd needs no Move).

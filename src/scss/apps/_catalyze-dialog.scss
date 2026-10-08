@@ -1,0 +1,225 @@
+// Catalyze picker (Alchemist feature button) — card-picker language (see _glyph-action-dialog.scss).
+// Big formula art, owned count in the card corner, name below; selected card glows. A 1s hover card
+// (Foundry's #tooltip, class `catalyze-tip`) shows type, damage and description.
+//
+// Theme: local --cz-* tokens, light by default; flipped by a dark interface/app theme, and back to light
+// when the app itself is explicitly light.
+
+@mixin cz-light {
+  --cz-accent: #7a6a00;          // owned count, selected name
+  --cz-glow: #{$c-yellow};
+  --cz-muted: rgba(0, 0, 0, 0.4);
+  --cz-hint: #555;
+  --cz-card-bg: rgba(0, 0, 0, 0.05);
+  --cz-card-border: rgba(0, 0, 0, 0.25);
+  --cz-error: #9d2b2b;
+}
+
+@mixin cz-dark {
+  --cz-accent: #{$c-yellow};
+  --cz-glow: #{$c-yellow};
+  --cz-muted: rgba(255, 255, 255, 0.35);
+  --cz-hint: #{$c-tan};
+  --cz-card-bg: rgba(0, 0, 0, 0.18);
+  --cz-card-border: rgba(0, 0, 0, 0.4);
+  --cz-error: #d07a7a;
+}
+
+.catalyze-dialog { @include cz-light; }
+.theme-dark .catalyze-dialog,
+.catalyze-dialog.theme-dark { @include cz-dark; }
+.catalyze-dialog.theme-light { @include cz-light; }
+
+.catalyze-dialog {
+  .catalyze-picker {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .catalyze-hint {
+    margin: 0;
+    font-family: $font-secondary;
+    font-size: 0.75rem;
+    line-height: 1.35;
+    color: var(--cz-hint);
+    text-align: center;
+  }
+
+  .catalyze-missing {
+    margin: 0;
+    font-size: 0.75rem;
+    color: var(--cz-error);
+    text-align: center;
+  }
+
+  .catalyze-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    max-height: 420px;
+    overflow-y: auto;
+    padding: 2px;
+  }
+
+  .catalyze-option {
+    height: auto;          // circumvent Foundry's fixed button height…
+    line-height: normal;   // …and its forced button line-height
+    position: relative;
+    min-width: 0;
+    padding: 8px 6px 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    background: var(--cz-card-bg);
+    border: 1px solid var(--cz-card-border);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: filter 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+
+    &:hover {
+      border-color: var(--cz-glow);
+      filter: brightness(1.08);
+      transform: translateY(-1px);
+    }
+
+    &.is-selected {
+      border-color: var(--cz-glow);
+      box-shadow: 0 0 8px -1px var(--cz-glow), inset 0 0 0 1px var(--cz-glow);
+
+      .catalyze-name { color: var(--cz-accent); }
+    }
+  }
+
+  .catalyze-art {
+    width: 72px;
+    height: 72px;
+    flex: none;
+    object-fit: cover;
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    border-radius: 4px;
+    display: block;
+  }
+
+  // Owned count: card's top-right corner, clear of the art.
+  .catalyze-owned {
+    position: absolute;
+    top: 5px;
+    right: 7px;
+    font-family: $font-primary;
+    font-weight: bold;
+    font-size: 1.1rem;
+    line-height: 1;
+    color: var(--cz-accent);
+
+    &.is-zero { color: var(--cz-muted); }
+  }
+
+  .catalyze-name {
+    width: 100%;
+    font-family: $font-primary;
+    font-weight: bold;
+    font-size: 0.9rem;
+    line-height: 1.15;
+    color: $c-text-1;
+    text-align: center;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+}
+
+// ---- Hover card (inside Foundry's global #tooltip, appended to <body>) ----
+
+@mixin cz-tip-light {
+  --cz-tip-bg: #f4f1ea;
+  --cz-tip-text: #2b2b2b;
+  --cz-tip-sub: #666;
+  --cz-tip-rule: rgba(0, 0, 0, 0.15);
+  --cz-tip-chip: rgba(0, 0, 0, 0.06);
+}
+
+@mixin cz-tip-dark {
+  --cz-tip-bg: rgba(18, 20, 24, 0.97);
+  --cz-tip-text: #e6e3da;
+  --cz-tip-sub: #a8a49a;
+  --cz-tip-rule: rgba(255, 255, 255, 0.15);
+  --cz-tip-chip: rgba(255, 255, 255, 0.07);
+}
+
+#tooltip.catalyze-tip { @include cz-tip-light; }
+.theme-dark #tooltip.catalyze-tip { @include cz-tip-dark; }
+
+#tooltip.catalyze-tip {
+  max-width: 300px;
+  padding: 0;
+  background: var(--cz-tip-bg);
+  border: 2px solid $c-green;
+  border-radius: 6px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+  color: var(--cz-tip-text);
+  text-align: left;
+
+  .cz-tip {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 8px 10px;
+  }
+
+  .cz-tip-head {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 5px;
+    border-bottom: 1px solid var(--cz-tip-rule);
+
+    strong {
+      font-family: $font-primary;
+      font-size: 1rem;
+      line-height: 1.2;
+    }
+
+    span {
+      font-size: 0.75rem;
+      color: var(--cz-tip-sub);
+    }
+  }
+
+  .cz-tip-damage {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .cz-tip-dice {
+    padding: 1px 8px;
+    border: 1px solid $c-green;
+    border-radius: 10px;
+    font-family: $font-primary;
+    font-weight: bold;
+    font-size: 0.9rem;
+    color: $c-green;
+  }
+
+  .cz-tip-dtype {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 1px 8px;
+    border-radius: 10px;
+    background: var(--cz-tip-chip);
+    font-size: 0.8rem;
+  }
+
+  .cz-tip-desc {
+    max-height: 220px;
+    overflow: hidden;
+    font-size: 0.8rem;
+    line-height: 1.4;
+
+    p { margin: 0 0 4px; }
+    p:last-child { margin-bottom: 0; }
+  }
+}

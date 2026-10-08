@@ -1,7 +1,7 @@
 import { CraftingHelper } from '../helpers/crafting-helper.mjs';
 import { ProjectHelper } from '../helpers/crafting/project-helper.mjs';
 import { AlchemyHelper } from '../helpers/crafting/alchemy-helper.mjs';
-import { PRIMA_MATERIA_CAP } from '../helpers/crafting/alchemy-mode.mjs';
+import { ALCHEMY_COST, PRIMA_MATERIA_CAP } from '../helpers/crafting/alchemy-mode.mjs';
 import { MixHelper } from '../helpers/crafting/mix-helper.mjs';
 import { CurrencyHelper } from '../helpers/currency-helper.mjs';
 import { MaterialsHelper } from '../helpers/materials-helper.mjs';
@@ -198,7 +198,7 @@ export class WorkbenchApp extends api.HandlebarsApplicationMixin(api.Application
     const formulaPicksRemaining = AlchemyHelper.formulaPicksRemaining(this.actor);
     const formulaValueCapCopper = AlchemyHelper.formulaValueCapCopper(this.actor);
     const knownCount = this.actor.system.craft?.formulas?.length ?? 0;
-    const alchemyCraftCost = 50; // flat 5s, RAW-fixed (AlchemyMode)
+    const alchemyCraftCost = ALCHEMY_COST; // flat 5s, RAW-fixed (AlchemyMode)
     const canAffordFormula = materials >= alchemyCraftCost;
     const alchemyCraftCostLabel = `<span class="wb-cost${canAffordFormula ? '' : ' is-short'}">${CurrencyHelper.format(alchemyCraftCost)}</span>`;
     // `fromUuidSync` only returns full `system` data for compendium items Foundry has

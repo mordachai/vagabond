@@ -5,7 +5,7 @@ import { AlchemyHelper } from './alchemy-helper.mjs';
 import { craftingConfig } from './config.mjs';
 
 /** RAW Alchemy: 5s of Materials per Craft (copper), whatever the item's own value. */
-const ALCHEMY_COST = 5 * CurrencyHelper.RATES.silver;
+export const ALCHEMY_COST =5 * CurrencyHelper.RATES.silver;
 
 /** Any equipped item satisfying the 'alchemy' tool kind (RAW: Alchemy Tools). */
 function hasAlchemyTools(actor) {
