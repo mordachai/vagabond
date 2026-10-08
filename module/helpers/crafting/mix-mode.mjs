@@ -31,8 +31,10 @@ export const MixMode = {
     checks.push({ ok: (actor.system.studiedDice ?? 0) > 0, key: 'studiedDice', label: 'VAGABOND.Craft.Checks.StudiedDice' });
 
     const itemA = recipe?.itemIdA ? mixable(actor, recipe.itemIdA) : null;
-    const itemB = recipe?.itemIdB && recipe.itemIdB !== recipe.itemIdA ? mixable(actor, recipe.itemIdB) : null;
-    checks.push({ ok: !!itemA && !!itemB, key: 'ingredients', label: 'VAGABOND.Craft.Checks.MixIngredients' });
+    const itemB = recipe?.itemIdB ? mixable(actor, recipe.itemIdB) : null;
+    // Two of the same stack (2× Acid) need two charges on it.
+    const sameStackOk = recipe?.itemIdA !== recipe?.itemIdB || MixHelper.charges(itemA) >= 2;
+    checks.push({ ok: !!itemA && !!itemB && sameStackOk, key: 'ingredients', label: 'VAGABOND.Craft.Checks.MixIngredients' });
 
     return { ok: checks.every(c => c.ok), checks, cost: { copper: 0, materials: 0, studiedDice: 1, action: 'use' } };
   },
@@ -47,6 +49,7 @@ export const MixMode = {
     const dataA = itemA.toObject();
     const dataB = itemB.toObject();
 
+    // Same stack twice: itemB is the same document, already holding one charge less.
     await VagabondItem._consumeCharge(itemA);
     await VagabondItem._consumeCharge(itemB);
     await actor.update({ 'system.studiedDice': actor.system.studiedDice - 1 });

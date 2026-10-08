@@ -1,14 +1,14 @@
 {
-  "name": "lv2 - Sculpt Spell",
+  "name": "Sculpt Spell",
   "_id": "wizardsculnsyncg",
   "img": "icons/svg/aura.svg",
   "type": "base",
   "system": {
     "changes": [
       {
-        "key": "system.bonuses.deliveryManaCostReduction",
+        "key": "system.bonuses.spellManaCostReduction",
         "type": "add",
-        "value": "(@attributes.level.value >= 2) ? 1 : 0",
+        "value": "(@lvl >= 4) ? 1 + floor((@lvl - 4) / 4) : 0",
         "phase": "initial",
         "priority": null
       }
@@ -22,7 +22,7 @@
     "expiry": null,
     "expired": false
   },
-  "description": "<p>Wizard Lv2: -1 delivery mana cost.</p>",
+  "description": "<p>Wizard (Sculpt Spell, Level 4): you pay 1 less Mana for Delivery upcasting, 1 more every 4 Levels hereafter.</p>",
   "origin": null,
   "tint": "#ffffff",
   "transfer": false,

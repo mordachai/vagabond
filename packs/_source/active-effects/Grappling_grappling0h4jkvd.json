@@ -14,7 +14,7 @@
     "expiry": null,
     "expired": false
   },
-  "description": "<p>Restraining a target. Speed halved unless target is smaller.</p>",
+  "description": "<p>Restraining a target. Speed halved unless target is smaller. [PARTIALLY AUTOMATED — speed penalty applied at grapple time]</p>",
   "origin": null,
   "tint": "#ffffff",
   "transfer": false,
@@ -22,7 +22,7 @@
     "grappling"
   ],
   "showIcon": 2,
-  "folder": "vacatconditifold",
+  "folder": "vacattracker0fld",
   "flags": {
     "vagabond": {
       "applicationMode": "permanent",

@@ -6,16 +6,9 @@
   "system": {
     "changes": [
       {
-        "key": "system.meleeCritBonus",
-        "type": "add",
-        "value": "-2",
-        "phase": "initial",
-        "priority": null
-      },
-      {
-        "key": "system.rangedCritBonus",
-        "type": "add",
-        "value": "-2",
+        "key": "system.attackCritBonus",
+        "type": "subtract",
+        "value": "1",
         "phase": "initial",
         "priority": null
       }
@@ -29,7 +22,7 @@
     "expiry": null,
     "expired": false
   },
-  "description": "<p>Ace property: critical hit threshold reduced by 2 instead of 1 (e.g. 20 → 18).</p>",
+  "description": "<p>Ace (Keen): this weapon Crits 2 lower rather than 1 lower from Keen. Drop onto a weapon that also has the Keen Property effect. Applies only while attacking with that weapon.</p>",
   "origin": null,
   "tint": "#ffffff",
   "transfer": false,
@@ -38,7 +31,7 @@
   "folder": "vacatrelic00fold",
   "flags": {
     "vagabond": {
-      "applicationMode": "permanent",
+      "applicationMode": "on-use",
       "canonicalId": "ace-keen"
     }
   },

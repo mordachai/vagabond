@@ -14,7 +14,7 @@
     "hitMacro": {
       "enabled": true,
       "uuid": "",
-      "command": "const amount  = (Number(scope.spellDamageDice ?? 1) || 1) * 5;\nconst targets = scope.targets ?? [];\nif (!targets.length) return ui.notifications.warn(\"Tempo: no target.\");\nconst duration = scope.isCritical ? { seconds: 60 } : {};\nfor (const t of targets) {\n  const a = t.actor ?? t; if (!a) continue;\n  const npc = typeof a.system.speed !== \"object\";\n  await a.createEmbeddedDocuments(\"ActiveEffect\", [{\n    name: `Tempo (+${amount} ft)`,\n    img: \"icons/magic/time/clock-stopwatch-white-blue.webp\",\n    duration,\n    changes: [{ key: npc ? \"system.speed\" : \"system.speed.bonus\", mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: String(amount) }],\n    flags: { vagabond: { tempo: true } },\n  }]);\n}\nui.notifications.info(`Tempo: +${amount} ft on ${targets.length} target(s).`);",
+      "command": "system:spell.status.hastened",
       "label": "Tempo +",
       "runAsGM": true
     },

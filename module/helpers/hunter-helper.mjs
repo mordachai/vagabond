@@ -11,6 +11,10 @@ import { classFeatureText } from './feature-text.mjs';
  *   - `system.huntersMarkTrigger`  attacking with no Mark makes the Target your Mark (optional)
  * The Mark button on the feature always works, no combat needed.
  *
+ * Marked status: while a Being is a Hunter's Mark it carries the Marked status (token HUD condition, also
+ * toggleable by hand). Applied when the Mark is set, removed by the active GM when the Mark effect is deleted
+ * (drop, move, or by hand), unless another hunter still marks that Being. Same pattern as the Witch's Hexed.
+ *
  * Tracking / navigation / Forage / sensing (Survivalist, Killer Instinct) and Climb / Swim
  * (Rover) are text only.
  *
@@ -121,6 +125,8 @@ export class HunterHelper {
       return false;
     }
 
+    await this.#setMarkedStatus(target, true, this.#L('MarkedBy', { name: hunter.name }));
+
     const { VagabondChatCard } = await import('./chat-card.mjs');
     const text = classFeatureText(hunter, { command: 'hunter.mark', name: title });
     await VagabondChatCard.featureCard(hunter, {
@@ -155,6 +161,50 @@ export class HunterHelper {
       return;
     }
     return this.setMark(actor, token, { manual: true });
+  }
+
+  /* -------------------------------------------- */
+  /*  Marked status                               */
+  /* -------------------------------------------- */
+
+  /** Is the Marked status available (it is not in Foundry's default status list)? */
+  static #markedAvailable() {
+    return !!CONFIG.statusEffects?.some(s => s.id === 'marked');
+  }
+
+  /**
+   * Put the Marked status on / take it off `actor`. Owner and GM write directly; anyone else routes through the
+   * 'applyStatus' socket action (which also stamps the per-application description).
+   */
+  static async #setMarkedStatus(actor, active, description = '') {
+    if (!actor || !this.#markedAvailable()) return;
+    if (actor.isOwner || game.user.isGM) {
+      if (active) {
+        if (!actor.statuses?.has('marked')) await actor.toggleStatusEffect('marked', { active: true });
+        const eff = actor.effects.find(e => e.statuses?.has('marked'));
+        if (eff && description && eff.description !== description) {
+          await eff.update({ description, 'flags.vagabond.flankInfo': true });
+        }
+      } else {
+        const ids = actor.effects.filter(e => e.statuses?.has('marked')).map(e => e.id);
+        if (ids.length) await actor.deleteEmbeddedDocuments('ActiveEffect', ids);
+      }
+    } else {
+      const { emitSocket } = await import('./socket-helper.mjs');
+      emitSocket('applyStatus', { actorUuid: actor.uuid, statusId: 'marked', active, description });
+    }
+  }
+
+  /** A Mark effect was deleted from a hunter: clear Marked from its Target unless another hunter still marks it. */
+  static async #onMarkEffectDeleted(effect) {
+    const key = effect?.flags?.vagabond?.huntersMark?.key;
+    const hunter = effect?.parent;
+    if (!key || hunter?.documentName !== 'Actor') return;
+    const doc = fromUuidSync(key);
+    const target = doc?.actor ?? doc ?? null;
+    if (!target) return;
+    const stillMarked = game.actors.some(a => a.id !== hunter.id && this.isMarkTarget(a, target));
+    if (!stillMarked) await this.#setMarkedStatus(target, false);
   }
 
   /* -------------------------------------------- */
@@ -209,5 +259,10 @@ export class HunterHelper {
   /** Register the hooks. Synchronous, called once at module load. */
   static registerHooks() {
     Hooks.on('vagabond.calculateFinalDamage', (ctx) => this.#onFinalDamage(ctx));
+    // Mark effect gone (drop / move / deleted by hand) → the Target is no longer Marked. Active GM only.
+    Hooks.on('deleteActiveEffect', (effect) => {
+      if (!effect?.flags?.vagabond?.huntersMark || game.users.activeGM !== game.user) return;
+      this.#onMarkEffectDeleted(effect).catch(err => console.error('vagabond | Hunter’s Mark: could not clear Marked', err));
+    });
   }
 }

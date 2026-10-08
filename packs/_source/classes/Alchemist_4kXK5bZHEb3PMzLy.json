@@ -90,7 +90,15 @@
         "extraTraining": 0,
         "requiredSpells": [],
         "allowedPerks": [],
-        "perkAmount": 0
+        "perkAmount": 0,
+        "action": {
+          "enabled": true,
+          "label": "Mix",
+          "icon": "flask-vial",
+          "uuid": "",
+          "command": "system:alchemist.mix",
+          "runAsGM": false
+        }
       },
       {
         "level": 6,

@@ -11,13 +11,6 @@
         "value": "true",
         "phase": "initial",
         "priority": null
-      },
-      {
-        "key": "system.attributes.manaMultiplier",
-        "type": "override",
-        "value": "2",
-        "phase": "initial",
-        "priority": null
       }
     ]
   },
@@ -29,7 +22,7 @@
     "expiry": null,
     "expired": false
   },
-  "description": "<p>Magical Secret perk: grants spellcasting ability with 2x mana multiplier. Requires choosing a casting stat.</p>",
+  "description": "<p>Magical Secret perk: you can Cast Spells (the Spell you learn is cast using Arcana, Influence, or Mysticism).</p>",
   "origin": null,
   "tint": "#ffffff",
   "transfer": false,

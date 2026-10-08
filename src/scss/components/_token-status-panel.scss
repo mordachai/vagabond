@@ -2,6 +2,10 @@
 // Foundry owns opacity (0.5 idle / 0.7 hover / 1.0 active) and its own filter var.
 // We only add border-radius and an inset outline — outline never affects grid layout.
 #token-hud .palette.status-effects {
+  // Bigger icons than Foundry's 24px (grid, gap and max-height all follow this var)
+  --effect-size: 30px;
+  --effect-columns: 6;
+
   img.effect-control {
     border-radius: 2px;
     outline: 1px solid transparent;
@@ -19,6 +23,28 @@
     &.active:hover {
       outline-color: #fffad0;
     }
+  }
+
+  // Room for the two group headings (book Statuses / Trackers) without scrolling
+  max-height: calc(12 * (var(--effect-size) + var(--effect-gap)) + 2 * var(--effect-gap));
+
+  // Group headings injected by the renderTokenHUD hook (vagabond.mjs)
+  .vagabond-status-heading {
+    grid-column: 1 / -1;
+    margin: 2px 0 0;
+    padding: 0 1px 1px;
+    font-family: $font-title;
+    font-size: 10px;
+    line-height: 1.2;
+    letter-spacing: 0.04em;
+    color: #ded656;
+    border-bottom: 1px solid rgba(222, 214, 86, 0.35);
+    pointer-events: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    &:first-child { margin-top: 0; }
   }
 }
 

@@ -38,6 +38,36 @@ export default class VagabondActorBase extends foundry.abstract
     );
     schema.biography = new fields.HTMLField();
 
+    // Shared by every actor type so one Active Effect key works on characters and NPCs alike
+    // (spell Trackers: Hastened / Slowed / Frozen, Blessed).
+    schema.speedModifier = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      {
+        initial: [],
+        label: "Speed Modifier",
+        hint: "Added to Speed (negative slows). Number or formula. Works on characters and NPCs."
+      }
+    );
+    schema.saveBonusDice = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      {
+        initial: [],
+        label: "Save Bonus Dice",
+        hint: "Dice added to every Save (e.g. 1d4 for Bless). Read by VagabondRollBuilder.saveBaseDie."
+      }
+    );
+
+    // Materials every weapon this actor wields also counts as, for Weakness (ADD a key from
+    // CONFIG.VAGABOND.materialWeaknesses, e.g. 'silver' — Revelator Holy Diver: wielded Weapons are Blessed).
+    schema.weaponsCountAs = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      {
+        initial: [],
+        label: "Wielded Weapons Count As",
+        hint: "Material keys (e.g. silver) every weapon this actor wields counts as for Weakness."
+      }
+    );
+
     return schema;
   }
 
@@ -46,5 +76,8 @@ export default class VagabondActorBase extends foundry.abstract
     // This ensures we don't accumulate values from previous save/load cycles
     // when adding calculated values in prepareDerivedData.
     if (this.health) this.health.max = 0;
+    this.speedModifier = [];
+    this.saveBonusDice = [];
+    this.weaponsCountAs = [];
   }
 }

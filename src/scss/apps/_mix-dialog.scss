@@ -1,0 +1,432 @@
+// Mix panel (Alchemist feature button, AlchemistHelper.mix) — compact sibling of the Catalyze picker.
+// Two drop slots + the combined effect, the Mix button (DialogV2 footer moved up under the preview), then a
+// carousel of the Alchemical Items on hand and the selected item's details. Quantities are corner badges.
+// Neutral tan frames, yellow for "picked", green only on the Mix button once it can be pressed, scooped
+// corners only on the details box. Colors are the theme-aware $c-* tokens, so light / dark follow the interface.
+
+@mixin mx-frame($color: $c-tan-lite, $radius: 8px) {
+  border: 2px solid $color;
+  border-radius: $radius;
+  background: $c-inset-2;
+}
+
+.mix-dialog {
+  .mix-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  // Art with a quantity badge on its top-right corner (tiles, slots, detail).
+  .mix-art {
+    position: relative;
+    flex: none;
+    display: inline-block;
+    line-height: 0;
+
+    img {
+      width: 44px;
+      height: 44px;
+      object-fit: cover;
+      border: 1px solid $c-faint;
+      border-radius: 6px;
+      background: $c-black;
+    }
+  }
+
+  .mix-badge {
+    position: absolute;
+    top: -7px;
+    right: -9px;
+    min-width: 22px;
+    padding: 1px 5px;
+    border: 1px solid $c-yellow;
+    border-radius: 9px;
+    background: $c-black;
+    color: $c-yellow;
+    font-family: $font-title;
+    font-size: 0.9rem;
+    line-height: 1.1;
+    text-align: center;
+  }
+
+  /* ---- Slots ---- */
+
+  .mix-slots {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .mix-plus {
+    color: $c-yellow;
+    font-size: 1.1rem;
+  }
+
+  .mix-slot {
+    @include mx-frame;
+    position: relative;
+    width: 100px;
+    min-height: 84px;
+    padding: 8px 4px 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    border-style: dashed;
+    font-size: 0.72rem;
+    color: $c-muted;
+    text-align: center;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+
+    > i { font-size: 1.3rem; opacity: 0.5; }
+
+    &.filled {
+      border-style: solid;
+      border-color: $c-yellow;
+      color: $c-text-1;
+      cursor: pointer;
+    }
+
+    &.drag-over {
+      border-style: solid;
+      border-color: $c-yellow;
+      box-shadow: 0 0 8px -1px $c-yellow, inset 0 0 0 1px $c-yellow;
+    }
+  }
+
+  .mix-panel.is-dragging .mix-slot { border-color: $c-yellow; }
+
+  .mix-slot-name {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-family: $font-primary;
+    font-weight: bold;
+    font-size: 0.8rem;
+  }
+
+  .mix-slot-clear {
+    position: absolute;
+    top: 2px;
+    left: 4px;
+    width: 16px;
+    height: 16px;
+    line-height: normal;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: $c-muted;
+    font-size: 0.7rem;
+    cursor: pointer;
+
+    &:hover { color: $c-red; }
+  }
+
+  /* ---- Combined effect ---- */
+
+  .mix-effect {
+    @include mx-frame;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 10px;
+    text-align: center;
+  }
+
+  .mix-hint {
+    margin: 0;
+    color: $c-muted;
+    font-size: 0.78rem;
+  }
+
+  .mix-line {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .mix-plus-sm {
+    color: $c-yellow;
+    font-weight: bold;
+  }
+
+  .mix-dmg {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 1px 10px;
+    border: 2px solid $c-tan-lite;
+    border-radius: 12px;
+    font-family: $font-primary;
+    font-weight: bold;
+    font-size: 1rem;
+    line-height: 1.3;
+    color: $c-text-1;
+
+    i { color: $c-yellow; }
+
+    &.is-companion { border-style: dashed; }
+  }
+
+  .mix-tag {
+    padding: 1px 9px;
+    border: 1px solid $c-tan-lite;
+    border-radius: 10px;
+    background: $c-inset-1;
+    font-size: 0.82rem;
+    line-height: 1.4;
+    color: $c-text-1;
+
+    &.is-use { font-style: italic; }
+  }
+
+  // How long the Mix lasts: centred strip under a rule.
+  .mix-expiry {
+    align-self: stretch;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding-top: 5px;
+    border-top: 1px solid $c-tan-lite;
+    font-size: 0.75rem;
+    color: $c-text-2;
+
+    i { color: $c-yellow; }
+  }
+
+  /* ---- Mix button row (DialogV2 footer relocated here) ---- */
+
+  .mix-action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    .form-footer {
+      flex: 0 1 auto;
+      margin: 0;
+      padding: 0;
+      border: none;
+    }
+
+    // Neutral until it can be pressed; ready = green border + green tint.
+    button[data-action="ok"] {
+      min-width: 150px;
+      height: 34px;
+      padding: 0 18px;
+      border: 2px solid $c-green;
+      border-radius: 8px;
+      background: color-mix(in srgb, #{$c-green} 30%, transparent);
+      color: $c-text-1;
+      font-family: $font-primary;
+      font-size: 1.05rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      transition: background 0.15s ease, box-shadow 0.15s ease;
+
+      i { color: $c-yellow; }
+
+      &:hover:not(:disabled) {
+        background: color-mix(in srgb, #{$c-green} 55%, transparent);
+        box-shadow: 0 0 8px -2px $c-green;
+      }
+
+      &:disabled {
+        border-color: $c-faint;
+        background: $c-inset-1;
+        color: $c-muted;
+
+        i { color: inherit; }
+      }
+    }
+  }
+
+  .mix-studied {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    height: 34px;
+    padding: 0 10px;
+    border: 2px solid $c-tan-lite;
+    border-radius: 8px;
+    background: $c-inset-2;
+    font-family: $font-primary;
+    font-weight: bold;
+    font-size: 1rem;
+    color: $c-text-1;
+
+    i { color: $c-yellow; }
+
+    &.is-zero {
+      border-color: $c-red;
+      color: $c-red;
+
+      i { color: inherit; }
+    }
+  }
+
+  /* ---- Alchemical Items carousel ---- */
+
+  .mix-items-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: $font-primary;
+    font-weight: bold;
+    font-size: 0.8rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: $c-text-1;
+
+    &::before,
+    &::after {
+      content: '';
+      flex: 1;
+      border-top: 1px solid $c-tan-lite;
+    }
+  }
+
+  .mix-carousel {
+    display: grid;
+    grid-template-columns: 18px minmax(0, 1fr) 18px;
+    align-items: center;
+    gap: 2px;
+  }
+
+  .mix-arrow {
+    height: auto;
+    line-height: normal;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: $c-yellow;
+    font-size: 1rem;
+    cursor: pointer;
+
+    &:disabled { opacity: 0.2; cursor: default; }
+  }
+
+  .mix-strip {
+    display: flex;
+    gap: 8px;
+    padding: 10px 4px 6px;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar { display: none; }
+  }
+
+  .mix-tile {
+    height: auto;          // circumvent Foundry's fixed button height…
+    line-height: normal;   // …and its forced button line-height
+    flex: 0 0 calc((100% - 4 * 8px) / 5); // always 5 tiles across (strip gap 8px)
+    min-width: 0;
+    padding: 8px 3px 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    border: 2px solid $c-tan-lite;
+    border-radius: 6px;
+    background: $c-inset-2;
+    scroll-snap-align: start;
+    cursor: grab;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+
+    &:hover { border-color: $c-yellow; }
+
+    &.is-selected {
+      border-color: $c-yellow;
+      box-shadow: 0 0 8px -1px $c-yellow, inset 0 0 0 1px $c-yellow;
+
+      .mix-tile-name { color: $c-yellow; }
+    }
+
+    &.is-used { opacity: 0.4; }
+
+    .mix-art { width: 100%; max-width: 60px; }
+
+    img {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 1;
+      -webkit-user-drag: none;
+    }
+  }
+
+  .mix-tile-name {
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 0.75rem;
+    text-align: center;
+    color: $c-text-1;
+  }
+
+  /* ---- Selected item details ---- */
+
+  .mix-detail {
+    @include mx-frame($c-tan-lite, 12px);
+    corner-shape: scoop;
+    padding: 8px 10px;
+
+    &:empty { display: none; }
+
+    .mix-art img { width: 48px; height: 48px; border-color: $c-yellow; }
+  }
+
+  .mix-detail-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .mix-detail-title {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+
+    strong {
+      font-family: $font-primary;
+      font-size: 1rem;
+      line-height: 1.15;
+      color: $c-text-1;
+    }
+
+    > span {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.75rem;
+      color: $c-muted;
+    }
+
+    .mix-dmg { font-size: 0.85rem; padding: 0 8px; }
+  }
+
+  .mix-detail-desc {
+    margin-top: 6px;
+    padding-top: 5px;
+    border-top: 1px solid $c-tan-lite;
+    max-height: 5.8em; // ~4 lines
+    overflow-y: auto;
+    font-size: 0.78rem;
+    line-height: 1.4;
+    color: $c-text-1;
+
+    p { margin: 0 0 4px; }
+    p:last-child { margin-bottom: 0; }
+  }
+}

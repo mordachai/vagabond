@@ -10,7 +10,14 @@
     "favorite": false,
     "noRollRequired": true,
     "fxSchool": "radiant",
-    "locked": true
+    "locked": true,
+    "hitMacro": {
+      "enabled": true,
+      "uuid": "",
+      "command": "system:spell.status.guided",
+      "label": "Guide",
+      "runAsGM": true
+    }
   },
   "effects": [],
   "folder": null,

@@ -3513,6 +3513,11 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 }
 
 /* Token status panel - imported at top level because the overlay renders outside sheets */
+#token-hud .palette.status-effects {
+  --effect-size: 30px;
+  --effect-columns: 6;
+  max-height: calc(12 * (var(--effect-size) + var(--effect-gap)) + 2 * var(--effect-gap));
+}
 #token-hud .palette.status-effects img.effect-control {
   border-radius: 2px;
   outline: 1px solid transparent;
@@ -3527,6 +3532,24 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 }
 #token-hud .palette.status-effects img.effect-control.active:hover {
   outline-color: #fffad0;
+}
+#token-hud .palette.status-effects .vagabond-status-heading {
+  grid-column: 1/-1;
+  margin: 2px 0 0;
+  padding: 0 1px 1px;
+  font-family: "Germania", serif;
+  font-size: 10px;
+  line-height: 1.2;
+  letter-spacing: 0.04em;
+  color: #ded656;
+  border-bottom: 1px solid rgba(222, 214, 86, 0.35);
+  pointer-events: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+#token-hud .palette.status-effects .vagabond-status-heading:first-child {
+  margin-top: 0;
 }
 
 /* Token status panel — fixed screen-corner column of the selected token's
@@ -12622,6 +12645,414 @@ ol#combat-tracker.directory-list {
   margin-bottom: 0;
 }
 
+.mix-dialog {
+  /* ---- Slots ---- */
+  /* ---- Combined effect ---- */
+  /* ---- Mix button row (DialogV2 footer relocated here) ---- */
+  /* ---- Alchemical Items carousel ---- */
+  /* ---- Selected item details ---- */
+}
+.mix-dialog .mix-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.mix-dialog .mix-art {
+  position: relative;
+  flex: none;
+  display: inline-block;
+  line-height: 0;
+}
+.mix-dialog .mix-art img {
+  width: 44px;
+  height: 44px;
+  object-fit: cover;
+  border: 1px solid var(--vagabond-c-faint);
+  border-radius: 6px;
+  background: var(--vagabond-c-black);
+}
+.mix-dialog .mix-badge {
+  position: absolute;
+  top: -7px;
+  right: -9px;
+  min-width: 22px;
+  padding: 1px 5px;
+  border: 1px solid var(--vagabond-c-chat-yellow);
+  border-radius: 9px;
+  background: var(--vagabond-c-black);
+  color: var(--vagabond-c-chat-yellow);
+  font-family: "Germania", serif;
+  font-size: 0.9rem;
+  line-height: 1.1;
+  text-align: center;
+}
+.mix-dialog .mix-slots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+.mix-dialog .mix-plus {
+  color: var(--vagabond-c-chat-yellow);
+  font-size: 1.1rem;
+}
+.mix-dialog .mix-slot {
+  border: 2px solid var(--vagabond-c-tan-lite);
+  border-radius: 8px;
+  background: var(--vagabond-c-inset-2);
+  position: relative;
+  width: 100px;
+  min-height: 84px;
+  padding: 8px 4px 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  border-style: dashed;
+  font-size: 0.72rem;
+  color: var(--vagabond-c-muted);
+  text-align: center;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.mix-dialog .mix-slot > i {
+  font-size: 1.3rem;
+  opacity: 0.5;
+}
+.mix-dialog .mix-slot.filled {
+  border-style: solid;
+  border-color: var(--vagabond-c-chat-yellow);
+  color: var(--vagabond-c-text-primary);
+  cursor: pointer;
+}
+.mix-dialog .mix-slot.drag-over {
+  border-style: solid;
+  border-color: var(--vagabond-c-chat-yellow);
+  box-shadow: 0 0 8px -1px var(--vagabond-c-chat-yellow), inset 0 0 0 1px var(--vagabond-c-chat-yellow);
+}
+.mix-dialog .mix-panel.is-dragging .mix-slot {
+  border-color: var(--vagabond-c-chat-yellow);
+}
+.mix-dialog .mix-slot-name {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: "Eskapade", serif;
+  font-weight: bold;
+  font-size: 0.8rem;
+}
+.mix-dialog .mix-slot-clear {
+  position: absolute;
+  top: 2px;
+  left: 4px;
+  width: 16px;
+  height: 16px;
+  line-height: normal;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--vagabond-c-muted);
+  font-size: 0.7rem;
+  cursor: pointer;
+}
+.mix-dialog .mix-slot-clear:hover {
+  color: var(--vagabond-c-red);
+}
+.mix-dialog .mix-effect {
+  border: 2px solid var(--vagabond-c-tan-lite);
+  border-radius: 8px;
+  background: var(--vagabond-c-inset-2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 10px;
+  text-align: center;
+}
+.mix-dialog .mix-hint {
+  margin: 0;
+  color: var(--vagabond-c-muted);
+  font-size: 0.78rem;
+}
+.mix-dialog .mix-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.mix-dialog .mix-plus-sm {
+  color: var(--vagabond-c-chat-yellow);
+  font-weight: bold;
+}
+.mix-dialog .mix-dmg {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 1px 10px;
+  border: 2px solid var(--vagabond-c-tan-lite);
+  border-radius: 12px;
+  font-family: "Eskapade", serif;
+  font-weight: bold;
+  font-size: 1rem;
+  line-height: 1.3;
+  color: var(--vagabond-c-text-primary);
+}
+.mix-dialog .mix-dmg i {
+  color: var(--vagabond-c-chat-yellow);
+}
+.mix-dialog .mix-dmg.is-companion {
+  border-style: dashed;
+}
+.mix-dialog .mix-tag {
+  padding: 1px 9px;
+  border: 1px solid var(--vagabond-c-tan-lite);
+  border-radius: 10px;
+  background: var(--vagabond-c-inset-1);
+  font-size: 0.82rem;
+  line-height: 1.4;
+  color: var(--vagabond-c-text-primary);
+}
+.mix-dialog .mix-tag.is-use {
+  font-style: italic;
+}
+.mix-dialog .mix-expiry {
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding-top: 5px;
+  border-top: 1px solid var(--vagabond-c-tan-lite);
+  font-size: 0.75rem;
+  color: var(--vagabond-c-text-secondary);
+}
+.mix-dialog .mix-expiry i {
+  color: var(--vagabond-c-chat-yellow);
+}
+.mix-dialog .mix-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+.mix-dialog .mix-action .form-footer {
+  flex: 0 1 auto;
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+.mix-dialog .mix-action button[data-action=ok] {
+  min-width: 150px;
+  height: 34px;
+  padding: 0 18px;
+  border: 2px solid var(--vagabond-c-green);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--vagabond-c-green) 30%, transparent);
+  color: var(--vagabond-c-text-primary);
+  font-family: "Eskapade", serif;
+  font-size: 1.05rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition: background 0.15s ease, box-shadow 0.15s ease;
+}
+.mix-dialog .mix-action button[data-action=ok] i {
+  color: var(--vagabond-c-chat-yellow);
+}
+.mix-dialog .mix-action button[data-action=ok]:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--vagabond-c-green) 55%, transparent);
+  box-shadow: 0 0 8px -2px var(--vagabond-c-green);
+}
+.mix-dialog .mix-action button[data-action=ok]:disabled {
+  border-color: var(--vagabond-c-faint);
+  background: var(--vagabond-c-inset-1);
+  color: var(--vagabond-c-muted);
+}
+.mix-dialog .mix-action button[data-action=ok]:disabled i {
+  color: inherit;
+}
+.mix-dialog .mix-studied {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 34px;
+  padding: 0 10px;
+  border: 2px solid var(--vagabond-c-tan-lite);
+  border-radius: 8px;
+  background: var(--vagabond-c-inset-2);
+  font-family: "Eskapade", serif;
+  font-weight: bold;
+  font-size: 1rem;
+  color: var(--vagabond-c-text-primary);
+}
+.mix-dialog .mix-studied i {
+  color: var(--vagabond-c-chat-yellow);
+}
+.mix-dialog .mix-studied.is-zero {
+  border-color: var(--vagabond-c-red);
+  color: var(--vagabond-c-red);
+}
+.mix-dialog .mix-studied.is-zero i {
+  color: inherit;
+}
+.mix-dialog .mix-items-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: "Eskapade", serif;
+  font-weight: bold;
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--vagabond-c-text-primary);
+}
+.mix-dialog .mix-items-head::before, .mix-dialog .mix-items-head::after {
+  content: "";
+  flex: 1;
+  border-top: 1px solid var(--vagabond-c-tan-lite);
+}
+.mix-dialog .mix-carousel {
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr) 18px;
+  align-items: center;
+  gap: 2px;
+}
+.mix-dialog .mix-arrow {
+  height: auto;
+  line-height: normal;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--vagabond-c-chat-yellow);
+  font-size: 1rem;
+  cursor: pointer;
+}
+.mix-dialog .mix-arrow:disabled {
+  opacity: 0.2;
+  cursor: default;
+}
+.mix-dialog .mix-strip {
+  display: flex;
+  gap: 8px;
+  padding: 10px 4px 6px;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+}
+.mix-dialog .mix-strip::-webkit-scrollbar {
+  display: none;
+}
+.mix-dialog .mix-tile {
+  height: auto;
+  line-height: normal;
+  flex: 0 0 calc((100% - 32px) / 5);
+  min-width: 0;
+  padding: 8px 3px 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  border: 2px solid var(--vagabond-c-tan-lite);
+  border-radius: 6px;
+  background: var(--vagabond-c-inset-2);
+  scroll-snap-align: start;
+  cursor: grab;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+}
+.mix-dialog .mix-tile:hover {
+  border-color: var(--vagabond-c-chat-yellow);
+}
+.mix-dialog .mix-tile.is-selected {
+  border-color: var(--vagabond-c-chat-yellow);
+  box-shadow: 0 0 8px -1px var(--vagabond-c-chat-yellow), inset 0 0 0 1px var(--vagabond-c-chat-yellow);
+}
+.mix-dialog .mix-tile.is-selected .mix-tile-name {
+  color: var(--vagabond-c-chat-yellow);
+}
+.mix-dialog .mix-tile.is-used {
+  opacity: 0.4;
+}
+.mix-dialog .mix-tile .mix-art {
+  width: 100%;
+  max-width: 60px;
+}
+.mix-dialog .mix-tile img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  -webkit-user-drag: none;
+}
+.mix-dialog .mix-tile-name {
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.75rem;
+  text-align: center;
+  color: var(--vagabond-c-text-primary);
+}
+.mix-dialog .mix-detail {
+  border: 2px solid var(--vagabond-c-tan-lite);
+  border-radius: 12px;
+  background: var(--vagabond-c-inset-2);
+  corner-shape: scoop;
+  padding: 8px 10px;
+}
+.mix-dialog .mix-detail:empty {
+  display: none;
+}
+.mix-dialog .mix-detail .mix-art img {
+  width: 48px;
+  height: 48px;
+  border-color: var(--vagabond-c-chat-yellow);
+}
+.mix-dialog .mix-detail-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.mix-dialog .mix-detail-title {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.mix-dialog .mix-detail-title strong {
+  font-family: "Eskapade", serif;
+  font-size: 1rem;
+  line-height: 1.15;
+  color: var(--vagabond-c-text-primary);
+}
+.mix-dialog .mix-detail-title > span {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.75rem;
+  color: var(--vagabond-c-muted);
+}
+.mix-dialog .mix-detail-title .mix-dmg {
+  font-size: 0.85rem;
+  padding: 0 8px;
+}
+.mix-dialog .mix-detail-desc {
+  margin-top: 6px;
+  padding-top: 5px;
+  border-top: 1px solid var(--vagabond-c-tan-lite);
+  max-height: 5.8em;
+  overflow-y: auto;
+  font-size: 0.78rem;
+  line-height: 1.4;
+  color: var(--vagabond-c-text-primary);
+}
+.mix-dialog .mix-detail-desc p {
+  margin: 0 0 4px;
+}
+.mix-dialog .mix-detail-desc p:last-child {
+  margin-bottom: 0;
+}
+
 .vagabond.shop-sheet .window-content {
   padding: 0;
 }
@@ -14332,9 +14763,6 @@ ol#combat-tracker.directory-list {
   /* Craft tab: catalog | (selected detail / ongoing Projects / Shift footer) */
   /* ------------------------------------------------------------------ */
   /* Right column */
-  /* ------------------------------------------------------------------ */
-  /* Mix tab: owned alchemicals | (two slots + preview / Mixtures list) */
-  /* ------------------------------------------------------------------ */
 }
 .workbench-app .window-content {
   padding: 0.5rem;
@@ -14775,16 +15203,30 @@ ol#combat-tracker.directory-list {
   background: var(--vagabond-c-black);
 }
 .workbench-app .wb-known-plate {
+  position: relative;
   flex: 1;
   min-width: 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
   gap: 2px;
-  padding: 0.2rem 0.4rem;
+  padding: 0.2rem 3rem 0.2rem 0.4rem;
   background: var(--vagabond-c-inset-2);
   border: 1px solid var(--vagabond-c-tan-lite);
   border-radius: 4px;
+}
+.workbench-app .wb-known-owned {
+  position: absolute;
+  top: 50%;
+  right: 0.5rem;
+  transform: translateY(-50%);
+  font-family: "Germania", serif;
+  font-size: 1.4rem;
+  line-height: 1;
+  color: var(--vagabond-c-chat-yellow);
+}
+.workbench-app .wb-known-owned.is-zero {
+  color: var(--vagabond-c-muted);
 }
 .workbench-app .wb-known-name {
   font-family: "Germania", serif;
@@ -15057,8 +15499,7 @@ ol#combat-tracker.directory-list {
   color: var(--vagabond-c-red);
   opacity: 1;
 }
-.workbench-app .wb-craft-tab,
-.workbench-app .wb-mix-tab {
+.workbench-app .wb-craft-tab {
   height: 100%;
   min-height: 0;
   display: grid;
@@ -15066,8 +15507,7 @@ ol#combat-tracker.directory-list {
   gap: 0.85rem;
   border-radius: 6px;
 }
-.workbench-app .wb-craft-tab.drag-over,
-.workbench-app .wb-mix-tab.drag-over {
+.workbench-app .wb-craft-tab.drag-over {
   outline: 2px dashed var(--vagabond-c-chat-yellow);
   outline-offset: 2px;
 }
@@ -15638,136 +16078,6 @@ ol#combat-tracker.directory-list {
 }
 .workbench-app .wb-autofill-btn:hover {
   border-color: var(--vagabond-c-chat-yellow);
-}
-.workbench-app .wb-mix-slots {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-}
-.workbench-app .wb-mix-plus {
-  color: var(--vagabond-c-chat-yellow);
-  flex: 0 0 auto;
-}
-.workbench-app .wb-mix-slot {
-  position: relative;
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.25rem;
-  padding: 0.5rem 0.3rem;
-  border: 1px dashed var(--vagabond-c-faint);
-  border-radius: 6px;
-  background: var(--vagabond-c-inset-2);
-  text-align: center;
-  font-size: 0.72rem;
-  color: var(--vagabond-c-muted);
-}
-.workbench-app .wb-mix-slot > i {
-  font-size: 1.3rem;
-  opacity: 0.5;
-}
-.workbench-app .wb-mix-slot img {
-  width: 48px;
-  height: 48px;
-  object-fit: cover;
-  border: 1px solid var(--vagabond-c-chat-yellow);
-  border-radius: 6px;
-  background: var(--vagabond-c-black);
-}
-.workbench-app .wb-mix-slot.filled {
-  border-style: solid;
-  border-color: var(--vagabond-c-chat-yellow);
-  color: inherit;
-}
-.workbench-app .wb-mix-slot-name {
-  max-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-family: "Germania", serif;
-  font-size: 0.8rem;
-}
-.workbench-app .wb-mix-slot-clear {
-  position: absolute;
-  top: 2px;
-  right: 2px;
-  width: 18px;
-  height: 18px;
-  line-height: normal;
-  padding: 0;
-  border: none;
-  background: transparent;
-  color: var(--vagabond-c-muted);
-  font-size: 0.7rem;
-  cursor: pointer;
-}
-.workbench-app .wb-mix-slot-clear:hover {
-  color: var(--vagabond-c-red);
-}
-.workbench-app .wb-mix-preview {
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-  margin: 0.5rem 0;
-  padding-top: 0.4rem;
-  border-top: 1px solid var(--vagabond-c-faint);
-}
-.workbench-app .wb-mix-line {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 0.5rem;
-  font-size: 0.75rem;
-}
-.workbench-app .wb-mix-line > span {
-  font-family: "Manofa", serif;
-  font-size: 0.65rem;
-  color: var(--vagabond-c-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-}
-.workbench-app .wb-mix-line strong {
-  text-align: right;
-}
-.workbench-app .wb-mix-line i {
-  color: var(--vagabond-c-chat-yellow);
-}
-.workbench-app .wb-mix-status {
-  display: inline-block;
-  margin-left: 0.25rem;
-  padding: 0 0.3rem;
-  border: 1px solid var(--vagabond-c-tan-lite);
-  border-radius: 3px;
-  font-size: 0.68rem;
-}
-.workbench-app .wb-mix-bench .wb-stage-btn {
-  width: 100%;
-}
-.workbench-app .wb-mix-row-status {
-  font-size: 0.7rem;
-  color: var(--vagabond-c-muted);
-}
-.workbench-app .wb-mix-row.is-inert img {
-  filter: grayscale(1) brightness(0.6);
-}
-.workbench-app .wb-mix-ingredient {
-  cursor: grab;
-}
-.workbench-app .wb-mix-ingredient img {
-  -webkit-user-drag: none;
-}
-.workbench-app .wb-mix-ingredient.is-dragging {
-  opacity: 0.45;
-}
-.workbench-app .wb-mix-tab.is-mix-dragging .wb-mix-slot {
-  border-color: var(--vagabond-c-chat-yellow);
-}
-.workbench-app .wb-mix-slot.drag-over {
-  border-style: solid;
-  border-color: var(--vagabond-c-chat-yellow);
-  box-shadow: 0 0 8px -1px var(--vagabond-c-chat-yellow), inset 0 0 0 1px var(--vagabond-c-chat-yellow);
 }
 
 /* Party supplies breakdown - renders inside Foundry's #tooltip, outside sheets */

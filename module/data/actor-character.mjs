@@ -1619,7 +1619,8 @@ export default class VagabondCharacter extends VagabondActorBase {
 
     // Speed Calculation
     // 1. Get speed bonus from Active Effects (stored in system.speed.bonus)
-    const speedBonus = this._evaluateFormulaField(this.speed.bonus, rollData);
+    const speedBonus = this._evaluateFormulaField(this.speed.bonus, rollData)
+      + this._evaluateFormulaField(this.speedModifier, rollData);
 
     // 2. Evaluate base speed from homebrew derivation formula
     const speedFormula = CONFIG.VAGABOND?.homebrew?.derivations?.speed

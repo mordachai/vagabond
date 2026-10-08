@@ -254,6 +254,17 @@ VAGABOND.statusConditions = {
  *
  * @type {Array}
  */
+/**
+ * The rulebook's Statuses (Alpha 3 p. 11). Every other entry of `statusEffectDefinitions` is a Tracker:
+ * a system aid (Focusing, Flanked, Hexed, Blessed…). The token HUD lists the two groups under their own
+ * headings, and the `statusEffectsMode` setting can hide the Trackers from it.
+ * @type {Set<string>}
+ */
+VAGABOND.bookStatusIds = new Set([
+  'berserk', 'blinded', 'burning', 'charmed', 'confused', 'dazed', 'fatigued', 'frightened', 'incapacitated',
+  'invisible', 'paralyzed', 'prone', 'restrained', 'sickened', 'suffocating', 'unconscious', 'vulnerable',
+]);
+
 VAGABOND.statusEffectDefinitions = [
   // AUTO-MANAGED (applied/removed by system code)
   {
@@ -470,6 +481,113 @@ VAGABOND.statusEffectDefinitions = [
     statuses: ['hexed'],
     description: "Under a Witch's Hex.",
     changes: []
+  },
+  {
+    // Informational only. Put on a Being while it is a Hunter's Mark (HunterHelper.setMark stamps the hunter's name
+    // into the description); also toggleable by hand from the token HUD. The Mark rules (Keen/Vicious, Lethal
+    // Precision, Apex Predator) follow the Hunter's Mark effect, not this status.
+    id: 'marked',
+    name: 'VAGABOND.StatusConditions.Marked',
+    img: '/icons/skills/targeting/crosshair-pointed-orange.webp',
+    statuses: ['marked'],
+    description: "A Hunter's Mark.",
+    changes: []
+  },
+
+  // SPELL TRACKERS (not book Statuses): put on a Being under a buff Spell so its numbers change while it lasts.
+  // Toggled by hand from the token HUD; remove them when the caster's Focus ends.
+  {
+    // Bless: "Targeted Beings of your choice have a d4 bonus to Saves."
+    id: 'blessed',
+    name: 'VAGABOND.StatusConditions.Blessed',
+    img: '/icons/magic/holy/saint-glass-portrait-halo.webp',
+    statuses: ['blessed'],
+    description: 'Under the Bless Spell: d4 bonus to Saves.',
+    changes: [
+      { key: 'system.saveBonusDice', type: 'add', value: '1d4' }
+    ]
+  },
+  {
+    // Exalt: "+1 bonus to each damage die they deal and to Will Saves against Frightened. This bonus is doubled
+    // if a Hellspawn or Undead is the attack's Target or the one forcing the Save." (Save doubling is not automated.)
+    id: 'exalted',
+    name: 'VAGABOND.StatusConditions.Exalted',
+    img: '/icons/skills/melee/sword-winged-holy-orange.webp',
+    statuses: ['exalted'],
+    description: 'Under the Exalt Spell: +1 to each damage die it deals and to Will Saves against Frightened, doubled against Hellspawn and Undead.',
+    changes: [
+      { key: 'system.bonusPerDamageDie', type: 'add', value: '1' },
+      { key: 'system.bonusPerDamageDieDoubleVsBeingTypes', type: 'add', value: 'Hellspawn' },
+      { key: 'system.bonusPerDamageDieDoubleVsBeingTypes', type: 'add', value: 'Undead' },
+      { key: 'system.saveVsStatusBonuses', type: 'add', value: 'frightened:will:1' }
+    ]
+  },
+  {
+    // Ward: "The Target has +1 Armor." (The upcast damage reduction stays manual.)
+    id: 'warded',
+    name: 'VAGABOND.StatusConditions.Warded',
+    img: '/icons/magic/defensive/shield-barrier-deflect-gold.webp',
+    statuses: ['warded'],
+    description: 'Under the Ward Spell: +1 Armor.',
+    changes: [
+      { key: 'system.armorBonus', type: 'add', value: '1' }
+    ]
+  },
+  {
+    // Guide: "Checks that rely on sight made against the Target have Favor." Attacks and Casts at it are Favored.
+    id: 'guided',
+    name: 'VAGABOND.StatusConditions.Guided',
+    img: '/icons/skills/ranged/target-bullseye-arrow-glowing.webp',
+    statuses: ['guided'],
+    description: 'Under the Guide Spell: Checks that rely on sight made against it have Favor.',
+    changes: [
+      { key: 'system.incomingAttacksModifier', type: 'override', value: 'favor' }
+    ]
+  },
+  {
+    // Tempo +: Speed +5' (upcast: edit the effect's value for more).
+    id: 'hastened',
+    name: 'VAGABOND.StatusConditions.Hastened',
+    img: '/icons/magic/time/clock-stopwatch-white-blue.webp',
+    statuses: ['hastened'],
+    description: "Under the Tempo + Spell: Speed +5'.",
+    changes: [
+      { key: 'system.speedModifier', type: 'add', value: '5' }
+    ]
+  },
+  {
+    // Tempo −: Speed −5' (upcast: edit the effect's value for more).
+    id: 'slowed',
+    name: 'VAGABOND.StatusConditions.Slowed',
+    img: '/icons/magic/time/hourglass-tilted-gray.webp',
+    statuses: ['slowed'],
+    description: "Under the Tempo - Spell: Speed -5'.",
+    changes: [
+      { key: 'system.speedModifier', type: 'add', value: '-5' }
+    ]
+  },
+  {
+    // Freeze on a Being: "its Speed is reduced by 10'."
+    id: 'frozen',
+    name: 'VAGABOND.StatusConditions.Frozen',
+    img: '/icons/magic/water/barrier-ice-crystal-wall-faceted-blue.webp',
+    statuses: ['frozen'],
+    description: "Under the Freeze Spell: Speed -10'.",
+    changes: [
+      { key: 'system.speedModifier', type: 'add', value: '-10' }
+    ]
+  },
+  {
+    // Shrink: "The Target's size and damage dice are reduced by one size." The weapon-skill die-size changes are
+    // added at init from the homebrew weapon skills (see vagabond.mjs). Size and NPC action damage stay manual.
+    id: 'shrunk',
+    name: 'VAGABOND.StatusConditions.Shrunk',
+    img: '/icons/magic/control/silhouette-grow-shrink-blue.webp',
+    statuses: ['shrunk'],
+    description: 'Under the Shrink Spell: size and damage dice one size smaller.',
+    changes: [
+      { key: 'system.spellDamageDieSizeBonus', type: 'add', value: '-2' }
+    ]
   },
   {
     // Bookkeeping only (no mechanical changes): mapped to Foundry's FLY special status

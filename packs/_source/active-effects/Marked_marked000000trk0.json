@@ -1,0 +1,46 @@
+{
+  "name": "Marked",
+  "_id": "marked000000trk0",
+  "img": "icons/skills/targeting/crosshair-pointed-orange.webp",
+  "type": "base",
+  "system": {
+    "changes": []
+  },
+  "disabled": false,
+  "start": null,
+  "duration": {
+    "value": null,
+    "units": "seconds",
+    "expiry": null,
+    "expired": false
+  },
+  "description": "<p>A Hunter's Mark.</p>",
+  "origin": null,
+  "tint": "#ffffff",
+  "transfer": false,
+  "statuses": [
+    "marked"
+  ],
+  "showIcon": 2,
+  "folder": "vacattracker0fld",
+  "flags": {
+    "vagabond": {
+      "applicationMode": "permanent",
+      "canonicalId": "marked",
+      "automation": "manual"
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "5.5.0",
+    "createdTime": 1778279425909,
+    "modifiedTime": 1778279425909,
+    "lastModifiedBy": null,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "sort": 0,
+  "_key": "!effects!marked000000trk0"
+}

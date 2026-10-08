@@ -1,21 +1,21 @@
 {
-  "name": "lv2 - Spell-Slinger",
+  "name": "Spell-Slinger",
   "_id": "sorcerersppyd0tm",
   "img": "icons/svg/fire.svg",
   "type": "base",
   "system": {
     "changes": [
       {
-        "key": "system.castCritBonus",
+        "key": "system.spellDamageDieSizeBonus",
         "type": "add",
-        "value": "(@lvl >= 2) ? -1 : 0",
+        "value": "(@lvl >= 4) ? 2 : 0",
         "phase": "initial",
         "priority": null
       },
       {
-        "key": "system.spellDamageDieSizeBonus",
+        "key": "system.castCritBonus",
         "type": "add",
-        "value": "(@lvl >= 2) ? 2 : 0",
+        "value": "(@lvl >= 4) ? 0 - 1 - floor((@lvl - 4) / 4) : 0",
         "phase": "initial",
         "priority": null
       }
@@ -29,7 +29,7 @@
     "expiry": null,
     "expired": false
   },
-  "description": "<p>Sorcerer Lv2: -1 spell crit threshold and +2 spell damage die size steps.</p>",
+  "description": "<p>Sorcerer (Spell-Slinger, Level 4): the damage die of your Spells is one size larger, and you Crit on Cast Checks and Saves against Casts 1 lower, 1 more every 4 Levels hereafter.</p>",
   "origin": null,
   "tint": "#ffffff",
   "transfer": false,

@@ -294,12 +294,37 @@
       "LimitCatalyze": "<strong>{name}</strong> já usou a Ação de Usar para Criar neste Turno ({used}/{allowed}). Criar mesmo assim?",
       "LimitDeft": "<strong>{name}</strong> já Criou {used}/{allowed} vezes neste Turno (Ação de Usar + Mãos Hábeis, que abre mão do Movimento). Criar mesmo assim?"
     },
+    "MixPanel": {
+      "Title": "Misturar",
+      "Mix": "Misturar",
+      "NoMix": "{name} não tem Misturar.",
+      "NoItems": "{name} não tem Itens Alquímicos com carga restante para Misturar.",
+      "StudiedDice": "Dados de Estudo (Misturar gasta 1)",
+      "Items": "Itens Alquímicos",
+      "Drop": "Solte aqui",
+      "DropHint": "Arraste dois Itens Alquímicos para os espaços (ou clique duas vezes neles).",
+      "Clear": "Remover",
+      "OwnedOnly": "Só os Itens Alquímicos do próprio personagem (com carga restante) podem ser misturados.",
+      "OneCharge": "{name} não tem carga para uma segunda dose.",
+      "CompanionHint": "um tipo de dano diferente, rolado em um cartão próprio nos mesmos alvos (ao acertar, quando arremessada)",
+      "Thrown": "Arremesso",
+      "Used": "Usada (sem rolagem de ataque)",
+      "LimitTitle": "Ação de Usar já tomada",
+      "LimitCatalyze": "<strong>{name}</strong> já tomou a Ação de Usar neste Turno ({used}/{allowed}). Misturar mesmo assim?",
+      "LimitDeft": "<strong>{name}</strong> já tomou {used}/{allowed} Ações de Usar neste Turno (Ação de Usar + Mãos Hábeis, que abre mão do Movimento). Misturar mesmo assim?"
+    },
+    "SpellTracker": {
+      "By": "{spell} — conjurada por {name}.",
+      "NoTarget": "Mire em um token para a Magia primeiro.",
+      "Unavailable": "O status {status} não está disponível (modo de status do Foundry)."
+    },
     "HuntersMark": {
       "Title": "Marca do Caçador",
       "EffectText": "{target} é a sua Marca. Exclua este efeito para largar a Marca.",
       "NotYours": "Apenas o dono do Caçador pode escolher uma Marca.",
       "NoTarget": "Mire em um token para marcá-lo.",
       "Marked": "<strong>{name}</strong> marca <strong>{target}</strong>.",
+      "MarkedBy": "Marcado por {name}.",
       "Failed": "Não foi possível marcar {name} — veja o console.",
       "Dropped": "<strong>{name}</strong> larga a Marca em <strong>{target}</strong>."
     },
@@ -411,6 +436,10 @@
       "GenericLight": "Luz (Genérico)",
       "GenericDark":  "Trevas (Genérico)"
     },
+    "StatusGroups": {
+      "Statuses": "Status Vagabond",
+      "Trackers": "Marcadores"
+    },
     "StatusConditions": {
       "Berserk": "Furioso",
       "Blinded": "Cego",
@@ -424,6 +453,15 @@
       "Flanking": "Flanqueando",
       "Flying": "Voando",
       "Hexed": "Amaldiçoado",
+      "Marked": "Marcado",
+      "Blessed": "Abençoado",
+      "Exalted": "Exaltado",
+      "Warded": "Protegido",
+      "Guided": "Guiado",
+      "Hastened": "Acelerado",
+      "Slowed": "Lento",
+      "Frozen": "Congelado",
+      "Shrunk": "Encolhido",
       "Focusing": "Concentrado",
       "Frightened": "Amedrontado",
       "Incapacitated": "Incapacitado",
@@ -451,6 +489,15 @@
       "Flanking": "Flanqueando um Inimigo adjacente junto de um aliado. +2 de dano em ataques contra ele, e ele fica Vulnerável enquanto dois de vocês permanecerem Próximos. [AUTOMATIZADO]",
       "Flying": "No ar. Não toca o chão, então o Sentido Sísmico não o detecta. [MANUAL]",
       "Hexed": "Sob o Feitiço de uma Bruxa. [MANUAL]",
+      "Marked": "A Marca de um Caçador. [MANUAL]",
+      "Blessed": "Sob a magia Bênção: bônus de d4 nas Salvaguardas. [AUTOMATIZADO]",
+      "Exalted": "Sob a magia Exaltar: +1 em cada dado de dano que causa e nas Salvaguardas de Vontade contra Amedrontado, dobrado contra Infernais e Mortos-Vivos. [AUTOMATIZADO: dano. MANUAL: bônus dobrado na Salvaguarda]",
+      "Warded": "Sob a magia Proteção: +1 de Armadura. [AUTOMATIZADO: Armadura. MANUAL: redução de dano ao aprimorar]",
+      "Guided": "Sob a magia Guiar: Testes que dependem de visão feitos contra ele têm Vantagem. [AUTOMATIZADO: ataques e Conjurações]",
+      "Hastened": "Sob a magia Tempo +: Velocidade +5'. [AUTOMATIZADO: edite o efeito para Velocidade aprimorada]",
+      "Slowed": "Sob a magia Tempo -: Velocidade -5'. [AUTOMATIZADO: edite o efeito para Velocidade aprimorada]",
+      "Frozen": "Sob a magia Congelar: Velocidade -10'. [AUTOMATIZADO]",
+      "Shrunk": "Sob a magia Encolher: tamanho e dados de dano um tamanho menor. [AUTOMATIZADO: dados de arma e Magia do personagem. MANUAL: tamanho, ações de NPC]",
       "Restrained": "Vulnerável + Velocidade = 0 [AUTOMATIZADO]",
       "Grappling": "Contendo um alvo. Velocidade reduzida à metade a menos que o alvo seja menor. [PARCIALMENTE AUTOMATIZADO]",
       "Blinded": "Não pode ver. Vulnerável [AUTOMATIZADO]",
@@ -763,7 +810,7 @@
         "PrimaMateriaValueCap": "Valor de até 10o",
         "RelicTarget": "Hospedeiro + poder",
         "Mix": "Característica Misturar",
-        "MixIngredients": "Dois Itens Alquímicos diferentes com carga restante"
+        "MixIngredients": "Dois Itens Alquímicos com carga restante (duas cargas para usar a mesma pilha duas vezes)"
       },
       "Modes": {
         "Craft": {
@@ -802,8 +849,8 @@
         "Result": "{actor} mistura {a} e {b}.",
         "Expiry": {
           "NextTurn": "Fica inerte no início do seu próximo Turno",
-          "NextAction": "Fica inerte após sua próxima ação",
-          "UntilUsed": "Dura até ser usada",
+          "NextAction": "Fora de Combate: fica inerte após sua próxima ação",
+          "UntilUsed": "Fora de Combate: dura até ser usada",
           "Inert": "Inerte"
         }
       },
@@ -816,30 +863,10 @@
         "NotAlchemist": "Só personagens com uma característica de Alquimia podem usar esta aba.",
         "SoonAlchemy": "Alquimia",
         "SoonRelic": "Forja de Relíquias",
-        "SoonMix": "Misturar",
         "PrimaMateriaButton": "Prima Materia ({n} de Estudo)",
         "PrimaMateriaHint": "Gaste um Dado de Estudo para Fabricar este item na hora, sem Materiais (até 10o).",
         "StudiedDice": "Dados de Estudo",
         "Charges": "Cargas restantes",
-        "MixSearch": "Buscar seus alquímicos...",
-        "NoMixIngredients": "Nenhum Item Alquímico com carga restante.",
-        "MixOwnedOnly": "Só os Itens Alquímicos do próprio personagem (com carga restante) podem ser misturados.",
-        "MixEmptySlot": "Arraste um ingrediente aqui",
-        "MixClearSlot": "Remover ingrediente",
-        "MixCompanion": "Mais",
-        "MixCompanionHint": "Um tipo de dano diferente: rolado em um cartão próprio nos mesmos alvos (ao acertar, quando arremessada).",
-        "MixStatuses": "Condições",
-        "MixUse": "Uso",
-        "MixThrown": "Arremesso (Corpo a Corpo, Finesse ou Ofício)",
-        "MixUsed": "Usada (sem rolagem de ataque)",
-        "MixLasts": "Duração",
-        "MixNoStudied": "Você precisa de um Dado de Estudo para Misturar.",
-        "MixPickTwo": "Escolha dois Itens Alquímicos diferentes.",
-        "MixButton": "Misturar (1 Dado de Estudo)",
-        "Mixtures": "Misturas",
-        "NoMixtures": "Nenhuma Mistura.",
-        "DiscardMix": "Descartar Mistura",
-        "DiscardMixConfirm": "Descartar {name}? Os ingredientes serão perdidos.",
         "AlchemyLevelLine": "Nível {level}: {known}/{grants} fórmulas",
         "Wealth": "Riqueza",
         "PartyWealth": "Riqueza do Grupo",
@@ -1114,8 +1141,9 @@
       },
       "statusEffectsMode": {
         "name": "Modo de Condições de Status",
-        "hint": "Escolha quais condições de status aparecem no menu do HUD de token. O modo Vagabond mostra todas as 17 condições específicas do sistema do livro de regras. O modo Foundry mostra todas as condições padrão. Requer recarregar o mundo para aplicar.",
-        "vagabond": "Condições Vagabond",
+        "hint": "Escolha quais condições de status aparecem no menu do HUD de token. Os 17 Status do livro vêm primeiro; Marcadores são auxílios do sistema (Concentrado, Flanqueado, Amaldiçoado, Marcado, efeitos de magias como Abençoado ou Protegido). Ocultar os Marcadores só os remove do menu: o sistema continua aplicando-os. O modo Foundry mostra as condições padrão do Foundry. Requer recarregar o mundo para aplicar.",
+        "vagabond": "Status Vagabond + Marcadores (Padrão)",
+        "vagabondBook": "Apenas Status Vagabond",
         "foundry": "Condições Padrão do Foundry"
       },
       "tokenStatusDisplay": {

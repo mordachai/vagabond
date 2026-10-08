@@ -98,6 +98,8 @@ export class PartyStatusHelper {
     submenu.className = 'vagabond-context-menu party-status-submenu';
 
     for (const def of defs) {
+      // Trackers hidden from the token HUD ('Vagabond Statuses only') stay out of this menu too
+      if (def.hud === false) continue;
       const isActive = activeIds.has(def.id);
       const isImmune = immuneIds.has(def.id);
       const label    = game.i18n.localize(def.name ?? def.label ?? def.id);

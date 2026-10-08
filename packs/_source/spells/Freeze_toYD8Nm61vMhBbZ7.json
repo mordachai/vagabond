@@ -9,7 +9,14 @@
     "crit": "Duration is continual.",
     "favorite": false,
     "noRollRequired": true,
-    "locked": true
+    "locked": true,
+    "hitMacro": {
+      "enabled": true,
+      "uuid": "",
+      "command": "system:spell.status.frozen",
+      "label": "Freeze",
+      "runAsGM": true
+    }
   },
   "effects": [],
   "folder": null,

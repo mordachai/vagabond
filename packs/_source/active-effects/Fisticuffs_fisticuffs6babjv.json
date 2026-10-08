@@ -6,9 +6,9 @@
   "system": {
     "changes": [
       {
-        "key": "system.fisticuffs",
-        "type": "override",
-        "value": "true",
+        "key": "system.critExtraDiceBySkill",
+        "type": "add",
+        "value": "brawl: 1",
         "phase": "initial",
         "priority": null
       }
@@ -22,7 +22,7 @@
     "expiry": null,
     "expired": false
   },
-  "description": "<p>Unarmed strikes deal lethal damage and scale with class.</p>",
+  "description": "<p>Pugilist (Fisticuffs): your Equipped Brawl Weapons have the Vicious property (an extra damage die when you Crit).</p>",
   "origin": null,
   "tint": "#ffffff",
   "transfer": false,

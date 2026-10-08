@@ -8,7 +8,7 @@
       {
         "key": "system.inventory.bonusSlots",
         "type": "add",
-        "value": "1",
+        "value": "2 + 2 * floor((@lvl - 1) / 3)",
         "phase": "initial",
         "priority": null
       }
@@ -22,7 +22,7 @@
     "expiry": null,
     "expired": false
   },
-  "description": "<p>Merchant feature: +1 inventory slot.</p>",
+  "description": "<p>Merchant (Deep Pockets): 2 extra Item Slots, and 2 more every 3 Levels hereafter.</p>",
   "origin": null,
   "tint": "#ffffff",
   "transfer": false,

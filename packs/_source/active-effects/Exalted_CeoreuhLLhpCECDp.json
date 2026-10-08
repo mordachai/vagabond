@@ -1,14 +1,14 @@
 {
   "name": "Exalted",
   "_id": "CeoreuhLLhpCECDp",
-  "img": "icons/magic/unholy/strike-body-explode-disintegrate.webp",
+  "img": "icons/skills/melee/sword-winged-holy-orange.webp",
   "type": "base",
   "system": {
     "changes": [
       {
         "key": "system.bonusPerDamageDie",
         "type": "add",
-        "value": 1,
+        "value": "1",
         "phase": "initial",
         "priority": null
       },
@@ -27,7 +27,7 @@
         "priority": null
       },
       {
-        "key": "saveVsStatusBonuses",
+        "key": "system.saveVsStatusBonuses",
         "type": "add",
         "value": "frightened:will:1",
         "phase": "initial",
@@ -43,17 +43,20 @@
     "expiry": null,
     "expired": false
   },
-  "description": "",
+  "description": "<p>Under the Exalt Spell: +1 to each damage die it deals and to Will Saves against Frightened, doubled against Hellspawn and Undead.</p>",
   "origin": null,
   "tint": "#ffffff",
   "transfer": false,
-  "statuses": [],
+  "statuses": [
+    "exalted"
+  ],
   "showIcon": 2,
-  "folder": "vacatclassFefold",
+  "folder": "vacattracker0fld",
   "flags": {
     "vagabond": {
       "applicationMode": "permanent",
-      "canonicalId": "exalted"
+      "canonicalId": "exalted",
+      "automation": "partial"
     }
   },
   "_stats": {

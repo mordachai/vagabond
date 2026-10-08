@@ -1,8 +1,14 @@
 # Changelog
 
-## v6.0.1
+## v6.1.0
 - Catalyze panel redesigned.
+- **Alchemist Mix has its own feature button.** A compact panel: drag two Alchemical Items into the slots, see the combined effect, Mix. The Workbench Mix tab is gone. Two doses of one stack can now be mixed. Mix and Catalyze share the Use Action count per Turn (1, or 2 with Deft Hands).
 - **Shorter Features list.** Scaling features (Eureka, Valor, Lay on Hands…) show only your current version on the sheet and HUD, with Level badges.
+- **Hunter's Mark adds a Marked status** to the target (like the Witch's Hexed), removed when the Mark is dropped or moved.
+- **Spell Trackers** for buff Spells: Blessed (d4 on Saves), Exalted (+1 per damage die), Warded (+1 Armor), Guided (attacks and Casts at it Favored), Hastened / Slowed (Tempo, 5' per die), Frozen (Speed -10'), Shrunk (damage dice one size smaller). A successful Cast of Bless, Exalt, Ward, Guide, Tempo, Freeze or Shrink shows a button that puts it on the Targets; it comes off when the caster stops Focusing on that Spell. Also toggleable from the token HUD. Shrink no longer changes the Being's size (that also cut NPC HP); track size by hand.
+- **Token HUD status menu split in two:** the book's 17 Statuses, then Trackers (Focusing, Flanked, Hexed, Marked, spell Trackers…). New option in Settings → Statuses & Tokens: *Vagabond Statuses only* hides the Trackers from the menu.
+- **Active Effects compendium cleaned up.** New *Trackers* folder with every Tracker as a ready status effect (Exalted now actually adds +1 to Will Saves vs Frightened). Die-size effects now step a full size (d6 → d8, was d7). Class and perk copies match Alpha 3 (Sneak Attack, Lethal Weapon, Fisticuffs, Deep Pockets, Secret of Mana, Sculpt Spell, Spell-Slinger); Ace - Keen works only with its weapon. Removed effects that did nothing (Burning I–III, Lifesteal, Manasteal, Brawl Check Favor, Evasive, Encumbered, + Mana Casting) and the Adamant / Mythral ones (Materials apply automatically).
+- **Revelator Holy Diver (Level 10) is automated:** permanently Blessed (d4 on Saves, wielded Weapons count as Silvered) and Exalted (+1 per damage die, doubled vs Hellspawn / Undead; +1 on Will Saves vs Frightened), as two effects you can switch off. Existing Revelators get them on first load.
 - Rogue's Level 2 feature is now labelled "Evasive (10’)" and Gunslinger's "Bad Medicine (+1 die)".
 - Fix: right-clicking a class feature on the sheet could open the wrong feature (Edit / To Chat).
 - Fix: the Workbench's Known Formulas showed the Alchemy craft cost as 50c; it now shows the book's 5s.

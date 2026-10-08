@@ -666,8 +666,11 @@ export function registerGameSettings({ refreshClockDependents, applyTokenEffectV
     scope: 'world',
     config: false,
     type: String,
+    // 'vagabond' = book Statuses + Trackers (kept as the stored key so existing worlds don't change);
+    // 'vagabondBook' hides the Trackers from the token HUD (they stay registered for automation).
     choices: {
       'vagabond': 'VAGABOND.Settings.statusEffectsMode.vagabond',
+      'vagabondBook': 'VAGABOND.Settings.statusEffectsMode.vagabondBook',
       'foundry': 'VAGABOND.Settings.statusEffectsMode.foundry'
     },
     default: 'vagabond',
@@ -985,7 +988,7 @@ export function registerGameSettings({ refreshClockDependents, applyTokenEffectV
     'witchClassMigrated', 'wizardClassMigrated', 'wizardSculptSpellMigrated', 'ancestriesMigrated',
     'alpha3StatusesMigrated', 'alpha3BackpackMigrated', 'alpha3RationsMigrated', 'alpha3DefensePerksMigrated',
     'alpha3ClassPerksMigrated', 'alpha3PerksMigrated', 'alpha3ClassesMigrated', 'alpha3AncestriesMigrated',
-    'classFeatureScaleKeysMigrated',
+    'classFeatureScaleKeysMigrated', 'classFeatureActionsMigrated', 'spellTrackerMacrosMigrated', 'classFeatureEffectsMigrated',
   ];
   for (const key of MIGRATION_GUARDS) {
     game.settings.register('vagabond', key, {

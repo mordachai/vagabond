@@ -328,6 +328,83 @@ export async function migrateClassFeatureScaleKeys() {
   await game.settings.set('vagabond', 'classFeatureScaleKeysMigrated', true);
 }
 
+/**
+ * Feature buttons added to the pack after migrateAlpha3Classes already ran (Alchemist Mix): copy a level feature's
+ * `action` by index from the compendium doc (matched by source id) onto world class copies whose feature at that
+ * index (same Level) has no button yet. Generic: any pack feature button a copy lacks is filled in. Aborts WITHOUT
+ * setting the guard while the classes pack hasn't been rebuilt. Runs after migrateClassFeatureScaleKeys.
+ */
+export async function migrateClassFeatureActions() {
+  if (game.user !== game.users.activeGM) return;
+  if (game.settings.get('vagabond', 'classFeatureActionsMigrated')) return;
+
+  const pack = game.packs.get('vagabond.classes');
+  if (!pack) return;
+  const probe = await pack.getDocument(ALPHA3_CLASSES.Alchemist.id);
+  if (!probe?.system.levelFeatures.some((lf) => lf.action?.command === 'system:alchemist.mix')) return; // pack not rebuilt yet
+  const byId = new Map((await pack.getDocuments()).map((d) => [d.id, d]));
+
+  for (const item of worldItems()) {
+    try {
+      if (item.type !== 'class') continue;
+      const source = byId.get(sourceDocId(item));
+      if (!source) continue;
+      const srcFeatures = source.system.toObject().levelFeatures;
+      let changed = false;
+      const levelFeatures = item.system.toObject().levelFeatures.map((lf, i) => {
+        const src = srcFeatures[i];
+        if (!src?.action?.enabled || src.level !== lf.level || lf.action?.enabled) return lf;
+        changed = true;
+        return { ...lf, action: src.action };
+      });
+      if (changed) await item.update({ 'system.levelFeatures': levelFeatures });
+    } catch (err) {
+      console.warn(`vagabond | migrate class feature buttons: skipped ${item?.uuid ?? '(unknown)'}`, err);
+    }
+  }
+
+  await game.settings.set('vagabond', 'classFeatureActionsMigrated', true);
+}
+
+/**
+ * Class effects added to the pack after migrateAlpha3Classes already ran (Revelator Holy Diver: Bless / Exalt).
+ * Generic: every pack class effect carrying `flags.vagabond.effectKey` that a world copy (matched by source id)
+ * lacks — no effect with that key — is created on the copy. A copy's own effects are never touched. Aborts
+ * WITHOUT setting the guard while the classes pack hasn't been rebuilt. Runs after migrateClassFeatureActions.
+ */
+export async function migrateClassFeatureEffects() {
+  if (game.user !== game.users.activeGM) return;
+  if (game.settings.get('vagabond', 'classFeatureEffectsMigrated')) return;
+
+  const pack = game.packs.get('vagabond.classes');
+  if (!pack) return;
+  const probe = await pack.getDocument(ALPHA3_CLASSES.Revelator.id);
+  if (!probe?.effects.some((e) => e.flags?.vagabond?.effectKey === 'revelator.holyDiver.bless')) return; // pack not rebuilt yet
+  const byId = new Map((await pack.getDocuments()).map((d) => [d.id, d]));
+
+  for (const item of worldItems()) {
+    try {
+      if (item.type !== 'class') continue;
+      const source = byId.get(sourceDocId(item));
+      if (!source) continue;
+      const have = new Set(safeEffects(item).map((e) => e.flags?.vagabond?.effectKey).filter(Boolean));
+      const missing = source.effects
+        .filter((e) => e.flags?.vagabond?.effectKey && !have.has(e.flags.vagabond.effectKey))
+        .map((e) => {
+          const data = e.toObject();
+          delete data._id;
+          delete data._stats;
+          return data;
+        });
+      if (missing.length) await item.createEmbeddedDocuments('ActiveEffect', missing);
+    } catch (err) {
+      console.warn(`vagabond | migrate class feature effects: skipped ${item?.uuid ?? '(unknown)'}`, err);
+    }
+  }
+
+  await game.settings.set('vagabond', 'classFeatureEffectsMigrated', true);
+}
+
 /** Class-granted perks whose book text / effects changed in Alpha 3 (Dusted Knuckle explode, Quick Draw Thrown). */
 const CLASS_PERKS = [
   { id: 'Lb1ncXSPRRd1wq84', name: 'Dusted Knuckle' },

@@ -433,6 +433,13 @@ export default class VagabondNPC extends VagabondActorBase {
       label: "Speed Halved (crawling)"
     });
 
+    // Armor bonus from Active Effects (same key as characters: Warded). Added to the authored Armor in
+    // prepareDerivedData; the edit-mode input shows the source value.
+    schema.armorBonus = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      { initial: [], label: "Armor Bonus", hint: "Number or formula added to Armor." }
+    );
+
     // Combat zone
     schema.zone = new fields.StringField({
       required: false,
@@ -633,6 +640,7 @@ export default class VagabondNPC extends VagabondActorBase {
     this.defenderStatusModifiers.attackersAreBlinded = false;
     this.defenderStatusModifiers.closeAttacksAutoCrit = false;
     this.speedHalved = false;
+    this.armorBonus = [];
   }
 
   /**
@@ -746,9 +754,15 @@ export default class VagabondNPC extends VagabondActorBase {
     // change pipeline merges the dotted key and replaces the number with
     // `{ bonus: '-999' }`, which renders as "[object Object]". All of those statuses
     // mean "speed reduced to 0", so coercing the object back to 0 is the correct value.
-    if (typeof this.speed !== 'number') this.speed = Number(this.speed?.base ?? 0) || 0;
+    const speedZeroed = typeof this.speed !== 'number';
+    if (speedZeroed) this.speed = Number(this.speed?.base ?? 0) || 0;
+    // Speed modifiers (Hastened / Slowed / Frozen) — a zeroed Speed stays 0
+    else this.speed = Math.max(0, this.speed + this._evaluateFormulaField(this.speedModifier, rollData));
     // Crawling (Prone): Speed halved
     if (this.speedHalved) this.speed = Math.floor(this.speed / 2);
+
+    // Armor bonus (Warded)
+    this.armor = Math.max(0, (Number(this.armor) || 0) + this._evaluateFormulaField(this.armorBonus, rollData));
 
     // Calculate fatigueMax from homebrew config + bonus
     this.fatigueMax = (CONFIG.VAGABOND?.homebrew?.derivations?.fatigueNPCMax ?? 5) + (this.fatigueBonus || 0);

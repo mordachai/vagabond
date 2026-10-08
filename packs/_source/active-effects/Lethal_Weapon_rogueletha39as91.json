@@ -6,9 +6,9 @@
   "system": {
     "changes": [
       {
-        "key": "system.hasLethalWeapon",
-        "type": "override",
-        "value": "true",
+        "key": "system.sneakAttackExplode",
+        "type": "add",
+        "value": "1",
         "phase": "initial",
         "priority": null
       }
@@ -22,7 +22,7 @@
     "expiry": null,
     "expired": false
   },
-  "description": "<p>Sneak Attack always applies (ignores once-per-round limit).</p>",
+  "description": "<p>Rogue (Lethal Weapon): your Sneak Attack dice can Explode.</p>",
   "origin": null,
   "tint": "#ffffff",
   "transfer": false,

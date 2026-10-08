@@ -282,6 +282,8 @@ export class VagabondActiveEffect extends ActiveEffect {
       'system.markDamageBonus': 'Extra Damage The Mark Takes (formula, e.g. Lethal Precision)',
       'system.favorChecks': 'Favor On Checks (ADD attack, cast or save)',
       'system.saveRollsTwice': 'Saves Rolled Twice, keep higher d20 (ADD a save key, e.g. reflex)',
+      'system.saveBonusDice': 'Save Bonus Dice (ADD dice, e.g. 1d4 for Bless)',
+      'system.weaponsCountAs': 'Wielded Weapons Count As (ADD a material for Weakness, e.g. silver)',
       'system.bonusDiceExplode': 'Favor + Healing Bonus Dice Explode (1 = on)',
       'system.healingBonusDice': 'Healing Rolls (Dice Bonus, e.g. 1d6)',
       'system.healingExplode': 'Healing Spell Rolls Explode (ADD a face: 1, 2, max or max-1)',
@@ -360,6 +362,7 @@ export class VagabondActiveEffect extends ActiveEffect {
 
       // -- NEW: Speed Bonus --
       'system.speed.bonus': 'Speed: Bonus (Flat Add)',
+      'system.speedModifier': 'Speed: Modifier (Flat Add, characters and NPCs)',
 
       // ===== STATS (dynamic from homebrew config) =====
       ...Object.fromEntries(

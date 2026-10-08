@@ -10,7 +10,14 @@
     "favorite": false,
     "noRollRequired": true,
     "fxSchool": "psychic",
-    "locked": true
+    "locked": true,
+    "hitMacro": {
+      "enabled": true,
+      "uuid": "",
+      "command": "system:spell.status.exalted",
+      "label": "Exalt",
+      "runAsGM": true
+    }
   },
   "effects": [],
   "folder": null,

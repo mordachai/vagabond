@@ -11,20 +11,6 @@
         "value": "true",
         "phase": "initial",
         "priority": null
-      },
-      {
-        "key": "system.attributes.manaMultiplier",
-        "type": "override",
-        "value": "1",
-        "phase": "initial",
-        "priority": null
-      },
-      {
-        "key": "system.attributes.castingStat",
-        "type": "override",
-        "value": "reason",
-        "phase": "initial",
-        "priority": null
       }
     ]
   },
@@ -36,7 +22,7 @@
     "expiry": null,
     "expired": false
   },
-  "description": "<p>Elf trait: Naturally Attuned grants innate spellcasting (Reason-based, 1x mana multiplier).</p>",
+  "description": "<p>Elf trait (Naturally Attuned): you know a Spell of your choice and can Cast it with a Skill of your choice; once per Round, with a 1 Mana discount on its Delivery.</p>",
   "origin": null,
   "tint": "#ffffff",
   "transfer": false,

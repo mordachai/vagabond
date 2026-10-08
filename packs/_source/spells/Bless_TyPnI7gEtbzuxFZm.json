@@ -11,7 +11,14 @@
     "noRollRequired": true,
     "fxSchool": "radiant",
     "locked": true,
-    "causedStatuses": []
+    "causedStatuses": [],
+    "hitMacro": {
+      "enabled": true,
+      "uuid": "",
+      "command": "system:spell.status.blessed",
+      "label": "Bless",
+      "runAsGM": true
+    }
   },
   "effects": [],
   "folder": null,

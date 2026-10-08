@@ -1,5 +1,5 @@
 {
-  "name": "Sneak Attack (1d4)",
+  "name": "Sneak Attack",
   "_id": "roguesneakgwndyd",
   "img": "icons/svg/mystery-man.svg",
   "type": "base",
@@ -7,8 +7,15 @@
     "changes": [
       {
         "key": "system.sneakAttackDice",
+        "type": "add",
+        "value": "1 + floor((@lvl - 1) / 3)",
+        "phase": "initial",
+        "priority": null
+      },
+      {
+        "key": "system.sneakAttackTrigger",
         "type": "override",
-        "value": "1",
+        "value": "true",
         "phase": "initial",
         "priority": null
       }
@@ -22,7 +29,7 @@
     "expiry": null,
     "expired": false
   },
-  "description": "<p>Deal +1d4 damage on Favored weapon attacks.</p>",
+  "description": "<p>Rogue (Sneak Attack): the first time you hit with a Favored attack on a Turn with a Finesse, Keen, or Ranged Weapon, it deals extra d4s equal to your Level divided by 3 (round up) and ignores that much Armor.</p>",
   "origin": null,
   "tint": "#ffffff",
   "transfer": false,

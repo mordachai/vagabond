@@ -9,7 +9,14 @@
     "crit": "",
     "favorite": false,
     "fxSchool": "defense",
-    "locked": true
+    "locked": true,
+    "hitMacro": {
+      "enabled": true,
+      "uuid": "",
+      "command": "system:spell.status.warded",
+      "label": "Ward",
+      "runAsGM": true
+    }
   },
   "effects": [],
   "folder": null,

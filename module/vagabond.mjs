@@ -76,6 +76,7 @@ import { DancerHelper } from './helpers/dancer-helper.mjs';
 import { FighterHelper } from './helpers/fighter-helper.mjs';
 import { GunslingerHelper } from './helpers/gunslinger-helper.mjs';
 import { HunterHelper } from './helpers/hunter-helper.mjs';
+import { SpellTrackerHelper } from './helpers/spell-tracker-helper.mjs';
 import { PugilistHelper } from './helpers/pugilist-helper.mjs';
 import { DefenseHelper } from './helpers/defense-helper.mjs';
 import { RevelatorHelper } from './helpers/revelator-helper.mjs';
@@ -86,7 +87,7 @@ import { WizardHelper } from './helpers/wizard-helper.mjs';
 import { AlchemistHelper } from './helpers/alchemist-helper.mjs';
 import { DruidHelper } from './helpers/druid-helper.mjs';
 import { migrateFighterClass, migrateDruidClass, migrateGunslingerClass, migrateHunterClass, migrateLuminaryClass, migrateMagusClass, migrateMerchantClass, migratePugilistClass, migrateRevelatorClass, migrateRogueClass, migrateSorcererClass, migrateVanguardClass, migrateWitchClass, migrateWizardClass, migrateAncestries } from './helpers/class-migrations.mjs';
-import { migrateAlpha3Statuses, migrateAlpha3Backpacks, migrateAlpha3Rations, migrateAlpha3DefensePerks, migrateAlpha3ClassPerks, migrateAlpha3Perks, migrateAlpha3Classes, migrateAlpha3Ancestries, migrateClassFeatureScaleKeys } from './helpers/alpha3-migrations.mjs';
+import { migrateAlpha3Statuses, migrateAlpha3Backpacks, migrateAlpha3Rations, migrateAlpha3DefensePerks, migrateAlpha3ClassPerks, migrateAlpha3Perks, migrateAlpha3Classes, migrateAlpha3Ancestries, migrateClassFeatureScaleKeys, migrateClassFeatureActions, migrateClassFeatureEffects } from './helpers/alpha3-migrations.mjs';
 import { consumeUsedEffects } from './helpers/use-effects.mjs';
 import { VagabondRollBuilder } from './helpers/roll-builder.mjs';
 import { CurrencyHelper } from './helpers/currency-helper.mjs';
@@ -312,13 +313,22 @@ Hooks.once('init', function () {
 
   // Apply custom status effects based on game setting
   const statusEffectsMode = game.settings.get('vagabond', 'statusEffectsMode');
-  if (statusEffectsMode === 'vagabond') {
-    // Sort status effects alphabetically by localized name
-    const sortedEffects = [...VAGABOND.statusEffectDefinitions].sort((a, b) => {
-      const nameA = game.i18n.localize(a.name);
-      const nameB = game.i18n.localize(b.name);
-      return nameA.localeCompare(nameB);
-    });
+  if (statusEffectsMode === 'vagabond' || statusEffectsMode === 'vagabondBook') {
+    // Shrunk: weapon damage dice one size smaller for every homebrew weapon skill
+    const shrunk = VAGABOND.statusEffectDefinitions.find(s => s.id === 'shrunk');
+    for (const skill of (CONFIG.VAGABOND.homebrew?.skills ?? []).filter(s => s.isWeaponSkill)) {
+      const key = `system.${skill.key}DamageDieSizeBonus`;
+      if (shrunk && !shrunk.changes.some(c => c.key === key)) shrunk.changes.push({ key, type: 'add', value: '-2' });
+    }
+
+    // Book Statuses first, then Trackers, each alphabetical by localized name (the token HUD
+    // shows them under two headings). 'vagabondBook' keeps the Trackers registered for automation
+    // but hides them from the HUD (`hud: false`).
+    const isTracker = (s) => !VAGABOND.bookStatusIds.has(s.id);
+    const sortedEffects = VAGABOND.statusEffectDefinitions
+      .map(s => (statusEffectsMode === 'vagabondBook' && isTracker(s) ? { ...s, hud: false } : s))
+      .sort((a, b) => (isTracker(a) - isTracker(b))
+        || game.i18n.localize(a.name).localeCompare(game.i18n.localize(b.name)));
     CONFIG.statusEffects = sortedEffects;
 
     // Point Foundry's special statuses at ours (core defaults are 'blind' / 'fly').
@@ -642,6 +652,7 @@ Hooks.once('ready', function () {
   // Bard Virtuoso — players route the benefit copy onto Group members through the GM.
   registerSocketAction('virtuosoApply', (payload) => BardHelper.apply(payload));
   registerMacroHandler('alchemist.catalyze', (scope) => AlchemistHelper.catalyze(scope));
+  registerMacroHandler('alchemist.mix', (scope) => AlchemistHelper.mix(scope));
   registerMacroHandler('bard.virtuoso', (scope) => BardHelper.virtuoso(scope));
   registerMacroHandler('bard.perform', (scope) => BardHelper.perform(scope));
   registerMacroHandler('dancer.stepUp', (scope) => DancerHelper.stepUp(scope));
@@ -659,6 +670,8 @@ Hooks.once('ready', function () {
   registerMacroHandler('wizard.extracurricular', (scope) => WizardHelper.extracurricular(scope));
   registerMacroHandler('wizard.extracurricularSpell', (scope) => WizardHelper.extracurricularSpell(scope));
   registerMacroHandler('wizard.archwizard', (scope) => WizardHelper.archwizard(scope));
+  // Buff Spells' hit macros: system:spell.status.<trackerId>
+  SpellTrackerHelper.registerMacroHandlers(registerMacroHandler);
 
   // Live state of feature buttons: glow while the effect is on, end it from the sheet / HUD
   // (right-click; Momentum is a pure toggle so a left click ends it too).
@@ -896,9 +909,13 @@ Hooks.once('ready', function () {
   migrateAlpha3Perks();
   // One-time: Human trait Knack -> Aptitude.
   migrateAlpha3Ancestries();
+  // One-time: buff Spell copies (Bless, Ward, Tempo…) get the Tracker hit macro.
+  SpellTrackerHelper.migrateWorldSpells();
   // One-time: class items get the Alpha 3 deltas (runs after every earlier class migration settled).
   // Then: class items get the scaling-chain ids (scaleKey) the sheet / HUD collapse features on.
-  Promise.allSettled(classRuns).then(() => migrateAlpha3Classes()).then(() => migrateClassFeatureScaleKeys());
+  // Then: feature buttons added to the pack later (Alchemist Mix) reach existing class copies.
+  Promise.allSettled(classRuns).then(() => migrateAlpha3Classes()).then(() => migrateClassFeatureScaleKeys())
+    .then(() => migrateClassFeatureActions()).then(() => migrateClassFeatureEffects());
 });
 
 // Recompute realtime light timers on scene load (catches elapsed time during reloads).
@@ -971,6 +988,7 @@ GunslingerHelper.registerHooks();
 
 // Hunter's Mark: Lethal Precision damage (inert unless an actor has a Mark and system.markDamageBonus)
 HunterHelper.registerHooks();
+SpellTrackerHelper.registerHooks();
 PugilistHelper.registerHooks();
 // Defense property: Patience tracking (inert unless an actor has system.patienceDefense)
 DefenseHelper.registerHooks();
@@ -1851,6 +1869,28 @@ Hooks.on('updateActor', (actor, changes) => {
 });
 Hooks.on('canvasReady', () => {
   if (game.users.activeGM?.isSelf) NpcFlying.sweep();
+});
+
+// Token HUD status palette: book Statuses and Trackers under their own headings
+// (CONFIG.statusEffects is already ordered book-first in init; Foundry-default mode is left alone).
+Hooks.on('renderTokenHUD', (hud, html) => {
+  const palette = html.querySelector('.palette.status-effects');
+  if (!palette || !CONFIG.statusEffects.some(s => s.id === 'vulnerable')) return;
+  const icons = [...palette.querySelectorAll('.effect-control[data-status-id]')];
+  const heading = (key) => {
+    const el = document.createElement('div');
+    el.className = 'vagabond-status-heading';
+    el.textContent = game.i18n.localize(key);
+    return el;
+  };
+  // Foundry sorts the palette by name on its own, so regroup here: book Statuses, then Trackers
+  // (each keeps the palette's alphabetical order).
+  const book = icons.filter(i => VAGABOND.bookStatusIds.has(i.dataset.statusId));
+  const trackers = icons.filter(i => !VAGABOND.bookStatusIds.has(i.dataset.statusId));
+  // Only head the groups when both are shown
+  if (!book.length || !trackers.length) return;
+  palette.append(heading('VAGABOND.StatusGroups.Statuses'), ...book,
+    heading('VAGABOND.StatusGroups.Trackers'), ...trackers);
 });
 
 // Shop token HUD: hide the combat toggle, add an open/close switch for the GM

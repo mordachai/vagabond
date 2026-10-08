@@ -74,6 +74,45 @@ export class MixHelper {
     return CONFIG.Item.documentClass._chargesRemaining(item) > 0;
   }
 
+  /** Charges left on an owned item (multi-use `uses.value`, else quantity); 0 for none. */
+  static charges(item) {
+    return item ? CONFIG.Item.documentClass._chargesRemaining(item) ?? 0 : 0;
+  }
+
+  /**
+   * Damage view for the Mix panel: formula with explode notation ("2d6!") when the dice can explode for `actor`
+   * (authored on `src`, a global effect, or Potency — a Mix carries no explode of its own), type label + icon.
+   */
+  static damageView(actor, damage, src = null) {
+    if (!damage) return null;
+    const probe = { type: 'equipment', system: { equipmentType: 'alchemical', canExplode: src?.canExplode, explodeValues: src?.explodeValues } };
+    return {
+      amount: VagabondDamagePipeline.markExplode(damage.amount, probe, actor),
+      typeLabel: game.i18n.localize(CONFIG.VAGABOND.damageTypes?.[damage.type] ?? damage.type),
+      icon: CONFIG.VAGABOND.damageTypeIcons?.[damage.type] ?? '',
+    };
+  }
+
+  /**
+   * What mixing `a` + `b` (owned items or item data) would make: main damage, the companion damage (a second
+   * damage type, rolled as its own card), on-hit statuses, thrown vs used, and how long the Mix would last.
+   */
+  static previewView(actor, a, b) {
+    const dataA = a?.toObject?.() ?? a;
+    const dataB = b?.toObject?.() ?? b;
+    const payload = this.combinePayloads(dataA, dataB);
+    const companion = payload.companionIndex === null ? null : this.damageOf([dataA, dataB][payload.companionIndex]);
+    const statusName = (id) => game.i18n.localize(CONFIG.statusEffects.find(s => s.id === id)?.name ?? id);
+    const probe = { type: 'equipment', system: { equipmentType: 'alchemical', damageType: payload.damageType, damageAmount: payload.damageAmount } };
+    return {
+      damage: this.damageView(actor, this.damageOf({ system: payload })),
+      companion: this.damageView(actor, companion),
+      statuses: payload.causedStatuses.map(s => statusName(s.statusId)),
+      thrown: globalThis.vagabond.utils.EquipmentHelper.isThrownAlchemical(probe),
+      expiryLabel: game.i18n.localize(this.expiryKeyFor(actor)),
+    };
+  }
+
   /** i18n key: how long a Mix made by `actor` right now would last. */
   static expiryKeyFor(actor) {
     const combat = game.combat;

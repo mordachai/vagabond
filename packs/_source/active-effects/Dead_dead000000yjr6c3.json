@@ -43,7 +43,7 @@
     "expiry": null,
     "expired": false
   },
-  "description": "<p>Same as Incapacitated but automatically fails ALL rolls (stats, skills, saves, attacks).</p>",
+  "description": "<p>Same as Incapacitated but automatically fails ALL rolls (stats, skills, saves, attacks). [FULLY AUTOMATED]</p>",
   "origin": null,
   "tint": "#ffffff",
   "transfer": false,
@@ -51,7 +51,7 @@
     "dead"
   ],
   "showIcon": 2,
-  "folder": "vacatconditifold",
+  "folder": "vacattracker0fld",
   "flags": {
     "vagabond": {
       "applicationMode": "permanent",
