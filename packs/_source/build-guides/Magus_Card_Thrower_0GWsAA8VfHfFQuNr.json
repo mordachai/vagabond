@@ -89,7 +89,7 @@
         "description": "<p>1 Slot while held. Worn, it occupies no Slot and adds +3 Slots to your Inventory. You can only benefit from one at a time.</p>",
         "equipmentType": "gear",
         "locked": true,
-        "equipped": false,
+        "equipped": true,
         "quantity": 1,
         "baseCost": {
           "gold": 0,
@@ -106,7 +106,7 @@
         "grip": "1H",
         "damageOneHand": "d6",
         "damageTwoHands": "d8",
-        "equipmentState": "unequipped",
+        "equipmentState": "worn",
         "armorType": "light",
         "immunities": [],
         "gearCategory": "Outdoors",
@@ -203,15 +203,15 @@
       "_key": "!actors.items!0GWsAA8VfHfFQuNr.PV1T0nY1UwPlsMHb"
     },
     {
-      "name": "Rations (1 day)",
+      "name": "Ration 1d",
       "type": "equipment",
-      "img": "icons/consumables/food/cooked-grilled-ham-hock-glazed-brown.webp",
+      "img": "icons/consumables/grains/bread-loaf-sliced-wheat-brown.webp",
       "system": {
         "description": "",
         "equipmentType": "gear",
         "locked": true,
         "equipped": false,
-        "quantity": 1,
+        "quantity": 5,
         "baseCost": {
           "gold": 0,
           "silver": 1,
@@ -244,178 +244,6 @@
       },
       "_id": "ZBO37A6uY9h9ExpJ",
       "_key": "!actors.items!0GWsAA8VfHfFQuNr.ZBO37A6uY9h9ExpJ"
-    },
-    {
-      "name": "Rations (1 day)",
-      "type": "equipment",
-      "img": "icons/consumables/food/cooked-grilled-ham-hock-glazed-brown.webp",
-      "system": {
-        "description": "",
-        "equipmentType": "gear",
-        "locked": true,
-        "equipped": false,
-        "quantity": 1,
-        "baseCost": {
-          "gold": 0,
-          "silver": 1,
-          "copper": 0
-        },
-        "baseSlots": 0,
-        "metal": "none",
-        "damageType": "-",
-        "damageAmount": "",
-        "canExplode": false,
-        "explodeValues": "",
-        "properties": [],
-        "weaponSkill": "melee",
-        "range": "close",
-        "grip": "1H",
-        "damageOneHand": "d6",
-        "damageTwoHands": "d8",
-        "equipmentState": "unequipped",
-        "armorType": "light",
-        "immunities": [],
-        "gearCategory": "Cooking & Food",
-        "alchemicalType": "concoction",
-        "lore": "",
-        "isConsumable": true,
-        "isSupply": true
-      },
-      "effects": [],
-      "flags": {
-        "core": {}
-      },
-      "_id": "1QH9D46PpgbnpzFc",
-      "_key": "!actors.items!0GWsAA8VfHfFQuNr.1QH9D46PpgbnpzFc"
-    },
-    {
-      "name": "Rations (1 day)",
-      "type": "equipment",
-      "img": "icons/consumables/food/cooked-grilled-ham-hock-glazed-brown.webp",
-      "system": {
-        "description": "",
-        "equipmentType": "gear",
-        "locked": true,
-        "equipped": false,
-        "quantity": 1,
-        "baseCost": {
-          "gold": 0,
-          "silver": 1,
-          "copper": 0
-        },
-        "baseSlots": 0,
-        "metal": "none",
-        "damageType": "-",
-        "damageAmount": "",
-        "canExplode": false,
-        "explodeValues": "",
-        "properties": [],
-        "weaponSkill": "melee",
-        "range": "close",
-        "grip": "1H",
-        "damageOneHand": "d6",
-        "damageTwoHands": "d8",
-        "equipmentState": "unequipped",
-        "armorType": "light",
-        "immunities": [],
-        "gearCategory": "Cooking & Food",
-        "alchemicalType": "concoction",
-        "lore": "",
-        "isConsumable": true,
-        "isSupply": true
-      },
-      "effects": [],
-      "flags": {
-        "core": {}
-      },
-      "_id": "YvejhetjIdWUhgoz",
-      "_key": "!actors.items!0GWsAA8VfHfFQuNr.YvejhetjIdWUhgoz"
-    },
-    {
-      "name": "Rations (1 day)",
-      "type": "equipment",
-      "img": "icons/consumables/food/cooked-grilled-ham-hock-glazed-brown.webp",
-      "system": {
-        "description": "",
-        "equipmentType": "gear",
-        "locked": true,
-        "equipped": false,
-        "quantity": 1,
-        "baseCost": {
-          "gold": 0,
-          "silver": 1,
-          "copper": 0
-        },
-        "baseSlots": 0,
-        "metal": "none",
-        "damageType": "-",
-        "damageAmount": "",
-        "canExplode": false,
-        "explodeValues": "",
-        "properties": [],
-        "weaponSkill": "melee",
-        "range": "close",
-        "grip": "1H",
-        "damageOneHand": "d6",
-        "damageTwoHands": "d8",
-        "equipmentState": "unequipped",
-        "armorType": "light",
-        "immunities": [],
-        "gearCategory": "Cooking & Food",
-        "alchemicalType": "concoction",
-        "lore": "",
-        "isConsumable": true,
-        "isSupply": true
-      },
-      "effects": [],
-      "flags": {
-        "core": {}
-      },
-      "_id": "uXshRAorRrzLVH3Y",
-      "_key": "!actors.items!0GWsAA8VfHfFQuNr.uXshRAorRrzLVH3Y"
-    },
-    {
-      "name": "Rations (1 day)",
-      "type": "equipment",
-      "img": "icons/consumables/food/cooked-grilled-ham-hock-glazed-brown.webp",
-      "system": {
-        "description": "",
-        "equipmentType": "gear",
-        "locked": true,
-        "equipped": false,
-        "quantity": 1,
-        "baseCost": {
-          "gold": 0,
-          "silver": 1,
-          "copper": 0
-        },
-        "baseSlots": 0,
-        "metal": "none",
-        "damageType": "-",
-        "damageAmount": "",
-        "canExplode": false,
-        "explodeValues": "",
-        "properties": [],
-        "weaponSkill": "melee",
-        "range": "close",
-        "grip": "1H",
-        "damageOneHand": "d6",
-        "damageTwoHands": "d8",
-        "equipmentState": "unequipped",
-        "armorType": "light",
-        "immunities": [],
-        "gearCategory": "Cooking & Food",
-        "alchemicalType": "concoction",
-        "lore": "",
-        "isConsumable": true,
-        "isSupply": true
-      },
-      "effects": [],
-      "flags": {
-        "core": {}
-      },
-      "_id": "W5L1FZ1z0GxNv8Hw",
-      "_key": "!actors.items!0GWsAA8VfHfFQuNr.W5L1FZ1z0GxNv8Hw"
     },
     {
       "name": "Torch",

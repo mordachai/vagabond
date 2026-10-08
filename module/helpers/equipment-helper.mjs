@@ -1,4 +1,5 @@
 import { VagabondDamageHelper } from './damage-helper.mjs';
+import { isStackableZeroSlot } from './stack-helper.mjs';
 
 /**
  * Helper utilities for equipment type checking, state management, and visual enrichment.
@@ -251,7 +252,85 @@ export class EquipmentHelper {
    */
   static async adjustQuantity(item, delta) {
     if (item?.type !== 'equipment') return;
-    await item.update({ 'system.quantity': Math.max(0, (item.system.quantity ?? 0) + delta) });
+    const current = item.system.quantity ?? 0;
+    let next = Math.max(0, current + delta);
+    // 0-Slot stacks hold at most zeroSlotStackSize (10 = 1 Slot); extra units need another card.
+    if (delta > 0 && isStackableZeroSlot(item)) {
+      const size = CONFIG.VAGABOND?.zeroSlotStackSize || 10;
+      if (next > Math.max(size, current)) {
+        next = Math.max(size, current);
+        ui.notifications.warn(game.i18n.format('VAGABOND.ContextMenu.StackFull', { size }));
+      }
+    }
+    await item.update({ 'system.quantity': next });
+  }
+
+  /**
+   * Other top-level 0-Slot copies on the actor that match `item` (same type, name
+   * and image) and could be merged into it. Empty unless `item` itself stacks.
+   * @param {Item} item
+   * @returns {Item[]}
+   */
+  static stackSiblings(item) {
+    const actor = item?.parent;
+    if (!actor || !isStackableZeroSlot(item)) return [];
+    return actor.items.filter((i) => i.id !== item.id && i.type === item.type
+      && i.name === item.name && i.img === item.img && isStackableZeroSlot(i));
+  }
+
+  /** True when merging `item` with its siblings would free at least one card. */
+  static canStack(item) {
+    const siblings = this.stackSiblings(item);
+    if (!siblings.length) return false;
+    const size = CONFIG.VAGABOND?.zeroSlotStackSize || 10;
+    const total = [item, ...siblings].reduce((n, d) => n + Math.max(1, d.system.quantity ?? 1), 0);
+    return Math.ceil(total / size) < siblings.length + 1;
+  }
+
+  /**
+   * Force-merge every matching 0-Slot copy on the actor into stacks of at most
+   * `zeroSlotStackSize` (10 = 1 Slot): `item` fills first, the remainder spills
+   * into the existing sibling cards (reused, not recreated); emptied cards are deleted.
+   * @param {Item} item
+   */
+  static async stackItem(item) {
+    const siblings = this.stackSiblings(item);
+    if (!siblings.length) return;
+    const size = CONFIG.VAGABOND?.zeroSlotStackSize || 10;
+    const docs = [item, ...siblings];
+    let remaining = docs.reduce((n, d) => n + Math.max(1, d.system.quantity ?? 1), 0);
+    const total = remaining;
+    const updates = [];
+    const removals = [];
+    for (const doc of docs) {
+      const q = Math.min(remaining, size);
+      remaining -= q;
+      if (q > 0) updates.push({ _id: doc.id, 'system.quantity': q });
+      else removals.push(doc.id);
+    }
+    await item.parent.updateEmbeddedDocuments('Item', updates);
+    if (removals.length) await item.parent.deleteEmbeddedDocuments('Item', removals);
+    ui.notifications.info(game.i18n.format('VAGABOND.ContextMenu.StackDone', { count: total, name: item.name }));
+  }
+
+  /**
+   * Split a stack into single-quantity cards (the original keeps 1).
+   * @param {Item} item
+   */
+  static async unstackItem(item) {
+    const qty = item.system.quantity ?? 1;
+    if (qty <= 1 || !isStackableZeroSlot(item)) return;
+    const start = this.nextGridPosition(item.parent);
+    const copies = Array.from({ length: qty - 1 }, (_, i) => {
+      const data = item.toObject();
+      delete data._id;
+      data.system.quantity = 1;
+      data.system.gridPosition = start + i;
+      return data;
+    });
+    await item.update({ 'system.quantity': 1 });
+    await item.parent.createEmbeddedDocuments('Item', copies);
+    ui.notifications.info(game.i18n.format('VAGABOND.ContextMenu.UnstackDone', { name: item.name, count: qty }));
   }
 
   /**

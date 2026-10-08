@@ -40,14 +40,20 @@ export class InventoryHandler {
 
     // Prepare item data for inventory cards
     context.inventoryItems = allInventoryItems.map((item, index) => {
+      const isSlotZero = EquipmentHelper.itemSlotCost(item) === 0;
+      const qty = item.system.quantity ?? 1;
       const itemData = {
         item: item,
+        // Hover tooltip: full name, plus quantity when stacked
+        tooltip: qty > 1 ? `${item.name} ×${qty}` : item.name,
+        // A full 0-Slot stack (10) technically occupies 1 Slot — no "free item" green tint
+        isFullZeroStack: isSlotZero && (item.system.quantity ?? 1) >= (CONFIG.VAGABOND?.zeroSlotStackSize || 10),
         gridPosition: item.system.gridPosition ?? index,
         equipped: EquipmentHelper.isEquipped(item),
         metalColor: EquipmentHelper.getMetalColor(item),
         weaponSkillIcon: EquipmentHelper.getWeaponSkillIcon(item),
         damageTypeIcon: EquipmentHelper.getDamageTypeIcon(item),
-        isSlotZero: EquipmentHelper.itemSlotCost(item) === 0,
+        isSlotZero,
         // Card width: per-unit Slots, capped to the 4-column grid (stacks don't widen the card)
         totalSlots: Math.min(EquipmentHelper.itemSlotCost(item), 4),
         // Capacity consumed by the whole stack (cost × quantity) — drives numbering only

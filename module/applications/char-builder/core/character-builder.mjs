@@ -5,6 +5,7 @@
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
 import { VagabondUIHelper } from '../../../helpers/ui-helper.mjs';
+import { stackZeroSlotItems, wearFirstBackpack } from '../../../helpers/stack-helper.mjs';
 import { effectModeToChangeType } from '../../../helpers/effects.mjs';
 import { ConfigurationSystem } from '../config/configuration-system.mjs';
 import { CharacterBuilderStateManager } from '../state/state-manager.mjs';
@@ -914,6 +915,7 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
       }
     }
 
+    let backpackWorn = false;
     if (validItems.length > 0) {
       const itemObjects = await Promise.all(validItems.map(async item => {
         const itemData = item.toObject();
@@ -996,7 +998,8 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
         return !singletonTypes.includes(existingItem.type) || !typesBeingAdded.has(existingItem.type);
       });
 
-      actorData.items.push(...itemObjects);
+      backpackWorn = wearFirstBackpack(itemObjects);
+      actorData.items.push(...stackZeroSlotItems(itemObjects, CONFIG.VAGABOND?.zeroSlotStackSize || 10));
     }
 
     // Mark character as constructed (hides builder button)
@@ -1074,7 +1077,11 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
           }
 
           if (packItemsToAdd.length > 0) {
-            await this.actor.createEmbeddedDocuments('Item', packItemsToAdd);
+            // Put the Backpack on (unless the gear step already did) so its +3 Slots apply.
+            if (!backpackWorn) wearFirstBackpack(packItemsToAdd);
+            // 0-Slot copies (rations, incense…) merge into stacks of 10 = 1 Slot; 1+ Slot items stay separate.
+            const stacked = stackZeroSlotItems(packItemsToAdd, CONFIG.VAGABOND?.zeroSlotStackSize || 10);
+            await this.actor.createEmbeddedDocuments('Item', stacked);
           }
         }
       } catch (error) {

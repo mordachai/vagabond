@@ -1,4 +1,5 @@
 import { activateHandItem } from './hand-item-activation.mjs';
+import { isStackableZeroSlot } from './stack-helper.mjs';
 
 /**
  * Whether an item has a meaningful "Use" action. Weapons always do (Use
@@ -108,6 +109,10 @@ export function buildItemMenuItems({ actor, item, event, rollHandler, equipmentH
       icon: 'fas fa-share',
       action: () => activate({ mode: 'throw' }),
     });
+  }
+
+  // Quantity stepper: Thrown weapons and 0-Slot stacks (rations, incense…)
+  if (EquipmentHelper.isThrowable(item) || (item.type === 'equipment' && EquipmentHelper.itemSlotCost(item) === 0)) {
     items.push({
       label: L('VAGABOND.UI.Labels.Quantity'),
       icon: 'fas fa-layer-group',
@@ -119,6 +124,24 @@ export function buildItemMenuItems({ actor, item, event, rollHandler, equipmentH
         },
       },
     });
+  }
+
+  // Stack ⇄ Unstack for 0-Slot items: merge scattered copies, else split a stack apart
+  if (item.type === 'equipment' && actor?.isOwner) {
+    if (EquipmentHelper.canStack(item)) {
+      items.push({
+        label: L('VAGABOND.ContextMenu.Stack'),
+        icon: 'fas fa-layer-group',
+        action: async () => { await EquipmentHelper.stackItem(item); onChange?.(); },
+      });
+    }
+    if ((item.system.quantity ?? 1) > 1 && isStackableZeroSlot(item)) {
+      items.push({
+        label: L('VAGABOND.ContextMenu.Unstack'),
+        icon: 'fas fa-clone',
+        action: async () => { await EquipmentHelper.unstackItem(item); onChange?.(); },
+      });
+    }
   }
 
   // Versatile grip toggle (only meaningful while held)

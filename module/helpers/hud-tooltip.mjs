@@ -49,7 +49,9 @@ export function bindHudTooltips(root, signal) {
       activeEl = el;
       if (el.dataset.hudTipHtml) game.tooltip.activate(el, { html: el.dataset.hudTipHtml });
       else game.tooltip.activate(el, { text: el.dataset.hudTip });
-      hideTimeout = window.setTimeout(hide, HIDE_MS);
+      // Optional per-element override: data-hud-tip-duration="1500" (ms)
+      const duration = Number(el.dataset.hudTipDuration) || HIDE_MS;
+      hideTimeout = window.setTimeout(hide, duration);
     }, SHOW_MS);
   }, { capture: true, signal });
 

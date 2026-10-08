@@ -811,9 +811,9 @@
       "_key": "!actors.items!MDpuqedcfHk7louv.m35AuT7nfPhxC1ym"
     },
     {
-      "name": "Rations (1 day)",
+      "name": "Ration 1d",
       "type": "equipment",
-      "img": "icons/consumables/food/cooked-grilled-ham-hock-glazed-brown.webp",
+      "img": "icons/consumables/grains/bread-loaf-sliced-wheat-brown.webp",
       "system": {
         "description": "",
         "equipmentType": "gear",

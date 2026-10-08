@@ -2,13 +2,15 @@
 <div
   class='inventory-card draggable
          {{#if equipped}}equipped{{/if}}
-         {{#if isSlotZero}}slot-zero{{/if}}
+         {{#if isSlotZero}}{{#unless isFullZeroStack}}slot-zero{{/unless}}{{/if}}
          {{#if item.flags.vagabond.mix.inert}}is-inert{{/if}}'
   data-item-id='{{item._id}}'
   data-uuid='{{item.uuid}}'
   data-item-slots='{{item.system.slots}}'
   data-item-type='{{item.type}}'
   data-grid-position='{{gridPosition}}'
+  data-hud-tip='{{tooltip}}'
+  data-hud-tip-duration='1500'
   data-is-slot-zero='{{isSlotZero}}'
   data-display-number='{{displayNumber}}'
   style='grid-column: span {{#if (eq totalSlots 0)}}1{{else}}{{totalSlots}}{{/if}};'
@@ -29,7 +31,7 @@
       {{/each}}
     </div>
   {{/if}}
-  {{#if item.system.isThrowable}}
+  {{#if (or item.system.isThrowable isSlotZero)}}
     <div
       class='item-qty-badge {{#unless item.system.quantity}}empty{{/unless}}'
       data-action='adjustQuantity'

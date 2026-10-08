@@ -80,7 +80,7 @@
         "description": "<p>1 Slot while held. Worn, it occupies no Slot and adds +3 Slots to your Inventory. You can only benefit from one at a time.</p>",
         "equipmentType": "gear",
         "locked": true,
-        "equipped": false,
+        "equipped": true,
         "quantity": 1,
         "baseCost": {
           "gold": 0,
@@ -97,7 +97,7 @@
         "grip": "1H",
         "damageOneHand": "d6",
         "damageTwoHands": "d8",
-        "equipmentState": "unequipped",
+        "equipmentState": "worn",
         "armorType": "light",
         "immunities": [],
         "gearCategory": "Outdoors",
@@ -194,15 +194,15 @@
       "_key": "!actors.items!vnHDqJnK73REyFAe.M9vrAAPuOMr5MGO8"
     },
     {
-      "name": "Rations (1 day)",
+      "name": "Ration 1d",
       "type": "equipment",
-      "img": "icons/consumables/food/cooked-grilled-ham-hock-glazed-brown.webp",
+      "img": "icons/consumables/grains/bread-loaf-sliced-wheat-brown.webp",
       "system": {
         "description": "",
         "equipmentType": "gear",
         "locked": true,
         "equipped": false,
-        "quantity": 1,
+        "quantity": 5,
         "baseCost": {
           "gold": 0,
           "silver": 1,
@@ -235,178 +235,6 @@
       },
       "_id": "IT29cnKWjFpdYlve",
       "_key": "!actors.items!vnHDqJnK73REyFAe.IT29cnKWjFpdYlve"
-    },
-    {
-      "name": "Rations (1 day)",
-      "type": "equipment",
-      "img": "icons/consumables/food/cooked-grilled-ham-hock-glazed-brown.webp",
-      "system": {
-        "description": "",
-        "equipmentType": "gear",
-        "locked": true,
-        "equipped": false,
-        "quantity": 1,
-        "baseCost": {
-          "gold": 0,
-          "silver": 1,
-          "copper": 0
-        },
-        "baseSlots": 0,
-        "metal": "none",
-        "damageType": "-",
-        "damageAmount": "",
-        "canExplode": false,
-        "explodeValues": "",
-        "properties": [],
-        "weaponSkill": "melee",
-        "range": "close",
-        "grip": "1H",
-        "damageOneHand": "d6",
-        "damageTwoHands": "d8",
-        "equipmentState": "unequipped",
-        "armorType": "light",
-        "immunities": [],
-        "gearCategory": "Cooking & Food",
-        "alchemicalType": "concoction",
-        "lore": "",
-        "isConsumable": true,
-        "isSupply": true
-      },
-      "effects": [],
-      "flags": {
-        "core": {}
-      },
-      "_id": "gPAKqS2U4yU1tXtt",
-      "_key": "!actors.items!vnHDqJnK73REyFAe.gPAKqS2U4yU1tXtt"
-    },
-    {
-      "name": "Rations (1 day)",
-      "type": "equipment",
-      "img": "icons/consumables/food/cooked-grilled-ham-hock-glazed-brown.webp",
-      "system": {
-        "description": "",
-        "equipmentType": "gear",
-        "locked": true,
-        "equipped": false,
-        "quantity": 1,
-        "baseCost": {
-          "gold": 0,
-          "silver": 1,
-          "copper": 0
-        },
-        "baseSlots": 0,
-        "metal": "none",
-        "damageType": "-",
-        "damageAmount": "",
-        "canExplode": false,
-        "explodeValues": "",
-        "properties": [],
-        "weaponSkill": "melee",
-        "range": "close",
-        "grip": "1H",
-        "damageOneHand": "d6",
-        "damageTwoHands": "d8",
-        "equipmentState": "unequipped",
-        "armorType": "light",
-        "immunities": [],
-        "gearCategory": "Cooking & Food",
-        "alchemicalType": "concoction",
-        "lore": "",
-        "isConsumable": true,
-        "isSupply": true
-      },
-      "effects": [],
-      "flags": {
-        "core": {}
-      },
-      "_id": "HSFQ7FMi6NrEs90X",
-      "_key": "!actors.items!vnHDqJnK73REyFAe.HSFQ7FMi6NrEs90X"
-    },
-    {
-      "name": "Rations (1 day)",
-      "type": "equipment",
-      "img": "icons/consumables/food/cooked-grilled-ham-hock-glazed-brown.webp",
-      "system": {
-        "description": "",
-        "equipmentType": "gear",
-        "locked": true,
-        "equipped": false,
-        "quantity": 1,
-        "baseCost": {
-          "gold": 0,
-          "silver": 1,
-          "copper": 0
-        },
-        "baseSlots": 0,
-        "metal": "none",
-        "damageType": "-",
-        "damageAmount": "",
-        "canExplode": false,
-        "explodeValues": "",
-        "properties": [],
-        "weaponSkill": "melee",
-        "range": "close",
-        "grip": "1H",
-        "damageOneHand": "d6",
-        "damageTwoHands": "d8",
-        "equipmentState": "unequipped",
-        "armorType": "light",
-        "immunities": [],
-        "gearCategory": "Cooking & Food",
-        "alchemicalType": "concoction",
-        "lore": "",
-        "isConsumable": true,
-        "isSupply": true
-      },
-      "effects": [],
-      "flags": {
-        "core": {}
-      },
-      "_id": "Er6Ea7ChQHqw6cNF",
-      "_key": "!actors.items!vnHDqJnK73REyFAe.Er6Ea7ChQHqw6cNF"
-    },
-    {
-      "name": "Rations (1 day)",
-      "type": "equipment",
-      "img": "icons/consumables/food/cooked-grilled-ham-hock-glazed-brown.webp",
-      "system": {
-        "description": "",
-        "equipmentType": "gear",
-        "locked": true,
-        "equipped": false,
-        "quantity": 1,
-        "baseCost": {
-          "gold": 0,
-          "silver": 1,
-          "copper": 0
-        },
-        "baseSlots": 0,
-        "metal": "none",
-        "damageType": "-",
-        "damageAmount": "",
-        "canExplode": false,
-        "explodeValues": "",
-        "properties": [],
-        "weaponSkill": "melee",
-        "range": "close",
-        "grip": "1H",
-        "damageOneHand": "d6",
-        "damageTwoHands": "d8",
-        "equipmentState": "unequipped",
-        "armorType": "light",
-        "immunities": [],
-        "gearCategory": "Cooking & Food",
-        "alchemicalType": "concoction",
-        "lore": "",
-        "isConsumable": true,
-        "isSupply": true
-      },
-      "effects": [],
-      "flags": {
-        "core": {}
-      },
-      "_id": "qLVUguuBN5ZnrV0p",
-      "_key": "!actors.items!vnHDqJnK73REyFAe.qLVUguuBN5ZnrV0p"
     },
     {
       "name": "Torch",
@@ -761,7 +589,7 @@
         "equipmentType": "gear",
         "locked": true,
         "equipped": false,
-        "quantity": 1,
+        "quantity": 3,
         "baseCost": {
           "gold": 0,
           "silver": 5,
@@ -792,88 +620,6 @@
       },
       "_id": "rhY2bhjCd2V2SnjK",
       "_key": "!actors.items!vnHDqJnK73REyFAe.rhY2bhjCd2V2SnjK"
-    },
-    {
-      "name": "Lockpick",
-      "type": "equipment",
-      "img": "icons/tools/hand/lockpicks-steel-grey.webp",
-      "system": {
-        "description": "",
-        "equipmentType": "gear",
-        "locked": true,
-        "equipped": false,
-        "quantity": 1,
-        "baseCost": {
-          "gold": 0,
-          "silver": 5,
-          "copper": 0
-        },
-        "baseSlots": 0,
-        "metal": "none",
-        "damageType": "-",
-        "damageAmount": "",
-        "canExplode": false,
-        "explodeValues": "",
-        "properties": [],
-        "weaponSkill": "melee",
-        "range": "close",
-        "grip": "1H",
-        "damageOneHand": "d6",
-        "damageTwoHands": "d8",
-        "equipmentState": "unequipped",
-        "armorType": "light",
-        "immunities": [],
-        "gearCategory": "Hardware",
-        "alchemicalType": "concoction",
-        "lore": ""
-      },
-      "effects": [],
-      "flags": {
-        "core": {}
-      },
-      "_id": "qFGgTZgn2eO6kIWP",
-      "_key": "!actors.items!vnHDqJnK73REyFAe.qFGgTZgn2eO6kIWP"
-    },
-    {
-      "name": "Lockpick",
-      "type": "equipment",
-      "img": "icons/tools/hand/lockpicks-steel-grey.webp",
-      "system": {
-        "description": "",
-        "equipmentType": "gear",
-        "locked": true,
-        "equipped": false,
-        "quantity": 1,
-        "baseCost": {
-          "gold": 0,
-          "silver": 5,
-          "copper": 0
-        },
-        "baseSlots": 0,
-        "metal": "none",
-        "damageType": "-",
-        "damageAmount": "",
-        "canExplode": false,
-        "explodeValues": "",
-        "properties": [],
-        "weaponSkill": "melee",
-        "range": "close",
-        "grip": "1H",
-        "damageOneHand": "d6",
-        "damageTwoHands": "d8",
-        "equipmentState": "unequipped",
-        "armorType": "light",
-        "immunities": [],
-        "gearCategory": "Hardware",
-        "alchemicalType": "concoction",
-        "lore": ""
-      },
-      "effects": [],
-      "flags": {
-        "core": {}
-      },
-      "_id": "rNMSHm07hmH7Rozd",
-      "_key": "!actors.items!vnHDqJnK73REyFAe.rNMSHm07hmH7Rozd"
     },
     {
       "name": "Light Armor",

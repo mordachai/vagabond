@@ -17,6 +17,7 @@ import { readFileSync, writeFileSync, readdirSync, mkdirSync, existsSync, rmSync
 import { createHash } from 'crypto';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { stackZeroSlotItems, wearFirstBackpack } from '../../module/helpers/stack-helper.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = resolve(here, '..', '..');
@@ -215,6 +216,9 @@ for (const g of guides) {
     }
     items.push(item);
   }
+  // 0-Slot copies (rations, incense…) merge into stacks of 10 = 1 Slot, like the builder.
+  wearFirstBackpack(items); // Backpack worn: +3 Slots, no Slot of its own
+  items.splice(0, items.length, ...stackZeroSlotItems(items));
 
   // --- class item
   items.push(embedItem(actorId, cls, `${actorId}|class`));
