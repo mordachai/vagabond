@@ -20,7 +20,7 @@
     "senses": [
       "telepathy"
     ],
-    "sensesNote": "Telepathy (Far)",
+    "sensesNote": "",
     "armor": 3,
     "armorDescription": "as (+1) Chain",
     "locked": true,
@@ -29,7 +29,8 @@
     ],
     "weaknesses": [],
     "statusImmunities": [
-      "sickened"
+      "sickened",
+      "suffocating"
     ],
     "zone": "frontline",
     "description": "(Beyonder) The loathsome dung-eaters that inhabit city sewers. They stamp around on three clawed legs, and use a set of tentacles to grasp prey, with a forehead tentacle used to see.",
@@ -76,33 +77,11 @@
         "flatDamage": "4",
         "rollDamage": "1d8",
         "damageType": "-",
-        "extraInfo": "and Restrained.",
+        "extraInfo": "and Restrained. If the Target is already Restrained this way, it is instead slammed into something and takes 7 (2d6) and must pass an [Endure] Save or be Dazed for 1 Round.",
         "causedStatuses": [
           {
             "statusId": "restrained",
             "saveType": "any",
-            "duration": "",
-            "tickDamageEnabled": false,
-            "requiresDamage": true,
-            "damageOnTick": "",
-            "damageType": "-"
-          }
-        ],
-        "critCausedStatuses": []
-      },
-      {
-        "name": "Tentacle (Restraining)",
-        "note": "Melee Attack | Endure",
-        "recharge": "",
-        "attackType": "melee",
-        "flatDamage": "7",
-        "rollDamage": "2d6",
-        "damageType": "-",
-        "extraInfo": "If the Target is Restrained it is slammed into something and takes 7 (2d6) and must pass an [Endure] Save or be Dazed for 1 Round.",
-        "causedStatuses": [
-          {
-            "statusId": "dazed",
-            "saveType": "endure",
             "duration": "",
             "tickDamageEnabled": false,
             "requiresDamage": true,

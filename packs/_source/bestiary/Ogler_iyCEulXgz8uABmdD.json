@@ -23,7 +23,7 @@
       "darksight",
       "telepathy"
     ],
-    "sensesNote": "Telepathy (Far)",
+    "sensesNote": "",
     "armor": 4,
     "armorDescription": "as (+1) Plate",
     "locked": true,
@@ -34,7 +34,7 @@
     "description": "(Beyonder) Greedy, pompous creatures out-of-touch with reality by nature. They are always driven insane by arrogance and the insatiable desire to rule over all. They are known to claim the works of their subjects as their own, enforce overreaching taxes, and trick others into outrageous deals.",
     "actions": [
       {
-        "name": "Multi-Cast",
+        "name": "Combo",
         "note": "",
         "recharge": "",
         "attackType": "melee",
@@ -103,7 +103,7 @@
       },
       {
         "name": "3 - Kinesis",
-        "note": "Will",
+        "note": "Endure",
         "recharge": "",
         "attackType": "castRanged",
         "flatDamage": "",
@@ -224,10 +224,6 @@
       {
         "name": "Mind of Madness",
         "description": "It can Cast while Berserk."
-      },
-      {
-        "name": "",
-        "description": ""
       }
     ],
     "universalDamageBonus": 0,

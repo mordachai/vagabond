@@ -20,7 +20,7 @@
     "morale": 8,
     "appearing": "1",
     "speed": 30,
-    "senses": "",
+    "senses": [],
     "armor": 4,
     "armorDescription": "as (+1) Plate",
     "locked": true,
@@ -31,8 +31,8 @@
     "description": "(Beyonder)",
     "actions": [
       {
-        "name": "Frenzy",
-        "note": "Multi-Attack",
+        "name": "Combo",
+        "note": "",
         "recharge": "",
         "attackType": "melee",
         "flatDamage": "",

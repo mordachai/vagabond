@@ -13,7 +13,7 @@
     "size": "medium",
     "beingType": "Outers",
     "speedTypes": [
-      "fly 60"
+      "fly"
     ],
     "hd": 9,
     "morale": 9,
@@ -30,12 +30,14 @@
     "immunities": [],
     "weaknesses": [],
     "statusImmunities": [
-      "confused",
       "berserk",
-      "sickened",
+      "blinded",
+      "confused",
       "fatigued",
       "frightened",
-      "paralyzed"
+      "paralyzed",
+      "sickened",
+      "suffocating"
     ],
     "zone": "backline",
     "description": "(Divine) A celestial, winged serpent commonly worshipped as a deity of medicinal care.",
@@ -79,7 +81,7 @@
         "flatDamage": "10",
         "rollDamage": "3d6",
         "damageType": "healing",
-        "extraInfo": "Regain HP",
+        "extraInfo": "Regain 10 (3d6) HP",
         "causedStatuses": [],
         "critCausedStatuses": []
       },
@@ -98,7 +100,10 @@
     ],
     "abilities": [],
     "universalDamageBonus": 0,
-    "universalDamageDice": ""
+    "universalDamageDice": "",
+    "speedValues": {
+      "fly": 60
+    }
   },
   "prototypeToken": {
     "name": "Couatl",

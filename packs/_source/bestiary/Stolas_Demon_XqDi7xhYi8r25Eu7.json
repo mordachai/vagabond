@@ -11,7 +11,7 @@
     "fatigue": 0,
     "biography": "",
     "threatLevel": 11.2,
-    "size": "huge",
+    "size": "giant",
     "beingType": "Hellspawn",
     "speedTypes": [
       "cling",
@@ -33,7 +33,9 @@
       "poison",
       "physical"
     ],
-    "weaknesses": [],
+    "weaknesses": [
+      "silver"
+    ],
     "statusImmunities": [],
     "zone": "frontline",
     "description": "Stolas demons are the astronomers of hell, appearing as massive owls whose eyes scintillate with a cosmic sprawl. They are created from the deceased souls of philosophers who valued reason and pragmatism over humanity and ethics, and stolas are extreme utilitarians in their slaughter.",
@@ -46,7 +48,7 @@
         "flatDamage": "21",
         "rollDamage": "6d6",
         "damageType": "-",
-        "extraInfo": "Dazed (Cd6 Rounds)",
+        "extraInfo": "and Dazed (Cd6 Rounds)",
         "causedStatuses": [
           {
             "statusId": "dazed",
@@ -92,15 +94,25 @@
         "flatDamage": "13",
         "rollDamage": "3d8",
         "damageType": "-",
-        "extraInfo": "",
-        "causedStatuses": [],
+        "extraInfo": "and Restrained if failed by 5 or more.",
+        "causedStatuses": [
+          {
+            "statusId": "restrained",
+            "requiresDamage": true,
+            "saveType": "any",
+            "duration": "",
+            "tickDamageEnabled": false,
+            "damageOnTick": "",
+            "damageType": "-"
+          }
+        ],
         "critCausedStatuses": []
       }
     ],
     "abilities": [
       {
         "name": "Magic Ward IV",
-        "description": "The first time it is unwillingly affected by a Spell each Round, the Caster must spend an extra 4 Mana to affect it."
+        "description": "It is not affected by Casts it is unwillingly subjected to unless the Caster's Check exceeds their difficulty by 4 or more."
       },
       {
         "name": "Regenerate III",

@@ -13,7 +13,7 @@
     "size": "large",
     "beingType": "Hellspawn",
     "speedTypes": [
-      "fly 60"
+      "fly"
     ],
     "hd": 13,
     "morale": 12,
@@ -32,7 +32,9 @@
       "fire",
       "physical"
     ],
-    "weaknesses": [],
+    "weaknesses": [
+      "silver"
+    ],
     "statusImmunities": [
       "sickened"
     ],
@@ -47,7 +49,7 @@
         "flatDamage": "",
         "rollDamage": "",
         "damageType": "-",
-        "extraInfo": "Cursed (Cd6, -4 penalty to Attack Checks and a -2 to [Reflex] Saves)",
+        "extraInfo": "Cursed (Cd6 Rounds, -4 penalty to Attack Checks and a -2 to [Reflex] Saves)",
         "causedStatuses": [],
         "critCausedStatuses": []
       },
@@ -131,13 +133,13 @@
       },
       {
         "name": "Wall of Fire",
-        "note": "Cast, Line | Reflex",
+        "note": "Cast, Line | Reflex | Focus",
         "recharge": "3/Day",
         "attackType": "castRanged",
-        "flatDamage": "7",
-        "rollDamage": "2d6",
+        "flatDamage": "",
+        "rollDamage": "",
         "damageType": "-",
-        "extraInfo": "Burning (2d6) (Focus)",
+        "extraInfo": "Burning (2d6)",
         "causedStatuses": [
           {
             "statusId": "burning",
@@ -198,16 +200,12 @@
     ],
     "abilities": [
       {
-        "name": "Supreme Hellspawn",
-        "description": "Regains 13 HP each Round."
+        "name": "Regenerate III",
+        "description": "Regains 13 (3d8) HP on its Turns."
       },
       {
         "name": "Magic Ward III",
-        "description": "The first time it is unwillingly affected by a Spell each Round, the Caster must spend an extra 3 Mana to affect it."
-      },
-      {
-        "name": "Regenerate II",
-        "description": "Regains 9 (2d8) HP on each of its Turns."
+        "description": "It is not affected by Casts it is unwillingly subjected to unless the Caster's Check exceeds their difficulty by 3 or more."
       },
       {
         "name": "Terror II",
@@ -215,7 +213,10 @@
       }
     ],
     "universalDamageBonus": 0,
-    "universalDamageDice": ""
+    "universalDamageDice": "",
+    "speedValues": {
+      "fly": 60
+    }
   },
   "prototypeToken": {
     "name": "Pit Fiend",

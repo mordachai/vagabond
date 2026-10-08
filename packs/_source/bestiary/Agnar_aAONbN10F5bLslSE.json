@@ -17,7 +17,7 @@
     "morale": 10,
     "appearing": "1",
     "speed": 30,
-    "senses": "",
+    "senses": [],
     "armor": 2,
     "armorDescription": "as Chain",
     "locked": true,
@@ -27,7 +27,7 @@
     ],
     "statusImmunities": [],
     "zone": "frontline",
-    "description": "(Beyonder) A jungle-dwelling monstrosity with a spherical torso and maw that surrounds its entire body. This sphere of horror is mounted atop four elephant-like legs, Its teeth enclose a donut-shaped gullet that forces any prey-paste through its abominable form. (Originally created by Hankerin Ferinale for Index Card RPG)",
+    "description": "(Beyonder) A jungle-dwelling monstrosity with a spherical torso and maw that surrounds its entire body. This sphere of horror is mounted atop four elephant-like legs, Its teeth enclose a donut-shaped gullet that forces any prey-paste through its abominable form.",
     "actions": [
       {
         "name": "Spin-Thrash",
@@ -75,7 +75,7 @@
       },
       {
         "name": "Leap",
-        "description": "If it uses its Move to Jump, any Being within 5 feet when it lands must pass a [Reflex] Save or take 10 (3d6) and be shoved Prone."
+        "description": "If it uses its Move to Jump, any Being within 5' when it lands must pass a [Reflex] Save or take 10 (3d6) and be shoved Prone. The Agnar was originally created by Hankerin Ferinale for Index Card RPG."
       }
     ],
     "universalDamageBonus": 0,

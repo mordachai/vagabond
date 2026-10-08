@@ -13,7 +13,7 @@
     "size": "small",
     "beingType": "Outers",
     "speedTypes": [
-      "fly 30"
+      "fly"
     ],
     "hd": 1,
     "morale": 7,
@@ -39,25 +39,25 @@
     "actions": [
       {
         "name": "Glare",
-        "note": "Cast, 30-foot Cone",
+        "note": "Cast, Remote | Endure",
         "recharge": "1/Day",
         "attackType": "castRanged",
         "flatDamage": "",
         "rollDamage": "",
         "damageType": "-",
-        "extraInfo": "Transformed into a stone statue (Cd6)",
+        "extraInfo": "Transformed into a stone statue (Cd4)",
         "causedStatuses": [],
         "critCausedStatuses": []
       },
       {
         "name": "Muddle",
-        "note": "Cast, 30-foot Cone",
+        "note": "Cast, 30-foot Cone | Will",
         "recharge": "Cd4",
         "attackType": "castRanged",
         "flatDamage": "",
         "rollDamage": "",
         "damageType": "-",
-        "extraInfo": "Confused (Cd4, or until this Being dies)",
+        "extraInfo": "Confused (Cd4)",
         "causedStatuses": [
           {
             "statusId": "confused",
@@ -73,13 +73,13 @@
       },
       {
         "name": "Enrage",
-        "note": "Cast, 30-foot Cone",
+        "note": "Cast, 30-foot Cone | Will",
         "recharge": "Cd4",
         "attackType": "castRanged",
         "flatDamage": "",
         "rollDamage": "",
         "damageType": "-",
-        "extraInfo": "Berserk (Cd4, or until this Being dies)",
+        "extraInfo": "Berserk (Cd4)",
         "causedStatuses": [
           {
             "statusId": "berserk",
@@ -105,7 +105,10 @@
       }
     ],
     "universalDamageBonus": 0,
-    "universalDamageDice": ""
+    "universalDamageDice": "",
+    "speedValues": {
+      "fly": 30
+    }
   },
   "prototypeToken": {
     "name": "Floating Eye",

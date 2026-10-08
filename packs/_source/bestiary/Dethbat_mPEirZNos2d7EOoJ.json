@@ -13,7 +13,7 @@
     "size": "small",
     "beingType": "Hellspawn",
     "speedTypes": [
-      "fly 30"
+      "fly"
     ],
     "hd": 1,
     "morale": 3,
@@ -37,7 +37,7 @@
       "sickened"
     ],
     "zone": "midline",
-    "description": "(Hellspawn) Infernal bats with human faces and grotesque tongues that drag below them as they fly.",
+    "description": "Infernal bats with human faces and grotesque tongues that drag below them as they fly.",
     "actions": [
       {
         "name": "Kiss",
@@ -47,7 +47,7 @@
         "flatDamage": "0",
         "rollDamage": "",
         "damageType": "-",
-        "extraInfo": "Dethbat’s Curse (Continual, until removed)",
+        "extraInfo": "Dethbat's Curse (Continual, until removed)",
         "causedStatuses": [],
         "critCausedStatuses": []
       },
@@ -102,7 +102,10 @@
       }
     ],
     "universalDamageBonus": 0,
-    "universalDamageDice": ""
+    "universalDamageDice": "",
+    "speedValues": {
+      "fly": 30
+    }
   },
   "prototypeToken": {
     "name": "Dethbat",

@@ -36,7 +36,7 @@
       "frightened"
     ],
     "zone": "midline",
-    "description": "(Beyonder) A bearded, panther-like creature with the eyes of a spider. (Originally created by Amanda Lee Frank).",
+    "description": "(Beyonder) A bearded, panther-like creature with the eyes of a spider.",
     "actions": [
       {
         "name": "Web",
@@ -123,7 +123,7 @@
       },
       {
         "name": "Pouncer",
-        "description": "If it moves at least 20 feet before making an Attack on the same Turn, the Target is shoved Prone if it is this Being's size or smaller."
+        "description": "If it moves at least 20' before making an Attack on the same Turn, the Target is shoved Prone if it is this Being's size or smaller."
       },
       {
         "name": "Web-Walk",
@@ -131,7 +131,7 @@
       },
       {
         "name": "Web",
-        "description": "Its web is an Object with 5 HP and Armor 1. The webs are Difficult Terrain as a surface, and cause a Target to be Restrained if hit with a Web Spit Attack from the Vigzud."
+        "description": "Its web is an Object with 5 HP and Armor 1. The webs are Difficult Terrain as a surface, and cause a Target to be Restrained if hit with a Web Spit Attack from the Vigzud. The Vigzud was originally created by Amanda Lee Frank."
       }
     ],
     "universalDamageBonus": 0,

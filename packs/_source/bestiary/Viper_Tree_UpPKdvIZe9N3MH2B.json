@@ -17,7 +17,7 @@
     "morale": null,
     "appearing": "2d10",
     "speed": 0,
-    "senses": "",
+    "senses": [],
     "armor": 2,
     "armorDescription": "Bark",
     "locked": true,
@@ -27,7 +27,8 @@
       "poison"
     ],
     "weaknesses": [
-      "fire"
+      "fire",
+      "silver"
     ],
     "statusImmunities": [],
     "zone": "frontline",

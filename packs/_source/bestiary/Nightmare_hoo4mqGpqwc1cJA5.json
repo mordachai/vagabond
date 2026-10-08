@@ -29,14 +29,16 @@
       "poison",
       "fire"
     ],
-    "weaknesses": [],
+    "weaknesses": [
+      "silver"
+    ],
     "statusImmunities": [],
     "zone": "frontline",
     "description": "Black, semi-skeletal hell horses with manes of fire.",
     "actions": [
       {
-        "name": "Stampede",
-        "note": "Multi-Attack",
+        "name": "Combo",
+        "note": "",
         "recharge": "",
         "attackType": "melee",
         "flatDamage": "",

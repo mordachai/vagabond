@@ -1,5 +1,5 @@
 {
-  "name": "Zotz, Demon",
+  "name": "Zotz Demon",
   "type": "npc",
   "img": "systems/vagabond/assets/ui/default-npc.svg",
   "system": {
@@ -30,7 +30,9 @@
       "physical",
       "poison"
     ],
-    "weaknesses": [],
+    "weaknesses": [
+      "silver"
+    ],
     "statusImmunities": [
       "fatigued",
       "frightened"
@@ -104,7 +106,7 @@
       },
       {
         "name": "Magic Ward II",
-        "description": "The first time it is unwillingly affected by a Spell each Round, the Caster must spend an extra 2 Mana to affect it."
+        "description": "It is not affected by Casts it is unwillingly subjected to unless the Caster's Check exceeds their difficulty by 2 or more."
       },
       {
         "name": "Nimble",
@@ -128,7 +130,7 @@
     "universalAlchemicalDamageDice": ""
   },
   "prototypeToken": {
-    "name": "Zotz, Demon",
+    "name": "Zotz Demon",
     "displayName": 0,
     "actorLink": false,
     "width": 3,

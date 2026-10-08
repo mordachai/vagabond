@@ -13,7 +13,7 @@
     "size": "huge",
     "beingType": "Outers",
     "speedTypes": [
-      "fly 180"
+      "fly"
     ],
     "hd": 15,
     "morale": 10,
@@ -28,9 +28,11 @@
     "locked": true,
     "immunities": [],
     "weaknesses": [],
-    "statusImmunities": [],
+    "statusImmunities": [
+      "suffocating"
+    ],
     "zone": "midline",
-    "description": "(Beyonder, Wyrm) A grey alien dragon from beyond the stars. It can fly at the speed of light.",
+    "description": "(Beyonder, Wyrm) A grey alien dragon from beyond the stars.",
     "actions": [
       {
         "name": "Combo",
@@ -74,7 +76,10 @@
       }
     ],
     "universalDamageBonus": 0,
-    "universalDamageDice": ""
+    "universalDamageDice": "",
+    "speedValues": {
+      "fly": 180
+    }
   },
   "prototypeToken": {
     "name": "Byakhee",

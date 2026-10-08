@@ -26,7 +26,9 @@
     "armorDescription": "as Chain",
     "locked": true,
     "immunities": [],
-    "weaknesses": [],
+    "weaknesses": [
+      "silver"
+    ],
     "statusImmunities": [],
     "zone": "backline",
     "description": "",
@@ -45,13 +47,13 @@
       },
       {
         "name": "Charm Person",
-        "note": "Cast, a Remote Humanlike | Will",
+        "note": "Cast, a Remote Humanlike | Will | Focus",
         "recharge": "1/Day",
         "attackType": "castRanged",
         "flatDamage": "0",
         "rollDamage": "",
         "damageType": "-",
-        "extraInfo": "Charmed (Focus)",
+        "extraInfo": "Charmed",
         "causedStatuses": [
           {
             "statusId": "charmed",
@@ -137,13 +139,13 @@
       },
       {
         "name": "Invisibility",
-        "note": "Cast, Touch | Will",
+        "note": "Cast, Touch | Will | Focus",
         "recharge": "",
         "attackType": "castClose",
         "flatDamage": "0",
         "rollDamage": "",
         "damageType": "-",
-        "extraInfo": "Turns Invisible for the duration. (Focus)",
+        "extraInfo": "Turns Invisible for the duration.",
         "causedStatuses": [],
         "critCausedStatuses": []
       }

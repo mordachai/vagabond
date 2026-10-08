@@ -31,7 +31,8 @@
       "fire"
     ],
     "weaknesses": [
-      "cold"
+      "cold",
+      "silver"
     ],
     "statusImmunities": [
       "fatigued",
@@ -45,7 +46,7 @@
       {
         "name": "Pop",
         "note": "Action (Cd4 after having a Being Restrained), Aura Near | Reflex",
-        "recharge": "Cd4",
+        "recharge": "",
         "attackType": "castClose",
         "flatDamage": "3",
         "rollDamage": "1d6",
@@ -84,7 +85,7 @@
       },
       {
         "name": "Magic Ward I",
-        "description": "The first time it is unwillingly affected by a Spell each Round, the Caster must spend an extra 1 Mana to affect it."
+        "description": "It is not affected by Casts it is unwillingly subjected to unless the Caster's Check exceeds their difficulty by 1 or more."
       },
       {
         "name": "Sticky",

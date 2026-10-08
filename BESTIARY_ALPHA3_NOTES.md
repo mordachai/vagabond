@@ -115,3 +115,22 @@ Necrophidius, Scarecrow (+Silver), Gremlin (+Cold Iron), Werewolf / Werewolf Dir
   The book prints `It casn't use Sleep, Charm, or Fear` — typo fixed to *can't*.
 - Pixie / Satyr had an **unnamed** Magic Ward ability: now named `Magic Ward I` with the Alpha 3 text.
 - Nymph's Kiss: "can only breathe water" (no longer "immediately suffocating"); Mermaid Immortal of the Sea: "in contact with a body of water".
+
+---
+
+## Part 6 — Outers (book pp. 154-166) — 31 statblocks, none new, none deleted
+
+- **Renamed**: `Zotz, Demon` -> `Zotz Demon` (book name; same `_id`).
+- **Hellspawn** now carry Silver weakness (type rule above): Chort, Dethbat, Hellhound (its odd `physical` weakness is gone), Imp, Nightmare, Oni, Pit Fiend, Stolas Demon, Viper Tree, Viskyd, Zotz Demon.
+  `Hellspawn` stays a being type (`beingType`), so it is no longer repeated as a `(Hellspawn)` description tag.
+- **d6 / d8 tables** (Angel *Dominator*, Ogler *Eyebeam*, Sphinx Archon *Reality Warp*, Lich later): the `1 - ...` row actions (with their `@UUID` links / statuses) are kept; each row is updated from the book row
+  (Ogler Kinesis now *Endure*, Angel Burning Slash wording). The Ogler *Mind of Madness* / *Antimagical Cone II* abilities follow the book (an unnamed third ability was dropped).
+- **Stat fixes**: Imp HD 2 -> 1; Stolas Demon Huge -> **Giant**; Sphinx Archon stored HP `10` -> `108`; Viper Tree zone typo (`Front`).
+- **Immunities**: Alpha 3 adds Suffocating (Byakhee, Otyugh, Phoenix, Angel/Couatl `Blindness` -> blinded ...), Restrained (Phoenix); Sphinx `Physical from non-Relics` (a stray string) -> real `physical`.
+- **Pit Fiend**: Regenerate II -> **III**, `Supreme Hellspawn` ability removed, Wall of Fire is now just `Burning (2d6)` (no 7 (2d6) damage).
+- **Otyugh**: `Tentacle (Restraining)` merged into `Tentacle` (4 (d8) + Restrained; if already Restrained: slam 7 (2d6) + Endure or Dazed). Dazed is *not* auto-applied (only conditional).
+- Telepathy qualifier `(Far)` dropped from Ogler / Otyugh (book prints plain Telepathy). Pixie-style unnamed Magic Ward abilities named (Imp, Thulhan...).
+- `speedTypes` strings `"fly 180"` etc. (Byakhee, Cloaker, Couatl, Dethbat, Floating Eye, Phoenix, Pit Fiend, Demon Ray) -> `fly` / `swim` + `speedValues`.
+
+Not modelled
+- Treant / Viper Tree `Weak: damage from axes` (no weapon-family weakness exists); Angel `Divine Armor`, Fall from Grace, Grace are text only.

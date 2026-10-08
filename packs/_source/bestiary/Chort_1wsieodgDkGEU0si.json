@@ -30,13 +30,15 @@
       "fire",
       "physical"
     ],
-    "weaknesses": [],
+    "weaknesses": [
+      "silver"
+    ],
     "statusImmunities": [
       "frightened",
       "fatigued"
     ],
     "zone": "frontline",
-    "description": "(Hellspawn) Goat-like bipedal demons, and sons of Chernobog.",
+    "description": "Goat-like bipedal demons, and sons of Chernobog.",
     "actions": [
       {
         "name": "Combo",
@@ -72,7 +74,7 @@
     "abilities": [
       {
         "name": "Magic Ward II",
-        "description": "The first time it is unwillingly affected by a Spell each Round, the Caster must spend an extra 2 Mana to affect it."
+        "description": "It is not affected by Casts it is unwillingly subjected to unless the Caster's Check exceeds their difficulty by 2 or more."
       }
     ],
     "universalDamageBonus": 0,

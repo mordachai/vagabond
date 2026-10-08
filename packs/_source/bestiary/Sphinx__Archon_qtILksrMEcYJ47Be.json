@@ -5,7 +5,7 @@
   "system": {
     "health": {
       "value": 108,
-      "max": 10,
+      "max": 108,
       "bonus": 0
     },
     "fatigue": 0,
@@ -47,7 +47,7 @@
       "suffocating"
     ],
     "zone": "frontline",
-    "description": "(Beyonder) The highest of all sphinxes, the Archonsphinx is an alien mastermind and reality bender.\n\nImmune: Physical from Weapons weaker than (+2) Relics",
+    "description": "(Beyonder) The highest of all sphinxes, the Archonsphinx is an alien mastermind and reality bender.",
     "actions": [
       {
         "name": "Combo",
@@ -74,7 +74,7 @@
         "critCausedStatuses": []
       },
       {
-        "name": "Arcane Wings",
+        "name": "Arcane Wing",
         "note": "Cast, 2×Remote | Reflex",
         "recharge": "",
         "attackType": "castRanged",
@@ -207,7 +207,7 @@
       },
       {
         "name": "Magic Ward III",
-        "description": "The first time it is unwillingly affected by a Spell each Round, the Caster must spend an extra 3 Mana to affect it."
+        "description": "It is not affected by Casts it is unwillingly subjected to unless the Caster's Check exceeds their difficulty by 3 or more."
       },
       {
         "name": "Metalepsis",

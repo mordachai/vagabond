@@ -36,25 +36,27 @@
     ],
     "weaknesses": [],
     "statusImmunities": [
-      "confused",
       "berserk",
-      "sickened",
+      "blinded",
+      "confused",
       "fatigued",
       "frightened",
-      "paralyzed"
+      "paralyzed",
+      "sickened",
+      "suffocating"
     ],
     "zone": "midline",
     "description": "(Divine)",
     "actions": [
       {
         "name": "Dominator",
-        "note": "2 Actions (re-roll duplicates)",
+        "note": "2 Actions as below (d6 to determine)",
         "recharge": "",
         "attackType": "melee",
         "flatDamage": "",
         "rollDamage": "",
         "damageType": "-",
-        "extraInfo": "[2 Actions as below (d6 to determine)",
+        "extraInfo": "",
         "causedStatuses": [],
         "critCausedStatuses": [],
         "rechargeCountdownId": null,
@@ -92,7 +94,7 @@
       },
       {
         "name": "2-Burning Slash",
-        "note": "Melee Attack, Near Cone | Half damage on pass",
+        "note": "Melee Attack, Near Cone | Half damage on a pass",
         "recharge": "",
         "attackType": "melee",
         "flatDamage": "13",
@@ -201,7 +203,7 @@
       },
       {
         "name": "Magic Ward III",
-        "description": "The first time it is unwillingly affected by a Spell each Round, the Caster must spend an extra 3 Mana to affect it."
+        "description": "It is not affected by Casts it is unwillingly subjected to unless the Caster's Check exceeds their difficulty by 3 or more."
       },
       {
         "name": "Flaming Sword",

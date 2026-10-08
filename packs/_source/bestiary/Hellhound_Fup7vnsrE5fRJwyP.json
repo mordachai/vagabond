@@ -29,11 +29,11 @@
     ],
     "weaknesses": [
       "cold",
-      "physical"
+      "silver"
     ],
     "statusImmunities": [],
     "zone": "midline",
-    "description": "These fire-breathing, monstrous hounds are the guard dogs to more powerful hellspawn. Wild hellhounds can be found near areas where they slipped through some rift between planes.",
+    "description": "Fire-breathing, monstrous hounds are the guard dogs to more powerful hellspawn.",
     "actions": [
       {
         "name": "Hellfire",

@@ -17,7 +17,7 @@
     "morale": 8,
     "appearing": "1",
     "speed": 5,
-    "senses": "",
+    "senses": [],
     "armor": 1,
     "armorDescription": "as Leather",
     "locked": true,
@@ -27,7 +27,7 @@
     ],
     "statusImmunities": [],
     "zone": "frontline",
-    "description": "(Beyonder) A predatory alien fungus that hunts by attracting prey with a small, furry growth that mimics a rabbit, squirrel, or similar small mammal. The creature itself resembles a tree stump with multiple root-like limbs and fungal eyestalks.",
+    "description": "(Beyonder) A predatory alien fungus that hunts by attracting prey with a small, furry growth that mimcs a rabbit, squirrel, or similar small mammal. The creature itself resembles a tree stump with multiple root-like limbs and fungal eyestalks.",
     "actions": [
       {
         "name": "Bite",

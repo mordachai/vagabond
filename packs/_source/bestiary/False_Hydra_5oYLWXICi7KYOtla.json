@@ -58,13 +58,13 @@
       },
       {
         "name": "Song of Discord",
-        "note": "Action, 5-mile Aura (only those who can hear it) | Will",
+        "note": "Action, 5-mile Aura (only those who can hear it) | Will | Focus",
         "recharge": "",
         "attackType": "castRanged",
         "flatDamage": "0",
         "rollDamage": "",
         "damageType": "-",
-        "extraInfo": "Charmed (until the song ends, it acts as if it can't see or hear this Being and creates false memories of illogical events). (Focus)",
+        "extraInfo": "Charmed (until the song ends, it acts as if it can't see or hear this Being and creates false memories of illogical events).",
         "causedStatuses": [
           {
             "statusId": "charmed",
@@ -86,7 +86,7 @@
       },
       {
         "name": "Multiple Heads",
-        "description": "It starts with one head, but grows another as it consumes humanoid Beings. Each time it grows a new head, it gains 3 HD (13 HP), and its stats change as shown below: \n3 Consumed: 2 Heads, Medium, TL 4.1 \n6 Consumed: 3 Heads, Large, TL 5.6 \n9 Consumed: 4 Heads, Large, TL 6.9 \n15 Consumed: 5 Heads, Huge, TL 8.2 \n24 Consumed: 6 Heads, Huge, TL 9.4"
+        "description": "It starts with one head, but grows another as it consumes humanoid Beings. Each time it grows a new head, it gains 3 HD (13 HP), and its stats change as shown below: # Consumed Heads Size TL 3 2 Medium 4.1 6 3 Large 5.6 9 4 Large 6.9 15 5 Huge 8.2 24 6 Huge 9.4"
       }
     ],
     "universalDamageBonus": 0,

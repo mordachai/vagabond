@@ -13,7 +13,7 @@
     "size": "large",
     "beingType": "Outers",
     "speedTypes": [
-      "fly 30"
+      "fly"
     ],
     "hd": 6,
     "morale": 7,
@@ -85,7 +85,10 @@
       }
     ],
     "universalDamageBonus": 0,
-    "universalDamageDice": ""
+    "universalDamageDice": "",
+    "speedValues": {
+      "fly": 30
+    }
   },
   "prototypeToken": {
     "name": "Cloaker",
