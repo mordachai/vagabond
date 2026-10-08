@@ -200,6 +200,7 @@ VAGABOND.damageTypes = {
  */
 VAGABOND.materialWeaknesses = {
   'adamant': 'VAGABOND.MaterialWeaknesses.Adamant',
+  'axe': 'VAGABOND.MaterialWeaknesses.Axe',
   'coldIron': 'VAGABOND.MaterialWeaknesses.ColdIron',
   'silver': 'VAGABOND.MaterialWeaknesses.Silver'
 };
@@ -284,6 +285,15 @@ VAGABOND.statusEffectDefinitions = [
     img: '/icons/magic/life/heart-cross-strong-flame-purple-orange.webp',
     statuses: ['charmed'],
     description: 'Can\'t willingly make an Attack Action targeting the one who Charmed it. [MANUAL TRACKING]'
+  },
+  {
+    // Not a book Status: marks a Being standing in Sunlight so Nightwalker / Sunlight Hypersensitivity /
+    // Vampiric rules (NPC fields `sunlightHarm`, `regenStopsInSunlight`, `hpFloor`) can read it. Toggle it by hand.
+    id: 'sunlit',
+    name: 'VAGABOND.StatusConditions.Sunlit',
+    img: '/icons/magic/light/beam-rays-yellow.webp',
+    statuses: ['sunlit'],
+    description: 'Standing in Sunlight. Nightwalkers burn and are Incapacitated, Vampires burn and stop regenerating, Zombies lose their 1 HP floor. [MANUAL TOGGLE]'
   },
   {
     id: 'suffocating',
@@ -1070,6 +1080,7 @@ VAGABOND.metalColors = {
  */
 VAGABOND.materialWeaknessIcons = {
   'adamant': 'fa-solid fa-square-a',
+  'axe': 'fa-solid fa-axe',
   'coldIron': 'fa-solid fa-square-i',
   'silver': 'fa-solid fa-square-s'
 };

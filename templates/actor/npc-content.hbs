@@ -55,7 +55,7 @@
   {{/unless}}
 
   {{! Immunities, Weaknesses, Status Immunities — locked view draws nothing when all are empty }}
-  {{#unless (and system.locked (not system.immunities.length) (not system.weaknesses.length) (not system.statusImmunities.length))}}
+  {{#unless (and system.locked (not system.immunities.length) (not system.weaknesses.length) (not system.statusImmunities.length) (not npcRulesView.length))}}
   <div class='npc-resistances-section'>
 
     {{#if system.locked}}
@@ -90,6 +90,11 @@
           </div>
         </div>
       {{/if}}
+      {{#each npcRulesView}}
+        <div class='npc-detail-row'>
+          <div class='npc-immunity-text'>{{this}}</div>
+        </div>
+      {{/each}}
 
     {{else}}
       {{! UNLOCKED MODE — single dropdown with 3 sections }}
@@ -140,6 +145,46 @@
             {{/each}}
           </div>
 
+        </div>
+      </details>
+
+      {{! Statblock rules the book prints as ability text }}
+      <details class='npc-immunity-dropdown npc-rules-dropdown'>
+        <summary class='npc-immunity-toggle'>
+          <i class='fas fa-chevron-down'></i>
+          <span>{{localize "VAGABOND.Actor.NPC.Rules.Title"}}</span>
+        </summary>
+        <div class='npc-immunity-checkboxes npc-resistance-panel'>
+          <label class='npc-field-label'>{{localize "VAGABOND.Actor.NPC.Rules.RelicImmunity"}}
+            <select name='system.relicImmunityMin' data-dtype='Number'>
+              <option value='' {{#if (eq system.relicImmunityMin null)}}selected{{/if}}>{{localize "VAGABOND.Actor.NPC.Rules.RelicNone"}}</option>
+              <option value='0' {{#if (eq system.relicImmunityMin 0)}}selected{{/if}}>{{localize "VAGABOND.Actor.NPC.Rules.RelicAny"}}</option>
+              <option value='1' {{#if (eq system.relicImmunityMin 1)}}selected{{/if}}>(+1)</option>
+              <option value='2' {{#if (eq system.relicImmunityMin 2)}}selected{{/if}}>(+2)</option>
+              <option value='3' {{#if (eq system.relicImmunityMin 3)}}selected{{/if}}>(+3)</option>
+            </select>
+          </label>
+          <label class='npc-field-label'>{{localize "VAGABOND.Actor.NPC.Rules.HpFloor"}}
+            <select name='system.hpFloor'>
+              <option value='none' {{#if (eq system.hpFloor 'none')}}selected{{/if}}>{{localize "VAGABOND.Actor.NPC.Rules.HpFloorNone"}}</option>
+              <option value='zombie' {{#if (eq system.hpFloor 'zombie')}}selected{{/if}}>{{localize "VAGABOND.Actor.NPC.Rules.HpFloorZombie"}}</option>
+              <option value='always' {{#if (eq system.hpFloor 'always')}}selected{{/if}}>{{localize "VAGABOND.Actor.NPC.Rules.HpFloorAlways"}}</option>
+            </select>
+          </label>
+          <label class='npc-field-label'>{{localize "VAGABOND.Actor.NPC.Rules.SunlightHarm"}}
+            <select name='system.sunlightHarm'>
+              <option value='none' {{#if (eq system.sunlightHarm 'none')}}selected{{/if}}>{{localize "VAGABOND.Actor.NPC.Rules.SunlightHarmNone"}}</option>
+              <option value='burn' {{#if (eq system.sunlightHarm 'burn')}}selected{{/if}}>{{localize "VAGABOND.Actor.NPC.Rules.SunlightHarmBurn"}}</option>
+              <option value='burnIncapacitated' {{#if (eq system.sunlightHarm 'burnIncapacitated')}}selected{{/if}}>{{localize "VAGABOND.Actor.NPC.Rules.SunlightHarmBurnIncapacitated"}}</option>
+            </select>
+          </label>
+          <label class='npc-field-label'>{{localize "VAGABOND.Actor.NPC.Rules.RegenPerTurn"}}
+            <input type='text' name='system.regenPerTurn' value='{{system.regenPerTurn}}' placeholder='3, d8, 2d8' />
+          </label>
+          <label class='npc-immunity-checkbox-item'>
+            <input type='checkbox' name='system.regenStopsInSunlight' {{#if system.regenStopsInSunlight}}checked{{/if}} />
+            <span>{{localize "VAGABOND.Actor.NPC.Rules.RegenStopsInSunlight"}}</span>
+          </label>
         </div>
       </details>
 

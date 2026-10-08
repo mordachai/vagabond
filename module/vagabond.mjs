@@ -74,6 +74,7 @@ import { VagabondDamageHelper } from './helpers/damage-helper.mjs';
 import { VagabondDamagePipeline } from './helpers/damage-pipeline.mjs';
 import { StatusHelper } from './helpers/status-helper.mjs';
 import { RageHelper } from './helpers/rage-helper.mjs';
+import { NpcRules } from './helpers/npc-rules.mjs';
 import { AlchemyHelper } from './helpers/crafting/alchemy-helper.mjs';
 import { BardHelper } from './helpers/bard-helper.mjs';
 import { DancerHelper } from './helpers/dancer-helper.mjs';
@@ -2709,6 +2710,23 @@ Hooks.on('deleteActiveEffect', (effect) => {
   for (const token of effect.parent?.getActiveTokens() ?? []) {
     _refreshDeadSkull(token);
   }
+});
+
+// Statblock rules (module/helpers/npc-rules.mjs): HP floor (Zombie / Grace), Sunlight harm (Nightwalker), turn-start regen / burn.
+Hooks.on('vagabond.calculateFinalDamage', (ctx) => NpcRules.applyHpFloor(ctx));
+for (const hookName of ['createActiveEffect', 'deleteActiveEffect']) {
+  Hooks.on(hookName, (effect) => {
+    if (effect.statuses?.has('sunlit')) NpcRules.queueSunlightSync(effect.parent);
+  });
+}
+Hooks.on('updateActor', (actor, changes) => {
+  if (foundry.utils.hasProperty(changes, 'system.sunlightHarm')) NpcRules.queueSunlightSync(actor);
+});
+Hooks.on('updateCombat', (combat, changed) => {
+  if (game.user !== game.users.activeGM) return;
+  if (changed.turn === undefined && changed.round === undefined) return;
+  const actor = combat.combatant?.actor;
+  if (actor) NpcRules.onTurnStart(actor).catch((err) => console.warn('Vagabond | NPC turn-start rules failed:', err));
 });
 
 /**

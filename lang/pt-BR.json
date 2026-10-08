@@ -385,6 +385,7 @@
     },
     "MaterialWeaknesses": {
       "Adamant": "Adamant",
+      "Axe": "Machados",
       "ColdIron": "Ferro Frio",
       "Silver": "Prata"
     },
@@ -433,6 +434,7 @@
       "Grappling": "Agarrando",
       "Sickened": "Doente",
       "Suffocating": "Sufocando",
+      "Sunlit": "Sob a Luz do Sol",
       "Unconscious": "Inconsciente",
       "Vulnerable": "Vulnerável"
     },
@@ -1841,6 +1843,25 @@
           "Actions": "Ações",
           "Abilities": "Habilidades",
           "Effects": "Efeitos"
+        },
+        "Rules": {
+          "Title": "Regras Especiais",
+          "Regenerate": "Regenerar",
+          "SunlightBurn": "Luz do Sol",
+          "RelicImmunity": "Imune a Físico contra armas Relíquia",
+          "RelicNone": "Imunidade comum (sem exceção de Relíquia)",
+          "RelicAny": "Ignorada por qualquer arma Relíquia (não-Relíquias)",
+          "RelicMin": "Ignorada por armas Relíquia de (+{n}) ou mais",
+          "HpFloor": "Não cai abaixo de 1 PV",
+          "HpFloorNone": "Não",
+          "HpFloorZombie": "Zumbi (exceto Crítico, Fraqueza ou Luz do Sol)",
+          "HpFloorAlways": "Sempre (Graça)",
+          "SunlightHarm": "Dano da Luz do Sol",
+          "SunlightHarmNone": "Nenhum",
+          "SunlightHarmBurn": "Queimando (d8)",
+          "SunlightHarmBurnIncapacitated": "Queimando (d8) + Incapacitado (Andarilho Noturno)",
+          "RegenPerTurn": "Recupera PV a cada Turno",
+          "RegenStopsInSunlight": "Não sob a Luz do Sol"
         },
         "Action": {
           "Name": "Nome",

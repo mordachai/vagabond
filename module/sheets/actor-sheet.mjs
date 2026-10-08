@@ -16,6 +16,7 @@ import { CurrencyHelper } from '../helpers/currency-helper.mjs';
 import { activateHandItem } from '../helpers/hand-item-activation.mjs';
 import * as ItemSections from '../helpers/item-sections.mjs';
 import { setupDragReorder } from '../helpers/drag-reorder.mjs';
+import { NpcRules } from '../helpers/npc-rules.mjs';
 
 const { api, sheets } = foundry.applications;
 
@@ -308,6 +309,9 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       context.features = [];
       context.traits = [];
     }
+
+    // NPC statblock rules (relic-immune, HP floor, Sunlight, regen) for the locked view
+    if (context.isNPC) context.npcRulesView = NpcRules.describe(this.actor);
 
     // Add character-specific data
     if (context.isCharacter) {

@@ -5,6 +5,7 @@ import { DruidHelper } from './druid-helper.mjs';
 import { HunterHelper } from './hunter-helper.mjs';
 import { WitchHelper } from './witch-helper.mjs';
 import { DefenseHelper } from './defense-helper.mjs';
+import { NpcRules } from './npc-rules.mjs';
 
 /**
  * Universal Damage Helper
@@ -934,7 +935,7 @@ export class VagabondDamageHelper {
     if (damage > 0 && !opts.skipHexBonus) {
       result.widdershinsBonus = WitchHelper.widdershinsBonus(opts.attackerActor ?? attackingWeapon?.actor ?? null, actor, attackingWeapon);
     }
-    Hooks.callAll('vagabond.calculateFinalDamage', { actor, damage, damageType, attackingWeapon, attackerActor: opts.attackerActor ?? null, result });
+    Hooks.callAll('vagabond.calculateFinalDamage', { actor, damage, damageType, attackingWeapon, attackerActor: opts.attackerActor ?? null, isCrit: !!opts.isCrit, result });
     result.final = Math.max(0, result.final);
     return result;
   }
@@ -984,15 +985,10 @@ export class VagabondDamageHelper {
     // Start with base damage
     let finalDamage = damage;
 
-    // Check for material-based weakness (Cold Iron, Silver)
-    if (attackingWeapon && attackingWeapon.system?.metal) {
-      const weaponMetal = attackingWeapon.system.metal;
-
-      // Check if NPC is weak to this metal type
-      if (weaknesses.includes(weaponMetal)) {
-        // Material weakness: Ignore armor and immunities, damage goes through
-        return { final: finalDamage, armorReduction: 0, berserkReduction: 0, flankedBonus, path: 'material' };
-      }
+    // Weapon-based weakness (Cold Iron, Silver, Adamant, axes)
+    if (VagabondDamagePipeline.weaponTriggersWeakness(attackingWeapon, weaknesses)) {
+      // Material weakness: Ignore armor and immunities, damage goes through
+      return { final: finalDamage, armorReduction: 0, berserkReduction: 0, flankedBonus, path: 'material' };
     }
 
     // RAW: Weak - Ignores Armor and Immune, and deals an extra damage die
@@ -1003,7 +999,8 @@ export class VagabondDamageHelper {
     }
 
     // RAW: Immune - Unharmed by the damage type (Beast Mode attacks ignore non-Relic Immune)
-    if (immunities.includes(normalizedType) && !DruidHelper.ignoresNonRelicImmune(opts.attackerActor, normalizedType)) {
+    if (immunities.includes(normalizedType) && !DruidHelper.ignoresNonRelicImmune(opts.attackerActor, normalizedType)
+      && !NpcRules.relicBypassesImmunity(actor, normalizedType, attackingWeapon)) {
       return { final: 0, armorReduction: 0, berserkReduction: 0, flankedBonus: 0, path: 'immune' };
     }
 
@@ -1533,7 +1530,7 @@ ${npcOnly ? '' : `
       const rolledDiceCount = rollTermsData.terms.reduce((n, t) =>
         n + (t.type === 'Die' ? (t.results ?? []).filter(r => r.active !== false).length : 0), 0);
       const damageBreakdown = this.calculateFinalDamageDetailed(
-        targetActor, damageAfterSave, damageType, sourceItem, { rolledDiceCount, attackerActor: sourceActor }
+        targetActor, damageAfterSave, damageType, sourceItem, { rolledDiceCount, attackerActor: sourceActor, isCrit: attackWasCrit }
       );
       const baseAfterFinal = damageBreakdown.final;
       const armorReduction = damageBreakdown.armorReduction;
@@ -1793,7 +1790,7 @@ ${npcOnly ? '' : `
       const shieldReduction = shieldRoll?.total ?? 0;
 
       const breakdown = this.calculateFinalDamageDetailed(
-        targetActor, Math.max(0, damageAmount - shieldReduction), damageType, sourceItem, { attackerActor: sourceActor }
+        targetActor, Math.max(0, damageAmount - shieldReduction), damageType, sourceItem, { attackerActor: sourceActor, isCrit: attackWasCrit }
       );
       let finalDamage = breakdown.final;
       if (!weaknessPreRolled && this._isWeakTo(targetActor, damageType, sourceItem, sourceActor)) {
@@ -2603,7 +2600,7 @@ ${npcOnly ? '' : `
       const effectiveDamage = damageAmount;
 
       // Calculate final damage (armor/immune/weak)
-      const directBreakdown = this.calculateFinalDamageDetailed(targetActor, effectiveDamage, damageType, sourceItem, { attackerActor: sourceActor });
+      const directBreakdown = this.calculateFinalDamageDetailed(targetActor, effectiveDamage, damageType, sourceItem, { attackerActor: sourceActor, isCrit: button.dataset.attackWasCrit === 'true' });
       const baseAfterFinalDirect = directBreakdown.final;
       // RAW: Weak — bypass Armor/Immune + deal an extra damage die
       let finalDamage = baseAfterFinalDirect;

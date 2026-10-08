@@ -339,6 +339,30 @@ export default class VagabondNPC extends VagabondActorBase {
       { required: true, initial: [] }
     );
 
+    // --- Statblock rules the book prints as ability text (module/helpers/npc-rules.mjs) ---
+    // Physical-family Immune "from non-Relics": null = plain Immune (nothing bypasses it);
+    // N >= 0 = a Relic weapon with a (+N) Bonus of at least N ignores the Immunity
+    // (0 = any Relic weapon: "Physical from non-Relics"; 2 = "... and Relic Weapons weaker than (+2)").
+    schema.relicImmunityMin = new fields.NumberField({
+      required: false, nullable: true, integer: true, initial: null, min: 0, max: 5,
+    });
+
+    // "Can't be reduced below 1 HP": 'zombie' unless hit by a Crit, damage it is Weak to, or it stands in
+    // Sunlight; 'always' has no exception (Angel Grace).
+    schema.hpFloor = new fields.StringField({
+      required: true, nullable: false, initial: 'none', choices: ['none', 'zombie', 'always'],
+    });
+
+    // Sunlight harm at the start of its Turn while it has the Sunlight status:
+    // 'burn' = Burning (d8); 'burnIncapacitated' = Burning (d8) and Incapacitated (Nightwalker).
+    schema.sunlightHarm = new fields.StringField({
+      required: true, nullable: false, initial: 'none', choices: ['none', 'burn', 'burnIncapacitated'],
+    });
+
+    // HP regained at the start of its Turn (number or dice formula, blank = none); optionally not in Sunlight.
+    schema.regenPerTurn = new fields.StringField({ required: false, nullable: false, blank: true, initial: '' });
+    schema.regenStopsInSunlight = new fields.BooleanField({ required: false, initial: false });
+
     // Favor/Hinder system - toggle for roll modifiers (Vulnerable/Flanked/Confused etc.
     // set this via AE override, same as character; without it those statuses were
     // silently inert on NPCs — no hinder on the NPC's own attacks/saves)

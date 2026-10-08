@@ -3,6 +3,7 @@ import { consumeUsedEffects } from './use-effects.mjs';
 import { DruidHelper } from './druid-helper.mjs';
 import { HunterHelper } from './hunter-helper.mjs';
 import { WitchHelper } from './witch-helper.mjs';
+import { isAxe } from './weapon-rules.mjs';
 
 /**
  * Unified Damage Pipeline
@@ -664,8 +665,21 @@ export class VagabondDamagePipeline {
     if (normalizedType === '-') return false;
     if (HunterHelper.isMarkWeak(attacker, targetActor) || WitchHelper.isHexWeak(attacker, targetActor)) return true;
     const weaknesses = targetActor.system.weaknesses || [];
-    if (attackingWeapon?.system?.metal && weaknesses.includes(attackingWeapon.system.metal)) return true;
+    if (this.weaponTriggersWeakness(attackingWeapon, weaknesses)) return true;
     return weaknesses.includes(normalizedType);
+  }
+
+  /**
+   * Weapon-based weaknesses: the weapon's material (Cold Iron, Silver, Adamant) or the weapon itself
+   * ("damage from axes"). Ignores Armor and Immune like any Weakness.
+   * @param {Item|null} weapon
+   * @param {string[]} weaknesses
+   */
+  static weaponTriggersWeakness(weapon, weaknesses) {
+    if (!weapon || !weaknesses?.length) return false;
+    const metal = weapon.system?.metal;
+    if (metal && weaknesses.includes(metal)) return true;
+    return weaknesses.includes('axe') && isAxe(weapon);
   }
 
   /**

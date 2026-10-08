@@ -385,6 +385,7 @@
     },
     "MaterialWeaknesses": {
       "Adamant": "Adamant",
+      "Axe": "Axes",
       "ColdIron": "Cold Iron",
       "Silver": "Silver"
     },
@@ -433,6 +434,7 @@
       "Grappling": "Grappling",
       "Sickened": "Sickened",
       "Suffocating": "Suffocating",
+      "Sunlit": "In Sunlight",
       "Unconscious": "Unconscious",
       "Vulnerable": "Vulnerable"
     },
@@ -1827,6 +1829,25 @@
           "Actions": "Actions",
           "Abilities": "Abilities",
           "Effects": "Effects"
+        },
+        "Rules": {
+          "Title": "Special Rules",
+          "Regenerate": "Regenerate",
+          "SunlightBurn": "Sunlight",
+          "RelicImmunity": "Physical Immune vs Relic weapons",
+          "RelicNone": "Plain Immune (no Relic bypass)",
+          "RelicAny": "Ignored by any Relic weapon (non-Relics)",
+          "RelicMin": "Ignored by Relic weapons of (+{n}) or more",
+          "HpFloor": "Can't drop below 1 HP",
+          "HpFloorNone": "No",
+          "HpFloorZombie": "Zombie (unless Crit, Weak or Sunlight)",
+          "HpFloorAlways": "Always (Grace)",
+          "SunlightHarm": "Sunlight harm",
+          "SunlightHarmNone": "None",
+          "SunlightHarmBurn": "Burning (d8)",
+          "SunlightHarmBurnIncapacitated": "Burning (d8) + Incapacitated (Nightwalker)",
+          "RegenPerTurn": "Regain HP each Turn",
+          "RegenStopsInSunlight": "Not in Sunlight"
         },
         "Action": {
           "Name": "Name",
