@@ -3,13 +3,13 @@
   "type": "class",
   "img": "icons/equipment/hand/gauntlet-simple-leather-brown-gold.webp",
   "system": {
-    "description": "<p><strong>I didn’t hear no bell.</strong></p><p><em>—Rocky Balboa, Rocky V</em></p><p>Pugilists are brawlers of swagger. While a monk may dedicate themself to a single focused blow, a pugilist will break their fingers and keep punching with the bloody stump.</p><h3>Iconic Pugilists</h3><ul><li><strong>Carl</strong>, <em>Dungeon Crawler Carl</em></li><li><strong>Rocky Balboa</strong>, <em>Rocky</em></li><li><strong>Hellboy</strong>, <em>Hellboy</em></li><li><strong>Stiffener Medick</strong>, <em>Redwall</em></li></ul><h3>Playing Pugilist</h3><p>Pugilists are frontline bruisers. Stay in the frontline, even while at low HP.</p><p><strong>Action:</strong> Attack (Brawl)<br /><strong>Move:</strong> Frontline<br /><strong>Starting Pack:</strong> Brawler or Monk<br /><strong>Key Stat:</strong> Might<br /><strong>Complexity:</strong> ★★☆☆☆<br /><strong>Training:</strong> Brawl, Influence</p><h3>Class Features</h3><table class=\"NormalTable\"><tbody><tr><td><p><strong>Level</strong></p></td><td><p><strong>Features</strong></p></td></tr><tr><td><p>1st</p></td><td><p>Fisticuffs, Rope-a-Dope</p></td></tr><tr><td><p>2nd</p></td><td><p>Haymaker (10+)</p></td></tr><tr><td><p>3rd</p></td><td><p>Perk</p></td></tr><tr><td><p>4th</p></td><td><p>Moxie (Cd4)</p></td></tr><tr><td><p>5th</p></td><td><p>Perk</p></td></tr><tr><td><p>6th</p></td><td><p>Title Holder (d6)</p></td></tr><tr><td><p>7th</p></td><td><p>Perk</p></td></tr><tr><td><p>8th</p></td><td><p>Haymaker (9+)</p></td></tr><tr><td><p>9th</p></td><td><p>Perk</p></td></tr><tr><td><p>10th</p></td><td><p>Moxie (Cd6), Title Holder (d8)</p></td></tr></tbody></table>",
+    "description": "<p><strong>I didn’t hear no bell.</strong></p><p><em>—Rocky Balboa, Rocky V</em></p><p>Pugilists are brawlers of swagger. While a monk may dedicate themself to a single focused blow, a pugilist will break their fingers and keep punching with the bloody stump.</p><h3>Iconic Pugilists</h3><ul><li><strong>Carl</strong>, <em>Dungeon Crawler Carl</em></li><li><strong>Rocky Balboa</strong>, <em>Rocky</em></li><li><strong>Hellboy</strong>, <em>Hellboy</em></li><li><strong>Stiffener Medick</strong>, <em>Redwall</em></li></ul><h3>Playing Pugilist</h3><p>Pugilists are frontline bruisers. Stay in the frontline, even while at low HP.</p><p><strong>Action:</strong> Attack (Brawl)<br /><strong>Move:</strong> Frontline<br /><strong>Starting Pack:</strong> Brawler or Monk<br /><strong>Key Stat:</strong> Might<br /><strong>Complexity:</strong> ★★☆☆☆<br /><strong>Training:</strong> Brawl, Influence</p><h3>Class Features</h3><table class=\"NormalTable\"><tbody><tr><td><p><strong>Level</strong></p></td><td><p><strong>Features</strong></p></td></tr><tr><td><p>1st</p></td><td><p>Fisticuffs, Rope-a-Dope</p></td></tr><tr><td><p>2nd</p></td><td><p>Haymaker (15+)</p></td></tr><tr><td><p>3rd</p></td><td><p>Perk</p></td></tr><tr><td><p>4th</p></td><td><p>Moxie (Cd4)</p></td></tr><tr><td><p>5th</p></td><td><p>Perk</p></td></tr><tr><td><p>6th</p></td><td><p>Title Holder (d6), Haymaker (14+)</p></td></tr><tr><td><p>7th</p></td><td><p>Perk</p></td></tr><tr><td><p>8th</p></td><td><p>Moxie (Cd6)</p></td></tr><tr><td><p>9th</p></td><td><p>Perk</p></td></tr><tr><td><p>10th</p></td><td><p>Haymaker (13+), Title Holder (d8)</p></td></tr></tbody></table>",
     "isSpellcaster": false,
     "levelFeatures": [
       {
         "level": 1,
         "name": "Fisticuffs",
-        "description": "<p>You have the Dusted Knuckle Perk (p. 68), and your Equipped Brawl Weapons have the Defense and Vicious properties.</p><p>Further, when you roll any damage dice for a Brawl Weapon, you can either:</p><ul><li><p>Increase your subsequent Brawl damage dice one size until the start of your Turn.</p></li><li><p>Grapple or Shove them if you viably could.</p></li></ul>",
+        "description": "<p>You have the Dusted Knuckle Perk (p. 68), and your Equipped Brawl Weapons have the Vicious property.</p><p>Further, when a damage die of your Brawl Weapon resolves, you can either:</p><ul><li><p>Increase your subsequent Brawl damage dice one size until the start of your Turn.</p></li><li><p>Grapple or Shove them if you viably could.</p></li></ul>",
         "statBonusPoints": 0,
         "extraTraining": 0,
         "requiredSpells": [],
@@ -23,7 +23,7 @@
       {
         "level": 1,
         "name": "Rope-a-Dope",
-        "description": "<p>If you reduce damage from a Close Enemy’s attack to 0 with the Defense property of a Brawl Weapon, you can immediately make one attack or Move 5’ without using Speed.</p>",
+        "description": "<p>If you don’t take damage from a Close Enemy’s attack, you can immediately make one attack or Move 5’ without using Speed.</p>",
         "statBonusPoints": 0,
         "extraTraining": 0,
         "requiredSpells": [],
@@ -34,8 +34,8 @@
       },
       {
         "level": 2,
-        "name": "Haymaker (10+)",
-        "description": "<p>If the result of your Brawl Check for an attack exceeds your Difficulty by 10, the Target is Dazed until the start of your Turn. The number needed to exceed is reduced by 1 every 6 Levels hereafter.</p>",
+        "name": "Haymaker (15+)",
+        "description": "<p>If the result of your Brawl Check for an attack exceeds your Difficulty by 15, the Target is Dazed until your next Turn. The number needed to exceed is reduced by 1 every 4 Levels hereafter.</p>",
         "statBonusPoints": 1,
         "extraTraining": 0,
         "requiredSpells": [],
@@ -59,7 +59,7 @@
       {
         "level": 4,
         "name": "Moxie (Cd4)",
-        "description": "<p>You have Favor on Saves against being Dazed, Frightened, Grappled, or Restrained.</p><p>Further, being at 0 HP doesn’t kill you for Cd4 Rounds. Each time you take damage during this time, also roll this countdown die. At 10th Level, this starts at Cd6.</p>",
+        "description": "<p>You have Favor on Saves against being Dazed, Frightened, Grappled, or Restrained.</p><p>Further, being at 0 HP doesn’t kill you for Cd4 Rounds. Each time you take damage during this time, also roll this countdown die. At 8th Level, this starts at Cd6.</p>",
         "statBonusPoints": 1,
         "extraTraining": 0,
         "requiredSpells": [],
@@ -83,8 +83,20 @@
       {
         "level": 6,
         "name": "Title Holder (d6)",
-        "description": "<p>You use a d6 for the damage dice of your Brawl Weapons, and they Explode on a roll of 1 or 2. At 10th Level, this increases to a d8.</p>",
+        "description": "<p>You use a d6 for the damage dice of your Brawl Weapons, and they can Explode on a roll of their two highest values. At 10th Level, this increases to a d8.</p>",
         "statBonusPoints": 1,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": []
+      },
+      {
+        "level": 6,
+        "name": "Haymaker (14+)",
+        "description": "<p>If the result of your Brawl Check for an attack exceeds your Difficulty by 15, the Target is Dazed until your next Turn. The number needed to exceed is reduced by 1 every 4 Levels hereafter.</p>",
+        "statBonusPoints": 0,
         "extraTraining": 0,
         "requiredSpells": [],
         "allowedPerks": [],
@@ -106,8 +118,8 @@
       },
       {
         "level": 8,
-        "name": "Haymaker (9+)",
-        "description": "<p>If the result of your Brawl Check for an attack exceeds your Difficulty by 10, the Target is Dazed until the start of your Turn. The number needed to exceed is reduced by 1 every 6 Levels hereafter.</p>",
+        "name": "Moxie (Cd6)",
+        "description": "<p>You have Favor on Saves against being Dazed, Frightened, Grappled, or Restrained.</p><p>Further, being at 0 HP doesn’t kill you for Cd4 Rounds. Each time you take damage during this time, also roll this countdown die. At 8th Level, this starts at Cd6.</p>",
         "statBonusPoints": 1,
         "extraTraining": 0,
         "requiredSpells": [],
@@ -130,8 +142,8 @@
       },
       {
         "level": 10,
-        "name": "Moxie (Cd6)",
-        "description": "<p>You have Favor on Saves against being Dazed, Frightened, Grappled, or Restrained.</p><p>Further, being at 0 HP doesn’t kill you for Cd4 Rounds. Each time you take damage during this time, also roll this countdown die. At 10th Level, this starts at Cd6.</p>",
+        "name": "Haymaker (13+)",
+        "description": "<p>If the result of your Brawl Check for an attack exceeds your Difficulty by 15, the Target is Dazed until your next Turn. The number needed to exceed is reduced by 1 every 4 Levels hereafter.</p>",
         "statBonusPoints": 1,
         "extraTraining": 0,
         "requiredSpells": [],
@@ -143,7 +155,7 @@
       {
         "level": 10,
         "name": "Title Holder (d8)",
-        "description": "<p>You use a d6 for the damage dice of your Brawl Weapons, and they Explode on a roll of 1 or 2. At 10th Level, this increases to a d8.</p>",
+        "description": "<p>You use a d6 for the damage dice of your Brawl Weapons, and they can Explode on a roll of their two highest values. At 10th Level, this increases to a d8.</p>",
         "statBonusPoints": 0,
         "extraTraining": 0,
         "requiredSpells": [],
@@ -232,7 +244,7 @@
         "changes": [
           {
             "key": "system.haymakerMargin",
-            "value": "10 - floor((@lvl - 2) / 6)",
+            "value": "15 - floor((@lvl - 2) / 4)",
             "priority": null,
             "type": "add"
           }
@@ -245,7 +257,7 @@
         "expiry": null,
         "expired": false
       },
-      "description": "A Brawl attack that beats the Difficulty by enough Dazes its Target until the start of your Turn.",
+      "description": "A Brawl attack that beats the Difficulty by enough Dazes its Target until your next Turn.",
       "tint": "#ffffff",
       "transfer": true,
       "statuses": [],
@@ -394,7 +406,7 @@
       "system": {
         "changes": [
           {
-            "key": "system.weaponLowExplodeBySkill",
+            "key": "system.weaponHighExplodeBySkill",
             "value": "brawl: 2",
             "priority": null,
             "type": "add"

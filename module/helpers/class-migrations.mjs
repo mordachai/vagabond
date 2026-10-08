@@ -361,7 +361,9 @@ export async function migrateWizardClass() {
     classId: 'U3rAxH8vn8tzDblW',
     className: 'Wizard',
     probeFeature: 'Manifold Mind (+1)',
-    isOld: (item) => item.system.levelFeatures?.some(lf => lf.name === 'Extracurricular'),
+    // Extracurricular is back in Alpha 3, so the old build is told apart by lacking Manifold Mind
+    isOld: (item) => item.system.levelFeatures?.some(lf => lf.name === 'Extracurricular')
+      && !item.system.levelFeatures.some(lf => lf.name === 'Manifold Mind (+1)'),
     // caster tables / Mana come from the book revision too
     extraUpdate: (item, s) => ({
       'system.manaSkill': s.manaSkill,

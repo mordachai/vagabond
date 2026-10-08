@@ -466,8 +466,9 @@ export class CountdownDiceOverlay {
     const flags = dice.flags.vagabond.countdownDice;
     const diceType = flags.diceType;
 
-    // Create roll
-    const roll = new Roll(`1${diceType}`);
+    // Create roll ("Cd4!": an Exploding die rolls again on its highest face and adds; a 1 only ever
+    // comes from the first die, so a total of 1 is still the shrink result)
+    const roll = new Roll(`1${diceType}${flags.exploding ? '!' : ''}`);
     await roll.evaluate();
 
     const rollResult = roll.total;

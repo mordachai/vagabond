@@ -25,15 +25,16 @@ const TRIGGER_FIELDS = {
   huntersMarkTrigger: false,
   haymakerMargin: 0,
   sneakAttackTrigger: false,
+  twinnedSpellTrigger: false,
   aggressorAuto: 0,
 };
 
 /**
  * Auto triggers that can only work by counting Turns. Outside a started Combat they would build
- * up and never end, so they stay manual there even in 'auto' mode. Empty today: Deadeye / Rage /
- * Momentum also end through roll-expiry.mjs, which needs no Combat.
+ * up and never end, so they stay manual there even in 'auto' mode. Twinned Spell ("twice on a turn")
+ * is the only one; Deadeye / Rage / Momentum also end through roll-expiry.mjs, which needs no Combat.
  */
-const COMBAT_ONLY_FIELDS = [];
+const COMBAT_ONLY_FIELDS = ['twinnedSpellTrigger'];
 
 export class AutomationMode {
 

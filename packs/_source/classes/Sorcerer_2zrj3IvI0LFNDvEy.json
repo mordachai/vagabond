@@ -3,7 +3,7 @@
   "type": "class",
   "img": "icons/magic/fire/flame-burning-hand-white.webp",
   "system": {
-    "description": "<p><strong>She said sorcery is a sword without a hilt. There is no safe way to grasp it.</strong></p><p><em>—Melisandre, A Dance with Dragons</em></p><p>Arcanists given a precious gift of magical prowess, sorcerers can tap into their own inner reserves to provide more Mana for casting.</p><h3>Iconic Sorcerers</h3><ul><li><strong>Yennefer</strong>, <em>The Witcher</em></li><li><strong>Elsa</strong>, <em>Frozen</em></li><li><strong>Ganondorf</strong>, <em>The Legend of Zelda</em></li><li><strong>Storm</strong>, <em>X-Men</em></li></ul><h3>Playing Sorcerer</h3><p>The sorcerer is a squishy blaster focused on Casting Spells for instant burst damage. You should stay in safety to Cast.</p><p><strong>Action:</strong> Cast<br /><strong>Move:</strong> Backline<br /><strong>Starting Pack:</strong> Mage or Occultist<br /><strong>Key Stat:</strong> Presence, Might<br /><strong>Complexity:</strong> ★★★☆☆<br /><strong>Training:</strong> Arcana, Influence</p><h3>Class Features</h3><table class=\"NormalTable\"><tbody><tr><td><p><strong>Level</strong></p></td><td><p><strong>Features</strong></p></td><td><p><strong>Spells</strong></p></td><td><p><strong>Mana</strong></p></td><td><p><strong>Cast Max</strong></p></td></tr><tr><td><p>1st</p></td><td><p>Glamour, Tap</p></td><td><p>4</p></td><td><p>4</p></td><td><p>3</p></td></tr><tr><td><p>2nd</p></td><td><p>Quickening (0 Mana)</p></td><td><p>4</p></td><td><p>8</p></td><td><p>4</p></td></tr><tr><td><p>3rd</p></td><td><p>Perk</p></td><td><p>5</p></td><td><p>12</p></td><td><p>5</p></td></tr><tr><td><p>4th</p></td><td><p>Spell-Slinger (-1)</p></td><td><p>5</p></td><td><p>16</p></td><td><p>6</p></td></tr><tr><td><p>5th</p></td><td><p>Perk</p></td><td><p>6</p></td><td><p>20</p></td><td><p>7</p></td></tr><tr><td><p>6th</p></td><td><p>Quickening (1 Mana)</p></td><td><p>6</p></td><td><p>24</p></td><td><p>8</p></td></tr><tr><td><p>7th</p></td><td><p>Perk</p></td><td><p>7</p></td><td><p>28</p></td><td><p>9</p></td></tr><tr><td><p>8th</p></td><td><p>Spell-Slinger (-2)</p></td><td><p>7</p></td><td><p>32</p></td><td><p>10</p></td></tr><tr><td><p>9th</p></td><td><p>Perk</p></td><td><p>8</p></td><td><p>36</p></td><td><p>11</p></td></tr><tr><td><p>10th</p></td><td><p>Quickening (2 Mana)</p></td><td><p>8</p></td><td><p>40</p></td><td><p>12</p></td></tr></tbody></table>",
+    "description": "<p><strong>She said sorcery is a sword without a hilt. There is no safe way to grasp it.</strong></p><p><em>—Melisandre, A Dance with Dragons</em></p><p>Arcanists given a precious gift of magical prowess, sorcerers can tap into their own inner reserves to provide more Mana for casting.</p><h3>Iconic Sorcerers</h3><ul><li><strong>Yennefer</strong>, <em>The Witcher</em></li><li><strong>Elsa</strong>, <em>Frozen</em></li><li><strong>Ganondorf</strong>, <em>The Legend of Zelda</em></li><li><strong>Storm</strong>, <em>X-Men</em></li></ul><h3>Playing Sorcerer</h3><p>The sorcerer is a squishy blaster focused on Casting Spells for instant burst damage. You should stay in safety to Cast.</p><p><strong>Action:</strong> Cast<br /><strong>Move:</strong> Backline<br /><strong>Starting Pack:</strong> Mage or Occultist<br /><strong>Key Stat:</strong> Presence, Might<br /><strong>Complexity:</strong> ★★★☆☆<br /><strong>Training:</strong> Arcana, Influence</p><h3>Class Features</h3><table class=\"NormalTable\"><tbody><tr><td><p><strong>Level</strong></p></td><td><p><strong>Features</strong></p></td><td><p><strong>Spells</strong></p></td><td><p><strong>Mana</strong></p></td><td><p><strong>Cast Max</strong></p></td></tr><tr><td><p>1st</p></td><td><p>Glamour, Tap</p></td><td><p>4</p></td><td><p>4</p></td><td><p>3</p></td></tr><tr><td><p>2nd</p></td><td><p>Quickening (0 Mana)</p></td><td><p>4</p></td><td><p>8</p></td><td><p>4</p></td></tr><tr><td><p>3rd</p></td><td><p>Perk</p></td><td><p>5</p></td><td><p>12</p></td><td><p>5</p></td></tr><tr><td><p>4th</p></td><td><p>Spell-Slinger (-1)</p></td><td><p>5</p></td><td><p>16</p></td><td><p>6</p></td></tr><tr><td><p>5th</p></td><td><p>Perk</p></td><td><p>6</p></td><td><p>20</p></td><td><p>7</p></td></tr><tr><td><p>6th</p></td><td><p>Quickening (1 Mana), Twinned Spell</p></td><td><p>6</p></td><td><p>24</p></td><td><p>8</p></td></tr><tr><td><p>7th</p></td><td><p>Perk</p></td><td><p>7</p></td><td><p>28</p></td><td><p>9</p></td></tr><tr><td><p>8th</p></td><td><p>Spell-Slinger (-2)</p></td><td><p>7</p></td><td><p>32</p></td><td><p>10</p></td></tr><tr><td><p>9th</p></td><td><p>Perk</p></td><td><p>8</p></td><td><p>36</p></td><td><p>11</p></td></tr><tr><td><p>10th</p></td><td><p>Quickening (2 Mana), Overpowered</p></td><td><p>8</p></td><td><p>40</p></td><td><p>12</p></td></tr></tbody></table>",
     "isSpellcaster": true,
     "levelFeatures": [
       {
@@ -21,7 +21,7 @@
       {
         "level": 1,
         "name": "Tap",
-        "description": "<p>You gain the Vehement Magic Perk (p. 73) and you can spend your HP as Mana, which also reduces your Max HP by the same amount until you Rest. If you die from this reduction, the Cast still resolves and your body is vaporized.</p>",
+        "description": "<p>You gain the Vehement Magic Perk (p. 73), and you can spend your HP as Mana, which also reduces your Max HP by the same amount until you Rest. If you die from this reduction, the Cast still resolves and your body is vaporized.</p>",
         "statBonusPoints": 0,
         "extraTraining": 0,
         "requiredSpells": [],
@@ -35,7 +35,7 @@
       {
         "level": 2,
         "name": "Quickening (0 Mana)",
-        "description": "<p>You can skip your Move to Cast a Spell. You can spend 0 Mana to upcast this Spell, but the amount of Mana you can spend to upcast it increases by 1 every 4 Levels hereafter.</p>",
+        "description": "<p>You can skip your Move to Cast a Spell. This Casting has a Cast Max of 0. The Cast Max increases by 1 every 4 Levels hereafter.</p>",
         "statBonusPoints": 1,
         "extraTraining": 0,
         "requiredSpells": [],
@@ -83,8 +83,20 @@
       {
         "level": 6,
         "name": "Quickening (1 Mana)",
-        "description": "<p>You can skip your Move to Cast a Spell. You can spend 0 Mana to upcast this Spell, but the amount of Mana you can spend to upcast it increases by 1 every 4 Levels hereafter.</p>",
+        "description": "<p>You can skip your Move to Cast a Spell. This Casting has a Cast Max of 0. The Cast Max increases by 1 every 4 Levels hereafter.</p>",
         "statBonusPoints": 1,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": []
+      },
+      {
+        "level": 6,
+        "name": "Twinned Spell",
+        "description": "<p>If you Cast the same Spell twice on a turn, the second Cast Check is Favored.</p>",
+        "statBonusPoints": 0,
         "extraTraining": 0,
         "requiredSpells": [],
         "allowedPerks": [],
@@ -131,7 +143,7 @@
       {
         "level": 10,
         "name": "Quickening (2 Mana)",
-        "description": "<p>You can skip your Move to Cast a Spell. You can spend 0 Mana to upcast this Spell, but the amount of Mana you can spend to upcast it increases by 1 every 4 Levels hereafter.</p>",
+        "description": "<p>You can skip your Move to Cast a Spell. This Casting has a Cast Max of 0. The Cast Max increases by 1 every 4 Levels hereafter.</p>",
         "statBonusPoints": 1,
         "extraTraining": 0,
         "requiredSpells": [],
@@ -139,6 +151,26 @@
         "perkAmount": 0,
         "spellAmount": 0,
         "skillChoices": []
+      },
+      {
+        "level": 10,
+        "name": "Overpowered",
+        "description": "<p>When you Cast, you can choose to gain 1 Fatigue. If you do, you regain Cd4! HP and Max HP at the start of your Turns and have a bonus to your Cast Max each Turn equal to the roll. If using an Ability would kill you during this countdown, including Fatigue gained from this Ability, you do not die until the countdown ends, after which your body is vaporized.</p>",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": [],
+        "action": {
+          "enabled": true,
+          "label": "Overpowered",
+          "icon": "bolt",
+          "uuid": "",
+          "command": "system:sorcerer.overpowered",
+          "runAsGM": false
+        }
       }
     ],
     "manaSkill": "influence",
@@ -351,6 +383,57 @@
       "showIcon": 1,
       "folder": null,
       "_key": "!items.effects!2zrj3IvI0LFNDvEy.UwnARSNy3d2u9odv"
+    },
+    {
+      "name": "Twinned Spell: Auto",
+      "origin": "Compendium.vagabond.classes.Item.2zrj3IvI0LFNDvEy",
+      "img": "icons/svg/aura.svg",
+      "_id": "sOrCtWiNnEdSp001",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.twinnedSpellTrigger",
+            "value": "true",
+            "priority": null,
+            "type": "override"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "Inside a started Combat, casting a Spell you already cast earlier this Turn makes its Cast Check Favored.",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent",
+          "minLevel": 6,
+          "switchable": true
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.44.0",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "createdTime": 1791400000000,
+        "modifiedTime": 1791400000000,
+        "lastModifiedBy": null
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!2zrj3IvI0LFNDvEy.sOrCtWiNnEdSp001"
     }
   ],
   "folder": null,

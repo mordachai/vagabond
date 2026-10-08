@@ -1582,19 +1582,20 @@ export class VagabondChatCard {
     let statusMessage;
     let statusClass;
     let stateMessage;
+    const bang = flags.exploding ? '!' : ''; // "Cd4!" Exploding die
 
     if (status === 'continues') {
       statusMessage = game.i18n.localize('VAGABOND.CountdownDice.Chat.Continues');
       statusClass = 'continues';
-      stateMessage = `${currentDiceType} remains`;
+      stateMessage = `${currentDiceType}${bang} remains`;
     } else if (status === 'reduced') {
       statusMessage = game.i18n.localize('VAGABOND.CountdownDice.Chat.Reduced');
       statusClass = 'reduced';
-      stateMessage = `${currentDiceType} → ${newDiceType}`;
+      stateMessage = `${currentDiceType}${bang} → ${newDiceType}${bang}`;
     } else if (status === 'ended') {
       statusMessage = game.i18n.localize('VAGABOND.CountdownDice.Chat.Ended');
       statusClass = 'ended';
-      stateMessage = `${currentDiceType} countdown complete`;
+      stateMessage = `${currentDiceType}${bang} countdown complete`;
     }
 
     // Build description: countdown state + status + optional tick target note
@@ -1624,7 +1625,7 @@ export class VagabondChatCard {
 
     // Build tags for dice type and result
     const tags = [
-      { label: currentDiceType, cssClass: 'tag-dice-type' },
+      { label: `${currentDiceType}${bang}`, cssClass: 'tag-dice-type' },
       { label: `Result: ${rollResult}`, cssClass: 'tag-result' }
     ];
 
@@ -1959,6 +1960,7 @@ export class VagabondChatCard {
    * @param {'damage'|'heal'|'recover'|'recharge'} [opts.type='damage']
    * @param {number} [opts.rawAmount]        Raw amount before armor reduction (damage only)
    * @param {number} [opts.armorReduction=0] Amount blocked by armor (damage only)
+   * @param {number} [opts.overhealExcess=0] Healing beyond Max HP (Luminary Overheal), shown as a note (heal only)
    * @param {number}  opts.finalAmount       Final effective amount applied
    * @param {string}  [opts.damageType]      Damage type key e.g. 'fire', 'physical'
    * @param {number}  opts.previousValue     Resource value before application
@@ -1975,6 +1977,7 @@ export class VagabondChatCard {
     shieldRoll = null,
     flankedBonus = 0,
     healPenalty = null,
+    overhealExcess = 0,
     finalAmount = 0,
     damageType = null,
     previousValue = 0,
@@ -2055,6 +2058,7 @@ export class VagabondChatCard {
           <span class="damage-final"><i class="fa-solid fa-heart"></i> +${effective}</span>
         </div>
         <div class="damage-application-note">HP restored —<strong> ${previousValue}</strong> →<strong> ${newValue}</strong></div>
+        ${overhealExcess > 0 ? `<div class="damage-application-note overheal-excess"><strong>${game.i18n.localize('VAGABOND.Chat.OverhealTitle')}:</strong> ${game.i18n.format('VAGABOND.Chat.OverhealExcess', { excess: overhealExcess })}</div>` : ''}
       </div>`;
 
     } else if (type === 'recover') {

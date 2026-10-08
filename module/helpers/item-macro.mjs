@@ -100,6 +100,13 @@ function _resolveTargets(d) {
  * @returns {Promise<*>}
  */
 export async function executeItemMacro(d) {
+  const result = await _executeItemMacro(d);
+  // Lets features react to a Spell/item macro button being used (Wizard Archwizard clean-up)
+  Hooks.callAll('vagabond.itemMacroExecuted', { itemUuid: d.itemUuid ?? null, slot: d.slot ?? null });
+  return result;
+}
+
+async function _executeItemMacro(d) {
   const { cfg, item, actor } = await _resolveSlot(d);
   if (!cfg) {
     ui.notifications.warn('Macro configuration not found.');
@@ -218,6 +225,14 @@ export function buildMacroButtonHTML({ cfg, slot, actorUuid, itemUuid, itemName,
     cmdB64 ? `data-command-b64="${cmdB64}"` : '',
     scopeB64 ? `data-extra-scope-b64="${scopeB64}"` : '',
   ].filter(Boolean).join(' ');
+  // Tile variant (`cfg.img`): picture on top, name below (Grit status mosaic)
+  if (cfg.img) {
+    const src = foundry.utils.escapeHTML?.(cfg.img) ?? cfg.img;
+    return `<button class="vagabond-macro-button" ${attrs} style="display:flex;flex-direction:column;align-items:center;gap:3px;height:auto;line-height:normal;padding:4px;min-width:0;">
+            <img src="${src}" width="50" height="50" style="width:50px;height:50px;border:0;object-fit:contain;">
+            <span style="max-width:100%;overflow:hidden;text-overflow:ellipsis;font-size:0.85em;">${safe}</span>
+          </button>`;
+  }
   return `<button class="vagabond-macro-button" ${attrs}>
             <i class="${faIconClasses(cfg.icon)}"></i> ${safe}${cfg.runAsGM ? ' <i class="fa-solid fa-user-shield vagabond-macro-gm" title="Runs as GM"></i>' : ''}
           </button>`;

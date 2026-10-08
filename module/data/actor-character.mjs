@@ -482,14 +482,14 @@ export default class VagabondCharacter extends VagabondActorBase {
     );
     // Weapon rules scoped to the skill the attack was rolled with (Pugilist Title Holder), "<skill>: <formula>":
     //   weaponDieBySkill        — damage dice of that skill's weapons use at least this die size (6 = d6)
-    //   weaponLowExplodeBySkill — those dice also Explode on a 1 up to this face (2 = on 1 or 2)
+    //   weaponHighExplodeBySkill — those dice Explode on their N highest faces (2 = the two highest values)
     schema.weaponDieBySkill = new fields.ArrayField(
       new fields.StringField({ blank: true }),
       { initial: [], label: "Weapon Die Size (by skill)" }
     );
-    schema.weaponLowExplodeBySkill = new fields.ArrayField(
+    schema.weaponHighExplodeBySkill = new fields.ArrayField(
       new fields.StringField({ blank: true }),
-      { initial: [], label: "Weapon Dice Explode On Low Faces (by skill)" }
+      { initial: [], label: "Weapon Dice Explode On Highest Faces (by skill)" }
     );
     // Pugilist Haymaker: a Brawl attack that beats the Difficulty by this much (formula, 0 = off) Dazes the Target.
     // Cleared by the world Class Automation mode (TRIGGER_FIELDS).
@@ -559,6 +559,43 @@ export default class VagabondCharacter extends VagabondActorBase {
       new fields.StringField({ blank: true }),
       { initial: [], label: "Extra Damage To The Mark" }
     );
+
+    // Witch (see witch-helper.mjs). The Hex itself is an actor-owned effect.
+    //   hexRules — rules that apply against the hexed Target: 'soulLink' (damage you deal to an Enemy
+    //              within Far of the Hex also hurts it), 'weak' (Misery Business: it is Weak to your damage)
+    //   hexDamageBonus — Widdershins: extra damage from your Spells against the hexed Target (formula)
+    schema.hexDamageBonus = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      { initial: [], label: "Extra Spell Damage To The Hexed Target" }
+    );
+    schema.hexRules = new fields.ArrayField(
+      new fields.StringField({ required: true }),
+      { required: true, initial: [], label: "Witch Hex Rules" }
+    );
+
+    // Merchant Midas Touch: Relic Bonuses / Ranks you have Equipped are raised by this much (formula).
+    // See _applyRelicBoost - it works on active effects flagged `flags.vagabond.relicBoost`.
+    schema.relicBoost = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      { initial: [], label: "Relic Bonus / Rank Boost" }
+    );
+
+    // Sorcerer Twinned Spell (see sorcerer-helper.mjs): casting the same Spell again on a Turn Favors the
+    // second Cast Check. Cleared by the world Class Automation mode (TRIGGER_FIELDS), Turn-counting so
+    // Combat-only (COMBAT_ONLY_FIELDS).
+    schema.twinnedSpellTrigger = new fields.BooleanField({
+      required: true,
+      initial: false,
+      label: "Auto-Twinned Spell (Sorcerer)"
+    });
+
+    // Luminary Overheal (see damage-helper handleApplyRestorative): healing that exceeds the Target's Max HP is
+    // reported on the apply card so it can be given to yourself or a Being you can see. Display only.
+    schema.overhealExcess = new fields.BooleanField({
+      required: true,
+      initial: false,
+      label: "Overheal: report excess healing (Luminary)"
+    });
 
     // Incoming damage reduction per damage die, limited to damage types. Each entry is
     // "<type>[,<type>…]: <formula>" (e.g. Druid Tempest Within: "cold,fire,shock: floor(@lvl / 4)").
@@ -988,10 +1025,13 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.layOnHandsDie = [];
     this.layOnHandsCures = [];
     this.weaponDieBySkill = [];
-    this.weaponLowExplodeBySkill = [];
+    this.weaponHighExplodeBySkill = [];
     this.haymakerMargin = [];
     this.markRules = [];
     this.markDamageBonus = [];
+    this.hexRules = [];
+    this.hexDamageBonus = [];
+    this.relicBoost = [];
     this.bonuses.globalExplode = [];
 
     // --- 3. Loop: Reset All Stat & Save Bonuses ---
@@ -1030,6 +1070,8 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.deadeyeTrigger = false;
     this.highNoonTrigger = false;
     this.huntersMarkTrigger = false;
+    this.twinnedSpellTrigger = false;
+    this.overhealExcess = false;
     this.beastIgnoreImmune = false;
     this.polymorphContinual = false;
     this.defenderStatusModifiers.attackersAreBlinded = false;
@@ -1038,14 +1080,16 @@ export default class VagabondCharacter extends VagabondActorBase {
   }
 
   /**
-   * Turn "<type>[,<type>…]: <formula>" entries into { type: amount } (repeats sum). The split is on
+   * Turn "<type>[,<type>…]: <formula>" entries into { type: amount } (repeats sum, or keep the largest
+   * with combine 'max' — "at least" rules such as Title Holder / Dusted Knuckle). The split is on
    * the FIRST colon, so the formula may itself use a ternary.
    * @param {string[]} entries
    * @param {object} rollData
+   * @param {'sum'|'max'} [combine='sum']
    * @returns {Object<string, number>}
    * @private
    */
-  _evaluateTypedReductions(entries, rollData) {
+  _evaluateTypedReductions(entries, rollData, combine = 'sum') {
     const out = {};
     for (const entry of Array.isArray(entries) ? entries : []) {
       const text = String(entry ?? '');
@@ -1054,7 +1098,7 @@ export default class VagabondCharacter extends VagabondActorBase {
       const amount = this._evaluateSingleFormula(text.slice(i + 1), rollData);
       if (!amount) continue;
       for (const type of text.slice(0, i).split(',').map(t => t.trim().toLowerCase()).filter(Boolean)) {
-        out[type] = (out[type] ?? 0) + amount;
+        out[type] = combine === 'max' ? Math.max(out[type] ?? 0, amount) : (out[type] ?? 0) + amount;
       }
     }
     return out;
@@ -1123,6 +1167,28 @@ export default class VagabondCharacter extends VagabondActorBase {
     } catch (err) {
       console.warn(`Vagabond | Invalid formula in bonus field: "${formulaStr}"`, err);
       return 0;
+    }
+  }
+
+  /**
+   * Merchant Midas Touch: every ACTIVE effect flagged `flags.vagabond.relicBoost` (its number = what ONE boost adds:
+   * 1 for a Bonus, 5 for a +5 Speed Rank) gets `step * system.relicBoost` added to each of its positive numeric `add`
+   * changes. Only Equipped relics apply (when-equipped suppression), and penalties (Cursed) are never flagged.
+   * @param {object} rollData
+   * @private
+   */
+  _applyRelicBoost(rollData) {
+    const boost = this._evaluateFormulaField(this.relicBoost, rollData);
+    this.relicBoost = boost;
+    if (boost <= 0 || typeof this.parent?.allApplicableEffects !== 'function') return;
+    for (const effect of this.parent.allApplicableEffects()) {
+      const step = Number(effect.flags?.vagabond?.relicBoost) || 0;
+      if (!step || !effect.active) continue;
+      for (const change of effect.system?.changes ?? []) {
+        if (change.type !== 'add' || !(Number(change.value) > 0)) continue;
+        const field = foundry.utils.getProperty(this.parent, change.key);
+        if (Array.isArray(field)) field.push(String(step * boost));
+      }
     }
   }
 
@@ -1205,8 +1271,8 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.polymorphLevelBonus = this._evaluateFormulaField(this.polymorphLevelBonus, rollData);
     this.deadeyeGrit = this._evaluateFormulaField(this.deadeyeGrit, rollData);
     this.critExtraDiceBySkill = this._evaluateTypedReductions(this.critExtraDiceBySkill, rollData);
-    this.weaponDieBySkill = this._evaluateTypedReductions(this.weaponDieBySkill, rollData);
-    this.weaponLowExplodeBySkill = this._evaluateTypedReductions(this.weaponLowExplodeBySkill, rollData);
+    this.weaponDieBySkill = this._evaluateTypedReductions(this.weaponDieBySkill, rollData, 'max');
+    this.weaponHighExplodeBySkill = this._evaluateTypedReductions(this.weaponHighExplodeBySkill, rollData, 'max');
     this.haymakerMargin = this._evaluateFormulaField(this.haymakerMargin, rollData);
     this.layOnHandsDie = this._evaluateFormulaField(this.layOnHandsDie, rollData);
     this.sneakAttackDice = this._evaluateFormulaField(this.sneakAttackDice, rollData);
@@ -1216,6 +1282,7 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.critLuckBonus = this._evaluateFormulaField(this.critLuckBonus, rollData);
     this.layOnHandsCures = this.layOnHandsCures.filter(s => !!s);
     this.markDamageBonus = this._evaluateFormulaField(this.markDamageBonus, rollData);
+    this.hexDamageBonus = this._evaluateFormulaField(this.hexDamageBonus, rollData);
 
     // NOTE: Stat bonuses, Save bonuses, Skill bonuses, and Weapon Skill bonuses
     // are NOT evaluated here - they're done inline in prepareDerivedData
@@ -1234,6 +1301,9 @@ export default class VagabondCharacter extends VagabondActorBase {
     // Get roll data for formula evaluation (need base stat values)
     // Build minimal roll data for initial stat calculations
     const initialRollData = this.getRollData();
+
+    // Relic Bonus / Rank boost (Merchant Midas Touch) must land before any bonus field is summed
+    this._applyRelicBoost(initialRollData);
 
     // Calculate stat totals with evaluated bonuses
     // NOTE: We evaluate formulas inline instead of storing back to StringFields

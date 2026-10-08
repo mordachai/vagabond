@@ -84,9 +84,12 @@ import { PugilistHelper } from './helpers/pugilist-helper.mjs';
 import { DefenseHelper } from './helpers/defense-helper.mjs';
 import { RevelatorHelper } from './helpers/revelator-helper.mjs';
 import { RogueHelper } from './helpers/rogue-helper.mjs';
+import { SorcererHelper } from './helpers/sorcerer-helper.mjs';
+import { WitchHelper } from './helpers/witch-helper.mjs';
+import { WizardHelper } from './helpers/wizard-helper.mjs';
 import { DruidHelper } from './helpers/druid-helper.mjs';
 import { migrateFighterClass, migrateDruidClass, migrateGunslingerClass, migrateHunterClass, migrateLuminaryClass, migrateMagusClass, migrateMerchantClass, migratePugilistClass, migrateRevelatorClass, migrateRogueClass, migrateSorcererClass, migrateVanguardClass, migrateWitchClass, migrateWizardClass, migrateAncestries } from './helpers/class-migrations.mjs';
-import { migrateAlpha3Statuses, migrateAlpha3Backpacks, migrateAlpha3DefensePerks } from './helpers/alpha3-migrations.mjs';
+import { migrateAlpha3Statuses, migrateAlpha3Backpacks, migrateAlpha3DefensePerks, migrateAlpha3ClassPerks, migrateAlpha3Classes, migrateAlpha3Ancestries } from './helpers/alpha3-migrations.mjs';
 import { consumeUsedEffects } from './helpers/use-effects.mjs';
 import { VagabondRollBuilder } from './helpers/roll-builder.mjs';
 import { CurrencyHelper } from './helpers/currency-helper.mjs';
@@ -1087,7 +1090,7 @@ function registerGameSettings() {
   }
 
   // Setting 21f7: One-time Alpha 3 migration guards (hidden) — see alpha3-migrations.mjs.
-  for (const key of ['alpha3StatusesMigrated', 'alpha3BackpackMigrated', 'alpha3DefensePerksMigrated']) {
+  for (const key of ['alpha3StatusesMigrated', 'alpha3BackpackMigrated', 'alpha3DefensePerksMigrated', 'alpha3ClassPerksMigrated', 'alpha3ClassesMigrated', 'alpha3AncestriesMigrated']) {
     game.settings.register('vagabond', key, {
       scope: 'world',
       config: false,
@@ -1735,6 +1738,11 @@ Hooks.once('ready', function () {
   registerMacroHandler('gunslinger.highNoon', (scope) => GunslingerHelper.highNoon(scope));
   registerMacroHandler('hunter.mark', (scope) => HunterHelper.mark(scope));
   registerMacroHandler('revelator.layOnHands', (scope) => RevelatorHelper.layOnHands(scope));
+  registerMacroHandler('sorcerer.overpowered', (scope) => SorcererHelper.overpowered(scope));
+  registerMacroHandler('witch.hex', (scope) => WitchHelper.hex(scope));
+  registerMacroHandler('wizard.extracurricular', (scope) => WizardHelper.extracurricular(scope));
+  registerMacroHandler('wizard.extracurricularSpell', (scope) => WizardHelper.extracurricularSpell(scope));
+  registerMacroHandler('wizard.archwizard', (scope) => WizardHelper.archwizard(scope));
 
   // Live state of feature buttons: glow while the effect is on, end it from the sheet / HUD
   // (right-click; Momentum is a pure toggle so a left click ends it too).
@@ -1751,6 +1759,15 @@ Hooks.once('ready', function () {
   FeatureAction.registerState('hunter.mark', {
     isActive: (actor) => !!HunterHelper.markEffect(actor),
     end: (actor) => HunterHelper.dropMark(actor),
+  });
+  FeatureAction.registerState('wizard.archwizard', {
+    isActive: (actor) => WizardHelper.hasArchwizardCopy(actor),
+    end: (actor) => WizardHelper.endArchwizard(actor),
+    toggle: true,
+  });
+  FeatureAction.registerState('witch.hex', {
+    isActive: (actor) => !!WitchHelper.hexEffect(actor),
+    end: (actor) => WitchHelper.dropHex(actor),
   });
 
   registerSocketAction('grantLuck', async ({ actorUuid, amount }) => {
@@ -1918,33 +1935,33 @@ Hooks.once('ready', function () {
   // One-time: Keen/Vicious tags → On Use Only effects on the weapon.
   EquipmentHelper.migrateWeaponPropertyEffects();
   // One-time: Barbarian class items get the book-revision effect set (per-behavior switches).
-  RageHelper.migrateBarbarianClass();
+  const classRuns = [RageHelper.migrateBarbarianClass()];
   // Idempotent: hand-switch helper effects stay switchable now that other class effects are locked features.
   RageHelper.flagSwitchableEffects();
   // Idempotent: Aggressor auto/manual twins stop double-counting when both are on.
   RageHelper.syncAggressorTwins();
   // One-time: Alchemist class items get the book-revision effect set (per-behavior switches).
-  AlchemyHelper.migrateAlchemistClass();
+  classRuns.push(AlchemyHelper.migrateAlchemistClass());
   // One-time: Bard class items get the book-revision features + Enjoy the Silence effect.
-  BardHelper.migrateBardClass();
+  classRuns.push(BardHelper.migrateBardClass());
   // One-time: Dancer class items get the book-revision features + Footloose / Don't Stop Me Now effects.
-  DancerHelper.migrateDancerClass();
+  classRuns.push(DancerHelper.migrateDancerClass());
   // One-time: Fighter / Druid class items get the book-revision features + effects.
-  migrateFighterClass();
-  migrateDruidClass();
+  classRuns.push(migrateFighterClass());
+  classRuns.push(migrateDruidClass());
   // One-time: Gunslinger / Hunter class items get the book-revision features + effects.
-  migrateGunslingerClass();
-  migrateHunterClass();
-  migrateLuminaryClass();
-  migrateMagusClass();
-  migrateMerchantClass();
-  migratePugilistClass();
-  migrateRevelatorClass();
-  migrateRogueClass();
-  migrateSorcererClass();
-  migrateVanguardClass();
-  migrateWitchClass();
-  migrateWizardClass();
+  classRuns.push(migrateGunslingerClass());
+  classRuns.push(migrateHunterClass());
+  classRuns.push(migrateLuminaryClass());
+  classRuns.push(migrateMagusClass());
+  classRuns.push(migrateMerchantClass());
+  classRuns.push(migratePugilistClass());
+  classRuns.push(migrateRevelatorClass());
+  classRuns.push(migrateRogueClass());
+  classRuns.push(migrateSorcererClass());
+  classRuns.push(migrateVanguardClass());
+  classRuns.push(migrateWitchClass());
+  classRuns.push(migrateWizardClass());
   // One-time: ancestry items get the book text, grants and effects (Dwarf also gets the Tough Perk).
   migrateAncestries();
   // One-time: stored copper amounts ×10 (ratio corrected to the book's 1s = 100c).
@@ -1955,6 +1972,12 @@ Hooks.once('ready', function () {
   migrateAlpha3Backpacks();
   // One-time: Patience / Protector perks on actors get the Defense-property text + effect.
   migrateAlpha3DefensePerks();
+  // One-time: Dusted Knuckle / Quick Draw perks on actors get the Alpha 3 text (+ Dusted Knuckle effects).
+  migrateAlpha3ClassPerks();
+  // One-time: Human trait Knack -> Aptitude.
+  migrateAlpha3Ancestries();
+  // One-time: class items get the Alpha 3 deltas (runs after every earlier class migration settled).
+  Promise.allSettled(classRuns).then(() => migrateAlpha3Classes());
 });
 
 // Recompute realtime light timers on scene load (catches elapsed time during reloads).
@@ -2031,6 +2054,12 @@ PugilistHelper.registerHooks();
 // Defense property: Patience tracking (inert unless an actor has system.patienceDefense)
 DefenseHelper.registerHooks();
 RogueHelper.registerHooks();
+// Sorcerer Twinned Spell (inert unless an actor has system.twinnedSpellTrigger)
+SorcererHelper.registerHooks();
+// Witch Soul Link (inert unless an actor has a Hex and system.hexRules 'soulLink')
+WitchHelper.registerHooks();
+// Wizard Archwizard: the temporary Spell removes itself once its Cast is resolved
+WizardHelper.registerHooks();
 
 Hooks.on('updateJournalEntry', (journal, changes) => {
   const pc = foundry.utils.getProperty(changes, 'flags.vagabond.progressClock');
@@ -3761,6 +3790,7 @@ Hooks.on('renderChatMessageHTML', (message, html) => {
         name: name,
         diceType: diceType,
         size: 'S', // Small size
+        exploding: trigger.dataset.exploding === 'true', // "Cd4!" notation
       });
     });
   });

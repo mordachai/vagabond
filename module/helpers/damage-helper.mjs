@@ -3,6 +3,7 @@ import { TargetHelper } from './target-helper.mjs';
 import { EquipmentHelper } from './equipment-helper.mjs';
 import { DruidHelper } from './druid-helper.mjs';
 import { HunterHelper } from './hunter-helper.mjs';
+import { WitchHelper } from './witch-helper.mjs';
 import { DefenseHelper } from './defense-helper.mjs';
 
 /**
@@ -930,6 +931,9 @@ export class VagabondDamageHelper {
    */
   static calculateFinalDamageDetailed(actor, damage, damageType, attackingWeapon = null, opts = {}) {
     const result = this._computeFinalDamage(actor, damage, damageType, attackingWeapon, opts);
+    if (damage > 0 && !opts.skipHexBonus) {
+      result.widdershinsBonus = WitchHelper.widdershinsBonus(opts.attackerActor ?? attackingWeapon?.actor ?? null, actor, attackingWeapon);
+    }
     Hooks.callAll('vagabond.calculateFinalDamage', { actor, damage, damageType, attackingWeapon, attackerActor: opts.attackerActor ?? null, result });
     result.final = Math.max(0, result.final);
     return result;
@@ -943,6 +947,14 @@ export class VagabondDamageHelper {
     if (damage > 0 && actor.statuses?.has('flanked')) {
       flankedBonus = CONFIG.VAGABOND?.homebrew?.derivations?.flankedDamageBonus ?? 2;
       damage += flankedBonus;
+    }
+
+    // Witch Widdershins: the witch's Spell damage against her hexed Target is increased (before Armor/Immune/Weak).
+    // Soul Link's pass-on damage is not a new Spell effect, so it skips the bonus.
+    let widdershinsBonus = 0;
+    if (damage > 0 && !opts.skipHexBonus) {
+      widdershinsBonus = WitchHelper.widdershinsBonus(opts.attackerActor ?? attackingWeapon?.actor ?? null, actor, attackingWeapon);
+      damage += widdershinsBonus;
     }
 
     // Normalize damage type for lookup
@@ -986,7 +998,7 @@ export class VagabondDamageHelper {
     // RAW: Weak - Ignores Armor and Immune, and deals an extra damage die
     // (Extra die is handled at roll/apply time, not here — armor/immunity just bypassed.
     //  Weak targets also skip the berserk reduction: weakness bypasses all reductions.)
-    if (weaknesses.includes(normalizedType) || HunterHelper.isMarkWeak(opts.attackerActor, actor)) {
+    if (weaknesses.includes(normalizedType) || HunterHelper.isMarkWeak(opts.attackerActor, actor) || WitchHelper.isHexWeak(opts.attackerActor, actor)) {
       return { final: finalDamage, armorReduction: 0, berserkReduction: 0, flankedBonus, path: 'weak' };
     }
 
@@ -1546,7 +1558,7 @@ ${npcOnly ? '' : `
           const currentHP = targetActor.system.health?.value || 0;
           const newHP = Math.max(0, currentHP - _autoFinal);
           await targetActor.update({ 'system.health.value': newHP });
-          Hooks.callAll('vagabond.postDamageApply', { actor: targetActor, amount: _autoFinal, damageType, sourceItem, attackerActor: sourceActor, oldHp: currentHP, newHp: newHP });
+          Hooks.callAll('vagabond.postDamageApply', { actor: targetActor, amount: _autoFinal, incoming: damageAfterSave, rolledDiceCount, damageType, sourceItem, attackerActor: sourceActor, oldHp: currentHP, newHp: newHP });
         }
       }
 
@@ -2485,6 +2497,10 @@ ${npcOnly ? '' : `
         const actualHealing = newHP - currentHP;
         await applyActorField('system.health.value', newHP);
 
+        // Luminary Overheal: the part of the healing that did not fit (rolled amount beyond Max HP)
+        const healer = TargetHelper.resolveActorRef(button.dataset.actorId);
+        const overhealExcess = healer?.system?.overhealExcess === true ? Math.max(0, modifiedAmount - actualHealing) : 0;
+
 
         const { VagabondChatCard: VCCHeal } = await import('./chat-card.mjs');
         await VCCHeal.applyResult(targetActor, {
@@ -2498,6 +2514,7 @@ ${npcOnly ? '' : `
           finalAmount: actualHealing,
           previousValue: currentHP,
           newValue: newHP,
+          overhealExcess,
         });
       } else if (restoredResource === 'fatigue') {
         // Recover: Decrease Fatigue (down to 0)
@@ -2609,7 +2626,7 @@ ${npcOnly ? '' : `
         const { emitSocket } = await import('./socket-helper.mjs');
         emitSocket('applyDamage', { actorUuid: targetActor.uuid, newHp: newHP });
       }
-      Hooks.callAll('vagabond.postDamageApply', { actor: targetActor, amount: _directFinal, damageType, sourceItem, attackerActor: sourceActor, oldHp: currentHP, newHp: newHP });
+      Hooks.callAll('vagabond.postDamageApply', { actor: targetActor, amount: _directFinal, incoming: effectiveDamage, damageType, sourceItem, attackerActor: sourceActor, oldHp: currentHP, newHp: newHP });
 
       // Post damage result to chat
       const { VagabondChatCard: VCCDirect } = await import('./chat-card.mjs');

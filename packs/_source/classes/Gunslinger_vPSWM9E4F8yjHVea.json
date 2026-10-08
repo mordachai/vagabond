@@ -9,7 +9,7 @@
       {
         "level": 1,
         "name": "Deadeye",
-        "description": "<p>After you make a Ranged attack, you Crit on subsequent Ranged attacks on a d20 roll 1 lower, and this can stack up to 3 times. It resets at the end of your Turn if you didn’t hit a Ranged attack since the start of your last Turn.</p>",
+        "description": "<p>After you make a Ranged attack, you Crit on subsequent Ranged attacks on a d20 roll 1 lower, and can stack up to 3 times. It resets at the end of your Turn if you didn’t hit a Ranged attack since the start of your last Turn.</p>",
         "statBonusPoints": 0,
         "extraTraining": 0,
         "requiredSpells": [],
@@ -29,7 +29,7 @@
       {
         "level": 1,
         "name": "Shooting Irons",
-        "description": "<p>You gain the Quick Draw Perk (p. 71) and, once per Round, you can make a Ranged attack against an attack that would hit you. If you pass, reduce the damage dealt by the Target’s attack by your attack’s damage.</p>",
+        "description": "<p>You gain the Quick Draw Perk (p. 71) and, once per Round, you can make a Ranged attack against an attack that would hit. If you pass, reduce the damage dealt by the Target’s attack by your attack’s damage.</p>",
         "statBonusPoints": 0,
         "extraTraining": 0,
         "requiredSpells": [],
@@ -67,7 +67,7 @@
       {
         "level": 4,
         "name": "Grit (3)",
-        "description": "<p>At the start of your Turn, you can increase your Deadeye by 3 to remove a Status from yourself from either Blinded, Burning, Confused, Dazed, or Frightened.</p><p>The increase is reduced by 1 every 4 Levels hereafter (minimum 0).</p>",
+        "description": "<p>At the start of your Turn, you can remove 3 Deadeye stacks to remove a Status from yourself from either Blinded, Burning, Confused, Dazed, or Frightened.</p><p>The Deadeye stacks removed by this Ability are reduced by 1 every 4 Levels hereafter (minimum 0).</p>",
         "statBonusPoints": 1,
         "extraTraining": 0,
         "requiredSpells": [],
@@ -135,7 +135,7 @@
       {
         "level": 8,
         "name": "Grit (2)",
-        "description": "<p>At the start of your Turn, you can increase your Deadeye by 3 to remove a Status from yourself from either Blinded, Burning, Confused, Dazed, or Frightened.</p><p>The increase is reduced by 1 every 4 Levels hereafter (minimum 0).</p>",
+        "description": "<p>At the start of your Turn, you can remove 3 Deadeye stacks to remove a Status from yourself from either Blinded, Burning, Confused, Dazed, or Frightened.</p><p>The Deadeye stacks removed by this Ability are reduced by 1 every 4 Levels hereafter (minimum 0).</p>",
         "statBonusPoints": 1,
         "extraTraining": 0,
         "requiredSpells": [],
@@ -369,7 +369,7 @@
         "changes": [
           {
             "key": "system.deadeyeGrit",
-            "value": "4 - floor(@lvl / 4)",
+            "value": "max(0, 4 - floor(@lvl / 4))",
             "priority": null,
             "type": "add"
           }

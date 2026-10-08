@@ -2,6 +2,7 @@ import { VagabondDiceAppearance } from './dice-appearance.mjs';
 import { consumeUsedEffects } from './use-effects.mjs';
 import { DruidHelper } from './druid-helper.mjs';
 import { HunterHelper } from './hunter-helper.mjs';
+import { WitchHelper } from './witch-helper.mjs';
 
 /**
  * Unified Damage Pipeline
@@ -180,9 +181,9 @@ export class VagabondDamagePipeline {
       if (isCritical && d.skillKey && actor.system?.critExplodeSkills?.includes?.(d.skillKey)) {
         explodeValues = [...new Set([...(explodeValues ?? []), 'max'])];
       }
-      // Skill-scoped low-face Explode (Pugilist Title Holder: 1 or 2)
-      const lowFaces = sourceType === 'weapon' && d.skillKey ? Math.trunc(Number(actor.system?.weaponLowExplodeBySkill?.[d.skillKey])) || 0 : 0;
-      if (lowFaces > 0) explodeValues = [...new Set([...(explodeValues ?? []), ...Array.from({ length: lowFaces }, (_, i) => i + 1)])];
+      // Skill-scoped Explode on the N highest faces (Pugilist Title Holder: the two highest values)
+      const highFaces = sourceType === 'weapon' && d.skillKey ? Math.trunc(Number(actor.system?.weaponHighExplodeBySkill?.[d.skillKey])) || 0 : 0;
+      if (highFaces > 0) explodeValues = [...new Set([...(explodeValues ?? []), ...Array.from({ length: highFaces }, (_, i) => i === 0 ? 'max' : `max-${i}`)])];
       // Healing Spells explode on the extra faces from Assured Healer / Radiant Healer
       if (sourceType === 'spell' && this._restoresHp(damageType)) {
         const healingFaces = this.healingExplodeValues(actor);
@@ -401,8 +402,8 @@ export class VagabondDamagePipeline {
    * Explosion values for an item, honoring actor global explode bonuses and the
    * Alchemist's Potency feature (scoped to `sourceType === 'alchemical'` only —
    * unlike `bonuses.globalExplode`, which applies to every damage source).
-   * Potency's `craft.alchemicalExplode` is a face COUNT (1 = highest @L4,
-   * 2 = two highest @L8), added on top of whatever the item authored.
+   * Potency's `craft.alchemicalExplode` is a face COUNT (1 = the highest face from L4;
+   * Alpha 3 text is just "can Explode"), added on top of whatever the item authored.
    * @param {Item|null} item
    * @param {Actor|null} actor
    * @param {string|null} [sourceType=null]
@@ -530,7 +531,7 @@ export class VagabondDamagePipeline {
     const sourceType = item.type === 'spell' ? 'spell'
       : item.system?.equipmentType === 'alchemical' ? 'alchemical' : 'weapon';
     if (this.getExplodeValues(item, actor, sourceType)) return true;
-    if (sourceType === 'weapon' && Number(actor?.system?.weaponLowExplodeBySkill?.[item.system?.weaponSkill]) > 0) return true;
+    if (sourceType === 'weapon' && Number(actor?.system?.weaponHighExplodeBySkill?.[item.system?.weaponSkill]) > 0) return true;
     return item.type === 'spell' && this._restoresHp(item.system?.damageType) && this.healingExplodeValues(actor).length > 0;
   }
 
@@ -655,13 +656,13 @@ export class VagabondDamagePipeline {
    * @param {Actor} targetActor
    * @param {string} damageType
    * @param {Item|null} attackingWeapon
-   * @param {Actor|null} [attacker] - Hunter Apex Predator: the Mark is Weak to its Hunter's attacks
+   * @param {Actor|null} [attacker] - Hunter Apex Predator / Witch Misery Business: the Mark / Hex is Weak to its owner's attacks
    * @returns {boolean}
    */
   static isWeakTo(targetActor, damageType, attackingWeapon = null, attacker = null) {
     const normalizedType = damageType.toLowerCase();
     if (normalizedType === '-') return false;
-    if (HunterHelper.isMarkWeak(attacker, targetActor)) return true;
+    if (HunterHelper.isMarkWeak(attacker, targetActor) || WitchHelper.isHexWeak(attacker, targetActor)) return true;
     const weaknesses = targetActor.system.weaknesses || [];
     if (attackingWeapon?.system?.metal && weaknesses.includes(attackingWeapon.system.metal)) return true;
     return weaknesses.includes(normalizedType);

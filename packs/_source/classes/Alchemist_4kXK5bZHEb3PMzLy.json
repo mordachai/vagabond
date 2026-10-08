@@ -3,7 +3,7 @@
   "type": "class",
   "img": "icons/consumables/potions/potion-flash-open-blue.webp",
   "system": {
-    "description": "<p><strong>Why respect knights when my potions can do anything that you can?</strong></p><p><em>—Justin Kuritzkes, Potion Seller</em></p><p>Often sequestered in a lab, alchemists study the essence of creation. They are as curious as they are resourceful, and always have “just the thing for this.”</p><h3>Iconic Alchemists</h3><ul><li><strong>The Colorman</strong>, <em>Sacré Bleu</em></li><li><strong>Dr. Jekyll</strong>, <em>Dr. Jekyll and Mr. Hyde</em></li><li><strong>Tessa Cade</strong>, <em>Defy the Night</em></li><li><strong>Walter White</strong>, <em>Breaking Bad</em></li></ul><h3>Playing Alchemist</h3><p>The alchemist is a low-defense, high-damage-and-utility blaster. It’s recommended you stay Far from Enemies to use Alchemical Items.</p><p><strong>Action:</strong> Use (Craft &amp; Attack)<br /><strong>Move:</strong> Backline<br /><strong>Starting Pack:</strong> Alchemist or Assassin<br /><strong>Key Stat:</strong> Reason<br /><strong>Complexity:</strong> ★★★★☆<br /><strong>Training:</strong> Arcana, Craft, Medicine</p><h3>Class Features</h3><table class=\"NormalTable\"><tbody><tr><td rowspan=\"2\"><p><strong>Level</strong></p></td><td rowspan=\"2\"><p><strong>Features</strong></p></td><td colspan=\"2\"><p><strong>Formulae</strong></p></td></tr><tr><td><p><strong>Known</strong></p></td><td><p><strong>Value</strong></p></td></tr><tr><td><p>1st</p></td><td><p>Alchemy, Catalyze</p></td><td><p>4</p></td><td><p>50s</p></td></tr><tr><td><p>2nd</p></td><td><p>Eureka (10+)</p></td><td><p>4</p></td><td><p>1g</p></td></tr><tr><td><p>3rd</p></td><td><p>Perk</p></td><td><p>4</p></td><td><p>1g 50s</p></td></tr><tr><td><p>4th</p></td><td><p>Potency (highest)</p></td><td><p>5</p></td><td><p>2g</p></td></tr><tr><td><p>5th</p></td><td><p>Perk</p></td><td><p>5</p></td><td><p>2g 50s</p></td></tr><tr><td><p>6th</p></td><td><p>Mix, Eureka (9+)</p></td><td><p>5</p></td><td><p>3g</p></td></tr><tr><td><p>7th</p></td><td><p>Perk</p></td><td><p>6</p></td><td><p>3g 50s</p></td></tr><tr><td><p>8th</p></td><td><p>Potency (2 highest)</p></td><td><p>6</p></td><td><p>4g</p></td></tr><tr><td><p>9th</p></td><td><p>Perk</p></td><td><p>6</p></td><td><p>4g 50s</p></td></tr><tr><td><p>10th</p></td><td><p>Prima Materia, Eureka (8+)</p></td><td><p>7</p></td><td><p>5g</p></td></tr></tbody></table>",
+    "description": "<p><strong>Why respect knights when my potions can do anything that you can?</strong></p><p><em>—Justin Kuritzkes, Potion Seller</em></p><p>Often sequestered in a lab, alchemists study the essence of creation. They are as curious as they are resourceful, and always have “just the thing for this.”</p><h3>Iconic Alchemists</h3><ul><li><strong>The Colorman</strong>, <em>Sacré Bleu</em></li><li><strong>Dr. Jekyll</strong>, <em>Dr. Jekyll and Mr. Hyde</em></li><li><strong>Tessa Cade</strong>, <em>Defy the Night</em></li><li><strong>Walter White</strong>, <em>Breaking Bad</em></li></ul><h3>Playing Alchemist</h3><p>The alchemist is a low-defense, high-damage-and-utility blaster. It’s recommended you stay Far from Enemies to use Alchemical Items.</p><p><strong>Action:</strong> Use (Craft &amp; Attack)<br /><strong>Move:</strong> Backline<br /><strong>Starting Pack:</strong> Alchemist or Assassin<br /><strong>Key Stat:</strong> Reason<br /><strong>Complexity:</strong> ★★★★☆<br /><strong>Training:</strong> Arcana, Craft, Medicine</p><h3>Class Features</h3><table class=\"NormalTable\"><tbody><tr><td rowspan=\"2\"><p><strong>Level</strong></p></td><td rowspan=\"2\"><p><strong>Features</strong></p></td><td colspan=\"2\"><p><strong>Formulae</strong></p></td></tr><tr><td><p><strong>Known</strong></p></td><td><p><strong>Value</strong></p></td></tr><tr><td><p>1st</p></td><td><p>Alchemy, Catalyze</p></td><td><p>4</p></td><td><p>50s</p></td></tr><tr><td><p>2nd</p></td><td><p>Eureka (15+)</p></td><td><p>4</p></td><td><p>1g</p></td></tr><tr><td><p>3rd</p></td><td><p>Perk</p></td><td><p>4</p></td><td><p>1g 50s</p></td></tr><tr><td><p>4th</p></td><td><p>Potency (+1)</p></td><td><p>5</p></td><td><p>2g</p></td></tr><tr><td><p>5th</p></td><td><p>Perk</p></td><td><p>5</p></td><td><p>2g 50s</p></td></tr><tr><td><p>6th</p></td><td><p>Mix, Eureka (14+)</p></td><td><p>5</p></td><td><p>3g</p></td></tr><tr><td><p>7th</p></td><td><p>Perk</p></td><td><p>6</p></td><td><p>3g 50s</p></td></tr><tr><td><p>8th</p></td><td><p>Potency (+2)</p></td><td><p>6</p></td><td><p>4g</p></td></tr><tr><td><p>9th</p></td><td><p>Perk</p></td><td><p>6</p></td><td><p>4g 50s</p></td></tr><tr><td><p>10th</p></td><td><p>Prima Materia, Eureka (13+)</p></td><td><p>7</p></td><td><p>5g</p></td></tr></tbody></table>",
     "isSpellcaster": false,
     "levelFeatures": [
       {
@@ -32,8 +32,8 @@
       },
       {
         "level": 2,
-        "name": "Eureka (10+)",
-        "description": "<p>When you pass a Craft Check by 10 or more, you gain a Studied die (p. 19). The roll required to do so is decreased by 1 every 4 Levels hereafter.</p>",
+        "name": "Eureka (15+)",
+        "description": "<p>When you pass a Craft Check by 15 or more, you gain a Studied die (p. 19). The roll required to do so is decreased by 1 every 4 Levels hereafter.</p>",
         "statBonusPoints": 1,
         "extraTraining": 0,
         "requiredSpells": [],
@@ -52,7 +52,7 @@
       },
       {
         "level": 4,
-        "name": "Potency (highest)",
+        "name": "Potency (+1)",
         "description": "<p>You have a +1 bonus to each of the damage and healing dice of your Alchemical Items, and they can Explode. This bonus increases by 1 every 4 Levels hereafter.</p>",
         "statBonusPoints": 1,
         "extraTraining": 0,
@@ -84,8 +84,8 @@
       },
       {
         "level": 6,
-        "name": "Eureka (9+)",
-        "description": "<p>When you pass a Craft Check by 10 or more, you gain a Studied die (p. 19). The roll required to do so is decreased by 1 every 4 Levels hereafter.</p>",
+        "name": "Eureka (14+)",
+        "description": "<p>When you pass a Craft Check by 15 or more, you gain a Studied die (p. 19). The roll required to do so is decreased by 1 every 4 Levels hereafter.</p>",
         "statBonusPoints": 0,
         "extraTraining": 0,
         "requiredSpells": [],
@@ -106,7 +106,7 @@
       },
       {
         "level": 8,
-        "name": "Potency (2 highest)",
+        "name": "Potency (+2)",
         "description": "<p>You have a +1 bonus to each of the damage and healing dice of your Alchemical Items, and they can Explode. This bonus increases by 1 every 4 Levels hereafter.</p>",
         "statBonusPoints": 1,
         "extraTraining": 0,
@@ -138,8 +138,8 @@
       },
       {
         "level": 10,
-        "name": "Eureka (8+)",
-        "description": "<p>When you pass a Craft Check by 10 or more, you gain a Studied die (p. 19). The roll required to do so is decreased by 1 every 4 Levels hereafter.</p>",
+        "name": "Eureka (13+)",
+        "description": "<p>When you pass a Craft Check by 15 or more, you gain a Studied die (p. 19). The roll required to do so is decreased by 1 every 4 Levels hereafter.</p>",
         "statBonusPoints": 0,
         "extraTraining": 0,
         "requiredSpells": [],
@@ -228,7 +228,7 @@
         "changes": [
           {
             "key": "system.craft.eurekaMargin",
-            "value": "10 - floor(max(0, @lvl - 2) / 4)",
+            "value": "15 - floor(max(0, @lvl - 2) / 4)",
             "priority": null,
             "type": "add"
           }
@@ -328,7 +328,7 @@
         "changes": [
           {
             "key": "system.craft.alchemicalExplode",
-            "value": "min(2, floor(@lvl / 4))",
+            "value": "min(1, floor(@lvl / 4))",
             "priority": null,
             "type": "add"
           }
@@ -372,7 +372,7 @@
       "name": "Mix",
       "origin": "Compendium.vagabond.classes.Item.4kXK5bZHEb3PMzLy",
       "img": "icons/svg/aura.svg",
-      "_id": "aLcH5MiXfEaTuR005",
+      "_id": "aLcH5MiXfEaTuR05",
       "type": "base",
       "system": {
         "changes": [
@@ -416,13 +416,13 @@
       "start": null,
       "showIcon": 1,
       "folder": null,
-      "_key": "!items.effects!4kXK5bZHEb3PMzLy.aLcH5MiXfEaTuR005"
+      "_key": "!items.effects!4kXK5bZHEb3PMzLy.aLcH5MiXfEaTuR05"
     },
     {
       "name": "Prima Materia",
       "origin": "Compendium.vagabond.classes.Item.4kXK5bZHEb3PMzLy",
       "img": "icons/svg/aura.svg",
-      "_id": "aLcH6PrImAmAtR006",
+      "_id": "aLcH6PrImAmAtR06",
       "type": "base",
       "system": {
         "changes": [
@@ -466,7 +466,7 @@
       "start": null,
       "showIcon": 1,
       "folder": null,
-      "_key": "!items.effects!4kXK5bZHEb3PMzLy.aLcH6PrImAmAtR006"
+      "_key": "!items.effects!4kXK5bZHEb3PMzLy.aLcH6PrImAmAtR06"
     }
   ],
   "folder": null,

@@ -3,7 +3,7 @@
   "type": "class",
   "img": "icons/equipment/head/hat-pointed-buckle-leather-purple.webp",
   "system": {
-    "description": "<p><strong>Wouldst thou like to live deliciously?</strong></p><p><em>—Robert Eggers, The VVitch</em></p><p>Witches are mediaries of magical secrets. One may become a witch through the whispers of a familiar or the favor of a being from beyond.</p><h3>Iconic Witches</h3><ul><li><strong>Dr. Facilier</strong>, <em>The Princess and the Frog</em></li><li><strong>Sabrina Spellman</strong>, <em>Sabrina the Teenage Witch</em></li><li><strong>The Morrigan</strong>, <em>Celtic mythology</em></li><li><strong>Yubaba</strong>, <em>Spirited Away</em></li></ul><h3>Playing Witch</h3><p>The witch is a debuffer focused on Casting Spells to stack detriments. Stick to the shadows and pile on Statuses through Hex.</p><p><strong>Action:</strong> Cast<br /><strong>Move:</strong> Backline<br /><strong>Starting Pack:</strong> Fortune Teller or Mage<br /><strong>Key Stat:</strong> Awareness<br /><strong>Complexity:</strong> ★★★☆☆<br /><strong>Training:</strong> Craft, Mysticism</p><h3>Class Features</h3><table class=\"NormalTable\"><tbody><tr><td><p><strong>Level</strong></p></td><td><p><strong>Features</strong></p></td><td><p><strong>Spells</strong></p></td><td><p><strong>Mana</strong></p></td><td><p><strong>Cast Max</strong></p></td></tr><tr><td><p>1st</p></td><td><p>Occultist, Hex</p></td><td><p>4</p></td><td><p>4</p></td><td><p>3</p></td></tr><tr><td><p>2nd</p></td><td><p>Widdershins (1)</p></td><td><p>4</p></td><td><p>8</p></td><td><p>4</p></td></tr><tr><td><p>3rd</p></td><td><p>Perk</p></td><td><p>5</p></td><td><p>12</p></td><td><p>5</p></td></tr><tr><td><p>4th</p></td><td><p>Grudge Bearer (+1)</p></td><td><p>5</p></td><td><p>16</p></td><td><p>6</p></td></tr><tr><td><p>5th</p></td><td><p>Perk</p></td><td><p>6</p></td><td><p>20</p></td><td><p>7</p></td></tr><tr><td><p>6th</p></td><td><p>Widdershins (2)</p></td><td><p>6</p></td><td><p>24</p></td><td><p>8</p></td></tr><tr><td><p>7th</p></td><td><p>Perk</p></td><td><p>7</p></td><td><p>28</p></td><td><p>9</p></td></tr><tr><td><p>8th</p></td><td><p>Grudge Bearer (+2)</p></td><td><p>7</p></td><td><p>32</p></td><td><p>10</p></td></tr><tr><td><p>9th</p></td><td><p>Perk</p></td><td><p>8</p></td><td><p>36</p></td><td><p>11</p></td></tr><tr><td><p>10th</p></td><td><p>Widdershins (3)</p></td><td><p>8</p></td><td><p>40</p></td><td><p>12</p></td></tr></tbody></table>",
+    "description": "<p><strong>Wouldst thou like to live deliciously?</strong></p><p><em>—Robert Eggers, The VVitch</em></p><p>Witches are mediaries of magical secrets. One may become a witch through the whispers of a familiar or the favor of a being from beyond.</p><h3>Iconic Witches</h3><ul><li><strong>Dr. Facilier</strong>, <em>The Princess and the Frog</em></li><li><strong>Sabrina Spellman</strong>, <em>Sabrina the Teenage Witch</em></li><li><strong>The Morrigan</strong>, <em>Celtic mythology</em></li><li><strong>Yubaba</strong>, <em>Spirited Away</em></li></ul><h3>Playing Witch</h3><p>The witch is a debuffer focused on Casting Spells to stack detriments. Stick to the shadows and pile on Statuses through Hex.</p><p><strong>Action:</strong> Cast<br /><strong>Move:</strong> Backline<br /><strong>Starting Pack:</strong> Fortune Teller or Mage<br /><strong>Key Stat:</strong> Awareness<br /><strong>Complexity:</strong> ★★★☆☆<br /><strong>Training:</strong> Craft, Mysticism</p><h3>Class Features</h3><table class=\"NormalTable\"><tbody><tr><td><p><strong>Level</strong></p></td><td><p><strong>Features</strong></p></td><td><p><strong>Spells</strong></p></td><td><p><strong>Mana</strong></p></td><td><p><strong>Cast Max</strong></p></td></tr><tr><td><p>1st</p></td><td><p>Occultist, Hex</p></td><td><p>4</p></td><td><p>4</p></td><td><p>3</p></td></tr><tr><td><p>2nd</p></td><td><p>Widdershins (1)</p></td><td><p>4</p></td><td><p>8</p></td><td><p>4</p></td></tr><tr><td><p>3rd</p></td><td><p>Perk</p></td><td><p>5</p></td><td><p>12</p></td><td><p>5</p></td></tr><tr><td><p>4th</p></td><td><p>Grudge Bearer (+1)</p></td><td><p>5</p></td><td><p>16</p></td><td><p>6</p></td></tr><tr><td><p>5th</p></td><td><p>Perk</p></td><td><p>6</p></td><td><p>20</p></td><td><p>7</p></td></tr><tr><td><p>6th</p></td><td><p>Widdershins (2), Soul Link</p></td><td><p>6</p></td><td><p>24</p></td><td><p>8</p></td></tr><tr><td><p>7th</p></td><td><p>Perk</p></td><td><p>7</p></td><td><p>28</p></td><td><p>9</p></td></tr><tr><td><p>8th</p></td><td><p>Grudge Bearer (+2)</p></td><td><p>7</p></td><td><p>32</p></td><td><p>10</p></td></tr><tr><td><p>9th</p></td><td><p>Perk</p></td><td><p>8</p></td><td><p>36</p></td><td><p>11</p></td></tr><tr><td><p>10th</p></td><td><p>Widdershins (3), Misery Business</p></td><td><p>8</p></td><td><p>40</p></td><td><p>12</p></td></tr></tbody></table>",
     "isSpellcaster": true,
     "levelFeatures": [
       {
@@ -42,7 +42,15 @@
         "allowedPerks": [],
         "perkAmount": 0,
         "spellAmount": 0,
-        "skillChoices": []
+        "skillChoices": [],
+        "action": {
+          "enabled": true,
+          "label": "Hex Target",
+          "icon": "eye",
+          "uuid": "",
+          "command": "system:witch.hex",
+          "runAsGM": false
+        }
       },
       {
         "level": 2,
@@ -105,6 +113,18 @@
         "skillChoices": []
       },
       {
+        "level": 6,
+        "name": "Soul Link",
+        "description": "<p>Once per Action when you deal damage to an Enemy within Far of your hexed Target, the hexed Target also takes the damage.</p>",
+        "statBonusPoints": 0,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": []
+      },
+      {
         "level": 7,
         "name": "Perk",
         "description": "<p>Choose a new Perk. You must meet the prerequisites to take it, unless the Perk is granted through a Class Feature.</p>",
@@ -145,6 +165,18 @@
         "name": "Widdershins (3)",
         "description": "<p>Your damage from Spell effects and your effective Level for the purpose of Spell effects are both increased by 1 against your hexed Target, and increased 1 more every 4 Levels hereafter.</p>",
         "statBonusPoints": 1,
+        "extraTraining": 0,
+        "requiredSpells": [],
+        "allowedPerks": [],
+        "perkAmount": 0,
+        "spellAmount": 0,
+        "skillChoices": []
+      },
+      {
+        "level": 10,
+        "name": "Misery Business",
+        "description": "<p>If you deal damage to your hexed Target, they are considered Weak to the damage.</p>",
+        "statBonusPoints": 0,
         "extraTraining": 0,
         "requiredSpells": [],
         "allowedPerks": [],
@@ -262,6 +294,156 @@
       "showIcon": 1,
       "folder": null,
       "_key": "!items.effects!FtE7i0UBBvuMH5ZI.UoLxUEgsMp1D1jgP"
+    },
+    {
+      "name": "Widdershins",
+      "origin": "Compendium.vagabond.classes.Item.FtE7i0UBBvuMH5ZI",
+      "img": "icons/svg/aura.svg",
+      "_id": "wItChWiDdErSh001",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.hexDamageBonus",
+            "value": "1 + floor((@lvl - 2) / 4)",
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent",
+          "minLevel": 2
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.44.0",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "createdTime": 1791400000000,
+        "modifiedTime": 1791400000000,
+        "lastModifiedBy": null
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!FtE7i0UBBvuMH5ZI.wItChWiDdErSh001"
+    },
+    {
+      "name": "Soul Link",
+      "origin": "Compendium.vagabond.classes.Item.FtE7i0UBBvuMH5ZI",
+      "img": "icons/svg/aura.svg",
+      "_id": "wItChSoUlLiNk001",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.hexRules",
+            "value": "soulLink",
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent",
+          "minLevel": 6
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.44.0",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "createdTime": 1791400000000,
+        "modifiedTime": 1791400000000,
+        "lastModifiedBy": null
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!FtE7i0UBBvuMH5ZI.wItChSoUlLiNk001"
+    },
+    {
+      "name": "Misery Business",
+      "origin": "Compendium.vagabond.classes.Item.FtE7i0UBBvuMH5ZI",
+      "img": "icons/svg/aura.svg",
+      "_id": "wItChMiSeRyBuS01",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.hexRules",
+            "value": "weak",
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent",
+          "minLevel": 10
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.44.0",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "createdTime": 1791400000000,
+        "modifiedTime": 1791400000000,
+        "lastModifiedBy": null
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!FtE7i0UBBvuMH5ZI.wItChMiSeRyBuS01"
     }
   ],
   "folder": null,

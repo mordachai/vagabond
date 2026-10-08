@@ -3,13 +3,13 @@
   "type": "class",
   "img": "icons/weapons/daggers/dagger-ritual-crooked-crystal.webp",
   "system": {
-    "description": "<p><strong>I may be a burglar… but I’m an honest one, I hope, more or less.</strong></p><p><em>—Bilbo Baggins, The Hobbit</em></p><p>Rogues are the back-alley urchins, gutterborn scum, and shadowed assassins. To hammers, every problem looks like a nail. Rogues are blades, and every problem is a throat.</p><h3>Iconic Rogues</h3><ul><li><strong>Locke Lamora</strong>, <em>Gentleman Bastard Sequence</em></li><li><strong>Nona Grey</strong>, <em>Book of the Ancestor</em></li><li><strong>Vin</strong>, <em>Mistborn</em></li><li><strong>Zidane Tribal</strong>, <em>Final Fantasy IX</em></li></ul><h3>Playing Rogue</h3><p>Rogues are low-defense, midline harassers that focus on one single, deadly shot. They are given Features that reinforce attempting to gain Favor on their Attacks.</p><p><strong>Action:</strong> Attack<br /><strong>Move:</strong> Midline<br /><strong>Starting Pack:</strong> Assassin, Conman, Investigator, or Scout<br /><strong>Key Stat:</strong> Dexterity/Awareness, Luck<br /><strong>Complexity:</strong> ★★☆☆☆<br /><strong>Training:</strong> Ranged, Finesse, Sneak</p><h3>Class Features</h3><table class=\"NormalTable\"><tbody><tr><td><p><strong>Level</strong></p></td><td><p><strong>Features</strong></p></td><td><p><strong>Sneak Attack</strong></p></td></tr><tr><td><p>1st</p></td><td><p>Sneak Attack, Infiltrator</p></td><td><p>1d4</p></td></tr><tr><td><p>2nd</p></td><td><p>Evasive</p></td><td><p>1d4</p></td></tr><tr><td><p>3rd</p></td><td><p>Perk</p></td><td><p>1d4</p></td></tr><tr><td><p>4th</p></td><td><p>Knack</p></td><td><p>2d4</p></td></tr><tr><td><p>5th</p></td><td><p>Perk</p></td><td><p>2d4</p></td></tr><tr><td><p>6th</p></td><td><p>Evasive (15’), Lethal Weapon</p></td><td><p>2d4</p></td></tr><tr><td><p>7th</p></td><td><p>Perk</p></td><td><p>3d4</p></td></tr><tr><td><p>8th</p></td><td><p>Knack</p></td><td><p>3d4</p></td></tr><tr><td><p>9th</p></td><td><p>Perk</p></td><td><p>3d4</p></td></tr><tr><td><p>10th</p></td><td><p>Evasive (20’), Waylay</p></td><td><p>4d4</p></td></tr></tbody></table>",
+    "description": "<p><strong>I may be a burglar… but I’m an honest one, I hope, more or less.</strong></p><p><em>—Bilbo Baggins, The Hobbit</em></p><p>Rogues are the back-alley urchins, gutterborn scum, and shadowed assassins. To hammers, every problem looks like a nail. Rogues are blades, and every problem is a throat.</p><h3>Iconic Rogues</h3><ul><li><strong>Locke Lamora</strong>, <em>Gentleman Bastard Sequence</em></li><li><strong>Nona Grey</strong>, <em>Book of the Ancestor</em></li><li><strong>Vin</strong>, <em>Mistborn</em></li><li><strong>Zidane Tribal</strong>, <em>Final Fantasy IX</em></li></ul><h3>Playing Rogue</h3><p>Rogues are low-defense, midline harassers that focus on one single, deadly shot. They are given Features that reinforce attempting to gain Favor on their Attacks.</p><p><strong>Action:</strong> Attack<br /><strong>Move:</strong> Midline<br /><strong>Starting Pack:</strong> Assassin, Conman, Investigator, or Scout<br /><strong>Key Stat:</strong> Dexterity/Awareness, Luck<br /><strong>Complexity:</strong> ★★☆☆☆<br /><strong>Training:</strong> Ranged, Finesse, Sneak</p><h3>Class Features</h3><table class=\"NormalTable\"><tbody><tr><td><p><strong>Level</strong></p></td><td><p><strong>Features</strong></p></td><td><p><strong>Sneak Attack</strong></p></td></tr><tr><td><p>1st</p></td><td><p>Sneak Attack, Infiltrator</p></td><td><p>1d4</p></td></tr><tr><td><p>2nd</p></td><td><p>Evasive</p></td><td><p>1d4</p></td></tr><tr><td><p>3rd</p></td><td><p>Perk</p></td><td><p>1d4</p></td></tr><tr><td><p>4th</p></td><td><p>Knack (1 Luck)</p></td><td><p>2d4</p></td></tr><tr><td><p>5th</p></td><td><p>Perk</p></td><td><p>2d4</p></td></tr><tr><td><p>6th</p></td><td><p>Evasive (15’), Lethal Weapon</p></td><td><p>2d4</p></td></tr><tr><td><p>7th</p></td><td><p>Perk</p></td><td><p>3d4</p></td></tr><tr><td><p>8th</p></td><td><p>Knack (2 Luck)</p></td><td><p>3d4</p></td></tr><tr><td><p>9th</p></td><td><p>Perk</p></td><td><p>3d4</p></td></tr><tr><td><p>10th</p></td><td><p>Evasive (20’), Waylay</p></td><td><p>4d4</p></td></tr></tbody></table>",
     "isSpellcaster": false,
     "levelFeatures": [
       {
         "level": 1,
         "name": "Sneak Attack",
-        "description": "<p>The first time you hit with a Favored attack on a Turn with a Finesse, Keen, or Ranged Weapon, it deals an extra d4 damage and ignores an amount of Armor equal to this number of extra dice. The number of extra d4s increases by 1 every 3 Levels hereafter.</p>",
+        "description": "<p>The first time you hit with a Favored attack on a Turn with a Finesse, Keen, or Ranged Weapon, it deals extra damage. This extra damage is a number of d4s equal to (your Level divided by 3, round up). The attack also ignores an amount of Armor equal to this number of extra dice.</p>",
         "statBonusPoints": 0,
         "extraTraining": 0,
         "requiredSpells": [],
@@ -21,7 +21,7 @@
       {
         "level": 1,
         "name": "Infiltrator",
-        "description": "<p>You gain the Resourceful Perk (p. 71) and you have Favor on Checks made to ambush and against traps that you are aware of.</p>",
+        "description": "<p>You gain the Resourceful Perk (p. 71), and you have Favor on Checks made to ambush and against traps that you are aware of.</p>",
         "statBonusPoints": 0,
         "extraTraining": 0,
         "requiredSpells": [],
@@ -58,7 +58,7 @@
       },
       {
         "level": 4,
-        "name": "Knack",
+        "name": "Knack (1 Luck)",
         "description": "<p>You gain 1 Luck during a Breather and when you Crit, in addition to other Crit benefits.</p><p>Further, when you Rest, you gain 1 extra Luck. This extra Luck gained from a Rest increases by 1 every 4 Levels hereafter.</p>",
         "statBonusPoints": 1,
         "extraTraining": 0,
@@ -118,7 +118,7 @@
       },
       {
         "level": 8,
-        "name": "Knack",
+        "name": "Knack (2 Luck)",
         "description": "<p>You gain 1 Luck during a Breather and when you Crit, in addition to other Crit benefits.</p><p>Further, when you Rest, you gain 1 extra Luck. This extra Luck gained from a Rest increases by 1 every 4 Levels hereafter.</p>",
         "statBonusPoints": 1,
         "extraTraining": 0,

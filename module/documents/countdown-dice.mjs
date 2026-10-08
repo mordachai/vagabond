@@ -77,6 +77,8 @@ export class CountdownDice {
           countdownDice: {
             type: 'countdownDice',
             diceType: data.diceType || 'd4',
+            // "Cd4!" notation: the die Explodes when rolled (typed text / features only, not in the create dialog)
+            exploding: data.exploding === true,
             name: data.name || 'Countdown',
             size: size,
             faded: false,
@@ -91,6 +93,8 @@ export class CountdownDice {
             // Optional linking for NPC action recharge automation
             linkedRechargeActorUuid:    data.linkedRechargeActorUuid    ?? null,
             linkedRechargeActionIndex:  data.linkedRechargeActionIndex  ?? null,
+            // Optional marker for a class feature that owns the die (Sorcerer Overpowered)
+            linkedFeature:     data.linkedFeature     ?? null,
             // TODO: fatigueOnTick: data.fatigueOnTick ?? 0, — restore when re-enabling the fatigueOnTick feature
           }
         }

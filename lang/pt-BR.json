@@ -118,7 +118,9 @@
       "DefenseBoth": "Ambas",
       "DefenseCheck": "Defesa (Checagem de Ataque)",
       "DiePenaltyTitle": "{status}: -{penalty} em cada dado de dano ({dice}) = -{total}",
-      "HealPenaltyTitle": "{status}: -{penalty} em cada dado de cura ({dice}) = -{total}"
+      "HealPenaltyTitle": "{status}: -{penalty} em cada dado de cura ({dice}) = -{total}",
+      "OverhealTitle": "Cura Excedente",
+      "OverhealExcess": "Você ainda tem {excess} PV para curar a si mesmo ou outro Ser que você possa ver."
     },
     "AttackTypes": {
       "Melee": "Corpo a Corpo",
@@ -234,11 +236,51 @@
       "Raised": "O Olho de Águia de <strong>{name}</strong> sobe para {n}.",
       "Reset": "<strong>{name}</strong> não acertou um ataque à Distância — o Olho de Águia reinicia.",
       "GritTitle": "Fibra",
-      "GritPick": "Escolha uma Condição para remover (Olho de Águia +{n}).",
-      "GritDone": "<strong>{name}</strong> se livra de {status}. O Olho de Águia agora é {n}.",
+      "GritPick": "Escolha uma Condição para se livrar (gaste {n} acúmulos de Olho de Águia).",
+      "GritNoStacks": "{name} precisa de {n} acúmulos de Olho de Águia para a Fibra (tem {have}).",
+      "GritDone": "<strong>{name}</strong> se livra de {status}, gastando {spent} acúmulos de Olho de Águia (restam {n}).",
       "NoStatus": "{name} não tem nenhuma Condição que a Fibra possa remover.",
       "HighNoonTitle": "Meio-Dia",
       "HighNoonDone": "O Olho de Águia de <strong>{name}</strong> é definido como 17."
+    },
+    "Sorcerer": {
+      "NotYours": "Apenas o dono do personagem pode fazer isso.",
+      "TwinnedTag": "Magia Gêmea",
+      "OverpoweredTitle": "Sobrecarregado",
+      "OverpoweredDie": "Sobrecarregado ({name})",
+      "OverpoweredOn": "{name} já está Sobrecarregado — a contagem regressiva está em andamento.",
+      "OverpoweredMaxFatigue": "{name} não pode receber mais Fadiga.",
+      "OverpoweredStarted": "<strong>{name}</strong> recebe 1 de Fadiga (agora {fatigue}) e inicia uma contagem regressiva Cd4. No início de cada Turno role-a: recupere essa quantidade de PV e PV Máximo, e some-a ao seu Máx. de Conjuração no Turno."
+    },
+    "Hex": {
+      "Title": "Maldição",
+      "EffectText": "{target} está amaldiçoado. Clique com o botão direito no botão da Maldição ou exclua este efeito para encerrá-la.",
+      "NotYours": "Apenas o dono do personagem pode fazer isso.",
+      "NoTarget": "Selecione um token como alvo para amaldiçoar primeiro.",
+      "Failed": "Não foi possível amaldiçoar {name}.",
+      "HexedBy": "Amaldiçoado por {name}.",
+      "Hexed": "<strong>{name}</strong> amaldiçoa <strong>{target}</strong>.",
+      "Dropped": "<strong>{name}</strong> encerra a Maldição sobre <strong>{target}</strong>.",
+      "SoulLinkTitle": "Elo de Almas",
+      "SoulLinked": "<strong>{name}</strong> causa dano a {enemy} — o amaldiçoado {hexed} também sofre {damage} de dano."
+    },
+    "Archwizard": {
+      "Title": "Arquimago",
+      "Search": "Buscar Magias…",
+      "Cast": "Conjurar",
+      "NoPack": "O compêndio de Magias não foi encontrado.",
+      "Casts": "<strong>{name}</strong> conjura <strong>{spell}</strong>, uma Magia que não conhece. Nenhum Mana pode ser gasto para ampliá-la.",
+      "CastFromSheet": "{spell} está na sua aba de Magias; conjure-a por lá."
+    },
+    "Extracurricular": {
+      "Title": "Extracurricular",
+      "NotYours": "Apenas o dono do personagem pode fazer isso.",
+      "NoStudied": "{name} não tem nenhum dado de Estudo para gastar.",
+      "NoSpells": "{name} não conhece nenhuma Magia.",
+      "Pick": "Escolha uma Magia que você conhece para adicionar o efeito dela à Conjuração (gasta um dado de Estudo).",
+      "ArchwizardTitle": "Arquimago: {spell}",
+      "SpellTitle": "Extracurricular: {spell}",
+      "Added": "<strong>{name}</strong> gasta um dado de Estudo ({left} restantes) para adicionar à Conjuração o efeito de <strong>{spell}</strong>:"
     },
     "HuntersMark": {
       "Title": "Marca do Caçador",
@@ -367,6 +409,7 @@
       "Flanked": "Flanqueado",
       "Flanking": "Flanqueando",
       "Flying": "Voando",
+      "Hexed": "Amaldiçoado",
       "Focusing": "Concentrado",
       "Frightened": "Amedrontado",
       "Incapacitated": "Incapacitado",
@@ -392,6 +435,7 @@
       "Flanked": "Vulnerável (seus ataques e Salvaguardas contra ataques têm Desvantagem; ataques direcionados a ele e Salvaguardas contra seus ataques têm Vantagem) e sofre 2 de dano extra de ataques, antes da Armadura [AUTOMATIZADO]",
       "Flanking": "Flanqueando um Inimigo adjacente junto de um aliado. +2 de dano em ataques contra ele, e ele fica Vulnerável enquanto dois de vocês permanecerem Próximos. [AUTOMATIZADO]",
       "Flying": "No ar. Não toca o chão, então o Sentido Sísmico não o detecta. [MANUAL]",
+      "Hexed": "Sob o Feitiço de uma Bruxa. [MANUAL]",
       "Restrained": "Vulnerável + Velocidade = 0 [AUTOMATIZADO]",
       "Grappling": "Contendo um alvo. Velocidade reduzida à metade a menos que o alvo seja menor. [PARCIALMENTE AUTOMATIZADO]",
       "Blinded": "Não pode ver. Vulnerável [AUTOMATIZADO]",

@@ -3,7 +3,7 @@
   "type": "perk",
   "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
   "system": {
-    "description": "<p>You can use a d4 for the damage dice of Brawl Weapons, and they Explode on a 1.</p>",
+    "description": "<p>You can use a d4 for the damage dice of Brawl Weapons, and they can Explode.</p>",
     "prerequisites": {
       "stats": [
         {
@@ -23,7 +23,106 @@
       "resourceOrGroups": []
     }
   },
-  "effects": [],
+  "effects": [
+    {
+      "name": "Dusted Knuckle: Die",
+      "origin": "Compendium.vagabond.perks.Item.Lb1ncXSPRRd1wq84",
+      "img": "icons/svg/aura.svg",
+      "_id": "dUsTkNuCkLeDie001",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.weaponDieBySkill",
+            "value": "brawl: 4",
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent"
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.44.0",
+        "createdTime": 1765911754601,
+        "modifiedTime": 1765913631658,
+        "lastModifiedBy": "13p65OEadZSZVLRk"
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!Lb1ncXSPRRd1wq84.dUsTkNuCkLeDie001"
+    },
+    {
+      "name": "Dusted Knuckle: Explode",
+      "origin": "Compendium.vagabond.perks.Item.Lb1ncXSPRRd1wq84",
+      "img": "icons/svg/aura.svg",
+      "_id": "dUsTkNuCkLeExp001",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.weaponHighExplodeBySkill",
+            "value": "brawl: 1",
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent"
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.44.0",
+        "createdTime": 1765911754601,
+        "modifiedTime": 1765913631658,
+        "lastModifiedBy": "13p65OEadZSZVLRk"
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!Lb1ncXSPRRd1wq84.dUsTkNuCkLeExp001"
+    }
+  ],
   "folder": null,
   "flags": {},
   "_stats": {

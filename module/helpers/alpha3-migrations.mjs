@@ -176,3 +176,150 @@ export async function migrateAlpha3DefensePerks() {
 
   await game.settings.set('vagabond', 'alpha3DefensePerksMigrated', true);
 }
+
+/**
+ * Class items already on actors are copies. Per class: the compendium doc id and an old-version signature
+ * (what the Alpha 2 build of the class looked like, so homebrew-edited or already-current copies are left
+ * alone). `probe` = a level feature name only present once the pack is rebuilt.
+ */
+const lfNames = (item) => (item.system.levelFeatures ?? []).map((lf) => lf.name);
+const ALPHA3_CLASSES = {
+  Alchemist: { id: '4kXK5bZHEb3PMzLy', isOld: (i) => lfNames(i).includes('Eureka (10+)') },
+  Barbarian: { id: 'qONUTXY8GwqSEoDw', isOld: (i) => (String(i.system.description).includes('>Rip and Tear</span>') && !String(i.system.description).includes('Aggressor (15’), Rip and Tear')) || i.effects?.some((e) => e.system?.changes?.some((c) => c.key === 'system.spellDamageDieSizeBonus')) },
+  Dancer: { id: '8LqHA6iqYBgFmVfJ', isOld: (i) => String(i.system.description).includes('Sandilene') },
+  Druid: { id: 'YhELwGaQYbFGoKAB', isOld: (i) => i.system.levelFeatures?.some((lf) => lf.level === 2 && lf.name === 'Savagery (+2)') },
+  Fighter: { id: 'TiQ8qydxxhedOk09', isOld: (i) => i.system.levelFeatures?.some((lf) => lf.level === 1 && lf.name === 'Fighting Style' && lf.perkAmount === 2) },
+  Gunslinger: { id: 'vPSWM9E4F8yjHVea', isOld: (i) => i.system.levelFeatures?.some((lf) => lf.name.startsWith('Grit') && lf.description.includes('increase your Deadeye')) },
+  Hunter: { id: '1qy5vhn6XcajyEZB', isOld: (i) => String(i.system.description).includes('Midline or Backline') },
+  Luminary: { id: 'RenZwwCL4aT5LFej', isOld: (i) => i.system.levelFeatures?.some((lf) => lf.name === 'Overheal' && !lf.description.includes('Once per Action')) || !i.effects?.some((e) => e.name === 'Overheal: Excess') },
+  Magus: { id: 'gSD4ww0S2NUBbnvo', isOld: (i) => lfNames(i).includes('Spell Parry (10+)') },
+  Merchant: { id: 'F26CjqMxgd2fPbv5', isOld: (i) => lfNames(i).includes('Top Shelf') || !i.effects?.some((e) => e.name === 'Midas Touch') },
+  Pugilist: { id: 'znHJW6Ern6f463p2', isOld: (i) => lfNames(i).includes('Haymaker (10+)') },
+  Revelator: { id: 'yZzChIB5YwQBSOeA', isOld: (i) => String(i.system.description).startsWith('<p><strong>He who') },
+  Rogue: { id: 'gwlbYvDMyO0cPA4U', isOld: (i) => lfNames(i).includes('Knack') },
+  Sorcerer: { id: '2zrj3IvI0LFNDvEy', isOld: (i) => !lfNames(i).includes('Twinned Spell') && lfNames(i).includes('Quickening (0 Mana)') },
+  Vanguard: { id: '8xsWpW29EzAAk100', isOld: (i) => lfNames(i).includes('Wall (Large)') },
+  Witch: { id: 'FtE7i0UBBvuMH5ZI', isOld: (i) => lfNames(i).includes('Widdershins (1)') && (!lfNames(i).includes('Soul Link') || !i.effects?.some((e) => e.name === 'Widdershins')) },
+  Wizard: { id: 'U3rAxH8vn8tzDblW', isOld: (i) => lfNames(i).includes('Manifold Mind (+1)') && (!lfNames(i).includes('Extracurricular') || i.system.levelFeatures?.some((lf) => lf.name === 'Archwizard' && !lf.action?.enabled)) },
+};
+
+/**
+ * Class items get the Alpha 3 deltas (ALPHA3_REVIEW.md §2): Eureka 15+/14+/13+, Savagery (+1), Fighting Style as
+ * one Perk, Grit paying Deadeye stacks, Overheal once per Action, Spell Parry 15+, Merchant rewrites, Pugilist
+ * Haymaker/Moxie/Title Holder, Rogue/Vanguard names, plus the new Sorcerer / Witch / Wizard features. Swaps
+ * description / levelFeatures / skillGrant / effects from the compendium doc (the player's per-effect
+ * `disabled` choice is kept by effect name). Aborts WITHOUT setting the guard while the classes pack hasn't
+ * been rebuilt (probe: the Sorcerer doc must carry Twinned Spell). Runs after the earlier class migrations.
+ */
+export async function migrateAlpha3Classes() {
+  if (game.user !== game.users.activeGM) return;
+  if (game.settings.get('vagabond', 'alpha3ClassesMigrated')) return;
+
+  const pack = game.packs.get('vagabond.classes');
+  if (!pack) return;
+  const probe = await pack.getDocument(ALPHA3_CLASSES.Sorcerer.id);
+  if (!probe?.system.levelFeatures.some((lf) => lf.name === 'Twinned Spell')) return; // pack not rebuilt yet
+
+  const sources = {};
+  for (const [name, { id }] of Object.entries(ALPHA3_CLASSES)) sources[name] = await pack.getDocument(id);
+
+  for (const item of worldItems()) {
+    try {
+      const mig = ALPHA3_CLASSES[item.name];
+      const source = sources[item.name];
+      if (item.type !== 'class' || !mig || !source || !mig.isOld(item)) continue;
+
+      const wasOff = new Map(item.effects.map((e) => [e.name, e.disabled]));
+      const effects = source.effects.map((e) => {
+        const data = e.toObject();
+        delete data._id;
+        delete data._stats;
+        if (wasOff.get(data.name) === true) data.disabled = true;
+        return data;
+      });
+      const s = source.system.toObject();
+      await item.update({
+        'system.description': s.description,
+        'system.levelFeatures': s.levelFeatures,
+        'system.skillGrant': s.skillGrant,
+      });
+      await item.deleteEmbeddedDocuments('ActiveEffect', item.effects.map((e) => e.id));
+      await item.createEmbeddedDocuments('ActiveEffect', effects);
+    } catch (err) {
+      console.warn(`vagabond | migrate Alpha 3 class: skipped ${item?.uuid ?? '(unknown)'}`, err);
+    }
+  }
+
+  await game.settings.set('vagabond', 'alpha3ClassesMigrated', true);
+}
+
+/** Class-granted perks whose book text / effects changed in Alpha 3 (Dusted Knuckle explode, Quick Draw Thrown). */
+const CLASS_PERKS = [
+  { id: 'Lb1ncXSPRRd1wq84', name: 'Dusted Knuckle' },
+  { id: 'byBDvKpPkrK8ynkE', name: 'Quick Draw' },
+];
+
+/**
+ * Perk items already on actors predate the Alpha 3 text: swap in the compendium's book text and (re)create its
+ * effects. Aborts WITHOUT setting the guard while the perks pack hasn't been rebuilt (Dusted Knuckle must carry
+ * its Explode effect). A copy already holding the compendium text is skipped.
+ */
+export async function migrateAlpha3ClassPerks() {
+  if (game.user !== game.users.activeGM) return;
+  if (game.settings.get('vagabond', 'alpha3ClassPerksMigrated')) return;
+
+  const pack = game.packs.get('vagabond.perks');
+  if (!pack) return;
+  const sources = new Map();
+  for (const def of CLASS_PERKS) sources.set(def.id, { def, doc: await pack.getDocument(def.id) });
+  if (!sources.get('Lb1ncXSPRRd1wq84').doc?.effects.size) return; // pack not rebuilt yet
+
+  for (const item of worldItems()) {
+    try {
+      if (item.type !== 'perk') continue;
+      const src = sources.get(sourceDocId(item)) ?? sources.get(CLASS_PERKS.find((d) => d.name === item.name)?.id);
+      if (!src?.doc || item.system.description === src.doc.system.description) continue;
+
+      await item.update({ 'system.description': src.doc.system.description });
+      const missing = src.doc.effects.filter((e) => !item.effects.some((x) => x.name === e.name));
+      if (missing.length) {
+        await item.createEmbeddedDocuments('ActiveEffect', missing.map((e) => {
+          const data = e.toObject();
+          delete data._id;
+          delete data._stats;
+          return data;
+        }));
+      }
+    } catch (err) {
+      console.warn(`vagabond | migrate Alpha 3 class perks: skipped ${item?.uuid ?? '(unknown)'}`, err);
+    }
+  }
+
+  await game.settings.set('vagabond', 'alpha3ClassPerksMigrated', true);
+}
+
+/**
+ * Human trait Knack → Aptitude (p. 27). The trait text and grants are unchanged, only the name: rename it on
+ * Human ancestry items already in the world. Aborts WITHOUT setting the guard while the ancestries pack hasn't been
+ * rebuilt. Items whose Human trait list has no "Knack" (already current / homebrew) are skipped.
+ */
+export async function migrateAlpha3Ancestries() {
+  if (game.user !== game.users.activeGM) return;
+  if (game.settings.get('vagabond', 'alpha3AncestriesMigrated')) return;
+
+  const source = await game.packs.get('vagabond.ancestries')?.getDocument('kYLA215krVXIgmnd');
+  if (!source?.system.traits.some((t) => t.name === 'Aptitude')) return; // pack not rebuilt yet
+
+  for (const item of worldItems()) {
+    try {
+      if (item.type !== 'ancestry' || item.name !== 'Human') continue;
+      const traits = item.system.toObject().traits;
+      if (!traits.some((t) => t.name === 'Knack')) continue;
+      await item.update({ 'system.traits': traits.map((t) => (t.name === 'Knack' ? { ...t, name: 'Aptitude' } : t)) });
+    } catch (err) {
+      console.warn(`vagabond | migrate Alpha 3 ancestry: skipped ${item?.uuid ?? '(unknown)'}`, err);
+    }
+  }
+
+  await game.settings.set('vagabond', 'alpha3AncestriesMigrated', true);
+}

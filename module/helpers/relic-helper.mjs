@@ -47,6 +47,8 @@ export class RelicHelper {
       changes: (powerItem.effects ?? []).map(e => ({
         name: e.name,
         applicationMode: e.flags?.vagabond?.applicationMode ?? 'permanent',
+        // What one Relic boost adds to this Bonus / Rank (Merchant Midas Touch), see actor `_applyRelicBoost`
+        relicBoost: e.flags?.vagabond?.relicBoost ?? null,
         changes: e.system?.changes ?? [],
       })),
       causedStatuses: powerItem.system.causedStatuses ?? [],
@@ -108,6 +110,7 @@ export class RelicHelper {
           flags: {
             vagabond: {
               applicationMode: change.applicationMode,
+              ...(change.relicBoost ? { relicBoost: change.relicBoost } : {}),
               relicSource: { kind: 'power', id: power.id },
             },
           },

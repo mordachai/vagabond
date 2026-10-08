@@ -256,7 +256,12 @@ export class GunslingerHelper {
       ui.notifications.warn(this.#L('NoStatus', { name: actor.name }));
       return;
     }
-    const gain = Math.max(0, Number(actor.system.deadeyeGrit) || 0);
+    // Grit (Alpha 3): the Status is paid for with Deadeye stacks
+    const cost = Math.max(0, Number(actor.system.deadeyeGrit) || 0);
+    if (this.stacks(actor) < cost) {
+      ui.notifications.warn(this.#L('GritNoStacks', { name: actor.name, n: cost, have: this.stacks(actor) }));
+      return;
+    }
 
     const { VagabondChatCard } = await import('./chat-card.mjs');
     const { buildMacroButtonHTML } = await import('./item-macro.mjs');
@@ -265,26 +270,29 @@ export class GunslingerHelper {
       .setActor(actor)
       .setTitle(this.#L('GritTitle'))
       .setSubtitle(actor.name)
-      .setDescription(`<p>${this.#L('GritPick', { n: gain })}</p>`);
-    for (const id of present) {
+      .setDescription(`<p>${this.#L('GritPick', { n: cost })}</p>`);
+    // Mosaic: 3 tiles per row, 50px Status image with its name below
+    const tiles = present.map((id) => {
       const def = CONFIG.statusEffects.find(e => e.id === id);
-      card.addFooterAction(buildMacroButtonHTML({
+      return buildMacroButtonHTML({
         cfg: {
           enabled: true,
           label: game.i18n.localize(def?.name ?? id),
           icon: 'heart-pulse',
+          img: def?.img ?? def?.icon,
           command: 'system:gunslinger.gritRemove',
         },
         slot: 'macro',
         actorUuid: actor.uuid,
         itemName: 'Grit',
         extraScope: { statusId: id },
-      }));
-    }
+      });
+    });
+    card.addFooterAction(`<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;width:100%;">${tiles.join('')}</div>`);
     await card.send();
   }
 
-  /** A Grit status button was clicked: remove the Status and raise Deadeye. */
+  /** A Grit status button was clicked: remove the Status and spend the Deadeye stacks. */
   static async gritRemove({ actor, statusId }) {
     if (!actor?.isOwner) {
       ui.notifications.warn(this.#L('NotYours'));
@@ -294,15 +302,19 @@ export class GunslingerHelper {
       ui.notifications.warn(this.#L('NoStatus', { name: actor.name }));
       return;
     }
-    const gain = Math.max(0, Number(actor.system.deadeyeGrit) || 0);
+    const cost = Math.max(0, Number(actor.system.deadeyeGrit) || 0);
+    if (this.stacks(actor) < cost) {
+      ui.notifications.warn(this.#L('GritNoStacks', { name: actor.name, n: cost, have: this.stacks(actor) }));
+      return;
+    }
     await StatusHelper.removeStatus(actor, statusId);
-    const n = gain > 0 ? await this.setStacks(actor, this.stacks(actor) + gain) : this.stacks(actor);
+    const n = cost > 0 ? await this.setStacks(actor, this.stacks(actor) - cost) : this.stacks(actor);
 
     const def = CONFIG.statusEffects.find(e => e.id === statusId);
     const { VagabondChatCard } = await import('./chat-card.mjs');
     await VagabondChatCard.featureCard(actor, {
       title: this.#L('GritTitle'),
-      description: `<p>${this.#L('GritDone', { name: actor.name, status: game.i18n.localize(def?.name ?? statusId), n })}</p>`
+      description: `<p>${this.#L('GritDone', { name: actor.name, status: game.i18n.localize(def?.name ?? statusId), spent: cost, n })}</p>`
         + this.#featureText(actor, 'Grit'),
     });
   }

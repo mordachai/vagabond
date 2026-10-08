@@ -37,7 +37,7 @@
       {
         "level": 2,
         "name": "Overheal",
-        "description": "<p>When you restore HP, you add half your Level to the total HP restored and, if you restore HP that exceeds the Being’s Max HP, you can give the excess to yourself or a Being you can see.</p>",
+        "description": "<p>Once per Action when you restore HP, you add half your Level to the total HP restored and, once per Turn, if you restore HP that exceeds the Being’s Max HP, you can give the excess to yourself or a Being you can see.</p>",
         "statBonusPoints": 1,
         "extraTraining": 0,
         "requiredSpells": [],
@@ -61,7 +61,7 @@
       {
         "level": 4,
         "name": "Ever-Cure (1 Status)",
-        "description": "<p>When you restore HP, you can chose to end one Status affecting the Target from either Berserk, Blinded, Charmed, Confused, Dazed, Frightened, Paralyzed, or Sickened. The number of Statuses you can remove at once this way increases by 1 every 4 Levels hereafter.</p>",
+        "description": "<p>When you restore HP, you can choose to end one Status affecting the Target from either Berserk, Blinded, Charmed, Confused, Dazed, Frightened, Paralyzed, or Sickened. The number of Statuses you can remove at once this way increases by 1 every 4 Levels hereafter.</p>",
         "statBonusPoints": 1,
         "extraTraining": 0,
         "requiredSpells": [],
@@ -109,7 +109,7 @@
       {
         "level": 8,
         "name": "Ever-Cure (2 Statuses)",
-        "description": "<p>When you restore HP, you can chose to end one Status affecting the Target from either Berserk, Blinded, Charmed, Confused, Dazed, Frightened, Paralyzed, or Sickened. The number of Statuses you can remove at once this way increases by 1 every 4 Levels hereafter.</p>",
+        "description": "<p>When you restore HP, you can choose to end one Status affecting the Target from either Berserk, Blinded, Charmed, Confused, Dazed, Frightened, Paralyzed, or Sickened. The number of Statuses you can remove at once this way increases by 1 every 4 Levels hereafter.</p>",
         "statBonusPoints": 1,
         "extraTraining": 0,
         "requiredSpells": [],
@@ -350,6 +350,56 @@
       "showIcon": 1,
       "folder": null,
       "_key": "!items.effects!RenZwwCL4aT5LFej.nDG8U4CigWtURhc4"
+    },
+    {
+      "name": "Overheal: Excess",
+      "origin": "Compendium.vagabond.classes.Item.RenZwwCL4aT5LFej",
+      "img": "icons/svg/aura.svg",
+      "_id": "lUmOvErHeAlXs001",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.overhealExcess",
+            "value": "true",
+            "priority": null,
+            "type": "override"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent",
+          "minLevel": 2
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.44.0",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "createdTime": 1791400000000,
+        "modifiedTime": 1791400000000,
+        "lastModifiedBy": null
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!RenZwwCL4aT5LFej.lUmOvErHeAlXs001"
     }
   ],
   "folder": null,

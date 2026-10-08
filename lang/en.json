@@ -118,7 +118,9 @@
       "DefenseBoth": "Both",
       "DefenseCheck": "Defense (Attack Check)",
       "DiePenaltyTitle": "{status}: -{penalty} to each damage die ({dice}) = -{total}",
-      "HealPenaltyTitle": "{status}: -{penalty} to each healing die ({dice}) = -{total}"
+      "HealPenaltyTitle": "{status}: -{penalty} to each healing die ({dice}) = -{total}",
+      "OverhealTitle": "Overheal",
+      "OverhealExcess": "You still have {excess} HP to heal yourself or another Being you can see."
     },
     "AttackTypes": {
       "Melee": "Melee",
@@ -234,11 +236,51 @@
       "Raised": "<strong>{name}</strong>’s Deadeye rises to {n}.",
       "Reset": "<strong>{name}</strong> didn’t hit a Ranged attack — Deadeye resets.",
       "GritTitle": "Grit",
-      "GritPick": "Choose a Status to remove (Deadeye +{n}).",
-      "GritDone": "<strong>{name}</strong> shakes off {status}. Deadeye is now {n}.",
+      "GritPick": "Choose a Status to shake off (spend {n} Deadeye stacks).",
+      "GritNoStacks": "{name} needs {n} Deadeye stacks for Grit (has {have}).",
+      "GritDone": "<strong>{name}</strong> shakes off {status}, spending {spent} Deadeye stacks ({n} left).",
       "NoStatus": "{name} has no Status Grit can remove.",
       "HighNoonTitle": "High Noon",
       "HighNoonDone": "<strong>{name}</strong>’s Deadeye is set to 17."
+    },
+    "Sorcerer": {
+      "NotYours": "Only the character’s owner can do that.",
+      "TwinnedTag": "Twinned Spell",
+      "OverpoweredTitle": "Overpowered",
+      "OverpoweredDie": "Overpowered ({name})",
+      "OverpoweredOn": "{name} is already Overpowered — the countdown is running.",
+      "OverpoweredMaxFatigue": "{name} can’t gain any more Fatigue.",
+      "OverpoweredStarted": "<strong>{name}</strong> gains 1 Fatigue (now {fatigue}) and starts a Cd4 countdown. At the start of each Turn roll it: regain that much HP and Max HP, and add it to your Cast Max for the Turn."
+    },
+    "Hex": {
+      "Title": "Hex",
+      "EffectText": "{target} is hexed. Right-click the Hex button or delete this effect to drop the Hex.",
+      "NotYours": "Only the character’s owner can do that.",
+      "NoTarget": "Target a token to hex first.",
+      "Failed": "Could not hex {name}.",
+      "HexedBy": "Hexed by {name}.",
+      "Hexed": "<strong>{name}</strong> hexes <strong>{target}</strong>.",
+      "Dropped": "<strong>{name}</strong> drops the Hex on <strong>{target}</strong>.",
+      "SoulLinkTitle": "Soul Link",
+      "SoulLinked": "<strong>{name}</strong> damages {enemy} — the hexed {hexed} also takes {damage} damage."
+    },
+    "Archwizard": {
+      "Title": "Archwizard",
+      "Search": "Search Spells…",
+      "Cast": "Cast",
+      "NoPack": "The Spells compendium was not found.",
+      "Casts": "<strong>{name}</strong> Casts <strong>{spell}</strong>, a Spell they do not know. No Mana can be spent to upcast it.",
+      "CastFromSheet": "{spell} is on your Spells tab; Cast it from there."
+    },
+    "Extracurricular": {
+      "Title": "Extracurricular",
+      "NotYours": "Only the character’s owner can do that.",
+      "NoStudied": "{name} has no Studied die to spend.",
+      "NoSpells": "{name} knows no Spells.",
+      "Pick": "Choose a Spell you know to add its effect to the Casting (spends a Studied die).",
+      "ArchwizardTitle": "Archwizard: {spell}",
+      "SpellTitle": "Extracurricular: {spell}",
+      "Added": "<strong>{name}</strong> spends a Studied die ({left} left) to add the effect of <strong>{spell}</strong> to the Casting:"
     },
     "HuntersMark": {
       "Title": "Hunter’s Mark",
@@ -367,6 +409,7 @@
       "Flanked": "Flanked",
       "Flanking": "Flanking",
       "Flying": "Flying",
+      "Hexed": "Hexed",
       "Focusing": "Focusing",
       "Frightened": "Frightened",
       "Incapacitated": "Incapacitated",
@@ -392,6 +435,7 @@
       "Flanked": "Vulnerable (its attacks and Saves against attacks have Hinder; attacks targeting it and Saves against its attacks have Favor) and takes an extra 2 damage from attacks, before Armor [AUTOMATED]",
       "Flanking": "Flanking an adjacent Foe alongside an ally. +2 damage on attacks against it, and it is Vulnerable while two of you stay Close. [AUTOMATED]",
       "Flying": "Airborne. Not touching the ground, so Seismicsense can't detect it. [MANUAL]",
+      "Hexed": "Under a Witch's Hex. [MANUAL]",
       "Restrained": "Vulnerable + Speed = 0 [AUTOMATED]",
       "Grappling": "Restraining a target. Speed halved unless target is smaller. [PARTIALLY AUTOMATED]",
       "Blinded": "Can't see. Vulnerable [AUTOMATED]",

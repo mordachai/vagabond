@@ -99,7 +99,7 @@ async function grantAlchemical(actor, uuid, source, titleKey) {
 }
 
 /** RAW Prima Materia cap: an Alchemical Item worth 10g or less. */
-export const PRIMA_MATERIA_CAP = 10000;
+export const PRIMA_MATERIA_CAP = 10 * CurrencyHelper.RATES.gold;
 
 /**
  * Stored value (copper) of an alchemical, from a full document OR a compendium

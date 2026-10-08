@@ -10,6 +10,7 @@ export class VagabondTextParser {
    * Examples:
    * - "Cd6" → clickable span that creates a d6 countdown dice
    * - "This spell lasts Cd8 rounds" → "This spell lasts [clickable Cd8] rounds"
+   * - "Cd4!" → an Exploding countdown die (typed notation only; the create dialog has no such option)
    *
    * @param {string} text - The text to parse
    * @returns {string} Text with countdown dice patterns converted to clickable spans
@@ -19,15 +20,15 @@ export class VagabondTextParser {
 
     // Replace countdown dice patterns with clickable spans
     // Matches: Cd4, Cd6, cd8, CD10, etc. (case-insensitive)
-    const countdownPattern = /C(d\d+)/gi;
+    const countdownPattern = /C(d\d+)(!)?/gi;
 
-    const formattedText = text.replace(countdownPattern, (match, diceNotation) => {
+    const formattedText = text.replace(countdownPattern, (match, diceNotation, bang) => {
       // Extract just the number (4, 6, 8, etc.)
       const diceSize = diceNotation.match(/\d+/)[0];
 
       // Return clickable span with data attributes for the handler
       // match is the full match "Cd6", "CD4", etc.
-      return `<span class="countdown-dice-trigger" data-action="createCountdownFromRecharge" data-dice-size="${diceSize}">${match}</span>`;
+      return `<span class="countdown-dice-trigger" data-action="createCountdownFromRecharge" data-dice-size="${diceSize}"${bang ? ' data-exploding="true"' : ''}>${match}</span>`;
     });
 
     return formattedText;

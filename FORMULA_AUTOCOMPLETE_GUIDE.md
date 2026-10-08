@@ -278,7 +278,7 @@ The Barbarian class item ships **one Active Effect per automated behavior**, so 
 
 | Effect | Key | Mode | Value |
 | --- | --- | --- | --- |
-| Rage | `system.<melee/ranged/brawl/finesse>DamageDieSizeBonus` | Add | `(@statuses.berserk) ? 2 : 0` (one die size larger) |
+| Rage | `system.<melee/ranged/brawl/finesse/spell>DamageDieSizeBonus` | Add | `(@statuses.berserk) ? 2 : 0` (one die size larger; Spells too — lowercase "attack" covers Casts) |
 | Rage | `system.incomingDamageReductionPerDie` | Add | `(@statuses.berserk) ? ((@armorWorn.slots <= 1) ? 1 : 0) : 0` (Light / no Armor) |
 | Rage: Auto-Berserk | `system.rageTrigger` | Override | `true` (damage taken / attacking applies Berserk — switch off for manual) |
 | Aggressor | `system.speed.bonus` | Add | `(@lvl >= 2) ? 5 * (1 + floor((@lvl - 2) / 4)) : 0` |
@@ -304,9 +304,9 @@ The Alchemist class item ships **one Active Effect per automated behavior** (all
 | Effect | Key | Mode | Value |
 | --- | --- | --- | --- |
 | Catalyze | `system.craft.catalyze` | Add | `1` |
-| Eureka (Lv 2+) | `system.craft.eurekaMargin` | Add | `10 - floor(max(0, @lvl - 2) / 4)` (10+ / 9+ / 8+) |
+| Eureka (Lv 2+) | `system.craft.eurekaMargin` | Add | `15 - floor(max(0, @lvl - 2) / 4)` (15+ / 14+ / 13+, Alpha 3) |
 | Potency (Lv 4+) | `system.alchemicalBonusPerDamageDie` | Add | `floor(@lvl / 4)` (+1 at 4, +2 at 8) |
-| Potency: Explode (Lv 4+) | `system.craft.alchemicalExplode` | Add | `min(2, floor(@lvl / 4))` (face COUNT: highest, then 2 highest) |
+| Potency: Explode (Lv 4+) | `system.craft.alchemicalExplode` | Add | `min(1, floor(@lvl / 4))` (face COUNT: the highest face — Alpha 3 text is just "can Explode") |
 | Mix (Lv 6+) | `system.craft.mix` | Add | `1` |
 | Prima Materia (Lv 10+) | `system.craft.primaMateria` | Add | `1` |
 
@@ -374,7 +374,7 @@ Deadeye itself is an actor effect created by the feature button / auto trigger (
 | Deadeye: Auto (switchable) | `system.deadeyeTrigger` | Override | `true` (each Ranged attack adds a stack; resets at the end of your Turn in a Combat without a Ranged hit) |
 | Bad Medicine (Lv 2+) | `system.critExtraDiceBySkill` | Add | `ranged: 1 + floor((@lvl - 2) / 4)` (extra dice matching the weapon's die on a Ranged Crit: 1 / 2 / 3) |
 | Devastator (Lv 6+) | `system.critExplodeSkills` | Add | `ranged` (Crit damage dice Explode on their highest face) |
-| Grit (Lv 4+) | `system.deadeyeGrit` | Add | `4 - floor(@lvl / 4)` (stacks the Grit button adds: 3 at Level 4, 2 at Level 8; the button clamps at 0) |
+| Grit (Lv 4+) | `system.deadeyeGrit` | Add | `max(0, 4 - floor(@lvl / 4))` (Deadeye stacks the Grit button REMOVES, Alpha 3: 3 at Level 4, 2 at Level 8; needs that many stacks) |
 | High Noon: Auto (Lv 10, switchable) | `system.highNoonTrigger` | Override | `true` (dropping a non-allied target to 0 HP sets Deadeye to 17) |
 
 > `system.critExtraDiceBySkill` is a general field: each entry is `<skill>[,<skill>…]: <formula>` = that many extra dice (matching the first die of the damage formula) on a Crit made with that weapon skill. `system.critExplodeSkills` ADDs weapon skill keys whose Crit damage dice Explode.
@@ -398,6 +398,7 @@ The Mark itself is an actor effect (`flags.vagabond.huntersMark`) created by the
 | Theurgy | `system.mana.castingMaxBonus` | Add | `2 + floor(@lvl / 2) - @stats.awareness.total` (Cast Max is 2 + Level; the engine adds Stat + half Level, so both are cancelled) |
 | Radiant Healer | `system.healingExplode` | Add | `max` (HP-restoring Spell rolls also Explode on their highest face; ADD `1`, `2`, `max`, `max-1` — Assured Healer adds `1`) |
 | Overheal (Lv 2+) | `system.healingBonusDice` | Add | `floor(@lvl / 2)` (flat term appended to HP-restoring rolls) |
+| Overheal: Excess (Lv 2+) | `system.overhealExcess` | Override | `true` (apply-healing card reports the HP that did not fit in the Target's Max HP) |
 
 ### Magus — Arcanum
 
@@ -416,10 +417,10 @@ The Mark itself is an actor effect (`flags.vagabond.huntersMark`) created by the
 | Effect | Key | Mode | Value |
 | --- | --- | --- | --- |
 | Fisticuffs | `system.critExtraDiceBySkill` | Add | `brawl: 1` (Vicious: a Brawl Crit adds one die matching the weapon) |
-| Haymaker: Auto (Lv 2+, switchable) | `system.haymakerMargin` | Add | `10 - floor((@lvl - 2) / 6)` (a Brawl attack beating the Difficulty by this much Dazes the Target; cleared by the Class Automation setting) |
+| Haymaker: Auto (Lv 2+, switchable) | `system.haymakerMargin` | Add | `15 - floor((@lvl - 2) / 4)` (a Brawl attack beating the Difficulty by this much Dazes the Target; cleared by the Class Automation setting) |
 | Moxie (Lv 4+) | `system.statusResistances` | Add | `dazed`, `frightened`, `restrained` (one change each) |
 | Title Holder: Die (Lv 6+) | `system.weaponDieBySkill` | Add | `brawl: 6 + 2 * floor(@lvl / 10)` (damage dice of that skill’s weapons are at least this size) |
-| Title Holder: Explode (Lv 6+) | `system.weaponLowExplodeBySkill` | Add | `brawl: 2` (those dice also Explode on 1 up to this face) |
+| Title Holder: Explode (Lv 6+) | `system.weaponHighExplodeBySkill` | Add | `brawl: 2` (those dice Explode on their two highest values) |
 
 ### Revelator — Righteous, Lay on Hands, Divine Resolve
 
@@ -446,6 +447,9 @@ The Mark itself is an actor effect (`flags.vagabond.huntersMark`) created by the
 | Glamour | `system.mana.castingMaxBonus` | Add | `2 + floor(@lvl / 2) - @stats.presence.total` (Cast Max is 2 + Level; the engine adds Presence + half Level, so both are cancelled) |
 | Spell-Slinger: Die (Lv 4+) | `system.spellDamageDieSizeBonus` | Add | `2` (d6 → d8) |
 | Spell-Slinger: Crit (Lv 4+) | `system.castCritBonus` | Add | `0 - 1 - floor((@lvl - 4) / 4)` (Crit range on Cast Checks: −1 at 4, −2 at 8) |
+| Twinned Spell: Auto (Lv 6+, switchable) | `system.twinnedSpellTrigger` | Override | `true` (in a started Combat the second Cast Check of the same Spell on a Turn is Favored; Combat-only, cleared by the Class Automation setting) |
+
+Overpowered (Lv 10) is a feature button (`system:sorcerer.overpowered`): +1 Fatigue and a Cd4 countdown die (`flags.vagabond.countdownDice.linkedFeature = 'overpowered'`); the per-Turn HP / Max HP / Cast Max part is text.
 
 ### Vanguard — Wall, Indestructible
 
@@ -454,11 +458,16 @@ The Mark itself is an actor effect (`flags.vagabond.huntersMark`) created by the
 | Wall (Lv 2+) | `system.defenseWeaponDieStep` | Add | `1 + floor((@lvl - 2) / 4)` (Defense-property weapons roll their damage dice this many sizes larger) |
 | Indestructible (Lv 4+) | `system.defenseWeaponBonusPerDie` | Add | `@statuses.incapacitated ? 0 : (@armorWorn.slots > 0) ? 1 + floor((@lvl - 4) / 4) : 0` (flat bonus to each damage die of Defense-property weapons) |
 
-### Witch — Occultist
+### Witch — Occultist, Hex, Soul Link, Misery Business
 
 | Effect | Key | Mode | Value |
 | --- | --- | --- | --- |
 | Occultist | `system.mana.castingMaxBonus` | Add | `2 + floor(@lvl / 2) - @stats.awareness.total` (Cast Max is 2 + Level; the engine adds Awareness + half Level, so both are cancelled) |
+| Widdershins (Lv 2+) | `system.hexDamageBonus` | Add | `1 + floor((@lvl - 2) / 4)` (flat Spell damage vs the hexed Target) |
+| Soul Link (Lv 6+) | `system.hexRules` | Add | `soulLink` (damage you deal to an Enemy also hurts the hexed Target; once per Turn in a started Combat) |
+| Misery Business (Lv 10+) | `system.hexRules` | Add | `weak` (the hexed Target is Weak to your damage) |
+
+The Hex itself is an actor effect (`flags.vagabond.hex = { key, name }`) set by the Hex feature button (`system:witch.hex`, right-click drops it); Widdershins, Grudge Bearer and the continual-Spell part of Hex are text.
 
 ### Wizard — Spellcaster, Manifold Mind, Sculpt Spell
 
@@ -467,6 +476,12 @@ The Mark itself is an actor effect (`flags.vagabond.huntersMark`) created by the
 | Spellcaster | `system.mana.castingMaxBonus` | Add | `2 + floor(@lvl / 2) - @stats.reason.total` (Cast Max is 2 + Level; the engine adds Reason + half Level, so both are cancelled) |
 | Manifold Mind (Lv 2+) | `system.focus.maxBonus` | Add | `1 + floor((@lvl - 2) / 4)` (Spells you can Focus on at once: 5 + this) |
 | Sculpt Spell (Lv 4+) | `system.bonuses.spellManaCostReduction` | Add | `1 + floor((@lvl - 4) / 4)` (Mana off the total cost of a Cast — Delivery, extra Damage dice, Delivery increase, Effect; Focus is not part of it; never below 0) |
+
+### Merchant — Midas Touch
+
+| Effect | Attribute Key | Mode | Effect Value | Result |
+|---|---|---|---|---|
+| Midas Touch (Lv 10) | `system.relicBoost` | Add | `1` | Each Equipped Relic effect flagged `flags.vagabond.relicBoost` (the flag's number = what one boost adds: 1 for a Bonus, 5 for a Swiftness Rank) gets `flag × relicBoost` added to each positive numeric `add` change |
 
 ### Exalted — Bonus Per Damage Die (with Doubling vs Specific Being Types)
 

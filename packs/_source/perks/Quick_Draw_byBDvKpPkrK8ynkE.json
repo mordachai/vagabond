@@ -3,7 +3,7 @@
   "type": "perk",
   "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
   "system": {
-    "description": "<p>When Combat occurs, you can make one Ranged attack before the first Turn, which is Hindered if it is made with a 2H Weapon.</p>",
+    "description": "<p>When Combat occurs, you can make one Ranged or Thrown attack before the first Turn, which is Hindered if it is made with a 2H Weapon.</p>",
     "prerequisites": {
       "stats": [
         {

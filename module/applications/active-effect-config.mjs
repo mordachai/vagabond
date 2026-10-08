@@ -168,6 +168,14 @@ export default class VagabondActiveEffectConfig extends foundry.applications.she
             option.textContent = rule;
             datalist.appendChild(option);
           });
+        } else if (keyValue === 'system.hexRules') {
+          input.setAttribute('placeholder', 'soulLink or weak');
+          ['soulLink', 'weak'].forEach(rule => {
+            const option = document.createElement('option');
+            option.value = rule;
+            option.textContent = rule;
+            datalist.appendChild(option);
+          });
         } else if (keyValue === 'system.critExplodeSkills') {
           input.setAttribute('placeholder', 'Weapon skill key (e.g., ranged)');
           (CONFIG.VAGABOND.homebrew?.skills ?? []).filter(s => s.isWeaponSkill).forEach(skill => {

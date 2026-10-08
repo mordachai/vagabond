@@ -450,6 +450,17 @@ VAGABOND.statusEffectDefinitions = [
     changes: []
   },
   {
+    // Informational only. Put on a Being while a Witch's Hex is on it (WitchHelper.setHex stamps the hexer's name
+    // into the description); also toggleable by hand from the token HUD. The Hex rules (Soul Link, Misery Business)
+    // follow the Witch's Hex effect, not this status.
+    id: 'hexed',
+    name: 'VAGABOND.StatusConditions.Hexed',
+    img: '/icons/magic/symbols/runes-triangle-blue.webp',
+    statuses: ['hexed'],
+    description: "Under a Witch's Hex.",
+    changes: []
+  },
+  {
     // Bookkeeping only (no mechanical changes): mapped to Foundry's FLY special status
     // (CONFIG.specialStatusEffects.FLY) so Feel Tremor / Seismicsense skips airborne tokens.
     // Toggled manually from the token HUD.

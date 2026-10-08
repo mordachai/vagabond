@@ -99,7 +99,8 @@
       "sort": 0,
       "flags": {
         "vagabond": {
-          "applicationMode": "permanent"
+          "applicationMode": "when-equipped",
+          "relicBoost": 1
         }
       },
       "_stats": {

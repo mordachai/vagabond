@@ -8,7 +8,7 @@
     "ancestryType": "Humanlike",
     "traits": [
       {
-        "name": "Knack",
+        "name": "Aptitude",
         "description": "<p>You gain a Perk and a Training.</p>",
         "statBonusPoints": 0,
         "extraTraining": 1,

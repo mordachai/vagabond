@@ -3,7 +3,7 @@
   "type": "class",
   "img": "icons/equipment/shield/heater-crystal-blue.webp",
   "system": {
-    "description": "<p><strong>Move, bitch. Get out the way.</strong></p><p><em>—Ludacris, Move Bitch</em></p><p>Vanguards are terrifying sentinels of heavy metal armor that use shields to devastate their foes, standing tall as mobile bastions of fortitude and might.</p><h3>Iconic Vanguards</h3><ul><li><strong>Groot</strong>, <em>Guardians of the Galaxy</em></li><li><strong>Havel</strong>, <em>Dark Souls</em></li><li><strong>Juggernaut</strong>, <em>X-Men</em></li><li><strong>Reinhardt</strong>, <em>Overwatch</em></li></ul><h3>Playing Vanguard</h3><p>The vanguard is a high-defense tank, trading off raw damage output for control. Actively defend through the Rush Action and Shoves.</p><p><strong>Action:</strong> Shove (Attack)<br /><strong>Move:</strong> Frontline<br /><strong>Starting Pack:</strong> Sentinel<br /><strong>Key Stat:</strong> Might<br /><strong>Complexity:</strong> ★★★☆☆<br /><strong>Training:</strong> Brawl, Melee</p><h3>Class Features</h3><table class=\"NormalTable\"><tbody><tr><td><p><strong>Level</strong></p></td><td><p><strong>Features</strong></p></td></tr><tr><td><p>1st</p></td><td><p>Crowd Control, Stalwart</p></td></tr><tr><td><p>2nd</p></td><td><p>Wall (Large)</p></td></tr><tr><td><p>3rd</p></td><td><p>Perk</p></td></tr><tr><td><p>4th</p></td><td><p>Indestructible (+1)</p></td></tr><tr><td><p>5th</p></td><td><p>Perk</p></td></tr><tr><td><p>6th</p></td><td><p>Wall (Huge), Armored Titan</p></td></tr><tr><td><p>7th</p></td><td><p>Perk</p></td></tr><tr><td><p>8th</p></td><td><p>Indestructible (+2)</p></td></tr><tr><td><p>9th</p></td><td><p>Perk</p></td></tr><tr><td><p>10th</p></td><td><p>Wall (Giant), Force Unrelenting</p></td></tr></tbody></table>",
+    "description": "<p><strong>Move, bitch. Get out the way.</strong></p><p><em>—Ludacris, Move Bitch</em></p><p>Vanguards are terrifying sentinels of heavy metal armor that use shields to devastate their foes, standing tall as mobile bastions of fortitude and might.</p><h3>Iconic Vanguards</h3><ul><li><strong>Groot</strong>, <em>Guardians of the Galaxy</em></li><li><strong>Havel</strong>, <em>Dark Souls</em></li><li><strong>Juggernaut</strong>, <em>X-Men</em></li><li><strong>Reinhardt</strong>, <em>Overwatch</em></li></ul><h3>Playing Vanguard</h3><p>The vanguard is a high-defense tank, trading off raw damage output for control. Actively defend through the Rush Action and Shoves.</p><p><strong>Action:</strong> Shove (Attack)<br /><strong>Move:</strong> Frontline<br /><strong>Starting Pack:</strong> Sentinel<br /><strong>Key Stat:</strong> Might<br /><strong>Complexity:</strong> ★★★☆☆<br /><strong>Training:</strong> Brawl, Melee</p><h3>Class Features</h3><table class=\"NormalTable\"><tbody><tr><td><p><strong>Level</strong></p></td><td><p><strong>Features</strong></p></td></tr><tr><td><p>1st</p></td><td><p>Crowd Control, Stalwart</p></td></tr><tr><td><p>2nd</p></td><td><p>Wall (1 size)</p></td></tr><tr><td><p>3rd</p></td><td><p>Perk</p></td></tr><tr><td><p>4th</p></td><td><p>Indestructible (+1)</p></td></tr><tr><td><p>5th</p></td><td><p>Perk</p></td></tr><tr><td><p>6th</p></td><td><p>Wall (2 sizes), Armored Titan</p></td></tr><tr><td><p>7th</p></td><td><p>Perk</p></td></tr><tr><td><p>8th</p></td><td><p>Indestructible (+2)</p></td></tr><tr><td><p>9th</p></td><td><p>Perk</p></td></tr><tr><td><p>10th</p></td><td><p>Wall (3 sizes), Force Unrelenting</p></td></tr></tbody></table>",
     "isSpellcaster": false,
     "levelFeatures": [
       {
@@ -34,7 +34,7 @@
       },
       {
         "level": 2,
-        "name": "Wall (Large)",
+        "name": "Wall (1 size)",
         "description": "<p>You are considered one size larger for Shoves and the damage dice of Defense Weapons are one size larger while you have them Equipped.</p><p>Both of these sizes increase by another size every 4 Levels hereafter.</p>",
         "statBonusPoints": 1,
         "extraTraining": 0,
@@ -82,7 +82,7 @@
       },
       {
         "level": 6,
-        "name": "Wall (Huge)",
+        "name": "Wall (2 sizes)",
         "description": "<p>You are considered one size larger for Shoves and the damage dice of Defense Weapons are one size larger while you have them Equipped.</p><p>Both of these sizes increase by another size every 4 Levels hereafter.</p>",
         "statBonusPoints": 1,
         "extraTraining": 0,
@@ -142,7 +142,7 @@
       },
       {
         "level": 10,
-        "name": "Wall (Giant)",
+        "name": "Wall (3 sizes)",
         "description": "<p>You are considered one size larger for Shoves and the damage dice of Defense Weapons are one size larger while you have them Equipped.</p><p>Both of these sizes increase by another size every 4 Levels hereafter.</p>",
         "statBonusPoints": 1,
         "extraTraining": 0,

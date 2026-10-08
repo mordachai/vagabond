@@ -3,7 +3,7 @@
 ## ▶ Resume here (updated 2026-10-08)
 
 1. **Phase 1 tested and signed off** (user, 2026-10-08) — bugs found in testing are fixed (Luck reroll of consumed items, Sickened/Frightened chat annotations, Incapacitated auto-fail on every Skill/Save built on Might/Dexterity, Acid Basic Burning = acid). Checklist kept below for regression only.
-2. **Phase 2 — Classes** (below), then Phases 3 → 6.
+2. **Phase 2 — Classes and the class half of Phase 3 are CODED, uncommitted, untested** (2026-10-08) — record, rulings that need your decision and the test list: `ALPHA3_CLASSES_NOTES.md`. Next: `npm run pack` (classes + perks), test, then Phase 4 → 6.
 3. Later sessions: bestiary / humanlike statblocks, full gear audit.
 
 Rulings in force: book is source of truth (no old-flow switches); lowercase "attack" covers Casts; Vulnerable hampers all its Checks / Saves; Backpack "one at a time" left to the table.
@@ -142,26 +142,28 @@ Status 2026-10-07: rulings settled, Defense property done (`61c1973`). **Phase 1
 - Vulnerable (ruling: lowercase "attack" covers Casts; a Vulnerable Being is hampered overall): Vulnerable / Flanked / Blinded / Restrained / Incapacitated / Paralyzed / Unconscious / Dead = blanket `favorHinder: hinder` (its Checks and Saves) + new `vulnerable` flag: attacks and Cast Checks targeting it Favor, Saves vs its attacks / Casts Favor. Target votes for weapon attacks and Cast Checks share `VagabondRollBuilder.targetingVotes` (Cast Checks read target statuses now). Flanked +2 applies to Casts too.
 - Invisible ("those that can't see it act as Blinded"): attacks / Casts at it Hinder, its attacks / Casts Favor, Saves vs its attacks Hinder, its Saves vs attacks Favor (`unseenDefender` rule). Prone's Melee rules include Touch Casts. NPCs gained `defenderStatusModifiers` so Invisible / Unconscious work on them.
 
-### Phase 2 — Classes (pack text + effects + migrations)
-- [ ] Alchemist: Eureka 15+ / 14+ / 13+ (margin field + names), Potency table names (+1) / (+2).
-- [ ] Barbarian: Aggressor (15') entry at 10th.
-- [ ] Druid: Savagery (+1) name at 2nd.
-- [ ] Fighter: Fighting Style = **one** Perk, pool Brawl / Finesse / Melee / Ranged prerequisite.
-- [ ] Gunslinger: Grit = remove 3 Deadeye stacks (text + `deadeyeGrit` effect / helper).
-- [ ] Luminary: Overheal once per Action, excess once per Turn; Ever-Cure "choose".
-- [ ] Magus: Spell Parry 15+ / 14+ / 13+.
-- [ ] Merchant: Gold Sink, Diamond Hands rewritten; Top Shelf → Midas Touch.
-- [ ] Pugilist: Fisticuffs Vicious only; Rope-a-Dope; Haymaker 15+/14+/13+ at 2/6/10 (`haymakerMargin` formula, "until your next Turn"); Moxie 4th / 8th; Title Holder explodes on the **two highest** faces (pipeline: new high-explode by skill, drop low-explode).
-- [ ] Rogue: table Knack (1 Luck) / (2 Luck); Sneak Attack text (Level ÷ 3 round up).
-- [ ] Sorcerer: Quickening = Cast Max 0 (+1 / 4 Levels).
-- [ ] Vanguard: Wall entries (1 size) / (2 sizes) / (3 sizes).
-- [ ] Human: trait Knack → **Aptitude** (ancestry migration).
+### Phase 2 — Classes (pack text + effects + migrations) — coded 2026-10-08, see `ALPHA3_CLASSES_NOTES.md`
+- [x] Alchemist: Eureka 15+ / 14+ / 13+, Potency (+1) / (+2), Potency Explode = highest face only (ruling #1), Prima Materia cap 10g (bug), two 17-char effect ids.
+- [x] Barbarian: Aggressor (15') entry at 10th; Rage also grows Spell dice.
+- [x] Druid: Savagery (+1) at 2nd, Primal Mystic wording.
+- [x] Fighter: Fighting Style = one Perk, pool Brawl / Finesse / Melee / Ranged (30 perks); Valor wording.
+- [x] Gunslinger: Grit removes Deadeye stacks (helper + card + effect); Deadeye / Shooting Irons wording.
+- [x] Luminary: Overheal wording (once per Action / excess once per Turn stay text), Ever-Cure "choose".
+- [x] Magus: Spell Parry 15+ / 14+ / 13+, Arcanum wording.
+- [x] Merchant: Gold Sink, Diamond Hands rewritten; Top Shelf -> Midas Touch (all text only, ruling #9).
+- [x] Pugilist: Fisticuffs Vicious only, Rope-a-Dope, Haymaker 15+/14+/13+ at 2/6/10, Moxie 4th / 8th, Title Holder = two highest values (`weaponHighExplodeBySkill`); Dusted Knuckle perk now an effect.
+- [x] Rogue: Knack (1 Luck) / (2 Luck), Sneak Attack text, Infiltrator comma.
+- [x] Sorcerer: Quickening = Cast Max 0 (text), Tap comma.
+- [x] Vanguard: Wall (1 size) / (2 sizes) / (3 sizes).
+- [x] Human: trait Knack -> **Aptitude** (pack + `migrateAlpha3Ancestries`, guard `alpha3AncestriesMigrated`).
+- [x] Dancer / Hunter / Revelator typo-level text; Quick Draw "Ranged or Thrown".
+- [x] One `migrateAlpha3Classes` + `migrateAlpha3ClassPerks` (`alpha3-migrations.mjs`).
 
 ### Phase 3 — New class features
-- [ ] Sorcerer **Twinned Spell** (6th: 2nd Cast of the same Spell in a Turn Favored) and **Overpowered** (10th: 1 Fatigue → Cd4 HP / Max HP / Cast Max countdown).
-- [ ] Witch **Hex target tracking** (prerequisite), then **Soul Link** (6th) and **Misery Business** (10th: hexed Target Weak to your damage).
-- [ ] Wizard **Extracurricular** (6th: Studied die adds another known Spell's effect) and **Archwizard** (10th: Cast unknown Spells, no upcast).
-- [ ] Merchant **Midas Touch** (Relic Bonus / Rank +1 while Equipped) and **Diamond Hands** (swap a held Relic's Power ≤ 250g × 5 per 4 Levels) — text first if the relic layer is missing.
+- [x] Sorcerer **Twinned Spell** (Combat-only auto Favor) and **Overpowered** (button: Fatigue + Cd4 die; per-Turn effects text).
+- [x] Witch **Hex target tracking** (button + effect, like Hunter's Mark), **Soul Link** (auto, hexed Target takes the same HP), **Misery Business** (hexed Target Weak).
+- [x] Wizard **Extracurricular** (button: Studied die + another Spell's text) and **Archwizard** (text).
+- [x] Merchant **Midas Touch** and **Diamond Hands** — text first, as planned (no relic-power layer; ruling #9).
 
 ### Phase 4 — Perks, items, spells, relics (pack text + data)
 - [ ] Perks §3 (20+ text / prerequisite changes) + **new perk Fluid Motion**; effects for Dusted Knuckle (explode), Skirmisher (Reflex penalty −1, +5' Speed, take 3×).

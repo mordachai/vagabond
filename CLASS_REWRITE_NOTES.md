@@ -6,6 +6,8 @@ Decisions that were not obvious are listed under **Doubts / course taken** for e
 
 Common to every class here: **Cast Max** is the book's own formula (`2 + Level` or `1 + half Level, round up`), but the engine always adds the casting Stat + half Level — so each caster has a class effect on `system.mana.castingMaxBonus` that cancels the Stat and adds the book formula (same trick as the Druid). A character whose casting Stat changes by an Active Effect stays correct, because `@stats.<key>.total` is read live.
 
+> **Alpha 3 (2026-10-08):** every class below was re-checked against Core Rulebook v3 Alpha 3 — see `ALPHA3_CLASSES_NOTES.md`. Changed since this record: Haymaker is 15+ / 14+ / 13+ at Levels 2 / 6 / 10, Moxie sits at 4th / 8th (Cd6 at 8th), Title Holder Explodes on the **two highest** values (`weaponHighExplodeBySkill`, replaces `weaponLowExplodeBySkill`), Spell Parry is 15+ / 14+ / 13+, Top Shelf became Midas Touch, Sorcerer / Witch / Wizard got their Alpha 3 features back (Twinned Spell, Overpowered, Soul Link, Misery Business, Extracurricular, Archwizard).
+
 ## Index and test order
 
 | Class | Commit | Automated (effect / helper) | Text only | Biggest doubt |

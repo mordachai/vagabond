@@ -3,7 +3,7 @@
   "type": "class",
   "img": "icons/environment/settlement/market-stall.webp",
   "system": {
-    "description": "<p><strong>Lamp oil? Rope? Bombs? You want it? It’s yours my friend, as long as you have enough rubies.</strong></p><p><em>—Morshu, Link: The Faces of Evil</em></p><p>May they be an appraiser of rare magic items, peddler of illicit substances, or bookkeeper for the court, merchants are masters of exchange.</p><h3>Iconic Merchants</h3><ul><li><strong>Anna</strong>, <em>Fire Emblem</em></li><li><strong>Marco Polo</strong>, <em>Venetian merchant</em></li><li><strong>Torneko Taloon</strong>, <em>Dragon Quest IV</em></li><li><strong>Tressa Colzione</strong>, <em>Octopath Traveler</em></li></ul><h3>Playing Merchant</h3><p>The merchant is a low-defense and damage character, who provides high-support through a wider inventory pool and optimizing your party’s resources. In combat, you should look out for allies in need of assistance and strategize what items to use.</p><p><strong>Action:</strong> Use<br /><strong>Move:</strong> Flexible (skip to Use)<br /><strong>Starting Pack:</strong> Blacksmith, Cook, or Tinker<br /><strong>Key Stat:</strong> Luck/Reason<br /><strong>Complexity:</strong> ★★★☆☆<br /><strong>Training:</strong> Craft, Finesse, Influence</p><h3>Class Features</h3><table class=\"NormalTable\"><tbody><tr><td><p><strong>Level</strong></p></td><td><p><strong>Features</strong></p></td></tr><tr><td><p>1st</p></td><td><p>Gold Sink, Deep Pockets</p></td></tr><tr><td><p>2nd</p></td><td><p>Line Goes Up (+1 Luck)</p></td></tr><tr><td><p>3rd</p></td><td><p>Perk</p></td></tr><tr><td><p>4th</p></td><td><p>Diamond Hands (+1)</p></td></tr><tr><td><p>5th</p></td><td><p>Perk</p></td></tr><tr><td><p>6th</p></td><td><p>Line Goes Up (+2 Luck), Opportunist</p></td></tr><tr><td><p>7th</p></td><td><p>Perk</p></td></tr><tr><td><p>8th</p></td><td><p>Diamond Hands (+2)</p></td></tr><tr><td><p>9th</p></td><td><p>Perk</p></td></tr><tr><td><p>10th</p></td><td><p>Line Goes Up (+3 Luck), Top Shelf</p></td></tr></tbody></table>",
+    "description": "<p><strong>Lamp oil? Rope? Bombs? You want it? It’s yours my friend, as long as you have enough rubies.</strong></p><p><em>—Morshu, Link: The Faces of Evil</em></p><p>May they be an appraiser of rare magic items, peddler of illicit substances, or bookkeeper for the court, merchants are masters of exchange.</p><h3>Iconic Merchants</h3><ul><li><strong>Anna</strong>, <em>Fire Emblem</em></li><li><strong>Marco Polo</strong>, <em>Venetian merchant</em></li><li><strong>Torneko Taloon</strong>, <em>Dragon Quest IV</em></li><li><strong>Tressa Colzione</strong>, <em>Octopath Traveler</em></li></ul><h3>Playing Merchant</h3><p>The merchant is a low-defense and damage character, who provides high-support through a wider inventory pool and optimizing your party’s resources. In combat, you should look out for allies in need of assistance and strategize what items to use.</p><p><strong>Action:</strong> Use<br /><strong>Move:</strong> Flexible (skip to Use)<br /><strong>Starting Pack:</strong> Blacksmith, Cook, or Tinker<br /><strong>Key Stat:</strong> Luck/Reason<br /><strong>Complexity:</strong> ★★★☆☆<br /><strong>Training:</strong> Craft, Finesse, Influence</p><h3>Class Features</h3><table class=\"NormalTable\"><tbody><tr><td><p><strong>Level</strong></p></td><td><p><strong>Features</strong></p></td></tr><tr><td><p>1st</p></td><td><p>Gold Sink, Deep Pockets</p></td></tr><tr><td><p>2nd</p></td><td><p>Line Goes Up (+1 Luck)</p></td></tr><tr><td><p>3rd</p></td><td><p>Perk</p></td></tr><tr><td><p>4th</p></td><td><p>Diamond Hands (+1)</p></td></tr><tr><td><p>5th</p></td><td><p>Perk</p></td></tr><tr><td><p>6th</p></td><td><p>Line Goes Up (+2 Luck), Opportunist</p></td></tr><tr><td><p>7th</p></td><td><p>Perk</p></td></tr><tr><td><p>8th</p></td><td><p>Diamond Hands (+2)</p></td></tr><tr><td><p>9th</p></td><td><p>Perk</p></td></tr><tr><td><p>10th</p></td><td><p>Line Goes Up (+3 Luck), Midas Touch</p></td></tr></tbody></table>",
     "isSpellcaster": false,
     "manaMultiplier": 0,
     "manaSkill": null,
@@ -24,7 +24,7 @@
       {
         "level": 1,
         "name": "Gold Sink",
-        "description": "<p>You can take the Use Action to place non-Relic Items into a container, close it, then spend 1 Luck to choose an Item with a value no more than the original valuables’. The chosen Item replaces the valuables.</p>",
+        "description": "<p>You can take the Use Action to place Item(s) that aren’t Fabled Relics inside a container and choose one Item with a value no higher than the Item(s) placed inside. The chosen Item replaces the originals. If the value exceeds 1g, you must spend 1 Luck to do so.</p>",
         "statBonusPoints": 0,
         "extraTraining": 0,
         "requiredSpells": [],
@@ -74,7 +74,7 @@
       {
         "level": 4,
         "name": "Diamond Hands (+1)",
-        "description": "<p>Items count as Relics with a compatible +1 Bonus Relic Power while you have them Equipped. This Bonus stacks with any other Bonus the Item may have. The Bonus Relic Power is increased by 1 every 4 Levels hereafter.</p>",
+        "description": "<p>You can take the Use Action to change the Power of a Relic you are holding to another Power of equal or lesser value. The Powers must be valued at 250g or lower. This value is multiplied by 5 every 4 Levels hereafter.</p>",
         "statBonusPoints": 1,
         "extraTraining": 0,
         "requiredSpells": [],
@@ -134,7 +134,7 @@
       {
         "level": 8,
         "name": "Diamond Hands (+2)",
-        "description": "<p>Items count as Relics with a compatible +1 Bonus Relic Power while you have them Equipped. This Bonus stacks with any other Bonus the Item may have. The Bonus Relic Power is increased by 1 every 4 Levels hereafter.</p>",
+        "description": "<p>You can take the Use Action to change the Power of a Relic you are holding to another Power of equal or lesser value. The Powers must be valued at 250g or lower. This value is multiplied by 5 every 4 Levels hereafter.</p>",
         "statBonusPoints": 1,
         "extraTraining": 0,
         "requiredSpells": [],
@@ -169,8 +169,8 @@
       },
       {
         "level": 10,
-        "name": "Top Shelf",
-        "description": "<p>You can use your Gold Sink Ability to pull non-Fabled Relics by spending 1 additional Luck per 250g of the Relic’s value, otherwise obeying all the rules for that Ability.</p>",
+        "name": "Midas Touch",
+        "description": "<p>Any Relic Item Bonus or Rank is increased by 1 while you have it Equipped.</p>",
         "statBonusPoints": 0,
         "extraTraining": 0,
         "requiredSpells": [],
@@ -236,6 +236,56 @@
       "showIcon": 1,
       "folder": null,
       "_key": "!items.effects!F26CjqMxgd2fPbv5.6HrnXhQTmczbuegN"
+    },
+    {
+      "name": "Midas Touch",
+      "origin": "Compendium.vagabond.classes.Item.F26CjqMxgd2fPbv5",
+      "img": "icons/svg/aura.svg",
+      "_id": "mErChMiDaSToUch1",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.relicBoost",
+            "value": "1",
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent",
+          "minLevel": 10
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.44.0",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "createdTime": 1791400000000,
+        "modifiedTime": 1791400000000,
+        "lastModifiedBy": null
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!F26CjqMxgd2fPbv5.mErChMiDaSToUch1"
     }
   ],
   "folder": null,

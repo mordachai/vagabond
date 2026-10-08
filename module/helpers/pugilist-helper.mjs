@@ -3,16 +3,16 @@ import { StatusHelper } from './status-helper.mjs';
 /**
  * Pugilist — Haymaker (optional automation).
  *
- * A Brawl attack whose Check beats the Difficulty by `system.haymakerMargin` or more (10, then 9 at
- * Level 8 — the class's "Haymaker" effect; 0 when the effect is off or the world Class Automation
- * mode says manual) Dazes its Target "until the start of your Turn".
+ * A Brawl attack whose Check beats the Difficulty by `system.haymakerMargin` or more (15, then 14 at
+ * Level 6 and 13 at Level 10 — the class's "Haymaker" effect; 0 when the effect is off or the world
+ * Class Automation mode says manual) Dazes its Target "until your next Turn".
  *
  * Duration: the Pugilist's actor remembers who it Dazed (`flags.vagabond.haymakerTargets`, written by
  * its own owner); when the Pugilist's Turn starts in a Combat the active GM lifts those Dazed
  * statuses. With no Combat nothing counts Turns, so the Dazed is removed by hand like any other.
  *
- * Title Holder (Brawl die size + low-face Explode) lives in the damage pipeline
- * (`weaponDieBySkill` / `weaponLowExplodeBySkill`); Fisticuffs, Rope-a-Dope and Moxie are text / plain effects.
+ * Title Holder (Brawl die size + Explode on the two highest values) lives in the damage pipeline
+ * (`weaponDieBySkill` / `weaponHighExplodeBySkill`); Fisticuffs, Rope-a-Dope and Moxie are text / plain effects.
  */
 export class PugilistHelper {
 
