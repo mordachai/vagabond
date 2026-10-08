@@ -28,11 +28,13 @@
     ],
     "weaknesses": [],
     "statusImmunities": [
-      "paralyzed",
-      "sickened",
-      "unconscious",
       "fatigued",
-      "prone"
+      "paralyzed",
+      "prone",
+      "restrained",
+      "sickened",
+      "suffocating",
+      "unconscious"
     ],
     "zone": "frontline",
     "description": "A relentless hunter of living air, capable of directly locating any scent that lingers in the winds.",
@@ -51,7 +53,7 @@
     "abilities": [
       {
         "name": "Invisible",
-        "description": "All Beings that can't detect invisibility act as Blinded when Targeting this Being and defending against its attacks."
+        "description": "It is permanently Invisible."
       }
     ],
     "universalDamageBonus": 0,

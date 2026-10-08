@@ -32,11 +32,14 @@
       "poison",
       "physical"
     ],
-    "weaknesses": [],
+    "weaknesses": [
+      "silver"
+    ],
     "statusImmunities": [
-      "frightened",
-      "charmed",
       "blinded",
+      "charmed",
+      "fatigued",
+      "frightened",
       "prone"
     ],
     "zone": "frontline",

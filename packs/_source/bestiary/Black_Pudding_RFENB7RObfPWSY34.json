@@ -36,10 +36,11 @@
       "fire"
     ],
     "statusImmunities": [
+      "blinded",
       "charmed",
+      "fatigued",
       "frightened",
-      "prone",
-      "blinded"
+      "prone"
     ],
     "zone": "frontline",
     "description": "(Slime) This tar-like mass of ooze lurks in the darkness with a singular goal, consume.",

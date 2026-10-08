@@ -134,3 +134,16 @@ Necrophidius, Scarecrow (+Silver), Gremlin (+Cold Iron), Werewolf / Werewolf Dir
 
 Not modelled
 - Treant / Viper Tree `Weak: damage from axes` (no weapon-family weakness exists); Angel `Divine Armor`, Fall from Grace, Grace are text only.
+
+---
+
+## Part 7 — Primordials (book pp. 167-176) — 35 statblocks, none new, none deleted
+
+- **Status Immunities**: Alpha 3 adds `Fatigue` to all slimes/oozes/Goo/Cube/Pudding/Jelly, and `Restrained` + `Suffocating` to the Elementals (Air/Fire/Water),
+  Invisible Stalker, Vortex, Yellow Mould; `Suffocating` to Air Bubble, Cube and Earth Elementals.
+- Air Bubble Speed `20` -> `0' (Fly 20')`; Efreeti Speed 80 -> `30' (Fly 80')`.
+- Ectoplasmic Ooze is `(Slime, Undead)`: gets the Silver weakness (type rule).
+- Treant: Weak is now `Fire, Poison; Damage from axes` — the Alpha 2 `slashing` stand-in is gone (no axe weakness exists, see Not modelled).
+- Magmot: invalid `burrow` speed type removed (the `Tunneler` ability already says it).
+- Focus is now a note tag (`... | Focus`) on Efreeti Wall of Fire / Invisibility and Treant Animate Trees instead of a trailing `(Focus)` in the text.
+- Book typo `Prmordial` (Hydrangean size line) recognised as Primordial; `Sufffocating` -> suffocating.

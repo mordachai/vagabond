@@ -34,9 +34,10 @@
       "cold"
     ],
     "statusImmunities": [
+      "blinded",
+      "fatigued",
       "prone",
-      "sickened",
-      "blinded"
+      "sickened"
     ],
     "zone": "frontline",
     "description": "(Slime)",

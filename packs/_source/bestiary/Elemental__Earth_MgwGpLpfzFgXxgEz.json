@@ -31,8 +31,9 @@
       "blunt"
     ],
     "statusImmunities": [
+      "fatigued",
       "sickened",
-      "fatigued"
+      "suffocating"
     ],
     "zone": "frontline",
     "description": "",

@@ -12,14 +12,12 @@
     "threatLevel": 6.4,
     "size": "large",
     "beingType": "Primordials",
-    "speedTypes": [
-      "burrow"
-    ],
+    "speedTypes": [],
     "hd": 3,
     "morale": 9,
     "appearing": "d2",
     "speed": 10,
-    "senses": "",
+    "senses": [],
     "armor": 3,
     "armorDescription": "as Plate",
     "locked": true,

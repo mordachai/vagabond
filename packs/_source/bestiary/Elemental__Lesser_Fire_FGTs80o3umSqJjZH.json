@@ -32,9 +32,11 @@
     ],
     "weaknesses": [],
     "statusImmunities": [
+      "fatigued",
       "prone",
       "sickened",
-      "fatigued"
+      "suffocating",
+      "restrained"
     ],
     "zone": "midline",
     "description": "",

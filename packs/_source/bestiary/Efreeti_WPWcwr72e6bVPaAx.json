@@ -18,7 +18,7 @@
     "hd": 10,
     "morale": 11,
     "appearing": "1",
-    "speed": 80,
+    "speed": 30,
     "senses": [
       "darksight"
     ],
@@ -35,13 +35,13 @@
     "actions": [
       {
         "name": "Wall of Fire",
-        "note": "Cast, 60' Line | Reflex",
+        "note": "Cast, 60' Line | Reflex | Focus",
         "recharge": "3/Day",
         "attackType": "castRanged",
         "flatDamage": "0",
         "rollDamage": "",
         "damageType": "-",
-        "extraInfo": "Burning (d6, while in the flames). It takes this damage the first time it enters the flames while it isn't Burning as well. (Focus)",
+        "extraInfo": "Burning (d6, while in the flames).",
         "causedStatuses": [
           {
             "statusId": "burning",
@@ -63,7 +63,7 @@
         "flatDamage": "0",
         "rollDamage": "",
         "damageType": "-",
-        "extraInfo": "An Object no larger than 10'x10' is created. Objects made this way composed of metal or stone disappear after one day.",
+        "extraInfo": "An Object no larger than 10'×10' is created. Objects made this way composed of metal or stone disappear after one day.",
         "causedStatuses": [],
         "critCausedStatuses": []
       },
@@ -93,13 +93,13 @@
       },
       {
         "name": "Invisibility",
-        "note": "Cast, Touch | Will",
+        "note": "Cast, Touch | Will | Focus",
         "recharge": "",
         "attackType": "castClose",
         "flatDamage": "0",
         "rollDamage": "",
         "damageType": "-",
-        "extraInfo": "Turns Invisible for the duration. (Focus)",
+        "extraInfo": "Turns Invisible for the duration.",
         "causedStatuses": [
           {
             "statusId": "invisible",

@@ -32,10 +32,11 @@
       "shock"
     ],
     "statusImmunities": [
-      "prone",
-      "frightened",
       "blinded",
-      "charmed"
+      "charmed",
+      "fatigued",
+      "frightened",
+      "prone"
     ],
     "zone": "frontline",
     "description": "(Slime) This mass of ooze looks like liquid stone, allowing it to perfectly camoflague with gray rock walls.",

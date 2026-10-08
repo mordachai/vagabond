@@ -30,8 +30,9 @@
       "fire"
     ],
     "statusImmunities": [
-      "prone",
-      "blinded"
+      "blinded",
+      "fatigued",
+      "prone"
     ],
     "zone": "frontline",
     "description": "(Slime) An otherwise immobile pile of sludge. It only attacks when another creature moves within reach of its pseudopods.",

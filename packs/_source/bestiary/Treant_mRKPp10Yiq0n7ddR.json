@@ -17,14 +17,13 @@
     "morale": 9,
     "appearing": "d8",
     "speed": 20,
-    "senses": "",
+    "senses": [],
     "armor": 4,
     "armorDescription": "as (+1) Plate",
     "locked": true,
     "immunities": [],
     "weaknesses": [
       "fire",
-      "slashing",
       "poison"
     ],
     "statusImmunities": [],
@@ -33,13 +32,13 @@
     "actions": [
       {
         "name": "Animate Trees",
-        "note": "Cast, a tree in Far",
+        "note": "Cast, a tree in Far | Focus",
         "recharge": "",
         "flatDamage": "0",
         "rollDamage": "",
         "damageType": "-",
         "attackType": "castRanged",
-        "extraInfo": "The tree acts as a Treant, though it has a Speed of 10' and doesn't have this Animate Trees Action. (Focus)"
+        "extraInfo": "The tree acts as a Treant, though it has a Speed of 10' and doesn't have this Animate Trees Action."
       },
       {
         "name": "Combo",

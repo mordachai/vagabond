@@ -30,10 +30,12 @@
     ],
     "weaknesses": [],
     "statusImmunities": [
-      "prone",
-      "frightened",
       "blinded",
-      "charmed"
+      "charmed",
+      "fatigued",
+      "frightened",
+      "prone",
+      "suffocating"
     ],
     "zone": "frontline",
     "description": "(Slime) A mostly transparent cube of slime that lurks in passageways, attempting to trap unaware delvers.",

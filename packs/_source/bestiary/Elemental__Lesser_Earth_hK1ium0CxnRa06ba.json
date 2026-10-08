@@ -32,7 +32,8 @@
     ],
     "statusImmunities": [
       "fatigued",
-      "sickened"
+      "sickened",
+      "suffocating"
     ],
     "zone": "frontline",
     "description": "",
@@ -51,7 +52,7 @@
     "abilities": [
       {
         "name": "Burrower",
-        "description": "It ignore Difficult Terrain of sand, stone, and earth, and it can Move by quickly burrowing in them. However, it can't cross water deeper than its height."
+        "description": "It ignores Difficult Terrain of sand, stone, and earth, and it can Move by quickly burrowing in them. However, it can't cross water deeper than its height."
       }
     ],
     "universalDamageBonus": 0,

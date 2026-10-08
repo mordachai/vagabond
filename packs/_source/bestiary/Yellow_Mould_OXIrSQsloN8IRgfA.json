@@ -36,16 +36,19 @@
       "fire"
     ],
     "statusImmunities": [
+      "berserk",
       "charmed",
       "confused",
-      "berserk",
-      "sickened",
-      "unconscious",
+      "fatigued",
       "frightened",
-      "prone"
+      "prone",
+      "restrained",
+      "sickened",
+      "suffocating",
+      "unconscious"
     ],
     "zone": null,
-    "description": "(Plant) A spore-producing fungus that thrives in dank environments. This mould emits a cloud of toxic spores that cause near immediate suffocation.",
+    "description": "(Plant) A spore-producing fungus that thrives in dank environments.",
     "actions": [],
     "abilities": [
       {

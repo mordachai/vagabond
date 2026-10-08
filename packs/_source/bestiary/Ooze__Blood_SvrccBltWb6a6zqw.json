@@ -31,9 +31,10 @@
     ],
     "weaknesses": [],
     "statusImmunities": [
-      "frightened",
-      "charmed",
       "blinded",
+      "charmed",
+      "fatigued",
+      "frightened",
       "prone"
     ],
     "zone": "frontline",

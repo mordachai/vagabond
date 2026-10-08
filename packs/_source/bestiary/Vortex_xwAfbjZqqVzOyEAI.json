@@ -33,9 +33,11 @@
     ],
     "weaknesses": [],
     "statusImmunities": [
-      "sickened",
       "fatigued",
-      "prone"
+      "prone",
+      "restrained",
+      "sickened",
+      "suffocating"
     ],
     "zone": "frontline",
     "description": "A living whirlwind. Its true body is a small sphere that flutters in the center of the whirlwind.",
@@ -47,7 +49,7 @@
       },
       {
         "name": "Whirlwind",
-        "description": "Medium or smaller Close Beings must pass [Endure] against being Restrained at the start of their Turns or be thrown 25 (d10x5) feet in the air."
+        "description": "Medium or smaller Close Beings must pass [Endure] against being Restrained at the start of their Turns or be thrown 25 (d10×5)' in the air."
       }
     ],
     "universalDamageBonus": 0,

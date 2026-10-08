@@ -19,7 +19,7 @@
     "hd": 6,
     "morale": 10,
     "appearing": "1",
-    "speed": 20,
+    "speed": 0,
     "senses": [
       "blindsight"
     ],
@@ -33,9 +33,11 @@
     ],
     "weaknesses": [],
     "statusImmunities": [
+      "blinded",
       "charmed",
+      "fatigued",
       "prone",
-      "blinded"
+      "suffocating"
     ],
     "zone": "frontline",
     "description": "(Slime) Floating masses of highly acrid air.",
