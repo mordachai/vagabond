@@ -13,7 +13,7 @@
       "silver": 0,
       "copper": 1
     },
-    "baseSlots": 1,
+    "baseSlots": 0,
     "metal": "none",
     "damageType": "-",
     "damageAmount": "",

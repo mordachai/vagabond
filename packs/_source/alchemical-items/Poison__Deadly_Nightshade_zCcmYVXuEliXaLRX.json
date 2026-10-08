@@ -4,7 +4,7 @@
   "type": "equipment",
   "img": "icons/consumables/potions/flask-ornate-skull-green.webp",
   "system": {
-    "description": "<p><span class=\"fontstyle0\">The Target is Sickened (Cd4 damage) and, if it is cursed with Lycanthropy, the curse is removed. In addition to the Material cost, this item requires 1g worth of wolfsbane to Craft.</span></p><p><span class=\"fontstyle2\"><strong>Consumed:</strong> </span><span class=\"fontstyle0\">Affects Targets who consume it.</span></p><p><span class=\"fontstyle2\"><strong>Injury:</strong> </span><span class=\"fontstyle0\">Affects Targets who are injured with weapons coated with it.</span></p>",
+    "description": "<p><span class=\"fontstyle0\">The Target is Sickened (Cd4 damage) and, if it is cursed with Lycanthropy, the curse is removed.</span></p><p><span class=\"fontstyle2\"><strong>Consumed:</strong> </span><span class=\"fontstyle0\">Affects Targets who consume it.</span></p><p><span class=\"fontstyle2\"><strong>Injury:</strong> </span><span class=\"fontstyle0\">Affects Targets who are injured with weapons coated with it.</span></p>",
     "equipmentType": "alchemical",
     "locked": true,
     "equipped": false,

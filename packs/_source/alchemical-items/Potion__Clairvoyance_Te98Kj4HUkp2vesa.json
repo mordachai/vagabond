@@ -4,7 +4,7 @@
   "type": "equipment",
   "img": "icons/consumables/potions/bottle-pear-corked-labeled-ornamental-purple.webp",
   "system": {
-    "description": "<p><span class=\"fontstyle0\">For 1 Hour, the consumer can see what another Being of their choice within Far can see. This sense is obstructed by 1 inch of lead or more than 2’ of stone.</span></p>",
+    "description": "<p><span class=\"fontstyle0\">For 1 Hour, the consumer can see what another Being of their choice within Far can see. This sense is obstructed by dense stone and metal.</span></p>",
     "equipmentType": "alchemical",
     "locked": true,
     "equipped": false,

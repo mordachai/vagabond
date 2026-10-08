@@ -4,7 +4,7 @@
   "type": "equipment",
   "img": "icons/commodities/stone/rock-chunk-purple.webp",
   "system": {
-    "description": "<p><span class=\"fontstyle0\">Treated stones with a purple sheen. A hit Target with Darksight is Blinded (Cd6).</span></p>",
+    "description": "<p><span class=\"fontstyle0\">A hit Target with Darksight is Blinded (Cd6).</span></p>",
     "equipmentType": "alchemical",
     "locked": true,
     "equipped": false,

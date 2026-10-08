@@ -6315,7 +6315,9 @@
         "metal": "none",
         "damageType": "-",
         "damageAmount": "",
-        "properties": [],
+        "properties": [
+          "Cleave"
+        ],
         "weaponSkill": "finesse",
         "range": "close",
         "grip": "V",
@@ -7001,9 +7003,9 @@
         ],
         "weaponSkill": "melee",
         "range": "close",
-        "grip": "1H",
+        "grip": "V",
         "damageOneHand": "d6",
-        "damageTwoHands": "d6",
+        "damageTwoHands": "d8",
         "equipmentState": "unequipped",
         "immunities": [],
         "gearCategory": "",

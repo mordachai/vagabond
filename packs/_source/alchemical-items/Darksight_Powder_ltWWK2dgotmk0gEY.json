@@ -4,7 +4,7 @@
   "type": "equipment",
   "img": "icons/tools/laboratory/bowl-powder-purple.webp",
   "system": {
-    "description": "<p><span class=\"fontstyle0\">Can’t be seen with normal vision or beyond Close. When viewed with Darksight, the powder glows. A vial contains enough powder to write a short sentence (10 words or less).</span></p>",
+    "description": "<p><span class=\"fontstyle0\">Can't be seen with normal vision or beyond Close. When viewed with Darksight, the powder glows. A vial contains enough powder to write roughly 10 words.</span></p>",
     "equipmentType": "alchemical",
     "locked": true,
     "equipped": false,

@@ -4,7 +4,7 @@
   "type": "equipment",
   "img": "icons/magic/air/fog-gas-smoke-dense-brown.webp",
   "system": {
-    "description": "<p><span class=\"fontstyle0\">This thick, brown-tinted smoke is a boon to anyone who needs to go without air for more than a few Rounds. For 1 hour after inhaling the contents of the vial, the Being can hold its breath indefinitely while it’s not Incapacitated.</span></p>",
+    "description": "<p><span class=\"fontstyle0\">For 1 Hour after inhaling the contents of the vial, the Being can hold its breath indefinitely while it's not Incapacitated.</span></p>",
     "equipmentType": "alchemical",
     "locked": true,
     "equipped": false,

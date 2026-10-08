@@ -4,7 +4,7 @@
   "type": "equipment",
   "img": "icons/sundries/lights/candle-lit-angelic.webp",
   "system": {
-    "description": "<p><span class=\"fontstyle0\">Acts as a torch, but its Light only sheds out to Close. The air in the Light is filled with a fresh, crisp odor. Those in its Light gain Favor on Saves against Berserk or Frightened.</span></p>",
+    "description": "<p><span class=\"fontstyle0\">Acts as a basic candle. The air in the Light is filled with a fresh, crisp odor. Those in its Light gain Favor on Saves against Berserk or Frightened.</span></p>",
     "equipmentType": "alchemical",
     "locked": true,
     "equipped": false,

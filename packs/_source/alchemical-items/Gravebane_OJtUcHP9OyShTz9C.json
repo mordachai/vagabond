@@ -4,7 +4,7 @@
   "type": "equipment",
   "img": "icons/consumables/potions/potion-bottle-corked-white.webp",
   "system": {
-    "description": "<p><span class=\"fontstyle0\">This thick white liquid evaporates almost instantly upon contact with air, creating a thin, nearly invisible smoke. The smoke is nearly odorless and has no effect on most Beings. Undead, however, are repulsed by it. Once used, the smoke fills the area out to Near for 1 minute, or until disbursed by strong wind. Undead are Dazed while in the smoke, ignoring Immunities.</span></p>",
+    "description": "<p><span class=\"fontstyle0\">Once used, smoke fills the area out to Near for 1 Minute, or until disbursed by strong wind. Undead are Dazed while in the smoke, ignoring Immunities.</span></p>",
     "equipmentType": "alchemical",
     "locked": true,
     "equipped": false,

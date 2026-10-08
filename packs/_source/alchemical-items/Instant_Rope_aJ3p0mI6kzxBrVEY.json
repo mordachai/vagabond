@@ -4,7 +4,7 @@
   "type": "equipment",
   "img": "icons/sundries/survival/rope-wrapped-grey.webp",
   "system": {
-    "description": "<p><span class=\"fontstyle0\">When poured, the viscous gray liquid in this flask instantly forms into a 50-foot-long rope for 1 minute before crumbling to dust.</span></p>",
+    "description": "<p><span class=\"fontstyle0\">When poured, the liquid in this flask instantly forms into a 50' rope for 1 Minute before crumbling to dust.</span></p>",
     "equipmentType": "alchemical",
     "locked": true,
     "equipped": false,

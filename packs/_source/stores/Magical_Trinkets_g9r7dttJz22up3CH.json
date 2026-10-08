@@ -644,9 +644,9 @@
       "_key": "!actors.items!g9r7dttJz22up3CH.PQFcMPApB5l6UTOw"
     },
     {
-      "name": "Fist-sized claw",
+      "name": "Wolf medalion",
       "type": "equipment",
-      "img": "/icons/commodities/biological/hand-clawed-grey.webp",
+      "img": "icons/commodities/treasure/medal-brass-red.webp",
       "system": {
         "equipmentType": "gear",
         "locked": true,
@@ -1145,9 +1145,9 @@
       "_key": "!actors.items!g9r7dttJz22up3CH.xSSPQxGFWIXbBQv1"
     },
     {
-      "name": "Staring doll",
+      "name": "Bloody ink vial",
       "type": "equipment",
-      "img": "/icons/commodities/treasure/doll-voodoo.webp",
+      "img": "icons/consumables/potions/vial-cork-red.webp",
       "system": {
         "equipmentType": "gear",
         "locked": true,
@@ -2648,9 +2648,9 @@
       "_key": "!actors.items!g9r7dttJz22up3CH.fZCyarcRwRODSkpH"
     },
     {
-      "name": "Saint's heart",
+      "name": "Book of prophecy",
       "type": "equipment",
-      "img": "/icons/consumables/meat/heart-organ-red.webp",
+      "img": "icons/sundries/books/book-open-purple.webp",
       "system": {
         "equipmentType": "gear",
         "locked": true,
@@ -2982,9 +2982,9 @@
       "_key": "!actors.items!g9r7dttJz22up3CH.cns835HR6ZDERchr"
     },
     {
-      "name": "Map of starsigns",
+      "name": "Tome of dead people",
       "type": "equipment",
-      "img": "/icons/sundries/documents/document-symbol-circle-brown.webp",
+      "img": "icons/sundries/books/book-open-brown-black.webp",
       "system": {
         "equipmentType": "gear",
         "locked": true,
@@ -3075,8 +3075,8 @@
           "label": "",
           "runAsGM": false
         },
-        "description": "<p><span class=\"fontstyle0\">Used by Casters to channel Arcane magic.</span></p>",
-        "gearCategory": "Trinket - Arcane",
+        "description": "<p><span class=\"fontstyle0\">Used by Casters to channel Occult magic.</span></p>",
+        "gearCategory": "Trinket - Occult",
         "armorRating": 1,
         "mightRequirement": 2,
         "reflexPenalty": 1,
@@ -3124,7 +3124,7 @@
         "vagabond": {
           "shop": {
             "sourceUuid": "Compendium.vagabond.gear.Item.CuMJ5A0DMjCVaN20",
-            "category": "Arcane"
+            "category": "Occult"
           }
         }
       },
@@ -3984,9 +3984,9 @@
       "_key": "!actors.items!g9r7dttJz22up3CH.ET5sDByeOCKoqaDy"
     },
     {
-      "name": "Clockwork hourglass",
+      "name": "20-sided die",
       "type": "equipment",
-      "img": "/icons/tools/navigation/hourglass-grey.webp",
+      "img": "icons/svg/d20-highlight.svg",
       "system": {
         "equipmentType": "gear",
         "locked": true,
@@ -6322,9 +6322,9 @@
       "_key": "!actors.items!g9r7dttJz22up3CH.4LE5TNPc7DxoBzp0"
     },
     {
-      "name": "Puzzle box",
+      "name": "Paintbrush",
       "type": "equipment",
-      "img": "icons/commodities/treasure/puzzle-box-glowing-blue.webp",
+      "img": "icons/tools/hand/brush-paint-brown-tan.webp",
       "system": {
         "equipmentType": "gear",
         "locked": true,
@@ -7250,8 +7250,8 @@
           "label": "",
           "runAsGM": false
         },
-        "description": "<p><span class=\"fontstyle0\">Used by Casters to channel Occult magic.</span></p>",
-        "gearCategory": "Trinket - Occult",
+        "description": "<p><span class=\"fontstyle0\">Used by Casters to channel Arcane magic.</span></p>",
+        "gearCategory": "Trinket - Arcane",
         "armorRating": 1,
         "mightRequirement": 2,
         "reflexPenalty": 1,
@@ -7299,7 +7299,7 @@
         "vagabond": {
           "shop": {
             "sourceUuid": "Compendium.vagabond.gear.Item.XKknmtVfGyivNNLj",
-            "category": "Occult"
+            "category": "Arcane"
           }
         }
       },
@@ -8493,7 +8493,7 @@
       "_key": "!actors.items!g9r7dttJz22up3CH.2IKEHxCsUIkXTjJ9"
     },
     {
-      "name": "Glass orb",
+      "name": "Pondering orb",
       "type": "equipment",
       "img": "icons/commodities/materials/glass-orb-blue.webp",
       "system": {
@@ -8660,7 +8660,7 @@
       "_key": "!actors.items!g9r7dttJz22up3CH.DRI7glw2rXfgn1Vy"
     },
     {
-      "name": "Meteor chunk",
+      "name": "Pink meteor chunk",
       "type": "equipment",
       "img": "icons/commodities/stone/ore-chunk-red.webp",
       "system": {
@@ -8994,9 +8994,9 @@
       "_key": "!actors.items!g9r7dttJz22up3CH.O9rI8JYulmUDqUM1"
     },
     {
-      "name": "Disk of information",
+      "name": "Crown of madness",
       "type": "equipment",
-      "img": "/icons/commodities/metal/plate-mount-round-copper.webp",
+      "img": "icons/commodities/treasure/crown-gold-satin-gems-red.webp",
       "system": {
         "equipmentType": "gear",
         "locked": true,
@@ -9662,9 +9662,9 @@
       "_key": "!actors.items!g9r7dttJz22up3CH.GJOyEVn4tOCnae9K"
     },
     {
-      "name": "Black mirror",
+      "name": "Reel of barbed wire",
       "type": "equipment",
-      "img": "/icons/tools/smithing/plate-steel-grey.webp",
+      "img": "icons/commodities/tech/wire-spool-steel.webp",
       "system": {
         "equipmentType": "gear",
         "locked": true,
@@ -9829,7 +9829,7 @@
       "_key": "!actors.items!g9r7dttJz22up3CH.fESWPAR6bSEYveKt"
     },
     {
-      "name": "Staff of twisted branches",
+      "name": "Wish willow",
       "type": "equipment",
       "img": "/icons/weapons/staves/staff-forest-spiral.webp",
       "system": {
@@ -13002,9 +13002,9 @@
       "_key": "!actors.items!g9r7dttJz22up3CH.efRo0Z3U4ARD7niY"
     },
     {
-      "name": "Tool of alien origin",
+      "name": "Mummified hand",
       "type": "equipment",
-      "img": "/icons/tools/fasteners/plate-mount-brass.webp",
+      "img": "icons/commodities/biological/hand-gnarled-purple.webp",
       "system": {
         "equipmentType": "gear",
         "locked": true,

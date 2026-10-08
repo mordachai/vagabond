@@ -4,7 +4,7 @@
   "type": "equipment",
   "img": "icons/consumables/potions/potion-vial-corked-labeled-purple.webp",
   "system": {
-    "description": "<p>For 1 Hour, the consumer gains Telepathy (Far). Using this sense requires Focus, and it is obstructed by 1 inch of lead or more than 2' of stone.</p>",
+    "description": "<p>For 1 Hour, the consumer gains Telepathy (Far). Using this sense requires Focus, and it is obstructed by dense stone and metal.</p>",
     "equipmentType": "alchemical",
     "locked": false,
     "equipped": false,

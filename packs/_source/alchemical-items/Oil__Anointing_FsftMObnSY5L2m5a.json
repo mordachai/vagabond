@@ -4,7 +4,7 @@
   "type": "equipment",
   "img": "icons/consumables/potions/potion-bottle-corked-stopper-ornate-yellow.webp",
   "system": {
-    "description": "<p><span class=\"fontstyle0\">Used in religious ceremonies, it acts as basic oil. However, when coated on a Weapon that is then ignited, the weapon counts as Silvered.</span></p>",
+    "description": "<p><span class=\"fontstyle0\">Acts as basic oil. However, when coated on a Weapon that is then ignited, the Weapon counts as Silvered (p. 79).</span></p>",
     "equipmentType": "alchemical",
     "locked": true,
     "equipped": false,

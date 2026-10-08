@@ -4,7 +4,7 @@
   "type": "equipment",
   "img": "icons/consumables/potions/potion-flask-corked-tied-necklace-teal.webp",
   "system": {
-    "description": "<p>For 1 Hour, the consumer can hear what other Beings of their choice within Far hear. This sense is obstructed by 1 inch of lead or more than 2’ of stone.</p>",
+    "description": "<p>For 1 Hour, the consumer can hear what other Beings of their choice within Far hear. This sense is obstructed by dense stone and metal.</p>",
     "equipmentType": "alchemical",
     "locked": false,
     "equipped": false,

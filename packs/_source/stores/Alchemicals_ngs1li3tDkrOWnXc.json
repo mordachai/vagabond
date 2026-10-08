@@ -312,7 +312,7 @@
       "type": "equipment",
       "img": "icons/consumables/potions/potion-flask-stopped-red.webp",
       "system": {
-        "description": "<p><span class=\"fontstyle0\">This crimson oil is a bane to scaly-kind. Acts as basic oil. However, while coated on a weapon that is then ignited, its damage against scaled Beings can explode and ignores 2 Armor.</span></p>",
+        "description": "<p><span class=\"fontstyle0\">Acts as basic oil. However, while coated on a Weapon that is then ignited, its damage against scaled Beings can Explode and ignores 2 Armor.</span></p>",
         "equipmentType": "alchemical",
         "locked": true,
         "equipped": false,
@@ -640,7 +640,7 @@
       "type": "equipment",
       "img": "icons/consumables/potions/potion-flask-corked-capped-green.webp",
       "system": {
-        "description": "<p><span class=\"fontstyle0\">A sickly emerald oil that shrieks when lit. Acts as basic oil. However, when coated on a Weapon that is then ignited, attack damage with it can explode if the Target can Cast. If the Target is Focusing and any of the dice do explode, its Focus ends.</span></p>",
+        "description": "<p><span class=\"fontstyle0\">Acts as basic oil. However, when coated on a Weapon that is then ignited, attack damage with it can Explode on a 1 if the Target can Cast. If the Target is Focusing and any of the dice do Explode, its Focus ends.</span></p>",
         "equipmentType": "alchemical",
         "locked": true,
         "equipped": false,
@@ -804,7 +804,7 @@
       "type": "equipment",
       "img": "icons/sundries/lights/candle-unlit-red.webp",
       "system": {
-        "description": "<p><span class=\"fontstyle0\">Sheds light out to Close for up to 1 hour while burning and fills the air within Near with a cozy odor. Once per Shift, a Being that takes a Breather in this area gains Favor on its next Will Save that Shift.</span></p>",
+        "description": "<p><span class=\"fontstyle0\">Acts as a basic candle, and fills the air within Near with a cozy odor. Once per Shift, a Being that takes a Breather in this area gains Favor on its next Will Save that Shift.</span></p>",
         "equipmentType": "alchemical",
         "locked": true,
         "equipped": false,
@@ -1132,7 +1132,7 @@
       "type": "equipment",
       "img": "icons/consumables/potions/potion-flask-corked-yellow.webp",
       "system": {
-        "description": "<p><span class=\"fontstyle0\">For 1 Minute, the consumer gains a bonus to Armor and Saves equal to the potion's Rank (+1). Afterward, any Invulnerability Potion the consumer drinks in the next week instead confers this bonus as a penalty.</span></p>",
+        "description": "<p><span class=\"fontstyle0\">For 1 Minute, the consumer gains a bonus to Armor and Saves equal to the potion's Rank (+1). Afterward, they can't benefit from another Invulnerability Potion for 1 Day.</span></p>",
         "equipmentType": "alchemical",
         "locked": true,
         "equipped": false,
@@ -1470,7 +1470,7 @@
       "type": "equipment",
       "img": "icons/magic/holy/chalice-glowing-yellow-blue.webp",
       "system": {
-        "description": "<p><span class=\"fontstyle0\">Used in sacred rituals, and is known to be caustic to unholy Beings. Undead and Hellspawn hit with it take d6 damage and are Burning (Cd4).</span></p>",
+        "description": "<p><span class=\"fontstyle0\">Undead and Hellspawn hit with it take d6 damage and are Burning (Cd4).</span></p>",
         "equipmentType": "alchemical",
         "locked": true,
         "equipped": false,
@@ -3602,7 +3602,7 @@
       "type": "equipment",
       "img": "icons/consumables/potions/potion-bottle-corked-stopper-ornate-yellow.webp",
       "system": {
-        "description": "<p><span class=\"fontstyle0\">Used in religious ceremonies, it acts as basic oil. However, when coated on a Weapon that is then ignited, the weapon counts as Silvered.</span></p>",
+        "description": "<p><span class=\"fontstyle0\">Acts as basic oil. However, when coated on a Weapon that is then ignited, the Weapon counts as Silvered (p. 79).</span></p>",
         "equipmentType": "alchemical",
         "locked": true,
         "equipped": false,
@@ -4586,7 +4586,7 @@
       "type": "equipment",
       "img": "icons/magic/air/fog-gas-smoke-dense-brown.webp",
       "system": {
-        "description": "<p><span class=\"fontstyle0\">This thick, brown-tinted smoke is a boon to anyone who needs to go without air for more than a few Rounds. For 1 hour after inhaling the contents of the vial, the Being can hold its breath indefinitely while it’s not Incapacitated.</span></p>",
+        "description": "<p><span class=\"fontstyle0\">For 1 Hour after inhaling the contents of the vial, the Being can hold its breath indefinitely while it's not Incapacitated.</span></p>",
         "equipmentType": "alchemical",
         "locked": true,
         "equipped": false,
@@ -5078,7 +5078,7 @@
       "type": "equipment",
       "img": "icons/tools/laboratory/cauldron-filled-gold.webp",
       "system": {
-        "description": "<p><span class=\"fontstyle0\">A special mixture of clay, ash, mandrake root, and the alchemist's own blood. This soup creates a homunculus (p. 120) under the alchemist's control, and it uses their Craft Skill for any Checks it makes. If another homunculus is created from the same alchemist's blood, the oldest homunculus dies.</span></p>",
+        "description": "<p><span class=\"fontstyle0\">This soup creates a homunculus (p. 120) under the alchemist's control, and it uses their Craft Skill for any Checks it makes. If another homunculus is created from the same alchemist's blood, the oldest homunculus dies.</span></p>",
         "equipmentType": "alchemical",
         "locked": true,
         "equipped": false,
@@ -5242,7 +5242,7 @@
       "type": "equipment",
       "img": "icons/sundries/lights/candle-pillar-lit-yellow.webp",
       "system": {
-        "description": "<p><span class=\"fontstyle0\">Sheds light out to Close for up to 1 hour while burning. Insects act as Frightened while within the light it sheds.</span></p>",
+        "description": "<p><span class=\"fontstyle0\">Acts as a basic candle. Insects act as Frightened while within the light it sheds.</span></p>",
         "equipmentType": "alchemical",
         "locked": true,
         "equipped": false,
@@ -5898,7 +5898,7 @@
       "type": "equipment",
       "img": "icons/consumables/potions/bottle-bulb-empty-glass.webp",
       "system": {
-        "description": "<p><span class=\"fontstyle0\">Clear oil with a tint of gray wisps seem to swirl through it. Acts as basic oil. However, while coated on a weapon that is then ignited, its attacks can hit incorporeal Beings (like ghosts).</span></p>",
+        "description": "<p><span class=\"fontstyle0\">Acts as basic oil. However, while coated on a Weapon that is then ignited, its attacks can hit incorporeal Beings (like ghosts).</span></p>",
         "equipmentType": "alchemical",
         "locked": true,
         "equipped": false,
@@ -6062,7 +6062,7 @@
       "type": "equipment",
       "img": "icons/consumables/potions/potion-bottle-corked-white.webp",
       "system": {
-        "description": "<p><span class=\"fontstyle0\">This thick white liquid evaporates almost instantly upon contact with air, creating a thin, nearly invisible smoke. The smoke is nearly odorless and has no effect on most Beings. Undead, however, are repulsed by it. Once used, the smoke fills the area out to Near for 1 minute, or until disbursed by strong wind. Undead are Dazed while in the smoke, ignoring Immunities.</span></p>",
+        "description": "<p><span class=\"fontstyle0\">Once used, smoke fills the area out to Near for 1 Minute, or until disbursed by strong wind. Undead are Dazed while in the smoke, ignoring Immunities.</span></p>",
         "equipmentType": "alchemical",
         "locked": true,
         "equipped": false,
@@ -6390,7 +6390,7 @@
       "type": "equipment",
       "img": "icons/consumables/potions/potion-bottle-corked-stopper-yellow.webp",
       "system": {
-        "description": "<p><span class=\"fontstyle0\">For 1 Minute, the consumer gains a bonus to Armor and Saves equal to the potion's Rank (+2). Afterward, any Invulnerability Potion the consumer drinks in the next week instead confers this bonus as a penalty.</span></p>",
+        "description": "<p><span class=\"fontstyle0\">For 1 Minute, the consumer gains a bonus to Armor and Saves equal to the potion's Rank (+2). Afterward, they can't benefit from another Invulnerability Potion for 1 Day.</span></p>",
         "equipmentType": "alchemical",
         "locked": true,
         "equipped": false,
@@ -7210,7 +7210,7 @@
       "type": "equipment",
       "img": "icons/consumables/potions/bottle-pear-corked-labeled-ornamental-purple.webp",
       "system": {
-        "description": "<p><span class=\"fontstyle0\">For 1 Hour, the consumer can see what another Being of their choice within Far can see. This sense is obstructed by 1 inch of lead or more than 2’ of stone.</span></p>",
+        "description": "<p><span class=\"fontstyle0\">For 1 Hour, the consumer can see what another Being of their choice within Far can see. This sense is obstructed by dense stone and metal.</span></p>",
         "equipmentType": "alchemical",
         "locked": true,
         "equipped": false,
@@ -7374,7 +7374,7 @@
       "type": "equipment",
       "img": "icons/magic/water/orb-ice-opaque.webp",
       "system": {
-        "description": "<p><span class=\"fontstyle0\">A liquid that rapidly freezes when exposed to oxygen. A Target who is hit with this Item takes d6 damage and its Speed is halved until the end of its next Turn.</span></p>",
+        "description": "<p><span class=\"fontstyle0\">A Target who is hit with this Item takes d6 damage and its Speed is halved until the end of its next Turn.</span></p>",
         "equipmentType": "alchemical",
         "locked": false,
         "equipped": false,
@@ -8358,7 +8358,7 @@
       "type": "equipment",
       "img": "icons/sundries/survival/rope-wrapped-grey.webp",
       "system": {
-        "description": "<p><span class=\"fontstyle0\">When poured, the viscous gray liquid in this flask instantly forms into a 50-foot-long rope for 1 minute before crumbling to dust.</span></p>",
+        "description": "<p><span class=\"fontstyle0\">When poured, the liquid in this flask instantly forms into a 50' rope for 1 Minute before crumbling to dust.</span></p>",
         "equipmentType": "alchemical",
         "locked": true,
         "equipped": false,
@@ -8850,7 +8850,7 @@
       "type": "equipment",
       "img": "icons/commodities/stone/rock-chunk-purple.webp",
       "system": {
-        "description": "<p><span class=\"fontstyle0\">Treated stones with a purple sheen. A hit Target with Darksight is Blinded (Cd6).</span></p>",
+        "description": "<p><span class=\"fontstyle0\">A hit Target with Darksight is Blinded (Cd6).</span></p>",
         "equipmentType": "alchemical",
         "locked": true,
         "equipped": false,
@@ -9666,11 +9666,11 @@
       "_key": "!actors.items!ngs1li3tDkrOWnXc.4XQtuSzAXoX3yBtg"
     },
     {
-      "name": "Oil, Vicious",
+      "name": "Oil, Bloodletter",
       "type": "equipment",
       "img": "icons/consumables/potions/potion-flask-corked-blue.webp",
       "system": {
-        "description": "<p><span class=\"fontstyle0\">A thick blue oil that acts as a powerful anticoagulant. Acts as basic oil. However, while coated on a weapon that is then ignited, its damage from attacks that hit Beings with half their HP or less can explode and cause them to bleed profusely for the Shift, granting Favor on Survival Checks to track it for this time.</span></p>",
+        "description": "<p><span class=\"fontstyle0\">Acts as basic oil. However, while coated on a Weapon that is then ignited, its damage from attacks that hit Beings with half their HP or less can Explode on a 1 and cause them to bleed profusely for the Shift, granting Favor on Survival Checks to track it for this time.</span></p>",
         "equipmentType": "alchemical",
         "locked": true,
         "equipped": false,
@@ -9834,7 +9834,7 @@
       "type": "equipment",
       "img": "icons/consumables/potions/flask-corked-yellow-glow.webp",
       "system": {
-        "description": "<p><span class=\"fontstyle0\">For 1 Minute, the consumer gains a bonus to Armor and Saves equal to the potion's Rank (+3). Afterward, any Invulnerability Potion the consumer drinks in the next week instead confers this bonus as a penalty.</span></p>",
+        "description": "<p><span class=\"fontstyle0\">For 1 Minute, the consumer gains a bonus to Armor and Saves equal to the potion's Rank (+3). Afterward, they can't benefit from another Invulnerability Potion for 1 Day.</span></p>",
         "equipmentType": "alchemical",
         "locked": true,
         "equipped": false,
@@ -10162,7 +10162,7 @@
       "type": "equipment",
       "img": "icons/sundries/lights/candle-lit-angelic.webp",
       "system": {
-        "description": "<p><span class=\"fontstyle0\">Acts as a torch, but its Light only sheds out to Close. The air in the Light is filled with a fresh, crisp odor. Those in its Light gain Favor on Saves against Berserk or Frightened.</span></p>",
+        "description": "<p><span class=\"fontstyle0\">Acts as a basic candle. The air in the Light is filled with a fresh, crisp odor. Those in its Light gain Favor on Saves against Berserk or Frightened.</span></p>",
         "equipmentType": "alchemical",
         "locked": true,
         "equipped": false,
@@ -10490,7 +10490,7 @@
       "type": "equipment",
       "img": "icons/consumables/potions/potion-vial-corked-labeled-purple.webp",
       "system": {
-        "description": "<p>For 1 Hour, the consumer gains Telepathy (Far). Using this sense requires Focus, and it is obstructed by 1 inch of lead or more than 2' of stone.</p>",
+        "description": "<p>For 1 Hour, the consumer gains Telepathy (Far). Using this sense requires Focus, and it is obstructed by dense stone and metal.</p>",
         "equipmentType": "alchemical",
         "locked": false,
         "equipped": false,
@@ -11976,7 +11976,7 @@
       "type": "equipment",
       "img": "icons/consumables/potions/potion-bottle-fumes-blue.webp",
       "system": {
-        "description": "<p><span class=\"fontstyle0\">Gray, smokey vapors that temporarily dull one’s sense of smell when inhaled. A Being that inhales the clearbreath gains Favor on Saves against foul smells and gases for 1 hour.</span></p>",
+        "description": "<p><span class=\"fontstyle0\">A Being that inhales it gains Favor on Saves against foul smells and gases for 1 Hour.</span></p>",
         "equipmentType": "alchemical",
         "locked": true,
         "equipped": false,
@@ -12140,7 +12140,7 @@
       "type": "equipment",
       "img": "icons/consumables/potions/potion-flask-corked-tied-necklace-teal.webp",
       "system": {
-        "description": "<p>For 1 Hour, the consumer can hear what other Beings of their choice within Far hear. This sense is obstructed by 1 inch of lead or more than 2’ of stone.</p>",
+        "description": "<p>For 1 Hour, the consumer can hear what other Beings of their choice within Far hear. This sense is obstructed by dense stone and metal.</p>",
         "equipmentType": "alchemical",
         "locked": false,
         "equipped": false,
@@ -12960,7 +12960,7 @@
       "type": "equipment",
       "img": "icons/consumables/potions/flask-ornate-skull-green.webp",
       "system": {
-        "description": "<p><span class=\"fontstyle0\">The Target is Sickened (Cd4 damage) and, if it is cursed with Lycanthropy, the curse is removed. In addition to the Material cost, this item requires 1g worth of wolfsbane to Craft.</span></p><p><span class=\"fontstyle2\"><strong>Consumed:</strong> </span><span class=\"fontstyle0\">Affects Targets who consume it.</span></p><p><span class=\"fontstyle2\"><strong>Injury:</strong> </span><span class=\"fontstyle0\">Affects Targets who are injured with weapons coated with it.</span></p>",
+        "description": "<p><span class=\"fontstyle0\">The Target is Sickened (Cd4 damage) and, if it is cursed with Lycanthropy, the curse is removed.</span></p><p><span class=\"fontstyle2\"><strong>Consumed:</strong> </span><span class=\"fontstyle0\">Affects Targets who consume it.</span></p><p><span class=\"fontstyle2\"><strong>Injury:</strong> </span><span class=\"fontstyle0\">Affects Targets who are injured with weapons coated with it.</span></p>",
         "equipmentType": "alchemical",
         "locked": true,
         "equipped": false,
@@ -13616,7 +13616,7 @@
       "type": "equipment",
       "img": "icons/tools/laboratory/bowl-powder-purple.webp",
       "system": {
-        "description": "<p><span class=\"fontstyle0\">Can’t be seen with normal vision or beyond Close. When viewed with Darksight, the powder glows. A vial contains enough powder to write a short sentence (10 words or less).</span></p>",
+        "description": "<p><span class=\"fontstyle0\">Can't be seen with normal vision or beyond Close. When viewed with Darksight, the powder glows. A vial contains enough powder to write roughly 10 words.</span></p>",
         "equipmentType": "alchemical",
         "locked": true,
         "equipped": false,
