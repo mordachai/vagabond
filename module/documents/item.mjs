@@ -1,6 +1,7 @@
 import { VagabondChatHelper } from '../helpers/chat-helper.mjs';
 import { effectModeToChangeType } from '../helpers/effects.mjs';
 import { EquipmentHelper } from '../helpers/equipment-helper.mjs';
+import { isStackableZeroSlot } from '../helpers/stack-helper.mjs';
 import { CurrencyHelper } from '../helpers/currency-helper.mjs';
 import { HunterHelper } from '../helpers/hunter-helper.mjs';
 
@@ -555,6 +556,22 @@ export class VagabondItem extends Item {
         const hr = foundry.utils.getProperty(changed, 'system.handsRequired');
         foundry.utils.setProperty(changed, 'system.equipmentState',
           hr === 2 ? 'twoHands' : hr === 1 ? 'oneHand' : 'worn');
+      }
+    }
+
+    // A 0-Slot stack holds at most zeroSlotStackSize (10 = 1 Slot). Typing / clicking a bigger
+    // quantity clamps this card and moves the excess into other cards. Done here (not in
+    // `_onUpdate`) because custom options don't reliably survive to `_onUpdate`; this hook only
+    // runs on the client that made the edit, so it can't double up.
+    if (this.type === 'equipment' && this.parent?.documentName === 'Actor'
+        && foundry.utils.hasProperty(changed, 'system.quantity') && isStackableZeroSlot(this)) {
+      const wanted = Number(foundry.utils.getProperty(changed, 'system.quantity')) || 0;
+      const cap = EquipmentHelper.zeroSlotStackCap(this);
+      if (wanted > cap) {
+        foundry.utils.setProperty(changed, 'system.quantity', cap);
+        // The item sheet autosaves with render:false — force a refresh so its field shows the clamped value
+        options.render = true;
+        await EquipmentHelper.splitStackOverflow(this, wanted - cap);
       }
     }
 

@@ -3,7 +3,8 @@
   class='inventory-card draggable
          {{#if equipped}}equipped{{/if}}
          {{#if isSlotZero}}{{#unless isFullZeroStack}}slot-zero{{/unless}}{{/if}}
-         {{#if item.flags.vagabond.mix.inert}}is-inert{{/if}}'
+         {{#if item.flags.vagabond.mix.inert}}is-inert{{/if}}
+         {{#if (eq item.system.quantity 0)}}is-depleted{{/if}}'
   data-item-id='{{item._id}}'
   data-uuid='{{item.uuid}}'
   data-item-slots='{{item.system.slots}}'

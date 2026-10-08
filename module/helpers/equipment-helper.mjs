@@ -266,15 +266,48 @@ export class EquipmentHelper {
     if (item?.type !== 'equipment') return;
     const current = item.system.quantity ?? 0;
     let next = Math.max(0, current + delta);
-    // 0-Slot stacks hold at most zeroSlotStackSize (10 = 1 Slot); extra units need another card.
-    if (delta > 0 && isStackableZeroSlot(item)) {
-      const size = CONFIG.VAGABOND?.zeroSlotStackSize || 10;
-      if (next > Math.max(size, current)) {
-        next = Math.max(size, current);
-        ui.notifications.warn(game.i18n.format('VAGABOND.ContextMenu.StackFull', { size }));
-      }
-    }
+    // Over a 0-Slot stack's cap (10 = 1 Slot): VagabondItem#_preUpdate clamps it and
+    // splitStackOverflow() moves the excess into other stacks / new cards.
     await item.update({ 'system.quantity': next });
+  }
+
+  /** Cap of a 0-Slot card being raised: the stack size, or its current quantity if already above it. */
+  static zeroSlotStackCap(item) {
+    return Math.max(CONFIG.VAGABOND?.zeroSlotStackSize || 10, item.system.quantity ?? 0);
+  }
+
+  /**
+   * Move `overflow` units of a 0-Slot item out of its (already clamped) card: first top up sibling
+   * stacks that still have room, then spill into new cards of at most `zeroSlotStackSize` each.
+   * @param {Item} item
+   * @param {number} overflow
+   */
+  static async splitStackOverflow(item, overflow) {
+    const actor = item?.parent;
+    if (!actor || overflow <= 0) return;
+    const size = CONFIG.VAGABOND?.zeroSlotStackSize || 10;
+    const updates = [];
+    for (const sib of this.stackSiblings(item)) {
+      if (overflow <= 0) break;
+      const qty = Math.max(1, sib.system.quantity ?? 1);
+      const add = Math.min(size - qty, overflow);
+      if (add <= 0) continue;
+      updates.push({ _id: sib.id, 'system.quantity': qty + add });
+      overflow -= add;
+    }
+    const copies = [];
+    const start = this.nextGridPosition(actor);
+    while (overflow > 0) {
+      const q = Math.min(size, overflow);
+      const data = item.toObject();
+      delete data._id;
+      data.system.quantity = q;
+      data.system.gridPosition = start + copies.length;
+      copies.push(data);
+      overflow -= q;
+    }
+    if (updates.length) await actor.updateEmbeddedDocuments('Item', updates);
+    if (copies.length) await actor.createEmbeddedDocuments('Item', copies);
   }
 
   /**

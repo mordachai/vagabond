@@ -20459,6 +20459,11 @@ ol#combat-tracker.directory-list {
 .vagabond .inventory-card.is-inert .item-image {
   filter: grayscale(1) brightness(0.6);
 }
+.vagabond .inventory-card.is-depleted .item-image,
+.vagabond .inventory-card.is-depleted .item-name-display {
+  filter: grayscale(1);
+  opacity: 0.45;
+}
 .vagabond .inventory-card .item-inert-badge {
   position: absolute;
   top: 2px;

@@ -334,6 +334,11 @@
   // Thrown-weapon stack count. L-click +1 (retrieve), R-click −1.
   // Inert Mix (mixInertBehavior 'keep') — greyed, Use blocked in checkConsumableRequirements
   &.is-inert .item-image { filter: grayscale(1) brightness(0.6); }
+  // Quantity 0 (spent / out of stock) — art and name fade, the ×0 badge stays readable and clickable
+  &.is-depleted {
+    .item-image,
+    .item-name-display { filter: grayscale(1); opacity: 0.45; }
+  }
   .item-inert-badge {
     position: absolute;
     top: 2px;
