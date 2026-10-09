@@ -540,6 +540,14 @@ export function loadHomebrewConfig() {
     { inplace: false, recursive: true }
   );
 
+  // Saved arrays replace the defaults wholesale, so skills saved before `attackType` existed
+  // lose it (Ranged would read as melee). Backfill it from the default skill with the same key.
+  for (const skill of config.skills ?? []) {
+    if (skill.attackType) continue;
+    const def = VAGABOND_HOMEBREW_DEFAULTS.skills.find(d => d.key === skill.key);
+    if (def?.attackType) skill.attackType = def.attackType;
+  }
+
   // Leveling migrations (runtime-only; persisted the next time the GM saves homebrew)
   const savedLv = saved?.leveling;
   if (savedLv) {

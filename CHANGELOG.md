@@ -1,5 +1,8 @@
 # Changelog
 
+## Unreleased
+- Fix: in worlds whose homebrew skills were saved before attack types existed, Ranged attacks counted as melee (defense rules, Ranged-only features and macros reading the attack type). Missing attack types now come from the default skill.
+
 ## v6.2.0
 - **Alchemist Alchemy lab.** New **Alchemy** tab on the character sheet and Alchemy panel on the HUD, with three stations: **Catalyze** (your known formulae as cards, Craft for 5s of Materials), **Mix** (Level 6: two slots, combined effect preview, Mix) and **Library** (every Alchemical Item: search, sort, Learn, Prima Materia, Craft as Project). No popups: the Catalyze and Mix feature buttons open the lab at that station, and the in-Combat Use Action limit asks for a second click instead of a dialog. The Workbench Alchemy tab and the Catalyze / Mix dialogs are gone.
 - The sheet's Magic tab and the HUD's Spells tab only show for characters who have a Spell.
