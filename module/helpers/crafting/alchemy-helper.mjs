@@ -13,14 +13,46 @@ export class AlchemyHelper {
     return actor?.items?.find(i => i.type === 'class') ?? null;
   }
 
-  /** Total formula picks granted by the class at the actor's current level. */
-  static formulaGrantsFor(actor) {
-    const classItem = this.classItemOf(actor);
-    const level = actor?.system?.attributes?.level?.value ?? 1;
+  /** Total formula picks a `class` item grants by `level` (sum of `formulaAmount` up to it). */
+  static formulaGrantsAtLevel(classItem, level) {
     if (!classItem) return 0;
-    return (classItem.system.levelFeatures ?? [])
+    return (classItem.system?.levelFeatures ?? [])
       .filter(f => (f.level ?? 0) <= level)
       .reduce((sum, f) => sum + (f.formulaAmount || 0), 0);
+  }
+
+  /**
+   * The value cap (in copper) a formula learned at `level` must be under — from the
+   * highest-level granting feature's `formulaValueCap` formula (RAW's own table
+   * scales identically across every Alchemy grant, so "the current one" is
+   * always what should gate a new pick). Silver formula result × RATES.silver → copper.
+   * `rollData` (the actor's, when there is one) is evaluated with its level forced to
+   * `level`, so the Level Up dialog and the Character Builder can ask about a level
+   * the actor hasn't reached yet.
+   */
+  static formulaValueCapAtLevel(classItem, level, rollData = {}) {
+    if (!classItem) return 0;
+    const granting = (classItem.system?.levelFeatures ?? [])
+      .filter(f => (f.level ?? 0) <= level && (f.formulaAmount || 0) > 0)
+      .sort((a, b) => b.level - a.level);
+    const formula = granting[0]?.formulaValueCap;
+    if (!formula) return 0;
+    try {
+      const data = foundry.utils.deepClone(rollData ?? {});
+      foundry.utils.setProperty(data, 'attributes.level.value', level);
+      const replaced = Roll.replaceFormulaData(String(formula).trim(), data, { missing: 0 });
+      const silver = Roll.safeEval(replaced);
+      if (silver === null || silver === undefined || isNaN(silver)) return 0;
+      return Math.max(0, Math.round(silver) * CurrencyHelper.RATES.silver);
+    } catch {
+      return 0;
+    }
+  }
+
+  /** Total formula picks granted by the class at the actor's current level. */
+  static formulaGrantsFor(actor) {
+    const level = actor?.system?.attributes?.level?.value ?? 1;
+    return this.formulaGrantsAtLevel(this.classItemOf(actor), level);
   }
 
   /** Remaining formula picks (grants minus already-known formulas). */
@@ -29,29 +61,12 @@ export class AlchemyHelper {
     return Math.max(0, this.formulaGrantsFor(actor) - known);
   }
 
-  /**
-   * The value cap (in copper) a newly-learned formula must be under — from the
-   * highest-level granted feature's `formulaValueCap` formula (RAW's own table
-   * scales identically across every Alchemy grant, so "the current one" is
-   * always what should gate a new pick). Silver formula result × RATES.silver → copper.
-   */
+  /** The value cap (in copper) a newly-learned formula must be under at the actor's current level. */
   static formulaValueCapCopper(actor) {
-    const classItem = this.classItemOf(actor);
     const level = actor?.system?.attributes?.level?.value ?? 1;
+    const classItem = this.classItemOf(actor);
     if (!classItem) return 0;
-    const granting = (classItem.system.levelFeatures ?? [])
-      .filter(f => (f.level ?? 0) <= level && (f.formulaAmount || 0) > 0)
-      .sort((a, b) => b.level - a.level);
-    const formula = granting[0]?.formulaValueCap;
-    if (!formula) return 0;
-    try {
-      const replaced = Roll.replaceFormulaData(String(formula).trim(), actor.getRollData(), { missing: 0 });
-      const silver = Roll.safeEval(replaced);
-      if (silver === null || silver === undefined || isNaN(silver)) return 0;
-      return Math.max(0, Math.round(silver) * CurrencyHelper.RATES.silver);
-    } catch {
-      return 0;
-    }
+    return this.formulaValueCapAtLevel(classItem, level, actor.getRollData());
   }
 
   /** Whether `actor` already knows `uuid` as a formula. */

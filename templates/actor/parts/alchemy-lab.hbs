@@ -1,0 +1,264 @@
+{{!-- Alchemy lab (AlchemyLab.prepare) — sheet Alchemy tab + HUD Alchemy panel (compact: no Library). --}}
+<div class="alchemy-lab{{#if compact}} is-compact{{/if}}">
+
+  <header class="al-header">
+    <span class="al-stat" data-tooltip="{{localize 'VAGABOND.AlchemyLab.Materials' cost=header.craftCostLabel}}">
+      <img src="icons/commodities/materials/powder-red-green-yellow.webp" alt=""> {{header.materialsLabel}}
+    </span>
+    <span class="al-stat{{#unless header.studiedDice}} is-zero{{/unless}}" data-tooltip="{{localize 'VAGABOND.AlchemyLab.StudiedDice'}}">
+      <i class="fa-solid fa-book-open"></i> {{header.studiedDice}}
+    </span>
+    <span class="al-stat" data-tooltip="{{localize 'VAGABOND.AlchemyLab.KnownHint' cap=header.capLabel}}">
+      <i class="fa-solid fa-scroll"></i> {{header.known}}/{{header.grants}}
+    </span>
+    {{#if header.tools}}
+    {{#if editable}}
+    <button type="button" class="al-stat al-tools{{#unless header.tools.equipped}} is-off{{/unless}}" data-action="labToggleTools" data-item-id="{{header.tools.id}}" data-tooltip="{{header.tools.tip}}">
+      <img src="{{header.tools.img}}" alt="">
+    </button>
+    {{else}}
+    <span class="al-stat al-tools{{#unless header.tools.equipped}} is-off{{/unless}}" data-tooltip="{{header.tools.tip}}"><img src="{{header.tools.img}}" alt=""></span>
+    {{/if}}
+    {{/if}}
+    {{#if header.inCombat}}
+    <span class="al-pips" data-tooltip="{{localize 'VAGABOND.AlchemyLab.UseActions' used=header.used allowed=header.allowed}}">
+      {{#each header.pips}}<span class="al-pip{{#if spent}} is-spent{{/if}}{{#if over}} is-over{{/if}}"></span>{{/each}}
+    </span>
+    {{/if}}
+  </header>
+
+  <nav class="al-stations">
+    {{#each stations}}
+    <button type="button" class="al-station{{#if active}} active{{/if}}" data-action="labStation" data-station="{{id}}">
+      <i class="{{icon}}"></i> {{localize label}}
+    </button>
+    {{/each}}
+  </nav>
+
+  {{#if notice}}
+  <div class="al-notice"><i class="fa-solid fa-triangle-exclamation"></i><span>{{notice}}</span></div>
+  {{/if}}
+
+  {{!-- ---------------- Catalyze ---------------- --}}
+  {{#if catalyze}}
+  <section class="al-catalyze">
+    <h4 class="al-known-title">
+      {{localize "VAGABOND.AlchemyLab.KnownFormulae"}}
+      {{#if catalyze.canEdit}}
+      <button type="button" class="al-edit{{#if catalyze.editMode}} active{{/if}}" data-action="labToggleEdit" data-tooltip="{{localize 'VAGABOND.AlchemyLab.EditFormulae'}}"><i class="fa-solid fa-pen"></i></button>
+      {{/if}}
+    </h4>
+    <div class="al-grid">
+      {{#each catalyze.cards}}
+      <div class="al-card{{#if selected}} is-selected{{/if}}" data-uuid="{{uuid}}">
+        {{#if ../catalyze.editMode}}
+        <button type="button" class="al-forget" data-action="labForget" data-tooltip="{{localize 'VAGABOND.AlchemyLab.Forget'}}"><i class="fa-solid fa-xmark"></i></button>
+        {{/if}}
+        <span class="al-art"><img src="{{img}}" alt=""><span class="al-badge{{#unless owned}} is-zero{{/unless}}" data-tooltip="{{localize 'VAGABOND.AlchemyLab.Owned' qty=owned}}">×{{owned}}</span></span>
+        <span class="al-card-name">{{name}}</span>
+        {{#if ../editable}}
+        <button type="button" class="al-craft{{#if armed}} is-armed{{/if}}" data-action="labCraft"
+                {{#unless ../catalyze.canCraft}}disabled{{/unless}}>
+          {{#if armed}}
+          <i class="fa-solid fa-triangle-exclamation"></i> {{localize "VAGABOND.AlchemyLab.CraftAnyway" used=../header.used allowed=../header.allowed}}
+          {{else}}
+          <i class="fa-solid fa-flask"></i> <span class="al-cost{{#unless ../catalyze.canAfford}} is-short{{/unless}}">{{../catalyze.costLabel}}</span>
+          {{/if}}
+        </button>
+        {{/if}}
+      </div>
+      {{/each}}
+      {{#each catalyze.empties}}
+      {{#if ../compact}}
+      <div class="al-card al-card-empty"><i class="fa-solid fa-flask"></i><span>{{localize "VAGABOND.AlchemyLab.EmptySlot"}}</span></div>
+      {{else}}
+      <button type="button" class="al-card al-card-empty" data-action="labStation" data-station="library" data-tooltip="{{localize 'VAGABOND.AlchemyLab.EmptySlotHint'}}">
+        <i class="fa-solid fa-plus"></i><span>{{localize "VAGABOND.AlchemyLab.EmptySlot"}}</span>
+      </button>
+      {{/if}}
+      {{/each}}
+    </div>
+    {{#unless catalyze.cards.length}}
+    <p class="al-empty">{{localize catalyze.emptyKey}}</p>
+    {{/unless}}
+    {{#each catalyze.cards}}
+    <div class="al-detail al-card-detail" data-uuid="{{uuid}}" {{#unless selected}}hidden{{/unless}}>
+      <div class="al-detail-head">
+        <img class="al-detail-img" src="{{img}}" alt="">
+        <div class="al-detail-title">
+          <strong>{{name}}</strong>
+          <span>{{typeLabel}}{{#if damage}} · <span class="al-dmg" data-tooltip="{{damage.typeLabel}}">{{damage.amount}}{{#if damage.icon}} <i class="{{damage.icon}}"></i>{{/if}}</span>{{/if}}</span>
+        </div>
+      </div>
+      {{#if description}}<div class="al-detail-desc">{{{description}}}</div>{{/if}}
+    </div>
+    {{/each}}
+  </section>
+  {{/if}}
+
+  {{!-- ---------------- Mix ---------------- --}}
+  {{#if mix}}
+  <section class="al-mix">
+    <div class="al-mix-slots">
+      {{#each mix.slots}}
+      {{#if @index}}<i class="fa-solid fa-plus al-mix-plus"></i>{{/if}}
+      <div class="al-mix-slot{{#if entry}} filled{{/if}}" data-slot="{{index}}">
+        {{#if entry}}
+        <span class="al-art"><img src="{{entry.img}}" alt=""><span class="al-badge">×{{entry.charges}}</span></span>
+        <span class="al-slot-name">{{entry.name}}</span>
+        <button type="button" class="al-slot-clear" data-action="labClearSlot" data-slot="{{index}}" data-tooltip="{{localize 'VAGABOND.MixPanel.Clear'}}"><i class="fa-solid fa-xmark"></i></button>
+        {{else}}
+        <i class="fa-solid fa-flask"></i><span>{{localize "VAGABOND.MixPanel.Drop"}}</span>
+        {{/if}}
+      </div>
+      {{/each}}
+    </div>
+
+    <div class="al-mix-effect">
+      {{#if mix.preview}}
+      {{#if (or mix.preview.damage mix.preview.companion)}}
+      <div class="al-line">
+        {{#if mix.preview.damage}}<span class="al-dmg" data-tooltip="{{mix.preview.damage.typeLabel}}">{{mix.preview.damage.amount}}{{#if mix.preview.damage.icon}} <i class="{{mix.preview.damage.icon}}"></i>{{/if}}</span>{{/if}}
+        {{#if mix.preview.companion}}
+        <span class="al-plus-sm">+</span>
+        <span class="al-dmg is-companion" data-tooltip="{{mix.preview.companion.typeLabel}} — {{localize 'VAGABOND.MixPanel.CompanionHint'}}">{{mix.preview.companion.amount}}{{#if mix.preview.companion.icon}} <i class="{{mix.preview.companion.icon}}"></i>{{/if}}</span>
+        {{/if}}
+      </div>
+      {{/if}}
+      <div class="al-line">
+        {{#each mix.preview.statuses}}<span class="al-tag">{{this}}</span>{{/each}}
+        <span class="al-tag is-use">{{mix.preview.useLabel}}</span>
+      </div>
+      <div class="al-expiry"><i class="fa-solid fa-hourglass-half"></i> {{mix.preview.expiryLabel}}</div>
+      {{else}}
+      <p class="al-hint">{{localize "VAGABOND.MixPanel.DropHint"}}</p>
+      {{/if}}
+    </div>
+
+    {{#if editable}}
+    <div class="al-mix-action">
+      <button type="button" class="al-mix-btn{{#if mix.armed}} is-armed{{/if}}" data-action="labMix" {{#unless mix.canMix}}disabled{{/unless}}>
+        {{#if mix.armed}}
+        <i class="fa-solid fa-triangle-exclamation"></i> {{localize "VAGABOND.AlchemyLab.MixAnyway" used=header.used allowed=header.allowed}}
+        {{else}}
+        <i class="fa-solid fa-flask-vial"></i> {{localize "VAGABOND.MixPanel.Mix"}}
+        {{/if}}
+      </button>
+    </div>
+    {{/if}}
+
+    <div class="al-section-head al-ruled"><span>{{localize "VAGABOND.MixPanel.Items"}}</span></div>
+    {{#if mix.entries.length}}
+    <div class="al-carousel">
+      <button type="button" class="al-arrow" data-dir="-1"><i class="fa-solid fa-chevron-left"></i></button>
+      <div class="al-strip">
+        {{#each mix.entries}}
+        <button type="button" class="al-tile{{#if selected}} is-selected{{/if}}{{#if used}} is-used{{/if}}" data-item-id="{{id}}" draggable="true" data-tooltip="{{name}}">
+          <span class="al-art"><img src="{{img}}" alt="" draggable="false"><span class="al-badge">×{{charges}}</span></span>
+          <span class="al-tile-name">{{name}}</span>
+        </button>
+        {{/each}}
+      </div>
+      <button type="button" class="al-arrow" data-dir="1"><i class="fa-solid fa-chevron-right"></i></button>
+    </div>
+    {{#each mix.entries}}
+    <div class="al-detail al-tile-detail" data-item-id="{{id}}" {{#unless selected}}hidden{{/unless}}>
+      <div class="al-detail-head">
+        <img class="al-detail-img" src="{{img}}" alt="">
+        <div class="al-detail-title">
+          <strong>{{name}}</strong>
+          <span>{{typeLabel}}{{#if damage}} · <span class="al-dmg" data-tooltip="{{damage.typeLabel}}">{{damage.amount}}{{#if damage.icon}} <i class="{{damage.icon}}"></i>{{/if}}</span>{{/if}}</span>
+        </div>
+      </div>
+      {{#if description}}<div class="al-detail-desc">{{{description}}}</div>{{/if}}
+    </div>
+    {{/each}}
+    {{else}}
+    <p class="al-empty">{{localize "VAGABOND.AlchemyLab.NoMixItems"}}</p>
+    {{/if}}
+  </section>
+  {{/if}}
+
+  {{!-- ---------------- Library (sheet only) ---------------- --}}
+  {{#if library}}
+  <section class="al-library">
+    <div class="al-known-strip" data-tooltip="{{localize 'VAGABOND.AlchemyLab.KnownStripHint'}}">
+      <div class="al-known-tiles">
+        {{#each library.knownTiles}}
+        <span class="al-known-tile" data-tooltip="{{name}}"><img src="{{img}}" alt=""></span>
+        {{/each}}
+        {{#each library.empties}}
+        <span class="al-known-tile is-empty"><i class="fa-solid fa-plus"></i></span>
+        {{/each}}
+      </div>
+      <span class="al-known-left">{{localize "VAGABOND.AlchemyLab.PicksLeft" n=library.picksLeft cap=header.capLabel}}</span>
+    </div>
+
+    <div class="al-lib-tools">
+      <input type="text" class="al-lib-search" placeholder="{{localize 'VAGABOND.AlchemyLab.Search'}}">
+      <div class="al-sorts">
+        {{#each library.sorts}}
+        <button type="button" class="al-sort{{#if active}} active{{/if}}" data-action="labSort" data-sort="{{id}}">{{localize label}}</button>
+        {{/each}}
+      </div>
+    </div>
+
+    <div class="al-lib-list">
+      {{#each library.groups}}
+      <div class="al-lib-group">
+        {{#if label}}<div class="al-lib-group-label">{{label}}</div>{{/if}}
+        {{#each rows}}
+        <div class="al-lib-item{{#if open}} is-open{{/if}}" data-name="{{nameLower}}">
+          <div class="al-lib-row{{#if known}} is-known{{/if}}{{#if overCap}} is-over-cap{{/if}}" data-uuid="{{uuid}}"
+               data-can-learn="{{canLearn}}" draggable="{{#if canLearn}}true{{else}}false{{/if}}">
+            <span class="al-art al-art-sm"><img src="{{img}}" alt="" draggable="false">{{#if owned}}<span class="al-badge">×{{owned}}</span>{{/if}}</span>
+            <span class="al-lib-name">{{name}}</span>
+            {{#if known}}<i class="fa-solid fa-scroll al-lib-known" data-tooltip="{{localize 'VAGABOND.AlchemyLab.AlreadyKnown'}}"></i>{{/if}}
+            <span class="al-lib-cost">{{costLabel}}</span>
+            <i class="fa-solid fa-chevron-right al-lib-caret"></i>
+          </div>
+          <div class="al-lib-detail">
+            <div class="al-detail-head">
+              <span>{{typeLabel}}{{#if damage}} · <span class="al-dmg" data-tooltip="{{damage.typeLabel}}">{{damage.amount}}{{#if damage.icon}} <i class="{{damage.icon}}"></i>{{/if}}</span>{{/if}}</span>
+            </div>
+            {{#if description}}<div class="al-detail-desc">{{{description}}}</div>{{/if}}
+            <div class="al-lib-actions" data-uuid="{{uuid}}">
+              {{#if known}}
+              <span class="al-note">{{localize "VAGABOND.AlchemyLab.AlreadyKnown"}}</span>
+              {{else if overCap}}
+              <span class="al-note is-warn">{{localize "VAGABOND.AlchemyLab.OverCap" cap=../../header.capLabel}}</span>
+              {{else if canLearn}}
+              <button type="button" class="al-btn is-primary" data-action="labLearn"><i class="fa-solid fa-hand-sparkles"></i> {{localize "VAGABOND.AlchemyLab.Learn"}}</button>
+              {{else}}
+              <span class="al-note">{{localize "VAGABOND.AlchemyLab.NoPicksLeft"}}</span>
+              {{/if}}
+              {{#if canPrima}}
+              <button type="button" class="al-btn{{#if primaArmed}} is-armed{{/if}}" data-action="labPrima" {{#unless ../../library.studiedDice}}disabled{{/unless}}
+                      data-tooltip="{{localize 'VAGABOND.AlchemyLab.PrimaHint' cap=../../library.primaCapLabel}}">
+                {{#if primaArmed}}
+                <i class="fa-solid fa-triangle-exclamation"></i> {{localize "VAGABOND.AlchemyLab.CraftAnyway" used=../../header.used allowed=../../header.allowed}}
+                {{else}}
+                <i class="fa-solid fa-mortar-pestle"></i> {{localize "VAGABOND.AlchemyLab.Prima"}}
+                {{/if}}
+              </button>
+              {{/if}}
+              {{#unless known}}
+              <button type="button" class="al-btn" data-action="labProject" data-tooltip="{{localize 'VAGABOND.AlchemyLab.ProjectHint'}}">
+                <i class="fa-solid fa-hammer"></i> {{localize "VAGABOND.AlchemyLab.Project"}}
+              </button>
+              {{/unless}}
+            </div>
+          </div>
+        </div>
+        {{/each}}
+      </div>
+      {{/each}}
+      {{#if library.hasRows}}
+      <p class="al-empty al-lib-nomatch" hidden>{{localize "VAGABOND.AlchemyLab.NoMatches"}}</p>
+      {{else}}
+      <p class="al-empty">{{localize "VAGABOND.AlchemyLab.NoCatalog"}}</p>
+      {{/if}}
+    </div>
+  </section>
+  {{/if}}
+</div>

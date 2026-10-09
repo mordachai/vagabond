@@ -313,6 +313,50 @@
       "LimitCatalyze": "<strong>{name}</strong> já tomou a Ação de Usar neste Turno ({used}/{allowed}). Misturar mesmo assim?",
       "LimitDeft": "<strong>{name}</strong> já tomou {used}/{allowed} Ações de Usar neste Turno (Ação de Usar + Mãos Hábeis, que abre mão do Movimento). Misturar mesmo assim?"
     },
+    "AlchemyLab": {
+      "Title": "Laboratório Alquímico",
+      "ToolsEquipped": "{name} equipado — clique para desequipar",
+      "ToolsUnequipped": "{name} não equipado (necessário para Criar) — clique para equipar",
+      "Stations": {
+        "Catalyze": "Catalisar",
+        "Mix": "Misturar",
+        "Library": "Biblioteca"
+      },
+      "Materials": "Materiais disponíveis (Criar uma fórmula conhecida custa {cost})",
+      "StudiedDice": "Dados de Estudo (Misturar e Prima Materia gastam 1)",
+      "KnownHint": "Fórmulas conhecidas / escolhas de fórmula. Uma fórmula nova deve valer {cap} ou menos.",
+      "UseActions": "Ações de Usar neste Turno: {used}/{allowed}",
+      "KnownFormulae": "Fórmulas Conhecidas",
+      "EditFormulae": "Editar fórmulas conhecidas",
+      "Forget": "Esquecer esta fórmula (libera a escolha)",
+      "Owned": "Você tem {qty} no inventário",
+      "CraftAnyway": "Mesmo assim ({used}/{allowed})",
+      "MixAnyway": "Misturar mesmo assim ({used}/{allowed})",
+      "EmptySlot": "Espaço vazio",
+      "EmptySlotHint": "Escolha uma fórmula na Biblioteca",
+      "NoFormulae": "Nenhuma fórmula conhecida — escolha-as na Biblioteca.",
+      "NoFormulaeCompact": "Nenhuma fórmula conhecida — escolha-as na aba Alquimia da ficha.",
+      "NoCatalyze": "Você conhece fórmulas mas não tem Catalisar — ainda não pode Criá-las.",
+      "NoMixItems": "Nenhum Item Alquímico com carga para Misturar.",
+      "KnownStripHint": "Arraste um item da lista para esta faixa (ou clique duas vezes) para aprendê-lo",
+      "PicksLeft": "{n} restantes · até {cap}",
+      "Search": "Buscar itens alquímicos…",
+      "Sort": {
+        "group": "Tipo",
+        "alpha": "A–Z",
+        "cost": "Custo"
+      },
+      "Learn": "Aprender",
+      "AlreadyKnown": "Já conhecida.",
+      "OverCap": "Vale mais que {cap} — acima do seu limite de fórmula.",
+      "NoPicksLeft": "Sem escolhas de fórmula restantes.",
+      "Prima": "Prima Materia",
+      "PrimaHint": "Gaste um Dado de Estudo para Criar este item sem Materiais ({cap} ou menos).",
+      "Project": "Criar como Projeto",
+      "ProjectHint": "Crie sem a fórmula, pelas regras normais de Criação (Quartos de dia + metade do valor em Materiais) — abre a Bancada.",
+      "NoMatches": "Nenhum item encontrado.",
+      "NoCatalog": "Nenhum item alquímico disponível — peça ao Mestre para habilitar um compêndio."
+    },
     "SpellTracker": {
       "By": "{spell} — conjurada por {name}.",
       "NoTarget": "Mire em um token para a Magia primeiro.",
@@ -1653,7 +1697,8 @@
         "Inventory": "Inventário",
         "Spells": "Magias",
         "Magic": "Magia",
-        "Effects": "Efeitos"
+        "Effects": "Efeitos",
+        "Alchemy": "Alquimia"
       },
       "base": {
         "FIELDS": {

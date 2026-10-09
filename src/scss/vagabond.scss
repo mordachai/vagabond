@@ -37,6 +37,9 @@
 /* NPC HUD - layers on the shared `.vbd-hud` base; also renders outside sheets */
 @import 'components/npc-hud';
 
+/* Alchemy lab - top level: sheet Alchemy tab AND the frameless Character HUD */
+@import 'components/alchemy-lab';
+
 /* Combat Carousel - floating overlay, companion to the sidebar tracker; renders outside sheets */
 @import 'components/combat-carousel';
 

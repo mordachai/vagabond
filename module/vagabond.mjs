@@ -98,6 +98,7 @@ import { CraftingHelper } from './helpers/crafting-helper.mjs';
 import { RelicHelper } from './helpers/relic-helper.mjs';
 import { CrystalHelper } from './helpers/crystal-helper.mjs';
 import { WorkbenchApp } from './applications/workbench-app.mjs';
+import { AlchemyLab } from './helpers/alchemy-lab.mjs';
 import { VagabondTokenRingShader, installStatusRingEffects, STATUS_RING_EFFECTS } from './ui/effects/index.mjs';
 
 const collections = foundry.documents.collections;
@@ -176,6 +177,7 @@ async function preloadHandlebarsTemplates() {
     // Actor partials
     'systems/vagabond/templates/actor/parts/inventory-card.hbs',
     'systems/vagabond/templates/actor/parts/effects-list.hbs',
+    'systems/vagabond/templates/actor/parts/alchemy-lab.hbs',
     // Party sheet partials
     'systems/vagabond/templates/party/party-member-card.hbs',
     'systems/vagabond/templates/party/party-npc-card.hbs',
@@ -653,8 +655,11 @@ Hooks.once('ready', function () {
 
   // Bard Virtuoso — players route the benefit copy onto Group members through the GM.
   registerSocketAction('virtuosoApply', (payload) => BardHelper.apply(payload));
-  registerMacroHandler('alchemist.catalyze', (scope) => AlchemistHelper.catalyze(scope));
-  registerMacroHandler('alchemist.mix', (scope) => AlchemistHelper.mix(scope));
+  // Catalyze / Mix open the Alchemy lab (sheet tab) at that station; the old dialogs only without a lab.
+  registerMacroHandler('alchemist.catalyze', (scope) => (AlchemyLab.hasLab(scope.actor)
+    ? AlchemyLab.openSheet(scope.actor, 'catalyze') : AlchemistHelper.catalyze(scope)));
+  registerMacroHandler('alchemist.mix', (scope) => (AlchemyLab.hasLab(scope.actor)
+    ? AlchemyLab.openSheet(scope.actor, 'mix') : AlchemistHelper.mix(scope)));
   registerMacroHandler('bard.virtuoso', (scope) => BardHelper.virtuoso(scope));
   registerMacroHandler('bard.perform', (scope) => BardHelper.perform(scope));
   registerMacroHandler('dancer.stepUp', (scope) => DancerHelper.stepUp(scope));

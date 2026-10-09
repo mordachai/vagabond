@@ -5477,6 +5477,918 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   object-fit: contain;
 }
 
+/* Alchemy lab - top level: sheet Alchemy tab AND the frameless Character HUD */
+.alchemy-lab {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 6px 4px 10px;
+  color: var(--vagabond-c-text-primary);
+  /* ---- Header ---- */
+  /* ---- Stations ---- */
+  /* ---- Notice ---- */
+  /* ---- Shared art + badge ---- */
+  /* ---- Details box (the one scooped element) ---- */
+  /* ---- Catalyze ---- */
+  /* ---- Mix ---- */
+  /* ---- Library ---- */
+  /* ---- HUD (compact) ---- */
+}
+.alchemy-lab [hidden] {
+  display: none !important;
+}
+.alchemy-lab .al-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.alchemy-lab .al-stat {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 3px 12px;
+  border: 1px solid var(--vagabond-c-tan-lite);
+  border-radius: 16px;
+  background: var(--vagabond-c-inset-2);
+  font-family: "Eskapade", serif;
+  font-weight: bold;
+  font-size: 1rem;
+}
+.alchemy-lab .al-stat i {
+  color: var(--vagabond-c-chat-yellow);
+  font-size: 1.25rem;
+}
+.alchemy-lab .al-stat img {
+  width: 24px;
+  height: 24px;
+  border: none;
+}
+.alchemy-lab .al-stat.is-zero {
+  color: var(--vagabond-c-red);
+  border-color: var(--vagabond-c-red);
+}
+.alchemy-lab .al-stat.is-zero i {
+  color: inherit;
+}
+.alchemy-lab .al-tools {
+  height: auto;
+  line-height: normal;
+  width: auto;
+  padding: 3px 12px;
+  color: var(--vagabond-c-text-primary);
+}
+.alchemy-lab .al-tools img {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  transition: filter 0.15s ease, opacity 0.15s ease;
+}
+.alchemy-lab .al-tools:is(button) {
+  cursor: pointer;
+}
+.alchemy-lab .al-tools:is(button):hover {
+  border-color: var(--vagabond-c-chat-yellow);
+}
+.alchemy-lab .al-tools.is-off img {
+  filter: grayscale(1);
+  opacity: 0.5;
+}
+.alchemy-lab .al-pips {
+  display: inline-flex;
+  gap: 4px;
+}
+.alchemy-lab .al-pip {
+  width: 10px;
+  height: 10px;
+  border: 2px solid var(--vagabond-c-tan-lite);
+  border-radius: 50%;
+}
+.alchemy-lab .al-pip.is-spent {
+  background: var(--vagabond-c-chat-yellow);
+  border-color: var(--vagabond-c-chat-yellow);
+}
+.alchemy-lab .al-pip.is-over {
+  background: var(--vagabond-c-red);
+  border-color: var(--vagabond-c-red);
+}
+.alchemy-lab .al-stations {
+  display: flex;
+  gap: 4px;
+  margin-top: 3px;
+  border-bottom: 1px solid var(--vagabond-c-tan-lite);
+}
+.alchemy-lab .al-station {
+  height: auto;
+  line-height: normal;
+  flex: 1;
+  padding: 5px 6px;
+  border: none;
+  border-bottom: 3px solid transparent;
+  border-radius: 0;
+  background: transparent;
+  font-family: "Eskapade", serif;
+  font-size: 0.9rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--vagabond-c-muted);
+}
+.alchemy-lab .al-station:hover {
+  color: var(--vagabond-c-text-primary);
+}
+.alchemy-lab .al-station.active {
+  color: var(--vagabond-c-text-primary);
+  border-bottom-color: var(--vagabond-c-chat-yellow);
+}
+.alchemy-lab .al-station.active i {
+  color: var(--vagabond-c-chat-yellow);
+}
+.alchemy-lab .al-notice {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border: 1px solid var(--vagabond-c-red);
+  border-radius: 6px;
+  font-size: 0.78rem;
+  color: var(--vagabond-c-red);
+}
+.alchemy-lab .al-section-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: "Eskapade", serif;
+  font-weight: bold;
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.alchemy-lab .al-section-head > span {
+  flex: 1;
+}
+.alchemy-lab .al-section-head.al-ruled > span {
+  flex: none;
+}
+.alchemy-lab .al-section-head.al-ruled::before, .alchemy-lab .al-section-head.al-ruled::after {
+  content: "";
+  flex: 1;
+  border-top: 1px solid var(--vagabond-c-tan-lite);
+}
+.alchemy-lab .al-known-title {
+  position: relative;
+  margin: 0;
+  width: 100%;
+  height: auto;
+  padding: 2px;
+  color: var(--vagabond-c-white);
+  background-image: url("../assets/images/sheets/rightColBg.svg");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  text-align: center;
+  filter: drop-shadow(2px 2px 1px var(--vagabond-c-inset-1));
+  text-shadow: 2px 2px 0 var(--vagabond-c-black), -2px 2px 0 var(--vagabond-c-black), -2px -2px 0 var(--vagabond-c-black), 2px -2px 0 var(--vagabond-c-black);
+}
+.alchemy-lab .al-known-title .al-edit {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  text-shadow: none;
+}
+.alchemy-lab .al-edit {
+  height: auto;
+  line-height: normal;
+  width: auto;
+  padding: 2px 6px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--vagabond-c-muted);
+  font-size: 0.75rem;
+}
+.alchemy-lab .al-edit:hover {
+  color: var(--vagabond-c-text-primary);
+}
+.alchemy-lab .al-edit.active {
+  color: var(--vagabond-c-chat-yellow);
+  border-color: var(--vagabond-c-chat-yellow);
+}
+.alchemy-lab .al-empty,
+.alchemy-lab .al-hint {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--vagabond-c-muted);
+  text-align: center;
+}
+.alchemy-lab .al-art {
+  position: relative;
+  flex: none;
+  display: inline-block;
+  line-height: 0;
+}
+.alchemy-lab .al-art img {
+  width: 52px;
+  height: 52px;
+  object-fit: cover;
+  border: 1px solid var(--vagabond-c-faint);
+  border-radius: 6px;
+  background: var(--vagabond-c-black);
+  -webkit-user-drag: none;
+}
+.alchemy-lab .al-art.al-art-sm img {
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+}
+.alchemy-lab .al-badge {
+  position: absolute;
+  top: -7px;
+  right: -9px;
+  min-width: 22px;
+  padding: 1px 5px;
+  border: 1px solid var(--vagabond-c-chat-yellow);
+  border-radius: 9px;
+  background: var(--vagabond-c-black);
+  color: var(--vagabond-c-chat-yellow);
+  font-family: "Germania", serif;
+  font-size: 0.9rem;
+  line-height: 1.1;
+  text-align: center;
+}
+.alchemy-lab .al-badge.is-zero {
+  border-color: var(--vagabond-c-faint);
+  color: var(--vagabond-c-faint);
+}
+.alchemy-lab .al-art-sm .al-badge {
+  top: -6px;
+  right: -10px;
+  min-width: 18px;
+  padding: 0 4px;
+  font-size: 0.8rem;
+}
+.alchemy-lab .al-dmg {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 8px;
+  border: 2px solid var(--vagabond-c-tan-lite);
+  border-radius: 12px;
+  font-family: "Eskapade", serif;
+  font-weight: bold;
+  color: var(--vagabond-c-text-primary);
+}
+.alchemy-lab .al-dmg i {
+  color: var(--vagabond-c-chat-yellow);
+}
+.alchemy-lab .al-dmg.is-companion {
+  border-style: dashed;
+}
+.alchemy-lab .al-detail {
+  border: 2px solid var(--vagabond-c-tan-lite);
+  border-radius: 12px;
+  background: var(--vagabond-c-inset-2);
+  corner-shape: scoop;
+  padding: 8px 10px;
+}
+.alchemy-lab .al-detail-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.alchemy-lab .al-detail-head > span {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.75rem;
+  color: var(--vagabond-c-muted);
+}
+.alchemy-lab .al-detail-img {
+  flex: none;
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border: 1px solid var(--vagabond-c-chat-yellow);
+  border-radius: 6px;
+  background: var(--vagabond-c-black);
+}
+.alchemy-lab .al-detail-title {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.alchemy-lab .al-detail-title strong {
+  font-family: "Eskapade", serif;
+  font-size: 1rem;
+  line-height: 1.15;
+}
+.alchemy-lab .al-detail-title > span {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.75rem;
+  color: var(--vagabond-c-muted);
+}
+.alchemy-lab .al-detail-desc {
+  margin-top: 6px;
+  padding-top: 5px;
+  border-top: 1px solid var(--vagabond-c-tan-lite);
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+.alchemy-lab .al-detail-desc p {
+  margin: 0 0 4px;
+}
+.alchemy-lab .al-detail-desc p:last-child {
+  margin-bottom: 0;
+}
+.alchemy-lab .al-catalyze {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.alchemy-lab .al-grid {
+  --al-cols: 4;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+.alchemy-lab .al-grid > .al-card {
+  flex: 0 0 calc((100% - (var(--al-cols) - 1) * 8px) / var(--al-cols));
+}
+.alchemy-lab .al-card {
+  height: auto;
+  line-height: normal;
+  border: 2px solid var(--vagabond-c-tan-lite);
+  border-radius: 8px;
+  background: var(--vagabond-c-inset-2);
+  position: relative;
+  min-width: 0;
+  padding: 10px 4px 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.alchemy-lab .al-card:hover {
+  border-color: var(--vagabond-c-chat-yellow);
+}
+.alchemy-lab .al-card.is-selected {
+  border-color: var(--vagabond-c-chat-yellow);
+  box-shadow: 0 0 8px -1px var(--vagabond-c-chat-yellow), inset 0 0 0 1px var(--vagabond-c-chat-yellow);
+}
+.alchemy-lab .al-card.is-selected .al-card-name {
+  color: var(--vagabond-c-chat-yellow);
+}
+.alchemy-lab .al-card.al-card-empty {
+  justify-content: center;
+  min-height: 112px;
+  border-style: dashed;
+  color: var(--vagabond-c-muted);
+  font-size: 0.75rem;
+  cursor: default;
+}
+.alchemy-lab .al-card.al-card-empty > i {
+  font-size: 1.2rem;
+  opacity: 0.6;
+}
+.alchemy-lab .al-card:is(button).al-card-empty {
+  cursor: pointer;
+}
+.alchemy-lab .al-card:is(button).al-card-empty:hover {
+  color: var(--vagabond-c-text-primary);
+}
+.alchemy-lab .al-card-name {
+  width: 100%;
+  min-height: 2.3em;
+  font-family: "Eskapade", serif;
+  font-weight: bold;
+  font-size: 0.85rem;
+  line-height: 1.15;
+  text-align: center;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.alchemy-lab .al-forget {
+  height: auto;
+  line-height: normal;
+  position: absolute;
+  top: -8px;
+  left: -8px;
+  z-index: 1;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--vagabond-c-black);
+  border-radius: 50%;
+  background: #c62828;
+  color: #ffffff;
+  font-size: 0.8rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+  transition: transform 0.12s ease, background 0.12s ease;
+}
+.alchemy-lab .al-forget i {
+  color: inherit;
+}
+.alchemy-lab .al-forget:hover {
+  background: #e53935;
+  transform: scale(1.12);
+}
+.alchemy-lab .al-craft {
+  height: auto;
+  line-height: normal;
+  width: 100%;
+  padding: 3px 4px;
+  border: 1px solid var(--vagabond-c-tan-lite);
+  border-radius: 6px;
+  background: var(--vagabond-c-inset-2);
+  font-size: 0.8rem;
+  color: var(--vagabond-c-text-primary);
+}
+.alchemy-lab .al-craft i {
+  color: var(--vagabond-c-chat-yellow);
+}
+.alchemy-lab .al-craft:hover:not(:disabled) {
+  border-color: var(--vagabond-c-green);
+}
+.alchemy-lab .al-craft:disabled {
+  color: var(--vagabond-c-muted);
+}
+.alchemy-lab .al-craft:disabled i {
+  color: inherit;
+}
+.alchemy-lab .al-cost.is-short {
+  color: var(--vagabond-c-red);
+}
+.alchemy-lab .is-armed {
+  border-color: var(--vagabond-c-red) !important;
+  color: var(--vagabond-c-red) !important;
+}
+.alchemy-lab .is-armed i {
+  color: inherit !important;
+}
+.alchemy-lab .al-mix {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.alchemy-lab .al-mix-slots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+.alchemy-lab .al-mix-plus {
+  color: var(--vagabond-c-chat-yellow);
+  font-size: 1.1rem;
+}
+.alchemy-lab .al-mix-slot {
+  border: 2px solid var(--vagabond-c-tan-lite);
+  border-radius: 8px;
+  background: var(--vagabond-c-inset-2);
+  position: relative;
+  width: 110px;
+  min-height: 92px;
+  padding: 10px 4px 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  border-style: dashed;
+  font-size: 0.72rem;
+  color: var(--vagabond-c-muted);
+  text-align: center;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.alchemy-lab .al-mix-slot > i {
+  font-size: 1.3rem;
+  opacity: 0.5;
+}
+.alchemy-lab .al-mix-slot.filled {
+  border-style: solid;
+  border-color: var(--vagabond-c-chat-yellow);
+  color: var(--vagabond-c-text-primary);
+}
+.alchemy-lab .al-mix-slot.drag-over {
+  border-style: solid;
+  border-color: var(--vagabond-c-chat-yellow);
+  box-shadow: 0 0 8px -1px var(--vagabond-c-chat-yellow), inset 0 0 0 1px var(--vagabond-c-chat-yellow);
+}
+.alchemy-lab.is-dragging .al-mix-slot, .alchemy-lab.is-dragging .al-known-strip {
+  border-color: var(--vagabond-c-chat-yellow);
+}
+.alchemy-lab .al-slot-name {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: "Eskapade", serif;
+  font-weight: bold;
+  font-size: 0.8rem;
+}
+.alchemy-lab .al-slot-clear {
+  height: auto;
+  line-height: normal;
+  position: absolute;
+  top: 2px;
+  left: 4px;
+  width: 16px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--vagabond-c-muted);
+  font-size: 0.7rem;
+}
+.alchemy-lab .al-slot-clear:hover {
+  color: var(--vagabond-c-red);
+}
+.alchemy-lab .al-mix-effect {
+  border: 2px solid var(--vagabond-c-tan-lite);
+  border-radius: 8px;
+  background: var(--vagabond-c-inset-2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 10px;
+  text-align: center;
+}
+.alchemy-lab .al-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.alchemy-lab .al-plus-sm {
+  color: var(--vagabond-c-chat-yellow);
+  font-weight: bold;
+}
+.alchemy-lab .al-tag {
+  padding: 1px 9px;
+  border: 1px solid var(--vagabond-c-tan-lite);
+  border-radius: 10px;
+  background: var(--vagabond-c-inset-2);
+  font-size: 0.82rem;
+  line-height: 1.4;
+}
+.alchemy-lab .al-tag.is-use {
+  font-style: italic;
+}
+.alchemy-lab .al-expiry {
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding-top: 5px;
+  border-top: 1px solid var(--vagabond-c-tan-lite);
+  font-size: 0.75rem;
+  color: var(--vagabond-c-text-secondary);
+}
+.alchemy-lab .al-expiry i {
+  color: var(--vagabond-c-chat-yellow);
+}
+.alchemy-lab .al-mix-action {
+  display: flex;
+  justify-content: center;
+}
+.alchemy-lab .al-mix-btn {
+  height: auto;
+  line-height: normal;
+  min-width: 160px;
+  padding: 6px 18px;
+  border: 2px solid var(--vagabond-c-green);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--vagabond-c-green) 30%, transparent);
+  color: var(--vagabond-c-text-primary);
+  font-family: "Eskapade", serif;
+  font-size: 1.05rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.alchemy-lab .al-mix-btn i {
+  color: var(--vagabond-c-chat-yellow);
+}
+.alchemy-lab .al-mix-btn:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--vagabond-c-green) 55%, transparent);
+  box-shadow: 0 0 8px -2px var(--vagabond-c-green);
+}
+.alchemy-lab .al-mix-btn:disabled {
+  border-color: var(--vagabond-c-faint);
+  background: var(--vagabond-c-inset-1);
+  color: var(--vagabond-c-muted);
+}
+.alchemy-lab .al-mix-btn:disabled i {
+  color: inherit;
+}
+.alchemy-lab .al-carousel {
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr) 18px;
+  align-items: center;
+  gap: 2px;
+}
+.alchemy-lab .al-arrow {
+  height: auto;
+  line-height: normal;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--vagabond-c-chat-yellow);
+  font-size: 1rem;
+}
+.alchemy-lab .al-arrow:disabled {
+  opacity: 0.2;
+  cursor: default;
+}
+.alchemy-lab .al-strip {
+  display: flex;
+  gap: 8px;
+  padding: 10px 4px 6px;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+}
+.alchemy-lab .al-strip::-webkit-scrollbar {
+  display: none;
+}
+.alchemy-lab .al-tile {
+  height: auto;
+  line-height: normal;
+  flex: 0 0 calc((100% - 24px) / 4);
+  min-width: 0;
+  padding: 8px 3px 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  border: 2px solid var(--vagabond-c-tan-lite);
+  border-radius: 6px;
+  background: var(--vagabond-c-inset-2);
+  scroll-snap-align: start;
+  cursor: grab;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+}
+.alchemy-lab .al-tile:hover {
+  border-color: var(--vagabond-c-chat-yellow);
+}
+.alchemy-lab .al-tile.is-selected {
+  border-color: var(--vagabond-c-chat-yellow);
+  box-shadow: 0 0 8px -1px var(--vagabond-c-chat-yellow), inset 0 0 0 1px var(--vagabond-c-chat-yellow);
+}
+.alchemy-lab .al-tile.is-selected .al-tile-name {
+  color: var(--vagabond-c-chat-yellow);
+}
+.alchemy-lab .al-tile.is-used {
+  opacity: 0.4;
+}
+.alchemy-lab .al-tile .al-art {
+  width: 100%;
+  max-width: 56px;
+}
+.alchemy-lab .al-tile img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+}
+.alchemy-lab .al-tile-name {
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.75rem;
+  text-align: center;
+}
+.alchemy-lab .al-library {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.alchemy-lab .al-known-strip {
+  border: 2px solid var(--vagabond-c-tan-lite);
+  border-radius: 8px;
+  background: var(--vagabond-c-inset-2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 8px;
+  border-style: dashed;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.alchemy-lab .al-known-strip.drag-over {
+  border-style: solid;
+  border-color: var(--vagabond-c-chat-yellow);
+  box-shadow: 0 0 8px -1px var(--vagabond-c-chat-yellow), inset 0 0 0 1px var(--vagabond-c-chat-yellow);
+}
+.alchemy-lab .al-known-tile {
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+}
+.alchemy-lab .al-known-tile img {
+  width: 32px;
+  height: 32px;
+  object-fit: cover;
+  border: 1px solid var(--vagabond-c-chat-yellow);
+  border-radius: 4px;
+}
+.alchemy-lab .al-known-tile.is-empty {
+  border: 1px dashed var(--vagabond-c-faint);
+  border-radius: 4px;
+  color: var(--vagabond-c-muted);
+  font-size: 0.7rem;
+}
+.alchemy-lab .al-known-tiles {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+}
+.alchemy-lab .al-known-left {
+  font-size: 0.75rem;
+  color: var(--vagabond-c-text-secondary);
+}
+.alchemy-lab .al-lib-tools {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.alchemy-lab .al-lib-search {
+  flex: 1;
+  min-width: 0;
+}
+.alchemy-lab .al-sorts {
+  display: flex;
+  gap: 2px;
+}
+.alchemy-lab .al-sort {
+  height: auto;
+  line-height: normal;
+  padding: 3px 7px;
+  border: 1px solid var(--vagabond-c-tan-lite);
+  border-radius: 6px;
+  background: transparent;
+  font-size: 0.75rem;
+  color: var(--vagabond-c-muted);
+}
+.alchemy-lab .al-sort.active {
+  color: var(--vagabond-c-text-primary);
+  border-color: var(--vagabond-c-chat-yellow);
+}
+.alchemy-lab .al-lib-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.alchemy-lab .al-lib-group-label {
+  padding: 2px 0;
+  border-bottom: 1px solid var(--vagabond-c-tan-lite);
+  font-family: "Eskapade", serif;
+  font-weight: bold;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--vagabond-c-text-secondary);
+}
+.alchemy-lab .al-lib-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 6px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.alchemy-lab .al-lib-row:hover {
+  background: var(--vagabond-c-inset-2);
+}
+.alchemy-lab .al-lib-row[draggable=true] {
+  cursor: grab;
+}
+.alchemy-lab .al-lib-row.is-over-cap {
+  opacity: 0.5;
+}
+.alchemy-lab .al-lib-row.is-known .al-lib-name {
+  color: var(--vagabond-c-chat-yellow);
+}
+.alchemy-lab .al-lib-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.85rem;
+}
+.alchemy-lab .al-lib-known {
+  color: var(--vagabond-c-chat-yellow);
+  font-size: 0.75rem;
+}
+.alchemy-lab .al-lib-cost {
+  font-size: 0.78rem;
+  color: var(--vagabond-c-text-secondary);
+}
+.alchemy-lab .al-lib-caret {
+  font-size: 0.65rem;
+  color: var(--vagabond-c-muted);
+  transition: transform 0.15s ease;
+}
+.alchemy-lab .al-lib-detail {
+  display: none;
+  margin: 2px 4px 6px 44px;
+}
+.alchemy-lab .al-lib-item.is-open .al-lib-row {
+  background: var(--vagabond-c-inset-2);
+}
+.alchemy-lab .al-lib-item.is-open .al-lib-caret {
+  transform: rotate(90deg);
+}
+.alchemy-lab .al-lib-item.is-open .al-lib-detail {
+  display: block;
+}
+.alchemy-lab .al-lib-actions {
+  margin-top: 6px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+.alchemy-lab .al-btn {
+  height: auto;
+  line-height: normal;
+  width: auto;
+  padding: 3px 10px;
+  border: 1px solid var(--vagabond-c-tan-lite);
+  border-radius: 6px;
+  background: var(--vagabond-c-inset-2);
+  font-size: 0.8rem;
+  color: var(--vagabond-c-text-primary);
+}
+.alchemy-lab .al-btn i {
+  color: var(--vagabond-c-chat-yellow);
+}
+.alchemy-lab .al-btn:disabled {
+  color: var(--vagabond-c-muted);
+}
+.alchemy-lab .al-btn:disabled i {
+  color: inherit;
+}
+.alchemy-lab .al-btn.is-primary {
+  border: 2px solid var(--vagabond-c-green);
+  background: color-mix(in srgb, var(--vagabond-c-green) 25%, transparent);
+}
+.alchemy-lab .al-note {
+  font-size: 0.78rem;
+  color: var(--vagabond-c-muted);
+}
+.alchemy-lab .al-note.is-warn {
+  color: var(--vagabond-c-red);
+}
+.alchemy-lab.is-compact {
+  padding: 4px 2px 6px;
+  gap: 6px;
+}
+.alchemy-lab.is-compact .al-grid {
+  --al-cols: 2;
+}
+.alchemy-lab.is-compact .al-art img {
+  width: 44px;
+  height: 44px;
+}
+.alchemy-lab.is-compact .al-card.al-card-empty {
+  min-height: 100px;
+}
+.alchemy-lab.is-compact .al-mix-slot {
+  width: 96px;
+  min-height: 84px;
+}
+.alchemy-lab.is-compact .al-detail-desc {
+  max-height: 8em;
+  overflow-y: auto;
+}
+
+.inventory-section.al-box {
+  background-color: transparent;
+  padding: 6px 8px 4px;
+}
+.inventory-section.al-box .alchemy-lab {
+  padding-top: 0;
+}
+
 /* Combat Carousel - floating overlay, companion to the sidebar tracker; renders outside sheets */
 .vcc-part {
   display: contents;
@@ -17395,7 +18307,8 @@ ol#combat-tracker.directory-list {
      SLIDING PANEL SYSTEM
      ====================================== */
   /* When closed, panel slides behind main sheet, only 20px trigger visible */
-  /* When open, panel at natural position next to main sheet */
+  /* When open, panel next to main sheet — nudged right + a gentler tilt so its lower-left corner
+     no longer covers the main sheet's tab scrollbar */
   /* Click zone - visible sliver on the RIGHT edge of panel when closed */
   /* Pulse animation for the active tooltip area */
   /* First-time tooltip for sliding panel */
@@ -23365,7 +24278,7 @@ ol#combat-tracker.directory-list {
   transform: translateX(-410px) rotate(0deg);
 }
 .vagabond .sliding-panel.panel-open {
-  transform: translateX(0) rotate(2deg);
+  transform: translateX(12px) rotate(1deg);
 }
 .vagabond .panel-click-zone {
   position: absolute;

@@ -6,6 +6,7 @@ import {
   EquipmentHandler,
 } from './handlers/_module.mjs';
 import { bindHudTooltips } from '../helpers/hud-tooltip.mjs';
+import { AlchemyLab } from '../helpers/alchemy-lab.mjs';
 
 /**
  * Character-specific actor sheet
@@ -36,7 +37,9 @@ export class VagabondCharacterSheet extends VagabondActorSheet {
     classes: ['vagabond', 'actor', 'character'],
     position: {
       width: 430  // Ensure character sheet keeps its proper width
-    }
+    },
+    // Alchemy tab (Alchemist lab): labStation, labCraft, labMix, labLearn…
+    actions: { ...AlchemyLab.ACTIONS },
   });
 
   /**
@@ -73,6 +76,9 @@ export class VagabondCharacterSheet extends VagabondActorSheet {
     const { signal } = this._listenerController;
 
     bindHudTooltips(this.element, signal);
+
+    // Alchemy tab: selection, drag-drop (learn / Mix slots), Library search, Mix carousel
+    AlchemyLab.wire(this, this.element, signal);
 
     // Stat boxes display the TOTAL (base + perks/effects) but edit the BASE.
     // Unfocused they carry no `name`, so form submits never write total into base.

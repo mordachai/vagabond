@@ -17,6 +17,7 @@ import { activateHandItem } from '../helpers/hand-item-activation.mjs';
 import * as ItemSections from '../helpers/item-sections.mjs';
 import { setupDragReorder } from '../helpers/drag-reorder.mjs';
 import { NpcRules } from '../helpers/npc-rules.mjs';
+import { AlchemyLab } from '../helpers/alchemy-lab.mjs';
 
 const { api, sheets } = foundry.applications;
 
@@ -150,6 +151,10 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       template: 'systems/vagabond/templates/actor/spells.hbs',
       scrollable: [""],
     },
+    alchemy: {
+      template: 'systems/vagabond/templates/actor/alchemy.hbs',
+      scrollable: [""],
+    },
     effects: {
       template: 'systems/vagabond/templates/actor/effects.hbs',
       scrollable: [""],
@@ -243,7 +248,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     const isNPC = this.document.type === 'npc';
 
     if (isCharacter) {
-      options.parts = ['tabs', 'features', 'spells', 'effects', 'slidingPanel'];
+      options.parts = this._characterParts();
     } else if (isNPC) {
       options.parts = ['npcHeader', 'npcContent'];
     }
@@ -251,6 +256,45 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     // Handle limited view permissions
     if (this.document.limited) {
       options.parts = isCharacter ? ['slidingPanel'] : ['npcHeader'];
+    }
+  }
+
+  /**
+   * Character parts in tab order: Features / Magic / Alchemy / Effects (Effects always last). Magic only while the
+   * character owns a Spell; Alchemy only with class formula grants (the Alchemist's lab).
+   * @returns {string[]}
+   * @protected
+   */
+  _characterParts() {
+    const hasSpells = this.actor.items.some((i) => i.type === 'spell');
+    return [
+      'tabs', 'features',
+      ...(hasSpells ? ['spells'] : []),
+      ...(AlchemyLab.hasLab(this.actor) ? ['alchemy'] : []),
+      'effects', 'slidingPanel',
+    ];
+  }
+
+  /**
+   * Tab parts come and go (Magic / Alchemy): drop the ones no longer rendered — Foundry keeps a part's old element
+   * when it isn't re-rendered — and put a newly shown one in tab order (Foundry appends new parts at the end).
+   * @override
+   */
+  _replaceHTML(result, content, options) {
+    const fullCharacter = this.document.type === 'character' && options.parts?.includes('tabs');
+    if (fullCharacter) {
+      for (const id of ['spells', 'alchemy']) {
+        if (!options.parts.includes(id)) content.querySelector(`[data-application-part="${id}"]`)?.remove();
+      }
+    }
+    super._replaceHTML(result, content, options);
+    if (!fullCharacter) return;
+    let prev = null;
+    for (const id of options.parts) {
+      const el = content.querySelector(`[data-application-part="${id}"]`);
+      if (!el) continue;
+      if (prev && !(prev.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING)) prev.after(el);
+      prev = el;
     }
   }
 
@@ -448,6 +492,15 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         }
         break;
 
+      case 'alchemy':
+        partContext.tab = context.tabs[partId];
+        try {
+          partContext.lab = await AlchemyLab.prepare(this.actor, AlchemyLab.stateOf(this));
+        } catch (error) {
+          console.error("Vagabond | Error preparing the Alchemy lab:", error);
+        }
+        break;
+
       case 'effects':
         partContext.tab = context.tabs[partId];
         break;
@@ -551,8 +604,13 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
   _getTabs(parts) {
     const tabGroup = 'primary';
 
-    // Default tab for first time it's rendered this session
+    // Default tab for first time it's rendered this session; also when the active tab is no longer shown
+    // (Magic / Alchemy come and go with Spells / formula grants)
     if (!this.tabGroups[tabGroup]) this.tabGroups[tabGroup] = 'features';
+    const tabIds = { features: 'features', spells: 'spells', alchemy: 'alchemy', effects: 'effects' };
+    if (parts.includes('features') && !parts.some((p) => tabIds[p] === this.tabGroups[tabGroup])) {
+      this.tabGroups[tabGroup] = 'features';
+    }
 
     return parts.reduce((tabs, partId) => {
       const tab = {
@@ -578,6 +636,10 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
           tab.id = 'spells';
           tab.label += 'Magic';
           //tab.icon = 'fa-solid fa-wand-sparkles';
+          break;
+        case 'alchemy':
+          tab.id = 'alchemy';
+          tab.label += 'Alchemy';
           break;
         case 'effects':
           tab.id = 'effects';
@@ -1260,6 +1322,9 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         className: 'inventory-context-menu',
       });
     }
+    // Catalyze / Mix: open the Alchemy lab at that station instead of running anything
+    const station = AlchemyLab.stationForAction(this.actor, key);
+    if (station) return AlchemyLab.openInSheet(this, station);
     return FeatureAction.run(this.actor, key);
   }
 

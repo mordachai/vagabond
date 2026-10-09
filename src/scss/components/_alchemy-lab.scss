@@ -1,0 +1,884 @@
+// Alchemy lab (AlchemyLab, templates/actor/parts/alchemy-lab.hbs) — character sheet Alchemy tab and the Character
+// HUD Alchemy panel (`.is-compact`). Top-level import: the HUD renders outside sheets.
+// Restraint: neutral tan frames, yellow = selected / picked, green border only on a primary button that can be
+// pressed, a scooped corner only on the details box. Quantity badges in $font-title. Colors are theme-aware $c-*.
+
+@mixin al-frame($color: $c-tan-lite, $radius: 8px) {
+  border: 2px solid $color;
+  border-radius: $radius;
+  background: $c-inset-2;
+}
+
+// Foundry gives every <button> a fixed height / line-height.
+@mixin al-button-reset {
+  height: auto;
+  line-height: normal;
+}
+
+.alchemy-lab {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 6px 4px 10px;
+  color: $c-text-1;
+
+  [hidden] { display: none !important; }
+
+  /* ---- Header ---- */
+
+  .al-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .al-stat {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 3px 12px;
+    border: 1px solid $c-tan-lite;
+    border-radius: 16px;
+    background: $c-inset-2;
+    font-family: $font-primary;
+    font-weight: bold;
+    font-size: 1rem;
+
+    i { color: $c-yellow; font-size: 1.25rem; }
+    img { width: 24px; height: 24px; border: none; }
+
+    &.is-zero { color: $c-red; border-color: $c-red; i { color: inherit; } }
+  }
+
+  // Alchemy Tools pill: art only; desaturated while not equipped, click toggles.
+  .al-tools {
+    height: auto;
+    line-height: normal;
+    width: auto;
+    padding: 3px 12px;
+    color: $c-text-1;
+
+    img { width: 24px; height: 24px; object-fit: contain; transition: filter 0.15s ease, opacity 0.15s ease; }
+
+    &:is(button) { cursor: pointer; &:hover { border-color: $c-yellow; } }
+
+    &.is-off img { filter: grayscale(1); opacity: 0.5; }
+  }
+
+  // In-Combat Use Actions this Turn: one pip per allowed Use Action (filled = spent, red = over the limit).
+  .al-pips {
+    display: inline-flex;
+    gap: 4px;
+  }
+
+  .al-pip {
+    width: 10px;
+    height: 10px;
+    border: 2px solid $c-tan-lite;
+    border-radius: 50%;
+
+    &.is-spent { background: $c-yellow; border-color: $c-yellow; }
+    &.is-over { background: $c-red; border-color: $c-red; }
+  }
+
+  /* ---- Stations ---- */
+
+  .al-stations {
+    display: flex;
+    gap: 4px;
+    margin-top: 3px;
+    border-bottom: 1px solid $c-tan-lite;
+  }
+
+  .al-station {
+    @include al-button-reset;
+    flex: 1;
+    padding: 5px 6px;
+    border: none;
+    border-bottom: 3px solid transparent;
+    border-radius: 0;
+    background: transparent;
+    font-family: $font-primary;
+    font-size: 0.9rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: $c-muted;
+
+    &:hover { color: $c-text-1; }
+
+    &.active {
+      color: $c-text-1;
+      border-bottom-color: $c-yellow;
+
+      i { color: $c-yellow; }
+    }
+  }
+
+  /* ---- Notice ---- */
+
+  .al-notice {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 8px;
+    border: 1px solid $c-red;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    color: $c-red;
+  }
+
+  .al-section-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: $font-primary;
+    font-weight: bold;
+    font-size: 0.8rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+
+    > span { flex: 1; }
+
+    &.al-ruled {
+      > span { flex: none; }
+
+      &::before,
+      &::after {
+        content: '';
+        flex: 1;
+        border-top: 1px solid $c-tan-lite;
+      }
+    }
+  }
+
+  // Known Formulae: same plate as the sliding panel's "Equipped" title (rightColBg.svg); edit pen on the right.
+  .al-known-title {
+    position: relative;
+    margin: 0;
+    width: 100%;
+    height: auto;
+    padding: 2px;
+    color: $c-white;
+    background-image: url('../assets/images/sheets/rightColBg.svg');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    text-align: center;
+    filter: drop-shadow(2px 2px 1px $c-inset-1);
+    text-shadow:
+      2px 2px 0 $c-black,
+      -2px 2px 0 $c-black,
+      -2px -2px 0 $c-black,
+      2px -2px 0 $c-black;
+
+    .al-edit {
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      text-shadow: none;
+    }
+  }
+
+  .al-edit {
+    @include al-button-reset;
+    width: auto;
+    padding: 2px 6px;
+    border: 1px solid transparent;
+    background: transparent;
+    color: $c-muted;
+    font-size: 0.75rem;
+
+    &:hover { color: $c-text-1; }
+    &.active { color: $c-yellow; border-color: $c-yellow; }
+  }
+
+  .al-empty,
+  .al-hint {
+    margin: 0;
+    font-size: 0.78rem;
+    color: $c-muted;
+    text-align: center;
+  }
+
+  /* ---- Shared art + badge ---- */
+
+  .al-art {
+    position: relative;
+    flex: none;
+    display: inline-block;
+    line-height: 0;
+
+    img {
+      width: 52px;
+      height: 52px;
+      object-fit: cover;
+      border: 1px solid $c-faint;
+      border-radius: 6px;
+      background: $c-black;
+      -webkit-user-drag: none;
+    }
+
+    &.al-art-sm img { width: 28px; height: 28px; border-radius: 4px; }
+  }
+
+  .al-badge {
+    position: absolute;
+    top: -7px;
+    right: -9px;
+    min-width: 22px;
+    padding: 1px 5px;
+    border: 1px solid $c-yellow;
+    border-radius: 9px;
+    background: $c-black;
+    color: $c-yellow;
+    font-family: $font-title;
+    font-size: 0.9rem;
+    line-height: 1.1;
+    text-align: center;
+
+    &.is-zero { border-color: $c-faint; color: $c-faint; }
+  }
+
+  .al-art-sm .al-badge { top: -6px; right: -10px; min-width: 18px; padding: 0 4px; font-size: 0.8rem; }
+
+  .al-dmg {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 0 8px;
+    border: 2px solid $c-tan-lite;
+    border-radius: 12px;
+    font-family: $font-primary;
+    font-weight: bold;
+    color: $c-text-1;
+
+    i { color: $c-yellow; }
+
+    &.is-companion { border-style: dashed; }
+  }
+
+  /* ---- Details box (the one scooped element) ---- */
+
+  .al-detail {
+    @include al-frame($c-tan-lite, 12px);
+    corner-shape: scoop;
+    padding: 8px 10px;
+  }
+
+  // Name + type line; Catalyze / Mix details carry the item art on the left, as tall as those two lines.
+  .al-detail-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    > span {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.75rem;
+      color: $c-muted;
+    }
+  }
+
+  .al-detail-img {
+    flex: none;
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border: 1px solid $c-yellow;
+    border-radius: 6px;
+    background: $c-black;
+  }
+
+  .al-detail-title {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+
+    strong {
+      font-family: $font-primary;
+      font-size: 1rem;
+      line-height: 1.15;
+    }
+
+    > span {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.75rem;
+      color: $c-muted;
+    }
+  }
+
+  .al-detail-desc {
+    margin-top: 6px;
+    padding-top: 5px;
+    border-top: 1px solid $c-tan-lite;
+    font-size: 0.8rem;
+    line-height: 1.4;
+
+    p { margin: 0 0 4px; }
+    p:last-child { margin-bottom: 0; }
+  }
+
+  /* ---- Catalyze ---- */
+
+  .al-catalyze {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  // 4 cards per row; a short last row (5th, 6th…) is centered.
+  .al-grid {
+    --al-cols: 4;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+
+    > .al-card { flex: 0 0 calc((100% - (var(--al-cols) - 1) * 8px) / var(--al-cols)); }
+  }
+
+  .al-card {
+    @include al-button-reset;
+    @include al-frame;
+    position: relative;
+    min-width: 0;
+    padding: 10px 4px 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+
+    &:hover { border-color: $c-yellow; }
+
+    &.is-selected {
+      border-color: $c-yellow;
+      box-shadow: 0 0 8px -1px $c-yellow, inset 0 0 0 1px $c-yellow;
+
+      .al-card-name { color: $c-yellow; }
+    }
+
+    &.al-card-empty {
+      justify-content: center;
+      min-height: 112px;
+      border-style: dashed;
+      color: $c-muted;
+      font-size: 0.75rem;
+      cursor: default;
+
+      > i { font-size: 1.2rem; opacity: 0.6; }
+    }
+
+    &:is(button).al-card-empty {
+      cursor: pointer;
+
+      &:hover { color: $c-text-1; }
+    }
+  }
+
+  .al-card-name {
+    width: 100%;
+    min-height: 2.3em;
+    font-family: $font-primary;
+    font-weight: bold;
+    font-size: 0.85rem;
+    line-height: 1.15;
+    text-align: center;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+
+  // Edit mode: forget = red disc, white ✕, on the card's top-left corner (mirrors the quantity badge).
+  .al-forget {
+    @include al-button-reset;
+    position: absolute;
+    top: -8px;
+    left: -8px;
+    z-index: 1;
+    width: 22px;
+    height: 22px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid $c-black;
+    border-radius: 50%;
+    background: #c62828;
+    color: #ffffff;
+    font-size: 0.8rem;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+    transition: transform 0.12s ease, background 0.12s ease;
+
+    i { color: inherit; }
+
+    &:hover {
+      background: #e53935;
+      transform: scale(1.12);
+    }
+  }
+
+  .al-craft {
+    @include al-button-reset;
+    width: 100%;
+    padding: 3px 4px;
+    border: 1px solid $c-tan-lite;
+    border-radius: 6px;
+    background: $c-inset-2;
+    font-size: 0.8rem;
+    color: $c-text-1;
+
+    i { color: $c-yellow; }
+
+    &:hover:not(:disabled) { border-color: $c-green; }
+    &:disabled { color: $c-muted; i { color: inherit; } }
+  }
+
+  .al-cost.is-short { color: $c-red; }
+
+  // Over the per-Turn Use Action limit: the button waits for a second click.
+  .is-armed {
+    border-color: $c-red !important;
+    color: $c-red !important;
+
+    i { color: inherit !important; }
+  }
+
+  /* ---- Mix ---- */
+
+  .al-mix {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .al-mix-slots {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .al-mix-plus { color: $c-yellow; font-size: 1.1rem; }
+
+  .al-mix-slot {
+    @include al-frame;
+    position: relative;
+    width: 110px;
+    min-height: 92px;
+    padding: 10px 4px 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    border-style: dashed;
+    font-size: 0.72rem;
+    color: $c-muted;
+    text-align: center;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+
+    > i { font-size: 1.3rem; opacity: 0.5; }
+
+    &.filled { border-style: solid; border-color: $c-yellow; color: $c-text-1; }
+
+    &.drag-over {
+      border-style: solid;
+      border-color: $c-yellow;
+      box-shadow: 0 0 8px -1px $c-yellow, inset 0 0 0 1px $c-yellow;
+    }
+  }
+
+  &.is-dragging .al-mix-slot,
+  &.is-dragging .al-known-strip { border-color: $c-yellow; }
+
+  .al-slot-name {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-family: $font-primary;
+    font-weight: bold;
+    font-size: 0.8rem;
+  }
+
+  .al-slot-clear {
+    @include al-button-reset;
+    position: absolute;
+    top: 2px;
+    left: 4px;
+    width: 16px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: $c-muted;
+    font-size: 0.7rem;
+
+    &:hover { color: $c-red; }
+  }
+
+  .al-mix-effect {
+    @include al-frame;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 10px;
+    text-align: center;
+  }
+
+  .al-line {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .al-plus-sm { color: $c-yellow; font-weight: bold; }
+
+  .al-tag {
+    padding: 1px 9px;
+    border: 1px solid $c-tan-lite;
+    border-radius: 10px;
+    background: $c-inset-2;
+    font-size: 0.82rem;
+    line-height: 1.4;
+
+    &.is-use { font-style: italic; }
+  }
+
+  .al-expiry {
+    align-self: stretch;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding-top: 5px;
+    border-top: 1px solid $c-tan-lite;
+    font-size: 0.75rem;
+    color: $c-text-2;
+
+    i { color: $c-yellow; }
+  }
+
+  .al-mix-action {
+    display: flex;
+    justify-content: center;
+  }
+
+  // Neutral until it can be pressed; ready = green border + green tint.
+  .al-mix-btn {
+    @include al-button-reset;
+    min-width: 160px;
+    padding: 6px 18px;
+    border: 2px solid $c-green;
+    border-radius: 8px;
+    background: color-mix(in srgb, #{$c-green} 30%, transparent);
+    color: $c-text-1;
+    font-family: $font-primary;
+    font-size: 1.05rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+
+    i { color: $c-yellow; }
+
+    &:hover:not(:disabled) {
+      background: color-mix(in srgb, #{$c-green} 55%, transparent);
+      box-shadow: 0 0 8px -2px $c-green;
+    }
+
+    &:disabled {
+      border-color: $c-faint;
+      background: $c-inset-1;
+      color: $c-muted;
+
+      i { color: inherit; }
+    }
+  }
+
+  .al-carousel {
+    display: grid;
+    grid-template-columns: 18px minmax(0, 1fr) 18px;
+    align-items: center;
+    gap: 2px;
+  }
+
+  .al-arrow {
+    @include al-button-reset;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: $c-yellow;
+    font-size: 1rem;
+
+    &:disabled { opacity: 0.2; cursor: default; }
+  }
+
+  .al-strip {
+    display: flex;
+    gap: 8px;
+    padding: 10px 4px 6px;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar { display: none; }
+  }
+
+  .al-tile {
+    @include al-button-reset;
+    flex: 0 0 calc((100% - 3 * 8px) / 4); // 4 tiles across (strip gap 8px)
+    min-width: 0;
+    padding: 8px 3px 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    border: 2px solid $c-tan-lite;
+    border-radius: 6px;
+    background: $c-inset-2;
+    scroll-snap-align: start;
+    cursor: grab;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+
+    &:hover { border-color: $c-yellow; }
+
+    &.is-selected {
+      border-color: $c-yellow;
+      box-shadow: 0 0 8px -1px $c-yellow, inset 0 0 0 1px $c-yellow;
+
+      .al-tile-name { color: $c-yellow; }
+    }
+
+    &.is-used { opacity: 0.4; }
+
+    .al-art { width: 100%; max-width: 56px; }
+
+    img { width: 100%; height: auto; aspect-ratio: 1; }
+  }
+
+  .al-tile-name {
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 0.75rem;
+    text-align: center;
+  }
+
+  /* ---- Library ---- */
+
+  .al-library {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  // Known picks: drop a catalog row on the strip to learn it.
+  .al-known-strip {
+    @include al-frame;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 8px;
+    border-style: dashed;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+
+    &.drag-over {
+      border-style: solid;
+      border-color: $c-yellow;
+      box-shadow: 0 0 8px -1px $c-yellow, inset 0 0 0 1px $c-yellow;
+    }
+  }
+
+  .al-known-tile {
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 0;
+
+    img {
+      width: 32px;
+      height: 32px;
+      object-fit: cover;
+      border: 1px solid $c-yellow;
+      border-radius: 4px;
+    }
+
+    &.is-empty {
+      border: 1px dashed $c-faint;
+      border-radius: 4px;
+      color: $c-muted;
+      font-size: 0.7rem;
+    }
+  }
+
+  .al-known-tiles {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+  }
+
+  .al-known-left {
+    font-size: 0.75rem;
+    color: $c-text-2;
+  }
+
+  .al-lib-tools {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+
+  .al-lib-search { flex: 1; min-width: 0; }
+
+  .al-sorts { display: flex; gap: 2px; }
+
+  .al-sort {
+    @include al-button-reset;
+    padding: 3px 7px;
+    border: 1px solid $c-tan-lite;
+    border-radius: 6px;
+    background: transparent;
+    font-size: 0.75rem;
+    color: $c-muted;
+
+    &.active { color: $c-text-1; border-color: $c-yellow; }
+  }
+
+  .al-lib-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .al-lib-group-label {
+    padding: 2px 0;
+    border-bottom: 1px solid $c-tan-lite;
+    font-family: $font-primary;
+    font-weight: bold;
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: $c-text-2;
+  }
+
+  .al-lib-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 5px 6px;
+    border-radius: 6px;
+    cursor: pointer;
+
+    &:hover { background: $c-inset-2; }
+    &[draggable="true"] { cursor: grab; }
+    &.is-over-cap { opacity: 0.5; }
+    &.is-known .al-lib-name { color: $c-yellow; }
+  }
+
+  .al-lib-name {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 0.85rem;
+  }
+
+  .al-lib-known { color: $c-yellow; font-size: 0.75rem; }
+
+  .al-lib-cost {
+    font-size: 0.78rem;
+    color: $c-text-2;
+  }
+
+  .al-lib-caret {
+    font-size: 0.65rem;
+    color: $c-muted;
+    transition: transform 0.15s ease;
+  }
+
+  .al-lib-detail {
+    display: none;
+    margin: 2px 4px 6px 44px;
+  }
+
+  .al-lib-item.is-open {
+    .al-lib-row { background: $c-inset-2; }
+    .al-lib-caret { transform: rotate(90deg); }
+    .al-lib-detail { display: block; }
+  }
+
+  .al-lib-actions {
+    margin-top: 6px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .al-btn {
+    @include al-button-reset;
+    width: auto;
+    padding: 3px 10px;
+    border: 1px solid $c-tan-lite;
+    border-radius: 6px;
+    background: $c-inset-2;
+    font-size: 0.8rem;
+    color: $c-text-1;
+
+    i { color: $c-yellow; }
+
+    &:disabled { color: $c-muted; i { color: inherit; } }
+
+    &.is-primary {
+      border: 2px solid $c-green;
+      background: color-mix(in srgb, #{$c-green} 25%, transparent);
+    }
+  }
+
+  .al-note {
+    font-size: 0.78rem;
+    color: $c-muted;
+
+    &.is-warn { color: $c-red; }
+  }
+
+  /* ---- HUD (compact) ---- */
+
+  &.is-compact {
+    padding: 4px 2px 6px;
+    gap: 6px;
+
+    .al-grid { --al-cols: 2; }
+    .al-art img { width: 44px; height: 44px; }
+    .al-card.al-card-empty { min-height: 100px; }
+    .al-mix-slot { width: 96px; min-height: 84px; }
+    .al-detail-desc { max-height: 8em; overflow-y: auto; }
+  }
+}
+
+// Sheet Alchemy tab: the lab sits in an Inventory-style box (yellow frame + title plate), theme background kept.
+.inventory-section.al-box {
+  background-color: transparent;
+  padding: 6px 8px 4px;
+
+  .alchemy-lab { padding-top: 0; }
+}

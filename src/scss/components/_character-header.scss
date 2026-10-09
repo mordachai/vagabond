@@ -1090,9 +1090,10 @@
   transform: translateX(-410px) rotate(0deg);
 }
 
-/* When open, panel at natural position next to main sheet */
+/* When open, panel next to main sheet — nudged right + a gentler tilt so its lower-left corner
+   no longer covers the main sheet's tab scrollbar */
 .sliding-panel.panel-open {
-  transform: translateX(0) rotate(2deg);
+  transform: translateX(12px) rotate(1deg);
 }
 
 

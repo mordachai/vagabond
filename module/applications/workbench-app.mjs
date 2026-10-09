@@ -457,7 +457,23 @@ export class WorkbenchApp extends api.HandlebarsApplicationMixin(api.Application
 
   /** Stage the selected item as a NEW Project row; it becomes a real Project item only once a Shift is worked on it. */
   static async #onStageProject(event, target) {
-    const uuid = target.dataset.uuid;
+    await this.#stage(target.dataset.uuid);
+  }
+
+  /**
+   * Open `actor`'s Workbench on the Craft tab with `uuid` selected and staged as a new Project row
+   * (the Alchemy lab's "Craft as Project").
+   */
+  static async stageFromCatalog(actor, uuid) {
+    const app = this.open(actor);
+    if (!app || !uuid) return app;
+    app.#tab = 'craft';
+    app.#selectedUuid = uuid;
+    await app.#stage(uuid);
+    return app;
+  }
+
+  async #stage(uuid) {
     const source = uuid ? await fromUuid(uuid) : null;
     if (!source || source.type !== 'equipment') return;
     const value = CurrencyHelper.toCopper(source.system.cost);
@@ -566,7 +582,7 @@ export class WorkbenchApp extends api.HandlebarsApplicationMixin(api.Application
     if (!uuid) return;
     this.#tab = 'craft';
     this.#selectedUuid = uuid;
-    await WorkbenchApp.#onStageProject.call(this, event, { dataset: { uuid } });
+    await this.#stage(uuid);
   }
 
   static async #onForgetFormula(event, target) {

@@ -313,6 +313,50 @@
       "LimitCatalyze": "<strong>{name}</strong> already took the Use Action this Turn ({used}/{allowed}). Mix anyway?",
       "LimitDeft": "<strong>{name}</strong> already took {used}/{allowed} Use Actions this Turn (Use Action + Deft Hands, which skips your Move). Mix anyway?"
     },
+    "AlchemyLab": {
+      "Title": "Alchemy Lab",
+      "ToolsEquipped": "{name} equipped — click to unequip",
+      "ToolsUnequipped": "{name} not equipped (needed to Craft) — click to equip",
+      "Stations": {
+        "Catalyze": "Catalyze",
+        "Mix": "Mix",
+        "Library": "Library"
+      },
+      "Materials": "Materials on hand (Crafting a known formula costs {cost})",
+      "StudiedDice": "Studied dice (Mix and Prima Materia spend 1)",
+      "KnownHint": "Known formulae / formula picks. A new formula must be worth {cap} or less.",
+      "UseActions": "Use Actions this Turn: {used}/{allowed}",
+      "KnownFormulae": "Known Formulae",
+      "EditFormulae": "Edit known formulae",
+      "Forget": "Forget this formula (frees the pick)",
+      "Owned": "You have {qty} in your inventory",
+      "CraftAnyway": "Anyway ({used}/{allowed})",
+      "MixAnyway": "Mix anyway ({used}/{allowed})",
+      "EmptySlot": "Empty slot",
+      "EmptySlotHint": "Pick a formula in the Library",
+      "NoFormulae": "No formulae known yet — pick them in the Library.",
+      "NoFormulaeCompact": "No formulae known yet — pick them on the character sheet’s Alchemy tab.",
+      "NoCatalyze": "You know formulae but don’t have Catalyze — you can’t Craft them yet.",
+      "NoMixItems": "No Alchemical Items with a charge left to Mix.",
+      "KnownStripHint": "Drag an item from the list onto this strip (or double-click it) to learn it",
+      "PicksLeft": "{n} left · up to {cap}",
+      "Search": "Search alchemical items…",
+      "Sort": {
+        "group": "Type",
+        "alpha": "A–Z",
+        "cost": "Cost"
+      },
+      "Learn": "Learn",
+      "AlreadyKnown": "Already known.",
+      "OverCap": "Worth more than {cap} — over your formula cap.",
+      "NoPicksLeft": "No formula picks left.",
+      "Prima": "Prima Materia",
+      "PrimaHint": "Spend a Studied die to Craft this item with no Materials ({cap} or less).",
+      "Project": "Craft as Project",
+      "ProjectHint": "Craft it without the formula, by the normal Craft rules (Shifts + half its value in Materials) — opens the Workbench.",
+      "NoMatches": "No items match.",
+      "NoCatalog": "No alchemical items available — ask your GM to enable a compendium."
+    },
     "HuntersMark": {
       "Title": "Hunter’s Mark",
       "EffectText": "{target} is your Mark. Delete this effect to drop the Mark.",
@@ -1639,7 +1683,8 @@
         "Inventory": "Inventory",
         "Spells": "Spells",
         "Magic": "Magic",
-        "Effects": "Effects"
+        "Effects": "Effects",
+        "Alchemy": "Alchemy"
       },
       "base": {
         "FIELDS": {

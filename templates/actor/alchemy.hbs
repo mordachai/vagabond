@@ -1,0 +1,13 @@
+{{! Alchemy Tab - the Alchemist's lab (AlchemyLab), boxed like the Inventory }}
+<section
+  class='tab alchemy scrollable {{tab.cssClass}}'
+  data-group='primary'
+  data-tab='alchemy'
+>
+  <section class='inventory-section al-box'>
+    <div class='inventory-header-container'>
+      <h4>{{localize "VAGABOND.AlchemyLab.Title"}}</h4>
+    </div>
+    {{> "systems/vagabond/templates/actor/parts/alchemy-lab.hbs" lab}}
+  </section>
+</section>

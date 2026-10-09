@@ -1,11 +1,8 @@
 import { CurrencyHelper } from './currency-helper.mjs';
 import { MaterialsHelper } from './materials-helper.mjs';
 import { CraftingHelper } from './crafting-helper.mjs';
-import { isCopyOf } from './source-id.mjs';
+import { AlchemyLab } from './alchemy-lab.mjs';
 import { MixHelper } from './crafting/mix-helper.mjs';
-
-/** Compendium doc id of the Deft Hands perk (`packs/_source/perks/Deft_Hands_*.json`). */
-const DEFT_HANDS_ID = 'vtNfeEdWNUWvaeRM';
 
 /**
  * Alchemist — Catalyze (feature button).
@@ -36,35 +33,6 @@ export class AlchemistHelper {
   /** Quantity of `uuid` the actor already carries (crafted copies carry the compendium uuid as sourceId). */
   static #owned(actor, uuid) {
     return actor.items.find(i => i.flags?.core?.sourceId === uuid && i.type === 'equipment')?.system?.quantity ?? 0;
-  }
-
-  /**
-   * Crafts allowed per Turn: Catalyze gives the Use Action (1); the Deft Hands Perk ("skip your Move to take the
-   * Use Action") adds a second one.
-   */
-  static #usesPerTurn(actor) {
-    return actor.items.some(i => i.type === 'perk' && this.#isDeftHands(i)) ? 2 : 1;
-  }
-
-  /**
-   * Deft Hands perk by its compendium doc id, so translated (Babele) copies still match; the English name is
-   * only the fallback for hand-made copies with no source.
-   */
-  static #isDeftHands(item) {
-    return isCopyOf(item, DEFT_HANDS_ID, 'Deft Hands');
-  }
-
-  /** Flag key of the actor's current Turn (this Round of the started Combat it fights in), or null outside Combat. */
-  static #turnKey(actor) {
-    const combat = game.combat;
-    if (!combat?.started || !combat.combatants.some(c => c.actor === actor)) return null;
-    return `${combat.id}:${combat.round}`;
-  }
-
-  /** Crafts already made this Turn (0 outside Combat or on a new Round). */
-  static #usesThisTurn(actor, key) {
-    const used = actor.getFlag('vagabond', 'catalyzeUses');
-    return key && used?.key === key ? (used.count ?? 0) : 0;
   }
 
   /** Markup of the picker: a card grid of known formulas (big art, owned-count badge, name below), one selectable. */
@@ -206,9 +174,9 @@ export class AlchemistHelper {
    * @returns {Promise<{key: string|null, used: number}|null>}  null = the player backed out
    */
   static async #useActionGuard(actor, prefix) {
-    const key = this.#turnKey(actor);
-    const used = this.#usesThisTurn(actor, key);
-    const allowed = this.#usesPerTurn(actor);
+    const key = AlchemyLab.turnKey(actor);
+    const used = AlchemyLab.usesThisTurn(actor, key);
+    const allowed = AlchemyLab.usesPerTurn(actor);
     if (key && used >= allowed) {
       const L = (k, data = {}) => game.i18n.format(`VAGABOND.${prefix}.${k}`, data);
       const proceed = await foundry.applications.api.DialogV2.confirm({
@@ -222,8 +190,8 @@ export class AlchemistHelper {
   }
 
   /** Count a Use Action spent this Turn (no-op outside Combat). */
-  static async #recordUseAction(actor, { key, used }) {
-    if (key) await actor.setFlag('vagabond', 'catalyzeUses', { key, count: used + 1 });
+  static async #recordUseAction(actor, turn) {
+    await AlchemyLab.recordUseAction(actor, turn);
   }
 
   /* -------------------------------------------- */
