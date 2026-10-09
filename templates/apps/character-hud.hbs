@@ -118,6 +118,13 @@
       {{/if}}
     </div>
 
+    {{!-- Alchemy lab (Alchemists only; same stations as the sheet, compact layout). Rendered only while open. --}}
+    {{#if lab}}
+    <div class="vh-panel-content vh-panel-alchemy" data-tab="alchemy">
+      {{> "systems/vagabond/templates/actor/parts/alchemy-lab.hbs" lab}}
+    </div>
+    {{/if}}
+
     {{!-- Inventory (all carried items, grouped by type) --}}
     <div class="vh-panel-content {{#unless (eq activeTab 'inventory')}}hidden{{/unless}}" data-tab="inventory">
       <div class="vh-inv-header">
@@ -235,7 +242,12 @@
       <button type="button" class="vh-tab {{#if (eq activeTab 'traits')}}active{{/if}}" data-action="openTab" data-tab="traits">{{localize "VAGABOND.UI.Sections.Traits"}}</button>
       <button type="button" class="vh-tab {{#if (eq activeTab 'skills')}}active{{/if}}" data-action="openTab" data-tab="skills">{{localize "VAGABOND.UI.Sections.Skills"}}</button>
       <button type="button" class="vh-tab {{#if (eq activeTab 'saves')}}active{{/if}}" data-action="openTab" data-tab="saves">{{localize "VAGABOND.UI.Sections.Saves"}}</button>
+      {{#if hasSpells}}
       <button type="button" class="vh-tab {{#if (eq activeTab 'spells')}}active{{/if}}" data-action="openTab" data-tab="spells">{{localize "VAGABOND.UI.Sections.Spells"}}</button>
+      {{/if}}
+      {{#if hasLab}}
+      <button type="button" class="vh-tab {{#if (eq activeTab 'alchemy')}}active{{/if}}" data-action="openTab" data-tab="alchemy">{{localize "VAGABOND.Actor.Tabs.Alchemy"}}</button>
+      {{/if}}
       <button type="button" class="vh-tab {{#if (eq activeTab 'inventory')}}active{{/if}}" data-action="openTab" data-tab="inventory">{{localize "VAGABOND.UI.Sections.Inventory"}}</button>
     </div>
   </div>

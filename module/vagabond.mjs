@@ -84,7 +84,6 @@ import { RogueHelper } from './helpers/rogue-helper.mjs';
 import { SorcererHelper } from './helpers/sorcerer-helper.mjs';
 import { WitchHelper } from './helpers/witch-helper.mjs';
 import { WizardHelper } from './helpers/wizard-helper.mjs';
-import { AlchemistHelper } from './helpers/alchemist-helper.mjs';
 import { DruidHelper } from './helpers/druid-helper.mjs';
 import { migrateFighterClass, migrateDruidClass, migrateGunslingerClass, migrateHunterClass, migrateLuminaryClass, migrateMagusClass, migrateMerchantClass, migratePugilistClass, migrateRevelatorClass, migrateRogueClass, migrateSorcererClass, migrateVanguardClass, migrateWitchClass, migrateWizardClass, migrateAncestries } from './helpers/class-migrations.mjs';
 import { migrateAlpha3Statuses, migrateAlpha3Backpacks, migrateAlpha3Rations, migrateAlpha3DefensePerks, migrateAlpha3ClassPerks, migrateAlpha3Perks, migrateAlpha3Classes, migrateAlpha3Ancestries, migrateClassFeatureScaleKeys, migrateClassFeatureActions, migrateClassFeatureEffects } from './helpers/alpha3-migrations.mjs';
@@ -655,11 +654,12 @@ Hooks.once('ready', function () {
 
   // Bard Virtuoso — players route the benefit copy onto Group members through the GM.
   registerSocketAction('virtuosoApply', (payload) => BardHelper.apply(payload));
-  // Catalyze / Mix open the Alchemy lab (sheet tab) at that station; the old dialogs only without a lab.
-  registerMacroHandler('alchemist.catalyze', (scope) => (AlchemyLab.hasLab(scope.actor)
-    ? AlchemyLab.openSheet(scope.actor, 'catalyze') : AlchemistHelper.catalyze(scope)));
-  registerMacroHandler('alchemist.mix', (scope) => (AlchemyLab.hasLab(scope.actor)
-    ? AlchemyLab.openSheet(scope.actor, 'mix') : AlchemistHelper.mix(scope)));
+  // Catalyze / Mix open the Alchemy lab (sheet tab) at that station; no lab (no Formula grants) = warning.
+  const openLab = (scope, station) => (AlchemyLab.hasLab(scope.actor)
+    ? AlchemyLab.openSheet(scope.actor, station)
+    : ui.notifications.warn(game.i18n.format('VAGABOND.AlchemyLab.NoLab', { name: scope.actor?.name ?? '' })));
+  registerMacroHandler('alchemist.catalyze', (scope) => openLab(scope, 'catalyze'));
+  registerMacroHandler('alchemist.mix', (scope) => openLab(scope, 'mix'));
   registerMacroHandler('bard.virtuoso', (scope) => BardHelper.virtuoso(scope));
   registerMacroHandler('bard.perform', (scope) => BardHelper.perform(scope));
   registerMacroHandler('dancer.stepUp', (scope) => DancerHelper.stepUp(scope));

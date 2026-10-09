@@ -25,6 +25,7 @@
   --vagabond-c-damage-orange: #e7570a;
   --vagabond-c-dark-bluey: #2c3e50;
   --vagabond-c-transparent: #000000c0;
+  --vagabond-c-transparent-strong: #000000f2; // 0.95 — panels read over the canvas (HUD tab panel)
   --vagabond-c-lightgrey: #d0d0d0;
   --vagabond-c-darkgray: #666666;
   --vagabond-c-red: #9d0000;
@@ -129,6 +130,7 @@ $c-muted: var(--vagabond-c-muted);
 $c-darkgray: var(--vagabond-c-darkgray);
 $c-lightgrey: var(--vagabond-c-lightgrey);
 $c-transparent: var(--vagabond-c-transparent);
+$c-transparent-strong: var(--vagabond-c-transparent-strong);
 
 $c-inset-1: var(--vagabond-c-inset-1);
 $c-inset-2: var(--vagabond-c-inset-2);

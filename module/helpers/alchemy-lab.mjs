@@ -23,8 +23,8 @@ export const ALCHEMY_LAB_PARTIAL = 'systems/vagabond/templates/actor/parts/alche
  * ("Craft anyway (1/1)").
  *
  * Stations: Catalyze (known formula cards, Craft for 5s of Materials) | Mix (L6, two slots + preview + carousel of
- * Alchemical Items on hand) | Library (sheet only: catalog of every Alchemical Item, Learn / Prima Materia / Craft
- * as Project).
+ * Alchemical Items on hand) | Library (catalog of every Alchemical Item, Learn / Prima Materia / Craft as Project).
+ * The HUD renders the same lab with `compact` (layout only — every station and action works the same).
  *
  * Hosting app contract:
  * - `app.actor` is the character;
@@ -207,7 +207,7 @@ export class AlchemyLab {
    * Render data for the lab partial.
    * @param {Actor} actor
    * @param {object} state      AlchemyLab.stateOf(app)
-   * @param {{compact?: boolean}} [options]  compact = HUD (no Library)
+   * @param {{compact?: boolean}} [options]  compact = HUD layout (same stations / actions)
    */
   static async prepare(actor, state, { compact = false } = {}) {
     const sys = actor.system;
@@ -218,7 +218,7 @@ export class AlchemyLab {
     const stations = [
       { id: 'catalyze', label: 'VAGABOND.AlchemyLab.Stations.Catalyze', icon: 'fa-solid fa-flask' },
       ...(mixOn ? [{ id: 'mix', label: 'VAGABOND.AlchemyLab.Stations.Mix', icon: 'fa-solid fa-flask-vial' }] : []),
-      ...(compact ? [] : [{ id: 'library', label: 'VAGABOND.AlchemyLab.Stations.Library', icon: 'fa-solid fa-book-atlas' }]),
+      { id: 'library', label: 'VAGABOND.AlchemyLab.Stations.Library', icon: 'fa-solid fa-book-atlas' },
     ];
     if (!stations.some(s => s.id === state.station)) state.station = 'catalyze';
     for (const s of stations) s.active = s.id === state.station;
@@ -264,7 +264,7 @@ export class AlchemyLab {
       notice: state.notice,
     };
 
-    if (state.station === 'catalyze') context.catalyze = await this.#catalyzeContext(actor, state, { catalyzeOn, materials, grants, formulas, ownedOf, compact });
+    if (state.station === 'catalyze') context.catalyze = await this.#catalyzeContext(actor, state, { catalyzeOn, materials, grants, formulas, ownedOf });
     else if (state.station === 'mix') context.mix = await this.#mixContext(actor, state);
     else if (state.station === 'library') context.library = await this.#libraryContext(actor, state, { primaOn, ownedOf, grants, formulas });
 
@@ -316,7 +316,7 @@ export class AlchemyLab {
     return html ? foundry.applications.ux.TextEditor.implementation.enrichHTML(html, { relativeTo }) : '';
   }
 
-  static async #catalyzeContext(actor, state, { catalyzeOn, materials, grants, formulas, ownedOf, compact }) {
+  static async #catalyzeContext(actor, state, { catalyzeOn, materials, grants, formulas, ownedOf }) {
     // fromUuid (not Sync): compendium items not yet loaded only give the index shape (no damage fields).
     const known = (await Promise.all(formulas.map(async (uuid) => {
       const doc = await fromUuid(uuid);
@@ -343,10 +343,9 @@ export class AlchemyLab {
       costLabel: CurrencyHelper.format(ALCHEMY_COST),
       canAfford,
       canCraft: catalyzeOn,
-      editMode: state.editMode && !compact,
-      canEdit: !compact && known.length > 0,
+      editMode: state.editMode,
+      canEdit: known.length > 0,
       selected: known.find(k => k.selected) ?? null,
-      emptyKey: compact ? 'VAGABOND.AlchemyLab.NoFormulaeCompact' : 'VAGABOND.AlchemyLab.NoFormulae',
     };
   }
 

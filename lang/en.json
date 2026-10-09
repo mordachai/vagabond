@@ -282,24 +282,8 @@
       "SpellTitle": "Extracurricular: {spell}",
       "Added": "<strong>{name}</strong> spends a Studied die ({left} left) to add the effect of <strong>{spell}</strong> to the Casting:"
     },
-    "Catalyze": {
-      "Title": "Catalyze",
-      "NotYours": "Only the character’s owner can do that.",
-      "NoCatalyze": "{name} doesn’t have Catalyze.",
-      "NoFormulas": "{name} knows no formulas yet. Learn them in the Workbench Alchemy tab.",
-      "Hint": "Craft one Alchemical Item you know with your Use Action. Cost: {cost} of Materials (you have {have}).",
-      "Missing": "Can’t Craft yet — missing: {list}",
-      "Craft": "Craft",
-      "LimitTitle": "Already crafted this Turn",
-      "LimitCatalyze": "<strong>{name}</strong> already used the Use Action to Craft this Turn ({used}/{allowed}). Craft anyway?",
-      "LimitDeft": "<strong>{name}</strong> already Crafted {used}/{allowed} times this Turn (Use Action + Deft Hands, which skips your Move). Craft anyway?"
-    },
     "MixPanel": {
-      "Title": "Mix",
       "Mix": "Mix",
-      "NoMix": "{name} doesn’t have Mix.",
-      "NoItems": "{name} has no Alchemical Items with a charge left to Mix.",
-      "StudiedDice": "Studied dice (Mixing spends 1)",
       "Items": "Alchemical Items",
       "Drop": "Drop here",
       "DropHint": "Drag two Alchemical Items into the slots (or double-click them).",
@@ -308,12 +292,10 @@
       "OneCharge": "{name} has no charge left for a second dose.",
       "CompanionHint": "a different damage type, rolled as its own card on the same targets (on a hit, when thrown)",
       "Thrown": "Thrown",
-      "Used": "Used (no attack roll)",
-      "LimitTitle": "Use Action already taken",
-      "LimitCatalyze": "<strong>{name}</strong> already took the Use Action this Turn ({used}/{allowed}). Mix anyway?",
-      "LimitDeft": "<strong>{name}</strong> already took {used}/{allowed} Use Actions this Turn (Use Action + Deft Hands, which skips your Move). Mix anyway?"
+      "Used": "Used (no attack roll)"
     },
     "AlchemyLab": {
+      "NoLab": "{name} has no Alchemy lab (no Formulae to know).",
       "Title": "Alchemy Lab",
       "ToolsEquipped": "{name} equipped — click to unequip",
       "ToolsUnequipped": "{name} not equipped (needed to Craft) — click to equip",
@@ -335,7 +317,6 @@
       "EmptySlot": "Empty slot",
       "EmptySlotHint": "Pick a formula in the Library",
       "NoFormulae": "No formulae known yet — pick them in the Library.",
-      "NoFormulaeCompact": "No formulae known yet — pick them on the character sheet’s Alchemy tab.",
       "NoCatalyze": "You know formulae but don’t have Catalyze — you can’t Craft them yet.",
       "NoMixItems": "No Alchemical Items with a charge left to Mix.",
       "KnownStripHint": "Drag an item from the list onto this strip (or double-click it) to learn it",
@@ -890,37 +871,7 @@
       "Workbench": {
         "Title": "Workbench",
         "ComingSoon": "Coming in a future update",
-        "NotAlchemist": "Only characters with an Alchemy feature can use this tab.",
-        "SoonAlchemy": "Alchemy",
         "SoonRelic": "Relic Forge",
-        "PrimaMateriaButton": "Prima Materia ({n} Studied)",
-        "PrimaMateriaHint": "Spend a Studied die to Craft this item instantly, with no Materials (10g or under).",
-        "StudiedDice": "Studied Dice",
-        "Charges": "Charges left",
-        "AlchemyLevelLine": "Level {level}: {known}/{grants} formulas",
-        "Wealth": "Wealth",
-        "PartyWealth": "Party Wealth",
-        "PartyMaterials": "Party Materials",
-        "NoCatalyze": "You know formulas but don't have Catalyze — you can't craft them here yet.",
-        "KnownFormulas": "Known Formulas",
-        "EditFormulas": "Edit Known Formulas",
-        "NoFormulas": "No formulas known yet.",
-        "EmptySlot": "Empty — choose a formula from the list",
-        "LearnFormula": "Learn a Formula",
-        "ForgetFormulaTitle": "Forget Formula",
-        "ForgetFormulaConfirm": "Forget {name}? This frees up the pick, but you'll need to learn it again to recover it.",
-        "FormulaSearch": "Search alchemical items…",
-        "NoFormulasAvailable": "No alchemical items available — ask your GM to enable a compendium.",
-        "OverValueCap": "Over your formula value cap.",
-        "OwnedQty": "You have {qty} in your inventory",
-        "CraftAsProject": "Craft as Project",
-        "CraftAsProjectHint": "Craft this without knowing the formula, using the normal Craft rules (Shift budget + half its value in Materials).",
-        "AlreadyKnown": "Already known.",
-        "NoPicksLeft": "No formula picks remaining.",
-        "SortGroup": "Group",
-        "SortAlpha": "A–Z",
-        "SortCost": "Cost",
-        "CraftCostHint": "{cost} to Craft",
         "SystemDisabled": "Crafting is turned off for this world.",
         "ShiftBudget": "Shift Value Limit",
         "MaterialsOnHand": "Material Available",
@@ -1403,7 +1354,7 @@
         "Variant": "Mana Crystals"
       },
       "Fields": {
-        "Enabled": "Enable crafting (Workbench, Craft/Scrap/Alchemy/Relic Forge)",
+        "Enabled": "Enable crafting (Workbench Craft/Scrap/Relic Forge, Alchemist's Alchemy lab)",
         "ApprovalLabel": "GM approval",
         "Approval": {
           "off": "Off — players craft freely",
@@ -2722,7 +2673,7 @@
         "Description": "Make items. Requires materials worth 50% of item value.",
         "DifficultyLabel": "Craft Difficulty:",
         "Button": "Craft Item",
-        "WorkbenchDescription": "Open the Workbench to spend a Shift crafting, scrap items for Materials, or work Alchemy."
+        "WorkbenchDescription": "Open the Workbench to spend a Shift crafting, or scrap items for Materials."
       },
       "CraftDifficulty": {
         "tier1": "18-17 (1s)",

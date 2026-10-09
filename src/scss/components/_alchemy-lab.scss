@@ -864,7 +864,7 @@
   /* ---- HUD (compact) ---- */
 
   &.is-compact {
-    padding: 4px 2px 6px;
+    padding: 6px 10px 10px;
     gap: 6px;
 
     .al-grid { --al-cols: 2; }
@@ -872,6 +872,8 @@
     .al-card.al-card-empty { min-height: 100px; }
     .al-mix-slot { width: 96px; min-height: 84px; }
     .al-detail-desc { max-height: 8em; overflow-y: auto; }
+    .al-lib-tools { flex-wrap: wrap; }
+    .al-lib-search { min-width: 140px; }
   }
 }
 

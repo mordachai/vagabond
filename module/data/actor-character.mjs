@@ -637,7 +637,7 @@ export default class VagabondCharacter extends VagabondActorBase {
       ),
       // Known Alchemical Item formulas (Item uuids) — a real stored choice, not a
       // bonus-stacking field; never reset in prepareBaseData. Picked via the
-      // Workbench Alchemy tab, gated by AlchemyHelper.formulaPicksRemaining.
+      // Alchemy lab Library (sheet tab / HUD panel), gated by AlchemyHelper.formulaPicksRemaining.
       formulas: new fields.ArrayField(
         new fields.StringField({ blank: true }),
         { initial: [], label: "Known Alchemy Formulas" }

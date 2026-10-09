@@ -1,4 +1,4 @@
-{{!-- Alchemy lab (AlchemyLab.prepare) — sheet Alchemy tab + HUD Alchemy panel (compact: no Library). --}}
+{{!-- Alchemy lab (AlchemyLab.prepare) — sheet Alchemy tab + HUD Alchemy panel (compact = HUD layout). --}}
 <div class="alchemy-lab{{#if compact}} is-compact{{/if}}">
 
   <header class="al-header">
@@ -69,17 +69,13 @@
       </div>
       {{/each}}
       {{#each catalyze.empties}}
-      {{#if ../compact}}
-      <div class="al-card al-card-empty"><i class="fa-solid fa-flask"></i><span>{{localize "VAGABOND.AlchemyLab.EmptySlot"}}</span></div>
-      {{else}}
       <button type="button" class="al-card al-card-empty" data-action="labStation" data-station="library" data-tooltip="{{localize 'VAGABOND.AlchemyLab.EmptySlotHint'}}">
         <i class="fa-solid fa-plus"></i><span>{{localize "VAGABOND.AlchemyLab.EmptySlot"}}</span>
       </button>
-      {{/if}}
       {{/each}}
     </div>
     {{#unless catalyze.cards.length}}
-    <p class="al-empty">{{localize catalyze.emptyKey}}</p>
+    <p class="al-empty">{{localize "VAGABOND.AlchemyLab.NoFormulae"}}</p>
     {{/unless}}
     {{#each catalyze.cards}}
     <div class="al-detail al-card-detail" data-uuid="{{uuid}}" {{#unless selected}}hidden{{/unless}}>
@@ -179,7 +175,7 @@
   </section>
   {{/if}}
 
-  {{!-- ---------------- Library (sheet only) ---------------- --}}
+  {{!-- ---------------- Library ---------------- --}}
   {{#if library}}
   <section class="al-library">
     <div class="al-known-strip" data-tooltip="{{localize 'VAGABOND.AlchemyLab.KnownStripHint'}}">

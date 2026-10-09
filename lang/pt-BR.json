@@ -282,24 +282,8 @@
       "SpellTitle": "Extracurricular: {spell}",
       "Added": "<strong>{name}</strong> gasta um dado de Estudo ({left} restantes) para adicionar à Conjuração o efeito de <strong>{spell}</strong>:"
     },
-    "Catalyze": {
-      "Title": "Catalisar",
-      "NotYours": "Apenas o dono do personagem pode fazer isso.",
-      "NoCatalyze": "{name} não tem Catalisar.",
-      "NoFormulas": "{name} ainda não conhece nenhuma fórmula. Aprenda na aba Alquimia da Bancada.",
-      "Hint": "Crie um Item Alquímico que você conhece com sua Ação de Usar. Custo: {cost} de Materiais (você tem {have}).",
-      "Missing": "Ainda não dá para Criar — faltando: {list}",
-      "Craft": "Criar",
-      "LimitTitle": "Já criou neste Turno",
-      "LimitCatalyze": "<strong>{name}</strong> já usou a Ação de Usar para Criar neste Turno ({used}/{allowed}). Criar mesmo assim?",
-      "LimitDeft": "<strong>{name}</strong> já Criou {used}/{allowed} vezes neste Turno (Ação de Usar + Mãos Hábeis, que abre mão do Movimento). Criar mesmo assim?"
-    },
     "MixPanel": {
-      "Title": "Misturar",
       "Mix": "Misturar",
-      "NoMix": "{name} não tem Misturar.",
-      "NoItems": "{name} não tem Itens Alquímicos com carga restante para Misturar.",
-      "StudiedDice": "Dados de Estudo (Misturar gasta 1)",
       "Items": "Itens Alquímicos",
       "Drop": "Solte aqui",
       "DropHint": "Arraste dois Itens Alquímicos para os espaços (ou clique duas vezes neles).",
@@ -308,12 +292,10 @@
       "OneCharge": "{name} não tem carga para uma segunda dose.",
       "CompanionHint": "um tipo de dano diferente, rolado em um cartão próprio nos mesmos alvos (ao acertar, quando arremessada)",
       "Thrown": "Arremesso",
-      "Used": "Usada (sem rolagem de ataque)",
-      "LimitTitle": "Ação de Usar já tomada",
-      "LimitCatalyze": "<strong>{name}</strong> já tomou a Ação de Usar neste Turno ({used}/{allowed}). Misturar mesmo assim?",
-      "LimitDeft": "<strong>{name}</strong> já tomou {used}/{allowed} Ações de Usar neste Turno (Ação de Usar + Mãos Hábeis, que abre mão do Movimento). Misturar mesmo assim?"
+      "Used": "Usada (sem rolagem de ataque)"
     },
     "AlchemyLab": {
+      "NoLab": "{name} não tem laboratório alquímico (nenhuma Fórmula para conhecer).",
       "Title": "Laboratório Alquímico",
       "ToolsEquipped": "{name} equipado — clique para desequipar",
       "ToolsUnequipped": "{name} não equipado (necessário para Criar) — clique para equipar",
@@ -335,7 +317,6 @@
       "EmptySlot": "Espaço vazio",
       "EmptySlotHint": "Escolha uma fórmula na Biblioteca",
       "NoFormulae": "Nenhuma fórmula conhecida — escolha-as na Biblioteca.",
-      "NoFormulaeCompact": "Nenhuma fórmula conhecida — escolha-as na aba Alquimia da ficha.",
       "NoCatalyze": "Você conhece fórmulas mas não tem Catalisar — ainda não pode Criá-las.",
       "NoMixItems": "Nenhum Item Alquímico com carga para Misturar.",
       "KnownStripHint": "Arraste um item da lista para esta faixa (ou clique duas vezes) para aprendê-lo",
@@ -904,37 +885,7 @@
       "Workbench": {
         "Title": "Bancada",
         "ComingSoon": "Em uma atualização futura",
-        "NotAlchemist": "Só personagens com uma característica de Alquimia podem usar esta aba.",
-        "SoonAlchemy": "Alquimia",
         "SoonRelic": "Forja de Relíquias",
-        "PrimaMateriaButton": "Prima Materia ({n} de Estudo)",
-        "PrimaMateriaHint": "Gaste um Dado de Estudo para Fabricar este item na hora, sem Materiais (até 10o).",
-        "StudiedDice": "Dados de Estudo",
-        "Charges": "Cargas restantes",
-        "AlchemyLevelLine": "Nível {level}: {known}/{grants} fórmulas",
-        "Wealth": "Riqueza",
-        "PartyWealth": "Riqueza do Grupo",
-        "PartyMaterials": "Materiais do Grupo",
-        "NoCatalyze": "Você conhece fórmulas, mas não tem Catalisar — ainda não pode fabricá-las aqui.",
-        "KnownFormulas": "Fórmulas Conhecidas",
-        "EditFormulas": "Editar Fórmulas Conhecidas",
-        "NoFormulas": "Nenhuma fórmula conhecida ainda.",
-        "EmptySlot": "Vazio — escolha uma fórmula da lista",
-        "LearnFormula": "Aprender uma Fórmula",
-        "ForgetFormulaTitle": "Esquecer Fórmula",
-        "ForgetFormulaConfirm": "Esquecer {name}? Isso libera a escolha, mas você precisará aprendê-la de novo para recuperá-la.",
-        "FormulaSearch": "Buscar itens alquímicos…",
-        "NoFormulasAvailable": "Nenhum item alquímico disponível — peça ao Mestre para ativar um compêndio.",
-        "OverValueCap": "Acima do seu limite de valor de fórmula.",
-        "OwnedQty": "Você tem {qty} no inventário",
-        "CraftAsProject": "Fabricar como Projeto",
-        "CraftAsProjectHint": "Fabrique isto sem conhecer a fórmula, pelas regras normais de Fabricação (orçamento do Quarto de dia + metade do valor em Materiais).",
-        "AlreadyKnown": "Já conhecida.",
-        "NoPicksLeft": "Nenhuma escolha de fórmula restante.",
-        "SortGroup": "Grupo",
-        "SortAlpha": "A–Z",
-        "SortCost": "Custo",
-        "CraftCostHint": "{cost} para Fabricar",
         "SystemDisabled": "A fabricação está desativada neste mundo.",
         "ShiftBudget": "Limite de Valor por Quarto de dia",
         "MaterialsOnHand": "Materiais Disponíveis",
@@ -1417,7 +1368,7 @@
         "Variant": "Cristais de Mana"
       },
       "Fields": {
-        "Enabled": "Ativar fabricação (Bancada, Fabricar/Desmontar/Alquimia/Forja de Relíquias)",
+        "Enabled": "Ativar fabricação (Bancada: Fabricar/Desmontar/Forja de Relíquias; laboratório de Alquimia do Alquimista)",
         "ApprovalLabel": "Aprovação do Mestre",
         "Approval": {
           "off": "Desligada — jogadores fabricam livremente",
@@ -2736,7 +2687,7 @@
         "Description": "Fabrique itens. Requer materiais no valor de 50% do valor do item.",
         "DifficultyLabel": "Dificuldade de Fabricação:",
         "Button": "Fabricar Item",
-        "WorkbenchDescription": "Abra a Bancada para passar um Quarto de dia fabricando, desmontar itens em Materiais ou trabalhar com Alquimia."
+        "WorkbenchDescription": "Abra a Bancada para passar um Quarto de dia fabricando, ou desmontar itens em Materiais."
       },
       "CraftDifficulty": {
         "tier1": "18-17 (1p)",

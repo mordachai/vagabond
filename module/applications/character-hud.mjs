@@ -17,6 +17,7 @@ import { EquipmentHelper } from '../helpers/equipment-helper.mjs';
 import { FeatureAction } from '../helpers/feature-action.mjs';
 import { EnrichmentHelper } from '../helpers/enrichment-helper.mjs';
 import { VagabondDamagePipeline } from '../helpers/damage-pipeline.mjs';
+import { AlchemyLab } from '../helpers/alchemy-lab.mjs';
 
 /** Inventory tab groupings, in display order, keyed by equipmentType. */
 const INV_GROUPS = [
@@ -126,6 +127,8 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
   _activeTab = null;
   /** Latched fixed-position coords { left, top }; survives re-renders. */
   #pos = null;
+  /** Panel scroll position of the tab it belongs to, kept across re-renders (Library Learn, Craft, item updates…). */
+  #panelScroll = { tab: null, top: 0 };
 
   /* -------------------------------------------- */
   /*  Construction                                */
@@ -189,6 +192,8 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
       toggleSpellFavorite: this._onToggleSpellFavorite,
       toggleEquip: this._onToggleEquip,
       usePip: this._onUsePip,
+      // Alchemy panel (shared lab core; lab UI state lives in `this._alchemyLab`)
+      ...AlchemyLab.ACTIONS,
     },
   };
 
@@ -413,6 +418,20 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
 
     // --- Items, slots, panels ---
     this._categorizeItems(context);
+
+    // Spells tab only while the actor owns a Spell (same rule as the sheet's Magic tab); Alchemy tab only with
+    // an Alchemy lab (class formula grants). A tab that disappeared closes the panel.
+    context.hasSpells = context.spells.length > 0;
+    context.hasLab = AlchemyLab.hasLab(actor);
+    if ((this._activeTab === 'spells' && !context.hasSpells) || (this._activeTab === 'alchemy' && !context.hasLab)) {
+      this._activeTab = null;
+      context.activeTab = null;
+      context.panelOpen = false;
+    }
+    // Alchemy lab (compact layout), built only while its panel is open.
+    if (this._activeTab === 'alchemy') {
+      context.lab = await AlchemyLab.prepare(actor, AlchemyLab.stateOf(this), { compact: true });
+    }
 
     return context;
   }
@@ -685,7 +704,18 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
   /*  Render lifecycle                            */
   /* -------------------------------------------- */
 
+  /** Remember the open panel's scroll position before the DOM is replaced. */
+  async _preRender(context, options) {
+    await super._preRender(context, options);
+    const panel = this.element?.querySelector('.vh-panel');
+    if (panel) this.#panelScroll = { tab: this._activeTab, top: panel.scrollTop };
+  }
+
   _onRender(context, options) {
+    // Same tab still open → restore its scroll; a tab switch starts at the top.
+    const panel = this.element.querySelector('.vh-panel');
+    if (panel && this._activeTab && this.#panelScroll.tab === this._activeTab) panel.scrollTop = this.#panelScroll.top;
+
     this.#ctrl?.abort();
     this.#ctrl = new AbortController();
     const { signal } = this.#ctrl;
@@ -724,6 +754,9 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
     if (handle) handle.addEventListener('contextmenu', (e) => this._openHudMenu(e), { signal });
 
     this._bindInlineEdits(signal);
+
+    // Alchemy panel: card / tile selection, Mix slot drag-drop, carousel.
+    AlchemyLab.wire(this, this.element, signal);
 
     // Status icons (left of portrait): right-click → Send to Chat / Remove Status.
     // Reuse the sheet's exact menu — left-click chat is handled by the statusClick action.
@@ -843,6 +876,7 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
     const setDropHighlight = (on) => this.element?.classList.toggle('vh-drop-active', on);
     this.element.addEventListener('dragover', (e) => {
       if (e.defaultPrevented || !this.actor.isOwner) return;
+      if (this.element.querySelector('.alchemy-lab.is-dragging')) return; // lab-internal drag (Mix tile → slot)
       // No dropEffect override: forcing 'copy' vetoes the drop when the source
       // set effectAllowed to 'move' (browser then never fires `drop`).
       e.preventDefault();
@@ -1208,7 +1242,16 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
   static _onStatusClick(event, target) { return VagabondActorSheet._onStatusClick.call(this, event, target); }
   static _onSpendLuck(event, target) { return VagabondActorSheet._onSpendLuck.call(this, event, target); }
   static _onSpendStudiedDie(event, target) { return VagabondActorSheet._onSpendStudiedDie.call(this, event, target); }
-  static _onFeatureAction(event, target) { return VagabondActorSheet._onFeatureAction.call(this, event, target); }
+  static _onFeatureAction(event, target) {
+    // Catalyze / Mix (left click): open the HUD's own Alchemy panel at that station, not the sheet.
+    const isRight = event.type === 'contextmenu' || event.button === 2;
+    if (!isRight && this._openLabFor(target.dataset.actionKey)) {
+      event.preventDefault();
+      event.stopPropagation();
+      return;
+    }
+    return VagabondActorSheet._onFeatureAction.call(this, event, target);
+  }
   static _onModifyCheckBonus(event, target) { return VagabondActorSheet._onModifyCheckBonus.call(this, event, target); }
   static _onModifyMana(event, target) { return VagabondActorSheet._onModifyMana.call(this, event, target); }
 
@@ -1221,6 +1264,20 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
     const tab = target.dataset.tab;
     this._activeTab = (this._activeTab === tab) ? null : tab;
     this.render();
+  }
+
+  /**
+   * Catalyze / Mix feature buttons (Traits panel, Belt): show the Alchemy panel at that station.
+   * @param {string} key  FeatureAction key
+   * @returns {boolean}   true when the key was a lab button (and the panel is opening)
+   */
+  _openLabFor(key) {
+    const station = key && AlchemyLab.stationForAction(this.actor, key);
+    if (!station) return false;
+    AlchemyLab.openStation(this, station);
+    this._activeTab = 'alchemy';
+    this.render();
+    return true;
   }
 
   /** Close button in the panel header → close the tab panel. */
@@ -1297,6 +1354,7 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
           });
         });
       }
+      if (this._openLabFor(id)) return;
       return FeatureAction.run(this.actor, id);
     }
 

@@ -94,6 +94,13 @@
   justify-content: space-around;
   padding: 12px 50px;
   box-shadow: 2px 2px 2px $c-inset-2;
+
+  // 4+ tabs (e.g. Features / Magic / Alchemy / Effects): less side padding so every tab keeps an equal width
+  // instead of shrinking to its label.
+  &:has(> [data-tab]:nth-child(4)) {
+    padding-inline: 16px;
+    gap: 4px;
+  }
   
   /* Target the individual tab header elements */
   [data-tab] {

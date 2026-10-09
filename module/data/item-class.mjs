@@ -121,7 +121,7 @@ export default class VagabondClass extends VagabondItemBase {
         spellAmount: new fields.NumberField({ initial: 0, integer: true, min: 0, max: 10 }),
 
         // Alchemy formula picks - number of Alchemical Item formulas this feature
-        // grants (Workbench Alchemy tab "Learn — N picks left"; see docs/crafting-plan.md
+        // grants (Alchemy lab Library "N picks left"; see docs/crafting-plan.md
         // §4.4/§5). No pool — any Alchemical Item under formulaValueCap qualifies.
         formulaAmount: new fields.NumberField({ initial: 0, integer: true, min: 0, max: 10 }),
 

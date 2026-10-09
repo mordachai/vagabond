@@ -75,6 +75,7 @@
   --vagabond-c-damage-orange: #e7570a;
   --vagabond-c-dark-bluey: #2c3e50;
   --vagabond-c-transparent: #000000c0;
+  --vagabond-c-transparent-strong: #000000f2;
   --vagabond-c-lightgrey: #d0d0d0;
   --vagabond-c-darkgray: #666666;
   --vagabond-c-red: #9d0000;
@@ -464,6 +465,10 @@ body[data-theme=dark] #sidebar {
   padding: 12px 50px;
   box-shadow: 2px 2px 2px var(--vagabond-c-inset-2);
   /* Target the individual tab header elements */
+}
+.vagabond nav.tabs:has(> [data-tab]:nth-child(4)) {
+  padding-inline: 16px;
+  gap: 4px;
 }
 .vagabond nav.tabs [data-tab] {
   transition: opacity 0.2s ease-in-out, filter 0.2s ease-in-out, transform 0.2s ease-in-out;
@@ -4423,7 +4428,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   position: absolute;
   left: calc(var(--vh-status-w) + 10px);
   right: 0;
-  background: var(--vagabond-c-transparent);
+  background: var(--vagabond-c-transparent-strong);
   border: 1px solid var(--vagabond-dark-yellow);
   border-radius: var(--vh-radius);
   max-height: 380px;
@@ -4445,6 +4450,17 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 }
 .vbd-hud .vh-panel-content.hidden {
   display: none;
+}
+.vbd-hud .vh-panel:has(> .vh-panel-alchemy) .vh-panel-close--float {
+  position: absolute;
+  top: var(--vh-gap);
+  right: var(--vh-gap);
+  z-index: 2;
+  float: none;
+  margin: 0;
+}
+.vbd-hud .vh-panel-alchemy .alchemy-lab .al-header {
+  padding: 0 24px;
 }
 .vbd-hud .vh-panel-header {
   display: flex;
@@ -6359,7 +6375,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   color: var(--vagabond-c-red);
 }
 .alchemy-lab.is-compact {
-  padding: 4px 2px 6px;
+  padding: 6px 10px 10px;
   gap: 6px;
 }
 .alchemy-lab.is-compact .al-grid {
@@ -6379,6 +6395,12 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .alchemy-lab.is-compact .al-detail-desc {
   max-height: 8em;
   overflow-y: auto;
+}
+.alchemy-lab.is-compact .al-lib-tools {
+  flex-wrap: wrap;
+}
+.alchemy-lab.is-compact .al-lib-search {
+  min-width: 140px;
 }
 
 .inventory-section.al-box {
@@ -16083,17 +16105,7 @@ ol#combat-tracker.directory-list {
 
 /* Crafting Workbench (docs/crafting-plan.md §5) */
 .workbench-app {
-  /* 2x2 wealth mosaic: [you|party] x [coin|material], icon-driven, no text labels */
   /* Row card: [img] [name] [arrow over yield] [scrap btn at end] */
-  /* Known Formula cards — shop-card pattern (head: img + plate; foot: Craft button) */
-  /* Alchemy tab: center (budget/notice/known) + right sidebar (full catalog + detail).
-     align-items: stretch so the sidebar matches the center column's full height —
-     the row list then flexes to fill it (see .wb-formula-sidebar-list) instead of
-     being capped at a small fixed box. */
-  /* flex:1 stretches the list down to the bottom of the sidebar (which itself now
-     matches the center column's height — see .wb-alchemy-layout) instead of a
-     small fixed box; it scrolls internally once content overflows that space. */
-  /* Accordion: row toggles, .wb-formula-row-detail expands inline right below it */
   /* ------------------------------------------------------------------ */
   /* Craft tab: catalog | (selected detail / ongoing Projects / Shift footer) */
   /* ------------------------------------------------------------------ */
@@ -16175,76 +16187,6 @@ ol#combat-tracker.directory-list {
   color: var(--vagabond-c-red);
   opacity: 1;
 }
-.workbench-app .wb-alchemy-header {
-  margin-bottom: 0.7rem;
-  padding: 0.4rem 0.6rem;
-  border: 1px solid var(--vagabond-c-faint);
-  border-radius: 4px;
-  background: var(--vagabond-c-surface);
-  font-size: 0.82rem;
-}
-.workbench-app .wb-alchemy-header-row1 {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  margin-bottom: 0.35rem;
-}
-.workbench-app .wb-alchemy-header-row1 i {
-  color: var(--vagabond-c-chat-yellow);
-}
-.workbench-app .wb-wealth-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.35rem;
-}
-.workbench-app .wb-wealth-tile {
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
-  padding: 0.3rem 0.5rem;
-  background: var(--vagabond-c-inset-2);
-  border: 1px solid var(--vagabond-c-tan-lite);
-  border-radius: 4px;
-  cursor: help;
-}
-.workbench-app .wb-wealth-tile i:first-child {
-  color: var(--vagabond-c-muted);
-  font-size: 0.8em;
-}
-.workbench-app .wb-wealth-tile i:nth-child(2) {
-  color: var(--vagabond-c-chat-yellow);
-}
-.workbench-app .wb-wealth-icon {
-  width: 14px;
-  height: 14px;
-  object-fit: cover;
-  border-radius: 2px;
-}
-.workbench-app .wb-wealth-value {
-  margin-left: auto;
-  font-family: "Germania", serif;
-  font-size: 1rem;
-}
-.workbench-app .wb-alchemy-notice {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  min-height: 2.1rem;
-  margin-bottom: 0.7rem;
-  padding: 0.4rem 0.6rem;
-  border: 1px solid var(--vagabond-c-red);
-  border-radius: 4px;
-  background: color-mix(in srgb, var(--vagabond-c-red) 8%, transparent);
-  color: var(--vagabond-c-red);
-  font-size: 0.78rem;
-}
-.workbench-app .wb-alchemy-notice i {
-  font-size: 0.9rem;
-  flex-shrink: 0;
-}
-.workbench-app .wb-alchemy-notice.is-empty {
-  visibility: hidden;
-}
 .workbench-app .wb-budget-bar {
   display: flex;
   justify-content: space-between;
@@ -16255,40 +16197,6 @@ ol#combat-tracker.directory-list {
   border-radius: 4px;
   font-size: 0.82rem;
   background: var(--vagabond-c-surface);
-}
-.workbench-app .wb-fieldset {
-  margin: 0 0 0.85rem;
-  padding: 0.6rem 0.75rem;
-  border: 1px solid var(--vagabond-c-faint);
-  border-radius: 4px;
-}
-.workbench-app .wb-fieldset legend {
-  font-family: "Manofa", serif;
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0 0.4rem;
-  font-weight: 600;
-  font-size: 0.82rem;
-}
-.workbench-app .wb-edit-toggle {
-  width: 20px;
-  height: 20px;
-  line-height: normal;
-  padding: 0;
-  border: 1px solid transparent;
-  background: transparent;
-  color: var(--vagabond-c-muted);
-  border-radius: 4px;
-  font-size: 0.7rem;
-  cursor: pointer;
-}
-.workbench-app .wb-edit-toggle:hover {
-  color: var(--vagabond-c-text-primary);
-}
-.workbench-app .wb-edit-toggle.active {
-  color: var(--vagabond-c-chat-yellow);
-  border-color: var(--vagabond-c-chat-yellow);
 }
 .workbench-app .wb-empty {
   margin: 0.3rem 0;
@@ -16350,15 +16258,6 @@ ol#combat-tracker.directory-list {
 .workbench-app .wb-shift-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
-}
-.workbench-app .wb-craft-project-btn {
-  margin-top: 0.4rem;
-  background: transparent;
-  color: var(--vagabond-c-text-primary);
-  border: 1px solid var(--vagabond-c-faint);
-}
-.workbench-app .wb-craft-project-btn:hover {
-  border-color: var(--vagabond-c-chat-yellow);
 }
 .workbench-app .wb-scrap-top {
   display: flex;
@@ -16465,374 +16364,6 @@ ol#combat-tracker.directory-list {
   font-size: 0.85rem;
   opacity: 0.75;
   white-space: nowrap;
-}
-.workbench-app .wb-known-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 0.6rem;
-}
-.workbench-app .wb-known-card {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-  min-width: 0;
-  padding: 0.4rem;
-  background: var(--vagabond-c-surface);
-  border: 1px solid var(--vagabond-c-tan-lite);
-  border-radius: 6px;
-  transition: border-color 0.15s, box-shadow 0.15s;
-}
-.workbench-app .wb-known-card:hover {
-  border-color: var(--vagabond-c-chat-yellow);
-  box-shadow: 0 0 8px -3px var(--vagabond-c-chat-yellow);
-}
-.workbench-app .wb-known-card-empty {
-  align-items: center;
-  justify-content: center;
-  gap: 0.3rem;
-  min-height: 90px;
-  border-style: dashed;
-  color: var(--vagabond-c-muted);
-  font-size: 0.75rem;
-  text-align: center;
-}
-.workbench-app .wb-known-card-empty i {
-  font-size: 1.2rem;
-  opacity: 0.5;
-}
-.workbench-app .wb-known-card-empty:hover {
-  border-color: var(--vagabond-c-tan-lite);
-  box-shadow: none;
-}
-.workbench-app .wb-known-remove {
-  position: absolute;
-  top: 3px;
-  right: 3px;
-  width: 18px;
-  height: 18px;
-  line-height: 16px;
-  padding: 0;
-  border: none;
-  background: transparent;
-  color: var(--vagabond-c-muted);
-  font-size: 1rem;
-  cursor: pointer;
-  z-index: 1;
-}
-.workbench-app .wb-known-remove:hover {
-  color: var(--vagabond-c-red);
-}
-.workbench-app .wb-known-head {
-  display: flex;
-  gap: 0.4rem;
-  min-width: 0;
-}
-.workbench-app .wb-known-img {
-  width: 48px;
-  height: 48px;
-  flex: 0 0 48px;
-  object-fit: cover;
-  border: 1px solid var(--vagabond-c-tan-lite);
-  border-radius: 4px;
-  background: var(--vagabond-c-black);
-}
-.workbench-app .wb-known-plate {
-  position: relative;
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 2px;
-  padding: 0.2rem 3rem 0.2rem 0.4rem;
-  background: var(--vagabond-c-inset-2);
-  border: 1px solid var(--vagabond-c-tan-lite);
-  border-radius: 4px;
-}
-.workbench-app .wb-known-owned {
-  position: absolute;
-  top: 50%;
-  right: 0.5rem;
-  transform: translateY(-50%);
-  font-family: "Germania", serif;
-  font-size: 1.4rem;
-  line-height: 1;
-  color: var(--vagabond-c-chat-yellow);
-}
-.workbench-app .wb-known-owned.is-zero {
-  color: var(--vagabond-c-muted);
-}
-.workbench-app .wb-known-name {
-  font-family: "Germania", serif;
-  font-size: 1.15rem;
-  line-height: 1.15;
-  min-height: 2.3em;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  padding-right: 1rem;
-}
-.workbench-app .wb-known-meta {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.95rem;
-  color: var(--vagabond-c-muted);
-}
-.workbench-app .wb-known-damage {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  font-size: 0.95rem;
-  color: var(--vagabond-c-chat-yellow);
-  cursor: help;
-}
-.workbench-app .wb-known-damage i {
-  font-size: 0.85em;
-}
-.workbench-app .wb-known-craft {
-  font-family: "Manofa", serif;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.35rem;
-  width: 100%;
-  padding: 0.3rem 0.5rem;
-  height: auto;
-  line-height: normal;
-  font-size: 0.95rem;
-  background: var(--vagabond-c-bg2);
-  color: var(--vagabond-c-white);
-  border: 1px solid var(--vagabond-c-chat-yellow);
-  border-radius: 4px;
-  cursor: pointer;
-  transition: box-shadow 0.15s;
-}
-.workbench-app .wb-known-craft:hover {
-  box-shadow: 0 0 8px -1px var(--vagabond-c-chat-yellow), inset 0 0 0 1px var(--vagabond-c-chat-yellow);
-}
-.workbench-app .wb-known-craft .wb-cost.is-short {
-  color: var(--vagabond-c-red);
-}
-.workbench-app .wb-alchemy-tab {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-.workbench-app .wb-alchemy-layout {
-  display: flex;
-  gap: 0.85rem;
-  align-items: stretch;
-  flex: 1;
-  min-height: 0;
-}
-.workbench-app .wb-alchemy-center {
-  flex: 1;
-  min-width: 0;
-  min-height: 0;
-  overflow-y: auto;
-}
-.workbench-app .wb-alchemy-sidebar {
-  width: 260px;
-  flex-shrink: 0;
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  border: 1px solid var(--vagabond-c-faint);
-  border-radius: 4px;
-  padding: 0.6rem;
-}
-.workbench-app .wb-formula-sidebar-header {
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-}
-.workbench-app .wb-formula-search {
-  width: 100%;
-}
-.workbench-app .wb-formula-sort-tabs {
-  display: flex;
-  gap: 0.25rem;
-}
-.workbench-app .wb-formula-sort-btn {
-  font-family: "Manofa", serif;
-  flex: 1;
-  height: auto;
-  line-height: normal;
-  padding: 0.25rem 0.3rem;
-  font-size: 0.7rem;
-  border: 1px solid var(--vagabond-c-faint);
-  background: transparent;
-  color: var(--vagabond-c-muted);
-  border-radius: 4px;
-  cursor: pointer;
-}
-.workbench-app .wb-formula-sort-btn:hover {
-  color: var(--vagabond-c-text-primary);
-}
-.workbench-app .wb-formula-sort-btn.active {
-  color: var(--vagabond-c-text-primary);
-  border-color: var(--vagabond-c-chat-yellow);
-  background: var(--vagabond-c-inset-2);
-}
-.workbench-app .wb-formula-sidebar-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  flex: 1;
-  min-height: 0;
-  overflow-y: auto;
-}
-.workbench-app .wb-formula-group.is-hidden {
-  display: none;
-}
-.workbench-app .wb-formula-group-label {
-  font-family: "Manofa", serif;
-  font-size: 0.68rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-  opacity: 0.6;
-  margin-bottom: 0.2rem;
-}
-.workbench-app .wb-formula-item.is-hidden {
-  display: none;
-}
-.workbench-app .wb-formula-row {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.25rem 0.35rem;
-  border-radius: 4px;
-  cursor: pointer;
-}
-.workbench-app .wb-formula-row:hover {
-  background: var(--vagabond-c-inset-2);
-}
-.workbench-app .wb-formula-row.is-selected {
-  background: color-mix(in srgb, var(--vagabond-c-chat-yellow) 15%, transparent);
-  outline: 1px solid var(--vagabond-c-chat-yellow);
-}
-.workbench-app .wb-formula-row.is-over-cap {
-  opacity: 0.5;
-}
-.workbench-app .wb-formula-row.is-known {
-  background: color-mix(in srgb, var(--vagabond-c-green) 22%, transparent);
-}
-.workbench-app .wb-formula-row.is-known:hover {
-  background: color-mix(in srgb, var(--vagabond-c-green) 32%, transparent);
-}
-.workbench-app .wb-formula-row-icon {
-  position: relative;
-  flex-shrink: 0;
-  width: 22px;
-  height: 22px;
-}
-.workbench-app .wb-formula-row-icon img {
-  width: 22px;
-  height: 22px;
-  object-fit: cover;
-  border-radius: 3px;
-}
-.workbench-app .wb-formula-row-badge {
-  position: absolute;
-  bottom: -4px;
-  right: -4px;
-  min-width: 14px;
-  height: 14px;
-  padding: 0 2px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--vagabond-c-chat-yellow);
-  color: var(--vagabond-c-black);
-  border-radius: 7px;
-  font-size: 0.7rem;
-  font-weight: 700;
-  line-height: 1;
-  font-family: "Germania", serif;
-  cursor: help;
-}
-.workbench-app .wb-formula-row-name {
-  flex: 1;
-  min-width: 0;
-  font-size: 0.95rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.workbench-app .wb-formula-row-cost {
-  font-family: "Germania", serif;
-  color: var(--vagabond-c-chat-yellow);
-  font-size: 0.95rem;
-  opacity: 0.75;
-  flex-shrink: 0;
-}
-.workbench-app .wb-formula-row-craftcost {
-  font-family: "Germania", serif;
-  color: var(--vagabond-c-green);
-  font-size: 0.95rem;
-  flex-shrink: 0;
-}
-.workbench-app .wb-formula-row-craftcost.is-short {
-  color: var(--vagabond-c-red);
-}
-.workbench-app .wb-formula-row-caret {
-  font-size: 0.65rem;
-  opacity: 0.5;
-  flex-shrink: 0;
-  transition: transform 0.15s;
-}
-.workbench-app .wb-formula-item.is-expanded .wb-formula-row-caret {
-  transform: rotate(90deg);
-}
-.workbench-app .wb-formula-row-detail {
-  margin: 0.3rem 0 0.2rem;
-  padding: 0.45rem 0.5rem;
-  background: var(--vagabond-c-inset-2);
-  border: 1px solid var(--vagabond-c-tan-lite);
-  border-radius: 4px;
-}
-.workbench-app .wb-formula-detail-desc {
-  font-size: 0.85rem;
-  opacity: 0.85;
-  max-height: 130px;
-  overflow-y: auto;
-  margin-bottom: 0.4rem;
-}
-.workbench-app .wb-formula-detail-desc p:first-child {
-  margin-top: 0;
-}
-.workbench-app .wb-formula-detail-desc p:last-child {
-  margin-bottom: 0;
-}
-.workbench-app .wb-formula-detail-stats {
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-  margin-bottom: 0.5rem;
-  font-size: 0.8rem;
-}
-.workbench-app .wb-formula-detail-stats .stat-row {
-  display: flex;
-  justify-content: space-between;
-}
-.workbench-app .wb-formula-detail-stats .stat-name {
-  opacity: 0.7;
-}
-.workbench-app .wb-formula-detail-note {
-  margin: 0;
-  font-size: 0.75rem;
-  opacity: 0.7;
-  font-style: italic;
-}
-.workbench-app .wb-formula-detail-warn {
-  color: var(--vagabond-c-red);
-  opacity: 1;
 }
 .workbench-app .wb-craft-tab {
   height: 100%;

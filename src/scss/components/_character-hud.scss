@@ -524,7 +524,7 @@
     position: absolute;
     left: calc(var(--vh-status-w) + 10px); // start at the portrait, clearing the status gutter
     right: 0;
-    background: $c-transparent;
+    background: $c-transparent-strong;
     border: 1px solid $c-dark-yellow;
     border-radius: var(--vh-radius);
     max-height: 380px;
@@ -542,6 +542,18 @@
   }
 
   .vh-panel-content.hidden { display: none; }
+
+  // Alchemy panel: the lab is a flex box (its own BFC), so a floated close would narrow the whole lab —
+  // pin the close to the corner instead and keep the centered header pills clear of it.
+  .vh-panel:has(> .vh-panel-alchemy) .vh-panel-close--float {
+    position: absolute;
+    top: var(--vh-gap);
+    right: var(--vh-gap);
+    z-index: 2;
+    float: none;
+    margin: 0;
+  }
+  .vh-panel-alchemy .alchemy-lab .al-header { padding: 0 24px; }
 
   // --- Panel header + close button (shared by PC tab panel + NPC detail panel) ---
   // A flex row; any title takes flex:1 so the close button stays at the right end.

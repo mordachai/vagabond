@@ -1,24 +1,11 @@
 import { CraftingHelper } from '../helpers/crafting-helper.mjs';
 import { ProjectHelper } from '../helpers/crafting/project-helper.mjs';
-import { AlchemyHelper } from '../helpers/crafting/alchemy-helper.mjs';
-import { ALCHEMY_COST, PRIMA_MATERIA_CAP } from '../helpers/crafting/alchemy-mode.mjs';
 import { CurrencyHelper } from '../helpers/currency-helper.mjs';
 import { MaterialsHelper } from '../helpers/materials-helper.mjs';
 import { CraftCatalog } from '../helpers/crafting/catalog-helper.mjs';
 import { equipmentStats, markStatsForActor } from '../helpers/equipment-stats.mjs';
-import { VagabondDamagePipeline } from '../helpers/damage-pipeline.mjs';
-import { sourceDocId } from '../helpers/source-id.mjs';
 
 const { api } = foundry.applications;
-
-/** Character members of whichever Party actor lists `actor` as a member (empty if none). */
-function partyMembersOf(actor) {
-  const party = game.actors.find(a => a.type === 'party' && (a.system.members ?? []).includes(actor?.uuid));
-  if (!party) return [];
-  return (party.system.members ?? [])
-    .map(uuid => fromUuidSync(uuid))
-    .filter(a => a?.type === 'character');
-}
 
 /** Parse a typed Shift amount ("30s", "1g 5s", "7s5c") into copper; a bare number counts as silver (the ± step unit). Null if unreadable. */
 function parseCurrencyInput(text) {
@@ -38,10 +25,11 @@ function parseCurrencyInput(text) {
 }
 
 /**
- * The Workbench: Craft + Scrap + Alchemy (Phases 2–3). Other mode-rail entries
+ * The Workbench: Craft + Scrap (Phases 2–3). Other mode-rail entries
  * (Relic Forge, Combine, Socket) are shown dimmed until their phases land —
- * see docs/crafting-plan.md §5. Mix is the Alchemist's feature-button panel
- * (AlchemistHelper.mix), not a Workbench tab. One instance per actor (keyed by uuid, like the
+ * see docs/crafting-plan.md §5. Alchemy (Catalyze / Mix / formula Library) lives in
+ * the Alchemist's Alchemy lab (character sheet tab + HUD panel, `AlchemyLab`), not here.
+ * One instance per actor (keyed by uuid, like the
  * Character HUD); reactive hooks registered in `_onRender`, cleared on close.
  *
  * Craft tab: item catalog (selecting an item IS picking the recipe) | selected-item
@@ -92,14 +80,6 @@ export class WorkbenchApp extends api.HandlebarsApplicationMixin(api.Application
       unregisterRecipe: WorkbenchApp.#onUnregisterRecipe,
       allocStep: WorkbenchApp.#onAllocStep,
       autoFill: WorkbenchApp.#onAutoFill,
-      craftFormula: WorkbenchApp.#onCraftFormula,
-      primaMateria: WorkbenchApp.#onPrimaMateria,
-      craftItemFromCatalog: WorkbenchApp.#onCraftItemFromCatalog,
-      forgetFormula: WorkbenchApp.#onForgetFormula,
-      learnFormulaPick: WorkbenchApp.#onLearnFormulaPick,
-      selectFormula: WorkbenchApp.#onSelectFormula,
-      sortFormulas: WorkbenchApp.#onSortFormulas,
-      toggleFormulaEdit: WorkbenchApp.#onToggleFormulaEdit,
     },
   };
 
@@ -122,38 +102,26 @@ export class WorkbenchApp extends api.HandlebarsApplicationMixin(api.Application
   #craftFilter = 'all';
   #lastCatalogClick = { uuid: null, time: 0 };
   #craftSearch = '';
-  #formulaSort = 'group';
-  #selectedFormulaUuid = null;
-  #formulaEditMode = false;
   #savedScroll = new Map();
-  #savedSearch = '';
-  /** Alchemy tab: last failure text, shown in the notice strip until the next successful action / tab switch. */
-  #alchemyNotice = '';
 
   /**
-   * Every render replaces the DOM wholesale, so scroll position + the formula
-   * search text would otherwise reset to top/empty on every click (sort toggle,
-   * row select, Learn, Forget...). Captured here, restored in `_onRender`.
+   * Every render replaces the DOM wholesale, so scroll positions would otherwise
+   * reset to top on every click. Captured here, restored in `_onRender`.
    * @override
    */
   async _preRender(context, options) {
     await super._preRender(context, options);
     if (!this.element) return;
     this.#savedScroll.clear();
-    for (const selector of ['.wb-main', '.wb-formula-sidebar-list', '.wb-catalog-list', '.wb-proj-list']) {
+    for (const selector of ['.wb-main', '.wb-catalog-list', '.wb-proj-list']) {
       const el = this.element.querySelector(selector);
       if (el) this.#savedScroll.set(selector, el.scrollTop);
     }
-    this.#savedSearch = this.element.querySelector('.wb-formula-search')?.value ?? '';
   }
 
   /** @override */
   async _prepareContext(_options) {
     const config = CraftingHelper.config();
-    // Alchemy tab is Alchemist-only — gated on class formula grants, not the
-    // Catalyze AE. Everyone else crafts alchemicals from the Craft catalog.
-    const isAlchemist = AlchemyHelper.formulaGrantsFor(this.actor) > 0;
-    if (this.#tab === 'alchemy' && !isAlchemist) this.#tab = 'craft';
     const budget = CraftingHelper.valuePerShift(this.actor);
     const materials = MaterialsHelper.totalValue(this.actor);
     this.#budget = budget;
@@ -183,140 +151,17 @@ export class WorkbenchApp extends api.HandlebarsApplicationMixin(api.Application
         items: scrapGroupsByType.get(key).sort((a, b) => a.name.localeCompare(b.name)),
       }));
 
-    const catalyzeOn = !!this.actor.system.craft?.catalyze;
-    const level = this.actor.system.attributes?.level?.value ?? 1;
-    const formulaGrants = AlchemyHelper.formulaGrantsFor(this.actor);
-    const formulaPicksRemaining = AlchemyHelper.formulaPicksRemaining(this.actor);
-    const formulaValueCapCopper = AlchemyHelper.formulaValueCapCopper(this.actor);
-    const knownCount = this.actor.system.craft?.formulas?.length ?? 0;
-    const alchemyCraftCost = ALCHEMY_COST; // flat 5s, RAW-fixed (AlchemyMode)
-    const canAffordFormula = materials >= alchemyCraftCost;
-    const alchemyCraftCostLabel = `<span class="wb-cost${canAffordFormula ? '' : ' is-short'}">${CurrencyHelper.format(alchemyCraftCost)}</span>`;
-    // Quantity on hand per compendium source: crafted / bought copies carry the source they were
-    // made from (sourceDocId — doc id, so translated copies match too).
-    const ownedById = new Map();
-    for (const it of this.actor.items) {
-      if (it.type !== 'equipment') continue;
-      const src = sourceDocId(it);
-      if (src) ownedById.set(src, (ownedById.get(src) ?? 0) + (it.system.quantity ?? 1));
-    }
-    const ownedOf = (uuid) => ownedById.get(String(uuid).split('.').pop()) ?? 0;
-    // `fromUuidSync` only returns full `system` data for compendium items Foundry has
-    // already fully loaded (otherwise just the index shape — no damageAmount/damageType).
-    // `fromUuid` always resolves the complete document, so damage never depends on
-    // whether the player happened to click that item elsewhere first.
-    const knownFormulas = (await Promise.all((this.actor.system.craft?.formulas ?? []).map(async uuid => {
-      const source = await fromUuid(uuid);
-      if (!source) return null;
-      return {
-        uuid, name: source.name, img: source.img,
-        alchemicalTypeLabel: game.i18n.localize(CONFIG.VAGABOND.alchemicalTypes?.[source.system?.alchemicalType] ?? source.system?.alchemicalType),
-        damageAmount: this.#markDamage(source.system?.damageAmount || '', source.system),
-        damageTypeLabel: (source.system?.damageType && source.system.damageType !== '-')
-          ? game.i18n.localize(CONFIG.VAGABOND.damageTypes?.[source.system.damageType] ?? source.system.damageType)
-          : '',
-        damageTypeIcon: CONFIG.VAGABOND.damageTypeIcons?.[source.system?.damageType] ?? '',
-        craftCostLabel: alchemyCraftCostLabel,
-        ownedQty: ownedOf(uuid),
-      };
-    }))).filter(Boolean);
-
-    const wealthLabel = CurrencyHelper.format(CurrencyHelper.toCopper(CurrencyHelper.walletOf(this.actor) ?? {}));
-    const partyMembers = partyMembersOf(this.actor);
-    const partyWealthLabel = CurrencyHelper.format(
-      partyMembers.reduce((sum, m) => sum + CurrencyHelper.toCopper(CurrencyHelper.walletOf(m) ?? {}), 0)
-    );
-    const partyMaterialsLabel = CurrencyHelper.format(
-      partyMembers.reduce((sum, m) => sum + MaterialsHelper.totalValue(m), 0)
-    );
-
-    const canLearnFormula = catalyzeOn && formulaPicksRemaining > 0;
-    const primaMateriaOn = !!this.actor.system.craft?.primaMateria;
-    const studiedDice = this.actor.system.studiedDice ?? 0;
-    let formulaGroups = [];
-    if (this.#tab === 'alchemy') {
-      const known = new Set(this.actor.system.craft?.formulas ?? []);
-      const all = await AlchemyHelper.availableAlchemicals();
-      // Detail fields (description/damage) come from the same index fetch as the
-      // catalog row itself, so the inline accordion needs no extra per-click fetch.
-      const catalog = all.map(a => ({
-        ...a,
-        costLabel: CurrencyHelper.format(a.cost),
-        alchemicalTypeLabel: game.i18n.localize(CONFIG.VAGABOND.alchemicalTypes?.[a.alchemicalType] ?? a.alchemicalType),
-        damageAmount: this.#markDamage(a.damageAmount, a),
-        damageTypeLabel: a.damageType ? game.i18n.localize(CONFIG.VAGABOND.damageTypes?.[a.damageType] ?? a.damageType) : '',
-        known: known.has(a.uuid),
-        overCap: a.cost > formulaValueCapCopper,
-        nameLower: a.name.toLowerCase(),
-        selected: a.uuid === this.#selectedFormulaUuid,
-        ownedQty: ownedOf(a.uuid),
-        primaOk: a.cost <= PRIMA_MATERIA_CAP,
-      }));
-
-      if (this.#formulaSort === 'cost') {
-        formulaGroups = [{ key: null, label: null, items: [...catalog].sort((a, b) => a.cost - b.cost) }];
-      } else if (this.#formulaSort === 'alpha') {
-        formulaGroups = [{ key: null, label: null, items: [...catalog].sort((a, b) => a.name.localeCompare(b.name)) }];
-      } else {
-        const byType = new Map();
-        for (const item of catalog) {
-          if (!byType.has(item.alchemicalType)) byType.set(item.alchemicalType, []);
-          byType.get(item.alchemicalType).push(item);
-        }
-        formulaGroups = Object.keys(CONFIG.VAGABOND.alchemicalTypes ?? {})
-          .filter(key => byType.has(key))
-          .map(key => ({
-            key,
-            label: game.i18n.localize(CONFIG.VAGABOND.alchemicalTypes[key]),
-            items: byType.get(key).sort((a, b) => a.name.localeCompare(b.name)),
-          }));
-      }
-    }
-
-    // Known Formulas render as a fixed slot grid (RAW: picks are limited by class
-    // level) — filled slots show the known item, the rest render empty so the
-    // player can see at a glance how many more they still need to pick on the right.
-    // Notice strip: the last failed action wins; otherwise whatever currently blocks
-    // crafting a known formula (everything except "formula known" — that's per-card).
-    let alchemyNotice = this.#alchemyNotice;
-    if (!alchemyNotice && this.#tab === 'alchemy' && catalyzeOn && knownFormulas.length) {
-      const evaluation = CraftingHelper.evaluate(this.actor, 'alchemy', { formulaUuid: knownFormulas[0].uuid });
-      const blocking = evaluation.checks.filter(c => !c.ok && c.key !== 'formula');
-      if (blocking.length) alchemyNotice = CraftingHelper.failureMessage({ reason: 'checksFailed', checks: blocking });
-    }
-    if (!catalyzeOn) alchemyNotice = alchemyNotice || game.i18n.localize('VAGABOND.Craft.Workbench.NoCatalyze');
-
-    const formulaSlots = Array.from({ length: Math.max(formulaGrants, knownFormulas.length) }, (_, i) => knownFormulas[i] ?? { empty: true });
-
     return {
       actor: this.actor,
       enabled: config.general.enabled,
       tab: this.#tab,
       showCraft: this.#tab === 'craft',
       showScrap: this.#tab === 'scrap',
-      showAlchemy: this.#tab === 'alchemy',
-      alchemyNotice,
-      canAffordFormula,
-      alchemyCraftCostText: CurrencyHelper.format(alchemyCraftCost),
       isGM: game.user.isGM,
       budget, budgetLabel: CurrencyHelper.format(budget),
       materials, materialsLabel: CurrencyHelper.format(materials),
       craft, scrapItems, scrapGroups,
       hasCraftSkill: budget > 0,
-      isAlchemist,
-      catalyzeOn, formulaGrants, formulaPicksRemaining,
-      level, knownCount,
-      wealthLabel, partyWealthLabel, partyMaterialsLabel,
-      canLearnFormula,
-      primaMateriaOn, studiedDice,
-      knownFormulas,
-      formulaSlots,
-      formulaEditMode: this.#formulaEditMode,
-      formulaSort: this.#formulaSort,
-      isSortGroup: this.#formulaSort === 'group',
-      isSortAlpha: this.#formulaSort === 'alpha',
-      isSortCost: this.#formulaSort === 'cost',
-      formulaGroups,
     };
   }
 
@@ -384,17 +229,6 @@ export class WorkbenchApp extends api.HandlebarsApplicationMixin(api.Application
     };
   }
 
-  /**
-   * Alchemical damage formula with explode notation ("2d6!") when the dice can
-   * explode for the crafting actor — authored on the item, a global effect, or
-   * Potency. `src` is anything carrying `canExplode`/`explodeValues` (none = only
-   * the actor's own routes count).
-   */
-  #markDamage(formula, src = null) {
-    const item = { type: 'equipment', system: { equipmentType: 'alchemical', canExplode: src?.canExplode, explodeValues: src?.explodeValues } };
-    return VagabondDamagePipeline.markExplode(formula, item, this.actor);
-  }
-
   #projectRow(key, name, img, value, progress, paid, isNew) {
     const remaining = Math.max(0, value - progress);
     const alloc = Math.min(this.#alloc.get(key) ?? 0, remaining);
@@ -423,7 +257,6 @@ export class WorkbenchApp extends api.HandlebarsApplicationMixin(api.Application
 
   static #onSwitchTab(event, target) {
     this.#tab = target.dataset.tab;
-    this.#alchemyNotice = '';
     this.render();
   }
 
@@ -551,79 +384,6 @@ export class WorkbenchApp extends api.HandlebarsApplicationMixin(api.Application
     this.#refreshShiftUI();
   }
 
-  static async #onCraftFormula(event, target) {
-    const uuid = target.closest('[data-formula-uuid]')?.dataset.formulaUuid;
-    if (!uuid) return;
-    const result = await CraftingHelper.request(this.actor, 'alchemy', { formulaUuid: uuid });
-    this.#alchemyNotice = result.ok ? '' : CraftingHelper.failureMessage(result);
-    this.render();
-  }
-
-  /** Prima Materia: spend a Studied die → one copy of any ≤10g alchemical, no Materials. */
-  static async #onPrimaMateria(event, target) {
-    const uuid = target.closest('[data-formula-uuid]')?.dataset.formulaUuid;
-    if (!uuid) return;
-    // PrimaMateriaMode.evaluate reads the source synchronously — prime the cache.
-    await fromUuid(uuid);
-    const result = await CraftingHelper.request(this.actor, 'primaMateria', { itemUuid: uuid });
-    this.#alchemyNotice = result.ok ? '' : CraftingHelper.failureMessage(result);
-    this.render();
-  }
-
-  /**
-   * "Craft as Project" — RAW allows Crafting any Item (known formula or not) via
-   * the normal Craft Difficulty/Shift-budget rules (docs' Craft table); knowing the
-   * formula (Alchemist Catalyze) only unlocks the flat-5s instant shortcut above.
-   * Stages the picked alchemical as a NEW Project row on the Craft tab so the
-   * generic Project flow (half-value Materials, per-Shift budget) runs.
-   */
-  static async #onCraftItemFromCatalog(event, target) {
-    const uuid = target.closest('[data-formula-uuid]')?.dataset.formulaUuid;
-    if (!uuid) return;
-    this.#tab = 'craft';
-    this.#selectedUuid = uuid;
-    await this.#stage(uuid);
-  }
-
-  static async #onForgetFormula(event, target) {
-    const uuid = target.closest('[data-formula-uuid]')?.dataset.formulaUuid;
-    if (!uuid) return;
-    const source = fromUuidSync(uuid);
-    const confirmed = await foundry.applications.api.DialogV2.confirm({
-      window: { title: game.i18n.localize('VAGABOND.Craft.Workbench.ForgetFormulaTitle') },
-      content: `<p>${game.i18n.format('VAGABOND.Craft.Workbench.ForgetFormulaConfirm', { name: source?.name ?? uuid })}</p>`,
-    });
-    if (!confirmed) return;
-    const result = await AlchemyHelper.forgetFormula(this.actor, uuid);
-    this.#alchemyNotice = result.ok ? '' : CraftingHelper.failureMessage(result);
-    this.render();
-  }
-
-  static async #onLearnFormulaPick(event, target) {
-    const uuid = target.closest('[data-formula-uuid]')?.dataset.formulaUuid;
-    if (!uuid) return;
-    const result = await AlchemyHelper.learnFormula(this.actor, uuid);
-    this.#alchemyNotice = result.ok ? '' : CraftingHelper.failureMessage(result);
-    this.render();
-  }
-
-  static #onSelectFormula(event, target) {
-    const uuid = target.closest('[data-formula-uuid]')?.dataset.formulaUuid;
-    if (!uuid) return;
-    this.#selectedFormulaUuid = this.#selectedFormulaUuid === uuid ? null : uuid;
-    this.render();
-  }
-
-  static #onSortFormulas(event, target) {
-    this.#formulaSort = target.dataset.sort;
-    this.render();
-  }
-
-  static #onToggleFormulaEdit() {
-    this.#formulaEditMode = !this.#formulaEditMode;
-    this.render();
-  }
-
   static async #onScrapItem(event, target) {
     const itemId = target.closest('[data-item-id]')?.dataset.itemId;
     const item = this.actor.items.get(itemId);
@@ -708,13 +468,6 @@ export class WorkbenchApp extends api.HandlebarsApplicationMixin(api.Application
         this.#applyCatalogFilter();
       }, { signal });
       this.#applyCatalogFilter();
-    }
-
-    const searchInput = this.element.querySelector('.wb-formula-search');
-    if (searchInput) {
-      searchInput.value = this.#savedSearch;
-      searchInput.addEventListener('input', () => this.#filterFormulas(searchInput.value), { signal });
-      if (this.#savedSearch) this.#filterFormulas(this.#savedSearch);
     }
 
     for (const [selector, top] of this.#savedScroll) {
@@ -828,20 +581,6 @@ export class WorkbenchApp extends api.HandlebarsApplicationMixin(api.Application
     if (shiftBtn) shiftBtn.disabled = spent <= 0 || overBudget || materialsShort;
   }
 
-  /** Filter the formula sidebar items/groups by name, hiding groups left with no matches. */
-  #filterFormulas(query) {
-    const q = query.trim().toLowerCase();
-    this.element.querySelectorAll('.wb-formula-group').forEach(group => {
-      let anyVisible = false;
-      group.querySelectorAll('.wb-formula-item').forEach(item => {
-        const match = (item.querySelector('.wb-formula-row')?.dataset.name ?? '').includes(q);
-        item.classList.toggle('is-hidden', !match);
-        if (match) anyVisible = true;
-      });
-      group.classList.toggle('is-hidden', !anyVisible);
-    });
-  }
-
   /** Wire a drag-over/leave/drop cycle on `selector`, handing the dropped Item document + uuid to `onDrop`. */
   #wireDropZone(selector, signal, onDrop) {
     const zone = this.element.querySelector(selector);
@@ -878,7 +617,7 @@ export class WorkbenchApp extends api.HandlebarsApplicationMixin(api.Application
       createItem: Hooks.on('createItem', (item) => onItem(item)),
       updateItem: Hooks.on('updateItem', (item, changes) => onItem(item, changes)),
       deleteItem: Hooks.on('deleteItem', (item) => onItem(item)),
-      // Studied dice / craft flags live on the actor itself (Prima Materia gate).
+      // Materials / Craft skill budget live on the actor itself.
       updateActor: Hooks.on('updateActor', (actor) => { if (actor.uuid === this.actor.uuid) this.#renderDebounce(); }),
     };
   }
