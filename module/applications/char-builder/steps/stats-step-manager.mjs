@@ -19,7 +19,6 @@ export class StatsStepManager extends BaseStepManager {
       'removeBonus': this._onRemoveBonus.bind(this),
       'applyStatBonus': this._onApplyStatBonus.bind(this), // Apply bonus via + button
       'removeStatBonus': this._onRemoveStatBonus.bind(this), // Remove bonus via tag click
-      'toggleReasonTraining': this._onToggleReasonTraining.bind(this)
     };
     
     // No external data required for stats step
@@ -49,99 +48,6 @@ export class StatsStepManager extends BaseStepManager {
    */
   _getStatePaths() {
     return ['selectedArrayId', 'assignedStats', 'unassignedValues', 'selectedValue'];
-  }
-
-  /* ------------------------------------------------------------------ */
-  /* Training from Reason (book p. 25: "choose a number of additional    */
-  /* Trainings at Level 1 equal to (half RSN, round up)")                */
-  /*                                                                    */
-  /* Picks live in `skillSelections.reason` — a non-numeric group the    */
-  /* class step's validation ignores but its `state.skills` rebuild      */
-  /* (`Object.values(skillSelections).flat()`) keeps, so every reader of */
-  /* `state.skills` (prereqs, preview, final actor) sees them.           */
-  /* ------------------------------------------------------------------ */
-
-  /** Final value of a stat in the builder (assigned + applied bonuses + perk bonuses), or null. */
-  _finalStatValue(state, key) {
-    const base = state.assignedStats?.[key];
-    if (base === null || base === undefined) return null;
-    const bonus = Object.values(state.appliedBonuses || {})
-      .filter(a => a.target === key)
-      .reduce((sum, a) => sum + (a.amount || 0), 0);
-    return base + bonus + (state.perkStatBonuses?.[key] || 0);
-  }
-
-  /** Skills a Reason Training may pick: every skill not already trained by another source. */
-  _reasonTrainingPool(state) {
-    const own = new Set(state.skillSelections?.reason ?? []);
-    const others = new Set((state.skills || []).filter(s => !own.has(s)));
-    return Object.keys(CONFIG.VAGABOND?.skills || {}).filter(k => !others.has(k));
-  }
-
-  /** Trainings owed by Reason: ceil(RSN / 2), capped by the skills still free. 0 until Reason is set. */
-  _reasonTrainingCount(state) {
-    const reason = this._finalStatValue(state, 'reason');
-    if (reason === null) return 0;
-    return Math.min(Math.ceil(Math.max(0, reason) / 2), this._reasonTrainingPool(state).length);
-  }
-
-  /** Write the Reason picks and rebuild `state.skills` around them. */
-  _setReasonTrainings(state, picks) {
-    const old = new Set(state.skillSelections?.reason ?? []);
-    const skills = [...new Set([...(state.skills || []).filter(s => !old.has(s)), ...picks])];
-    this.stateManager.updateMultiple({
-      skillSelections: { ...(state.skillSelections || {}), reason: picks },
-      skills,
-    });
-  }
-
-  /** Context for the Reason Training picker; trims stale picks (Reason lowered, skill taken elsewhere). */
-  _prepareReasonTraining(state) {
-    const count = this._reasonTrainingCount(state);
-    if (state.reasonTrainingCount !== count) this.updateState('reasonTrainingCount', count, { skipValidation: true });
-
-    const pool = this._reasonTrainingPool(state);
-    const current = state.skillSelections?.reason ?? [];
-    const valid = current.filter(s => pool.includes(s)).slice(0, count);
-    if (valid.length !== current.length) this._setReasonTrainings(state, valid);
-    if (count <= 0) return null;
-
-    const trained = new Set(state.skills || []);
-    const skills = Object.keys(CONFIG.VAGABOND?.skills || {}).map(key => {
-      const isChecked = valid.includes(key);
-      const elsewhere = !isChecked && trained.has(key);
-      return {
-        key,
-        label: CONFIG.VAGABOND.skills[key] ?? key,
-        isChecked: isChecked || elsewhere,
-        isDisabled: elsewhere,
-      };
-    });
-    return { count, selected: valid.length, skills };
-  }
-
-  async _onToggleReasonTraining(event, target) {
-    const skill = target.value;
-    const state = this.getCurrentState();
-    const current = state.skillSelections?.reason ?? [];
-    if (current.includes(skill)) return this._setReasonTrainings(state, current.filter(s => s !== skill));
-
-    const count = this._reasonTrainingCount(state);
-    if (current.length >= count) {
-      target.checked = false;
-      ui.notifications.warn(game.i18n.format('VAGABOND.CharBuilder.Decision.ReasonTrainingFull', { count }));
-      return;
-    }
-    if (!this._reasonTrainingPool(state).includes(skill)) return;
-    this._setReasonTrainings(state, [...current, skill]);
-  }
-
-  /** Random Reason picks (full random character). */
-  _randomizeReasonTrainings() {
-    const state = this.getCurrentState();
-    const count = this._reasonTrainingCount(state);
-    const pool = this._reasonTrainingPool(state).sort(() => Math.random() - 0.5);
-    this._setReasonTrainings(state, pool.slice(0, count));
   }
 
   /**
@@ -336,7 +242,6 @@ export class StatsStepManager extends BaseStepManager {
         game.i18n.localize('VAGABOND.CharBuilder.Instructions.Stats') : null,
       availableBonuses: bonusesDisplay,
       bonusStats: bonusStats, // New simplified bonus stats data
-      reasonTraining: this._prepareReasonTraining(this.getCurrentState())
     };
   }
 
@@ -844,9 +749,6 @@ export class StatsStepManager extends BaseStepManager {
 
     // Auto-apply required stat bonuses (from ancestry/class)
     await this._autoApplyBonuses();
-
-    // Trainings from Reason
-    this._randomizeReasonTrainings();
   }
 
   /**
@@ -902,8 +804,7 @@ export class StatsStepManager extends BaseStepManager {
     
     return !!state.selectedArrayId && 
            Object.values(assignedStats).every(v => v !== null && v !== undefined) &&
-           (state.unassignedValues || []).length === 0 &&
-           (state.skillSelections?.reason ?? []).length >= this._reasonTrainingCount(state);
+           (state.unassignedValues || []).length === 0;
   }
 
   /**

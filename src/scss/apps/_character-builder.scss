@@ -2185,3 +2185,283 @@
     }
   }
 }
+
+// ---------------------------------------------------------------------------
+// Skills step — Training pools (decision zone), Stats rail (left), Skills grid
+// Theme tokens only ($c-text-*, $c-surface…) so light and dark both read well.
+// ---------------------------------------------------------------------------
+.vagabond-builder {
+  // (?) hover help — plain cursor on purpose
+  .training-hint {
+    font-size: 0.85rem;
+    opacity: 0.6;
+    cursor: default;
+
+    &:hover { opacity: 1; }
+  }
+
+  .decision-zone:has(.training-panel) {
+    background: $c-surface;
+    border-color: $c-text-1;
+    color: $c-text-1;
+  }
+
+  .decision-zone .training-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    .training-panel-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 4px 8px;
+
+      strong {
+        font-family: $font-title;
+        font-size: 1.25rem;
+      }
+
+    }
+
+    .training-pools {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 8px;
+    }
+
+    // Card buttons: Foundry gives <button> a fixed height/line-height
+    .training-pool {
+      height: auto;
+      line-height: normal;
+      margin: 0;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      align-items: center;
+      gap: 0 10px;
+      padding: 5px 10px;
+      text-align: left;
+      font-family: $font-primary;
+      color: $c-text-1;
+      background: $c-surface;
+      border: 1px solid $c-inset-1;
+      border-radius: 3px;
+      cursor: pointer;
+
+      .pool-count {
+        grid-row: span 2;
+        min-width: 2.4em;
+        text-align: center;
+        font-family: $font-number;
+        font-size: 1.5rem;
+        color: $c-text-2;
+      }
+
+      .pool-source {
+        font-family: $font-title;
+        font-size: 1.1rem;
+      }
+
+      .pool-detail {
+        font-size: 0.9rem;
+        opacity: 0.85;
+      }
+
+      &.full .pool-count {
+        color: $c-green;
+      }
+
+      &.active {
+        border-color: $c-yellow;
+        box-shadow: 0 0 8px -1px $c-yellow, inset 0 0 0 1px $c-yellow;
+      }
+
+      &.locked {
+        cursor: default;
+        opacity: 0.8;
+
+        .pool-count {
+          font-size: 1.2rem;
+          color: $c-text-1;
+          opacity: 0.6;
+        }
+      }
+    }
+  }
+
+  // Left column on the Skills step
+  .selection-list-column {
+    .directory-item.training-stat {
+      justify-content: space-between;
+      gap: 8px;
+      list-style: none;
+
+      .training-stat-name {
+        font-family: $font-title;
+        font-size: 1.3rem;
+      }
+
+      .training-stat-value {
+        display: grid;
+        place-items: center;
+        width: 36px;
+        height: 40px;
+        flex-shrink: 0;
+        font-family: $font-number;
+        font-size: 1.4rem;
+        color: $c-white;
+        background: $c-black;
+        clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+      }
+
+      &.active {
+        background: $c-yellow;
+        color: $c-black;
+        border-left: 3px solid $c-black;
+      }
+
+      &.no-skills {
+        cursor: default;
+        opacity: 0.55;
+      }
+    }
+
+    .training-stats-note {
+      margin: 10px 8px 0;
+      font-size: 0.95rem;
+      opacity: 0.75;
+    }
+  }
+
+  // Content zone on the Skills step: two columns, grouped by Stat
+  .training-skills {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-auto-flow: column;
+    gap: 0 32px;
+    min-height: 100%; // rows stretch to fill the zone → even spacing, no scroll
+    align-content: stretch;
+    font-size: 1rem;
+    color: $c-text-1;
+  }
+
+  .training-skill {
+    position: relative;
+    display: grid;
+    grid-template-columns: 20px minmax(0, 1fr) auto;
+    align-items: center;
+    align-content: center;
+    gap: 0 10px;
+    padding: 4px 8px;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: opacity 0.15s ease;
+
+    &:hover {
+      border-color: $c-inset-1;
+    }
+
+    // Real checkbox stays for the action + keyboard; the diamond is the visual
+    input[type="checkbox"] {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    &:has(input:focus-visible) {
+      outline: 2px solid $c-yellow;
+    }
+
+    .training-check {
+      width: 20px;
+      height: 20px;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+
+      &.trained { background-image: $img-trained; }
+      &.untrained { background-image: $img-untrained; }
+    }
+
+    .training-skill-title {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 2px 8px;
+      min-width: 0;
+    }
+
+    .training-skill-name {
+      font-family: $font-title;
+      font-size: 1.3rem;
+      line-height: 1.1;
+    }
+
+    .training-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 1px 7px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      border-radius: 3px;
+      color: $c-white;
+      background: $c-black;
+
+      &.lock {
+        color: $c-text-1;
+        background: transparent;
+        border: 1px solid $c-inset-1;
+      }
+
+      &.casting {
+        color: $c-black;
+        background: $c-yellow;
+      }
+
+      i { font-size: 0.75rem; }
+    }
+
+    .training-skill-value {
+      font-family: $font-number;
+      font-size: 1.7rem;
+      line-height: 1;
+      color: $c-text-2;
+      white-space: nowrap;
+      text-align: right;
+
+      // Value-if-Trained only while hovering the row
+      .if-trained {
+        font-size: 1.1rem;
+        opacity: 0.65;
+        visibility: hidden;
+      }
+    }
+
+    // Must out-rank the hidden rule above (same nesting + :hover)
+    &:hover .training-skill-value .if-trained {
+      visibility: visible;
+    }
+
+    // Stays in the middle column so it wraps before the numbers
+
+    &.trained .training-skill-name {
+      font-weight: 700;
+    }
+
+    &.casting {
+      border-color: $c-yellow;
+      background: rgba(222, 214, 86, 0.12);
+    }
+
+    &.locked {
+      cursor: default;
+    }
+
+    &.out-of-pool,
+    &.unfocused {
+      opacity: 0.35;
+    }
+  }
+}

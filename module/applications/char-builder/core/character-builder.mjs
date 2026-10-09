@@ -12,12 +12,14 @@ import { CharacterBuilderStateManager } from '../state/state-manager.mjs';
 import { ValidationEngine } from '../state/validation-engine.mjs';
 import { CharacterBuilderDataService } from '../services/data-service.mjs';
 import { CharacterBuilderUIComponents } from '../ui/ui-components.mjs';
+import { isTrainingComplete } from '../steps/skills-step-manager.mjs';
 
 // Import all step managers
 import {
   AncestryStepManager,
   ClassStepManager,
   StatsStepManager,
+  SkillsStepManager,
   SpellsStepManager,
   PerksStepManager,
   StartingPacksStepManager,
@@ -96,6 +98,7 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
       'ancestry': new AncestryStepManager(this.stateManager, this.dataService, this.configSystem),
       'class': new ClassStepManager(this.stateManager, this.dataService, this.configSystem),
       'stats': new StatsStepManager(this.stateManager, this.dataService, this.configSystem),
+      'skills': new SkillsStepManager(this.stateManager, this.dataService, this.configSystem),
       'spells': new SpellsStepManager(this.stateManager, this.dataService, this.configSystem),
       'perks': new PerksStepManager(this.stateManager, this.dataService, this.configSystem),
       'starting-packs': new StartingPacksStepManager(this.stateManager, this.dataService, this.configSystem),
@@ -260,53 +263,8 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
     // Fallback to original logic if step manager not found
     const completionMap = {
       ancestry: () => !!this.builderData.ancestry,
-      class: () => {
-        // Check if class is selected AND skills are assigned
-        const state = this.stateManager?.getCurrentState();
-        if (!state) return !!this.builderData.class;
-
-        const classSelected = !!state.selectedClass;
-        const skillGrant = state.skillGrant;
-
-        if (!classSelected) return false;
-        if (!skillGrant || !skillGrant.choices) return true; // No skill choices required
-
-        const currentSkills = state.skills || [];
-        const guaranteed = skillGrant.guaranteed || [];
-
-        // Get all skills including weapon skills (melee, ranged)
-        const allSkillsWithWeaponSkills = [
-          ...Object.keys(CONFIG.VAGABOND?.skills || {}),
-          'melee',
-          'ranged'
-        ];
-
-        // Validate each choice pool
-        for (const choice of skillGrant.choices) {
-          const pool = (choice.pool && choice.pool.length > 0) ? choice.pool : allSkillsWithWeaponSkills;
-          const selectedFromPool = currentSkills.filter(skill =>
-            pool.includes(skill) && !guaranteed.includes(skill)
-          ).length;
-
-          if (selectedFromPool < choice.count) {
-            return false; // Not enough skills from this pool
-          }
-        }
-
-        // Also validate extra training skills if any
-        const extraTrainingCount = state.extraTrainingCount || 0;
-        if (extraTrainingCount > 0) {
-          const skillSelections = state.skillSelections || {};
-          const extraTrainingGroupIndex = skillGrant.choices.length;
-          const extraTrainingSelections = skillSelections[extraTrainingGroupIndex] || [];
-
-          if (extraTrainingSelections.length < extraTrainingCount) {
-            return false; // Not enough extra training skills
-          }
-        }
-
-        return true;
-      },
+      class: () => !!this.builderData.class,
+      skills: () => isTrainingComplete(this.stateManager.getCurrentState()),
       stats: () => {
         const state = this.stateManager?.getCurrentState();
         const arraySelected = !!this.builderData.selectedArrayId;
@@ -345,11 +303,11 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
       Object.keys(state.assignedStats).length === statCount &&
       Object.values(state.assignedStats).every(v => v !== null && v !== undefined);
 
-    return ancestryComplete && classComplete && statsComplete;
+    return ancestryComplete && classComplete && statsComplete && isTrainingComplete(state);
   }
 
   // Navigation order for steps (fallback)
-  static STEPS_ORDER = ['ancestry', 'class', 'stats', 'spells', 'perks', 'starting-packs', 'gear'];
+  static STEPS_ORDER = ['ancestry', 'class', 'stats', 'skills', 'spells', 'perks', 'starting-packs', 'gear'];
 
   static DEFAULT_OPTIONS = {
     id: "vagabond-char-builder",
@@ -368,7 +326,6 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
       randomizeFullCharacter: VagabondCharBuilder.prototype._onRandomizeFullCharacter,
       pickValue: VagabondCharBuilder.prototype._delegateToStepManager,
       assignStat: VagabondCharBuilder.prototype._delegateToStepManager,
-      toggleSkill: VagabondCharBuilder.prototype._delegateToStepManager,
       resetStats: VagabondCharBuilder.prototype._delegateToStepManager,
       addToTray: VagabondCharBuilder.prototype._delegateToStepManager,
       removeFromTray: VagabondCharBuilder.prototype._delegateToStepManager,
@@ -381,7 +338,9 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
       applyStatBonus: VagabondCharBuilder.prototype._delegateToStepManager,
       removeStatBonus: VagabondCharBuilder.prototype._delegateToStepManager,
       unassignStat: VagabondCharBuilder.prototype._delegateToStepManager,
-      toggleReasonTraining: VagabondCharBuilder.prototype._delegateToStepManager
+      toggleTraining: VagabondCharBuilder.prototype._delegateToStepManager,
+      selectTrainingPool: VagabondCharBuilder.prototype._delegateToStepManager,
+      focusSkillStat: VagabondCharBuilder.prototype._delegateToStepManager
     }
   };
 
@@ -749,6 +708,8 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
         message = game.i18n.localize('VAGABOND.CharBuilder.Warnings.NeedClass');
       } else if (!this._isStepComplete('stats')) {
         message = game.i18n.localize('VAGABOND.CharBuilder.Warnings.NeedStats');
+      } else if (!this._isStepComplete('skills')) {
+        message = game.i18n.localize('VAGABOND.CharBuilder.Warnings.NeedSkills');
       } else if (!this._isStepComplete('perks')) {
         message = game.i18n.localize('VAGABOND.CharBuilder.Warnings.NeedPerks');
       } else {
@@ -788,7 +749,7 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
     await this._ensureInitialized();
 
     // Use step managers for full character randomization
-    const stepOrder = ['ancestry', 'class', 'stats', 'spells', 'starting-packs'];
+    const stepOrder = ['ancestry', 'class', 'stats', 'skills', 'spells', 'starting-packs'];
 
     for (const stepName of stepOrder) {
       // Skip spells for non-spellcaster classes
@@ -828,7 +789,7 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
   async _onFinish() {
     // Validate mandatory steps are complete
     if (!this._areMandatoryStepsComplete()) {
-      ui.notifications.error("You must complete Ancestry, Class, and Stats before finishing character creation.");
+      ui.notifications.error(game.i18n.localize('VAGABOND.CharBuilder.Warnings.NeedMandatorySteps'));
       return;
     }
 
@@ -1259,18 +1220,9 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
     const currentStep = this.currentStep;
 
     return stepOrder.map((stepKey, i) => {
-      let disabled = false;
-      if (i > 0) {
-        // Can't access step 2+ without completing step 1 (ancestry)
-        if (!this._isStepComplete('ancestry')) disabled = true;
-        // Can't access step 3+ without completing step 2 (class with skill selection)
-        else if (i >= 2 && !this._isStepComplete('class')) disabled = true;
-        // Can't access step 4+ without completing step 3 (stats)
-        else if (i >= 3 && !this._isStepComplete('stats')) disabled = true;
-        // Can't access step 5+ without completing step 4 (perks - mandatory)
-        else if (i >= 4 && !this._isStepComplete('perks')) disabled = true;
-        // Spells and beyond: allow access (spells optional, gear optional)
-      }
+      // Each mandatory step gates every step after it (ancestry → class → stats → skills)
+      const disabled = ['ancestry', 'class', 'stats', 'skills']
+        .some(gate => stepOrder.indexOf(gate) >= 0 && i > stepOrder.indexOf(gate) && !this._isStepComplete(gate));
 
       // Special handling for step names
       let stepName;

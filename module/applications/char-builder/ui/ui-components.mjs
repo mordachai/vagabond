@@ -1,3 +1,4 @@
+import { isTrainingComplete } from '../steps/skills-step-manager.mjs';
 /**
  * Character Builder UI Components
  * 
@@ -34,8 +35,10 @@ export class CharacterBuilderUIComponents {
         'skills',
         'skillSelections',  // CRITICAL: Track per-group skill selections for validation
         'skillGrant',  // CRITICAL: Track skill grant structure changes
-        'extraTrainingCount',  // CRITICAL: Track extra training from ancestry/class grants
-        'reasonTrainingCount',  // CRITICAL: Trainings owed by Reason (stats step)
+        'trainingPools',  // CRITICAL: Training sources (Skills step)
+        'activeTrainingPool',  // Skills step: source the next checkbox spends
+        'skillFocusStat',  // Skills step: Stat focus filter
+        'perkStatBonuses',  // Reason bonus from perks changes the Reason Training count
         'perks',
         'classPerks',
         'perkGrants',  // CRITICAL: Track grant fulfillment for perks step
@@ -143,15 +146,7 @@ export class CharacterBuilderUIComponents {
 
       // Helper flags for template
       const isGearStep = state.currentStep === 'gear';
-      const hasChoices = (state.currentStep === 'class' && state.selectedClass) ||
-                         (state.currentStep === 'stats');
-
-      // Prepare classChoices for decision zone if on class step
-      // classPreviewData already contains properly formatted skill data with disabled/checked states
-      let classChoices = null;
-      if (state.currentStep === 'class' && mappedStepContext.classPreviewData) {
-        classChoices = mappedStepContext.classPreviewData.skillGrant || {};
-      }
+      const hasChoices = state.currentStep === 'stats' || state.currentStep === 'skills';
 
       // Combine all contexts
       const completeContext = {
@@ -164,7 +159,6 @@ export class CharacterBuilderUIComponents {
         previewItem, // Preview item (if different from selected)
         isGearStep, // Helper for gear step template
         hasChoices, // Helper for decision zone visibility
-        classChoices, // Skill choices for class step
         showAllPerks: state.showAllPerks || false,
         navigation: navigationContext,
         sidebar: sidebarContext,
@@ -331,7 +325,7 @@ export class CharacterBuilderUIComponents {
     } catch (error) {
       // Configuration not loaded yet, use defaults
       console.debug('Configuration not loaded for navigation, using defaults');
-      stepOrder = ['ancestry', 'class', 'stats', 'perks', 'spells', 'starting-packs', 'gear'];
+      stepOrder = ['ancestry', 'class', 'stats', 'skills', 'spells', 'perks', 'starting-packs', 'gear'];
       allStepConfigs = {};
     }
 
@@ -415,7 +409,7 @@ export class CharacterBuilderUIComponents {
     } catch (error) {
       // Configuration not loaded yet, use defaults
       console.debug('Configuration not loaded for step progress, using defaults');
-      stepOrder = ['ancestry', 'class', 'stats', 'perks', 'spells', 'starting-packs', 'gear'];
+      stepOrder = ['ancestry', 'class', 'stats', 'skills', 'spells', 'perks', 'starting-packs', 'gear'];
       allStepConfigs = {};
     }
 
@@ -629,58 +623,10 @@ export class CharacterBuilderUIComponents {
         return !!state.selectedAncestry;
 
       case 'class':
-        // Need class selected AND all skill choices satisfied
-        if (!state.selectedClass) {
-          return false;
-        }
+        return !!state.selectedClass;
 
-        // Check each skill choice pool
-        const skillGrant = state.skillGrant;
-        if (!skillGrant || !skillGrant.choices) {
-          // No skill grant data - just check if class is selected
-          return true;
-        }
-
-        const currentSkills = state.skills || [];
-        const guaranteed = skillGrant.guaranteed || [];
-
-        const allSkillsWithWeaponSkills = Object.keys(CONFIG.VAGABOND?.skills || {});
-
-        // Validate each choice pool
-        let totalNeeded = 0;
-        let totalSelected = 0;
-        let isValid = true;
-
-        for (let i = 0; i < skillGrant.choices.length; i++) {
-          const choice = skillGrant.choices[i];
-          const pool = (choice.pool && choice.pool.length > 0) ? choice.pool : allSkillsWithWeaponSkills;
-          const selectedFromPool = currentSkills.filter(skill =>
-            pool.includes(skill) && !guaranteed.includes(skill)
-          ).length;
-
-          totalNeeded += choice.count;
-          totalSelected += selectedFromPool;
-
-          const poolValid = selectedFromPool >= choice.count;
-
-          if (!poolValid) {
-            isValid = false;
-          }
-        }
-
-        // Also validate extra training skills if any
-        const extraTrainingCount = state.extraTrainingCount || 0;
-        if (extraTrainingCount > 0) {
-          const skillSelections = state.skillSelections || {};
-          const extraTrainingGroupIndex = skillGrant.choices.length;
-          const extraTrainingSelections = skillSelections[extraTrainingGroupIndex] || [];
-
-          if (extraTrainingSelections.length < extraTrainingCount) {
-            isValid = false;
-          }
-        }
-
-        return isValid;
+      case 'skills':
+        return isTrainingComplete(state);
 
       case 'stats': {
         const stats = state.assignedStats || {};
@@ -729,6 +675,8 @@ export class CharacterBuilderUIComponents {
         return !!state.selectedAncestry;
       case 'stats':
         return !!state.selectedClass;
+      case 'skills':
+        return this._isStepCompleted('stats', state);
       case 'perks':
         return !!state.selectedClass;
       case 'spells':
@@ -753,13 +701,14 @@ export class CharacterBuilderUIComponents {
     // Optional steps: starting-packs, gear
     const mandatoryComplete = this._isStepCompleted('ancestry', state) &&
                                this._isStepCompleted('class', state) &&
-                               this._isStepCompleted('stats', state);
+                               this._isStepCompleted('stats', state) &&
+                               this._isStepCompleted('skills', state);
 
     if (!mandatoryComplete) return false;
 
     // Check if current step index is at least at perks step
     // This ensures user has gone through perks step (even if they didn't select any)
-    const stepOrder = ['ancestry', 'class', 'stats', 'perks', 'spells', 'starting-packs', 'gear'];
+    const stepOrder = ['ancestry', 'class', 'stats', 'skills', 'perks', 'spells', 'starting-packs', 'gear'];
     const currentStepIndex = stepOrder.indexOf(state.currentStep);
     const perksStepIndex = stepOrder.indexOf('perks');
     const spellsStepIndex = stepOrder.indexOf('spells');
@@ -868,7 +817,7 @@ export class CharacterBuilderUIComponents {
       stepOrder = this.configSystem.getStepOrder();
     } catch (error) {
       // Configuration not loaded yet, use defaults
-      stepOrder = ['ancestry', 'class', 'stats', 'perks', 'spells', 'starting-packs', 'gear'];
+      stepOrder = ['ancestry', 'class', 'stats', 'skills', 'spells', 'perks', 'starting-packs', 'gear'];
     }
 
     const currentIndex = stepOrder.indexOf(currentStep);

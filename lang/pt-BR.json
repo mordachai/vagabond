@@ -3395,6 +3395,7 @@
         "Ancestry": "Ancestralidade",
         "Class": "Classe",
         "Stats": "Atributos",
+        "Skills": "Perícias",
         "Spells": "Magias",
         "Perks": "Talentos",
         "Startingpacks": "Pacotes Iniciais",
@@ -3432,8 +3433,27 @@
       "LevelPrefix": "Nível {level}",
       "NoFeaturesAtLevel": "Nenhuma característica neste nível",
       "NoClassFeaturesDefined": "Nenhuma característica de classe definida",
+      "Skills": {
+        "PanelTitle": "Treinamento a atribuir",
+        "PanelHint": "Escolha uma fonte e marque as Perícias. Cada Perícia marcada gasta um Treinamento da fonte selecionada.",
+        "SourceClass": "Classe · {name}",
+        "SourceClassFeature": "Característica de classe · {origin}: {name}",
+        "SourceAncestry": "Traço de ancestralidade · {origin}: {name}",
+        "SourceReason": "Raciocínio",
+        "ClassTraining": "Treinamento: {skills}",
+        "AnySkill": "Qualquer Perícia",
+        "ChooseFrom": "Escolha entre {skills}",
+        "ReasonRule": "Metade do RACIOCÍNIO, arredondado para cima",
+        "ValueNote": "Menor é melhor. Passe o mouse sobre uma Perícia para ver, entre parênteses, o valor quando Treinada.",
+        "IfTrained": "Se Treinada",
+        "Casting": "Conjuração",
+        "CastingTooltip": "Sua Classe conjura Magias com esta Perícia",
+        "LockedTooltip": "Treinamento da sua Classe (fixo)",
+        "NotAllowed": "Não permitida pela fonte selecionada",
+        "NoRoom": "Nenhum Treinamento restante pode receber {skill}."
+      },
       "Decision": {
-        "ObligatoryTraining": "Treinamento Obrigatório:",
+        "ObligatoryTraining": "Treinamento:",
         "ExtraTrainedSkills": "Perícias Treinadas Extras:",
         "ChooseNSkills": "Escolha {count} perícia(s)",
         "SelectedCount": "({selected}/{count} selecionadas)",
@@ -3444,7 +3464,7 @@
         "BonusFromPerk": "Bônus de Vantagem",
         "ClickToRemoveBonus": "Clique para remover o bônus e reatribuir",
         "ClickToApplyBonus": "Clique para aplicar +1 de bônus em {label}",
-        "ReasonTraining": "Treinamento por Raciocínio (metade do RCN, arredondado para cima)",
+        "ReasonTraining": "Treinamento por Raciocínio (metade do RACIOCÍNIO, arredondado para cima)",
         "ReasonTrainingFull": "Você só pode escolher {count} Treinamento(s) por Raciocínio"
       },
       "ClassDetails": "Detalhes",
@@ -3495,8 +3515,10 @@
       "FinishMessage": "Seu Vagabond está pronto! Lembre-se de verificar novamente suas Características e Traços em sua nova ficha para garantir que você adicionou manualmente todos os Talentos e Magias prometidos.",
       "Warnings": {
         "NeedAncestry": "Selecione uma Ancestralidade antes de continuar.",
-        "NeedClass": "Escolha uma Classe e atribua suas perícias iniciais antes de continuar.",
+        "NeedClass": "Escolha uma Classe antes de continuar.",
         "NeedStats": "Atribua todos os seus Atributos antes de continuar.",
+        "NeedSkills": "Atribua todo o seu Treinamento na etapa de Perícias antes de continuar.",
+        "NeedMandatorySteps": "Complete Ancestralidade, Classe, Atributos e Perícias antes de finalizar a criação do personagem.",
         "NeedPerks": "Complete a etapa de Talentos antes de continuar.",
         "NeedPreviousStep": "Complete a etapa anterior antes de continuar."
       }

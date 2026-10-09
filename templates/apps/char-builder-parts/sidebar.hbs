@@ -1,8 +1,10 @@
 {{!-- LEFT COLUMN: Selection List (full height) --}}
 <aside class="selection-list-column">
     <div class="search-sticky">
+        {{#unless (eq step 'skills')}}
         <input type="text" class="search-input" placeholder="{{localize 'VAGABOND.CharBuilder.SearchPlaceholder'}}" autocomplete="off">
         <button type="button" class="search-clear" title="{{localize 'VAGABOND.CharBuilder.ClearSearchTooltip'}}"><i class="fas fa-times"></i></button>
+        {{/unless}}
         {{#if (eq step 'perks')}}
         {{#if grants}}
         <div class="perk-grants-list">
@@ -52,6 +54,15 @@
                     <span class="array-values">{{this.values}}</span>
                 </li>
             {{/each}}
+        {{else if (eq step 'skills')}}
+            {{!-- Stats rail: click a Stat to focus its Skills --}}
+            {{#each skillTraining.stats as |st|}}
+                <li class="directory-item training-stat {{#if st.focused}}active{{/if}} {{#unless st.total}}no-skills{{/unless}}" {{#if st.total}}data-action="focusSkillStat" data-stat="{{st.key}}"{{/if}}>
+                    <span class="training-stat-name">{{st.label}}</span>
+                    <span class="training-stat-value">{{st.value}}</span>
+                </li>
+            {{/each}}
+            <p class="training-stats-note">{{localize "VAGABOND.CharBuilder.Skills.ValueNote"}}</p>
         {{else if isGearStep}}
             <div class="budget-tracker {{#if budget.isOver}}bankrupt{{/if}}">
                 <span>{{localize "VAGABOND.CharBuilder.SilverBudget"}}: <strong>{{budget.remaining}}</strong> / {{budget.total}}</span>

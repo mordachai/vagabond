@@ -1,3 +1,5 @@
+import { isTrainingComplete } from '../steps/skills-step-manager.mjs';
+
 /**
  * Validation Engine for Character Builder
  * 
@@ -43,7 +45,9 @@ export class ValidationEngine {
     this.validators.set('single_selection', this._validateSingleSelection.bind(this));
     this.validators.set('valid_equipment', this._validateValidEquipment.bind(this));
     this.validators.set('no_duplicates_unless_allowed', this._validateNoDuplicatesUnlessAllowed.bind(this));
-    this.validators.set('skills_assigned', this._validateSkillsAssigned.bind(this));
+    // Training (all sources) is assigned on the Skills step; 'skills_assigned' kept as an alias
+    this.validators.set('training_assigned', (rule, state) => ({ isValid: isTrainingComplete(state) }));
+    this.validators.set('skills_assigned', (rule, state) => ({ isValid: isTrainingComplete(state) }));
     this.validators.set('perks_selected', this._validatePerksSelected.bind(this));
 
     // Bonus validators
@@ -588,15 +592,6 @@ export class ValidationEngine {
 
   // Built-in validator implementations
 
-  /**
-   * Get all available skills including weapon skills (melee, ranged)
-   * Matches the logic in ClassStepManager._getAllSkillsWithWeaponSkills()
-   * @private
-   */
-  _getAllSkillsWithWeaponSkills() {
-    return Object.keys(CONFIG.VAGABOND?.skills || {});
-  }
-
   _validateRequired(rule, state, category) {
     const pathMap = {
       ancestry_selection: 'selectedAncestry',
@@ -733,87 +728,10 @@ export class ValidationEngine {
         return { isValid: !!state.selectedAncestry };
 
       case 'class':
-        // Need to have a class selected AND all required skills assigned
-        if (!state.selectedClass) {
-          return { isValid: false };
-        }
+        return { isValid: !!state.selectedClass };
 
-        // Check if all skill choice pools are satisfied
-        // The state should have skillGrant structure from the class
-        const skillGrant = state.skillGrant;
-        if (!skillGrant || !skillGrant.choices) {
-          // If no skill grant data, fall back to simple count check
-          const skillsNeeded = state.skillChoicesNeeded || 0;
-          const skillsSelected = (state.skills || []).length;
-          const result = skillsSelected >= skillsNeeded;
-          return { isValid: result };
-        }
-
-        const currentSkills = state.skills || [];
-        const guaranteed = skillGrant.guaranteed || [];
-        const skillSelections = state.skillSelections || {};
-
-        // Get all skills including weapon skills (melee, ranged)
-        const allSkillsWithWeaponSkills = this._getAllSkillsWithWeaponSkills();
-
-        // Build choices array (class groups + ancestry restricted + unrestricted extra training)
-        let allChoices = [...skillGrant.choices];
-
-        // Add ancestry restricted skill choice groups
-        const ancestryGroups = state.extraTrainingGroups || [];
-        for (const rg of ancestryGroups) {
-          const idx = allChoices.length;
-          allChoices.push({
-            count: rg.count || 1,
-            pool: (rg.pool && rg.pool.length > 0) ? rg.pool : allSkillsWithWeaponSkills,
-            originalIndex: idx
-          });
-        }
-
-        // Check if there's extra training from ancestry/class grants
-        const extraTrainingCount = state.extraTrainingCount || 0;
-
-        if (extraTrainingCount > 0) {
-          // Add extra training group dynamically (matches UI preparation logic)
-          const extraTrainingGroupIndex = allChoices.length;
-
-          // Extra training group always uses all skills and requires the exact count
-          allChoices.push({
-            count: extraTrainingCount,
-            pool: allSkillsWithWeaponSkills,
-            originalIndex: extraTrainingGroupIndex
-          });
-        }
-
-        // Sort groups by pool size (smallest first) for better allocation
-        const sortedChoices = allChoices
-          .map((choice, index) => ({
-            ...choice,
-            originalIndex: choice.originalIndex !== undefined ? choice.originalIndex : index,
-            pool: (choice.pool && choice.pool.length > 0) ? choice.pool : allSkillsWithWeaponSkills,
-            poolSize: (choice.pool && choice.pool.length > 0) ? choice.pool.length : allSkillsWithWeaponSkills.length
-          }))
-          .sort((a, b) => a.poolSize - b.poolSize);
-
-        const usedSkills = new Set(guaranteed); // Start with guaranteed skills
-
-        for (const group of sortedChoices) {
-          const groupSkills = skillSelections[group.originalIndex] || [];
-
-          // Count skills from this group that haven't been used yet
-          const validSkills = groupSkills.filter(skill =>
-            group.pool.includes(skill) && !usedSkills.has(skill)
-          );
-
-          if (validSkills.length < Math.min(group.count, group.pool.filter(s => !usedSkills.has(s)).length)) {
-            return { isValid: false };
-          }
-
-          // Mark these skills as used for future groups
-          validSkills.forEach(skill => usedSkills.add(skill));
-        }
-
-        return { isValid: true };
+      case 'skills':
+        return { isValid: isTrainingComplete(state) };
 
       case 'stats': {
         // Need all stats assigned AND an array selected
@@ -830,10 +748,7 @@ export class ValidationEngine {
         const appliedBonusesCount = Object.keys(state.appliedBonuses || {}).length;
         const allBonusesApplied = appliedBonusesCount >= bonusStatsCount;
 
-        // Trainings from Reason (count stored by the stats step: ceil(RSN / 2), capped by free skills)
-        const reasonTrainingsDone = (state.skillSelections?.reason ?? []).length >= (state.reasonTrainingCount || 0);
-
-        return { isValid: allStatsAssigned && arraySelected && allBonusesApplied && reasonTrainingsDone };
+        return { isValid: allStatsAssigned && arraySelected && allBonusesApplied };
       }
 
       case 'spells':
@@ -886,91 +801,6 @@ export class ValidationEngine {
   _validateOptional(rule, state) {
     // Optional steps are always valid
     return { isValid: true };
-  }
-
-  _validateSkillsAssigned(rule, state) {
-    // Validate that all required skills from choice pools have been assigned
-    if (!state.selectedClass) {
-      return { isValid: false, errors: ['No class selected'] };
-    }
-
-    const skillGrant = state.skillGrant;
-    if (!skillGrant || !skillGrant.choices) {
-      // If no skill grant data, fall back to simple count check
-      const skillsNeeded = state.skillChoicesNeeded || 0;
-      const skillsSelected = (state.skills || []).length;
-      const isValid = skillsSelected >= skillsNeeded;
-      return { isValid, errors: isValid ? [] : ['Not enough skills selected'] };
-    }
-
-    const currentSkills = state.skills || [];
-    const guaranteed = skillGrant.guaranteed || [];
-    const skillSelections = state.skillSelections || {};
-
-    // Get all skills including weapon skills (melee, ranged)
-    const allSkillsWithWeaponSkills = this._getAllSkillsWithWeaponSkills();
-
-    // Build choices array (class groups + ancestry restricted + unrestricted extra training)
-    let allChoices = [...skillGrant.choices];
-
-    // Add ancestry restricted skill choice groups
-    const ancestryGroups = state.extraTrainingGroups || [];
-    for (const rg of ancestryGroups) {
-      const idx = allChoices.length;
-      allChoices.push({
-        count: rg.count || 1,
-        pool: (rg.pool && rg.pool.length > 0) ? rg.pool : allSkillsWithWeaponSkills,
-        originalIndex: idx
-      });
-    }
-
-    // Check if there's extra training from ancestry/class grants
-    const extraTrainingCount = state.extraTrainingCount || 0;
-
-    if (extraTrainingCount > 0) {
-      // Add extra training group dynamically (matches UI preparation logic)
-      const extraTrainingGroupIndex = allChoices.length;
-
-      // Extra training group always uses all skills and requires the exact count
-      allChoices.push({
-        count: extraTrainingCount,
-        pool: allSkillsWithWeaponSkills,
-        originalIndex: extraTrainingGroupIndex
-      });
-    }
-
-    // Sort groups by pool size (smallest first) for better allocation
-    const sortedGroups = allChoices
-      .map((choice, index) => ({
-        ...choice,
-        originalIndex: choice.originalIndex !== undefined ? choice.originalIndex : index,
-        pool: (choice.pool && choice.pool.length > 0) ? choice.pool : allSkillsWithWeaponSkills,
-        poolSize: (choice.pool && choice.pool.length > 0) ? choice.pool.length : allSkillsWithWeaponSkills.length
-      }))
-      .sort((a, b) => a.poolSize - b.poolSize);
-
-    const usedSkills = new Set(guaranteed); // Start with guaranteed skills
-
-    for (const group of sortedGroups) {
-      const groupSkills = skillSelections[group.originalIndex] || [];
-
-      // Count skills from this group that haven't been used yet
-      const validSkills = groupSkills.filter(skill =>
-        group.pool.includes(skill) && !usedSkills.has(skill)
-      );
-
-      if (validSkills.length < Math.min(group.count, group.pool.filter(s => !usedSkills.has(s)).length)) {
-        return {
-          isValid: false,
-          errors: [`Need ${group.count} skills from group ${group.originalIndex + 1}, only have ${validSkills.length}`]
-        };
-      }
-
-      // Mark these skills as used for future groups
-      validSkills.forEach(skill => usedSkills.add(skill));
-    }
-
-    return { isValid: true, errors: [] };
   }
 
   _validatePerksSelected(rule, state) {

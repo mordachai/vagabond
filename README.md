@@ -13,12 +13,17 @@ _You need the book (digital or paperback) to have access to the compendia contai
 
 ---
 
-### Print Wave 3 updates:
+### Print Wave 3 (Alpha 3) — fully updated
 
-- Classes: Alchemist
-- Weapons, Armors, Alchemy gear
-- Starting Packs items
-- Relics items
+All Print Wave 3 / Alpha 3 content is now in the system:
+
+- **All Classes and their features**
+- Ancestries, Perks and Spells
+- Weapons, Armor, Alchemical gear, Starting Packs and Relics
+- Bestiary and Humanlike NPCs
+- **Build Guides** (Appendix C) as ready-to-play Level 1 characters
+- Leveling, Statuses and core rules
+- **New Defense rules**
 
 ---
 

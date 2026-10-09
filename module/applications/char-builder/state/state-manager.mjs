@@ -41,7 +41,8 @@ export class CharacterBuilderStateManager {
 
       // Skills
       skills: [],
-      extraTrainingGroups: [],  // Ancestry restricted skill choice groups
+      skillSelections: {},      // { [trainingPoolId]: skillKey[] } — Skills step picks
+      trainingPools: null,      // Training sources for the current Ancestry + Class (Skills step)
 
       // Collections
       spells: [],
@@ -321,7 +322,7 @@ export class CharacterBuilderStateManager {
    */
   getStepProgress() {
     const stepOrder = this.configSystem?.getStepOrder() || 
-                     ['ancestry', 'class', 'stats', 'spells', 'perks', 'starting-packs', 'gear'];
+                     ['ancestry', 'class', 'stats', 'skills', 'spells', 'perks', 'starting-packs', 'gear'];
     
     const progress = {};
     for (const stepName of stepOrder) {
@@ -425,7 +426,7 @@ export class CharacterBuilderStateManager {
     
     if (path === 'currentStep') {
       const validSteps = this.configSystem?.getStepOrder() || 
-                        ['ancestry', 'class', 'stats', 'spells', 'perks', 'starting-packs', 'gear'];
+                        ['ancestry', 'class', 'stats', 'skills', 'spells', 'perks', 'starting-packs', 'gear'];
       return validSteps.includes(value);
     }
     
@@ -505,7 +506,7 @@ export class CharacterBuilderStateManager {
    */
   _updateCompletedSteps() {
     const stepOrder = this.configSystem?.getStepOrder() || 
-                     ['ancestry', 'class', 'stats', 'spells', 'perks', 'starting-packs', 'gear'];
+                     ['ancestry', 'class', 'stats', 'skills', 'spells', 'perks', 'starting-packs', 'gear'];
     
     this.builderData.completedSteps = stepOrder.filter(step => this.isStepComplete(step));
   }
@@ -529,7 +530,7 @@ export class CharacterBuilderStateManager {
    * @private
    */
   _isStepRequired(stepName) {
-    const requiredSteps = ['ancestry', 'class', 'stats'];
+    const requiredSteps = ['ancestry', 'class', 'stats', 'skills'];
     return requiredSteps.includes(stepName);
   }
 

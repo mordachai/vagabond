@@ -3381,6 +3381,7 @@
         "Ancestry": "Ancestry",
         "Class": "Class",
         "Stats": "Stats",
+        "Skills": "Skills",
         "Spells": "Spells",
         "Perks": "Perks",
         "Startingpacks": "Starting Packs",
@@ -3420,8 +3421,27 @@
       "LevelPrefix": "Level {level}",
       "NoFeaturesAtLevel": "No features at this level",
       "NoClassFeaturesDefined": "No class features defined",
+      "Skills": {
+        "PanelTitle": "Training to assign",
+        "PanelHint": "Pick a source, then check Skills. Each checked Skill spends one Training from the selected source.",
+        "SourceClass": "Class · {name}",
+        "SourceClassFeature": "Class feature · {origin}: {name}",
+        "SourceAncestry": "Ancestry trait · {origin}: {name}",
+        "SourceReason": "Reason",
+        "ClassTraining": "Training: {skills}",
+        "AnySkill": "Any Skill",
+        "ChooseFrom": "Choose from {skills}",
+        "ReasonRule": "Half REASON, round up",
+        "ValueNote": "Lower is better. Hover a Skill to see, in parentheses, its value once Trained.",
+        "IfTrained": "If Trained",
+        "Casting": "Casting",
+        "CastingTooltip": "Your Class casts Spells with this Skill",
+        "LockedTooltip": "Training from your Class (locked)",
+        "NotAllowed": "Not allowed by the selected source",
+        "NoRoom": "No Training left that can take {skill}."
+      },
       "Decision": {
-        "ObligatoryTraining": "Obligatory Training:",
+        "ObligatoryTraining": "Training:",
         "ExtraTrainedSkills": "Extra Trained Skills:",
         "ChooseNSkills": "Choose {count} skill(s)",
         "SelectedCount": "({selected}/{count} selected)",
@@ -3432,7 +3452,7 @@
         "BonusFromPerk": "Bonus from Perk",
         "ClickToRemoveBonus": "Click to remove bonus and reassign",
         "ClickToApplyBonus": "Click to apply +1 bonus to {label}",
-        "ReasonTraining": "Training from Reason (half RSN, round up)",
+        "ReasonTraining": "Training from Reason (half REASON, round up)",
         "ReasonTrainingFull": "You can only pick {count} Training(s) from Reason"
       },
       "Instructions": {
@@ -3481,8 +3501,10 @@
       "FinishMessage": "Your Vagabond is ready! Remember to double-check your Features and Traits on your new sheet to ensure you've manually added all promised Perks and Spells.",
       "Warnings": {
         "NeedAncestry": "Select an Ancestry before continuing.",
-        "NeedClass": "Choose a Class and assign your starting skills before continuing.",
+        "NeedClass": "Choose a Class before continuing.",
         "NeedStats": "Assign all your Stats before continuing.",
+        "NeedSkills": "Assign all your Training on the Skills step before continuing.",
+        "NeedMandatorySteps": "Complete Ancestry, Class, Stats and Skills before finishing character creation.",
         "NeedPerks": "Complete the Perks step before continuing.",
         "NeedPreviousStep": "Complete the previous step before continuing."
       }

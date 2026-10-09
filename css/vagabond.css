@@ -7878,6 +7878,235 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   opacity: 0.7;
 }
 
+.vagabond-builder .training-hint {
+  font-size: 0.85rem;
+  opacity: 0.6;
+  cursor: default;
+}
+.vagabond-builder .training-hint:hover {
+  opacity: 1;
+}
+.vagabond-builder .decision-zone:has(.training-panel) {
+  background: var(--vagabond-c-surface);
+  border-color: var(--vagabond-c-text-primary);
+  color: var(--vagabond-c-text-primary);
+}
+.vagabond-builder .decision-zone .training-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.vagabond-builder .decision-zone .training-panel .training-panel-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 8px;
+}
+.vagabond-builder .decision-zone .training-panel .training-panel-head strong {
+  font-family: "Germania", serif;
+  font-size: 1.25rem;
+}
+.vagabond-builder .decision-zone .training-panel .training-pools {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 8px;
+}
+.vagabond-builder .decision-zone .training-panel .training-pool {
+  height: auto;
+  line-height: normal;
+  margin: 0;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 0 10px;
+  padding: 5px 10px;
+  text-align: left;
+  font-family: "Eskapade", serif;
+  color: var(--vagabond-c-text-primary);
+  background: var(--vagabond-c-surface);
+  border: 1px solid var(--vagabond-c-inset-1);
+  border-radius: 3px;
+  cursor: pointer;
+}
+.vagabond-builder .decision-zone .training-panel .training-pool .pool-count {
+  grid-row: span 2;
+  min-width: 2.4em;
+  text-align: center;
+  font-family: "Ludlow", serif;
+  font-size: 1.5rem;
+  color: var(--vagabond-c-text-secondary);
+}
+.vagabond-builder .decision-zone .training-panel .training-pool .pool-source {
+  font-family: "Germania", serif;
+  font-size: 1.1rem;
+}
+.vagabond-builder .decision-zone .training-panel .training-pool .pool-detail {
+  font-size: 0.9rem;
+  opacity: 0.85;
+}
+.vagabond-builder .decision-zone .training-panel .training-pool.full .pool-count {
+  color: var(--vagabond-c-green);
+}
+.vagabond-builder .decision-zone .training-panel .training-pool.active {
+  border-color: var(--vagabond-c-chat-yellow);
+  box-shadow: 0 0 8px -1px var(--vagabond-c-chat-yellow), inset 0 0 0 1px var(--vagabond-c-chat-yellow);
+}
+.vagabond-builder .decision-zone .training-panel .training-pool.locked {
+  cursor: default;
+  opacity: 0.8;
+}
+.vagabond-builder .decision-zone .training-panel .training-pool.locked .pool-count {
+  font-size: 1.2rem;
+  color: var(--vagabond-c-text-primary);
+  opacity: 0.6;
+}
+.vagabond-builder .selection-list-column .directory-item.training-stat {
+  justify-content: space-between;
+  gap: 8px;
+  list-style: none;
+}
+.vagabond-builder .selection-list-column .directory-item.training-stat .training-stat-name {
+  font-family: "Germania", serif;
+  font-size: 1.3rem;
+}
+.vagabond-builder .selection-list-column .directory-item.training-stat .training-stat-value {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 40px;
+  flex-shrink: 0;
+  font-family: "Ludlow", serif;
+  font-size: 1.4rem;
+  color: var(--vagabond-c-white);
+  background: var(--vagabond-c-black);
+  clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+}
+.vagabond-builder .selection-list-column .directory-item.training-stat.active {
+  background: var(--vagabond-c-chat-yellow);
+  color: var(--vagabond-c-black);
+  border-left: 3px solid var(--vagabond-c-black);
+}
+.vagabond-builder .selection-list-column .directory-item.training-stat.no-skills {
+  cursor: default;
+  opacity: 0.55;
+}
+.vagabond-builder .selection-list-column .training-stats-note {
+  margin: 10px 8px 0;
+  font-size: 0.95rem;
+  opacity: 0.75;
+}
+.vagabond-builder .training-skills {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-auto-flow: column;
+  gap: 0 32px;
+  min-height: 100%;
+  align-content: stretch;
+  font-size: 1rem;
+  color: var(--vagabond-c-text-primary);
+}
+.vagabond-builder .training-skill {
+  position: relative;
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr) auto;
+  align-items: center;
+  align-content: center;
+  gap: 0 10px;
+  padding: 4px 8px;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+.vagabond-builder .training-skill:hover {
+  border-color: var(--vagabond-c-inset-1);
+}
+.vagabond-builder .training-skill input[type=checkbox] {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.vagabond-builder .training-skill:has(input:focus-visible) {
+  outline: 2px solid var(--vagabond-c-chat-yellow);
+}
+.vagabond-builder .training-skill .training-check {
+  width: 20px;
+  height: 20px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.vagabond-builder .training-skill .training-check.trained {
+  background-image: var(--vagabond-img-trained);
+}
+.vagabond-builder .training-skill .training-check.untrained {
+  background-image: var(--vagabond-img-untrained);
+}
+.vagabond-builder .training-skill .training-skill-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 8px;
+  min-width: 0;
+}
+.vagabond-builder .training-skill .training-skill-name {
+  font-family: "Germania", serif;
+  font-size: 1.3rem;
+  line-height: 1.1;
+}
+.vagabond-builder .training-skill .training-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 1px 7px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  border-radius: 3px;
+  color: var(--vagabond-c-white);
+  background: var(--vagabond-c-black);
+}
+.vagabond-builder .training-skill .training-chip.lock {
+  color: var(--vagabond-c-text-primary);
+  background: transparent;
+  border: 1px solid var(--vagabond-c-inset-1);
+}
+.vagabond-builder .training-skill .training-chip.casting {
+  color: var(--vagabond-c-black);
+  background: var(--vagabond-c-chat-yellow);
+}
+.vagabond-builder .training-skill .training-chip i {
+  font-size: 0.75rem;
+}
+.vagabond-builder .training-skill .training-skill-value {
+  font-family: "Ludlow", serif;
+  font-size: 1.7rem;
+  line-height: 1;
+  color: var(--vagabond-c-text-secondary);
+  white-space: nowrap;
+  text-align: right;
+}
+.vagabond-builder .training-skill .training-skill-value .if-trained {
+  font-size: 1.1rem;
+  opacity: 0.65;
+  visibility: hidden;
+}
+.vagabond-builder .training-skill:hover .training-skill-value .if-trained {
+  visibility: visible;
+}
+.vagabond-builder .training-skill.trained .training-skill-name {
+  font-weight: 700;
+}
+.vagabond-builder .training-skill.casting {
+  border-color: var(--vagabond-c-chat-yellow);
+  background: rgba(222, 214, 86, 0.12);
+}
+.vagabond-builder .training-skill.locked {
+  cursor: default;
+}
+.vagabond-builder .training-skill.out-of-pool, .vagabond-builder .training-skill.unfocused {
+  opacity: 0.35;
+}
+
 ol#combat-tracker.directory-list {
   padding: 0 0 0 0.4em !important;
 }

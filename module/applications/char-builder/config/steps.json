@@ -1,8 +1,9 @@
 {
   "order": [
     "ancestry",
-    "class", 
+    "class",
     "stats",
+    "skills",
     "spells",
     "perks",
     "starting-packs",
@@ -12,10 +13,13 @@
     "ancestry": {
       "displayName": "Choose Ancestry",
       "order": 1,
-      "requiredData": ["ancestries", "ancestryFeatures"],
+      "requiredData": [
+        "ancestries",
+        "ancestryFeatures"
+      ],
       "actions": [
         "select-ancestry",
-        "randomize-ancestry", 
+        "randomize-ancestry",
         "view-details"
       ],
       "completionCriteria": [
@@ -32,20 +36,19 @@
     "class": {
       "displayName": "Choose Class",
       "order": 2,
-      "requiredData": ["classes", "classFeatures"],
+      "requiredData": [
+        "classes",
+        "classFeatures"
+      ],
       "actions": [
         "select-class",
         "randomize-class",
-        "view-details",
-        "toggle-skill"
+        "view-details"
       ],
       "completionCriteria": [
         {
           "type": "has_selection",
           "path": "selectedClass"
-        },
-        {
-          "type": "skills_assigned"
         }
       ],
       "navigation": {
@@ -64,7 +67,7 @@
       "requiredData": [],
       "actions": [
         "pick-array",
-        "assign-stat", 
+        "assign-stat",
         "reset-stats",
         "randomize-stats"
       ],
@@ -85,16 +88,43 @@
             "step": "ancestry"
           },
           {
-            "type": "step_complete", 
+            "type": "step_complete",
             "step": "class"
+          }
+        ]
+      }
+    },
+    "skills": {
+      "displayName": "Assign Training",
+      "order": 4,
+      "requiredData": [],
+      "actions": [
+        "toggle-training",
+        "select-training-pool",
+        "focus-skill-stat",
+        "randomize-training"
+      ],
+      "completionCriteria": [
+        {
+          "type": "training_assigned"
+        }
+      ],
+      "navigation": {
+        "canSkip": false,
+        "prerequisites": [
+          {
+            "type": "step_complete",
+            "step": "stats"
           }
         ]
       }
     },
     "spells": {
       "displayName": "Choose Spells",
-      "order": 4,
-      "requiredData": ["spells"],
+      "order": 5,
+      "requiredData": [
+        "spells"
+      ],
       "actions": [
         "add-to-tray",
         "remove-from-tray",
@@ -118,8 +148,10 @@
     },
     "perks": {
       "displayName": "Choose Perks",
-      "order": 5,
-      "requiredData": ["perks"],
+      "order": 6,
+      "requiredData": [
+        "perks"
+      ],
       "actions": [
         "add-to-tray",
         "remove-from-tray",
@@ -143,8 +175,10 @@
     },
     "starting-packs": {
       "displayName": "Choose Starting Pack",
-      "order": 6,
-      "requiredData": ["startingPacks"],
+      "order": 7,
+      "requiredData": [
+        "startingPacks"
+      ],
       "actions": [
         "select-starting-pack",
         "remove-starting-pack",
@@ -167,8 +201,10 @@
     },
     "gear": {
       "displayName": "Choose Gear",
-      "order": 7,
-      "requiredData": ["equipment"],
+      "order": 8,
+      "requiredData": [
+        "equipment"
+      ],
       "actions": [
         "add-to-tray",
         "remove-from-tray",

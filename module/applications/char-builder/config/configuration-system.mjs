@@ -266,7 +266,7 @@ export class ConfigurationSystem {
    */
   _loadStepConfigFallback() {
     const config = {
-      order: ['ancestry', 'class', 'stats', 'spells', 'perks', 'starting-packs', 'gear'],
+      order: ['ancestry', 'class', 'stats', 'skills', 'spells', 'perks', 'starting-packs', 'gear'],
       steps: {
         ancestry: {
           displayName: 'Choose Ancestry',
@@ -281,7 +281,7 @@ export class ConfigurationSystem {
           displayName: 'Choose Class',
           order: 2,
           requiredData: ['classes', 'classFeatures'],
-          actions: ['select-class', 'randomize-class', 'view-details', 'toggle-skill'],
+          actions: ['select-class', 'randomize-class', 'view-details'],
           completionCriteria: [
             { type: 'has_selection', path: 'selectedClass' }
           ]
@@ -294,6 +294,15 @@ export class ConfigurationSystem {
           completionCriteria: [
             { type: 'has_selection', path: 'selectedArrayId' },
             { type: 'all_stats_assigned' }
+          ]
+        },
+        skills: {
+          displayName: 'Assign Training',
+          order: 4,
+          requiredData: [],
+          actions: ['toggle-training', 'select-training-pool', 'focus-skill-stat', 'randomize-training'],
+          completionCriteria: [
+            { type: 'training_assigned' }
           ]
         },
         spells: {

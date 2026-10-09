@@ -1,5 +1,8 @@
 # Changelog
 
+## v6.2.0
+- **New Character Builder step: Skills** (after Stats). Every Training you get at Level 1 is assigned in one place: your Class Training (locked), Ancestry traits like Human Aptitude, Level 1 class features, and Reason (half REASON, round up). Each source shows how many it still owes; pick a source, then check Skills. Stats on the left focus their Skills, each Skill shows its value (and, on hover, its value once Trained), a (?) with its description, and your class's Casting Skill is marked. The Class and Stats steps no longer ask for Skills.
+
 ## v6.1.0
 - Catalyze panel redesigned.
 - **Alchemist Mix has its own feature button.** A compact panel: drag two Alchemical Items into the slots, see the combined effect, Mix. The Workbench Mix tab is gone. Two doses of one stack can now be mixed. Mix and Catalyze share the Use Action count per Turn (1, or 2 with Deft Hands).

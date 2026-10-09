@@ -1,46 +1,29 @@
 <section class="decision-zone {{#unless hasChoices}}hidden{{/unless}}">
 {{!-- <header class="zone-header">{{localize "VAGABOND.CharBuilder.ProposedChoices"}}</header> --}}
 <div class="decision-tray">
-    {{#if (eq step 'class')}}
-        <div class="skill-decision skill-rows">
-            <div class="guaranteed-skills skill-row">
-                <div class="skill-tags">
-                    <strong>{{localize "VAGABOND.CharBuilder.Decision.ObligatoryTraining"}}</strong>
-                    {{#each classChoices.guaranteed}}
-                        <span class="skill-tag locked">
-                            <i class="fas fa-lock"></i>
-                            {{capitalize (localize (concat "VAGABOND.Skills." (capitalize this)))}}
-                        </span>
-                    {{/each}}
-                </div>
+    {{#if (eq step 'skills')}}
+        {{!-- Training sources: pick one, then check Skills in the grid below --}}
+        <div class="training-panel">
+            <div class="training-panel-head">
+                <strong>{{localize "VAGABOND.CharBuilder.Skills.PanelTitle"}}</strong>
+                <i class="fa-solid fa-circle-question training-hint" data-tooltip="{{localize 'VAGABOND.CharBuilder.Skills.PanelHint'}}"></i>
             </div>
-            {{#each classChoices.choices}}
-                <div class="pool-box skill-row {{#if this.isExtraTraining}}extra-training{{/if}}">
-                    <strong>{{#if this.isExtraTraining}}{{localize "VAGABOND.CharBuilder.Decision.ExtraTrainedSkills"}} {{else}}{{localize "VAGABOND.CharBuilder.Decision.ChooseNSkills" count=this.count}}{{/if}} {{#if this.selected}}<span class="skill-count {{#unless (eq this.selected this.count)}}incomplete{{/unless}}">{{localize "VAGABOND.CharBuilder.Decision.SelectedCount" selected=this.selected count=this.count}}</span>{{/if}}:</strong>
-                    {{#if this.isExtraTraining}}
-                        <span class="extra-training-sources">
-                            {{#each this.extraTrainingSources}}
-                                <strong>{{localize "VAGABOND.CharBuilder.Decision.ExtraTrainingSource" amount=this.amount name=this.name origin=this.origin type=this.type}}</strong>
-                            {{/each}}
-                        </span>
-                    {{/if}}
-                    <div class="pool-options">
-                        {{#each this.skills}}
-                            <label class="checkbox-label {{#if this.isDisabled}}disabled{{/if}}" title="{{#if this.isGuaranteed}}{{localize 'VAGABOND.CharBuilder.Decision.GrantedByClass'}}{{else if this.isDisabled}}{{localize 'VAGABOND.CharBuilder.Decision.SelectedInAnotherGroup'}}{{/if}}">
-                                <input
-                                    type="checkbox"
-                                    value="{{this.key}}"
-                                    {{#if this.isChecked}}checked{{/if}}
-                                    {{#if this.isDisabled}}disabled{{/if}}
-                                    data-group-index="{{this.groupIndex}}"
-                                    data-action="toggleSkill">
-                                {{this.label}}
-                                {{#if this.isGuaranteed}}<i class="fas fa-lock"></i>{{/if}}
-                            </label>
-                        {{/each}}
-                    </div>
+            <div class="training-pools">
+                {{#if skillTraining.lockedCard}}
+                <div class="training-pool locked" data-tooltip="{{localize 'VAGABOND.CharBuilder.Skills.LockedTooltip'}}">
+                    <span class="pool-count"><i class="fas fa-lock"></i></span>
+                    <span class="pool-source">{{skillTraining.lockedCard.source}}</span>
+                    <span class="pool-detail">{{skillTraining.lockedCard.detail}}</span>
                 </div>
-            {{/each}}
+                {{/if}}
+                {{#each skillTraining.pools as |pool|}}
+                <button type="button" class="training-pool {{#if pool.full}}full{{/if}} {{#if pool.active}}active{{/if}}" data-action="selectTrainingPool" data-pool="{{pool.id}}">
+                    <span class="pool-count">{{pool.used}}/{{pool.needed}}</span>
+                    <span class="pool-source">{{pool.source}}</span>
+                    <span class="pool-detail">{{pool.detail}}</span>
+                </button>
+                {{/each}}
+            </div>
         </div>
     {{/if}}
 
@@ -110,28 +93,6 @@
 
         {{!-- Bonus Stats Selector - Reusable Partial --}}
         {{> "systems/vagabond/templates/shared/bonus-stats-selector.hbs"}}
-
-        {{!-- Trainings from Reason (half RSN, round up) --}}
-        {{#if reasonTraining}}
-        <div class="skill-decision skill-rows">
-            <div class="pool-box skill-row extra-training">
-                <strong>{{localize "VAGABOND.CharBuilder.Decision.ReasonTraining"}} <span class="skill-count {{#unless (eq reasonTraining.selected reasonTraining.count)}}incomplete{{/unless}}">{{localize "VAGABOND.CharBuilder.Decision.SelectedCount" selected=reasonTraining.selected count=reasonTraining.count}}</span>:</strong>
-                <div class="pool-options">
-                    {{#each reasonTraining.skills}}
-                        <label class="checkbox-label {{#if this.isDisabled}}disabled{{/if}}" title="{{#if this.isDisabled}}{{localize 'VAGABOND.CharBuilder.Decision.SelectedInAnotherGroup'}}{{/if}}">
-                            <input
-                                type="checkbox"
-                                value="{{this.key}}"
-                                {{#if this.isChecked}}checked{{/if}}
-                                {{#if this.isDisabled}}disabled{{/if}}
-                                data-action="toggleReasonTraining">
-                            {{this.label}}
-                        </label>
-                    {{/each}}
-                </div>
-            </div>
-        </div>
-        {{/if}}
     {{/if}}
 </div>
 </section>

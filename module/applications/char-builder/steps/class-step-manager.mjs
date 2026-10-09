@@ -12,8 +12,7 @@ export class ClassStepManager extends BaseStepManager {
     this.actionHandlers = {
       'selectOption': this._onSelectOption.bind(this),
       'addToTray': this._onAddToTray.bind(this),
-      'randomize': this._onRandomize.bind(this),
-      'toggleSkill': this._onToggleSkill.bind(this)
+      'randomize': this._onRandomize.bind(this)
     };
     
     // Required data for class step
@@ -42,9 +41,6 @@ export class ClassStepManager extends BaseStepManager {
   async _prepareStepSpecificContext(state) {
     // Auto-populate perks from class features when entering perks step later
     await this._updateClassPerksIfNeeded(state);
-
-    // Collect extra training points from ancestry and class
-    const extraTraining = await this._collectExtraTraining(state);
 
     const availableClasses = await this._loadClassOptions();
     const selectedClass = state.selectedClass;
@@ -148,219 +144,12 @@ export class ClassStepManager extends BaseStepManager {
   }
 
   /**
-   * Collect extra training points from ancestry and class features
-   * @private
-   */
-  async _collectExtraTraining(state) {
-    const sources = [];
-    let total = 0;
-    const restrictedGroups = [];
-
-    // From ancestry traits
-    if (state.selectedAncestry) {
-      try {
-        const ancestry = await fromUuid(state.selectedAncestry);
-        if (ancestry?.system?.traits) {
-          for (const trait of ancestry.system.traits) {
-            const amount = trait.extraTraining || 0;
-            if (amount > 0) {
-              sources.push({
-                name: trait.name,
-                amount: amount,
-                origin: ancestry.name,
-                type: 'Ancestry'
-              });
-              total += amount;
-            }
-
-            // Collect skill choice groups from this trait
-            if (trait.skillChoices && Array.isArray(trait.skillChoices)) {
-              for (const group of trait.skillChoices) {
-                restrictedGroups.push({
-                  count: group.count || 1,
-                  pool: group.pool || [],
-                  label: group.label || ''
-                });
-              }
-            }
-          }
-        }
-      } catch (error) {
-        console.warn('Failed to load ancestry for extra training:', error);
-      }
-    }
-
-    // From class features (level 1 only for character creation)
-    if (state.selectedClass) {
-      try {
-        const classItem = await fromUuid(state.selectedClass);
-        if (classItem?.system?.levelFeatures) {
-          const level1Features = classItem.system.levelFeatures.filter(f => f.level === 1);
-          for (const feature of level1Features) {
-            const amount = feature.extraTraining || 0;
-            if (amount > 0) {
-              sources.push({
-                name: feature.name,
-                amount: amount,
-                origin: classItem.name,
-                type: 'Class'
-              });
-              total += amount;
-            }
-
-            // Collect skill choice groups from class features (same as ancestry traits)
-            if (feature.skillChoices && Array.isArray(feature.skillChoices)) {
-              for (const group of feature.skillChoices) {
-                restrictedGroups.push({
-                  count: group.count || 1,
-                  pool: group.pool || [],
-                  label: group.label || ''
-                });
-              }
-            }
-          }
-        }
-      } catch (error) {
-        console.warn('Failed to load class for extra training:', error);
-      }
-    }
-
-    return { total, sources, restrictedGroups };
-  }
-
-  /**
-   * Get all available skills including regular skills and weapon skills
-   * @private
-   */
-  _getAllSkillsWithWeaponSkills() {
-    return Object.keys(CONFIG.VAGABOND?.skills || {});
-  }
-
-  /**
    * Prepare class preview data including skills and features
    * @private
    */
   async _prepareClassPreviewData(classItem, state) {
+    // Training is assigned on the Skills step; the class only reports its fixed Training here
     const skillGrant = classItem.system.skillGrant || { guaranteed: [], choices: [] };
-    const currentSkills = state.skills || [];
-    const skillSelections = state.skillSelections || {};
-
-    // Get extra training points and sources
-    const extraTrainingData = await this._collectExtraTraining(state);
-    const extraTraining = extraTrainingData.total;
-
-    // Prepare skill choices data with detailed skill state
-    const skillChoices = skillGrant.choices.map((choice, groupIndex) => {
-      const pool = choice.pool.length ? choice.pool : this._getAllSkillsWithWeaponSkills();
-      const skillsInThisGroup = skillSelections[groupIndex] || [];
-
-      // Prepare each skill in the pool with its state
-      const skillsData = pool.map(skillKey => {
-        const isGuaranteed = skillGrant.guaranteed.includes(skillKey);
-        const isSelectedInThisGroup = skillsInThisGroup.includes(skillKey);
-        const isSelectedInOtherGroup = !isSelectedInThisGroup && currentSkills.includes(skillKey) && !isGuaranteed;
-
-        // Skill is disabled if guaranteed or selected in another group
-        const isDisabled = isGuaranteed || isSelectedInOtherGroup;
-        const isChecked = isGuaranteed || isSelectedInThisGroup || isSelectedInOtherGroup;
-
-        const label = CONFIG.VAGABOND.skills[skillKey] ?? skillKey;
-
-        return {
-          key: skillKey,
-          label: label,
-          isChecked: isChecked,
-          isDisabled: isDisabled,
-          isGuaranteed: isGuaranteed,
-          groupIndex: groupIndex
-        };
-      });
-
-      return {
-        count: choice.count,
-        pool: pool,
-        skills: skillsData,
-        selected: skillsInThisGroup.length,
-        groupIndex: groupIndex
-      };
-    });
-
-    // Add ancestry restricted skill choice groups
-    const allSkills = this._getAllSkillsWithWeaponSkills();
-    for (const rg of extraTrainingData.restrictedGroups) {
-      const idx = skillChoices.length;
-      const selections = skillSelections[idx] || [];
-      const pool = rg.pool.length > 0 ? rg.pool : allSkills;
-
-      const skillsData = pool.map(skillKey => {
-        const isGuaranteed = skillGrant.guaranteed.includes(skillKey);
-        const isSelectedInThisGroup = selections.includes(skillKey);
-        const isSelectedInOtherGroup = !isSelectedInThisGroup && currentSkills.includes(skillKey) && !isGuaranteed;
-
-        const isDisabled = isGuaranteed || isSelectedInOtherGroup;
-        const isChecked = isGuaranteed || isSelectedInThisGroup || isSelectedInOtherGroup;
-
-        const label = CONFIG.VAGABOND.skills[skillKey] ?? skillKey;
-
-        return {
-          key: skillKey,
-          label: label,
-          isChecked: isChecked,
-          isDisabled: isDisabled,
-          isGuaranteed: isGuaranteed,
-          groupIndex: idx
-        };
-      });
-
-      skillChoices.push({
-        count: rg.count,
-        pool: pool,
-        skills: skillsData,
-        selected: selections.length,
-        groupIndex: idx,
-        isAncestryRestricted: true,
-        label: rg.label || ''
-      });
-    }
-
-    // Store ancestry restricted groups in state
-    this.stateManager.updateState('extraTrainingGroups', extraTrainingData.restrictedGroups, { skipValidation: true });
-
-    // Add unrestricted extra training choice group if available
-    if (extraTraining > 0) {
-      const extraTrainingGroupIndex = skillChoices.length; // Next available index
-      const extraTrainingSelections = skillSelections[extraTrainingGroupIndex] || [];
-
-      const extraTrainingSkillsData = allSkills.map(skillKey => {
-        const isGuaranteed = skillGrant.guaranteed.includes(skillKey);
-        const isSelectedInThisGroup = extraTrainingSelections.includes(skillKey);
-        const isSelectedInOtherGroup = !isSelectedInThisGroup && currentSkills.includes(skillKey) && !isGuaranteed;
-
-        const isDisabled = isGuaranteed || isSelectedInOtherGroup;
-        const isChecked = isGuaranteed || isSelectedInThisGroup || isSelectedInOtherGroup;
-
-        const label = CONFIG.VAGABOND.skills[skillKey] ?? skillKey;
-
-        return {
-          key: skillKey,
-          label: label,
-          isChecked: isChecked,
-          isDisabled: isDisabled,
-          isGuaranteed: isGuaranteed,
-          groupIndex: extraTrainingGroupIndex
-        };
-      });
-
-      skillChoices.push({
-        count: extraTraining,
-        pool: allSkills,
-        skills: extraTrainingSkillsData,
-        selected: extraTrainingSelections.length,
-        groupIndex: extraTrainingGroupIndex,
-        isExtraTraining: true, // Flag to identify this special group
-        extraTrainingSources: extraTrainingData.sources // Include source information
-      });
-    }
 
     // Group level features by level and enrich descriptions
     const levelFeatures = classItem.system.levelFeatures || [];
@@ -417,8 +206,7 @@ export class ClassStepManager extends BaseStepManager {
 
     return {
       skillGrant: {
-        guaranteed: skillGrant.guaranteed,
-        choices: skillChoices
+        guaranteed: skillGrant.guaranteed
       },
       isSpellcaster: classItem.system.isSpellcaster ? 'Yes' : 'No',
       manaSkill: manaSkill,
@@ -515,11 +303,6 @@ export class ClassStepManager extends BaseStepManager {
       // RESET spells since different class might have different spell list
       this.updateState('spells', []);
 
-      // Calculate how many skill choices are needed
-      const skillChoicesNeeded = skillGrant.choices.reduce((total, choice) => total + choice.count, 0);
-      this.updateState('skillChoicesNeeded', skillChoicesNeeded);
-
-
       // Store the skill grant structure for validation
       this.updateState('skillGrant', skillGrant);
 
@@ -537,10 +320,6 @@ export class ClassStepManager extends BaseStepManager {
       const classPerkUuids = await this._extractPerksFromClass(uuid);
       this.updateState('classPerks', classPerkUuids);
       this.updateState('lastClassForPerks', uuid);
-
-      // Calculate and store extra training count for validation
-      const extraTrainingData = await this._collectExtraTraining(this.getCurrentState());
-      this.updateState('extraTrainingCount', extraTrainingData.total);
 
       this.render();
     } catch (error) {
@@ -580,107 +359,6 @@ export class ClassStepManager extends BaseStepManager {
     } catch (error) {
       console.error('Failed to select class:', error);
       ui.notifications.error('Failed to select class');
-    }
-  }
-
-  /**
-   * Handle skill toggle
-   * @private
-   */
-  async _onToggleSkill(event, target) {
-    const skill = target.value;
-    const groupIndex = parseInt(target.dataset.groupIndex);
-    const state = this.getCurrentState();
-
-    if (!state.selectedClass) {
-      ui.notifications.warn('Please select a class first');
-      return;
-    }
-
-    try {
-      const classItem = await fromUuid(state.selectedClass);
-      if (!classItem) return;
-
-      const skillGrant = classItem.system.skillGrant || { guaranteed: [], choices: [] };
-      const currentSkills = state.skills || [];
-      const skillSelections = state.skillSelections || {};
-
-      // Check if this is a guaranteed skill (can't be toggled)
-      if (skillGrant.guaranteed.includes(skill)) {
-        ui.notifications.warn('This skill is guaranteed by your class and cannot be removed');
-        return;
-      }
-
-      // Get skills selected in this group
-      const skillsInThisGroup = skillSelections[groupIndex] || [];
-
-      // Toggle the skill
-      let newSkillSelections;
-      let newSkills;
-
-      if (skillsInThisGroup.includes(skill)) {
-        // Remove from this group
-        const updatedGroupSkills = skillsInThisGroup.filter(s => s !== skill);
-        newSkillSelections = {
-          ...skillSelections,
-          [groupIndex]: updatedGroupSkills
-        };
-      } else {
-        // Check if skill is selected in another group
-        if (currentSkills.includes(skill)) {
-          ui.notifications.warn('This skill is already selected in another group');
-          return;
-        }
-
-        // Check if we can add more skills to this group
-        let maxCount;
-
-        const extraTrainingData = await this._collectExtraTraining(state);
-        const classGroupCount = skillGrant.choices.length;
-        const ancestryGroups = state.extraTrainingGroups || [];
-
-        if (groupIndex < classGroupCount) {
-          // Normal class choice group
-          const choice = skillGrant.choices[groupIndex];
-          if (!choice) {
-            console.error(`No choice definition for group ${groupIndex}`);
-            return;
-          }
-          maxCount = choice.count;
-        } else if (groupIndex < classGroupCount + ancestryGroups.length) {
-          // Ancestry restricted skill choice group
-          maxCount = ancestryGroups[groupIndex - classGroupCount].count;
-        } else {
-          // Unrestricted extra training group
-          maxCount = extraTrainingData.total;
-        }
-
-        if (skillsInThisGroup.length >= maxCount) {
-          ui.notifications.warn(`You can only select ${maxCount} skill(s) from this group`);
-          return;
-        }
-
-        // Add to this group
-        const updatedGroupSkills = [...skillsInThisGroup, skill];
-        newSkillSelections = {
-          ...skillSelections,
-          [groupIndex]: updatedGroupSkills
-        };
-      }
-
-      // Rebuild combined skills list
-      newSkills = [
-        ...skillGrant.guaranteed,
-        ...Object.values(newSkillSelections).flat()
-      ];
-
-
-      this.updateState('skillSelections', newSkillSelections);
-      this.updateState('skills', newSkills);
-      
-    } catch (error) {
-      console.error('Failed to toggle skill:', error);
-      ui.notifications.error('Failed to toggle skill');
     }
   }
 
@@ -725,10 +403,10 @@ export class ClassStepManager extends BaseStepManager {
       this.updateState('perks', []);
       this.updateState('spells', []);
 
-      // Calculate skill choices needed
+      // Class Training only; every other Training is picked on the Skills step
       const skillGrant = classItem.system.skillGrant || { guaranteed: [], choices: [] };
-      const skillChoicesNeeded = skillGrant.choices.reduce((total, choice) => total + choice.count, 0);
-      this.updateState('skillChoicesNeeded', skillChoicesNeeded);
+      this.updateState('skills', [...skillGrant.guaranteed]);
+      this.updateState('skillSelections', {});
 
       // Store the skill grant structure for validation
       this.updateState('skillGrant', skillGrant);
@@ -747,62 +425,6 @@ export class ClassStepManager extends BaseStepManager {
       this.updateState('classPerks', classPerkUuids);
       this.updateState('lastClassForPerks', selectedClass.uuid);
 
-      // Auto-select skills
-      await this._autoSelectSkills(selectedClass.uuid);
-
-    }
-  }
-
-  /**
-   * Auto-select skills for a class
-   * @private
-   */
-  async _autoSelectSkills(classUuid) {
-    try {
-      const classItem = await fromUuid(classUuid);
-      if (!classItem) return;
-
-      const skillGrant = classItem.system.skillGrant || { guaranteed: [], choices: [] };
-      const skills = [...skillGrant.guaranteed];
-      const skillSelections = {};
-
-      // Get all skills including weapon skills (melee, ranged)
-      const allSkillsWithWeaponSkills = this._getAllSkillsWithWeaponSkills();
-
-      // Auto-select random skills from normal class choices
-      skillGrant.choices.forEach((choice, groupIndex) => {
-        const pool = (choice.pool && choice.pool.length > 0) ? choice.pool : allSkillsWithWeaponSkills;
-        const available = pool.filter(s => !skills.includes(s));
-        const shuffled = available.sort(() => Math.random() - 0.5);
-        const selected = shuffled.slice(0, choice.count);
-
-        // Store per-group selections for UI
-        skillSelections[groupIndex] = selected;
-
-        // Add to combined skills list
-        skills.push(...selected);
-      });
-
-      // Auto-select extra training skills if any
-      const state = this.getCurrentState();
-      const extraTrainingData = await this._collectExtraTraining(state);
-      if (extraTrainingData.total > 0) {
-        const extraTrainingGroupIndex = skillGrant.choices.length;
-        const available = allSkillsWithWeaponSkills.filter(s => !skills.includes(s));
-        const shuffled = available.sort(() => Math.random() - 0.5);
-        const selected = shuffled.slice(0, extraTrainingData.total);
-
-        // Store per-group selections for UI
-        skillSelections[extraTrainingGroupIndex] = selected;
-
-        // Add to combined skills list
-        skills.push(...selected);
-      }
-
-      this.updateState('skills', skills);
-      this.updateState('skillSelections', skillSelections);
-    } catch (error) {
-      console.error('Failed to auto-select skills:', error);
     }
   }
 

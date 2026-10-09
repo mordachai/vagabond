@@ -1,3 +1,4 @@
+import { isTrainingComplete } from '../steps/skills-step-manager.mjs';
 /**
  * Context Component
  * 
@@ -263,7 +264,7 @@ export class ContextComponent {
       allStepConfigs = this.configSystem.getAllStepConfigs();
     } catch (error) {
       // Configuration not loaded yet, use defaults
-      stepOrder = ['ancestry', 'class', 'stats', 'perks', 'spells', 'starting-packs', 'gear'];
+      stepOrder = ['ancestry', 'class', 'stats', 'skills', 'spells', 'perks', 'starting-packs', 'gear'];
       allStepConfigs = {};
     }
 
@@ -577,7 +578,7 @@ export class ContextComponent {
     };
 
     // Validate each step
-    const steps = ['ancestry', 'class', 'stats', 'perks', 'spells', 'starting-packs', 'gear'];
+    const steps = ['ancestry', 'class', 'stats', 'skills', 'spells', 'perks', 'starting-packs', 'gear'];
     
     for (const step of steps) {
       const stepValidation = await this._validateStep(step, state);
@@ -634,73 +635,10 @@ export class ContextComponent {
       case 'ancestry':
         return !!state.selectedAncestry;
       case 'class':
-        // Need to have a class selected AND all required skills assigned
-        if (!state.selectedClass) {
-          return false;
-        }
+        return !!state.selectedClass;
 
-        // Check if all skill choice pools are satisfied
-        const skillGrant = state.skillGrant;
-        if (!skillGrant || !skillGrant.choices) {
-          // If no skill grant data, fall back to simple count check
-          const skillsNeeded = state.skillChoicesNeeded || 0;
-          const skillsSelected = (state.skills || []).length;
-          return skillsSelected >= skillsNeeded;
-        }
-
-        const guaranteed = skillGrant.guaranteed || [];
-        const skillSelections = state.skillSelections || {};
-
-        // Get all skills including weapon skills (melee, ranged)
-        const allSkillsWithWeaponSkills = this._getAllSkillsWithWeaponSkills();
-
-        // Build choices array (may include extra training group)
-        let allChoices = [...skillGrant.choices];
-
-        // Check if there's extra training from ancestry/class grants
-        const extraTrainingCount = state.extraTrainingCount || 0;
-
-        if (extraTrainingCount > 0) {
-          // Add extra training group dynamically (matches UI preparation logic)
-          const extraTrainingGroupIndex = skillGrant.choices.length;
-
-          // Extra training group always uses all skills and requires the exact count
-          allChoices.push({
-            count: extraTrainingCount,
-            pool: allSkillsWithWeaponSkills,
-            originalIndex: extraTrainingGroupIndex
-          });
-        }
-
-        // Sort groups by pool size (smallest first) for better allocation
-        const sortedChoices = allChoices
-          .map((choice, index) => ({
-            ...choice,
-            originalIndex: choice.originalIndex !== undefined ? choice.originalIndex : index,
-            pool: (choice.pool && choice.pool.length > 0) ? choice.pool : allSkillsWithWeaponSkills,
-            poolSize: (choice.pool && choice.pool.length > 0) ? choice.pool.length : allSkillsWithWeaponSkills.length
-          }))
-          .sort((a, b) => a.poolSize - b.poolSize);
-
-        const usedSkills = new Set(guaranteed); // Start with guaranteed skills
-
-        for (const group of sortedChoices) {
-          const groupSkills = skillSelections[group.originalIndex] || [];
-
-          // Count skills from this group that haven't been used yet
-          const validSkills = groupSkills.filter(skill =>
-            group.pool.includes(skill) && !usedSkills.has(skill)
-          );
-
-          if (validSkills.length < Math.min(group.count, group.pool.filter(s => !usedSkills.has(s)).length)) {
-            return false;
-          }
-
-          // Mark these skills as used for future groups
-          validSkills.forEach(skill => usedSkills.add(skill));
-        }
-
-        return true;
+      case 'skills':
+        return isTrainingComplete(state);
 
       case 'stats': {
         const stats = state.assignedStats || {};
@@ -722,15 +660,6 @@ export class ContextComponent {
       default:
         return false;
     }
-  }
-
-  /**
-   * Get all available skills including weapon skills (melee, ranged)
-   * Matches the logic in ClassStepManager._getAllSkillsWithWeaponSkills()
-   * @private
-   */
-  _getAllSkillsWithWeaponSkills() {
-    return Object.keys(CONFIG.VAGABOND?.skills || {});
   }
 
   /**
