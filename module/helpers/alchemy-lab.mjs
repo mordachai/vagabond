@@ -425,39 +425,162 @@ export class AlchemyLab {
     }));
     for (const r of rows) r.canLearn = !r.known && !r.overCap && picksLeft > 0;
 
-    let groups;
-    if (state.sort === 'cost') groups = [{ label: null, rows: [...rows].sort((x, y) => x.cost - y.cost) }];
-    else if (state.sort === 'alpha') groups = [{ label: null, rows }];
-    else {
-      const byType = new Map();
-      for (const r of rows) {
-        if (!byType.has(r.alchemicalType)) byType.set(r.alchemicalType, []);
-        byType.get(r.alchemicalType).push(r);
-      }
-      groups = Object.keys(CONFIG.VAGABOND.alchemicalTypes ?? {})
-        .filter(key => byType.has(key))
-        .map(key => ({ label: this.#typeLabel(key), rows: byType.get(key) }));
-    }
-
     // Known strip: one tile per pick (empty tiles are drop targets for learning).
-    const knownTiles = formulas.map(uuid => {
-      const doc = fromUuidSync(uuid);
-      return { uuid, name: doc?.name ?? uuid, img: doc?.img ?? 'icons/svg/item-bag.svg' };
-    });
+    const knownTiles = formulas.map(uuid => this.#tile(uuid));
     const empties = Math.max(0, grants - knownTiles.length);
     return {
-      groups,
+      groups: this.#groupRows(rows, state.sort),
       hasRows: rows.length > 0,
       knownTiles,
       empties: Array.from({ length: empties }, (_, i) => ({ index: i })),
       picksLeft,
       sort: state.sort,
-      sorts: ['group', 'alpha', 'cost'].map(id => ({
-        id, active: id === state.sort, label: `VAGABOND.AlchemyLab.Sort.${id}`,
-      })),
+      sorts: this.#sorts(state.sort),
       studiedDice,
       primaCapLabel: CurrencyHelper.format(PRIMA_MATERIA_CAP),
     };
+  }
+
+  /** Strip tile of a formula uuid (compendium index shape is enough: name + img). */
+  static #tile(uuid) {
+    const doc = fromUuidSync(uuid);
+    return { uuid, name: doc?.name ?? uuid, img: doc?.img ?? 'icons/svg/item-bag.svg' };
+  }
+
+  static #sorts(active) {
+    return ['group', 'alpha', 'cost'].map(id => ({ id, active: id === active, label: `VAGABOND.AlchemyLab.Sort.${id}` }));
+  }
+
+  /** Catalog rows → `[{label, rows}]`: by Alchemical type (book order), or one flat group A–Z / by cost. */
+  static #groupRows(rows, sort) {
+    if (sort === 'cost') return [{ label: null, rows: [...rows].sort((x, y) => x.cost - y.cost) }];
+    if (sort === 'alpha') return [{ label: null, rows }];
+    const byType = new Map();
+    for (const r of rows) {
+      if (!byType.has(r.alchemicalType)) byType.set(r.alchemicalType, []);
+      byType.get(r.alchemicalType).push(r);
+    }
+    return Object.keys(CONFIG.VAGABOND.alchemicalTypes ?? {})
+      .filter(key => byType.has(key))
+      .map(key => ({ label: this.#typeLabel(key), rows: byType.get(key) }));
+  }
+
+  /* -------------------------------------------- */
+  /*  Formula picker (Level Up, Character Builder) */
+  /* -------------------------------------------- */
+
+  /** UI state of a formula picker host (`app._formulaPicker`). */
+  static createPickerState() {
+    return { sort: 'group', search: '', open: null };
+  }
+
+  /**
+   * Render data for `templates/actor/parts/alchemy-picker.hbs` — the Library look, for choosing formulae that are
+   * only written when the host finishes (Level Up "Apply", Character Builder "Finish"). Nothing is learned here.
+   * @param {object} options
+   * @param {Actor|null} [options.actor]  owner (explode marks); null in the Character Builder
+   * @param {string[]} [options.known]    formulae already known (locked tiles)
+   * @param {string[]} [options.chosen]   picks made in the host (removable tiles)
+   * @param {number} options.slots        picks the host may make (`chosen` counts against it)
+   * @param {number} options.capCopper    value cap of a new formula
+   * @param {object} options.state        createPickerState()
+   */
+  static async pickerContext({ actor = null, known = [], chosen = [], slots = 0, capCopper = 0, state }) {
+    const knownSet = new Set(known);
+    const chosenSet = new Set(chosen);
+    const picksLeft = Math.max(0, slots - chosen.length);
+    const all = await AlchemyHelper.availableAlchemicals();
+
+    const rows = all.map(a => {
+      const row = {
+        uuid: a.uuid,
+        name: a.name,
+        img: a.img,
+        cost: a.cost,
+        costLabel: CurrencyHelper.format(a.cost),
+        alchemicalType: a.alchemicalType,
+        typeLabel: this.#typeLabel(a.alchemicalType),
+        damage: this.#damageView(actor, a),
+        description: a.description,
+        known: knownSet.has(a.uuid),
+        chosen: chosenSet.has(a.uuid),
+        overCap: a.cost > capCopper,
+        nameLower: a.name.toLowerCase(),
+        open: a.uuid === state.open,
+      };
+      row.canPick = !row.known && !row.chosen && !row.overCap && picksLeft > 0;
+      return row;
+    });
+
+    return {
+      knownTiles: known.map(uuid => this.#tile(uuid)),
+      chosenTiles: chosen.map(uuid => this.#tile(uuid)),
+      empties: Array.from({ length: picksLeft }, (_, i) => ({ index: i })),
+      picksLeft,
+      capLabel: CurrencyHelper.format(capCopper),
+      groups: this.#groupRows(rows, state.sort),
+      hasRows: rows.length > 0,
+      sorts: this.#sorts(state.sort),
+    };
+  }
+
+  /**
+   * Actions of the picker partial, spread into the host's actions. Host contract: `this._formulaPicker`
+   * (createPickerState), `this._pickFormula(uuid)`, `this._unpickFormula(uuid)`, `this.render()`.
+   */
+  static PICKER_ACTIONS = {
+    labPickFormula: function (event, target) { this._pickFormula(AlchemyLab.#uuidOf(target)); },
+    labUnpickFormula: function (event, target) { this._unpickFormula(AlchemyLab.#uuidOf(target)); },
+    labPickerSort: function (event, target) {
+      this._formulaPicker.sort = target.dataset.sort;
+      this.render();
+    },
+  };
+
+  /**
+   * Picker DOM wiring (call from the host's `_onRender`): row click = expand, double-click / drag onto the strip
+   * = pick, search filter. Same feel as the Library.
+   * @param {ApplicationV2} app   host (see PICKER_ACTIONS)
+   * @param {HTMLElement} root
+   * @param {AbortSignal} signal
+   */
+  static wirePicker(app, root, signal) {
+    const lab = root?.querySelector('.alchemy-lab.al-picker');
+    if (!lab) return;
+    const state = app._formulaPicker;
+    const on = (el, type, fn, opts = {}) => el.addEventListener(type, fn, { signal, ...opts });
+
+    for (const row of lab.querySelectorAll('.al-lib-row[data-uuid]')) {
+      const uuid = row.dataset.uuid;
+      on(row, 'click', (ev) => {
+        if (ev.target.closest('button')) return;
+        const item = row.closest('.al-lib-item');
+        const open = !item.classList.contains('is-open');
+        for (const other of lab.querySelectorAll('.al-lib-item.is-open')) other.classList.remove('is-open');
+        item.classList.toggle('is-open', open);
+        state.open = open ? uuid : null;
+      });
+      on(row, 'dblclick', () => { if (row.dataset.canPick === 'true') app._pickFormula(uuid); });
+      on(row, 'dragstart', (ev) => {
+        ev.dataTransfer.setData('text/plain', JSON.stringify({ type: AlchemyLab.DRAG_FORMULA, uuid }));
+        ev.dataTransfer.effectAllowed = 'copy';
+        lab.classList.add('is-dragging');
+      });
+      on(row, 'dragend', () => lab.classList.remove('is-dragging'));
+    }
+    for (const zone of lab.querySelectorAll('.al-known-strip')) {
+      this.#wireDrop(zone, on, [AlchemyLab.DRAG_FORMULA], (data) => { if (data.uuid) app._pickFormula(data.uuid); });
+    }
+
+    const search = lab.querySelector('.al-lib-search');
+    if (search) {
+      search.value = state.search;
+      on(search, 'input', () => {
+        state.search = search.value;
+        this.#filterLibrary(lab, state.search);
+      });
+      this.#filterLibrary(lab, state.search);
+    }
   }
 
   /* -------------------------------------------- */

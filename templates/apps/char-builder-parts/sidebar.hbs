@@ -189,10 +189,13 @@
                     <img src="{{opt.img}}" width="32" height="32">
                     <div class="item-info">
                         <div class="name">{{opt.name}}</div>
-                        {{#if opt.damageTypeLabel}}
+                        {{#if (or opt.damageTypeLabel opt.costLabel)}}
                             <div class="item-meta">
+                                {{#if opt.costLabel}}<span class="item-cost"><i class="fas fa-coins"></i> {{opt.costLabel}}</span>{{/if}}
+                                {{#if opt.damageTypeLabel}}
                                 {{#if opt.damageTypeIcon}}<i class="{{opt.damageTypeIcon}}"></i>{{/if}}
                                 <span class="damage-type-label">{{opt.damageTypeLabel}}</span>
+                                {{/if}}
                             </div>
                         {{/if}}
                     </div>

@@ -336,7 +336,10 @@
       "Project": "Criar como Projeto",
       "ProjectHint": "Crie sem a fórmula, pelas regras normais de Criação (Quartos de dia + metade do valor em Materiais) — abre a Bancada.",
       "NoMatches": "Nenhum item encontrado.",
-      "NoCatalog": "Nenhum item alquímico disponível — peça ao Mestre para habilitar um compêndio."
+      "NoCatalog": "Nenhum item alquímico disponível — peça ao Mestre para habilitar um compêndio.",
+      "PickerStripHint": "Suas fórmulas. Arraste um item da lista para esta faixa (ou clique duas vezes nele) para escolhê-lo",
+      "Picked": "Escolhida — aprendida ao concluir.",
+      "Unpick": "Remover esta escolha"
     },
     "SpellTracker": {
       "By": "{spell} — conjurada por {name}.",
@@ -3392,6 +3395,7 @@
         "Class": "Classe",
         "Stats": "Atributos",
         "Spells": "Magias",
+        "Alchemy": "Alquimia",
         "Perks": "Talentos",
         "Startingpacks": "Pacotes Iniciais",
         "Gear": "Equipamento"
@@ -3414,6 +3418,9 @@
       "PerksColon": "Vantagens:",
       "CounterPerks": "Vantagens",
       "CounterSpells": "Magias",
+      "CounterFormulae": "Fórmulas",
+      "FormulaCapNote": "Cada uma de até {cap}",
+      "FormulaLimit": "Você só pode escolher {n} fórmulas.",
       "CounterChooseMore": "Escolha da lista",
       "CounterAllChosen": "Tudo escolhido",
       "SpellsColon": "Magias:",
@@ -3487,6 +3494,7 @@
         "Stats": "Selecione um conjunto de Atributos na lista à esquerda para começar a atribuir valores acima.",
         "Spells": "Se sua classe ou ancestralidade permitir, escolha suas magias iniciais. Magias podem criar efeitos devastadores e milagrosos.",
         "SpellsNone": "Sua build não tem magias para escolher — mas fique à vontade para olhar e ver o que as magias legais fazem.",
+        "Alchemy": "Escolha {n} Itens Alquímicos de até {cap} como suas fórmulas conhecidas. Você pode Criar uma fórmula conhecida com Catalisar por {cost} em Materiais.",
         "Perks": "Verifique seus talentos iniciais. Talentos são marcas de conquista e sinais de arcos na jornada de vida de alguém.",
         "StartingPacks": "Você pode escolher qualquer pacote que preferir, mas há Pacotes Iniciais recomendados na seção de Jogo da sua classe",
         "Gear": "Você pode gastar sua prata restante em equipamento, armas e suprimentos adicionais."
@@ -3535,6 +3543,7 @@
         "NeedSkills": "Atribua todo o seu Treinamento na etapa de Atributos antes de continuar.",
         "NeedMandatorySteps": "Complete Ancestralidade, Classe, Atributos e Perícias antes de finalizar a criação do personagem.",
         "NeedPerks": "Complete a etapa de Talentos antes de continuar.",
+        "NeedFormulae": "Escolha todas as suas fórmulas na etapa de Alquimia antes de continuar.",
         "NeedPreviousStep": "Complete a etapa anterior antes de continuar."
       }
     },
@@ -3585,6 +3594,13 @@
       "PrereqsNotMet": "(pré-requisitos não atendidos)",
       "LearnNewSpells": "Aprender Novas Magias",
       "ChooseSpellsInstruction": "Escolha {max} nova(s) magia(s) ({current}/{max} selecionadas):",
+      "LearnFormulae": "Aprender Novas Fórmulas",
+      "ChooseFormulaeInstruction": "Escolha {max} nova(s) fórmula(s) de até {cap} ({current}/{max} selecionadas):",
+      "NewFormulae": "Novas Fórmulas:",
+      "MustFormula": "Você deve escolher uma Fórmula",
+      "PlusFormula": "+{n} Fórmula",
+      "TipFormula": "Aprenda um Item Alquímico como fórmula (de até {cap}).",
+      "FormulaDone": "Fórmula: {name}",
       "AlreadyKnown": "Já Conhecida",
       "Selected": "Selecionada",
       "LearnSpell": "Aprender Magia",

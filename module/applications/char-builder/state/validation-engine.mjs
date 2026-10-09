@@ -1,4 +1,5 @@
 import { isTrainingComplete } from '../steps/training-manager.mjs';
+import { isStepDone } from '../steps/step-gating.mjs';
 
 /**
  * Validation Engine for Character Builder
@@ -49,6 +50,7 @@ export class ValidationEngine {
     this.validators.set('training_assigned', (rule, state) => ({ isValid: isTrainingComplete(state) }));
     this.validators.set('skills_assigned', (rule, state) => ({ isValid: isTrainingComplete(state) }));
     this.validators.set('perks_selected', this._validatePerksSelected.bind(this));
+    this.validators.set('formulas_picked', (rule, state) => ({ isValid: isStepDone('alchemy', state) }));
 
     // Bonus validators
     this.validators.set('all_bonuses_applied', this._validateAllBonusesApplied.bind(this));
@@ -757,6 +759,9 @@ export class ValidationEngine {
         // If no spell limit, step is complete (not a spellcaster)
         // If has spell limit, must select EXACTLY that many spells
         return { isValid: spellLimit === 0 || spellsSelected === spellLimit };
+
+      case 'alchemy':
+        return { isValid: isStepDone('alchemy', state) };
 
       case 'perks':
       case 'starting-packs':

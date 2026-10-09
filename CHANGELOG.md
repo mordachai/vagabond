@@ -1,6 +1,10 @@
 # Changelog
 
 ## v6.2.0
+- **Alchemist Alchemy lab.** New **Alchemy** tab on the character sheet and Alchemy panel on the HUD, with three stations: **Catalyze** (your known formulae as cards, Craft for 5s of Materials), **Mix** (Level 6: two slots, combined effect preview, Mix) and **Library** (every Alchemical Item: search, sort, Learn, Prima Materia, Craft as Project). No popups: the Catalyze and Mix feature buttons open the lab at that station, and the in-Combat Use Action limit asks for a second click instead of a dialog. The Workbench Alchemy tab and the Catalyze / Mix dialogs are gone.
+- The sheet's Magic tab and the HUD's Spells tab only show for characters who have a Spell.
+- **Level Up: Alchemy tab.** Alchemists choose their new formulae when they level up (Levels 4, 7 and 10, or any picks still open), within the formula value cap.
+- **Character Builder: Alchemy step** for Alchemists, between Spells and Perks: choose your 4 starting formulae (50s or less, values shown in the list). Other classes don't see the step.
 - **Character Builder: Stats step overhauled.** Stats and Training on one screen: pick or roll an array, place Stats in hexagon slots, then check Skills to train them (every Level 1 Training source in one panel, paid automatically). Character Traits, Saves and Skill values update live; click a Stat to see what it affects.
 - Numbers now use the title font.
 - Character Builder: fixed Training (Class, Elf Ascendancy's Detect) shown together in one locked "Trained" card; the panel counts the Training left to assign.

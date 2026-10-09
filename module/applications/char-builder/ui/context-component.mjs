@@ -1,5 +1,5 @@
 import { isTrainingComplete } from '../steps/training-manager.mjs';
-import { isStepUnlocked, DEFAULT_STEP_ORDER } from '../steps/step-gating.mjs';
+import { isStepUnlocked, isStepDone, DEFAULT_STEP_ORDER } from '../steps/step-gating.mjs';
 /**
  * Context Component
  * 
@@ -28,6 +28,8 @@ export class ContextComponent {
       'perks',
       'classPerks',
       'spells',
+      'formulas',
+      'formulaLimit',
       'selectedStartingPack',
       'gear'
     ];
@@ -176,6 +178,8 @@ export class ContextComponent {
       'perks',
       'classPerks',
       'spells',
+      'formulas',
+      'formulaLimit',
       'selectedStartingPack',
       'gear'
     ];
@@ -265,7 +269,7 @@ export class ContextComponent {
       allStepConfigs = this.configSystem.getAllStepConfigs();
     } catch (error) {
       // Configuration not loaded yet, use defaults
-      stepOrder = ['ancestry', 'class', 'stats', 'spells', 'perks', 'starting-packs', 'gear'];
+      stepOrder = ['ancestry', 'class', 'stats', 'spells', 'alchemy', 'perks', 'starting-packs', 'gear'];
       allStepConfigs = {};
     }
 
@@ -579,7 +583,7 @@ export class ContextComponent {
     };
 
     // Validate each step
-    const steps = ['ancestry', 'class', 'stats', 'spells', 'perks', 'starting-packs', 'gear'];
+    const steps = ['ancestry', 'class', 'stats', 'spells', 'alchemy', 'perks', 'starting-packs', 'gear'];
     
     for (const step of steps) {
       const stepValidation = await this._validateStep(step, state);
@@ -651,6 +655,8 @@ export class ContextComponent {
         return true; // Perks are optional
       case 'spells':
         return true; // Spells are optional or class-dependent
+      case 'alchemy':
+        return isStepDone('alchemy', state);
       case 'starting-packs':
         return !!state.selectedStartingPack;
       case 'gear':

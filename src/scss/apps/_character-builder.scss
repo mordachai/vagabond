@@ -1095,6 +1095,8 @@
               align-items: baseline;
               gap: 4px;
             }
+
+            .item-cost + * { margin-left: 6px; } // Alchemy step: value, then damage type
           }
 
           .prereq-warning {

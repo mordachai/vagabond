@@ -177,6 +177,7 @@ async function preloadHandlebarsTemplates() {
     'systems/vagabond/templates/actor/parts/inventory-card.hbs',
     'systems/vagabond/templates/actor/parts/effects-list.hbs',
     'systems/vagabond/templates/actor/parts/alchemy-lab.hbs',
+    'systems/vagabond/templates/actor/parts/alchemy-picker.hbs',
     // Party sheet partials
     'systems/vagabond/templates/party/party-member-card.hbs',
     'systems/vagabond/templates/party/party-npc-card.hbs',

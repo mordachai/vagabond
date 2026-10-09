@@ -1,0 +1,77 @@
+{{!-- Formula picker (AlchemyLab.pickerContext) — Level Up dialog Alchemy tab, Character Builder Alchemy step.
+     Library look; picks are only written when the host finishes. --}}
+<div class="alchemy-lab al-picker">
+  <section class="al-library">
+    <div class="al-known-strip" data-tooltip="{{localize 'VAGABOND.AlchemyLab.PickerStripHint'}}">
+      <div class="al-known-tiles">
+        {{#each knownTiles}}
+        <span class="al-known-tile" data-tooltip="{{name}}"><img src="{{img}}" alt=""></span>
+        {{/each}}
+        {{#each chosenTiles}}
+        <span class="al-known-tile is-picked" data-uuid="{{uuid}}" data-tooltip="{{name}}">
+          <img src="{{img}}" alt="">
+          <button type="button" class="al-tile-remove" data-action="labUnpickFormula" data-tooltip="{{localize 'VAGABOND.AlchemyLab.Unpick'}}"><i class="fa-solid fa-xmark"></i></button>
+        </span>
+        {{/each}}
+        {{#each empties}}
+        <span class="al-known-tile is-empty"><i class="fa-solid fa-plus"></i></span>
+        {{/each}}
+      </div>
+      <span class="al-known-left">{{localize "VAGABOND.AlchemyLab.PicksLeft" n=picksLeft cap=capLabel}}</span>
+    </div>
+
+    <div class="al-lib-tools">
+      <input type="text" class="al-lib-search" placeholder="{{localize 'VAGABOND.AlchemyLab.Search'}}">
+      <div class="al-sorts">
+        {{#each sorts}}
+        <button type="button" class="al-sort{{#if active}} active{{/if}}" data-action="labPickerSort" data-sort="{{id}}">{{localize label}}</button>
+        {{/each}}
+      </div>
+    </div>
+
+    <div class="al-lib-list">
+      {{#each groups}}
+      <div class="al-lib-group">
+        {{#if label}}<div class="al-lib-group-label">{{label}}</div>{{/if}}
+        {{#each rows}}
+        <div class="al-lib-item{{#if open}} is-open{{/if}}" data-name="{{nameLower}}">
+          <div class="al-lib-row{{#if known}} is-known{{/if}}{{#if chosen}} is-known{{/if}}{{#if overCap}} is-over-cap{{/if}}" data-uuid="{{uuid}}"
+               data-can-pick="{{canPick}}" draggable="{{#if canPick}}true{{else}}false{{/if}}">
+            <span class="al-art al-art-sm"><img src="{{img}}" alt="" draggable="false"></span>
+            <span class="al-lib-name">{{name}}</span>
+            {{#if known}}<i class="fa-solid fa-scroll al-lib-known" data-tooltip="{{localize 'VAGABOND.AlchemyLab.AlreadyKnown'}}"></i>{{/if}}
+            {{#if chosen}}<i class="fa-solid fa-check al-lib-known" data-tooltip="{{localize 'VAGABOND.AlchemyLab.Picked'}}"></i>{{/if}}
+            <span class="al-lib-cost">{{costLabel}}</span>
+            <i class="fa-solid fa-chevron-right al-lib-caret"></i>
+          </div>
+          <div class="al-lib-detail">
+            <div class="al-detail-head">
+              <span>{{typeLabel}}{{#if damage}} · <span class="al-dmg" data-tooltip="{{damage.typeLabel}}">{{damage.amount}}{{#if damage.icon}} <i class="{{damage.icon}}"></i>{{/if}}</span>{{/if}}</span>
+            </div>
+            {{#if description}}<div class="al-detail-desc">{{{description}}}</div>{{/if}}
+            <div class="al-lib-actions" data-uuid="{{uuid}}">
+              {{#if known}}
+              <span class="al-note">{{localize "VAGABOND.AlchemyLab.AlreadyKnown"}}</span>
+              {{else if chosen}}
+              <button type="button" class="al-btn" data-action="labUnpickFormula"><i class="fa-solid fa-xmark"></i> {{localize "VAGABOND.AlchemyLab.Unpick"}}</button>
+              {{else if overCap}}
+              <span class="al-note is-warn">{{localize "VAGABOND.AlchemyLab.OverCap" cap=../../capLabel}}</span>
+              {{else if canPick}}
+              <button type="button" class="al-btn is-primary" data-action="labPickFormula"><i class="fa-solid fa-hand-sparkles"></i> {{localize "VAGABOND.AlchemyLab.Learn"}}</button>
+              {{else}}
+              <span class="al-note">{{localize "VAGABOND.AlchemyLab.NoPicksLeft"}}</span>
+              {{/if}}
+            </div>
+          </div>
+        </div>
+        {{/each}}
+      </div>
+      {{/each}}
+      {{#if hasRows}}
+      <p class="al-empty al-lib-nomatch" hidden>{{localize "VAGABOND.AlchemyLab.NoMatches"}}</p>
+      {{else}}
+      <p class="al-empty">{{localize "VAGABOND.AlchemyLab.NoCatalog"}}</p>
+      {{/if}}
+    </div>
+  </section>
+</div>

@@ -266,7 +266,7 @@ export class ConfigurationSystem {
    */
   _loadStepConfigFallback() {
     const config = {
-      order: ['ancestry', 'class', 'stats', 'spells', 'perks', 'starting-packs', 'gear'],
+      order: ['ancestry', 'class', 'stats', 'spells', 'alchemy', 'perks', 'starting-packs', 'gear'],
       steps: {
         ancestry: {
           displayName: 'Choose Ancestry',
@@ -306,9 +306,18 @@ export class ConfigurationSystem {
             { type: 'within_spell_limit' }
           ]
         },
+        alchemy: {
+          displayName: 'Choose Formulae',
+          order: 5,
+          requiredData: [],
+          actions: ['add-to-tray', 'remove-from-tray', 'clear-tray', 'randomize-formulae'],
+          completionCriteria: [
+            { type: 'formulas_picked' }
+          ]
+        },
         perks: {
           displayName: 'Choose Perks',
-          order: 5,
+          order: 6,
           requiredData: ['perks'],
           actions: ['add-to-tray', 'remove-from-tray', 'clear-tray', 'toggle-show-all'],
           completionCriteria: [
@@ -317,7 +326,7 @@ export class ConfigurationSystem {
         },
         'starting-packs': {
           displayName: 'Choose Starting Pack',
-          order: 6,
+          order: 7,
           requiredData: ['startingPacks'],
           actions: ['select-starting-pack', 'remove-starting-pack', 'randomize-starting-pack'],
           completionCriteria: [
@@ -326,7 +335,7 @@ export class ConfigurationSystem {
         },
         gear: {
           displayName: 'Choose Gear',
-          order: 7,
+          order: 8,
           requiredData: ['equipment'],
           actions: ['add-to-tray', 'remove-from-tray', 'clear-tray'],
           completionCriteria: [

@@ -6230,6 +6230,38 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   color: var(--vagabond-c-muted);
   font-size: 0.7rem;
 }
+.alchemy-lab .al-known-tile.is-picked {
+  position: relative;
+}
+.alchemy-lab .al-known-tile.is-picked img {
+  box-shadow: 0 0 8px -1px var(--vagabond-c-chat-yellow);
+}
+.alchemy-lab .al-tile-remove {
+  height: auto;
+  line-height: normal;
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  z-index: 1;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--vagabond-c-black);
+  border-radius: 50%;
+  background: #c62828;
+  color: #ffffff;
+  font-size: 0.6rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+}
+.alchemy-lab .al-tile-remove i {
+  color: inherit;
+}
+.alchemy-lab .al-tile-remove:hover {
+  background: #e53935;
+}
 .alchemy-lab .al-known-tiles {
   display: flex;
   flex-wrap: wrap;
@@ -7890,6 +7922,9 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   display: flex;
   align-items: baseline;
   gap: 4px;
+}
+.vagabond-builder .builder-body .selection-list-column .directory-item:has(.item-info) .item-info .item-meta .item-cost + * {
+  margin-left: 6px;
 }
 .vagabond-builder .builder-body .selection-list-column .directory-item:has(.item-info) .item-info .prereq-warning {
   display: flex;

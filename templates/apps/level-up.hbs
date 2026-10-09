@@ -471,6 +471,15 @@
       </section>
     {{/if}}
 
+    {{! ─── Alchemy (formula picks) ─── }}
+    {{#if (eq activeTab 'alchemy')}}
+      <section class="lu-tab lu-alchemy">
+        <h3><i class="fas fa-flask"></i> {{localize "VAGABOND.LevelUp.LearnFormulae"}}</h3>
+        <p class="lu-instruction">{{localize "VAGABOND.LevelUp.ChooseFormulaeInstruction" max=alchemy.slots current=alchemy.count cap=alchemy.cap}}</p>
+        {{> "systems/vagabond/templates/actor/parts/alchemy-picker.hbs" alchemy.picker}}
+      </section>
+    {{/if}}
+
   </div>
 
   </div>{{! lu-main }}

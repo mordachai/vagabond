@@ -726,6 +726,36 @@
       color: $c-muted;
       font-size: 0.7rem;
     }
+
+    // Picker: a pick made in this window (not learned yet) — yellow glow + ✕ to drop it.
+    &.is-picked {
+      position: relative;
+      img { box-shadow: 0 0 8px -1px $c-yellow; }
+    }
+  }
+
+  // Same red disc as `.al-forget`, smaller.
+  .al-tile-remove {
+    @include al-button-reset;
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    z-index: 1;
+    width: 16px;
+    height: 16px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid $c-black;
+    border-radius: 50%;
+    background: #c62828;
+    color: #ffffff;
+    font-size: 0.6rem;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+
+    i { color: inherit; }
+    &:hover { background: #e53935; }
   }
 
   .al-known-tiles {

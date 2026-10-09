@@ -7,16 +7,19 @@
  * - Stat Increase (pick one stat to increase, even levels by default)
  * - Perks (choose a perk from class grants, odd levels > 1 by default)
  * - Spells (choose new spells if the class/perks/ancestry grants them)
+ * - Alchemy (choose new Alchemist formulae when the class grants picks)
  * - Guide (heroes from the Build Guides pack: stat goals, perks by level, spells)
  *
  * Only what the player can act on right now is shown: the XP award first, and the Stat / Perk /
- * Spell choices only once the Level has been gained.
+ * Spell / Formula choices only once the Level has been gained.
  */
 
 import { CharacterBuilderDataService } from './char-builder/services/data-service.mjs';
 import { CurrencyHelper } from '../helpers/currency-helper.mjs';
 import { VagabondChatCard } from '../helpers/chat-card.mjs';
 import { effectModeToChangeType } from '../helpers/effects.mjs';
+import { AlchemyHelper } from '../helpers/crafting/alchemy-helper.mjs';
+import { AlchemyLab } from '../helpers/alchemy-lab.mjs';
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
@@ -54,6 +57,7 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
       selectSpell: LevelUpDialog._onSelectSpell,
       addSpell: LevelUpDialog._onAddSpell,
       removeSpell: LevelUpDialog._onRemoveSpell,
+      ...AlchemyLab.PICKER_ACTIONS,
       changeTab: LevelUpDialog._onChangeTab,
       toggleGmOverride: LevelUpDialog._onToggleGmOverride,
       toggleShowAllPerks: LevelUpDialog._onToggleShowAllPerks,
@@ -108,6 +112,10 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
     this.selectedSpellUuid = null; // preview
     this.chosenSpells = []; // added to tray
 
+    // Formula picks (Alchemist), written to system.craft.formulas on Apply
+    this.chosenFormulas = [];
+    this._formulaPicker = AlchemyLab.createPickerState();
+
     // Cache
     this._perkCache = null;
     this._spellCache = null;
@@ -130,6 +138,10 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
     // The title changes once the Level is gained ("XP Award" -> "Level Up")
     const title = this.window?.title;
     if (title) title.textContent = this.title;
+
+    this._pickerAbort?.abort();
+    this._pickerAbort = new AbortController();
+    AlchemyLab.wirePicker(this, this.element, this._pickerAbort.signal);
   }
 
   // ─── Tab & Level Helpers ──────────────────────────────────
@@ -295,6 +307,25 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
     return Math.max(0, nextSpells - prevSpells);
   }
 
+  /** Formulae the character already knows (compendium uuids) */
+  get knownFormulas() {
+    return this.actor.system.craft?.formulas ?? [];
+  }
+
+  /**
+   * Formula picks to make at the new Level: the class's total grants by then minus what is known.
+   * Covers a Level that adds a grant (Alchemist 4 / 7 / 10) and picks still open from earlier Levels.
+   */
+  get newFormulaSlots() {
+    const grants = AlchemyHelper.formulaGrantsAtLevel(this.classItem, this.newLevel);
+    return Math.max(0, grants - this.knownFormulas.length);
+  }
+
+  /** Value cap (copper) of a formula learned at the new Level */
+  get formulaCapCopper() {
+    return AlchemyHelper.formulaValueCapAtLevel(this.classItem, this.newLevel, this.actor.getRollData());
+  }
+
   /**
    * Get level features for the new level
    */
@@ -318,6 +349,8 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
       (f.requiredSpells?.length || 0) > 0 || (f.spellAmount || 0) > 0
     );
     if ((this.isSpellcaster && this.newSpellSlots > 0) || hasSpellGrants || this.gmOverride) tabs.push('spells');
+
+    if (this.newFormulaSlots > 0) tabs.push('alchemy');
     return tabs;
   }
 
@@ -400,6 +433,11 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
       context.spells = await this._prepareSpellsContext();
     }
 
+    // Alchemy (formula picks)
+    if (this.visibleTabs.includes('alchemy')) {
+      context.alchemy = await this._prepareAlchemyContext();
+    }
+
     return context;
   }
 
@@ -409,6 +447,7 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
       case 'stats': return !!this.selectedStat && (!this.gainsReasonTraining || !!this.reasonTrainingSkill);
       case 'perks': return !!this.chosenPerkUuid;
       case 'spells': return this.newSpellSlots <= 0 || this.chosenSpells.length >= this.newSpellSlots;
+      case 'alchemy': return this.chosenFormulas.length >= this.newFormulaSlots;
       default: return null;
     }
   }
@@ -422,6 +461,7 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
       { id: 'stats', label: game.i18n.localize('VAGABOND.LevelUp.TabStats'), icon: 'fas fa-chart-bar' },
       { id: 'perks', label: game.i18n.localize('VAGABOND.LevelUp.TabPerks'), icon: 'fas fa-gem' },
       { id: 'spells', label: game.i18n.localize('VAGABOND.UI.Sections.Spells'), icon: 'fas fa-hat-wizard' },
+      { id: 'alchemy', label: game.i18n.localize('VAGABOND.Actor.Tabs.Alchemy'), icon: 'fas fa-flask' },
       { id: 'summary', label: game.i18n.localize('VAGABOND.LevelUp.TabSummary'), icon: 'fas fa-scroll' },
     ];
     return tabDefs
@@ -582,6 +622,18 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
       }
       const remaining = this.newSpellSlots - this.chosenSpells.length;
       if (remaining > 0) pending('spells', L('PlusSpell', { n: remaining }), L('TipSpell'), L('MustSpell'));
+    }
+
+    if (choices.includes('alchemy')) {
+      for (const uuid of this.chosenFormulas) {
+        const item = await fromUuid(uuid);
+        if (item) row('done', L('FormulaDone', { name: item.name }), { desc: await enrich(item.system.description, item) });
+      }
+      const remaining = this.newFormulaSlots - this.chosenFormulas.length;
+      if (remaining > 0) {
+        const cap = CurrencyHelper.format(this.formulaCapCopper);
+        pending('alchemy', L('PlusFormula', { n: remaining }), L('TipFormula', { cap }), L('MustFormula'));
+      }
     }
 
     // What is still needed before there is anything to do
@@ -1078,6 +1130,25 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
     };
   }
 
+  /** Alchemy tab: the Library-look formula picker (AlchemyLab.pickerContext) */
+  async _prepareAlchemyContext() {
+    const slots = this.newFormulaSlots;
+    const capCopper = this.formulaCapCopper;
+    return {
+      slots,
+      count: this.chosenFormulas.length,
+      cap: CurrencyHelper.format(capCopper),
+      picker: await AlchemyLab.pickerContext({
+        actor: this.actor,
+        known: this.knownFormulas,
+        chosen: this.chosenFormulas,
+        slots,
+        capCopper,
+        state: this._formulaPicker,
+      }),
+    };
+  }
+
   // ─── Prerequisite Checking ────────────────────────────────
 
   /**
@@ -1379,6 +1450,7 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
     if (this.gainsReasonTraining && !this.reasonTrainingSkill) return false;
     if (need.includes('perks') && !this.chosenPerkUuid) return false;
     if (need.includes('spells') && !this._tabDone('spells')) return false;
+    if (need.includes('alchemy') && !this._tabDone('alchemy')) return false;
     return true;
   }
 
@@ -1438,6 +1510,7 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
   /** @override */
   async close(options = {}) {
     if (!(await this._confirmClose())) return this;
+    this._pickerAbort?.abort();
     return super.close(options);
   }
 
@@ -1696,6 +1769,24 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
     this.render();
   }
 
+  /** Formula picker (AlchemyLab.PICKER_ACTIONS host contract): stage a formula pick */
+  async _pickFormula(uuid) {
+    if (!uuid || this.chosenFormulas.includes(uuid) || this.knownFormulas.includes(uuid)) return;
+    if (this.chosenFormulas.length >= this.newFormulaSlots) return;
+    const item = await fromUuid(uuid);
+    if (!item || item.type !== 'equipment' || item.system.equipmentType !== 'alchemical') return;
+    if (CurrencyHelper.toCopper(item.system.cost) > this.formulaCapCopper) return;
+    this.chosenFormulas.push(uuid);
+    this.render();
+  }
+
+  /** Formula picker: drop a staged pick */
+  _unpickFormula(uuid) {
+    if (!uuid) return;
+    this.chosenFormulas = this.chosenFormulas.filter(u => u !== uuid);
+    this.render();
+  }
+
   static _onToggleGmOverride(event, target) {
     const wasOverride = this.gmOverride;
     this.gmOverride = !this.gmOverride;
@@ -1846,10 +1937,16 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
       }
     }
 
-    // 4. Build and send chat card
+    // 4. Learn chosen formulae
+    if (this.chosenFormulas.length > 0) {
+      const formulas = [...new Set([...this.knownFormulas, ...this.chosenFormulas])];
+      await this.actor.update({ 'system.craft.formulas': formulas });
+    }
+
+    // 5. Build and send chat card
     await this._sendLevelUpChatCard(previousMaxHP, previousMaxMana, previousCastingMax);
 
-    // 5. Close dialog
+    // 6. Close dialog
     this.close();
   }
 
@@ -1916,6 +2013,17 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
       }
       if (names.length > 0) {
         description += `<p><strong>New Spells:</strong> ${names.join(', ')}</p>`;
+      }
+    }
+
+    // Formulae
+    if (this.chosenFormulas.length > 0) {
+      const names = [];
+      for (const uuid of this.chosenFormulas) {
+        try { const f = await fromUuid(uuid); if (f) names.push(f.name); } catch { /* ignore */ }
+      }
+      if (names.length > 0) {
+        description += `<p><strong>${game.i18n.localize('VAGABOND.LevelUp.NewFormulae')}</strong> ${names.join(', ')}</p>`;
       }
     }
 

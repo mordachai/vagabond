@@ -3,6 +3,7 @@
  */
 import { BaseStepManager } from './base-step-manager.mjs';
 import { levelTableCap } from '../../../helpers/homebrew-config.mjs';
+import { AlchemyHelper } from '../../../helpers/crafting/alchemy-helper.mjs';
 
 export class ClassStepManager extends BaseStepManager {
   constructor(stateManager, dataService, configSystem) {
@@ -315,6 +316,7 @@ export class ClassStepManager extends BaseStepManager {
         spellLimit = level1Spells?.spells || 0;
       }
       this.updateState('spellLimit', spellLimit);
+      this._setFormulaLimit(item);
 
       // Extract and add class perks (replaces old class perks)
       const classPerkUuids = await this._extractPerksFromClass(uuid);
@@ -419,6 +421,7 @@ export class ClassStepManager extends BaseStepManager {
         spellLimit = level1Spells?.spells || 0;
       }
       this.updateState('spellLimit', spellLimit);
+      this._setFormulaLimit(classItem);
 
       // Extract and set class perks
       const classPerkUuids = await this._extractPerksFromClass(selectedClass.uuid);
@@ -426,6 +429,18 @@ export class ClassStepManager extends BaseStepManager {
       this.updateState('lastClassForPerks', selectedClass.uuid);
 
     }
+  }
+
+  /**
+   * Alchemy step: formula picks the Class grants at Level 1 (0 removes the step). Picks reset with the Class,
+   * like Spells; a build that had reached the Alchemy step and lost it falls back to Spells.
+   * @private
+   */
+  _setFormulaLimit(classItem) {
+    const limit = AlchemyHelper.formulaGrantsAtLevel(classItem, 1);
+    this.updateState('formulaLimit', limit);
+    this.updateState('formulas', []);
+    if (!limit && this.getCurrentState().furthestStep === 'alchemy') this.updateState('furthestStep', 'spells');
   }
 
   /**

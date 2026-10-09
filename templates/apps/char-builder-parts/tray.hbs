@@ -42,6 +42,17 @@
                 {{/if}}
             {{/if}}
 
+            {{#if (eq step 'alchemy')}}
+                <div class="tray-counter {{#if (gte currentFormulaCount formulaLimit)}}done{{/if}}">
+                    <span class="tray-counter-label">{{localize "VAGABOND.CharBuilder.CounterFormulae"}}</span>
+                    <span class="tray-counter-value">{{currentFormulaCount}}<span class="tray-counter-max">/{{formulaLimit}}</span></span>
+                    <span class="tray-counter-note">
+                        {{#if (gte currentFormulaCount formulaLimit)}}<i class="fas fa-check"></i> {{localize "VAGABOND.CharBuilder.CounterAllChosen"}}{{else}}{{localize "VAGABOND.CharBuilder.CounterChooseMore"}}{{/if}}
+                    </span>
+                    <span class="tray-counter-note">{{localize "VAGABOND.CharBuilder.FormulaCapNote" cap=formulaCapLabel}}</span>
+                </div>
+            {{/if}}
+
             <button type="button" class="btn-clear-tray" data-action="clearTray">
                 <i class="fas fa-trash"></i> {{localize "VAGABOND.CharBuilder.Buttons.ClearTray"}}
             </button>
@@ -139,6 +150,34 @@
                         </div>
                     {{/each}}
                 {{/if}}
+            {{else if (eq step 'alchemy')}}
+                {{#if trayData.formulas.length}}
+                    {{#each trayData.formulas as |item|}}
+                        <div class="tray-item-compact spell-slot filled" data-uuid="{{item.uuid}}">
+                            <img src="{{item.img}}" alt="{{item.name}}" class="tray-img">
+                            <div class="tray-info">
+                                <span class="tray-name">{{item.name}}</span>
+                                <span class="tray-meta">{{item.costLabel}}</span>
+                            </div>
+                            <button type="button" class="btn-remove" data-action="removeFromTray" data-uuid="{{item.uuid}}" title="{{localize 'VAGABOND.CharBuilder.RemoveTooltip'}}">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    {{/each}}
+                {{else}}
+                    <div class="tray-empty-message">
+                        <i class="fas fa-arrow-left"></i>
+                        <p>{{localize "VAGABOND.CharBuilder.TrayEmpty"}}</p>
+                    </div>
+                {{/if}}
+                {{#each trayData.emptySlots as |slot|}}
+                    <div class="tray-item-compact spell-slot empty">
+                        <div class="empty-slot-placeholder">
+                            <i class="fas fa-plus-circle"></i>
+                            <span class="empty-slot-text">{{localize "VAGABOND.CharBuilder.EmptySlot"}}</span>
+                        </div>
+                    </div>
+                {{/each}}
             {{else if (eq step 'gear')}}
                 {{#if trayData.isEmpty}}
                     <div class="tray-empty-message">

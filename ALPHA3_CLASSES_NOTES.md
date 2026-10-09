@@ -79,7 +79,7 @@ Bard, Barbarian (apart from the table row and the Rage spell die), Hunter, Revel
 
 - [ ] Migration: an old Fighter / Gunslinger / Pugilist / Sorcerer / Witch / Wizard / Merchant / Druid / Alchemist / Magus / Rogue / Vanguard / Luminary / Barbarian item picks up the new names and features once; an effect you had switched off stays off; a second reload does nothing; Dusted Knuckle / Quick Draw perks on actors show the new text.
 - [ ] Builder: Fighter Level 1 offers **one** Perk from the 30-perk pool; level-up at 4 and 8 still one each.
-- [ ] Alchemist: Craft Check passing by 15 grants a Studied die (14 at Level 6, 13 at Level 10); Potency dice explode on the highest face only; Prima Materia lets a 10g item through the Workbench (and rejects 11g).
+- [ ] Alchemist: Craft Check passing by 15 grants a Studied die (14 at Level 6, 13 at Level 10); Potency dice explode on the highest face only; Prima Materia (Alchemy lab → Library) lets a 10g item through (and rejects 11g).
 - [ ] Gunslinger Level 4: with 3 Deadeye stacks and a Burning status, Grit removes the status and the stacks; with 2 stacks it warns. Level 8: costs 2.
 - [ ] Pugilist: Haymaker margin 15 / 14 / 13; Level 6 Brawl dice are d6 and explode on 5–6 (d8: 7–8 at Level 10); Dusted Knuckle alone gives d4 and explodes on 4; with Title Holder the d6 / two-face rules win (no stacking). Moxie shows at Level 4 and 8 only.
 - [ ] Sorcerer Level 6, in a started Combat with “Twinned Spell: Auto” on: cast a Spell with a Cast Check twice on the same Turn → second roll shows Favor and a “Twinned Spell” tag; next Turn it resets; Manual mode or no Combat → nothing. Level 10: Overpowered button adds 1 Fatigue and a Cd4 die named “Overpowered (<name>)” in the overlay; second click warns.
@@ -95,3 +95,14 @@ Bard, Barbarian (apart from the table row and the Rage spell die), Hunter, Revel
 - [ ] `npm run pack` perks; reload as GM → `alpha3PerksMigrated` runs (world perk copies get the A3 text / prerequisites).
 - [ ] Skirmisher: with armor worn, Reflex Difficulty penalty is 1 lower per copy (never below 0); Speed +5 per copy.
 - [ ] Fluid Motion appears in the perk list (DEX 7); Animal Companion needs Leadership & Survival, Situational Awareness AWR 7, Treads Lightly Trained Sneak.
+
+### Alchemist Alchemy lab (2026-10-09)
+Sheet + HUD "Alchemy" lab (`helpers/alchemy-lab.mjs`, partial `templates/actor/parts/alchemy-lab.hbs`), stations Catalyze | Mix | Library, no dialogs; the Workbench has no Alchemy tab. Formula picks outside the lab use the shared picker (`AlchemyLab.pickerContext` + `templates/actor/parts/alchemy-picker.hbs`, nothing learned until the host finishes):
+- **Level Up dialog** "Alchemy" tab once the Level is gained, when `formulaGrantsAtLevel(class, newLevel)` > known (Lv 4 / 7 / 10, or picks still open). Cap = `formulaValueCapAtLevel(class, newLevel)`. Mandatory for Apply; Apply writes `system.craft.formulas`.
+- **Character Builder** "Alchemy" step (after Spells, before Perks) only when the Class grants formulae (`state.formulaLimit`, set on Class pick; step-gating `isStepApplicable` / `applicableSteps` hide it otherwise). Done = picks == grants (4 ≤ 50s at Lv 1). Finish writes `system.craft.formulas`.
+
+- [ ] Sheet / HUD lab: Learn, Forget, Craft, Mix, Prima, Craft as Project; Catalyze / Mix feature buttons open the lab at that station (user-tested OK 2026-10-09).
+- [ ] Level Up Alchemist 3 → 4: Alchemy tab appears only after Level Up; strip shows the 4 known + 1 empty; items over 200s are dimmed with the cap note; Learn / double-click / drag onto the strip picks; ✕ on the tile or Unpick removes; Apply stays disabled until the pick is made; after Apply the lab shows 5 known and the chat card lists "New Formulae". Same at 7 and 10. Non-Alchemist level-up: no Alchemy tab.
+- [ ] Level Up Alchemist with only 2 of 4 known (picks open) at any Level → Alchemy tab asks for 2.
+- [ ] Builder: pick Alchemist → tabs Ancestry · Class · Stats · Spells · Alchemy · Perks …; Alchemy lists only items ≤ 50s, tray 4 slots, counter 0/4; Next disabled until 4; Perks tab locked until then. Switch Class to Fighter → Alchemy tab gone, Perks reachable from Spells. Random on the step fills 4. Full Random Alchemist → 4 formulae. Finish → sheet lab shows the 4 known.
+- [ ] Elf (or any spell-granting Ancestry) Alchemist: Spells and Alchemy are separate steps.

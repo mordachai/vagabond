@@ -336,7 +336,10 @@
       "Project": "Craft as Project",
       "ProjectHint": "Craft it without the formula, by the normal Craft rules (Shifts + half its value in Materials) — opens the Workbench.",
       "NoMatches": "No items match.",
-      "NoCatalog": "No alchemical items available — ask your GM to enable a compendium."
+      "NoCatalog": "No alchemical items available — ask your GM to enable a compendium.",
+      "PickerStripHint": "Your formulae. Drag an item from the list onto this strip (or double-click it) to pick it",
+      "Picked": "Picked — learned when you finish.",
+      "Unpick": "Remove this pick"
     },
     "HuntersMark": {
       "Title": "Hunter’s Mark",
@@ -3378,6 +3381,7 @@
         "Class": "Class",
         "Stats": "Stats",
         "Spells": "Spells",
+        "Alchemy": "Alchemy",
         "Perks": "Perks",
         "Startingpacks": "Starting Packs",
         "Gear": "Gear"
@@ -3402,6 +3406,9 @@
       "PerksColon": "Perks:",
       "CounterPerks": "Perks",
       "CounterSpells": "Spells",
+      "CounterFormulae": "Formulae",
+      "FormulaCapNote": "Each worth {cap} or less",
+      "FormulaLimit": "You can only choose {n} formulae.",
       "CounterChooseMore": "Pick from the list",
       "CounterAllChosen": "All chosen",
       "SpellsColon": "Spells:",
@@ -3473,6 +3480,7 @@
         "Stats": "Select a Stat array from the list on the left to begin assigning values on top.",
         "Spells": "If your class or ancestry allows, choose your starting spells. Spells can create devastating and miraculous effects.",
         "SpellsNone": "Your build has no spells to choose — but feel free to look around and see what the cool spells do.",
+        "Alchemy": "Choose {n} Alchemical Items worth {cap} or less as your known formulae. You can Craft a known formula with Catalyze for {cost} of Materials.",
         "Perks": "Check your starting perks. Perks are marks of achievement and signals of arcs in one's life journey.",
         "StartingPacks": "You can choose any pack you like, but there are recommended Starter Packs in your class Playing section",
         "Gear": "You can spend your remaining silver on additional equipment, weapons, and supplies."
@@ -3521,6 +3529,7 @@
         "NeedSkills": "Assign all your Training on the Stats step before continuing.",
         "NeedMandatorySteps": "Complete Ancestry, Class, Stats and Skills before finishing character creation.",
         "NeedPerks": "Complete the Perks step before continuing.",
+        "NeedFormulae": "Choose all your formulae on the Alchemy step before continuing.",
         "NeedPreviousStep": "Complete the previous step before continuing."
       }
     },
@@ -3571,6 +3580,13 @@
       "PrereqsNotMet": "(prereqs not met)",
       "LearnNewSpells": "Learn New Spells",
       "ChooseSpellsInstruction": "Choose {max} new spell(s) ({current}/{max} selected):",
+      "LearnFormulae": "Learn New Formulae",
+      "ChooseFormulaeInstruction": "Choose {max} new formula(e) worth {cap} or less ({current}/{max} selected):",
+      "NewFormulae": "New Formulae:",
+      "MustFormula": "You must choose a Formula",
+      "PlusFormula": "+{n} Formula",
+      "TipFormula": "Learn an Alchemical Item as a formula (worth {cap} or less).",
+      "FormulaDone": "Formula: {name}",
       "AlreadyKnown": "Already Known",
       "Selected": "Selected",
       "LearnSpell": "Learn Spell",

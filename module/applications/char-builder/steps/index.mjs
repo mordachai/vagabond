@@ -7,6 +7,7 @@ export { ClassStepManager } from './class-step-manager.mjs';
 export { StatsStepManager } from './stats-step-manager.mjs';
 export { TrainingManager } from './training-manager.mjs';
 export { SpellsStepManager } from './spells-step-manager.mjs';
+export { AlchemyStepManager } from './alchemy-step-manager.mjs';
 export { PerksStepManager } from './perks-step-manager.mjs';
 export { StartingPacksStepManager } from './starting-packs-step-manager.mjs';
 export { GearStepManager } from './gear-step-manager.mjs';

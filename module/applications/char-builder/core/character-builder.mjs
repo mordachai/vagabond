@@ -13,7 +13,7 @@ import { ValidationEngine } from '../state/validation-engine.mjs';
 import { CharacterBuilderDataService } from '../services/data-service.mjs';
 import { CharacterBuilderUIComponents } from '../ui/ui-components.mjs';
 import { isTrainingComplete } from '../steps/training-manager.mjs';
-import { isStepUnlocked, canFinishBuild, furthestAfter } from '../steps/step-gating.mjs';
+import { isStepUnlocked, canFinishBuild, furthestAfter, applicableSteps, isStepApplicable, isStepDone } from '../steps/step-gating.mjs';
 
 // Import all step managers
 import {
@@ -21,6 +21,7 @@ import {
   ClassStepManager,
   StatsStepManager,
   SpellsStepManager,
+  AlchemyStepManager,
   PerksStepManager,
   StartingPacksStepManager,
   GearStepManager
@@ -99,6 +100,7 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
       'class': new ClassStepManager(this.stateManager, this.dataService, this.configSystem),
       'stats': new StatsStepManager(this.stateManager, this.dataService, this.configSystem),
       'spells': new SpellsStepManager(this.stateManager, this.dataService, this.configSystem),
+      'alchemy': new AlchemyStepManager(this.stateManager, this.dataService, this.configSystem),
       'perks': new PerksStepManager(this.stateManager, this.dataService, this.configSystem),
       'starting-packs': new StartingPacksStepManager(this.stateManager, this.dataService, this.configSystem),
       'gear': new GearStepManager(this.stateManager, this.dataService, this.configSystem)
@@ -214,14 +216,13 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
   }
 
   /**
-   * Get step order from configuration or fallback
+   * Step order from configuration or fallback, without the steps absent from this build
+   * (Alchemy only for a Class with formula picks)
    * @returns {Array<string>} Step order
    */
   get stepsOrder() {
-    if (this._configLoaded) {
-      return this.configSystem.getStepOrder();
-    }
-    return VagabondCharBuilder.STEPS_ORDER;
+    const order = this._configLoaded ? this.configSystem.getStepOrder() : VagabondCharBuilder.STEPS_ORDER;
+    return applicableSteps(this.stateManager.getCurrentState(), order);
   }
 
   /**
@@ -277,6 +278,7 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
         return arraySelected && allStatsAssigned && allBonusesApplied && isTrainingComplete(state);
       },
       spells: () => true, // Optional step
+      alchemy: () => isStepDone('alchemy', this.stateManager.getCurrentState()),
       perks: () => true, // Optional step
       'starting-packs': () => true, // Optional step
       gear: () => true // Optional step
@@ -306,7 +308,7 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
   }
 
   // Navigation order for steps (fallback)
-  static STEPS_ORDER = ['ancestry', 'class', 'stats', 'spells', 'perks', 'starting-packs', 'gear'];
+  static STEPS_ORDER = ['ancestry', 'class', 'stats', 'spells', 'alchemy', 'perks', 'starting-packs', 'gear'];
 
   static DEFAULT_OPTIONS = {
     id: "vagabond-char-builder",
@@ -458,7 +460,7 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
     });
 
     // 3. Tray drag-drop for perks/spells/gear
-    if (['perks', 'spells', 'gear'].includes(this.currentStep)) {
+    if (['perks', 'spells', 'alchemy', 'gear'].includes(this.currentStep)) {
       // Make selection list items draggable
       const selectableItems = html.querySelectorAll('.directory-item[data-uuid]');
       selectableItems.forEach(item => {
@@ -700,6 +702,8 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
         // Stats step = Stats + Training: name what is actually missing
         const statsPlaced = Object.values(this.stateManager.getCurrentState().assignedStats || {}).every(v => v !== null && v !== undefined);
         message = game.i18n.localize(statsPlaced ? 'VAGABOND.CharBuilder.Warnings.NeedSkills' : 'VAGABOND.CharBuilder.Warnings.NeedStats');
+      } else if (isStepApplicable('alchemy', this.stateManager.getCurrentState()) && !this._isStepComplete('alchemy')) {
+        message = game.i18n.localize('VAGABOND.CharBuilder.Warnings.NeedFormulae');
       } else if (!this._isStepComplete('perks')) {
         message = game.i18n.localize('VAGABOND.CharBuilder.Warnings.NeedPerks');
       } else {
@@ -740,7 +744,7 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
     await this._ensureInitialized();
 
     // Use step managers for full character randomization
-    const stepOrder = ['ancestry', 'class', 'stats', 'spells', 'starting-packs'];
+    const stepOrder = ['ancestry', 'class', 'stats', 'spells', 'alchemy', 'starting-packs'];
 
     for (const stepName of stepOrder) {
       // Skip spells for non-spellcaster classes
@@ -956,6 +960,11 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
 
       backpackWorn = wearFirstBackpack(itemObjects);
       actorData.items.push(...stackZeroSlotItems(itemObjects, CONFIG.VAGABOND?.zeroSlotStackSize || 10));
+    }
+
+    // Alchemist formula picks (Alchemy step)
+    if ((state.formulaLimit || 0) > 0) {
+      foundry.utils.setProperty(actorData, 'system.craft.formulas', [...new Set(state.formulas || [])]);
     }
 
     // Mark character as constructed (hides builder button)

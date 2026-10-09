@@ -1,4 +1,5 @@
 import { isTrainingComplete } from '../steps/training-manager.mjs';
+import { isStepDone } from '../steps/step-gating.mjs';
 
 /**
  * Character Builder State Manager
@@ -48,6 +49,8 @@ export class CharacterBuilderStateManager {
 
       // Collections
       spells: [],
+      formulas: [],             // Alchemy step: formula picks (compendium uuids) → system.craft.formulas
+      formulaLimit: 0,          // Formula picks the Class grants at Level 1 (0 = no Alchemy step)
       perks: [],
       classPerks: [], // Auto-populated from class features
       gear: [],
@@ -306,6 +309,7 @@ export class CharacterBuilderStateManager {
         const budgets = this.calculateBudgets();
         return budgets.spells.remaining >= 0;
       },
+      alchemy: () => isStepDone('alchemy', this.builderData),
       perks: () => true, // Optional step
       'starting-packs': () => true, // Optional step
       gear: () => {
@@ -326,7 +330,7 @@ export class CharacterBuilderStateManager {
    */
   getStepProgress() {
     const stepOrder = this.configSystem?.getStepOrder() || 
-                     ['ancestry', 'class', 'stats', 'spells', 'perks', 'starting-packs', 'gear'];
+                     ['ancestry', 'class', 'stats', 'spells', 'alchemy', 'perks', 'starting-packs', 'gear'];
     
     const progress = {};
     for (const stepName of stepOrder) {
@@ -424,13 +428,13 @@ export class CharacterBuilderStateManager {
       return value === null || (typeof value === 'number' && value >= 2 && value <= 8);
     }
     
-    if (path === 'spells' || path === 'perks' || path === 'gear' || path === 'skills') {
+    if (path === 'spells' || path === 'formulas' || path === 'perks' || path === 'gear' || path === 'skills') {
       return Array.isArray(value);
     }
     
     if (path === 'currentStep') {
       const validSteps = this.configSystem?.getStepOrder() || 
-                        ['ancestry', 'class', 'stats', 'spells', 'perks', 'starting-packs', 'gear'];
+                        ['ancestry', 'class', 'stats', 'spells', 'alchemy', 'perks', 'starting-packs', 'gear'];
       return validSteps.includes(value);
     }
     
@@ -510,7 +514,7 @@ export class CharacterBuilderStateManager {
    */
   _updateCompletedSteps() {
     const stepOrder = this.configSystem?.getStepOrder() || 
-                     ['ancestry', 'class', 'stats', 'spells', 'perks', 'starting-packs', 'gear'];
+                     ['ancestry', 'class', 'stats', 'spells', 'alchemy', 'perks', 'starting-packs', 'gear'];
     
     this.builderData.completedSteps = stepOrder.filter(step => this.isStepComplete(step));
   }

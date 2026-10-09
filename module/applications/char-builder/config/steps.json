@@ -4,6 +4,7 @@
     "class",
     "stats",
     "spells",
+    "alchemy",
     "perks",
     "starting-packs",
     "gear"
@@ -125,9 +126,34 @@
         ]
       }
     },
+    "alchemy": {
+      "displayName": "Choose Formulae",
+      "order": 5,
+      "requiredData": [],
+      "actions": [
+        "add-to-tray",
+        "remove-from-tray",
+        "clear-tray",
+        "randomize-formulae"
+      ],
+      "completionCriteria": [
+        {
+          "type": "formulas_picked"
+        }
+      ],
+      "navigation": {
+        "canSkip": false,
+        "prerequisites": [
+          {
+            "type": "step_complete",
+            "step": "stats"
+          }
+        ]
+      }
+    },
     "perks": {
       "displayName": "Choose Perks",
-      "order": 5,
+      "order": 6,
       "requiredData": [
         "perks"
       ],
@@ -154,7 +180,7 @@
     },
     "starting-packs": {
       "displayName": "Choose Starting Pack",
-      "order": 6,
+      "order": 7,
       "requiredData": [
         "startingPacks"
       ],
@@ -180,7 +206,7 @@
     },
     "gear": {
       "displayName": "Choose Gear",
-      "order": 7,
+      "order": 8,
       "requiredData": [
         "equipment"
       ],

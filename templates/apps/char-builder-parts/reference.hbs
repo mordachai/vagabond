@@ -81,8 +81,8 @@
         {{/if}}
     {{/if}}
 
-    {{!-- COLUMN 3: SPELLS STEP - Mana Stats, Ancestry Traits, and Class Features --}}
-    {{#if (eq step 'spells')}}
+    {{!-- COLUMN 3: SPELLS STEP - Mana Stats, Ancestry Traits, and Class Features (Alchemy step: Level 1 Class Features) --}}
+    {{#if (or (eq step 'spells') (eq step 'alchemy'))}}
         {{#if manaStats}}
             <div class="spells-summary-box">
                 {{!-- Mana Stats Row --}}

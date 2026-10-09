@@ -3,18 +3,42 @@ import { isTrainingComplete } from './training-manager.mjs';
 /**
  * Step gating — which builder tabs are revealed.
  *
- * Steps unlock one at a time in order (Ancestry → Class → Stats (+ Training) → Spells → Perks): a step
+ * Steps unlock one at a time in order (Ancestry → Class → Stats (+ Training) → Spells → Alchemy → Perks): a step
  * opens only once every step before it is done AND the player has reached the step right before it
  * (`state.furthestStep`, advanced by Next / tab clicks). Starting Packs and Gear are the closing pair:
  * they open together once Perks is reached, and so does the Finish button.
  *
+ * A step can also be absent for this build: Alchemy exists only when the chosen Class grants formulae
+ * (`state.formulaLimit`). Absent steps get no tab and are skipped by Next / Previous (`applicableSteps`).
+ *
  * Pure functions of the builder state, shared by the tab bar, tab clicks and the Finish button.
  */
 
-export const DEFAULT_STEP_ORDER = ['ancestry', 'class', 'stats', 'spells', 'perks', 'starting-packs', 'gear'];
+export const DEFAULT_STEP_ORDER = ['ancestry', 'class', 'stats', 'spells', 'alchemy', 'perks', 'starting-packs', 'gear'];
 
 /** Revealed together; the first one is the gate for the whole group. */
 const CLOSING_STEPS = ['starting-packs', 'gear'];
+
+/**
+ * Whether a step exists for this build (Alchemy only for a Class with formula picks).
+ * @param {string} stepName
+ * @param {object} state
+ * @returns {boolean}
+ */
+export function isStepApplicable(stepName, state) {
+  if (stepName === 'alchemy') return (state?.formulaLimit || 0) > 0;
+  return true;
+}
+
+/**
+ * The step order without the steps absent from this build.
+ * @param {object} state
+ * @param {string[]} [order]
+ * @returns {string[]}
+ */
+export function applicableSteps(state, order = DEFAULT_STEP_ORDER) {
+  return order.filter(s => isStepApplicable(s, state));
+}
 
 /**
  * Whether a step's required choices are made (optional steps are always done).
@@ -40,6 +64,8 @@ export function isStepDone(stepName, state) {
       const spellLimit = state.spellLimit || 0;
       return spellLimit === 0 || (state.spells || []).length === spellLimit;
     }
+    case 'alchemy':
+      return (state.formulas || []).length >= (state.formulaLimit || 0);
     default:
       return true;
   }
@@ -53,18 +79,20 @@ export function isStepDone(stepName, state) {
  * @returns {boolean}
  */
 export function isStepUnlocked(stepName, state, order = DEFAULT_STEP_ORDER) {
+  if (!isStepApplicable(stepName, state)) return false;
+  const steps = applicableSteps(state, order);
   // The closing pair shares the gate of its first step present in the order
   const gateStep = CLOSING_STEPS.includes(stepName)
-    ? (CLOSING_STEPS.find(s => order.includes(s)) ?? stepName)
+    ? (CLOSING_STEPS.find(s => steps.includes(s)) ?? stepName)
     : stepName;
-  const idx = order.indexOf(gateStep);
+  const idx = steps.indexOf(gateStep);
   if (idx <= 0) return idx === 0;
 
   for (let i = 0; i < idx; i++) {
-    if (!isStepDone(order[i], state)) return false;
+    if (!isStepDone(steps[i], state)) return false;
   }
-  // The step right before must have been reached
-  return furthestIndex(state, order) >= idx - 1;
+  // The step right before must have been reached (indices in `order`, so a skipped step never blocks)
+  return furthestIndex(state, order) >= order.indexOf(steps[idx - 1]);
 }
 
 /**

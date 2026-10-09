@@ -1,5 +1,5 @@
 import { isTrainingComplete } from '../steps/training-manager.mjs';
-import { isStepUnlocked, canFinishBuild, DEFAULT_STEP_ORDER } from '../steps/step-gating.mjs';
+import { isStepUnlocked, isStepDone, applicableSteps, canFinishBuild, DEFAULT_STEP_ORDER } from '../steps/step-gating.mjs';
 /**
  * Character Builder UI Components
  * 
@@ -43,6 +43,8 @@ export class CharacterBuilderUIComponents {
         'classPerks',
         'perkGrants',  // CRITICAL: Track grant fulfillment for perks step
         'spells',
+        'formulas',  // Alchemy step: formula picks
+        'formulaLimit',  // Alchemy step exists only when the Class grants formulae
         'selectedStartingPack',
         'gear',
         'currentStep',
@@ -325,9 +327,12 @@ export class CharacterBuilderUIComponents {
     } catch (error) {
       // Configuration not loaded yet, use defaults
       console.debug('Configuration not loaded for navigation, using defaults');
-      stepOrder = ['ancestry', 'class', 'stats', 'spells', 'perks', 'starting-packs', 'gear'];
+      stepOrder = ['ancestry', 'class', 'stats', 'spells', 'alchemy', 'perks', 'starting-packs', 'gear'];
       allStepConfigs = {};
     }
+
+    // Steps absent from this build (Alchemy for a Class without formulae) get no tab
+    stepOrder = applicableSteps(state, stepOrder);
 
     // Build step list with metadata
     const steps = stepOrder.map(stepName => {
@@ -409,12 +414,12 @@ export class CharacterBuilderUIComponents {
     } catch (error) {
       // Configuration not loaded yet, use defaults
       console.debug('Configuration not loaded for step progress, using defaults');
-      stepOrder = ['ancestry', 'class', 'stats', 'spells', 'perks', 'starting-packs', 'gear'];
+      stepOrder = ['ancestry', 'class', 'stats', 'spells', 'alchemy', 'perks', 'starting-packs', 'gear'];
       allStepConfigs = {};
     }
 
     // Build step list with metadata
-    const steps = stepOrder.map(stepName => ({
+    const steps = applicableSteps(state, stepOrder).map(stepName => ({
       name: stepName,
       ...(allStepConfigs[stepName] || {})
     }));
@@ -646,6 +651,9 @@ export class CharacterBuilderUIComponents {
         const spellsSelected = (state.spells || []).length;
         return spellLimit === 0 || spellsSelected === spellLimit;
 
+      case 'alchemy':
+        return isStepDone('alchemy', state);
+
       case 'starting-packs':
         return !!state.selectedStartingPack;
 
@@ -786,7 +794,7 @@ export class CharacterBuilderUIComponents {
       stepOrder = this.configSystem.getStepOrder();
     } catch (error) {
       // Configuration not loaded yet, use defaults
-      stepOrder = ['ancestry', 'class', 'stats', 'spells', 'perks', 'starting-packs', 'gear'];
+      stepOrder = ['ancestry', 'class', 'stats', 'spells', 'alchemy', 'perks', 'starting-packs', 'gear'];
     }
 
     const currentIndex = stepOrder.indexOf(currentStep);
