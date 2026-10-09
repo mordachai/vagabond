@@ -3395,7 +3395,6 @@
         "Ancestry": "Ancestralidade",
         "Class": "Classe",
         "Stats": "Atributos",
-        "Skills": "Perícias",
         "Spells": "Magias",
         "Perks": "Talentos",
         "Startingpacks": "Pacotes Iniciais",
@@ -3403,7 +3402,6 @@
       },
       "Traits":"Traços",
       "ClassFeatures": "Características",
-      "DerivedStats": "Estatísticas do Personagem",
       "ProposedChoices": "Escolhas Propostas",
       "OriginReferences": "Referências de Origem",
       "AssignStats": "Arraste e solte os valores nos Atributos abaixo para atribuir:",
@@ -3433,9 +3431,21 @@
       "LevelPrefix": "Nível {level}",
       "NoFeaturesAtLevel": "Nenhuma característica neste nível",
       "NoClassFeaturesDefined": "Nenhuma característica de classe definida",
+      "Stats": {
+        "ChooseOrRoll": "Escolha ou role seus Atributos",
+        "Distribute": "Distribua seus Atributos",
+        "TraitsTitle": "Características do Personagem",
+        "TrainingTitle": "Treinamento de Perícias",
+        "RollArray": "Rolar",
+        "YourArray": "Seu Conjunto",
+        "ChangeArray": "Trocar conjunto",
+        "RollAgain": "Rolar de Novo",
+        "ChangeArrayTitle": "Trocar Conjunto",
+        "ChangeArrayConfirm": "Trocar o conjunto apaga os Atributos já distribuídos. Continuar?"
+      },
       "Skills": {
         "PanelTitle": "Treinamento a atribuir",
-        "PanelHint": "Escolha uma fonte e marque as Perícias. Cada Perícia marcada gasta um Treinamento da fonte selecionada.",
+        "PanelHint": "Marque uma Perícia para treiná-la: ela é paga por uma fonte que a permite, a mais limitada primeiro. Desmarque para devolver o Treinamento.",
         "SourceClass": "Classe · {name}",
         "SourceClassFeature": "Característica de classe · {origin}: {name}",
         "SourceAncestry": "Traço de ancestralidade · {origin}: {name}",
@@ -3447,9 +3457,8 @@
         "ValueNote": "Menor é melhor. Passe o mouse sobre uma Perícia para ver, entre parênteses, o valor quando Treinada.",
         "IfTrained": "Se Treinada",
         "Casting": "Conjuração",
-        "CastingTooltip": "Sua Classe conjura Magias com esta Perícia",
+        "CastingTooltip": "Perícia de Conjuração: usada ao conjurar Magias",
         "LockedTooltip": "Treinamento da sua Classe (fixo)",
-        "NotAllowed": "Não permitida pela fonte selecionada",
         "NoRoom": "Nenhum Treinamento restante pode receber {skill}."
       },
       "Decision": {
@@ -3517,7 +3526,7 @@
         "NeedAncestry": "Selecione uma Ancestralidade antes de continuar.",
         "NeedClass": "Escolha uma Classe antes de continuar.",
         "NeedStats": "Atribua todos os seus Atributos antes de continuar.",
-        "NeedSkills": "Atribua todo o seu Treinamento na etapa de Perícias antes de continuar.",
+        "NeedSkills": "Atribua todo o seu Treinamento na etapa de Atributos antes de continuar.",
         "NeedMandatorySteps": "Complete Ancestralidade, Classe, Atributos e Perícias antes de finalizar a criação do personagem.",
         "NeedPerks": "Complete a etapa de Talentos antes de continuar.",
         "NeedPreviousStep": "Complete a etapa anterior antes de continuar."

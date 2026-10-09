@@ -5,7 +5,7 @@ export { BaseStepManager } from './base-step-manager.mjs';
 export { AncestryStepManager } from './ancestry-step-manager.mjs';
 export { ClassStepManager } from './class-step-manager.mjs';
 export { StatsStepManager } from './stats-step-manager.mjs';
-export { SkillsStepManager } from './skills-step-manager.mjs';
+export { TrainingManager } from './training-manager.mjs';
 export { SpellsStepManager } from './spells-step-manager.mjs';
 export { PerksStepManager } from './perks-step-manager.mjs';
 export { StartingPacksStepManager } from './starting-packs-step-manager.mjs';

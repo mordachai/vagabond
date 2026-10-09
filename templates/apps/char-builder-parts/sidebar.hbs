@@ -1,10 +1,9 @@
 {{!-- LEFT COLUMN: Selection List (full height) --}}
 <aside class="selection-list-column">
+    {{#unless (eq step 'stats')}}
     <div class="search-sticky">
-        {{#unless (eq step 'skills')}}
         <input type="text" class="search-input" placeholder="{{localize 'VAGABOND.CharBuilder.SearchPlaceholder'}}" autocomplete="off">
         <button type="button" class="search-clear" title="{{localize 'VAGABOND.CharBuilder.ClearSearchTooltip'}}"><i class="fas fa-times"></i></button>
-        {{/unless}}
         {{#if (eq step 'perks')}}
         {{#if grants}}
         <div class="perk-grants-list">
@@ -45,24 +44,99 @@
         </div>
         {{/if}}
     </div>
+    {{/unless}}
     <div class="directory-list custom-scroll">
         {{#if (eq step 'stats')}}
-            {{#each statData.arrays}}
+            {{#if statData.arraysCollapsed}}
+            {{!-- Array picked: list rolled up to the chosen row (click to reopen) --}}
+            <h3 class="stat-arrays-title">{{localize "VAGABOND.CharBuilder.Stats.YourArray"}}</h3>
+            <div class="directory-item stat-array-item stat-array-current active" data-action="expandStatArrays" data-tooltip="{{localize 'VAGABOND.CharBuilder.Stats.ChangeArray'}}">
+                <span class="array-label">{{statData.selectedArray.id}}</span>
+                <span class="array-values">{{statData.selectedArray.values}}</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            {{else}}
+            <h3 class="stat-arrays-title">{{localize "VAGABOND.CharBuilder.Stats.ChooseOrRoll"}}</h3>
+            <ul class="stat-arrays-grid">
+                {{#each statData.arrays}}
                 <li class="directory-item stat-array-item {{#if this.selected}}active{{/if}}"
                     data-id="{{this.id}}" data-action="selectOption">
                     <span class="array-label">{{this.id}}</span>
                     <span class="array-values">{{this.values}}</span>
                 </li>
-            {{/each}}
-        {{else if (eq step 'skills')}}
-            {{!-- Stats rail: click a Stat to focus its Skills --}}
-            {{#each skillTraining.stats as |st|}}
-                <li class="directory-item training-stat {{#if st.focused}}active{{/if}} {{#unless st.total}}no-skills{{/unless}}" {{#if st.total}}data-action="focusSkillStat" data-stat="{{st.key}}"{{/if}}>
-                    <span class="training-stat-name">{{st.label}}</span>
-                    <span class="training-stat-value">{{st.value}}</span>
-                </li>
-            {{/each}}
-            <p class="training-stats-note">{{localize "VAGABOND.CharBuilder.Skills.ValueNote"}}</p>
+                {{/each}}
+            </ul>
+            {{/if}}
+            <button type="button" class="stat-array-roll" data-action="rollStatArray">
+                <i class="fas fa-dice"></i> {{#if hasSelection}}{{localize "VAGABOND.CharBuilder.Stats.RollAgain"}}{{else}}{{localize "VAGABOND.CharBuilder.Stats.RollArray"}}{{/if}}
+            </button>
+            {{#if hasSelection}}
+            <section class="stat-distribute">
+                <h3 class="stat-arrays-title">{{localize "VAGABOND.CharBuilder.Stats.Distribute"}}</h3>
+                {{!-- Values to pick and drop --}}
+                {{#if statData.unassigned.length}}
+                <div class="available-pool">
+                    <div class="pool-values">
+                        {{#each statData.unassigned}}
+                        <button type="button" class="value-chip {{#if this.active}}active{{/if}}" data-index="{{this.index}}" data-value="{{this.value}}" data-action="pickValue">{{this.value}}</button>
+                        {{/each}}
+                    </div>
+                    <div><i class="fa-light fa-chevrons-down chevrons-down"></i></div>
+                </div>
+                {{/if}}
+                <div class="stat-assigner">
+                    {{#each statData.slots}}
+                    <div class="stat-slot-container">
+                        <div class="stat-slot" data-stat="{{this.key}}" data-action="assignStat" title="{{this.hint}}">
+                            <label class="{{#if this.isKeyStat}}key-stat{{/if}} {{#if this.focused}}focused{{/if}}" data-action="focusSkillStat" data-stat="{{this.key}}">{{this.label}}</label>
+                            <div class="hex-box-wrapper">
+                                <div class="hex-box {{#if this.value}}filled{{else}}empty{{/if}}">
+                                    {{#if this.value}}
+                                        {{!-- Show finalValue if there are any bonuses (ancestry/class OR perk) --}}
+                                        {{#if (or this.hasBonus this.hasPerkBonus)}}
+                                            {{this.finalValue}}
+                                        {{else}}
+                                            {{this.value}}
+                                        {{/if}}
+                                    {{else}}
+                                        ?
+                                    {{/if}}
+                                </div>
+                                {{!-- Remove stat value button (appears on hover) --}}
+                                {{#if this.value}}
+                                <button type="button" class="remove-stat-btn" data-action="unassignStat" data-stat="{{this.key}}" title="{{localize 'VAGABOND.CharBuilder.Decision.RemoveAndReturnToPool' value=this.value}}">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                                {{/if}}
+                                {{!-- Perk bonus badge (green) - bottom right --}}
+                                {{#if this.hasPerkBonus}}
+                                <div class="perk-bonus-badge" title="{{localize 'VAGABOND.CharBuilder.Decision.BonusFromPerk'}}">+{{this.perkBonus}}</div>
+                                {{/if}}
+                                {{!-- Ancestry/Class bonus button (interactive, top-left) --}}
+                                {{#if this.hasBonus}}
+                                <button type="button" class="bonus-tag applied" data-action="removeStatBonus" data-stat="{{this.key}}" title="{{localize 'VAGABOND.CharBuilder.Decision.ClickToRemoveBonus'}}">
+                                    +{{this.bonusAmount}}
+                                </button>
+                                {{else if this.canApplyBonus}}
+                                <button type="button" class="bonus-tag clickable" data-action="applyStatBonus" data-stat="{{this.key}}" title="{{localize 'VAGABOND.CharBuilder.Decision.ClickToApplyBonus' label=this.label}}">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                                {{/if}}
+                            </div>
+                        </div>
+                    </div>
+                    {{/each}}
+                </div>
+                {{#unless statData.unassigned.length}}
+                <button type="button" class="btn-reset-stats-icon" data-action="resetStats" title="{{localize 'VAGABOND.CharBuilder.Buttons.Reset'}}">
+                    <i class="fas fa-undo"></i>
+                </button>
+                {{/unless}}
+
+                {{!-- Bonus Stats Selector - Reusable Partial --}}
+                {{> "systems/vagabond/templates/shared/bonus-stats-selector.hbs"}}
+            </section>
+            {{/if}}
         {{else if isGearStep}}
             <div class="budget-tracker {{#if budget.isOver}}bankrupt{{/if}}">
                 <span>{{localize "VAGABOND.CharBuilder.SilverBudget"}}: <strong>{{budget.remaining}}</strong> / {{budget.total}}</span>

@@ -12,7 +12,7 @@ import { CharacterBuilderStateManager } from '../state/state-manager.mjs';
 import { ValidationEngine } from '../state/validation-engine.mjs';
 import { CharacterBuilderDataService } from '../services/data-service.mjs';
 import { CharacterBuilderUIComponents } from '../ui/ui-components.mjs';
-import { isTrainingComplete } from '../steps/skills-step-manager.mjs';
+import { isTrainingComplete } from '../steps/training-manager.mjs';
 import { isStepUnlocked, canFinishBuild, furthestAfter } from '../steps/step-gating.mjs';
 
 // Import all step managers
@@ -20,7 +20,6 @@ import {
   AncestryStepManager,
   ClassStepManager,
   StatsStepManager,
-  SkillsStepManager,
   SpellsStepManager,
   PerksStepManager,
   StartingPacksStepManager,
@@ -99,7 +98,6 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
       'ancestry': new AncestryStepManager(this.stateManager, this.dataService, this.configSystem),
       'class': new ClassStepManager(this.stateManager, this.dataService, this.configSystem),
       'stats': new StatsStepManager(this.stateManager, this.dataService, this.configSystem),
-      'skills': new SkillsStepManager(this.stateManager, this.dataService, this.configSystem),
       'spells': new SpellsStepManager(this.stateManager, this.dataService, this.configSystem),
       'perks': new PerksStepManager(this.stateManager, this.dataService, this.configSystem),
       'starting-packs': new StartingPacksStepManager(this.stateManager, this.dataService, this.configSystem),
@@ -265,7 +263,6 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
     const completionMap = {
       ancestry: () => !!this.builderData.ancestry,
       class: () => !!this.builderData.class,
-      skills: () => isTrainingComplete(this.stateManager.getCurrentState()),
       stats: () => {
         const state = this.stateManager?.getCurrentState();
         const arraySelected = !!this.builderData.selectedArrayId;
@@ -276,7 +273,8 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
         const appliedBonusesCount = Object.keys(state?.appliedBonuses || {}).length;
         const allBonusesApplied = appliedBonusesCount >= bonusStatsCount;
 
-        return arraySelected && allStatsAssigned && allBonusesApplied;
+        // Training is assigned on the Stats step too
+        return arraySelected && allStatsAssigned && allBonusesApplied && isTrainingComplete(state);
       },
       spells: () => true, // Optional step
       perks: () => true, // Optional step
@@ -308,7 +306,7 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
   }
 
   // Navigation order for steps (fallback)
-  static STEPS_ORDER = ['ancestry', 'class', 'stats', 'skills', 'spells', 'perks', 'starting-packs', 'gear'];
+  static STEPS_ORDER = ['ancestry', 'class', 'stats', 'spells', 'perks', 'starting-packs', 'gear'];
 
   static DEFAULT_OPTIONS = {
     id: "vagabond-char-builder",
@@ -324,6 +322,8 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
       selectOption: VagabondCharBuilder.prototype._delegateToStepManager,
       toggleCategory: VagabondCharBuilder.prototype._onToggleCategory,
       randomize: VagabondCharBuilder.prototype._delegateToStepManager,
+      rollStatArray: VagabondCharBuilder.prototype._delegateToStepManager,
+      expandStatArrays: VagabondCharBuilder.prototype._delegateToStepManager,
       randomizeFullCharacter: VagabondCharBuilder.prototype._onRandomizeFullCharacter,
       pickValue: VagabondCharBuilder.prototype._delegateToStepManager,
       assignStat: VagabondCharBuilder.prototype._delegateToStepManager,
@@ -340,7 +340,6 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
       removeStatBonus: VagabondCharBuilder.prototype._delegateToStepManager,
       unassignStat: VagabondCharBuilder.prototype._delegateToStepManager,
       toggleTraining: VagabondCharBuilder.prototype._delegateToStepManager,
-      selectTrainingPool: VagabondCharBuilder.prototype._delegateToStepManager,
       focusSkillStat: VagabondCharBuilder.prototype._delegateToStepManager
     }
   };
@@ -514,32 +513,20 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
       }
     }
 
-    // 4. Stat hover highlighting for derived stats preview
+    // 4. Derived stats preview (Stat focus = `focusSkillStat` action on the Stat labels)
+    clearTimeout(this._focusFadeTimer);
     if (this.currentStep === 'stats') {
-      const statLabels = html.querySelectorAll('.stat-slot label');
       const derivedItems = html.querySelectorAll('.skill-item[data-affected-by]');
 
-      statLabels.forEach(label => {
-        const statSlot = label.closest('.stat-slot');
-        if (!statSlot) return;
-
-        const statKey = statSlot.dataset.stat;
-
-        label.addEventListener('mouseenter', () => {
-          derivedItems.forEach(item => {
-            const affectedBy = item.dataset.affectedBy?.split(' ') || [];
-            if (affectedBy.includes(statKey)) {
-              item.classList.add('stat-hover-highlight');
-            }
-          });
-        });
-
-        label.addEventListener('mouseleave', () => {
-          derivedItems.forEach(item => {
-            item.classList.remove('stat-hover-highlight');
-          });
-        });
-      });
+      // A Stat focus fades out on its own after 3s (CSS opacity transition), so it never looks stuck
+      if (this.stateManager?.builderData?.skillFocusStat) {
+        this._focusFadeTimer = setTimeout(() => {
+          if (!this.rendered) return;
+          this.stateManager.updateState('skillFocusStat', null, { skipValidation: true, skipHistory: true });
+          html.querySelectorAll('.unfocused').forEach(el => el.classList.remove('unfocused'));
+          html.querySelectorAll('.stat-slot label.focused').forEach(el => el.classList.remove('focused'));
+        }, 3000);
+      }
 
       // Track value changes and trigger animation
       derivedItems.forEach(item => {
@@ -710,9 +697,9 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
       } else if (!this._isStepComplete('class')) {
         message = game.i18n.localize('VAGABOND.CharBuilder.Warnings.NeedClass');
       } else if (!this._isStepComplete('stats')) {
-        message = game.i18n.localize('VAGABOND.CharBuilder.Warnings.NeedStats');
-      } else if (!this._isStepComplete('skills')) {
-        message = game.i18n.localize('VAGABOND.CharBuilder.Warnings.NeedSkills');
+        // Stats step = Stats + Training: name what is actually missing
+        const statsPlaced = Object.values(this.stateManager.getCurrentState().assignedStats || {}).every(v => v !== null && v !== undefined);
+        message = game.i18n.localize(statsPlaced ? 'VAGABOND.CharBuilder.Warnings.NeedSkills' : 'VAGABOND.CharBuilder.Warnings.NeedStats');
       } else if (!this._isStepComplete('perks')) {
         message = game.i18n.localize('VAGABOND.CharBuilder.Warnings.NeedPerks');
       } else {
@@ -753,7 +740,7 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
     await this._ensureInitialized();
 
     // Use step managers for full character randomization
-    const stepOrder = ['ancestry', 'class', 'stats', 'skills', 'spells', 'starting-packs'];
+    const stepOrder = ['ancestry', 'class', 'stats', 'spells', 'starting-packs'];
 
     for (const stepName of stepOrder) {
       // Skip spells for non-spellcaster classes

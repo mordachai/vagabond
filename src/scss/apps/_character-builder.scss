@@ -427,6 +427,601 @@
         }
       }
 
+      // Builder h3 bar, but grows to wrap the title on two lines.
+      // Id prefix: must beat the global `#vagabond-char-builder .window-content h3` rule.
+      #vagabond-char-builder & .stat-arrays-title {
+        height: auto;
+        min-height: 38px;
+        margin: 0 0 8px;
+        padding: 6px 10px;
+        border: none;
+        justify-content: center;
+        text-align: center;
+        white-space: normal;
+        font-size: 1.15rem;
+        line-height: 1.15;
+
+        &::after {
+          display: none; // Trailing line shrinks to a stray dash when centered
+        }
+      }
+
+      .stat-arrays-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2px 4px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+
+        .stat-array-item {
+          padding: 1px 4px;
+          border: 1px solid rgba(128, 128, 128, 0.35);
+          border-radius: 4px;
+
+          .array-label {
+            margin-right: 4px;
+            flex-shrink: 0;
+          }
+
+          .array-values {
+            font-size: 1rem;
+            white-space: nowrap;
+          }
+        }
+      }
+
+      // Rolled-up list: only the chosen array, click to reopen
+      .stat-array-current {
+        padding: 3px 8px;
+        border: 1px solid rgba(128, 128, 128, 0.35);
+        border-radius: 4px;
+
+        .array-values {
+          flex: 1;
+          font-size: 1.1rem;
+        }
+
+        i {
+          font-size: 0.8rem;
+          opacity: 0.7;
+        }
+      }
+
+      .stat-array-roll {
+        width: 100%;
+        height: auto;
+        line-height: normal;
+        margin-top: 6px;
+        padding: 4px;
+        border: none;
+        background: transparent;
+        background-image: url('../assets/ui/chat/apply-direct-bg.webp');
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+        color: #fff;
+        font-family: $font-title;
+        font-size: 1.1rem;
+        filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.8));
+      }
+
+      // Stats distribution under the arrays (3 x 2 grid in the 230px column)
+      .stat-distribute {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 12px;
+        color: $c-text-1;
+        font-size: 14px;
+
+        #vagabond-char-builder & .stat-arrays-title {
+          align-self: stretch;
+        }
+
+        .stat-assigner {
+          display: grid;
+          grid-template-columns: repeat(6, 1fr);
+          flex: 1;
+        }
+
+        .btn-reset-stats-icon {
+          background: transparent;
+          color: #c62828;
+          border: 2px solid #c62828;
+          border-radius: 50%;
+          width: 32px;
+          height: 32px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          font-size: 1rem;
+          transition: all 0.2s ease;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+          flex-shrink: 0;
+
+          &:hover {
+            background: #c62828;
+            color: white;
+            font-weight: bold;
+            transform: scale(1.05);
+            box-shadow: 0 3px 6px rgba(0,0,0,0.4);
+          }
+
+          &:active {
+            transform: scale(0.95);
+          }
+
+          i {
+            margin: 0;
+            line-height: 1;
+          }
+        }
+
+        .stat-slot-container {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          position: relative;
+        }
+
+        .available-pool {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          gap: 10px;
+        }
+
+        .pool-values {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          justify-content: center;
+          gap: 5px;
+        }
+
+        .stat-slot {
+          display: flex;
+          flex-direction: column-reverse;
+          align-items: center;
+          justify-content: center;
+          text-align: center;
+          gap: 4px;
+
+          label {
+            font-size: 1.1rem;
+            font-weight: 800;
+
+            &.key-stat {
+              color: $c-red;
+            }
+          }
+
+          .hex-box-wrapper {
+            position: relative;
+            width: 45px;
+            height: 45px;
+
+              // Stat hex perk bonus badge (yellow tag in bottom-right corner)
+            .perk-bonus-badge {
+              position: absolute;
+              width: 16px;
+              height: 16px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              bottom: -5px;
+              right: -10px;
+              border-radius: 2px;
+              font-family: $font-title;
+              font-size: 0.95em;
+              font-weight: 700;
+              background-color: #f3d71e; // Green for perk bonuses
+              color: #000000;
+              z-index: 10;
+              pointer-events: none;
+              box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+            }
+          }
+
+          .hex-box {
+            width: 45px;
+            height: 45px;
+            border: 2px solid transparent;
+            background: $c-text-1;
+            color: $c-white;
+            line-height: 40px;
+            font-weight: bold;
+            font-size: 2.2rem;
+            font-family: $font-number;
+
+            &.empty {
+              border-style: dotted;
+              border-color: $c-text-1;
+              color: #787878;
+              background: white;
+            }
+
+            // Show remove button only on hex-box hover
+            &.filled:hover {
+              + .remove-stat-btn {
+                opacity: 1;
+                pointer-events: auto;
+              }
+            }
+          }
+
+          .remove-stat-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(244, 67, 54, 0.75);
+            color: white;
+            border: 2px solid rgba(198, 40, 40, 0.8);
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 0.9rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+            z-index: 10;
+
+            &:hover {
+              opacity: 1;
+              pointer-events: auto;
+              background: rgba(244, 67, 54, 0.9);
+              transform: translate(-50%, -50%) scale(1.1);
+              box-shadow: 0 3px 8px rgba(0,0,0,0.4);
+            }
+
+            &:active {
+              transform: translate(-50%, -50%) scale(0.95);
+            }
+
+            i {
+              margin: 0;
+              line-height: 1;
+            }
+          }
+
+          .bonus-tag {
+            position: absolute;
+            top: -8px;
+            right: -14px;
+            background: #4caf50;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 3px 6px;
+            border-radius: 50%;
+            border: 2px solid #388e3c;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 24px;
+            height: 24px;
+            line-height: 1;
+            z-index: 11;
+
+            &.applied {
+              background: #4caf50;
+
+              &:hover {
+                background: #f44336;
+                border-color: #c62828;
+                transform: scale(1.1);
+                box-shadow: 0 3px 6px rgba(0,0,0,0.4);
+              }
+            }
+
+            &.clickable {
+              background: #2196f3;
+              border-color: #1565c0;
+
+              &:hover {
+                background: #42a5f5;
+                transform: scale(1.1);
+                box-shadow: 0 3px 6px rgba(0,0,0,0.4);
+              }
+            }
+
+            &:active {
+              transform: scale(0.95);
+            }
+
+            i {
+              font-size: 0.7rem;
+              margin: 0;
+              line-height: 1;
+            }
+          }
+        }
+
+        .value-chip {
+          width: 44px;
+          height: 44px;
+          background: $c-red;
+          color: white;
+          border: none;
+          margin: 8px;
+          cursor: grab;
+          font-size: 22px;
+          transition: transform 0.1s ease, opacity 0.2s ease;
+
+          &:active {
+            cursor: grabbing;
+          }
+
+          &.active {
+            background: $c-red;
+            outline: 2px solid gold;
+          }
+
+          &.dragging {
+            opacity: 0.5;
+            transform: scale(0.95);
+          }
+        }
+
+        .bonus-stats-container {
+          margin-top: 16px;
+
+          &.disabled {
+            opacity: 0.6;
+            pointer-events: none;
+          }
+
+          // Source on the left, points left to apply on the right
+          .bonus-stats-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 10px;
+            border: 2px solid $c-green;
+            border-radius: 6px;
+
+            .bonus-label {
+              font-size: 1rem;
+              font-weight: 700;
+              line-height: 1.2;
+            }
+
+            .bonus-value {
+              flex-shrink: 0;
+              font-family: $font-title;
+              font-size: 1.6rem;
+              line-height: 1;
+              color: $c-green;
+            }
+          }
+
+          .bonus-source-label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: $c-text-1;
+            margin-bottom: 6px;
+            padding: 4px 8px;
+            background: rgba(255, 200, 100, 0.2);
+            border-left: 3px solid #d4a574;
+            font-style: italic;
+          }
+
+          .bonus-stats-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            background: rgba(255, 255, 255, 0.5);
+            border: 2px solid $c-text-1;
+            border-radius: 4px;
+
+            .bonus-label {
+              font-weight: 700;
+              font-size: 1rem;
+              color: $c-text-1;
+            }
+
+            .bonus-value {
+              font-family: $font-secondary;
+              font-size: large;
+              font-weight: 800;
+            }
+
+            .separator {
+              color: $c-text-1;
+              font-weight: 700;
+            }
+
+            .stat-selector {
+              flex: 1;
+              padding: 6px 10px;
+              font-size: 0.95rem;
+              background: white;
+              border: 1px solid $c-text-1;
+              border-radius: 3px;
+              cursor: pointer;
+
+              &:disabled {
+                cursor: not-allowed;
+                opacity: 0.5;
+              }
+
+              option:disabled {
+                color: #999;
+              }
+            }
+          }
+        }
+
+        // Compact overrides for the narrow column
+        .available-pool {
+          gap: 0;
+        }
+
+        .pool-values {
+          flex-wrap: wrap;
+          gap: 4px;
+        }
+
+        .value-chip {
+          width: 32px;
+          height: 32px;
+          margin: 0;
+          padding: 0;
+          line-height: 32px;
+          font-size: 18px;
+        }
+
+        .stat-assigner {
+          align-self: stretch;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 10px 4px;
+          margin-top: 4px;
+        }
+
+        .stat-slot label {
+          font-size: 1rem;
+        }
+
+        .btn-reset-stats-icon {
+          margin-top: 8px;
+        }
+
+        .bonus-stats-container {
+          align-self: stretch;
+          margin-top: 8px;
+        }
+
+        // Contrast: theme-aware colors, no red (it renders pink in dark mode)
+        .chevrons-down {
+          font-size: 1.3rem;
+          color: $c-text-2;
+        }
+
+        // Smaller chevrons, same gap between the chips and the hexagons
+        div:has(> .chevrons-down) {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          height: 32px;
+        }
+
+        .value-chip,
+        .value-chip.active {
+          background: $c-yellow;
+          color: #000;
+        }
+
+        .value-chip.active {
+          outline: 2px solid $c-text-1;
+          outline-offset: 1px;
+        }
+
+        .stat-slot {
+          label {
+            padding: 0 4px;
+            border-radius: 3px;
+            color: $c-text-1;
+            cursor: pointer;
+
+            &.focused,
+            &.focused.key-stat {
+              background: $c-yellow;
+              color: #000;
+            }
+
+            &.key-stat {
+              color: $c-text-2;
+              text-decoration: underline 2px $c-yellow;
+              text-underline-offset: 3px;
+            }
+          }
+
+          // Hexagons (pointy-top, like the HUD stat hexes).
+          // ::before = fill, ::after = outline drawn by an SVG mask so it follows the theme color.
+          .hex-box-wrapper {
+            width: 42px;
+            height: 48px;
+          }
+
+          .hex-box {
+            $hex: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+            $hex-line: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpolygon points='50,1 99,25.5 99,74.5 50,99 1,74.5 1,25.5' fill='none' stroke='black' stroke-width='2' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");
+            $hex-dots: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpolygon points='50,1 99,25.5 99,74.5 50,99 1,74.5 1,25.5' fill='none' stroke='black' stroke-width='2' stroke-dasharray='3 3' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");
+
+            position: relative;
+            isolation: isolate;
+            width: 42px;
+            height: 48px;
+            line-height: 48px;
+            border: none;
+            background: transparent;
+            color: #fff;
+
+            &::before,
+            &::after {
+              content: "";
+              position: absolute;
+              inset: 0;
+              z-index: -1;
+            }
+
+            &::before {
+              background: $c-black;
+              clip-path: $hex;
+            }
+
+            &::after {
+              background: $c-text-1;
+              mask: $hex-line center / 100% 100% no-repeat;
+            }
+
+            &.empty {
+              border: none;
+              background: transparent;
+              color: $c-muted;
+
+              &::before { background: transparent; }
+              &::after { mask-image: $hex-dots; }
+            }
+          }
+
+          .remove-stat-btn,
+          .remove-stat-btn:hover {
+            background: rgba(0, 0, 0, 0.8);
+            border-color: #fff;
+            color: #fff;
+          }
+        }
+
+        .btn-reset-stats-icon {
+          color: $c-text-1;
+          border-color: $c-text-1;
+
+          &:hover {
+            background: $c-yellow;
+            border-color: $c-yellow;
+            color: #000;
+          }
+        }
+
+        .bonus-stats-container {
+          color: $c-text-1;
+        }
+      }
+
       .stat-array-item {
         font-size: 1rem;
 
@@ -441,7 +1036,8 @@
           font-weight: 500;
           font-size: 0.95rem;
           padding: 2px;
-          color: $c-text-1;
+          color: #000;
+          background: $c-yellow;
           border: 1px solid black;
           margin-right: 8px;
         }
@@ -520,459 +1116,6 @@
       flex-direction: column;
       min-height: 0;
       gap: 15px;
-    }
-
-    .decision-zone {
-      flex: 0 0 auto;
-      padding: 10px;
-      background: rgba(255, 255, 255, 0.4);
-      border: 1px dashed black;
-      color: $c-black;
-
-      .skill-decision {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
-      }
-
-      .pool-options {
-        display: grid;
-        grid-template-columns: repeat(7, 1fr);
-        column-gap: 6px;
-
-        .checkbox-label {
-            word-break: keep-all;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            cursor: pointer;
-            user-select: none;
-
-            // Disabled checkboxes (guaranteed or selected in other group)
-            &.disabled {
-              opacity: 0.7;
-              cursor: not-allowed;
-
-              input[type="checkbox"] {
-                cursor: not-allowed;
-                accent-color: #666; // Darker gray for disabled
-              }
-            }
-
-            input[type="checkbox"] {
-              cursor: pointer;
-              width: 16px;
-              height: 16px;
-              accent-color: $c-red; // Brand color for enabled checkboxes
-
-              // When disabled and checked, show as filled square
-              &:disabled:checked {
-                opacity: 1;
-                appearance: none;
-                -webkit-appearance: none;
-                -moz-appearance: none;
-                background-color: #888;
-                border: 2px solid #666;
-                border-radius: 2px;
-                position: relative;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-
-                // Show checkmark or fill
-                &::after {
-                  content: "✓";
-                  color: white;
-                  font-size: 11px;
-                  font-weight: bold;
-                  line-height: 1;
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                }
-              }
-            }
-
-            i.fa-lock {
-              font-size: 10px;
-              color: #999;
-              margin-left: 2px;
-            }
-        }
-      }
-
-      .stat-assigner-row {
-        display: flex;
-        align-items: baseline;
-        gap: 12px;
-        margin-top: 8px;
-      }
-
-      .stat-assigner {
-        display: grid;
-        grid-template-columns: repeat(6, 1fr);
-        flex: 1;
-      }
-
-      .btn-reset-stats-icon {
-        background: transparent;
-        color: #c62828;
-        border: 2px solid #c62828;
-        border-radius: 50%;
-        width: 32px;
-        height: 32px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        font-size: 1rem;
-        transition: all 0.2s ease;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.3);
-        flex-shrink: 0;
-
-        &:hover {
-          background: #c62828;
-          color: white;
-          font-weight: bold;
-          transform: scale(1.05);
-          box-shadow: 0 3px 6px rgba(0,0,0,0.4);
-        }
-
-        &:active {
-          transform: scale(0.95);
-        }
-
-        i {
-          margin: 0;
-          line-height: 1;
-        }
-      }
-
-      .stat-slot-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        position: relative;
-      }
-
-      .available-pool {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        gap: 10px;
-      }
-
-      .pool-values {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: center;
-        gap: 5px;
-      }
-
-      .zone-header {
-        font-family: $font-title;
-        border-bottom: 1px solid black;
-        margin-bottom: 8px;
-      }
-
-      .stat-slot {
-        display: flex;
-        flex-direction: column-reverse;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        gap: 4px;
-
-        label {
-          font-size: 1.1rem;
-          font-weight: 800;
-
-          &.key-stat {
-            color: $c-red;
-          }
-        }
-
-        .hex-box-wrapper {
-          position: relative;
-          width: 45px;
-          height: 45px;
-
-            // Stat hex perk bonus badge (yellow tag in bottom-right corner)
-          .perk-bonus-badge {
-            position: absolute;
-            width: 16px;
-            height: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            bottom: -5px;
-            right: -10px;
-            border-radius: 2px;
-            font-family: $font-title;
-            font-size: 0.95em;
-            font-weight: 700;
-            background-color: #f3d71e; // Green for perk bonuses
-            color: #000000;
-            z-index: 10;
-            pointer-events: none;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.3);
-          }
-        }
-
-        .hex-box {
-          width: 45px;
-          height: 45px;
-          border: 2px solid transparent;
-          background: $c-text-1;
-          color: $c-white;
-          line-height: 40px;
-          font-weight: bold;
-          font-size: 2.2rem;
-          font-family: $font-number;
-
-          &.empty {
-            border-style: dotted;
-            border-color: $c-text-1;
-            color: #787878;
-            background: white;
-          }
-
-          // Show remove button only on hex-box hover
-          &.filled:hover {
-            + .remove-stat-btn {
-              opacity: 1;
-              pointer-events: auto;
-            }
-          }
-        }
-
-        .remove-stat-btn {
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          background: rgba(244, 67, 54, 0.75);
-          color: white;
-          border: 2px solid rgba(198, 40, 40, 0.8);
-          border-radius: 50%;
-          width: 32px;
-          height: 32px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          cursor: pointer;
-          font-size: 0.9rem;
-          opacity: 0;
-          pointer-events: none;
-          transition: all 0.2s ease;
-          box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-          z-index: 10;
-
-          &:hover {
-            opacity: 1;
-            pointer-events: auto;
-            background: rgba(244, 67, 54, 0.9);
-            transform: translate(-50%, -50%) scale(1.1);
-            box-shadow: 0 3px 8px rgba(0,0,0,0.4);
-          }
-
-          &:active {
-            transform: translate(-50%, -50%) scale(0.95);
-          }
-
-          i {
-            margin: 0;
-            line-height: 1;
-          }
-        }
-
-        .bonus-tag {
-          position: absolute;
-          top: -8px;
-          right: -14px;
-          background: #4caf50;
-          color: white;
-          font-size: 0.75rem;
-          font-weight: 700;
-          padding: 3px 6px;
-          border-radius: 50%;
-          border: 2px solid #388e3c;
-          box-shadow: 0 2px 4px rgba(0,0,0,0.3);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          cursor: pointer;
-          transition: all 0.2s ease;
-          width: 24px;
-          height: 24px;
-          line-height: 1;
-          z-index: 11;
-
-          &.applied {
-            background: #4caf50;
-
-            &:hover {
-              background: #f44336;
-              border-color: #c62828;
-              transform: scale(1.1);
-              box-shadow: 0 3px 6px rgba(0,0,0,0.4);
-            }
-          }
-
-          &.clickable {
-            background: #2196f3;
-            border-color: #1565c0;
-
-            &:hover {
-              background: #42a5f5;
-              transform: scale(1.1);
-              box-shadow: 0 3px 6px rgba(0,0,0,0.4);
-            }
-          }
-
-          &:active {
-            transform: scale(0.95);
-          }
-
-          i {
-            font-size: 0.7rem;
-            margin: 0;
-            line-height: 1;
-          }
-        }
-      }
-
-      .value-chip {
-        width: 44px;
-        height: 44px;
-        background: $c-red;
-        color: white;
-        border: none;
-        margin: 8px;
-        cursor: grab;
-        font-size: 22px;
-        transition: transform 0.1s ease, opacity 0.2s ease;
-
-        &:active {
-          cursor: grabbing;
-        }
-
-        &.active {
-          background: $c-red;
-          outline: 2px solid gold;
-        }
-
-        &.dragging {
-          opacity: 0.5;
-          transform: scale(0.95);
-        }
-      }
-
-      .skill-tag.locked {
-        background: #ccc;
-        border: 1px solid #444;
-        padding: 2px 6px;
-        margin-right: 5px;
-        font-size: 0.9rem;
-        width: fit-content;
-      }
-
-      // Bonus Stats Selector Container
-      .bonus-stats-container {
-        margin-top: 16px;
-
-        &.disabled {
-          opacity: 0.6;
-          pointer-events: none;
-        }
-
-        .bonus-stats-header {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          padding: 4px 8px;
-          border: 1px solid $c-text-1;
-          border-radius: 6px;
-
-          .bonus-label {
-            font-size: 0.9rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-
-            i {
-              color: #4caf50;
-              font-size: 0.8rem;
-            }
-
-            .bonus-value {
-              font-size: 0.9rem;
-              font-weight: 800;
-            }
-          }
-        }
-
-        .bonus-source-label {
-          font-size: 0.9rem;
-          font-weight: 600;
-          color: $c-text-1;
-          margin-bottom: 6px;
-          padding: 4px 8px;
-          background: rgba(255, 200, 100, 0.2);
-          border-left: 3px solid #d4a574;
-          font-style: italic;
-        }
-
-        .bonus-stats-row {
-          display: flex;
-          align-items: center;
-          gap: 12px;
-          padding: 10px 12px;
-          background: rgba(255, 255, 255, 0.5);
-          border: 2px solid $c-text-1;
-          border-radius: 4px;
-
-          .bonus-label {
-            font-weight: 700;
-            font-size: 1rem;
-            color: $c-text-1;
-          }
-
-          .bonus-value {
-            font-family: $font-secondary;
-            font-size: large;
-            font-weight: 800;
-          }
-
-          .separator {
-            color: $c-text-1;
-            font-weight: 700;
-          }
-
-          .stat-selector {
-            flex: 1;
-            padding: 6px 10px;
-            font-size: 0.95rem;
-            background: white;
-            border: 1px solid $c-text-1;
-            border-radius: 3px;
-            cursor: pointer;
-
-            &:disabled {
-              cursor: not-allowed;
-              opacity: 0.5;
-            }
-
-            option:disabled {
-              color: #999;
-            }
-          }
-        }
-      }
     }
 
     .content-zone {
@@ -1395,7 +1538,7 @@
 
         .stat-abbr {
           font-size: 0.75rem;
-          color: #666;
+          color: $c-muted;
           font-weight: normal;
           margin-left: 2px;
         }
@@ -1411,21 +1554,19 @@
 
       .skill-value {
         flex: 0 0 auto;
-        font-family: $font-primary;
-        font-weight: 600;
-        font-size: 1.25rem;
-        color: $c-red;
+        font-family: $font-number;
+        font-size: 1.4rem;
+        line-height: 1;
+        color: $c-text-2;
         min-width: 15px;
         text-align: right;
       }
 
-      // Hover effect - highlight when associated stat is hovered
-      &.stat-hover-highlight {
-        box-shadow: 0 0 12px rgba(255, 29, 29, 0.9)!important;
-        box-shadow: inset 0 0 4px rgba(255, 29, 29, 0.9)!important;
-        background-color: rgba(255, 29, 29, 0.08)!important;
-        border-radius: 6px;
-        transition: all 0.6s ease-in-out;
+      // Stat focus (click a Stat label): dim what that Stat doesn't affect
+      transition: opacity 0.6s ease;
+
+      &.unfocused {
+        opacity: 0.35;
       }
 
       // Value change animation
@@ -1438,10 +1579,10 @@
   // Keyframes for value change animation
   @keyframes valueFlash {
     0% {
-      text-shadow: 0 0 8px rgba(200, 50, 50, 0.7);
+      text-shadow: 0 0 8px rgba(222, 214, 86, 0.7);
     }
     50% {
-      text-shadow: 0 0 15px rgba(200, 50, 50, 1);
+      text-shadow: 0 0 15px rgba(222, 214, 86, 1);
     }
     100% {
       text-shadow: none;
@@ -2187,7 +2328,7 @@
 }
 
 // ---------------------------------------------------------------------------
-// Skills step — Training pools (decision zone), Stats rail (left), Skills grid
+// Stats step — Training panel + Skills grid (preview column)
 // Theme tokens only ($c-text-*, $c-surface…) so light and dark both read well.
 // ---------------------------------------------------------------------------
 .vagabond-builder {
@@ -2200,13 +2341,7 @@
     &:hover { opacity: 1; }
   }
 
-  .decision-zone:has(.training-panel) {
-    background: $c-surface;
-    border-color: $c-text-1;
-    color: $c-text-1;
-  }
-
-  .decision-zone .training-panel {
+  .training-panel {
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -2220,8 +2355,13 @@
       strong {
         font-family: $font-title;
         font-size: 1.25rem;
+        color: $c-text-2; // yellow in dark mode, dark slate in light mode
       }
 
+      .training-panel-note {
+        font-size: 0.9rem;
+        opacity: 0.75;
+      }
     }
 
     .training-pools {
@@ -2230,10 +2370,8 @@
       gap: 8px;
     }
 
-    // Card buttons: Foundry gives <button> a fixed height/line-height
+    // Progress cards (not clickable: Training is paid automatically)
     .training-pool {
-      height: auto;
-      line-height: normal;
       margin: 0;
       display: grid;
       grid-template-columns: auto 1fr;
@@ -2246,7 +2384,6 @@
       background: $c-surface;
       border: 1px solid $c-inset-1;
       border-radius: 3px;
-      cursor: pointer;
 
       .pool-count {
         grid-row: span 2;
@@ -2271,11 +2408,6 @@
         color: $c-green;
       }
 
-      &.active {
-        border-color: $c-yellow;
-        box-shadow: 0 0 8px -1px $c-yellow, inset 0 0 0 1px $c-yellow;
-      }
-
       &.locked {
         cursor: default;
         opacity: 0.8;
@@ -2289,51 +2421,65 @@
     }
   }
 
-  // Left column on the Skills step
-  .selection-list-column {
-    .directory-item.training-stat {
-      justify-content: space-between;
-      gap: 8px;
-      list-style: none;
+  // Stats step: Training under Character Traits + Saves (scrolls with the preview)
+  // Stats step: Skills Training fills the space left under Traits + Saves (homebrew Skills auto-fit);
+  // past that the preview scrolls as usual.
+  .selection-preview:has(.stats-training) {
+    display: flex;
+    flex-direction: column;
+  }
 
-      .training-stat-name {
-        font-family: $font-title;
-        font-size: 1.3rem;
+  .stats-training {
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+
+    .training-panel {
+      gap: 4px;
+      margin: 6px 0 4px;
+      padding: 5px 8px;
+      background: $c-surface;
+      border: 1px dashed $c-text-1;
+      color: $c-text-1;
+
+      .training-panel-head strong {
+        font-size: 1.1rem;
       }
 
-      .training-stat-value {
-        display: grid;
-        place-items: center;
-        width: 36px;
-        height: 40px;
-        flex-shrink: 0;
-        font-family: $font-number;
-        font-size: 1.4rem;
-        color: $c-white;
-        background: $c-black;
-        clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+      .training-pools {
+        gap: 6px;
       }
 
-      &.active {
-        background: $c-yellow;
-        color: $c-black;
-        border-left: 3px solid $c-black;
-      }
+      .training-pool {
+        padding: 2px 8px;
 
-      &.no-skills {
-        cursor: default;
-        opacity: 0.55;
+        .pool-count { font-size: 1.2rem; }
+        .pool-source { font-size: 1rem; }
+        .pool-detail { font-size: 0.8rem; }
       }
     }
 
-    .training-stats-note {
-      margin: 10px 8px 0;
-      font-size: 0.95rem;
-      opacity: 0.75;
+    // Rows stretch to share the remaining height
+    .training-skills {
+      flex: 1 0 auto;
+      min-height: 0;
+    }
+
+    .training-skill {
+      padding: 1px 8px;
+
+      .training-skill-name { font-size: 1.15rem; }
+      .training-skill-value { font-size: 1.45rem; }
     }
   }
 
-  // Content zone on the Skills step: two columns, grouped by Stat
+  // Stats step preview: tighter grids under the section bars
+  .stats-preview-results .preview-skills-grid {
+    padding: 6px 10px;
+    gap: 4px 15px;
+  }
+
+  // Skills grid: two columns, grouped by Stat
   .training-skills {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -2348,7 +2494,7 @@
   .training-skill {
     position: relative;
     display: grid;
-    grid-template-columns: 20px minmax(0, 1fr) auto;
+    grid-template-columns: 24px minmax(0, 1fr) auto;
     align-items: center;
     align-content: center;
     gap: 0 10px;
@@ -2356,7 +2502,7 @@
     border: 1px solid transparent;
     border-radius: 3px;
     cursor: pointer;
-    transition: opacity 0.15s ease;
+    transition: opacity 0.6s ease;
 
     &:hover {
       border-color: $c-inset-1;
@@ -2374,8 +2520,8 @@
     }
 
     .training-check {
-      width: 20px;
-      height: 20px;
+      width: 24px;
+      height: 24px;
       background-size: contain;
       background-repeat: no-repeat;
       background-position: center;
@@ -2416,15 +2562,17 @@
       }
 
       &.casting {
+        padding: 2px 5px; // icon only
         color: $c-black;
         background: $c-yellow;
+        cursor: help;
       }
 
       i { font-size: 0.75rem; }
     }
 
     .training-skill-value {
-      font-family: $font-number;
+      font-family: $font-title;
       font-size: 1.7rem;
       line-height: 1;
       color: $c-text-2;
@@ -2450,16 +2598,10 @@
       font-weight: 700;
     }
 
-    &.casting {
-      border-color: $c-yellow;
-      background: rgba(222, 214, 86, 0.12);
-    }
-
     &.locked {
       cursor: default;
     }
 
-    &.out-of-pool,
     &.unfocused {
       opacity: 0.35;
     }

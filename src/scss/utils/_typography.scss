@@ -60,4 +60,4 @@ $font-primary: 'Eskapade', serif;
 $font-secondary: 'Manofa', serif;
 $font-title: 'Germania', serif;
 $font-text: 'Paradigm', serif;
-$font-number: 'Ludlow', serif;
+$font-number: $font-title; // was 'Ludlow', serif

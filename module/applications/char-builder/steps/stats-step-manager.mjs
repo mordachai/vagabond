@@ -2,11 +2,16 @@
  * Stats Step Manager - Handles stat assignment and array selection logic
  */
 import { BaseStepManager } from './base-step-manager.mjs';
+import { TrainingManager, isTrainingComplete } from './training-manager.mjs';
 
 export class StatsStepManager extends BaseStepManager {
   constructor(stateManager, dataService, configSystem) {
     super(stateManager, dataService, configSystem);
-    
+
+    // Training is assigned on this step too (TrainingManager owns the pools and picks)
+    this.training = new TrainingManager(stateManager, dataService, configSystem);
+    const trainingAction = name => (event, target) => this.training.actionHandlers[name](event, target);
+
     // Define action handlers for stats step
     this.actionHandlers = {
       'selectOption': this._onSelectOption.bind(this),
@@ -15,10 +20,14 @@ export class StatsStepManager extends BaseStepManager {
       'unassignStat': this._onUnassignStat.bind(this), // Remove single stat value
       'resetStats': this._onResetStats.bind(this),
       'randomize': this._onRandomize.bind(this),
+      'rollStatArray': this._onRollStatArray.bind(this), // Roll only the array (no assignment)
+      'expandStatArrays': this._onExpandStatArrays.bind(this), // Reopen the collapsed array list
       'applyBonus': this._onApplyBonus.bind(this),
       'removeBonus': this._onRemoveBonus.bind(this),
       'applyStatBonus': this._onApplyStatBonus.bind(this), // Apply bonus via + button
       'removeStatBonus': this._onRemoveStatBonus.bind(this), // Remove bonus via tag click
+      'toggleTraining': trainingAction('toggleTraining'),
+      'focusSkillStat': trainingAction('focusSkillStat') // Stat label click: dim what it doesn't affect
     };
     
     // No external data required for stats step
@@ -47,7 +56,7 @@ export class StatsStepManager extends BaseStepManager {
    * @protected
    */
   _getStatePaths() {
-    return ['selectedArrayId', 'assignedStats', 'unassignedValues', 'selectedValue'];
+    return ['selectedArrayId', 'assignedStats', 'unassignedValues', 'selectedValue', 'statArraysOpen'];
   }
 
   /**
@@ -60,6 +69,7 @@ export class StatsStepManager extends BaseStepManager {
     const assignedStats = state.assignedStats || {};
     const unassignedValues = state.unassignedValues || [];
     const selectedValue = state.selectedValue;
+    const focus = state.skillFocusStat ?? null;
 
     // Collect available bonuses from ancestry, class, and perks
     const availableBonuses = await this._collectAvailableBonuses(state);
@@ -88,9 +98,12 @@ export class StatsStepManager extends BaseStepManager {
     const statArrayOptions = Object.entries(statArrays).map(([id, values]) => ({
       id: id,
       values: values,
-      selected: selectedArrayId === id,
+      selected: String(selectedArrayId) === id,
       total: values.reduce((sum, val) => sum + val, 0)
     }));
+    // Once an array is picked the list rolls up to that one row (click it to reopen)
+    const selectedArray = statArrayOptions.find(a => a.selected) ?? null;
+    const arraysCollapsed = !!selectedArray && !state.statArraysOpen;
 
     // Prepare individual stats for display with localized labels
     const statOrder = this._getStatKeys();
@@ -151,7 +164,8 @@ export class StatsStepManager extends BaseStepManager {
         hasValue: baseValue !== null && baseValue !== undefined,
         hint: hint,
         canApplyBonus: canApplyBonuses,
-        isKeyStat: isKeyStat
+        isKeyStat: isKeyStat,
+        focused: focus === stat
       };
 
       return statData;
@@ -171,6 +185,16 @@ export class StatsStepManager extends BaseStepManager {
 
     // Prepare derived stats for preview (if all stats are assigned)
     const derivedStats = await this._prepareDerivedStats(assignedStats, state);
+    if (derivedStats && focus) {
+      const dim = entry => { if (entry?.affectedBy) entry.unfocused = !entry.affectedBy.includes(focus); };
+      ['hp', 'manaMax', 'manaCast', 'luck', 'inventory', 'speed'].forEach(k => dim(derivedStats[k]));
+      derivedStats.saves.forEach(dim);
+    }
+
+    // Training panel + Skill grid (TrainingManager; it reads the stats just assigned)
+    const skillTraining = selectedArrayId
+      ? (await this.training._prepareStepSpecificContext(this.getCurrentState()))?.skillTraining ?? null
+      : null;
 
     // Prepare bonuses for display (old system - kept for compatibility)
     const bonusesDisplay = availableBonuses.map(bonus => {
@@ -227,6 +251,8 @@ export class StatsStepManager extends BaseStepManager {
       statArrays: statArrayOptions,
       statData: {  // For template compatibility
         arrays: statArrayOptions,
+        selectedArray,
+        arraysCollapsed,
         unassigned: unassignedDisplay,
         slots: statsDisplay,
         derived: derivedStats
@@ -242,6 +268,7 @@ export class StatsStepManager extends BaseStepManager {
         game.i18n.localize('VAGABOND.CharBuilder.Instructions.Stats') : null,
       availableBonuses: bonusesDisplay,
       bonusStats: bonusStats, // New simplified bonus stats data
+      skillTraining
     };
   }
 
@@ -476,8 +503,49 @@ export class StatsStepManager extends BaseStepManager {
    * Handle selecting a stat array
    * @private
    */
-  _onSelectOption(event, target) {
+  async _onSelectOption(event, target) {
     const arrayId = target.dataset.id;
+    // Same array again: just roll the list back up, keep what is placed
+    if (String(this.getCurrentState().selectedArrayId) === String(arrayId)) {
+      this.updateState('statArraysOpen', false, { skipValidation: true });
+      return;
+    }
+    if (!(await this._confirmArrayChange())) return;
+    this._selectArray(arrayId);
+  }
+
+  _onExpandStatArrays() {
+    this.updateState('statArraysOpen', true, { skipValidation: true });
+  }
+
+  /** Changing the array wipes placed Stats: ask first when any are placed. */
+  async _confirmArrayChange() {
+    const placed = Object.values(this.getCurrentState().assignedStats || {}).some(v => v !== null && v !== undefined);
+    if (!placed) return true;
+    return !!(await foundry.applications.api.DialogV2.confirm({
+      window: { title: game.i18n.localize('VAGABOND.CharBuilder.Stats.ChangeArrayTitle') },
+      content: `<p>${game.i18n.localize('VAGABOND.CharBuilder.Stats.ChangeArrayConfirm')}</p>`,
+      rejectClose: false
+    }));
+  }
+
+  /**
+   * Roll 1dN (N = array count) to pick a stat array; leaves assignment to the player
+   * @private
+   */
+  async _onRollStatArray(event, target) {
+    const arrayIds = Object.keys(this._getStatArrays());
+    if (!arrayIds.length) return;
+    if (!(await this._confirmArrayChange())) return;
+    const roll = await new Roll(`1d${arrayIds.length}`).evaluate();
+    this._selectArray(arrayIds[roll.total - 1]);
+  }
+
+  /**
+   * Select a stat array: its values go to the unassigned pool, assignments are cleared
+   * @private
+   */
+  _selectArray(arrayId) {
     if (!arrayId) return;
 
     const statArrays = this._getStatArrays();
@@ -494,7 +562,8 @@ export class StatsStepManager extends BaseStepManager {
       'selectedArrayId': arrayId,
       'unassignedValues': [...selectedArray].slice(0, statCount),
       'assignedStats': this._makeEmptyAssignedStats(),
-      'selectedValue': null
+      'selectedValue': null,
+      'statArraysOpen': false
     };
 
     this.stateManager.updateMultiple(updates);
@@ -742,13 +811,17 @@ export class StatsStepManager extends BaseStepManager {
       'selectedArrayId': selectedId,
       'assignedStats': assignedStats,
       'unassignedValues': [],
-      'selectedValue': null
+      'selectedValue': null,
+      'statArraysOpen': false
     };
 
     this.stateManager.updateMultiple(updates);
 
     // Auto-apply required stat bonuses (from ancestry/class)
     await this._autoApplyBonuses();
+
+    // Training owed now that Reason is known
+    await this.training.randomize();
   }
 
   /**
@@ -804,7 +877,8 @@ export class StatsStepManager extends BaseStepManager {
     
     return !!state.selectedArrayId && 
            Object.values(assignedStats).every(v => v !== null && v !== undefined) &&
-           (state.unassignedValues || []).length === 0;
+           (state.unassignedValues || []).length === 0 &&
+           isTrainingComplete(state);
   }
 
   /**

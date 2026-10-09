@@ -1,5 +1,5 @@
 /**
- * Skills Step Manager - one place to assign every Training owed at Level 1.
+ * Training Manager - assigns every Training owed at Level 1 (lives inside the Stats step).
  *
  * Training sources ("pools"):
  *   - Class Training (`skillGrant.guaranteed`)      → locked, always trained
@@ -11,7 +11,10 @@
  *   - `trainingPools`  = { key, guaranteed, castingSkill, pools[] } — static pool definitions, rebuilt when the
  *                        Ancestry or Class changes (`key` = trainingPoolsKey(state)). Reason is added at read time.
  *   - `skillSelections` = { [poolId]: skillKey[] } — the picks; `skills` = guaranteed + every pick.
- *   - `activeTrainingPool` / `skillFocusStat` = UI only.
+ *   - `skillFocusStat` = UI only (Stat label focus on the Stats step).
+ *
+ * Checking a Skill pays it from the open pool with the shortest allowed list that can take it
+ * (the most restrictive one), so the player never picks a source.
  *
  * Completion is synchronous (`isTrainingComplete`) so navigation, the Next button and the validation engine
  * all read the same rule without loading documents.
@@ -85,26 +88,25 @@ export function isTrainingComplete(state) {
   return resolveTrainingPools(state).every(p => p.picks.length === p.needed);
 }
 
-export class SkillsStepManager extends BaseStepManager {
+export class TrainingManager extends BaseStepManager {
   constructor(stateManager, dataService, configSystem) {
     super(stateManager, dataService, configSystem);
 
     this.actionHandlers = {
       'toggleTraining': this._onToggleTraining.bind(this),
-      'selectTrainingPool': this._onSelectTrainingPool.bind(this),
-      'focusSkillStat': this._onFocusSkillStat.bind(this),
-      'randomize': this._onRandomize.bind(this)
+      'focusSkillStat': this._onFocusSkillStat.bind(this)
     };
 
     this.requiredData = [];
   }
 
+  /** Not a step of its own: owned by the Stats step. */
   get stepName() {
-    return 'skills';
+    return 'stats';
   }
 
   _getStatePaths() {
-    return ['skillSelections', 'activeTrainingPool', 'skillFocusStat'];
+    return ['skillSelections', 'skillFocusStat'];
   }
 
   isComplete() {
@@ -199,11 +201,6 @@ export class SkillsStepManager extends BaseStepManager {
     }, { skipValidation: true });
   }
 
-  /** First pool still owing Training, else the given fallback. */
-  _firstOpenPool(fallback = null) {
-    return resolveTrainingPools(this.getCurrentState()).find(p => !p.full)?.id ?? fallback;
-  }
-
   /* ------------------------------------------------------------------ */
   /* Context                                                             */
   /* ------------------------------------------------------------------ */
@@ -214,12 +211,6 @@ export class SkillsStepManager extends BaseStepManager {
     state = this.getCurrentState();
 
     const resolved = resolveTrainingPools(state);
-    let activeId = state.activeTrainingPool;
-    if (!resolved.some(p => p.id === activeId)) {
-      activeId = resolved.find(p => !p.full)?.id ?? resolved[0]?.id ?? null;
-      this.updateState('activeTrainingPool', activeId, { skipValidation: true });
-    }
-    const active = resolved.find(p => p.id === activeId) ?? null;
 
     const skillDefs = CONFIG.VAGABOND.homebrew?.skills ?? [];
     const skillLabel = key => skillDefs.find(s => s.key === key)?.label ?? game.i18n.localize(CONFIG.VAGABOND.skills?.[key] ?? key);
@@ -245,7 +236,7 @@ export class SkillsStepManager extends BaseStepManager {
           ? game.i18n.format('VAGABOND.CharBuilder.Skills.ChooseFrom', { skills: listSkills(p.pool) })
           : anyLabel);
       }
-      return { id: p.id, source, detail, used: p.picks.length, needed: p.needed, full: p.full, active: p.id === activeId };
+      return { id: p.id, source, detail, used: p.picks.length, needed: p.needed, full: p.full };
     });
 
     // Difficulties: one preview actor untrained, one fully trained
@@ -272,21 +263,9 @@ export class SkillsStepManager extends BaseStepManager {
         isLocked,
         isCasting: s.key === defs.castingSkill,
         lockLabel: isLocked ? game.i18n.localize('TYPES.Item.class') : null,
-        isOutOfPool: !isTrained && !!active && !active.eligible.includes(s.key),
         isUnfocused: !!focus && focus !== s.stat,
         value: isTrained ? trained?.system.skills?.[s.key]?.difficulty : untrained?.system.skills?.[s.key]?.difficulty,
         trainedValue: isTrained ? null : trained?.system.skills?.[s.key]?.difficulty
-      };
-    });
-
-    const trainingStats = statDefs.map(st => {
-      const own = skills.filter(s => skillDefs.find(d => d.key === s.key)?.stat === st.key);
-      return {
-        key: st.key,
-        label: st.label,
-        value: finalStatValue(state, st.key) ?? '—',
-        total: own.length,
-        focused: focus === st.key
       };
     });
 
@@ -298,13 +277,9 @@ export class SkillsStepManager extends BaseStepManager {
         pools: poolCards,
         skills,
         rows: Math.ceil(skills.length / 2),
-        stats: trainingStats,
         remaining,
         allAssigned: remaining === 0 && resolved.every(p => p.picks.length === p.needed)
-      },
-      hasSelection: true,
-      showRandomButton: resolved.length > 0,
-      useTripleColumn: false
+      }
     };
   }
 
@@ -343,14 +318,13 @@ export class SkillsStepManager extends BaseStepManager {
     if (owner) {
       selections[owner.id] = (selections[owner.id] ?? []).filter(s => s !== skill);
       this._writeSelections(selections);
-      this.updateState('activeTrainingPool', owner.id, { skipValidation: true });
       return;
     }
 
-    // Check: the selected pool if it can take it, else the first pool with room that can
-    const fits = p => !p.full && p.eligible.includes(skill);
-    const active = resolved.find(p => p.id === state.activeTrainingPool);
-    const pool = (active && fits(active)) ? active : resolved.find(fits);
+    // Check: the most restrictive open pool that can take it (keeps "any Skill" pools free for later)
+    const pool = resolved
+      .filter(p => !p.full && p.eligible.includes(skill))
+      .reduce((best, p) => (!best || p.eligible.length < best.eligible.length ? p : best), null);
     if (!pool) {
       target.checked = false;
       const label = (CONFIG.VAGABOND.homebrew?.skills ?? []).find(s => s.key === skill)?.label ?? skill;
@@ -360,24 +334,12 @@ export class SkillsStepManager extends BaseStepManager {
 
     selections[pool.id] = [...(selections[pool.id] ?? []), skill];
     this._writeSelections(selections);
-    if (pool.picks.length + 1 >= pool.needed) {
-      this.updateState('activeTrainingPool', this._firstOpenPool(pool.id), { skipValidation: true });
-    }
-  }
-
-  async _onSelectTrainingPool(event, target) {
-    const id = target.dataset.pool;
-    if (id) this.updateState('activeTrainingPool', id, { skipValidation: true });
   }
 
   async _onFocusSkillStat(event, target) {
     const stat = target.dataset.stat;
     const current = this.getCurrentState().skillFocusStat;
     this.updateState('skillFocusStat', current === stat ? null : stat, { skipValidation: true });
-  }
-
-  async _onRandomize() {
-    await this.randomize();
   }
 
   /** Fill every pool with random eligible Skills (keeps nothing from before). */
@@ -396,9 +358,5 @@ export class SkillsStepManager extends BaseStepManager {
 
   _onReset() {
     this._writeSelections({});
-  }
-
-  async _onActivate() {
-    await this._ensureTrainingPools();
   }
 }

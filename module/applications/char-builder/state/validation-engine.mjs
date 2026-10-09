@@ -1,4 +1,4 @@
-import { isTrainingComplete } from '../steps/skills-step-manager.mjs';
+import { isTrainingComplete } from '../steps/training-manager.mjs';
 
 /**
  * Validation Engine for Character Builder
@@ -45,7 +45,7 @@ export class ValidationEngine {
     this.validators.set('single_selection', this._validateSingleSelection.bind(this));
     this.validators.set('valid_equipment', this._validateValidEquipment.bind(this));
     this.validators.set('no_duplicates_unless_allowed', this._validateNoDuplicatesUnlessAllowed.bind(this));
-    // Training (all sources) is assigned on the Skills step; 'skills_assigned' kept as an alias
+    // Training (all sources) is assigned on the Stats step; 'skills_assigned' kept as an alias
     this.validators.set('training_assigned', (rule, state) => ({ isValid: isTrainingComplete(state) }));
     this.validators.set('skills_assigned', (rule, state) => ({ isValid: isTrainingComplete(state) }));
     this.validators.set('perks_selected', this._validatePerksSelected.bind(this));
@@ -730,9 +730,6 @@ export class ValidationEngine {
       case 'class':
         return { isValid: !!state.selectedClass };
 
-      case 'skills':
-        return { isValid: isTrainingComplete(state) };
-
       case 'stats': {
         // Need all stats assigned AND an array selected
         const stats = state.assignedStats || {};
@@ -748,7 +745,7 @@ export class ValidationEngine {
         const appliedBonusesCount = Object.keys(state.appliedBonuses || {}).length;
         const allBonusesApplied = appliedBonusesCount >= bonusStatsCount;
 
-        return { isValid: allStatsAssigned && arraySelected && allBonusesApplied };
+        return { isValid: allStatsAssigned && arraySelected && allBonusesApplied && isTrainingComplete(state) };
       }
 
       case 'spells':

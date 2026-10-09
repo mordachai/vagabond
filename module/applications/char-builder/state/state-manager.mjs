@@ -1,3 +1,5 @@
+import { isTrainingComplete } from '../steps/training-manager.mjs';
+
 /**
  * Character Builder State Manager
  * 
@@ -41,8 +43,8 @@ export class CharacterBuilderStateManager {
 
       // Skills
       skills: [],
-      skillSelections: {},      // { [trainingPoolId]: skillKey[] } — Skills step picks
-      trainingPools: null,      // Training sources for the current Ancestry + Class (Skills step)
+      skillSelections: {},      // { [trainingPoolId]: skillKey[] } — Training picks (Stats step)
+      trainingPools: null,      // Training sources for the current Ancestry + Class (Stats step)
 
       // Collections
       spells: [],
@@ -296,7 +298,8 @@ export class CharacterBuilderStateManager {
       class: () => !!this.builderData.selectedClass,
       stats: () => {
         return !!this.builderData.selectedArrayId && 
-               Object.values(this.builderData.assignedStats).every(v => v !== null);
+               Object.values(this.builderData.assignedStats).every(v => v !== null) &&
+               isTrainingComplete(this.builderData);
       },
       spells: () => {
         // Optional step, always complete unless over limit
@@ -323,7 +326,7 @@ export class CharacterBuilderStateManager {
    */
   getStepProgress() {
     const stepOrder = this.configSystem?.getStepOrder() || 
-                     ['ancestry', 'class', 'stats', 'skills', 'spells', 'perks', 'starting-packs', 'gear'];
+                     ['ancestry', 'class', 'stats', 'spells', 'perks', 'starting-packs', 'gear'];
     
     const progress = {};
     for (const stepName of stepOrder) {
@@ -427,7 +430,7 @@ export class CharacterBuilderStateManager {
     
     if (path === 'currentStep') {
       const validSteps = this.configSystem?.getStepOrder() || 
-                        ['ancestry', 'class', 'stats', 'skills', 'spells', 'perks', 'starting-packs', 'gear'];
+                        ['ancestry', 'class', 'stats', 'spells', 'perks', 'starting-packs', 'gear'];
       return validSteps.includes(value);
     }
     
@@ -507,7 +510,7 @@ export class CharacterBuilderStateManager {
    */
   _updateCompletedSteps() {
     const stepOrder = this.configSystem?.getStepOrder() || 
-                     ['ancestry', 'class', 'stats', 'skills', 'spells', 'perks', 'starting-packs', 'gear'];
+                     ['ancestry', 'class', 'stats', 'spells', 'perks', 'starting-packs', 'gear'];
     
     this.builderData.completedSteps = stepOrder.filter(step => this.isStepComplete(step));
   }
@@ -531,7 +534,7 @@ export class CharacterBuilderStateManager {
    * @private
    */
   _isStepRequired(stepName) {
-    const requiredSteps = ['ancestry', 'class', 'stats', 'skills'];
+    const requiredSteps = ['ancestry', 'class', 'stats'];
     return requiredSteps.includes(stepName);
   }
 

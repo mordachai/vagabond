@@ -148,7 +148,7 @@ export class ClassStepManager extends BaseStepManager {
    * @private
    */
   async _prepareClassPreviewData(classItem, state) {
-    // Training is assigned on the Skills step; the class only reports its fixed Training here
+    // Training is assigned on the Stats step; the class only reports its fixed Training here
     const skillGrant = classItem.system.skillGrant || { guaranteed: [], choices: [] };
 
     // Group level features by level and enrich descriptions
@@ -403,7 +403,7 @@ export class ClassStepManager extends BaseStepManager {
       this.updateState('perks', []);
       this.updateState('spells', []);
 
-      // Class Training only; every other Training is picked on the Skills step
+      // Class Training only; every other Training is picked on the Stats step
       const skillGrant = classItem.system.skillGrant || { guaranteed: [], choices: [] };
       this.updateState('skills', [...skillGrant.guaranteed]);
       this.updateState('skillSelections', {});

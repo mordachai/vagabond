@@ -1068,7 +1068,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   font-weight: 900;
   line-height: 1;
   margin-right: 4px;
-  font-family: "Ludlow", serif;
+  font-family: "Germania", serif;
 }
 .vagabond-chat-card-v2 .roll-strip .roll-result-banner .roll-vs {
   color: var(--c-dark-blue);
@@ -2175,7 +2175,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .vb-die-wrapper .vb-die-val {
   position: relative;
   z-index: 2;
-  font-family: "Ludlow", serif;
+  font-family: "Germania", serif;
   font-weight: 700;
   font-size: 32px;
   color: #fff;
@@ -2844,7 +2844,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   transform: translate(-50%, -50%);
   z-index: 3;
   color: #fff;
-  font-family: "Ludlow", serif;
+  font-family: "Germania", serif;
   font-weight: bold;
   line-height: 1;
   text-shadow: 0 0 3px black, 0 0 3px black, 0 0 3px black;
@@ -4076,7 +4076,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-family: "Ludlow", serif;
+  font-family: "Germania", serif;
   font-size: calc(1.25rem * var(--vh-font-scale));
   line-height: 1.15;
   white-space: nowrap;
@@ -4263,7 +4263,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   align-items: center;
   gap: 2px;
   margin-left: -4px;
-  font-family: "Ludlow", serif;
+  font-family: "Germania", serif;
   font-size: calc(1.4rem * var(--vh-font-scale));
   color: var(--vagabond-c-chat-yellow);
   text-shadow: var(--vh-outline-2);
@@ -4372,7 +4372,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   position: absolute;
   top: 48%;
   transform: translateY(-50%);
-  font-family: "Ludlow", serif;
+  font-family: "Germania", serif;
   font-size: calc(1.175rem * var(--vh-font-scale));
   color: var(--vagabond-c-chat-yellow);
 }
@@ -4628,7 +4628,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   color: var(--vagabond-c-tan);
 }
 .vbd-hud .vh-stat .vh-stat-val {
-  font-family: "Ludlow", serif;
+  font-family: "Germania", serif;
   font-size: calc(1.2rem * var(--vh-font-scale));
   line-height: 1;
   color: var(--vagabond-c-stat);
@@ -4646,7 +4646,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   font-size: calc(1rem * var(--vh-font-scale));
 }
 .vbd-hud .vh-skill .vh-skill-diff {
-  font-family: "Ludlow", serif;
+  font-family: "Germania", serif;
   color: var(--vagabond-c-stat);
   font-size: calc(1.2rem * var(--vh-font-scale));
 }
@@ -4681,7 +4681,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   color: var(--vagabond-c-lite);
 }
 .vbd-hud .vh-save .vh-save-diff {
-  font-family: "Ludlow", serif;
+  font-family: "Germania", serif;
   font-size: calc(1.5rem * var(--vh-font-scale));
   color: var(--vagabond-c-stat);
 }
@@ -4710,13 +4710,13 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   white-space: nowrap;
 }
 .vbd-hud .vh-inv-val {
-  font-family: "Ludlow", serif;
+  font-family: "Germania", serif;
   color: var(--vagabond-c-stat);
   flex: 0 0 auto;
 }
 .vbd-hud .vh-inv-range {
   flex: 0 0 auto;
-  font-family: "Ludlow", serif;
+  font-family: "Germania", serif;
   font-size: calc(0.7rem * var(--vh-font-scale));
   color: var(--vagabond-c-white);
   border: 1px solid var(--vagabond-dark-yellow);
@@ -6397,6 +6397,502 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   font-family: "Germania", serif;
   font-size: 1.15rem;
 }
+#vagabond-char-builder .vagabond-builder .builder-body .selection-list-column .stat-arrays-title {
+  height: auto;
+  min-height: 38px;
+  margin: 0 0 8px;
+  padding: 6px 10px;
+  border: none;
+  justify-content: center;
+  text-align: center;
+  white-space: normal;
+  font-size: 1.15rem;
+  line-height: 1.15;
+}
+#vagabond-char-builder .vagabond-builder .builder-body .selection-list-column .stat-arrays-title::after {
+  display: none;
+}
+.vagabond-builder .builder-body .selection-list-column .stat-arrays-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.vagabond-builder .builder-body .selection-list-column .stat-arrays-grid .stat-array-item {
+  padding: 1px 4px;
+  border: 1px solid rgba(128, 128, 128, 0.35);
+  border-radius: 4px;
+}
+.vagabond-builder .builder-body .selection-list-column .stat-arrays-grid .stat-array-item .array-label {
+  margin-right: 4px;
+  flex-shrink: 0;
+}
+.vagabond-builder .builder-body .selection-list-column .stat-arrays-grid .stat-array-item .array-values {
+  font-size: 1rem;
+  white-space: nowrap;
+}
+.vagabond-builder .builder-body .selection-list-column .stat-array-current {
+  padding: 3px 8px;
+  border: 1px solid rgba(128, 128, 128, 0.35);
+  border-radius: 4px;
+}
+.vagabond-builder .builder-body .selection-list-column .stat-array-current .array-values {
+  flex: 1;
+  font-size: 1.1rem;
+}
+.vagabond-builder .builder-body .selection-list-column .stat-array-current i {
+  font-size: 0.8rem;
+  opacity: 0.7;
+}
+.vagabond-builder .builder-body .selection-list-column .stat-array-roll {
+  width: 100%;
+  height: auto;
+  line-height: normal;
+  margin-top: 6px;
+  padding: 4px;
+  border: none;
+  background: transparent;
+  background-image: url("../assets/ui/chat/apply-direct-bg.webp");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  color: #fff;
+  font-family: "Germania", serif;
+  font-size: 1.1rem;
+  filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.8));
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 12px;
+  color: var(--vagabond-c-text-primary);
+  font-size: 14px;
+}
+#vagabond-char-builder .vagabond-builder .builder-body .selection-list-column .stat-distribute .stat-arrays-title {
+  align-self: stretch;
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .stat-assigner {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  flex: 1;
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .btn-reset-stats-icon {
+  background: transparent;
+  color: #c62828;
+  border: 2px solid #c62828;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  flex-shrink: 0;
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .btn-reset-stats-icon:hover {
+  background: #c62828;
+  color: white;
+  font-weight: bold;
+  transform: scale(1.05);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .btn-reset-stats-icon:active {
+  transform: scale(0.95);
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .btn-reset-stats-icon i {
+  margin: 0;
+  line-height: 1;
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .stat-slot-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .available-pool {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .pool-values {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .stat-slot {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 4px;
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .stat-slot label {
+  font-size: 1.1rem;
+  font-weight: 800;
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .stat-slot label.key-stat {
+  color: var(--vagabond-c-red);
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .stat-slot .hex-box-wrapper {
+  position: relative;
+  width: 45px;
+  height: 45px;
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .stat-slot .hex-box-wrapper .perk-bonus-badge {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  bottom: -5px;
+  right: -10px;
+  border-radius: 2px;
+  font-family: "Germania", serif;
+  font-size: 0.95em;
+  font-weight: 700;
+  background-color: #f3d71e;
+  color: #000000;
+  z-index: 10;
+  pointer-events: none;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .stat-slot .hex-box {
+  width: 45px;
+  height: 45px;
+  border: 2px solid transparent;
+  background: var(--vagabond-c-text-primary);
+  color: var(--vagabond-c-white);
+  line-height: 40px;
+  font-weight: bold;
+  font-size: 2.2rem;
+  font-family: "Germania", serif;
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .stat-slot .hex-box.empty {
+  border-style: dotted;
+  border-color: var(--vagabond-c-text-primary);
+  color: #787878;
+  background: white;
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .stat-slot .hex-box.filled:hover + .remove-stat-btn {
+  opacity: 1;
+  pointer-events: auto;
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .stat-slot .remove-stat-btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(244, 67, 54, 0.75);
+  color: white;
+  border: 2px solid rgba(198, 40, 40, 0.8);
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.9rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  z-index: 10;
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .stat-slot .remove-stat-btn:hover {
+  opacity: 1;
+  pointer-events: auto;
+  background: rgba(244, 67, 54, 0.9);
+  transform: translate(-50%, -50%) scale(1.1);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .stat-slot .remove-stat-btn:active {
+  transform: translate(-50%, -50%) scale(0.95);
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .stat-slot .remove-stat-btn i {
+  margin: 0;
+  line-height: 1;
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .stat-slot .bonus-tag {
+  position: absolute;
+  top: -8px;
+  right: -14px;
+  background: #4caf50;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 3px 6px;
+  border-radius: 50%;
+  border: 2px solid #388e3c;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 24px;
+  height: 24px;
+  line-height: 1;
+  z-index: 11;
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .stat-slot .bonus-tag.applied {
+  background: #4caf50;
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .stat-slot .bonus-tag.applied:hover {
+  background: #f44336;
+  border-color: #c62828;
+  transform: scale(1.1);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .stat-slot .bonus-tag.clickable {
+  background: #2196f3;
+  border-color: #1565c0;
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .stat-slot .bonus-tag.clickable:hover {
+  background: #42a5f5;
+  transform: scale(1.1);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .stat-slot .bonus-tag:active {
+  transform: scale(0.95);
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .stat-slot .bonus-tag i {
+  font-size: 0.7rem;
+  margin: 0;
+  line-height: 1;
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .value-chip {
+  width: 44px;
+  height: 44px;
+  background: var(--vagabond-c-red);
+  color: white;
+  border: none;
+  margin: 8px;
+  cursor: grab;
+  font-size: 22px;
+  transition: transform 0.1s ease, opacity 0.2s ease;
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .value-chip:active {
+  cursor: grabbing;
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .value-chip.active {
+  background: var(--vagabond-c-red);
+  outline: 2px solid gold;
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .value-chip.dragging {
+  opacity: 0.5;
+  transform: scale(0.95);
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .bonus-stats-container {
+  margin-top: 16px;
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .bonus-stats-container.disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .bonus-stats-container .bonus-stats-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border: 2px solid var(--vagabond-c-green);
+  border-radius: 6px;
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .bonus-stats-container .bonus-stats-header .bonus-label {
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .bonus-stats-container .bonus-stats-header .bonus-value {
+  flex-shrink: 0;
+  font-family: "Germania", serif;
+  font-size: 1.6rem;
+  line-height: 1;
+  color: var(--vagabond-c-green);
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .bonus-stats-container .bonus-source-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--vagabond-c-text-primary);
+  margin-bottom: 6px;
+  padding: 4px 8px;
+  background: rgba(255, 200, 100, 0.2);
+  border-left: 3px solid #d4a574;
+  font-style: italic;
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .bonus-stats-container .bonus-stats-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.5);
+  border: 2px solid var(--vagabond-c-text-primary);
+  border-radius: 4px;
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .bonus-stats-container .bonus-stats-row .bonus-label {
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--vagabond-c-text-primary);
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .bonus-stats-container .bonus-stats-row .bonus-value {
+  font-family: "Manofa", serif;
+  font-size: large;
+  font-weight: 800;
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .bonus-stats-container .bonus-stats-row .separator {
+  color: var(--vagabond-c-text-primary);
+  font-weight: 700;
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .bonus-stats-container .bonus-stats-row .stat-selector {
+  flex: 1;
+  padding: 6px 10px;
+  font-size: 0.95rem;
+  background: white;
+  border: 1px solid var(--vagabond-c-text-primary);
+  border-radius: 3px;
+  cursor: pointer;
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .bonus-stats-container .bonus-stats-row .stat-selector:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .bonus-stats-container .bonus-stats-row .stat-selector option:disabled {
+  color: #999;
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .available-pool {
+  gap: 0;
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .pool-values {
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .value-chip {
+  width: 32px;
+  height: 32px;
+  margin: 0;
+  padding: 0;
+  line-height: 32px;
+  font-size: 18px;
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .stat-assigner {
+  align-self: stretch;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px 4px;
+  margin-top: 4px;
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .stat-slot label {
+  font-size: 1rem;
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .btn-reset-stats-icon {
+  margin-top: 8px;
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .bonus-stats-container {
+  align-self: stretch;
+  margin-top: 8px;
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .chevrons-down {
+  font-size: 1.3rem;
+  color: var(--vagabond-c-text-secondary);
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute div:has(> .chevrons-down) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 32px;
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .value-chip,
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .value-chip.active {
+  background: var(--vagabond-c-chat-yellow);
+  color: #000;
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .value-chip.active {
+  outline: 2px solid var(--vagabond-c-text-primary);
+  outline-offset: 1px;
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .stat-slot label {
+  padding: 0 4px;
+  border-radius: 3px;
+  color: var(--vagabond-c-text-primary);
+  cursor: pointer;
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .stat-slot label.focused, .vagabond-builder .builder-body .selection-list-column .stat-distribute .stat-slot label.focused.key-stat {
+  background: var(--vagabond-c-chat-yellow);
+  color: #000;
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .stat-slot label.key-stat {
+  color: var(--vagabond-c-text-secondary);
+  text-decoration: underline 2px var(--vagabond-c-chat-yellow);
+  text-underline-offset: 3px;
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .stat-slot .hex-box-wrapper {
+  width: 42px;
+  height: 48px;
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .stat-slot .hex-box {
+  position: relative;
+  isolation: isolate;
+  width: 42px;
+  height: 48px;
+  line-height: 48px;
+  border: none;
+  background: transparent;
+  color: #fff;
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .stat-slot .hex-box::before, .vagabond-builder .builder-body .selection-list-column .stat-distribute .stat-slot .hex-box::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .stat-slot .hex-box::before {
+  background: var(--vagabond-c-black);
+  clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .stat-slot .hex-box::after {
+  background: var(--vagabond-c-text-primary);
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpolygon points='50,1 99,25.5 99,74.5 50,99 1,74.5 1,25.5' fill='none' stroke='black' stroke-width='2' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E") center/100% 100% no-repeat;
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .stat-slot .hex-box.empty {
+  border: none;
+  background: transparent;
+  color: var(--vagabond-c-muted);
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .stat-slot .hex-box.empty::before {
+  background: transparent;
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .stat-slot .hex-box.empty::after {
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpolygon points='50,1 99,25.5 99,74.5 50,99 1,74.5 1,25.5' fill='none' stroke='black' stroke-width='2' stroke-dasharray='3 3' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .stat-slot .remove-stat-btn,
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .stat-slot .remove-stat-btn:hover {
+  background: rgba(0, 0, 0, 0.8);
+  border-color: #fff;
+  color: #fff;
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .btn-reset-stats-icon {
+  color: var(--vagabond-c-text-primary);
+  border-color: var(--vagabond-c-text-primary);
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .btn-reset-stats-icon:hover {
+  background: var(--vagabond-c-chat-yellow);
+  border-color: var(--vagabond-c-chat-yellow);
+  color: #000;
+}
+.vagabond-builder .builder-body .selection-list-column .stat-distribute .bonus-stats-container {
+  color: var(--vagabond-c-text-primary);
+}
 .vagabond-builder .builder-body .selection-list-column .stat-array-item {
   font-size: 1rem;
 }
@@ -6407,11 +6903,12 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   height: 20px;
   align-items: center;
   justify-content: center;
-  font-family: "Ludlow", serif;
+  font-family: "Germania", serif;
   font-weight: 500;
   font-size: 0.95rem;
   padding: 2px;
-  color: var(--vagabond-c-text-primary);
+  color: #000;
+  background: var(--vagabond-c-chat-yellow);
   border: 1px solid black;
   margin-right: 8px;
 }
@@ -6474,393 +6971,6 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   flex-direction: column;
   min-height: 0;
   gap: 15px;
-}
-.vagabond-builder .builder-body .decision-zone {
-  flex: 0 0 auto;
-  padding: 10px;
-  background: rgba(255, 255, 255, 0.4);
-  border: 1px dashed black;
-  color: var(--vagabond-c-black);
-}
-.vagabond-builder .builder-body .decision-zone .skill-decision {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 10px;
-}
-.vagabond-builder .builder-body .decision-zone .pool-options {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  column-gap: 6px;
-}
-.vagabond-builder .builder-body .decision-zone .pool-options .checkbox-label {
-  word-break: keep-all;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  cursor: pointer;
-  user-select: none;
-}
-.vagabond-builder .builder-body .decision-zone .pool-options .checkbox-label.disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-}
-.vagabond-builder .builder-body .decision-zone .pool-options .checkbox-label.disabled input[type=checkbox] {
-  cursor: not-allowed;
-  accent-color: #666;
-}
-.vagabond-builder .builder-body .decision-zone .pool-options .checkbox-label input[type=checkbox] {
-  cursor: pointer;
-  width: 16px;
-  height: 16px;
-  accent-color: var(--vagabond-c-red);
-}
-.vagabond-builder .builder-body .decision-zone .pool-options .checkbox-label input[type=checkbox]:disabled:checked {
-  opacity: 1;
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  background-color: #888;
-  border: 2px solid #666;
-  border-radius: 2px;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.vagabond-builder .builder-body .decision-zone .pool-options .checkbox-label input[type=checkbox]:disabled:checked::after {
-  content: "✓";
-  color: white;
-  font-size: 11px;
-  font-weight: bold;
-  line-height: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.vagabond-builder .builder-body .decision-zone .pool-options .checkbox-label i.fa-lock {
-  font-size: 10px;
-  color: #999;
-  margin-left: 2px;
-}
-.vagabond-builder .builder-body .decision-zone .stat-assigner-row {
-  display: flex;
-  align-items: baseline;
-  gap: 12px;
-  margin-top: 8px;
-}
-.vagabond-builder .builder-body .decision-zone .stat-assigner {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  flex: 1;
-}
-.vagabond-builder .builder-body .decision-zone .btn-reset-stats-icon {
-  background: transparent;
-  color: #c62828;
-  border: 2px solid #c62828;
-  border-radius: 50%;
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  font-size: 1rem;
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-  flex-shrink: 0;
-}
-.vagabond-builder .builder-body .decision-zone .btn-reset-stats-icon:hover {
-  background: #c62828;
-  color: white;
-  font-weight: bold;
-  transform: scale(1.05);
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
-}
-.vagabond-builder .builder-body .decision-zone .btn-reset-stats-icon:active {
-  transform: scale(0.95);
-}
-.vagabond-builder .builder-body .decision-zone .btn-reset-stats-icon i {
-  margin: 0;
-  line-height: 1;
-}
-.vagabond-builder .builder-body .decision-zone .stat-slot-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: relative;
-}
-.vagabond-builder .builder-body .decision-zone .available-pool {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-}
-.vagabond-builder .builder-body .decision-zone .pool-values {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-}
-.vagabond-builder .builder-body .decision-zone .zone-header {
-  font-family: "Germania", serif;
-  border-bottom: 1px solid black;
-  margin-bottom: 8px;
-}
-.vagabond-builder .builder-body .decision-zone .stat-slot {
-  display: flex;
-  flex-direction: column-reverse;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  gap: 4px;
-}
-.vagabond-builder .builder-body .decision-zone .stat-slot label {
-  font-size: 1.1rem;
-  font-weight: 800;
-}
-.vagabond-builder .builder-body .decision-zone .stat-slot label.key-stat {
-  color: var(--vagabond-c-red);
-}
-.vagabond-builder .builder-body .decision-zone .stat-slot .hex-box-wrapper {
-  position: relative;
-  width: 45px;
-  height: 45px;
-}
-.vagabond-builder .builder-body .decision-zone .stat-slot .hex-box-wrapper .perk-bonus-badge {
-  position: absolute;
-  width: 16px;
-  height: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  bottom: -5px;
-  right: -10px;
-  border-radius: 2px;
-  font-family: "Germania", serif;
-  font-size: 0.95em;
-  font-weight: 700;
-  background-color: #f3d71e;
-  color: #000000;
-  z-index: 10;
-  pointer-events: none;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-}
-.vagabond-builder .builder-body .decision-zone .stat-slot .hex-box {
-  width: 45px;
-  height: 45px;
-  border: 2px solid transparent;
-  background: var(--vagabond-c-text-primary);
-  color: var(--vagabond-c-white);
-  line-height: 40px;
-  font-weight: bold;
-  font-size: 2.2rem;
-  font-family: "Ludlow", serif;
-}
-.vagabond-builder .builder-body .decision-zone .stat-slot .hex-box.empty {
-  border-style: dotted;
-  border-color: var(--vagabond-c-text-primary);
-  color: #787878;
-  background: white;
-}
-.vagabond-builder .builder-body .decision-zone .stat-slot .hex-box.filled:hover + .remove-stat-btn {
-  opacity: 1;
-  pointer-events: auto;
-}
-.vagabond-builder .builder-body .decision-zone .stat-slot .remove-stat-btn {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: rgba(244, 67, 54, 0.75);
-  color: white;
-  border: 2px solid rgba(198, 40, 40, 0.8);
-  border-radius: 50%;
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  font-size: 0.9rem;
-  opacity: 0;
-  pointer-events: none;
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-  z-index: 10;
-}
-.vagabond-builder .builder-body .decision-zone .stat-slot .remove-stat-btn:hover {
-  opacity: 1;
-  pointer-events: auto;
-  background: rgba(244, 67, 54, 0.9);
-  transform: translate(-50%, -50%) scale(1.1);
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
-}
-.vagabond-builder .builder-body .decision-zone .stat-slot .remove-stat-btn:active {
-  transform: translate(-50%, -50%) scale(0.95);
-}
-.vagabond-builder .builder-body .decision-zone .stat-slot .remove-stat-btn i {
-  margin: 0;
-  line-height: 1;
-}
-.vagabond-builder .builder-body .decision-zone .stat-slot .bonus-tag {
-  position: absolute;
-  top: -8px;
-  right: -14px;
-  background: #4caf50;
-  color: white;
-  font-size: 0.75rem;
-  font-weight: 700;
-  padding: 3px 6px;
-  border-radius: 50%;
-  border: 2px solid #388e3c;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  width: 24px;
-  height: 24px;
-  line-height: 1;
-  z-index: 11;
-}
-.vagabond-builder .builder-body .decision-zone .stat-slot .bonus-tag.applied {
-  background: #4caf50;
-}
-.vagabond-builder .builder-body .decision-zone .stat-slot .bonus-tag.applied:hover {
-  background: #f44336;
-  border-color: #c62828;
-  transform: scale(1.1);
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
-}
-.vagabond-builder .builder-body .decision-zone .stat-slot .bonus-tag.clickable {
-  background: #2196f3;
-  border-color: #1565c0;
-}
-.vagabond-builder .builder-body .decision-zone .stat-slot .bonus-tag.clickable:hover {
-  background: #42a5f5;
-  transform: scale(1.1);
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
-}
-.vagabond-builder .builder-body .decision-zone .stat-slot .bonus-tag:active {
-  transform: scale(0.95);
-}
-.vagabond-builder .builder-body .decision-zone .stat-slot .bonus-tag i {
-  font-size: 0.7rem;
-  margin: 0;
-  line-height: 1;
-}
-.vagabond-builder .builder-body .decision-zone .value-chip {
-  width: 44px;
-  height: 44px;
-  background: var(--vagabond-c-red);
-  color: white;
-  border: none;
-  margin: 8px;
-  cursor: grab;
-  font-size: 22px;
-  transition: transform 0.1s ease, opacity 0.2s ease;
-}
-.vagabond-builder .builder-body .decision-zone .value-chip:active {
-  cursor: grabbing;
-}
-.vagabond-builder .builder-body .decision-zone .value-chip.active {
-  background: var(--vagabond-c-red);
-  outline: 2px solid gold;
-}
-.vagabond-builder .builder-body .decision-zone .value-chip.dragging {
-  opacity: 0.5;
-  transform: scale(0.95);
-}
-.vagabond-builder .builder-body .decision-zone .skill-tag.locked {
-  background: #ccc;
-  border: 1px solid #444;
-  padding: 2px 6px;
-  margin-right: 5px;
-  font-size: 0.9rem;
-  width: fit-content;
-}
-.vagabond-builder .builder-body .decision-zone .bonus-stats-container {
-  margin-top: 16px;
-}
-.vagabond-builder .builder-body .decision-zone .bonus-stats-container.disabled {
-  opacity: 0.6;
-  pointer-events: none;
-}
-.vagabond-builder .builder-body .decision-zone .bonus-stats-container .bonus-stats-header {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 4px 8px;
-  border: 1px solid var(--vagabond-c-text-primary);
-  border-radius: 6px;
-}
-.vagabond-builder .builder-body .decision-zone .bonus-stats-container .bonus-stats-header .bonus-label {
-  font-size: 0.9rem;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.vagabond-builder .builder-body .decision-zone .bonus-stats-container .bonus-stats-header .bonus-label i {
-  color: #4caf50;
-  font-size: 0.8rem;
-}
-.vagabond-builder .builder-body .decision-zone .bonus-stats-container .bonus-stats-header .bonus-label .bonus-value {
-  font-size: 0.9rem;
-  font-weight: 800;
-}
-.vagabond-builder .builder-body .decision-zone .bonus-stats-container .bonus-source-label {
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--vagabond-c-text-primary);
-  margin-bottom: 6px;
-  padding: 4px 8px;
-  background: rgba(255, 200, 100, 0.2);
-  border-left: 3px solid #d4a574;
-  font-style: italic;
-}
-.vagabond-builder .builder-body .decision-zone .bonus-stats-container .bonus-stats-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 10px 12px;
-  background: rgba(255, 255, 255, 0.5);
-  border: 2px solid var(--vagabond-c-text-primary);
-  border-radius: 4px;
-}
-.vagabond-builder .builder-body .decision-zone .bonus-stats-container .bonus-stats-row .bonus-label {
-  font-weight: 700;
-  font-size: 1rem;
-  color: var(--vagabond-c-text-primary);
-}
-.vagabond-builder .builder-body .decision-zone .bonus-stats-container .bonus-stats-row .bonus-value {
-  font-family: "Manofa", serif;
-  font-size: large;
-  font-weight: 800;
-}
-.vagabond-builder .builder-body .decision-zone .bonus-stats-container .bonus-stats-row .separator {
-  color: var(--vagabond-c-text-primary);
-  font-weight: 700;
-}
-.vagabond-builder .builder-body .decision-zone .bonus-stats-container .bonus-stats-row .stat-selector {
-  flex: 1;
-  padding: 6px 10px;
-  font-size: 0.95rem;
-  background: white;
-  border: 1px solid var(--vagabond-c-text-primary);
-  border-radius: 3px;
-  cursor: pointer;
-}
-.vagabond-builder .builder-body .decision-zone .bonus-stats-container .bonus-stats-row .stat-selector:disabled {
-  cursor: not-allowed;
-  opacity: 0.5;
-}
-.vagabond-builder .builder-body .decision-zone .bonus-stats-container .bonus-stats-row .stat-selector option:disabled {
-  color: #999;
 }
 .vagabond-builder .builder-body .content-zone {
   display: grid;
@@ -7203,6 +7313,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   white-space: nowrap;
   overflow: hidden;
   padding: 0 8px;
+  transition: opacity 0.6s ease;
 }
 .vagabond-builder .preview-skills-grid .skill-item.trained {
   font-weight: 800;
@@ -7213,7 +7324,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 }
 .vagabond-builder .preview-skills-grid .skill-item .skill-name .stat-abbr {
   font-size: 0.75rem;
-  color: #666;
+  color: var(--vagabond-c-muted);
   font-weight: normal;
   margin-left: 2px;
 }
@@ -7226,29 +7337,25 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 }
 .vagabond-builder .preview-skills-grid .skill-item .skill-value {
   flex: 0 0 auto;
-  font-family: "Eskapade", serif;
-  font-weight: 600;
-  font-size: 1.25rem;
-  color: var(--vagabond-c-red);
+  font-family: "Germania", serif;
+  font-size: 1.4rem;
+  line-height: 1;
+  color: var(--vagabond-c-text-secondary);
   min-width: 15px;
   text-align: right;
 }
-.vagabond-builder .preview-skills-grid .skill-item.stat-hover-highlight {
-  box-shadow: 0 0 12px rgba(255, 29, 29, 0.9) !important;
-  box-shadow: inset 0 0 4px rgba(255, 29, 29, 0.9) !important;
-  background-color: rgba(255, 29, 29, 0.08) !important;
-  border-radius: 6px;
-  transition: all 0.6s ease-in-out;
+.vagabond-builder .preview-skills-grid .skill-item.unfocused {
+  opacity: 0.35;
 }
 .vagabond-builder .preview-skills-grid .skill-item.value-changed {
   animation: valueFlash 5s ease-in-out !important;
 }
 @keyframes valueFlash {
   0% {
-    text-shadow: 0 0 8px rgba(200, 50, 50, 0.7);
+    text-shadow: 0 0 8px rgba(222, 214, 86, 0.7);
   }
   50% {
-    text-shadow: 0 0 15px rgb(200, 50, 50);
+    text-shadow: 0 0 15px rgb(222, 214, 86);
   }
   100% {
     text-shadow: none;
@@ -7886,34 +7993,32 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .vagabond-builder .training-hint:hover {
   opacity: 1;
 }
-.vagabond-builder .decision-zone:has(.training-panel) {
-  background: var(--vagabond-c-surface);
-  border-color: var(--vagabond-c-text-primary);
-  color: var(--vagabond-c-text-primary);
-}
-.vagabond-builder .decision-zone .training-panel {
+.vagabond-builder .training-panel {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
-.vagabond-builder .decision-zone .training-panel .training-panel-head {
+.vagabond-builder .training-panel .training-panel-head {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
   gap: 4px 8px;
 }
-.vagabond-builder .decision-zone .training-panel .training-panel-head strong {
+.vagabond-builder .training-panel .training-panel-head strong {
   font-family: "Germania", serif;
   font-size: 1.25rem;
+  color: var(--vagabond-c-text-secondary);
 }
-.vagabond-builder .decision-zone .training-panel .training-pools {
+.vagabond-builder .training-panel .training-panel-head .training-panel-note {
+  font-size: 0.9rem;
+  opacity: 0.75;
+}
+.vagabond-builder .training-panel .training-pools {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 8px;
 }
-.vagabond-builder .decision-zone .training-panel .training-pool {
-  height: auto;
-  line-height: normal;
+.vagabond-builder .training-panel .training-pool {
   margin: 0;
   display: grid;
   grid-template-columns: auto 1fr;
@@ -7926,74 +8031,86 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   background: var(--vagabond-c-surface);
   border: 1px solid var(--vagabond-c-inset-1);
   border-radius: 3px;
-  cursor: pointer;
 }
-.vagabond-builder .decision-zone .training-panel .training-pool .pool-count {
+.vagabond-builder .training-panel .training-pool .pool-count {
   grid-row: span 2;
   min-width: 2.4em;
   text-align: center;
-  font-family: "Ludlow", serif;
+  font-family: "Germania", serif;
   font-size: 1.5rem;
   color: var(--vagabond-c-text-secondary);
 }
-.vagabond-builder .decision-zone .training-panel .training-pool .pool-source {
+.vagabond-builder .training-panel .training-pool .pool-source {
   font-family: "Germania", serif;
   font-size: 1.1rem;
 }
-.vagabond-builder .decision-zone .training-panel .training-pool .pool-detail {
+.vagabond-builder .training-panel .training-pool .pool-detail {
   font-size: 0.9rem;
   opacity: 0.85;
 }
-.vagabond-builder .decision-zone .training-panel .training-pool.full .pool-count {
+.vagabond-builder .training-panel .training-pool.full .pool-count {
   color: var(--vagabond-c-green);
 }
-.vagabond-builder .decision-zone .training-panel .training-pool.active {
-  border-color: var(--vagabond-c-chat-yellow);
-  box-shadow: 0 0 8px -1px var(--vagabond-c-chat-yellow), inset 0 0 0 1px var(--vagabond-c-chat-yellow);
-}
-.vagabond-builder .decision-zone .training-panel .training-pool.locked {
+.vagabond-builder .training-panel .training-pool.locked {
   cursor: default;
   opacity: 0.8;
 }
-.vagabond-builder .decision-zone .training-panel .training-pool.locked .pool-count {
+.vagabond-builder .training-panel .training-pool.locked .pool-count {
   font-size: 1.2rem;
   color: var(--vagabond-c-text-primary);
   opacity: 0.6;
 }
-.vagabond-builder .selection-list-column .directory-item.training-stat {
-  justify-content: space-between;
-  gap: 8px;
-  list-style: none;
+.vagabond-builder .selection-preview:has(.stats-training) {
+  display: flex;
+  flex-direction: column;
 }
-.vagabond-builder .selection-list-column .directory-item.training-stat .training-stat-name {
-  font-family: "Germania", serif;
-  font-size: 1.3rem;
+.vagabond-builder .stats-training {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
 }
-.vagabond-builder .selection-list-column .directory-item.training-stat .training-stat-value {
-  display: grid;
-  place-items: center;
-  width: 36px;
-  height: 40px;
-  flex-shrink: 0;
-  font-family: "Ludlow", serif;
-  font-size: 1.4rem;
-  color: var(--vagabond-c-white);
-  background: var(--vagabond-c-black);
-  clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+.vagabond-builder .stats-training .training-panel {
+  gap: 4px;
+  margin: 6px 0 4px;
+  padding: 5px 8px;
+  background: var(--vagabond-c-surface);
+  border: 1px dashed var(--vagabond-c-text-primary);
+  color: var(--vagabond-c-text-primary);
 }
-.vagabond-builder .selection-list-column .directory-item.training-stat.active {
-  background: var(--vagabond-c-chat-yellow);
-  color: var(--vagabond-c-black);
-  border-left: 3px solid var(--vagabond-c-black);
+.vagabond-builder .stats-training .training-panel .training-panel-head strong {
+  font-size: 1.1rem;
 }
-.vagabond-builder .selection-list-column .directory-item.training-stat.no-skills {
-  cursor: default;
-  opacity: 0.55;
+.vagabond-builder .stats-training .training-panel .training-pools {
+  gap: 6px;
 }
-.vagabond-builder .selection-list-column .training-stats-note {
-  margin: 10px 8px 0;
-  font-size: 0.95rem;
-  opacity: 0.75;
+.vagabond-builder .stats-training .training-panel .training-pool {
+  padding: 2px 8px;
+}
+.vagabond-builder .stats-training .training-panel .training-pool .pool-count {
+  font-size: 1.2rem;
+}
+.vagabond-builder .stats-training .training-panel .training-pool .pool-source {
+  font-size: 1rem;
+}
+.vagabond-builder .stats-training .training-panel .training-pool .pool-detail {
+  font-size: 0.8rem;
+}
+.vagabond-builder .stats-training .training-skills {
+  flex: 1 0 auto;
+  min-height: 0;
+}
+.vagabond-builder .stats-training .training-skill {
+  padding: 1px 8px;
+}
+.vagabond-builder .stats-training .training-skill .training-skill-name {
+  font-size: 1.15rem;
+}
+.vagabond-builder .stats-training .training-skill .training-skill-value {
+  font-size: 1.45rem;
+}
+.vagabond-builder .stats-preview-results .preview-skills-grid {
+  padding: 6px 10px;
+  gap: 4px 15px;
 }
 .vagabond-builder .training-skills {
   display: grid;
@@ -8008,7 +8125,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .vagabond-builder .training-skill {
   position: relative;
   display: grid;
-  grid-template-columns: 20px minmax(0, 1fr) auto;
+  grid-template-columns: 24px minmax(0, 1fr) auto;
   align-items: center;
   align-content: center;
   gap: 0 10px;
@@ -8016,7 +8133,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   border: 1px solid transparent;
   border-radius: 3px;
   cursor: pointer;
-  transition: opacity 0.15s ease;
+  transition: opacity 0.6s ease;
 }
 .vagabond-builder .training-skill:hover {
   border-color: var(--vagabond-c-inset-1);
@@ -8030,8 +8147,8 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   outline: 2px solid var(--vagabond-c-chat-yellow);
 }
 .vagabond-builder .training-skill .training-check {
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
@@ -8071,14 +8188,16 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   border: 1px solid var(--vagabond-c-inset-1);
 }
 .vagabond-builder .training-skill .training-chip.casting {
+  padding: 2px 5px;
   color: var(--vagabond-c-black);
   background: var(--vagabond-c-chat-yellow);
+  cursor: help;
 }
 .vagabond-builder .training-skill .training-chip i {
   font-size: 0.75rem;
 }
 .vagabond-builder .training-skill .training-skill-value {
-  font-family: "Ludlow", serif;
+  font-family: "Germania", serif;
   font-size: 1.7rem;
   line-height: 1;
   color: var(--vagabond-c-text-secondary);
@@ -8096,14 +8215,10 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .vagabond-builder .training-skill.trained .training-skill-name {
   font-weight: 700;
 }
-.vagabond-builder .training-skill.casting {
-  border-color: var(--vagabond-c-chat-yellow);
-  background: rgba(222, 214, 86, 0.12);
-}
 .vagabond-builder .training-skill.locked {
   cursor: default;
 }
-.vagabond-builder .training-skill.out-of-pool, .vagabond-builder .training-skill.unfocused {
+.vagabond-builder .training-skill.unfocused {
   opacity: 0.35;
 }
 
@@ -11869,7 +11984,7 @@ ol#combat-tracker.directory-list {
 }
 .vsc-root .vsc-circle .vsc-num {
   fill: rgb(var(--ac));
-  font-family: "Ludlow", serif;
+  font-family: "Germania", serif;
   font-size: 26px;
   pointer-events: none;
   paint-order: stroke fill;
@@ -12015,7 +12130,7 @@ ol#combat-tracker.directory-list {
   border: 1px solid rgb(var(--ac));
   border-radius: 10px;
   padding: 1px 2px;
-  font-family: "Ludlow", serif;
+  font-family: "Germania", serif;
   font-size: 16px;
   pointer-events: auto;
   z-index: 5;
@@ -22370,7 +22485,7 @@ ol#combat-tracker.directory-list {
 .vagabond .armor-overlay .armor-value {
   position: relative;
   top: -8px;
-  font-family: "Ludlow", serif;
+  font-family: "Germania", serif;
   font-size: 2em;
   color: var(--vagabond-c-chat-yellow);
   text-align: center;
@@ -22457,7 +22572,7 @@ ol#combat-tracker.directory-list {
   align-items: baseline;
   justify-content: center;
   gap: 2px;
-  font-family: "Ludlow", serif;
+  font-family: "Germania", serif;
   position: absolute;
   bottom: -15px;
   left: 50%;
@@ -22766,7 +22881,7 @@ ol#combat-tracker.directory-list {
   border: none;
   border-bottom: 1px solid transparent;
   background: transparent;
-  font-family: "Ludlow", serif;
+  font-family: "Germania", serif;
   font-size: 1.1em;
   padding: 0 1px;
   margin: 0 1px;
@@ -22955,7 +23070,7 @@ ol#combat-tracker.directory-list {
 }
 .vagabond .speed-stats-row .speed-group .speed-group-input {
   width: 30px;
-  font-family: "Ludlow", serif;
+  font-family: "Germania", serif;
   text-align: center;
   font-size: 1.4em;
   font-weight: normal;
@@ -23023,7 +23138,7 @@ ol#combat-tracker.directory-list {
 }
 .vagabond .modifiers-group .modifiers-group-input {
   width: 30px;
-  font-family: "Ludlow", serif;
+  font-family: "Germania", serif;
   text-align: center;
   font-size: 1.7em;
   font-weight: normal;
@@ -23353,7 +23468,7 @@ ol#combat-tracker.directory-list {
 .vagabond .mana-field .mana-value {
   width: 60px;
   text-align: center;
-  font-family: "Ludlow", serif;
+  font-family: "Germania", serif;
   font-size: 2em;
   line-height: 24px;
   height: 24px;
@@ -23391,7 +23506,7 @@ ol#combat-tracker.directory-list {
   text-align: center;
   border: none;
   background: transparent;
-  font-family: "Ludlow", serif;
+  font-family: "Germania", serif;
   font-size: 24px;
   font-weight: bold;
   pointer-events: none;
@@ -23658,7 +23773,7 @@ ol#combat-tracker.directory-list {
   align-items: center;
   gap: 4px;
   color: var(--vagabond-c-black);
-  font-family: "Ludlow", serif;
+  font-family: "Germania", serif;
   font-size: 1.6em;
   border-bottom: 2px solid var(--vagabond-c-black);
 }
@@ -23675,7 +23790,7 @@ ol#combat-tracker.directory-list {
   background: transparent;
   padding: 0;
   color: var(--vagabond-c-black);
-  font-family: "Ludlow", serif;
+  font-family: "Germania", serif;
   field-sizing: content;
 }
 .vagabond .npc-hp-display .npc-hp-separator {
@@ -23973,7 +24088,7 @@ ol#combat-tracker.directory-list {
   font-size: 1.7em;
   color: var(--vagabond-c-white);
   text-align: center;
-  font-family: "Ludlow", serif;
+  font-family: "Germania", serif;
 }
 .vagabond .npc-armor-badge .npc-armor-input {
   width: 2em;
@@ -25072,7 +25187,7 @@ details[open] .vagabond .npc-immunity-toggle i {
 .vagabond .party-speed-stat .speed-input {
   field-sizing: content;
   min-width: 1ch;
-  font-family: "Ludlow", serif;
+  font-family: "Germania", serif;
   font-size: 1.3em;
   text-align: left;
   text-shadow: 1px 1px 0 var(--vagabond-c-dark-bluey), -1px 1px 0 var(--vagabond-c-dark-bluey), -1px -1px 0 var(--vagabond-c-dark-bluey), 1px -1px 0 var(--vagabond-c-dark-bluey);
@@ -25766,7 +25881,7 @@ details[open] .vagabond .npc-immunity-toggle i {
 .vagabond ._vehicle-header-placeholder .vehicle-speed-stat .speed-input {
   field-sizing: content;
   min-width: 1ch;
-  font-family: "Ludlow", serif;
+  font-family: "Germania", serif;
   font-size: 1.3em;
   text-align: left;
   text-shadow: 1px 1px 0 var(--vagabond-c-dark-bluey), -1px 1px 0 var(--vagabond-c-dark-bluey), -1px -1px 0 var(--vagabond-c-dark-bluey), 1px -1px 0 var(--vagabond-c-dark-bluey);
@@ -26521,7 +26636,7 @@ details[open] .vagabond .npc-immunity-toggle i {
 .vagabond .construct-header .construct-speed-stat .speed-input {
   field-sizing: content;
   min-width: 1ch;
-  font-family: "Ludlow", serif;
+  font-family: "Germania", serif;
   font-size: 1.3em;
   text-align: left;
   text-shadow: 1px 1px 0 var(--vagabond-c-dark-bluey), -1px 1px 0 var(--vagabond-c-dark-bluey), -1px -1px 0 var(--vagabond-c-dark-bluey), 1px -1px 0 var(--vagabond-c-dark-bluey);

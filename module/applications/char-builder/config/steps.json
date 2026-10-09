@@ -3,7 +3,6 @@
     "ancestry",
     "class",
     "stats",
-    "skills",
     "spells",
     "perks",
     "starting-packs",
@@ -69,7 +68,9 @@
         "pick-array",
         "assign-stat",
         "reset-stats",
-        "randomize-stats"
+        "randomize-stats",
+        "toggle-training",
+        "focus-skill-stat"
       ],
       "completionCriteria": [
         {
@@ -78,6 +79,9 @@
         },
         {
           "type": "all_stats_assigned"
+        },
+        {
+          "type": "training_assigned"
         }
       ],
       "navigation": {
@@ -94,34 +98,9 @@
         ]
       }
     },
-    "skills": {
-      "displayName": "Assign Training",
-      "order": 4,
-      "requiredData": [],
-      "actions": [
-        "toggle-training",
-        "select-training-pool",
-        "focus-skill-stat",
-        "randomize-training"
-      ],
-      "completionCriteria": [
-        {
-          "type": "training_assigned"
-        }
-      ],
-      "navigation": {
-        "canSkip": false,
-        "prerequisites": [
-          {
-            "type": "step_complete",
-            "step": "stats"
-          }
-        ]
-      }
-    },
     "spells": {
       "displayName": "Choose Spells",
-      "order": 5,
+      "order": 4,
       "requiredData": [
         "spells"
       ],
@@ -148,7 +127,7 @@
     },
     "perks": {
       "displayName": "Choose Perks",
-      "order": 6,
+      "order": 5,
       "requiredData": [
         "perks"
       ],
@@ -175,7 +154,7 @@
     },
     "starting-packs": {
       "displayName": "Choose Starting Pack",
-      "order": 7,
+      "order": 6,
       "requiredData": [
         "startingPacks"
       ],
@@ -201,7 +180,7 @@
     },
     "gear": {
       "displayName": "Choose Gear",
-      "order": 8,
+      "order": 7,
       "requiredData": [
         "equipment"
       ],

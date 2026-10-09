@@ -1,4 +1,4 @@
-import { isTrainingComplete } from '../steps/skills-step-manager.mjs';
+import { isTrainingComplete } from '../steps/training-manager.mjs';
 import { isStepUnlocked, canFinishBuild, DEFAULT_STEP_ORDER } from '../steps/step-gating.mjs';
 /**
  * Character Builder UI Components
@@ -36,9 +36,8 @@ export class CharacterBuilderUIComponents {
         'skills',
         'skillSelections',  // CRITICAL: Track per-group skill selections for validation
         'skillGrant',  // CRITICAL: Track skill grant structure changes
-        'trainingPools',  // CRITICAL: Training sources (Skills step)
-        'activeTrainingPool',  // Skills step: source the next checkbox spends
-        'skillFocusStat',  // Skills step: Stat focus filter
+        'trainingPools',  // CRITICAL: Training sources (Stats step)
+        'skillFocusStat',  // Stats step: Stat label focus
         'perkStatBonuses',  // Reason bonus from perks changes the Reason Training count
         'perks',
         'classPerks',
@@ -50,6 +49,7 @@ export class CharacterBuilderUIComponents {
         'furthestStep',  // Step gating: tabs reveal one by one
         'previewUuid',  // CRITICAL: Track preview changes for UI updates
         'selectedArrayId',
+        'statArraysOpen',  // Stats step: array list rolled up after a pick
         'unassignedValues',
         'showAllPerks',
         'ignorePrereqTypes'
@@ -148,7 +148,6 @@ export class CharacterBuilderUIComponents {
 
       // Helper flags for template
       const isGearStep = state.currentStep === 'gear';
-      const hasChoices = state.currentStep === 'stats' || state.currentStep === 'skills';
 
       // Combine all contexts
       const completeContext = {
@@ -160,7 +159,6 @@ export class CharacterBuilderUIComponents {
         selectedItem, // Currently selected/previewing item
         previewItem, // Preview item (if different from selected)
         isGearStep, // Helper for gear step template
-        hasChoices, // Helper for decision zone visibility
         showAllPerks: state.showAllPerks || false,
         navigation: navigationContext,
         sidebar: sidebarContext,
@@ -327,7 +325,7 @@ export class CharacterBuilderUIComponents {
     } catch (error) {
       // Configuration not loaded yet, use defaults
       console.debug('Configuration not loaded for navigation, using defaults');
-      stepOrder = ['ancestry', 'class', 'stats', 'skills', 'spells', 'perks', 'starting-packs', 'gear'];
+      stepOrder = ['ancestry', 'class', 'stats', 'spells', 'perks', 'starting-packs', 'gear'];
       allStepConfigs = {};
     }
 
@@ -411,7 +409,7 @@ export class CharacterBuilderUIComponents {
     } catch (error) {
       // Configuration not loaded yet, use defaults
       console.debug('Configuration not loaded for step progress, using defaults');
-      stepOrder = ['ancestry', 'class', 'stats', 'skills', 'spells', 'perks', 'starting-packs', 'gear'];
+      stepOrder = ['ancestry', 'class', 'stats', 'spells', 'perks', 'starting-packs', 'gear'];
       allStepConfigs = {};
     }
 
@@ -627,9 +625,6 @@ export class CharacterBuilderUIComponents {
       case 'class':
         return !!state.selectedClass;
 
-      case 'skills':
-        return isTrainingComplete(state);
-
       case 'stats': {
         const stats = state.assignedStats || {};
         const statKeys = Object.keys(CONFIG.VAGABOND.stats ?? {});
@@ -637,7 +632,7 @@ export class CharacterBuilderUIComponents {
         if (!keys.every(s => stats[s] !== null && stats[s] !== undefined)) return false;
         const bonusStatsCount = state.bonusStatsCount || 0;
         const appliedBonusesCount = Object.keys(state.appliedBonuses || {}).length;
-        return appliedBonusesCount >= bonusStatsCount;
+        return appliedBonusesCount >= bonusStatsCount && isTrainingComplete(state);
       }
 
       case 'perks':
@@ -693,8 +688,7 @@ export class CharacterBuilderUIComponents {
     // Mandatory steps done + Starting Packs / Gear revealed (Perks reached)
     const mandatoryComplete = this._isStepCompleted('ancestry', state) &&
                                this._isStepCompleted('class', state) &&
-                               this._isStepCompleted('stats', state) &&
-                               this._isStepCompleted('skills', state);
+                               this._isStepCompleted('stats', state);
 
     return mandatoryComplete && canFinishBuild(state, this._stepOrder());
   }
@@ -792,7 +786,7 @@ export class CharacterBuilderUIComponents {
       stepOrder = this.configSystem.getStepOrder();
     } catch (error) {
       // Configuration not loaded yet, use defaults
-      stepOrder = ['ancestry', 'class', 'stats', 'skills', 'spells', 'perks', 'starting-packs', 'gear'];
+      stepOrder = ['ancestry', 'class', 'stats', 'spells', 'perks', 'starting-packs', 'gear'];
     }
 
     const currentIndex = stepOrder.indexOf(currentStep);

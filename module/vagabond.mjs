@@ -166,6 +166,9 @@ async function preloadHandlebarsTemplates() {
     'systems/vagabond/templates/shared/being-type-select.hbs',
     'systems/vagabond/templates/shared/weapon-skill-select.hbs',
     'systems/vagabond/templates/shared/bonus-stats-selector.hbs',
+    // Char builder partials
+    'systems/vagabond/templates/apps/char-builder-parts/training-panel.hbs',
+    'systems/vagabond/templates/apps/char-builder-parts/training-skills.hbs',
     // Item partials
     'systems/vagabond/templates/item/parts/grants-config.hbs',
     'systems/vagabond/templates/item/parts/macro-config.hbs',
@@ -207,7 +210,6 @@ async function preloadHandlebarsTemplates() {
   const builderParts = {
     'navigation': 'systems/vagabond/templates/apps/char-builder-parts/navigation.hbs',
     'sidebar': 'systems/vagabond/templates/apps/char-builder-parts/sidebar.hbs',
-    'decision': 'systems/vagabond/templates/apps/char-builder-parts/decision.hbs',
     'tray': 'systems/vagabond/templates/apps/char-builder-parts/tray.hbs',
     'preview': 'systems/vagabond/templates/apps/char-builder-parts/preview.hbs',
     'reference': 'systems/vagabond/templates/apps/char-builder-parts/reference.hbs',

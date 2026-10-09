@@ -1,0 +1,17 @@
+{{!-- Every Skill in two columns grouped by Stat: Training checkbox + hint (Stats step) --}}
+<div class="training-skills" style="grid-template-rows: repeat({{skillTraining.rows}}, auto);">
+    {{#each skillTraining.skills as |sk|}}
+    <label class="training-skill {{#if sk.isTrained}}trained{{/if}} {{#if sk.isLocked}}locked{{/if}} {{#if sk.isCasting}}casting{{/if}} {{#if sk.isUnfocused}}unfocused{{/if}}"
+        {{#if sk.isLocked}}data-tooltip="{{localize 'VAGABOND.CharBuilder.Skills.LockedTooltip'}}"{{/if}}>
+        <input type="checkbox" value="{{sk.key}}" data-action="toggleTraining" {{checked sk.isTrained}} {{disabled sk.isLocked}}>
+        <span class="training-check {{#if sk.isTrained}}trained{{else}}untrained{{/if}}"></span>
+        <span class="training-skill-title">
+            <span class="training-skill-name">{{sk.label}}</span>
+            {{#if sk.hint}}<i class="fa-solid fa-circle-question training-hint" data-tooltip="{{sk.hint}}"></i>{{/if}}
+            {{#if sk.isLocked}}<span class="training-chip lock"><i class="fas fa-lock"></i> {{sk.lockLabel}}</span>{{/if}}
+            {{#if sk.isCasting}}<span class="training-chip casting" data-tooltip="{{localize 'VAGABOND.CharBuilder.Skills.CastingTooltip'}}"><i class="fa-solid fa-wand-magic-sparkles"></i></span>{{/if}}
+        </span>
+        <span class="training-skill-value">{{#if sk.trainedValue}}<span class="if-trained" data-tooltip="{{localize 'VAGABOND.CharBuilder.Skills.IfTrained'}}">({{sk.trainedValue}})</span> {{/if}}{{sk.value}}</span>
+    </label>
+    {{/each}}
+</div>

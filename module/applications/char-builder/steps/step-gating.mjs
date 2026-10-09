@@ -1,9 +1,9 @@
-import { isTrainingComplete } from './skills-step-manager.mjs';
+import { isTrainingComplete } from './training-manager.mjs';
 
 /**
  * Step gating — which builder tabs are revealed.
  *
- * Steps unlock one at a time in order (Ancestry → Class → Stats → Skills → Spells → Perks): a step
+ * Steps unlock one at a time in order (Ancestry → Class → Stats (+ Training) → Spells → Perks): a step
  * opens only once every step before it is done AND the player has reached the step right before it
  * (`state.furthestStep`, advanced by Next / tab clicks). Starting Packs and Gear are the closing pair:
  * they open together once Perks is reached, and so does the Finish button.
@@ -11,7 +11,7 @@ import { isTrainingComplete } from './skills-step-manager.mjs';
  * Pure functions of the builder state, shared by the tab bar, tab clicks and the Finish button.
  */
 
-export const DEFAULT_STEP_ORDER = ['ancestry', 'class', 'stats', 'skills', 'spells', 'perks', 'starting-packs', 'gear'];
+export const DEFAULT_STEP_ORDER = ['ancestry', 'class', 'stats', 'spells', 'perks', 'starting-packs', 'gear'];
 
 /** Revealed together; the first one is the gate for the whole group. */
 const CLOSING_STEPS = ['starting-packs', 'gear'];
@@ -33,10 +33,9 @@ export function isStepDone(stepName, state) {
       const statKeys = Object.keys(CONFIG.VAGABOND.stats ?? {});
       const keys = statKeys.length ? statKeys : ['might', 'dexterity', 'awareness', 'reason', 'presence', 'luck'];
       if (!keys.every(s => stats[s] !== null && stats[s] !== undefined)) return false;
-      return Object.keys(state.appliedBonuses || {}).length >= (state.bonusStatsCount || 0);
+      if (Object.keys(state.appliedBonuses || {}).length < (state.bonusStatsCount || 0)) return false;
+      return isTrainingComplete(state); // Training is assigned on the Stats step
     }
-    case 'skills':
-      return isTrainingComplete(state);
     case 'spells': {
       const spellLimit = state.spellLimit || 0;
       return spellLimit === 0 || (state.spells || []).length === spellLimit;

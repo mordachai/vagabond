@@ -1,4 +1,4 @@
-import { isTrainingComplete } from '../steps/skills-step-manager.mjs';
+import { isTrainingComplete } from '../steps/training-manager.mjs';
 import { isStepUnlocked, DEFAULT_STEP_ORDER } from '../steps/step-gating.mjs';
 /**
  * Context Component
@@ -265,7 +265,7 @@ export class ContextComponent {
       allStepConfigs = this.configSystem.getAllStepConfigs();
     } catch (error) {
       // Configuration not loaded yet, use defaults
-      stepOrder = ['ancestry', 'class', 'stats', 'skills', 'spells', 'perks', 'starting-packs', 'gear'];
+      stepOrder = ['ancestry', 'class', 'stats', 'spells', 'perks', 'starting-packs', 'gear'];
       allStepConfigs = {};
     }
 
@@ -579,7 +579,7 @@ export class ContextComponent {
     };
 
     // Validate each step
-    const steps = ['ancestry', 'class', 'stats', 'skills', 'spells', 'perks', 'starting-packs', 'gear'];
+    const steps = ['ancestry', 'class', 'stats', 'spells', 'perks', 'starting-packs', 'gear'];
     
     for (const step of steps) {
       const stepValidation = await this._validateStep(step, state);
@@ -638,9 +638,6 @@ export class ContextComponent {
       case 'class':
         return !!state.selectedClass;
 
-      case 'skills':
-        return isTrainingComplete(state);
-
       case 'stats': {
         const stats = state.assignedStats || {};
         const statKeys = Object.keys(CONFIG.VAGABOND.stats ?? {});
@@ -648,7 +645,7 @@ export class ContextComponent {
         if (!keys.every(s => stats[s] !== null && stats[s] !== undefined)) return false;
         const bonusStatsCount = state.bonusStatsCount || 0;
         const appliedBonusesCount = Object.keys(state.appliedBonuses || {}).length;
-        return appliedBonusesCount >= bonusStatsCount;
+        return appliedBonusesCount >= bonusStatsCount && isTrainingComplete(state);
       }
       case 'perks':
         return true; // Perks are optional

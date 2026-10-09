@@ -19,11 +19,8 @@
 {{#if bonusStats.remaining}}
 <div class="bonus-stats-container {{#unless bonusStats.isActive}}disabled{{/unless}}">
     <div class="bonus-stats-header">
-        <span class="bonus-label">
-            <i class="fas fa-plus-circle"></i>
-            {{bonusStats.sourceLabel}}:
-            <span class="bonus-value">+{{bonusStats.remaining}}</span> remaining
-        </span>
+        <span class="bonus-label">{{bonusStats.sourceLabel}}</span>
+        <span class="bonus-value">+{{bonusStats.remaining}}</span>
     </div>
 </div>
 {{/if}}

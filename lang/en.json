@@ -3381,7 +3381,6 @@
         "Ancestry": "Ancestry",
         "Class": "Class",
         "Stats": "Stats",
-        "Skills": "Skills",
         "Spells": "Spells",
         "Perks": "Perks",
         "Startingpacks": "Starting Packs",
@@ -3389,7 +3388,6 @@
       },
       "Traits":"Traits",
       "ClassFeatures": "Features",
-      "DerivedStats": "Character Stats",
       "ProposedChoices": "Proposed Choices",
       "OriginReferences": "Origin References",
       "AssignStats": "Drag and drop the values in the Stats below to assign:",
@@ -3421,9 +3419,21 @@
       "LevelPrefix": "Level {level}",
       "NoFeaturesAtLevel": "No features at this level",
       "NoClassFeaturesDefined": "No class features defined",
+      "Stats": {
+        "ChooseOrRoll": "Choose or roll for your Stats",
+        "Distribute": "Distribute your Stats",
+        "TraitsTitle": "Character Traits",
+        "TrainingTitle": "Skills Training",
+        "RollArray": "Roll",
+        "YourArray": "Your Array",
+        "ChangeArray": "Change array",
+        "RollAgain": "Roll Again",
+        "ChangeArrayTitle": "Change Array",
+        "ChangeArrayConfirm": "Changing the array clears the Stats you already placed. Continue?"
+      },
       "Skills": {
         "PanelTitle": "Training to assign",
-        "PanelHint": "Pick a source, then check Skills. Each checked Skill spends one Training from the selected source.",
+        "PanelHint": "Check a Skill to train it: it is paid from a source that allows it, the most limited one first. Uncheck to give the Training back.",
         "SourceClass": "Class · {name}",
         "SourceClassFeature": "Class feature · {origin}: {name}",
         "SourceAncestry": "Ancestry trait · {origin}: {name}",
@@ -3435,9 +3445,8 @@
         "ValueNote": "Lower is better. Hover a Skill to see, in parentheses, its value once Trained.",
         "IfTrained": "If Trained",
         "Casting": "Casting",
-        "CastingTooltip": "Your Class casts Spells with this Skill",
+        "CastingTooltip": "Casting Skill: used when casting Spells",
         "LockedTooltip": "Training from your Class (locked)",
-        "NotAllowed": "Not allowed by the selected source",
         "NoRoom": "No Training left that can take {skill}."
       },
       "Decision": {
@@ -3503,7 +3512,7 @@
         "NeedAncestry": "Select an Ancestry before continuing.",
         "NeedClass": "Choose a Class before continuing.",
         "NeedStats": "Assign all your Stats before continuing.",
-        "NeedSkills": "Assign all your Training on the Skills step before continuing.",
+        "NeedSkills": "Assign all your Training on the Stats step before continuing.",
         "NeedMandatorySteps": "Complete Ancestry, Class, Stats and Skills before finishing character creation.",
         "NeedPerks": "Complete the Perks step before continuing.",
         "NeedPreviousStep": "Complete the previous step before continuing."
