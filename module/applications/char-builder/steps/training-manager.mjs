@@ -8,8 +8,10 @@
  *   - Reason (book p. 25)                           → half REASON, round up (any Skill)
  *
  * State:
- *   - `trainingPools`  = { key, guaranteed, castingSkill, pools[] } — static pool definitions, rebuilt when the
- *                        Ancestry or Class changes (`key` = trainingPoolsKey(state)). Reason is added at read time.
+ *   - `trainingPools`  = { key, guaranteed, fixed[], castingSkill, pools[] } — static pool definitions, rebuilt when
+ *                        the Ancestry or Class changes (`key` = trainingPoolsKey(state)). Reason is added at read time.
+ *                        A choice group with no real choice (pool no larger than its count, e.g. Elf Ascendancy
+ *                        "Detect") is a fixed grant: its Skills join `guaranteed` and show as a locked card (`fixed`).
  *   - `skillSelections` = { [poolId]: skillKey[] } — the picks; `skills` = guaranteed + every pick.
  *   - `skillFocusStat` = UI only (Stat label focus on the Stats step).
  *
@@ -23,7 +25,7 @@ import { BaseStepManager } from './base-step-manager.mjs';
 
 /** Pool definitions are valid only for the Ancestry + Class they were built from. */
 export function trainingPoolsKey(state) {
-  return `${state.selectedAncestry ?? ''}|${state.selectedClass ?? ''}`;
+  return `v3|${state.selectedAncestry ?? ''}|${state.selectedClass ?? ''}`;
 }
 
 /** Skill keys in homebrew order (falls back to CONFIG.VAGABOND.skills). */
@@ -123,13 +125,16 @@ export class TrainingManager extends BaseStepManager {
     const key = trainingPoolsKey(state);
     if (state.trainingPools?.key === key) return state.trainingPools;
 
-    const defs = { key, guaranteed: [], castingSkill: null, pools: [] };
+    const defs = { key, guaranteed: [], fixed: [], castingSkill: null, pools: [] };
     const anySkill = list => (list?.length ? [...list] : null);
 
     const classItem = state.selectedClass ? await fromUuid(state.selectedClass).catch(() => null) : null;
     if (classItem) {
       const grant = classItem.system.skillGrant || { guaranteed: [], choices: [] };
       defs.guaranteed = [...(grant.guaranteed || [])];
+      if (defs.guaranteed.length) {
+        defs.fixed.push({ kind: 'class', origin: classItem.name, skills: [...defs.guaranteed] });
+      }
       if (classItem.system.isSpellcaster && classItem.system.manaSkill) defs.castingSkill = classItem.system.manaSkill;
       (grant.choices || []).forEach((choice, i) => {
         defs.pools.push({
@@ -139,13 +144,20 @@ export class TrainingManager extends BaseStepManager {
       });
     }
 
-    const addGrantPools = (entries, prefix, sourceKey, originName) => {
+    const addGrantPools = (entries, prefix, sourceKey, originName, kind) => {
       (entries || []).forEach((entry, i) => {
         const source = game.i18n.format(sourceKey, { origin: originName, name: entry.name });
         if ((entry.extraTraining || 0) > 0) {
           defs.pools.push({ id: `${prefix}-${i}`, kind: 'grant', count: entry.extraTraining, pool: null, source });
         }
         (entry.skillChoices || []).forEach((group, g) => {
+          const pool = anySkill(group.pool);
+          if (pool && pool.length <= (group.count || 1)) {
+            // No real choice: grant it outright
+            defs.guaranteed.push(...pool.filter(s => !defs.guaranteed.includes(s)));
+            defs.fixed.push({ kind, origin: originName, skills: pool });
+            return;
+          }
           defs.pools.push({
             id: `${prefix}-${i}-${g}`, kind: 'grant', count: group.count || 1, pool: anySkill(group.pool),
             label: group.label || '', source
@@ -155,13 +167,13 @@ export class TrainingManager extends BaseStepManager {
     };
 
     const ancestry = state.selectedAncestry ? await fromUuid(state.selectedAncestry).catch(() => null) : null;
-    if (ancestry) addGrantPools(ancestry.system.traits, 'ancestry', 'VAGABOND.CharBuilder.Skills.SourceAncestry', ancestry.name);
+    if (ancestry) addGrantPools(ancestry.system.traits, 'ancestry', 'VAGABOND.CharBuilder.Skills.SourceAncestry', ancestry.name, 'ancestry');
 
     if (classItem) {
       // Keep the real levelFeatures index in the id so the picks survive a re-read
       const features = (classItem.system.levelFeatures || []).map((f, i) => ({ ...f, _idx: i }));
       const level1 = features.filter(f => f.level === 1);
-      level1.forEach(f => addGrantPools([f], `feature-${f._idx}`, 'VAGABOND.CharBuilder.Skills.SourceClassFeature', classItem.name));
+      level1.forEach(f => addGrantPools([f], `feature-${f._idx}`, 'VAGABOND.CharBuilder.Skills.SourceClassFeature', classItem.name, 'class'));
     }
 
     this.stateManager.updateState('trainingPools', defs, { skipValidation: true });
@@ -217,12 +229,20 @@ export class TrainingManager extends BaseStepManager {
     const listSkills = keys => keys.map(skillLabel).join(', ');
     const anyLabel = game.i18n.localize('VAGABOND.CharBuilder.Skills.AnySkill');
 
-    // Top panel: locked Class Training first, then every pool
-    const classItem = state.selectedClass ? await fromUuid(state.selectedClass).catch(() => null) : null;
-    const lockedCard = defs.guaranteed.length ? {
-      source: game.i18n.format('VAGABOND.CharBuilder.Skills.SourceClass', { name: classItem?.name ?? '' }),
-      detail: game.i18n.format('VAGABOND.CharBuilder.Skills.ClassTraining', { skills: listSkills(defs.guaranteed) })
-    } : null;
+    // Top panel: one locked card listing every fixed Training by origin (Ancestry first, then Class), then every pool
+    const lockLabels = { class: game.i18n.localize('TYPES.Item.class'), ancestry: game.i18n.localize('TYPES.Item.ancestry') };
+    const lockedByOrigin = new Map();
+    for (const kind of ['ancestry', 'class']) {
+      for (const f of (defs.fixed ?? []).filter(f => f.kind === kind)) {
+        const id = `${kind}|${f.origin}`;
+        if (!lockedByOrigin.has(id)) lockedByOrigin.set(id, { label: `${lockLabels[kind]} (${f.origin})`, skills: [] });
+        const entry = lockedByOrigin.get(id);
+        entry.skills.push(...f.skills.filter(s => !entry.skills.includes(s)));
+      }
+    }
+    const lockedLines = [...lockedByOrigin.values()].map(l => ({ label: l.label, skills: listSkills(l.skills) }));
+    const lockLabelOf = new Map();
+    for (const f of defs.fixed ?? []) for (const s of f.skills) if (!lockLabelOf.has(s)) lockLabelOf.set(s, lockLabels[f.kind]);
 
     const reasonValue = finalStatValue(state, 'reason');
     const poolCards = resolved.map(p => {
@@ -262,7 +282,7 @@ export class TrainingManager extends BaseStepManager {
         isTrained,
         isLocked,
         isCasting: s.key === defs.castingSkill,
-        lockLabel: isLocked ? game.i18n.localize('TYPES.Item.class') : null,
+        lockLabel: isLocked ? (lockLabelOf.get(s.key) ?? lockLabels.class) : null,
         isUnfocused: !!focus && focus !== s.stat,
         value: isTrained ? trained?.system.skills?.[s.key]?.difficulty : untrained?.system.skills?.[s.key]?.difficulty,
         trainedValue: isTrained ? null : trained?.system.skills?.[s.key]?.difficulty
@@ -270,10 +290,14 @@ export class TrainingManager extends BaseStepManager {
     });
 
     const remaining = resolved.reduce((sum, p) => sum + Math.max(0, p.needed - p.picks.length), 0);
+    const panelTitle = remaining === 0
+      ? game.i18n.localize('VAGABOND.CharBuilder.Skills.PanelTitleDone')
+      : game.i18n.format(remaining === 1 ? 'VAGABOND.CharBuilder.Skills.PanelTitleOne' : 'VAGABOND.CharBuilder.Skills.PanelTitle', { count: remaining });
 
     return {
       skillTraining: {
-        lockedCard,
+        lockedLines,
+        panelTitle,
         pools: poolCards,
         skills,
         rows: Math.ceil(skills.length / 2),

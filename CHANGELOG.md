@@ -1,7 +1,11 @@
 # Changelog
 
 ## v6.2.0
-- **New Character Builder step: Skills** (after Stats). Every Training you get at Level 1 is assigned in one place: your Class Training (locked), Ancestry traits like Human Aptitude, Level 1 class features, and Reason (half REASON, round up). Each source shows how many it still owes; pick a source, then check Skills. Stats on the left focus their Skills, each Skill shows its value (and, on hover, its value once Trained), a (?) with its description, and your class's Casting Skill is marked. The Class and Stats steps no longer ask for Skills.
+- **Character Builder: Stats step overhauled.** Stats and Training on one screen: pick or roll an array, place Stats in hexagon slots, then check Skills to train them (every Level 1 Training source in one panel, paid automatically). Character Traits, Saves and Skill values update live; click a Stat to see what it affects.
+- Numbers now use the title font.
+- Character Builder: fixed Training (Class, Elf Ascendancy's Detect) shown together in one locked "Trained" card; the panel counts the Training left to assign.
+- Character Builder: characters with no Spells to choose can still browse the Spells tab, with a clear "no spells to choose" message.
+- Character Builder: clearer Perks/Spells counters and perk grant list.
 
 ## v6.1.0
 - Catalyze panel redesigned.

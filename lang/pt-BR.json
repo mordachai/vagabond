@@ -3416,6 +3416,10 @@
       "SlotsSuffix": "espaços",
       "FreeColon": "Livres:",
       "PerksColon": "Vantagens:",
+      "CounterPerks": "Vantagens",
+      "CounterSpells": "Magias",
+      "CounterChooseMore": "Escolha da lista",
+      "CounterAllChosen": "Tudo escolhido",
       "SpellsColon": "Magias:",
       "MaximumReached": "Máximo atingido",
       "SpellsRequiredSuffix": "obrigatória(s)",
@@ -3435,7 +3439,7 @@
         "ChooseOrRoll": "Escolha ou role seus Atributos",
         "Distribute": "Distribua seus Atributos",
         "TraitsTitle": "Características do Personagem",
-        "TrainingTitle": "Treinamento de Perícias",
+        "TrainingTitle": "Perícias",
         "RollArray": "Rolar",
         "YourArray": "Seu Conjunto",
         "ChangeArray": "Trocar conjunto",
@@ -3444,7 +3448,9 @@
         "ChangeArrayConfirm": "Trocar o conjunto apaga os Atributos já distribuídos. Continuar?"
       },
       "Skills": {
-        "PanelTitle": "Treinamento a atribuir",
+        "PanelTitle": "{count} Treinamentos de Perícia a atribuir",
+        "PanelTitleOne": "1 Treinamento de Perícia a atribuir",
+        "PanelTitleDone": "Todo o Treinamento de Perícia atribuído",
         "PanelHint": "Marque uma Perícia para treiná-la: ela é paga por uma fonte que a permite, a mais limitada primeiro. Desmarque para devolver o Treinamento.",
         "SourceClass": "Classe · {name}",
         "SourceClassFeature": "Característica de classe · {origin}: {name}",
@@ -3458,7 +3464,8 @@
         "IfTrained": "Se Treinada",
         "Casting": "Conjuração",
         "CastingTooltip": "Perícia de Conjuração: usada ao conjurar Magias",
-        "LockedTooltip": "Treinamento da sua Classe (fixo)",
+        "LockedTitle": "Treinado",
+        "LockedTooltip": "Treinamento concedido pela sua Ancestralidade e Classe (fixo)",
         "NoRoom": "Nenhum Treinamento restante pode receber {skill}."
       },
       "Decision": {
@@ -3483,6 +3490,7 @@
         "Class": "Selecione uma Classe. Elas concedem Treinamento e Características, e fornecem um guia de como o Herói melhor atua em Combate.",
         "Stats": "Selecione um conjunto de Atributos na lista à esquerda para começar a atribuir valores acima.",
         "Spells": "Se sua classe ou ancestralidade permitir, escolha suas magias iniciais. Magias podem criar efeitos devastadores e milagrosos.",
+        "SpellsNone": "Sua build não tem magias para escolher — mas fique à vontade para olhar e ver o que as magias legais fazem.",
         "Perks": "Verifique seus talentos iniciais. Talentos são marcas de conquista e sinais de arcos na jornada de vida de alguém.",
         "StartingPacks": "Você pode escolher qualquer pacote que preferir, mas há Pacotes Iniciais recomendados na seção de Jogo da sua classe",
         "Gear": "Você pode gastar sua prata restante em equipamento, armas e suprimentos adicionais."
@@ -3515,6 +3523,8 @@
       "TrayTitle": "Suas Seleções",
       "TrayInstructions": "Arraste itens da lista ou clique em 'Adicionar ao Personagem' para reunir suas escolhas.",
       "TrayEmpty": "Sua área está vazia. Selecione itens da lista e solte-os aqui.",
+      "NoSpellChoicesTitle": "Você não tem magias para escolher",
+      "NoSpellChoicesHint": "Você pode dar uma olhada e ver o que as magias legais fazem — talvez seu próximo personagem seja um conjurador!",
       "PackContents": "Conteúdo do Pacote",
       "Budget": "Orçamento Inicial",
       "Confirmation": {

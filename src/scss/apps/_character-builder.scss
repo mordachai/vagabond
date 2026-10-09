@@ -272,12 +272,14 @@
           border-radius: 4px;
           border: 1px solid rgba(0, 0, 0, 0.1);
 
+          // Fixed light palette: the list box is light in both themes, so theme colors (pink red in dark mode) wash out
           .grant-item {
             display: flex;
             align-items: center;
             justify-content: space-between;
             padding: 6px 8px;
             background: white;
+            border-left: 4px solid transparent;
             border-radius: 3px;
             font-size: 13px;
             transition: all 0.2s ease;
@@ -289,26 +291,28 @@
             }
 
             i {
-              color: #28a745;
+              color: #1e7b12;
               font-size: 14px;
               margin-left: 8px;
             }
 
             &.active {
-              background: rgba(0, 255, 0, 0.15);
-              border-left: 3px solid green;
-              font-weight: 600;
+              background: #fff3c4;
+              border-left-color: #c58a00;
+              box-shadow: 0 0 0 1px #e2b33c;
 
               .grant-label {
-                color: $c-red;
+                color: #1a1a1a;
+                font-weight: 700;
               }
             }
 
             &.fulfilled {
-              opacity: 0.7;
+              background: #e6f2e3;
+              border-left-color: #1e7b12;
 
               .grant-label {
-                color: #666;
+                color: #4a5a48;
                 text-decoration: line-through;
               }
             }
@@ -1893,6 +1897,10 @@
     display: grid;
     grid-template-columns: 180px 1fr;
     gap: 10px;
+
+    &.no-sidebar {
+      grid-template-columns: 1fr;
+    }
   }
 
   .tray-sidebar {
@@ -1913,6 +1921,53 @@
       margin: 0;
       font-size: 0.85rem;
       line-height: 1.3;
+    }
+
+    // Perks / Spells counter: solid dark card so it reads over the translucent tray in both themes
+    .tray-counter {
+      margin-top: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      padding: 8px 10px;
+      background: rgba(0, 0, 0, 0.55);
+      border-left: 4px solid #e0a800;
+      border-radius: 4px;
+      color: #f2f2f2;
+
+      .tray-counter-label {
+        font-family: $font-title;
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .tray-counter-value {
+        font-family: $font-number;
+        font-size: 1.9rem;
+        line-height: 1;
+        color: #ffd24a;
+      }
+
+      .tray-counter-max {
+        font-size: 1.2rem;
+        color: #f2f2f2;
+        opacity: 0.8;
+      }
+
+      .tray-counter-note {
+        font-size: 0.8rem;
+        color: #e6e6e6;
+      }
+
+      &.done {
+        border-left-color: #26cb0c;
+
+        .tray-counter-value,
+        .tray-counter-note i {
+          color: #7ee36a;
+        }
+      }
     }
 
     .pack-summary {
@@ -2126,6 +2181,34 @@
         font-weight: 600;
         text-transform: uppercase;
       }
+    }
+  }
+
+  .tray-no-spells-message {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 20px 24px;
+
+    > i {
+      font-size: 2.6rem;
+      opacity: 0.6;
+    }
+
+    strong {
+      display: block;
+      font-family: $font-title;
+      font-size: 1.6rem;
+      line-height: 1.2;
+    }
+
+    p {
+      margin: 4px 0 0;
+      font-size: 1rem;
+      font-style: italic;
+      opacity: 0.8;
     }
   }
 
@@ -2356,6 +2439,10 @@
         font-family: $font-title;
         font-size: 1.25rem;
         color: $c-text-2; // yellow in dark mode, dark slate in light mode
+
+        &.done {
+          opacity: 0.7;
+        }
       }
 
       .training-panel-note {
@@ -2408,9 +2495,18 @@
         color: $c-green;
       }
 
+      .pool-lines {
+        display: flex;
+        flex-direction: column;
+      }
+
       &.locked {
         cursor: default;
         opacity: 0.8;
+
+        .pool-detail strong {
+          font-weight: 600;
+        }
 
         .pool-count {
           font-size: 1.2rem;

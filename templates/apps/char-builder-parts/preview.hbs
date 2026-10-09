@@ -90,7 +90,7 @@
                     {{/if}}
                 {{/if}}
             </div>
-            {{#if showTray}}
+            {{#if (and showTray (not noSpellChoices))}}
                 <button type="button" class="btn-add-to-tray preview-header-btn" data-action="addToTray" data-uuid="{{selectedItem.uuid}}" title="{{localize 'VAGABOND.CharBuilder.Buttons.AddToTray'}}">
                     <i class="fas fa-plus"></i>
                 </button>

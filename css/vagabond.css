@@ -6281,6 +6281,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   justify-content: space-between;
   padding: 6px 8px;
   background: white;
+  border-left: 4px solid transparent;
   border-radius: 3px;
   font-size: 13px;
   transition: all 0.2s ease;
@@ -6291,23 +6292,25 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   color: #333;
 }
 .vagabond-builder .builder-body .selection-list-column .search-sticky .perk-grants-list .grant-item i {
-  color: #28a745;
+  color: #1e7b12;
   font-size: 14px;
   margin-left: 8px;
 }
 .vagabond-builder .builder-body .selection-list-column .search-sticky .perk-grants-list .grant-item.active {
-  background: rgba(0, 255, 0, 0.15);
-  border-left: 3px solid green;
-  font-weight: 600;
+  background: #fff3c4;
+  border-left-color: #c58a00;
+  box-shadow: 0 0 0 1px #e2b33c;
 }
 .vagabond-builder .builder-body .selection-list-column .search-sticky .perk-grants-list .grant-item.active .grant-label {
-  color: var(--vagabond-c-red);
+  color: #1a1a1a;
+  font-weight: 700;
 }
 .vagabond-builder .builder-body .selection-list-column .search-sticky .perk-grants-list .grant-item.fulfilled {
-  opacity: 0.7;
+  background: #e6f2e3;
+  border-left-color: #1e7b12;
 }
 .vagabond-builder .builder-body .selection-list-column .search-sticky .perk-grants-list .grant-item.fulfilled .grant-label {
-  color: #666;
+  color: #4a5a48;
   text-decoration: line-through;
 }
 .vagabond-builder .builder-body .selection-list-column .directory-list {
@@ -7617,6 +7620,9 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   grid-template-columns: 180px 1fr;
   gap: 10px;
 }
+.tray-zone .tray-grid.no-sidebar {
+  grid-template-columns: 1fr;
+}
 .tray-zone .tray-sidebar {
   display: flex;
   flex-direction: column;
@@ -7634,6 +7640,45 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   margin: 0;
   font-size: 0.85rem;
   line-height: 1.3;
+}
+.tray-zone .tray-sidebar .tray-counter {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 10px;
+  background: rgba(0, 0, 0, 0.55);
+  border-left: 4px solid #e0a800;
+  border-radius: 4px;
+  color: #f2f2f2;
+}
+.tray-zone .tray-sidebar .tray-counter .tray-counter-label {
+  font-family: "Germania", serif;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.tray-zone .tray-sidebar .tray-counter .tray-counter-value {
+  font-family: "Germania", serif;
+  font-size: 1.9rem;
+  line-height: 1;
+  color: #ffd24a;
+}
+.tray-zone .tray-sidebar .tray-counter .tray-counter-max {
+  font-size: 1.2rem;
+  color: #f2f2f2;
+  opacity: 0.8;
+}
+.tray-zone .tray-sidebar .tray-counter .tray-counter-note {
+  font-size: 0.8rem;
+  color: #e6e6e6;
+}
+.tray-zone .tray-sidebar .tray-counter.done {
+  border-left-color: #26cb0c;
+}
+.tray-zone .tray-sidebar .tray-counter.done .tray-counter-value,
+.tray-zone .tray-sidebar .tray-counter.done .tray-counter-note i {
+  color: #7ee36a;
 }
 .tray-zone .tray-sidebar .pack-summary {
   margin-top: auto;
@@ -7819,6 +7864,30 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
+}
+.tray-zone .tray-no-spells-message {
+  grid-column: 1/-1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 20px 24px;
+}
+.tray-zone .tray-no-spells-message > i {
+  font-size: 2.6rem;
+  opacity: 0.6;
+}
+.tray-zone .tray-no-spells-message strong {
+  display: block;
+  font-family: "Germania", serif;
+  font-size: 1.6rem;
+  line-height: 1.2;
+}
+.tray-zone .tray-no-spells-message p {
+  margin: 4px 0 0;
+  font-size: 1rem;
+  font-style: italic;
+  opacity: 0.8;
 }
 .tray-zone .tray-empty-message {
   grid-column: 1/-1;
@@ -8009,6 +8078,9 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   font-size: 1.25rem;
   color: var(--vagabond-c-text-secondary);
 }
+.vagabond-builder .training-panel .training-panel-head strong.done {
+  opacity: 0.7;
+}
 .vagabond-builder .training-panel .training-panel-head .training-panel-note {
   font-size: 0.9rem;
   opacity: 0.75;
@@ -8051,9 +8123,16 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .vagabond-builder .training-panel .training-pool.full .pool-count {
   color: var(--vagabond-c-green);
 }
+.vagabond-builder .training-panel .training-pool .pool-lines {
+  display: flex;
+  flex-direction: column;
+}
 .vagabond-builder .training-panel .training-pool.locked {
   cursor: default;
   opacity: 0.8;
+}
+.vagabond-builder .training-panel .training-pool.locked .pool-detail strong {
+  font-weight: 600;
 }
 .vagabond-builder .training-panel .training-pool.locked .pool-count {
   font-size: 1.2rem;

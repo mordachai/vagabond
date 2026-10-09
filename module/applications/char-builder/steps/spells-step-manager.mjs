@@ -130,6 +130,8 @@ export class SpellsStepManager extends BaseStepManager {
 
     const fulfilledGrantUuids = grants.filter(g => g.fulfilled).map(g => g.fulfilled);
     const totalSelectableSlots = spellLimit + grants.length;
+    // Nothing to pick (non-caster, no spell grants): the tab stays browsable as a tour
+    const noSpellChoices = totalSelectableSlots === 0;
 
     return {
       availableOptions: markedSpells,
@@ -137,6 +139,7 @@ export class SpellsStepManager extends BaseStepManager {
       selectedItem: previewItem,
       previewItem: previewItem,
       spellLimit: totalSelectableSlots,
+      noSpellChoices,
       currentSpellCount: selectedSpells.length,
       hasSelection: selectedSpells.length > 0,
       showRandomButton: true,
@@ -149,7 +152,7 @@ export class SpellsStepManager extends BaseStepManager {
       activeGrant: activeGrant,
       hasActiveGrant: !!activeGrant,
       instruction: (selectedSpells.length === 0 && !previewUuid) ?
-        game.i18n.localize('VAGABOND.CharBuilder.Instructions.Spells') : null,
+        game.i18n.localize(noSpellChoices ? 'VAGABOND.CharBuilder.Instructions.SpellsNone' : 'VAGABOND.CharBuilder.Instructions.Spells') : null,
       manaStats: manaStats,
       ancestryData: ancestryData,
       classPreviewData: classPreviewData
@@ -490,6 +493,12 @@ export class SpellsStepManager extends BaseStepManager {
     // Check if already selected
     if (currentSpells.includes(uuid)) {
       ui.notifications.warn('Spell already selected');
+      return;
+    }
+
+    // Non-casters without spell grants can browse but never pick
+    if (classSpellLimit + grants.length === 0) {
+      ui.notifications.warn(game.i18n.localize('VAGABOND.CharBuilder.NoSpellChoicesTitle'));
       return;
     }
 

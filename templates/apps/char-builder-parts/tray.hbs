@@ -1,7 +1,8 @@
 {{!-- Tray Zone (visible on perks/spells/gear steps) --}}
 <section class="tray-zone {{#unless showTray}}hidden{{/unless}}">
-    <div class="tray-grid">
-        {{!-- Instruction column (left side) --}}
+    <div class="tray-grid {{#if (and (eq step 'spells') noSpellChoices)}}no-sidebar{{/if}}">
+        {{!-- Instruction column (left side); hidden when there are no spells to choose --}}
+        {{#unless (and (eq step 'spells') noSpellChoices)}}
         <div class="tray-sidebar">
             {{!-- <h3>{{localize "VAGABOND.CharBuilder.TrayTitle"}}</h3> --}}
             <p><small>{{localize "VAGABOND.CharBuilder.TrayInstructions"}}</small></p>
@@ -16,24 +17,26 @@
 
             {{#if (eq step 'perks')}}
                 {{#if perkLimit}}
-                    <div class="pack-summary perk-limit-display">
-                        <p class="{{#unless (gte currentPerkCount perkLimit)}}incomplete{{/unless}}"><strong>{{localize "VAGABOND.CharBuilder.PerksColon"}}</strong> {{currentPerkCount}}/{{perkLimit}}</p>
-                        {{#if (gte currentPerkCount perkLimit)}}
-                            <p class="text-warning"><small>{{localize "VAGABOND.CharBuilder.MaximumReached"}}</small></p>
-                        {{/if}}
+                    <div class="tray-counter {{#if (gte currentPerkCount perkLimit)}}done{{/if}}">
+                        <span class="tray-counter-label">{{localize "VAGABOND.CharBuilder.CounterPerks"}}</span>
+                        <span class="tray-counter-value">{{currentPerkCount}}<span class="tray-counter-max">/{{perkLimit}}</span></span>
+                        <span class="tray-counter-note">
+                            {{#if (gte currentPerkCount perkLimit)}}<i class="fas fa-check"></i> {{localize "VAGABOND.CharBuilder.CounterAllChosen"}}{{else}}{{localize "VAGABOND.CharBuilder.CounterChooseMore"}}{{/if}}
+                        </span>
                     </div>
                 {{/if}}
             {{/if}}
 
             {{#if (eq step 'spells')}}
                 {{#if spellLimit}}
-                    <div class="pack-summary spell-limit-display">
-                        <p class="{{#unless (gte currentSpellCount spellLimit)}}incomplete{{/unless}}"><strong>{{localize "VAGABOND.CharBuilder.SpellsColon"}}</strong> {{currentSpellCount}}/{{spellLimit}}</p>
+                    <div class="tray-counter {{#if (gte currentSpellCount spellLimit)}}done{{/if}}">
+                        <span class="tray-counter-label">{{localize "VAGABOND.CharBuilder.CounterSpells"}}</span>
+                        <span class="tray-counter-value">{{currentSpellCount}}<span class="tray-counter-max">/{{spellLimit}}</span></span>
+                        <span class="tray-counter-note">
+                            {{#if (gte currentSpellCount spellLimit)}}<i class="fas fa-check"></i> {{localize "VAGABOND.CharBuilder.CounterAllChosen"}}{{else}}{{localize "VAGABOND.CharBuilder.CounterChooseMore"}}{{/if}}
+                        </span>
                         {{#if requiredSpellCount}}
-                            <p class="text-info"><small>{{requiredSpellCount}} {{localize "VAGABOND.CharBuilder.SpellsRequiredSuffix"}}</small></p>
-                        {{/if}}
-                        {{#if (gte currentSpellCount spellLimit)}}
-                            <p class="text-warning"><small>{{localize "VAGABOND.CharBuilder.MaximumReached"}}</small></p>
+                            <span class="tray-counter-note">{{requiredSpellCount}} {{localize "VAGABOND.CharBuilder.SpellsRequiredSuffix"}}</span>
                         {{/if}}
                     </div>
                 {{/if}}
@@ -43,6 +46,7 @@
                 <i class="fas fa-trash"></i> {{localize "VAGABOND.CharBuilder.Buttons.ClearTray"}}
             </button>
         </div>
+        {{/unless}}
 
         {{!-- Items grid (4 columns) --}}
         <div class="tray-items-grid">
@@ -83,6 +87,15 @@
                     {{/each}}
                 {{/if}}
             {{else if (eq step 'spells')}}
+                {{#if noSpellChoices}}
+                    <div class="tray-no-spells-message">
+                        <i class="fas fa-wand-sparkles"></i>
+                        <div class="tray-no-spells-text">
+                            <strong>{{localize "VAGABOND.CharBuilder.NoSpellChoicesTitle"}}</strong>
+                            <p>{{localize "VAGABOND.CharBuilder.NoSpellChoicesHint"}}</p>
+                        </div>
+                    </div>
+                {{/if}}
                 {{#if requiredSpellCount}}
                     <div class="required-spells-notice">
                         <i class="fas fa-star"></i>
@@ -107,7 +120,7 @@
                             {{/if}}
                         </div>
                     {{/each}}
-                {{else}}
+                {{else if (not noSpellChoices)}}
                     {{!-- No spells selected yet --}}
                     <div class="tray-empty-message">
                         <i class="fas fa-arrow-left"></i>

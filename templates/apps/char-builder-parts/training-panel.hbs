@@ -1,16 +1,20 @@
 {{!-- Training owed, per source (Stats step). Checked Skills are paid automatically. --}}
 <div class="training-panel">
     <div class="training-panel-head">
-        <strong>{{localize "VAGABOND.CharBuilder.Skills.PanelTitle"}}</strong>
+        <strong class="{{#if skillTraining.allAssigned}}done{{/if}}">{{skillTraining.panelTitle}}</strong>
         <i class="fa-solid fa-circle-question training-hint" data-tooltip="{{localize 'VAGABOND.CharBuilder.Skills.PanelHint'}}"></i>
         <span class="training-panel-note">{{localize "VAGABOND.CharBuilder.Skills.ValueNote"}}</span>
     </div>
     <div class="training-pools">
-        {{#if skillTraining.lockedCard}}
+        {{#if skillTraining.lockedLines.length}}
         <div class="training-pool locked" data-tooltip="{{localize 'VAGABOND.CharBuilder.Skills.LockedTooltip'}}">
             <span class="pool-count"><i class="fas fa-lock"></i></span>
-            <span class="pool-source">{{skillTraining.lockedCard.source}}</span>
-            <span class="pool-detail">{{skillTraining.lockedCard.detail}}</span>
+            <span class="pool-source">{{localize "VAGABOND.CharBuilder.Skills.LockedTitle"}}</span>
+            <span class="pool-lines">
+                {{#each skillTraining.lockedLines as |line|}}
+                <span class="pool-detail"><strong>{{line.label}}:</strong> {{line.skills}}</span>
+                {{/each}}
+            </span>
         </div>
         {{/if}}
         {{#each skillTraining.pools as |pool|}}

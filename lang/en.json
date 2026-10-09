@@ -3404,6 +3404,10 @@
       "SlotsSuffix": "slots",
       "FreeColon": "Free:",
       "PerksColon": "Perks:",
+      "CounterPerks": "Perks",
+      "CounterSpells": "Spells",
+      "CounterChooseMore": "Pick from the list",
+      "CounterAllChosen": "All chosen",
       "SpellsColon": "Spells:",
       "MaximumReached": "Maximum reached",
       "SpellsRequiredSuffix": "required",
@@ -3423,7 +3427,7 @@
         "ChooseOrRoll": "Choose or roll for your Stats",
         "Distribute": "Distribute your Stats",
         "TraitsTitle": "Character Traits",
-        "TrainingTitle": "Skills Training",
+        "TrainingTitle": "Skills",
         "RollArray": "Roll",
         "YourArray": "Your Array",
         "ChangeArray": "Change array",
@@ -3432,7 +3436,9 @@
         "ChangeArrayConfirm": "Changing the array clears the Stats you already placed. Continue?"
       },
       "Skills": {
-        "PanelTitle": "Training to assign",
+        "PanelTitle": "{count} Skill Trainings to assign",
+        "PanelTitleOne": "1 Skill Training to assign",
+        "PanelTitleDone": "All Skill Training assigned",
         "PanelHint": "Check a Skill to train it: it is paid from a source that allows it, the most limited one first. Uncheck to give the Training back.",
         "SourceClass": "Class · {name}",
         "SourceClassFeature": "Class feature · {origin}: {name}",
@@ -3446,7 +3452,8 @@
         "IfTrained": "If Trained",
         "Casting": "Casting",
         "CastingTooltip": "Casting Skill: used when casting Spells",
-        "LockedTooltip": "Training from your Class (locked)",
+        "LockedTitle": "Trained",
+        "LockedTooltip": "Training granted by your Ancestry and Class (locked)",
         "NoRoom": "No Training left that can take {skill}."
       },
       "Decision": {
@@ -3469,6 +3476,7 @@
         "Class": "Select a Class. They grant Training and Features, and provides a guide for how the Hero best perform in Combat.",
         "Stats": "Select a Stat array from the list on the left to begin assigning values on top.",
         "Spells": "If your class or ancestry allows, choose your starting spells. Spells can create devastating and miraculous effects.",
+        "SpellsNone": "Your build has no spells to choose — but feel free to look around and see what the cool spells do.",
         "Perks": "Check your starting perks. Perks are marks of achievement and signals of arcs in one's life journey.",
         "StartingPacks": "You can choose any pack you like, but there are recommended Starter Packs in your class Playing section",
         "Gear": "You can spend your remaining silver on additional equipment, weapons, and supplies."
@@ -3501,6 +3509,8 @@
       "TrayTitle": "Your Selections",
       "TrayInstructions": "Drag items from the list or click 'Add to Tray' to collect your choices.",
       "TrayEmpty": "Your tray is empty. Select items from the list and drop it here.",
+      "NoSpellChoicesTitle": "You have no spells to choose",
+      "NoSpellChoicesHint": "You can look around to see what the cool spells do — maybe your next character will be a caster!",
       "PackContents": "Pack Contents",
       "Budget": "Starting Budget",
       "Confirmation": {
