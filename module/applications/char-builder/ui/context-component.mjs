@@ -1,4 +1,5 @@
 import { isTrainingComplete } from '../steps/skills-step-manager.mjs';
+import { isStepUnlocked, DEFAULT_STEP_ORDER } from '../steps/step-gating.mjs';
 /**
  * Context Component
  * 
@@ -670,26 +671,13 @@ export class ContextComponent {
    * @returns {boolean} True if step is accessible
    */
   _isStepAccessible(stepName, state, stepIndex) {
-    // Basic prerequisite checking
-    switch (stepName) {
-      case 'ancestry':
-        return true;
-      case 'class':
-        return !!state.selectedAncestry;
-      case 'stats':
-        return !!state.selectedClass;
-      case 'perks':
-        return !!state.selectedClass;
-      case 'spells':
-        return !!state.selectedClass;
-      case 'starting-packs':
-        return !!state.selectedClass;
-      case 'gear':
-        // Gear is accessible after class selection (both starting-packs and gear are optional)
-        return !!state.selectedClass;
-      default:
-        return stepIndex === 0; // First step is always accessible
+    let order;
+    try {
+      order = this.configSystem.getStepOrder();
+    } catch (error) {
+      order = DEFAULT_STEP_ORDER;
     }
+    return isStepUnlocked(stepName, state, order);
   }
 
   /**

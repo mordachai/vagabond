@@ -60,6 +60,7 @@ export class CharacterBuilderStateManager {
 
       // UI state
       currentStep: 'ancestry',
+      furthestStep: 'ancestry', // Furthest step reached — tabs reveal one by one (step-gating.mjs)
       completedSteps: [],
       previewUuid: null,
 

@@ -13,6 +13,7 @@ import { ValidationEngine } from '../state/validation-engine.mjs';
 import { CharacterBuilderDataService } from '../services/data-service.mjs';
 import { CharacterBuilderUIComponents } from '../ui/ui-components.mjs';
 import { isTrainingComplete } from '../steps/skills-step-manager.mjs';
+import { isStepUnlocked, canFinishBuild, furthestAfter } from '../steps/step-gating.mjs';
 
 // Import all step managers
 import {
@@ -670,8 +671,10 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
     const stepOrder = this.stepsOrder; // Use configuration-aware getter
     const idx = stepOrder.indexOf(this.currentStep);
     if (idx < stepOrder.length - 1) {
+      const nextStep = stepOrder[idx + 1];
       this.stateManager.updateMultiple({
-        'currentStep': stepOrder[idx + 1],
+        'currentStep': nextStep,
+        'furthestStep': furthestAfter(this.stateManager.getCurrentState(), nextStep, stepOrder),
         'previewUuid': null
       });
       this.render();
@@ -721,6 +724,7 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
     
     this.stateManager.updateMultiple({
       'currentStep': requestedStep,
+      'furthestStep': furthestAfter(this.stateManager.getCurrentState(), requestedStep, this.stepsOrder),
       'previewUuid': null
     });
     this.render();
@@ -782,13 +786,17 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
       }
     }
 
+    // A full random build reveals every step (and Finish)
+    const order = this.stepsOrder;
+    this.stateManager.updateState('furthestStep', order[order.length - 1], { skipValidation: true });
+
     // ui.notifications.info("Full character randomized!");
     this.render();
   }
 
   async _onFinish() {
     // Validate mandatory steps are complete
-    if (!this._areMandatoryStepsComplete()) {
+    if (!this._areMandatoryStepsComplete() || !canFinishBuild(this.stateManager.getCurrentState(), this.stepsOrder)) {
       ui.notifications.error(game.i18n.localize('VAGABOND.CharBuilder.Warnings.NeedMandatorySteps'));
       return;
     }
@@ -1220,9 +1228,8 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
     const currentStep = this.currentStep;
 
     return stepOrder.map((stepKey, i) => {
-      // Each mandatory step gates every step after it (ancestry → class → stats → skills)
-      const disabled = ['ancestry', 'class', 'stats', 'skills']
-        .some(gate => stepOrder.indexOf(gate) >= 0 && i > stepOrder.indexOf(gate) && !this._isStepComplete(gate));
+      // Steps reveal one by one (step-gating.mjs)
+      const disabled = !isStepUnlocked(stepKey, this.stateManager.getCurrentState(), stepOrder);
 
       // Special handling for step names
       let stepName;

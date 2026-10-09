@@ -1,4 +1,5 @@
 import { isTrainingComplete } from '../steps/skills-step-manager.mjs';
+import { isStepUnlocked, canFinishBuild, DEFAULT_STEP_ORDER } from '../steps/step-gating.mjs';
 /**
  * Character Builder UI Components
  * 
@@ -46,6 +47,7 @@ export class CharacterBuilderUIComponents {
         'selectedStartingPack',
         'gear',
         'currentStep',
+        'furthestStep',  // Step gating: tabs reveal one by one
         'previewUuid',  // CRITICAL: Track preview changes for UI updates
         'selectedArrayId',
         'unassignedValues',
@@ -346,7 +348,7 @@ export class CharacterBuilderUIComponents {
         ...step,
         isCurrent: step.name === state.currentStep,
         isCompleted: this._isStepCompleted(step.name, state),
-        isAccessible: this._isStepAccessible(step.name, state),
+        isAccessible: isStepUnlocked(step.name, state, stepOrder),
         isPrevious: index < currentStepIndex,
         isNext: index > currentStepIndex
       })),
@@ -667,27 +669,18 @@ export class CharacterBuilderUIComponents {
    * @returns {boolean} True if step is accessible
    */
   _isStepAccessible(stepName, state) {
-    // Basic prerequisite checking
-    switch (stepName) {
-      case 'ancestry':
-        return true;
-      case 'class':
-        return !!state.selectedAncestry;
-      case 'stats':
-        return !!state.selectedClass;
-      case 'skills':
-        return this._isStepCompleted('stats', state);
-      case 'perks':
-        return !!state.selectedClass;
-      case 'spells':
-        return !!state.selectedClass;
-      case 'starting-packs':
-        return !!state.selectedClass;
-      case 'gear':
-        // Gear is independent - only requires stats to be complete
-        return Object.keys(state.assignedStats || {}).length === 6;
-      default:
-        return false;
+    return isStepUnlocked(stepName, state, this._stepOrder());
+  }
+
+  /**
+   * Configured step order (defaults until configuration loads)
+   * @returns {string[]}
+   */
+  _stepOrder() {
+    try {
+      return this.configSystem.getStepOrder();
+    } catch (error) {
+      return DEFAULT_STEP_ORDER;
     }
   }
 
@@ -697,31 +690,13 @@ export class CharacterBuilderUIComponents {
    * @returns {boolean} True if character is complete
    */
   _isCharacterComplete(state) {
-    // Mandatory steps: ancestry, class, stats, perks, spells (if spellcaster)
-    // Optional steps: starting-packs, gear
+    // Mandatory steps done + Starting Packs / Gear revealed (Perks reached)
     const mandatoryComplete = this._isStepCompleted('ancestry', state) &&
                                this._isStepCompleted('class', state) &&
                                this._isStepCompleted('stats', state) &&
                                this._isStepCompleted('skills', state);
 
-    if (!mandatoryComplete) return false;
-
-    // Check if current step index is at least at perks step
-    // This ensures user has gone through perks step (even if they didn't select any)
-    const stepOrder = ['ancestry', 'class', 'stats', 'skills', 'perks', 'spells', 'starting-packs', 'gear'];
-    const currentStepIndex = stepOrder.indexOf(state.currentStep);
-    const perksStepIndex = stepOrder.indexOf('perks');
-    const spellsStepIndex = stepOrder.indexOf('spells');
-
-    // Must have at least reached the perks step
-    if (currentStepIndex < perksStepIndex) return false;
-
-    // For spellcasters, must have at least reached the spells step
-    // Note: We can't easily check if class is spellcaster here without loading the class item
-    // So we require reaching the spells step for all characters
-    if (currentStepIndex < spellsStepIndex) return false;
-
-    return true;
+    return mandatoryComplete && canFinishBuild(state, this._stepOrder());
   }
 
   /**
