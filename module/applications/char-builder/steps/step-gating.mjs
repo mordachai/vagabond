@@ -11,10 +11,19 @@ import { isTrainingComplete } from './training-manager.mjs';
  * A step can also be absent for this build: Alchemy exists only when the chosen Class grants formulae
  * (`state.formulaLimit`). Absent steps get no tab and are skipped by Next / Previous (`applicableSteps`).
  *
+ * Creation path (`state.creationPath`, picked on the Path step right after Ancestry):
+ *   - 'builder' → the full step list (Class → … → Gear); the Guides step is absent.
+ *   - 'guide'   → Ancestry → Path → Guides, then ONLY the steps the chosen Build Guide left open
+ *                 (`state.guideOpenSteps`, a snapshot taken when the guide seeds the state: Human extra Perk,
+ *                 Elf Spell, Alchemist formulae…). Finish opens once the last of them is reached.
+ *
  * Pure functions of the builder state, shared by the tab bar, tab clicks and the Finish button.
  */
 
-export const DEFAULT_STEP_ORDER = ['ancestry', 'class', 'stats', 'spells', 'alchemy', 'perks', 'starting-packs', 'gear'];
+export const DEFAULT_STEP_ORDER = ['ancestry', 'path', 'guides', 'class', 'stats', 'spells', 'alchemy', 'perks', 'starting-packs', 'gear'];
+
+/** Always present on both creation paths. */
+const SHARED_STEPS = ['ancestry', 'path'];
 
 /** Revealed together; the first one is the gate for the whole group. */
 const CLOSING_STEPS = ['starting-packs', 'gear'];
@@ -26,6 +35,11 @@ const CLOSING_STEPS = ['starting-packs', 'gear'];
  * @returns {boolean}
  */
 export function isStepApplicable(stepName, state) {
+  if (SHARED_STEPS.includes(stepName)) return true;
+  if (state?.creationPath === 'guide') {
+    return stepName === 'guides' || (state.guideOpenSteps ?? []).includes(stepName);
+  }
+  if (stepName === 'guides') return false;
   if (stepName === 'alchemy') return (state?.formulaLimit || 0) > 0;
   return true;
 }
@@ -50,6 +64,10 @@ export function isStepDone(stepName, state) {
   switch (stepName) {
     case 'ancestry':
       return !!state.selectedAncestry;
+    case 'path':
+      return !!state.creationPath;
+    case 'guides':
+      return !!state.selectedGuide;
     case 'class':
       return !!state.selectedClass;
     case 'stats': {
@@ -61,8 +79,12 @@ export function isStepDone(stepName, state) {
       return isTrainingComplete(state); // Training is assigned on the Stats step
     }
     case 'spells': {
+      // Class slots (`spellLimit`) count the Spells no grant took; Ancestry / feature grants must all be filled
+      const grants = state.spellGrants || [];
+      if (grants.some(g => !g.fulfilled)) return false;
       const spellLimit = state.spellLimit || 0;
-      return spellLimit === 0 || (state.spells || []).length === spellLimit;
+      const classSpells = (state.spells || []).filter(u => !grants.some(g => g.fulfilled === u));
+      return spellLimit === 0 || classSpells.length === spellLimit;
     }
     case 'alchemy':
       return (state.formulas || []).length >= (state.formulaLimit || 0);
@@ -102,8 +124,13 @@ export function isStepUnlocked(stepName, state, order = DEFAULT_STEP_ORDER) {
  * @returns {boolean}
  */
 export function canFinishBuild(state, order = DEFAULT_STEP_ORDER) {
-  const closing = CLOSING_STEPS.find(s => order.includes(s));
-  return closing ? isStepUnlocked(closing, state, order) : order.every(s => isStepDone(s, state));
+  const steps = applicableSteps(state, order);
+  const closing = CLOSING_STEPS.find(s => steps.includes(s));
+  if (closing) return isStepUnlocked(closing, state, order);
+  // Guide path: every remaining step done and the last one reached
+  const last = steps[steps.length - 1];
+  return steps.every(s => isStepDone(s, state)) && isStepUnlocked(last, state, order) &&
+    furthestIndex(state, order) >= order.indexOf(last);
 }
 
 /**

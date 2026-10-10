@@ -269,7 +269,7 @@ export class ContextComponent {
       allStepConfigs = this.configSystem.getAllStepConfigs();
     } catch (error) {
       // Configuration not loaded yet, use defaults
-      stepOrder = ['ancestry', 'class', 'stats', 'spells', 'alchemy', 'perks', 'starting-packs', 'gear'];
+      stepOrder = DEFAULT_STEP_ORDER;
       allStepConfigs = {};
     }
 

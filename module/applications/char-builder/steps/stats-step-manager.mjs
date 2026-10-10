@@ -97,6 +97,7 @@ export class StatsStepManager extends BaseStepManager {
     // Prepare stat arrays for display
     const statArrayOptions = Object.entries(statArrays).map(([id, values]) => ({
       id: id,
+      label: id === 'guide' ? game.i18n.localize('VAGABOND.CharBuilder.Guides.StatArray') : id,
       values: values,
       selected: String(selectedArrayId) === id,
       total: values.reduce((sum, val) => sum + val, 0)
@@ -277,6 +278,50 @@ export class StatsStepManager extends BaseStepManager {
    * @private
    */
   _getStatArrays() {
+    // A Build Guide's own Stat row (as printed in the book) is offered as an extra 'guide' array
+    const guide = this.guideStatArray(this.getCurrentState());
+    const base = this._getBaseStatArrays();
+    return guide ? { ...base, guide } : base;
+  }
+
+  /**
+   * The Build Guide's Level 1 Stats as an array in Stat order (it may not match any builder array), or null.
+   * @param {object} state
+   * @returns {number[]|null}
+   */
+  guideStatArray(state) {
+    const row = state?.guideStats;
+    if (!row) return null;
+    const keys = this._getStatKeys();
+    return keys.every(k => Number.isFinite(row[k])) ? keys.map(k => row[k]) : null;
+  }
+
+  /**
+   * Place the Build Guide's Stats: 'guide' array, every Stat assigned, nothing left to distribute.
+   * Bonus points (Human Strong Potential…) stay open for the player.
+   * @param {object} row - { [statKey]: value }
+   */
+  applyGuideStats(row) {
+    const keys = this._getStatKeys();
+    this.stateManager.updateMultiple({
+      guideStats: { ...row },
+      selectedArrayId: 'guide',
+      assignedStats: Object.fromEntries(keys.map(k => [k, row[k] ?? null])),
+      unassignedValues: [],
+      selectedValue: null,
+      appliedBonuses: {},
+      statArraysOpen: false
+    }, { skipValidation: true });
+  }
+
+  /** The bonus Stat points owed by Ancestry / Class (stored as `bonusStatsCount` for the gating). */
+  async refreshBonusCount() {
+    const count = (await this._collectAvailableBonuses(this.getCurrentState())).length;
+    this.updateState('bonusStatsCount', count, { skipValidation: true });
+    return count;
+  }
+
+  _getBaseStatArrays() {
     // Homebrew config takes priority
     const homebrewArrays = CONFIG.VAGABOND.homebrew?.statArrays;
     if (homebrewArrays?.length) {
@@ -534,7 +579,7 @@ export class StatsStepManager extends BaseStepManager {
    * @private
    */
   async _onRollStatArray(event, target) {
-    const arrayIds = Object.keys(this._getStatArrays());
+    const arrayIds = Object.keys(this._getBaseStatArrays()); // the dice never roll the Guide row
     if (!arrayIds.length) return;
     if (!(await this._confirmArrayChange())) return;
     const roll = await new Roll(`1d${arrayIds.length}`).evaluate();
@@ -750,7 +795,7 @@ export class StatsStepManager extends BaseStepManager {
    * - Assign remaining values in order: might, dex, awr, rsn, pre, luck (skipping key stat)
    */
   async randomize() {
-    const statArrays = this._getStatArrays();
+    const statArrays = this._getBaseStatArrays();
     const arrayIds = Object.keys(statArrays);
 
     if (arrayIds.length === 0) {

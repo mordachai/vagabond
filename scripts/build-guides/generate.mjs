@@ -331,7 +331,7 @@ for (const g of guides) {
     items,
     effects: [],
     folder: null,
-    flags: { vagabond: { buildGuide: buildGuidePlan(g, className) } },
+    flags: { vagabond: { buildGuide: { ...buildGuidePlan(g, className), classId: cls._id, startingPackId: spDoc?._id ?? null } } },
     ownership: { default: 2 }, // compendium doc ownership is irrelevant to import; pack ownership lives in system.json
     sort: 0,
     _id: actorId,
@@ -350,6 +350,8 @@ for (const g of guides) {
  * The guide's progression, stored on the actor so the Level Up dialog can preselect picks.
  * `stats` holds the book's Level 1 and Level 10 rows; `perks` the book's Perk-by-Level list;
  * `spells` splits "A, B; get C and D later" into the starting list and the later list.
+ * The Character Builder's Build Guide path also reads `classId` / `startingPackId` (compendium doc ids,
+ * added at the call site) to seed its state.
  */
 function buildGuidePlan(g, className) {
   const cut = g.spells.trim() === '-' ? '' : g.spells;

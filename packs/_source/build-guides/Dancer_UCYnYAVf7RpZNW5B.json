@@ -764,7 +764,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "evasive"
           },
           {
             "level": 3,
@@ -788,7 +789,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "captivator"
           },
           {
             "level": 5,
@@ -812,7 +814,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "evasive"
           },
           {
             "level": 6,
@@ -848,7 +851,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "captivator"
           },
           {
             "level": 9,
@@ -872,7 +876,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "evasive"
           },
           {
             "level": 10,
@@ -1230,7 +1235,9 @@
           "later": [],
           "startIds": [],
           "laterIds": []
-        }
+        },
+        "classId": "8LqHA6iqYBgFmVfJ",
+        "startingPackId": "CgsVEQvhZaD9Dx9A"
       }
     }
   },

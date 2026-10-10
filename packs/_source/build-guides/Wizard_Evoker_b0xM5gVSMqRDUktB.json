@@ -637,7 +637,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "manifold-mind"
           },
           {
             "level": 3,
@@ -661,7 +662,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "sculpt-spell"
           },
           {
             "level": 5,
@@ -685,7 +687,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "manifold-mind"
           },
           {
             "level": 6,
@@ -729,7 +732,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "sculpt-spell"
           },
           {
             "level": 9,
@@ -753,7 +757,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "manifold-mind"
           },
           {
             "level": 10,
@@ -1012,7 +1017,42 @@
           "resourceOrGroups": []
         }
       },
-      "effects": [],
+      "effects": [
+        {
+          "name": "Vehement Magic",
+          "origin": "Compendium.vagabond.perks.Item.UhI94xpNrdCln9jR",
+          "img": "icons/svg/aura.svg",
+          "_id": "xN7Y2ZyXLLA0odw4",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.spellDamageExplode",
+                "value": "1",
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {},
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!b0xM5gVSMqRDUktB.YySCV28uGUMBAwNY.xN7Y2ZyXLLA0odw4"
+        }
+      ],
       "flags": {
         "vagabond": {
           "perkOrigin": {
@@ -1074,7 +1114,14 @@
         "crit": "Duration is continual.",
         "favorite": true,
         "noRollRequired": true,
-        "locked": true
+        "locked": true,
+        "hitMacro": {
+          "enabled": true,
+          "uuid": "",
+          "command": "system:spell.status.frozen",
+          "label": "Freeze",
+          "runAsGM": true
+        }
       },
       "effects": [],
       "flags": {},
@@ -1279,7 +1326,9 @@
             ],
             []
           ]
-        }
+        },
+        "classId": "U3rAxH8vn8tzDblW",
+        "startingPackId": "hje865DkzVVguhdT"
       }
     }
   },

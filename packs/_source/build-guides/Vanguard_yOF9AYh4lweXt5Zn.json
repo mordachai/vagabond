@@ -570,7 +570,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "wall"
           },
           {
             "level": 3,
@@ -594,7 +595,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "indestructible"
           },
           {
             "level": 5,
@@ -618,7 +620,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "wall"
           },
           {
             "level": 6,
@@ -654,7 +657,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "indestructible"
           },
           {
             "level": 9,
@@ -678,7 +682,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "wall"
           },
           {
             "level": 10,
@@ -987,7 +992,9 @@
           "later": [],
           "startIds": [],
           "laterIds": []
-        }
+        },
+        "classId": "8xsWpW29EzAAk100",
+        "startingPackId": "KcqqBXunMOsfq9TP"
       }
     }
   },

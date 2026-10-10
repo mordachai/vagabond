@@ -666,7 +666,8 @@
               "uuid": "",
               "command": "system:revelator.layOnHands",
               "runAsGM": false
-            }
+            },
+            "scaleKey": "lay-on-hands"
           },
           {
             "level": 3,
@@ -690,7 +691,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "paragons-aura"
           },
           {
             "level": 5,
@@ -722,7 +724,8 @@
               "uuid": "",
               "command": "system:revelator.layOnHands",
               "runAsGM": false
-            }
+            },
+            "scaleKey": "lay-on-hands"
           },
           {
             "level": 6,
@@ -758,7 +761,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "paragons-aura"
           },
           {
             "level": 9,
@@ -790,7 +794,8 @@
               "uuid": "",
               "command": "system:revelator.layOnHands",
               "runAsGM": false
-            }
+            },
+            "scaleKey": "lay-on-hands"
           },
           {
             "level": 10,
@@ -1045,6 +1050,110 @@
           "showIcon": 1,
           "folder": null,
           "_key": "!actors.items.effects!WSGynwLGc2UH5id5.7wrZ0Gbpydc1XSnT.im7KvMTWElc3lgM6"
+        },
+        {
+          "name": "Holy Diver: Bless",
+          "origin": "Compendium.vagabond.classes.Item.yZzChIB5YwQBSOeA",
+          "img": "icons/magic/holy/saint-glass-portrait-halo.webp",
+          "_id": "holyDiverBless01",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.saveBonusDice",
+                "value": "1d4",
+                "priority": null,
+                "type": "add"
+              },
+              {
+                "key": "system.weaponsCountAs",
+                "value": "silver",
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "<p>Holy Diver: you are permanently under the Bless Spell (d4 bonus to Saves) and Weapons you wield count as Silvered.</p>",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "permanent",
+              "minLevel": 10,
+              "effectKey": "revelator.holyDiver.bless"
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!WSGynwLGc2UH5id5.7wrZ0Gbpydc1XSnT.holyDiverBless01"
+        },
+        {
+          "name": "Holy Diver: Exalt",
+          "origin": "Compendium.vagabond.classes.Item.yZzChIB5YwQBSOeA",
+          "img": "icons/skills/melee/sword-winged-holy-orange.webp",
+          "_id": "holyDiverExalt01",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.bonusPerDamageDie",
+                "value": "1",
+                "priority": null,
+                "type": "add"
+              },
+              {
+                "key": "system.bonusPerDamageDieDoubleVsBeingTypes",
+                "value": "Hellspawn",
+                "priority": null,
+                "type": "add"
+              },
+              {
+                "key": "system.bonusPerDamageDieDoubleVsBeingTypes",
+                "value": "Undead",
+                "priority": null,
+                "type": "add"
+              },
+              {
+                "key": "system.saveVsStatusBonuses",
+                "value": "frightened:will:1",
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "<p>Holy Diver: you are permanently under the Exalt Spell (+1 to each damage die you deal and to Will Saves against Frightened, doubled against Hellspawn and Undead).</p>",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "permanent",
+              "minLevel": 10,
+              "effectKey": "revelator.holyDiver.exalt"
+            }
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!WSGynwLGc2UH5id5.7wrZ0Gbpydc1XSnT.holyDiverExalt01"
         }
       ],
       "flags": {},
@@ -1172,7 +1281,14 @@
         "noRollRequired": true,
         "fxSchool": "radiant",
         "locked": true,
-        "causedStatuses": []
+        "causedStatuses": [],
+        "hitMacro": {
+          "enabled": true,
+          "uuid": "",
+          "command": "system:spell.status.blessed",
+          "label": "Bless",
+          "runAsGM": true
+        }
       },
       "effects": [],
       "flags": {},
@@ -1313,7 +1429,9 @@
               "lSVkxtOolrInid6w"
             ]
           ]
-        }
+        },
+        "classId": "yZzChIB5YwQBSOeA",
+        "startingPackId": "KoynpKyutYoL8KOX"
       }
     }
   },

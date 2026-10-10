@@ -79,7 +79,9 @@ export class SpellHandler {
     const hasDamage = spell.system.damageType !== '-' && state.damageDice >= 1;
     // Dice-scaling spells (no damage type) charge per-die mana like damage dice.
     const diceActive = hasDamage || (spell.system.usesDiceScaling && state.damageDice >= 1);
-    const damageCost = diceActive && state.damageDice > 1 ? state.damageDice - 1 : 0;
+    // noFreeDie spells (Life) pay for every die, the first included.
+    const freeDice = spell.system.noFreeDie ? 0 : 1;
+    const damageCost = diceActive ? Math.max(0, state.damageDice - freeDice) : 0;
 
     // Fx cost: +1 mana ONLY when using both damage AND effects
     // 0 dice = effect-only cast, Fx is free (no combo surcharge)
@@ -306,7 +308,7 @@ export class SpellHandler {
         damageElement.textContent = `${state.damageDice}`;
       }
       if (damageElement) {
-        damageElement.style.color = state.damageDice > 1
+        damageElement.style.color = state.damageDice > (spell.system.noFreeDie ? 0 : 1)
           ? 'var(--vagabond-c-damage-orange)'
           : '';
       }

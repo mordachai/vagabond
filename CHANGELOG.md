@@ -1,6 +1,14 @@
 # Changelog
 
 ## Unreleased
+- **Character Builder: Build Guides.** After choosing an Ancestry, pick **Use a Build Guide** or **Build from Scratch**; you can go back and switch at any time. Guides are the book's 40 ready-made Level 1 builds, shown as flip cards: the front has Stats, HP, Armor, Mana and Cast Max, Weapons, Armor & Trinkets, Spells, Level 1 Perks, Starting Pack and coins; the back has Perks by Level, Stats at Level 10, Spells to learn later and Training. Click any Weapon, Armor, Spell, Perk or Starting Pack for its details. Search and filter by Class; click a picked card again to drop it.
+- A Build Guide fills in Class, Stats, Training, Perks, Spells and gear. Only your Ancestry's own choices (and anything the guide leaves open) are left as steps before Finish. **Customize in the Builder** opens the full builder with the guide's picks, so you can change anything.
+- GMs can hide Build Guides from players (eye button on each card).
+- Item details popups have bigger text, and a Starting Pack's popup lists what's inside.
+- The Character Builder uses the sheet's scrollbars.
+- **Throw skill for Thrown weapons.** The locked weapon sheet has a new **Throw** dropdown: throws roll with the same skill as the weapon's attacks by default, or with any weapon skill you pick (e.g. throw a Dagger with Ranged).
+- Weapon Property tooltips (Cleave, Defense, Grapple, Keen, Long, Thrown, Vicious) now show the book's full text.
+- No more pop-up when a throw at a Far Target is Hindered; the attack card's "Far" tag already shows it.
 - Fix: in worlds whose homebrew skills were saved before attack types existed, Ranged attacks counted as melee (defense rules, Ranged-only features and macros reading the attack type). Missing attack types now come from the default skill.
 
 ## v6.2.0

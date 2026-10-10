@@ -139,8 +139,11 @@
  * }
  */
 
-/* Global scrollbar styling for vagabond sheets and chat */
+/* Global scrollbar styling for vagabond sheets and chat
+   (+ Character Builder and item mini-sheet popups, which don't carry the .vagabond class) */
 .vagabond *,
+.vagabond-builder *,
+.inventory-mini-sheet,
 #chat-log {
   @include vagabond-scrollbar;
 }

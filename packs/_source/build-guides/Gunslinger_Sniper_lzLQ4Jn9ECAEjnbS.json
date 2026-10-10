@@ -784,7 +784,7 @@
           },
           {
             "level": 2,
-            "name": "Bad Medicine",
+            "name": "Bad Medicine (+1 die)",
             "description": "<p>You deal an extra die of damage when you Crit with a Ranged Check. The number of extra dice increases by 1 every 4 Levels hereafter.</p>",
             "statBonusPoints": 1,
             "extraTraining": 0,
@@ -792,7 +792,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "bad-medicine"
           },
           {
             "level": 3,
@@ -824,7 +825,8 @@
               "uuid": "",
               "command": "system:gunslinger.grit",
               "runAsGM": false
-            }
+            },
+            "scaleKey": "grit"
           },
           {
             "level": 5,
@@ -848,7 +850,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "bad-medicine"
           },
           {
             "level": 6,
@@ -884,7 +887,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "grit"
           },
           {
             "level": 9,
@@ -908,7 +912,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "bad-medicine"
           },
           {
             "level": 10,
@@ -1307,7 +1312,9 @@
           "later": [],
           "startIds": [],
           "laterIds": []
-        }
+        },
+        "classId": "vPSWM9E4F8yjHVea",
+        "startingPackId": "j0veMJ1duvnOwNOa"
       }
     }
   },

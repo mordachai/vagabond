@@ -266,7 +266,7 @@ export class ConfigurationSystem {
    */
   _loadStepConfigFallback() {
     const config = {
-      order: ['ancestry', 'class', 'stats', 'spells', 'alchemy', 'perks', 'starting-packs', 'gear'],
+      order: ['ancestry', 'path', 'guides', 'class', 'stats', 'spells', 'alchemy', 'perks', 'starting-packs', 'gear'],
       steps: {
         ancestry: {
           displayName: 'Choose Ancestry',

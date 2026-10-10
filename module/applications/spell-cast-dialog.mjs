@@ -880,7 +880,9 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
     // Dice-scaling spells (no damage type) charge the same per-die mana as damage
     // dice so the dice are a real resource; the first die is free.
     const diceActive = hasDamage || (spell.system.usesDiceScaling && state.damageDice >= 1);
-    const damageCost = diceActive && state.damageDice > 1 ? state.damageDice - 1 : 0;
+    // noFreeDie spells (Life) pay for every die, the first included.
+    const freeDice = spell.system.noFreeDie ? 0 : 1;
+    const damageCost = diceActive ? Math.max(0, state.damageDice - freeDice) : 0;
     const fxCost = state.useFx && hasDamage ? 1 : 0;
 
     let deliveryBaseCost = state.deliveryType

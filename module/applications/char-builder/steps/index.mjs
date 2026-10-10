@@ -3,6 +3,8 @@
  */
 export { BaseStepManager } from './base-step-manager.mjs';
 export { AncestryStepManager } from './ancestry-step-manager.mjs';
+export { PathStepManager } from './path-step-manager.mjs';
+export { GuidesStepManager } from './guides-step-manager.mjs';
 export { ClassStepManager } from './class-step-manager.mjs';
 export { StatsStepManager } from './stats-step-manager.mjs';
 export { TrainingManager } from './training-manager.mjs';

@@ -190,6 +190,12 @@ export class VagabondDamagePipeline {
         const healingFaces = this.healingExplodeValues(actor);
         if (healingFaces.length) explodeValues = [...new Set([...(explodeValues ?? []), ...healingFaces])];
       }
+      // Damage Spells explode on the extra faces from Vehement Magic — real damage only, never
+      // restorative (healing / recover / recharge) or untyped '-' rolls
+      if (sourceType === 'spell' && this._dealsDamage(damageType)) {
+        const damageFaces = this.spellDamageExplodeValues(actor);
+        if (damageFaces.length) explodeValues = [...new Set([...(explodeValues ?? []), ...damageFaces])];
+      }
       if (explodeValues) await this.manuallyExplodeDice(roll, explodeValues);
     }
 
@@ -243,6 +249,19 @@ export class VagabondDamagePipeline {
     const type = damageType?.toLowerCase() || '';
     const configured = CONFIG.VAGABOND?.restorativeDamageTypes;
     return !!(configured ? configured[type] : { healing: 'hp', recover: 'fatigue', recharge: 'mana' }[type]);
+  }
+
+  /**
+   * Is this a real damage type — not untyped ('-' / empty) and not restorative
+   * (`CONFIG.VAGABOND.restorativeDamageTypes`: healing / recover / recharge + homebrew)?
+   * @param {string} damageType
+   * @returns {boolean}
+   */
+  static _dealsDamage(damageType) {
+    const type = damageType?.toLowerCase() || '';
+    if (!type || type === '-') return false;
+    const configured = CONFIG.VAGABOND?.restorativeDamageTypes;
+    return !(configured ? configured[type] : { healing: 'hp', recover: 'fatigue', recharge: 'mana' }[type]);
   }
 
   static _restoresHp(damageType) {
@@ -510,7 +529,21 @@ export class VagabondDamagePipeline {
    * @returns {Array<number|string>}
    */
   static healingExplodeValues(actor) {
-    const raw = actor?.system?.healingExplode;
+    return this._explodeFaces(actor?.system?.healingExplode);
+  }
+
+  /**
+   * Faces the actor's damage-dealing Spell rolls also explode on (`system.spellDamageExplode`,
+   * Vehement Magic: 1). Same vocabulary as healingExplodeValues.
+   * @param {Actor|null} actor
+   * @returns {Array<number|string>}
+   */
+  static spellDamageExplodeValues(actor) {
+    return this._explodeFaces(actor?.system?.spellDamageExplode);
+  }
+
+  /** Normalize an AE-built face list ('1', 'max', 'max-1'…) into explode values. */
+  static _explodeFaces(raw) {
     if (!Array.isArray(raw)) return [];
     return [...new Set(raw
       .map(v => String(v).trim().toLowerCase())
@@ -533,7 +566,9 @@ export class VagabondDamagePipeline {
       : item.system?.equipmentType === 'alchemical' ? 'alchemical' : 'weapon';
     if (this.getExplodeValues(item, actor, sourceType)) return true;
     if (sourceType === 'weapon' && Number(actor?.system?.weaponHighExplodeBySkill?.[item.system?.weaponSkill]) > 0) return true;
-    return item.type === 'spell' && this._restoresHp(item.system?.damageType) && this.healingExplodeValues(actor).length > 0;
+    if (item.type !== 'spell') return false;
+    if (this._restoresHp(item.system?.damageType) && this.healingExplodeValues(actor).length > 0) return true;
+    return this._dealsDamage(item.system?.damageType) && this.spellDamageExplodeValues(actor).length > 0;
   }
 
   /**

@@ -326,7 +326,7 @@ export class RollHandler {
       // Check for auto-fail conditions before rolling weapon attack
       // (Dead, or the attack skill is built on a failed Stat — Incapacitated: Might / Dexterity)
       const { VagabondRollBuilder: _AutoFailRB } = await import('../../helpers/roll-builder.mjs');
-      if (_AutoFailRB.autoFails(this.actor, EquipmentHelper.attackSkillFor(item, { skillKey }))) {
+      if (_AutoFailRB.autoFails(this.actor, EquipmentHelper.attackSkillFor(item, { skillKey, thrown }))) {
         // Import chat card helper
         const { VagabondChatCard } = await import('../../helpers/chat-card.mjs');
 
@@ -364,14 +364,12 @@ export class RollHandler {
         const throwerToken = this.actor.token?.object ?? this.actor.getActiveTokens(true)[0];
         const throwTarget = TargetHelper.resolveTargets(targetsAtRollTime)[0];
         if (throwerToken && throwTarget) throwRangeBand = FlankingHelper.rangeBand(throwerToken, throwTarget);
-        if (throwRangeBand === 'far') {
-          favorHinder = VagabondRollBuilder.mergeFavorHinder(favorHinder, 'hinder');
-          ui.notifications.warn(game.i18n.format('VAGABOND.ContextMenu.ThrowFar', { name: item.name }));
-        }
+        // No toast: the card's "Far" tag says why the throw is Hindered
+        if (throwRangeBand === 'far') favorHinder = VagabondRollBuilder.mergeFavorHinder(favorHinder, 'hinder');
       }
 
       // Pre-roll hook for weapon attack: the chosen / preferred / default skill.
-      const _wpnRollKey = EquipmentHelper.attackSkillFor(item, { skillKey });
+      const _wpnRollKey = EquipmentHelper.attackSkillFor(item, { skillKey, thrown });
       const _wpnRollData = this.actor.getRollData();
       const _wpnSkillData = _wpnRollData.skills?.[_wpnRollKey] || _wpnRollData.saves?.[_wpnRollKey];
       const _wpnBaseDifficulty = _wpnSkillData?.difficulty ?? 10;

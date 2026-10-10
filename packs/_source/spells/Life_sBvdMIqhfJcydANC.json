@@ -9,6 +9,7 @@
     "crit": "",
     "favorite": false,
     "noRollRequired": true,
+    "noFreeDie": true,
     "fxSchool": "healing",
     "locked": true
   },

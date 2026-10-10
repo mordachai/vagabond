@@ -612,7 +612,8 @@
             "extraTraining": 0,
             "requiredSpells": [],
             "allowedPerks": [],
-            "perkAmount": 0
+            "perkAmount": 0,
+            "scaleKey": "eureka"
           },
           {
             "level": 3,
@@ -634,7 +635,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "formulaAmount": 1,
-            "formulaValueCap": "@attributes.level.value * 50"
+            "formulaValueCap": "@attributes.level.value * 50",
+            "scaleKey": "potency"
           },
           {
             "level": 5,
@@ -654,7 +656,15 @@
             "extraTraining": 0,
             "requiredSpells": [],
             "allowedPerks": [],
-            "perkAmount": 0
+            "perkAmount": 0,
+            "action": {
+              "enabled": true,
+              "label": "Mix",
+              "icon": "flask-vial",
+              "uuid": "",
+              "command": "system:alchemist.mix",
+              "runAsGM": false
+            }
           },
           {
             "level": 6,
@@ -664,7 +674,8 @@
             "extraTraining": 0,
             "requiredSpells": [],
             "allowedPerks": [],
-            "perkAmount": 0
+            "perkAmount": 0,
+            "scaleKey": "eureka"
           },
           {
             "level": 7,
@@ -686,7 +697,8 @@
             "extraTraining": 0,
             "requiredSpells": [],
             "allowedPerks": [],
-            "perkAmount": 0
+            "perkAmount": 0,
+            "scaleKey": "potency"
           },
           {
             "level": 9,
@@ -718,7 +730,8 @@
             "extraTraining": 0,
             "requiredSpells": [],
             "allowedPerks": [],
-            "perkAmount": 0
+            "perkAmount": 0,
+            "scaleKey": "eureka"
           }
         ],
         "manaSkill": null,
@@ -1133,7 +1146,9 @@
           "later": [],
           "startIds": [],
           "laterIds": []
-        }
+        },
+        "classId": "4kXK5bZHEb3PMzLy",
+        "startingPackId": "Km7GTFMeCkOvr986"
       }
     }
   },

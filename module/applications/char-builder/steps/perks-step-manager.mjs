@@ -180,6 +180,29 @@ export class PerksStepManager extends BaseStepManager {
   }
 
   /**
+   * Build Guide seeding: fill the Perk grants with the guide's Perks (grants are sorted most restrictive first,
+   * so a Class pool takes its Perk before the free creation Perk). Perks the Class grants outright are skipped.
+   * Grants left empty (Human Aptitude…) stay for the player.
+   * @param {string[]} perkUuids
+   * @returns {Promise<string[]>} the Perks no open grant could take
+   */
+  async seedGrants(perkUuids) {
+    const state = this.getCurrentState();
+    const sameDoc = (a, b) => a === b || String(a).split('.').pop() === String(b).split('.').pop();
+    const classPerks = [...new Set([...(state.classPerks || []), ...(await this._collectGuaranteedPerks(state))])];
+    const grants = await this._collectPerkGrants(state);
+    const unplaced = [];
+    for (const uuid of perkUuids) {
+      if (classPerks.some(c => sameDoc(c, uuid))) continue;
+      const grant = grants.find(g => !g.fulfilled && (!g.allowedPerks.length || g.allowedPerks.some(a => sameDoc(a, uuid))));
+      if (grant) grant.fulfilled = uuid;
+      else unplaced.push(uuid);
+    }
+    this.stateManager.updateMultiple({ classPerks, perkGrants: grants, perks: [], perkChoices: {} }, { skipValidation: true });
+    return unplaced;
+  }
+
+  /**
    * Check if a perk UUID matches a grant's restrictions
    * @private
    */

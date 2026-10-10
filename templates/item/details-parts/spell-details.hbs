@@ -135,6 +135,20 @@
           <p class='notes'>{{localize "VAGABOND.UI.Labels.NoRollRequiredHint"}}</p>
         </div>
 
+        {{! No Free Die Checkbox }}
+        <div class='form-group'>
+          <label class='checkbox-label'>
+            <input
+              type='checkbox'
+              name='system.noFreeDie'
+              {{#if system.noFreeDie}}checked{{/if}}
+              data-dtype='Boolean'
+            />
+            <span>{{localize "VAGABOND.UI.Labels.NoFreeDie"}}</span>
+          </label>
+          <p class='notes'>{{localize "VAGABOND.UI.Labels.NoFreeDieHint"}}</p>
+        </div>
+
         {{! Uses Dice Scaling Checkbox }}
         <div class='form-group'>
           <label class='checkbox-label'>

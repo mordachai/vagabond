@@ -709,7 +709,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "spell-parry"
           },
           {
             "level": 3,
@@ -733,7 +734,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "arcane-surge"
           },
           {
             "level": 5,
@@ -757,7 +759,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "spell-parry"
           },
           {
             "level": 6,
@@ -793,7 +796,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "arcane-surge"
           },
           {
             "level": 9,
@@ -817,7 +821,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "spell-parry"
           },
           {
             "level": 10,
@@ -1022,7 +1027,42 @@
           "resourceOrGroups": []
         }
       },
-      "effects": [],
+      "effects": [
+        {
+          "name": "Vehement Magic",
+          "origin": "Compendium.vagabond.perks.Item.UhI94xpNrdCln9jR",
+          "img": "icons/svg/aura.svg",
+          "_id": "xN7Y2ZyXLLA0odw4",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.spellDamageExplode",
+                "value": "1",
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {},
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!NZbcDOzbvZ8Js4uR.RQtBSTgIfLP4pPad.xN7Y2ZyXLLA0odw4"
+        }
+      ],
       "flags": {
         "vagabond": {
           "perkOrigin": {
@@ -1047,7 +1087,14 @@
         "noRollRequired": true,
         "fxSchool": "radiant",
         "locked": true,
-        "causedStatuses": []
+        "causedStatuses": [],
+        "hitMacro": {
+          "enabled": true,
+          "uuid": "",
+          "command": "system:spell.status.blessed",
+          "label": "Bless",
+          "runAsGM": true
+        }
       },
       "effects": [],
       "flags": {},
@@ -1065,6 +1112,7 @@
         "crit": "",
         "favorite": true,
         "noRollRequired": true,
+        "noFreeDie": true,
         "fxSchool": "healing",
         "locked": true
       },
@@ -1119,7 +1167,7 @@
         "hitMacro": {
           "enabled": true,
           "uuid": "",
-          "command": "const amount  = (Number(scope.spellDamageDice ?? 1) || 1) * 5;\nconst targets = scope.targets ?? [];\nif (!targets.length) return ui.notifications.warn(\"Tempo: no target.\");\nconst duration = scope.isCritical ? { seconds: 60 } : {};\nfor (const t of targets) {\n  const a = t.actor ?? t; if (!a) continue;\n  const npc = typeof a.system.speed !== \"object\";\n  await a.createEmbeddedDocuments(\"ActiveEffect\", [{\n    name: `Tempo (+${amount} ft)`,\n    img: \"icons/magic/time/clock-stopwatch-white-blue.webp\",\n    duration,\n    changes: [{ key: npc ? \"system.speed\" : \"system.speed.bonus\", mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: String(amount) }],\n    flags: { vagabond: { tempo: true } },\n  }]);\n}\nui.notifications.info(`Tempo: +${amount} ft on ${targets.length} target(s).`);",
+          "command": "system:spell.status.hastened",
           "label": "Tempo +",
           "runAsGM": true
         },
@@ -1146,7 +1194,7 @@
         "hitMacro": {
           "enabled": true,
           "uuid": "",
-          "command": "const amount  = -((Number(scope.spellDamageDice ?? 1) || 1) * 5);\nconst targets = scope.targets ?? [];\nif (!targets.length) return ui.notifications.warn(\"Tempo: no target.\");\nconst duration = scope.isCritical ? { seconds: 60 } : {};\nfor (const t of targets) {\n  const a = t.actor ?? t; if (!a) continue;\n  const npc = typeof a.system.speed !== \"object\";\n  await a.createEmbeddedDocuments(\"ActiveEffect\", [{\n    name: `Tempo (${amount} ft)`,\n    img: \"icons/magic/time/clock-stopwatch-white-blue.webp\",\n    duration,\n    changes: [{ key: npc ? \"system.speed\" : \"system.speed.bonus\", mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: String(amount) }],\n    flags: { vagabond: { tempo: true } },\n  }]);\n}\nui.notifications.info(`Tempo: ${amount} ft on ${targets.length} target(s).`);",
+          "command": "system:spell.status.slowed",
           "label": "Tempo -",
           "runAsGM": true
         },
@@ -1274,7 +1322,9 @@
               "0SXybjqa7puxI7fK"
             ]
           ]
-        }
+        },
+        "classId": "gSD4ww0S2NUBbnvo",
+        "startingPackId": "ALxq2xfC8nfF75iQ"
       }
     }
   },

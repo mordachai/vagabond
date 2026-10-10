@@ -659,6 +659,44 @@ export class SpellsStepManager extends BaseStepManager {
   }
 
   /**
+   * Build Guide seeding: the guide's Spells fill the Class Spell slots first, then any open grant that allows them.
+   * Required (auto-granted) Spells are added as usual; grants left empty (Elf Naturally Attuned…) stay for the player.
+   * @param {string[]} spellUuids
+   * @returns {Promise<string[]>} the Spells no slot could take
+   */
+  async seedSpells(spellUuids) {
+    const state = this.getCurrentState();
+    const sameDoc = (a, b) => a === b || String(a).split('.').pop() === String(b).split('.').pop();
+    const required = await this._collectRequiredSpells(state);
+    const grants = await this._collectSpellGrants(state);
+    // Required Spells take Class slots, like adding Spells by hand (`_onAddToTray`)
+    let classSlots = Math.max(0, (await this._getSpellLimit(state)) - required.length);
+    const spells = [...required];
+    const unplaced = [];
+    for (const uuid of spellUuids) {
+      if (spells.some(s => sameDoc(s, uuid))) continue;
+      if (classSlots > 0) { classSlots--; spells.push(uuid); continue; }
+      const grant = grants.find(g => !g.fulfilled && (!g.allowedSpells.length || g.allowedSpells.some(a => sameDoc(a, uuid))));
+      if (grant) { grant.fulfilled = uuid; spells.push(uuid); }
+      else unplaced.push(uuid);
+    }
+    this.stateManager.updateMultiple({ spells, spellGrants: grants }, { skipValidation: true });
+    return unplaced;
+  }
+
+  /**
+   * Spell choices still open: an unfulfilled grant or a free Class slot.
+   * @returns {Promise<boolean>}
+   */
+  async hasOpenChoices() {
+    const state = this.getCurrentState();
+    const grants = state.spellGrants || [];
+    if (grants.some(g => !g.fulfilled)) return true;
+    const classSpells = (state.spells || []).filter(u => !grants.some(g => g.fulfilled === u));
+    return classSpells.length < await this._getSpellLimit(state);
+  }
+
+  /**
    * Check if step is complete — all spell grants must be fulfilled
    */
   isComplete() {

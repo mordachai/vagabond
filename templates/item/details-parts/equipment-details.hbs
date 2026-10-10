@@ -58,6 +58,20 @@
                 <span class='stat-value'>{{attackSkill.label}}</span>
               {{/if}}
             </div>
+            {{#if throwSkill}}
+            <div class='locked-stat'>
+              <span class='stat-label'>{{localize "VAGABOND.UI.Labels.ThrowSkillColon"}}</span>
+              {{#if throwSkill.choices}}
+                <select class='stat-value locked-skill-select' name='flags.vagabond.throwSkill' data-dtype='String'>
+                  {{#each throwSkill.choices as |c|}}
+                    <option value='{{c.key}}' {{#if c.selected}}selected{{/if}}>{{c.label}}</option>
+                  {{/each}}
+                </select>
+              {{else}}
+                <span class='stat-value'>{{throwSkill.label}}</span>
+              {{/if}}
+            </div>
+            {{/if}}
             <div class='locked-stat'>
               <span class='stat-label'>{{localize "VAGABOND.UI.Labels.RangeColon"}}</span>
               <span class='stat-value'>{{#if system.range}}{{localize (lookup config.weaponRanges system.range)}}{{else}}-{{/if}}</span>

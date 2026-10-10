@@ -661,7 +661,8 @@
             "perkAmount": 1,
             "ignorePerkPrereqs": "all",
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "fighting-style"
           },
           {
             "level": 1,
@@ -693,7 +694,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "valor"
           },
           {
             "level": 3,
@@ -749,7 +751,8 @@
             "perkAmount": 1,
             "ignorePerkPrereqs": "all",
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "fighting-style"
           },
           {
             "level": 5,
@@ -773,7 +776,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "valor"
           },
           {
             "level": 6,
@@ -841,7 +845,8 @@
             "perkAmount": 1,
             "ignorePerkPrereqs": "all",
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "fighting-style"
           },
           {
             "level": 9,
@@ -865,7 +870,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "valor"
           },
           {
             "level": 10,
@@ -1243,7 +1249,9 @@
           "later": [],
           "startIds": [],
           "laterIds": []
-        }
+        },
+        "classId": "TiQ8qydxxhedOk09",
+        "startingPackId": "8aE5eHJwq8lMe2Bo"
       }
     }
   },

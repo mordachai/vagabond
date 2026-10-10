@@ -28,6 +28,10 @@ export class CharacterBuilderUIComponents {
     this.changeDetection = {
       enabled: true,
       trackedPaths: [
+        'creationPath',  // Path step: Build Guide vs Builder
+        'selectedGuide',  // Guides step
+        'guideOpenSteps',  // Guide path: open steps snapshot
+        'guideStats',  // 'guide' stat array
         'selectedAncestry',
         'selectedClass',
         'assignedStats',
@@ -165,7 +169,7 @@ export class CharacterBuilderUIComponents {
         navigation: navigationContext,
         sidebar: sidebarContext,
         // Navigation button states (for footer template)
-        isLastStep: state.currentStep === 'gear', // Hide Next button on last step
+        isLastStep: this._isLastStep(state), // Hide Next button on last step
         canAdvance: this._canProceedToNext(state), // Can click Next button
         canFinish: this._isCharacterComplete(state), // Can click Finish button
         ui: {
@@ -327,7 +331,7 @@ export class CharacterBuilderUIComponents {
     } catch (error) {
       // Configuration not loaded yet, use defaults
       console.debug('Configuration not loaded for navigation, using defaults');
-      stepOrder = ['ancestry', 'class', 'stats', 'spells', 'alchemy', 'perks', 'starting-packs', 'gear'];
+      stepOrder = DEFAULT_STEP_ORDER;
       allStepConfigs = {};
     }
 
@@ -414,7 +418,7 @@ export class CharacterBuilderUIComponents {
     } catch (error) {
       // Configuration not loaded yet, use defaults
       console.debug('Configuration not loaded for step progress, using defaults');
-      stepOrder = ['ancestry', 'class', 'stats', 'spells', 'alchemy', 'perks', 'starting-packs', 'gear'];
+      stepOrder = DEFAULT_STEP_ORDER;
       allStepConfigs = {};
     }
 
@@ -608,6 +612,16 @@ export class CharacterBuilderUIComponents {
   }
 
   /**
+   * The current step is the last one of this build (Gear, or the guide path's last open step)
+   * @param {object} state
+   * @returns {boolean}
+   */
+  _isLastStep(state) {
+    const steps = applicableSteps(state, this._stepOrder());
+    return state.currentStep === steps[steps.length - 1];
+  }
+
+  /**
    * Check if should show preview
    * @param {object} state - Current builder state
    * @returns {boolean} True if should show preview
@@ -626,6 +640,10 @@ export class CharacterBuilderUIComponents {
     switch (stepName) {
       case 'ancestry':
         return !!state.selectedAncestry;
+
+      case 'path':
+      case 'guides':
+        return isStepDone(stepName, state);
 
       case 'class':
         return !!state.selectedClass;
@@ -646,10 +664,7 @@ export class CharacterBuilderUIComponents {
         return true;
 
       case 'spells':
-        // Need exact spell count for spellcasters
-        const spellLimit = state.spellLimit || 0;
-        const spellsSelected = (state.spells || []).length;
-        return spellLimit === 0 || spellsSelected === spellLimit;
+        return isStepDone('spells', state);
 
       case 'alchemy':
         return isStepDone('alchemy', state);
@@ -794,7 +809,7 @@ export class CharacterBuilderUIComponents {
       stepOrder = this.configSystem.getStepOrder();
     } catch (error) {
       // Configuration not loaded yet, use defaults
-      stepOrder = ['ancestry', 'class', 'stats', 'spells', 'alchemy', 'perks', 'starting-packs', 'gear'];
+      stepOrder = DEFAULT_STEP_ORDER;
     }
 
     const currentIndex = stepOrder.indexOf(currentStep);

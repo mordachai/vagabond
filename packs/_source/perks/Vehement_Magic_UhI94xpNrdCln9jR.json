@@ -16,7 +16,53 @@
       "resourceOrGroups": []
     }
   },
-  "effects": [],
+  "effects": [
+    {
+      "name": "Vehement Magic",
+      "origin": "Compendium.vagabond.perks.Item.UhI94xpNrdCln9jR",
+      "img": "icons/svg/aura.svg",
+      "_id": "xN7Y2ZyXLLA0odw4",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.spellDamageExplode",
+            "value": "1",
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "6.2.0",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "createdTime": 1791400000000,
+        "modifiedTime": 1791400000000,
+        "lastModifiedBy": null
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!UhI94xpNrdCln9jR.xN7Y2ZyXLLA0odw4"
+    }
+  ],
   "folder": null,
   "flags": {},
   "_stats": {

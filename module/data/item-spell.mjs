@@ -81,6 +81,16 @@ export default class VagabondSpell extends VagabondItemBase {
       hint: "Allow the cast dice control on a damage-less spell (damage type '-'). Dice become a counted resource for macros (scope.spellDamageDice); each die past the first costs 1 mana. No damage is rolled."
     });
 
+    // No Free Die - every damage/healing die costs 1 Mana, including the first
+    // (Life: "heal Target(s) for d6 HP per Mana spent"). Default rules give
+    // the first die for free.
+    schema.noFreeDie = new fields.BooleanField({
+      required: true,
+      initial: false,
+      label: "No Free Die",
+      hint: "Every die costs 1 Mana, including the first."
+    });
+
     // Optional label shown on the dice node when using dice scaling (e.g. "Speed").
     schema.diceScaleLabel = new fields.StringField({
       required: false,

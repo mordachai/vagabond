@@ -732,7 +732,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "line-goes-up"
           },
           {
             "level": 3,
@@ -756,7 +757,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "diamond-hands"
           },
           {
             "level": 5,
@@ -780,7 +782,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "line-goes-up"
           },
           {
             "level": 6,
@@ -816,7 +819,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "diamond-hands"
           },
           {
             "level": 9,
@@ -840,7 +844,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "line-goes-up"
           },
           {
             "level": 10,
@@ -1099,7 +1104,9 @@
           "later": [],
           "startIds": [],
           "laterIds": []
-        }
+        },
+        "classId": "F26CjqMxgd2fPbv5",
+        "startingPackId": "GjPcdjZKPh8PBfMj"
       }
     }
   },

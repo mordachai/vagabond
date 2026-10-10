@@ -728,7 +728,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "spell-parry"
           },
           {
             "level": 3,
@@ -752,7 +753,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "arcane-surge"
           },
           {
             "level": 5,
@@ -776,7 +778,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "spell-parry"
           },
           {
             "level": 6,
@@ -812,7 +815,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "arcane-surge"
           },
           {
             "level": 9,
@@ -836,7 +840,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "spell-parry"
           },
           {
             "level": 10,
@@ -1038,7 +1043,14 @@
         "favorite": true,
         "noRollRequired": true,
         "fxSchool": "radiant",
-        "locked": true
+        "locked": true,
+        "hitMacro": {
+          "enabled": true,
+          "uuid": "",
+          "command": "system:spell.status.guided",
+          "label": "Guide",
+          "runAsGM": true
+        }
       },
       "effects": [],
       "flags": {},
@@ -1216,7 +1228,9 @@
               "L43XdoqLgQ8Wl6vM"
             ]
           ]
-        }
+        },
+        "classId": "gSD4ww0S2NUBbnvo",
+        "startingPackId": "y1dMToABIEv83o2C"
       }
     }
   },

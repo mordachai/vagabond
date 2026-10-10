@@ -4,8 +4,8 @@
 // ==========================================
 
 .inventory-mini-sheet {
-  width: 300px;
-  max-height: 450px;
+  width: 340px;
+  max-height: 520px;
   overflow-y: auto;
   overflow-x: hidden;
   background: $c-lite;
@@ -40,7 +40,7 @@
       color: $c-dark;
 
       .mini-sheet-type {
-        font-size: 10px;
+        font-size: 12px;
         text-transform: uppercase;
         font-weight: 600;
         letter-spacing: 0.5px;
@@ -51,7 +51,7 @@
 
       h3 {
         margin: 0;
-        font-size: 20px;
+        font-size: 24px;
         font-weight: 700;
         line-height: 1.2;
         word-wrap: break-word;
@@ -60,7 +60,7 @@
 
       // Lore (for relics, below name within title column)
       .mini-sheet-lore {
-        font-size: 12px;
+        font-size: 14px;
         line-height: 1.4;
         font-style: italic;
 
@@ -76,7 +76,7 @@
         margin-top: 4px;
 
         .mini-sheet-label {
-          font-size: 10px;
+          font-size: 12px;
           text-transform: uppercase;
           font-weight: 600;
           letter-spacing: 0.5px;
@@ -124,7 +124,7 @@
 
   // Description (full width, below header/lore, no label)
   .mini-sheet-description {
-    font-size: 14px;
+    font-size: 16px;
     line-height: 1.5;
     margin-bottom: 12px;
     padding: 8px;
@@ -143,7 +143,7 @@
       display: flex;
       flex-direction: row;
       gap: 2px;
-      font-size: 14px;
+      font-size: 16px;
 
       .stat-name {
         font-weight: 600;
@@ -177,13 +177,62 @@
     }
   }
 
+  // Starter Pack contents: one item per row (icon, name, ×quantity), then Starting Currency
+  .mini-sheet-pack-contents {
+    grid-template-columns: 1fr;
+    gap: 3px;
+
+    .mini-sheet-label {
+      font-family: $font-title;
+      font-size: 17px;
+      font-weight: 600;
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+
+    .pack-content-row {
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+
+      .stat-name {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-family: $font-primary;
+        font-weight: 400;
+        text-transform: none;
+        letter-spacing: 0;
+
+        &::after { content: none; }
+      }
+
+      .stat-value { font-weight: 700; }
+    }
+
+    .pack-content-img {
+      width: 26px;
+      height: 26px;
+      border: none;
+      border-radius: 4px;
+      object-fit: cover;
+    }
+
+    .pack-content-currency {
+      justify-content: space-between;
+      margin-top: 4px;
+      padding-top: 6px;
+      border-top: 1px solid rgba(0, 0, 0, 0.2);
+    }
+  }
+
   // Properties section (full width at bottom)
   .mini-sheet-properties {
     padding-top: 12px;
     border-top: 1px solid $c-dark;
 
     .mini-sheet-label {
-      font-size: 16px;
+      font-size: 17px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.5px;
@@ -192,7 +241,7 @@
 
     // Critical value (spells): same look as the description block.
     .mini-sheet-crit {
-      font-size: 14px;
+      font-size: 16px;
       line-height: 1.5;
       font-weight: 400;
       font-family: $font-primary;
@@ -206,7 +255,7 @@
       .property-row {
         display: flex;
         gap: 6px;
-        font-size: 14px;
+        font-size: 16px;
         line-height: 1.4;
 
         .property-name {

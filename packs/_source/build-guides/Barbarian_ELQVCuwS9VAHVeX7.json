@@ -629,7 +629,8 @@
             "extraTraining": 0,
             "requiredSpells": [],
             "allowedPerks": [],
-            "perkAmount": 0
+            "perkAmount": 0,
+            "scaleKey": "aggressor"
           },
           {
             "level": 3,
@@ -649,7 +650,8 @@
             "extraTraining": 0,
             "requiredSpells": [],
             "allowedPerks": [],
-            "perkAmount": 0
+            "perkAmount": 0,
+            "scaleKey": "murder-mode"
           },
           {
             "level": 5,
@@ -669,7 +671,8 @@
             "extraTraining": 0,
             "requiredSpells": [],
             "allowedPerks": [],
-            "perkAmount": 0
+            "perkAmount": 0,
+            "scaleKey": "aggressor"
           },
           {
             "level": 6,
@@ -699,7 +702,8 @@
             "extraTraining": 0,
             "requiredSpells": [],
             "allowedPerks": [],
-            "perkAmount": 0
+            "perkAmount": 0,
+            "scaleKey": "murder-mode"
           },
           {
             "level": 9,
@@ -729,7 +733,8 @@
             "extraTraining": 0,
             "requiredSpells": [],
             "allowedPerks": [],
-            "perkAmount": 0
+            "perkAmount": 0,
+            "scaleKey": "aggressor"
           }
         ],
         "manaSkill": null,
@@ -1351,7 +1356,9 @@
           "later": [],
           "startIds": [],
           "laterIds": []
-        }
+        },
+        "classId": "qONUTXY8GwqSEoDw",
+        "startingPackId": "hW4AUwhRz98OJoDh"
       }
     }
   },

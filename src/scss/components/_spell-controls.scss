@@ -318,7 +318,7 @@
   padding-right: 2px;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 6px 3px;
+  gap: 6px;
   padding: 6px 3px;
 
   .spell-grid-card {
@@ -331,8 +331,8 @@
 
   // Rotated 45° diamond frame mirroring the dialog header portrait
   .spell-grid-frame {
-    width: 60px;
-    height: 28px;
+    width: 100%;
+    height: 33px;
     border: 1px solid $c-yellow;
     border-radius: 3px;
     overflow: hidden;

@@ -599,7 +599,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "quickening"
           },
           {
             "level": 3,
@@ -623,7 +624,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "spell-slinger"
           },
           {
             "level": 5,
@@ -647,7 +649,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "quickening"
           },
           {
             "level": 6,
@@ -683,7 +686,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "spell-slinger"
           },
           {
             "level": 9,
@@ -707,7 +711,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "quickening"
           },
           {
             "level": 10,
@@ -1047,7 +1052,42 @@
           "resourceOrGroups": []
         }
       },
-      "effects": [],
+      "effects": [
+        {
+          "name": "Vehement Magic",
+          "origin": "Compendium.vagabond.perks.Item.UhI94xpNrdCln9jR",
+          "img": "icons/svg/aura.svg",
+          "_id": "xN7Y2ZyXLLA0odw4",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.spellDamageExplode",
+                "value": "1",
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {},
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!wAFC2Qh00oYz4LvQ.pG3RVVJ6E1J2oto1.xN7Y2ZyXLLA0odw4"
+        }
+      ],
       "flags": {
         "vagabond": {
           "perkOrigin": {
@@ -1191,7 +1231,14 @@
         "crit": "",
         "favorite": true,
         "fxSchool": "defense",
-        "locked": true
+        "locked": true,
+        "hitMacro": {
+          "enabled": true,
+          "uuid": "",
+          "command": "system:spell.status.warded",
+          "label": "Ward",
+          "runAsGM": true
+        }
       },
       "effects": [],
       "flags": {},
@@ -1315,7 +1362,9 @@
               "vVHD6kTqq2V277RU"
             ]
           ]
-        }
+        },
+        "classId": "2zrj3IvI0LFNDvEy",
+        "startingPackId": "2pgitsw4mqFLgBnZ"
       }
     }
   },

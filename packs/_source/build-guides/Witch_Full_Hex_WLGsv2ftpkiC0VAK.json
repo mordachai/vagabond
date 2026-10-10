@@ -790,7 +790,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "widdershins"
           },
           {
             "level": 3,
@@ -814,7 +815,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "grudge-bearer"
           },
           {
             "level": 5,
@@ -838,7 +840,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "widdershins"
           },
           {
             "level": 6,
@@ -874,7 +877,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "grudge-bearer"
           },
           {
             "level": 9,
@@ -898,7 +902,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "widdershins"
           },
           {
             "level": 10,
@@ -1500,7 +1505,9 @@
               "lyJBorVks7Y2tpgF"
             ]
           ]
-        }
+        },
+        "classId": "FtE7i0UBBvuMH5ZI",
+        "startingPackId": "NmrCbvZNNhHz1Nem"
       }
     }
   },

@@ -637,7 +637,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "manifold-mind"
           },
           {
             "level": 3,
@@ -661,7 +662,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "sculpt-spell"
           },
           {
             "level": 5,
@@ -685,7 +687,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "manifold-mind"
           },
           {
             "level": 6,
@@ -729,7 +732,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "sculpt-spell"
           },
           {
             "level": 9,
@@ -753,7 +757,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "manifold-mind"
           },
           {
             "level": 10,
@@ -1330,7 +1335,9 @@
               "x0G7WvOldTzluuYy"
             ]
           ]
-        }
+        },
+        "classId": "U3rAxH8vn8tzDblW",
+        "startingPackId": "hje865DkzVVguhdT"
       }
     }
   },

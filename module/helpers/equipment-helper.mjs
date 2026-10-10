@@ -178,6 +178,18 @@ export class EquipmentHelper {
   }
 
   /**
+   * Skills a Thrown weapon can be thrown with: its own attack skills first,
+   * then every other weapon skill (homebrew `isWeaponSkill`). Deduped.
+   * @param {Object} item
+   * @returns {string[]}
+   */
+  static throwSkillOptions(item) {
+    const weaponSkills = (CONFIG.VAGABOND.homebrew?.skills ?? []).filter((s) => s.isWeaponSkill).map((s) => s.key);
+    const keys = [...this.attackSkillOptions(item), ...weaponSkills];
+    return keys.filter((k, i) => k && keys.indexOf(k) === i);
+  }
+
+  /**
    * The allowed attack skill with the LOWEST difficulty for `actor` (lower =
    * better in Vagabond: difficulty is the d20 target). Ties keep the weapon's
    * option order (default first). Used once, when a weapon enters a
@@ -200,12 +212,20 @@ export class EquipmentHelper {
    * @param {{skillKey?: string|null}} [options]
    * @returns {string}
    */
-  static attackSkillFor(item, { skillKey = null } = {}) {
+  static attackSkillFor(item, { skillKey = null, thrown = false } = {}) {
     // Thrown Alchemical Item: explicit pick, else whichever of its skills is
     // better for the owner right now (never persisted — no preferredSkill seed).
     if (this.isThrownAlchemical(item)) {
       const options = this.THROWN_ALCHEMICAL_SKILLS;
       return options.includes(skillKey) ? skillKey : this.bestAttackSkill(item, item.actor);
+    }
+    // Throwing a Thrown weapon: explicit pick, then the owner's throw skill
+    // (flags.vagabond.throwSkill), else the same skill its attacks roll with.
+    if (thrown) {
+      const throwOptions = this.throwSkillOptions(item);
+      const throwPick = item?.getFlag?.('vagabond', 'throwSkill');
+      const pick = [skillKey, throwPick].find((k) => k && throwOptions.includes(k));
+      if (pick) return pick;
     }
     const options = this.attackSkillOptions(item);
     const preferred = item?.getFlag?.('vagabond', 'preferredSkill');

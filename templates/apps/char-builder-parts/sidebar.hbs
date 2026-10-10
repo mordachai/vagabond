@@ -51,7 +51,7 @@
             {{!-- Array picked: list rolled up to the chosen row (click to reopen) --}}
             <h3 class="stat-arrays-title">{{localize "VAGABOND.CharBuilder.Stats.YourArray"}}</h3>
             <div class="directory-item stat-array-item stat-array-current active" data-action="expandStatArrays" data-tooltip="{{localize 'VAGABOND.CharBuilder.Stats.ChangeArray'}}">
-                <span class="array-label">{{statData.selectedArray.id}}</span>
+                <span class="array-label">{{statData.selectedArray.label}}</span>
                 <span class="array-values">{{statData.selectedArray.values}}</span>
                 <i class="fas fa-chevron-down"></i>
             </div>
@@ -61,7 +61,7 @@
                 {{#each statData.arrays}}
                 <li class="directory-item stat-array-item {{#if this.selected}}active{{/if}}"
                     data-id="{{this.id}}" data-action="selectOption">
-                    <span class="array-label">{{this.id}}</span>
+                    <span class="array-label">{{this.label}}</span>
                     <span class="array-values">{{this.values}}</span>
                 </li>
                 {{/each}}

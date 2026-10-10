@@ -751,14 +751,7 @@ export class ValidationEngine {
       }
 
       case 'spells':
-        // Need to select required number of spells based on class spell limit
-        // If not a spellcaster (spellLimit = 0), step is auto-complete
-        const spellLimit = state.spellLimit || 0;
-        const spellsSelected = (state.spells || []).length;
-
-        // If no spell limit, step is complete (not a spellcaster)
-        // If has spell limit, must select EXACTLY that many spells
-        return { isValid: spellLimit === 0 || spellsSelected === spellLimit };
+        return { isValid: isStepDone('spells', state) };
 
       case 'alchemy':
         return { isValid: isStepDone('alchemy', state) };

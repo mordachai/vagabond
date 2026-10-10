@@ -1,5 +1,5 @@
 import { isTrainingComplete } from '../steps/training-manager.mjs';
-import { isStepDone } from '../steps/step-gating.mjs';
+import { isStepDone, DEFAULT_STEP_ORDER } from '../steps/step-gating.mjs';
 
 /**
  * Character Builder State Manager
@@ -27,6 +27,12 @@ export class CharacterBuilderStateManager {
    */
   _initializeBuilderData() {
     return {
+      // Creation path (Path step): 'builder' | 'guide' | null
+      creationPath: null,
+      selectedGuide: null,      // Build Guide actor uuid (guide path, or the guide a customized build started from)
+      guideStats: null,         // The guide's Level 1 Stat row → the 'guide' stat array
+      guideOpenSteps: [],       // Guide path: steps the guide left open (snapshot at seeding)
+
       // Core selections
       selectedAncestry: null,
       selectedClass: null,
@@ -298,6 +304,8 @@ export class CharacterBuilderStateManager {
   isStepComplete(stepName) {
     const completionMap = {
       ancestry: () => !!this.builderData.selectedAncestry,
+      path: () => isStepDone('path', this.builderData),
+      guides: () => isStepDone('guides', this.builderData),
       class: () => !!this.builderData.selectedClass,
       stats: () => {
         return !!this.builderData.selectedArrayId && 
@@ -329,8 +337,7 @@ export class CharacterBuilderStateManager {
    * @returns {Object} Completion status for each step
    */
   getStepProgress() {
-    const stepOrder = this.configSystem?.getStepOrder() || 
-                     ['ancestry', 'class', 'stats', 'spells', 'alchemy', 'perks', 'starting-packs', 'gear'];
+    const stepOrder = this.configSystem?.getStepOrder() || DEFAULT_STEP_ORDER;
     
     const progress = {};
     for (const stepName of stepOrder) {
@@ -421,7 +428,8 @@ export class CharacterBuilderStateManager {
     }
     
     if (path === 'selectedArrayId') {
-      return value === null || (typeof value === 'string' && /^[1-9]|1[0-2]$/.test(value));
+      // Array number, or 'guide' = the Build Guide's own Stat row
+      return value === null || value === 'guide' || (typeof value === 'string' && /^[1-9]|1[0-2]$/.test(value));
     }
     
     if (path.startsWith('assignedStats.')) {
@@ -433,8 +441,7 @@ export class CharacterBuilderStateManager {
     }
     
     if (path === 'currentStep') {
-      const validSteps = this.configSystem?.getStepOrder() || 
-                        ['ancestry', 'class', 'stats', 'spells', 'alchemy', 'perks', 'starting-packs', 'gear'];
+      const validSteps = this.configSystem?.getStepOrder() || DEFAULT_STEP_ORDER;
       return validSteps.includes(value);
     }
     
@@ -513,8 +520,7 @@ export class CharacterBuilderStateManager {
    * @private
    */
   _updateCompletedSteps() {
-    const stepOrder = this.configSystem?.getStepOrder() || 
-                     ['ancestry', 'class', 'stats', 'spells', 'alchemy', 'perks', 'starting-packs', 'gear'];
+    const stepOrder = this.configSystem?.getStepOrder() || DEFAULT_STEP_ORDER;
     
     this.builderData.completedSteps = stepOrder.filter(step => this.isStepComplete(step));
   }

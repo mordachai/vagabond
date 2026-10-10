@@ -1,7 +1,10 @@
 <form class="vagabond-builder flexcol" autocomplete="off">
     {{> navigation}}
 
-    <main class="builder-body">
+    <main class="builder-body {{#if guideStage}}is-guide-stage{{/if}}">
+        {{#if guideStage}}
+            {{> guide-stage}}
+        {{else}}
         {{> sidebar}}
 
         <div class="right-column">
@@ -11,6 +14,7 @@
                 {{> reference}}
             </section>
         </div>
+        {{/if}}
     </main>
 
     {{> footer}}

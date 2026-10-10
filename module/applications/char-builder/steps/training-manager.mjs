@@ -180,6 +180,34 @@ export class TrainingManager extends BaseStepManager {
     return defs;
   }
 
+  /**
+   * Build Guide seeding: pay the guide's trained Skills into the open pools (the most constrained Skill first,
+   * each into the pool with the shortest allowed list), like checking them one by one. Stats must be placed first
+   * (Reason sets its pool). Pools left open stay for the player (Human Aptitude…).
+   * @param {string[]} skillKeys - every Skill the guide trains (granted ones are skipped)
+   * @returns {Promise<string[]>} the Skills no open pool could take
+   */
+  async seedSkills(skillKeys) {
+    const defs = await this._ensureTrainingPools();
+    const guaranteed = new Set(defs.guaranteed);
+    const pools = resolveTrainingPools({ ...this.getCurrentState(), skillSelections: {} });
+    const fits = (p, s) => p.eligible.includes(s);
+    const wanted = [...new Set(skillKeys)].filter(s => !guaranteed.has(s));
+    wanted.sort((a, b) => pools.filter(p => fits(p, a)).length - pools.filter(p => fits(p, b)).length);
+
+    const selections = {};
+    const unplaced = [];
+    for (const skill of wanted) {
+      const pool = pools
+        .filter(p => fits(p, skill) && (selections[p.id]?.length ?? 0) < p.count)
+        .sort((a, b) => (a.pool?.length ?? Infinity) - (b.pool?.length ?? Infinity))[0];
+      if (!pool) { unplaced.push(skill); continue; }
+      (selections[pool.id] ??= []).push(skill);
+    }
+    this._writeSelections(selections);
+    return unplaced;
+  }
+
   /** Drop picks that no longer fit (pool changed, Reason lowered, Skill now granted) and rebuild `skills`. */
   _trimSelections() {
     const state = this.getCurrentState();

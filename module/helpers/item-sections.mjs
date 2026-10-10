@@ -54,6 +54,38 @@ export function buildSpellDamageBase(item) {
 }
 
 /**
+ * Complete mini-sheet popup body: header (image, type, name, relic lore, spell Damage Base, close button)
+ * + the shared detail sections. Used by the inventory mini-sheet and the Character Builder's Build Guide cards.
+ * @param {VagabondItem} item
+ * @param {object} [options]
+ * @param {string} [options.description] - pre-enriched description HTML replacing the raw one
+ * @returns {string}
+ */
+export function buildMiniSheetContent(item, { description } = {}) {
+  const isSpell = item.type === 'spell';
+  const isRelic = EquipmentHelper.isRelic(item);
+  let html = `
+      <div class="mini-sheet-header">
+        <img src="${item.img}" alt="${item.name}" class="mini-sheet-image" />
+        <div class="mini-sheet-title">
+          <span class="mini-sheet-type">${formatItemType(item)}</span>
+          <h3>${item.name}</h3>
+          ${isRelic && item.system.lore ? `<div class="mini-sheet-lore">${item.system.lore}</div>` : ''}
+          ${isSpell ? buildSpellDamageBase(item) : ''}
+        </div>
+        <button class="mini-sheet-close" type="button" aria-label="Close">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+    `;
+  if (description === undefined) return html + buildItemDetailSections(item);
+  html += description ? `<div class="mini-sheet-description">${description}</div>` : '';
+  html += buildStatsSection(item);
+  if (EquipmentHelper.isWeapon(item) && item.system.properties?.length > 0) html += buildWeaponProperties(item);
+  return html;
+}
+
+/**
  * Description block (full width). Empty when no description.
  * @param {VagabondItem} item
  * @returns {string}
@@ -303,12 +335,44 @@ export function buildWeaponProperties(item) {
 }
 
 /**
+ * Starter Pack: what it holds (icon, name, ×quantity) + its Starting Currency.
+ * Names come from the compendium indexes (translated with the world), the uuid tail when unresolved.
+ * @param {VagabondItem} item
+ * @returns {string}
+ */
+export function buildStarterPackContents(item) {
+  const rows = (item.system.items ?? []).map(entry => {
+    const doc = fromUuidSync(entry.uuid);
+    const name = doc?.name ?? String(entry.uuid).split('.').pop();
+    const img = doc?.img ? `<img class="pack-content-img" src="${doc.img}" alt="">` : '';
+    return `
+      <div class="stat-row pack-content-row">
+        <span class="stat-name">${img}${name}</span>
+        <span class="stat-value">${entry.quantity > 1 ? `×${entry.quantity}` : ''}</span>
+      </div>`;
+  }).join('');
+  const currency = item.system.getCurrencyString?.() ?? '';
+  return `
+    <div class="mini-sheet-stats mini-sheet-pack-contents">
+      <div class="mini-sheet-label">${game.i18n.localize('VAGABOND.Item.StarterPack.PackContents')}</div>
+      ${rows}
+      ${currency ? `
+      <div class="stat-row pack-content-currency">
+        <span class="stat-name">${game.i18n.localize('VAGABOND.Item.StarterPack.Currency')}</span>
+        <span class="stat-value">${currency}</span>
+      </div>` : ''}
+    </div>
+  `;
+}
+
+/**
  * Type-appropriate stat grid for any item.
  * @param {VagabondItem} item
  * @returns {string}
  */
 export function buildStatsSection(item) {
   if (item.type === 'spell') return buildSpellStats(item);
+  if (item.type === 'starterPack') return buildStarterPackContents(item);
   if (EquipmentHelper.isWeapon(item)) return buildWeaponStats(item);
   if (EquipmentHelper.isArmor(item)) return buildArmorStats(item);
   if (EquipmentHelper.isGear(item) || EquipmentHelper.isAlchemical(item) || EquipmentHelper.isRelic(item)) {

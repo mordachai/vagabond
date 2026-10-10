@@ -969,6 +969,14 @@ export function registerGameSettings({ refreshClockDependents, applyTokenEffectV
     requiresReload: false
   });
 
+  // Build Guides the GM hid from the Character Builder gallery (guide Actor uuids; eye toggle on each card)
+  game.settings.register('vagabond', 'buildGuidesHidden', {
+    scope: 'world',
+    config: false,
+    type: Array,
+    default: []
+  });
+
   /* -------------------------------------------- */
   /*  One-time migration guards (hidden)          */
   /* -------------------------------------------- */
@@ -989,6 +997,7 @@ export function registerGameSettings({ refreshClockDependents, applyTokenEffectV
     'alpha3StatusesMigrated', 'alpha3BackpackMigrated', 'alpha3RationsMigrated', 'alpha3DefensePerksMigrated',
     'alpha3ClassPerksMigrated', 'alpha3PerksMigrated', 'alpha3ClassesMigrated', 'alpha3AncestriesMigrated',
     'classFeatureScaleKeysMigrated', 'classFeatureActionsMigrated', 'spellTrackerMacrosMigrated', 'classFeatureEffectsMigrated',
+    'lifeNoFreeDieMigrated', 'vehementMagicMigrated',
   ];
   for (const key of MIGRATION_GUARDS) {
     game.settings.register('vagabond', key, {

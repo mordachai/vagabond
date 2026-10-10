@@ -1,0 +1,190 @@
+{{!-- Path step (Build Guide vs Builder) and Guides step (Build Guide gallery) — full-width stage --}}
+<section class="guide-stage">
+    {{#if (eq guideStage 'path')}}
+    <div class="path-choice custom-scroll">
+        <header class="path-header">
+            <div class="path-title">{{localize "VAGABOND.CharBuilder.Path.Title"}}</div>
+            <p class="path-subtitle">{{localize "VAGABOND.CharBuilder.Path.Subtitle"}}</p>
+        </header>
+
+        <div class="path-options">
+            <button type="button" class="path-option {{#if pathChoice.isGuide}}is-selected{{/if}}" data-action="choosePath" data-path="guide" {{#unless pathChoice.hasGuides}}disabled{{/unless}}>
+                <span class="path-medallion"><i class="fas fa-book-open"></i></span>
+                <span class="path-option-name">{{localize "VAGABOND.CharBuilder.Path.Guide"}}</span>
+                <span class="path-option-hint">{{#if pathChoice.hasGuides}}{{localize "VAGABOND.CharBuilder.Path.GuideHint" count=pathChoice.guideCount}}{{else}}{{localize "VAGABOND.CharBuilder.Path.NoGuides"}}{{/if}}</span>
+                <span class="path-perks">
+                    <span class="path-perk"><i class="fas fa-bolt"></i>{{localize "VAGABOND.CharBuilder.Path.GuidePoint1"}}</span>
+                    <span class="path-perk"><i class="fas fa-stairs"></i>{{localize "VAGABOND.CharBuilder.Path.GuidePoint2"}}</span>
+                    <span class="path-perk"><i class="fas fa-sliders"></i>{{localize "VAGABOND.CharBuilder.Path.GuidePoint3"}}</span>
+                </span>
+            </button>
+            <button type="button" class="path-option {{#if pathChoice.isBuilder}}is-selected{{/if}}" data-action="choosePath" data-path="builder">
+                <span class="path-medallion"><i class="fas fa-hammer"></i></span>
+                <span class="path-option-name">{{localize "VAGABOND.CharBuilder.Path.Builder"}}</span>
+                <span class="path-option-hint">{{localize "VAGABOND.CharBuilder.Path.BuilderHint"}}</span>
+                <span class="path-perks">
+                    <span class="path-perk"><i class="fas fa-dice-d20"></i>{{localize "VAGABOND.CharBuilder.Path.BuilderPoint1"}}</span>
+                    <span class="path-perk"><i class="fas fa-wand-sparkles"></i>{{localize "VAGABOND.CharBuilder.Path.BuilderPoint2"}}</span>
+                    <span class="path-perk"><i class="fas fa-store"></i>{{localize "VAGABOND.CharBuilder.Path.BuilderPoint3"}}</span>
+                </span>
+            </button>
+        </div>
+
+        {{#if pathChoice.seeded}}
+        <div class="path-current">
+            <img class="path-current-img" src="{{pathChoice.seeded.img}}" alt="">
+            <div class="path-current-text">
+                <span class="path-current-label">{{#if pathChoice.seeded.customized}}{{localize "VAGABOND.CharBuilder.Path.CustomizingLabel"}}{{else}}{{localize "VAGABOND.CharBuilder.Path.CurrentLabel"}}{{/if}}</span>
+                <span class="path-current-name">{{pathChoice.seeded.buildName}}</span>
+                <span class="path-current-class">{{pathChoice.seeded.className}}</span>
+            </div>
+            <div class="path-current-actions">
+                <button type="button" data-action="choosePath" data-path="guide">
+                    <i class="fas fa-book-open"></i> {{localize "VAGABOND.CharBuilder.Path.ChangeBuild"}}
+                </button>
+                {{#unless pathChoice.seeded.customized}}
+                <button type="button" data-action="choosePath" data-path="customize">
+                    <i class="fas fa-sliders"></i> {{localize "VAGABOND.CharBuilder.Path.CustomizeShort"}}
+                </button>
+                {{/unless}}
+            </div>
+        </div>
+        {{/if}}
+    </div>
+    {{/if}}
+
+    {{#if (eq guideStage 'guides')}}
+    <div class="guide-gallery">
+        <div class="guide-toolbar">
+            <p class="guide-note"><i class="fas fa-circle-info"></i> {{localize "VAGABOND.CharBuilder.Guides.Note"}}</p>
+            <div class="guide-search-box">
+                <i class="fas fa-magnifying-glass"></i>
+                <input type="text" class="guide-search" value="{{guideSearch}}" placeholder="{{localize 'VAGABOND.CharBuilder.Guides.Search'}}" autocomplete="off">
+            </div>
+            <div class="guide-filters">
+                <button type="button" class="guide-filter-chip {{#if guideFilterAll}}active{{/if}}" data-action="filterGuides" data-class="all">{{localize "VAGABOND.CharBuilder.Guides.AllClasses"}}</button>
+                {{#each guideClasses as |c|}}
+                <button type="button" class="guide-filter-chip {{#if c.active}}active{{/if}}" data-action="filterGuides" data-class="{{c.key}}">{{c.label}}</button>
+                {{/each}}
+            </div>
+        </div>
+
+        <ul class="guide-grid custom-scroll">
+            {{#each guideCards as |g|}}
+            <li class="guide-card {{#if g.selected}}is-selected{{/if}} {{#if g.flipped}}is-flipped{{/if}} {{#if g.hidden}}is-hidden{{/if}} {{#if g.filteredOut}}filtered-out{{/if}}"
+                data-action="selectOption" data-uuid="{{g.uuid}}" data-class="{{g.classKey}}" data-search="{{g.searchText}}">
+                <div class="guide-card-inner">
+                    {{!-- FRONT: what the Hero starts with --}}
+                    <div class="guide-face guide-front">
+                        <header class="gc-head">
+                            <img class="gc-portrait" src="{{g.img}}" alt="">
+                            <div class="gc-titles">
+                                <span class="gc-build">{{g.buildName}}</span>
+                                <span class="gc-class">{{g.className}}</span>
+                            </div>
+                        </header>
+
+                        <div class="gc-stats">
+                            {{#each g.stats as |st|}}
+                            <div class="gc-stat"><span class="gc-stat-abbr">{{st.abbr}}</span><span class="gc-stat-val">{{st.value}}</span></div>
+                            {{/each}}
+                        </div>
+
+                        <div class="gc-vitals">
+                            <span class="gc-vital" data-tooltip="{{localize 'VAGABOND.CharBuilder.Guides.HP'}}"><i class="fas fa-heart"></i> {{g.hp}}</span>
+                            <span class="gc-vital" data-tooltip="{{localize 'VAGABOND.CharBuilder.Guides.Armor'}}"><i class="fas fa-shield-halved"></i> {{g.armorRating}}</span>
+                            {{#if g.mana}}
+                            <span class="gc-vital" data-tooltip="{{localize 'VAGABOND.CharBuilder.Guides.ManaTip'}}"><i class="fas fa-star-christmas"></i> {{g.mana}}</span>
+                            <span class="gc-vital" data-tooltip="{{localize 'VAGABOND.CharBuilder.Guides.CastMaxTip'}}"><i class="fa-duotone fa-regular fa-wand-magic-sparkles"></i> {{localize "VAGABOND.CharBuilder.Guides.CastMax" n=g.manaCast}}</span>
+                            {{/if}}
+                        </div>
+
+                        <div class="gc-rows">
+                            <div class="gc-row-pair">
+                                <div class="gc-row">
+                                    <span class="gc-row-label"><i class="fas fa-swords"></i> {{localize "VAGABOND.CharBuilder.Guides.Weapons"}}</span>
+                                    <span class="gc-row-items">
+                                        {{#each g.weapons as |w|}}<span class="gc-chip {{#if w.equipped}}is-equipped{{/if}}" data-action="guideItemInfo" data-uuid="{{w.uuid}}">{{w.name}}{{#if w.multi}} ×{{w.count}}{{/if}}{{#if w.damage}} <em>{{w.damage}}</em>{{/if}}</span>{{else}}<span class="gc-none">—</span>{{/each}}
+                                    </span>
+                                </div>
+                                <div class="gc-row">
+                                    <span class="gc-row-label"><i class="fas fa-shirt"></i> {{localize "VAGABOND.CharBuilder.Guides.ArmorGear"}}</span>
+                                    <span class="gc-row-items">
+                                        {{#if g.armor}}<span class="gc-chip" data-action="guideItemInfo" data-uuid="{{g.armor.uuid}}">{{g.armor.name}}</span>{{/if}}
+                                        {{#each g.trinkets as |t|}}<span class="gc-chip" data-action="guideItemInfo" data-uuid="{{t.uuid}}">{{t.name}}</span>{{/each}}
+                                        {{#unless (or g.armor g.trinkets.length)}}<span class="gc-none">—</span>{{/unless}}
+                                    </span>
+                                </div>
+                            </div>
+                            {{#if g.spells.length}}
+                            <div class="gc-row">
+                                <span class="gc-row-label"><i class="fas fa-wand-sparkles"></i> {{localize "VAGABOND.CharBuilder.Guides.Spells"}}</span>
+                                <span class="gc-row-items">
+                                    {{#each g.spells as |sp|}}<span class="gc-chip" data-action="guideItemInfo" data-uuid="{{sp.uuid}}">{{sp.name}}</span>{{/each}}
+                                </span>
+                            </div>
+                            {{/if}}
+                            <div class="gc-row gc-row-perks">
+                                <span class="gc-row-label"><i class="fas fa-star"></i> {{localize "VAGABOND.CharBuilder.Guides.Perks"}}</span>
+                                <span class="gc-row-items">
+                                    {{#each g.perks as |p|}}<span class="gc-chip" data-action="guideItemInfo" data-uuid="{{p.uuid}}">{{p.name}}</span>{{else}}<span class="gc-none">—</span>{{/each}}
+                                </span>
+                            </div>
+                        </div>
+
+                        <footer class="gc-kit">
+                            {{#if g.startingPack}}<span class="gc-kit-pack"><i class="fas fa-backpack"></i> <span class="gc-link" {{#if g.startingPack.uuid}}data-action="guideItemInfo" data-uuid="{{g.startingPack.uuid}}"{{/if}}>{{g.startingPack.name}}</span></span>{{/if}}
+                            <span class="gc-kit-coins" data-tooltip="{{localize 'VAGABOND.CharBuilder.Guides.Coins'}}"><i class="fas fa-coins"></i> {{g.coins}}</span>
+                        </footer>
+                    </div>
+
+                    {{!-- BACK: how the build grows --}}
+                    <div class="guide-face guide-back">
+                        <header class="gc-back-head">
+                            <span class="gc-build">{{g.buildName}}</span>
+                            <span class="gc-class">{{g.className}}</span>
+                        </header>
+                        <div class="gc-back-body custom-scroll">
+                            <div class="gc-back-title">{{localize "VAGABOND.CharBuilder.Guides.Progression"}}</div>
+                            <ol class="gc-timeline">
+                                {{#each g.back.progression as |step|}}
+                                <li class="{{#if step.start}}is-start{{/if}}">
+                                    <span class="gc-level">{{step.level}}</span>
+                                    <span class="gc-level-perks">{{#each step.perks as |p|}}<span class="gc-link" {{#if p.uuid}}data-action="guideItemInfo" data-uuid="{{p.uuid}}"{{/if}}>{{p.name}}</span>{{#unless @last}}, {{/unless}}{{else}}<em>{{localize "VAGABOND.CharBuilder.Guides.BlankInBook"}}</em>{{/each}}</span>
+                                </li>
+                                {{/each}}
+                            </ol>
+
+                            <div class="gc-back-title">{{localize "VAGABOND.CharBuilder.Guides.StatGoal"}}</div>
+                            <div class="gc-stat-goals">
+                                {{#each g.stats as |st|}}
+                                <div class="gc-stat-goal {{#if st.grows}}grows{{/if}}">
+                                    <span class="gc-stat-abbr">{{st.abbr}}</span>
+                                    <span class="gc-stat-val">{{st.value}}{{#if st.grows}} → {{st.goal}}{{/if}}</span>
+                                </div>
+                                {{/each}}
+                            </div>
+
+                            {{#if g.back.laterSpells.length}}
+                            <div class="gc-back-title">{{localize "VAGABOND.CharBuilder.Guides.LaterSpells"}}</div>
+                            <p class="gc-back-text">{{#each g.back.laterSpells as |sp|}}<span class="gc-link" {{#if sp.uuid}}data-action="guideItemInfo" data-uuid="{{sp.uuid}}"{{/if}}>{{sp.name}}</span>{{#unless @last}}, {{/unless}}{{/each}}</p>
+                            {{/if}}
+
+                            <div class="gc-back-title">{{localize "VAGABOND.CharBuilder.Guides.Training"}}</div>
+                            <p class="gc-back-text">{{#each g.back.training}}{{this}}{{#unless @last}}, {{/unless}}{{else}}—{{/each}}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="button" class="gc-corner gc-flip" data-action="flipGuide" data-tooltip="{{localize 'VAGABOND.CharBuilder.Guides.Flip'}}"><i class="fas fa-rotate"></i></button>
+                {{#if @root.isGM}}
+                <button type="button" class="gc-corner gc-hide" data-action="toggleGuideHidden" data-tooltip="{{#if g.hidden}}{{localize 'VAGABOND.CharBuilder.Guides.ShowToPlayers'}}{{else}}{{localize 'VAGABOND.CharBuilder.Guides.HideFromPlayers'}}{{/if}}"><i class="fas {{#if g.hidden}}fa-eye-slash{{else}}fa-eye{{/if}}"></i></button>
+                {{/if}}
+                {{#if g.selected}}<span class="gc-selected-badge"><i class="fas fa-check"></i></span>{{/if}}
+            </li>
+            {{/each}}
+            <li class="guide-empty hidden">{{localize "VAGABOND.CharBuilder.Guides.NoMatch"}}</li>
+        </ul>
+    </div>
+    {{/if}}
+</section>

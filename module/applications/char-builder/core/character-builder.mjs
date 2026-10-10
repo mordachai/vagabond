@@ -13,11 +13,14 @@ import { ValidationEngine } from '../state/validation-engine.mjs';
 import { CharacterBuilderDataService } from '../services/data-service.mjs';
 import { CharacterBuilderUIComponents } from '../ui/ui-components.mjs';
 import { isTrainingComplete } from '../steps/training-manager.mjs';
-import { isStepUnlocked, canFinishBuild, furthestAfter, applicableSteps, isStepApplicable, isStepDone } from '../steps/step-gating.mjs';
+import { BuildGuideService } from '../services/build-guide-service.mjs';
+import { isStepUnlocked, canFinishBuild, furthestAfter, applicableSteps, isStepApplicable, isStepDone, DEFAULT_STEP_ORDER } from '../steps/step-gating.mjs';
 
 // Import all step managers
 import {
   AncestryStepManager,
+  PathStepManager,
+  GuidesStepManager,
   ClassStepManager,
   StatsStepManager,
   SpellsStepManager,
@@ -97,6 +100,8 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
   _initializeStepManagers() {
     const managers = {
       'ancestry': new AncestryStepManager(this.stateManager, this.dataService, this.configSystem),
+      'path': new PathStepManager(this.stateManager, this.dataService, this.configSystem),
+      'guides': new GuidesStepManager(this.stateManager, this.dataService, this.configSystem),
       'class': new ClassStepManager(this.stateManager, this.dataService, this.configSystem),
       'stats': new StatsStepManager(this.stateManager, this.dataService, this.configSystem),
       'spells': new SpellsStepManager(this.stateManager, this.dataService, this.configSystem),
@@ -110,6 +115,10 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
     Object.values(managers).forEach(manager => {
       manager.render = () => this.render();
     });
+
+    // The Path / Guides steps drive the other managers (guide seeding)
+    managers.path.managers = managers;
+    managers.guides.managers = managers;
 
     return managers;
   }
@@ -308,7 +317,7 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
   }
 
   // Navigation order for steps (fallback)
-  static STEPS_ORDER = ['ancestry', 'class', 'stats', 'spells', 'alchemy', 'perks', 'starting-packs', 'gear'];
+  static STEPS_ORDER = DEFAULT_STEP_ORDER;
 
   static DEFAULT_OPTIONS = {
     id: "vagabond-char-builder",
@@ -318,6 +327,11 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
     // Use new action delegation system
     actions: {
       goToStep: VagabondCharBuilder.prototype._onGoToStep,
+      choosePath: VagabondCharBuilder.prototype._delegateToStepManager,
+      filterGuides: VagabondCharBuilder.prototype._onGuideGalleryUi,
+      flipGuide: VagabondCharBuilder.prototype._onGuideGalleryUi,
+      toggleGuideHidden: VagabondCharBuilder.prototype._onToggleGuideHidden,
+      guideItemInfo: VagabondCharBuilder.prototype._onGuideGalleryUi,
       next: VagabondCharBuilder.prototype._onNext,
       prev: VagabondCharBuilder.prototype._onPrev,
       // Delegate all other actions to step managers
@@ -349,13 +363,21 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
   static PARTS = {
     form: {
       template: "systems/vagabond/templates/apps/char-builder.hbs",
-      scrollable: [".directory-list", ".selection-preview", ".reference-column"]
+      // Scroll positions kept across re-renders (Guides gallery + Path step included: picking a card re-renders)
+      scrollable: [".directory-list", ".selection-preview", ".reference-column", ".guide-grid", ".path-choice"]
     }
   };
 
   /** @override */
   _onRender(context, options) {
     const html = this.element;
+
+    // Build Guide gallery: search box + filter state survive re-renders (no render while typing)
+    if (this.currentStep === 'guides' && this.stepManagers?.guides) {
+      const guides = this.stepManagers.guides;
+      guides.applyFilter(html);
+      html.querySelector('.guide-search')?.addEventListener('input', ev => guides.setSearch(ev.target.value, html));
+    }
 
     // Search input filter
     const searchInput = html.querySelector('.search-input');
@@ -640,12 +662,44 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
     }
 
     try {
+      const ancestryBefore = this.stateManager.getCurrentState().selectedAncestry;
       await currentStepManager.handleAction(action, event, target);
+      // A Build Guide is seeded against the Ancestry's grants: re-seed it when the Ancestry changes
+      const state = this.stateManager.getCurrentState();
+      if (state.selectedAncestry !== ancestryBefore && state.selectedGuide && state.creationPath === 'guide') {
+        await this.stepManagers.guides.seed(state.selectedGuide);
+      }
       this.render();
     } catch (error) {
       console.error(`Error handling action '${action}' in step '${this.currentStep}':`, error);
       ui.notifications.error(`Failed to handle ${action} action`);
     }
+  }
+
+  /**
+   * Build Guide gallery chips / card flip: pure DOM toggles on the Guides step, no re-render
+   * @private
+   */
+  async _onGuideGalleryUi(event, target) {
+    await this._ensureInitialized();
+    await this.stepManagers.guides.handleAction(target.dataset.action, event, target);
+  }
+
+  /**
+   * GM eye toggle on a Build Guide card. The hidden list is a world setting, not builder state, so the cached
+   * render context must be dropped for the card to update.
+   * @private
+   */
+  async _onToggleGuideHidden(event, target) {
+    await this._onGuideGalleryUi(event, target);
+    this.uiComponents.clearCaches();
+    this.render();
+  }
+
+  /** @override */
+  async close(options) {
+    GuidesStepManager.closeItemInfo();
+    return super.close(options);
   }
 
   // Navigation action handlers (keep these in core builder)
@@ -696,6 +750,10 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
       let message;
       if (!this._isStepComplete('ancestry')) {
         message = game.i18n.localize('VAGABOND.CharBuilder.Warnings.NeedAncestry');
+      } else if (!this._isStepComplete('path')) {
+        message = game.i18n.localize('VAGABOND.CharBuilder.Warnings.NeedPath');
+      } else if (isStepApplicable('guides', this.stateManager.getCurrentState()) && !this._isStepComplete('guides')) {
+        message = game.i18n.localize('VAGABOND.CharBuilder.Warnings.NeedGuide');
       } else if (!this._isStepComplete('class')) {
         message = game.i18n.localize('VAGABOND.CharBuilder.Warnings.NeedClass');
       } else if (!this._isStepComplete('stats')) {
@@ -742,6 +800,10 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
   async _onRandomizeFullCharacter() {
     // Ensure step managers are initialized
     await this._ensureInitialized();
+
+    // Full Random is a builder-path feature: drop any Build Guide first
+    this.stepManagers.path.clearBuild();
+    this.stateManager.updateState('creationPath', 'builder', { skipValidation: true });
 
     // Use step managers for full character randomization
     const stepOrder = ['ancestry', 'class', 'stats', 'spells', 'alchemy', 'starting-packs'];
@@ -794,6 +856,13 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
 
     // Use existing finish logic but with state manager data
     const state = this.stateManager.getCurrentState();
+
+    // Build Guide: the guide path takes the guide Actor's gear + coins; both paths keep the guide's plan
+    // (`flags.vagabond.buildGuide`, read by the Level Up dialog) and art while its Class is kept
+    const guideActor = state.selectedGuide ? await fromUuid(state.selectedGuide).catch(() => null) : null;
+    const guidePlan = guideActor?.flags?.vagabond?.buildGuide ?? null;
+    const fromGuide = state.creationPath === 'guide' && !!guidePlan;
+    const keepsGuideClass = !!guidePlan && String(state.selectedClass ?? '').split('.').pop() === guidePlan.classId;
 
     // Create the final actor data
     const actorData = this.actor.toObject();
@@ -962,6 +1031,15 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
       actorData.items.push(...stackZeroSlotItems(itemObjects, CONFIG.VAGABOND?.zeroSlotStackSize || 10));
     }
 
+    // Guide path: the guide's equipment as generated (pack items, trade-ins, purchases, equip states, stacks) + coins
+    if (fromGuide) {
+      actorData.items.push(...BuildGuideService.equipmentData(guideActor));
+      for (const denom of ['gold', 'silver', 'copper']) {
+        actorData.system.currency[denom] = (actorData.system.currency[denom] || 0) + (guideActor.system.currency?.[denom] || 0);
+      }
+    }
+    if (keepsGuideClass) foundry.utils.setProperty(actorData, 'flags.vagabond.buildGuide', foundry.utils.deepClone(guidePlan));
+
     // Alchemist formula picks (Alchemy step)
     if ((state.formulaLimit || 0) > 0) {
       foundry.utils.setProperty(actorData, 'system.craft.formulas', [...new Set(state.formulas || [])]);
@@ -970,9 +1048,9 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
     // Mark character as constructed (hides builder button)
     actorData.system.details.constructed = true;
 
-    // Class art for Heroes that still have the stock placeholder (portrait and/or token);
+    // Guide art (else Class art) for Heroes that still have the stock placeholder (portrait and/or token);
     // anything the player/GM already chose is left alone. Works for homebrew classes too.
-    const classArt = classItemObj?.img;
+    const classArt = (keepsGuideClass && guideActor.img) || classItemObj?.img;
     if (classArt && classArt !== classItemObj.constructor.DEFAULT_ICON) {
       const defaultPortrait = foundry.documents.Actor.DEFAULT_ICON;
       if (!actorData.img || actorData.img === defaultPortrait) actorData.img = classArt;
@@ -985,8 +1063,8 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
     // Update the actor (first update to apply stats and items, which triggers prepareDerivedData)
     await this.actor.update(actorData);
 
-    // Process starting pack (if selected)
-    if (state.selectedStartingPack) {
+    // Process starting pack (if selected; the guide path already brought the guide's gear)
+    if (state.selectedStartingPack && !fromGuide) {
       try {
         const startingPack = await fromUuid(state.selectedStartingPack);
         if (startingPack && startingPack.system.items) {

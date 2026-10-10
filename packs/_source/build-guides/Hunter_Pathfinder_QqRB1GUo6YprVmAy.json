@@ -639,7 +639,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "rover"
           },
           {
             "level": 3,
@@ -663,7 +664,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "lethal-precision"
           },
           {
             "level": 5,
@@ -687,7 +689,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "rover"
           },
           {
             "level": 6,
@@ -723,7 +726,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "lethal-precision"
           },
           {
             "level": 9,
@@ -747,7 +751,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "rover"
           },
           {
             "level": 10,
@@ -1143,7 +1148,9 @@
           "later": [],
           "startIds": [],
           "laterIds": []
-        }
+        },
+        "classId": "1qy5vhn6XcajyEZB",
+        "startingPackId": "u632eTgHBKam3ZBc"
       }
     }
   },

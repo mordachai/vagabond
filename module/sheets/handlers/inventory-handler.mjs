@@ -382,8 +382,8 @@ export class InventoryHandler {
     miniSheet.style.zIndex = '10000';
 
     // Position near the click
-    const x = Math.min(event.clientX + 10, window.innerWidth - 360);
-    const y = Math.min(event.clientY + 10, window.innerHeight - 400);
+    const x = Math.min(event.clientX + 10, window.innerWidth - 380);
+    const y = Math.min(event.clientY + 10, window.innerHeight - 540);
     miniSheet.style.left = `${x}px`;
     miniSheet.style.top = `${y}px`;
 
@@ -443,32 +443,8 @@ export class InventoryHandler {
    * @private
    */
   _buildMiniSheetContent(item) {
-    const { EquipmentHelper } = globalThis.vagabond.utils;
-
-    const isSpell = item.type === 'spell';
-    const isRelic = EquipmentHelper.isRelic(item);
-
-    // Header: Image (100x100) + Type above Name + Lore (if relic) + Close button.
-    // Header chrome stays here; the body sections are shared (item-sections.mjs).
-    let html = `
-      <div class="mini-sheet-header">
-        <img src="${item.img}" alt="${item.name}" class="mini-sheet-image" />
-        <div class="mini-sheet-title">
-          <span class="mini-sheet-type">${ItemSections.formatItemType(item)}</span>
-          <h3>${item.name}</h3>
-          ${isRelic && item.system.lore ? `<div class="mini-sheet-lore">${item.system.lore}</div>` : ''}
-          ${isSpell ? ItemSections.buildSpellDamageBase(item) : ''}
-        </div>
-        <button class="mini-sheet-close" type="button" aria-label="Close">
-          <i class="fas fa-times"></i>
-        </button>
-      </div>
-    `;
-
-    // Description + stat grid + weapon properties (shared with HUD accordion)
-    html += ItemSections.buildItemDetailSections(item);
-
-    return html;
+    // Header chrome + description + stat grid + weapon properties (shared, item-sections.mjs)
+    return ItemSections.buildMiniSheetContent(item);
   }
 
   /**

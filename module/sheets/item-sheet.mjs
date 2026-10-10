@@ -290,6 +290,22 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
           ? options.map((k) => ({ key: k, label: skillLabel(k), selected: k === current }))
           : null,
       };
+      // Thrown weapons: the skill throws roll with (flags.vagabond.throwSkill);
+      // empty = the same skill as its attacks
+      if (EquipmentHelper.isThrowable(this.item)) {
+        const throwPick = this.item.getFlag('vagabond', 'throwSkill') ?? '';
+        const throwCurrent = EquipmentHelper.attackSkillFor(this.item, { thrown: true });
+        context.throwSkill = {
+          label: skillLabel(throwCurrent),
+          choices: this.item.isOwner
+            ? [
+              { key: '', label: game.i18n.format('VAGABOND.UI.Labels.ThrowSkillDefault', { skill: skillLabel(current) }), selected: !throwPick },
+              ...EquipmentHelper.throwSkillOptions(this.item)
+                .map((k) => ({ key: k, label: skillLabel(k), selected: k === throwPick })),
+            ]
+            : null,
+        };
+      }
     }
 
     // View-only viewers (e.g. players reading a shop's stock item) always get the
@@ -1196,6 +1212,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
           const needsRender = isEditor || name === 'name' || name === 'system.metal' || name === 'system.usesDiceScaling'
             || name === 'system.weaponSkill' // Other Skills list excludes the default
             || name === 'system.grip' // Damage rows depend on the grip (0/1H/2H/V)
+            || name === 'flags.vagabond.preferredSkill' // Throw dropdown's "Same as attack (X)"
             // Armor "Final" read-outs derive from these
             || name === 'system.armorRating' || name === 'system.reflexPenalty' || name === 'system.baseSlots';
           const options = needsRender ? {} : { render: false };

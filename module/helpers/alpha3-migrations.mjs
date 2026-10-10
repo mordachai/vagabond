@@ -525,3 +525,53 @@ export async function migrateAlpha3Ancestries() {
 
   await game.settings.set('vagabond', 'alpha3AncestriesMigrated', true);
 }
+
+/**
+ * Life heals "d6 HP per Mana spent" — no free first die. World copies of the Life Spell get
+ * `system.noFreeDie` (the pack ships it). Only the field is written; nothing else on the copy changes.
+ */
+export async function migrateLifeNoFreeDie() {
+  if (game.user !== game.users.activeGM) return;
+  if (game.settings.get('vagabond', 'lifeNoFreeDieMigrated')) return;
+
+  for (const item of worldItems()) {
+    try {
+      if (item.type !== 'spell' || item.system.noFreeDie || !isCopyOf(item, 'sBvdMIqhfJcydANC', 'Life')) continue;
+      await item.update({ 'system.noFreeDie': true });
+    } catch (err) {
+      console.warn(`vagabond | migrate Life no-free-die: skipped ${item?.uuid ?? '(unknown)'}`, err);
+    }
+  }
+
+  await game.settings.set('vagabond', 'lifeNoFreeDieMigrated', true);
+}
+
+/**
+ * Vehement Magic ("Damage rolls from Spells you Cast Explode on a roll of 1") now ships a
+ * `system.spellDamageExplode` effect. World copies of the Perk get the compendium effect they lack.
+ * Aborts WITHOUT setting the guard while the perks pack hasn't been rebuilt.
+ */
+export async function migrateVehementMagic() {
+  if (game.user !== game.users.activeGM) return;
+  if (game.settings.get('vagabond', 'vehementMagicMigrated')) return;
+
+  const source = await game.packs.get('vagabond.perks')?.getDocument('UhI94xpNrdCln9jR');
+  if (!source?.effects.size) return; // pack not rebuilt yet
+
+  for (const item of worldItems()) {
+    try {
+      if (item.type !== 'perk' || !isCopyOf(item, 'UhI94xpNrdCln9jR', 'Vehement Magic')) continue;
+      if (item.effects.some((x) => x.system?.changes?.some((c) => c.key === 'system.spellDamageExplode'))) continue;
+      await item.createEmbeddedDocuments('ActiveEffect', source.effects.map((e) => {
+        const data = e.toObject();
+        delete data._id;
+        delete data._stats;
+        return data;
+      }));
+    } catch (err) {
+      console.warn(`vagabond | migrate Vehement Magic: skipped ${item?.uuid ?? '(unknown)'}`, err);
+    }
+  }
+
+  await game.settings.set('vagabond', 'vehementMagicMigrated', true);
+}

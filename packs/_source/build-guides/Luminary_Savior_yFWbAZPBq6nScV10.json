@@ -732,7 +732,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "ever-cure"
           },
           {
             "level": 5,
@@ -780,7 +781,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "ever-cure"
           },
           {
             "level": 9,
@@ -1138,7 +1140,14 @@
         "noRollRequired": true,
         "fxSchool": "radiant",
         "locked": true,
-        "causedStatuses": []
+        "causedStatuses": [],
+        "hitMacro": {
+          "enabled": true,
+          "uuid": "",
+          "command": "system:spell.status.blessed",
+          "label": "Bless",
+          "runAsGM": true
+        }
       },
       "effects": [],
       "flags": {},
@@ -1156,6 +1165,7 @@
         "crit": "",
         "favorite": true,
         "noRollRequired": true,
+        "noFreeDie": true,
         "fxSchool": "healing",
         "locked": true
       },
@@ -1205,7 +1215,14 @@
         "crit": "",
         "favorite": true,
         "fxSchool": "defense",
-        "locked": true
+        "locked": true,
+        "hitMacro": {
+          "enabled": true,
+          "uuid": "",
+          "command": "system:spell.status.warded",
+          "label": "Ward",
+          "runAsGM": true
+        }
       },
       "effects": [],
       "flags": {},
@@ -1329,7 +1346,9 @@
               "vVHD6kTqq2V277RU"
             ]
           ]
-        }
+        },
+        "classId": "RenZwwCL4aT5LFej",
+        "startingPackId": "ALxq2xfC8nfF75iQ"
       }
     }
   },

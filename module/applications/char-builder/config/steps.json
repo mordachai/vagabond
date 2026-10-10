@@ -1,6 +1,8 @@
 {
   "order": [
     "ancestry",
+    "path",
+    "guides",
     "class",
     "stats",
     "spells",
@@ -31,6 +33,36 @@
       "navigation": {
         "canSkip": false,
         "prerequisites": []
+      }
+    },
+    "path": {
+      "displayName": "Choose Path",
+      "order": 1.5,
+      "requiredData": [],
+      "actions": ["choose-path"],
+      "completionCriteria": [
+        { "type": "has_selection", "path": "creationPath" }
+      ],
+      "navigation": {
+        "canSkip": false,
+        "prerequisites": [
+          { "type": "step_complete", "step": "ancestry" }
+        ]
+      }
+    },
+    "guides": {
+      "displayName": "Build Guides",
+      "order": 1.7,
+      "requiredData": [],
+      "actions": ["select-guide"],
+      "completionCriteria": [
+        { "type": "has_selection", "path": "selectedGuide" }
+      ],
+      "navigation": {
+        "canSkip": false,
+        "prerequisites": [
+          { "type": "step_complete", "step": "path" }
+        ]
       }
     },
     "class": {

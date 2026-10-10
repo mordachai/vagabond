@@ -668,7 +668,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "manifold-mind"
           },
           {
             "level": 3,
@@ -692,7 +693,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "sculpt-spell"
           },
           {
             "level": 5,
@@ -716,7 +718,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "manifold-mind"
           },
           {
             "level": 6,
@@ -760,7 +763,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "sculpt-spell"
           },
           {
             "level": 9,
@@ -784,7 +788,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "manifold-mind"
           },
           {
             "level": 10,
@@ -1070,7 +1075,14 @@
         "noRollRequired": true,
         "fxSchool": "radiant",
         "locked": true,
-        "causedStatuses": []
+        "causedStatuses": [],
+        "hitMacro": {
+          "enabled": true,
+          "uuid": "",
+          "command": "system:spell.status.blessed",
+          "label": "Bless",
+          "runAsGM": true
+        }
       },
       "effects": [],
       "flags": {},
@@ -1089,7 +1101,14 @@
         "favorite": true,
         "noRollRequired": true,
         "fxSchool": "radiant",
-        "locked": true
+        "locked": true,
+        "hitMacro": {
+          "enabled": true,
+          "uuid": "",
+          "command": "system:spell.status.guided",
+          "label": "Guide",
+          "runAsGM": true
+        }
       },
       "effects": [],
       "flags": {},
@@ -1107,6 +1126,7 @@
         "crit": "",
         "favorite": true,
         "noRollRequired": true,
+        "noFreeDie": true,
         "fxSchool": "healing",
         "locked": true
       },
@@ -1126,7 +1146,14 @@
         "crit": "",
         "favorite": true,
         "fxSchool": "defense",
-        "locked": true
+        "locked": true,
+        "hitMacro": {
+          "enabled": true,
+          "uuid": "",
+          "command": "system:spell.status.warded",
+          "label": "Ward",
+          "runAsGM": true
+        }
       },
       "effects": [],
       "flags": {},
@@ -1249,7 +1276,9 @@
               "FyLP7OY1vyxxvxA0"
             ]
           ]
-        }
+        },
+        "classId": "U3rAxH8vn8tzDblW",
+        "startingPackId": "ALxq2xfC8nfF75iQ"
       }
     }
   },

@@ -416,6 +416,14 @@ export default class VagabondCharacter extends VagabondActorBase {
       { initial: [], label: "Healing Spell Rolls Explode" }
     );
 
+    // Faces that also Explode on the damage rolls of your Spells — AE ADDs '1', '2' or 'max' / 'max-1'
+    // (Vehement Magic: 1). Real damage types only: restorative and '-' rolls never explode from this.
+    // Read by VagabondDamagePipeline.spellDamageExplodeValues.
+    schema.spellDamageExplode = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      { initial: [], label: "Spell Damage Rolls Explode" }
+    );
+
     // Barbarian Rage auto-trigger: when true (AE-set — switch that effect off to play
     // Berserk by hand), taking damage or attacking applies Berserk. See rage-helper.mjs.
     schema.rageTrigger = new fields.BooleanField({
@@ -1075,6 +1083,7 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.bonusDiceExplode = [];
     this.healingBonusDice = [];
     this.healingExplode = [];
+    this.spellDamageExplode = [];
     this.rageTrigger = false;
     this.aggressorAuto = 0;
     this.momentumTrigger = false;
@@ -1241,6 +1250,7 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.universalAlchemicalDamageDice = this.universalAlchemicalDamageDice.filter(d => !!d).join(' + ');
     this.healingBonusDice = this.healingBonusDice.filter(d => !!d).join(' + ');
     this.healingExplode = this.healingExplode.filter(d => !!d);
+    this.spellDamageExplode = this.spellDamageExplode.filter(d => !!d);
     this.bonusDiceExplode = this._evaluateFormulaField(this.bonusDiceExplode, rollData) > 0;
 
     // Mana bonuses

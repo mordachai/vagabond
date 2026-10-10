@@ -735,7 +735,7 @@
           },
           {
             "level": 2,
-            "name": "Evasive",
+            "name": "Evasive (10’)",
             "description": "<p>Once per Round after another Being uses an Action or Move, you can Move 10’ without using Speed and can continue moving using your remaining Speed. This free Speed increases by 5’ every 4 Levels hereafter.</p>",
             "statBonusPoints": 1,
             "extraTraining": 0,
@@ -743,7 +743,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "evasive"
           },
           {
             "level": 3,
@@ -767,7 +768,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "knack"
           },
           {
             "level": 5,
@@ -791,7 +793,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "evasive"
           },
           {
             "level": 6,
@@ -827,7 +830,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "knack"
           },
           {
             "level": 9,
@@ -851,7 +855,8 @@
             "allowedPerks": [],
             "perkAmount": 0,
             "spellAmount": 0,
-            "skillChoices": []
+            "skillChoices": [],
+            "scaleKey": "evasive"
           },
           {
             "level": 10,
@@ -1285,7 +1290,9 @@
           "later": [],
           "startIds": [],
           "laterIds": []
-        }
+        },
+        "classId": "gwlbYvDMyO0cPA4U",
+        "startingPackId": "PnfmuSTuRLW0gjln"
       }
     }
   },

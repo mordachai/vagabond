@@ -3598,8 +3598,8 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 
 /* Inventory mini-sheet - imported at top level because it renders outside sheets */
 .inventory-mini-sheet {
-  width: 300px;
-  max-height: 450px;
+  width: 340px;
+  max-height: 520px;
   overflow-y: auto;
   overflow-x: hidden;
   background: var(--vagabond-c-lite);
@@ -3632,7 +3632,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   color: var(--vagabond-c-dark);
 }
 .inventory-mini-sheet .mini-sheet-header .mini-sheet-title .mini-sheet-type {
-  font-size: 10px;
+  font-size: 12px;
   text-transform: uppercase;
   font-weight: 600;
   letter-spacing: 0.5px;
@@ -3642,14 +3642,14 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 }
 .inventory-mini-sheet .mini-sheet-header .mini-sheet-title h3 {
   margin: 0;
-  font-size: 20px;
+  font-size: 24px;
   font-weight: 700;
   line-height: 1.2;
   word-wrap: break-word;
   color: var(--vagabond-c-dark);
 }
 .inventory-mini-sheet .mini-sheet-header .mini-sheet-title .mini-sheet-lore {
-  font-size: 12px;
+  font-size: 14px;
   line-height: 1.4;
   font-style: italic;
 }
@@ -3661,7 +3661,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   margin-top: 4px;
 }
 .inventory-mini-sheet .mini-sheet-header .mini-sheet-title .mini-sheet-damage-base .mini-sheet-label {
-  font-size: 10px;
+  font-size: 12px;
   text-transform: uppercase;
   font-weight: 600;
   letter-spacing: 0.5px;
@@ -3699,7 +3699,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   pointer-events: none;
 }
 .inventory-mini-sheet .mini-sheet-description {
-  font-size: 14px;
+  font-size: 16px;
   line-height: 1.5;
   margin-bottom: 12px;
   padding: 8px;
@@ -3716,7 +3716,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   display: flex;
   flex-direction: row;
   gap: 2px;
-  font-size: 14px;
+  font-size: 16px;
 }
 .inventory-mini-sheet .mini-sheet-stats .stat-row .stat-name {
   font-weight: 600;
@@ -3750,19 +3750,63 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .inventory-mini-sheet .mini-sheet-stats .uses-pips .uses-pip:hover {
   transform: scale(1.2);
 }
+.inventory-mini-sheet .mini-sheet-pack-contents {
+  grid-template-columns: 1fr;
+  gap: 3px;
+}
+.inventory-mini-sheet .mini-sheet-pack-contents .mini-sheet-label {
+  font-family: "Germania", serif;
+  font-size: 17px;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+.inventory-mini-sheet .mini-sheet-pack-contents .pack-content-row {
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.inventory-mini-sheet .mini-sheet-pack-contents .pack-content-row .stat-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: "Eskapade", serif;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+}
+.inventory-mini-sheet .mini-sheet-pack-contents .pack-content-row .stat-name::after {
+  content: none;
+}
+.inventory-mini-sheet .mini-sheet-pack-contents .pack-content-row .stat-value {
+  font-weight: 700;
+}
+.inventory-mini-sheet .mini-sheet-pack-contents .pack-content-img {
+  width: 26px;
+  height: 26px;
+  border: none;
+  border-radius: 4px;
+  object-fit: cover;
+}
+.inventory-mini-sheet .mini-sheet-pack-contents .pack-content-currency {
+  justify-content: space-between;
+  margin-top: 4px;
+  padding-top: 6px;
+  border-top: 1px solid rgba(0, 0, 0, 0.2);
+}
 .inventory-mini-sheet .mini-sheet-properties {
   padding-top: 12px;
   border-top: 1px solid var(--vagabond-c-dark);
 }
 .inventory-mini-sheet .mini-sheet-properties .mini-sheet-label {
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   margin-bottom: 6px;
 }
 .inventory-mini-sheet .mini-sheet-properties .mini-sheet-crit {
-  font-size: 14px;
+  font-size: 16px;
   line-height: 1.5;
   font-weight: 400;
   font-family: "Eskapade", serif;
@@ -3775,7 +3819,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .inventory-mini-sheet .mini-sheet-properties .property-list .property-row {
   display: flex;
   gap: 6px;
-  font-size: 14px;
+  font-size: 16px;
   line-height: 1.4;
 }
 .inventory-mini-sheet .mini-sheet-properties .property-list .property-row .property-name {
@@ -9268,6 +9312,578 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 }
 .vagabond-builder .training-skill.unfocused {
   opacity: 0.35;
+}
+
+.vagabond-builder .builder-body.is-guide-stage {
+  display: block;
+  overflow: hidden;
+  padding: 16px 25px;
+  --gc-card-bg: var(--vagabond-c-input-bg);
+  --gc-line: var(--vagabond-c-tan-lite);
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-stage {
+  height: 100%;
+  min-height: 0;
+}
+.vagabond-builder .builder-body.is-guide-stage button {
+  height: auto;
+  line-height: normal;
+}
+.vagabond-builder .builder-body.is-guide-stage .path-choice {
+  height: 100%;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+  padding: 24px 0;
+  color: var(--vagabond-c-text-primary);
+}
+.vagabond-builder .builder-body.is-guide-stage .path-choice .path-header {
+  text-align: center;
+}
+.vagabond-builder .builder-body.is-guide-stage .path-choice .path-title {
+  font-family: "Germania", serif;
+  font-size: 34px;
+  line-height: 1.2;
+  color: var(--vagabond-c-text-secondary);
+  border: none;
+  margin: 0;
+}
+.vagabond-builder .builder-body.is-guide-stage .path-choice .path-subtitle {
+  margin: 4px 0 0;
+  font-size: 16px;
+  opacity: 0.8;
+}
+.vagabond-builder .builder-body.is-guide-stage .path-choice .path-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 320px));
+  gap: 28px;
+}
+.vagabond-builder .builder-body.is-guide-stage .path-choice .path-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 28px 24px 22px;
+  background: var(--gc-card-bg);
+  border: 1px solid var(--gc-line);
+  border-radius: 10px;
+  color: var(--vagabond-c-text-primary);
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+.vagabond-builder .builder-body.is-guide-stage .path-choice .path-option .path-medallion {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  background: var(--vagabond-c-bg1);
+  color: var(--vagabond-c-text-secondary);
+  font-size: 38px;
+  box-shadow: inset 0 0 0 3px var(--vagabond-c-tan-lite);
+}
+.vagabond-builder .builder-body.is-guide-stage .path-choice .path-option .path-option-name {
+  font-family: "Germania", serif;
+  font-size: 24px;
+  color: var(--vagabond-c-text-secondary);
+}
+.vagabond-builder .builder-body.is-guide-stage .path-choice .path-option .path-option-hint {
+  font-size: 15px;
+  line-height: 1.4;
+  opacity: 0.85;
+  text-align: center;
+}
+.vagabond-builder .builder-body.is-guide-stage .path-choice .path-option .path-perks {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  align-self: stretch;
+  margin-top: 6px;
+}
+.vagabond-builder .builder-body.is-guide-stage .path-choice .path-option .path-perk {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 4px 8px;
+  border-radius: 8px;
+  background: var(--vagabond-c-bg1);
+  font-size: 14px;
+  line-height: 1.2;
+  text-align: center;
+}
+.vagabond-builder .builder-body.is-guide-stage .path-choice .path-option .path-perk i {
+  font-size: 22px;
+  color: var(--vagabond-c-text-secondary);
+}
+.vagabond-builder .builder-body.is-guide-stage .path-choice .path-option:not(:disabled):hover {
+  transform: translateY(-3px);
+  border-color: var(--vagabond-c-chat-yellow);
+}
+.vagabond-builder .builder-body.is-guide-stage .path-choice .path-option.is-selected {
+  border-color: var(--vagabond-c-chat-yellow);
+  box-shadow: 0 0 8px -1px var(--vagabond-c-chat-yellow), inset 0 0 0 1px var(--vagabond-c-chat-yellow);
+}
+.vagabond-builder .builder-body.is-guide-stage .path-choice .path-option:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.vagabond-builder .builder-body.is-guide-stage .path-choice .path-current {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: min(668px, 100%);
+  padding: 10px 14px;
+  background: var(--gc-card-bg);
+  border: 1px solid var(--gc-line);
+  border-radius: 10px;
+}
+.vagabond-builder .builder-body.is-guide-stage .path-choice .path-current .path-current-img {
+  width: 56px;
+  height: 56px;
+  object-fit: cover;
+  border: none;
+  border-radius: 6px;
+}
+.vagabond-builder .builder-body.is-guide-stage .path-choice .path-current .path-current-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.vagabond-builder .builder-body.is-guide-stage .path-choice .path-current .path-current-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.7;
+}
+.vagabond-builder .builder-body.is-guide-stage .path-choice .path-current .path-current-name {
+  font-family: "Germania", serif;
+  font-size: 20px;
+  color: var(--vagabond-c-text-secondary);
+}
+.vagabond-builder .builder-body.is-guide-stage .path-choice .path-current .path-current-class {
+  font-size: 12px;
+  opacity: 0.8;
+}
+.vagabond-builder .builder-body.is-guide-stage .path-choice .path-current .path-current-actions {
+  display: flex;
+  gap: 8px;
+}
+.vagabond-builder .builder-body.is-guide-stage .path-choice .path-current .path-current-actions button {
+  width: auto;
+  padding: 6px 12px;
+  white-space: nowrap;
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-gallery {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 0;
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-toolbar {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-toolbar .guide-note {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.4;
+  color: var(--vagabond-c-text-secondary);
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-toolbar .guide-note i {
+  color: var(--vagabond-c-tan-lite);
+  margin-right: 4px;
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-toolbar .guide-search-box {
+  position: relative;
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-toolbar .guide-search-box i {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0.6;
+  color: var(--vagabond-c-text-primary);
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-toolbar .guide-search-box .guide-search {
+  width: 100%;
+  height: 32px;
+  padding-left: 32px;
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-toolbar .guide-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-toolbar .guide-filter-chip {
+  width: auto;
+  padding: 3px 10px;
+  font-size: 12px;
+  border-radius: 999px;
+  border: 1px solid var(--gc-line);
+  background: var(--gc-card-bg);
+  color: var(--vagabond-c-text-primary);
+  cursor: pointer;
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-toolbar .guide-filter-chip.active {
+  background: var(--vagabond-c-bg1);
+  color: var(--vagabond-c-text-secondary);
+  border-color: var(--vagabond-c-text-secondary);
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-grid {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  list-style: none;
+  margin: 0;
+  padding: 4px 8px 12px 2px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(246px, 1fr));
+  grid-auto-rows: 348px;
+  gap: 14px;
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-empty {
+  grid-column: 1/-1;
+  text-align: center;
+  padding: 30px;
+  opacity: 0.7;
+  color: var(--vagabond-c-text-primary);
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-card {
+  position: relative;
+  perspective: 1200px;
+  cursor: pointer;
+  color: var(--vagabond-c-text-primary);
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-card.filtered-out {
+  display: none;
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-card .guide-card-inner {
+  position: relative;
+  height: 100%;
+  transition: transform 0.5s ease;
+  transform-style: preserve-3d;
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-card.is-flipped .guide-card-inner {
+  transform: rotateY(180deg);
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-card .guide-face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  backface-visibility: hidden;
+  background: var(--gc-card-bg);
+  border: 1px solid var(--gc-line);
+  border-radius: 10px;
+  overflow: hidden;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-card .guide-back {
+  transform: rotateY(180deg);
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-card:hover .guide-face {
+  border-color: var(--vagabond-c-chat-yellow);
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-card.is-selected .guide-face {
+  border-color: var(--vagabond-c-chat-yellow);
+  box-shadow: 0 0 8px -1px var(--vagabond-c-chat-yellow), inset 0 0 0 1px var(--vagabond-c-chat-yellow);
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-card.is-hidden .guide-face {
+  border-style: dashed;
+  border-width: 2px;
+  border-color: var(--vagabond-c-muted);
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-card.is-hidden .guide-face > * {
+  opacity: 0.5;
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-card .gc-head,
+.vagabond-builder .builder-body.is-guide-stage .guide-card .gc-back-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 64px 8px 8px;
+  background: var(--vagabond-c-bg1);
+  color: var(--vagabond-c-text-secondary);
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-card .gc-back-head {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+  padding: 8px 64px 6px 12px;
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-card .gc-portrait {
+  flex: 0 0 auto;
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border: none;
+  border-radius: 6px;
+  box-shadow: 0 0 0 2px var(--vagabond-c-tan-lite);
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-card .gc-titles {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-card .gc-build {
+  font-family: "Germania", serif;
+  font-size: 22px;
+  line-height: 1.1;
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-card .gc-class {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  opacity: 0.85;
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-card .gc-stats {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 4px;
+  padding: 6px 10px 2px;
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-card .gc-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2px 0;
+  background: var(--vagabond-c-inset-2);
+  border: 1px solid var(--gc-line);
+  border-radius: 4px;
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-card .gc-stat .gc-stat-abbr {
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  opacity: 0.85;
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-card .gc-stat .gc-stat-val {
+  font-family: "Germania", serif;
+  font-size: 19px;
+  line-height: 1.1;
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-card .gc-vitals {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  padding: 3px 10px 5px;
+  font-size: 15px;
+  font-weight: bold;
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-card .gc-vitals .gc-vital i {
+  opacity: 0.85;
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-card .gc-vitals .gc-vital:first-child i {
+  color: var(--vagabond-c-red);
+  opacity: 1;
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-card .gc-rows {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 6px 10px 8px;
+  border-top: 1px solid var(--gc-line);
+  min-height: 0;
+  overflow: hidden;
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-card .gc-row-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-card .gc-row-pair > .gc-row {
+  min-width: 0;
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-card .gc-row {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-card .gc-row .gc-row-label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.7;
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-card .gc-row .gc-row-label i {
+  width: 14px;
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-card .gc-row .gc-row-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-card .gc-chip {
+  padding: 1px 7px;
+  font-size: 14px;
+  cursor: help;
+  transition: border-color 0.15s ease;
+  border-radius: 4px;
+  background: var(--vagabond-c-inset-2);
+  border: 1px solid var(--gc-line);
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-card .gc-chip:hover {
+  border-color: var(--vagabond-c-chat-yellow);
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-card .gc-chip em {
+  font-style: normal;
+  opacity: 0.7;
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-card .gc-chip.is-equipped {
+  border-color: var(--vagabond-c-text-primary);
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-card .gc-row-perks .gc-chip {
+  background: var(--vagabond-c-bg1);
+  color: var(--vagabond-c-text-secondary);
+  border-color: transparent;
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-card .gc-none {
+  opacity: 0.5;
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-card .gc-kit {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 5px 10px;
+  border-top: 1px solid var(--gc-line);
+  background: var(--vagabond-c-inset-2);
+  font-size: 14px;
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-card .gc-kit .gc-kit-pack {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-card .gc-kit .gc-kit-coins {
+  flex: 0 0 auto;
+  font-weight: bold;
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-card .gc-kit i {
+  opacity: 0.8;
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-card .gc-back-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 4px 12px 10px;
+  font-size: 14px;
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-card .gc-back-title {
+  margin: 8px 0 3px;
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.7;
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-card .gc-link {
+  cursor: help;
+  text-decoration: underline dotted;
+  text-underline-offset: 2px;
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-card .gc-link:hover {
+  color: var(--vagabond-c-text-secondary);
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-card .gc-back-text {
+  margin: 0;
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-card .gc-timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0 4px;
+  border-left: 2px solid var(--gc-line);
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-card .gc-timeline li {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 2px 0 2px 10px;
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-card .gc-timeline li.is-start .gc-level {
+  background: var(--vagabond-c-bg1);
+  color: var(--vagabond-c-text-secondary);
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-card .gc-timeline .gc-level {
+  flex: 0 0 auto;
+  min-width: 22px;
+  text-align: center;
+  font-family: "Germania", serif;
+  font-size: 15px;
+  border-radius: 4px;
+  background: var(--vagabond-c-inset-2);
+  border: 1px solid var(--gc-line);
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-card .gc-stat-goals {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-card .gc-stat-goal {
+  display: flex;
+  justify-content: space-between;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: var(--vagabond-c-inset-2);
+  border: 1px solid var(--gc-line);
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-card .gc-stat-goal .gc-stat-abbr {
+  font-size: 12px;
+  opacity: 0.8;
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-card .gc-stat-goal.grows .gc-stat-val {
+  color: var(--vagabond-c-text-secondary);
+  font-weight: bold;
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-card .gc-corner {
+  position: absolute;
+  top: 8px;
+  z-index: 2;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid var(--gc-line);
+  background: var(--gc-card-bg);
+  color: var(--vagabond-c-text-primary);
+  font-size: 12px;
+  cursor: pointer;
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-card .gc-corner:hover {
+  border-color: var(--vagabond-c-chat-yellow);
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-card .gc-flip {
+  right: 8px;
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-card .gc-hide {
+  right: 38px;
+}
+.vagabond-builder .builder-body.is-guide-stage .guide-card .gc-selected-badge {
+  position: absolute;
+  bottom: -6px;
+  right: -6px;
+  z-index: 2;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--vagabond-c-chat-yellow);
+  color: var(--vagabond-c-black);
+  font-size: 11px;
 }
 
 ol#combat-tracker.directory-list {
@@ -17830,22 +18446,31 @@ ol#combat-tracker.directory-list {
  *   @include context-menu-styles;
  * }
  */
-/* Global scrollbar styling for vagabond sheets and chat */
+/* Global scrollbar styling for vagabond sheets and chat
+   (+ Character Builder and item mini-sheet popups, which don't carry the .vagabond class) */
 .vagabond *,
+.vagabond-builder *,
+.inventory-mini-sheet,
 #chat-log {
   scrollbar-width: auto !important;
   scrollbar-color: auto !important;
 }
 .vagabond *::-webkit-scrollbar,
+.vagabond-builder *::-webkit-scrollbar,
+.inventory-mini-sheet::-webkit-scrollbar,
 #chat-log::-webkit-scrollbar {
   width: 6px;
 }
 .vagabond *::-webkit-scrollbar-track,
+.vagabond-builder *::-webkit-scrollbar-track,
+.inventory-mini-sheet::-webkit-scrollbar-track,
 #chat-log::-webkit-scrollbar-track {
   background: var(--vagabond-scrollbar-bg);
   border-radius: 4px;
 }
 .vagabond *::-webkit-scrollbar-thumb,
+.vagabond-builder *::-webkit-scrollbar-thumb,
+.inventory-mini-sheet::-webkit-scrollbar-thumb,
 #chat-log::-webkit-scrollbar-thumb {
   background: linear-gradient(180deg, var(--vagabond-scrollbar-thumb1) 0%, var(--vagabond-scrollbar-thumb2) 100%);
   border-radius: 4px;
@@ -28049,7 +28674,7 @@ details[open] .vagabond .npc-immunity-toggle i {
   padding-right: 2px;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 6px 3px;
+  gap: 6px;
   padding: 6px 3px;
 }
 .vagabond .favorited-spells-grid .spell-grid-card {
@@ -28060,8 +28685,8 @@ details[open] .vagabond .npc-immunity-toggle i {
   width: 100%;
 }
 .vagabond .favorited-spells-grid .spell-grid-frame {
-  width: 60px;
-  height: 28px;
+  width: 100%;
+  height: 33px;
   border: 1px solid var(--vagabond-c-chat-yellow);
   border-radius: 3px;
   overflow: hidden;

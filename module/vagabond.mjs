@@ -86,7 +86,7 @@ import { WitchHelper } from './helpers/witch-helper.mjs';
 import { WizardHelper } from './helpers/wizard-helper.mjs';
 import { DruidHelper } from './helpers/druid-helper.mjs';
 import { migrateFighterClass, migrateDruidClass, migrateGunslingerClass, migrateHunterClass, migrateLuminaryClass, migrateMagusClass, migrateMerchantClass, migratePugilistClass, migrateRevelatorClass, migrateRogueClass, migrateSorcererClass, migrateVanguardClass, migrateWitchClass, migrateWizardClass, migrateAncestries } from './helpers/class-migrations.mjs';
-import { migrateAlpha3Statuses, migrateAlpha3Backpacks, migrateAlpha3Rations, migrateAlpha3DefensePerks, migrateAlpha3ClassPerks, migrateAlpha3Perks, migrateAlpha3Classes, migrateAlpha3Ancestries, migrateClassFeatureScaleKeys, migrateClassFeatureActions, migrateClassFeatureEffects } from './helpers/alpha3-migrations.mjs';
+import { migrateAlpha3Statuses, migrateAlpha3Backpacks, migrateAlpha3Rations, migrateAlpha3DefensePerks, migrateAlpha3ClassPerks, migrateAlpha3Perks, migrateAlpha3Classes, migrateAlpha3Ancestries, migrateClassFeatureScaleKeys, migrateClassFeatureActions, migrateClassFeatureEffects, migrateLifeNoFreeDie, migrateVehementMagic } from './helpers/alpha3-migrations.mjs';
 import { consumeUsedEffects } from './helpers/use-effects.mjs';
 import { VagabondRollBuilder } from './helpers/roll-builder.mjs';
 import { CurrencyHelper } from './helpers/currency-helper.mjs';
@@ -215,7 +215,8 @@ async function preloadHandlebarsTemplates() {
     'tray': 'systems/vagabond/templates/apps/char-builder-parts/tray.hbs',
     'preview': 'systems/vagabond/templates/apps/char-builder-parts/preview.hbs',
     'reference': 'systems/vagabond/templates/apps/char-builder-parts/reference.hbs',
-    'footer': 'systems/vagabond/templates/apps/char-builder-parts/footer.hbs'
+    'footer': 'systems/vagabond/templates/apps/char-builder-parts/footer.hbs',
+    'guide-stage': 'systems/vagabond/templates/apps/char-builder-parts/guide-stage.hbs'
   };
 
   // Register each builder part as a Handlebars partial (parallel instead of sequential)
@@ -917,6 +918,10 @@ Hooks.once('ready', function () {
   migrateAlpha3Perks();
   // One-time: Human trait Knack -> Aptitude.
   migrateAlpha3Ancestries();
+  // One-time: Life copies pay Mana for every healing die (no free first die).
+  migrateLifeNoFreeDie();
+  // One-time: Vehement Magic copies get their spell-damage Explode effect.
+  migrateVehementMagic();
   // One-time: buff Spell copies (Bless, Ward, Tempo…) get the Tracker hit macro.
   SpellTrackerHelper.migrateWorldSpells();
   // One-time: class items get the Alpha 3 deltas (runs after every earlier class migration settled).
