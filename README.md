@@ -38,7 +38,9 @@ All Print Wave 3 / Alpha 3 content is now in the system:
 
 ---
 
-### **New feature:** Downtime panel
+### **New feature:** New Downtime panel
+
+<img width="950"  alt="image" src="https://github.com/user-attachments/assets/25ad4757-6b0f-40d5-aa0d-1d277e708910" />
 
 - **Shift tracker:** one 4-Shift clock per Day. A downtime starts at 1 Shift; add more with **+** (a whole Day, or longer if the GM allows). Each activity spends a Shift, and the icons show what each Shift was used for.
 - **Activity mosaic:** Craft, Study, Foraging, Hunting and Other Activities as picture tiles, plus Rest and Breather. Click a tile to open its options and the book's text; the yellow button does it.
