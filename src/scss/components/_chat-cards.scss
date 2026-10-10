@@ -1462,6 +1462,9 @@ li.chat-message:has(.vagabond-chat-card-v2) {
 
         .vb-die-val { font-size: 22px; } /* Smaller text */
     }
+
+    /* Dropped by keep-highest / keep-lowest (e.g. Travel Complication Pace die) */
+    &.is-discarded { opacity: 0.35; }
 }
 
 .vb-die-wrapper .vb-die-bg {

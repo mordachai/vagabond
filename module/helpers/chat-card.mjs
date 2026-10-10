@@ -216,7 +216,7 @@ export class VagabondChatCard {
             : null;
 
           parts.push(`
-            <div class="vb-die-wrapper ${sizeClass}" data-faces="${dieType}">
+            <div class="vb-die-wrapper ${sizeClass}${result.discarded ? ' is-discarded' : ''}" data-faces="${dieType}">
               <div class="vb-die-bg dmg-pool" style="background-image: url('${dieIcon}')"></div>
               <span class="vb-die-val">${result.result}</span>
               ${isExploded ? '<i class="fas fa-burst vb-die-explode" title="Exploded!"></i>' : ''}

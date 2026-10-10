@@ -33,6 +33,9 @@ export default class VagabondParty extends VagabondActorBase {
     schema.navigator = new fields.StringField({ required: true, blank: true, initial: '' });
     schema.pace = new fields.StringField({ required: true, initial: 'normal', choices: ['slow', 'normal', 'fast'] });
     schema.hazardous = new fields.BooleanField({ required: true, initial: false });
+    // Shifts Travelled since the last Rest (book: Travel Clocks are 4-segment Shift Clocks;
+    // two Shifts per Rest, each further one gives 1 Fatigue). The GM resets it after a Rest.
+    schema.travelShifts = new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 });
 
     // Shifts the GM grants the party for its next downtime (pushed to every Character by the sheet's Downtime button)
     schema.shifts = new fields.NumberField({ ...requiredInteger, initial: 1, min: 1 });

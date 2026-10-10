@@ -1467,15 +1467,30 @@ VAGABOND.speedTable = {
 
 /**
  * Travel Paces (book Exploration, TRAVEL SPEED table): the Pace multiplies the miles
- * the Group moves that Shift; `complication` is the Complication roll it asks for.
+ * the Group moves that Shift; `complication` is the Complication roll it asks for and
+ * `complicationFormula` the dice behind it (the d66: kept dice in rolled order = tens, ones).
  * Hazardous Lands (Jungles, Mountains, Swamps) halve the miles on top (`hazardousMult`).
  */
 VAGABOND.travelPaces = {
-  slow:   { mult: 0.5, label: 'VAGABOND.Actor.Party.Travel.Pace.slow',   complication: 'VAGABOND.Actor.Party.Travel.Complication.slow' },
-  normal: { mult: 1,   label: 'VAGABOND.Actor.Party.Travel.Pace.normal', complication: 'VAGABOND.Actor.Party.Travel.Complication.normal' },
-  fast:   { mult: 2,   label: 'VAGABOND.Actor.Party.Travel.Pace.fast',   complication: 'VAGABOND.Actor.Party.Travel.Complication.fast' },
+  slow:   { mult: 0.5, label: 'VAGABOND.Actor.Party.Travel.Pace.slow',   complication: 'VAGABOND.Actor.Party.Travel.Complication.slow',   complicationFormula: '3d6kh2' },
+  normal: { mult: 1,   label: 'VAGABOND.Actor.Party.Travel.Pace.normal', complication: 'VAGABOND.Actor.Party.Travel.Complication.normal', complicationFormula: '2d6' },
+  fast:   { mult: 2,   label: 'VAGABOND.Actor.Party.Travel.Pace.fast',   complication: 'VAGABOND.Actor.Party.Travel.Complication.fast',   complicationFormula: '3d6kl2' },
 };
 VAGABOND.hazardousMult = 0.5;
+// Shifts a Group can Travel after a Rest; each further Shift until the next Rest gives 1 Fatigue
+VAGABOND.travelShiftsPerRest = 2;
+
+/**
+ * TRAVEL COMPLICATIONS (book Adventuring, d66). Any result not listed (21-66) = no Complication.
+ * Text lives in `VAGABOND.Actor.Party.Travel.Complications.<key>`.
+ */
+VAGABOND.travelComplications = [
+  { min: 11, max: 11, key: 'hazard' },
+  { min: 12, max: 12, key: 'lost' },
+  { min: 13, max: 13, key: 'obscurement' },
+  { min: 14, max: 15, key: 'storm' },
+  { min: 16, max: 16, key: 'temperature' },
+];
 
 
 

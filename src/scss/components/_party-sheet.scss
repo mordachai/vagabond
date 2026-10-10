@@ -171,21 +171,31 @@
   &:hover { border-color: $c-bg2; }
 }
 
+// Info column: name row, movement grid (left) · Travel + Downtime clock boxes (right, full height)
 .party-info {
   flex: 1;
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-rows: auto 1fr;
   grid-template-areas:
-    'name   down'
-    'type   down'
-    'speeds down'
-    'travel travel';
-  gap: 4px 12px;
+    'name   clocks'
+    'move   clocks';
+  gap: 6px 10px;
+  min-width: 0;
+}
+
+// Party name + Level Up (GM)
+.party-name-row {
+  grid-area: name;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   min-width: 0;
 }
 
 .party-name {
-    grid-area: name;
+    flex: 1;
+    min-width: 0;
     font-family: $font-title;
     font-size: 1.5em !important;
     color: $c-white !important;
@@ -203,157 +213,63 @@
       2px -2px 0 $c-black;
 }
 
-.party-type {
-  grid-area: type;
-  font-family: $font-title;
-  font-size: 1em;
+// Movement grid. Row 1: speed source · Speed · Crawl · Travel.
+// Row 2 (book Exploration, own full-width row): Navigator · Pace · Hazardous Lands.
+.party-move {
+  grid-area: move;
+  display: grid;
+  grid-template-columns: auto repeat(3, minmax(0, 1fr));
+  grid-template-rows: auto auto;
+  align-content: center;
+  gap: 6px 14px;
+  padding: 6px 12px;
+  background: rgba(0, 0, 0, 0.5);
+  border: 2px solid $c-yellow;
+  border-radius: 8px;
   color: $c-yellow;
-  width: 100%;
-  opacity: 0.9;
-}
-
-input.party-type {
-  color: $c-yellow !important;
   text-shadow: var(--vh-outline-2);
-
-  &:focus {
-    color: $c-white !important;
-    text-shadow: none;
-  }
-}
-
-// Speeds area + Level Up Party button, side by side in the info grid
-.party-speed-row {
-  grid-area: speeds;
-  display: flex;
-  flex-wrap: nowrap;
-  align-items: stretch;
-  gap: 8px;
   min-width: 0;
-}
 
-.party-speeds {
-    position: relative;
-    bottom: 0;
-    flex: 0 1 auto;
-    min-width: 0;
-    flex-wrap: nowrap;
-    align-items: center;
+  .pm-cell {
     display: flex;
-    justify-content: flex-start;
-    align-content: baseline;
-    background: rgba(0,0,0,0.5);
-    padding: 6px 10px 6px 6px;
-    gap: 6px 12px;
-    border: 2px solid $c-yellow;
-    border-radius: 8px;
-    text-shadow:
-      2px 2px 0 $c-dark-bluey,
-      -2px 2px 0 $c-dark-bluey,
-      -2px -2px 0 $c-dark-bluey,
-      2px -2px 0 $c-dark-bluey;
-}
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    min-width: 0;
+  }
+  .pm-toggle { align-items: center; }
 
-// Horse / party switch: where the automatic speeds come from (the lit icon is the active source)
-.party-speed-source {
-  display: inline-flex;
-  align-items: center;
-  flex: none;
-  gap: 8px;
-  height: auto;
-  min-height: 0;
-  line-height: 1;
-  padding: 4px 8px;
-  background: rgba(0, 0, 0, 0.45);
-  border: 1px solid $c-yellow;
-  border-radius: 14px;
-  box-shadow: none;
-  text-shadow: none;
-  cursor: pointer;
-
-  i {
-    font-size: 1.3em;
-    color: $c-yellow;
-    opacity: 0.3;
-    transition: opacity 0.15s;
-
-    &.is-on { opacity: 1; }
+  .pm-row {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    align-items: end;
+    gap: 14px;
   }
 
-  &:hover i { opacity: 0.65; }
-  &:hover i.is-on { opacity: 1; }
-}
+  .pm-label {
+    font-family: $font-title;
+    font-size: 0.75em;
+    line-height: 1.1;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    opacity: 0.8;
+    white-space: nowrap;
+  }
 
-.party-speed-stat {
+  .pm-value {
     display: flex;
     align-items: baseline;
     gap: 4px;
-    white-space: nowrap;
-    line-height: 1.2;
-
-    .speed-label {
-      font-family: $font-title;
-      font-size: 1.0em;
-      line-height: 1.2;
-      color: $c-yellow;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-    }
-
-    .speed-unit {
-      font-family: $font-title;
-      font-size: 0.8em;
-      line-height: 1.2;
-      color: $c-yellow;
-      margin-left: -2px;
-      text-align: left;
-    }
-
-    .speed-input {
-      field-sizing: content;
-      min-width: 1ch;
-      height: auto;
-      min-height: 0;
-      margin: 0;
-      padding: 0;
-      background: transparent;
-      border: none;
-      box-shadow: none;
-      font-family: $font-number;
-      font-size: 1.3em;
-      line-height: 1.1;
-      text-align: right;
-      text-shadow:
-        1px 1px 0 $c-dark-bluey,
-        -1px 1px 0 $c-dark-bluey,
-        -1px -1px 0 $c-dark-bluey,
-        1px -1px 0 $c-dark-bluey;
-    }
-
-    input { color: $c-yellow; }
-
-    // Following the automatic source (no manual override): shown dimmer
-    .speed-input.is-auto { opacity: 0.75; }
-}
-
-// Travel (book Exploration): Navigator · Pace · Hazardous Lands → miles this Shift
-.party-travel-row {
-  grid-area: travel;
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 4px 10px;
-  min-width: 0;
-  color: $c-yellow;
-  text-shadow: var(--vh-outline-2);
-
-  .ptr-leader {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
     min-width: 0;
-    font-family: $font-title;
     white-space: nowrap;
+  }
+
+  .pm-leader .pm-value {
+    align-items: center;
+    max-width: 100%;
+    font-family: $font-title;
+    line-height: 1.6;
 
     .ptr-leader-name {
       overflow: hidden;
@@ -373,7 +289,7 @@ input.party-type {
     min-height: 0;
     line-height: normal;
     margin: 0;
-    padding: 1px 9px;
+    padding: 2px 10px;
     background: rgba(0, 0, 0, 0.45);
     border: none;
     border-radius: 0;
@@ -400,38 +316,100 @@ input.party-type {
     min-height: 0;
     line-height: normal;
     margin: 0;
-    padding: 2px 7px;
+    padding: 3px 9px;
     background: rgba(0, 0, 0, 0.45);
     border: 1px solid $c-yellow;
-    border-radius: 12px;
+    border-radius: 14px;
     box-shadow: none;
     color: $c-yellow;
     text-shadow: none;
     opacity: 0.45;
     cursor: pointer;
 
+    i { font-size: 1.2em; }
     &:hover { opacity: 0.8; }
     &.is-on { opacity: 1; }
   }
-
-  .ptr-distance {
-    margin-left: auto;
-    font-family: $font-number;
-    font-size: 1.2em;
-    white-space: nowrap;
-
-    .speed-unit {
-      margin-left: 3px;
-      font-family: $font-title;
-      font-size: 0.65em;
-    }
-
-    // Pace / Hazardous Lands change the miles: shown at full strength
-    &:not(.is-modified) { opacity: 0.75; }
-  }
 }
 
-// Grant every Character a Level (GM, right of the speeds area)
+// Horse / party switch: where the automatic speeds come from (the lit icon is the active source)
+.party-speed-source {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+  gap: 8px;
+  height: auto;
+  min-height: 0;
+  line-height: 1;
+  padding: 3px 8px;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid $c-yellow;
+  border-radius: 14px;
+  box-shadow: none;
+  text-shadow: none;
+  cursor: pointer;
+
+  i {
+    font-size: 1.2em;
+    color: $c-yellow;
+    opacity: 0.3;
+    transition: opacity 0.15s;
+
+    &.is-on { opacity: 1; }
+  }
+
+  &:hover i { opacity: 0.65; }
+  &:hover i.is-on { opacity: 1; }
+}
+
+.party-speed-stat {
+    .speed-unit {
+      font-family: $font-title;
+      font-size: 0.8em;
+      line-height: 1.2;
+      color: $c-yellow;
+      margin-left: -2px;
+      text-align: left;
+    }
+
+    .speed-input {
+      field-sizing: content;
+      min-width: 1ch;
+      height: auto;
+      min-height: 0;
+      margin: 0;
+      padding: 0;
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      font-family: $font-number;
+      font-size: 1.4em;
+      line-height: 1.1;
+      text-align: left;
+      text-shadow:
+        1px 1px 0 $c-dark-bluey,
+        -1px 1px 0 $c-dark-bluey,
+        -1px -1px 0 $c-dark-bluey,
+        1px -1px 0 $c-dark-bluey;
+    }
+
+    input { color: $c-yellow; }
+
+    // Following the automatic source (no manual override): shown dimmer
+    .speed-input.is-auto { opacity: 0.75; }
+
+    // Travel altered by Pace / Hazardous Lands (back to yellow while editing the base)
+    .speed-input.is-modified:not(:focus) {
+      opacity: 1;
+      text-shadow:
+        1px 1px 0 $c-red,
+        -1px 1px 0 $c-red,
+        -1px -1px 0 $c-red,
+        1px -1px 0 $c-red;
+    }
+}
+
+// Grant every Character a Level (GM, right of the party name)
 .party-levelup-btn {
   display: flex;
   align-items: center;
@@ -439,7 +417,6 @@ input.party-type {
   height: auto;
   line-height: normal;
   flex: none;
-  margin-left: auto;
   padding: 4px 14px;
   background: $c-yellow;
   color: $c-black;
@@ -455,16 +432,22 @@ input.party-type {
   &:hover { filter: brightness(1.1); }
 }
 
-// Shifts the GM grants for the party's downtime: SVG Shift clock(s) with the
-// progress-clock side handles (top-right, full height of the header info column)
-.party-downtime-box {
-  grid-area: down;
+// Travel (Shifts Travelled since the last Rest) + Downtime (Shifts the GM grants): SVG Shift
+// clock(s) with the progress-clock side handles, side by side at the full header height
+.party-clock-boxes {
+  grid-area: clocks;
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+}
+
+.party-clock-box {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
   gap: 3px;
-  max-width: 200px;
+  width: 130px;
   padding: 4px 8px;
   background: rgba(0, 0, 0, 0.5);
   border: 2px solid $c-yellow;
@@ -516,6 +499,43 @@ input.party-type {
     letter-spacing: 0.04em;
     text-shadow: var(--vh-outline-2);
     white-space: nowrap;
+
+    // Travelled past the two Shifts a Rest allows (each further Shift gives 1 Fatigue)
+    &.is-over {
+      text-shadow:
+        1px 1px 0 $c-red,
+        -1px 1px 0 $c-red,
+        -1px -1px 0 $c-red,
+        1px -1px 0 $c-red;
+    }
+  }
+
+  .pdt-count-row {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  // GM: Travel back to 0 Shifts after a Rest
+  .pdt-reset {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    height: auto;
+    min-height: 0;
+    line-height: 1;
+    margin: 0;
+    padding: 0;
+    background: none;
+    border: none;
+    box-shadow: none;
+    color: $c-yellow;
+    font-size: 0.85em;
+    opacity: 0.7;
+    cursor: pointer;
+
+    &:hover { opacity: 1; }
   }
 
   .pdt-open {

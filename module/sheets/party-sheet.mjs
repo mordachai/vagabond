@@ -7,6 +7,7 @@ import { DowntimeHelper, SHIFTS_PER_DAY } from '../helpers/downtime-helper.mjs';
 import { ProgressClock } from '../documents/progress-clock.mjs';
 import { EquipmentHelper } from '../helpers/equipment-helper.mjs';
 import { CurrencyHelper } from '../helpers/currency-helper.mjs';
+import { VagabondTextParser } from '../helpers/text-parser.mjs';
 import { buildStatsSection, buildSlotsRow, buildWeaponProperties } from '../helpers/item-sections.mjs';
 
 /** Inventory tab sections, in display order (containers and unknown types fall under `gear`). */
@@ -112,6 +113,7 @@ export class VagabondPartySheet extends VagabondActorSheet {
 
     // Shift clock: one 4-segment clock per Day of the Shifts the GM grants (same art as the Downtime panel)
     context.shiftClocks = this._shiftClocks();
+    context.travelClocks = this._travelClocks();
 
     // Speed / Crawl / Travel: manual override or automatic (slowest member)
     context.speeds = this._speedsView();
@@ -950,10 +952,24 @@ export class VagabondPartySheet extends VagabondActorSheet {
     on('toggleHazardous', () => {
       if (this.isEditable) this.actor.update({ 'system.hazardous': !this.actor.system.hazardous });
     });
+    on('partyTravelStep', (el) => this._stepTravelShifts(Number(el.dataset.step)));
+    on('partyTravel', () => this._partyTravel());
+    on('partyTravelReset', () => {
+      if (game.user.isGM) this.actor.update({ 'system.travelShifts': 0 });
+    });
     on('toggleSpeedSource', () => {
       if (!this.isEditable) return;
       this.actor.update({ 'system.speedSource': this._speedSource() === 'container' ? 'party' : 'container' });
     });
+
+    // Travel field shows the Pace / Hazardous miles; while focused it edits the base Travel Speed
+    const travel = this.element.querySelector('input[name="system.travel"].is-modified');
+    if (travel) {
+      travel.addEventListener('focus', () => { travel.value = travel.dataset.base; }, { signal });
+      travel.addEventListener('blur', () => {
+        if (travel.value === travel.dataset.base) travel.value = travel.dataset.trip;
+      }, { signal });
+    }
 
     // "Remove Member" toggle: the per-card X buttons only show while it is on
     const applyRemoveMode = () => {
@@ -1160,6 +1176,26 @@ export class VagabondPartySheet extends VagabondActorSheet {
     return { size, list };
   }
 
+  /**
+   * The header's Travel clocks: one 4-segment Shift clock per Day travelled, filled with the
+   * Shifts Travelled since the last Rest (one empty clock at 0). `over` = past the two Shifts
+   * a Rest allows (each further Shift gives 1 Fatigue).
+   */
+  _travelClocks() {
+    const travelled = Math.max(0, this.actor.system.travelShifts || 0);
+    const days = Math.max(1, Math.ceil(travelled / SHIFTS_PER_DAY));
+    const list = [];
+    for (let day = 0; day < days; day++) {
+      const filled = Math.clamp(travelled - day * SHIFTS_PER_DAY, 0, SHIFTS_PER_DAY);
+      list.push({
+        img: ProgressClock.getSVGPath(SHIFTS_PER_DAY, filled),
+        tooltip: this._controlsText('TravelDayTooltip', { day: day + 1, n: filled, max: SHIFTS_PER_DAY }),
+      });
+    }
+    const size = days <= 1 ? 72 : days <= 2 ? 56 : 40;
+    return { size, list, travelled, over: travelled > CONFIG.VAGABOND.travelShiftsPerRest };
+  }
+
   /** Localized `VAGABOND.Actor.Party.Controls.<key>`, formatted when `data` is given. */
   _controlsText(key, data) {
     const path = `VAGABOND.Actor.Party.Controls.${key}`;
@@ -1315,9 +1351,16 @@ export class VagabondPartySheet extends VagabondActorSheet {
    */
   async _processSubmitData(event, form, submitData) {
     const auto = this._autoSpeeds();
+    // The Travel field may be showing the Pace / Hazardous miles, not the stored speed: submit the base instead
+    const travelInput = form.querySelector('input[name="system.travel"].is-modified');
+    const showsTrip = travelInput && document.activeElement !== travelInput && travelInput.value === travelInput.dataset.trip;
     for (const field of ['speed', 'crawl', 'travel']) {
       const path = `system.${field}`;
       const nested = foundry.utils.hasProperty(submitData, path);
+      if (field === 'travel' && showsTrip) {
+        if (nested) foundry.utils.setProperty(submitData, path, travelInput.dataset.base);
+        else if (path in submitData) submitData[path] = travelInput.dataset.base;
+      }
       const raw = nested ? foundry.utils.getProperty(submitData, path) : submitData[path];
       if (raw === undefined) continue;
       const value = Number(raw);
@@ -1329,6 +1372,57 @@ export class VagabondPartySheet extends VagabondActorSheet {
     await super._processSubmitData(event, form, submitData);
     // The stored value may not change (0 -> 0): re-render so the field shows the automatic value again
     this.render(false, { parts: ['party'] });
+  }
+
+  /**
+   * GM: roll this Shift's Travel Complication (book d66) with the party's Pace applied
+   * (Slow keeps the two highest of 3d6, Fast the two lowest; the kept dice in rolled
+   * order are tens, ones). Posted as a card whispered to the GMs; `shift` = the Shift
+   * Travelled since the last Rest (tagged, and past the Rest allowance it reminds the Fatigue).
+   */
+  async _rollTravelComplication({ shift = null } = {}) {
+    if (!game.user.isGM) return;
+    const paces = CONFIG.VAGABOND.travelPaces;
+    const pace = paces[this.actor.system.pace] ? this.actor.system.pace : 'normal';
+    const roll = await new Roll(paces[pace].complicationFormula ?? '2d6').evaluate();
+    const kept = roll.dice[0].results.filter((r) => r.active).map((r) => r.result);
+    const d66 = kept[0] * 10 + kept[1];
+
+    const t = (key, data) => (data ? game.i18n.format(`VAGABOND.Actor.Party.Travel.${key}`, data) : game.i18n.localize(`VAGABOND.Actor.Party.Travel.${key}`));
+    const entry = CONFIG.VAGABOND.travelComplications.find((c) => d66 >= c.min && d66 <= c.max);
+    const navigator = this._navigatorActor()?.name ?? t('LeaderSlowest');
+    let description = entry
+      ? `<p>${VagabondTextParser.parseCountdownDice(t(`Complications.${entry.key}`, { navigator }))}</p><p><em>${t('RandomEncounterHint')}</em></p>`
+      : `<p>${t('ComplicationNone')}</p>`;
+    if (shift > CONFIG.VAGABOND.travelShiftsPerRest) description += `<p><strong>${t('ComplicationFatigue', { n: shift })}</strong></p>`;
+
+    const { VagabondChatCard } = await import('../helpers/chat-card.mjs');
+    const card = new VagabondChatCard()
+      .setActor(this.actor)
+      .setTitle(t('ComplicationTitle'))
+      .setSubtitle(t('ComplicationPace', { pace: game.i18n.localize(paces[pace].label), roll: game.i18n.localize(paces[pace].complication) }))
+      .addRoll(roll, null)
+      .setDescription(description);
+    card.data.rollTotal = d66;
+    if (shift) card.data.standardTags = [{ label: t('ComplicationShift', { n: shift }), icon: 'fas fa-route' }];
+    card.data.whisper = game.users.filter((u) => u.isGM).map((u) => u.id);
+    await card.send();
+  }
+
+  /** GM: Travel one Shift — mark it on the Travel clock, then roll its Complication. */
+  async _partyTravel() {
+    if (!game.user.isGM) return;
+    const shift = (this.actor.system.travelShifts || 0) + 1;
+    await this.actor.update({ 'system.travelShifts': shift });
+    await this._rollTravelComplication({ shift });
+  }
+
+  /** GM: mark / unmark a Travelled Shift by hand (no Complication roll; back to 0 after a Rest). */
+  async _stepTravelShifts(step) {
+    if (!game.user.isGM || !step) return;
+    const current = this.actor.system.travelShifts || 0;
+    const next = Math.clamp(current + step, 0, DowntimeHelper.MAX_SHIFTS);
+    if (next !== current) await this.actor.update({ 'system.travelShifts': next });
   }
 
   /** GM: grant the party one more / one fewer Shift for its next downtime. */

@@ -2147,6 +2147,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   padding-bottom: 3px;
   /* 1. ATTACK ROLL STRIP DICE (Standard Size) */
   /* 2. DAMAGE SECTION DICE (Smaller Size) */
+  /* Dropped by keep-highest / keep-lowest (e.g. Travel Complication Pace die) */
 }
 .vb-die-wrapper.die-type-check {
   width: 45px !important;
@@ -2162,6 +2163,9 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 }
 .vb-die-wrapper.die-type-damage .vb-die-val {
   font-size: 22px;
+}
+.vb-die-wrapper.is-discarded {
+  opacity: 0.35;
 }
 
 .vb-die-wrapper .vb-die-bg {
@@ -26678,12 +26682,21 @@ details[open] .vagabond .npc-immunity-toggle i {
   flex: 1;
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  grid-template-areas: "name   down" "type   down" "speeds down" "travel travel";
-  gap: 4px 12px;
+  grid-template-rows: auto 1fr;
+  grid-template-areas: "name   clocks" "move   clocks";
+  gap: 6px 10px;
+  min-width: 0;
+}
+.vagabond .party-name-row {
+  grid-area: name;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   min-width: 0;
 }
 .vagabond .party-name {
-  grid-area: name;
+  flex: 1;
+  min-width: 0;
   font-family: "Germania", serif;
   font-size: 1.5em !important;
   color: var(--vagabond-c-white) !important;
@@ -26696,46 +26709,126 @@ details[open] .vagabond .npc-immunity-toggle i {
   filter: drop-shadow(2px 2px 1px var(--vagabond-c-inset-1));
   text-shadow: 2px 2px 0 var(--vagabond-c-black), -2px 2px 0 var(--vagabond-c-black), -2px -2px 0 var(--vagabond-c-black), 2px -2px 0 var(--vagabond-c-black);
 }
-.vagabond .party-type {
-  grid-area: type;
-  font-family: "Germania", serif;
-  font-size: 1em;
-  color: var(--vagabond-c-chat-yellow);
-  width: 100%;
-  opacity: 0.9;
-}
-.vagabond input.party-type {
-  color: var(--vagabond-c-chat-yellow) !important;
-  text-shadow: var(--vh-outline-2);
-}
-.vagabond input.party-type:focus {
-  color: var(--vagabond-c-white) !important;
-  text-shadow: none;
-}
-.vagabond .party-speed-row {
-  grid-area: speeds;
-  display: flex;
-  flex-wrap: nowrap;
-  align-items: stretch;
-  gap: 8px;
-  min-width: 0;
-}
-.vagabond .party-speeds {
-  position: relative;
-  bottom: 0;
-  flex: 0 1 auto;
-  min-width: 0;
-  flex-wrap: nowrap;
-  align-items: center;
-  display: flex;
-  justify-content: flex-start;
-  align-content: baseline;
+.vagabond .party-move {
+  grid-area: move;
+  display: grid;
+  grid-template-columns: auto repeat(3, minmax(0, 1fr));
+  grid-template-rows: auto auto;
+  align-content: center;
+  gap: 6px 14px;
+  padding: 6px 12px;
   background: rgba(0, 0, 0, 0.5);
-  padding: 6px 10px 6px 6px;
-  gap: 6px 12px;
   border: 2px solid var(--vagabond-c-chat-yellow);
   border-radius: 8px;
-  text-shadow: 2px 2px 0 var(--vagabond-c-dark-bluey), -2px 2px 0 var(--vagabond-c-dark-bluey), -2px -2px 0 var(--vagabond-c-dark-bluey), 2px -2px 0 var(--vagabond-c-dark-bluey);
+  color: var(--vagabond-c-chat-yellow);
+  text-shadow: var(--vh-outline-2);
+  min-width: 0;
+}
+.vagabond .party-move .pm-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  min-width: 0;
+}
+.vagabond .party-move .pm-toggle {
+  align-items: center;
+}
+.vagabond .party-move .pm-row {
+  grid-column: 1/-1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: end;
+  gap: 14px;
+}
+.vagabond .party-move .pm-label {
+  font-family: "Germania", serif;
+  font-size: 0.75em;
+  line-height: 1.1;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  opacity: 0.8;
+  white-space: nowrap;
+}
+.vagabond .party-move .pm-value {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  min-width: 0;
+  white-space: nowrap;
+}
+.vagabond .party-move .pm-leader .pm-value {
+  align-items: center;
+  max-width: 100%;
+  font-family: "Germania", serif;
+  line-height: 1.6;
+}
+.vagabond .party-move .pm-leader .pm-value .ptr-leader-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.vagabond .party-move .ptr-paces {
+  display: inline-flex;
+  border: 1px solid var(--vagabond-c-chat-yellow);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.vagabond .party-move .ptr-pace {
+  height: auto;
+  min-height: 0;
+  line-height: normal;
+  margin: 0;
+  padding: 2px 10px;
+  background: rgba(0, 0, 0, 0.45);
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  color: var(--vagabond-c-chat-yellow);
+  font-family: "Germania", serif;
+  font-size: 0.85em;
+  text-transform: uppercase;
+  text-shadow: none;
+  opacity: 0.55;
+  cursor: pointer;
+}
+.vagabond .party-move .ptr-pace + .ptr-pace {
+  border-left: 1px solid var(--vagabond-c-chat-yellow);
+}
+.vagabond .party-move .ptr-pace:hover {
+  opacity: 0.85;
+}
+.vagabond .party-move .ptr-pace.is-selected {
+  background: var(--vagabond-c-chat-yellow);
+  color: var(--vagabond-c-black);
+  opacity: 1;
+}
+.vagabond .party-move .ptr-hazard {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  height: auto;
+  min-height: 0;
+  line-height: normal;
+  margin: 0;
+  padding: 3px 9px;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid var(--vagabond-c-chat-yellow);
+  border-radius: 14px;
+  box-shadow: none;
+  color: var(--vagabond-c-chat-yellow);
+  text-shadow: none;
+  opacity: 0.45;
+  cursor: pointer;
+}
+.vagabond .party-move .ptr-hazard i {
+  font-size: 1.2em;
+}
+.vagabond .party-move .ptr-hazard:hover {
+  opacity: 0.8;
+}
+.vagabond .party-move .ptr-hazard.is-on {
+  opacity: 1;
 }
 .vagabond .party-speed-source {
   display: inline-flex;
@@ -26745,7 +26838,7 @@ details[open] .vagabond .npc-immunity-toggle i {
   height: auto;
   min-height: 0;
   line-height: 1;
-  padding: 4px 8px;
+  padding: 3px 8px;
   background: rgba(0, 0, 0, 0.45);
   border: 1px solid var(--vagabond-c-chat-yellow);
   border-radius: 14px;
@@ -26754,7 +26847,7 @@ details[open] .vagabond .npc-immunity-toggle i {
   cursor: pointer;
 }
 .vagabond .party-speed-source i {
-  font-size: 1.3em;
+  font-size: 1.2em;
   color: var(--vagabond-c-chat-yellow);
   opacity: 0.3;
   transition: opacity 0.15s;
@@ -26767,21 +26860,6 @@ details[open] .vagabond .npc-immunity-toggle i {
 }
 .vagabond .party-speed-source:hover i.is-on {
   opacity: 1;
-}
-.vagabond .party-speed-stat {
-  display: flex;
-  align-items: baseline;
-  gap: 4px;
-  white-space: nowrap;
-  line-height: 1.2;
-}
-.vagabond .party-speed-stat .speed-label {
-  font-family: "Germania", serif;
-  font-size: 1em;
-  line-height: 1.2;
-  color: var(--vagabond-c-chat-yellow);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
 }
 .vagabond .party-speed-stat .speed-unit {
   font-family: "Germania", serif;
@@ -26802,9 +26880,9 @@ details[open] .vagabond .npc-immunity-toggle i {
   border: none;
   box-shadow: none;
   font-family: "Germania", serif;
-  font-size: 1.3em;
+  font-size: 1.4em;
   line-height: 1.1;
-  text-align: right;
+  text-align: left;
   text-shadow: 1px 1px 0 var(--vagabond-c-dark-bluey), -1px 1px 0 var(--vagabond-c-dark-bluey), -1px -1px 0 var(--vagabond-c-dark-bluey), 1px -1px 0 var(--vagabond-c-dark-bluey);
 }
 .vagabond .party-speed-stat input {
@@ -26813,101 +26891,9 @@ details[open] .vagabond .npc-immunity-toggle i {
 .vagabond .party-speed-stat .speed-input.is-auto {
   opacity: 0.75;
 }
-.vagabond .party-travel-row {
-  grid-area: travel;
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 4px 10px;
-  min-width: 0;
-  color: var(--vagabond-c-chat-yellow);
-  text-shadow: var(--vh-outline-2);
-}
-.vagabond .party-travel-row .ptr-leader {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  min-width: 0;
-  font-family: "Germania", serif;
-  white-space: nowrap;
-}
-.vagabond .party-travel-row .ptr-leader .ptr-leader-name {
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.vagabond .party-travel-row .ptr-paces {
-  display: inline-flex;
-  border: 1px solid var(--vagabond-c-chat-yellow);
-  border-radius: 12px;
-  overflow: hidden;
-}
-.vagabond .party-travel-row .ptr-pace {
-  height: auto;
-  min-height: 0;
-  line-height: normal;
-  margin: 0;
-  padding: 1px 9px;
-  background: rgba(0, 0, 0, 0.45);
-  border: none;
-  border-radius: 0;
-  box-shadow: none;
-  color: var(--vagabond-c-chat-yellow);
-  font-family: "Germania", serif;
-  font-size: 0.85em;
-  text-transform: uppercase;
-  text-shadow: none;
-  opacity: 0.55;
-  cursor: pointer;
-}
-.vagabond .party-travel-row .ptr-pace + .ptr-pace {
-  border-left: 1px solid var(--vagabond-c-chat-yellow);
-}
-.vagabond .party-travel-row .ptr-pace:hover {
-  opacity: 0.85;
-}
-.vagabond .party-travel-row .ptr-pace.is-selected {
-  background: var(--vagabond-c-chat-yellow);
-  color: var(--vagabond-c-black);
+.vagabond .party-speed-stat .speed-input.is-modified:not(:focus) {
   opacity: 1;
-}
-.vagabond .party-travel-row .ptr-hazard {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: auto;
-  height: auto;
-  min-height: 0;
-  line-height: normal;
-  margin: 0;
-  padding: 2px 7px;
-  background: rgba(0, 0, 0, 0.45);
-  border: 1px solid var(--vagabond-c-chat-yellow);
-  border-radius: 12px;
-  box-shadow: none;
-  color: var(--vagabond-c-chat-yellow);
-  text-shadow: none;
-  opacity: 0.45;
-  cursor: pointer;
-}
-.vagabond .party-travel-row .ptr-hazard:hover {
-  opacity: 0.8;
-}
-.vagabond .party-travel-row .ptr-hazard.is-on {
-  opacity: 1;
-}
-.vagabond .party-travel-row .ptr-distance {
-  margin-left: auto;
-  font-family: "Germania", serif;
-  font-size: 1.2em;
-  white-space: nowrap;
-}
-.vagabond .party-travel-row .ptr-distance .speed-unit {
-  margin-left: 3px;
-  font-family: "Germania", serif;
-  font-size: 0.65em;
-}
-.vagabond .party-travel-row .ptr-distance:not(.is-modified) {
-  opacity: 0.75;
+  text-shadow: 1px 1px 0 var(--vagabond-c-red), -1px 1px 0 var(--vagabond-c-red), -1px -1px 0 var(--vagabond-c-red), 1px -1px 0 var(--vagabond-c-red);
 }
 .vagabond .party-levelup-btn {
   display: flex;
@@ -26916,7 +26902,6 @@ details[open] .vagabond .npc-immunity-toggle i {
   height: auto;
   line-height: normal;
   flex: none;
-  margin-left: auto;
   padding: 4px 14px;
   background: var(--vagabond-c-chat-yellow);
   color: var(--vagabond-c-black);
@@ -26934,20 +26919,25 @@ details[open] .vagabond .npc-immunity-toggle i {
 .vagabond .party-levelup-btn:hover {
   filter: brightness(1.1);
 }
-.vagabond .party-downtime-box {
-  grid-area: down;
+.vagabond .party-clock-boxes {
+  grid-area: clocks;
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+}
+.vagabond .party-clock-box {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
   gap: 3px;
-  max-width: 200px;
+  width: 130px;
   padding: 4px 8px;
   background: rgba(0, 0, 0, 0.5);
   border: 2px solid var(--vagabond-c-chat-yellow);
   border-radius: 8px;
 }
-.vagabond .party-downtime-box .pdt-clocks {
+.vagabond .party-clock-box .pdt-clocks {
   position: relative;
   flex: 1;
   display: flex;
@@ -26957,7 +26947,7 @@ details[open] .vagabond .npc-immunity-toggle i {
   gap: 2px;
   padding: 0 calc(var(--pdt-size) * 0.22);
 }
-.vagabond .party-downtime-box .pdt-clock {
+.vagabond .party-clock-box .pdt-clock {
   position: relative;
   z-index: 2;
   width: var(--pdt-size);
@@ -26965,7 +26955,7 @@ details[open] .vagabond .npc-immunity-toggle i {
   border: none;
   flex: 0 0 auto;
 }
-.vagabond .party-downtime-box .pdt-handle {
+.vagabond .party-clock-box .pdt-handle {
   position: absolute;
   top: 50%;
   z-index: 1;
@@ -26976,16 +26966,16 @@ details[open] .vagabond .npc-immunity-toggle i {
   cursor: pointer;
   transition: filter 0.15s ease;
 }
-.vagabond .party-downtime-box .pdt-handle:hover {
+.vagabond .party-clock-box .pdt-handle:hover {
   filter: brightness(1.4);
 }
-.vagabond .party-downtime-box .pdt-handle-left {
+.vagabond .party-clock-box .pdt-handle-left {
   left: 0;
 }
-.vagabond .party-downtime-box .pdt-handle-right {
+.vagabond .party-clock-box .pdt-handle-right {
   right: 0;
 }
-.vagabond .party-downtime-box .pdt-count {
+.vagabond .party-clock-box .pdt-count {
   font-family: "Germania", serif;
   font-size: 0.95em;
   color: var(--vagabond-c-chat-yellow);
@@ -26994,7 +26984,36 @@ details[open] .vagabond .npc-immunity-toggle i {
   text-shadow: var(--vh-outline-2);
   white-space: nowrap;
 }
-.vagabond .party-downtime-box .pdt-open {
+.vagabond .party-clock-box .pdt-count.is-over {
+  text-shadow: 1px 1px 0 var(--vagabond-c-red), -1px 1px 0 var(--vagabond-c-red), -1px -1px 0 var(--vagabond-c-red), 1px -1px 0 var(--vagabond-c-red);
+}
+.vagabond .party-clock-box .pdt-count-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.vagabond .party-clock-box .pdt-reset {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  height: auto;
+  min-height: 0;
+  line-height: 1;
+  margin: 0;
+  padding: 0;
+  background: none;
+  border: none;
+  box-shadow: none;
+  color: var(--vagabond-c-chat-yellow);
+  font-size: 0.85em;
+  opacity: 0.7;
+  cursor: pointer;
+}
+.vagabond .party-clock-box .pdt-reset:hover {
+  opacity: 1;
+}
+.vagabond .party-clock-box .pdt-open {
   align-self: stretch;
   height: auto;
   line-height: normal;
@@ -27007,7 +27026,7 @@ details[open] .vagabond .npc-immunity-toggle i {
   text-transform: uppercase;
   cursor: pointer;
 }
-.vagabond .party-downtime-box .pdt-open:hover {
+.vagabond .party-clock-box .pdt-open:hover {
   filter: brightness(1.1);
 }
 .vagabond .party-members-header {

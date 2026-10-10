@@ -18,62 +18,14 @@
       >
     </div>
     <div class="party-info">
-      <input
-        type="text"
-        name="name"
-        value="{{actor.name}}"
-        class="party-name"
-        placeholder="{{localize 'VAGABOND.Actor.Party.NamePlaceholder'}}"
-      >
-      <input
-        type="text"
-        name="system.type"
-        value="{{system.type}}"
-        class="party-type"
-        placeholder="{{localize 'VAGABOND.Actor.Party.TypePlaceholder'}}"
-      >
-      <div class="party-downtime-box">
-        <div class="pdt-clocks" style="--pdt-size: {{shiftClocks.size}}px">
-          {{#if isGM}}
-          <img class="pdt-handle pdt-handle-left" src="systems/vagabond/assets/ui/clocks/clock_left_bt.svg" alt="" data-action="partyShiftsStep" data-step="-1" data-tooltip="{{localize 'VAGABOND.Actor.Party.Controls.ShiftsRemove'}}">
-          {{/if}}
-          {{#each shiftClocks.list}}
-          <img class="pdt-clock" src="{{img}}" alt="" data-tooltip="{{tooltip}}">
-          {{/each}}
-          {{#if isGM}}
-          <img class="pdt-handle pdt-handle-right" src="systems/vagabond/assets/ui/clocks/clock_right_bt.svg" alt="" data-action="partyShiftsStep" data-step="1" data-tooltip="{{localize 'VAGABOND.Actor.Party.Controls.ShiftsAdd'}}">
-          {{/if}}
-        </div>
-        <span class="pdt-count" data-tooltip="{{localize 'VAGABOND.Actor.Party.Controls.ShiftsTooltip'}}">{{localize 'VAGABOND.Actor.Party.Controls.ShiftsCount' n=system.shifts}}</span>
-        <button
-          type="button"
-          class="pdt-open"
-          data-action="partyDowntime"
-          data-tooltip="{{#if isGM}}{{localize 'VAGABOND.Actor.Party.Controls.DowntimeGM'}}{{else}}{{localize 'VAGABOND.Actor.Party.Controls.DowntimeOwn'}}{{/if}}"
-        >{{localize 'VAGABOND.Actor.Party.Controls.Downtime'}}</button>
-      </div>
-      <div class="party-speed-row">
-      <div class="party-speeds">
-        <button type="button" class="party-speed-source" data-action="toggleSpeedSource" data-tooltip="{{speeds.sourceTooltip}}">
-          <i class="fa-solid fa-horse{{#if speeds.fromContainer}} is-on{{/if}}"></i>
-          <i class="fa-solid fa-users{{#unless speeds.fromContainer}} is-on{{/unless}}"></i>
-        </button>
-        <div class="party-speed-stat">
-          <span class="speed-label">{{localize 'VAGABOND.Actor.Character.FIELDS.combat.speed.base.label'}}:</span>
-          <input type="number" name="system.speed" value="{{speeds.speed.value}}" class="speed-input{{#if speeds.speed.auto}} is-auto{{/if}}" min="0"{{#if speeds.speed.auto}} data-tooltip="{{speeds.autoTooltip}}"{{/if}}>
-          <span class="speed-unit">{{localize 'VAGABOND.UI.Units.Feet'}}</span>
-        </div>
-        <div class="party-speed-stat">
-          <span class="speed-label">{{localize 'VAGABOND.Actor.Character.FIELDS.combat.speed.crawl.label'}}:</span>
-          <input type="number" name="system.crawl" value="{{speeds.crawl.value}}" class="speed-input{{#if speeds.crawl.auto}} is-auto{{/if}}" min="0"{{#if speeds.crawl.auto}} data-tooltip="{{speeds.autoTooltip}}"{{/if}}>
-          <span class="speed-unit">{{localize 'VAGABOND.UI.Units.Feet'}}</span>
-        </div>
-        <div class="party-speed-stat">
-          <span class="speed-label">{{localize 'VAGABOND.Actor.Character.FIELDS.combat.speed.travel.label'}}:</span>
-          <input type="number" name="system.travel" value="{{speeds.travel.value}}" class="speed-input{{#if speeds.travel.auto}} is-auto{{/if}}" min="0"{{#if speeds.travel.auto}} data-tooltip="{{speeds.autoTooltip}}"{{/if}}>
-          <span class="speed-unit">{{localize 'VAGABOND.UI.Units.Miles'}}</span>
-        </div>
-      </div>
+      <div class="party-name-row">
+        <input
+          type="text"
+          name="name"
+          value="{{actor.name}}"
+          class="party-name"
+          placeholder="{{localize 'VAGABOND.Actor.Party.NamePlaceholder'}}"
+        >
         {{#if isGM}}
         <button type="button" class="party-levelup-btn" data-action="partyLevelUpAll" data-tooltip="{{localize 'VAGABOND.Actor.Party.Controls.LevelUpAllTooltip'}}">
           <i class="fas fa-angles-up"></i> {{localize 'VAGABOND.Actor.Party.Controls.LevelUpAll'}}
@@ -81,23 +33,113 @@
         {{/if}}
       </div>
 
-      {{! Travel (book Exploration): Navigator · Pace · Hazardous Lands → miles this Shift }}
-      <div class="party-travel-row">
-        <span class="ptr-leader" data-tooltip="{{speeds.trip.leaderTooltip}}">
-          <i class="fa-solid {{#if speeds.fromContainer}}fa-horse{{else}}fa-compass{{/if}}"></i>
-          <span class="ptr-leader-name">{{speeds.trip.leader}}</span>
-        </span>
-        <div class="ptr-paces">
-          {{#each speeds.trip.paces}}
-          <button type="button" class="ptr-pace{{#if active}} is-selected{{/if}}" data-action="setTravelPace" data-pace="{{key}}" data-tooltip="{{tooltip}}">{{label}}</button>
-          {{/each}}
+      {{! Movement grid — row 1: speed source · Speed · Crawl · Travel; row 2 (book Exploration):
+          Navigator · Pace · Hazardous Lands. Every cell = small label over its value / control. }}
+      <div class="party-move">
+        <div class="pm-cell pm-toggle">
+          <span class="pm-label">{{localize 'VAGABOND.Actor.Party.Travel.LabelSource'}}</span>
+          <button type="button" class="party-speed-source" data-action="toggleSpeedSource" data-tooltip="{{speeds.sourceTooltip}}">
+            <i class="fa-solid fa-horse{{#if speeds.fromContainer}} is-on{{/if}}"></i>
+            <i class="fa-solid fa-users{{#unless speeds.fromContainer}} is-on{{/unless}}"></i>
+          </button>
         </div>
-        <button type="button" class="ptr-hazard{{#if speeds.trip.hazardous}} is-on{{/if}}" data-action="toggleHazardous" data-tooltip="{{speeds.trip.hazardTooltip}}">
-          <i class="fa-solid fa-mountain"></i>
-        </button>
-        <span class="ptr-distance{{#if speeds.trip.modified}} is-modified{{/if}}" data-tooltip="{{speeds.trip.distanceTooltip}}">
-          {{speeds.trip.distance}}<span class="speed-unit">{{localize 'VAGABOND.UI.Units.Miles'}} / {{localize 'VAGABOND.Actor.Party.Travel.Shift'}}</span>
-        </span>
+        <div class="pm-cell party-speed-stat">
+          <span class="pm-label">{{localize 'VAGABOND.Actor.Character.FIELDS.combat.speed.base.label'}}</span>
+          <span class="pm-value">
+            <input type="number" name="system.speed" value="{{speeds.speed.value}}" class="speed-input{{#if speeds.speed.auto}} is-auto{{/if}}" min="0"{{#if speeds.speed.auto}} data-tooltip="{{speeds.autoTooltip}}"{{/if}}>
+            <span class="speed-unit">{{localize 'VAGABOND.UI.Units.Feet'}}</span>
+          </span>
+        </div>
+        <div class="pm-cell party-speed-stat">
+          <span class="pm-label">{{localize 'VAGABOND.Actor.Character.FIELDS.combat.speed.crawl.label'}}</span>
+          <span class="pm-value">
+            <input type="number" name="system.crawl" value="{{speeds.crawl.value}}" class="speed-input{{#if speeds.crawl.auto}} is-auto{{/if}}" min="0"{{#if speeds.crawl.auto}} data-tooltip="{{speeds.autoTooltip}}"{{/if}}>
+            <span class="speed-unit">{{localize 'VAGABOND.UI.Units.Feet'}}</span>
+          </span>
+        </div>
+        <div class="pm-cell party-speed-stat">
+          <span class="pm-label">{{localize 'VAGABOND.Actor.Character.FIELDS.combat.speed.travel.label'}}</span>
+          <span class="pm-value">
+            {{! Shows the miles this Shift (Pace / Hazardous Lands applied, red outline when altered); focusing it edits the base Travel Speed }}
+            {{#if speeds.trip.modified}}
+            <input type="number" name="system.travel" value="{{speeds.trip.distance}}" class="speed-input is-modified{{#if speeds.travel.auto}} is-auto{{/if}}" min="0" step="any" data-base="{{speeds.travel.value}}" data-trip="{{speeds.trip.distance}}" data-tooltip="{{speeds.trip.distanceTooltip}}">
+            {{else}}
+            <input type="number" name="system.travel" value="{{speeds.travel.value}}" class="speed-input{{#if speeds.travel.auto}} is-auto{{/if}}" min="0"{{#if speeds.travel.auto}} data-tooltip="{{speeds.autoTooltip}}"{{/if}}>
+            {{/if}}
+            <span class="speed-unit">{{localize 'VAGABOND.UI.Units.Miles'}}</span>
+          </span>
+        </div>
+
+        <div class="pm-row">
+          <div class="pm-cell pm-leader" data-tooltip="{{speeds.trip.leaderTooltip}}">
+            <span class="pm-label">{{localize 'VAGABOND.Actor.Party.Travel.LabelNavigator'}}</span>
+            <span class="pm-value">
+              <i class="fa-solid {{#if speeds.fromContainer}}fa-horse{{else}}fa-compass{{/if}}"></i>
+              <span class="ptr-leader-name">{{speeds.trip.leader}}</span>
+            </span>
+          </div>
+          <div class="pm-cell pm-pace">
+            <span class="pm-label">{{localize 'VAGABOND.Actor.Party.Travel.LabelPace'}}</span>
+            <div class="ptr-paces">
+              {{#each speeds.trip.paces}}
+              <button type="button" class="ptr-pace{{#if active}} is-selected{{/if}}" data-action="setTravelPace" data-pace="{{key}}" data-tooltip="{{tooltip}}">{{label}}</button>
+              {{/each}}
+            </div>
+          </div>
+          <div class="pm-cell pm-toggle">
+            <span class="pm-label">{{localize 'VAGABOND.Actor.Party.Travel.LabelHazard'}}</span>
+            <button type="button" class="ptr-hazard{{#if speeds.trip.hazardous}} is-on{{/if}}" data-action="toggleHazardous" data-tooltip="{{speeds.trip.hazardTooltip}}">
+              <i class="fa-solid fa-mountain"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {{! Travel + Downtime Shift clocks, side by side, full header height }}
+      <div class="party-clock-boxes">
+        <div class="party-clock-box party-travel-box">
+          <div class="pdt-clocks" style="--pdt-size: {{travelClocks.size}}px">
+            {{#if isGM}}
+            <img class="pdt-handle pdt-handle-left" src="systems/vagabond/assets/ui/clocks/clock_left_bt.svg" alt="" data-action="partyTravelStep" data-step="-1" data-tooltip="{{localize 'VAGABOND.Actor.Party.Controls.TravelRemove'}}">
+            {{/if}}
+            {{#each travelClocks.list}}
+            <img class="pdt-clock" src="{{img}}" alt="" data-tooltip="{{tooltip}}">
+            {{/each}}
+            {{#if isGM}}
+            <img class="pdt-handle pdt-handle-right" src="systems/vagabond/assets/ui/clocks/clock_right_bt.svg" alt="" data-action="partyTravelStep" data-step="1" data-tooltip="{{localize 'VAGABOND.Actor.Party.Controls.TravelAdd'}}">
+            {{/if}}
+          </div>
+          <span class="pdt-count-row">
+            <span class="pdt-count{{#if travelClocks.over}} is-over{{/if}}" data-tooltip="{{localize 'VAGABOND.Actor.Party.Controls.TravelTooltip'}}">{{localize 'VAGABOND.Actor.Party.Controls.TravelCount' n=travelClocks.travelled}}</span>
+            {{#if (and isGM travelClocks.travelled)}}
+            <button type="button" class="pdt-reset" data-action="partyTravelReset" data-tooltip="{{localize 'VAGABOND.Actor.Party.Controls.TravelReset'}}"><i class="fa-solid fa-rotate-left"></i></button>
+            {{/if}}
+          </span>
+          {{#if isGM}}
+          <button type="button" class="pdt-open" data-action="partyTravel" data-tooltip="{{localize 'VAGABOND.Actor.Party.Controls.TravelGM'}}">{{localize 'VAGABOND.Actor.Party.Controls.Travel'}}</button>
+          {{/if}}
+        </div>
+
+        <div class="party-clock-box party-downtime-box">
+          <div class="pdt-clocks" style="--pdt-size: {{shiftClocks.size}}px">
+            {{#if isGM}}
+            <img class="pdt-handle pdt-handle-left" src="systems/vagabond/assets/ui/clocks/clock_left_bt.svg" alt="" data-action="partyShiftsStep" data-step="-1" data-tooltip="{{localize 'VAGABOND.Actor.Party.Controls.ShiftsRemove'}}">
+            {{/if}}
+            {{#each shiftClocks.list}}
+            <img class="pdt-clock" src="{{img}}" alt="" data-tooltip="{{tooltip}}">
+            {{/each}}
+            {{#if isGM}}
+            <img class="pdt-handle pdt-handle-right" src="systems/vagabond/assets/ui/clocks/clock_right_bt.svg" alt="" data-action="partyShiftsStep" data-step="1" data-tooltip="{{localize 'VAGABOND.Actor.Party.Controls.ShiftsAdd'}}">
+            {{/if}}
+          </div>
+          <span class="pdt-count" data-tooltip="{{localize 'VAGABOND.Actor.Party.Controls.ShiftsTooltip'}}">{{localize 'VAGABOND.Actor.Party.Controls.ShiftsCount' n=system.shifts}}</span>
+          <button
+            type="button"
+            class="pdt-open"
+            data-action="partyDowntime"
+            data-tooltip="{{#if isGM}}{{localize 'VAGABOND.Actor.Party.Controls.DowntimeGM'}}{{else}}{{localize 'VAGABOND.Actor.Party.Controls.DowntimeOwn'}}{{/if}}"
+          >{{localize 'VAGABOND.Actor.Party.Controls.Downtime'}}</button>
+        </div>
       </div>
     </div>
   </div>
