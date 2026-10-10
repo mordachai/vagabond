@@ -183,8 +183,10 @@
     {{! ─── Stat Increase ─── }}
     {{#if (eq activeTab 'stats')}}
       <section class="lu-tab lu-stats">
-        <h3><i class="fas fa-chart-bar"></i> {{localize "VAGABOND.LevelUp.StatIncrease"}}</h3>
-        <p class="lu-instruction">{{localize "VAGABOND.LevelUp.ChooseStatInstruction" cap=statIncrease.statCap}}</p>
+        <div class="lu-tab-header">
+          <h3><i class="fas fa-chart-bar"></i> {{localize "VAGABOND.LevelUp.StatIncrease"}}</h3>
+          <p class="lu-instruction">{{localize "VAGABOND.LevelUp.ChooseStatInstruction" cap=statIncrease.statCap}}</p>
+        </div>
 
         <div class="lu-stat-grid lu-one-row">
           {{#each statIncrease.stats}}
@@ -195,28 +197,19 @@
                     {{#if isMaxed}}disabled{{/if}}>
               <span class="lu-stat-name">{{label}}</span>
               {{#if isGuidePick}}<span class="lu-badge guide">{{localize "VAGABOND.LevelUp.GuidePick"}}</span>{{/if}}
-              <span class="lu-stat-value">{{current}}</span>
-              {{#if isSelected}}<span class="lu-stat-delta">+1</span>{{/if}}
+              {{#if isSelected}}
+                <span class="lu-stat-change">
+                  <span class="lu-stat-value">{{current}}</span>
+                  <i class="fas fa-arrow-right lu-stat-arrow"></i>
+                  <span class="lu-stat-value lu-stat-to">{{preview}}</span>
+                </span>
+              {{else}}
+                <span class="lu-stat-value">{{current}}</span>
+              {{/if}}
               {{#if isMaxed}}<span class="lu-stat-max">{{localize "VAGABOND.LevelUp.Max"}}</span>{{/if}}
             </button>
           {{/each}}
         </div>
-
-        {{! Training from Reason (raising Reason past a half-RSN threshold) }}
-        {{#if statIncrease.reasonTraining}}
-          <p class="lu-instruction">{{localize "VAGABOND.LevelUp.ReasonTrainingInstruction"}}</p>
-          <div class="lu-stat-grid">
-            {{#each statIncrease.reasonTraining}}
-              <button type="button"
-                      class="lu-stat-card {{#if isSelected}}selected{{/if}}"
-                      data-action="selectReasonTraining"
-                      data-skill="{{key}}">
-                <span class="lu-stat-name">{{label}}</span>
-                {{#if isSelected}}<span class="lu-stat-delta"><i class="fas fa-check"></i></span>{{/if}}
-              </button>
-            {{/each}}
-          </div>
-        {{/if}}
 
         {{! Derived Stats Preview }}
         <div class="lu-derived-stats">
@@ -269,34 +262,32 @@
           </div>
 
           {{! Skills }}
-          <h4>{{localize "VAGABOND.UI.Sections.Skills"}}</h4>
-          <div class="lu-derived-grid lu-grid-4col">
+          {{! Training from Reason (raising Reason past a half-RSN threshold): tick a row }}
+          <h4 class="lu-skills-head {{#if statIncrease.reasonTraining}}lu-picking{{/if}}">
+            <span>{{localize "VAGABOND.UI.Sections.Skills"}}</span>
+            {{#with statIncrease.reasonTraining}}
+              <span class="lu-instruction lu-reason-hint">{{localize "VAGABOND.LevelUp.ReasonTrainingInstruction" from=from to=to tFrom=tFrom tTo=tTo}}</span>
+            {{/with}}
+          </h4>
+          <div class="lu-derived-grid lu-grid-3col">
             {{#each statIncrease.derived.skills}}
-              <div class="lu-derived-item {{#if trained}}lu-trained{{/if}} {{#if changed}}lu-changed{{/if}}">
-                <span class="lu-derived-label">
-                  {{#if trained}}<strong>{{/if}}
-                  {{label}}{{#if statAbbr}} <span class="lu-stat-abbr">[{{statAbbr}}]</span>{{/if}}
-                  {{#if trained}}</strong>{{/if}}
-                </span>
+              <label class="lu-derived-item lu-skill-row {{#if trained}}lu-trained{{/if}} {{#if picked}}lu-picked{{/if}} {{#if pickable}}lu-pickable{{/if}} {{#if changed}}lu-changed{{/if}}">
+                <input type="checkbox" data-action="selectReasonTraining" data-skill="{{key}}" {{checked (or trained picked)}} {{disabled (not pickable)}}>
+                <span class="lu-train-check {{#if (or trained picked)}}trained{{else}}untrained{{/if}}"></span>
+                <span class="lu-derived-label">{{label}}{{#if statAbbr}} <span class="lu-stat-abbr">[{{statAbbr}}]</span>{{/if}}</span>
                 <span class="lu-derived-dots"></span>
                 <span class="lu-derived-value">{{#if changed}}<span class="lu-old-val">{{value}}</span> {{previewValue}}{{else}}{{value}}{{/if}}</span>
-              </div>
+              </label>
             {{/each}}
-          </div>
-
-          {{! Weapon Skills }}
-          <h4>{{localize "VAGABOND.UI.Labels.WeaponSkills"}}</h4>
-          <div class="lu-derived-grid lu-grid-4col">
+            {{! Weapon Skills share the Skills grid }}
             {{#each statIncrease.derived.weaponSkills}}
-              <div class="lu-derived-item {{#if trained}}lu-trained{{/if}} {{#if changed}}lu-changed{{/if}}">
-                <span class="lu-derived-label">
-                  {{#if trained}}<strong>{{/if}}
-                  {{label}}{{#if statAbbr}} <span class="lu-stat-abbr">[{{statAbbr}}]</span>{{/if}}
-                  {{#if trained}}</strong>{{/if}}
-                </span>
+              <label class="lu-derived-item lu-skill-row {{#if trained}}lu-trained{{/if}} {{#if picked}}lu-picked{{/if}} {{#if pickable}}lu-pickable{{/if}} {{#if changed}}lu-changed{{/if}}">
+                <input type="checkbox" data-action="selectReasonTraining" data-skill="{{key}}" {{checked (or trained picked)}} {{disabled (not pickable)}}>
+                <span class="lu-train-check {{#if (or trained picked)}}trained{{else}}untrained{{/if}}"></span>
+                <span class="lu-derived-label">{{label}}{{#if statAbbr}} <span class="lu-stat-abbr">[{{statAbbr}}]</span>{{/if}}</span>
                 <span class="lu-derived-dots"></span>
                 <span class="lu-derived-value">{{#if changed}}<span class="lu-old-val">{{value}}</span> {{previewValue}}{{else}}{{value}}{{/if}}</span>
-              </div>
+              </label>
             {{/each}}
           </div>
         </div>

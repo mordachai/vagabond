@@ -166,9 +166,14 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
    * chosen +1 Reason crosses that threshold (an even Reason total becoming odd).
    */
   get gainsReasonTraining() {
-    if (this.selectedStat !== 'reason') return false;
-    const total = this.actor.system.stats?.reason?.total ?? 0;
-    return Math.ceil((total + 1) / 2) > Math.ceil(total / 2);
+    const { tFrom, tTo } = this.reasonTrainingInfo;
+    return this.selectedStat === 'reason' && tTo > tFrom;
+  }
+
+  /** "Reason 6 → 7: Trainings 3 → 4" values for the hint and the To Do tip */
+  get reasonTrainingInfo() {
+    const from = this.actor.system.stats?.reason?.total ?? 0;
+    return { from, to: from + 1, tFrom: Math.ceil(from / 2), tTo: Math.ceil((from + 1) / 2) };
   }
 
   /**
@@ -597,7 +602,7 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
         const skill = sys.skills?.[this.reasonTrainingSkill]?.label ?? this.reasonTrainingSkill;
         row('done', L('TrainingDone', { skill }));
       } else {
-        pending('stats', L('PlusTraining'), L('ReasonTrainingInstruction'), L('MustTraining'));
+        pending('stats', L('PlusTraining'), L('ReasonTrainingInstruction', this.reasonTrainingInfo), L('MustTraining'));
       }
     }
 
@@ -770,12 +775,17 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
 
     // Skills: split into regular and weapon groups
     // difficulty = base - (trained ? stat*2 : stat) - bonus  (base configured in homebrew dice tab)
+    // Training from Reason is ticked straight on these rows (one untrained Skill)
+    const canPickTraining = this.gainsReasonTraining;
     const _mapSkill = ([key, skill]) => {
       let previewValue = skill.difficulty;
       if (selected && skill.stat === selected) {
         const multiplier = skill.trained ? 2 : 1;
         previewValue = skill.difficulty - multiplier; // -1 difficulty for each +1 stat
       }
+      const picked = canPickTraining && !skill.trained && this.reasonTrainingSkill === key;
+      // Trained counts the Stat twice: the new Training subtracts the (previewed) Stat once more
+      if (picked) previewValue -= previewTotals[skill.stat] ?? 0;
       return {
         key,
         label: skill.label || key,
@@ -783,6 +793,8 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
         value: skill.difficulty,
         previewValue,
         trained: skill.trained,
+        picked,
+        pickable: canPickTraining && !skill.trained,
         changed: previewValue !== skill.difficulty,
       };
     };
@@ -854,14 +866,8 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
         skills,
         weaponSkills,
       },
-      // Training from Reason: pick one untrained Skill
-      reasonTraining: this.gainsReasonTraining
-        ? allSkillEntries.filter(([, s]) => !s.trained).map(([key, s]) => ({
-          key,
-          label: s.label || key,
-          isSelected: this.reasonTrainingSkill === key,
-        }))
-        : null,
+      // Training from Reason: hint above the Skills list, picked on the rows
+      reasonTraining: canPickTraining ? this.reasonTrainingInfo : null,
     };
   }
 
@@ -1519,7 +1525,8 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
    * were never applied. Resolves true when closing may go ahead.
    */
   async _confirmClose() {
-    const L = (key, data) => game.i18n.format(`VAGABOND.LevelUp.${key}`, data ?? {});
+    if (this._choicesApplied) return true;
+    const L =(key, data) => game.i18n.format(`VAGABOND.LevelUp.${key}`, data ?? {});
     const { DialogV2 } = foundry.applications.api;
 
     const ticked = this.questions.filter(Boolean).length;
@@ -1531,7 +1538,8 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
         content: `<p>${L('CloseXPBody', { n: ticked })}</p>`,
         buttons: [
           { action: 'award', label: L('AwardAndClose', { xp }), icon: 'fas fa-star', default: true },
-          { action: 'close', label: L('CloseWithoutXP'), icon: 'fas fa-xmark' },
+          // Not 'close': that is ApplicationV2's built-in dismiss action (resolves null)
+          { action: 'discard', label: L('CloseWithoutXP'), icon: 'fas fa-xmark' },
           { action: 'stay', label: L('KeepEditing'), icon: 'fas fa-pen' },
         ],
         rejectClose: false,
@@ -1540,20 +1548,56 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
         await LevelUpDialog._onAwardXP.call(this);
         return true;
       }
-      return choice === 'close';
+      return choice === 'discard';
     }
 
-    if (this.levelApplied && !this._isChecklistComplete()) {
-      const ok = await DialogV2.confirm({
+    // A gained Level only sticks once its choices are applied: closing before Apply undoes it
+    if (this.levelApplied) {
+      if (this._applyingChoices) return false;
+      const canApply = this._isChecklistComplete();
+      const buttons = [
+        ...(canApply ? [{ action: 'apply', label: L('ApplyAndClose'), icon: 'fas fa-check', default: true }] : []),
+        { action: 'undo', label: L('UndoLevelAndClose'), icon: 'fas fa-rotate-left' },
+        { action: 'stay', label: L('KeepEditing'), icon: 'fas fa-pen', default: !canApply },
+      ];
+      const choice = await DialogV2.wait({
         window: { title: L('ClosePendingTitle'), icon: 'fas fa-triangle-exclamation' },
         content: `<p>${L('ClosePendingBody', { level: this.newLevel })}</p>`,
-        yes: { label: L('CloseAnyway') },
-        no: { label: L('KeepEditing'), default: true },
+        buttons,
         rejectClose: false,
       });
-      return !!ok;
+      if (choice === 'apply') {
+        this._applyingChoices = true;
+        try {
+          this._choicesApplied = await LevelUpDialog._applyChoices.call(this);
+        } finally {
+          this._applyingChoices = false;
+        }
+        return this._choicesApplied;
+      }
+      if (choice === 'undo') {
+        await this._undoLevel();
+        return true;
+      }
+      return false;
     }
     return true;
+  }
+
+  /** Roll back _gainLevel (Level, XP, and the Class item a Level-0 hero received). */
+  async _undoLevel() {
+    const snap = this._levelSnapshot;
+    if (!snap) return;
+    if (snap.classItemId && this.actor.items.has(snap.classItemId)) {
+      await this.actor.deleteEmbeddedDocuments('Item', [snap.classItemId]);
+    }
+    await this.actor.update({
+      'system.attributes.level.value': snap.level,
+      'system.attributes.xp': snap.xp,
+    });
+    this.levelApplied = false;
+    this._levelSnapshot = null;
+    ui.notifications.info(game.i18n.format('VAGABOND.LevelUp.LevelUndone', { name: this.actor.name, level: snap.level }));
   }
 
   static _onToggleQuestion(event, target) {
@@ -1607,7 +1651,18 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
    * @param {{destiny?: boolean}} [options]
    */
   async _gainLevel({ destiny = false } = {}) {
-    if (this.levelApplied) return;
+    // Lock before the first await: levelApplied only flips after actor.update, so a double
+    // click would otherwise gain two Levels
+    if (this.levelApplied || this._gainingLevel) return;
+    this._gainingLevel = true;
+    try {
+      await this._doGainLevel({ destiny });
+    } finally {
+      this._gainingLevel = false;
+    }
+  }
+
+  async _doGainLevel({ destiny }) {
 
     const currentLevel = this.actor.system.attributes.level.value;
     const newLevel = currentLevel + 1;
@@ -1619,6 +1674,7 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
       return;
     }
 
+    let classDoc = null;
     if (this.needsClass) {
       if (!this.selectedClassUuid) {
         ui.notifications.warn(game.i18n.localize('VAGABOND.LevelUp.ChooseClassFirst'));
@@ -1626,14 +1682,25 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
         this.render();
         return;
       }
-      const classDoc = await fromUuid(this.selectedClassUuid);
+      classDoc = await fromUuid(this.selectedClassUuid);
       if (!classDoc || classDoc.type !== 'class') {
         ui.notifications.error('Class not found.');
         return;
       }
+    }
+
+    // Snapshot for _undoLevel: closing without Apply rolls the Level Up back
+    this._levelSnapshot = {
+      level: currentLevel,
+      xp: this.actor.system.attributes.xp || 0,
+      classItemId: null,
+    };
+
+    if (classDoc) {
       const classData = classDoc.toObject();
       foundry.utils.setProperty(classData, 'flags.core.sourceId', this.selectedClassUuid);
-      await this.actor.createEmbeddedDocuments('Item', [classData]);
+      const [created] = await this.actor.createEmbeddedDocuments('Item', [classData]);
+      this._levelSnapshot.classItemId = created?.id ?? null;
     }
 
     const update = { 'system.attributes.level.value': newLevel };
@@ -1666,7 +1733,7 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
 
   static _onSelectReasonTraining(event, target) {
     const skill = target.dataset.skill;
-    if (!skill || !this.gainsReasonTraining) return;
+    if (!skill || !this.gainsReasonTraining || this.actor.system.skills?.[skill]?.trained) return;
     this.reasonTrainingSkill = this.reasonTrainingSkill === skill ? null : skill;
     this.render();
   }
@@ -1829,14 +1896,30 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
   // ─── Apply Level Up (Final) ───────────────────────────────
 
   static async _onApplyLevelUp(event, target) {
+    // Once only: a second click while the first Apply is still awaiting would re-read the
+    // raised Stat and add +1 again (plus a duplicate Perk / Spells / chat card)
+    if (this._choicesApplied || this._applyingChoices) return;
+    this._applyingChoices = true;
+    if (target) target.disabled = true;
+    try {
+      if (await LevelUpDialog._applyChoices.call(this)) this._choicesApplied = true;
+    } finally {
+      this._applyingChoices = false;
+      if (target && !this._choicesApplied) target.disabled = false;
+    }
+    if (this._choicesApplied) this.close();
+  }
+
+  /** @returns {Promise<boolean>} true when the choices were written to the actor */
+  static async _applyChoices() {
     if (!this.levelApplied) {
       ui.notifications.warn('You must level up first (use the XP tab).');
-      return;
+      return false;
     }
 
     if (!this._isChecklistComplete()) {
       ui.notifications.warn('Complete all items in the To Do list before applying.');
-      return;
+      return false;
     }
 
     // Store previous values for chat card
@@ -1946,8 +2029,8 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
     // 5. Build and send chat card
     await this._sendLevelUpChatCard(previousMaxHP, previousMaxMana, previousCastingMax);
 
-    // 6. Close dialog
-    this.close();
+    // 6. Caller closes the dialog
+    return true;
   }
 
   async _sendLevelUpChatCard(previousMaxHP, previousMaxMana, previousCastingMax) {

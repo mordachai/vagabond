@@ -11200,12 +11200,17 @@ ol#combat-tracker.directory-list {
   color: var(--vagabond-c-text-secondary);
   line-height: 1;
 }
-.level-up-dialog .lu-stat-card .lu-stat-delta {
-  position: absolute;
-  top: 4px;
-  right: 6px;
-  font-size: 0.85rem;
-  font-weight: 700;
+.level-up-dialog .lu-stat-card .lu-stat-change {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+  line-height: 1;
+}
+.level-up-dialog .lu-stat-card .lu-stat-arrow {
+  font-size: 0.75rem;
+  color: var(--vagabond-c-green);
+}
+.level-up-dialog .lu-stat-card .lu-stat-to {
   color: var(--vagabond-c-green);
 }
 .level-up-dialog .lu-stat-card .lu-stat-max {
@@ -11231,7 +11236,7 @@ ol#combat-tracker.directory-list {
 .level-up-dialog .lu-derived-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 2px 12px;
+  gap: 10px 12px;
 }
 .level-up-dialog .lu-derived-grid.lu-grid-2col {
   grid-template-columns: 1fr 1fr;
@@ -11246,24 +11251,75 @@ ol#combat-tracker.directory-list {
   padding: 4px 12px;
 }
 .level-up-dialog .lu-derived-item {
+  font-family: "Eskapade", serif;
   display: flex;
   align-items: baseline;
   gap: 4px;
   padding: 1px 0;
 }
-.level-up-dialog .lu-derived-item.lu-trained .lu-derived-label strong {
-  color: var(--vagabond-c-text-secondary);
-}
 .level-up-dialog .lu-derived-item.lu-changed .lu-derived-value {
+  color: var(--vagabond-c-green);
+}
+.level-up-dialog .lu-derived-stats h4.lu-skills-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+.level-up-dialog .lu-derived-stats h4.lu-skills-head .lu-reason-hint {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: var(--vagabond-c-green);
+  text-align: right;
+}
+.level-up-dialog .lu-skill-row {
+  position: relative;
+  align-items: center;
+  border-radius: 3px;
+}
+.level-up-dialog .lu-skill-row input[type=checkbox] {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.level-up-dialog .lu-skill-row .lu-train-check {
+  flex: 0 0 16px;
+  width: 16px;
+  height: 16px;
+  background-color: var(--vagabond-c-text-primary);
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+}
+.level-up-dialog .lu-skill-row .lu-train-check.trained {
+  mask-image: var(--vagabond-img-trained);
+}
+.level-up-dialog .lu-skill-row .lu-train-check.untrained {
+  mask-image: var(--vagabond-img-untrained);
+}
+.level-up-dialog .lu-skill-row.lu-pickable {
+  cursor: pointer;
+}
+.level-up-dialog .lu-skill-row.lu-pickable .lu-train-check {
+  background-color: var(--vagabond-c-text-secondary);
+}
+.level-up-dialog .lu-skill-row.lu-pickable:hover {
+  background: rgba(148, 145, 60, 0.15);
+}
+.level-up-dialog .lu-skill-row:has(input:focus-visible) {
+  outline: 2px solid var(--vagabond-c-chat-yellow);
+}
+.level-up-dialog .lu-skill-row.lu-picked .lu-derived-label {
   color: var(--vagabond-c-green);
 }
 .level-up-dialog .lu-derived-label {
   flex: 0 0 auto;
-  font-size: 0.9rem;
+  font-size: 1.1rem;
   color: var(--vagabond-c-text-primary);
 }
 .level-up-dialog .lu-stat-abbr {
-  font-size: 0.65rem;
+  font-size: 0.8rem;
   color: var(--vagabond-c-muted);
 }
 .level-up-dialog .lu-derived-dots {
@@ -11274,8 +11330,8 @@ ol#combat-tracker.directory-list {
 }
 .level-up-dialog .lu-derived-value {
   flex: 0 0 auto;
-  font-weight: 700;
-  font-size: 0.8rem;
+  font-weight: 400;
+  font-size: 1.1rem;
   color: var(--vagabond-c-text-secondary);
   min-width: 18px;
   text-align: right;
@@ -11283,7 +11339,7 @@ ol#combat-tracker.directory-list {
 .level-up-dialog .lu-old-val {
   color: var(--vagabond-c-muted);
   text-decoration: line-through;
-  font-size: 0.7rem;
+  font-size: 0.9rem;
   margin-right: 2px;
 }
 .level-up-dialog .lu-owned-notice {
@@ -11296,6 +11352,25 @@ ol#combat-tracker.directory-list {
 }
 .level-up-dialog .lu-owned-notice i {
   margin-right: 4px;
+}
+.level-up-dialog .lu-tab .lu-tab-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid var(--vagabond-c-tan-lite);
+  padding-bottom: 6px;
+}
+.level-up-dialog .lu-tab .lu-tab-header h3 {
+  margin: 0;
+  border: none;
+  padding: 0;
+  flex: 0 0 auto;
+}
+.level-up-dialog .lu-tab .lu-tab-header .lu-instruction {
+  margin: 0;
+  text-align: right;
 }
 .level-up-dialog .lu-perks-header {
   display: flex;

@@ -490,14 +490,23 @@
       line-height: 1;
     }
 
-    .lu-stat-delta {
-      position: absolute;
-      top: 4px;
-      right: 6px;
-      font-size: 0.85rem;
-      font-weight: 700;
+    // Selected: "current → new"
+    .lu-stat-change {
+      display: flex;
+      align-items: baseline;
+      gap: 5px;
+      line-height: 1;
+    }
+
+    .lu-stat-arrow {
+      font-size: 0.75rem;
       color: $c-green;
     }
+
+    .lu-stat-to {
+      color: $c-green;
+    }
+
 
     .lu-stat-max {
       position: absolute;
@@ -528,7 +537,7 @@
   .lu-derived-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 2px 12px;
+    gap: 10px 12px;
 
     &.lu-grid-2col {
       grid-template-columns: 1fr 1fr;
@@ -547,16 +556,11 @@
   }
 
   .lu-derived-item {
+    font-family: $font-primary;
     display: flex;
     align-items: baseline;
     gap: 4px;
     padding: 1px 0;
-
-    &.lu-trained {
-      .lu-derived-label strong {
-        color: $c-text-2;
-      }
-    }
 
     &.lu-changed {
       .lu-derived-value {
@@ -565,14 +569,71 @@
     }
   }
 
+  // Skills heading: title + Training-from-Reason hint on one row
+  .lu-derived-stats h4.lu-skills-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+
+    .lu-reason-hint {
+      margin: 0;
+      font-size: 0.9rem;
+      font-weight: 400;
+      color: $c-green;
+      text-align: right;
+    }
+  }
+
+  // Skill rows: Training diamond (char builder look); untrained rows tickable while
+  // the +1 Reason earns a Training
+  .lu-skill-row {
+    position: relative;
+    align-items: center;
+    border-radius: 3px;
+
+    input[type="checkbox"] {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    // SVG used as a mask so the colour follows state: text colour when locked,
+    // yellow only on rows that can take the Training
+    .lu-train-check {
+      flex: 0 0 16px;
+      width: 16px;
+      height: 16px;
+      background-color: $c-text-1;
+      mask-size: contain;
+      mask-repeat: no-repeat;
+      mask-position: center;
+
+      &.trained { mask-image: $img-trained; }
+      &.untrained { mask-image: $img-untrained; }
+    }
+
+    &.lu-pickable {
+      cursor: pointer;
+
+      .lu-train-check { background-color: $c-text-2; }
+
+      &:hover { background: rgba(148, 145, 60, 0.15); }
+    }
+
+    &:has(input:focus-visible) { outline: 2px solid $c-yellow; }
+
+    &.lu-picked .lu-derived-label { color: $c-green; }
+  }
+
   .lu-derived-label {
     flex: 0 0 auto;
-    font-size: 0.90rem;
+    font-size: 1.1rem;
     color: $c-text-1;
   }
 
   .lu-stat-abbr {
-    font-size: 0.65rem;
+    font-size: 0.8rem;
     color: $c-muted;
   }
 
@@ -585,8 +646,8 @@
 
   .lu-derived-value {
     flex: 0 0 auto;
-    font-weight: 700;
-    font-size: 0.8rem;
+    font-weight: 400;
+    font-size: 1.1rem;
     color: $c-text-2;
     min-width: 18px;
     text-align: right;
@@ -595,7 +656,7 @@
   .lu-old-val {
     color: $c-muted;
     text-decoration: line-through;
-    font-size: 0.7rem;
+    font-size: 0.9rem;
     margin-right: 2px;
   }
 
@@ -608,6 +669,30 @@
     margin-top: 8px;
 
     i { margin-right: 4px; }
+  }
+
+  // ─── Tab header: title + hint on one row ───
+
+  .lu-tab .lu-tab-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid $c-tan-lite;
+    padding-bottom: 6px;
+
+    h3 {
+      margin: 0;
+      border: none;
+      padding: 0;
+      flex: 0 0 auto;
+    }
+
+    .lu-instruction {
+      margin: 0;
+      text-align: right;
+    }
   }
 
   // ─── Perks Header ──────────────────────────

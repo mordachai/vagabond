@@ -1,6 +1,13 @@
 # Changelog
 
 ## Unreleased
+- **Level Up: undo on close.** A gained Level is only kept once you Apply your choices. Closing the window before that asks you to **Apply and close**, **Undo Level Up and close** (restores your Level, your XP and, for a Level 0 hero, removes the new Class) or keep editing.
+- **Level Up: clearer Stat increase.** The picked Stat shows its current and new value (e.g. `6 → 7`).
+- **Level Up: Training from Reason picked in the Skills list.** When raising Reason earns a Training, tick an untrained Skill right in the Skills list (same checkboxes as the Character Builder). The hint shows the numbers (e.g. "Reason 6 → 7: Trainings 3 → 4") and the preview includes the new Training. Weapon Skills are listed with the other Skills, in three columns with bigger text.
+- Fix: clicking Apply (or Level Up) twice in a row could apply the Stat increase, Perk and Spells twice, or gain two Levels.
+- Fix: "Close without XP" in the Level Up window did nothing.
+
+## v6.3.0
 - **Character Builder: Build Guides.** After choosing an Ancestry, pick **Use a Build Guide** or **Build from Scratch**; you can go back and switch at any time. Guides are the book's 40 ready-made Level 1 builds, shown as flip cards: the front has Stats, HP, Armor, Mana and Cast Max, Weapons, Armor & Trinkets, Spells, Level 1 Perks, Starting Pack and coins; the back has Perks by Level, Stats at Level 10, Spells to learn later and Training. Click any Weapon, Armor, Spell, Perk or Starting Pack for its details. Search and filter by Class; click a picked card again to drop it.
 - A Build Guide fills in Class, Stats, Training, Perks, Spells and gear. Only your Ancestry's own choices (and anything the guide leaves open) are left as steps before Finish. **Customize in the Builder** opens the full builder with the guide's picks, so you can change anything.
 - GMs can hide Build Guides from players (eye button on each card).
