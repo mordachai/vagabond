@@ -1612,7 +1612,9 @@ export default class VagabondCharacter extends VagabondActorBase {
     const level = this.attributes.level.value || 1;
 
     // Luck Pool — driven by configurable stat; 'none' disables the pool entirely.
-    // system.bonusLuck (AE-driven, e.g. a Perk) adds to the pool max WITHOUT touching the Luck stat.
+    // system.bonusLuck (AE-driven, e.g. a Perk) adds to the pool WITHOUT touching the Luck stat.
+    // RAW: maxLuck is only the value the pool resets to on Rest — NOT a cap. Gains (Crit, Knack,
+    // Virtuoso, manual +1) may push currentLuck above it.
     const luckStatKey = CONFIG.VAGABOND?.homebrew?.derivations?.luckStat ?? 'luck';
     const hasLuckPool = luckStatKey && luckStatKey !== 'none';
     this.hasLuckPool = hasLuckPool;
@@ -1621,9 +1623,6 @@ export default class VagabondCharacter extends VagabondActorBase {
       : 0;
 
     if (this.currentLuck === undefined || this.currentLuck === null) {
-      this.currentLuck = this.maxLuck;
-    }
-    if (this.currentLuck > this.maxLuck) {
       this.currentLuck = this.maxLuck;
     }
 

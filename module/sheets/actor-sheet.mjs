@@ -1529,22 +1529,18 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
   static async _onSpendLuck(event, target) {
     event.preventDefault();
     const currentLuck = this.actor.system.currentLuck || 0;
-    // Use maxLuck which equals luck stat total (includes bonuses)
-    const maxLuck = this.actor.system.maxLuck || 0;
 
     if (event.shiftKey) {
-      // Shift+Click: Add +1 luck (capped at max)
-      if (currentLuck < maxLuck) {
-        const newLuck = currentLuck + 1;
-        await this.actor.update({ 'system.currentLuck': newLuck });
-        await VagabondChatCard.luckGain(this.actor, newLuck, maxLuck);
-      }
+      // Shift+Click: Add +1 luck (no cap — the Luck Stat is only the Rest reset value)
+      const newLuck = currentLuck + 1;
+      await this.actor.update({ 'system.currentLuck': newLuck });
+      await VagabondChatCard.luckGain(this.actor, newLuck);
     } else {
       // Regular Click: Spend (decrement)
       if (currentLuck > 0) {
         const newLuck = currentLuck - 1;
         await this.actor.update({ 'system.currentLuck': newLuck });
-        await VagabondChatCard.luckSpend(this.actor, newLuck, maxLuck);
+        await VagabondChatCard.luckSpend(this.actor, newLuck);
       }
     }
   }

@@ -224,13 +224,11 @@ export class BardHelper {
     const bard = await fromUuid(eff.flags.vagabond.virtuoso.source);
     if (!bard) return;
     const current = bard.system.currentLuck ?? 0;
-    const max = bard.system.maxLuck ?? 0;
-    if (current >= max) return;
     const next = current + 1;
     if (bard.isOwner) await bard.update({ 'system.currentLuck': next });
     else emitSocket('grantLuck', { actorUuid: bard.uuid, amount: 1 });
     const { VagabondChatCard } = await import('./chat-card.mjs');
-    await VagabondChatCard.luckGain(bard, next, max, game.i18n.localize('VAGABOND.Virtuoso.Overtuned'));
+    await VagabondChatCard.luckGain(bard, next, game.i18n.localize('VAGABOND.Virtuoso.Overtuned'));
   }
 
   /* -------------------------------------------- */

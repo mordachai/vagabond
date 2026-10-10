@@ -109,9 +109,8 @@ export class RogueHelper {
   }
 
   static async #knack(actor, bonus) {
-    const max = actor.system.maxLuck ?? 0;
     const cur = actor.system.currentLuck ?? 0;
-    const next = Math.min(max, cur + bonus);
+    const next = cur + bonus;
     if (next <= cur) return;
     await actor.update({ 'system.currentLuck': next });
     const { VagabondChatCard } = await import('./chat-card.mjs');

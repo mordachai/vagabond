@@ -711,9 +711,9 @@ Hooks.once('ready', function () {
   registerSocketAction('grantLuck', async ({ actorUuid, amount }) => {
     const actor = await fromUuid(actorUuid);
     if (!actor) return;
+    // Luck Pool has no cap (maxLuck = Rest reset value only).
     const currentLuck = actor.system.currentLuck ?? 0;
-    const maxLuck = actor.system.maxLuck ?? 0;
-    const newLuck = Math.min(maxLuck, currentLuck + amount);
+    const newLuck = Math.max(0, currentLuck + amount);
     await actor.update({ 'system.currentLuck': newLuck });
   });
 
@@ -2108,16 +2108,15 @@ const FLUKE_REROLL_ENTRY = {
     if (!actor || !actor.isOwner) return false;
     // Dynamically update label and classes based on current luck
     const currentLuck = actor.system.currentLuck || 0;
-    const maxLuck = actor.system.maxLuck || 0;
     const flukeLabel = game.i18n.localize('VAGABOND.UI.Chat.FlukeReroll');
     const lt = CONFIG.VAGABOND.homebrew?.terms?.luckTerm || 'Luck';
     const pt = CONFIG.VAGABOND.homebrew?.terms?.poolTerm || 'Pool';
     const luckLabel = `${lt} ${pt}`;
     if (currentLuck > 0) {
-      FLUKE_REROLL_ENTRY.label = `${flukeLabel} (${luckLabel}: ${currentLuck}/${maxLuck})`;
+      FLUKE_REROLL_ENTRY.label = `${flukeLabel} (${luckLabel}: ${currentLuck})`;
       FLUKE_REROLL_ENTRY.classes = '';
     } else {
-      FLUKE_REROLL_ENTRY.label = `${flukeLabel} (${luckLabel}: 0/${maxLuck})`;
+      FLUKE_REROLL_ENTRY.label = `${flukeLabel} (${luckLabel}: 0)`;
       FLUKE_REROLL_ENTRY.classes = 'vagabond-disabled';
     }
     return true;
@@ -2139,7 +2138,6 @@ const FLUKE_REROLL_ENTRY = {
       return;
     }
     const luckTerm = CONFIG.VAGABOND.homebrew?.terms?.luckTerm || 'Luck';
-    const maxLuck = actor.system.maxLuck || 0;
     const newLuck = currentLuck - 1;
     await actor.update({ 'system.currentLuck': newLuck });
 
@@ -2150,7 +2148,7 @@ const FLUKE_REROLL_ENTRY = {
       .setTitle('Fluke!')
       .setSubtitle(actor.name)
       .setDescription(`<p><i class="fas fa-clover"></i> <strong>${actor.name}</strong> spends a ${luckTerm} point to reroll.</p>`);
-    notifCard.data.metadata = [{ label: `Remaining ${luckTerm}`, value: `${newLuck} / ${maxLuck}` }];
+    notifCard.data.metadata = [{ label: `Remaining ${luckTerm}`, value: `${newLuck}` }];
     await notifCard.send();
 
     // Detect favor/hinder from the stored formula

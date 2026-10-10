@@ -447,13 +447,12 @@ export class CombatCarousel extends api.HandlebarsApplicationMixin(api.Applicati
     const actor = this._actorForBackStat(el);
     if (!actor || !(game.user.isGM || actor.isOwner)) return;
     const currentLuck = actor.system.currentLuck ?? 0;
-    const maxLuck = actor.system.maxLuck ?? 0;
-    const val = Math.clamp(currentLuck + delta, 0, maxLuck);
+    const val = Math.max(0, currentLuck + delta);  // no cap — the Luck Stat is only the Rest reset value
     if (val === currentLuck) return;
     await actor.update({ 'system.currentLuck': val });
     // Same chat feedback as the actor sheet's luck pool click (_onSpendLuck).
-    if (delta > 0) await VagabondChatCard.luckGain(actor, val, maxLuck);
-    else await VagabondChatCard.luckSpend(actor, val, maxLuck);
+    if (delta > 0) await VagabondChatCard.luckGain(actor, val);
+    else await VagabondChatCard.luckSpend(actor, val);
   }
 
   /* -------------------------------------------- */

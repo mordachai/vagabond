@@ -98,7 +98,7 @@ export class DowntimeApp extends api.HandlebarsApplicationMixin(api.ApplicationV
     const currentMana = this.#actor.system.mana.current;
     const maxMana = this.#actor.system.mana.max;
     const currentLuck = this.#actor.system.currentLuck;
-    const maxLuck = this.#actor.system.maxLuck || 8;
+    const maxLuck = this.#actor.system.maxLuck ?? 0;  // Rest resets the pool to the Luck Stat
     const currentFatigue = this.#actor.system.fatigue || 0;
 
     const updates = {

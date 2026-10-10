@@ -265,7 +265,6 @@ export class VagabondPartySheet extends VagabondActorSheet {
       },
       luck: {
         current: sys.currentLuck ?? 0,
-        total: sys.maxLuck ?? 0,
       },
       studiedDice: sys.studiedDice ?? 0,
       // One entry per configured homebrew save, in config order (icons via saveIcons)

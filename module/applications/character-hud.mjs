@@ -375,7 +375,7 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
     context.checkBonus = sys.universalCheckBonus ?? 0;
 
     context.hasLuckPool = !!sys.hasLuckPool;
-    context.luck = { value: sys.currentLuck ?? 0, max: sys.maxLuck ?? 0 };
+    context.luck = { value: sys.currentLuck ?? 0 };
 
     context.hasMana = (sys.mana?.max ?? 0) > 0;
     context.mana = {

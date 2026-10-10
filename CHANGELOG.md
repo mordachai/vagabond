@@ -4,6 +4,8 @@
 - **Level Up: undo on close.** A gained Level is only kept once you Apply your choices. Closing the window before that asks you to **Apply and close**, **Undo Level Up and close** (restores your Level, your XP and, for a Level 0 hero, removes the new Class) or keep editing.
 - **Level Up: clearer Stat increase.** The picked Stat shows its current and new value (e.g. `6 → 7`).
 - **Level Up: Training from Reason picked in the Skills list.** When raising Reason earns a Training, tick an untrained Skill right in the Skills list (same checkboxes as the Character Builder). The hint shows the numbers (e.g. "Reason 6 → 7: Trainings 3 → 4") and the preview includes the new Training. Weapon Skills are listed with the other Skills, in three columns with bigger text.
+- **Luck Pool has no cap.** Your Luck Stat is only the value the pool resets to when you Rest; Luck gained from Crits, Knack, Virtuoso or Shift+Click can go above it. Luck now shows as a single number (no more "3 / 5") in chat cards, the Fluke menu and the party sheet.
+- Fix: resting (Downtime) reset the Luck Pool to 8 when the Luck Stat total was 0; it now resets to the Luck Stat.
 - Fix: clicking Apply (or Level Up) twice in a row could apply the Stat increase, Perk and Spells twice, or gain two Levels.
 - Fix: "Close without XP" in the Level Up window did nothing.
 

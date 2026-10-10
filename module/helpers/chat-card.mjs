@@ -1756,10 +1756,9 @@ export class VagabondChatCard {
    * Create a chat card for spending luck
    * @param {VagabondActor} actor - The actor spending luck
    * @param {number} newLuck - New luck value after spending
-   * @param {number} maxLuck - Maximum luck value
    * @returns {Promise<ChatMessage>}
    */
-  static async luckSpend(actor, newLuck, maxLuck) {
+  static async luckSpend(actor, newLuck) {
     const luckTerm = CONFIG.VAGABOND.homebrew?.terms?.luckTerm || 'Luck';
     const poolTerm = CONFIG.VAGABOND.homebrew?.terms?.poolTerm || 'Pool';
     const card = new VagabondChatCard()
@@ -1775,7 +1774,7 @@ export class VagabondChatCard {
 
     card.data.metadata = [{
       label: `Remaining ${luckTerm}`,
-      value: `${newLuck} / ${maxLuck}`
+      value: `${newLuck}`
     }];
 
     card.addFooterAction(`
@@ -1797,10 +1796,10 @@ export class VagabondChatCard {
   /**
    * Create a chat card for recharging luck
    * @param {VagabondActor} actor - The actor recharging luck
-   * @param {number} maxLuck - Maximum luck value
+   * @param {number} newLuck - Pool value after the recharge (the Luck Stat)
    * @returns {Promise<ChatMessage>}
    */
-  static async luckRecharge(actor, maxLuck) {
+  static async luckRecharge(actor, newLuck) {
     const luckTerm = CONFIG.VAGABOND.homebrew?.terms?.luckTerm || 'Luck';
     const poolTerm = CONFIG.VAGABOND.homebrew?.terms?.poolTerm || 'Pool';
     const card = new VagabondChatCard()
@@ -1810,7 +1809,7 @@ export class VagabondChatCard {
       .setSubtitle(actor.name)
       .setDescription(`
         <p><i class="fas fa-clover"></i> <strong>${actor.name}</strong> recharges their ${luckTerm}.</p>
-        <p><strong>${luckTerm} ${poolTerm}:</strong> ${maxLuck} / ${maxLuck}</p>
+        <p><strong>${luckTerm} ${poolTerm}:</strong> ${newLuck}</p>
       `);
 
     return await card.send();
@@ -1820,11 +1819,12 @@ export class VagabondChatCard {
    * Create a chat card for gaining luck
    * @param {VagabondActor} actor - The actor gaining luck
    * @param {number} newLuck - New luck value after gain
-   * @param {number} maxLuck - Maximum luck value
    * @param {string} [reason] - Optional reason (e.g. 'Critical Hit')
    * @returns {Promise<ChatMessage>}
    */
-  static async luckGain(actor, newLuck, maxLuck, reason = '') {
+  static async luckGain(actor, newLuck, reason = '') {
+    // Legacy (actor, newLuck, maxLuck, reason) callers — the Luck Pool has no max any more.
+    if (typeof reason === 'number') reason = arguments[3] ?? '';
     const luckTerm = CONFIG.VAGABOND.homebrew?.terms?.luckTerm || 'Luck';
     const poolTerm = CONFIG.VAGABOND.homebrew?.terms?.poolTerm || 'Pool';
     const reasonText = reason ? ` from <strong>${reason}</strong>` : '';
@@ -1835,14 +1835,14 @@ export class VagabondChatCard {
       .setSubtitle(actor.name)
       .setDescription(`
         <p><i class="fas fa-clover"></i> <strong>${actor.name}</strong> gains 1 ${luckTerm}${reasonText}.</p>
-        <p><strong>${luckTerm} ${poolTerm}:</strong> ${newLuck} / ${maxLuck}</p>
+        <p><strong>${luckTerm} ${poolTerm}:</strong> ${newLuck}</p>
       `);
 
     return await card.send();
   }
 
   /**
-   * Grant +1 luck to a character actor on a critical hit/success (capped at max).
+   * Grant +1 luck to a character actor on a critical hit/success (no cap).
    * No-ops for non-character actors (e.g. NPCs).
    * @param {VagabondActor} actor - The actor that rolled the crit
    * @param {string} [reason] - Label to show in chat (e.g. 'Critical Hit')
@@ -1880,11 +1880,9 @@ export class VagabondChatCard {
     if (actor.system.currentLuck === undefined) return null;
     await VagabondChatCard._waitForDiceAnimation(rollMessage);
     const currentLuck = actor.system.currentLuck ?? 0;
-    const maxLuck = actor.system.maxLuck ?? 0;
-    if (currentLuck >= maxLuck) return null;
     const newLuck = currentLuck + 1;
     await actor.update({ 'system.currentLuck': newLuck });
-    return await VagabondChatCard.luckGain(actor, newLuck, maxLuck, reason);
+    return await VagabondChatCard.luckGain(actor, newLuck, reason);
   }
 
   /**
