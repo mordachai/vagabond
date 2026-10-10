@@ -29,6 +29,15 @@ All Print Wave 3 / Alpha 3 content is now in the system:
 
 ## Features
 
+### **New features:** Build Guides and Alchemy Lab [YouTube video below](https://youtu.be/USKwZxF5lJA)
+
+[![Build Guides and Alchemy Lab](https://img.youtube.com/vi/USKwZxF5lJA/0.jpg)](https://youtu.be/USKwZxF5lJA)
+
+- **Build Guides:** in the Character Builder, right after Ancestry, choose **Use a Build Guide** or **Build from Scratch**. Pick from the book's 40 ready-made Level 1 builds, shown as flip cards (front: Stats, HP, gear, Spells, Perks; back: how the build grows to Level 10). Play it as it is or customize it in the Builder. GMs can hide guides from players.
+- **Alchemy Lab:** Alchemists get an Alchemy tab on the sheet and an Alchemy panel on the HUD: **Catalyze**, **Mix** and the formula **Library** in one place, no popups. Pick new formulae in the Level Up menu and in the Character Builder.
+
+---
+
 ### **New features:** Stores
 
 Shops are now a real thing at the table. Create a **Shop** actor, stock it, drop its token on the map and let your players go shopping — prices, change, stock and receipts are all handled for you. _Map: The City of Greybanner - 2 Minutes Tabletop_
