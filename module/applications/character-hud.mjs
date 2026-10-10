@@ -1449,7 +1449,7 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
         {
           label: L('VAGABOND.Hud.Menu.Downtime'),
           icon: 'fas fa-hourglass-half',
-          action: () => new globalThis.vagabond.applications.DowntimeApp(this.actor).render(true),
+          action: () => globalThis.vagabond.applications.DowntimeApp.open(this.actor),
         },
         ...(CraftingHelper.config().general.enabled ? [{
           label: L('VAGABOND.Craft.Workbench.Title'),

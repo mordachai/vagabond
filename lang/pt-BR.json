@@ -2655,71 +2655,112 @@
       }
     },
     "Downtime": {
-      "Title": "Atividades de Tempo Livre",
+      "Title": "Tempo Livre",
       "ButtonLabel": "Tempo Livre",
-      "OpenTooltip": "Abrir Atividades de Tempo Livre",
-      "Cancel": "Cancelar",
-      "Done": "Concluído",
-      "Cost": {
-        "OneShift": "1 Quarto de dia",
-        "Free": "Grátis"
+      "OpenTooltip": "Abrir Tempo Livre",
+      "ActivitiesHeader": "Atividades · 1 Quarto de dia cada",
+      "RestHeader": "Descanso e Fôlego",
+      "Free": "Grátis",
+      "CritDouble": "Crítico: encontrou o dobro!",
+      "SurvivalTooltip": "Rola um Teste de Sobrevivência (Shift = Vantagem, Ctrl = Desvantagem)",
+      "NotEnoughMoney": "Dinheiro insuficiente! Você precisa de {cost} mas só tem {have}.",
+      "NoRationSource": "Não foi possível encontrar o item Ração no compêndio de Equipamentos.",
+      "Have": {
+        "Materials": "Materiais que você tem",
+        "ValuePerShift": "Valor que você pode Fabricar por Quarto de dia (pela sua Dificuldade de Fabricação)",
+        "SurvivalTooltip": "Dificuldade de Sobrevivência: role isto ou mais para passar (★ = Treinado)",
+        "Coins": "Moedas que você tem"
       },
-      "Rest": {
-        "Title": "Descansar",
-        "Description": "Recupera PV, Mana e a reserva de Sorte ao máximo. Se PV está no máximo, recupera 1 Fadiga.",
-        "LodgingLabel": "Qualidade da Hospedagem:"
+      "Tracker": {
+        "Intro": "Seu tempo livre permite que você se prepare, se estabeleça na sociedade, colete informações ou simplesmente encha a cara e acabe numa briga de taverna.",
+        "Left": "{left} / {shifts} Quartos restantes",
+        "Add": "Adicionar um Quarto de dia",
+        "Remove": "Remover um Quarto de dia",
+        "Reset": "Novo tempo livre (limpa os Quartos gastos)",
+        "DayTooltip": "Dia {day}: {left} de {planned} Quartos restantes",
+        "ShiftN": "Quarto {n}",
+        "NoShiftsLeft": "Não há Quartos de dia restantes neste tempo livre. Adicione um com + se o Mestre permitir."
       },
       "Lodging": {
-        "none": "Sem Hospedagem (Grátis)",
-        "horrible": "Horrível (1p)",
-        "poor": "Pobre (2p)",
-        "modest": "Modesta (10p)",
-        "comfortable": "Confortável (20p)",
-        "luxury": "Luxuosa (40p)",
-        "opulent": "Opulenta (1o)"
-      },
-      "Breather": {
-        "Title": "Recuperar Fôlego",
-        "Description": "Faça uma pausa curta para recuperar o fôlego e alguma vitalidade.",
-        "Effect": "Efeito: Recupera PV igual ao seu atributo {stat} ({value}).",
-        "Button": "Recuperar Fôlego"
+        "none": "Sem Hospedagem",
+        "horrible": "Horrível",
+        "poor": "Pobre",
+        "modest": "Modesta",
+        "comfortable": "Confortável",
+        "luxury": "Luxuosa",
+        "opulent": "Opulenta"
       },
       "Craft": {
         "Title": "Fabricar",
-        "Description": "Fabrique itens. Requer materiais no valor de 50% do valor do item.",
-        "DifficultyLabel": "Dificuldade de Fabricação:",
-        "Button": "Fabricar Item",
-        "WorkbenchDescription": "Abra a Bancada para passar um Quarto de dia fabricando, ou desmontar itens em Materiais."
-      },
-      "CraftDifficulty": {
-        "tier1": "18-17 (1p)",
-        "tier2": "16-15 (20p)",
-        "tier3": "14-13 (50p)",
-        "tier4": "12-11 (2o 50p)",
-        "tier5": "10-9 (5o)",
-        "tier6": "8-7 (7o 50p)",
-        "tier7": "6 (10o)"
-      },
-      "Forage": {
-        "Title": "Forragear",
-        "Description": "Reúna recursos na natureza. Requer um Teste de Sobrevivência.",
-        "TargetLabel": "Recurso Alvo:",
-        "Button": "Forragear"
-      },
-      "ForageType": {
-        "food": "Comida (d6 Rações)",
-        "mats": "Materiais (d6 * 5p)"
-      },
-      "Hunt": {
-        "Title": "Caçar",
-        "Description": "Procure por caça selvagem. Requer um Teste de Sobrevivência. Encontre bestas para rações ou materiais.",
-        "Button": "Caçar Presa"
+        "Book": "<p>Fabricar requer Materiais que valham pelo menos metade do valor dos Itens fabricados e ferramentas razoáveis ou um ambiente para fazê-los. Sua Dificuldade de Fabricação define o Valor que você pode Fabricar por Quarto de dia.</p><p>Vários Quartos de trabalho podem ser dedicados a um Item, e não precisam ser consecutivos. Você pode Fabricar vários Itens no mesmo Quarto, desde que o valor total desses Itens não exceda o Valor que você pode Fabricar por Quarto.</p><table><tr><th>Dificuldade</th><th>Valor</th><th>Dificuldade</th><th>Valor</th></tr><tr><td>18-17</td><td>1p</td><td>10-9</td><td>5o</td></tr><tr><td>16-15</td><td>20p</td><td>8-7</td><td>7o 50p</td></tr><tr><td>14-13</td><td>50p</td><td>6</td><td>10o</td></tr><tr><td>12-11</td><td>2o 50p</td><td></td><td></td></tr></table><p><strong>Desmontar.</strong> Você pode desmontar Itens em Materiais que valham metade do valor deles durante um Quarto gasto Fabricando ou gastando uma Hora para isso.</p><p><em>Trabalhar um Quarto na Bancada gasta um Quarto aqui.</em></p>"
       },
       "Study": {
         "Title": "Estudar",
-        "Description": "Ganhe um Dado de Estudo para obter Vantagem em uma rolagem de d20 no próximo dia, ou trocar uma Característica de Classe.",
-        "CurrentDice": "Dados de Estudo Atuais: {value}",
-        "Button": "Estudar"
+        "Button": "Estudar",
+        "DiceTooltip": "Dados de Estudo",
+        "Book": "<p>Se você Estudar, ganha um dado de Estudo, um d6 que você pode gastar para ganhar Vantagem em uma rolagem de d20 que fizer no próximo Dia.</p><p>Além disso, ao Estudar você pode mudar uma escolha oferecida por uma de suas Características (como uma Magia Conhecida).</p>",
+        "Result": "<strong>{name}</strong> estuda e ganha um <strong>dado de Estudo</strong> (agora {dice}). Pode ser gasto para Vantagem em uma rolagem de d20 no próximo Dia."
+      },
+      "Forage": {
+        "Title": "Forragear",
+        "Button": "Forragear",
+        "Rations": "Rações",
+        "Materials": "Materiais",
+        "Book": "<p>Você pode gastar um Quarto de dia coletando comida e Materiais na natureza, em ambientes que possam fornecê-los. Também pode fazê-lo ao Viajar em Ritmo Lento. Quando o fizer, faça um Teste de Sobrevivência. Se passar, determine se encontra Rações ou Materiais. Num Crítico, encontra o dobro.</p><p><strong>Rações:</strong> d6 Rações<br><strong>Materiais:</strong> Materiais valendo (d6 × 5p)</p>",
+        "Fail": "<strong>{name}</strong> vasculha a natureza mas não encontra nada.",
+        "FoundRations": "<strong>{name}</strong> coleta <strong>{n} Rações</strong> (adicionadas ao inventário).",
+        "FoundMaterials": "<strong>{name}</strong> reúne <strong>Materiais valendo {value}</strong> (adicionados ao inventário)."
+      },
+      "Hunt": {
+        "Title": "Caçar",
+        "Button": "Caçar",
+        "Prey": "Presa",
+        "Book": "<p>Procurar Caça Selvagem requer um Quarto de dia. Quando o fizer, faça um Teste de Sobrevivência. Se passar, role para ver qual Caça Selvagem você descobre. Num Crítico, escolha qual Besta encontra. A coleta pode ser feita como parte de uma Cena. Qualquer coisa da qual você possa tirar carne fornece Rações ou Materiais:</p><p><strong>Rações:</strong> A quantidade que você coleta é igual aos PV dela, multiplicada por 3 para Animais Presa.<br><strong>Materiais:</strong> O Valor coletado é igual a (PV dela × 5p).</p>",
+        "Fail": "<strong>{name}</strong> espreita a natureza mas não encontra caça.",
+        "Found": "<strong>{name}</strong> encontra <strong>{qty} × {beast}</strong>. Cada um coletado fornece:",
+        "YieldRations": "{n} Rações, ou",
+        "YieldMaterials": "Materiais valendo {value}",
+        "HarvestNote": "A coleta é feita como parte de uma Cena.",
+        "ChooseTitle": "Crítico na Caça",
+        "ChooseHint": "Escolha qual Besta você encontra."
+      },
+      "Other": {
+        "Title": "Outras Atividades",
+        "Button": "Rolar",
+        "SkillLabel": "Teste de Perícia",
+        "GoldTooltip": "Ouro investido (+1 a cada 10o)",
+        "InvestedTag": "Investido {value} (+{bonus})",
+        "Book": "<p>Você pode gastar um Quarto de dia em farras, fazendo contatos, colhendo informações ou de outras formas. Essas atividades exigem gastar parte da sua riqueza e fazer um Teste de Perícia para determinar o resultado. Você recebe +1 nessa rolagem a cada 10o investidos na atividade.</p>"
+      },
+      "Rest": {
+        "Title": "Descansar",
+        "Button": "Descansar",
+        "LodgingLabel": "Hospedagem (custo por Dia)",
+        "HP": "PV",
+        "Mana": "Mana",
+        "Luck": "Sorte",
+        "Fatigue": "Fadiga",
+        "Book": "<p>Descansos exigem um Quarto de dia em que você esteja alimentado e repousado. Um Descanso restaura seus PV e Mana ao Máximo, e sua Reserva de Sorte volta ao seu atributo Sorte. Se seus PV já estiverem no Máximo, o Descanso remove 1 Fadiga em vez disso.</p>",
+        "Result": "<strong>{name}</strong> descansa. Hospedagem: {lodging} ({cost})."
+      },
+      "Breather": {
+        "Title": "Recuperar Fôlego",
+        "Button": "Fôlego",
+        "HealTooltip": "PV recuperados (Força)",
+        "RationsTooltip": "Rações carregadas",
+        "AlreadyUsed": "Já recuperou o fôlego neste Quarto de dia.",
+        "Book": "<p>Uma vez por Quarto de dia, você pode comer uma ração e beber um pouco de água para recuperar PV igual à sua Força.</p>",
+        "Result": "<strong>{name}</strong> recupera o fôlego e ganha <strong>{n} PV</strong> ({from} → {to}).",
+        "RationEaten": "(1 Ração consumida)",
+        "NoRation": "(nenhuma Ração carregada)"
+      },
+      "WildGame": {
+        "wolf": "Lobo",
+        "fowl": "Ave (Falcão)",
+        "vermin": "Pragas (Coelho)",
+        "deer": "Cervo",
+        "boar": "Javali",
+        "cattle": "Gado"
       }
     },
     "SpellCast": {

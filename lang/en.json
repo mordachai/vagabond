@@ -2641,71 +2641,112 @@
       }
     },
     "Downtime": {
-      "Title": "Downtime Activities",
+      "Title": "Downtime",
       "ButtonLabel": "Downtime",
-      "OpenTooltip": "Open Downtime Activities",
-      "Cancel": "Cancel",
-      "Done": "Done",
-      "Cost": {
-        "OneShift": "1 Shift",
-        "Free": "Free"
+      "OpenTooltip": "Open Downtime",
+      "ActivitiesHeader": "Activities · 1 Shift each",
+      "RestHeader": "Rest & Breather",
+      "Free": "Free",
+      "CritDouble": "Crit: found double!",
+      "SurvivalTooltip": "Rolls a Survival Check (Shift = Favor, Ctrl = Hinder)",
+      "NotEnoughMoney": "Not enough money! You need {cost} but only have {have}.",
+      "NoRationSource": "Couldn't find the Ration item in the Gear compendium.",
+      "Have": {
+        "Materials": "Materials you have",
+        "ValuePerShift": "Value you can Craft per Shift (from your Craft Difficulty)",
+        "SurvivalTooltip": "Survival Difficulty: roll this or higher to pass (★ = Trained)",
+        "Coins": "Coins you have"
       },
-      "Rest": {
-        "Title": "Rest",
-        "Description": "Recover HP, Mana, and Luck pool to max. If HP is at max, recover 1 Fatigue.",
-        "LodgingLabel": "Lodging Quality:"
+      "Tracker": {
+        "Intro": "Your downtime lets you prepare, establish a foothold in society, gather intel, or just get wasted and wind up in a tavern brawl.",
+        "Left": "{left} / {shifts} Shifts left",
+        "Add": "Add a Shift",
+        "Remove": "Remove a Shift",
+        "Reset": "New downtime (clear spent Shifts)",
+        "DayTooltip": "Day {day}: {left} of {planned} Shifts left",
+        "ShiftN": "Shift {n}",
+        "NoShiftsLeft": "No Shifts left in this downtime. Add one with + if the GM allows."
       },
       "Lodging": {
-        "none": "No Lodging (Free)",
-        "horrible": "Horrible (1s)",
-        "poor": "Poor (2s)",
-        "modest": "Modest (10s)",
-        "comfortable": "Comfortable (20s)",
-        "luxury": "Luxury (40s)",
-        "opulent": "Opulent (1g)"
-      },
-      "Breather": {
-        "Title": "Breather",
-        "Description": "Take a short break to catch your breath and recover some vitality.",
-        "Effect": "Effect: Regain HP equal to your {stat} stat ({value}).",
-        "Button": "Take Breather"
+        "none": "No Lodging",
+        "horrible": "Horrible",
+        "poor": "Poor",
+        "modest": "Modest",
+        "comfortable": "Comfortable",
+        "luxury": "Luxurious",
+        "opulent": "Opulent"
       },
       "Craft": {
         "Title": "Craft",
-        "Description": "Make items. Requires materials worth 50% of item value.",
-        "DifficultyLabel": "Craft Difficulty:",
-        "Button": "Craft Item",
-        "WorkbenchDescription": "Open the Workbench to spend a Shift crafting, or scrap items for Materials."
-      },
-      "CraftDifficulty": {
-        "tier1": "18-17 (1s)",
-        "tier2": "16-15 (20s)",
-        "tier3": "14-13 (50s)",
-        "tier4": "12-11 (2g 50s)",
-        "tier5": "10-9 (5g)",
-        "tier6": "8-7 (7g 50s)",
-        "tier7": "6 (10g)"
-      },
-      "Forage": {
-        "Title": "Forage",
-        "Description": "Gather resources from the wilderness. Requires a Survival Check.",
-        "TargetLabel": "Target Resource:",
-        "Button": "Forage"
-      },
-      "ForageType": {
-        "food": "Food (d6 Rations)",
-        "mats": "Materials (d6 * 5s)"
-      },
-      "Hunt": {
-        "Title": "Hunt",
-        "Description": "Look for wild game. Requires a Survival Check. Find beasts for rations or materials.",
-        "Button": "Hunt Game"
+        "Book": "<p>Crafting requires Materials worth at least half the value of the Items being crafted and reasonable tools or an environment to make them. Your Craft Difficulty sets the Value you can Craft per Shift.</p><p>Multiple Shifts of work can be put into making an Item, which don't need to be consecutive. You can Craft Multiple Items during the same Shift, provided the total value of those Items does not exceed the Value you can Craft per Shift.</p><table><tr><th>Difficulty</th><th>Value</th><th>Difficulty</th><th>Value</th></tr><tr><td>18-17</td><td>1s</td><td>10-9</td><td>5g</td></tr><tr><td>16-15</td><td>20s</td><td>8-7</td><td>7g 50s</td></tr><tr><td>14-13</td><td>50s</td><td>6</td><td>10g</td></tr><tr><td>12-11</td><td>2g 50s</td><td></td><td></td></tr></table><p><strong>Scrapping.</strong> You can scrap Items for Materials worth half its value during a Shift you spend to Craft or by spending an Hour to do so.</p><p><em>Working a Shift in the Workbench spends a Shift here.</em></p>"
       },
       "Study": {
         "Title": "Study",
-        "Description": "Gain a Studied Die to gain Favor on a d20 roll tomorrow, or swap a Class Feature.",
-        "CurrentDice": "Current Studied Dice: {value}",
-        "Button": "Study"
+        "Button": "Study",
+        "DiceTooltip": "Studied dice",
+        "Book": "<p>If you Study, you gain a Studied die which is a d6 that you can spend to gain Favor on a d20 roll you make in the next Day.</p><p>Additionally, you can change a choice offered by one of your Features when you Study (such as a Spell Known).</p>",
+        "Result": "<strong>{name}</strong> studies and gains a <strong>Studied die</strong> (now {dice}). It can be spent for Favor on a d20 roll in the next Day."
+      },
+      "Forage": {
+        "Title": "Foraging",
+        "Button": "Forage",
+        "Rations": "Rations",
+        "Materials": "Materials",
+        "Book": "<p>You can spend a Shift gathering food and Materials from the wilderness in environments that can provide them. You can also do so when you Travel at a Slow Pace. When you do, make a Survival Check. On a pass, determine if you find Rations or Materials. On a Crit, you find double.</p><p><strong>Rations:</strong> d6 Rations<br><strong>Materials:</strong> Materials worth (d6 × 5s)</p>",
+        "Fail": "<strong>{name}</strong> searches the wilderness but finds nothing.",
+        "FoundRations": "<strong>{name}</strong> forages <strong>{n} Rations</strong> (added to inventory).",
+        "FoundMaterials": "<strong>{name}</strong> gathers <strong>Materials worth {value}</strong> (added to inventory)."
+      },
+      "Hunt": {
+        "Title": "Hunting",
+        "Button": "Hunt",
+        "Prey": "Prey",
+        "Book": "<p>Looking for Wild Game requires a Shift. When you do, make a Survival Check. On a pass, roll to see what Wild Game you discover. On a Crit, choose which Beast you find. Harvesting can be done as part of a Scene. Anything you can harvest meat from gives Rations or Materials:</p><p><strong>Rations:</strong> The number you can harvest equals its HP, multiplied by 3 for Prey Animals.<br><strong>Materials:</strong> The Value harvested is equal to (its HP × 5s).</p>",
+        "Fail": "<strong>{name}</strong> stalks the wilds but finds no game.",
+        "Found": "<strong>{name}</strong> finds <strong>{qty} × {beast}</strong>. Each one harvested gives:",
+        "YieldRations": "{n} Rations, or",
+        "YieldMaterials": "Materials worth {value}",
+        "HarvestNote": "Harvesting is done as part of a Scene.",
+        "ChooseTitle": "Hunting Crit",
+        "ChooseHint": "Choose which Beast you find."
+      },
+      "Other": {
+        "Title": "Other Activities",
+        "Button": "Roll",
+        "SkillLabel": "Skill Check",
+        "GoldTooltip": "Gold invested (+1 per 10g)",
+        "InvestedTag": "Invested {value} (+{bonus})",
+        "Book": "<p>You might spend a Shift carousing, networking, gathering intel, or in other ways. These activities require spending some of your wealth and making a Skill Check to determine the outcome. You get a +1 bonus to this roll for every 10g invested into the activity.</p>"
+      },
+      "Rest": {
+        "Title": "Rest",
+        "Button": "Rest",
+        "LodgingLabel": "Lodging (cost per Day)",
+        "HP": "HP",
+        "Mana": "Mana",
+        "Luck": "Luck",
+        "Fatigue": "Fatigue",
+        "Book": "<p>Rests require a Shift where you are fed and rested. A Rest restores your HP and Mana to their Maxes, and your Luck Pool is reset to your Luck Stat. If your HP is already at your Max, the Rest instead removes 1 Fatigue.</p>",
+        "Result": "<strong>{name}</strong> rests. Lodging: {lodging} ({cost})."
+      },
+      "Breather": {
+        "Title": "Breather",
+        "Button": "Breather",
+        "HealTooltip": "HP regained (Might)",
+        "RationsTooltip": "Rations carried",
+        "AlreadyUsed": "Breather already taken this Shift.",
+        "Book": "<p>Once per Shift, you can eat a ration and drink some water to regain HP equal to your Might.</p>",
+        "Result": "<strong>{name}</strong> takes a breather and regains <strong>{n} HP</strong> ({from} → {to}).",
+        "RationEaten": "(1 Ration eaten)",
+        "NoRation": "(no Ration carried)"
+      },
+      "WildGame": {
+        "wolf": "Wolf",
+        "fowl": "Fowl (Hawk)",
+        "vermin": "Vermin (Rabbit)",
+        "deer": "Deer",
+        "boar": "Boar",
+        "cattle": "Cattle"
       }
     },
     "SpellCast": {

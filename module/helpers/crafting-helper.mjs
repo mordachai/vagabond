@@ -7,6 +7,7 @@ import { RelicForgeMode } from './crafting/relic-forge-mode.mjs';
 import { MixMode } from './crafting/mix-mode.mjs';
 import { ProjectHelper } from './crafting/project-helper.mjs';
 import { CRAFTING_DEFAULTS, craftingConfig } from './crafting/config.mjs';
+import { DowntimeHelper } from './downtime-helper.mjs';
 
 export { CRAFTING_DEFAULTS };
 
@@ -164,6 +165,8 @@ export class CraftingHelper {
     }
 
     await this.#postShiftSummary(actor, budget, spent, results);
+    // Logs the Shift on the Downtime tracker (no-op once its planned Shifts are spent)
+    await DowntimeHelper.spendShift(actor, 'craft');
     return { ok: true, budget, spent, results };
   }
 

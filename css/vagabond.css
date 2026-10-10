@@ -3832,121 +3832,322 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 }
 
 /* Downtime activities - imported at top level because config dialog is outside sheets */
-.downtime-container {
+.downtime-manager .window-content {
+  padding: 8px 10px 10px;
+}
+
+.downtime-panel {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  gap: 4px;
   color: var(--vagabond-c-text-primary);
+  font-family: "Paradigm", serif;
+  /* ---- Shift tracker ---- */
+  /* ---- Sections ---- */
+  /* ---- Mosaic tiles ---- */
+  /* ---- Drawer (accordion under each mosaic) ---- */
 }
-
-.downtime-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 15px;
-  padding: 10px;
-  font-family: var(--font-primary);
+.downtime-panel button {
+  height: auto;
+  line-height: normal;
 }
-
-.activity-card {
-  background: var(--color-bg-2);
-  border: 1px solid var(--vagabond-c-text-primary);
-  border-radius: 8px;
-  padding: 15px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-}
-
-.activity-header {
-  font-weight: bold;
-  font-size: 1.2em;
-  border-bottom: 1px solid var(--color-border-light-1);
-  margin-bottom: 10px;
-  padding-bottom: 5px;
-  text-transform: uppercase;
+.downtime-panel .dt-tracker {
   display: flex;
   align-items: center;
+  gap: 10px;
+  padding: 6px 8px;
+  border: 2px solid var(--vagabond-c-tan-lite);
+  border-radius: 8px;
+  background: var(--vagabond-c-inset-2);
+}
+.downtime-panel .dt-clocks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  max-width: 50%;
+}
+.downtime-panel .dt-clocks .dt-clock {
+  width: 64px;
+  height: 64px;
+  border: none;
+  flex: 0 0 auto;
+}
+.downtime-panel .dt-clocks .dt-clock.is-partial {
+  opacity: 0.75;
+}
+.downtime-panel .dt-tracker-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.downtime-panel .dt-tracker-count {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.downtime-panel .dt-tracker-count .dt-left {
+  flex: 1;
+  text-align: center;
+  font-family: "Germania", serif;
+  font-size: 1.4rem;
+  white-space: nowrap;
+}
+.downtime-panel .dt-tracker-count .dt-left.is-zero {
+  color: var(--vagabond-c-red);
+}
+.downtime-panel .dt-step {
+  width: 28px;
+  min-width: 28px;
+  padding: 4px 0;
+  font-size: 0.85rem;
+  border: 1px solid var(--vagabond-c-tan-lite);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--vagabond-c-text-primary);
+}
+.downtime-panel .dt-step:disabled {
+  opacity: 0.35;
+}
+.downtime-panel .dt-step.dt-reset {
+  margin-left: 4px;
+}
+.downtime-panel .dt-log {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  min-height: 28px;
+  align-items: center;
+}
+.downtime-panel .dt-log img {
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--vagabond-c-tan-lite);
+  border-radius: 3px;
+}
+.downtime-panel .dt-log .dt-log-empty {
+  font-size: 0.9rem;
+  font-style: italic;
+  color: var(--vagabond-c-muted);
+  line-height: 1.2;
+}
+.downtime-panel .dt-section {
+  margin: 6px 0 0;
+  padding: 0 0 2px;
+  border-bottom: 1px solid var(--vagabond-c-tan-lite);
+  font-family: "Eskapade", serif;
+  font-size: 1.2rem;
+  text-transform: uppercase;
+}
+.downtime-panel .dt-mosaic {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
   gap: 8px;
 }
-
-.activity-content {
-  font-size: 0.9em;
-  margin-bottom: 15px;
-  flex-grow: 1;
-}
-.activity-content p {
-  margin: 0 0 10px 0;
-}
-
-.downtime-btn {
-  width: 100%;
-  padding: 8px;
-  cursor: pointer;
-  background: var(--color-ui-2);
+.downtime-panel .dt-tile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 2px 7px;
+  border: 2px solid var(--vagabond-c-tan-lite);
+  border-radius: 8px;
+  background: var(--vagabond-c-inset-2);
   color: var(--vagabond-c-text-primary);
-  border: 1px solid var(--vagabond-c-text-primary);
-  border-radius: 4px;
+  cursor: pointer;
+  transition: border-color 0.15s, box-shadow 0.15s;
 }
-.downtime-btn:hover {
-  background: var(--color-ui-1);
-  text-shadow: 0 0 5px white;
+.downtime-panel .dt-tile img {
+  width: 80px;
+  height: 80px;
+  border: none;
+  border-radius: 6px;
 }
-
-.input-group {
-  margin-bottom: 10px;
+.downtime-panel .dt-tile .dt-tile-title {
+  font-family: "Eskapade", serif;
+  font-size: 1.05rem;
+  line-height: 1.05;
+  text-align: center;
 }
-.input-group label {
-  display: block;
-  margin-bottom: 4px;
-  font-weight: bold;
+.downtime-panel .dt-tile:hover {
+  border-color: var(--vagabond-c-tan);
 }
-.input-group select {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 4px;
+.downtime-panel .dt-tile.is-selected {
+  border-color: var(--vagabond-c-chat-yellow);
+  box-shadow: 0 0 8px -1px var(--vagabond-c-chat-yellow), inset 0 0 0 1px var(--vagabond-c-chat-yellow);
 }
-
-.cost-badge {
-  background: #333;
+.downtime-panel .dt-tile.is-blocked img {
+  filter: grayscale(1);
+  opacity: 0.55;
+}
+.downtime-panel .dt-badge {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 0 4px;
+  border-radius: 8px;
+  background: var(--vagabond-c-transparent);
   color: var(--vagabond-c-white);
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-size: 0.7em;
+  font-family: "Germania", serif;
+  font-size: 0.9rem;
+}
+.downtime-panel .dt-badge i {
+  font-size: 0.75rem;
+}
+.downtime-panel .dt-badge.is-zero {
+  color: var(--vagabond-c-red-flat);
+}
+.downtime-panel .dt-drawer {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.2s ease;
+}
+.downtime-panel .dt-drawer.is-open {
+  grid-template-rows: 1fr;
+}
+.downtime-panel .dt-drawer-inner {
+  min-height: 0;
+  overflow: hidden;
+}
+.downtime-panel .dt-pane {
+  display: none;
+  margin-top: 6px;
+  padding: 8px 10px;
+  border: 1px solid var(--vagabond-c-tan-lite);
+  border-radius: 6px;
+  background: var(--vagabond-c-inset-2);
+}
+.downtime-panel .dt-pane.is-active {
+  display: block;
+}
+.downtime-panel .dt-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.downtime-panel .dt-controls select {
+  flex: 1;
+  min-width: 0;
+  height: 30px;
+  font-size: 0.95rem;
+}
+.downtime-panel .dt-controls .dt-hint {
+  flex: 1;
+  font-size: 0.9rem;
+  font-style: italic;
+  color: var(--vagabond-c-muted);
+}
+.downtime-panel .dt-controls .dt-go {
   margin-left: auto;
 }
-
-.downtime-footer {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  padding: 15px;
-  border-top: 1px solid var(--vagabond-c-text-primary);
-  background: var(--color-bg-1);
+.downtime-panel .dt-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 1px 8px;
+  border: 1px solid var(--vagabond-c-tan-lite);
+  border-radius: 12px;
+  font-family: "Germania", serif;
+  font-size: 1rem;
 }
-.downtime-footer .downtime-footer-btn {
-  padding: 8px 20px;
-  cursor: pointer;
-  border: 1px solid var(--vagabond-c-text-primary);
-  border-radius: 4px;
+.downtime-panel .dt-chip.is-zero {
+  color: var(--vagabond-c-red);
+  border-color: var(--vagabond-c-red);
+}
+.downtime-panel .dt-chip i {
+  font-size: 0.85rem;
+}
+.downtime-panel .dt-chip .dt-trained {
+  color: var(--vagabond-dark-yellow);
+  font-size: 0.7rem;
+}
+.downtime-panel .dt-seg {
+  display: inline-flex;
+}
+.downtime-panel .dt-seg button {
+  padding: 4px 10px;
+  font-size: 0.95rem;
+  border: 1px solid var(--vagabond-c-tan-lite);
+  background: transparent;
+  color: var(--vagabond-c-text-primary);
+  border-radius: 0;
+}
+.downtime-panel .dt-seg button:first-child {
+  border-radius: 4px 0 0 4px;
+}
+.downtime-panel .dt-seg button:last-child {
+  border-radius: 0 4px 4px 0;
+  border-left: none;
+}
+.downtime-panel .dt-seg button.is-selected {
+  border-color: var(--vagabond-c-chat-yellow);
+  box-shadow: inset 0 0 0 1px var(--vagabond-c-chat-yellow);
+}
+.downtime-panel .dt-gold {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+.downtime-panel .dt-gold i {
+  color: var(--vagabond-dark-yellow);
+  font-size: 1rem;
+}
+.downtime-panel .dt-gold input {
+  width: 60px;
+  height: 30px;
+  font-size: 0.95rem;
+  text-align: center;
+}
+.downtime-panel .dt-go {
+  min-width: 104px;
+  padding: 6px 12px;
+  font-family: "Eskapade", serif;
+  font-size: 1.05rem;
   font-weight: bold;
-  transition: all 0.2s ease;
+  border: 1px solid var(--vagabond-dark-yellow);
+  border-radius: 4px;
+  background: var(--vagabond-c-chat-yellow);
+  color: var(--vagabond-c-black);
 }
-.downtime-footer .downtime-footer-btn.cancel-btn {
-  background: var(--color-bg-2);
+.downtime-panel .dt-go i {
+  font-size: 0.9rem;
+  margin-right: 3px;
+}
+.downtime-panel .dt-go:not(:disabled):hover {
+  filter: brightness(1.1);
+  box-shadow: 0 0 8px -1px var(--vagabond-c-chat-yellow);
+}
+.downtime-panel .dt-go:disabled {
+  background: var(--vagabond-c-inset-2);
+  border-color: var(--vagabond-c-tan-lite);
   color: var(--vagabond-c-text-primary);
+  opacity: 0.45;
+  cursor: not-allowed;
 }
-.downtime-footer .downtime-footer-btn.cancel-btn:hover {
-  background: var(--color-bg-3);
-  border-color: var(--color-border-light-1);
+.downtime-panel .dt-book {
+  margin-top: 6px;
+  padding-top: 5px;
+  border-top: 1px solid var(--vagabond-inventory-lines);
+  font-size: 0.95rem;
+  line-height: 1.35;
 }
-.downtime-footer .downtime-footer-btn.done-btn {
-  background: var(--color-ui-2);
-  color: var(--vagabond-c-text-primary);
+.downtime-panel .dt-book p {
+  margin: 0 0 4px;
 }
-.downtime-footer .downtime-footer-btn.done-btn:hover {
-  background: var(--color-ui-1);
-  text-shadow: 0 0 5px white;
+.downtime-panel .dt-book p:last-child {
+  margin-bottom: 0;
+}
+.downtime-panel .dt-book table {
+  margin: 4px 0;
+  font-size: 0.9rem;
+}
+.downtime-panel .dt-book td, .downtime-panel .dt-book th {
+  padding: 1px 6px;
 }
 
 /* Character HUD - imported at top level because the frameless overlay renders outside sheets */

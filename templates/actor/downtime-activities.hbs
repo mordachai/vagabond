@@ -1,120 +1,154 @@
-<div class="downtime-container">
-<div class="downtime-grid">
-    {{!-- Rest Activity --}}
-    <div class="activity-card">
-        <div class="activity-header">
-            <i class="fas fa-bed"></i> {{localize "VAGABOND.Downtime.Rest.Title"}}
-            <span class="cost-badge">{{localize "VAGABOND.Downtime.Cost.OneShift"}}</span>
-        </div>
-        <div class="activity-content">
-            <p>{{localize "VAGABOND.Downtime.Rest.Description"}}</p>
-            <div class="input-group">
-                <label>{{localize "VAGABOND.Downtime.Rest.LodgingLabel"}}</label>
-                <select name="lodgingType">
-                    <option value="none">{{localize "VAGABOND.Downtime.Lodging.none"}}</option>
-                    <option value="horrible">{{localize "VAGABOND.Downtime.Lodging.horrible"}}</option>
-                    <option value="poor">{{localize "VAGABOND.Downtime.Lodging.poor"}}</option>
-                    <option value="modest">{{localize "VAGABOND.Downtime.Lodging.modest"}}</option>
-                    <option value="comfortable">{{localize "VAGABOND.Downtime.Lodging.comfortable"}}</option>
-                    <option value="luxury">{{localize "VAGABOND.Downtime.Lodging.luxury"}}</option>
-                    <option value="opulent">{{localize "VAGABOND.Downtime.Lodging.opulent"}}</option>
-                </select>
-            </div>
-        </div>
-        <button type="button" class="downtime-btn" data-action="processRest">
-            <i class="fas fa-bed"></i> {{localize "VAGABOND.Downtime.Rest.Title"}}
-        </button>
-    </div>
+<div class="downtime-panel">
+  {{#*inline "dtTile"}}
+    <button type="button" class="dt-tile {{#if selected}}is-selected{{/if}} {{#if blocked}}is-blocked{{/if}}"
+            data-action="selectTile" data-key="{{key}}">
+      <img src="{{icon}}" alt="">
+      <span class="dt-tile-title">{{title}}</span>
+      {{#if badgeIcon}}<span class="dt-badge {{#if zero}}is-zero{{/if}}" data-tooltip="{{badgeTooltip}}"><i class="{{badgeIcon}}"></i>{{badge}}</span>{{/if}}
+    </button>
+  {{/inline}}
 
-    {{!-- Breather Activity --}}
-    <div class="activity-card">
-        <div class="activity-header">
-            <i class="fas fa-heart"></i> {{localize "VAGABOND.Downtime.Breather.Title"}}
-            <span class="cost-badge">{{localize "VAGABOND.Downtime.Cost.Free"}}</span>
+  {{!-- Shift tracker: one 4-segment clock per Day, filled = Shifts left --}}
+  <section class="dt-tracker">
+    <div class="dt-clocks">
+      {{#each tracker.clocks}}
+        <img class="dt-clock {{#if partial}}is-partial{{/if}}" src="{{img}}" data-tooltip="{{tooltip}}" alt="">
+      {{/each}}
+    </div>
+    <div class="dt-tracker-body">
+      <div class="dt-tracker-count">
+        <button type="button" class="dt-step" data-action="shiftRemove" {{#unless tracker.canRemove}}disabled{{/unless}}
+                data-tooltip="{{localize 'VAGABOND.Downtime.Tracker.Remove'}}"><i class="fas fa-minus"></i></button>
+        <span class="dt-left {{#if noShifts}}is-zero{{/if}}">{{localize "VAGABOND.Downtime.Tracker.Left" left=tracker.left shifts=tracker.shifts}}</span>
+        <button type="button" class="dt-step" data-action="shiftAdd" {{#unless tracker.canAdd}}disabled{{/unless}}
+                data-tooltip="{{localize 'VAGABOND.Downtime.Tracker.Add'}}"><i class="fas fa-plus"></i></button>
+        <button type="button" class="dt-step dt-reset" data-action="shiftReset" {{#unless tracker.canReset}}disabled{{/unless}}
+                data-tooltip="{{localize 'VAGABOND.Downtime.Tracker.Reset'}}"><i class="fas fa-rotate-left"></i></button>
+      </div>
+      <div class="dt-log">
+        {{#each tracker.log}}<img src="{{img}}" data-tooltip="{{tooltip}}" alt="">{{else}}<span class="dt-log-empty">{{localize "VAGABOND.Downtime.Tracker.Intro"}}</span>{{/each}}
+      </div>
+    </div>
+  </section>
+
+  {{!-- ============ Activities (each takes a Shift) ============ --}}
+  <h3 class="dt-section">{{localize "VAGABOND.Downtime.ActivitiesHeader"}}</h3>
+
+  <div class="dt-mosaic">
+    {{#each activityTiles}}
+      {{> dtTile}}
+    {{/each}}
+  </div>
+
+  <div class="dt-drawer {{#if activityOpen}}is-open{{/if}}">
+    <div class="dt-drawer-inner">
+
+      <div class="dt-pane {{#if sel.craft}}is-active{{/if}}" data-pane="craft">
+        <div class="dt-controls">
+          {{#if craftingEnabled}}
+            <span class="dt-chip" data-tooltip="{{localize 'VAGABOND.Downtime.Have.Materials'}}"><i class="fas fa-cubes"></i> {{have.materials}}</span>
+            <span class="dt-chip" data-tooltip="{{localize 'VAGABOND.Downtime.Have.ValuePerShift'}}"><i class="fas fa-hammer"></i> {{have.valuePerShift}}</span>
+          {{else}}
+            <span class="dt-hint">{{localize "VAGABOND.Craft.Workbench.SystemDisabled"}}</span>
+          {{/if}}
+          <button type="button" class="dt-go" data-action="openWorkbench" {{#unless craftingEnabled}}disabled{{/unless}}>
+            <i class="fas fa-hammer"></i> {{localize "VAGABOND.Craft.Workbench.Title"}}
+          </button>
         </div>
-        <div class="activity-content">
-            <p>{{localize "VAGABOND.Downtime.Breather.Description"}}</p>
-            <p><strong>{{localize "VAGABOND.Downtime.Breather.Effect" stat=(localize (lookup config.stats "might")) value=actor.system.stats.might.value}}</strong></p>
+        <div class="dt-book">{{{localize "VAGABOND.Downtime.Craft.Book"}}}</div>
+      </div>
+
+      <div class="dt-pane {{#if sel.study}}is-active{{/if}}" data-pane="study">
+        <div class="dt-controls">
+          <span class="dt-chip" data-tooltip="{{localize 'VAGABOND.Downtime.Study.DiceTooltip'}}"><i class="fas fa-dice-d6"></i> {{studiedDice}}</span>
+          <button type="button" class="dt-go" data-action="processStudy" {{#if noShifts}}disabled{{/if}}>
+            <i class="fas fa-book-open"></i> {{localize "VAGABOND.Downtime.Study.Button"}}
+          </button>
         </div>
-        <button type="button" class="downtime-btn" data-action="processBreather">
+        <div class="dt-book">{{{localize "VAGABOND.Downtime.Study.Book"}}}</div>
+      </div>
+
+      <div class="dt-pane {{#if sel.forage}}is-active{{/if}}" data-pane="forage">
+        <div class="dt-controls">
+<span class="dt-chip" data-tooltip="{{localize 'VAGABOND.Downtime.Have.SurvivalTooltip'}}"><i class="fas fa-dice-d20"></i> {{have.survival.label}} {{have.survival.difficulty}}{{#if have.survival.trained}} <i class="fas fa-star dt-trained"></i>{{/if}}</span>
+          <div class="dt-seg">
+            <button type="button" data-action="forageType" data-value="rations" class="{{#if (eq forageType 'rations')}}is-selected{{/if}}">{{localize "VAGABOND.Downtime.Forage.Rations"}}</button>
+            <button type="button" data-action="forageType" data-value="materials" class="{{#if (eq forageType 'materials')}}is-selected{{/if}}">{{localize "VAGABOND.Downtime.Forage.Materials"}}</button>
+          </div>
+          <button type="button" class="dt-go" data-action="processForage" {{#if noShifts}}disabled{{/if}}
+                  data-tooltip="{{localize 'VAGABOND.Downtime.SurvivalTooltip'}}">
+            <i class="fas fa-dice-d20"></i> {{localize "VAGABOND.Downtime.Forage.Button"}}
+          </button>
+        </div>
+        <div class="dt-book">{{{localize "VAGABOND.Downtime.Forage.Book"}}}</div>
+      </div>
+
+      <div class="dt-pane {{#if sel.hunt}}is-active{{/if}}" data-pane="hunt">
+        <div class="dt-controls">
+<span class="dt-chip" data-tooltip="{{localize 'VAGABOND.Downtime.Have.SurvivalTooltip'}}"><i class="fas fa-dice-d20"></i> {{have.survival.label}} {{have.survival.difficulty}}{{#if have.survival.trained}} <i class="fas fa-star dt-trained"></i>{{/if}}</span>
+          <button type="button" class="dt-go" data-action="processHunt" {{#if noShifts}}disabled{{/if}}
+                  data-tooltip="{{localize 'VAGABOND.Downtime.SurvivalTooltip'}}">
+            <i class="fas fa-dice-d20"></i> {{localize "VAGABOND.Downtime.Hunt.Button"}}
+          </button>
+        </div>
+        <div class="dt-book">{{{localize "VAGABOND.Downtime.Hunt.Book"}}}</div>
+      </div>
+
+      <div class="dt-pane {{#if sel.other}}is-active{{/if}}" data-pane="other">
+        <div class="dt-controls">
+          <select name="otherSkill" data-tooltip="{{localize 'VAGABOND.Downtime.Other.SkillLabel'}}">
+            {{selectOptions skills selected=defaultSkill valueAttr="key" labelAttr="label"}}
+          </select>
+          <label class="dt-gold" data-tooltip="{{localize 'VAGABOND.Downtime.Other.GoldTooltip'}}">
+            <i class="fas fa-coins"></i><input type="number" name="otherGold" value="0" min="0" step="10">
+          </label>
+          <span class="dt-chip" data-tooltip="{{localize 'VAGABOND.Downtime.Have.Coins'}}"><i class="fas fa-coins"></i> {{have.coins}}</span>
+          <button type="button" class="dt-go" data-action="processOther" {{#if noShifts}}disabled{{/if}}>
+            <i class="fas fa-dice-d20"></i> {{localize "VAGABOND.Downtime.Other.Button"}}
+          </button>
+        </div>
+        <div class="dt-book">{{{localize "VAGABOND.Downtime.Other.Book"}}}</div>
+      </div>
+
+    </div>
+  </div>
+
+  {{!-- ============ Rest & Breather (not Downtime activities) ============ --}}
+  <h3 class="dt-section">{{localize "VAGABOND.Downtime.RestHeader"}}</h3>
+
+  <div class="dt-mosaic">
+    {{#each restTiles}}
+      {{> dtTile}}
+    {{/each}}
+  </div>
+
+  <div class="dt-drawer {{#if restOpen}}is-open{{/if}}">
+    <div class="dt-drawer-inner">
+
+      <div class="dt-pane {{#if sel.rest}}is-active{{/if}}" data-pane="rest">
+        <div class="dt-controls">
+          <select name="lodgingType" data-tooltip="{{localize 'VAGABOND.Downtime.Rest.LodgingLabel'}}">
+            {{selectOptions lodging selected="none" valueAttr="key" labelAttr="label"}}
+          </select>
+          <span class="dt-chip" data-tooltip="{{localize 'VAGABOND.Downtime.Have.Coins'}}"><i class="fas fa-coins"></i> {{have.coins}}</span>
+          <button type="button" class="dt-go" data-action="processRest">
+            <i class="fas fa-bed"></i> {{localize "VAGABOND.Downtime.Rest.Button"}}
+          </button>
+        </div>
+        <div class="dt-book">{{{localize "VAGABOND.Downtime.Rest.Book"}}}</div>
+      </div>
+
+      <div class="dt-pane {{#if sel.breather}}is-active{{/if}}" data-pane="breather">
+        <div class="dt-controls">
+          <span class="dt-chip" data-tooltip="{{localize 'VAGABOND.Downtime.Breather.HealTooltip'}}"><i class="fas fa-heart"></i> +{{might}}</span>
+          <span class="dt-chip {{#unless rations}}is-zero{{/unless}}" data-tooltip="{{localize 'VAGABOND.Downtime.Breather.RationsTooltip'}}"><i class="fas fa-drumstick-bite"></i> {{rations}}</span>
+          <button type="button" class="dt-go" data-action="processBreather" {{#if breatherUsed}}disabled data-tooltip="{{localize 'VAGABOND.Downtime.Breather.AlreadyUsed'}}"{{/if}}>
             <i class="fas fa-heart"></i> {{localize "VAGABOND.Downtime.Breather.Button"}}
-        </button>
-    </div>
+          </button>
+        </div>
+        <div class="dt-book">{{{localize "VAGABOND.Downtime.Breather.Book"}}}</div>
+      </div>
 
-    {{!-- Craft Activity --}}
-    <div class="activity-card">
-        <div class="activity-header">
-            <i class="fas fa-hammer"></i> {{localize "VAGABOND.Downtime.Craft.Title"}}
-            <span class="cost-badge">{{localize "VAGABOND.Downtime.Cost.OneShift"}}</span>
-        </div>
-        <div class="activity-content">
-            <p>{{#if craftingEnabled}}{{localize "VAGABOND.Downtime.Craft.WorkbenchDescription"}}{{else}}{{localize "VAGABOND.Craft.Workbench.SystemDisabled"}}{{/if}}</p>
-        </div>
-        <button type="button" class="downtime-btn" data-action="openWorkbench" {{#unless craftingEnabled}}disabled{{/unless}}>
-            <i class="fas fa-tools"></i> {{localize "VAGABOND.Craft.Workbench.Title"}}
-        </button>
     </div>
-
-    {{!-- Forage Activity --}}
-    <div class="activity-card">
-        <div class="activity-header">
-            <i class="fas fa-leaf"></i> {{localize "VAGABOND.Downtime.Forage.Title"}}
-            <span class="cost-badge">{{localize "VAGABOND.Downtime.Cost.OneShift"}}</span>
-        </div>
-        <div class="activity-content">
-            <p>{{localize "VAGABOND.Downtime.Forage.Description"}}</p>
-            <div class="input-group">
-                <label>{{localize "VAGABOND.Downtime.Forage.TargetLabel"}}</label>
-                <select name="forageType">
-                    <option value="food">{{localize "VAGABOND.Downtime.ForageType.food"}}</option>
-                    <option value="mats">{{localize "VAGABOND.Downtime.ForageType.mats"}}</option>
-                </select>
-            </div>
-        </div>
-        <button type="button" class="downtime-btn" data-action="processForage">
-            <i class="fas fa-search"></i> {{localize "VAGABOND.Downtime.Forage.Button"}}
-        </button>
-    </div>
-
-    {{!-- Hunt Activity --}}
-    <div class="activity-card">
-        <div class="activity-header">
-            <i class="fas fa-paw"></i> {{localize "VAGABOND.Downtime.Hunt.Title"}}
-            <span class="cost-badge">{{localize "VAGABOND.Downtime.Cost.OneShift"}}</span>
-        </div>
-        <div class="activity-content">
-            <p>{{localize "VAGABOND.Downtime.Hunt.Description"}}</p>
-        </div>
-        <button type="button" class="downtime-btn" data-action="processHunt">
-            <i class="fas fa-bow-arrow"></i> {{localize "VAGABOND.Downtime.Hunt.Button"}}
-        </button>
-    </div>
-
-    {{!-- Study Activity --}}
-    <div class="activity-card">
-        <div class="activity-header">
-            <i class="fas fa-book-open"></i> {{localize "VAGABOND.Downtime.Study.Title"}}
-            <span class="cost-badge">{{localize "VAGABOND.Downtime.Cost.OneShift"}}</span>
-        </div>
-        <div class="activity-content">
-            <p>{{localize "VAGABOND.Downtime.Study.Description"}}</p>
-            <div class="input-group" style="background: rgba(0,0,0,0.1); padding: 5px; border-radius: 4px;">
-                <label>{{localize "VAGABOND.Downtime.Study.CurrentDice" value=studiedDice}}</label>
-            </div>
-        </div>
-        <button type="button" class="downtime-btn" data-action="processStudy">
-            <i class="fas fa-graduation-cap"></i> {{localize "VAGABOND.Downtime.Study.Button"}}
-        </button>
-    </div>
-</div>
-
-{{!-- Footer Buttons --}}
-<footer class="downtime-footer">
-    <button type="button" class="downtime-footer-btn cancel-btn" data-action="cancelDowntime">
-        <i class="fas fa-times"></i> {{localize "VAGABOND.Downtime.Cancel"}}
-    </button>
-    <button type="button" class="downtime-footer-btn done-btn" data-action="doneDowntime">
-        <i class="fas fa-check"></i> {{localize "VAGABOND.Downtime.Done"}}
-    </button>
-</footer>
+  </div>
 </div>

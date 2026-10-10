@@ -149,14 +149,29 @@ VAGABOND.zeroSlotStackSize = 10;
  * @type {Object}
  */
 VAGABOND.lodgingExpenses = {
-  'none': { label: 'No Lodging', cost: 0 },
-  'horrible': { label: 'Horrible', cost: 1 },
-  'poor': { label: 'Poor', cost: 2 },
-  'modest': { label: 'Modest', cost: 10 },
-  'comfortable': { label: 'Comfortable', cost: 20 },
-  'luxury': { label: 'Luxury', cost: 40 },
-  'opulent': { label: 'Opulent', cost: 100 } // silver (converted via CurrencyHelper)
+  'none': { label: 'VAGABOND.Downtime.Lodging.none', cost: 0 },
+  'horrible': { label: 'VAGABOND.Downtime.Lodging.horrible', cost: 1 },
+  'poor': { label: 'VAGABOND.Downtime.Lodging.poor', cost: 2 },
+  'modest': { label: 'VAGABOND.Downtime.Lodging.modest', cost: 10 },
+  'comfortable': { label: 'VAGABOND.Downtime.Lodging.comfortable', cost: 20 },
+  'luxury': { label: 'VAGABOND.Downtime.Lodging.luxury', cost: 40 },
+  'opulent': { label: 'VAGABOND.Downtime.Lodging.opulent', cost: 100 } // silver (converted via CurrencyHelper)
 };
+
+/**
+ * Wild Game found by the Hunting downtime activity (rolled on 1d6; a Crit picks one).
+ * `qty` = how many are found, `hp` = HP of one (= Rations harvested, ×3 for Prey;
+ * Materials = HP × 5s). HP mirrors the bestiary entries.
+ * @type {Array<{key: string, label: string, qty: string, hp: number, prey: boolean}>}
+ */
+VAGABOND.wildGame = [
+  { key: 'wolf',   label: 'VAGABOND.Downtime.WildGame.wolf',   qty: '2d6', hp: 9,  prey: false },
+  { key: 'fowl',   label: 'VAGABOND.Downtime.WildGame.fowl',   qty: '1d6', hp: 1,  prey: true },
+  { key: 'vermin', label: 'VAGABOND.Downtime.WildGame.vermin', qty: '2d6', hp: 1,  prey: true },
+  { key: 'deer',   label: 'VAGABOND.Downtime.WildGame.deer',   qty: '1d6', hp: 4,  prey: true },
+  { key: 'boar',   label: 'VAGABOND.Downtime.WildGame.boar',   qty: '1d6', hp: 13, prey: false },
+  { key: 'cattle', label: 'VAGABOND.Downtime.WildGame.cattle', qty: '1d4', hp: 18, prey: true },
+];
 
 /**
  * Saves againts damage of spells, weapons, and attacks

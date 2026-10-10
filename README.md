@@ -38,6 +38,15 @@ All Print Wave 3 / Alpha 3 content is now in the system:
 
 ---
 
+### **New feature:** Downtime panel
+
+- **Shift tracker:** one 4-Shift clock per Day. A downtime starts at 1 Shift; add more with **+** (a whole Day, or longer if the GM allows). Each activity spends a Shift, and the icons show what each Shift was used for.
+- **Activity mosaic:** Craft, Study, Foraging, Hunting and Other Activities as picture tiles, plus Rest and Breather. Click a tile to open its options and the book's text; the yellow button does it.
+- **Book rules:** Foraging and Hunting roll a Survival Check first (Crit = double / choose the Beast), Foraging adds the Rations or Materials to your inventory, Other Activities get +1 per 10g invested, Breather eats a Ration once per Shift, Rest pays for lodging.
+- **What you have, at a glance:** Materials and Value per Shift for Craft, Survival Difficulty for Foraging and Hunting, your coins for Rest and Other Activities.
+
+---
+
 ### **New features:** Stores
 
 Shops are now a real thing at the table. Create a **Shop** actor, stock it, drop its token on the map and let your players go shopping — prices, change, stock and receipts are all handled for you. _Map: The City of Greybanner - 2 Minutes Tabletop_
@@ -261,9 +270,10 @@ Track tension and time directly on the canvas without needing external modules.
 
 <img width="714" alt="image" src="https://github.com/user-attachments/assets/76a9b148-125a-43bc-9fc7-eec68fc4b3eb" />
 
-- **Resting**: Calculates lodging costs automatically based on quality (Squalid to Aristocratic) and updates HP, Mana, and Luck.
-- **Hunting & Foraging**: Built-in loot tables for hunting game or foraging for supplies, automatically rolling for yield.
-- **Crafting & Studying**: Track progress on crafting projects or gain "Studied Dice" for future rolls.
+- **Shift tracker**: plan how many Shifts the downtime lasts; each activity spends one.
+- **Resting**: pays lodging (Horrible to Opulent) and restores HP, Mana and the Luck Pool (or removes 1 Fatigue at full HP).
+- **Hunting & Foraging**: Survival Check first, then the yield is rolled; Foraging adds Rations or Materials to your inventory.
+- **Crafting, Studying & Other Activities**: open the Workbench, gain Studied dice, or roll a Skill Check boosted by the gold you invest.
 
 ---
 

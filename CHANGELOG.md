@@ -5,6 +5,11 @@
 - **Level Up: clearer Stat increase.** The picked Stat shows its current and new value (e.g. `6 → 7`).
 - **Level Up: Training from Reason picked in the Skills list.** When raising Reason earns a Training, tick an untrained Skill right in the Skills list (same checkboxes as the Character Builder). The hint shows the numbers (e.g. "Reason 6 → 7: Trainings 3 → 4") and the preview includes the new Training. Weapon Skills are listed with the other Skills, in three columns with bigger text.
 - **Luck Pool has no cap.** Your Luck Stat is only the value the pool resets to when you Rest; Luck gained from Crits, Knack, Virtuoso or Shift+Click can go above it. Luck now shows as a single number (no more "3 / 5") in chat cards, the Fluke menu and the party sheet.
+- **New Downtime panel.** Smaller window with the activities as a mosaic of picture tiles: click one to open its options and the book's text below. A Shift tracker at the top shows one 4-Shift clock per Day: a downtime starts at 1 Shift, add more with + (a whole Day, or longer if the GM allows), and each activity spends one. Working a Shift in the Workbench spends one too.
+- **Foraging and Hunting roll a Survival Check.** Foraging: pick Rations or Materials, a pass adds d6 Rations or (d6 × 5s) Materials to your inventory, a Crit doubles it. Hunting: a pass rolls the Wild Game found (a Crit lets you choose), and the card shows the Rations (×3 for Prey) or Materials each beast gives when harvested.
+- Each activity shows what you have next to its yellow action button: Materials and Value per Shift for Craft, your Survival Difficulty for Foraging and Hunting, your coins for Other Activities and Rest; the Skill list shows each Skill's Difficulty.
+- **Other Activities** (carousing, networking, gathering intel…): pick a Skill and the gold invested; the Check gets +1 per 10g, and the gold is paid.
+- **Breather** eats one of your Rations and can be taken once per Shift. Rest also spends a Shift of your downtime, and shows the Fatigue removed when your HP was already full.
 - Fix: resting (Downtime) reset the Luck Pool to 8 when the Luck Stat total was 0; it now resets to the Luck Stat.
 - Fix: clicking Apply (or Level Up) twice in a row could apply the Stat increase, Perk and Spells twice, or gain two Levels.
 - Fix: "Close without XP" in the Level Up window did nothing.

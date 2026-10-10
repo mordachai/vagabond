@@ -1626,7 +1626,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
    * @protected
    */
   static async _onOpenDowntime(event, target) {
-    new globalThis.vagabond.applications.DowntimeApp(this.actor).render(true);
+    globalThis.vagabond.applications.DowntimeApp.open(this.actor);
   }
 
   /**
