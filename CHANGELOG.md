@@ -1,6 +1,8 @@
 # Changelog
 
 ## Unreleased
+- **Gear: Transportation & Cargo folder.** Riding Animals (Camel, Elephant, Horse draft / pony / riding / war, Mule), Saddle & tack, Cart, Wagon and the Water Travel vessels (Canoe, Caravel, Galley, Keelboat, Longship, Rowboat, Sailboat, Warship) as ready-to-use Container items with the book's cost, capacity and Travel Speed (mounts also carry Speed and Crawl). Drop them on a party or stock them in a shop.
+- **Party sheet: Travel rules from the book.** The Group Travels at its **Navigator's** Travel Speed (compass on a member card; the slowest member when none is picked). A new travel row picks the **Pace** (Slow ×0.5 / Normal / Fast ×2, with the Complication roll in the tooltip) and toggles **Hazardous Lands** (halves the miles), and shows the miles moved this Shift.
 - Party sheet: Rations and Beverages also count what is stored in the party's containers (the hover shows one row per container).
 - **Party sheet: speed source switch.** A horse / party switch at the start of the speeds row picks what the automatic Speed, Crawl and Travel follow: the slowest member (default) or the party's container. Container items gained Speed / Crawl / Travel fields (edit mode) for wagons, mounts and the like. **Level Up** (whole party) sits right of the speeds area, on the same row.
 - **Party sheet: treasure.** Rations and Beverages stay in a small gray pill; the treasure sits outside it: a chest (the party's own coins, editable) and the coins icon (the members' coins, summed up).

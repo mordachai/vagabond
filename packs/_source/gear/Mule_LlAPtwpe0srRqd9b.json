@@ -1,0 +1,42 @@
+{
+  "name": "Mule",
+  "type": "container",
+  "img": "/icons/environment/creatures/horses.webp",
+  "system": {
+    "description": "<p><strong>Riding Animal.</strong> Travel Speed 6 mi per Shift · Capacity 11 Slots.</p><p>A willing Being can be mounted by riders that are at least one Size smaller as an Action or by skipping their Move. Intelligent Mounts act of their own accord, but controlled Mounts obey the rider, who uses the Mount's Speed instead of their own. The Mount uses the rider's applicable Skill for Checks.</p>",
+    "slots": 0,
+    "capacity": 11,
+    "gridPosition": 0,
+    "locked": true,
+    "speed": 30,
+    "crawl": 90,
+    "travel": 6,
+    "items": [],
+    "baseCost": {
+      "gold": 3,
+      "silver": 0,
+      "copper": 0
+    }
+  },
+  "effects": [],
+  "folder": "woQZcU1qvzuwqO8l",
+  "sort": 700000,
+  "ownership": {
+    "default": 0,
+    "13p65OEadZSZVLRk": 3
+  },
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.369",
+    "systemId": "vagabond",
+    "systemVersion": "6.3.1",
+    "createdTime": 1791645107442,
+    "modifiedTime": 1791646823460,
+    "lastModifiedBy": "22hFZNuh12h5BExY"
+  },
+  "_id": "LlAPtwpe0srRqd9b",
+  "_key": "!items!LlAPtwpe0srRqd9b"
+}

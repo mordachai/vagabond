@@ -59,6 +59,12 @@
   <div class="npc-info-row">
     <i class="fas fa-person-running npc-info-icon"></i>
     <span>{{speedFormatted}}</span>
+    <button
+      type="button"
+      class="member-navigator-btn{{#if isNavigator}} is-on{{/if}}"
+      data-action="toggleNavigator"
+      data-tooltip="{{#if isNavigator}}{{localize 'VAGABOND.Actor.Party.Travel.NavigatorOn'}}{{else}}{{localize 'VAGABOND.Actor.Party.Travel.NavigatorSet'}}{{/if}}"
+    ><i class="fa-solid fa-compass"></i></button>
   </div>
 
   {{! ── Senses ─────────────────────────────────────────────────────────── }}

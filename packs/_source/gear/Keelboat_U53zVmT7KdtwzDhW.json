@@ -1,0 +1,42 @@
+{
+  "name": "Keelboat",
+  "type": "container",
+  "img": "icons/environment/vehicles/boat-fishing-masted.webp",
+  "system": {
+    "description": "<p><strong>Vessel.</strong> Travel Speed 6 mi per Shift · Capacity 300 Slots.</p>",
+    "slots": 0,
+    "capacity": 300,
+    "gridPosition": 0,
+    "locked": true,
+    "speed": 0,
+    "crawl": 0,
+    "travel": 6,
+    "items": [],
+    "baseCost": {
+      "gold": 300,
+      "silver": 0,
+      "copper": 0
+    }
+  },
+  "effects": [],
+  "folder": "woQZcU1qvzuwqO8l",
+  "sort": 1400000,
+  "ownership": {
+    "default": 0,
+    "13p65OEadZSZVLRk": 3
+  },
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.365",
+    "systemId": "vagabond",
+    "systemVersion": "6.3.1",
+    "createdTime": 1791645107442,
+    "modifiedTime": 1791645107442,
+    "lastModifiedBy": "13p65OEadZSZVLRk"
+  },
+  "_id": "U53zVmT7KdtwzDhW",
+  "_key": "!items!U53zVmT7KdtwzDhW"
+}

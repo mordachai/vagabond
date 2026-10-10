@@ -28,6 +28,12 @@ export default class VagabondParty extends VagabondActorBase {
     // Where the automatic speeds come from: the slowest member, or the party's container (wagon, mount…)
     schema.speedSource = new fields.StringField({ required: true, initial: 'party', choices: ['party', 'container'] });
 
+    // Travel (book Exploration): the Group uses its Navigator's Travel Speed (member uuid, '' = none
+    // picked → slowest member); the Pace multiplies the miles per Shift; Hazardous Lands halve them.
+    schema.navigator = new fields.StringField({ required: true, blank: true, initial: '' });
+    schema.pace = new fields.StringField({ required: true, initial: 'normal', choices: ['slow', 'normal', 'fast'] });
+    schema.hazardous = new fields.BooleanField({ required: true, initial: false });
+
     // Shifts the GM grants the party for its next downtime (pushed to every Character by the sheet's Downtime button)
     schema.shifts = new fields.NumberField({ ...requiredInteger, initial: 1, min: 1 });
 

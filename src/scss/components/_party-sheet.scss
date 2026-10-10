@@ -178,7 +178,8 @@
   grid-template-areas:
     'name   down'
     'type   down'
-    'speeds down';
+    'speeds down'
+    'travel travel';
   gap: 4px 12px;
   min-width: 0;
 }
@@ -333,6 +334,101 @@ input.party-type {
 
     // Following the automatic source (no manual override): shown dimmer
     .speed-input.is-auto { opacity: 0.75; }
+}
+
+// Travel (book Exploration): Navigator · Pace · Hazardous Lands → miles this Shift
+.party-travel-row {
+  grid-area: travel;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  min-width: 0;
+  color: $c-yellow;
+  text-shadow: var(--vh-outline-2);
+
+  .ptr-leader {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    min-width: 0;
+    font-family: $font-title;
+    white-space: nowrap;
+
+    .ptr-leader-name {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+
+  .ptr-paces {
+    display: inline-flex;
+    border: 1px solid $c-yellow;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .ptr-pace {
+    height: auto;
+    min-height: 0;
+    line-height: normal;
+    margin: 0;
+    padding: 1px 9px;
+    background: rgba(0, 0, 0, 0.45);
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    color: $c-yellow;
+    font-family: $font-title;
+    font-size: 0.85em;
+    text-transform: uppercase;
+    text-shadow: none;
+    opacity: 0.55;
+    cursor: pointer;
+
+    & + .ptr-pace { border-left: 1px solid $c-yellow; }
+    &:hover { opacity: 0.85; }
+    &.is-selected { background: $c-yellow; color: $c-black; opacity: 1; }
+  }
+
+  .ptr-hazard {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    height: auto;
+    min-height: 0;
+    line-height: normal;
+    margin: 0;
+    padding: 2px 7px;
+    background: rgba(0, 0, 0, 0.45);
+    border: 1px solid $c-yellow;
+    border-radius: 12px;
+    box-shadow: none;
+    color: $c-yellow;
+    text-shadow: none;
+    opacity: 0.45;
+    cursor: pointer;
+
+    &:hover { opacity: 0.8; }
+    &.is-on { opacity: 1; }
+  }
+
+  .ptr-distance {
+    margin-left: auto;
+    font-family: $font-number;
+    font-size: 1.2em;
+    white-space: nowrap;
+
+    .speed-unit {
+      margin-left: 3px;
+      font-family: $font-title;
+      font-size: 0.65em;
+    }
+
+    // Pace / Hazardous Lands change the miles: shown at full strength
+    &:not(.is-modified) { opacity: 0.75; }
+  }
 }
 
 // Grant every Character a Level (GM, right of the speeds area)
@@ -2270,5 +2366,32 @@ $inv-soft: color-mix(in srgb, #{$c-text-1} 78%, transparent);
     text-align: center;
     color: $inv-soft;
     font-style: italic;
+  }
+}
+
+// Compass on member cards (Character + NPC)
+.party-member-card, .party-npc-card {
+  // Compass: picks the member whose Travel Speed the Group uses (lit = Navigator)
+  .member-navigator-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: auto;
+    height: auto;
+    min-height: 0;
+    line-height: normal;
+    margin: 0;
+    padding: 1px 4px;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    color: $c-text-2;
+    font-size: 1.1em;
+    opacity: 0.35;
+    cursor: pointer;
+
+    &:hover { opacity: 0.75; }
+    &.is-on { opacity: 1; color: $c-yellow; text-shadow: var(--vh-outline-2); }
   }
 }

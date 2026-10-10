@@ -26678,7 +26678,7 @@ details[open] .vagabond .npc-immunity-toggle i {
   flex: 1;
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  grid-template-areas: "name   down" "type   down" "speeds down";
+  grid-template-areas: "name   down" "type   down" "speeds down" "travel travel";
   gap: 4px 12px;
   min-width: 0;
 }
@@ -26811,6 +26811,102 @@ details[open] .vagabond .npc-immunity-toggle i {
   color: var(--vagabond-c-chat-yellow);
 }
 .vagabond .party-speed-stat .speed-input.is-auto {
+  opacity: 0.75;
+}
+.vagabond .party-travel-row {
+  grid-area: travel;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  min-width: 0;
+  color: var(--vagabond-c-chat-yellow);
+  text-shadow: var(--vh-outline-2);
+}
+.vagabond .party-travel-row .ptr-leader {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+  font-family: "Germania", serif;
+  white-space: nowrap;
+}
+.vagabond .party-travel-row .ptr-leader .ptr-leader-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.vagabond .party-travel-row .ptr-paces {
+  display: inline-flex;
+  border: 1px solid var(--vagabond-c-chat-yellow);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.vagabond .party-travel-row .ptr-pace {
+  height: auto;
+  min-height: 0;
+  line-height: normal;
+  margin: 0;
+  padding: 1px 9px;
+  background: rgba(0, 0, 0, 0.45);
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  color: var(--vagabond-c-chat-yellow);
+  font-family: "Germania", serif;
+  font-size: 0.85em;
+  text-transform: uppercase;
+  text-shadow: none;
+  opacity: 0.55;
+  cursor: pointer;
+}
+.vagabond .party-travel-row .ptr-pace + .ptr-pace {
+  border-left: 1px solid var(--vagabond-c-chat-yellow);
+}
+.vagabond .party-travel-row .ptr-pace:hover {
+  opacity: 0.85;
+}
+.vagabond .party-travel-row .ptr-pace.is-selected {
+  background: var(--vagabond-c-chat-yellow);
+  color: var(--vagabond-c-black);
+  opacity: 1;
+}
+.vagabond .party-travel-row .ptr-hazard {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  height: auto;
+  min-height: 0;
+  line-height: normal;
+  margin: 0;
+  padding: 2px 7px;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid var(--vagabond-c-chat-yellow);
+  border-radius: 12px;
+  box-shadow: none;
+  color: var(--vagabond-c-chat-yellow);
+  text-shadow: none;
+  opacity: 0.45;
+  cursor: pointer;
+}
+.vagabond .party-travel-row .ptr-hazard:hover {
+  opacity: 0.8;
+}
+.vagabond .party-travel-row .ptr-hazard.is-on {
+  opacity: 1;
+}
+.vagabond .party-travel-row .ptr-distance {
+  margin-left: auto;
+  font-family: "Germania", serif;
+  font-size: 1.2em;
+  white-space: nowrap;
+}
+.vagabond .party-travel-row .ptr-distance .speed-unit {
+  margin-left: 3px;
+  font-family: "Germania", serif;
+  font-size: 0.65em;
+}
+.vagabond .party-travel-row .ptr-distance:not(.is-modified) {
   opacity: 0.75;
 }
 .vagabond .party-levelup-btn {
@@ -28639,6 +28735,33 @@ details[open] .vagabond .npc-immunity-toggle i {
   text-align: center;
   color: color-mix(in srgb, var(--vagabond-c-text-primary) 78%, transparent);
   font-style: italic;
+}
+.vagabond .party-member-card .member-navigator-btn, .vagabond .party-npc-card .member-navigator-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: auto;
+  height: auto;
+  min-height: 0;
+  line-height: normal;
+  margin: 0;
+  padding: 1px 4px;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  color: var(--vagabond-c-text-secondary);
+  font-size: 1.1em;
+  opacity: 0.35;
+  cursor: pointer;
+}
+.vagabond .party-member-card .member-navigator-btn:hover, .vagabond .party-npc-card .member-navigator-btn:hover {
+  opacity: 0.75;
+}
+.vagabond .party-member-card .member-navigator-btn.is-on, .vagabond .party-npc-card .member-navigator-btn.is-on {
+  opacity: 1;
+  color: var(--vagabond-c-chat-yellow);
+  text-shadow: var(--vh-outline-2);
 }
 .vagabond .construct-header {
   display: flex;

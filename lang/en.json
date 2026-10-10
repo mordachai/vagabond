@@ -1801,7 +1801,7 @@
           "DowntimeStarted": "Downtime started for {n} Character(s).",
           "NoOwnCharacter": "You don't own a Character in this party.",
           "NoCharacters": "This party has no Characters.",
-          "SpeedAuto": "Automatic: the slowest party member's value. Type another value to override it; type this one again to go back to automatic.",
+          "SpeedAuto": "Automatic: the slowest party member's value (Travel: the Navigator's, when one is picked). Type another value to override it; type this one again to go back to automatic.",
           "SpeedAutoContainer": "Automatic: the party container's value (the slowest member's where it sets none). Type another value to override it; type this one again to go back to automatic.",
           "SpeedSourceParty": "Automatic speed: slowest party member. Click to use the party container instead.",
           "SpeedSourceContainer": "Automatic speed: the party container (wagon, mount…). Click to use the slowest party member instead.",
@@ -1811,6 +1811,26 @@
           "LevelUpAllProgress": "Level Up {i}/{n}: {name}",
           "LevelUpAllStopped": "Party Level Up stopped at {name}.",
           "LevelUpOne": "Open Level Up (award XP, gain a Level)"
+        },
+        "Travel": {
+          "Shift": "Shift",
+          "Pace": { "slow": "Slow", "normal": "Normal", "fast": "Fast" },
+          "Complication": {
+            "slow": "add a d6, use the two highest",
+            "normal": "normal",
+            "fast": "add a d6, use the two lowest"
+          },
+          "PaceTooltip": "Pace: miles moved this Shift ×{mult}. Complication roll: {roll}.",
+          "ForageHint": "You can Forage while you Travel at a Slow Pace.",
+          "LeaderSlowest": "Slowest member",
+          "LeaderContainer": "Party container",
+          "LeaderContainerTooltip": "Travel Speed comes from the party container (mount, vehicle, vessel).",
+          "NavigatorTooltip": "Navigator: the Group uses the Navigator's Travel Speed (Speed ÷ 5 miles per Shift). Pick one with the compass on a member card; with none, the slowest member is used.",
+          "NavigatorSet": "Make this member the party's Navigator",
+          "NavigatorOn": "Navigator (click to clear)",
+          "HazardousOff": "Hazardous Lands (Jungles, Mountains, Swamps): off. Click when the party Travels through them to halve the miles.",
+          "HazardousOn": "Hazardous Lands: the miles moved each Shift are halved. Click to turn off.",
+          "DistanceTooltip": "Miles moved this Shift: Travel Speed × Pace, halved in Hazardous Lands. After a Rest you can Travel for two Shifts; each further Shift until you Rest again gives 1 Fatigue."
         },
         "CompactView": {
           "Open": "Open Compact View",

@@ -167,6 +167,7 @@ export class VagabondPartySheet extends VagabondActorSheet {
         name: actor.name,
         img: actor.img,
         isNPC: true,
+        isNavigator: actor.uuid === this.actor.system.navigator,
         hd: sys.hd ?? 1,
         hp: { value: sys.health.value, max: sys.health.max, pct: hpPct },
         armor: sys.armor ?? 0,
@@ -237,6 +238,7 @@ export class VagabondPartySheet extends VagabondActorSheet {
       name: actor.name,
       img: actor.img,
       isNPC: false,
+      isNavigator: actor.uuid === this.actor.system.navigator,
       playerName,
       level: sys.attributes.level?.value ?? 1,
       ancestry: sys.ancestryData?.name ?? null,
@@ -941,6 +943,13 @@ export class VagabondPartySheet extends VagabondActorSheet {
     };
 
     on('partyShiftsStep', (el) => this._stepPartyShifts(Number(el.dataset.step)));
+    on('toggleNavigator', (el) => this._toggleNavigator(el.closest('[data-actor-uuid]')?.dataset.actorUuid));
+    on('setTravelPace', (el) => {
+      if (this.isEditable && el.dataset.pace) this.actor.update({ 'system.pace': el.dataset.pace });
+    });
+    on('toggleHazardous', () => {
+      if (this.isEditable) this.actor.update({ 'system.hazardous': !this.actor.system.hazardous });
+    });
     on('toggleSpeedSource', () => {
       if (!this.isEditable) return;
       this.actor.update({ 'system.speedSource': this._speedSource() === 'container' ? 'party' : 'container' });
@@ -1212,10 +1221,68 @@ export class VagabondPartySheet extends VagabondActorSheet {
       }
     }
     const carried = this._speedSource() === 'container' ? this._containerSpeeds() : {};
+    // Book: "A Group uses the Navigator's Speed" for Travel (the slowest member's when none is picked)
+    const navigator = this._navigatorActor();
+    const navigatorTravel = navigator ? this._memberTravel(navigator) : null;
     return {
       speed: carried.speed ?? slowest.speed ?? 0,
       crawl: carried.crawl ?? slowest.crawl ?? 0,
-      travel: carried.travel ?? slowest.travel ?? 0,
+      travel: carried.travel ?? navigatorTravel ?? slowest.travel ?? 0,
+    };
+  }
+
+  /** The party's Navigator, while that uuid is still a member; null otherwise. */
+  _navigatorActor() {
+    const uuid = this.actor.system.navigator;
+    if (!uuid || !(this.actor.system.members ?? []).includes(uuid)) return null;
+    try { return fromUuidSync(uuid) ?? null; } catch { return null; }
+  }
+
+  /** A member's Travel Speed in miles per Shift: a Character's derived value, an NPC's Speed ÷ 5 (book). */
+  _memberTravel(actor) {
+    if (actor.type === 'character') {
+      const travel = Number(actor.system.speed?.travel);
+      return Number.isFinite(travel) ? travel : null;
+    }
+    const speed = Number(actor.system.speed);
+    return speed > 0 ? Math.floor(speed / 5) : null;
+  }
+
+  /** Pick (or clear, when already picked) the member the Group follows when it Travels. */
+  async _toggleNavigator(uuid) {
+    if (!this.isEditable || !uuid) return;
+    await this.actor.update({ 'system.navigator': this.actor.system.navigator === uuid ? '' : uuid });
+  }
+
+  /**
+   * Travel modifiers (book Exploration): the Pace multiplies the miles moved each Shift and
+   * Hazardous Lands halve them. `distance` is the result for a Travel Speed of `travel`.
+   */
+  _travelView(travel) {
+    const paces = CONFIG.VAGABOND.travelPaces;
+    const pace = paces[this.actor.system.pace] ? this.actor.system.pace : 'normal';
+    const hazardous = !!this.actor.system.hazardous;
+    const mult = paces[pace].mult * (hazardous ? CONFIG.VAGABOND.hazardousMult : 1);
+    const navigator = this._navigatorActor();
+    const fromContainer = this._speedSource() === 'container';
+    const t = (key, data) => (data ? game.i18n.format(`VAGABOND.Actor.Party.Travel.${key}`, data) : game.i18n.localize(`VAGABOND.Actor.Party.Travel.${key}`));
+    return {
+      pace,
+      hazardous,
+      paces: Object.entries(paces).map(([key, cfg]) => ({
+        key,
+        label: game.i18n.localize(cfg.label),
+        active: key === pace,
+        tooltip: t('PaceTooltip', { mult: cfg.mult, roll: game.i18n.localize(cfg.complication) })
+          + (key === 'slow' ? ` ${t('ForageHint')}` : ''),
+      })),
+      // Who sets the Travel Speed: the container, the Navigator, or (none picked) the slowest member
+      leader: fromContainer ? t('LeaderContainer') : (navigator?.name ?? t('LeaderSlowest')),
+      leaderTooltip: fromContainer ? t('LeaderContainerTooltip') : t('NavigatorTooltip'),
+      hazardTooltip: t(hazardous ? 'HazardousOn' : 'HazardousOff'),
+      distance: Math.round(travel * mult * 100) / 100,
+      modified: mult !== 1,
+      distanceTooltip: t('DistanceTooltip'),
     };
   }
 
@@ -1237,6 +1304,7 @@ export class VagabondPartySheet extends VagabondActorSheet {
         ? { value: manual, auto: false }
         : { value: auto[field], auto: true };
     }
+    view.trip = this._travelView(view.travel.value);
     return view;
   }
 

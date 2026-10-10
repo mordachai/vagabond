@@ -86,6 +86,12 @@
     </div>
     <button
       type="button"
+      class="member-navigator-btn{{#if isNavigator}} is-on{{/if}}"
+      data-action="toggleNavigator"
+      data-tooltip="{{#if isNavigator}}{{localize 'VAGABOND.Actor.Party.Travel.NavigatorOn'}}{{else}}{{localize 'VAGABOND.Actor.Party.Travel.NavigatorSet'}}{{/if}}"
+    ><i class="fa-solid fa-compass"></i></button>
+    <button
+      type="button"
       class="member-xp-chip{{#if xp.canLevelUp}} can-level{{/if}}"
       data-action="memberLevelUp"
       data-tooltip="{{localize 'VAGABOND.Actor.Party.Controls.LevelUpOne'}}"

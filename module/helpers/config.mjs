@@ -1465,6 +1465,18 @@ VAGABOND.speedTable = {
   6: { base: 35, crawl: 105, travel: 7 }  // Dex 6+ (Caps here if higher entries are removed)
 };
 
+/**
+ * Travel Paces (book Exploration, TRAVEL SPEED table): the Pace multiplies the miles
+ * the Group moves that Shift; `complication` is the Complication roll it asks for.
+ * Hazardous Lands (Jungles, Mountains, Swamps) halve the miles on top (`hazardousMult`).
+ */
+VAGABOND.travelPaces = {
+  slow:   { mult: 0.5, label: 'VAGABOND.Actor.Party.Travel.Pace.slow',   complication: 'VAGABOND.Actor.Party.Travel.Complication.slow' },
+  normal: { mult: 1,   label: 'VAGABOND.Actor.Party.Travel.Pace.normal', complication: 'VAGABOND.Actor.Party.Travel.Complication.normal' },
+  fast:   { mult: 2,   label: 'VAGABOND.Actor.Party.Travel.Pace.fast',   complication: 'VAGABOND.Actor.Party.Travel.Complication.fast' },
+};
+VAGABOND.hazardousMult = 0.5;
+
 
 
 /**

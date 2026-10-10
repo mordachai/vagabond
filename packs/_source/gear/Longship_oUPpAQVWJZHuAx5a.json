@@ -1,0 +1,42 @@
+{
+  "name": "Longship",
+  "type": "container",
+  "img": "/icons/skills/trades/profession-sailing-ship.webp",
+  "system": {
+    "description": "<p><strong>Vessel.</strong> Travel Speed 30 mi per Shift · Capacity 1000 Slots.</p>",
+    "slots": 0,
+    "capacity": 1000,
+    "gridPosition": 0,
+    "locked": true,
+    "speed": 0,
+    "crawl": 0,
+    "travel": 30,
+    "items": [],
+    "baseCost": {
+      "gold": 1000,
+      "silver": 0,
+      "copper": 0
+    }
+  },
+  "effects": [],
+  "folder": "woQZcU1qvzuwqO8l",
+  "sort": 1500000,
+  "ownership": {
+    "default": 0,
+    "13p65OEadZSZVLRk": 3
+  },
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.369",
+    "systemId": "vagabond",
+    "systemVersion": "6.3.1",
+    "createdTime": 1791645107442,
+    "modifiedTime": 1791646741072,
+    "lastModifiedBy": "22hFZNuh12h5BExY"
+  },
+  "_id": "oUPpAQVWJZHuAx5a",
+  "_key": "!items!oUPpAQVWJZHuAx5a"
+}

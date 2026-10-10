@@ -80,6 +80,25 @@
         </button>
         {{/if}}
       </div>
+
+      {{! Travel (book Exploration): Navigator · Pace · Hazardous Lands → miles this Shift }}
+      <div class="party-travel-row">
+        <span class="ptr-leader" data-tooltip="{{speeds.trip.leaderTooltip}}">
+          <i class="fa-solid {{#if speeds.fromContainer}}fa-horse{{else}}fa-compass{{/if}}"></i>
+          <span class="ptr-leader-name">{{speeds.trip.leader}}</span>
+        </span>
+        <div class="ptr-paces">
+          {{#each speeds.trip.paces}}
+          <button type="button" class="ptr-pace{{#if active}} is-selected{{/if}}" data-action="setTravelPace" data-pace="{{key}}" data-tooltip="{{tooltip}}">{{label}}</button>
+          {{/each}}
+        </div>
+        <button type="button" class="ptr-hazard{{#if speeds.trip.hazardous}} is-on{{/if}}" data-action="toggleHazardous" data-tooltip="{{speeds.trip.hazardTooltip}}">
+          <i class="fa-solid fa-mountain"></i>
+        </button>
+        <span class="ptr-distance{{#if speeds.trip.modified}} is-modified{{/if}}" data-tooltip="{{speeds.trip.distanceTooltip}}">
+          {{speeds.trip.distance}}<span class="speed-unit">{{localize 'VAGABOND.UI.Units.Miles'}} / {{localize 'VAGABOND.Actor.Party.Travel.Shift'}}</span>
+        </span>
+      </div>
     </div>
   </div>
 

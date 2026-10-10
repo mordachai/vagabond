@@ -1815,7 +1815,7 @@
           "DowntimeStarted": "Descanso iniciado para {n} Personagem(ns).",
           "NoOwnCharacter": "Você não possui um Personagem neste grupo.",
           "NoCharacters": "Este grupo não tem Personagens.",
-          "SpeedAuto": "Automático: o valor do membro mais lento. Digite outro valor para substituí-lo; digite este de novo para voltar ao automático.",
+          "SpeedAuto": "Automático: o valor do membro mais lento (Viagem: o do Navegador, quando houver). Digite outro valor para substituí-lo; digite este de novo para voltar ao automático.",
           "SpeedAutoContainer": "Automático: o valor do recipiente do grupo (o do membro mais lento onde ele não define). Digite outro valor para substituí-lo; digite este de novo para voltar ao automático.",
           "SpeedSourceParty": "Velocidade automática: membro mais lento do grupo. Clique para usar o recipiente do grupo.",
           "SpeedSourceContainer": "Velocidade automática: recipiente do grupo (carroça, montaria…). Clique para usar o membro mais lento.",
@@ -1825,6 +1825,26 @@
           "LevelUpAllProgress": "Subida de Nível {i}/{n}: {name}",
           "LevelUpAllStopped": "A subida de nível do grupo parou em {name}.",
           "LevelUpOne": "Abrir Subida de Nível (dar XP, ganhar um Nível)"
+        },
+        "Travel": {
+          "Shift": "Turno",
+          "Pace": { "slow": "Lento", "normal": "Normal", "fast": "Rápido" },
+          "Complication": {
+            "slow": "some um d6, use os dois maiores",
+            "normal": "normal",
+            "fast": "some um d6, use os dois menores"
+          },
+          "PaceTooltip": "Ritmo: milhas percorridas neste Turno ×{mult}. Rolagem de Complicação: {roll}.",
+          "ForageHint": "Você pode Forragear enquanto Viaja em Ritmo Lento.",
+          "LeaderSlowest": "Membro mais lento",
+          "LeaderContainer": "Recipiente do grupo",
+          "LeaderContainerTooltip": "A Velocidade de viagem vem do recipiente do grupo (montaria, veículo, embarcação).",
+          "NavigatorTooltip": "Navegador: o Grupo usa a Velocidade de viagem do Navegador (Velocidade ÷ 5 milhas por Turno). Escolha um pela bússola no card de um membro; sem Navegador, usa o membro mais lento.",
+          "NavigatorSet": "Tornar este membro o Navegador do grupo",
+          "NavigatorOn": "Navegador (clique para remover)",
+          "HazardousOff": "Terras Perigosas (Selvas, Montanhas, Pântanos): desligado. Clique quando o grupo Viajar por elas para dividir as milhas pela metade.",
+          "HazardousOn": "Terras Perigosas: as milhas percorridas a cada Turno caem pela metade. Clique para desligar.",
+          "DistanceTooltip": "Milhas percorridas neste Turno: Velocidade de viagem × Ritmo, pela metade em Terras Perigosas. Após um Descanso você pode Viajar por dois Turnos; cada Turno a mais até Descansar de novo dá 1 de Fadiga."
         },
         "CompactView": {
           "Open": "Visualização Compacta",
