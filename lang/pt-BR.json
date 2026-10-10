@@ -1687,6 +1687,7 @@
       "Party": {
         "Tabs": {
           "Party": "Grupo",
+          "Inventory": "Inventário",
           "Notes": "Notas",
           "Vehicle": "Veículo",
           "Effects": "Efeitos"
@@ -1746,6 +1747,7 @@
           "OpenSheet": "Abrir ficha de personagem",
           "PanToToken": "Centralizar no token",
           "LevelAbbr": "Nv.",
+          "HP": "PV",
           "Player": "Jogador",
           "XP": "XP",
           "Fatigue": "Fadiga",
@@ -1764,6 +1766,7 @@
           "NoMembersHint": "Arraste atores para esta aba ou use o botão + para adicionar membros.",
           "AddMember": "Adicionar Membro",
           "Remove": "Remover do Grupo",
+          "RemoveMember": "Remover Membro",
           "RemoveConfirm": "Remover {name} do grupo?",
           "AlreadyMember": "Esse ator já é membro do grupo.",
           "NoAvailable": "Nenhum personagem disponível para adicionar.",
@@ -1771,10 +1774,57 @@
           "PickMember": "Membro do Grupo",
           "Add": "Adicionar",
           "Wealth": "Riqueza",
+          "Chest": "Baú do grupo: moedas guardadas no recipiente do grupo",
           "TotalWealth": "Riqueza Total do Grupo",
           "AssignStatusEffects": "Atribuir Efeitos de Status",
           "RemoveAllStatuses": "Remover Todos os Status",
           "IsImmune": "{name} é imune a {status}."
+        },
+        "Inventory": {
+          "Item": "Item",
+          "Quantity": "Qtd",
+          "Empty": "Não carrega nada.",
+          "NoCharacters": "Este grupo não tem Personagens.",
+          "Groups": {
+            "weapon": "Armas",
+            "armor": "Armaduras",
+            "alchemical": "Alquímicos",
+            "relic": "Relíquias",
+            "gear": "Equipamento"
+          },
+          "Containers": {
+            "Label": "Recipientes",
+            "Drop": "Solte itens recipiente aqui",
+            "Tooltip": "Solte itens recipiente aqui para guardá-los com o grupo",
+            "Open": "Abrir recipiente",
+            "Delete": "Remover recipiente",
+            "DeleteConfirm": "Remover {name} do grupo? Tudo dentro dele será perdido.",
+            "OnlyContainers": "Apenas itens recipiente podem ser soltos no grupo."
+          }
+        },
+        "Controls": {
+          "ShiftsCount": "Turnos: {n}",
+          "ShiftsTooltip": "Turnos que o Mestre concede ao grupo para o próximo período de descanso",
+          "ShiftsAdd": "Conceder mais um Turno",
+          "ShiftsRemove": "Conceder um Turno a menos",
+          "Downtime": "Descanso",
+          "DowntimeGM": "Iniciar um novo descanso: cada Personagem recebe esta quantidade de Turnos, nenhum gasto",
+          "DowntimeOwn": "Abrir seu painel de Descanso",
+          "DowntimeConfirm": "Alguns Personagens já gastaram Turnos. Iniciar um novo descanso e limpá-los?",
+          "DowntimeAnnounce": "O descanso começa: {shifts} Turno(s) para o grupo.",
+          "DowntimeStarted": "Descanso iniciado para {n} Personagem(ns).",
+          "NoOwnCharacter": "Você não possui um Personagem neste grupo.",
+          "NoCharacters": "Este grupo não tem Personagens.",
+          "SpeedAuto": "Automático: o valor do membro mais lento. Digite outro valor para substituí-lo; digite este de novo para voltar ao automático.",
+          "SpeedAutoContainer": "Automático: o valor do recipiente do grupo (o do membro mais lento onde ele não define). Digite outro valor para substituí-lo; digite este de novo para voltar ao automático.",
+          "SpeedSourceParty": "Velocidade automática: membro mais lento do grupo. Clique para usar o recipiente do grupo.",
+          "SpeedSourceContainer": "Velocidade automática: recipiente do grupo (carroça, montaria…). Clique para usar o membro mais lento.",
+          "LevelUpAll": "Subir de Nível",
+          "LevelUpAllTooltip": "Conceder um Nível (Destino, sem precisar de XP) a todos os Personagens, uma janela de Subida de Nível após a outra",
+          "LevelUpAllConfirm": "Conceder um Nível a {n} Personagem(ns)? Uma janela de Subida de Nível abre para cada um aplicar suas escolhas.",
+          "LevelUpAllProgress": "Subida de Nível {i}/{n}: {name}",
+          "LevelUpAllStopped": "A subida de nível do grupo parou em {name}.",
+          "LevelUpOne": "Abrir Subida de Nível (dar XP, ganhar um Nível)"
         },
         "CompactView": {
           "Open": "Visualização Compacta",
@@ -1942,7 +1992,7 @@
         },
         "MoraleCheck": {
           "Title": "Teste de Moral",
-          "tooltip": "Testar Moral (2d6 vs Moral)\n\nQuando rolar:\n• Seu Líder é derrotado.\n• Está sozinho e com metade dos PV ou menos.\n• Metade ou mais estão derrotados.",
+          "tooltip": "Testar Moral (2d6 vs Moral)\n\nInimigos fazem Testes de Moral durante um Combate quando:\n• Ocorre a primeira morte em seu Grupo.\n• Seus PV estão na metade ou menos, ou metade de seu Grupo está Incapacitada.\n• Causaram 0 de dano durante uma Rodada.\n• O Líder do Grupo morre.",
           "Target": "Alvo de Moral",
           "Roll": "Resultado da Rolagem",
           "Passed": "A moral se mantém! O NPC continua lutando.",

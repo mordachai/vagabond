@@ -3,16 +3,26 @@
 // Imported inside `.vagabond {}` in vagabond.scss — do NOT add an outer wrapper
 // ─────────────────────────────────────────────────────────────────────────────
 
-// ── Supplies bar ──────────────────────────────────────────────────────────────
+// ── Supplies + treasure row ───────────────────────────────────────────────────
+.party-supplies-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 10px;
+  border-bottom: 1px solid $c-tan-lite;
+}
+
+// Rations and Beverages only: a small gray pill that hugs its content
 .party-supplies-bar {
+  flex: none;
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 6px 10px;
+  padding: 1px 10px;
   background: $c-inset-1;
-  border-bottom: 1px solid $c-tan-lite;
+  border-radius: 4px;
   font-family: $font-title;
-  font-size: 1.2em;
+  font-size: 1.1em;
 
   .supplies-label {
     color: $c-yellow;
@@ -47,15 +57,70 @@
     color: $c-tan;
     margin: 0 4px;
   }
+}
 
-  // Wealth group pushed to the far right
-  .supplies-wealth {
-    margin-left: auto;
-    display: flex;
+// Treasure sits outside the gray pill, pushed to the far right:
+// chest = the party's own coins (editable), coins = what the members carry, summed
+.party-treasure {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 36px;
+  font-family: $font-title;
+  font-size: 1.1em;
+  color: $c-text-2;
+
+  .treasure-group {
+    display: inline-flex;
     align-items: center;
     gap: 6px;
 
-    i { color: $c-yellow; font-size: 1em; }
+    > i { font-size: 1.1em; }
+  }
+
+  .has-breakdown {
+    cursor: help;
+    border-radius: 3px;
+    transition: background-color 0.15s;
+    &:hover { background-color: color-mix(in srgb, #{$c-yellow} 12%, transparent); }
+  }
+
+  .supplies-value {
+    font-weight: bold;
+    color: $c-text-2;
+  }
+
+  .currency-abbr { color: inherit; }
+
+  .treasure-coin {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 1px;
+    margin: 0;
+    font-weight: bold;
+  }
+
+  .treasure-input {
+    field-sizing: content;
+    min-width: 2ch;
+    height: auto;
+    line-height: 1.2;
+    padding: 0;
+    background: transparent;
+    border: none;
+    border-bottom: 1px dotted $c-tan;
+    border-radius: 0;
+    box-shadow: none;
+    text-align: right;
+    font-family: $font-number;
+    font-size: 1em;
+    font-weight: bold;
+    color: inherit;
+
+    &::-webkit-inner-spin-button,
+    &::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+    &:focus { outline: none; border-bottom-color: $c-text-2; }
+    &[readonly] { border-bottom-color: transparent; cursor: default; }
   }
 }
 
@@ -78,9 +143,21 @@
   border-bottom: 3px solid $c-black;
 }
 
+// Stretches to the full height of the info column so the portrait sits flush
+// with the Shifts box; the image fills it (cover).
+.party-portrait-wrap {
+  position: relative;
+  flex: 0 0 auto;
+  align-self: stretch;
+  width: 130px;
+  min-height: 120px;
+}
+
 .party-portrait {
-  width: 120px;
-  height: 120px;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
   object-position: top center;
   background-color: $c-black;
@@ -96,13 +173,18 @@
 
 .party-info {
   flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    'name   down'
+    'type   down'
+    'speeds down';
+  gap: 4px 12px;
   min-width: 0;
 }
 
 .party-name {
+    grid-area: name;
     font-family: $font-title;
     font-size: 1.5em !important;
     color: $c-white !important;
@@ -121,6 +203,7 @@
 }
 
 .party-type {
+  grid-area: type;
   font-family: $font-title;
   font-size: 1em;
   color: $c-yellow;
@@ -138,15 +221,29 @@ input.party-type {
   }
 }
 
+// Speeds area + Level Up Party button, side by side in the info grid
+.party-speed-row {
+  grid-area: speeds;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  gap: 8px;
+  min-width: 0;
+}
+
 .party-speeds {
     position: relative;
     bottom: 0;
+    flex: 0 1 auto;
+    min-width: 0;
+    flex-wrap: nowrap;
+    align-items: center;
     display: flex;
-    justify-content: space-around;
+    justify-content: flex-start;
     align-content: baseline;
     background: rgba(0,0,0,0.5);
-    padding: 2px 8px;
-    gap: 8px;
+    padding: 6px 10px 6px 6px;
+    gap: 6px 12px;
     border: 2px solid $c-yellow;
     border-radius: 8px;
     text-shadow:
@@ -156,14 +253,47 @@ input.party-type {
       2px -2px 0 $c-dark-bluey;
 }
 
+// Horse / party switch: where the automatic speeds come from (the lit icon is the active source)
+.party-speed-source {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+  gap: 8px;
+  height: auto;
+  min-height: 0;
+  line-height: 1;
+  padding: 4px 8px;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid $c-yellow;
+  border-radius: 14px;
+  box-shadow: none;
+  text-shadow: none;
+  cursor: pointer;
+
+  i {
+    font-size: 1.3em;
+    color: $c-yellow;
+    opacity: 0.3;
+    transition: opacity 0.15s;
+
+    &.is-on { opacity: 1; }
+  }
+
+  &:hover i { opacity: 0.65; }
+  &:hover i.is-on { opacity: 1; }
+}
+
 .party-speed-stat {
     display: flex;
-    align-items: center;
+    align-items: baseline;
+    gap: 4px;
     white-space: nowrap;
+    line-height: 1.2;
 
     .speed-label {
       font-family: $font-title;
-      font-size: 1.3em;
+      font-size: 1.0em;
+      line-height: 1.2;
       color: $c-yellow;
       text-transform: uppercase;
       letter-spacing: 0.04em;
@@ -171,18 +301,27 @@ input.party-type {
 
     .speed-unit {
       font-family: $font-title;
-      font-size: 0.9em;
+      font-size: 0.8em;
+      line-height: 1.2;
       color: $c-yellow;
-      margin-left: -5px;
+      margin-left: -2px;
       text-align: left;
     }
 
     .speed-input {
       field-sizing: content;
       min-width: 1ch;
+      height: auto;
+      min-height: 0;
+      margin: 0;
+      padding: 0;
+      background: transparent;
+      border: none;
+      box-shadow: none;
       font-family: $font-number;
       font-size: 1.3em;
-      text-align: left;
+      line-height: 1.1;
+      text-align: right;
       text-shadow:
         1px 1px 0 $c-dark-bluey,
         -1px 1px 0 $c-dark-bluey,
@@ -192,6 +331,112 @@ input.party-type {
 
     input { color: $c-yellow; }
 
+    // Following the automatic source (no manual override): shown dimmer
+    .speed-input.is-auto { opacity: 0.75; }
+}
+
+// Grant every Character a Level (GM, right of the speeds area)
+.party-levelup-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  height: auto;
+  line-height: normal;
+  flex: none;
+  margin-left: auto;
+  padding: 4px 14px;
+  background: $c-yellow;
+  color: $c-black;
+  border: none;
+  border-radius: 8px;
+  font-family: $font-title;
+  font-size: 14px;
+  text-shadow: none;
+  white-space: nowrap;
+  cursor: pointer;
+
+  i { font-size: 1.1em; }
+  &:hover { filter: brightness(1.1); }
+}
+
+// Shifts the GM grants for the party's downtime: SVG Shift clock(s) with the
+// progress-clock side handles (top-right, full height of the header info column)
+.party-downtime-box {
+  grid-area: down;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 3px;
+  max-width: 200px;
+  padding: 4px 8px;
+  background: rgba(0, 0, 0, 0.5);
+  border: 2px solid $c-yellow;
+  border-radius: 8px;
+
+  .pdt-clocks {
+    position: relative;
+    flex: 1;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: center;
+    gap: 2px;
+    // room for the handles that peek out of the sides
+    padding: 0 calc(var(--pdt-size) * 0.22);
+  }
+
+  .pdt-clock {
+    position: relative;
+    z-index: 2;
+    width: var(--pdt-size);
+    height: var(--pdt-size);
+    border: none;
+    flex: 0 0 auto;
+  }
+
+  // Same handles as the on-canvas progress clock, tucked behind the clock art
+  .pdt-handle {
+    position: absolute;
+    top: 50%;
+    z-index: 1;
+    width: calc(var(--pdt-size) * 0.24);
+    height: calc(var(--pdt-size) * 0.45);
+    border: none;
+    transform: translateY(-50%);
+    cursor: pointer;
+    transition: filter 0.15s ease;
+
+    &:hover { filter: brightness(1.4); }
+  }
+  .pdt-handle-left { left: 0; }
+  .pdt-handle-right { right: 0; }
+
+  .pdt-count {
+    font-family: $font-title;
+    font-size: 0.95em;
+    color: $c-yellow;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    text-shadow: var(--vh-outline-2);
+    white-space: nowrap;
+  }
+
+  .pdt-open {
+    align-self: stretch;
+    height: auto;
+    line-height: normal;
+    padding: 3px 8px;
+    background: $c-yellow;
+    color: $c-black;
+    border: none;
+    border-radius: 4px;
+    font-family: $font-title;
+    text-transform: uppercase;
+    cursor: pointer;
+
+    &:hover { filter: brightness(1.1); }
+  }
 }
 
 // ── Add Member header ──────────────────────────────────────────────────────────
@@ -222,7 +467,8 @@ input.party-type {
     i { font-size: 1.1em; }
   }
 
-  .party-add-member {
+  .party-add-member,
+  .party-remove-member {
     display: flex;
     align-items: center;
     gap: 5px;
@@ -239,6 +485,8 @@ input.party-type {
     &:hover { opacity: 0.8; }
 
     i { font-size: 1.2em; }
+
+    &.is-active { background: #c62828; }
   }
 }
 
@@ -263,6 +511,11 @@ input.party-type {
   grid-template-columns: repeat(clamp(2, var(--member-count, 2), 4), 1fr);
   gap: 15px;
   padding: 10px;
+
+  // Remove X buttons stay hidden until "Remove Member" is toggled on.
+  .member-remove-btn { display: none; }
+
+  &.remove-mode .member-remove-btn { display: flex; }
 }
 
 // ── Shared HP / Fatigue bar styles (used by both .party-member-card and .party-npc-card) ──
@@ -296,7 +549,7 @@ input.party-type {
 }
 
 .member-hp-bar-bg {
-  flex: 1;
+  flex: 1 0 auto;
   &::before { width: var(--hp-fill, 0%); background: rgba(238, 69, 50, 0.561); }
   i { color: $c-yellow; }
 }
@@ -310,6 +563,7 @@ input.party-type {
 
 // ── Member card ────────────────────────────────────────────────────────────────
 .party-member-card {
+  font-size: 1.15em;
   background: $bg-paper;
   background-repeat: $bg-repeat;
   background-size: $bg-size;
@@ -336,24 +590,29 @@ input.party-type {
     border-bottom: 3px solid $c-black;
   }
 
+  // Same red disc as the Alchemy lab's `.al-tile-remove`.
   .member-remove-btn {
     position: absolute;
-    top: -13px;
-    right: -10px;
-    width: 18px;
-    height: 18px;
-    padding: 1px 10px;
-    border: none;
-    font-size: 0.85em;
-    cursor: pointer;
-    border-radius: 12px;
-    display: flex;
+    top: -8px;
+    right: -8px;
+    z-index: 1;
+    width: 16px;
+    height: 16px;
+    min-height: 0;
+    line-height: normal;
+    padding: 0;
     align-items: center;
     justify-content: center;
-    opacity: 0.9;
-    transition: opacity 0.15s, color 0.15s, background 0.15s;
+    border: 1px solid $c-black;
+    border-radius: 50%;
+    background: #c62828;
+    color: #ffffff;
+    font-size: 0.6rem;
+    cursor: pointer;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
 
-    &:hover { color: $c-white; background: rgba(198, 5, 5, 0.7); opacity: 1; }
+    i { color: inherit; }
+    &:hover { background: #e53935; }
   }
 
   .member-portrait-wrap {
@@ -365,8 +624,8 @@ input.party-type {
   }
 
   .member-portrait {
-    width: 54px;
-    height: 54px;
+    width: 52px;
+    height: 52px;
     object-fit: cover;
     object-position: top center;
     display: block;
@@ -395,7 +654,7 @@ input.party-type {
 
   .member-subtitle {
     font-family: $font-title;
-    font-size: 0.9em;
+    font-size: 0.75em;
     color: $c-yellow;
     margin: 0;
     display: flex;
@@ -418,11 +677,6 @@ input.party-type {
     }
   }
 
-  .member-speed {
-    flex-shrink: 0;
-    opacity: 0.85;
-  }
-
   .member-header-info {
     flex: 1;
     display: flex;
@@ -431,7 +685,7 @@ input.party-type {
     min-width: 0;
   }
 
-  // Row 1: Name + XP
+  // Row 1: Name
   .member-name-row {
     display: flex;
     align-items: baseline;
@@ -441,7 +695,8 @@ input.party-type {
   .member-name {
     flex: 1;
     font-family: $font-title;
-    font-size: 1.2em;
+    font-size: 1.5em;
+    line-height: 1.15;
     color: $c-yellow;
     white-space: nowrap;
     overflow: hidden;
@@ -455,16 +710,6 @@ input.party-type {
       2px -2px 0 $c-black;
 
     &:hover { text-decoration: underline; }
-  }
-
-  .member-xp {
-    flex-shrink: 0;
-    font-family: $font-title;
-    font-size: 1em;
-    color: $c-yellow;
-    white-space: nowrap;
-
-    i { font-size: 0.8em; color: #c0912b; margin-right: 1px; }
   }
 
   // Row 2: HP + Fatigue as bar-backgrounds
@@ -484,8 +729,8 @@ input.party-type {
   }
 
   .member-status-icon {
-    width: 22px;
-    height: 22px;
+    width: 28px;
+    height: 28px;
     object-fit: cover;
     border-radius: 3px;
     border: 1px solid $c-tan-lite;
@@ -499,9 +744,11 @@ input.party-type {
   // ── Div 3: Saves row ───────────────────────────────────────────────────────
   .member-saves-row {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-around;
     align-items: center;
-    padding: 4px 8px;
+    gap: 4px 10px;
+    padding: 5px 8px;
     border-bottom: 1px solid $c-tan-lite;
     background: $c-inset-2;
   }
@@ -513,6 +760,37 @@ input.party-type {
   }
 
   .save-icon { font-size: 1.2em; color: $c-text-2; }
+
+  // XP: opens the member's Level Up window (award XP / gain a Level)
+  .member-xp-chip {
+    display: flex;
+    align-items: baseline;
+    gap: 5px;
+    height: auto;
+    line-height: normal;
+    padding: 1px 9px;
+    background: transparent;
+    border: 1px solid $c-tan-lite;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: border-color 0.15s, box-shadow 0.15s;
+
+    .xp-label {
+      font-family: $font-title;
+      font-size: 0.85em;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: $c-muted;
+    }
+
+    &:hover { border-color: $c-bg2; }
+
+    // Banked enough XP to gain a Level
+    &.can-level {
+      border-color: $c-yellow;
+      box-shadow: 0 0 8px -1px $c-yellow, inset 0 0 0 1px $c-yellow;
+    }
+  }
 
   .save-value {
     font-family: $font-title;
@@ -547,7 +825,7 @@ input.party-type {
 
   .stat-icon {
     font-size: 1em;
-    width: 14px;
+    width: 18px;
     text-align: center;
     color: $c-muted;
     flex-shrink: 0;
@@ -565,60 +843,6 @@ input.party-type {
     font-size: 0.9em;
     color: $c-muted;
     white-space: nowrap;
-  }
-
-  // ── Div 5 & 6: Equipped + Spells ──────────────────────────────────────────
-  .member-equipped-list,
-  .member-spells-list {
-    padding: 4px 8px;
-
-    &:not(:last-child) { border-bottom: 1px solid $c-tan-lite; }
-  }
-
-  .member-list-label {
-    font-family: $font-title;
-    font-size: 1em;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: $c-text-2;
-    margin: 0 0 3px;
-  }
-
-  .member-item-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 3px;
-  }
-
-  .member-item-entry {
-    display: flex;
-    align-items: center;
-    gap: 3px;
-    background: $c-inset-2;
-    border: 1px solid $c-tan-lite;
-    border-radius: 3px;
-    padding: 1px 4px;
-    max-width: 130px;
-  }
-
-  .member-item-icon {
-    width: 14px;
-    height: 14px;
-    object-fit: cover;
-    border-radius: 2px;
-    flex-shrink: 0;
-  }
-
-  .member-item-name {
-    font-family: $font-title;
-    font-size: 1em;
-    color: $c-text-1;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
   }
 }
 
@@ -655,25 +879,29 @@ input.party-type {
     &:hover { filter: brightness(1.1); }
   }
 
+  // Same red disc as the Alchemy lab's `.al-tile-remove`.
   .member-remove-btn {
     position: absolute;
-    top: -13px;
-    right: -10px;
-    width: 18px;
-    height: 18px;
-    padding: 1px 10px;
-    border: none;
-    font-size: 0.85em;
-    cursor: pointer;
-    border-radius: 12px;
-    display: flex;
+    top: -8px;
+    right: -8px;
+    z-index: 1;
+    width: 16px;
+    height: 16px;
+    min-height: 0;
+    line-height: normal;
+    padding: 0;
     align-items: center;
     justify-content: center;
-    opacity: 0.9;
-    transition: opacity 0.15s, color 0.15s, background 0.15s;
-    z-index: 1;
+    border: 1px solid $c-black;
+    border-radius: 50%;
+    background: #c62828;
+    color: #ffffff;
+    font-size: 0.6rem;
+    cursor: pointer;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
 
-    &:hover { color: $c-white; background: rgba(198, 5, 5, 0.7); opacity: 1; }
+    i { color: inherit; }
+    &:hover { background: #e53935; }
   }
 
   .npc-portrait {
@@ -1677,5 +1905,370 @@ input.party-type {
     font-style: italic;
     font-size: 0.9em;
     margin: 0;
+  }
+}
+
+// ── Member card: editable coins ────────────────────────────────────────────────
+.party-member-card .member-stat-cell.member-coins {
+  grid-column: 1 / -1;
+  gap: 6px;
+
+  .member-coin {
+    display: flex;
+    align-items: baseline;
+    gap: 2px;
+    flex: 1 1 0;
+    min-width: 0;
+    margin: 0;
+  }
+
+  .member-coin-input {
+    width: 100%;
+    min-width: 0;
+    height: auto;
+    line-height: normal;
+    padding: 0 2px;
+    text-align: right;
+    font-family: $font-title;
+    font-size: 1em;
+    color: $c-text-1;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid $c-tan-lite;
+    border-radius: 0;
+    box-shadow: none;
+    -moz-appearance: textfield;
+
+    &::-webkit-inner-spin-button,
+    &::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+
+    &:focus { outline: none; border-bottom-color: $c-bg2; }
+    &[readonly] { border-bottom-color: transparent; cursor: default; }
+  }
+
+  // Fixed yellow vanishes on the light card: follow the theme accent
+  .currency-abbr { color: $c-text-2; }
+}
+
+// Secondary text in the Inventory tab: the body text colour, slightly faded, so it
+// stays readable on the light parchment ($c-muted is too pale there)
+$inv-soft: color-mix(in srgb, #{$c-text-1} 78%, transparent);
+
+// ── Inventory tab: party containers sleeve ─────────────────────────────────────
+.party-containers {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  height: 40px;
+  margin: 10px 10px 0;
+  padding: 0 10px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  background: $c-inset-2;
+  border: 1px dashed $c-tan;
+  border-radius: 4px;
+  font-family: $font-title;
+  font-size: 13px;
+  line-height: 1.2;
+  color: $inv-soft;
+  transition: border-color 0.15s, background 0.15s;
+
+  &.is-over {
+    border-color: $c-yellow;
+    background: color-mix(in srgb, #{$c-yellow} 14%, transparent);
+  }
+
+  .pc-label {
+    flex: none;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-size: 0.9em;
+    color: $c-text-2;
+  }
+  .pc-hint { flex: none; font-style: italic; }
+
+  .pc-chip {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    height: 30px;
+  }
+
+  .pc-open,
+  .pc-delete {
+    height: auto;
+    min-height: 0;
+    line-height: 1.2;
+    padding: 0;
+    background: none;
+    border: none;
+    box-shadow: none;
+    font-family: inherit;
+    font-size: inherit;
+    cursor: pointer;
+
+    &:focus,
+    &:focus-visible { outline: none; box-shadow: none; }
+  }
+
+  .pc-open {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: $c-text-1;
+    &:hover { color: $c-text-2; }
+  }
+
+  .pc-img {
+    width: 28px;
+    height: 28px;
+    margin: 0;
+    border: none;
+    border-radius: 3px;
+    object-fit: cover;
+    background: $c-black;
+  }
+
+  .pc-fill { font-size: 0.9em; color: $inv-soft; }
+
+  .pc-delete {
+    color: $inv-soft;
+    font-size: 0.95em;
+    &:hover { color: #e53935; }
+  }
+}
+
+// ── Inventory tab ──────────────────────────────────────────────────────────────
+.party-inv-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  font-size: 1.05em;
+  background: $bg-paper;
+  background-repeat: $bg-repeat;
+  background-size: $bg-size;
+  border: 2px solid $c-tan-lite;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+
+  .inv-card-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 8px;
+    background-image: url('../assets/images/sheets/tabNavBG.webp');
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-bottom: 3px solid $c-black;
+    border-radius: 6px 6px 0 0;
+    color: $c-yellow;
+    cursor: pointer;
+  }
+
+  .inv-card-portrait {
+    width: 34px;
+    height: 34px;
+    flex-shrink: 0;
+    object-fit: cover;
+    object-position: top center;
+    background-color: $c-black;
+    border: 1px solid $c-yellow;
+    border-radius: 4px;
+  }
+
+  .inv-card-name {
+    flex: 1;
+    min-width: 0;
+    margin: 0;
+    font-family: $font-title;
+    font-size: 1.1em;
+    color: $c-yellow;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-shadow: 1px 1px 0 $c-black;
+  }
+
+  .inv-card-slots {
+    flex-shrink: 0;
+    font-family: $font-title;
+    color: $c-yellow;
+    white-space: nowrap;
+    text-shadow: 1px 1px 0 $c-black;
+  }
+
+  // Image, name and Qty share one line height and sit on the same baseline
+  --inv-line: 1.15rem;
+
+  .inv-columns,
+  .inv-row {
+    display: grid;
+    grid-template-columns: var(--inv-line) minmax(0, 1fr) 30px;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .inv-columns {
+    padding: 2px 8px;
+    font-family: $font-title;
+    font-size: 0.8em;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: $inv-soft;
+    background: $c-inset-2;
+    border-bottom: 1px solid $c-tan-lite;
+
+    .inv-col-name { grid-column: 1 / 3; }
+    .inv-col-qty { text-align: center; }
+  }
+
+  // Type heading: small, with a rule running from the word to the end of the row
+  .inv-group-title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+    padding: 3px 8px 0;
+    font-family: $font-title;
+    font-size: 0.8em;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: $c-text-2;
+
+    &::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: $c-tan;
+    }
+  }
+
+  .inv-item { border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
+
+  .inv-row { padding: 3px 8px; line-height: var(--inv-line); }
+
+  .inv-img {
+    display: block;
+    width: var(--inv-line);
+    height: var(--inv-line);
+    margin: 0;
+    object-fit: cover;
+    border: none;
+    border-radius: 3px;
+    background: $c-black;
+  }
+
+  // The name opens the accordion
+  .inv-name {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 4px;
+    width: 100%;
+    min-width: 0;
+    height: auto;
+    min-height: 0;
+    line-height: var(--inv-line);
+    padding: 0;
+    background: none;
+    border: none;
+    box-shadow: none;
+    text-align: left;
+    font-family: $font-title;
+    font-size: 1em;
+    color: $c-text-1;
+    cursor: pointer;
+
+    .inv-name-text {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    &:hover,
+    &:focus-visible { text-decoration: underline; }
+
+    // No Foundry focus ring after a click (keyboard focus still underlines)
+    &:focus,
+    &:focus-visible { outline: none; box-shadow: none; }
+  }
+  .inv-item.open .inv-name { color: $c-text-2; }
+
+  .inv-qty {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    font-family: $font-title;
+    line-height: var(--inv-line);
+    color: $c-text-1;
+  }
+
+  // Accordion: grid-rows transition, content filled lazily
+  .inv-detail {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.2s ease;
+
+    > .inv-detail-inner { overflow: hidden; min-height: 0; }
+  }
+  .inv-item.open .inv-detail { grid-template-rows: 1fr; }
+  .inv-item.open .inv-detail-inner { padding: 4px 8px 6px; }
+
+  .inv-detail-inner {
+    font-size: 0.9em;
+    color: $c-text-1;
+
+    .mini-sheet-description {
+      margin-bottom: 4px;
+      p { margin: 0 0 4px; }
+    }
+    // One stat per line: the cards are narrow (4 per row)
+    .mini-sheet-stats,
+    .mini-sheet-stats--inline {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1px;
+      margin-bottom: 4px;
+    }
+    .stat-row { display: flex; justify-content: space-between; gap: 6px; min-width: 0; }
+    .stat-name { color: $inv-soft; }
+    .stat-value { font-family: $font-title; color: $c-text-1; text-transform: capitalize; }
+    // Slots and Value share one row, both in the accent colour ($c-text-2 follows the theme)
+    .stat-row--slots {
+      justify-content: flex-start;
+      .stat-value { color: $c-text-2; }
+      .stat-coins { margin-left: auto; white-space: nowrap; }
+    }
+    .mini-sheet-properties { margin-top: 4px; }
+    .mini-sheet-label {
+      font-family: $font-title;
+      color: $c-text-2;
+      margin-bottom: 2px;
+    }
+    .property-list { display: flex; flex-wrap: wrap; gap: 2px 10px; }
+    .property-chip {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 3px;
+
+      .property-name { color: $c-text-1; }
+    }
+    .property-hint {
+      font-size: 0.8em;
+      color: $inv-soft;
+      cursor: help;
+      &:hover { color: $c-text-2; }
+    }
+  }
+
+  .inv-empty {
+    margin: 0;
+    padding: 10px 8px;
+    text-align: center;
+    color: $inv-soft;
+    font-style: italic;
   }
 }

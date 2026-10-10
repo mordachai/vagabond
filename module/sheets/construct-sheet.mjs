@@ -3,6 +3,7 @@ import { prepareEffectsView } from '../helpers/effects.mjs';
 import { TargetHelper } from '../helpers/target-helper.mjs';
 import { VagabondDamageHelper } from '../helpers/damage-helper.mjs';
 import { VagabondDiceAppearance } from '../helpers/dice-appearance.mjs';
+import { bindPartHpClickers } from '../helpers/part-hp-clicker.mjs';
 
 /**
  * Construct actor sheet.
@@ -230,28 +231,8 @@ export class VagabondConstructSheet extends VagabondActorSheet {
       }, { signal });
     });
 
-    // HP clicker — left click: -1 (Shift: -10), right click: +1 (Shift: +10)
-    this.element.querySelectorAll('.part-hp-clicker').forEach(icon => {
-      icon.addEventListener('click', async (e) => {
-        const partId = icon.closest('[data-part-id]')?.dataset.partId;
-        if (!partId) return;
-        const item = this.actor.items.get(partId);
-        if (!item) return;
-        const delta = e.shiftKey ? -10 : -1;
-        const newVal = Math.max(0, item.system.health.value + delta);
-        await item.update({ 'system.health.value': newVal });
-      }, { signal });
-      icon.addEventListener('contextmenu', async (e) => {
-        e.preventDefault();
-        const partId = icon.closest('[data-part-id]')?.dataset.partId;
-        if (!partId) return;
-        const item = this.actor.items.get(partId);
-        if (!item) return;
-        const delta = e.shiftKey ? 10 : 1;
-        const newVal = Math.min(item.system.health.max, item.system.health.value + delta);
-        await item.update({ 'system.health.value': newVal });
-      }, { signal });
-    });
+    // HP clicker — left click: -1, right click: +1 (Shift: ±10)
+    bindPartHpClickers(this.element, this.actor, signal);
 
     // Roll part damage directly (damage-only card, no attack roll)
     this.element.querySelectorAll('.part-roll-damage').forEach(icon => {

@@ -1,0 +1,31 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// List tooltips — `{{listTip}}` helper + `data-tooltip-class="vagabond-list-tooltip"`.
+// Rendered inside Foundry's global #tooltip (outside sheets), so top level.
+// Native tooltips collapse newlines; this keeps heading + bullet layout.
+// ─────────────────────────────────────────────────────────────────────────────
+#tooltip.vagabond-list-tooltip {
+  text-align: left;
+  max-width: 280px;
+
+  p {
+    margin: 0 0 4px;
+    font-weight: bold;
+  }
+
+  ul {
+    margin: 0;
+    padding-left: 1.1em;
+    list-style: disc;
+  }
+
+  li {
+    margin: 0 0 2px;
+    padding: 0;
+  }
+}
+
+// Click-hint tooltips (mouse icon + key rows, one per line) — plain markup with
+// <br>, no list styling; just keep the rows left-aligned.
+#tooltip.vagabond-hint-tooltip {
+  text-align: left;
+}

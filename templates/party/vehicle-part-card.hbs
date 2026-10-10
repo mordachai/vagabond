@@ -34,7 +34,8 @@
     <div class="part-hp-bg" style="--hp-fill: {{health.pct}}%">
       <i
         class="fas fa-heart part-hp-icon part-hp-clicker hp-bar-text"
-        data-tooltip="Left: -1 / Right: +1 | Shift: ±10"
+        data-tooltip-html="<i class='fas fa-computer-mouse'></i>L: &minus;1<br><i class='fas fa-computer-mouse'></i>R: +1<br><i class='fas fa-computer-mouse'></i>L/R<span class='vh-key-badge'>{{localize 'VAGABOND.Hud.KeyShift'}}</span>: &plusmn;10"
+        data-tooltip-class="vagabond-hint-tooltip"
       ></i>
       <input
         type="number"

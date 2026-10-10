@@ -7,14 +7,16 @@
 
   {{! ── Party Header ─────────────────────────────────────────────────────── }}
   <div class="party-header">
-    <img
-      class="party-portrait"
-      src="{{actor.img}}"
-      alt="{{actor.name}}"
-      data-edit="img"
-      data-action="onEditImage"
-      data-tooltip="{{actor.name}}"
-    >
+    <div class="party-portrait-wrap">
+      <img
+        class="party-portrait"
+        src="{{actor.img}}"
+        alt="{{actor.name}}"
+        data-edit="img"
+        data-action="onEditImage"
+        data-tooltip="{{actor.name}}"
+      >
+    </div>
     <div class="party-info">
       <input
         type="text"
@@ -30,54 +32,98 @@
         class="party-type"
         placeholder="{{localize 'VAGABOND.Actor.Party.TypePlaceholder'}}"
       >
+      <div class="party-downtime-box">
+        <div class="pdt-clocks" style="--pdt-size: {{shiftClocks.size}}px">
+          {{#if isGM}}
+          <img class="pdt-handle pdt-handle-left" src="systems/vagabond/assets/ui/clocks/clock_left_bt.svg" alt="" data-action="partyShiftsStep" data-step="-1" data-tooltip="{{localize 'VAGABOND.Actor.Party.Controls.ShiftsRemove'}}">
+          {{/if}}
+          {{#each shiftClocks.list}}
+          <img class="pdt-clock" src="{{img}}" alt="" data-tooltip="{{tooltip}}">
+          {{/each}}
+          {{#if isGM}}
+          <img class="pdt-handle pdt-handle-right" src="systems/vagabond/assets/ui/clocks/clock_right_bt.svg" alt="" data-action="partyShiftsStep" data-step="1" data-tooltip="{{localize 'VAGABOND.Actor.Party.Controls.ShiftsAdd'}}">
+          {{/if}}
+        </div>
+        <span class="pdt-count" data-tooltip="{{localize 'VAGABOND.Actor.Party.Controls.ShiftsTooltip'}}">{{localize 'VAGABOND.Actor.Party.Controls.ShiftsCount' n=system.shifts}}</span>
+        <button
+          type="button"
+          class="pdt-open"
+          data-action="partyDowntime"
+          data-tooltip="{{#if isGM}}{{localize 'VAGABOND.Actor.Party.Controls.DowntimeGM'}}{{else}}{{localize 'VAGABOND.Actor.Party.Controls.DowntimeOwn'}}{{/if}}"
+        >{{localize 'VAGABOND.Actor.Party.Controls.Downtime'}}</button>
+      </div>
+      <div class="party-speed-row">
       <div class="party-speeds">
+        <button type="button" class="party-speed-source" data-action="toggleSpeedSource" data-tooltip="{{speeds.sourceTooltip}}">
+          <i class="fa-solid fa-horse{{#if speeds.fromContainer}} is-on{{/if}}"></i>
+          <i class="fa-solid fa-users{{#unless speeds.fromContainer}} is-on{{/unless}}"></i>
+        </button>
         <div class="party-speed-stat">
           <span class="speed-label">{{localize 'VAGABOND.Actor.Character.FIELDS.combat.speed.base.label'}}:</span>
-          <input type="number" name="system.speed" value="{{system.speed}}" class="speed-input" min="0">
+          <input type="number" name="system.speed" value="{{speeds.speed.value}}" class="speed-input{{#if speeds.speed.auto}} is-auto{{/if}}" min="0"{{#if speeds.speed.auto}} data-tooltip="{{speeds.autoTooltip}}"{{/if}}>
           <span class="speed-unit">{{localize 'VAGABOND.UI.Units.Feet'}}</span>
         </div>
         <div class="party-speed-stat">
           <span class="speed-label">{{localize 'VAGABOND.Actor.Character.FIELDS.combat.speed.crawl.label'}}:</span>
-          <input type="number" name="system.crawl" value="{{system.crawl}}" class="speed-input" min="0">
+          <input type="number" name="system.crawl" value="{{speeds.crawl.value}}" class="speed-input{{#if speeds.crawl.auto}} is-auto{{/if}}" min="0"{{#if speeds.crawl.auto}} data-tooltip="{{speeds.autoTooltip}}"{{/if}}>
           <span class="speed-unit">{{localize 'VAGABOND.UI.Units.Feet'}}</span>
         </div>
         <div class="party-speed-stat">
           <span class="speed-label">{{localize 'VAGABOND.Actor.Character.FIELDS.combat.speed.travel.label'}}:</span>
-          <input type="number" name="system.travel" value="{{system.travel}}" class="speed-input" min="0">
+          <input type="number" name="system.travel" value="{{speeds.travel.value}}" class="speed-input{{#if speeds.travel.auto}} is-auto{{/if}}" min="0"{{#if speeds.travel.auto}} data-tooltip="{{speeds.autoTooltip}}"{{/if}}>
           <span class="speed-unit">{{localize 'VAGABOND.UI.Units.Miles'}}</span>
         </div>
+      </div>
+        {{#if isGM}}
+        <button type="button" class="party-levelup-btn" data-action="partyLevelUpAll" data-tooltip="{{localize 'VAGABOND.Actor.Party.Controls.LevelUpAllTooltip'}}">
+          <i class="fas fa-angles-up"></i> {{localize 'VAGABOND.Actor.Party.Controls.LevelUpAll'}}
+        </button>
+        {{/if}}
       </div>
     </div>
   </div>
 
-  {{! ── Supplies Bar ───────────────────────────────────── }}
-  <div class="party-supplies-bar">
-    <span class="supplies-group{{#if supplies.rationsTooltip}} has-breakdown{{/if}}" {{#if supplies.rationsTooltip}}data-tooltip-html="{{supplies.rationsTooltip}}" data-tooltip-direction="DOWN"{{/if}}>
-      <span class="supplies-label"><i class="fa-sharp fa-regular fa-wheat"></i> {{localize 'VAGABOND.Actor.Party.Card.Rations'}}: </span>
-      <span class="supplies-value">{{supplies.rations}}</span>
-    </span>
-    <span class="supplies-sep">·</span>
-    <span class="supplies-group{{#if supplies.beveragesTooltip}} has-breakdown{{/if}}" {{#if supplies.beveragesTooltip}}data-tooltip-html="{{supplies.beveragesTooltip}}" data-tooltip-direction="DOWN"{{/if}}>
-      <span class="supplies-label"><i class="fa-solid fa-droplet"></i> {{localize 'VAGABOND.Actor.Party.Card.Beverages'}}: </span>
-      <span class="supplies-value">{{supplies.beverages}}</span>
-    </span>
+  {{! ── Supplies (gray pill) + Treasure (outside it) ───────────────────── }}
+  <div class="party-supplies-row">
+    <div class="party-supplies-bar">
+      <span class="supplies-group{{#if supplies.rationsTooltip}} has-breakdown{{/if}}" {{#if supplies.rationsTooltip}}data-tooltip-html="{{supplies.rationsTooltip}}" data-tooltip-direction="DOWN"{{/if}}>
+        <span class="supplies-label"><i class="fa-sharp fa-regular fa-wheat"></i> {{localize 'VAGABOND.Actor.Party.Card.Rations'}}: </span>
+        <span class="supplies-value">{{supplies.rations}}</span>
+      </span>
+      <span class="supplies-sep">·</span>
+      <span class="supplies-group{{#if supplies.beveragesTooltip}} has-breakdown{{/if}}" {{#if supplies.beveragesTooltip}}data-tooltip-html="{{supplies.beveragesTooltip}}" data-tooltip-direction="DOWN"{{/if}}>
+        <span class="supplies-label"><i class="fa-solid fa-droplet"></i> {{localize 'VAGABOND.Actor.Party.Card.Beverages'}}: </span>
+        <span class="supplies-value">{{supplies.beverages}}</span>
+      </span>
+    </div>
 
-    {{#if supplies.currencyTooltip}}
-    {{! GM: whole wealth group shows the per-member breakdown (no per-coin tooltips — they would override it) }}
-    <span class="supplies-wealth has-breakdown" data-tooltip-html="{{supplies.currencyTooltip}}" data-tooltip-direction="DOWN">
-      <i class="fas fa-coins"></i>
-      <span class="supplies-value">{{supplies.currency.gold}}<span class="currency-abbr">{{localize 'VAGABOND.Currency.Gold.abbr'}}</span></span>
-      <span class="supplies-value">{{supplies.currency.silver}}<span class="currency-abbr">{{localize 'VAGABOND.Currency.Silver.abbr'}}</span></span>
-      <span class="supplies-value">{{supplies.currency.copper}}<span class="currency-abbr">{{localize 'VAGABOND.Currency.Copper.abbr'}}</span></span>
-    </span>
-    {{else}}
-    <span class="supplies-wealth">
-      <i class="fas fa-coins" data-tooltip="{{localize 'VAGABOND.Actor.Party.Card.TotalWealth'}}"></i>
-      <span class="supplies-value" data-tooltip="{{localize 'VAGABOND.Wealth.Gold'}}">{{supplies.currency.gold}}<span class="currency-abbr">{{localize 'VAGABOND.Currency.Gold.abbr'}}</span></span>
-      <span class="supplies-value" data-tooltip="{{localize 'VAGABOND.Wealth.Silver'}}">{{supplies.currency.silver}}<span class="currency-abbr">{{localize 'VAGABOND.Currency.Silver.abbr'}}</span></span>
-      <span class="supplies-value" data-tooltip="{{localize 'VAGABOND.Wealth.Copper'}}">{{supplies.currency.copper}}<span class="currency-abbr">{{localize 'VAGABOND.Currency.Copper.abbr'}}</span></span>
-    </span>
-    {{/if}}
+    <div class="party-treasure">
+      {{! Chest = coins kept in the party's container (the party's own purse, editable) }}
+      <span class="treasure-group treasure-chest" data-tooltip="{{localize 'VAGABOND.Actor.Party.Card.Chest'}}">
+        <i class="fa-solid fa-treasure-chest"></i>
+        <label class="treasure-coin" data-tooltip="{{localize 'VAGABOND.Wealth.Gold'}}"><input type="number" class="treasure-input" name="system.currency.gold" value="{{system.currency.gold}}" min="0"{{#unless editable}} readonly{{/unless}}><span class="currency-abbr">{{localize 'VAGABOND.Currency.Gold.abbr'}}</span></label>
+        <label class="treasure-coin" data-tooltip="{{localize 'VAGABOND.Wealth.Silver'}}"><input type="number" class="treasure-input" name="system.currency.silver" value="{{system.currency.silver}}" min="0"{{#unless editable}} readonly{{/unless}}><span class="currency-abbr">{{localize 'VAGABOND.Currency.Silver.abbr'}}</span></label>
+        <label class="treasure-coin" data-tooltip="{{localize 'VAGABOND.Wealth.Copper'}}"><input type="number" class="treasure-input" name="system.currency.copper" value="{{system.currency.copper}}" min="0"{{#unless editable}} readonly{{/unless}}><span class="currency-abbr">{{localize 'VAGABOND.Currency.Copper.abbr'}}</span></label>
+      </span>
+
+      {{! Coins = what the members carry, summed up }}
+      {{#if supplies.currencyTooltip}}
+      {{! GM: whole wealth group shows the per-member breakdown (no per-coin tooltips — they would override it) }}
+      <span class="treasure-group treasure-wealth has-breakdown" data-tooltip-html="{{supplies.currencyTooltip}}" data-tooltip-direction="DOWN">
+        <i class="fas fa-coins"></i>
+        <span class="supplies-value">{{supplies.currency.gold}}<span class="currency-abbr">{{localize 'VAGABOND.Currency.Gold.abbr'}}</span></span>
+        <span class="supplies-value">{{supplies.currency.silver}}<span class="currency-abbr">{{localize 'VAGABOND.Currency.Silver.abbr'}}</span></span>
+        <span class="supplies-value">{{supplies.currency.copper}}<span class="currency-abbr">{{localize 'VAGABOND.Currency.Copper.abbr'}}</span></span>
+      </span>
+      {{else}}
+      <span class="treasure-group treasure-wealth">
+        <i class="fas fa-coins" data-tooltip="{{localize 'VAGABOND.Actor.Party.Card.TotalWealth'}}"></i>
+        <span class="supplies-value" data-tooltip="{{localize 'VAGABOND.Wealth.Gold'}}">{{supplies.currency.gold}}<span class="currency-abbr">{{localize 'VAGABOND.Currency.Gold.abbr'}}</span></span>
+        <span class="supplies-value" data-tooltip="{{localize 'VAGABOND.Wealth.Silver'}}">{{supplies.currency.silver}}<span class="currency-abbr">{{localize 'VAGABOND.Currency.Silver.abbr'}}</span></span>
+        <span class="supplies-value" data-tooltip="{{localize 'VAGABOND.Wealth.Copper'}}">{{supplies.currency.copper}}<span class="currency-abbr">{{localize 'VAGABOND.Currency.Copper.abbr'}}</span></span>
+      </span>
+      {{/if}}
+    </div>
   </div>
 
   {{! ── Member Management Header ──────────────────────── }}
@@ -101,6 +147,15 @@
     >
       <i class="fas fa-user-plus"></i>
       {{localize 'VAGABOND.Actor.Party.Card.AddMember'}}
+    </button>
+    <button
+      type="button"
+      class="party-remove-member"
+      data-action="toggleRemoveMode"
+      data-tooltip="{{localize 'VAGABOND.Actor.Party.Card.RemoveMember'}}"
+    >
+      <i class="fas fa-user-minus"></i>
+      {{localize 'VAGABOND.Actor.Party.Card.RemoveMember'}}
     </button>
   </div>
 

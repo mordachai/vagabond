@@ -280,7 +280,7 @@
       <div class="npc-stat-row npc-row-morale-app">
         {{! Morale (with background) }}
         <div class='npc-morale-field'>
-          <label class='npc-field-label rollable' data-action='rollMorale' data-tooltip='{{localize "VAGABOND.Actor.NPC.MoraleCheck.tooltip"}}'>{{localize "VAGABOND.Actor.NPC.FIELDS.morale.label"}}</label>
+          <label class='npc-field-label rollable' data-action='rollMorale' data-tooltip-html='{{listTip (localize "VAGABOND.Actor.NPC.MoraleCheck.tooltip")}}' data-tooltip-class='vagabond-list-tooltip'>{{localize "VAGABOND.Actor.NPC.FIELDS.morale.label"}}</label>
           <input
             type='text'
             name='system.morale'

@@ -3,10 +3,18 @@ import { prepareEffectsView } from '../helpers/effects.mjs';
 import { TargetHelper } from '../helpers/target-helper.mjs';
 import { PartyCompactView } from '../applications/party-compact-view.mjs';
 import { PartyStatusHelper } from '../helpers/party-status-helper.mjs';
+import { DowntimeHelper, SHIFTS_PER_DAY } from '../helpers/downtime-helper.mjs';
+import { ProgressClock } from '../documents/progress-clock.mjs';
+import { EquipmentHelper } from '../helpers/equipment-helper.mjs';
+import { CurrencyHelper } from '../helpers/currency-helper.mjs';
+import { buildStatsSection, buildSlotsRow, buildWeaponProperties } from '../helpers/item-sections.mjs';
+
+/** Inventory tab sections, in display order (containers and unknown types fall under `gear`). */
+const INVENTORY_GROUPS = ['weapon', 'armor', 'alchemical', 'relic', 'gear'];
 
 /**
  * Party actor sheet.
- * Two tabs: Party (member cards for characters + NPCs), Effects.
+ * Tabs: Party (member cards for characters + NPCs), Inventory (items per Character), Notes, Effects.
  * All users with party permission see both tabs.
  * The compact-view button is GM-only (enforced in the template via isGM).
  */
@@ -17,6 +25,10 @@ export class VagabondPartySheet extends VagabondActorSheet {
     this._actorUpdateHookId = null;
     this._effectHookIds = null;
     this._notesHookId = null;
+    this._itemHookIds = null;
+    /** UUIDs of the inventory items whose detail accordion is open (survives re-renders). */
+    this._invOpen = new Set();
+    this._removeMode = false;
   }
 
   /**
@@ -54,6 +66,10 @@ export class VagabondPartySheet extends VagabondActorSheet {
       template: 'systems/vagabond/templates/party/party-tab.hbs',
       scrollable: [''],
     },
+    inventory: {
+      template: 'systems/vagabond/templates/party/party-inventory-tab.hbs',
+      scrollable: [''],
+    },
     notes: {
       template: 'systems/vagabond/templates/party/notes-tab.hbs',
     },
@@ -70,7 +86,7 @@ export class VagabondPartySheet extends VagabondActorSheet {
   _configureRenderOptions(options) {
     const hadParts = !!options.parts;
     super._configureRenderOptions(options);
-    if (!hadParts) options.parts = ['tabs', 'party', 'notes', 'notes-right', 'effects'];
+    if (!hadParts) options.parts = ['tabs', 'party', 'inventory', 'notes', 'notes-right', 'effects'];
   }
 
   /** @override */
@@ -93,6 +109,12 @@ export class VagabondPartySheet extends VagabondActorSheet {
 
     // Resolve full member data for party tab cards
     context.members = await this._resolveMembers();
+
+    // Shift clock: one 4-segment clock per Day of the Shifts the GM grants (same art as the Downtime panel)
+    context.shiftClocks = this._shiftClocks();
+
+    // Speed / Crawl / Travel: manual override or automatic (slowest member)
+    context.speeds = this._speedsView();
 
     // Aggregate supplies across all members (characters only)
     context.supplies = this._aggregateSupplies(context.members);
@@ -171,19 +193,6 @@ export class VagabondPartySheet extends VagabondActorSheet {
     // Armor: use the actor's derived armor value (includes Active Effect bonuses)
     const armor = sys.armor ?? 0;
 
-    // Equipped items for display list
-    const equippedItems = actor.items
-      .filter(i => i.type === 'equipment' && (
-        (i.system.equipmentType === 'weapon' && i.system.equipmentState !== 'unequipped') ||
-        (i.system.equipmentType !== 'weapon' && i.system.equipped)
-      ))
-      .map(i => ({ id: i.id, name: i.name, img: i.img, type: i.system.equipmentType }));
-
-    // Favorited spells
-    const favoritedSpells = actor.items
-      .filter(i => i.type === 'spell' && i.system.favorite)
-      .map(i => ({ id: i.id, name: i.name, img: i.img }));
-
     // Active status effects
     const statuses = actor.effects
       .filter(e => e.statuses?.size > 0)
@@ -241,6 +250,7 @@ export class VagabondPartySheet extends VagabondActorSheet {
         current: xpCurrent,
         required: xpRequired,
         pct: xpPct,
+        canLevelUp: !!sys.attributes.canLevelUp,
       },
       hp: {
         value: sys.health.value,
@@ -274,14 +284,13 @@ export class VagabondPartySheet extends VagabondActorSheet {
         label: sys.saves?.[s.key]?.label ?? CONFIG.VAGABOND.saves?.[s.key] ?? s.label,
         icon: CONFIG.VAGABOND.saveIcons?.[s.key] ?? 'fa-solid fa-shield',
       })),
-      equippedItems,
-      favoritedSpells,
       statuses,
       currency: {
         gold:   sys.currency?.gold   ?? 0,
         silver: sys.currency?.silver ?? 0,
         copper: sys.currency?.copper ?? 0,
       },
+      canEditCoins: actor.isOwner,
       // Supply items for aggregation — raw data; totals computed separately
       _supplyRations: actor.items
         .filter(i => i.type === 'equipment' && i.system.isSupply)
@@ -334,12 +343,17 @@ export class VagabondPartySheet extends VagabondActorSheet {
       { rations: 0, beverages: 0, currency: { gold: 0, silver: 0, copper: 0 } }
     );
 
-    // Hover breakdowns (per character member). Wealth breakdown is GM-only.
+    // Rations / Beverages stored in the party's own containers count too
+    const stored = this._containerSupplyRows();
+    totals.rations += stored.reduce((n, r) => n + r._supplyRations, 0);
+    totals.beverages += stored.reduce((n, r) => n + r._supplyBeverages, 0);
+
+    // Hover breakdowns (per character member, then per party container). Wealth breakdown is GM-only.
     const characters = members.filter(m => !m.isNPC);
     totals.rationsTooltip = this._supplyBreakdownHtml(
-      'VAGABOND.Actor.Party.Card.Rations', characters, m => [m._supplyRations ?? 0]);
+      'VAGABOND.Actor.Party.Card.Rations', [...characters, ...stored], m => [m._supplyRations ?? 0]);
     totals.beveragesTooltip = this._supplyBreakdownHtml(
-      'VAGABOND.Actor.Party.Card.Beverages', characters, m => [m._supplyBeverages ?? 0]);
+      'VAGABOND.Actor.Party.Card.Beverages', [...characters, ...stored], m => [m._supplyBeverages ?? 0]);
     if (game.user.isGM) {
       const abbr = key => game.i18n.localize(`VAGABOND.Currency.${key}.abbr`);
       totals.currencyTooltip = this._supplyBreakdownHtml(
@@ -348,6 +362,25 @@ export class VagabondPartySheet extends VagabondActorSheet {
         [abbr('Gold'), abbr('Silver'), abbr('Copper')]);
     }
     return totals;
+  }
+
+  /**
+   * One row per party Container item with the Rations / Beverages stored inside it
+   * (a container's contents are item snapshots in `system.items`, not embedded items).
+   * @returns {{name: string, _supplyRations: number, _supplyBeverages: number}[]}
+   * @private
+   */
+  _containerSupplyRows() {
+    const count = (contents, flag) => (contents ?? [])
+      .filter(data => data?.type === 'equipment' && data.system?.[flag])
+      .reduce((n, data) => n + (Number(data.system.quantity ?? 1) || 0), 0);
+    return this.actor.items
+      .filter(item => item.type === 'container')
+      .map(item => ({
+        name: item.name,
+        _supplyRations: count(item.system.items, 'isSupply'),
+        _supplyBeverages: count(item.system.items, 'isBeverage'),
+      }));
   }
 
   /**
@@ -564,6 +597,11 @@ export class VagabondPartySheet extends VagabondActorSheet {
     const partContext = await super._preparePartContext(partId, context);
     if (partId === 'party') {
       partContext.tab = context.tabs[partId];
+    } else if (partId === 'inventory') {
+      partContext.tab = context.tabs[partId];
+      partContext.inventoryCards = this._inventoryCards();
+      partContext.containers = this._containerChips();
+      partContext.canEditContainers = this.actor.isOwner;
     } else if (partId === 'notes') {
       partContext.tab = context.tabs[partId];
       const TE = foundry.applications.ux.TextEditor.implementation;
@@ -592,6 +630,10 @@ export class VagabondPartySheet extends VagabondActorSheet {
         case 'party':
           tab.id = 'party';
           tab.label = 'VAGABOND.Actor.Party.Tabs.Party';
+          break;
+        case 'inventory':
+          tab.id = 'inventory';
+          tab.label = 'VAGABOND.Actor.Party.Tabs.Inventory';
           break;
         case 'notes':
           tab.id = 'notes';
@@ -645,8 +687,31 @@ export class VagabondPartySheet extends VagabondActorSheet {
       delete: Hooks.on('deleteActiveEffect', reRenderIfMember),
     };
 
+    // Items added / changed / removed on a member refresh the Inventory tab (and the card's Slots)
+    if (this._itemHookIds) {
+      Hooks.off('createItem', this._itemHookIds.create);
+      Hooks.off('updateItem', this._itemHookIds.update);
+      Hooks.off('deleteItem', this._itemHookIds.delete);
+    }
+    const refreshInventory = foundry.utils.debounce(
+      () => this.render(false, { parts: ['party', 'inventory'] }), 100);
+    // ...and so do the party's own container items (the sleeve at the top of the tab)
+    const onMemberItem = (item) => {
+      const parentUuid = item.parent?.uuid;
+      if (!parentUuid) return;
+      if (parentUuid === this.actor.uuid || this.actor.system.members?.includes(parentUuid)) refreshInventory();
+    };
+    this._itemHookIds = {
+      create: Hooks.on('createItem', onMemberItem),
+      update: Hooks.on('updateItem', onMemberItem),
+      delete: Hooks.on('deleteItem', onMemberItem),
+    };
+
     // Wire up member card interactions
     this._bindMemberActions(signal);
+
+    // Party-level header controls (auto speeds, Shifts, Downtime, Level Up Party, member XP)
+    this._bindPartyControls(signal);
 
     // Wire up journal-backed note editors (GM + personal)
     this._bindNotesActions(signal);
@@ -861,6 +926,435 @@ export class VagabondPartySheet extends VagabondActorSheet {
   }
 
   /**
+   * Party header controls and the per-member XP chip.
+   * @param {AbortSignal} signal
+   * @private
+   */
+  _bindPartyControls(signal) {
+    const on = (action, handler) => {
+      this.element.querySelectorAll(`[data-action="${action}"]`).forEach((el) => {
+        el.addEventListener('click', (event) => {
+          event.stopPropagation();
+          handler(el, event);
+        }, { signal });
+      });
+    };
+
+    on('partyShiftsStep', (el) => this._stepPartyShifts(Number(el.dataset.step)));
+    on('toggleSpeedSource', () => {
+      if (!this.isEditable) return;
+      this.actor.update({ 'system.speedSource': this._speedSource() === 'container' ? 'party' : 'container' });
+    });
+
+    // "Remove Member" toggle: the per-card X buttons only show while it is on
+    const applyRemoveMode = () => {
+      this.element.querySelectorAll('.party-member-grid').forEach((grid) => grid.classList.toggle('remove-mode', this._removeMode));
+      this.element.querySelectorAll('[data-action="toggleRemoveMode"]').forEach((btn) => btn.classList.toggle('is-active', this._removeMode));
+    };
+    applyRemoveMode();
+    on('toggleRemoveMode', () => {
+      this._removeMode = !this._removeMode;
+      applyRemoveMode();
+    });
+    on('toggleInvItem', (el) => this._toggleInventoryItem(el.closest('.inv-item')));
+    on('openContainer', (el) => fromUuidSync(el.closest('[data-item-uuid]')?.dataset.itemUuid)?.sheet?.render(true));
+    on('deleteContainer', (el) => this._deleteContainer(el.closest('[data-item-uuid]')?.dataset.itemUuid));
+
+    // Containers sleeve: lit while a drag hovers it (the drop itself goes through _onDropItem)
+    this.element.querySelectorAll('.party-containers').forEach((zone) => {
+      const over = (on) => zone.classList.toggle('is-over', on);
+      zone.addEventListener('dragenter', () => over(true), { signal });
+      zone.addEventListener('dragover', () => over(true), { signal });
+      zone.addEventListener('dragleave', (event) => { if (!zone.contains(event.relatedTarget)) over(false); }, { signal });
+      zone.addEventListener('drop', () => over(false), { signal });
+    });
+
+    // Item names: tooltip only when the ellipsis cuts the name. Set on pointerover, which
+    // fires before the pointerenter Foundry's TooltipManager reads the attribute on.
+    this.element.querySelectorAll('.party-inventory').forEach((tab) => {
+      tab.addEventListener('pointerover', (event) => {
+        const button = event.target.closest?.('.inv-name');
+        const text = button?.querySelector('.inv-name-text');
+        if (!text) return;
+        if (text.scrollWidth > text.clientWidth) button.dataset.tooltipText = text.textContent;
+        else delete button.dataset.tooltipText;
+      }, { signal });
+    });
+
+    // Open accordions stay open across re-renders
+    this.element.querySelectorAll('.inv-item.open').forEach((row) => this._fillInventoryDetail(row));
+
+    // Member coins: edit gold / silver / copper straight on the card
+    this.element.querySelectorAll('.member-coin-input:not([readonly])').forEach((input) => {
+      input.addEventListener('change', async (event) => {
+        event.stopPropagation();
+        const coin = input.dataset.coin;
+        if (!CurrencyHelper.DENOMINATIONS.includes(coin)) return;
+        const uuid = input.closest('[data-actor-uuid]')?.dataset.actorUuid;
+        const actor = uuid ? await fromUuid(uuid) : null;
+        if (!actor) return;
+        const value = Math.max(0, Math.floor(Number(input.value) || 0));
+        input.value = value;
+        await this._updateMemberField(actor, `system.currency.${coin}`, value);
+      }, { signal });
+    });
+    on('partyDowntime', () => this._partyDowntime());
+    on('partyLevelUpAll', () => this._levelUpParty());
+    on('memberLevelUp', async (el) => {
+      const uuid = el.closest('[data-actor-uuid]')?.dataset.actorUuid;
+      const actor = uuid ? await fromUuid(uuid) : null;
+      if (!actor) return;
+      if (!actor.isOwner) {
+        ui.notifications.warn(this._controlsText('NoOwnCharacter'));
+        return;
+      }
+      const { LevelUpDialog } = globalThis.vagabond.applications;
+      new LevelUpDialog(actor).render(true);
+    });
+  }
+
+  /**
+   * Inventory tab data: one card per Character with its items grouped by type
+   * (Weapon, Armor, Alchemical, Relic, Gear). Slots and Value are for the whole stack.
+   * @returns {Object[]}
+   */
+  _inventoryCards() {
+    const cards = [];
+    for (const uuid of this.actor.system.members ?? []) {
+      let member = null;
+      try { member = fromUuidSync(uuid); } catch { member = null; }
+      if (member?.type !== 'character') continue;
+
+      const buckets = Object.fromEntries(INVENTORY_GROUPS.map((key) => [key, []]));
+      for (const item of member.items) {
+        if (item.type !== 'equipment' && item.type !== 'container') continue;
+        const type = item.system.equipmentType;
+        const key = INVENTORY_GROUPS.includes(type) ? type : 'gear';
+        const quantity = Math.max(0, Number(item.system.quantity ?? 1));
+        buckets[key].push({
+          uuid: item.uuid,
+          name: item.name,
+          img: item.img,
+          quantity,
+          open: this._invOpen.has(item.uuid),
+        });
+      }
+
+      const groups = INVENTORY_GROUPS
+        .filter((key) => buckets[key].length)
+        .map((key) => ({
+          key,
+          label: game.i18n.localize(`VAGABOND.Actor.Party.Inventory.Groups.${key}`),
+          items: buckets[key].sort((a, b) => a.name.localeCompare(b.name)),
+        }));
+
+      cards.push({
+        uuid: member.uuid,
+        name: member.name,
+        img: member.img,
+        slotsUsed: member.system.inventory?.occupiedSlots ?? 0,
+        slotsTotal: member.system.inventory?.maxSlots ?? 0,
+        groups,
+      });
+    }
+    return cards;
+  }
+
+  /** Whole-stack value of an item as a coin string ('' when it has none). */
+  _itemValue(item) {
+    const quantity = Math.max(0, Number(item.system.quantity ?? 1));
+    const unit = item.type === 'container' ? item.system.baseCost : item.system.cost;
+    const copper = CurrencyHelper.toCopper(unit) * quantity;
+    return copper > 0 ? CurrencyHelper.format(copper) : '';
+  }
+
+  /** The party's own Container items, for the sleeve at the top of the Inventory tab. */
+  _containerChips() {
+    return this.actor.items
+      .filter((item) => item.type === 'container')
+      .map((item) => ({
+        uuid: item.uuid,
+        name: item.name,
+        img: item.img,
+        used: item.system.currentCapacity ?? 0,
+        capacity: item.system.capacity ?? 0,
+      }))
+      .sort((a, b) => a.name.localeCompare(b.name));
+  }
+
+  /** Remove one of the party's containers (with its contents) after a confirmation. */
+  async _deleteContainer(uuid) {
+    if (!uuid || !this.actor.isOwner) return;
+    const item = fromUuidSync(uuid);
+    if (!item || item.parent?.uuid !== this.actor.uuid) return;
+    const confirmed = await foundry.applications.api.DialogV2.confirm({
+      window: { title: item.name },
+      content: `<p>${game.i18n.format('VAGABOND.Actor.Party.Inventory.Containers.DeleteConfirm', { name: foundry.utils.escapeHTML(item.name) })}</p>`,
+    });
+    if (confirmed) await item.delete();
+  }
+
+  /** Click on an item name: open / close its info accordion (no re-render). */
+  _toggleInventoryItem(row) {
+    const uuid = row?.dataset.itemUuid;
+    if (!uuid) return;
+    const open = row.classList.toggle('open');
+    if (open) {
+      this._invOpen.add(uuid);
+      this._fillInventoryDetail(row);
+    } else {
+      this._invOpen.delete(uuid);
+    }
+  }
+
+  /** Fill an open accordion with the shared item detail body (description, stats, properties). */
+  async _fillInventoryDetail(row) {
+    const host = row.querySelector('.inv-detail-inner');
+    if (!host || host.dataset.loaded) return;
+    let item = null;
+    try { item = fromUuidSync(row.dataset.itemUuid); } catch { item = null; }
+    if (!item) return;
+    host.dataset.loaded = '1';
+
+    const TE = foundry.applications.ux.TextEditor.implementation;
+    const description = item.system.description
+      ? await TE.enrichHTML(item.system.description, { relativeTo: item })
+      : '';
+    let html = description ? `<div class="mini-sheet-description">${description}</div>` : '';
+    // Quantity is in the list; the Value rides on the Slots row, Material shows when it matters
+    const value = this._itemValue(item);
+    html += item.type === 'container'
+      ? `<div class="mini-sheet-stats">${buildSlotsRow(item, { value })}</div>`
+      : buildStatsSection(item, { compact: true, value });
+    if (EquipmentHelper.isWeapon(item) && item.system.properties?.length) {
+      html += buildWeaponProperties(item, { tooltips: true });
+    }
+    host.innerHTML = html;
+  }
+
+  /**
+   * The header's Shift clocks: one 4-segment clock per Day, all filled (nothing is spent
+   * until the downtime starts). Clocks shrink as the Days pile up so the box stays compact.
+   */
+  _shiftClocks() {
+    const shifts = Math.max(1, this.actor.system.shifts || 1);
+    const days = Math.ceil(shifts / SHIFTS_PER_DAY);
+    const list = [];
+    for (let day = 0; day < days; day++) {
+      const planned = Math.min(SHIFTS_PER_DAY, shifts - day * SHIFTS_PER_DAY);
+      list.push({
+        img: ProgressClock.getSVGPath(SHIFTS_PER_DAY, planned),
+        tooltip: game.i18n.format('VAGABOND.Downtime.Tracker.DayTooltip', { day: day + 1, left: planned, planned }),
+      });
+    }
+    const size = days <= 1 ? 72 : days <= 2 ? 56 : 40;
+    return { size, list };
+  }
+
+  /** Localized `VAGABOND.Actor.Party.Controls.<key>`, formatted when `data` is given. */
+  _controlsText(key, data) {
+    const path = `VAGABOND.Actor.Party.Controls.${key}`;
+    return data ? game.i18n.format(path, data) : game.i18n.localize(path);
+  }
+
+  /** Every member that still resolves to an actor. */
+  async _memberActors() {
+    const uuids = this.actor.system.members ?? [];
+    const actors = await Promise.all(uuids.map((uuid) => fromUuid(uuid).catch(() => null)));
+    return actors.filter(Boolean);
+  }
+
+  /** Where the automatic speeds come from: the slowest member (`party`) or the party's container. */
+  _speedSource() {
+    return this.actor.system.speedSource === 'container' ? 'container' : 'party';
+  }
+
+  /**
+   * Speeds set on the party's Container items (a wagon, a mount…): per field the slowest
+   * container that sets one (> 0), null when none does.
+   * @returns {{speed: number|null, crawl: number|null, travel: number|null}}
+   */
+  _containerSpeeds() {
+    const slowest = { speed: null, crawl: null, travel: null };
+    for (const item of this.actor.items) {
+      if (item.type !== 'container') continue;
+      for (const field of Object.keys(slowest)) {
+        const value = Number(item.system[field]);
+        if (value > 0 && (slowest[field] === null || value < slowest[field])) slowest[field] = value;
+      }
+    }
+    return slowest;
+  }
+
+  /**
+   * Automatic party speeds: the slowest member's value for each field, or - while the
+   * speed source is the container - the container's own speeds (members' value where it sets none).
+   * Characters supply Speed / Crawl / Travel; NPCs only their Speed (0 = stationary, ignored).
+   * Read synchronously at render / submit time, so it follows every member's current value.
+   * @returns {{speed: number, crawl: number, travel: number}}
+   */
+  _autoSpeeds() {
+    const slowest = { speed: null, crawl: null, travel: null };
+    const take = (field, value) => {
+      if (!Number.isFinite(value)) return;
+      if (slowest[field] === null || value < slowest[field]) slowest[field] = value;
+    };
+    for (const uuid of this.actor.system.members ?? []) {
+      let member = null;
+      try { member = fromUuidSync(uuid); } catch { member = null; }
+      if (member?.type === 'character') {
+        take('speed', Number(member.system.speed?.base));
+        take('crawl', Number(member.system.speed?.crawl));
+        take('travel', Number(member.system.speed?.travel));
+      } else if (member?.type === 'npc') {
+        const speed = Number(member.system.speed);
+        if (speed > 0) take('speed', speed);
+      }
+    }
+    const carried = this._speedSource() === 'container' ? this._containerSpeeds() : {};
+    return {
+      speed: carried.speed ?? slowest.speed ?? 0,
+      crawl: carried.crawl ?? slowest.crawl ?? 0,
+      travel: carried.travel ?? slowest.travel ?? 0,
+    };
+  }
+
+  /**
+   * Party speeds as shown: a stored value (> 0) is a manual override, 0 follows the
+   * automatic source (`auto: true`). Also carries the source switch's state and tooltips.
+   */
+  _speedsView() {
+    const auto = this._autoSpeeds();
+    const fromContainer = this._speedSource() === 'container';
+    const view = {
+      fromContainer,
+      sourceTooltip: this._controlsText(fromContainer ? 'SpeedSourceContainer' : 'SpeedSourceParty'),
+      autoTooltip: this._controlsText(fromContainer ? 'SpeedAutoContainer' : 'SpeedAuto'),
+    };
+    for (const field of ['speed', 'crawl', 'travel']) {
+      const manual = Number(this.actor.system[field]) || 0;
+      view[field] = manual > 0
+        ? { value: manual, auto: false }
+        : { value: auto[field], auto: true };
+    }
+    return view;
+  }
+
+  /**
+   * Typing the automatic value again (or clearing the field) hands the speed back to
+   * automatic, stored as 0; any other value is kept as a manual override.
+   * @override
+   */
+  async _processSubmitData(event, form, submitData) {
+    const auto = this._autoSpeeds();
+    for (const field of ['speed', 'crawl', 'travel']) {
+      const path = `system.${field}`;
+      const nested = foundry.utils.hasProperty(submitData, path);
+      const raw = nested ? foundry.utils.getProperty(submitData, path) : submitData[path];
+      if (raw === undefined) continue;
+      const value = Number(raw);
+      const resume = !Number.isFinite(value) || value <= 0 || value === auto[field];
+      if (!resume) continue;
+      if (nested) foundry.utils.setProperty(submitData, path, 0);
+      else submitData[path] = 0;
+    }
+    await super._processSubmitData(event, form, submitData);
+    // The stored value may not change (0 -> 0): re-render so the field shows the automatic value again
+    this.render(false, { parts: ['party'] });
+  }
+
+  /** GM: grant the party one more / one fewer Shift for its next downtime. */
+  async _stepPartyShifts(step) {
+    if (!game.user.isGM || !step) return;
+    const current = this.actor.system.shifts || 1;
+    const next = Math.clamp(current + step, 1, DowntimeHelper.MAX_SHIFTS);
+    if (next !== current) await this.actor.update({ 'system.shifts': next });
+  }
+
+  /**
+   * Downtime button. GM: start a fresh downtime with the party's Shifts on every Character.
+   * Player: open the Downtime panel of their own Character.
+   */
+  async _partyDowntime() {
+    const characters = (await this._memberActors()).filter((a) => a.type === 'character');
+
+    if (!game.user.isGM) {
+      const own = characters.find((a) => a.isOwner);
+      if (!own) {
+        ui.notifications.warn(this._controlsText('NoOwnCharacter'));
+        return;
+      }
+      globalThis.vagabond.applications.DowntimeApp.open(own);
+      return;
+    }
+
+    if (!characters.length) {
+      ui.notifications.warn(this._controlsText('NoCharacters'));
+      return;
+    }
+
+    if (characters.some((a) => DowntimeHelper.state(a).log.length > 0)) {
+      const confirmed = await foundry.applications.api.DialogV2.confirm({
+        window: { title: this._controlsText('Downtime') },
+        content: `<p>${this._controlsText('DowntimeConfirm')}</p>`,
+      });
+      if (!confirmed) return;
+    }
+
+    const shifts = this.actor.system.shifts || 1;
+    await Promise.all(characters.map((a) => DowntimeHelper.begin(a, shifts)));
+    await ChatMessage.create({
+      speaker: { alias: this.actor.name },
+      content: `<p>${this._controlsText('DowntimeAnnounce', { shifts })}</p>`,
+    });
+    ui.notifications.info(this._controlsText('DowntimeStarted', { n: characters.length }));
+  }
+
+  /**
+   * GM: Grant Level (Destiny, no XP) to every Character, one Level Up window at a time.
+   * The next window opens once the current one is closed with its choices applied;
+   * closing one without applying (or undoing) stops the run.
+   */
+  async _levelUpParty() {
+    if (!game.user.isGM) return;
+    const characters = (await this._memberActors()).filter((a) => a.type === 'character');
+    if (!characters.length) {
+      ui.notifications.warn(this._controlsText('NoCharacters'));
+      return;
+    }
+
+    const confirmed = await foundry.applications.api.DialogV2.confirm({
+      window: { title: this._controlsText('LevelUpAll') },
+      content: `<p>${this._controlsText('LevelUpAllConfirm', { n: characters.length })}</p>`,
+    });
+    if (!confirmed) return;
+
+    const { LevelUpDialog } = globalThis.vagabond.applications;
+    for (const [index, actor] of characters.entries()) {
+      ui.notifications.info(this._controlsText('LevelUpAllProgress', {
+        i: index + 1, n: characters.length, name: actor.name,
+      }));
+
+      const dialog = new LevelUpDialog(actor);
+      const closed = new Promise((resolve) => {
+        const hookId = Hooks.on('closeLevelUpDialog', (app) => {
+          if (app !== dialog) return;
+          Hooks.off('closeLevelUpDialog', hookId);
+          resolve();
+        });
+      });
+      await dialog.render(true);
+      await dialog._gainLevel({ destiny: true });
+      await closed;
+
+      if (!dialog._choicesApplied) {
+        ui.notifications.info(this._controlsText('LevelUpAllStopped', { name: actor.name }));
+        return;
+      }
+    }
+  }
+
+  /**
    * Handle dropping an actor onto the party sheet — adds them as a member.
    * Only accepts character and npc actors.
    * @param {DragEvent} event
@@ -880,6 +1374,28 @@ export class VagabondPartySheet extends VagabondActorSheet {
     }
     await this._addMember(uuid);
     return true;
+  }
+
+  /**
+   * Only Container items can be dropped on the party (they land in the Inventory
+   * tab's sleeve). A container dragged from another Actor you own is moved, not copied.
+   * @param {DragEvent} event
+   * @param {Object} data
+   * @override
+   */
+  async _onDropItem(event, data) {
+    if (!this.actor.isOwner) return false;
+    const item = await Item.implementation.fromDropData(data);
+    if (!item) return false;
+    if (item.type !== 'container') {
+      ui.notifications.warn(game.i18n.localize('VAGABOND.Actor.Party.Inventory.Containers.OnlyContainers'));
+      return false;
+    }
+    if (item.parent?.uuid === this.actor.uuid) return false;
+
+    const created = await this.actor.createEmbeddedDocuments('Item', [item.toObject()]);
+    if (created?.length && item.parent?.documentName === 'Actor' && item.parent.isOwner) await item.delete();
+    return created;
   }
 
   /**
@@ -1044,6 +1560,12 @@ export class VagabondPartySheet extends VagabondActorSheet {
     if (this._notesHookId) {
       Hooks.off('updateJournalEntryPage', this._notesHookId);
       this._notesHookId = null;
+    }
+    if (this._itemHookIds) {
+      Hooks.off('createItem', this._itemHookIds.create);
+      Hooks.off('updateItem', this._itemHookIds.update);
+      Hooks.off('deleteItem', this._itemHookIds.delete);
+      this._itemHookIds = null;
     }
     return super.close(options);
   }

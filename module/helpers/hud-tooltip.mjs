@@ -47,8 +47,10 @@ export function bindHudTooltips(root, signal) {
     showTimeout = window.setTimeout(() => {
       showTimeout = null;
       activeEl = el;
-      if (el.dataset.hudTipHtml) game.tooltip.activate(el, { html: el.dataset.hudTipHtml });
-      else game.tooltip.activate(el, { text: el.dataset.hudTip });
+      // Optional extra tooltip class: data-hud-tip-class="vagabond-list-tooltip"
+      const cssClass = el.dataset.hudTipClass || undefined;
+      if (el.dataset.hudTipHtml) game.tooltip.activate(el, { html: el.dataset.hudTipHtml, cssClass });
+      else game.tooltip.activate(el, { text: el.dataset.hudTip, cssClass });
       // Optional per-element override: data-hud-tip-duration="1500" (ms)
       const duration = Number(el.dataset.hudTipDuration) || HIDE_MS;
       hideTimeout = window.setTimeout(hide, duration);

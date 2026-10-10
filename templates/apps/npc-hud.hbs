@@ -66,7 +66,7 @@
         <div class="vh-vital vh-vital--hd" data-hud-tip="{{localize 'VAGABOND.Actor.NPC.FIELDS.hd.label'}}"><i class="fas fa-dice-d6"></i><span>{{hd}}</span></div>
         <div class="vh-vital vh-vital--hp rollable" data-hud-tip-html="{{localize 'VAGABOND.ResourceTypes.MaxHP'}}: {{hp.max}} | <i class='fas fa-computer-mouse'></i>L: −1 &middot; <i class='fas fa-computer-mouse'></i>R: +1"><i class="fas fa-heart"></i><span>{{hp.value}}</span></div>
         <div class="vh-vital vh-vital--fatigue rollable" data-hud-tip-html="{{localize 'VAGABOND.Actor.Character.FIELDS.combat.fatigue.label'}} | <i class='fas fa-computer-mouse'></i>L: +1 &middot; <i class='fas fa-computer-mouse'></i>R: −1"><i class="fas fa-skull"></i><span>{{fatigue.value}}</span></div>
-        <div class="vh-vital vh-vital--morale rollable" data-action="rollMorale" data-hud-tip="{{localize 'VAGABOND.Actor.NPC.MoraleCheck.tooltip'}}"><i class="fas fa-flag"></i><span>{{#if morale}}{{morale}}{{else}}–{{/if}}</span></div>
+        <div class="vh-vital vh-vital--morale rollable" data-action="rollMorale" data-hud-tip-html="{{listTip (localize 'VAGABOND.Actor.NPC.MoraleCheck.tooltip')}}" data-hud-tip-class="vagabond-list-tooltip"><i class="fas fa-flag"></i><span>{{#if morale}}{{morale}}{{else}}–{{/if}}</span></div>
       </div>
 
       <div class="vh-center">

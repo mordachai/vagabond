@@ -55,6 +55,12 @@ export class DowntimeHelper {
     return true;
   }
 
+  /** Start a new downtime with `shifts` planned and nothing spent. */
+  static async begin(actor, shifts) {
+    const n = Math.clamp(Math.round(shifts) || 1, 1, MAX_SHIFTS);
+    await actor.setFlag('vagabond', 'downtime', { shifts: n, log: [], breatherAt: -1 });
+  }
+
   /** Start a new downtime: back to 1 Shift, nothing spent. */
   static async reset(actor) {
     await actor.setFlag('vagabond', 'downtime', { shifts: 1, log: [], breatherAt: -1 });

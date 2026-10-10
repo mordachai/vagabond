@@ -526,6 +526,31 @@ Handlebars.registerHelper('contains', function (array, value) {
 
 Handlebars.registerHelper('add', (a, b) => a + b);
 
+// Tooltip that keeps list layout. Native tooltips collapse newlines, so a localized
+// string with "• " bullet lines is turned into <p>/<ul><li> markup. Use with
+// data-tooltip-html + data-tooltip-class="vagabond-list-tooltip" (HUD:
+// data-hud-tip-html + data-hud-tip-class): {{listTip (localize "KEY")}}
+Handlebars.registerHelper('listTip', (text) => {
+  if (!text || typeof text !== 'string') return '';
+  const esc = Handlebars.escapeExpression;
+  let html = '';
+  let inList = false;
+  for (const raw of text.split('\n')) {
+    const line = raw.trim();
+    if (!line) continue;
+    const bullet = /^[•\-*]\s*/.exec(line);
+    if (bullet) {
+      if (!inList) { html += '<ul>'; inList = true; }
+      html += `<li>${esc(line.slice(bullet[0].length))}</li>`;
+    } else {
+      if (inList) { html += '</ul>'; inList = false; }
+      html += `<p>${esc(line)}</p>`;
+    }
+  }
+  if (inList) html += '</ul>';
+  return html;
+});
+
 // Read a progress clock value in any template: {{clockValue "doom"}} or
 // {{clockValue "doom" "pct"}} (prop: value|filled|max|segments|pct|name|handle|kind)
 Handlebars.registerHelper('clockValue', (ref, prop) => {

@@ -1,5 +1,21 @@
 # Changelog
 
+## Unreleased
+- Party sheet: Rations and Beverages also count what is stored in the party's containers (the hover shows one row per container).
+- **Party sheet: speed source switch.** A horse / party switch at the start of the speeds row picks what the automatic Speed, Crawl and Travel follow: the slowest member (default) or the party's container. Container items gained Speed / Crawl / Travel fields (edit mode) for wagons, mounts and the like. **Level Up** (whole party) sits right of the speeds area, on the same row.
+- **Party sheet: treasure.** Rations and Beverages stay in a small gray pill; the treasure sits outside it: a chest (the party's own coins, editable) and the coins icon (the members' coins, summed up).
+- Party Inventory tab: taller containers sleeve; item rows aligned (image, name, quantity) with even spacing; an item name shows a tooltip only when it is cut off; no focus outline left after clicking an item.
+- Party sheet light mode: readable secondary texts in the Inventory tab and coin letters (g / s / c) on the party cards.
+- **Party Inventory tab: containers sleeve.** A thin strip at the top takes dropped Container items and lists them (click to open, X to remove). An item's Value now sits on the Slots row of its info instead of in the list.
+- Party sheet: member remove buttons (X) are hidden until the new "Remove Member" button is toggled on.
+- **Party sheet: Inventory tab.** Same layout as the Party tab, one card per Character listing their items by type (Weapons, Armor, Alchemicals, Relics, Gear) with name and quantity. Click an item's name to open its info (description, stats, properties with a (?) hint; Slots and Material live there); the card header shows the Slots used.
+- **Party cards: editable coins.** A Character's gold, silver and copper can be edited right on the party card by their owner (and the GM).
+- **Party sheet: Shifts and Downtime.** The header's top-right box holds the Shifts the GM grants the party for its downtime (GM edits with - / +). The **Downtime** button starts a new downtime for every Character with that many Shifts and announces it in chat; players get the same button to open their own Downtime panel.
+- **Party sheet: Level Up** (GM, right end of the speeds row) grants a Level (Destiny, no XP needed) to every Character, opening one Level Up window after another.
+- **Party sheet: automatic speeds.** Speed, Crawl and Travel follow the slowest party member and update as members' speeds change (shown dimmed). Type another value to override it; type the automatic value again (or clear the field) to go back to automatic.
+- **Party cards:** Speed (HUD shoe-prints icon) and XP now sit on the saves row. Click a Character's XP to open their Level Up window (it glows when they can level). Cards are larger, two per row in the default window and more when you widen it.
+- Party compact view: HP and Fatigue tooltips are localized and show the mouse-click hints; Mana (HUD / sheet) and part-card HP tooltips list one hint per line.
+
 ## v6.3.1
 - **Level Up: undo on close.** A gained Level is only kept once you Apply your choices. Closing the window before that asks you to **Apply and close**, **Undo Level Up and close** (restores your Level, your XP and, for a Level 0 hero, removes the new Class) or keep editing.
 - **Level Up: clearer Stat increase.** The picked Stat shows its current and new value (e.g. `6 → 7`).

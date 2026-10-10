@@ -35,7 +35,7 @@
           <span>{{armor}}</span>
         </div>
         <div class="compact-stat compact-hp"
-          data-tooltip="HP {{hp.value}}/{{hp.max}} | Left: −1 / Right: +1">
+          data-tooltip-html="{{localize 'VAGABOND.Actor.Party.Card.HP'}} {{hp.value}}/{{hp.max}} | <i class='fas fa-computer-mouse'></i>L: &minus;1 &middot; <i class='fas fa-computer-mouse'></i>R: +1">
           <i class="fas fa-heart"></i>
           <span>{{hp.value}}/{{hp.max}}</span>
         </div>
@@ -43,7 +43,7 @@
 
       <div class="compact-stat-row">
         <div class="compact-stat compact-fatigue"
-          data-tooltip="{{localize 'VAGABOND.Actor.Party.Card.Fatigue'}} {{fatigue}} | Left: +1 / Right: −1">
+          data-tooltip-html="{{localize 'VAGABOND.Actor.Party.Card.Fatigue'}} {{fatigue}} | <i class='fas fa-computer-mouse'></i>L: +1 &middot; <i class='fas fa-computer-mouse'></i>R: &minus;1">
           <i class="fas fa-skull"></i>
           <span>{{fatigue}}</span>
         </div>

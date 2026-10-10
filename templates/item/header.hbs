@@ -182,6 +182,38 @@
               />
             </div>
           </div>
+          <div class='grid grid-3col gap-8'>
+            <div class='resource'>
+              <label class='resource-label'>{{localize "VAGABOND.Actor.Character.FIELDS.combat.speed.base.label"}}</label>
+              <input
+                type='number'
+                name='system.speed'
+                value='{{system.speed}}'
+                min='0'
+                data-dtype='Number'
+              />
+            </div>
+            <div class='resource'>
+              <label class='resource-label'>{{localize "VAGABOND.Actor.Character.FIELDS.combat.speed.crawl.label"}}</label>
+              <input
+                type='number'
+                name='system.crawl'
+                value='{{system.crawl}}'
+                min='0'
+                data-dtype='Number'
+              />
+            </div>
+            <div class='resource'>
+              <label class='resource-label'>{{localize "VAGABOND.Actor.Character.FIELDS.combat.speed.travel.label"}}</label>
+              <input
+                type='number'
+                name='system.travel'
+                value='{{system.travel}}'
+                min='0'
+                data-dtype='Number'
+              />
+            </div>
+          </div>
         </div>
       {{/if}}
     {{/if}}

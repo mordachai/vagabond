@@ -1673,6 +1673,7 @@
       "Party": {
         "Tabs": {
           "Party": "Party",
+          "Inventory": "Inventory",
           "Notes": "Notes",
           "Vehicle": "Vehicle",
           "Effects": "Effects"
@@ -1732,6 +1733,7 @@
           "OpenSheet": "Open character sheet",
           "PanToToken": "Pan to token",
           "LevelAbbr": "Lv.",
+          "HP": "HP",
           "Player": "Player",
           "XP": "XP",
           "Fatigue": "Fatigue",
@@ -1750,6 +1752,7 @@
           "NoMembersHint": "Drag actors onto this tab or use the + button to add members.",
           "AddMember": "Add Member",
           "Remove": "Remove from Party",
+          "RemoveMember": "Remove Member",
           "RemoveConfirm": "Remove {name} from the party?",
           "AlreadyMember": "That actor is already a party member.",
           "NoAvailable": "No available characters to add.",
@@ -1757,10 +1760,57 @@
           "PickMember": "Party Member",
           "Add": "Add",
           "Wealth": "Wealth",
+          "Chest": "Party chest: coins kept in the party's container",
           "TotalWealth": "Party Total Wealth",
           "AssignStatusEffects": "Assign Status Effects",
           "RemoveAllStatuses": "Remove All Statuses",
           "IsImmune": "{name} is immune to {status}."
+        },
+        "Inventory": {
+          "Item": "Item",
+          "Quantity": "Qty",
+          "Empty": "Carrying nothing.",
+          "NoCharacters": "This party has no Characters.",
+          "Groups": {
+            "weapon": "Weapons",
+            "armor": "Armor",
+            "alchemical": "Alchemicals",
+            "relic": "Relics",
+            "gear": "Gear"
+          },
+          "Containers": {
+            "Label": "Containers",
+            "Drop": "Drop container items here",
+            "Tooltip": "Drop Container items here to keep them with the party",
+            "Open": "Open container",
+            "Delete": "Remove container",
+            "DeleteConfirm": "Remove {name} from the party? Everything inside is lost.",
+            "OnlyContainers": "Only Container items can be dropped on the party."
+          }
+        },
+        "Controls": {
+          "ShiftsCount": "Shifts: {n}",
+          "ShiftsTooltip": "Shifts the GM grants the party for its next downtime",
+          "ShiftsAdd": "Grant one more Shift",
+          "ShiftsRemove": "Grant one fewer Shift",
+          "Downtime": "Downtime",
+          "DowntimeGM": "Start a new downtime: every Character gets this many Shifts, nothing spent",
+          "DowntimeOwn": "Open your Downtime panel",
+          "DowntimeConfirm": "Some Characters already spent Shifts. Start a new downtime and clear them?",
+          "DowntimeAnnounce": "Downtime begins: {shifts} Shift(s) for the party.",
+          "DowntimeStarted": "Downtime started for {n} Character(s).",
+          "NoOwnCharacter": "You don't own a Character in this party.",
+          "NoCharacters": "This party has no Characters.",
+          "SpeedAuto": "Automatic: the slowest party member's value. Type another value to override it; type this one again to go back to automatic.",
+          "SpeedAutoContainer": "Automatic: the party container's value (the slowest member's where it sets none). Type another value to override it; type this one again to go back to automatic.",
+          "SpeedSourceParty": "Automatic speed: slowest party member. Click to use the party container instead.",
+          "SpeedSourceContainer": "Automatic speed: the party container (wagon, mount…). Click to use the slowest party member instead.",
+          "LevelUpAll": "Level Up",
+          "LevelUpAllTooltip": "Grant a Level (Destiny, no XP needed) to every Character, one Level Up window after another",
+          "LevelUpAllConfirm": "Grant a Level to {n} Character(s)? A Level Up window opens for each one to apply its choices.",
+          "LevelUpAllProgress": "Level Up {i}/{n}: {name}",
+          "LevelUpAllStopped": "Party Level Up stopped at {name}.",
+          "LevelUpOne": "Open Level Up (award XP, gain a Level)"
         },
         "CompactView": {
           "Open": "Open Compact View",
@@ -1928,7 +1978,7 @@
         },
         "MoraleCheck": {
           "Title": "Morale Check",
-          "tooltip": "Check Morale (2d6 vs Morale)\n\nWhen to roll:\n• Their Leader is defeated.\n• They are alone and at half HP or lower.\n• Half or more are defeated.",
+          "tooltip": "Check Morale (2d6 vs Morale)\n\nEnemies make Morale Checks during a Combat when:\n• The first death in their Group occurs.\n• Their HP is at half or less, or half their Group is Incapacitated.\n• They dealt 0 damage during a Round.\n• The Group Leader dies.",
           "Target": "Morale Target",
           "Roll": "Roll Result",
           "Passed": "Morale holds! The NPC continues fighting.",

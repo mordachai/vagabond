@@ -66,6 +66,8 @@
 
 /* Party supplies breakdown - renders inside Foundry's #tooltip, outside sheets */
 @import 'components/party-supplies-tooltip';
+/* Bulleted-list tooltips (listTip helper) - render inside Foundry's #tooltip */
+@import 'components/list-tooltip';
 
 /* Context menus - imported at top level because they render outside sheets (appended to document.body) */
 

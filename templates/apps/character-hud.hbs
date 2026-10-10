@@ -229,7 +229,7 @@
             </div>
           {{/each}}
           {{#if hasMana}}
-            <div class="vh-mana clickable mana-modifier" data-action="modifyMana" data-hud-tip-html="{{localize 'VAGABOND.ResourceTypes.MaxMana'}}: {{mana.max}} | {{localize 'VAGABOND.ResourceTypes.ManaPerCast'}}: {{mana.castingMax}} | <i class='fas fa-computer-mouse'></i>L {{localize 'VAGABOND.Hud.ManaSpendHint'}} &middot; <i class='fas fa-computer-mouse'></i>R {{localize 'VAGABOND.Hud.ManaRestoreHint'}}">
+            <div class="vh-mana clickable mana-modifier" data-action="modifyMana" data-hud-tip-html="{{localize 'VAGABOND.ResourceTypes.MaxMana'}}: {{mana.max}}<br>{{localize 'VAGABOND.ResourceTypes.ManaPerCast'}}: {{mana.castingMax}}<br><i class='fas fa-computer-mouse'></i>L {{localize 'VAGABOND.Hud.ManaSpendHint'}}<br><i class='fas fa-computer-mouse'></i>R {{localize 'VAGABOND.Hud.ManaRestoreHint'}}" data-hud-tip-class="vagabond-hint-tooltip">
               <i class="fas fa-star-christmas"></i><span>{{mana.current}}</span>
             </div>
           {{/if}}

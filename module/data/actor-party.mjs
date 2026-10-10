@@ -25,6 +25,11 @@ export default class VagabondParty extends VagabondActorBase {
     schema.speed  = new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 });
     schema.crawl  = new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 });
     schema.travel = new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 });
+    // Where the automatic speeds come from: the slowest member, or the party's container (wagon, mount…)
+    schema.speedSource = new fields.StringField({ required: true, initial: 'party', choices: ['party', 'container'] });
+
+    // Shifts the GM grants the party for its next downtime (pushed to every Character by the sheet's Downtime button)
+    schema.shifts = new fields.NumberField({ ...requiredInteger, initial: 1, min: 1 });
 
     // Party treasury — shared funds (shop split payments, member transfers)
     schema.currency = new fields.SchemaField({

@@ -17915,6 +17915,29 @@ ol#combat-tracker.directory-list {
   margin-left: 1px;
 }
 
+/* Bulleted-list tooltips (listTip helper) - render inside Foundry's #tooltip */
+#tooltip.vagabond-list-tooltip {
+  text-align: left;
+  max-width: 280px;
+}
+#tooltip.vagabond-list-tooltip p {
+  margin: 0 0 4px;
+  font-weight: bold;
+}
+#tooltip.vagabond-list-tooltip ul {
+  margin: 0;
+  padding-left: 1.1em;
+  list-style: disc;
+}
+#tooltip.vagabond-list-tooltip li {
+  margin: 0 0 2px;
+  padding: 0;
+}
+
+#tooltip.vagabond-hint-tooltip {
+  text-align: left;
+}
+
 /* Context menus - imported at top level because they render outside sheets (appended to document.body) */
 /* Inventory context menu - Uses ContextMenuHelper with dual-selector pattern */
 .vagabond .inventory-context-menu,
@@ -26495,15 +26518,23 @@ details[open] .vagabond .npc-immunity-toggle i {
 .vagabond .npc-field-display i {
   color: var(--vagabond-c-dark);
 }
+.vagabond .party-supplies-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--vagabond-c-tan-lite);
+}
 .vagabond .party-supplies-bar {
+  flex: none;
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 6px 10px;
+  padding: 1px 10px;
   background: var(--vagabond-c-inset-1);
-  border-bottom: 1px solid var(--vagabond-c-tan-lite);
+  border-radius: 4px;
   font-family: "Germania", serif;
-  font-size: 1.2em;
+  font-size: 1.1em;
 }
 .vagabond .party-supplies-bar .supplies-label {
   color: var(--vagabond-c-chat-yellow);
@@ -26535,15 +26566,73 @@ details[open] .vagabond .npc-immunity-toggle i {
   color: var(--vagabond-c-tan);
   margin: 0 4px;
 }
-.vagabond .party-supplies-bar .supplies-wealth {
+.vagabond .party-treasure {
   margin-left: auto;
   display: flex;
   align-items: center;
+  gap: 36px;
+  font-family: "Germania", serif;
+  font-size: 1.1em;
+  color: var(--vagabond-c-text-secondary);
+}
+.vagabond .party-treasure .treasure-group {
+  display: inline-flex;
+  align-items: center;
   gap: 6px;
 }
-.vagabond .party-supplies-bar .supplies-wealth i {
-  color: var(--vagabond-c-chat-yellow);
+.vagabond .party-treasure .treasure-group > i {
+  font-size: 1.1em;
+}
+.vagabond .party-treasure .has-breakdown {
+  cursor: help;
+  border-radius: 3px;
+  transition: background-color 0.15s;
+}
+.vagabond .party-treasure .has-breakdown:hover {
+  background-color: color-mix(in srgb, var(--vagabond-c-chat-yellow) 12%, transparent);
+}
+.vagabond .party-treasure .supplies-value {
+  font-weight: bold;
+  color: var(--vagabond-c-text-secondary);
+}
+.vagabond .party-treasure .currency-abbr {
+  color: inherit;
+}
+.vagabond .party-treasure .treasure-coin {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 1px;
+  margin: 0;
+  font-weight: bold;
+}
+.vagabond .party-treasure .treasure-input {
+  field-sizing: content;
+  min-width: 2ch;
+  height: auto;
+  line-height: 1.2;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-bottom: 1px dotted var(--vagabond-c-tan);
+  border-radius: 0;
+  box-shadow: none;
+  text-align: right;
+  font-family: "Germania", serif;
   font-size: 1em;
+  font-weight: bold;
+  color: inherit;
+}
+.vagabond .party-treasure .treasure-input::-webkit-inner-spin-button, .vagabond .party-treasure .treasure-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.vagabond .party-treasure .treasure-input:focus {
+  outline: none;
+  border-bottom-color: var(--vagabond-c-text-secondary);
+}
+.vagabond .party-treasure .treasure-input[readonly] {
+  border-bottom-color: transparent;
+  cursor: default;
 }
 .vagabond .currency-abbr {
   font-size: 0.75em;
@@ -26560,9 +26649,18 @@ details[open] .vagabond .npc-immunity-toggle i {
   background-size: cover;
   border-bottom: 3px solid var(--vagabond-c-black);
 }
+.vagabond .party-portrait-wrap {
+  position: relative;
+  flex: 0 0 auto;
+  align-self: stretch;
+  width: 130px;
+  min-height: 120px;
+}
 .vagabond .party-portrait {
-  width: 120px;
-  height: 120px;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
   object-position: top center;
   background-color: var(--vagabond-c-black);
@@ -26578,12 +26676,14 @@ details[open] .vagabond .npc-immunity-toggle i {
 }
 .vagabond .party-info {
   flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas: "name   down" "type   down" "speeds down";
+  gap: 4px 12px;
   min-width: 0;
 }
 .vagabond .party-name {
+  grid-area: name;
   font-family: "Germania", serif;
   font-size: 1.5em !important;
   color: var(--vagabond-c-white) !important;
@@ -26597,6 +26697,7 @@ details[open] .vagabond .npc-immunity-toggle i {
   text-shadow: 2px 2px 0 var(--vagabond-c-black), -2px 2px 0 var(--vagabond-c-black), -2px -2px 0 var(--vagabond-c-black), 2px -2px 0 var(--vagabond-c-black);
 }
 .vagabond .party-type {
+  grid-area: type;
   font-family: "Germania", serif;
   font-size: 1em;
   color: var(--vagabond-c-chat-yellow);
@@ -26611,48 +26712,207 @@ details[open] .vagabond .npc-immunity-toggle i {
   color: var(--vagabond-c-white) !important;
   text-shadow: none;
 }
+.vagabond .party-speed-row {
+  grid-area: speeds;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  gap: 8px;
+  min-width: 0;
+}
 .vagabond .party-speeds {
   position: relative;
   bottom: 0;
+  flex: 0 1 auto;
+  min-width: 0;
+  flex-wrap: nowrap;
+  align-items: center;
   display: flex;
-  justify-content: space-around;
+  justify-content: flex-start;
   align-content: baseline;
   background: rgba(0, 0, 0, 0.5);
-  padding: 2px 8px;
-  gap: 8px;
+  padding: 6px 10px 6px 6px;
+  gap: 6px 12px;
   border: 2px solid var(--vagabond-c-chat-yellow);
   border-radius: 8px;
   text-shadow: 2px 2px 0 var(--vagabond-c-dark-bluey), -2px 2px 0 var(--vagabond-c-dark-bluey), -2px -2px 0 var(--vagabond-c-dark-bluey), 2px -2px 0 var(--vagabond-c-dark-bluey);
 }
+.vagabond .party-speed-source {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+  gap: 8px;
+  height: auto;
+  min-height: 0;
+  line-height: 1;
+  padding: 4px 8px;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid var(--vagabond-c-chat-yellow);
+  border-radius: 14px;
+  box-shadow: none;
+  text-shadow: none;
+  cursor: pointer;
+}
+.vagabond .party-speed-source i {
+  font-size: 1.3em;
+  color: var(--vagabond-c-chat-yellow);
+  opacity: 0.3;
+  transition: opacity 0.15s;
+}
+.vagabond .party-speed-source i.is-on {
+  opacity: 1;
+}
+.vagabond .party-speed-source:hover i {
+  opacity: 0.65;
+}
+.vagabond .party-speed-source:hover i.is-on {
+  opacity: 1;
+}
 .vagabond .party-speed-stat {
   display: flex;
-  align-items: center;
+  align-items: baseline;
+  gap: 4px;
   white-space: nowrap;
+  line-height: 1.2;
 }
 .vagabond .party-speed-stat .speed-label {
   font-family: "Germania", serif;
-  font-size: 1.3em;
+  font-size: 1em;
+  line-height: 1.2;
   color: var(--vagabond-c-chat-yellow);
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
 .vagabond .party-speed-stat .speed-unit {
   font-family: "Germania", serif;
-  font-size: 0.9em;
+  font-size: 0.8em;
+  line-height: 1.2;
   color: var(--vagabond-c-chat-yellow);
-  margin-left: -5px;
+  margin-left: -2px;
   text-align: left;
 }
 .vagabond .party-speed-stat .speed-input {
   field-sizing: content;
   min-width: 1ch;
+  height: auto;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border: none;
+  box-shadow: none;
   font-family: "Germania", serif;
   font-size: 1.3em;
-  text-align: left;
+  line-height: 1.1;
+  text-align: right;
   text-shadow: 1px 1px 0 var(--vagabond-c-dark-bluey), -1px 1px 0 var(--vagabond-c-dark-bluey), -1px -1px 0 var(--vagabond-c-dark-bluey), 1px -1px 0 var(--vagabond-c-dark-bluey);
 }
 .vagabond .party-speed-stat input {
   color: var(--vagabond-c-chat-yellow);
+}
+.vagabond .party-speed-stat .speed-input.is-auto {
+  opacity: 0.75;
+}
+.vagabond .party-levelup-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  height: auto;
+  line-height: normal;
+  flex: none;
+  margin-left: auto;
+  padding: 4px 14px;
+  background: var(--vagabond-c-chat-yellow);
+  color: var(--vagabond-c-black);
+  border: none;
+  border-radius: 8px;
+  font-family: "Germania", serif;
+  font-size: 14px;
+  text-shadow: none;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.vagabond .party-levelup-btn i {
+  font-size: 1.1em;
+}
+.vagabond .party-levelup-btn:hover {
+  filter: brightness(1.1);
+}
+.vagabond .party-downtime-box {
+  grid-area: down;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 3px;
+  max-width: 200px;
+  padding: 4px 8px;
+  background: rgba(0, 0, 0, 0.5);
+  border: 2px solid var(--vagabond-c-chat-yellow);
+  border-radius: 8px;
+}
+.vagabond .party-downtime-box .pdt-clocks {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 0 calc(var(--pdt-size) * 0.22);
+}
+.vagabond .party-downtime-box .pdt-clock {
+  position: relative;
+  z-index: 2;
+  width: var(--pdt-size);
+  height: var(--pdt-size);
+  border: none;
+  flex: 0 0 auto;
+}
+.vagabond .party-downtime-box .pdt-handle {
+  position: absolute;
+  top: 50%;
+  z-index: 1;
+  width: calc(var(--pdt-size) * 0.24);
+  height: calc(var(--pdt-size) * 0.45);
+  border: none;
+  transform: translateY(-50%);
+  cursor: pointer;
+  transition: filter 0.15s ease;
+}
+.vagabond .party-downtime-box .pdt-handle:hover {
+  filter: brightness(1.4);
+}
+.vagabond .party-downtime-box .pdt-handle-left {
+  left: 0;
+}
+.vagabond .party-downtime-box .pdt-handle-right {
+  right: 0;
+}
+.vagabond .party-downtime-box .pdt-count {
+  font-family: "Germania", serif;
+  font-size: 0.95em;
+  color: var(--vagabond-c-chat-yellow);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  text-shadow: var(--vh-outline-2);
+  white-space: nowrap;
+}
+.vagabond .party-downtime-box .pdt-open {
+  align-self: stretch;
+  height: auto;
+  line-height: normal;
+  padding: 3px 8px;
+  background: var(--vagabond-c-chat-yellow);
+  color: var(--vagabond-c-black);
+  border: none;
+  border-radius: 4px;
+  font-family: "Germania", serif;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.vagabond .party-downtime-box .pdt-open:hover {
+  filter: brightness(1.1);
 }
 .vagabond .party-members-header {
   display: flex;
@@ -26683,7 +26943,8 @@ details[open] .vagabond .npc-immunity-toggle i {
 .vagabond .party-members-header .party-compact-view-btn i {
   font-size: 1.1em;
 }
-.vagabond .party-members-header .party-add-member {
+.vagabond .party-members-header .party-add-member,
+.vagabond .party-members-header .party-remove-member {
   display: flex;
   align-items: center;
   gap: 5px;
@@ -26697,11 +26958,17 @@ details[open] .vagabond .npc-immunity-toggle i {
   cursor: pointer;
   transition: opacity 0.15s;
 }
-.vagabond .party-members-header .party-add-member:hover {
+.vagabond .party-members-header .party-add-member:hover,
+.vagabond .party-members-header .party-remove-member:hover {
   opacity: 0.8;
 }
-.vagabond .party-members-header .party-add-member i {
+.vagabond .party-members-header .party-add-member i,
+.vagabond .party-members-header .party-remove-member i {
   font-size: 1.2em;
+}
+.vagabond .party-members-header .party-add-member.is-active,
+.vagabond .party-members-header .party-remove-member.is-active {
+  background: #c62828;
 }
 .vagabond .party-empty-state {
   display: flex;
@@ -26725,6 +26992,12 @@ details[open] .vagabond .npc-immunity-toggle i {
   grid-template-columns: repeat(clamp(2, var(--member-count, 2), 4), 1fr);
   gap: 15px;
   padding: 10px;
+}
+.vagabond .party-member-grid .member-remove-btn {
+  display: none;
+}
+.vagabond .party-member-grid.remove-mode .member-remove-btn {
+  display: flex;
 }
 .vagabond .member-hp-bar-bg,
 .vagabond .member-fatigue-bar-bg {
@@ -26767,7 +27040,7 @@ details[open] .vagabond .npc-immunity-toggle i {
   color: var(--vagabond-c-chat-yellow);
 }
 .vagabond .member-hp-bar-bg {
-  flex: 1;
+  flex: 1 0 auto;
 }
 .vagabond .member-hp-bar-bg::before {
   width: var(--hp-fill, 0%);
@@ -26788,6 +27061,7 @@ details[open] .vagabond .npc-immunity-toggle i {
   color: var(--vagabond-c-chat-yellow);
 }
 .vagabond .party-member-card {
+  font-size: 1.15em;
   background: var(--vagabond-bg-paper);
   background-repeat: var(--vagabond-bg-repeat);
   background-size: var(--vagabond-bg-size);
@@ -26813,25 +27087,29 @@ details[open] .vagabond .npc-immunity-toggle i {
 }
 .vagabond .party-member-card .member-remove-btn {
   position: absolute;
-  top: -13px;
-  right: -10px;
-  width: 18px;
-  height: 18px;
-  padding: 1px 10px;
-  border: none;
-  font-size: 0.85em;
-  cursor: pointer;
-  border-radius: 12px;
-  display: flex;
+  top: -8px;
+  right: -8px;
+  z-index: 1;
+  width: 16px;
+  height: 16px;
+  min-height: 0;
+  line-height: normal;
+  padding: 0;
   align-items: center;
   justify-content: center;
-  opacity: 0.9;
-  transition: opacity 0.15s, color 0.15s, background 0.15s;
+  border: 1px solid var(--vagabond-c-black);
+  border-radius: 50%;
+  background: #c62828;
+  color: #ffffff;
+  font-size: 0.6rem;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+}
+.vagabond .party-member-card .member-remove-btn i {
+  color: inherit;
 }
 .vagabond .party-member-card .member-remove-btn:hover {
-  color: var(--vagabond-c-white);
-  background: rgba(198, 5, 5, 0.7);
-  opacity: 1;
+  background: #e53935;
 }
 .vagabond .party-member-card .member-portrait-wrap {
   flex-shrink: 0;
@@ -26841,8 +27119,8 @@ details[open] .vagabond .npc-immunity-toggle i {
   gap: 2px;
 }
 .vagabond .party-member-card .member-portrait {
-  width: 54px;
-  height: 54px;
+  width: 52px;
+  height: 52px;
   object-fit: cover;
   object-position: top center;
   display: block;
@@ -26866,7 +27144,7 @@ details[open] .vagabond .npc-immunity-toggle i {
 }
 .vagabond .party-member-card .member-subtitle {
   font-family: "Germania", serif;
-  font-size: 0.9em;
+  font-size: 0.75em;
   color: var(--vagabond-c-chat-yellow);
   margin: 0;
   display: flex;
@@ -26884,10 +27162,6 @@ details[open] .vagabond .npc-immunity-toggle i {
   text-overflow: ellipsis;
   min-width: 0;
 }
-.vagabond .party-member-card .member-speed {
-  flex-shrink: 0;
-  opacity: 0.85;
-}
 .vagabond .party-member-card .member-header-info {
   flex: 1;
   display: flex;
@@ -26903,7 +27177,8 @@ details[open] .vagabond .npc-immunity-toggle i {
 .vagabond .party-member-card .member-name {
   flex: 1;
   font-family: "Germania", serif;
-  font-size: 1.2em;
+  font-size: 1.5em;
+  line-height: 1.15;
   color: var(--vagabond-c-chat-yellow);
   white-space: nowrap;
   overflow: hidden;
@@ -26914,18 +27189,6 @@ details[open] .vagabond .npc-immunity-toggle i {
 }
 .vagabond .party-member-card .member-name:hover {
   text-decoration: underline;
-}
-.vagabond .party-member-card .member-xp {
-  flex-shrink: 0;
-  font-family: "Germania", serif;
-  font-size: 1em;
-  color: var(--vagabond-c-chat-yellow);
-  white-space: nowrap;
-}
-.vagabond .party-member-card .member-xp i {
-  font-size: 0.8em;
-  color: #c0912b;
-  margin-right: 1px;
 }
 .vagabond .party-member-card .member-hpfatigue-row {
   display: flex;
@@ -26940,8 +27203,8 @@ details[open] .vagabond .npc-immunity-toggle i {
   border-bottom: 1px solid var(--vagabond-c-tan-lite);
 }
 .vagabond .party-member-card .member-status-icon {
-  width: 22px;
-  height: 22px;
+  width: 28px;
+  height: 28px;
   object-fit: cover;
   border-radius: 3px;
   border: 1px solid var(--vagabond-c-tan-lite);
@@ -26955,9 +27218,11 @@ details[open] .vagabond .npc-immunity-toggle i {
 }
 .vagabond .party-member-card .member-saves-row {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-around;
   align-items: center;
-  padding: 4px 8px;
+  gap: 4px 10px;
+  padding: 5px 8px;
   border-bottom: 1px solid var(--vagabond-c-tan-lite);
   background: var(--vagabond-c-inset-2);
 }
@@ -26969,6 +27234,33 @@ details[open] .vagabond .npc-immunity-toggle i {
 .vagabond .party-member-card .save-icon {
   font-size: 1.2em;
   color: var(--vagabond-c-text-secondary);
+}
+.vagabond .party-member-card .member-xp-chip {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+  height: auto;
+  line-height: normal;
+  padding: 1px 9px;
+  background: transparent;
+  border: 1px solid var(--vagabond-c-tan-lite);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.vagabond .party-member-card .member-xp-chip .xp-label {
+  font-family: "Germania", serif;
+  font-size: 0.85em;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--vagabond-c-muted);
+}
+.vagabond .party-member-card .member-xp-chip:hover {
+  border-color: var(--vagabond-c-bg2);
+}
+.vagabond .party-member-card .member-xp-chip.can-level {
+  border-color: var(--vagabond-c-chat-yellow);
+  box-shadow: 0 0 8px -1px var(--vagabond-c-chat-yellow), inset 0 0 0 1px var(--vagabond-c-chat-yellow);
 }
 .vagabond .party-member-card .save-value {
   font-family: "Germania", serif;
@@ -26999,7 +27291,7 @@ details[open] .vagabond .npc-immunity-toggle i {
 }
 .vagabond .party-member-card .stat-icon {
   font-size: 1em;
-  width: 14px;
+  width: 18px;
   text-align: center;
   color: var(--vagabond-c-muted);
   flex-shrink: 0;
@@ -27015,55 +27307,6 @@ details[open] .vagabond .npc-immunity-toggle i {
   font-size: 0.9em;
   color: var(--vagabond-c-muted);
   white-space: nowrap;
-}
-.vagabond .party-member-card .member-equipped-list,
-.vagabond .party-member-card .member-spells-list {
-  padding: 4px 8px;
-}
-.vagabond .party-member-card .member-equipped-list:not(:last-child),
-.vagabond .party-member-card .member-spells-list:not(:last-child) {
-  border-bottom: 1px solid var(--vagabond-c-tan-lite);
-}
-.vagabond .party-member-card .member-list-label {
-  font-family: "Germania", serif;
-  font-size: 1em;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--vagabond-c-text-secondary);
-  margin: 0 0 3px;
-}
-.vagabond .party-member-card .member-item-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 3px;
-}
-.vagabond .party-member-card .member-item-entry {
-  display: flex;
-  align-items: center;
-  gap: 3px;
-  background: var(--vagabond-c-inset-2);
-  border: 1px solid var(--vagabond-c-tan-lite);
-  border-radius: 3px;
-  padding: 1px 4px;
-  max-width: 130px;
-}
-.vagabond .party-member-card .member-item-icon {
-  width: 14px;
-  height: 14px;
-  object-fit: cover;
-  border-radius: 2px;
-  flex-shrink: 0;
-}
-.vagabond .party-member-card .member-item-name {
-  font-family: "Germania", serif;
-  font-size: 1em;
-  color: var(--vagabond-c-text-primary);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 .vagabond .party-npc-card {
   background: var(--vagabond-bg-paper);
@@ -27095,26 +27338,29 @@ details[open] .vagabond .npc-immunity-toggle i {
 }
 .vagabond .party-npc-card .member-remove-btn {
   position: absolute;
-  top: -13px;
-  right: -10px;
-  width: 18px;
-  height: 18px;
-  padding: 1px 10px;
-  border: none;
-  font-size: 0.85em;
-  cursor: pointer;
-  border-radius: 12px;
-  display: flex;
+  top: -8px;
+  right: -8px;
+  z-index: 1;
+  width: 16px;
+  height: 16px;
+  min-height: 0;
+  line-height: normal;
+  padding: 0;
   align-items: center;
   justify-content: center;
-  opacity: 0.9;
-  transition: opacity 0.15s, color 0.15s, background 0.15s;
-  z-index: 1;
+  border: 1px solid var(--vagabond-c-black);
+  border-radius: 50%;
+  background: #c62828;
+  color: #ffffff;
+  font-size: 0.6rem;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+}
+.vagabond .party-npc-card .member-remove-btn i {
+  color: inherit;
 }
 .vagabond .party-npc-card .member-remove-btn:hover {
-  color: var(--vagabond-c-white);
-  background: rgba(198, 5, 5, 0.7);
-  opacity: 1;
+  background: #e53935;
 }
 .vagabond .party-npc-card .npc-portrait {
   width: 54px;
@@ -28011,6 +28257,388 @@ details[open] .vagabond .npc-immunity-toggle i {
   font-style: italic;
   font-size: 0.9em;
   margin: 0;
+}
+.vagabond .party-member-card .member-stat-cell.member-coins {
+  grid-column: 1/-1;
+  gap: 6px;
+}
+.vagabond .party-member-card .member-stat-cell.member-coins .member-coin {
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+  flex: 1 1 0;
+  min-width: 0;
+  margin: 0;
+}
+.vagabond .party-member-card .member-stat-cell.member-coins .member-coin-input {
+  width: 100%;
+  min-width: 0;
+  height: auto;
+  line-height: normal;
+  padding: 0 2px;
+  text-align: right;
+  font-family: "Germania", serif;
+  font-size: 1em;
+  color: var(--vagabond-c-text-primary);
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--vagabond-c-tan-lite);
+  border-radius: 0;
+  box-shadow: none;
+  -moz-appearance: textfield;
+}
+.vagabond .party-member-card .member-stat-cell.member-coins .member-coin-input::-webkit-inner-spin-button, .vagabond .party-member-card .member-stat-cell.member-coins .member-coin-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.vagabond .party-member-card .member-stat-cell.member-coins .member-coin-input:focus {
+  outline: none;
+  border-bottom-color: var(--vagabond-c-bg2);
+}
+.vagabond .party-member-card .member-stat-cell.member-coins .member-coin-input[readonly] {
+  border-bottom-color: transparent;
+  cursor: default;
+}
+.vagabond .party-member-card .member-stat-cell.member-coins .currency-abbr {
+  color: var(--vagabond-c-text-secondary);
+}
+.vagabond .party-containers {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  height: 40px;
+  margin: 10px 10px 0;
+  padding: 0 10px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  background: var(--vagabond-c-inset-2);
+  border: 1px dashed var(--vagabond-c-tan);
+  border-radius: 4px;
+  font-family: "Germania", serif;
+  font-size: 13px;
+  line-height: 1.2;
+  color: color-mix(in srgb, var(--vagabond-c-text-primary) 78%, transparent);
+  transition: border-color 0.15s, background 0.15s;
+}
+.vagabond .party-containers.is-over {
+  border-color: var(--vagabond-c-chat-yellow);
+  background: color-mix(in srgb, var(--vagabond-c-chat-yellow) 14%, transparent);
+}
+.vagabond .party-containers .pc-label {
+  flex: none;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 0.9em;
+  color: var(--vagabond-c-text-secondary);
+}
+.vagabond .party-containers .pc-hint {
+  flex: none;
+  font-style: italic;
+}
+.vagabond .party-containers .pc-chip {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 30px;
+}
+.vagabond .party-containers .pc-open,
+.vagabond .party-containers .pc-delete {
+  height: auto;
+  min-height: 0;
+  line-height: 1.2;
+  padding: 0;
+  background: none;
+  border: none;
+  box-shadow: none;
+  font-family: inherit;
+  font-size: inherit;
+  cursor: pointer;
+}
+.vagabond .party-containers .pc-open:focus, .vagabond .party-containers .pc-open:focus-visible,
+.vagabond .party-containers .pc-delete:focus,
+.vagabond .party-containers .pc-delete:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+.vagabond .party-containers .pc-open {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--vagabond-c-text-primary);
+}
+.vagabond .party-containers .pc-open:hover {
+  color: var(--vagabond-c-text-secondary);
+}
+.vagabond .party-containers .pc-img {
+  width: 28px;
+  height: 28px;
+  margin: 0;
+  border: none;
+  border-radius: 3px;
+  object-fit: cover;
+  background: var(--vagabond-c-black);
+}
+.vagabond .party-containers .pc-fill {
+  font-size: 0.9em;
+  color: color-mix(in srgb, var(--vagabond-c-text-primary) 78%, transparent);
+}
+.vagabond .party-containers .pc-delete {
+  color: color-mix(in srgb, var(--vagabond-c-text-primary) 78%, transparent);
+  font-size: 0.95em;
+}
+.vagabond .party-containers .pc-delete:hover {
+  color: #e53935;
+}
+.vagabond .party-inv-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  font-size: 1.05em;
+  background: var(--vagabond-bg-paper);
+  background-repeat: var(--vagabond-bg-repeat);
+  background-size: var(--vagabond-bg-size);
+  border: 2px solid var(--vagabond-c-tan-lite);
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  --inv-line: 1.15rem;
+}
+.vagabond .party-inv-card .inv-card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  background-image: url("../assets/images/sheets/tabNavBG.webp");
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-bottom: 3px solid var(--vagabond-c-black);
+  border-radius: 6px 6px 0 0;
+  color: var(--vagabond-c-chat-yellow);
+  cursor: pointer;
+}
+.vagabond .party-inv-card .inv-card-portrait {
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  object-fit: cover;
+  object-position: top center;
+  background-color: var(--vagabond-c-black);
+  border: 1px solid var(--vagabond-c-chat-yellow);
+  border-radius: 4px;
+}
+.vagabond .party-inv-card .inv-card-name {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  font-family: "Germania", serif;
+  font-size: 1.1em;
+  color: var(--vagabond-c-chat-yellow);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-shadow: 1px 1px 0 var(--vagabond-c-black);
+}
+.vagabond .party-inv-card .inv-card-slots {
+  flex-shrink: 0;
+  font-family: "Germania", serif;
+  color: var(--vagabond-c-chat-yellow);
+  white-space: nowrap;
+  text-shadow: 1px 1px 0 var(--vagabond-c-black);
+}
+.vagabond .party-inv-card .inv-columns,
+.vagabond .party-inv-card .inv-row {
+  display: grid;
+  grid-template-columns: var(--inv-line) minmax(0, 1fr) 30px;
+  align-items: center;
+  gap: 6px;
+}
+.vagabond .party-inv-card .inv-columns {
+  padding: 2px 8px;
+  font-family: "Germania", serif;
+  font-size: 0.8em;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--vagabond-c-text-primary) 78%, transparent);
+  background: var(--vagabond-c-inset-2);
+  border-bottom: 1px solid var(--vagabond-c-tan-lite);
+}
+.vagabond .party-inv-card .inv-columns .inv-col-name {
+  grid-column: 1/3;
+}
+.vagabond .party-inv-card .inv-columns .inv-col-qty {
+  text-align: center;
+}
+.vagabond .party-inv-card .inv-group-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  padding: 3px 8px 0;
+  font-family: "Germania", serif;
+  font-size: 0.8em;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--vagabond-c-text-secondary);
+}
+.vagabond .party-inv-card .inv-group-title::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--vagabond-c-tan);
+}
+.vagabond .party-inv-card .inv-item {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+}
+.vagabond .party-inv-card .inv-row {
+  padding: 3px 8px;
+  line-height: var(--inv-line);
+}
+.vagabond .party-inv-card .inv-img {
+  display: block;
+  width: var(--inv-line);
+  height: var(--inv-line);
+  margin: 0;
+  object-fit: cover;
+  border: none;
+  border-radius: 3px;
+  background: var(--vagabond-c-black);
+}
+.vagabond .party-inv-card .inv-name {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+  min-width: 0;
+  height: auto;
+  min-height: 0;
+  line-height: var(--inv-line);
+  padding: 0;
+  background: none;
+  border: none;
+  box-shadow: none;
+  text-align: left;
+  font-family: "Germania", serif;
+  font-size: 1em;
+  color: var(--vagabond-c-text-primary);
+  cursor: pointer;
+}
+.vagabond .party-inv-card .inv-name .inv-name-text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.vagabond .party-inv-card .inv-name:hover, .vagabond .party-inv-card .inv-name:focus-visible {
+  text-decoration: underline;
+}
+.vagabond .party-inv-card .inv-name:focus, .vagabond .party-inv-card .inv-name:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+.vagabond .party-inv-card .inv-item.open .inv-name {
+  color: var(--vagabond-c-text-secondary);
+}
+.vagabond .party-inv-card .inv-qty {
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  font-family: "Germania", serif;
+  line-height: var(--inv-line);
+  color: var(--vagabond-c-text-primary);
+}
+.vagabond .party-inv-card .inv-detail {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.2s ease;
+}
+.vagabond .party-inv-card .inv-detail > .inv-detail-inner {
+  overflow: hidden;
+  min-height: 0;
+}
+.vagabond .party-inv-card .inv-item.open .inv-detail {
+  grid-template-rows: 1fr;
+}
+.vagabond .party-inv-card .inv-item.open .inv-detail-inner {
+  padding: 4px 8px 6px;
+}
+.vagabond .party-inv-card .inv-detail-inner {
+  font-size: 0.9em;
+  color: var(--vagabond-c-text-primary);
+}
+.vagabond .party-inv-card .inv-detail-inner .mini-sheet-description {
+  margin-bottom: 4px;
+}
+.vagabond .party-inv-card .inv-detail-inner .mini-sheet-description p {
+  margin: 0 0 4px;
+}
+.vagabond .party-inv-card .inv-detail-inner .mini-sheet-stats,
+.vagabond .party-inv-card .inv-detail-inner .mini-sheet-stats--inline {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1px;
+  margin-bottom: 4px;
+}
+.vagabond .party-inv-card .inv-detail-inner .stat-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 6px;
+  min-width: 0;
+}
+.vagabond .party-inv-card .inv-detail-inner .stat-name {
+  color: color-mix(in srgb, var(--vagabond-c-text-primary) 78%, transparent);
+}
+.vagabond .party-inv-card .inv-detail-inner .stat-value {
+  font-family: "Germania", serif;
+  color: var(--vagabond-c-text-primary);
+  text-transform: capitalize;
+}
+.vagabond .party-inv-card .inv-detail-inner .stat-row--slots {
+  justify-content: flex-start;
+}
+.vagabond .party-inv-card .inv-detail-inner .stat-row--slots .stat-value {
+  color: var(--vagabond-c-text-secondary);
+}
+.vagabond .party-inv-card .inv-detail-inner .stat-row--slots .stat-coins {
+  margin-left: auto;
+  white-space: nowrap;
+}
+.vagabond .party-inv-card .inv-detail-inner .mini-sheet-properties {
+  margin-top: 4px;
+}
+.vagabond .party-inv-card .inv-detail-inner .mini-sheet-label {
+  font-family: "Germania", serif;
+  color: var(--vagabond-c-text-secondary);
+  margin-bottom: 2px;
+}
+.vagabond .party-inv-card .inv-detail-inner .property-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 10px;
+}
+.vagabond .party-inv-card .inv-detail-inner .property-chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 3px;
+}
+.vagabond .party-inv-card .inv-detail-inner .property-chip .property-name {
+  color: var(--vagabond-c-text-primary);
+}
+.vagabond .party-inv-card .inv-detail-inner .property-hint {
+  font-size: 0.8em;
+  color: color-mix(in srgb, var(--vagabond-c-text-primary) 78%, transparent);
+  cursor: help;
+}
+.vagabond .party-inv-card .inv-detail-inner .property-hint:hover {
+  color: var(--vagabond-c-text-secondary);
+}
+.vagabond .party-inv-card .inv-empty {
+  margin: 0;
+  padding: 10px 8px;
+  text-align: center;
+  color: color-mix(in srgb, var(--vagabond-c-text-primary) 78%, transparent);
+  font-style: italic;
 }
 .vagabond .construct-header {
   display: flex;

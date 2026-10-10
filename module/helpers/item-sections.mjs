@@ -118,11 +118,28 @@ function localizeConfigValue(map, key) {
 }
 
 /**
+ * Slots stat row. `value` (an already formatted coin string) rides on the same row
+ * with a coins icon — used by the party Inventory tab, where it replaces the Cost row.
+ * @param {VagabondItem} item
+ * @param {{value?: string}} [opts]
+ * @returns {string}
+ */
+export function buildSlotsRow(item, { value = '' } = {}) {
+  const label = game.i18n.localize('VAGABOND.UI.Labels.Slots');
+  return `
+      <div class="stat-row stat-row--slots">
+        <span class="stat-name">${label}</span>
+        <span class="stat-value">${item.system.slots ?? 0}</span>
+        ${value ? `<span class="stat-value stat-coins"><i class="fa-solid fa-coins"></i> ${value}</span>` : ''}
+      </div>`;
+}
+
+/**
  * Weapon stat grid (two columns).
  * @param {VagabondItem} item
  * @returns {string}
  */
-export function buildWeaponStats(item) {
+export function buildWeaponStats(item, { compact = false, value = '' } = {}) {
   const L = (k) => game.i18n.localize(`VAGABOND.UI.Labels.${k}`);
   const damageType = localizeConfigValue(CONFIG.VAGABOND.damageTypes, item.system.currentDamageType || item.system.damageType);
   const weaponSkill = localizeConfigValue(CONFIG.VAGABOND.weaponSkills, item.system.weaponSkill);
@@ -151,20 +168,19 @@ export function buildWeaponStats(item) {
         <span class="stat-value">${metal}</span>
       </div>
       ` : ''}
+      ${compact ? '' : `
       <div class="stat-row">
         <span class="stat-name">${L('Cost')}</span>
         <span class="stat-value">${item.system.costDisplay || item.system.cost || '0'}</span>
       </div>
+      `}
       ${item.system.requiresBound ? `
       <div class="stat-row">
         <span class="stat-name">${game.i18n.localize('VAGABOND.Item.Equipment.FIELDS.bound.label')}</span>
         <span class="stat-value">${item.system.bound ? L('Yes') : L('No')}</span>
       </div>
       ` : ''}
-      <div class="stat-row">
-        <span class="stat-name">${L('Slots')}</span>
-        <span class="stat-value">${item.system.slots ?? 0}</span>
-      </div>
+      ${buildSlotsRow(item, { value })}
     </div>
   `;
 }
@@ -174,7 +190,7 @@ export function buildWeaponStats(item) {
  * @param {VagabondItem} item
  * @returns {string}
  */
-export function buildArmorStats(item) {
+export function buildArmorStats(item, { compact = false, value = '' } = {}) {
   const L = (k) => game.i18n.localize(`VAGABOND.UI.Labels.${k}`);
   const metal = localizeConfigValue(CONFIG.VAGABOND.metalTypes, item.system.metal);
   return `
@@ -197,20 +213,19 @@ export function buildArmorStats(item) {
         <span class="stat-value">${metal}</span>
       </div>
       ` : ''}
+      ${compact ? '' : `
       <div class="stat-row">
         <span class="stat-name">${L('Cost')}</span>
         <span class="stat-value">${item.system.costDisplay || item.system.cost || '0'}</span>
       </div>
+      `}
       ${item.system.requiresBound ? `
       <div class="stat-row">
         <span class="stat-name">${game.i18n.localize('VAGABOND.Item.Equipment.FIELDS.bound.label')}</span>
         <span class="stat-value">${item.system.bound ? L('Yes') : L('No')}</span>
       </div>
       ` : ''}
-      <div class="stat-row">
-        <span class="stat-name">${L('Slots')}</span>
-        <span class="stat-value">${item.system.slots ?? 0}</span>
-      </div>
+      ${buildSlotsRow(item, { value })}
     </div>
   `;
 }
@@ -278,31 +293,36 @@ export async function onUsePipClick(target, fallbackItem = null) {
  * @param {VagabondItem} item
  * @returns {string}
  */
-export function buildGearStats(item) {
+export function buildGearStats(item, { compact = false, value = '' } = {}) {
   const L = (k) => game.i18n.localize(`VAGABOND.UI.Labels.${k}`);
   return `
     <div class="mini-sheet-stats mini-sheet-stats--inline">
-      ${item.system.quantity ? `
+      ${item.system.quantity && !compact ? `
       <div class="stat-row">
         <span class="stat-name">${L('Quantity')}</span>
         <span class="stat-value">${item.system.quantity}</span>
       </div>
       ` : ''}
+      ${compact && item.system.metal && !['none', 'iron'].includes(item.system.metal) ? `
+      <div class="stat-row">
+        <span class="stat-name">${game.i18n.localize('VAGABOND.Item.Weapon.FIELDS.metal.label')}</span>
+        <span class="stat-value">${localizeConfigValue(CONFIG.VAGABOND.metalTypes, item.system.metal)}</span>
+      </div>
+      ` : ''}
       ${buildUsesPipsRow(item)}
+      ${compact ? '' : `
       <div class="stat-row">
         <span class="stat-name">${L('Cost')}</span>
         <span class="stat-value">${item.system.costDisplay || item.system.cost || '0'}</span>
       </div>
+      `}
       ${item.system.requiresBound ? `
       <div class="stat-row">
         <span class="stat-name">${game.i18n.localize('VAGABOND.Item.Equipment.FIELDS.bound.label')}</span>
         <span class="stat-value">${item.system.bound ? L('Yes') : L('No')}</span>
       </div>
       ` : ''}
-      <div class="stat-row">
-        <span class="stat-name">${L('Slots')}</span>
-        <span class="stat-value">${item.system.slots ?? 0}</span>
-      </div>
+      ${buildSlotsRow(item, { value })}
     </div>
   `;
 }
@@ -312,7 +332,7 @@ export function buildGearStats(item) {
  * @param {VagabondItem} item
  * @returns {string}
  */
-export function buildWeaponProperties(item) {
+export function buildWeaponProperties(item, { tooltips = false } = {}) {
   const config = CONFIG.VAGABOND;
   return `
     <div class="mini-sheet-properties">
@@ -322,6 +342,13 @@ export function buildWeaponProperties(item) {
           const descriptionKey = config.weaponPropertyHints?.[prop] || '';
           const description = descriptionKey ? game.i18n.localize(descriptionKey) : '';
           const propLabel = localizeConfigValue(config.weaponProperties, prop);
+          // Compact: the property name with a (?) whose hover shows the description
+          if (tooltips) {
+            const hint = description
+              ? `<i class="fa-solid fa-circle-question property-hint" data-tooltip="${foundry.utils.escapeHTML(description)}"></i>`
+              : '';
+            return `<span class="property-chip"><span class="property-name">${propLabel}</span>${hint}</span>`;
+          }
           return `
             <div class="property-row">
               <span class="property-name">${propLabel}:</span>
@@ -370,13 +397,13 @@ export function buildStarterPackContents(item) {
  * @param {VagabondItem} item
  * @returns {string}
  */
-export function buildStatsSection(item) {
+export function buildStatsSection(item, opts = {}) {
   if (item.type === 'spell') return buildSpellStats(item);
   if (item.type === 'starterPack') return buildStarterPackContents(item);
-  if (EquipmentHelper.isWeapon(item)) return buildWeaponStats(item);
-  if (EquipmentHelper.isArmor(item)) return buildArmorStats(item);
+  if (EquipmentHelper.isWeapon(item)) return buildWeaponStats(item, opts);
+  if (EquipmentHelper.isArmor(item)) return buildArmorStats(item, opts);
   if (EquipmentHelper.isGear(item) || EquipmentHelper.isAlchemical(item) || EquipmentHelper.isRelic(item)) {
-    return buildGearStats(item);
+    return buildGearStats(item, opts);
   }
   return '';
 }

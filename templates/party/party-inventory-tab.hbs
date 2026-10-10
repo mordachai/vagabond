@@ -1,0 +1,73 @@
+{{! Party Inventory Tab — one card per Character, items grouped by type }}
+<section
+  class="tab party-inventory scrollable {{tab.cssClass}}"
+  data-group="primary"
+  data-tab="inventory"
+>
+  {{! Party containers: a thin sleeve that takes dropped Container items and lists them }}
+  <div class="party-containers" data-tooltip="{{localize 'VAGABOND.Actor.Party.Inventory.Containers.Tooltip'}}">
+    <span class="pc-label"><i class="fas fa-box-open"></i> {{localize 'VAGABOND.Actor.Party.Inventory.Containers.Label'}}</span>
+    {{#each containers}}
+    <span class="pc-chip" data-item-uuid="{{uuid}}">
+      <button type="button" class="pc-open" data-action="openContainer" data-tooltip="{{localize 'VAGABOND.Actor.Party.Inventory.Containers.Open'}}">
+        <img class="pc-img" src="{{img}}" alt="">
+        <span class="pc-name">{{name}}</span>
+        <span class="pc-fill">{{used}}/{{capacity}}</span>
+      </button>
+      {{#if ../canEditContainers}}
+      <button type="button" class="pc-delete" data-action="deleteContainer" data-tooltip="{{localize 'VAGABOND.Actor.Party.Inventory.Containers.Delete'}}"><i class="fa-solid fa-xmark"></i></button>
+      {{/if}}
+    </span>
+    {{else}}
+    <span class="pc-hint">{{localize 'VAGABOND.Actor.Party.Inventory.Containers.Drop'}}</span>
+    {{/each}}
+  </div>
+
+  {{#if inventoryCards.length}}
+  <div class="party-member-grid party-inventory-grid" style="--member-count: {{inventoryCards.length}}">
+    {{#each inventoryCards}}
+    <div class="party-inv-card" data-actor-uuid="{{uuid}}">
+
+      <header class="inv-card-header" data-action="openMemberSheet">
+        <img class="inv-card-portrait" src="{{img}}" alt="{{name}}">
+        <h3 class="inv-card-name">{{name}}</h3>
+        <span class="inv-card-slots" data-tooltip="{{localize 'VAGABOND.Actor.Party.Card.Slots'}}">
+          <i class="fas fa-backpack"></i> {{slotsUsed}}/{{slotsTotal}}
+        </span>
+      </header>
+
+      {{#if groups.length}}
+      <div class="inv-columns">
+        <span class="inv-col-name">{{localize 'VAGABOND.Actor.Party.Inventory.Item'}}</span>
+        <span class="inv-col-qty">{{localize 'VAGABOND.Actor.Party.Inventory.Quantity'}}</span>
+      </div>
+      {{#each groups}}
+      <div class="inv-group">
+        <h4 class="inv-group-title">{{label}}</h4>
+        {{#each items}}
+        <div class="inv-item{{#if open}} open{{/if}}" data-item-uuid="{{uuid}}">
+          <div class="inv-row">
+            <img class="inv-img" src="{{img}}" alt="">
+            <button type="button" class="inv-name" data-action="toggleInvItem">
+              <span class="inv-name-text">{{name}}</span>
+            </button>
+            <span class="inv-qty">{{quantity}}</span>
+          </div>
+          <div class="inv-detail"><div class="inv-detail-inner"></div></div>
+        </div>
+        {{/each}}
+      </div>
+      {{/each}}
+      {{else}}
+      <p class="inv-empty">{{localize 'VAGABOND.Actor.Party.Inventory.Empty'}}</p>
+      {{/if}}
+
+    </div>
+    {{/each}}
+  </div>
+  {{else}}
+  <div class="party-empty-state">
+    <p>{{localize 'VAGABOND.Actor.Party.Inventory.NoCharacters'}}</p>
+  </div>
+  {{/if}}
+</section>
