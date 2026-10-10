@@ -414,7 +414,7 @@
         "equipmentState": "unequipped",
         "armorType": "light",
         "immunities": [],
-        "gearCategory": "Tools",
+        "gearCategory": "Alchemy & Medicine",
         "alchemicalType": "concoction",
         "lore": "",
         "toolKind": "alchemy"

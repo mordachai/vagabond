@@ -28,7 +28,7 @@
     "equipmentState": "unequipped",
     "armorType": "light",
     "immunities": [],
-    "gearCategory": "Tools",
+    "gearCategory": "Alchemy & Medicine",
     "alchemicalType": "concoction",
     "lore": "",
     "toolKind": "alchemy"
@@ -49,7 +49,7 @@
     "lastModifiedBy": "13p65OEadZSZVLRk"
   },
   "_id": "GlJQrtDBhqIHLwCI",
-  "folder": "zjkpcB7upRLmY779",
+  "folder": "8BC7GVobqqAjnv8a",
   "sort": 100000,
   "ownership": {
     "default": 0,

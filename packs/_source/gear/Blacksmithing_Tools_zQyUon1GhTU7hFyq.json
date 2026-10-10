@@ -28,7 +28,7 @@
     "equipmentState": "unequipped",
     "armorType": "light",
     "immunities": [],
-    "gearCategory": "Tools",
+    "gearCategory": "Smithy",
     "alchemicalType": "concoction",
     "lore": ""
   },
@@ -48,7 +48,7 @@
     "lastModifiedBy": "13p65OEadZSZVLRk"
   },
   "_id": "zQyUon1GhTU7hFyq",
-  "folder": "zjkpcB7upRLmY779",
+  "folder": "EJFsj5iegXzPtYhb",
   "sort": 200000,
   "ownership": {
     "default": 0,

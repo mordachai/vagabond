@@ -4,7 +4,7 @@
   "_id": "Yj7hxhiROZCgAZ9j",
   "img": "/icons/environment/creatures/horse-tan.webp",
   "system": {
-    "subtitle": "Beasts & Husbandry",
+    "subtitle": "Beasts & Husbandry, Mounts & Vehicles",
     "shopkeeper": {
       "name": "",
       "title": "",
@@ -143,173 +143,6 @@
   },
   "items": [
     {
-      "name": "Fowl - Duck",
-      "type": "equipment",
-      "img": "icons/creatures/birds/duck-green.webp",
-      "system": {
-        "description": "",
-        "equipmentType": "gear",
-        "locked": true,
-        "equipped": false,
-        "quantity": 1,
-        "baseCost": {
-          "gold": 0,
-          "silver": 5,
-          "copper": 0
-        },
-        "baseSlots": 1,
-        "metal": "none",
-        "damageType": "-",
-        "damageAmount": "",
-        "canExplode": false,
-        "explodeValues": "",
-        "properties": [],
-        "weaponSkill": "melee",
-        "range": "close",
-        "grip": "1H",
-        "damageOneHand": "d6",
-        "damageTwoHands": "d8",
-        "equipmentState": "unequipped",
-        "immunities": [],
-        "gearCategory": "Beasts & Husbandry",
-        "alchemicalType": "concoction",
-        "lore": "",
-        "armorRating": 1,
-        "mightRequirement": 2,
-        "reflexPenalty": 1,
-        "handsRequired": 0,
-        "isTrinket": false,
-        "requiresBound": false,
-        "bound": false,
-        "relic": {
-          "powers": [],
-          "fabled": false,
-          "requiresBond": false,
-          "boundTo": "",
-          "cursed": false,
-          "consumable": false,
-          "sockets": []
-        },
-        "relicPower": {
-          "enabled": false,
-          "targets": [
-            "any"
-          ],
-          "family": "",
-          "rank": 1,
-          "requiredMaterials": []
-        },
-        "crystal": {
-          "type": "",
-          "bonus": 0,
-          "payloadUuid": "",
-          "usedThisQuest": false
-        },
-        "gridPosition": 0,
-        "containerId": null,
-        "altSkills": [],
-        "damageTypeOneHand": "-",
-        "damageTypeTwoHands": "-",
-        "armorDamage": 0,
-        "dieDamage": 0,
-        "craftMaterial": {
-          "enabled": false,
-          "key": "",
-          "value": 0
-        },
-        "toolKind": "",
-        "isSupply": false,
-        "isBeverage": false,
-        "isConsumable": false,
-        "linkedConsumable": "",
-        "uses": {
-          "max": 0,
-          "value": 0
-        },
-        "passiveCausedStatuses": [],
-        "causedStatuses": [],
-        "critCausedStatuses": [],
-        "critThresholdMod": [],
-        "blockedStatuses": [],
-        "resistedStatuses": [],
-        "coating": {
-          "sourceName": "",
-          "charges": 0,
-          "causedStatuses": []
-        },
-        "imbuedSpell": {
-          "active": false,
-          "sourceActorUuid": "",
-          "sourceActorName": "",
-          "spellUuid": "",
-          "spellName": "",
-          "spellImg": "",
-          "damageTypeKey": "",
-          "dieSize": 0,
-          "damageDice": 0,
-          "deferredMana": 0,
-          "deferredPayment": false,
-          "manaSkillKey": ""
-        },
-        "itemFx": {
-          "enabled": false,
-          "animType": "auto",
-          "hitFile": "",
-          "hitScale": 1,
-          "hitOffsetX": 0,
-          "hitDuration": 800,
-          "hitSound": "",
-          "missFile": "",
-          "missScale": 1,
-          "missDuration": 600,
-          "missSound": "",
-          "soundVolume": 0.6
-        },
-        "macro": {
-          "enabled": false,
-          "uuid": "",
-          "command": "",
-          "label": "",
-          "runAsGM": false
-        },
-        "hitMacro": {
-          "enabled": false,
-          "uuid": "",
-          "command": "",
-          "label": "",
-          "runAsGM": false
-        }
-      },
-      "effects": [],
-      "flags": {
-        "core": {},
-        "vagabond": {
-          "shop": {
-            "category": "Beasts & Husbandry"
-          }
-        }
-      },
-      "_stats": {
-        "coreVersion": "14.368",
-        "systemId": "vagabond",
-        "systemVersion": "5.43.0",
-        "createdTime": 1790429478861,
-        "modifiedTime": 1790429478861,
-        "lastModifiedBy": "F8lCaC2xBa4wgj43",
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null
-      },
-      "ownership": {
-        "default": 0,
-        "F8lCaC2xBa4wgj43": 3
-      },
-      "folder": null,
-      "_id": "yUabbMa0uq0OfAmf",
-      "sort": 0,
-      "_key": "!actors.items!Yj7hxhiROZCgAZ9j.yUabbMa0uq0OfAmf"
-    },
-    {
       "name": "Animal feed (per Day)",
       "type": "equipment",
       "img": "icons/consumables/grains/sack-grain-open-white.webp",
@@ -337,483 +170,46 @@
         "damageOneHand": "d6",
         "damageTwoHands": "d8",
         "equipmentState": "unequipped",
+        "armorType": "light",
         "immunities": [],
         "gearCategory": "Beasts & Husbandry",
         "alchemicalType": "concoction",
-        "lore": "",
-        "armorRating": 1,
-        "mightRequirement": 2,
-        "reflexPenalty": 1,
-        "handsRequired": 0,
-        "isTrinket": false,
-        "requiresBound": false,
-        "bound": false,
-        "relic": {
-          "powers": [],
-          "fabled": false,
-          "requiresBond": false,
-          "boundTo": "",
-          "cursed": false,
-          "consumable": false,
-          "sockets": []
-        },
-        "relicPower": {
-          "enabled": false,
-          "targets": [
-            "any"
-          ],
-          "family": "",
-          "rank": 1,
-          "requiredMaterials": []
-        },
-        "crystal": {
-          "type": "",
-          "bonus": 0,
-          "payloadUuid": "",
-          "usedThisQuest": false
-        },
-        "gridPosition": 0,
-        "containerId": null,
-        "altSkills": [],
-        "damageTypeOneHand": "-",
-        "damageTypeTwoHands": "-",
-        "armorDamage": 0,
-        "dieDamage": 0,
-        "craftMaterial": {
-          "enabled": false,
-          "key": "",
-          "value": 0
-        },
-        "toolKind": "",
-        "isSupply": false,
-        "isBeverage": false,
-        "isConsumable": false,
-        "linkedConsumable": "",
-        "uses": {
-          "max": 0,
-          "value": 0
-        },
-        "passiveCausedStatuses": [],
-        "causedStatuses": [],
-        "critCausedStatuses": [],
-        "critThresholdMod": [],
-        "blockedStatuses": [],
-        "resistedStatuses": [],
-        "coating": {
-          "sourceName": "",
-          "charges": 0,
-          "causedStatuses": []
-        },
-        "imbuedSpell": {
-          "active": false,
-          "sourceActorUuid": "",
-          "sourceActorName": "",
-          "spellUuid": "",
-          "spellName": "",
-          "spellImg": "",
-          "damageTypeKey": "",
-          "dieSize": 0,
-          "damageDice": 0,
-          "deferredMana": 0,
-          "deferredPayment": false,
-          "manaSkillKey": ""
-        },
-        "itemFx": {
-          "enabled": false,
-          "animType": "auto",
-          "hitFile": "",
-          "hitScale": 1,
-          "hitOffsetX": 0,
-          "hitDuration": 800,
-          "hitSound": "",
-          "missFile": "",
-          "missScale": 1,
-          "missDuration": 600,
-          "missSound": "",
-          "soundVolume": 0.6
-        },
-        "macro": {
-          "enabled": false,
-          "uuid": "",
-          "command": "",
-          "label": "",
-          "runAsGM": false
-        },
-        "hitMacro": {
-          "enabled": false,
-          "uuid": "",
-          "command": "",
-          "label": "",
-          "runAsGM": false
-        }
+        "lore": ""
       },
       "effects": [],
       "flags": {
         "core": {},
         "vagabond": {
           "shop": {
-            "category": "Beasts & Husbandry"
+            "category": "Beasts & Husbandry",
+            "sourceUuid": "Compendium.vagabond.gear.Item.ACX6EQJ0mzkrgVnF"
           }
         }
       },
       "_stats": {
-        "coreVersion": "14.368",
-        "systemId": "vagabond",
-        "systemVersion": "5.43.0",
-        "createdTime": 1790429478861,
-        "modifiedTime": 1790429478861,
-        "lastModifiedBy": "F8lCaC2xBa4wgj43",
-        "compendiumSource": null,
+        "compendiumSource": "Compendium.vagabond.gear.Item.ACX6EQJ0mzkrgVnF",
         "duplicateSource": null,
-        "exportSource": null
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "vagabond",
+        "systemVersion": "1.3.0",
+        "createdTime": 1765500902702,
+        "modifiedTime": 1765500902702,
+        "lastModifiedBy": "13p65OEadZSZVLRk"
       },
+      "_id": "iAbggdp8EVuYSZhS",
+      "folder": null,
+      "sort": 0,
       "ownership": {
         "default": 0,
-        "F8lCaC2xBa4wgj43": 3
+        "13p65OEadZSZVLRk": 3
       },
-      "folder": null,
-      "_id": "iAbggdp8EVuYSZhS",
-      "sort": 0,
       "_key": "!actors.items!Yj7hxhiROZCgAZ9j.iAbggdp8EVuYSZhS"
     },
     {
-      "name": "Horses - Draft",
+      "name": "Barding, heavy",
       "type": "equipment",
-      "img": "icons/environment/creatures/horse-tan.webp",
-      "system": {
-        "description": "",
-        "equipmentType": "gear",
-        "locked": true,
-        "equipped": false,
-        "quantity": 1,
-        "baseCost": {
-          "gold": 4,
-          "silver": 0,
-          "copper": 0
-        },
-        "baseSlots": 0,
-        "metal": "none",
-        "damageType": "-",
-        "damageAmount": "",
-        "canExplode": false,
-        "explodeValues": "",
-        "properties": [],
-        "weaponSkill": "melee",
-        "range": "close",
-        "grip": "1H",
-        "damageOneHand": "d6",
-        "damageTwoHands": "d8",
-        "equipmentState": "unequipped",
-        "immunities": [],
-        "gearCategory": "Beasts & Husbandry",
-        "alchemicalType": "concoction",
-        "lore": "",
-        "armorRating": 1,
-        "mightRequirement": 2,
-        "reflexPenalty": 0,
-        "handsRequired": 0,
-        "isTrinket": false,
-        "requiresBound": false,
-        "bound": false,
-        "relic": {
-          "powers": [],
-          "fabled": false,
-          "requiresBond": false,
-          "boundTo": "",
-          "cursed": false,
-          "consumable": false,
-          "sockets": []
-        },
-        "relicPower": {
-          "enabled": false,
-          "targets": [
-            "any"
-          ],
-          "family": "",
-          "rank": 1,
-          "requiredMaterials": []
-        },
-        "crystal": {
-          "type": "",
-          "bonus": 0,
-          "payloadUuid": "",
-          "usedThisQuest": false
-        },
-        "gridPosition": 0,
-        "containerId": null,
-        "altSkills": [],
-        "damageTypeOneHand": "-",
-        "damageTypeTwoHands": "-",
-        "armorDamage": 0,
-        "dieDamage": 0,
-        "craftMaterial": {
-          "enabled": false,
-          "key": "",
-          "value": 0
-        },
-        "toolKind": "",
-        "isSupply": false,
-        "isBeverage": false,
-        "isConsumable": false,
-        "linkedConsumable": "",
-        "uses": {
-          "max": 0,
-          "value": 0
-        },
-        "passiveCausedStatuses": [],
-        "causedStatuses": [],
-        "critCausedStatuses": [],
-        "critThresholdMod": [],
-        "blockedStatuses": [],
-        "resistedStatuses": [],
-        "coating": {
-          "sourceName": "",
-          "charges": 0,
-          "causedStatuses": []
-        },
-        "imbuedSpell": {
-          "active": false,
-          "sourceActorUuid": "",
-          "sourceActorName": "",
-          "spellUuid": "",
-          "spellName": "",
-          "spellImg": "",
-          "damageTypeKey": "",
-          "dieSize": 0,
-          "damageDice": 0,
-          "deferredMana": 0,
-          "deferredPayment": false,
-          "manaSkillKey": ""
-        },
-        "itemFx": {
-          "enabled": false,
-          "animType": "auto",
-          "hitFile": "",
-          "hitScale": 1,
-          "hitOffsetX": 0,
-          "hitDuration": 800,
-          "hitSound": "",
-          "missFile": "",
-          "missScale": 1,
-          "missDuration": 600,
-          "missSound": "",
-          "soundVolume": 0.6
-        },
-        "macro": {
-          "enabled": false,
-          "uuid": "",
-          "command": "",
-          "label": "",
-          "runAsGM": false
-        },
-        "hitMacro": {
-          "enabled": false,
-          "uuid": "",
-          "command": "",
-          "label": "",
-          "runAsGM": false
-        }
-      },
-      "effects": [],
-      "flags": {
-        "core": {},
-        "vagabond": {
-          "shop": {
-            "category": "Beasts & Husbandry"
-          }
-        }
-      },
-      "_stats": {
-        "coreVersion": "14.368",
-        "systemId": "vagabond",
-        "systemVersion": "5.43.0",
-        "createdTime": 1790429478861,
-        "modifiedTime": 1790429478861,
-        "lastModifiedBy": "F8lCaC2xBa4wgj43",
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null
-      },
-      "ownership": {
-        "default": 0,
-        "F8lCaC2xBa4wgj43": 3
-      },
-      "folder": null,
-      "_id": "hnSmgc59I9GcDmdM",
-      "sort": 0,
-      "_key": "!actors.items!Yj7hxhiROZCgAZ9j.hnSmgc59I9GcDmdM"
-    },
-    {
-      "name": "Cattle - Bull",
-      "type": "equipment",
-      "img": "icons/creatures/mammals/bull-horned-blue.webp",
-      "system": {
-        "description": "",
-        "equipmentType": "gear",
-        "locked": true,
-        "equipped": false,
-        "quantity": 1,
-        "baseCost": {
-          "gold": 60,
-          "silver": 0,
-          "copper": 0
-        },
-        "baseSlots": 0,
-        "metal": "none",
-        "damageType": "-",
-        "damageAmount": "",
-        "canExplode": false,
-        "explodeValues": "",
-        "properties": [],
-        "weaponSkill": "melee",
-        "range": "close",
-        "grip": "1H",
-        "damageOneHand": "d6",
-        "damageTwoHands": "d8",
-        "equipmentState": "unequipped",
-        "immunities": [],
-        "gearCategory": "Beasts & Husbandry",
-        "alchemicalType": "concoction",
-        "lore": "",
-        "armorRating": 1,
-        "mightRequirement": 2,
-        "reflexPenalty": 0,
-        "handsRequired": 0,
-        "isTrinket": false,
-        "requiresBound": false,
-        "bound": false,
-        "relic": {
-          "powers": [],
-          "fabled": false,
-          "requiresBond": false,
-          "boundTo": "",
-          "cursed": false,
-          "consumable": false,
-          "sockets": []
-        },
-        "relicPower": {
-          "enabled": false,
-          "targets": [
-            "any"
-          ],
-          "family": "",
-          "rank": 1,
-          "requiredMaterials": []
-        },
-        "crystal": {
-          "type": "",
-          "bonus": 0,
-          "payloadUuid": "",
-          "usedThisQuest": false
-        },
-        "gridPosition": 0,
-        "containerId": null,
-        "altSkills": [],
-        "damageTypeOneHand": "-",
-        "damageTypeTwoHands": "-",
-        "armorDamage": 0,
-        "dieDamage": 0,
-        "craftMaterial": {
-          "enabled": false,
-          "key": "",
-          "value": 0
-        },
-        "toolKind": "",
-        "isSupply": false,
-        "isBeverage": false,
-        "isConsumable": false,
-        "linkedConsumable": "",
-        "uses": {
-          "max": 0,
-          "value": 0
-        },
-        "passiveCausedStatuses": [],
-        "causedStatuses": [],
-        "critCausedStatuses": [],
-        "critThresholdMod": [],
-        "blockedStatuses": [],
-        "resistedStatuses": [],
-        "coating": {
-          "sourceName": "",
-          "charges": 0,
-          "causedStatuses": []
-        },
-        "imbuedSpell": {
-          "active": false,
-          "sourceActorUuid": "",
-          "sourceActorName": "",
-          "spellUuid": "",
-          "spellName": "",
-          "spellImg": "",
-          "damageTypeKey": "",
-          "dieSize": 0,
-          "damageDice": 0,
-          "deferredMana": 0,
-          "deferredPayment": false,
-          "manaSkillKey": ""
-        },
-        "itemFx": {
-          "enabled": false,
-          "animType": "auto",
-          "hitFile": "",
-          "hitScale": 1,
-          "hitOffsetX": 0,
-          "hitDuration": 800,
-          "hitSound": "",
-          "missFile": "",
-          "missScale": 1,
-          "missDuration": 600,
-          "missSound": "",
-          "soundVolume": 0.6
-        },
-        "macro": {
-          "enabled": false,
-          "uuid": "",
-          "command": "",
-          "label": "",
-          "runAsGM": false
-        },
-        "hitMacro": {
-          "enabled": false,
-          "uuid": "",
-          "command": "",
-          "label": "",
-          "runAsGM": false
-        }
-      },
-      "effects": [],
-      "flags": {
-        "core": {},
-        "vagabond": {
-          "shop": {
-            "category": "Beasts & Husbandry"
-          }
-        }
-      },
-      "_stats": {
-        "coreVersion": "14.368",
-        "systemId": "vagabond",
-        "systemVersion": "5.43.0",
-        "createdTime": 1790429478861,
-        "modifiedTime": 1790429478861,
-        "lastModifiedBy": "F8lCaC2xBa4wgj43",
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null
-      },
-      "ownership": {
-        "default": 0,
-        "F8lCaC2xBa4wgj43": 3
-      },
-      "folder": null,
-      "_id": "424jcISJrDpDUCxF",
-      "sort": 0,
-      "_key": "!actors.items!Yj7hxhiROZCgAZ9j.424jcISJrDpDUCxF"
-    },
-    {
-      "name": "Rats, bag of 20",
-      "type": "equipment",
-      "img": "icons/containers/bags/sack-leather-brown.webp",
+      "img": "icons/equipment/chest/breastplate-banded-steel.webp",
       "system": {
         "description": "",
         "equipmentType": "gear",
@@ -822,6 +218,70 @@
         "quantity": 1,
         "baseCost": {
           "gold": 2,
+          "silver": 50,
+          "copper": 0
+        },
+        "baseSlots": 3,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Beasts & Husbandry",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "category": "Beasts & Husbandry",
+            "sourceUuid": "Compendium.vagabond.gear.Item.ONLArctea6QRXpVV"
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Compendium.vagabond.gear.Item.ONLArctea6QRXpVV",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "vagabond",
+        "systemVersion": "1.3.0",
+        "createdTime": 1765500902702,
+        "modifiedTime": 1765500902702,
+        "lastModifiedBy": "13p65OEadZSZVLRk"
+      },
+      "_id": "GWbdcG3LxUiWCAZs",
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "13p65OEadZSZVLRk": 3
+      },
+      "_key": "!actors.items!Yj7hxhiROZCgAZ9j.GWbdcG3LxUiWCAZs"
+    },
+    {
+      "name": "Barding, light",
+      "type": "equipment",
+      "img": "icons/equipment/chest/breastplate-leather-brown-belted.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 1,
           "silver": 0,
           "copper": 0
         },
@@ -838,144 +298,169 @@
         "damageOneHand": "d6",
         "damageTwoHands": "d8",
         "equipmentState": "unequipped",
+        "armorType": "light",
         "immunities": [],
         "gearCategory": "Beasts & Husbandry",
         "alchemicalType": "concoction",
-        "lore": "",
-        "armorRating": 1,
-        "mightRequirement": 2,
-        "reflexPenalty": 2,
-        "handsRequired": 0,
-        "isTrinket": false,
-        "requiresBound": false,
-        "bound": false,
-        "relic": {
-          "powers": [],
-          "fabled": false,
-          "requiresBond": false,
-          "boundTo": "",
-          "cursed": false,
-          "consumable": false,
-          "sockets": []
-        },
-        "relicPower": {
-          "enabled": false,
-          "targets": [
-            "any"
-          ],
-          "family": "",
-          "rank": 1,
-          "requiredMaterials": []
-        },
-        "crystal": {
-          "type": "",
-          "bonus": 0,
-          "payloadUuid": "",
-          "usedThisQuest": false
-        },
-        "gridPosition": 0,
-        "containerId": null,
-        "altSkills": [],
-        "damageTypeOneHand": "-",
-        "damageTypeTwoHands": "-",
-        "armorDamage": 0,
-        "dieDamage": 0,
-        "craftMaterial": {
-          "enabled": false,
-          "key": "",
-          "value": 0
-        },
-        "toolKind": "",
-        "isSupply": false,
-        "isBeverage": false,
-        "isConsumable": false,
-        "linkedConsumable": "",
-        "uses": {
-          "max": 0,
-          "value": 0
-        },
-        "passiveCausedStatuses": [],
-        "causedStatuses": [],
-        "critCausedStatuses": [],
-        "critThresholdMod": [],
-        "blockedStatuses": [],
-        "resistedStatuses": [],
-        "coating": {
-          "sourceName": "",
-          "charges": 0,
-          "causedStatuses": []
-        },
-        "imbuedSpell": {
-          "active": false,
-          "sourceActorUuid": "",
-          "sourceActorName": "",
-          "spellUuid": "",
-          "spellName": "",
-          "spellImg": "",
-          "damageTypeKey": "",
-          "dieSize": 0,
-          "damageDice": 0,
-          "deferredMana": 0,
-          "deferredPayment": false,
-          "manaSkillKey": ""
-        },
-        "itemFx": {
-          "enabled": false,
-          "animType": "auto",
-          "hitFile": "",
-          "hitScale": 1,
-          "hitOffsetX": 0,
-          "hitDuration": 800,
-          "hitSound": "",
-          "missFile": "",
-          "missScale": 1,
-          "missDuration": 600,
-          "missSound": "",
-          "soundVolume": 0.6
-        },
-        "macro": {
-          "enabled": false,
-          "uuid": "",
-          "command": "",
-          "label": "",
-          "runAsGM": false
-        },
-        "hitMacro": {
-          "enabled": false,
-          "uuid": "",
-          "command": "",
-          "label": "",
-          "runAsGM": false
-        }
+        "lore": ""
       },
       "effects": [],
       "flags": {
         "core": {},
         "vagabond": {
           "shop": {
-            "category": "Beasts & Husbandry"
+            "category": "Beasts & Husbandry",
+            "sourceUuid": "Compendium.vagabond.gear.Item.ctwFfm5T7atyuMpa"
           }
         }
       },
       "_stats": {
-        "coreVersion": "14.368",
-        "systemId": "vagabond",
-        "systemVersion": "5.43.0",
-        "createdTime": 1790429478861,
-        "modifiedTime": 1790429478861,
-        "lastModifiedBy": "F8lCaC2xBa4wgj43",
-        "compendiumSource": null,
+        "compendiumSource": "Compendium.vagabond.gear.Item.ctwFfm5T7atyuMpa",
         "duplicateSource": null,
-        "exportSource": null
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "vagabond",
+        "systemVersion": "1.3.0",
+        "createdTime": 1765500902702,
+        "modifiedTime": 1765500902702,
+        "lastModifiedBy": "13p65OEadZSZVLRk"
       },
+      "_id": "mN4O8yx4M9wPFAea",
+      "folder": null,
+      "sort": 0,
       "ownership": {
         "default": 0,
-        "F8lCaC2xBa4wgj43": 3
+        "13p65OEadZSZVLRk": 3
       },
+      "_key": "!actors.items!Yj7hxhiROZCgAZ9j.mN4O8yx4M9wPFAea"
+    },
+    {
+      "name": "Camel",
+      "type": "equipment",
+      "img": "icons/commodities/treasure/figurine-camel.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 10,
+          "silver": 0,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Beasts & Husbandry",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "category": "Beasts & Husbandry",
+            "sourceUuid": "Compendium.vagabond.gear.Item.UPv1tExAF44el9P2"
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Compendium.vagabond.gear.Item.UPv1tExAF44el9P2",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "vagabond",
+        "systemVersion": "1.3.0",
+        "createdTime": 1765500902702,
+        "modifiedTime": 1765500902702,
+        "lastModifiedBy": "13p65OEadZSZVLRk"
+      },
+      "_id": "8vuiIf1dpr35gF8y",
       "folder": null,
-      "_id": "USCZNIpv0z053vFi",
       "sort": 0,
-      "_key": "!actors.items!Yj7hxhiROZCgAZ9j.USCZNIpv0z053vFi"
+      "ownership": {
+        "default": 0,
+        "13p65OEadZSZVLRk": 3
+      },
+      "_key": "!actors.items!Yj7hxhiROZCgAZ9j.8vuiIf1dpr35gF8y"
+    },
+    {
+      "name": "Cat",
+      "type": "equipment",
+      "img": "icons/creatures/mammals/cat-hunched-glowing-red.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 1,
+          "silver": 0,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Beasts & Husbandry",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "category": "Beasts & Husbandry",
+            "sourceUuid": "Compendium.vagabond.gear.Item.zt23nYV6PNkNJ06r"
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Compendium.vagabond.gear.Item.zt23nYV6PNkNJ06r",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "vagabond",
+        "systemVersion": "1.3.0",
+        "createdTime": 1765500902702,
+        "modifiedTime": 1765500902702,
+        "lastModifiedBy": "13p65OEadZSZVLRk"
+      },
+      "_id": "9EOXHKuEP4grBcim",
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "13p65OEadZSZVLRk": 3
+      },
+      "_key": "!actors.items!Yj7hxhiROZCgAZ9j.9EOXHKuEP4grBcim"
     },
     {
       "name": "Cattle - Bison",
@@ -1005,149 +490,46 @@
         "damageOneHand": "d6",
         "damageTwoHands": "d8",
         "equipmentState": "unequipped",
+        "armorType": "light",
         "immunities": [],
         "gearCategory": "Beasts & Husbandry",
         "alchemicalType": "concoction",
-        "lore": "",
-        "armorRating": 1,
-        "mightRequirement": 2,
-        "reflexPenalty": 0,
-        "handsRequired": 0,
-        "isTrinket": false,
-        "requiresBound": false,
-        "bound": false,
-        "relic": {
-          "powers": [],
-          "fabled": false,
-          "requiresBond": false,
-          "boundTo": "",
-          "cursed": false,
-          "consumable": false,
-          "sockets": []
-        },
-        "relicPower": {
-          "enabled": false,
-          "targets": [
-            "any"
-          ],
-          "family": "",
-          "rank": 1,
-          "requiredMaterials": []
-        },
-        "crystal": {
-          "type": "",
-          "bonus": 0,
-          "payloadUuid": "",
-          "usedThisQuest": false
-        },
-        "gridPosition": 0,
-        "containerId": null,
-        "altSkills": [],
-        "damageTypeOneHand": "-",
-        "damageTypeTwoHands": "-",
-        "armorDamage": 0,
-        "dieDamage": 0,
-        "craftMaterial": {
-          "enabled": false,
-          "key": "",
-          "value": 0
-        },
-        "toolKind": "",
-        "isSupply": false,
-        "isBeverage": false,
-        "isConsumable": false,
-        "linkedConsumable": "",
-        "uses": {
-          "max": 0,
-          "value": 0
-        },
-        "passiveCausedStatuses": [],
-        "causedStatuses": [],
-        "critCausedStatuses": [],
-        "critThresholdMod": [],
-        "blockedStatuses": [],
-        "resistedStatuses": [],
-        "coating": {
-          "sourceName": "",
-          "charges": 0,
-          "causedStatuses": []
-        },
-        "imbuedSpell": {
-          "active": false,
-          "sourceActorUuid": "",
-          "sourceActorName": "",
-          "spellUuid": "",
-          "spellName": "",
-          "spellImg": "",
-          "damageTypeKey": "",
-          "dieSize": 0,
-          "damageDice": 0,
-          "deferredMana": 0,
-          "deferredPayment": false,
-          "manaSkillKey": ""
-        },
-        "itemFx": {
-          "enabled": false,
-          "animType": "auto",
-          "hitFile": "",
-          "hitScale": 1,
-          "hitOffsetX": 0,
-          "hitDuration": 800,
-          "hitSound": "",
-          "missFile": "",
-          "missScale": 1,
-          "missDuration": 600,
-          "missSound": "",
-          "soundVolume": 0.6
-        },
-        "macro": {
-          "enabled": false,
-          "uuid": "",
-          "command": "",
-          "label": "",
-          "runAsGM": false
-        },
-        "hitMacro": {
-          "enabled": false,
-          "uuid": "",
-          "command": "",
-          "label": "",
-          "runAsGM": false
-        }
+        "lore": ""
       },
       "effects": [],
       "flags": {
         "core": {},
         "vagabond": {
           "shop": {
-            "category": "Beasts & Husbandry"
+            "category": "Beasts & Husbandry",
+            "sourceUuid": "Compendium.vagabond.gear.Item.Ix0LqX84xpj4pd2I"
           }
         }
       },
       "_stats": {
-        "coreVersion": "14.368",
-        "systemId": "vagabond",
-        "systemVersion": "5.43.0",
-        "createdTime": 1790429478861,
-        "modifiedTime": 1790429478861,
-        "lastModifiedBy": "F8lCaC2xBa4wgj43",
-        "compendiumSource": null,
+        "compendiumSource": "Compendium.vagabond.gear.Item.Ix0LqX84xpj4pd2I",
         "duplicateSource": null,
-        "exportSource": null
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "vagabond",
+        "systemVersion": "1.3.0",
+        "createdTime": 1765500902702,
+        "modifiedTime": 1765500902702,
+        "lastModifiedBy": "13p65OEadZSZVLRk"
       },
+      "_id": "j5d6tXvfoHgLApEG",
+      "folder": null,
+      "sort": 0,
       "ownership": {
         "default": 0,
-        "F8lCaC2xBa4wgj43": 3
+        "13p65OEadZSZVLRk": 3
       },
-      "folder": null,
-      "_id": "j5d6tXvfoHgLApEG",
-      "sort": 0,
       "_key": "!actors.items!Yj7hxhiROZCgAZ9j.j5d6tXvfoHgLApEG"
     },
     {
-      "name": "Saddle & tack",
+      "name": "Cattle - Bull",
       "type": "equipment",
-      "img": "icons/equipment/waist/belt-leather-brown.webp",
+      "img": "icons/creatures/mammals/bull-horned-blue.webp",
       "system": {
         "description": "",
         "equipmentType": "gear",
@@ -1155,174 +537,7 @@
         "equipped": false,
         "quantity": 1,
         "baseCost": {
-          "gold": 2,
-          "silver": 50,
-          "copper": 0
-        },
-        "baseSlots": 2,
-        "metal": "none",
-        "damageType": "-",
-        "damageAmount": "",
-        "canExplode": false,
-        "explodeValues": "",
-        "properties": [],
-        "weaponSkill": "melee",
-        "range": "close",
-        "grip": "1H",
-        "damageOneHand": "d6",
-        "damageTwoHands": "d8",
-        "equipmentState": "unequipped",
-        "immunities": [],
-        "gearCategory": "Beasts & Husbandry",
-        "alchemicalType": "concoction",
-        "lore": "",
-        "armorRating": 1,
-        "mightRequirement": 2,
-        "reflexPenalty": 2,
-        "handsRequired": 0,
-        "isTrinket": false,
-        "requiresBound": false,
-        "bound": false,
-        "relic": {
-          "powers": [],
-          "fabled": false,
-          "requiresBond": false,
-          "boundTo": "",
-          "cursed": false,
-          "consumable": false,
-          "sockets": []
-        },
-        "relicPower": {
-          "enabled": false,
-          "targets": [
-            "any"
-          ],
-          "family": "",
-          "rank": 1,
-          "requiredMaterials": []
-        },
-        "crystal": {
-          "type": "",
-          "bonus": 0,
-          "payloadUuid": "",
-          "usedThisQuest": false
-        },
-        "gridPosition": 0,
-        "containerId": null,
-        "altSkills": [],
-        "damageTypeOneHand": "-",
-        "damageTypeTwoHands": "-",
-        "armorDamage": 0,
-        "dieDamage": 0,
-        "craftMaterial": {
-          "enabled": false,
-          "key": "",
-          "value": 0
-        },
-        "toolKind": "",
-        "isSupply": false,
-        "isBeverage": false,
-        "isConsumable": false,
-        "linkedConsumable": "",
-        "uses": {
-          "max": 0,
-          "value": 0
-        },
-        "passiveCausedStatuses": [],
-        "causedStatuses": [],
-        "critCausedStatuses": [],
-        "critThresholdMod": [],
-        "blockedStatuses": [],
-        "resistedStatuses": [],
-        "coating": {
-          "sourceName": "",
-          "charges": 0,
-          "causedStatuses": []
-        },
-        "imbuedSpell": {
-          "active": false,
-          "sourceActorUuid": "",
-          "sourceActorName": "",
-          "spellUuid": "",
-          "spellName": "",
-          "spellImg": "",
-          "damageTypeKey": "",
-          "dieSize": 0,
-          "damageDice": 0,
-          "deferredMana": 0,
-          "deferredPayment": false,
-          "manaSkillKey": ""
-        },
-        "itemFx": {
-          "enabled": false,
-          "animType": "auto",
-          "hitFile": "",
-          "hitScale": 1,
-          "hitOffsetX": 0,
-          "hitDuration": 800,
-          "hitSound": "",
-          "missFile": "",
-          "missScale": 1,
-          "missDuration": 600,
-          "missSound": "",
-          "soundVolume": 0.6
-        },
-        "macro": {
-          "enabled": false,
-          "uuid": "",
-          "command": "",
-          "label": "",
-          "runAsGM": false
-        },
-        "hitMacro": {
-          "enabled": false,
-          "uuid": "",
-          "command": "",
-          "label": "",
-          "runAsGM": false
-        }
-      },
-      "effects": [],
-      "flags": {
-        "core": {},
-        "vagabond": {
-          "shop": {
-            "category": "Beasts & Husbandry"
-          }
-        }
-      },
-      "_stats": {
-        "coreVersion": "14.368",
-        "systemId": "vagabond",
-        "systemVersion": "5.43.0",
-        "createdTime": 1790429478861,
-        "modifiedTime": 1790429478861,
-        "lastModifiedBy": "F8lCaC2xBa4wgj43",
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null
-      },
-      "ownership": {
-        "default": 0,
-        "F8lCaC2xBa4wgj43": 3
-      },
-      "folder": null,
-      "_id": "R292GgvHnt0ZK3rl",
-      "sort": 0,
-      "_key": "!actors.items!Yj7hxhiROZCgAZ9j.R292GgvHnt0ZK3rl"
-    },
-    {
-      "name": "Horses - Warhorse",
-      "type": "equipment",
-      "img": "icons/environment/creatures/horses.webp",
-      "system": {
-        "description": "",
-        "equipmentType": "gear",
-        "locked": true,
-        "equipped": false,
-        "quantity": 1,
-        "baseCost": {
-          "gold": 25,
+          "gold": 60,
           "silver": 0,
           "copper": 0
         },
@@ -1339,144 +554,169 @@
         "damageOneHand": "d6",
         "damageTwoHands": "d8",
         "equipmentState": "unequipped",
+        "armorType": "light",
         "immunities": [],
         "gearCategory": "Beasts & Husbandry",
         "alchemicalType": "concoction",
-        "lore": "",
-        "armorRating": 1,
-        "mightRequirement": 2,
-        "reflexPenalty": 0,
-        "handsRequired": 0,
-        "isTrinket": false,
-        "requiresBound": false,
-        "bound": false,
-        "relic": {
-          "powers": [],
-          "fabled": false,
-          "requiresBond": false,
-          "boundTo": "",
-          "cursed": false,
-          "consumable": false,
-          "sockets": []
-        },
-        "relicPower": {
-          "enabled": false,
-          "targets": [
-            "any"
-          ],
-          "family": "",
-          "rank": 1,
-          "requiredMaterials": []
-        },
-        "crystal": {
-          "type": "",
-          "bonus": 0,
-          "payloadUuid": "",
-          "usedThisQuest": false
-        },
-        "gridPosition": 0,
-        "containerId": null,
-        "altSkills": [],
-        "damageTypeOneHand": "-",
-        "damageTypeTwoHands": "-",
-        "armorDamage": 0,
-        "dieDamage": 0,
-        "craftMaterial": {
-          "enabled": false,
-          "key": "",
-          "value": 0
-        },
-        "toolKind": "",
-        "isSupply": false,
-        "isBeverage": false,
-        "isConsumable": false,
-        "linkedConsumable": "",
-        "uses": {
-          "max": 0,
-          "value": 0
-        },
-        "passiveCausedStatuses": [],
-        "causedStatuses": [],
-        "critCausedStatuses": [],
-        "critThresholdMod": [],
-        "blockedStatuses": [],
-        "resistedStatuses": [],
-        "coating": {
-          "sourceName": "",
-          "charges": 0,
-          "causedStatuses": []
-        },
-        "imbuedSpell": {
-          "active": false,
-          "sourceActorUuid": "",
-          "sourceActorName": "",
-          "spellUuid": "",
-          "spellName": "",
-          "spellImg": "",
-          "damageTypeKey": "",
-          "dieSize": 0,
-          "damageDice": 0,
-          "deferredMana": 0,
-          "deferredPayment": false,
-          "manaSkillKey": ""
-        },
-        "itemFx": {
-          "enabled": false,
-          "animType": "auto",
-          "hitFile": "",
-          "hitScale": 1,
-          "hitOffsetX": 0,
-          "hitDuration": 800,
-          "hitSound": "",
-          "missFile": "",
-          "missScale": 1,
-          "missDuration": 600,
-          "missSound": "",
-          "soundVolume": 0.6
-        },
-        "macro": {
-          "enabled": false,
-          "uuid": "",
-          "command": "",
-          "label": "",
-          "runAsGM": false
-        },
-        "hitMacro": {
-          "enabled": false,
-          "uuid": "",
-          "command": "",
-          "label": "",
-          "runAsGM": false
-        }
+        "lore": ""
       },
       "effects": [],
       "flags": {
         "core": {},
         "vagabond": {
           "shop": {
-            "category": "Beasts & Husbandry"
+            "category": "Beasts & Husbandry",
+            "sourceUuid": "Compendium.vagabond.gear.Item.F9dBz7Vd8OZxroHL"
           }
         }
       },
       "_stats": {
-        "coreVersion": "14.368",
-        "systemId": "vagabond",
-        "systemVersion": "5.43.0",
-        "createdTime": 1790429478861,
-        "modifiedTime": 1790429478861,
-        "lastModifiedBy": "F8lCaC2xBa4wgj43",
-        "compendiumSource": null,
+        "compendiumSource": "Compendium.vagabond.gear.Item.F9dBz7Vd8OZxroHL",
         "duplicateSource": null,
-        "exportSource": null
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "vagabond",
+        "systemVersion": "1.3.0",
+        "createdTime": 1765500902702,
+        "modifiedTime": 1765500902702,
+        "lastModifiedBy": "13p65OEadZSZVLRk"
       },
+      "_id": "424jcISJrDpDUCxF",
+      "folder": null,
+      "sort": 0,
       "ownership": {
         "default": 0,
-        "F8lCaC2xBa4wgj43": 3
+        "13p65OEadZSZVLRk": 3
       },
+      "_key": "!actors.items!Yj7hxhiROZCgAZ9j.424jcISJrDpDUCxF"
+    },
+    {
+      "name": "Cattle - Cow",
+      "type": "equipment",
+      "img": "icons/creatures/mammals/livestock-cow-green.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 9,
+          "silver": 0,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Beasts & Husbandry",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "category": "Beasts & Husbandry",
+            "sourceUuid": "Compendium.vagabond.gear.Item.g7t5fKpYNA3DDBdE"
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Compendium.vagabond.gear.Item.g7t5fKpYNA3DDBdE",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "vagabond",
+        "systemVersion": "1.3.0",
+        "createdTime": 1765500902702,
+        "modifiedTime": 1765500902702,
+        "lastModifiedBy": "13p65OEadZSZVLRk"
+      },
+      "_id": "AIU5Jaeesk1QVqEz",
       "folder": null,
-      "_id": "fRRkDYOdMv5I3ytd",
       "sort": 0,
-      "_key": "!actors.items!Yj7hxhiROZCgAZ9j.fRRkDYOdMv5I3ytd"
+      "ownership": {
+        "default": 0,
+        "13p65OEadZSZVLRk": 3
+      },
+      "_key": "!actors.items!Yj7hxhiROZCgAZ9j.AIU5Jaeesk1QVqEz"
+    },
+    {
+      "name": "Cattle - Ox",
+      "type": "equipment",
+      "img": "icons/creatures/mammals/ox-bull-horned-glowing-orange.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 5,
+          "silver": 0,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Beasts & Husbandry",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "category": "Beasts & Husbandry",
+            "sourceUuid": "Compendium.vagabond.gear.Item.dTkfln77QHGYxbpM"
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Compendium.vagabond.gear.Item.dTkfln77QHGYxbpM",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "vagabond",
+        "systemVersion": "1.3.0",
+        "createdTime": 1765500902702,
+        "modifiedTime": 1765500902702,
+        "lastModifiedBy": "13p65OEadZSZVLRk"
+      },
+      "_id": "erROJL7aNYP5CQKX",
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "13p65OEadZSZVLRk": 3
+      },
+      "_key": "!actors.items!Yj7hxhiROZCgAZ9j.erROJL7aNYP5CQKX"
     },
     {
       "name": "Dog - Common",
@@ -1506,144 +746,105 @@
         "damageOneHand": "d6",
         "damageTwoHands": "d8",
         "equipmentState": "unequipped",
+        "armorType": "light",
         "immunities": [],
         "gearCategory": "Beasts & Husbandry",
         "alchemicalType": "concoction",
-        "lore": "",
-        "armorRating": 1,
-        "mightRequirement": 2,
-        "reflexPenalty": 0,
-        "handsRequired": 0,
-        "isTrinket": false,
-        "requiresBound": false,
-        "bound": false,
-        "relic": {
-          "powers": [],
-          "fabled": false,
-          "requiresBond": false,
-          "boundTo": "",
-          "cursed": false,
-          "consumable": false,
-          "sockets": []
-        },
-        "relicPower": {
-          "enabled": false,
-          "targets": [
-            "any"
-          ],
-          "family": "",
-          "rank": 1,
-          "requiredMaterials": []
-        },
-        "crystal": {
-          "type": "",
-          "bonus": 0,
-          "payloadUuid": "",
-          "usedThisQuest": false
-        },
-        "gridPosition": 0,
-        "containerId": null,
-        "altSkills": [],
-        "damageTypeOneHand": "-",
-        "damageTypeTwoHands": "-",
-        "armorDamage": 0,
-        "dieDamage": 0,
-        "craftMaterial": {
-          "enabled": false,
-          "key": "",
-          "value": 0
-        },
-        "toolKind": "",
-        "isSupply": false,
-        "isBeverage": false,
-        "isConsumable": false,
-        "linkedConsumable": "",
-        "uses": {
-          "max": 0,
-          "value": 0
-        },
-        "passiveCausedStatuses": [],
-        "causedStatuses": [],
-        "critCausedStatuses": [],
-        "critThresholdMod": [],
-        "blockedStatuses": [],
-        "resistedStatuses": [],
-        "coating": {
-          "sourceName": "",
-          "charges": 0,
-          "causedStatuses": []
-        },
-        "imbuedSpell": {
-          "active": false,
-          "sourceActorUuid": "",
-          "sourceActorName": "",
-          "spellUuid": "",
-          "spellName": "",
-          "spellImg": "",
-          "damageTypeKey": "",
-          "dieSize": 0,
-          "damageDice": 0,
-          "deferredMana": 0,
-          "deferredPayment": false,
-          "manaSkillKey": ""
-        },
-        "itemFx": {
-          "enabled": false,
-          "animType": "auto",
-          "hitFile": "",
-          "hitScale": 1,
-          "hitOffsetX": 0,
-          "hitDuration": 800,
-          "hitSound": "",
-          "missFile": "",
-          "missScale": 1,
-          "missDuration": 600,
-          "missSound": "",
-          "soundVolume": 0.6
-        },
-        "macro": {
-          "enabled": false,
-          "uuid": "",
-          "command": "",
-          "label": "",
-          "runAsGM": false
-        },
-        "hitMacro": {
-          "enabled": false,
-          "uuid": "",
-          "command": "",
-          "label": "",
-          "runAsGM": false
-        }
+        "lore": ""
       },
       "effects": [],
       "flags": {
         "core": {},
         "vagabond": {
           "shop": {
-            "category": "Beasts & Husbandry"
+            "category": "Beasts & Husbandry",
+            "sourceUuid": "Compendium.vagabond.gear.Item.7JRR9kqvnFEYYD2p"
           }
         }
       },
       "_stats": {
-        "coreVersion": "14.368",
-        "systemId": "vagabond",
-        "systemVersion": "5.43.0",
-        "createdTime": 1790429478861,
-        "modifiedTime": 1790429478861,
-        "lastModifiedBy": "F8lCaC2xBa4wgj43",
-        "compendiumSource": null,
+        "compendiumSource": "Compendium.vagabond.gear.Item.7JRR9kqvnFEYYD2p",
         "duplicateSource": null,
-        "exportSource": null
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "vagabond",
+        "systemVersion": "1.3.0",
+        "createdTime": 1765500902702,
+        "modifiedTime": 1765500902702,
+        "lastModifiedBy": "13p65OEadZSZVLRk"
       },
+      "_id": "CkhEmRnunZkwUVea",
+      "folder": null,
+      "sort": 0,
       "ownership": {
         "default": 0,
-        "F8lCaC2xBa4wgj43": 3
+        "13p65OEadZSZVLRk": 3
       },
-      "folder": null,
-      "_id": "CkhEmRnunZkwUVea",
-      "sort": 0,
       "_key": "!actors.items!Yj7hxhiROZCgAZ9j.CkhEmRnunZkwUVea"
+    },
+    {
+      "name": "Dog - Warhound",
+      "type": "equipment",
+      "img": "icons/creatures/mammals/wolf-howl-moon-forest-blue.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 10,
+          "silver": 0,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Beasts & Husbandry",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "category": "Beasts & Husbandry",
+            "sourceUuid": "Compendium.vagabond.gear.Item.nIh4In6x6mIXMjvl"
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Compendium.vagabond.gear.Item.nIh4In6x6mIXMjvl",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "vagabond",
+        "systemVersion": "1.3.0",
+        "createdTime": 1765500902702,
+        "modifiedTime": 1765500902702,
+        "lastModifiedBy": "13p65OEadZSZVLRk"
+      },
+      "_id": "Fu1Ex1pEvfpib2yQ",
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "13p65OEadZSZVLRk": 3
+      },
+      "_key": "!actors.items!Yj7hxhiROZCgAZ9j.Fu1Ex1pEvfpib2yQ"
     },
     {
       "name": "Elephant",
@@ -1673,149 +874,46 @@
         "damageOneHand": "d6",
         "damageTwoHands": "d8",
         "equipmentState": "unequipped",
+        "armorType": "light",
         "immunities": [],
         "gearCategory": "Beasts & Husbandry",
         "alchemicalType": "concoction",
-        "lore": "",
-        "armorRating": 1,
-        "mightRequirement": 2,
-        "reflexPenalty": 0,
-        "handsRequired": 0,
-        "isTrinket": false,
-        "requiresBound": false,
-        "bound": false,
-        "relic": {
-          "powers": [],
-          "fabled": false,
-          "requiresBond": false,
-          "boundTo": "",
-          "cursed": false,
-          "consumable": false,
-          "sockets": []
-        },
-        "relicPower": {
-          "enabled": false,
-          "targets": [
-            "any"
-          ],
-          "family": "",
-          "rank": 1,
-          "requiredMaterials": []
-        },
-        "crystal": {
-          "type": "",
-          "bonus": 0,
-          "payloadUuid": "",
-          "usedThisQuest": false
-        },
-        "gridPosition": 0,
-        "containerId": null,
-        "altSkills": [],
-        "damageTypeOneHand": "-",
-        "damageTypeTwoHands": "-",
-        "armorDamage": 0,
-        "dieDamage": 0,
-        "craftMaterial": {
-          "enabled": false,
-          "key": "",
-          "value": 0
-        },
-        "toolKind": "",
-        "isSupply": false,
-        "isBeverage": false,
-        "isConsumable": false,
-        "linkedConsumable": "",
-        "uses": {
-          "max": 0,
-          "value": 0
-        },
-        "passiveCausedStatuses": [],
-        "causedStatuses": [],
-        "critCausedStatuses": [],
-        "critThresholdMod": [],
-        "blockedStatuses": [],
-        "resistedStatuses": [],
-        "coating": {
-          "sourceName": "",
-          "charges": 0,
-          "causedStatuses": []
-        },
-        "imbuedSpell": {
-          "active": false,
-          "sourceActorUuid": "",
-          "sourceActorName": "",
-          "spellUuid": "",
-          "spellName": "",
-          "spellImg": "",
-          "damageTypeKey": "",
-          "dieSize": 0,
-          "damageDice": 0,
-          "deferredMana": 0,
-          "deferredPayment": false,
-          "manaSkillKey": ""
-        },
-        "itemFx": {
-          "enabled": false,
-          "animType": "auto",
-          "hitFile": "",
-          "hitScale": 1,
-          "hitOffsetX": 0,
-          "hitDuration": 800,
-          "hitSound": "",
-          "missFile": "",
-          "missScale": 1,
-          "missDuration": 600,
-          "missSound": "",
-          "soundVolume": 0.6
-        },
-        "macro": {
-          "enabled": false,
-          "uuid": "",
-          "command": "",
-          "label": "",
-          "runAsGM": false
-        },
-        "hitMacro": {
-          "enabled": false,
-          "uuid": "",
-          "command": "",
-          "label": "",
-          "runAsGM": false
-        }
+        "lore": ""
       },
       "effects": [],
       "flags": {
         "core": {},
         "vagabond": {
           "shop": {
-            "category": "Beasts & Husbandry"
+            "category": "Beasts & Husbandry",
+            "sourceUuid": "Compendium.vagabond.gear.Item.Plyg4bWiTyFo2jyW"
           }
         }
       },
       "_stats": {
-        "coreVersion": "14.368",
-        "systemId": "vagabond",
-        "systemVersion": "5.43.0",
-        "createdTime": 1790429478861,
-        "modifiedTime": 1790429478861,
-        "lastModifiedBy": "F8lCaC2xBa4wgj43",
-        "compendiumSource": null,
+        "compendiumSource": "Compendium.vagabond.gear.Item.Plyg4bWiTyFo2jyW",
         "duplicateSource": null,
-        "exportSource": null
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "vagabond",
+        "systemVersion": "1.3.0",
+        "createdTime": 1765500902702,
+        "modifiedTime": 1765500902702,
+        "lastModifiedBy": "13p65OEadZSZVLRk"
       },
+      "_id": "6MAnk4bKG3O3ZB4S",
+      "folder": null,
+      "sort": 0,
       "ownership": {
         "default": 0,
-        "F8lCaC2xBa4wgj43": 3
+        "13p65OEadZSZVLRk": 3
       },
-      "folder": null,
-      "_id": "6MAnk4bKG3O3ZB4S",
-      "sort": 0,
       "_key": "!actors.items!Yj7hxhiROZCgAZ9j.6MAnk4bKG3O3ZB4S"
     },
     {
-      "name": "Rat",
+      "name": "Fowl - Chicken, hen",
       "type": "equipment",
-      "img": "icons/creatures/mammals/rodent-rat-green.webp",
+      "img": "icons/creatures/birds/chicken-hen-white.webp",
       "system": {
         "description": "",
         "equipmentType": "gear",
@@ -1824,7 +922,7 @@
         "quantity": 1,
         "baseCost": {
           "gold": 0,
-          "silver": 10,
+          "silver": 2,
           "copper": 0
         },
         "baseSlots": 1,
@@ -1840,144 +938,233 @@
         "damageOneHand": "d6",
         "damageTwoHands": "d8",
         "equipmentState": "unequipped",
+        "armorType": "light",
         "immunities": [],
         "gearCategory": "Beasts & Husbandry",
         "alchemicalType": "concoction",
-        "lore": "",
-        "armorRating": 1,
-        "mightRequirement": 2,
-        "reflexPenalty": 1,
-        "handsRequired": 0,
-        "isTrinket": false,
-        "requiresBound": false,
-        "bound": false,
-        "relic": {
-          "powers": [],
-          "fabled": false,
-          "requiresBond": false,
-          "boundTo": "",
-          "cursed": false,
-          "consumable": false,
-          "sockets": []
-        },
-        "relicPower": {
-          "enabled": false,
-          "targets": [
-            "any"
-          ],
-          "family": "",
-          "rank": 1,
-          "requiredMaterials": []
-        },
-        "crystal": {
-          "type": "",
-          "bonus": 0,
-          "payloadUuid": "",
-          "usedThisQuest": false
-        },
-        "gridPosition": 0,
-        "containerId": null,
-        "altSkills": [],
-        "damageTypeOneHand": "-",
-        "damageTypeTwoHands": "-",
-        "armorDamage": 0,
-        "dieDamage": 0,
-        "craftMaterial": {
-          "enabled": false,
-          "key": "",
-          "value": 0
-        },
-        "toolKind": "",
-        "isSupply": false,
-        "isBeverage": false,
-        "isConsumable": false,
-        "linkedConsumable": "",
-        "uses": {
-          "max": 0,
-          "value": 0
-        },
-        "passiveCausedStatuses": [],
-        "causedStatuses": [],
-        "critCausedStatuses": [],
-        "critThresholdMod": [],
-        "blockedStatuses": [],
-        "resistedStatuses": [],
-        "coating": {
-          "sourceName": "",
-          "charges": 0,
-          "causedStatuses": []
-        },
-        "imbuedSpell": {
-          "active": false,
-          "sourceActorUuid": "",
-          "sourceActorName": "",
-          "spellUuid": "",
-          "spellName": "",
-          "spellImg": "",
-          "damageTypeKey": "",
-          "dieSize": 0,
-          "damageDice": 0,
-          "deferredMana": 0,
-          "deferredPayment": false,
-          "manaSkillKey": ""
-        },
-        "itemFx": {
-          "enabled": false,
-          "animType": "auto",
-          "hitFile": "",
-          "hitScale": 1,
-          "hitOffsetX": 0,
-          "hitDuration": 800,
-          "hitSound": "",
-          "missFile": "",
-          "missScale": 1,
-          "missDuration": 600,
-          "missSound": "",
-          "soundVolume": 0.6
-        },
-        "macro": {
-          "enabled": false,
-          "uuid": "",
-          "command": "",
-          "label": "",
-          "runAsGM": false
-        },
-        "hitMacro": {
-          "enabled": false,
-          "uuid": "",
-          "command": "",
-          "label": "",
-          "runAsGM": false
-        }
+        "lore": ""
       },
       "effects": [],
       "flags": {
         "core": {},
         "vagabond": {
           "shop": {
-            "category": "Beasts & Husbandry"
+            "category": "Beasts & Husbandry",
+            "sourceUuid": "Compendium.vagabond.gear.Item.n5VfsNwjivvRrter"
           }
         }
       },
       "_stats": {
-        "coreVersion": "14.368",
-        "systemId": "vagabond",
-        "systemVersion": "5.43.0",
-        "createdTime": 1790429478861,
-        "modifiedTime": 1790429478861,
-        "lastModifiedBy": "F8lCaC2xBa4wgj43",
-        "compendiumSource": null,
+        "compendiumSource": "Compendium.vagabond.gear.Item.n5VfsNwjivvRrter",
         "duplicateSource": null,
-        "exportSource": null
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "vagabond",
+        "systemVersion": "1.3.0",
+        "createdTime": 1765500902702,
+        "modifiedTime": 1765500902702,
+        "lastModifiedBy": "13p65OEadZSZVLRk"
       },
+      "_id": "EZ3wwtmSdsq4FpHf",
+      "folder": null,
+      "sort": 0,
       "ownership": {
         "default": 0,
-        "F8lCaC2xBa4wgj43": 3
+        "13p65OEadZSZVLRk": 3
       },
+      "_key": "!actors.items!Yj7hxhiROZCgAZ9j.EZ3wwtmSdsq4FpHf"
+    },
+    {
+      "name": "Fowl - Chicken, rooster",
+      "type": "equipment",
+      "img": "icons/creatures/birds/chicken-hen-green.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 1,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Beasts & Husbandry",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "category": "Beasts & Husbandry",
+            "sourceUuid": "Compendium.vagabond.gear.Item.rvJvqEZvbmPwETCl"
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Compendium.vagabond.gear.Item.rvJvqEZvbmPwETCl",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "vagabond",
+        "systemVersion": "1.3.0",
+        "createdTime": 1765500902702,
+        "modifiedTime": 1765500902702,
+        "lastModifiedBy": "13p65OEadZSZVLRk"
+      },
+      "_id": "4lRWZ2SpHYHvPj29",
       "folder": null,
-      "_id": "0ZL00Zng4FsO8C12",
       "sort": 0,
-      "_key": "!actors.items!Yj7hxhiROZCgAZ9j.0ZL00Zng4FsO8C12"
+      "ownership": {
+        "default": 0,
+        "13p65OEadZSZVLRk": 3
+      },
+      "_key": "!actors.items!Yj7hxhiROZCgAZ9j.4lRWZ2SpHYHvPj29"
+    },
+    {
+      "name": "Fowl - Duck",
+      "type": "equipment",
+      "img": "icons/creatures/birds/duck-green.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 5,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Beasts & Husbandry",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "category": "Beasts & Husbandry",
+            "sourceUuid": "Compendium.vagabond.gear.Item.2DkPPQwcly1crhtb"
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Compendium.vagabond.gear.Item.2DkPPQwcly1crhtb",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "vagabond",
+        "systemVersion": "1.3.0",
+        "createdTime": 1765500902702,
+        "modifiedTime": 1765500902702,
+        "lastModifiedBy": "13p65OEadZSZVLRk"
+      },
+      "_id": "yUabbMa0uq0OfAmf",
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "13p65OEadZSZVLRk": 3
+      },
+      "_key": "!actors.items!Yj7hxhiROZCgAZ9j.yUabbMa0uq0OfAmf"
+    },
+    {
+      "name": "Horses - Draft",
+      "type": "equipment",
+      "img": "icons/environment/creatures/horse-tan.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 4,
+          "silver": 0,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Beasts & Husbandry",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "category": "Beasts & Husbandry",
+            "sourceUuid": "Compendium.vagabond.gear.Item.AHgkN0aYcKliJe1n"
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Compendium.vagabond.gear.Item.AHgkN0aYcKliJe1n",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "vagabond",
+        "systemVersion": "1.3.0",
+        "createdTime": 1765500902702,
+        "modifiedTime": 1765500902702,
+        "lastModifiedBy": "13p65OEadZSZVLRk"
+      },
+      "_id": "hnSmgc59I9GcDmdM",
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "13p65OEadZSZVLRk": 3
+      },
+      "_key": "!actors.items!Yj7hxhiROZCgAZ9j.hnSmgc59I9GcDmdM"
     },
     {
       "name": "Horses - Pony",
@@ -2007,143 +1194,40 @@
         "damageOneHand": "d6",
         "damageTwoHands": "d8",
         "equipmentState": "unequipped",
+        "armorType": "light",
         "immunities": [],
         "gearCategory": "Beasts & Husbandry",
         "alchemicalType": "concoction",
-        "lore": "",
-        "armorRating": 1,
-        "mightRequirement": 2,
-        "reflexPenalty": 0,
-        "handsRequired": 0,
-        "isTrinket": false,
-        "requiresBound": false,
-        "bound": false,
-        "relic": {
-          "powers": [],
-          "fabled": false,
-          "requiresBond": false,
-          "boundTo": "",
-          "cursed": false,
-          "consumable": false,
-          "sockets": []
-        },
-        "relicPower": {
-          "enabled": false,
-          "targets": [
-            "any"
-          ],
-          "family": "",
-          "rank": 1,
-          "requiredMaterials": []
-        },
-        "crystal": {
-          "type": "",
-          "bonus": 0,
-          "payloadUuid": "",
-          "usedThisQuest": false
-        },
-        "gridPosition": 0,
-        "containerId": null,
-        "altSkills": [],
-        "damageTypeOneHand": "-",
-        "damageTypeTwoHands": "-",
-        "armorDamage": 0,
-        "dieDamage": 0,
-        "craftMaterial": {
-          "enabled": false,
-          "key": "",
-          "value": 0
-        },
-        "toolKind": "",
-        "isSupply": false,
-        "isBeverage": false,
-        "isConsumable": false,
-        "linkedConsumable": "",
-        "uses": {
-          "max": 0,
-          "value": 0
-        },
-        "passiveCausedStatuses": [],
-        "causedStatuses": [],
-        "critCausedStatuses": [],
-        "critThresholdMod": [],
-        "blockedStatuses": [],
-        "resistedStatuses": [],
-        "coating": {
-          "sourceName": "",
-          "charges": 0,
-          "causedStatuses": []
-        },
-        "imbuedSpell": {
-          "active": false,
-          "sourceActorUuid": "",
-          "sourceActorName": "",
-          "spellUuid": "",
-          "spellName": "",
-          "spellImg": "",
-          "damageTypeKey": "",
-          "dieSize": 0,
-          "damageDice": 0,
-          "deferredMana": 0,
-          "deferredPayment": false,
-          "manaSkillKey": ""
-        },
-        "itemFx": {
-          "enabled": false,
-          "animType": "auto",
-          "hitFile": "",
-          "hitScale": 1,
-          "hitOffsetX": 0,
-          "hitDuration": 800,
-          "hitSound": "",
-          "missFile": "",
-          "missScale": 1,
-          "missDuration": 600,
-          "missSound": "",
-          "soundVolume": 0.6
-        },
-        "macro": {
-          "enabled": false,
-          "uuid": "",
-          "command": "",
-          "label": "",
-          "runAsGM": false
-        },
-        "hitMacro": {
-          "enabled": false,
-          "uuid": "",
-          "command": "",
-          "label": "",
-          "runAsGM": false
-        }
+        "lore": ""
       },
       "effects": [],
       "flags": {
         "core": {},
         "vagabond": {
           "shop": {
-            "category": "Beasts & Husbandry"
+            "category": "Beasts & Husbandry",
+            "sourceUuid": "Compendium.vagabond.gear.Item.SVm7dlYKMcaUm4wF"
           }
         }
       },
       "_stats": {
-        "coreVersion": "14.368",
-        "systemId": "vagabond",
-        "systemVersion": "5.43.0",
-        "createdTime": 1790429478861,
-        "modifiedTime": 1790429478861,
-        "lastModifiedBy": "F8lCaC2xBa4wgj43",
-        "compendiumSource": null,
+        "compendiumSource": "Compendium.vagabond.gear.Item.SVm7dlYKMcaUm4wF",
         "duplicateSource": null,
-        "exportSource": null
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "vagabond",
+        "systemVersion": "1.3.0",
+        "createdTime": 1765500902702,
+        "modifiedTime": 1765500902702,
+        "lastModifiedBy": "13p65OEadZSZVLRk"
       },
+      "_id": "qnOPbsRZzlpE1Eh3",
+      "folder": null,
+      "sort": 0,
       "ownership": {
         "default": 0,
-        "F8lCaC2xBa4wgj43": 3
+        "13p65OEadZSZVLRk": 3
       },
-      "folder": null,
-      "_id": "qnOPbsRZzlpE1Eh3",
-      "sort": 0,
       "_key": "!actors.items!Yj7hxhiROZCgAZ9j.qnOPbsRZzlpE1Eh3"
     },
     {
@@ -2174,149 +1258,46 @@
         "damageOneHand": "d6",
         "damageTwoHands": "d8",
         "equipmentState": "unequipped",
+        "armorType": "light",
         "immunities": [],
         "gearCategory": "Beasts & Husbandry",
         "alchemicalType": "concoction",
-        "lore": "",
-        "armorRating": 1,
-        "mightRequirement": 2,
-        "reflexPenalty": 0,
-        "handsRequired": 0,
-        "isTrinket": false,
-        "requiresBound": false,
-        "bound": false,
-        "relic": {
-          "powers": [],
-          "fabled": false,
-          "requiresBond": false,
-          "boundTo": "",
-          "cursed": false,
-          "consumable": false,
-          "sockets": []
-        },
-        "relicPower": {
-          "enabled": false,
-          "targets": [
-            "any"
-          ],
-          "family": "",
-          "rank": 1,
-          "requiredMaterials": []
-        },
-        "crystal": {
-          "type": "",
-          "bonus": 0,
-          "payloadUuid": "",
-          "usedThisQuest": false
-        },
-        "gridPosition": 0,
-        "containerId": null,
-        "altSkills": [],
-        "damageTypeOneHand": "-",
-        "damageTypeTwoHands": "-",
-        "armorDamage": 0,
-        "dieDamage": 0,
-        "craftMaterial": {
-          "enabled": false,
-          "key": "",
-          "value": 0
-        },
-        "toolKind": "",
-        "isSupply": false,
-        "isBeverage": false,
-        "isConsumable": false,
-        "linkedConsumable": "",
-        "uses": {
-          "max": 0,
-          "value": 0
-        },
-        "passiveCausedStatuses": [],
-        "causedStatuses": [],
-        "critCausedStatuses": [],
-        "critThresholdMod": [],
-        "blockedStatuses": [],
-        "resistedStatuses": [],
-        "coating": {
-          "sourceName": "",
-          "charges": 0,
-          "causedStatuses": []
-        },
-        "imbuedSpell": {
-          "active": false,
-          "sourceActorUuid": "",
-          "sourceActorName": "",
-          "spellUuid": "",
-          "spellName": "",
-          "spellImg": "",
-          "damageTypeKey": "",
-          "dieSize": 0,
-          "damageDice": 0,
-          "deferredMana": 0,
-          "deferredPayment": false,
-          "manaSkillKey": ""
-        },
-        "itemFx": {
-          "enabled": false,
-          "animType": "auto",
-          "hitFile": "",
-          "hitScale": 1,
-          "hitOffsetX": 0,
-          "hitDuration": 800,
-          "hitSound": "",
-          "missFile": "",
-          "missScale": 1,
-          "missDuration": 600,
-          "missSound": "",
-          "soundVolume": 0.6
-        },
-        "macro": {
-          "enabled": false,
-          "uuid": "",
-          "command": "",
-          "label": "",
-          "runAsGM": false
-        },
-        "hitMacro": {
-          "enabled": false,
-          "uuid": "",
-          "command": "",
-          "label": "",
-          "runAsGM": false
-        }
+        "lore": ""
       },
       "effects": [],
       "flags": {
         "core": {},
         "vagabond": {
           "shop": {
-            "category": "Beasts & Husbandry"
+            "category": "Beasts & Husbandry",
+            "sourceUuid": "Compendium.vagabond.gear.Item.T3QlBTvosoMvUMPQ"
           }
         }
       },
       "_stats": {
-        "coreVersion": "14.368",
-        "systemId": "vagabond",
-        "systemVersion": "5.43.0",
-        "createdTime": 1790429478861,
-        "modifiedTime": 1790429478861,
-        "lastModifiedBy": "F8lCaC2xBa4wgj43",
-        "compendiumSource": null,
+        "compendiumSource": "Compendium.vagabond.gear.Item.T3QlBTvosoMvUMPQ",
         "duplicateSource": null,
-        "exportSource": null
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "vagabond",
+        "systemVersion": "1.3.0",
+        "createdTime": 1765500902702,
+        "modifiedTime": 1765500902702,
+        "lastModifiedBy": "13p65OEadZSZVLRk"
       },
+      "_id": "re3kjBnuCVPa0I9x",
+      "folder": null,
+      "sort": 0,
       "ownership": {
         "default": 0,
-        "F8lCaC2xBa4wgj43": 3
+        "13p65OEadZSZVLRk": 3
       },
-      "folder": null,
-      "_id": "re3kjBnuCVPa0I9x",
-      "sort": 0,
       "_key": "!actors.items!Yj7hxhiROZCgAZ9j.re3kjBnuCVPa0I9x"
     },
     {
-      "name": "Stabling (per day)",
+      "name": "Horses - Warhorse",
       "type": "equipment",
-      "img": "icons/environment/settlement/stable.webp",
+      "img": "icons/environment/creatures/horses.webp",
       "system": {
         "description": "",
         "equipmentType": "gear",
@@ -2324,341 +1305,7 @@
         "equipped": false,
         "quantity": 1,
         "baseCost": {
-          "gold": 0,
-          "silver": 5,
-          "copper": 0
-        },
-        "baseSlots": 0,
-        "metal": "none",
-        "damageType": "-",
-        "damageAmount": "",
-        "canExplode": false,
-        "explodeValues": "",
-        "properties": [],
-        "weaponSkill": "melee",
-        "range": "close",
-        "grip": "1H",
-        "damageOneHand": "d6",
-        "damageTwoHands": "d8",
-        "equipmentState": "unequipped",
-        "immunities": [],
-        "gearCategory": "Beasts & Husbandry",
-        "alchemicalType": "concoction",
-        "lore": "",
-        "armorRating": 1,
-        "mightRequirement": 2,
-        "reflexPenalty": 0,
-        "handsRequired": 0,
-        "isTrinket": false,
-        "requiresBound": false,
-        "bound": false,
-        "relic": {
-          "powers": [],
-          "fabled": false,
-          "requiresBond": false,
-          "boundTo": "",
-          "cursed": false,
-          "consumable": false,
-          "sockets": []
-        },
-        "relicPower": {
-          "enabled": false,
-          "targets": [
-            "any"
-          ],
-          "family": "",
-          "rank": 1,
-          "requiredMaterials": []
-        },
-        "crystal": {
-          "type": "",
-          "bonus": 0,
-          "payloadUuid": "",
-          "usedThisQuest": false
-        },
-        "gridPosition": 0,
-        "containerId": null,
-        "altSkills": [],
-        "damageTypeOneHand": "-",
-        "damageTypeTwoHands": "-",
-        "armorDamage": 0,
-        "dieDamage": 0,
-        "craftMaterial": {
-          "enabled": false,
-          "key": "",
-          "value": 0
-        },
-        "toolKind": "",
-        "isSupply": false,
-        "isBeverage": false,
-        "isConsumable": false,
-        "linkedConsumable": "",
-        "uses": {
-          "max": 0,
-          "value": 0
-        },
-        "passiveCausedStatuses": [],
-        "causedStatuses": [],
-        "critCausedStatuses": [],
-        "critThresholdMod": [],
-        "blockedStatuses": [],
-        "resistedStatuses": [],
-        "coating": {
-          "sourceName": "",
-          "charges": 0,
-          "causedStatuses": []
-        },
-        "imbuedSpell": {
-          "active": false,
-          "sourceActorUuid": "",
-          "sourceActorName": "",
-          "spellUuid": "",
-          "spellName": "",
-          "spellImg": "",
-          "damageTypeKey": "",
-          "dieSize": 0,
-          "damageDice": 0,
-          "deferredMana": 0,
-          "deferredPayment": false,
-          "manaSkillKey": ""
-        },
-        "itemFx": {
-          "enabled": false,
-          "animType": "auto",
-          "hitFile": "",
-          "hitScale": 1,
-          "hitOffsetX": 0,
-          "hitDuration": 800,
-          "hitSound": "",
-          "missFile": "",
-          "missScale": 1,
-          "missDuration": 600,
-          "missSound": "",
-          "soundVolume": 0.6
-        },
-        "macro": {
-          "enabled": false,
-          "uuid": "",
-          "command": "",
-          "label": "",
-          "runAsGM": false
-        },
-        "hitMacro": {
-          "enabled": false,
-          "uuid": "",
-          "command": "",
-          "label": "",
-          "runAsGM": false
-        }
-      },
-      "effects": [],
-      "flags": {
-        "core": {},
-        "vagabond": {
-          "shop": {
-            "category": "Beasts & Husbandry"
-          }
-        }
-      },
-      "_stats": {
-        "coreVersion": "14.368",
-        "systemId": "vagabond",
-        "systemVersion": "5.43.0",
-        "createdTime": 1790429478861,
-        "modifiedTime": 1790429478861,
-        "lastModifiedBy": "F8lCaC2xBa4wgj43",
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null
-      },
-      "ownership": {
-        "default": 0,
-        "F8lCaC2xBa4wgj43": 3
-      },
-      "folder": null,
-      "_id": "HeSEGgkwwayHtzXL",
-      "sort": 0,
-      "_key": "!actors.items!Yj7hxhiROZCgAZ9j.HeSEGgkwwayHtzXL"
-    },
-    {
-      "name": "Barding, light",
-      "type": "equipment",
-      "img": "icons/equipment/chest/breastplate-leather-brown-belted.webp",
-      "system": {
-        "description": "",
-        "equipmentType": "gear",
-        "locked": true,
-        "equipped": false,
-        "quantity": 1,
-        "baseCost": {
-          "gold": 1,
-          "silver": 0,
-          "copper": 0
-        },
-        "baseSlots": 2,
-        "metal": "none",
-        "damageType": "-",
-        "damageAmount": "",
-        "canExplode": false,
-        "explodeValues": "",
-        "properties": [],
-        "weaponSkill": "melee",
-        "range": "close",
-        "grip": "1H",
-        "damageOneHand": "d6",
-        "damageTwoHands": "d8",
-        "equipmentState": "unequipped",
-        "immunities": [],
-        "gearCategory": "Beasts & Husbandry",
-        "alchemicalType": "concoction",
-        "lore": "",
-        "armorRating": 1,
-        "mightRequirement": 2,
-        "reflexPenalty": 2,
-        "handsRequired": 0,
-        "isTrinket": false,
-        "requiresBound": false,
-        "bound": false,
-        "relic": {
-          "powers": [],
-          "fabled": false,
-          "requiresBond": false,
-          "boundTo": "",
-          "cursed": false,
-          "consumable": false,
-          "sockets": []
-        },
-        "relicPower": {
-          "enabled": false,
-          "targets": [
-            "any"
-          ],
-          "family": "",
-          "rank": 1,
-          "requiredMaterials": []
-        },
-        "crystal": {
-          "type": "",
-          "bonus": 0,
-          "payloadUuid": "",
-          "usedThisQuest": false
-        },
-        "gridPosition": 0,
-        "containerId": null,
-        "altSkills": [],
-        "damageTypeOneHand": "-",
-        "damageTypeTwoHands": "-",
-        "armorDamage": 0,
-        "dieDamage": 0,
-        "craftMaterial": {
-          "enabled": false,
-          "key": "",
-          "value": 0
-        },
-        "toolKind": "",
-        "isSupply": false,
-        "isBeverage": false,
-        "isConsumable": false,
-        "linkedConsumable": "",
-        "uses": {
-          "max": 0,
-          "value": 0
-        },
-        "passiveCausedStatuses": [],
-        "causedStatuses": [],
-        "critCausedStatuses": [],
-        "critThresholdMod": [],
-        "blockedStatuses": [],
-        "resistedStatuses": [],
-        "coating": {
-          "sourceName": "",
-          "charges": 0,
-          "causedStatuses": []
-        },
-        "imbuedSpell": {
-          "active": false,
-          "sourceActorUuid": "",
-          "sourceActorName": "",
-          "spellUuid": "",
-          "spellName": "",
-          "spellImg": "",
-          "damageTypeKey": "",
-          "dieSize": 0,
-          "damageDice": 0,
-          "deferredMana": 0,
-          "deferredPayment": false,
-          "manaSkillKey": ""
-        },
-        "itemFx": {
-          "enabled": false,
-          "animType": "auto",
-          "hitFile": "",
-          "hitScale": 1,
-          "hitOffsetX": 0,
-          "hitDuration": 800,
-          "hitSound": "",
-          "missFile": "",
-          "missScale": 1,
-          "missDuration": 600,
-          "missSound": "",
-          "soundVolume": 0.6
-        },
-        "macro": {
-          "enabled": false,
-          "uuid": "",
-          "command": "",
-          "label": "",
-          "runAsGM": false
-        },
-        "hitMacro": {
-          "enabled": false,
-          "uuid": "",
-          "command": "",
-          "label": "",
-          "runAsGM": false
-        }
-      },
-      "effects": [],
-      "flags": {
-        "core": {},
-        "vagabond": {
-          "shop": {
-            "category": "Beasts & Husbandry"
-          }
-        }
-      },
-      "_stats": {
-        "coreVersion": "14.368",
-        "systemId": "vagabond",
-        "systemVersion": "5.43.0",
-        "createdTime": 1790429478861,
-        "modifiedTime": 1790429478861,
-        "lastModifiedBy": "F8lCaC2xBa4wgj43",
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null
-      },
-      "ownership": {
-        "default": 0,
-        "F8lCaC2xBa4wgj43": 3
-      },
-      "folder": null,
-      "_id": "mN4O8yx4M9wPFAea",
-      "sort": 0,
-      "_key": "!actors.items!Yj7hxhiROZCgAZ9j.mN4O8yx4M9wPFAea"
-    },
-    {
-      "name": "Cattle - Ox",
-      "type": "equipment",
-      "img": "icons/creatures/mammals/ox-bull-horned-glowing-orange.webp",
-      "system": {
-        "description": "",
-        "equipmentType": "gear",
-        "locked": true,
-        "equipped": false,
-        "quantity": 1,
-        "baseCost": {
-          "gold": 5,
+          "gold": 25,
           "silver": 0,
           "copper": 0
         },
@@ -2675,478 +1322,41 @@
         "damageOneHand": "d6",
         "damageTwoHands": "d8",
         "equipmentState": "unequipped",
+        "armorType": "light",
         "immunities": [],
         "gearCategory": "Beasts & Husbandry",
         "alchemicalType": "concoction",
-        "lore": "",
-        "armorRating": 1,
-        "mightRequirement": 2,
-        "reflexPenalty": 0,
-        "handsRequired": 0,
-        "isTrinket": false,
-        "requiresBound": false,
-        "bound": false,
-        "relic": {
-          "powers": [],
-          "fabled": false,
-          "requiresBond": false,
-          "boundTo": "",
-          "cursed": false,
-          "consumable": false,
-          "sockets": []
-        },
-        "relicPower": {
-          "enabled": false,
-          "targets": [
-            "any"
-          ],
-          "family": "",
-          "rank": 1,
-          "requiredMaterials": []
-        },
-        "crystal": {
-          "type": "",
-          "bonus": 0,
-          "payloadUuid": "",
-          "usedThisQuest": false
-        },
-        "gridPosition": 0,
-        "containerId": null,
-        "altSkills": [],
-        "damageTypeOneHand": "-",
-        "damageTypeTwoHands": "-",
-        "armorDamage": 0,
-        "dieDamage": 0,
-        "craftMaterial": {
-          "enabled": false,
-          "key": "",
-          "value": 0
-        },
-        "toolKind": "",
-        "isSupply": false,
-        "isBeverage": false,
-        "isConsumable": false,
-        "linkedConsumable": "",
-        "uses": {
-          "max": 0,
-          "value": 0
-        },
-        "passiveCausedStatuses": [],
-        "causedStatuses": [],
-        "critCausedStatuses": [],
-        "critThresholdMod": [],
-        "blockedStatuses": [],
-        "resistedStatuses": [],
-        "coating": {
-          "sourceName": "",
-          "charges": 0,
-          "causedStatuses": []
-        },
-        "imbuedSpell": {
-          "active": false,
-          "sourceActorUuid": "",
-          "sourceActorName": "",
-          "spellUuid": "",
-          "spellName": "",
-          "spellImg": "",
-          "damageTypeKey": "",
-          "dieSize": 0,
-          "damageDice": 0,
-          "deferredMana": 0,
-          "deferredPayment": false,
-          "manaSkillKey": ""
-        },
-        "itemFx": {
-          "enabled": false,
-          "animType": "auto",
-          "hitFile": "",
-          "hitScale": 1,
-          "hitOffsetX": 0,
-          "hitDuration": 800,
-          "hitSound": "",
-          "missFile": "",
-          "missScale": 1,
-          "missDuration": 600,
-          "missSound": "",
-          "soundVolume": 0.6
-        },
-        "macro": {
-          "enabled": false,
-          "uuid": "",
-          "command": "",
-          "label": "",
-          "runAsGM": false
-        },
-        "hitMacro": {
-          "enabled": false,
-          "uuid": "",
-          "command": "",
-          "label": "",
-          "runAsGM": false
-        }
+        "lore": ""
       },
       "effects": [],
       "flags": {
         "core": {},
         "vagabond": {
           "shop": {
-            "category": "Beasts & Husbandry"
+            "category": "Beasts & Husbandry",
+            "sourceUuid": "Compendium.vagabond.gear.Item.PVqCFpdsYC7sMzVr"
           }
         }
       },
       "_stats": {
-        "coreVersion": "14.368",
-        "systemId": "vagabond",
-        "systemVersion": "5.43.0",
-        "createdTime": 1790429478861,
-        "modifiedTime": 1790429478861,
-        "lastModifiedBy": "F8lCaC2xBa4wgj43",
-        "compendiumSource": null,
+        "compendiumSource": "Compendium.vagabond.gear.Item.PVqCFpdsYC7sMzVr",
         "duplicateSource": null,
-        "exportSource": null
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "vagabond",
+        "systemVersion": "1.3.0",
+        "createdTime": 1765500902702,
+        "modifiedTime": 1765500902702,
+        "lastModifiedBy": "13p65OEadZSZVLRk"
       },
+      "_id": "fRRkDYOdMv5I3ytd",
+      "folder": null,
+      "sort": 0,
       "ownership": {
         "default": 0,
-        "F8lCaC2xBa4wgj43": 3
+        "13p65OEadZSZVLRk": 3
       },
-      "folder": null,
-      "_id": "erROJL7aNYP5CQKX",
-      "sort": 0,
-      "_key": "!actors.items!Yj7hxhiROZCgAZ9j.erROJL7aNYP5CQKX"
-    },
-    {
-      "name": "Barding, heavy",
-      "type": "equipment",
-      "img": "icons/equipment/chest/breastplate-banded-steel.webp",
-      "system": {
-        "description": "",
-        "equipmentType": "gear",
-        "locked": true,
-        "equipped": false,
-        "quantity": 1,
-        "baseCost": {
-          "gold": 2,
-          "silver": 50,
-          "copper": 0
-        },
-        "baseSlots": 3,
-        "metal": "none",
-        "damageType": "-",
-        "damageAmount": "",
-        "canExplode": false,
-        "explodeValues": "",
-        "properties": [],
-        "weaponSkill": "melee",
-        "range": "close",
-        "grip": "1H",
-        "damageOneHand": "d6",
-        "damageTwoHands": "d8",
-        "equipmentState": "unequipped",
-        "immunities": [],
-        "gearCategory": "Beasts & Husbandry",
-        "alchemicalType": "concoction",
-        "lore": "",
-        "armorRating": 1,
-        "mightRequirement": 2,
-        "reflexPenalty": 3,
-        "handsRequired": 0,
-        "isTrinket": false,
-        "requiresBound": false,
-        "bound": false,
-        "relic": {
-          "powers": [],
-          "fabled": false,
-          "requiresBond": false,
-          "boundTo": "",
-          "cursed": false,
-          "consumable": false,
-          "sockets": []
-        },
-        "relicPower": {
-          "enabled": false,
-          "targets": [
-            "any"
-          ],
-          "family": "",
-          "rank": 1,
-          "requiredMaterials": []
-        },
-        "crystal": {
-          "type": "",
-          "bonus": 0,
-          "payloadUuid": "",
-          "usedThisQuest": false
-        },
-        "gridPosition": 0,
-        "containerId": null,
-        "altSkills": [],
-        "damageTypeOneHand": "-",
-        "damageTypeTwoHands": "-",
-        "armorDamage": 0,
-        "dieDamage": 0,
-        "craftMaterial": {
-          "enabled": false,
-          "key": "",
-          "value": 0
-        },
-        "toolKind": "",
-        "isSupply": false,
-        "isBeverage": false,
-        "isConsumable": false,
-        "linkedConsumable": "",
-        "uses": {
-          "max": 0,
-          "value": 0
-        },
-        "passiveCausedStatuses": [],
-        "causedStatuses": [],
-        "critCausedStatuses": [],
-        "critThresholdMod": [],
-        "blockedStatuses": [],
-        "resistedStatuses": [],
-        "coating": {
-          "sourceName": "",
-          "charges": 0,
-          "causedStatuses": []
-        },
-        "imbuedSpell": {
-          "active": false,
-          "sourceActorUuid": "",
-          "sourceActorName": "",
-          "spellUuid": "",
-          "spellName": "",
-          "spellImg": "",
-          "damageTypeKey": "",
-          "dieSize": 0,
-          "damageDice": 0,
-          "deferredMana": 0,
-          "deferredPayment": false,
-          "manaSkillKey": ""
-        },
-        "itemFx": {
-          "enabled": false,
-          "animType": "auto",
-          "hitFile": "",
-          "hitScale": 1,
-          "hitOffsetX": 0,
-          "hitDuration": 800,
-          "hitSound": "",
-          "missFile": "",
-          "missScale": 1,
-          "missDuration": 600,
-          "missSound": "",
-          "soundVolume": 0.6
-        },
-        "macro": {
-          "enabled": false,
-          "uuid": "",
-          "command": "",
-          "label": "",
-          "runAsGM": false
-        },
-        "hitMacro": {
-          "enabled": false,
-          "uuid": "",
-          "command": "",
-          "label": "",
-          "runAsGM": false
-        }
-      },
-      "effects": [],
-      "flags": {
-        "core": {},
-        "vagabond": {
-          "shop": {
-            "category": "Beasts & Husbandry"
-          }
-        }
-      },
-      "_stats": {
-        "coreVersion": "14.368",
-        "systemId": "vagabond",
-        "systemVersion": "5.43.0",
-        "createdTime": 1790429478861,
-        "modifiedTime": 1790429478861,
-        "lastModifiedBy": "F8lCaC2xBa4wgj43",
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null
-      },
-      "ownership": {
-        "default": 0,
-        "F8lCaC2xBa4wgj43": 3
-      },
-      "folder": null,
-      "_id": "GWbdcG3LxUiWCAZs",
-      "sort": 0,
-      "_key": "!actors.items!Yj7hxhiROZCgAZ9j.GWbdcG3LxUiWCAZs"
-    },
-    {
-      "name": "Rabbit",
-      "type": "equipment",
-      "img": "icons/creatures/mammals/rabbit-movement-glowing-green.webp",
-      "system": {
-        "description": "",
-        "equipmentType": "gear",
-        "locked": true,
-        "equipped": false,
-        "quantity": 1,
-        "baseCost": {
-          "gold": 0,
-          "silver": 30,
-          "copper": 0
-        },
-        "baseSlots": 0,
-        "metal": "none",
-        "damageType": "-",
-        "damageAmount": "",
-        "canExplode": false,
-        "explodeValues": "",
-        "properties": [],
-        "weaponSkill": "melee",
-        "range": "close",
-        "grip": "1H",
-        "damageOneHand": "d6",
-        "damageTwoHands": "d8",
-        "equipmentState": "unequipped",
-        "immunities": [],
-        "gearCategory": "Beasts & Husbandry",
-        "alchemicalType": "concoction",
-        "lore": "",
-        "armorRating": 1,
-        "mightRequirement": 2,
-        "reflexPenalty": 0,
-        "handsRequired": 0,
-        "isTrinket": false,
-        "requiresBound": false,
-        "bound": false,
-        "relic": {
-          "powers": [],
-          "fabled": false,
-          "requiresBond": false,
-          "boundTo": "",
-          "cursed": false,
-          "consumable": false,
-          "sockets": []
-        },
-        "relicPower": {
-          "enabled": false,
-          "targets": [
-            "any"
-          ],
-          "family": "",
-          "rank": 1,
-          "requiredMaterials": []
-        },
-        "crystal": {
-          "type": "",
-          "bonus": 0,
-          "payloadUuid": "",
-          "usedThisQuest": false
-        },
-        "gridPosition": 0,
-        "containerId": null,
-        "altSkills": [],
-        "damageTypeOneHand": "-",
-        "damageTypeTwoHands": "-",
-        "armorDamage": 0,
-        "dieDamage": 0,
-        "craftMaterial": {
-          "enabled": false,
-          "key": "",
-          "value": 0
-        },
-        "toolKind": "",
-        "isSupply": false,
-        "isBeverage": false,
-        "isConsumable": false,
-        "linkedConsumable": "",
-        "uses": {
-          "max": 0,
-          "value": 0
-        },
-        "passiveCausedStatuses": [],
-        "causedStatuses": [],
-        "critCausedStatuses": [],
-        "critThresholdMod": [],
-        "blockedStatuses": [],
-        "resistedStatuses": [],
-        "coating": {
-          "sourceName": "",
-          "charges": 0,
-          "causedStatuses": []
-        },
-        "imbuedSpell": {
-          "active": false,
-          "sourceActorUuid": "",
-          "sourceActorName": "",
-          "spellUuid": "",
-          "spellName": "",
-          "spellImg": "",
-          "damageTypeKey": "",
-          "dieSize": 0,
-          "damageDice": 0,
-          "deferredMana": 0,
-          "deferredPayment": false,
-          "manaSkillKey": ""
-        },
-        "itemFx": {
-          "enabled": false,
-          "animType": "auto",
-          "hitFile": "",
-          "hitScale": 1,
-          "hitOffsetX": 0,
-          "hitDuration": 800,
-          "hitSound": "",
-          "missFile": "",
-          "missScale": 1,
-          "missDuration": 600,
-          "missSound": "",
-          "soundVolume": 0.6
-        },
-        "macro": {
-          "enabled": false,
-          "uuid": "",
-          "command": "",
-          "label": "",
-          "runAsGM": false
-        },
-        "hitMacro": {
-          "enabled": false,
-          "uuid": "",
-          "command": "",
-          "label": "",
-          "runAsGM": false
-        }
-      },
-      "effects": [],
-      "flags": {
-        "core": {},
-        "vagabond": {
-          "shop": {
-            "category": "Beasts & Husbandry"
-          }
-        }
-      },
-      "_stats": {
-        "coreVersion": "14.368",
-        "systemId": "vagabond",
-        "systemVersion": "5.43.0",
-        "createdTime": 1790429478861,
-        "modifiedTime": 1790429478861,
-        "lastModifiedBy": "F8lCaC2xBa4wgj43",
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null
-      },
-      "ownership": {
-        "default": 0,
-        "F8lCaC2xBa4wgj43": 3
-      },
-      "folder": null,
-      "_id": "gduKWFQt5IvxgQrV",
-      "sort": 0,
-      "_key": "!actors.items!Yj7hxhiROZCgAZ9j.gduKWFQt5IvxgQrV"
+      "_key": "!actors.items!Yj7hxhiROZCgAZ9j.fRRkDYOdMv5I3ytd"
     },
     {
       "name": "Mule",
@@ -3176,1146 +1386,949 @@
         "damageOneHand": "d6",
         "damageTwoHands": "d8",
         "equipmentState": "unequipped",
+        "armorType": "light",
         "immunities": [],
         "gearCategory": "Beasts & Husbandry",
         "alchemicalType": "concoction",
-        "lore": "",
-        "armorRating": 1,
-        "mightRequirement": 2,
-        "reflexPenalty": 0,
-        "handsRequired": 0,
-        "isTrinket": false,
-        "requiresBound": false,
-        "bound": false,
-        "relic": {
-          "powers": [],
-          "fabled": false,
-          "requiresBond": false,
-          "boundTo": "",
-          "cursed": false,
-          "consumable": false,
-          "sockets": []
-        },
-        "relicPower": {
-          "enabled": false,
-          "targets": [
-            "any"
-          ],
-          "family": "",
-          "rank": 1,
-          "requiredMaterials": []
-        },
-        "crystal": {
-          "type": "",
-          "bonus": 0,
-          "payloadUuid": "",
-          "usedThisQuest": false
-        },
-        "gridPosition": 0,
-        "containerId": null,
-        "altSkills": [],
-        "damageTypeOneHand": "-",
-        "damageTypeTwoHands": "-",
-        "armorDamage": 0,
-        "dieDamage": 0,
-        "craftMaterial": {
-          "enabled": false,
-          "key": "",
-          "value": 0
-        },
-        "toolKind": "",
-        "isSupply": false,
-        "isBeverage": false,
-        "isConsumable": false,
-        "linkedConsumable": "",
-        "uses": {
-          "max": 0,
-          "value": 0
-        },
-        "passiveCausedStatuses": [],
-        "causedStatuses": [],
-        "critCausedStatuses": [],
-        "critThresholdMod": [],
-        "blockedStatuses": [],
-        "resistedStatuses": [],
-        "coating": {
-          "sourceName": "",
-          "charges": 0,
-          "causedStatuses": []
-        },
-        "imbuedSpell": {
-          "active": false,
-          "sourceActorUuid": "",
-          "sourceActorName": "",
-          "spellUuid": "",
-          "spellName": "",
-          "spellImg": "",
-          "damageTypeKey": "",
-          "dieSize": 0,
-          "damageDice": 0,
-          "deferredMana": 0,
-          "deferredPayment": false,
-          "manaSkillKey": ""
-        },
-        "itemFx": {
-          "enabled": false,
-          "animType": "auto",
-          "hitFile": "",
-          "hitScale": 1,
-          "hitOffsetX": 0,
-          "hitDuration": 800,
-          "hitSound": "",
-          "missFile": "",
-          "missScale": 1,
-          "missDuration": 600,
-          "missSound": "",
-          "soundVolume": 0.6
-        },
-        "macro": {
-          "enabled": false,
-          "uuid": "",
-          "command": "",
-          "label": "",
-          "runAsGM": false
-        },
-        "hitMacro": {
-          "enabled": false,
-          "uuid": "",
-          "command": "",
-          "label": "",
-          "runAsGM": false
-        }
+        "lore": ""
       },
       "effects": [],
       "flags": {
         "core": {},
         "vagabond": {
           "shop": {
-            "category": "Beasts & Husbandry"
+            "category": "Beasts & Husbandry",
+            "sourceUuid": "Compendium.vagabond.gear.Item.TvShflixUvz0WBwC"
           }
         }
       },
       "_stats": {
-        "coreVersion": "14.368",
-        "systemId": "vagabond",
-        "systemVersion": "5.43.0",
-        "createdTime": 1790429478861,
-        "modifiedTime": 1790429478861,
-        "lastModifiedBy": "F8lCaC2xBa4wgj43",
-        "compendiumSource": null,
+        "compendiumSource": "Compendium.vagabond.gear.Item.TvShflixUvz0WBwC",
         "duplicateSource": null,
-        "exportSource": null
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "vagabond",
+        "systemVersion": "1.3.0",
+        "createdTime": 1765500902702,
+        "modifiedTime": 1765500902702,
+        "lastModifiedBy": "13p65OEadZSZVLRk"
       },
+      "_id": "EPNHq4xjcyenQyhc",
+      "folder": null,
+      "sort": 0,
       "ownership": {
         "default": 0,
-        "F8lCaC2xBa4wgj43": 3
+        "13p65OEadZSZVLRk": 3
       },
-      "folder": null,
-      "_id": "EPNHq4xjcyenQyhc",
-      "sort": 0,
       "_key": "!actors.items!Yj7hxhiROZCgAZ9j.EPNHq4xjcyenQyhc"
     },
     {
-      "name": "Camel",
+      "name": "Rabbit",
       "type": "equipment",
+      "img": "icons/creatures/mammals/rabbit-movement-glowing-green.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 30,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Beasts & Husbandry",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "category": "Beasts & Husbandry",
+            "sourceUuid": "Compendium.vagabond.gear.Item.hyOy0ejlDmSfA8v1"
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Compendium.vagabond.gear.Item.hyOy0ejlDmSfA8v1",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "vagabond",
+        "systemVersion": "1.3.0",
+        "createdTime": 1765500902702,
+        "modifiedTime": 1765500902702,
+        "lastModifiedBy": "13p65OEadZSZVLRk"
+      },
+      "_id": "gduKWFQt5IvxgQrV",
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "13p65OEadZSZVLRk": 3
+      },
+      "_key": "!actors.items!Yj7hxhiROZCgAZ9j.gduKWFQt5IvxgQrV"
+    },
+    {
+      "name": "Rat",
+      "type": "equipment",
+      "img": "icons/creatures/mammals/rodent-rat-green.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 10,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Beasts & Husbandry",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "category": "Beasts & Husbandry",
+            "sourceUuid": "Compendium.vagabond.gear.Item.PnK7vbVA0D30aMwG"
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Compendium.vagabond.gear.Item.PnK7vbVA0D30aMwG",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "vagabond",
+        "systemVersion": "1.3.0",
+        "createdTime": 1765500902702,
+        "modifiedTime": 1765500902702,
+        "lastModifiedBy": "13p65OEadZSZVLRk"
+      },
+      "_id": "0ZL00Zng4FsO8C12",
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "13p65OEadZSZVLRk": 3
+      },
+      "_key": "!actors.items!Yj7hxhiROZCgAZ9j.0ZL00Zng4FsO8C12"
+    },
+    {
+      "name": "Rats, bag of 20",
+      "type": "equipment",
+      "img": "icons/containers/bags/sack-leather-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 2,
+          "silver": 0,
+          "copper": 0
+        },
+        "baseSlots": 2,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Beasts & Husbandry",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "category": "Beasts & Husbandry",
+            "sourceUuid": "Compendium.vagabond.gear.Item.DsFPrqaHIq6iXj56"
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Compendium.vagabond.gear.Item.DsFPrqaHIq6iXj56",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "vagabond",
+        "systemVersion": "1.3.0",
+        "createdTime": 1765500902702,
+        "modifiedTime": 1765500902702,
+        "lastModifiedBy": "13p65OEadZSZVLRk"
+      },
+      "_id": "USCZNIpv0z053vFi",
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "13p65OEadZSZVLRk": 3
+      },
+      "_key": "!actors.items!Yj7hxhiROZCgAZ9j.USCZNIpv0z053vFi"
+    },
+    {
+      "name": "Saddle & tack",
+      "type": "equipment",
+      "img": "icons/equipment/waist/belt-leather-brown.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 2,
+          "silver": 50,
+          "copper": 0
+        },
+        "baseSlots": 2,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Beasts & Husbandry",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "category": "Beasts & Husbandry",
+            "sourceUuid": "Compendium.vagabond.gear.Item.IRaJsmY6JDxvuIGD"
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Compendium.vagabond.gear.Item.IRaJsmY6JDxvuIGD",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "vagabond",
+        "systemVersion": "1.3.0",
+        "createdTime": 1765500902702,
+        "modifiedTime": 1765500902702,
+        "lastModifiedBy": "13p65OEadZSZVLRk"
+      },
+      "_id": "R292GgvHnt0ZK3rl",
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "13p65OEadZSZVLRk": 3
+      },
+      "_key": "!actors.items!Yj7hxhiROZCgAZ9j.R292GgvHnt0ZK3rl"
+    },
+    {
+      "name": "Stabling (per day)",
+      "type": "equipment",
+      "img": "icons/environment/settlement/stable.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 0,
+          "silver": 5,
+          "copper": 0
+        },
+        "baseSlots": 0,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Beasts & Husbandry",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "category": "Beasts & Husbandry",
+            "sourceUuid": "Compendium.vagabond.gear.Item.PTRsLwaplBcSZCcO"
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Compendium.vagabond.gear.Item.PTRsLwaplBcSZCcO",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "vagabond",
+        "systemVersion": "1.3.0",
+        "createdTime": 1765500902702,
+        "modifiedTime": 1765500902702,
+        "lastModifiedBy": "13p65OEadZSZVLRk"
+      },
+      "_id": "HeSEGgkwwayHtzXL",
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "13p65OEadZSZVLRk": 3
+      },
+      "_key": "!actors.items!Yj7hxhiROZCgAZ9j.HeSEGgkwwayHtzXL"
+    },
+    {
+      "name": "Cart",
+      "type": "container",
+      "img": "icons/commodities/wood/wood-wheel-brown.webp",
+      "system": {
+        "description": "<p><strong>Vehicle.</strong> +50 Slots.</p>",
+        "slots": 0,
+        "capacity": 50,
+        "gridPosition": 0,
+        "locked": true,
+        "speed": 0,
+        "crawl": 0,
+        "travel": 0,
+        "items": [],
+        "baseCost": {
+          "gold": 5,
+          "silver": 0,
+          "copper": 0
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 900000,
+      "ownership": {
+        "default": 0,
+        "13p65OEadZSZVLRk": 3
+      },
+      "flags": {
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.y3bRCaRRylb307nk",
+            "category": "Beasts & Husbandry"
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Compendium.vagabond.gear.Item.y3bRCaRRylb307nk",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.365",
+        "systemId": "vagabond",
+        "systemVersion": "6.3.1",
+        "createdTime": 1791645107442,
+        "modifiedTime": 1791645107442,
+        "lastModifiedBy": "13p65OEadZSZVLRk"
+      },
+      "_id": "6YuNWcPOcjXGlIqS",
+      "_key": "!actors.items!Yj7hxhiROZCgAZ9j.6YuNWcPOcjXGlIqS"
+    },
+    {
+      "name": "Wagon",
+      "type": "container",
+      "img": "icons/environment/settlement/wagon.webp",
+      "system": {
+        "description": "<p><strong>Vehicle.</strong> +150 Slots.</p>",
+        "slots": 0,
+        "capacity": 150,
+        "gridPosition": 0,
+        "locked": true,
+        "speed": 0,
+        "crawl": 0,
+        "travel": 0,
+        "items": [],
+        "baseCost": {
+          "gold": 15,
+          "silver": 0,
+          "copper": 0
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 1000000,
+      "ownership": {
+        "default": 0,
+        "13p65OEadZSZVLRk": 3
+      },
+      "flags": {
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.HaKvqWOSV7zpalbG",
+            "category": "Beasts & Husbandry"
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Compendium.vagabond.gear.Item.HaKvqWOSV7zpalbG",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.365",
+        "systemId": "vagabond",
+        "systemVersion": "6.3.1",
+        "createdTime": 1791645107442,
+        "modifiedTime": 1791645107442,
+        "lastModifiedBy": "13p65OEadZSZVLRk"
+      },
+      "_id": "UcC0eqG5qzrJpqSf",
+      "_key": "!actors.items!Yj7hxhiROZCgAZ9j.UcC0eqG5qzrJpqSf"
+    },
+    {
+      "name": "Camel",
+      "type": "container",
       "img": "icons/commodities/treasure/figurine-camel.webp",
       "system": {
-        "description": "",
-        "equipmentType": "gear",
+        "description": "<p><strong>Riding Animal.</strong> Travel Speed 10 mi per Shift · Capacity 12 Slots.</p><p>A willing Being can be mounted by riders that are at least one Size smaller as an Action or by skipping their Move. Intelligent Mounts act of their own accord, but controlled Mounts obey the rider, who uses the Mount's Speed instead of their own. The Mount uses the rider's applicable Skill for Checks.</p>",
+        "slots": 0,
+        "capacity": 12,
+        "gridPosition": 0,
         "locked": true,
-        "equipped": false,
-        "quantity": 1,
+        "speed": 50,
+        "crawl": 150,
+        "travel": 10,
+        "items": [],
         "baseCost": {
           "gold": 10,
           "silver": 0,
           "copper": 0
-        },
-        "baseSlots": 0,
-        "metal": "none",
-        "damageType": "-",
-        "damageAmount": "",
-        "canExplode": false,
-        "explodeValues": "",
-        "properties": [],
-        "weaponSkill": "melee",
-        "range": "close",
-        "grip": "1H",
-        "damageOneHand": "d6",
-        "damageTwoHands": "d8",
-        "equipmentState": "unequipped",
-        "immunities": [],
-        "gearCategory": "Beasts & Husbandry",
-        "alchemicalType": "concoction",
-        "lore": "",
-        "armorRating": 1,
-        "mightRequirement": 2,
-        "reflexPenalty": 0,
-        "handsRequired": 0,
-        "isTrinket": false,
-        "requiresBound": false,
-        "bound": false,
-        "relic": {
-          "powers": [],
-          "fabled": false,
-          "requiresBond": false,
-          "boundTo": "",
-          "cursed": false,
-          "consumable": false,
-          "sockets": []
-        },
-        "relicPower": {
-          "enabled": false,
-          "targets": [
-            "any"
-          ],
-          "family": "",
-          "rank": 1,
-          "requiredMaterials": []
-        },
-        "crystal": {
-          "type": "",
-          "bonus": 0,
-          "payloadUuid": "",
-          "usedThisQuest": false
-        },
-        "gridPosition": 0,
-        "containerId": null,
-        "altSkills": [],
-        "damageTypeOneHand": "-",
-        "damageTypeTwoHands": "-",
-        "armorDamage": 0,
-        "dieDamage": 0,
-        "craftMaterial": {
-          "enabled": false,
-          "key": "",
-          "value": 0
-        },
-        "toolKind": "",
-        "isSupply": false,
-        "isBeverage": false,
-        "isConsumable": false,
-        "linkedConsumable": "",
-        "uses": {
-          "max": 0,
-          "value": 0
-        },
-        "passiveCausedStatuses": [],
-        "causedStatuses": [],
-        "critCausedStatuses": [],
-        "critThresholdMod": [],
-        "blockedStatuses": [],
-        "resistedStatuses": [],
-        "coating": {
-          "sourceName": "",
-          "charges": 0,
-          "causedStatuses": []
-        },
-        "imbuedSpell": {
-          "active": false,
-          "sourceActorUuid": "",
-          "sourceActorName": "",
-          "spellUuid": "",
-          "spellName": "",
-          "spellImg": "",
-          "damageTypeKey": "",
-          "dieSize": 0,
-          "damageDice": 0,
-          "deferredMana": 0,
-          "deferredPayment": false,
-          "manaSkillKey": ""
-        },
-        "itemFx": {
-          "enabled": false,
-          "animType": "auto",
-          "hitFile": "",
-          "hitScale": 1,
-          "hitOffsetX": 0,
-          "hitDuration": 800,
-          "hitSound": "",
-          "missFile": "",
-          "missScale": 1,
-          "missDuration": 600,
-          "missSound": "",
-          "soundVolume": 0.6
-        },
-        "macro": {
-          "enabled": false,
-          "uuid": "",
-          "command": "",
-          "label": "",
-          "runAsGM": false
-        },
-        "hitMacro": {
-          "enabled": false,
-          "uuid": "",
-          "command": "",
-          "label": "",
-          "runAsGM": false
         }
       },
       "effects": [],
+      "folder": null,
+      "sort": 100000,
+      "ownership": {
+        "default": 0,
+        "13p65OEadZSZVLRk": 3
+      },
       "flags": {
-        "core": {},
         "vagabond": {
           "shop": {
-            "category": "Beasts & Husbandry"
+            "sourceUuid": "Compendium.vagabond.gear.Item.kzWDaYKGsuCMYkmw",
+            "category": "Transportation & Cargo"
           }
         }
       },
       "_stats": {
-        "coreVersion": "14.368",
-        "systemId": "vagabond",
-        "systemVersion": "5.43.0",
-        "createdTime": 1790429478861,
-        "modifiedTime": 1790429478861,
-        "lastModifiedBy": "F8lCaC2xBa4wgj43",
-        "compendiumSource": null,
+        "compendiumSource": "Compendium.vagabond.gear.Item.kzWDaYKGsuCMYkmw",
         "duplicateSource": null,
-        "exportSource": null
+        "exportSource": null,
+        "coreVersion": "14.365",
+        "systemId": "vagabond",
+        "systemVersion": "6.3.1",
+        "createdTime": 1791645107442,
+        "modifiedTime": 1791645107442,
+        "lastModifiedBy": "13p65OEadZSZVLRk"
       },
-      "ownership": {
-        "default": 0,
-        "F8lCaC2xBa4wgj43": 3
-      },
-      "folder": null,
-      "_id": "8vuiIf1dpr35gF8y",
-      "sort": 0,
-      "_key": "!actors.items!Yj7hxhiROZCgAZ9j.8vuiIf1dpr35gF8y"
+      "_id": "j9EMIwJ4mIaRL2J0",
+      "_key": "!actors.items!Yj7hxhiROZCgAZ9j.j9EMIwJ4mIaRL2J0"
     },
     {
-      "name": "Fowl - Chicken, rooster",
-      "type": "equipment",
-      "img": "icons/creatures/birds/chicken-hen-green.webp",
+      "name": "Elephant",
+      "type": "container",
+      "img": "icons/commodities/treasure/figurine-rhino.webp",
       "system": {
-        "description": "",
-        "equipmentType": "gear",
-        "locked": true,
-        "equipped": false,
-        "quantity": 1,
-        "baseCost": {
-          "gold": 0,
-          "silver": 1,
-          "copper": 0
-        },
-        "baseSlots": 1,
-        "metal": "none",
-        "damageType": "-",
-        "damageAmount": "",
-        "canExplode": false,
-        "explodeValues": "",
-        "properties": [],
-        "weaponSkill": "melee",
-        "range": "close",
-        "grip": "1H",
-        "damageOneHand": "d6",
-        "damageTwoHands": "d8",
-        "equipmentState": "unequipped",
-        "immunities": [],
-        "gearCategory": "Beasts & Husbandry",
-        "alchemicalType": "concoction",
-        "lore": "",
-        "armorRating": 1,
-        "mightRequirement": 2,
-        "reflexPenalty": 1,
-        "handsRequired": 0,
-        "isTrinket": false,
-        "requiresBound": false,
-        "bound": false,
-        "relic": {
-          "powers": [],
-          "fabled": false,
-          "requiresBond": false,
-          "boundTo": "",
-          "cursed": false,
-          "consumable": false,
-          "sockets": []
-        },
-        "relicPower": {
-          "enabled": false,
-          "targets": [
-            "any"
-          ],
-          "family": "",
-          "rank": 1,
-          "requiredMaterials": []
-        },
-        "crystal": {
-          "type": "",
-          "bonus": 0,
-          "payloadUuid": "",
-          "usedThisQuest": false
-        },
+        "description": "<p><strong>Riding Animal.</strong> Travel Speed 8 mi per Shift · Capacity 96 Slots.</p><p>A willing Being can be mounted by riders that are at least one Size smaller as an Action or by skipping their Move. Intelligent Mounts act of their own accord, but controlled Mounts obey the rider, who uses the Mount's Speed instead of their own. The Mount uses the rider's applicable Skill for Checks.</p>",
+        "slots": 0,
+        "capacity": 96,
         "gridPosition": 0,
-        "containerId": null,
-        "altSkills": [],
-        "damageTypeOneHand": "-",
-        "damageTypeTwoHands": "-",
-        "armorDamage": 0,
-        "dieDamage": 0,
-        "craftMaterial": {
-          "enabled": false,
-          "key": "",
-          "value": 0
-        },
-        "toolKind": "",
-        "isSupply": false,
-        "isBeverage": false,
-        "isConsumable": false,
-        "linkedConsumable": "",
-        "uses": {
-          "max": 0,
-          "value": 0
-        },
-        "passiveCausedStatuses": [],
-        "causedStatuses": [],
-        "critCausedStatuses": [],
-        "critThresholdMod": [],
-        "blockedStatuses": [],
-        "resistedStatuses": [],
-        "coating": {
-          "sourceName": "",
-          "charges": 0,
-          "causedStatuses": []
-        },
-        "imbuedSpell": {
-          "active": false,
-          "sourceActorUuid": "",
-          "sourceActorName": "",
-          "spellUuid": "",
-          "spellName": "",
-          "spellImg": "",
-          "damageTypeKey": "",
-          "dieSize": 0,
-          "damageDice": 0,
-          "deferredMana": 0,
-          "deferredPayment": false,
-          "manaSkillKey": ""
-        },
-        "itemFx": {
-          "enabled": false,
-          "animType": "auto",
-          "hitFile": "",
-          "hitScale": 1,
-          "hitOffsetX": 0,
-          "hitDuration": 800,
-          "hitSound": "",
-          "missFile": "",
-          "missScale": 1,
-          "missDuration": 600,
-          "missSound": "",
-          "soundVolume": 0.6
-        },
-        "macro": {
-          "enabled": false,
-          "uuid": "",
-          "command": "",
-          "label": "",
-          "runAsGM": false
-        },
-        "hitMacro": {
-          "enabled": false,
-          "uuid": "",
-          "command": "",
-          "label": "",
-          "runAsGM": false
-        }
-      },
-      "effects": [],
-      "flags": {
-        "core": {},
-        "vagabond": {
-          "shop": {
-            "category": "Beasts & Husbandry"
-          }
-        }
-      },
-      "_stats": {
-        "coreVersion": "14.368",
-        "systemId": "vagabond",
-        "systemVersion": "5.43.0",
-        "createdTime": 1790429478861,
-        "modifiedTime": 1790429478861,
-        "lastModifiedBy": "F8lCaC2xBa4wgj43",
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null
-      },
-      "ownership": {
-        "default": 0,
-        "F8lCaC2xBa4wgj43": 3
-      },
-      "folder": null,
-      "_id": "4lRWZ2SpHYHvPj29",
-      "sort": 0,
-      "_key": "!actors.items!Yj7hxhiROZCgAZ9j.4lRWZ2SpHYHvPj29"
-    },
-    {
-      "name": "Cattle - Cow",
-      "type": "equipment",
-      "img": "icons/creatures/mammals/livestock-cow-green.webp",
-      "system": {
-        "description": "",
-        "equipmentType": "gear",
         "locked": true,
-        "equipped": false,
-        "quantity": 1,
+        "speed": 40,
+        "crawl": 120,
+        "travel": 8,
+        "items": [],
         "baseCost": {
-          "gold": 9,
+          "gold": 20,
           "silver": 0,
           "copper": 0
-        },
-        "baseSlots": 0,
-        "metal": "none",
-        "damageType": "-",
-        "damageAmount": "",
-        "canExplode": false,
-        "explodeValues": "",
-        "properties": [],
-        "weaponSkill": "melee",
-        "range": "close",
-        "grip": "1H",
-        "damageOneHand": "d6",
-        "damageTwoHands": "d8",
-        "equipmentState": "unequipped",
-        "immunities": [],
-        "gearCategory": "Beasts & Husbandry",
-        "alchemicalType": "concoction",
-        "lore": "",
-        "armorRating": 1,
-        "mightRequirement": 2,
-        "reflexPenalty": 0,
-        "handsRequired": 0,
-        "isTrinket": false,
-        "requiresBound": false,
-        "bound": false,
-        "relic": {
-          "powers": [],
-          "fabled": false,
-          "requiresBond": false,
-          "boundTo": "",
-          "cursed": false,
-          "consumable": false,
-          "sockets": []
-        },
-        "relicPower": {
-          "enabled": false,
-          "targets": [
-            "any"
-          ],
-          "family": "",
-          "rank": 1,
-          "requiredMaterials": []
-        },
-        "crystal": {
-          "type": "",
-          "bonus": 0,
-          "payloadUuid": "",
-          "usedThisQuest": false
-        },
-        "gridPosition": 0,
-        "containerId": null,
-        "altSkills": [],
-        "damageTypeOneHand": "-",
-        "damageTypeTwoHands": "-",
-        "armorDamage": 0,
-        "dieDamage": 0,
-        "craftMaterial": {
-          "enabled": false,
-          "key": "",
-          "value": 0
-        },
-        "toolKind": "",
-        "isSupply": false,
-        "isBeverage": false,
-        "isConsumable": false,
-        "linkedConsumable": "",
-        "uses": {
-          "max": 0,
-          "value": 0
-        },
-        "passiveCausedStatuses": [],
-        "causedStatuses": [],
-        "critCausedStatuses": [],
-        "critThresholdMod": [],
-        "blockedStatuses": [],
-        "resistedStatuses": [],
-        "coating": {
-          "sourceName": "",
-          "charges": 0,
-          "causedStatuses": []
-        },
-        "imbuedSpell": {
-          "active": false,
-          "sourceActorUuid": "",
-          "sourceActorName": "",
-          "spellUuid": "",
-          "spellName": "",
-          "spellImg": "",
-          "damageTypeKey": "",
-          "dieSize": 0,
-          "damageDice": 0,
-          "deferredMana": 0,
-          "deferredPayment": false,
-          "manaSkillKey": ""
-        },
-        "itemFx": {
-          "enabled": false,
-          "animType": "auto",
-          "hitFile": "",
-          "hitScale": 1,
-          "hitOffsetX": 0,
-          "hitDuration": 800,
-          "hitSound": "",
-          "missFile": "",
-          "missScale": 1,
-          "missDuration": 600,
-          "missSound": "",
-          "soundVolume": 0.6
-        },
-        "macro": {
-          "enabled": false,
-          "uuid": "",
-          "command": "",
-          "label": "",
-          "runAsGM": false
-        },
-        "hitMacro": {
-          "enabled": false,
-          "uuid": "",
-          "command": "",
-          "label": "",
-          "runAsGM": false
         }
       },
       "effects": [],
+      "folder": null,
+      "sort": 200000,
+      "ownership": {
+        "default": 0,
+        "13p65OEadZSZVLRk": 3
+      },
       "flags": {
-        "core": {},
         "vagabond": {
           "shop": {
-            "category": "Beasts & Husbandry"
+            "sourceUuid": "Compendium.vagabond.gear.Item.stgWfRdfru434zsR",
+            "category": "Transportation & Cargo"
           }
         }
       },
       "_stats": {
-        "coreVersion": "14.368",
-        "systemId": "vagabond",
-        "systemVersion": "5.43.0",
-        "createdTime": 1790429478861,
-        "modifiedTime": 1790429478861,
-        "lastModifiedBy": "F8lCaC2xBa4wgj43",
-        "compendiumSource": null,
+        "compendiumSource": "Compendium.vagabond.gear.Item.stgWfRdfru434zsR",
         "duplicateSource": null,
-        "exportSource": null
+        "exportSource": null,
+        "coreVersion": "14.365",
+        "systemId": "vagabond",
+        "systemVersion": "6.3.1",
+        "createdTime": 1791645107442,
+        "modifiedTime": 1791645107442,
+        "lastModifiedBy": "13p65OEadZSZVLRk"
       },
-      "ownership": {
-        "default": 0,
-        "F8lCaC2xBa4wgj43": 3
-      },
-      "folder": null,
-      "_id": "AIU5Jaeesk1QVqEz",
-      "sort": 0,
-      "_key": "!actors.items!Yj7hxhiROZCgAZ9j.AIU5Jaeesk1QVqEz"
+      "_id": "3jhhXorf9jLTDMCu",
+      "_key": "!actors.items!Yj7hxhiROZCgAZ9j.3jhhXorf9jLTDMCu"
     },
     {
-      "name": "Fowl - Chicken, hen",
-      "type": "equipment",
-      "img": "icons/creatures/birds/chicken-hen-white.webp",
+      "name": "Horse, draft",
+      "type": "container",
+      "img": "icons/environment/creatures/horse-tan.webp",
       "system": {
-        "description": "",
-        "equipmentType": "gear",
-        "locked": true,
-        "equipped": false,
-        "quantity": 1,
-        "baseCost": {
-          "gold": 0,
-          "silver": 2,
-          "copper": 0
-        },
-        "baseSlots": 1,
-        "metal": "none",
-        "damageType": "-",
-        "damageAmount": "",
-        "canExplode": false,
-        "explodeValues": "",
-        "properties": [],
-        "weaponSkill": "melee",
-        "range": "close",
-        "grip": "1H",
-        "damageOneHand": "d6",
-        "damageTwoHands": "d8",
-        "equipmentState": "unequipped",
-        "immunities": [],
-        "gearCategory": "Beasts & Husbandry",
-        "alchemicalType": "concoction",
-        "lore": "",
-        "armorRating": 1,
-        "mightRequirement": 2,
-        "reflexPenalty": 1,
-        "handsRequired": 0,
-        "isTrinket": false,
-        "requiresBound": false,
-        "bound": false,
-        "relic": {
-          "powers": [],
-          "fabled": false,
-          "requiresBond": false,
-          "boundTo": "",
-          "cursed": false,
-          "consumable": false,
-          "sockets": []
-        },
-        "relicPower": {
-          "enabled": false,
-          "targets": [
-            "any"
-          ],
-          "family": "",
-          "rank": 1,
-          "requiredMaterials": []
-        },
-        "crystal": {
-          "type": "",
-          "bonus": 0,
-          "payloadUuid": "",
-          "usedThisQuest": false
-        },
+        "description": "<p><strong>Riding Animal.</strong> Travel Speed 6 mi per Shift · Capacity 14 Slots.</p><p>A willing Being can be mounted by riders that are at least one Size smaller as an Action or by skipping their Move. Intelligent Mounts act of their own accord, but controlled Mounts obey the rider, who uses the Mount's Speed instead of their own. The Mount uses the rider's applicable Skill for Checks.</p>",
+        "slots": 0,
+        "capacity": 14,
         "gridPosition": 0,
-        "containerId": null,
-        "altSkills": [],
-        "damageTypeOneHand": "-",
-        "damageTypeTwoHands": "-",
-        "armorDamage": 0,
-        "dieDamage": 0,
-        "craftMaterial": {
-          "enabled": false,
-          "key": "",
-          "value": 0
-        },
-        "toolKind": "",
-        "isSupply": false,
-        "isBeverage": false,
-        "isConsumable": false,
-        "linkedConsumable": "",
-        "uses": {
-          "max": 0,
-          "value": 0
-        },
-        "passiveCausedStatuses": [],
-        "causedStatuses": [],
-        "critCausedStatuses": [],
-        "critThresholdMod": [],
-        "blockedStatuses": [],
-        "resistedStatuses": [],
-        "coating": {
-          "sourceName": "",
-          "charges": 0,
-          "causedStatuses": []
-        },
-        "imbuedSpell": {
-          "active": false,
-          "sourceActorUuid": "",
-          "sourceActorName": "",
-          "spellUuid": "",
-          "spellName": "",
-          "spellImg": "",
-          "damageTypeKey": "",
-          "dieSize": 0,
-          "damageDice": 0,
-          "deferredMana": 0,
-          "deferredPayment": false,
-          "manaSkillKey": ""
-        },
-        "itemFx": {
-          "enabled": false,
-          "animType": "auto",
-          "hitFile": "",
-          "hitScale": 1,
-          "hitOffsetX": 0,
-          "hitDuration": 800,
-          "hitSound": "",
-          "missFile": "",
-          "missScale": 1,
-          "missDuration": 600,
-          "missSound": "",
-          "soundVolume": 0.6
-        },
-        "macro": {
-          "enabled": false,
-          "uuid": "",
-          "command": "",
-          "label": "",
-          "runAsGM": false
-        },
-        "hitMacro": {
-          "enabled": false,
-          "uuid": "",
-          "command": "",
-          "label": "",
-          "runAsGM": false
-        }
-      },
-      "effects": [],
-      "flags": {
-        "core": {},
-        "vagabond": {
-          "shop": {
-            "category": "Beasts & Husbandry"
-          }
-        }
-      },
-      "_stats": {
-        "coreVersion": "14.368",
-        "systemId": "vagabond",
-        "systemVersion": "5.43.0",
-        "createdTime": 1790429478861,
-        "modifiedTime": 1790429478861,
-        "lastModifiedBy": "F8lCaC2xBa4wgj43",
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null
-      },
-      "ownership": {
-        "default": 0,
-        "F8lCaC2xBa4wgj43": 3
-      },
-      "folder": null,
-      "_id": "EZ3wwtmSdsq4FpHf",
-      "sort": 0,
-      "_key": "!actors.items!Yj7hxhiROZCgAZ9j.EZ3wwtmSdsq4FpHf"
-    },
-    {
-      "name": "Dog - Warhound",
-      "type": "equipment",
-      "img": "icons/creatures/mammals/wolf-howl-moon-forest-blue.webp",
-      "system": {
-        "description": "",
-        "equipmentType": "gear",
         "locked": true,
-        "equipped": false,
-        "quantity": 1,
+        "speed": 30,
+        "crawl": 90,
+        "travel": 6,
+        "items": [],
         "baseCost": {
-          "gold": 10,
+          "gold": 4,
           "silver": 0,
           "copper": 0
-        },
-        "baseSlots": 0,
-        "metal": "none",
-        "damageType": "-",
-        "damageAmount": "",
-        "canExplode": false,
-        "explodeValues": "",
-        "properties": [],
-        "weaponSkill": "melee",
-        "range": "close",
-        "grip": "1H",
-        "damageOneHand": "d6",
-        "damageTwoHands": "d8",
-        "equipmentState": "unequipped",
-        "immunities": [],
-        "gearCategory": "Beasts & Husbandry",
-        "alchemicalType": "concoction",
-        "lore": "",
-        "armorRating": 1,
-        "mightRequirement": 2,
-        "reflexPenalty": 0,
-        "handsRequired": 0,
-        "isTrinket": false,
-        "requiresBound": false,
-        "bound": false,
-        "relic": {
-          "powers": [],
-          "fabled": false,
-          "requiresBond": false,
-          "boundTo": "",
-          "cursed": false,
-          "consumable": false,
-          "sockets": []
-        },
-        "relicPower": {
-          "enabled": false,
-          "targets": [
-            "any"
-          ],
-          "family": "",
-          "rank": 1,
-          "requiredMaterials": []
-        },
-        "crystal": {
-          "type": "",
-          "bonus": 0,
-          "payloadUuid": "",
-          "usedThisQuest": false
-        },
-        "gridPosition": 0,
-        "containerId": null,
-        "altSkills": [],
-        "damageTypeOneHand": "-",
-        "damageTypeTwoHands": "-",
-        "armorDamage": 0,
-        "dieDamage": 0,
-        "craftMaterial": {
-          "enabled": false,
-          "key": "",
-          "value": 0
-        },
-        "toolKind": "",
-        "isSupply": false,
-        "isBeverage": false,
-        "isConsumable": false,
-        "linkedConsumable": "",
-        "uses": {
-          "max": 0,
-          "value": 0
-        },
-        "passiveCausedStatuses": [],
-        "causedStatuses": [],
-        "critCausedStatuses": [],
-        "critThresholdMod": [],
-        "blockedStatuses": [],
-        "resistedStatuses": [],
-        "coating": {
-          "sourceName": "",
-          "charges": 0,
-          "causedStatuses": []
-        },
-        "imbuedSpell": {
-          "active": false,
-          "sourceActorUuid": "",
-          "sourceActorName": "",
-          "spellUuid": "",
-          "spellName": "",
-          "spellImg": "",
-          "damageTypeKey": "",
-          "dieSize": 0,
-          "damageDice": 0,
-          "deferredMana": 0,
-          "deferredPayment": false,
-          "manaSkillKey": ""
-        },
-        "itemFx": {
-          "enabled": false,
-          "animType": "auto",
-          "hitFile": "",
-          "hitScale": 1,
-          "hitOffsetX": 0,
-          "hitDuration": 800,
-          "hitSound": "",
-          "missFile": "",
-          "missScale": 1,
-          "missDuration": 600,
-          "missSound": "",
-          "soundVolume": 0.6
-        },
-        "macro": {
-          "enabled": false,
-          "uuid": "",
-          "command": "",
-          "label": "",
-          "runAsGM": false
-        },
-        "hitMacro": {
-          "enabled": false,
-          "uuid": "",
-          "command": "",
-          "label": "",
-          "runAsGM": false
         }
       },
       "effects": [],
+      "folder": null,
+      "sort": 300000,
+      "ownership": {
+        "default": 0,
+        "13p65OEadZSZVLRk": 3
+      },
       "flags": {
-        "core": {},
         "vagabond": {
           "shop": {
-            "category": "Beasts & Husbandry"
+            "sourceUuid": "Compendium.vagabond.gear.Item.dDyi2VzJIcIAl0Mn",
+            "category": "Transportation & Cargo"
           }
         }
       },
       "_stats": {
-        "coreVersion": "14.368",
-        "systemId": "vagabond",
-        "systemVersion": "5.43.0",
-        "createdTime": 1790429478861,
-        "modifiedTime": 1790429478861,
-        "lastModifiedBy": "F8lCaC2xBa4wgj43",
-        "compendiumSource": null,
+        "compendiumSource": "Compendium.vagabond.gear.Item.dDyi2VzJIcIAl0Mn",
         "duplicateSource": null,
-        "exportSource": null
+        "exportSource": null,
+        "coreVersion": "14.365",
+        "systemId": "vagabond",
+        "systemVersion": "6.3.1",
+        "createdTime": 1791645107442,
+        "modifiedTime": 1791645107442,
+        "lastModifiedBy": "13p65OEadZSZVLRk"
       },
-      "ownership": {
-        "default": 0,
-        "F8lCaC2xBa4wgj43": 3
-      },
-      "folder": null,
-      "_id": "Fu1Ex1pEvfpib2yQ",
-      "sort": 0,
-      "_key": "!actors.items!Yj7hxhiROZCgAZ9j.Fu1Ex1pEvfpib2yQ"
+      "_id": "CZ80KJEkjgaBbMD6",
+      "_key": "!actors.items!Yj7hxhiROZCgAZ9j.CZ80KJEkjgaBbMD6"
     },
     {
-      "name": "Cat",
-      "type": "equipment",
-      "img": "icons/creatures/mammals/cat-hunched-glowing-red.webp",
+      "name": "Horse, pony",
+      "type": "container",
+      "img": "icons/environment/creatures/horse-brown.webp",
       "system": {
-        "description": "",
-        "equipmentType": "gear",
-        "locked": true,
-        "equipped": false,
-        "quantity": 1,
-        "baseCost": {
-          "gold": 1,
-          "silver": 0,
-          "copper": 0
-        },
-        "baseSlots": 0,
-        "metal": "none",
-        "damageType": "-",
-        "damageAmount": "",
-        "canExplode": false,
-        "explodeValues": "",
-        "properties": [],
-        "weaponSkill": "melee",
-        "range": "close",
-        "grip": "1H",
-        "damageOneHand": "d6",
-        "damageTwoHands": "d8",
-        "equipmentState": "unequipped",
-        "immunities": [],
-        "gearCategory": "Beasts & Husbandry",
-        "alchemicalType": "concoction",
-        "lore": "",
-        "armorRating": 1,
-        "mightRequirement": 2,
-        "reflexPenalty": 0,
-        "handsRequired": 0,
-        "isTrinket": false,
-        "requiresBound": false,
-        "bound": false,
-        "relic": {
-          "powers": [],
-          "fabled": false,
-          "requiresBond": false,
-          "boundTo": "",
-          "cursed": false,
-          "consumable": false,
-          "sockets": []
-        },
-        "relicPower": {
-          "enabled": false,
-          "targets": [
-            "any"
-          ],
-          "family": "",
-          "rank": 1,
-          "requiredMaterials": []
-        },
-        "crystal": {
-          "type": "",
-          "bonus": 0,
-          "payloadUuid": "",
-          "usedThisQuest": false
-        },
+        "description": "<p><strong>Riding Animal.</strong> Travel Speed 6 mi per Shift · Capacity 10 Slots.</p><p>A willing Being can be mounted by riders that are at least one Size smaller as an Action or by skipping their Move. Intelligent Mounts act of their own accord, but controlled Mounts obey the rider, who uses the Mount's Speed instead of their own. The Mount uses the rider's applicable Skill for Checks.</p>",
+        "slots": 0,
+        "capacity": 10,
         "gridPosition": 0,
-        "containerId": null,
-        "altSkills": [],
-        "damageTypeOneHand": "-",
-        "damageTypeTwoHands": "-",
-        "armorDamage": 0,
-        "dieDamage": 0,
-        "craftMaterial": {
-          "enabled": false,
-          "key": "",
-          "value": 0
-        },
-        "toolKind": "",
-        "isSupply": false,
-        "isBeverage": false,
-        "isConsumable": false,
-        "linkedConsumable": "",
-        "uses": {
-          "max": 0,
-          "value": 0
-        },
-        "passiveCausedStatuses": [],
-        "causedStatuses": [],
-        "critCausedStatuses": [],
-        "critThresholdMod": [],
-        "blockedStatuses": [],
-        "resistedStatuses": [],
-        "coating": {
-          "sourceName": "",
-          "charges": 0,
-          "causedStatuses": []
-        },
-        "imbuedSpell": {
-          "active": false,
-          "sourceActorUuid": "",
-          "sourceActorName": "",
-          "spellUuid": "",
-          "spellName": "",
-          "spellImg": "",
-          "damageTypeKey": "",
-          "dieSize": 0,
-          "damageDice": 0,
-          "deferredMana": 0,
-          "deferredPayment": false,
-          "manaSkillKey": ""
-        },
-        "itemFx": {
-          "enabled": false,
-          "animType": "auto",
-          "hitFile": "",
-          "hitScale": 1,
-          "hitOffsetX": 0,
-          "hitDuration": 800,
-          "hitSound": "",
-          "missFile": "",
-          "missScale": 1,
-          "missDuration": 600,
-          "missSound": "",
-          "soundVolume": 0.6
-        },
-        "macro": {
-          "enabled": false,
-          "uuid": "",
-          "command": "",
-          "label": "",
-          "runAsGM": false
-        },
-        "hitMacro": {
-          "enabled": false,
-          "uuid": "",
-          "command": "",
-          "label": "",
-          "runAsGM": false
+        "locked": true,
+        "speed": 30,
+        "crawl": 90,
+        "travel": 6,
+        "items": [],
+        "baseCost": {
+          "gold": 3,
+          "silver": 50,
+          "copper": 0
         }
       },
       "effects": [],
+      "folder": null,
+      "sort": 400000,
+      "ownership": {
+        "default": 0,
+        "13p65OEadZSZVLRk": 3
+      },
       "flags": {
-        "core": {},
         "vagabond": {
           "shop": {
-            "category": "Beasts & Husbandry"
+            "sourceUuid": "Compendium.vagabond.gear.Item.YeZJvX4tML38RMAH",
+            "category": "Transportation & Cargo"
           }
         }
       },
       "_stats": {
-        "coreVersion": "14.368",
-        "systemId": "vagabond",
-        "systemVersion": "5.43.0",
-        "createdTime": 1790429478861,
-        "modifiedTime": 1790429478861,
-        "lastModifiedBy": "F8lCaC2xBa4wgj43",
-        "compendiumSource": null,
+        "compendiumSource": "Compendium.vagabond.gear.Item.YeZJvX4tML38RMAH",
         "duplicateSource": null,
-        "exportSource": null
+        "exportSource": null,
+        "coreVersion": "14.365",
+        "systemId": "vagabond",
+        "systemVersion": "6.3.1",
+        "createdTime": 1791645107442,
+        "modifiedTime": 1791645107442,
+        "lastModifiedBy": "13p65OEadZSZVLRk"
       },
+      "_id": "tZZSyHRKGOaVuzib",
+      "_key": "!actors.items!Yj7hxhiROZCgAZ9j.tZZSyHRKGOaVuzib"
+    },
+    {
+      "name": "Horse, riding",
+      "type": "container",
+      "img": "icons/environment/creatures/horse-white.webp",
+      "system": {
+        "description": "<p><strong>Riding Animal.</strong> Travel Speed 16 mi per Shift · Capacity 12 Slots.</p><p>A willing Being can be mounted by riders that are at least one Size smaller as an Action or by skipping their Move. Intelligent Mounts act of their own accord, but controlled Mounts obey the rider, who uses the Mount's Speed instead of their own. The Mount uses the rider's applicable Skill for Checks.</p>",
+        "slots": 0,
+        "capacity": 12,
+        "gridPosition": 0,
+        "locked": true,
+        "speed": 80,
+        "crawl": 240,
+        "travel": 16,
+        "items": [],
+        "baseCost": {
+          "gold": 7,
+          "silver": 50,
+          "copper": 0
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 500000,
       "ownership": {
         "default": 0,
-        "F8lCaC2xBa4wgj43": 3
+        "13p65OEadZSZVLRk": 3
       },
+      "flags": {
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.nRI5zBguaFFIU3rk",
+            "category": "Transportation & Cargo"
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Compendium.vagabond.gear.Item.nRI5zBguaFFIU3rk",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.365",
+        "systemId": "vagabond",
+        "systemVersion": "6.3.1",
+        "createdTime": 1791645107442,
+        "modifiedTime": 1791645107442,
+        "lastModifiedBy": "13p65OEadZSZVLRk"
+      },
+      "_id": "8ZO4Hw8Asc64eqNz",
+      "_key": "!actors.items!Yj7hxhiROZCgAZ9j.8ZO4Hw8Asc64eqNz"
+    },
+    {
+      "name": "Horse, war",
+      "type": "container",
+      "img": "/icons/environment/people/cavalry-heavy.webp",
+      "system": {
+        "description": "<p><strong>Riding Animal.</strong> Travel Speed 8 mi per Shift · Capacity 16 Slots.</p><p>A willing Being can be mounted by riders that are at least one Size smaller as an Action or by skipping their Move. Intelligent Mounts act of their own accord, but controlled Mounts obey the rider, who uses the Mount's Speed instead of their own. The Mount uses the rider's applicable Skill for Checks.</p>",
+        "slots": 0,
+        "capacity": 16,
+        "gridPosition": 0,
+        "locked": true,
+        "speed": 40,
+        "crawl": 120,
+        "travel": 8,
+        "items": [],
+        "baseCost": {
+          "gold": 25,
+          "silver": 0,
+          "copper": 0
+        }
+      },
+      "effects": [],
       "folder": null,
-      "_id": "9EOXHKuEP4grBcim",
-      "sort": 0,
-      "_key": "!actors.items!Yj7hxhiROZCgAZ9j.9EOXHKuEP4grBcim"
+      "sort": 600000,
+      "ownership": {
+        "default": 0,
+        "13p65OEadZSZVLRk": 3
+      },
+      "flags": {
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.bPUHfAjYIBUFKrJn",
+            "category": "Transportation & Cargo"
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Compendium.vagabond.gear.Item.bPUHfAjYIBUFKrJn",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.369",
+        "systemId": "vagabond",
+        "systemVersion": "6.3.1",
+        "createdTime": 1791645107442,
+        "modifiedTime": 1791646330459,
+        "lastModifiedBy": "22hFZNuh12h5BExY"
+      },
+      "_id": "kHJWJ8zWerbSBQ1C",
+      "_key": "!actors.items!Yj7hxhiROZCgAZ9j.kHJWJ8zWerbSBQ1C"
+    },
+    {
+      "name": "Mule",
+      "type": "container",
+      "img": "/icons/environment/creatures/horses.webp",
+      "system": {
+        "description": "<p><strong>Riding Animal.</strong> Travel Speed 6 mi per Shift · Capacity 11 Slots.</p><p>A willing Being can be mounted by riders that are at least one Size smaller as an Action or by skipping their Move. Intelligent Mounts act of their own accord, but controlled Mounts obey the rider, who uses the Mount's Speed instead of their own. The Mount uses the rider's applicable Skill for Checks.</p>",
+        "slots": 0,
+        "capacity": 11,
+        "gridPosition": 0,
+        "locked": true,
+        "speed": 30,
+        "crawl": 90,
+        "travel": 6,
+        "items": [],
+        "baseCost": {
+          "gold": 3,
+          "silver": 0,
+          "copper": 0
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 700000,
+      "ownership": {
+        "default": 0,
+        "13p65OEadZSZVLRk": 3
+      },
+      "flags": {
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.LlAPtwpe0srRqd9b",
+            "category": "Transportation & Cargo"
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Compendium.vagabond.gear.Item.LlAPtwpe0srRqd9b",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.369",
+        "systemId": "vagabond",
+        "systemVersion": "6.3.1",
+        "createdTime": 1791645107442,
+        "modifiedTime": 1791646823460,
+        "lastModifiedBy": "22hFZNuh12h5BExY"
+      },
+      "_id": "uY16mc4fJT6UYJ6Q",
+      "_key": "!actors.items!Yj7hxhiROZCgAZ9j.uY16mc4fJT6UYJ6Q"
+    },
+    {
+      "name": "Saddle & tack",
+      "type": "container",
+      "img": "/icons/equipment/shoulder/shoulderpad-segmented-leather.webp",
+      "system": {
+        "description": "<p><strong>Tack.</strong> +5 Slots.</p>",
+        "slots": 0,
+        "capacity": 5,
+        "gridPosition": 0,
+        "locked": true,
+        "speed": 0,
+        "crawl": 0,
+        "travel": 0,
+        "items": [],
+        "baseCost": {
+          "gold": 2,
+          "silver": 50,
+          "copper": 0
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 800000,
+      "ownership": {
+        "default": 0,
+        "13p65OEadZSZVLRk": 3
+      },
+      "flags": {
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.HQjoO4qRcanj2S4K",
+            "category": "Transportation & Cargo"
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Compendium.vagabond.gear.Item.HQjoO4qRcanj2S4K",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.369",
+        "systemId": "vagabond",
+        "systemVersion": "6.3.1",
+        "createdTime": 1791645107442,
+        "modifiedTime": 1791646259944,
+        "lastModifiedBy": "22hFZNuh12h5BExY"
+      },
+      "_id": "kwkAju7pGHzZgP27",
+      "_key": "!actors.items!Yj7hxhiROZCgAZ9j.kwkAju7pGHzZgP27"
+    },
+    {
+      "name": "Cart",
+      "type": "container",
+      "img": "icons/commodities/wood/wood-wheel-brown.webp",
+      "system": {
+        "description": "<p><strong>Vehicle.</strong> +50 Slots.</p>",
+        "slots": 0,
+        "capacity": 50,
+        "gridPosition": 0,
+        "locked": true,
+        "speed": 0,
+        "crawl": 0,
+        "travel": 0,
+        "items": [],
+        "baseCost": {
+          "gold": 5,
+          "silver": 0,
+          "copper": 0
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 900000,
+      "ownership": {
+        "default": 0,
+        "13p65OEadZSZVLRk": 3
+      },
+      "flags": {
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.5NHRhQ1HcHYlo9zi",
+            "category": "Transportation & Cargo"
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Compendium.vagabond.gear.Item.5NHRhQ1HcHYlo9zi",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.365",
+        "systemId": "vagabond",
+        "systemVersion": "6.3.1",
+        "createdTime": 1791645107442,
+        "modifiedTime": 1791645107442,
+        "lastModifiedBy": "13p65OEadZSZVLRk"
+      },
+      "_id": "P4Dn4T4XrrNuQXov",
+      "_key": "!actors.items!Yj7hxhiROZCgAZ9j.P4Dn4T4XrrNuQXov"
+    },
+    {
+      "name": "Wagon",
+      "type": "container",
+      "img": "icons/environment/settlement/wagon.webp",
+      "system": {
+        "description": "<p><strong>Vehicle.</strong> +150 Slots.</p>",
+        "slots": 0,
+        "capacity": 150,
+        "gridPosition": 0,
+        "locked": true,
+        "speed": 0,
+        "crawl": 0,
+        "travel": 0,
+        "items": [],
+        "baseCost": {
+          "gold": 15,
+          "silver": 0,
+          "copper": 0
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 1000000,
+      "ownership": {
+        "default": 0,
+        "13p65OEadZSZVLRk": 3
+      },
+      "flags": {
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.XJTjKKpbc7b5E0J2",
+            "category": "Transportation & Cargo"
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Compendium.vagabond.gear.Item.XJTjKKpbc7b5E0J2",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.365",
+        "systemId": "vagabond",
+        "systemVersion": "6.3.1",
+        "createdTime": 1791645107442,
+        "modifiedTime": 1791645107442,
+        "lastModifiedBy": "13p65OEadZSZVLRk"
+      },
+      "_id": "7JyeDcj66rvFcTLz",
+      "_key": "!actors.items!Yj7hxhiROZCgAZ9j.7JyeDcj66rvFcTLz"
     }
   ],
   "effects": [],

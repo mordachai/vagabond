@@ -28,7 +28,7 @@
     "equipmentState": "unequipped",
     "armorType": "light",
     "immunities": [],
-    "gearCategory": "Trade Goods",
+    "gearCategory": "Cooking & Food",
     "alchemicalType": "concoction",
     "lore": ""
   },
@@ -48,7 +48,7 @@
     "lastModifiedBy": "13p65OEadZSZVLRk"
   },
   "_id": "9EhMvcwfPkhj1CBF",
-  "folder": "4bTRwIRF9QAQ95Nv",
+  "folder": "LWA8sFw703LrSG08",
   "sort": 225000,
   "ownership": {
     "default": 0,

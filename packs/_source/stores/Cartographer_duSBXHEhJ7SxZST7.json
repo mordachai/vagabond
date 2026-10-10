@@ -144,9 +144,9 @@
   },
   "items": [
     {
-      "name": "Spyglass",
+      "name": "Astrolabe",
       "type": "equipment",
-      "img": "icons/tools/navigation/spyglass-telescope-blue.webp",
+      "img": "icons/tools/navigation/sextant-complex-brown.webp",
       "system": {
         "description": "",
         "equipmentType": "gear",
@@ -154,8 +154,8 @@
         "equipped": false,
         "quantity": 1,
         "baseCost": {
-          "gold": 1,
-          "silver": 0,
+          "gold": 0,
+          "silver": 20,
           "copper": 0
         },
         "baseSlots": 1,
@@ -171,475 +171,41 @@
         "damageOneHand": "d6",
         "damageTwoHands": "d8",
         "equipmentState": "unequipped",
+        "armorType": "light",
         "immunities": [],
         "gearCategory": "Astronomy & Navigation",
         "alchemicalType": "concoction",
-        "lore": "",
-        "armorRating": 1,
-        "mightRequirement": 2,
-        "reflexPenalty": 1,
-        "handsRequired": 0,
-        "isTrinket": false,
-        "requiresBound": false,
-        "bound": false,
-        "relic": {
-          "powers": [],
-          "fabled": false,
-          "requiresBond": false,
-          "boundTo": "",
-          "cursed": false,
-          "consumable": false,
-          "sockets": []
-        },
-        "relicPower": {
-          "enabled": false,
-          "targets": [
-            "any"
-          ],
-          "family": "",
-          "rank": 1,
-          "requiredMaterials": []
-        },
-        "crystal": {
-          "type": "",
-          "bonus": 0,
-          "payloadUuid": "",
-          "usedThisQuest": false
-        },
-        "gridPosition": 0,
-        "containerId": null,
-        "altSkills": [],
-        "damageTypeOneHand": "-",
-        "damageTypeTwoHands": "-",
-        "armorDamage": 0,
-        "dieDamage": 0,
-        "craftMaterial": {
-          "enabled": false,
-          "key": "",
-          "value": 0
-        },
-        "toolKind": "",
-        "isSupply": false,
-        "isBeverage": false,
-        "isConsumable": false,
-        "linkedConsumable": "",
-        "uses": {
-          "max": 0,
-          "value": 0
-        },
-        "passiveCausedStatuses": [],
-        "causedStatuses": [],
-        "critCausedStatuses": [],
-        "critThresholdMod": [],
-        "blockedStatuses": [],
-        "resistedStatuses": [],
-        "coating": {
-          "sourceName": "",
-          "charges": 0,
-          "causedStatuses": []
-        },
-        "imbuedSpell": {
-          "active": false,
-          "sourceActorUuid": "",
-          "sourceActorName": "",
-          "spellUuid": "",
-          "spellName": "",
-          "spellImg": "",
-          "damageTypeKey": "",
-          "dieSize": 0,
-          "damageDice": 0,
-          "deferredMana": 0,
-          "deferredPayment": false,
-          "manaSkillKey": ""
-        },
-        "itemFx": {
-          "enabled": false,
-          "animType": "auto",
-          "hitFile": "",
-          "hitScale": 1,
-          "hitOffsetX": 0,
-          "hitDuration": 800,
-          "hitSound": "",
-          "missFile": "",
-          "missScale": 1,
-          "missDuration": 600,
-          "missSound": "",
-          "soundVolume": 0.6
-        },
-        "macro": {
-          "enabled": false,
-          "uuid": "",
-          "command": "",
-          "label": "",
-          "runAsGM": false
-        },
-        "hitMacro": {
-          "enabled": false,
-          "uuid": "",
-          "command": "",
-          "label": "",
-          "runAsGM": false
-        }
+        "lore": ""
       },
       "effects": [],
       "flags": {
         "core": {},
         "vagabond": {
           "shop": {
-            "category": "Astronomy & Navigation"
+            "category": "Astronomy & Navigation",
+            "sourceUuid": "Compendium.vagabond.gear.Item.HxzOPvH1DJBVoLyN"
           }
         }
       },
       "_stats": {
-        "coreVersion": "14.368",
-        "systemId": "vagabond",
-        "systemVersion": "5.43.0",
-        "createdTime": 1790429357430,
-        "modifiedTime": 1790429357430,
-        "lastModifiedBy": "F8lCaC2xBa4wgj43",
-        "compendiumSource": null,
+        "compendiumSource": "Compendium.vagabond.gear.Item.HxzOPvH1DJBVoLyN",
         "duplicateSource": null,
-        "exportSource": null
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "vagabond",
+        "systemVersion": "1.3.0",
+        "createdTime": 1765501419369,
+        "modifiedTime": 1765501419369,
+        "lastModifiedBy": "13p65OEadZSZVLRk"
       },
+      "_id": "2KgBi3SisOCkAMGK",
       "folder": null,
-      "_id": "qdpFpKzF69Y6ePyK",
       "sort": 0,
       "ownership": {
-        "default": 0
+        "default": 0,
+        "13p65OEadZSZVLRk": 3
       },
-      "_key": "!actors.items!duSBXHEhJ7SxZST7.qdpFpKzF69Y6ePyK"
-    },
-    {
-      "name": "Orrery",
-      "type": "equipment",
-      "img": "icons/skills/trades/academics-astronomy-navigation-purple.webp",
-      "system": {
-        "description": "",
-        "equipmentType": "gear",
-        "locked": true,
-        "equipped": false,
-        "quantity": 1,
-        "baseCost": {
-          "gold": 3,
-          "silver": 0,
-          "copper": 0
-        },
-        "baseSlots": 2,
-        "metal": "none",
-        "damageType": "-",
-        "damageAmount": "",
-        "canExplode": false,
-        "explodeValues": "",
-        "properties": [],
-        "weaponSkill": "melee",
-        "range": "close",
-        "grip": "1H",
-        "damageOneHand": "d6",
-        "damageTwoHands": "d8",
-        "equipmentState": "unequipped",
-        "immunities": [],
-        "gearCategory": "Astronomy & Navigation",
-        "alchemicalType": "concoction",
-        "lore": "",
-        "armorRating": 1,
-        "mightRequirement": 2,
-        "reflexPenalty": 2,
-        "handsRequired": 0,
-        "isTrinket": false,
-        "requiresBound": false,
-        "bound": false,
-        "relic": {
-          "powers": [],
-          "fabled": false,
-          "requiresBond": false,
-          "boundTo": "",
-          "cursed": false,
-          "consumable": false,
-          "sockets": []
-        },
-        "relicPower": {
-          "enabled": false,
-          "targets": [
-            "any"
-          ],
-          "family": "",
-          "rank": 1,
-          "requiredMaterials": []
-        },
-        "crystal": {
-          "type": "",
-          "bonus": 0,
-          "payloadUuid": "",
-          "usedThisQuest": false
-        },
-        "gridPosition": 0,
-        "containerId": null,
-        "altSkills": [],
-        "damageTypeOneHand": "-",
-        "damageTypeTwoHands": "-",
-        "armorDamage": 0,
-        "dieDamage": 0,
-        "craftMaterial": {
-          "enabled": false,
-          "key": "",
-          "value": 0
-        },
-        "toolKind": "",
-        "isSupply": false,
-        "isBeverage": false,
-        "isConsumable": false,
-        "linkedConsumable": "",
-        "uses": {
-          "max": 0,
-          "value": 0
-        },
-        "passiveCausedStatuses": [],
-        "causedStatuses": [],
-        "critCausedStatuses": [],
-        "critThresholdMod": [],
-        "blockedStatuses": [],
-        "resistedStatuses": [],
-        "coating": {
-          "sourceName": "",
-          "charges": 0,
-          "causedStatuses": []
-        },
-        "imbuedSpell": {
-          "active": false,
-          "sourceActorUuid": "",
-          "sourceActorName": "",
-          "spellUuid": "",
-          "spellName": "",
-          "spellImg": "",
-          "damageTypeKey": "",
-          "dieSize": 0,
-          "damageDice": 0,
-          "deferredMana": 0,
-          "deferredPayment": false,
-          "manaSkillKey": ""
-        },
-        "itemFx": {
-          "enabled": false,
-          "animType": "auto",
-          "hitFile": "",
-          "hitScale": 1,
-          "hitOffsetX": 0,
-          "hitDuration": 800,
-          "hitSound": "",
-          "missFile": "",
-          "missScale": 1,
-          "missDuration": 600,
-          "missSound": "",
-          "soundVolume": 0.6
-        },
-        "macro": {
-          "enabled": false,
-          "uuid": "",
-          "command": "",
-          "label": "",
-          "runAsGM": false
-        },
-        "hitMacro": {
-          "enabled": false,
-          "uuid": "",
-          "command": "",
-          "label": "",
-          "runAsGM": false
-        }
-      },
-      "effects": [],
-      "flags": {
-        "core": {},
-        "vagabond": {
-          "shop": {
-            "category": "Astronomy & Navigation"
-          }
-        }
-      },
-      "_stats": {
-        "coreVersion": "14.368",
-        "systemId": "vagabond",
-        "systemVersion": "5.43.0",
-        "createdTime": 1790429357430,
-        "modifiedTime": 1790429357430,
-        "lastModifiedBy": "F8lCaC2xBa4wgj43",
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null
-      },
-      "folder": null,
-      "_id": "RK85auB4EFevxnMY",
-      "sort": 0,
-      "ownership": {
-        "default": 0
-      },
-      "_key": "!actors.items!duSBXHEhJ7SxZST7.RK85auB4EFevxnMY"
-    },
-    {
-      "name": "Telescope",
-      "type": "equipment",
-      "img": "icons/tools/navigation/spyglass-telescope-waves-blue.webp",
-      "system": {
-        "description": "",
-        "equipmentType": "gear",
-        "locked": true,
-        "equipped": false,
-        "quantity": 1,
-        "baseCost": {
-          "gold": 2,
-          "silver": 0,
-          "copper": 0
-        },
-        "baseSlots": 2,
-        "metal": "none",
-        "damageType": "-",
-        "damageAmount": "",
-        "canExplode": false,
-        "explodeValues": "",
-        "properties": [],
-        "weaponSkill": "melee",
-        "range": "close",
-        "grip": "1H",
-        "damageOneHand": "d6",
-        "damageTwoHands": "d8",
-        "equipmentState": "unequipped",
-        "immunities": [],
-        "gearCategory": "Astronomy & Navigation",
-        "alchemicalType": "concoction",
-        "lore": "",
-        "armorRating": 1,
-        "mightRequirement": 2,
-        "reflexPenalty": 2,
-        "handsRequired": 0,
-        "isTrinket": false,
-        "requiresBound": false,
-        "bound": false,
-        "relic": {
-          "powers": [],
-          "fabled": false,
-          "requiresBond": false,
-          "boundTo": "",
-          "cursed": false,
-          "consumable": false,
-          "sockets": []
-        },
-        "relicPower": {
-          "enabled": false,
-          "targets": [
-            "any"
-          ],
-          "family": "",
-          "rank": 1,
-          "requiredMaterials": []
-        },
-        "crystal": {
-          "type": "",
-          "bonus": 0,
-          "payloadUuid": "",
-          "usedThisQuest": false
-        },
-        "gridPosition": 0,
-        "containerId": null,
-        "altSkills": [],
-        "damageTypeOneHand": "-",
-        "damageTypeTwoHands": "-",
-        "armorDamage": 0,
-        "dieDamage": 0,
-        "craftMaterial": {
-          "enabled": false,
-          "key": "",
-          "value": 0
-        },
-        "toolKind": "",
-        "isSupply": false,
-        "isBeverage": false,
-        "isConsumable": false,
-        "linkedConsumable": "",
-        "uses": {
-          "max": 0,
-          "value": 0
-        },
-        "passiveCausedStatuses": [],
-        "causedStatuses": [],
-        "critCausedStatuses": [],
-        "critThresholdMod": [],
-        "blockedStatuses": [],
-        "resistedStatuses": [],
-        "coating": {
-          "sourceName": "",
-          "charges": 0,
-          "causedStatuses": []
-        },
-        "imbuedSpell": {
-          "active": false,
-          "sourceActorUuid": "",
-          "sourceActorName": "",
-          "spellUuid": "",
-          "spellName": "",
-          "spellImg": "",
-          "damageTypeKey": "",
-          "dieSize": 0,
-          "damageDice": 0,
-          "deferredMana": 0,
-          "deferredPayment": false,
-          "manaSkillKey": ""
-        },
-        "itemFx": {
-          "enabled": false,
-          "animType": "auto",
-          "hitFile": "",
-          "hitScale": 1,
-          "hitOffsetX": 0,
-          "hitDuration": 800,
-          "hitSound": "",
-          "missFile": "",
-          "missScale": 1,
-          "missDuration": 600,
-          "missSound": "",
-          "soundVolume": 0.6
-        },
-        "macro": {
-          "enabled": false,
-          "uuid": "",
-          "command": "",
-          "label": "",
-          "runAsGM": false
-        },
-        "hitMacro": {
-          "enabled": false,
-          "uuid": "",
-          "command": "",
-          "label": "",
-          "runAsGM": false
-        }
-      },
-      "effects": [],
-      "flags": {
-        "core": {},
-        "vagabond": {
-          "shop": {
-            "category": "Astronomy & Navigation"
-          }
-        }
-      },
-      "_stats": {
-        "coreVersion": "14.368",
-        "systemId": "vagabond",
-        "systemVersion": "5.43.0",
-        "createdTime": 1790429357430,
-        "modifiedTime": 1790429357430,
-        "lastModifiedBy": "F8lCaC2xBa4wgj43",
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null
-      },
-      "folder": null,
-      "_id": "lGsisOaFEmFCY72n",
-      "sort": 0,
-      "ownership": {
-        "default": 0
-      },
-      "_key": "!actors.items!duSBXHEhJ7SxZST7.lGsisOaFEmFCY72n"
+      "_key": "!actors.items!duSBXHEhJ7SxZST7.2KgBi3SisOCkAMGK"
     },
     {
       "name": "Case, map/scroll",
@@ -669,309 +235,41 @@
         "damageOneHand": "d6",
         "damageTwoHands": "d8",
         "equipmentState": "unequipped",
+        "armorType": "light",
         "immunities": [],
         "gearCategory": "Astronomy & Navigation",
         "alchemicalType": "concoction",
-        "lore": "",
-        "armorRating": 1,
-        "mightRequirement": 2,
-        "reflexPenalty": 1,
-        "handsRequired": 0,
-        "isTrinket": false,
-        "requiresBound": false,
-        "bound": false,
-        "relic": {
-          "powers": [],
-          "fabled": false,
-          "requiresBond": false,
-          "boundTo": "",
-          "cursed": false,
-          "consumable": false,
-          "sockets": []
-        },
-        "relicPower": {
-          "enabled": false,
-          "targets": [
-            "any"
-          ],
-          "family": "",
-          "rank": 1,
-          "requiredMaterials": []
-        },
-        "crystal": {
-          "type": "",
-          "bonus": 0,
-          "payloadUuid": "",
-          "usedThisQuest": false
-        },
-        "gridPosition": 0,
-        "containerId": null,
-        "altSkills": [],
-        "damageTypeOneHand": "-",
-        "damageTypeTwoHands": "-",
-        "armorDamage": 0,
-        "dieDamage": 0,
-        "craftMaterial": {
-          "enabled": false,
-          "key": "",
-          "value": 0
-        },
-        "toolKind": "",
-        "isSupply": false,
-        "isBeverage": false,
-        "isConsumable": false,
-        "linkedConsumable": "",
-        "uses": {
-          "max": 0,
-          "value": 0
-        },
-        "passiveCausedStatuses": [],
-        "causedStatuses": [],
-        "critCausedStatuses": [],
-        "critThresholdMod": [],
-        "blockedStatuses": [],
-        "resistedStatuses": [],
-        "coating": {
-          "sourceName": "",
-          "charges": 0,
-          "causedStatuses": []
-        },
-        "imbuedSpell": {
-          "active": false,
-          "sourceActorUuid": "",
-          "sourceActorName": "",
-          "spellUuid": "",
-          "spellName": "",
-          "spellImg": "",
-          "damageTypeKey": "",
-          "dieSize": 0,
-          "damageDice": 0,
-          "deferredMana": 0,
-          "deferredPayment": false,
-          "manaSkillKey": ""
-        },
-        "itemFx": {
-          "enabled": false,
-          "animType": "auto",
-          "hitFile": "",
-          "hitScale": 1,
-          "hitOffsetX": 0,
-          "hitDuration": 800,
-          "hitSound": "",
-          "missFile": "",
-          "missScale": 1,
-          "missDuration": 600,
-          "missSound": "",
-          "soundVolume": 0.6
-        },
-        "macro": {
-          "enabled": false,
-          "uuid": "",
-          "command": "",
-          "label": "",
-          "runAsGM": false
-        },
-        "hitMacro": {
-          "enabled": false,
-          "uuid": "",
-          "command": "",
-          "label": "",
-          "runAsGM": false
-        }
+        "lore": ""
       },
       "effects": [],
       "flags": {
         "core": {},
         "vagabond": {
           "shop": {
-            "category": "Astronomy & Navigation"
+            "category": "Astronomy & Navigation",
+            "sourceUuid": "Compendium.vagabond.gear.Item.dDiqUkTeOUJJKGaO"
           }
         }
       },
       "_stats": {
-        "coreVersion": "14.368",
-        "systemId": "vagabond",
-        "systemVersion": "5.43.0",
-        "createdTime": 1790429357430,
-        "modifiedTime": 1790429357430,
-        "lastModifiedBy": "F8lCaC2xBa4wgj43",
-        "compendiumSource": null,
+        "compendiumSource": "Compendium.vagabond.gear.Item.dDiqUkTeOUJJKGaO",
         "duplicateSource": null,
-        "exportSource": null
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "vagabond",
+        "systemVersion": "1.3.0",
+        "createdTime": 1765501419369,
+        "modifiedTime": 1765501419369,
+        "lastModifiedBy": "13p65OEadZSZVLRk"
       },
-      "folder": null,
       "_id": "MWOevLcpJwM2cKXs",
+      "folder": null,
       "sort": 0,
       "ownership": {
-        "default": 0
+        "default": 0,
+        "13p65OEadZSZVLRk": 3
       },
       "_key": "!actors.items!duSBXHEhJ7SxZST7.MWOevLcpJwM2cKXs"
-    },
-    {
-      "name": "Sundial",
-      "type": "equipment",
-      "img": "icons/magic/time/day-night-sun-moon.webp",
-      "system": {
-        "description": "",
-        "equipmentType": "gear",
-        "locked": true,
-        "equipped": false,
-        "quantity": 1,
-        "baseCost": {
-          "gold": 2,
-          "silver": 50,
-          "copper": 0
-        },
-        "baseSlots": 1,
-        "metal": "none",
-        "damageType": "-",
-        "damageAmount": "",
-        "canExplode": false,
-        "explodeValues": "",
-        "properties": [],
-        "weaponSkill": "melee",
-        "range": "close",
-        "grip": "1H",
-        "damageOneHand": "d6",
-        "damageTwoHands": "d8",
-        "equipmentState": "unequipped",
-        "immunities": [],
-        "gearCategory": "Astronomy & Navigation",
-        "alchemicalType": "concoction",
-        "lore": "",
-        "armorRating": 1,
-        "mightRequirement": 2,
-        "reflexPenalty": 1,
-        "handsRequired": 0,
-        "isTrinket": false,
-        "requiresBound": false,
-        "bound": false,
-        "relic": {
-          "powers": [],
-          "fabled": false,
-          "requiresBond": false,
-          "boundTo": "",
-          "cursed": false,
-          "consumable": false,
-          "sockets": []
-        },
-        "relicPower": {
-          "enabled": false,
-          "targets": [
-            "any"
-          ],
-          "family": "",
-          "rank": 1,
-          "requiredMaterials": []
-        },
-        "crystal": {
-          "type": "",
-          "bonus": 0,
-          "payloadUuid": "",
-          "usedThisQuest": false
-        },
-        "gridPosition": 0,
-        "containerId": null,
-        "altSkills": [],
-        "damageTypeOneHand": "-",
-        "damageTypeTwoHands": "-",
-        "armorDamage": 0,
-        "dieDamage": 0,
-        "craftMaterial": {
-          "enabled": false,
-          "key": "",
-          "value": 0
-        },
-        "toolKind": "",
-        "isSupply": false,
-        "isBeverage": false,
-        "isConsumable": false,
-        "linkedConsumable": "",
-        "uses": {
-          "max": 0,
-          "value": 0
-        },
-        "passiveCausedStatuses": [],
-        "causedStatuses": [],
-        "critCausedStatuses": [],
-        "critThresholdMod": [],
-        "blockedStatuses": [],
-        "resistedStatuses": [],
-        "coating": {
-          "sourceName": "",
-          "charges": 0,
-          "causedStatuses": []
-        },
-        "imbuedSpell": {
-          "active": false,
-          "sourceActorUuid": "",
-          "sourceActorName": "",
-          "spellUuid": "",
-          "spellName": "",
-          "spellImg": "",
-          "damageTypeKey": "",
-          "dieSize": 0,
-          "damageDice": 0,
-          "deferredMana": 0,
-          "deferredPayment": false,
-          "manaSkillKey": ""
-        },
-        "itemFx": {
-          "enabled": false,
-          "animType": "auto",
-          "hitFile": "",
-          "hitScale": 1,
-          "hitOffsetX": 0,
-          "hitDuration": 800,
-          "hitSound": "",
-          "missFile": "",
-          "missScale": 1,
-          "missDuration": 600,
-          "missSound": "",
-          "soundVolume": 0.6
-        },
-        "macro": {
-          "enabled": false,
-          "uuid": "",
-          "command": "",
-          "label": "",
-          "runAsGM": false
-        },
-        "hitMacro": {
-          "enabled": false,
-          "uuid": "",
-          "command": "",
-          "label": "",
-          "runAsGM": false
-        }
-      },
-      "effects": [],
-      "flags": {
-        "core": {},
-        "vagabond": {
-          "shop": {
-            "category": "Astronomy & Navigation"
-          }
-        }
-      },
-      "_stats": {
-        "coreVersion": "14.368",
-        "systemId": "vagabond",
-        "systemVersion": "5.43.0",
-        "createdTime": 1790429357430,
-        "modifiedTime": 1790429357430,
-        "lastModifiedBy": "F8lCaC2xBa4wgj43",
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null
-      },
-      "folder": null,
-      "_id": "jRSeUxLZTjgn9Fo6",
-      "sort": 0,
-      "ownership": {
-        "default": 0
-      },
-      "_key": "!actors.items!duSBXHEhJ7SxZST7.jRSeUxLZTjgn9Fo6"
     },
     {
       "name": "Compass",
@@ -1001,143 +299,105 @@
         "damageOneHand": "d6",
         "damageTwoHands": "d8",
         "equipmentState": "unequipped",
+        "armorType": "light",
         "immunities": [],
         "gearCategory": "Astronomy & Navigation",
         "alchemicalType": "concoction",
-        "lore": "",
-        "armorRating": 1,
-        "mightRequirement": 2,
-        "reflexPenalty": 1,
-        "handsRequired": 0,
-        "isTrinket": false,
-        "requiresBound": false,
-        "bound": false,
-        "relic": {
-          "powers": [],
-          "fabled": false,
-          "requiresBond": false,
-          "boundTo": "",
-          "cursed": false,
-          "consumable": false,
-          "sockets": []
-        },
-        "relicPower": {
-          "enabled": false,
-          "targets": [
-            "any"
-          ],
-          "family": "",
-          "rank": 1,
-          "requiredMaterials": []
-        },
-        "crystal": {
-          "type": "",
-          "bonus": 0,
-          "payloadUuid": "",
-          "usedThisQuest": false
-        },
-        "gridPosition": 0,
-        "containerId": null,
-        "altSkills": [],
-        "damageTypeOneHand": "-",
-        "damageTypeTwoHands": "-",
-        "armorDamage": 0,
-        "dieDamage": 0,
-        "craftMaterial": {
-          "enabled": false,
-          "key": "",
-          "value": 0
-        },
-        "toolKind": "",
-        "isSupply": false,
-        "isBeverage": false,
-        "isConsumable": false,
-        "linkedConsumable": "",
-        "uses": {
-          "max": 0,
-          "value": 0
-        },
-        "passiveCausedStatuses": [],
-        "causedStatuses": [],
-        "critCausedStatuses": [],
-        "critThresholdMod": [],
-        "blockedStatuses": [],
-        "resistedStatuses": [],
-        "coating": {
-          "sourceName": "",
-          "charges": 0,
-          "causedStatuses": []
-        },
-        "imbuedSpell": {
-          "active": false,
-          "sourceActorUuid": "",
-          "sourceActorName": "",
-          "spellUuid": "",
-          "spellName": "",
-          "spellImg": "",
-          "damageTypeKey": "",
-          "dieSize": 0,
-          "damageDice": 0,
-          "deferredMana": 0,
-          "deferredPayment": false,
-          "manaSkillKey": ""
-        },
-        "itemFx": {
-          "enabled": false,
-          "animType": "auto",
-          "hitFile": "",
-          "hitScale": 1,
-          "hitOffsetX": 0,
-          "hitDuration": 800,
-          "hitSound": "",
-          "missFile": "",
-          "missScale": 1,
-          "missDuration": 600,
-          "missSound": "",
-          "soundVolume": 0.6
-        },
-        "macro": {
-          "enabled": false,
-          "uuid": "",
-          "command": "",
-          "label": "",
-          "runAsGM": false
-        },
-        "hitMacro": {
-          "enabled": false,
-          "uuid": "",
-          "command": "",
-          "label": "",
-          "runAsGM": false
-        }
+        "lore": ""
       },
       "effects": [],
       "flags": {
         "core": {},
         "vagabond": {
           "shop": {
-            "category": "Astronomy & Navigation"
+            "category": "Astronomy & Navigation",
+            "sourceUuid": "Compendium.vagabond.gear.Item.K5EHpROMIABuKZDR"
           }
         }
       },
       "_stats": {
-        "coreVersion": "14.368",
-        "systemId": "vagabond",
-        "systemVersion": "5.43.0",
-        "createdTime": 1790429357430,
-        "modifiedTime": 1790429357430,
-        "lastModifiedBy": "F8lCaC2xBa4wgj43",
-        "compendiumSource": null,
+        "compendiumSource": "Compendium.vagabond.gear.Item.K5EHpROMIABuKZDR",
         "duplicateSource": null,
-        "exportSource": null
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "vagabond",
+        "systemVersion": "1.3.0",
+        "createdTime": 1765501419369,
+        "modifiedTime": 1765501419369,
+        "lastModifiedBy": "13p65OEadZSZVLRk"
       },
-      "folder": null,
       "_id": "zMXUXeDjeA5Ar091",
+      "folder": null,
       "sort": 0,
       "ownership": {
-        "default": 0
+        "default": 0,
+        "13p65OEadZSZVLRk": 3
       },
       "_key": "!actors.items!duSBXHEhJ7SxZST7.zMXUXeDjeA5Ar091"
+    },
+    {
+      "name": "Orrery",
+      "type": "equipment",
+      "img": "icons/skills/trades/academics-astronomy-navigation-purple.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 3,
+          "silver": 0,
+          "copper": 0
+        },
+        "baseSlots": 2,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Astronomy & Navigation",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "category": "Astronomy & Navigation",
+            "sourceUuid": "Compendium.vagabond.gear.Item.MCZiaymjXhYo1Eqa"
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Compendium.vagabond.gear.Item.MCZiaymjXhYo1Eqa",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "vagabond",
+        "systemVersion": "1.3.0",
+        "createdTime": 1765501419369,
+        "modifiedTime": 1765501419369,
+        "lastModifiedBy": "13p65OEadZSZVLRk"
+      },
+      "_id": "RK85auB4EFevxnMY",
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "13p65OEadZSZVLRk": 3
+      },
+      "_key": "!actors.items!duSBXHEhJ7SxZST7.RK85auB4EFevxnMY"
     },
     {
       "name": "Periscope",
@@ -1167,148 +427,46 @@
         "damageOneHand": "d6",
         "damageTwoHands": "d8",
         "equipmentState": "unequipped",
+        "armorType": "light",
         "immunities": [],
         "gearCategory": "Astronomy & Navigation",
         "alchemicalType": "concoction",
-        "lore": "",
-        "armorRating": 1,
-        "mightRequirement": 2,
-        "reflexPenalty": 1,
-        "handsRequired": 0,
-        "isTrinket": false,
-        "requiresBound": false,
-        "bound": false,
-        "relic": {
-          "powers": [],
-          "fabled": false,
-          "requiresBond": false,
-          "boundTo": "",
-          "cursed": false,
-          "consumable": false,
-          "sockets": []
-        },
-        "relicPower": {
-          "enabled": false,
-          "targets": [
-            "any"
-          ],
-          "family": "",
-          "rank": 1,
-          "requiredMaterials": []
-        },
-        "crystal": {
-          "type": "",
-          "bonus": 0,
-          "payloadUuid": "",
-          "usedThisQuest": false
-        },
-        "gridPosition": 0,
-        "containerId": null,
-        "altSkills": [],
-        "damageTypeOneHand": "-",
-        "damageTypeTwoHands": "-",
-        "armorDamage": 0,
-        "dieDamage": 0,
-        "craftMaterial": {
-          "enabled": false,
-          "key": "",
-          "value": 0
-        },
-        "toolKind": "",
-        "isSupply": false,
-        "isBeverage": false,
-        "isConsumable": false,
-        "linkedConsumable": "",
-        "uses": {
-          "max": 0,
-          "value": 0
-        },
-        "passiveCausedStatuses": [],
-        "causedStatuses": [],
-        "critCausedStatuses": [],
-        "critThresholdMod": [],
-        "blockedStatuses": [],
-        "resistedStatuses": [],
-        "coating": {
-          "sourceName": "",
-          "charges": 0,
-          "causedStatuses": []
-        },
-        "imbuedSpell": {
-          "active": false,
-          "sourceActorUuid": "",
-          "sourceActorName": "",
-          "spellUuid": "",
-          "spellName": "",
-          "spellImg": "",
-          "damageTypeKey": "",
-          "dieSize": 0,
-          "damageDice": 0,
-          "deferredMana": 0,
-          "deferredPayment": false,
-          "manaSkillKey": ""
-        },
-        "itemFx": {
-          "enabled": false,
-          "animType": "auto",
-          "hitFile": "",
-          "hitScale": 1,
-          "hitOffsetX": 0,
-          "hitDuration": 800,
-          "hitSound": "",
-          "missFile": "",
-          "missScale": 1,
-          "missDuration": 600,
-          "missSound": "",
-          "soundVolume": 0.6
-        },
-        "macro": {
-          "enabled": false,
-          "uuid": "",
-          "command": "",
-          "label": "",
-          "runAsGM": false
-        },
-        "hitMacro": {
-          "enabled": false,
-          "uuid": "",
-          "command": "",
-          "label": "",
-          "runAsGM": false
-        }
+        "lore": ""
       },
       "effects": [],
       "flags": {
         "core": {},
         "vagabond": {
           "shop": {
-            "category": "Astronomy & Navigation"
+            "category": "Astronomy & Navigation",
+            "sourceUuid": "Compendium.vagabond.gear.Item.420Ttee0UiWzStAC"
           }
         }
       },
       "_stats": {
-        "coreVersion": "14.368",
-        "systemId": "vagabond",
-        "systemVersion": "5.43.0",
-        "createdTime": 1790429357430,
-        "modifiedTime": 1790429357430,
-        "lastModifiedBy": "F8lCaC2xBa4wgj43",
-        "compendiumSource": null,
+        "compendiumSource": "Compendium.vagabond.gear.Item.420Ttee0UiWzStAC",
         "duplicateSource": null,
-        "exportSource": null
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "vagabond",
+        "systemVersion": "1.3.0",
+        "createdTime": 1765501419369,
+        "modifiedTime": 1765501419369,
+        "lastModifiedBy": "13p65OEadZSZVLRk"
       },
-      "folder": null,
       "_id": "bK7KrKfycJtTQVuB",
+      "folder": null,
       "sort": 0,
       "ownership": {
-        "default": 0
+        "default": 0,
+        "13p65OEadZSZVLRk": 3
       },
       "_key": "!actors.items!duSBXHEhJ7SxZST7.bK7KrKfycJtTQVuB"
     },
     {
-      "name": "Astrolabe",
+      "name": "Spyglass",
       "type": "equipment",
-      "img": "icons/tools/navigation/sextant-complex-brown.webp",
+      "img": "icons/tools/navigation/spyglass-telescope-blue.webp",
       "system": {
         "description": "",
         "equipmentType": "gear",
@@ -1316,8 +474,8 @@
         "equipped": false,
         "quantity": 1,
         "baseCost": {
-          "gold": 0,
-          "silver": 20,
+          "gold": 1,
+          "silver": 0,
           "copper": 0
         },
         "baseSlots": 1,
@@ -1333,143 +491,169 @@
         "damageOneHand": "d6",
         "damageTwoHands": "d8",
         "equipmentState": "unequipped",
+        "armorType": "light",
         "immunities": [],
         "gearCategory": "Astronomy & Navigation",
         "alchemicalType": "concoction",
-        "lore": "",
-        "armorRating": 1,
-        "mightRequirement": 2,
-        "reflexPenalty": 1,
-        "handsRequired": 0,
-        "isTrinket": false,
-        "requiresBound": false,
-        "bound": false,
-        "relic": {
-          "powers": [],
-          "fabled": false,
-          "requiresBond": false,
-          "boundTo": "",
-          "cursed": false,
-          "consumable": false,
-          "sockets": []
-        },
-        "relicPower": {
-          "enabled": false,
-          "targets": [
-            "any"
-          ],
-          "family": "",
-          "rank": 1,
-          "requiredMaterials": []
-        },
-        "crystal": {
-          "type": "",
-          "bonus": 0,
-          "payloadUuid": "",
-          "usedThisQuest": false
-        },
-        "gridPosition": 0,
-        "containerId": null,
-        "altSkills": [],
-        "damageTypeOneHand": "-",
-        "damageTypeTwoHands": "-",
-        "armorDamage": 0,
-        "dieDamage": 0,
-        "craftMaterial": {
-          "enabled": false,
-          "key": "",
-          "value": 0
-        },
-        "toolKind": "",
-        "isSupply": false,
-        "isBeverage": false,
-        "isConsumable": false,
-        "linkedConsumable": "",
-        "uses": {
-          "max": 0,
-          "value": 0
-        },
-        "passiveCausedStatuses": [],
-        "causedStatuses": [],
-        "critCausedStatuses": [],
-        "critThresholdMod": [],
-        "blockedStatuses": [],
-        "resistedStatuses": [],
-        "coating": {
-          "sourceName": "",
-          "charges": 0,
-          "causedStatuses": []
-        },
-        "imbuedSpell": {
-          "active": false,
-          "sourceActorUuid": "",
-          "sourceActorName": "",
-          "spellUuid": "",
-          "spellName": "",
-          "spellImg": "",
-          "damageTypeKey": "",
-          "dieSize": 0,
-          "damageDice": 0,
-          "deferredMana": 0,
-          "deferredPayment": false,
-          "manaSkillKey": ""
-        },
-        "itemFx": {
-          "enabled": false,
-          "animType": "auto",
-          "hitFile": "",
-          "hitScale": 1,
-          "hitOffsetX": 0,
-          "hitDuration": 800,
-          "hitSound": "",
-          "missFile": "",
-          "missScale": 1,
-          "missDuration": 600,
-          "missSound": "",
-          "soundVolume": 0.6
-        },
-        "macro": {
-          "enabled": false,
-          "uuid": "",
-          "command": "",
-          "label": "",
-          "runAsGM": false
-        },
-        "hitMacro": {
-          "enabled": false,
-          "uuid": "",
-          "command": "",
-          "label": "",
-          "runAsGM": false
-        }
+        "lore": ""
       },
       "effects": [],
       "flags": {
         "core": {},
         "vagabond": {
           "shop": {
-            "category": "Astronomy & Navigation"
+            "category": "Astronomy & Navigation",
+            "sourceUuid": "Compendium.vagabond.gear.Item.2OpraGvajtzozyxT"
           }
         }
       },
       "_stats": {
-        "coreVersion": "14.368",
-        "systemId": "vagabond",
-        "systemVersion": "5.43.0",
-        "createdTime": 1790429357430,
-        "modifiedTime": 1790429357430,
-        "lastModifiedBy": "F8lCaC2xBa4wgj43",
-        "compendiumSource": null,
+        "compendiumSource": "Compendium.vagabond.gear.Item.2OpraGvajtzozyxT",
         "duplicateSource": null,
-        "exportSource": null
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "vagabond",
+        "systemVersion": "1.3.0",
+        "createdTime": 1765501419369,
+        "modifiedTime": 1765501419369,
+        "lastModifiedBy": "13p65OEadZSZVLRk"
       },
+      "_id": "qdpFpKzF69Y6ePyK",
       "folder": null,
-      "_id": "2KgBi3SisOCkAMGK",
       "sort": 0,
       "ownership": {
-        "default": 0
+        "default": 0,
+        "13p65OEadZSZVLRk": 3
       },
-      "_key": "!actors.items!duSBXHEhJ7SxZST7.2KgBi3SisOCkAMGK"
+      "_key": "!actors.items!duSBXHEhJ7SxZST7.qdpFpKzF69Y6ePyK"
+    },
+    {
+      "name": "Sundial",
+      "type": "equipment",
+      "img": "icons/magic/time/day-night-sun-moon.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 2,
+          "silver": 50,
+          "copper": 0
+        },
+        "baseSlots": 1,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Astronomy & Navigation",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "category": "Astronomy & Navigation",
+            "sourceUuid": "Compendium.vagabond.gear.Item.xEx5OSwbVRUlioVC"
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Compendium.vagabond.gear.Item.xEx5OSwbVRUlioVC",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "vagabond",
+        "systemVersion": "1.3.0",
+        "createdTime": 1765501419369,
+        "modifiedTime": 1765501419369,
+        "lastModifiedBy": "13p65OEadZSZVLRk"
+      },
+      "_id": "jRSeUxLZTjgn9Fo6",
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "13p65OEadZSZVLRk": 3
+      },
+      "_key": "!actors.items!duSBXHEhJ7SxZST7.jRSeUxLZTjgn9Fo6"
+    },
+    {
+      "name": "Telescope",
+      "type": "equipment",
+      "img": "icons/tools/navigation/spyglass-telescope-waves-blue.webp",
+      "system": {
+        "description": "",
+        "equipmentType": "gear",
+        "locked": true,
+        "equipped": false,
+        "quantity": 1,
+        "baseCost": {
+          "gold": 2,
+          "silver": 0,
+          "copper": 0
+        },
+        "baseSlots": 2,
+        "metal": "none",
+        "damageType": "-",
+        "damageAmount": "",
+        "canExplode": false,
+        "explodeValues": "",
+        "properties": [],
+        "weaponSkill": "melee",
+        "range": "close",
+        "grip": "1H",
+        "damageOneHand": "d6",
+        "damageTwoHands": "d8",
+        "equipmentState": "unequipped",
+        "armorType": "light",
+        "immunities": [],
+        "gearCategory": "Astronomy & Navigation",
+        "alchemicalType": "concoction",
+        "lore": ""
+      },
+      "effects": [],
+      "flags": {
+        "core": {},
+        "vagabond": {
+          "shop": {
+            "category": "Astronomy & Navigation",
+            "sourceUuid": "Compendium.vagabond.gear.Item.Qgd6djHTjRfPDZLO"
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Compendium.vagabond.gear.Item.Qgd6djHTjRfPDZLO",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "vagabond",
+        "systemVersion": "1.3.0",
+        "createdTime": 1765501419369,
+        "modifiedTime": 1765501419369,
+        "lastModifiedBy": "13p65OEadZSZVLRk"
+      },
+      "_id": "lGsisOaFEmFCY72n",
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "13p65OEadZSZVLRk": 3
+      },
+      "_key": "!actors.items!duSBXHEhJ7SxZST7.lGsisOaFEmFCY72n"
     }
   ],
   "effects": [],

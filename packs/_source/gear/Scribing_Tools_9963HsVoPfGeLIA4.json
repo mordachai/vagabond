@@ -28,7 +28,7 @@
     "equipmentState": "unequipped",
     "armorType": "light",
     "immunities": [],
-    "gearCategory": "Tools",
+    "gearCategory": "Books & Magic",
     "alchemicalType": "concoction",
     "lore": ""
   },
@@ -48,7 +48,7 @@
     "lastModifiedBy": "13p65OEadZSZVLRk"
   },
   "_id": "9963HsVoPfGeLIA4",
-  "folder": "zjkpcB7upRLmY779",
+  "folder": "jDENOiYNJhBGEQx1",
   "sort": 387500,
   "ownership": {
     "default": 0,

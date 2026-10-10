@@ -1,0 +1,558 @@
+{
+  "folder": "ZBlhFd167vzgGztg",
+  "name": "Docks",
+  "type": "shop",
+  "_id": "cZlPFfFmGuHfsV9g",
+  "img": "/icons/equipment/neck/pendant-gold-anchor.webp",
+  "system": {
+    "subtitle": "Boats & Ships",
+    "shopkeeper": {
+      "name": "",
+      "title": "",
+      "img": "icons/svg/mystery-man.svg",
+      "description": ""
+    },
+    "pricing": {
+      "markup": 0,
+      "buyRatio": 0,
+      "saleDiscount": 0,
+      "presenceEnabled": false,
+      "presenceStat": "presence",
+      "presencePctPerPoint": 2
+    },
+    "buysCategories": [],
+    "resell": true,
+    "relationships": {},
+    "relationLevels": {
+      "hostile": 50,
+      "unfriendly": 20,
+      "neutral": 0,
+      "friendly": -10,
+      "allied": -20
+    },
+    "haggle": {
+      "mode": "off",
+      "skill": "influence",
+      "difficultyMod": 0,
+      "successPct": 10,
+      "critPct": 20,
+      "lockoutOnFail": true
+    },
+    "stock": {
+      "unlimitedByDefault": true,
+      "catalogPacks": [],
+      "restockTable": ""
+    },
+    "usePurse": false,
+    "currency": {
+      "gold": 0,
+      "silver": 0,
+      "copper": 0
+    }
+  },
+  "prototypeToken": {
+    "name": "Docks",
+    "displayName": 0,
+    "actorLink": true,
+    "width": 1,
+    "height": 1,
+    "depth": 1,
+    "texture": {
+      "src": "/icons/equipment/neck/pendant-gold-anchor.webp",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": 0,
+    "displayBars": 0,
+    "bar1": {
+      "attribute": "health"
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": false,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "items": [
+    {
+      "name": "Canoe",
+      "type": "container",
+      "img": "icons/commodities/wood/lumber-plank.webp",
+      "system": {
+        "description": "<p><strong>Vessel.</strong> Travel Speed 12 mi per Shift · Capacity 5 Slots.</p>",
+        "slots": 0,
+        "capacity": 5,
+        "gridPosition": 0,
+        "locked": true,
+        "speed": 0,
+        "crawl": 0,
+        "travel": 12,
+        "items": [],
+        "baseCost": {
+          "gold": 5,
+          "silver": 0,
+          "copper": 0
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 1100000,
+      "ownership": {
+        "default": 0,
+        "13p65OEadZSZVLRk": 3
+      },
+      "flags": {
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.X6zGgajivakWKX4U",
+            "category": "Transportation & Cargo"
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Compendium.vagabond.gear.Item.X6zGgajivakWKX4U",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.369",
+        "systemId": "vagabond",
+        "systemVersion": "6.3.1",
+        "createdTime": 1791645107442,
+        "modifiedTime": 1791646429612,
+        "lastModifiedBy": "22hFZNuh12h5BExY"
+      },
+      "_id": "pPIxRVCXX4iXWdks",
+      "_key": "!actors.items!cZlPFfFmGuHfsV9g.pPIxRVCXX4iXWdks"
+    },
+    {
+      "name": "Caravel",
+      "type": "container",
+      "img": "/icons/tools/nautical/steering-wheel.webp",
+      "system": {
+        "description": "<p><strong>Vessel.</strong> Travel Speed 30 mi per Shift · Capacity 1000 Slots.</p>",
+        "slots": 0,
+        "capacity": 1000,
+        "gridPosition": 0,
+        "locked": true,
+        "speed": 0,
+        "crawl": 0,
+        "travel": 30,
+        "items": [],
+        "baseCost": {
+          "gold": 1000,
+          "silver": 0,
+          "copper": 0
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 1200000,
+      "ownership": {
+        "default": 0,
+        "13p65OEadZSZVLRk": 3
+      },
+      "flags": {
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.S7AWNc6MKMEYLoDy",
+            "category": "Transportation & Cargo"
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Compendium.vagabond.gear.Item.S7AWNc6MKMEYLoDy",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.369",
+        "systemId": "vagabond",
+        "systemVersion": "6.3.1",
+        "createdTime": 1791645107442,
+        "modifiedTime": 1791646728692,
+        "lastModifiedBy": "22hFZNuh12h5BExY"
+      },
+      "_id": "UJ5nnZvWM3YPqThi",
+      "_key": "!actors.items!cZlPFfFmGuHfsV9g.UJ5nnZvWM3YPqThi"
+    },
+    {
+      "name": "Galley",
+      "type": "container",
+      "img": "icons/environment/settlement/ship.webp",
+      "system": {
+        "description": "<p><strong>Vessel.</strong> Travel Speed 24 mi per Shift · Capacity 3000 Slots.</p>",
+        "slots": 0,
+        "capacity": 3000,
+        "gridPosition": 0,
+        "locked": true,
+        "speed": 0,
+        "crawl": 0,
+        "travel": 24,
+        "items": [],
+        "baseCost": {
+          "gold": 3000,
+          "silver": 0,
+          "copper": 0
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 1300000,
+      "ownership": {
+        "default": 0,
+        "13p65OEadZSZVLRk": 3
+      },
+      "flags": {
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.CGwh9VjHJmS8TFPU",
+            "category": "Transportation & Cargo"
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Compendium.vagabond.gear.Item.CGwh9VjHJmS8TFPU",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.365",
+        "systemId": "vagabond",
+        "systemVersion": "6.3.1",
+        "createdTime": 1791645107442,
+        "modifiedTime": 1791645107442,
+        "lastModifiedBy": "13p65OEadZSZVLRk"
+      },
+      "_id": "aEEPgSqsavqiIlFm",
+      "_key": "!actors.items!cZlPFfFmGuHfsV9g.aEEPgSqsavqiIlFm"
+    },
+    {
+      "name": "Keelboat",
+      "type": "container",
+      "img": "icons/environment/vehicles/boat-fishing-masted.webp",
+      "system": {
+        "description": "<p><strong>Vessel.</strong> Travel Speed 6 mi per Shift · Capacity 300 Slots.</p>",
+        "slots": 0,
+        "capacity": 300,
+        "gridPosition": 0,
+        "locked": true,
+        "speed": 0,
+        "crawl": 0,
+        "travel": 6,
+        "items": [],
+        "baseCost": {
+          "gold": 300,
+          "silver": 0,
+          "copper": 0
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 1400000,
+      "ownership": {
+        "default": 0,
+        "13p65OEadZSZVLRk": 3
+      },
+      "flags": {
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.U53zVmT7KdtwzDhW",
+            "category": "Transportation & Cargo"
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Compendium.vagabond.gear.Item.U53zVmT7KdtwzDhW",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.365",
+        "systemId": "vagabond",
+        "systemVersion": "6.3.1",
+        "createdTime": 1791645107442,
+        "modifiedTime": 1791645107442,
+        "lastModifiedBy": "13p65OEadZSZVLRk"
+      },
+      "_id": "jZ3Zlb8KwRazjeDP",
+      "_key": "!actors.items!cZlPFfFmGuHfsV9g.jZ3Zlb8KwRazjeDP"
+    },
+    {
+      "name": "Longship",
+      "type": "container",
+      "img": "/icons/skills/trades/profession-sailing-ship.webp",
+      "system": {
+        "description": "<p><strong>Vessel.</strong> Travel Speed 30 mi per Shift · Capacity 1000 Slots.</p>",
+        "slots": 0,
+        "capacity": 1000,
+        "gridPosition": 0,
+        "locked": true,
+        "speed": 0,
+        "crawl": 0,
+        "travel": 30,
+        "items": [],
+        "baseCost": {
+          "gold": 1000,
+          "silver": 0,
+          "copper": 0
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 1500000,
+      "ownership": {
+        "default": 0,
+        "13p65OEadZSZVLRk": 3
+      },
+      "flags": {
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.oUPpAQVWJZHuAx5a",
+            "category": "Transportation & Cargo"
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Compendium.vagabond.gear.Item.oUPpAQVWJZHuAx5a",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.369",
+        "systemId": "vagabond",
+        "systemVersion": "6.3.1",
+        "createdTime": 1791645107442,
+        "modifiedTime": 1791646741072,
+        "lastModifiedBy": "22hFZNuh12h5BExY"
+      },
+      "_id": "y1uqCpkXjqA5ijkf",
+      "_key": "!actors.items!cZlPFfFmGuHfsV9g.y1uqCpkXjqA5ijkf"
+    },
+    {
+      "name": "Rowboat",
+      "type": "container",
+      "img": "/icons/skills/melee/hand-grip-staff-yellow-brown.webp",
+      "system": {
+        "description": "<p><strong>Vessel.</strong> Travel Speed 6 mi per Shift · Capacity 30 Slots.</p>",
+        "slots": 0,
+        "capacity": 30,
+        "gridPosition": 0,
+        "locked": true,
+        "speed": 0,
+        "crawl": 0,
+        "travel": 6,
+        "items": [],
+        "baseCost": {
+          "gold": 5,
+          "silver": 0,
+          "copper": 0
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 1600000,
+      "ownership": {
+        "default": 0,
+        "13p65OEadZSZVLRk": 3
+      },
+      "flags": {
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.lDxbTpIQCT3Wcfpu",
+            "category": "Transportation & Cargo"
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Compendium.vagabond.gear.Item.lDxbTpIQCT3Wcfpu",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.369",
+        "systemId": "vagabond",
+        "systemVersion": "6.3.1",
+        "createdTime": 1791645107442,
+        "modifiedTime": 1791646536141,
+        "lastModifiedBy": "22hFZNuh12h5BExY"
+      },
+      "_id": "MGtVwgrHWnv3NVRE",
+      "_key": "!actors.items!cZlPFfFmGuHfsV9g.MGtVwgrHWnv3NVRE"
+    },
+    {
+      "name": "Sailboat",
+      "type": "container",
+      "img": "icons/magic/air/wind-weather-sailing-ship.webp",
+      "system": {
+        "description": "<p><strong>Vessel.</strong> Travel Speed 30 mi per Shift · Capacity 1000 Slots.</p>",
+        "slots": 0,
+        "capacity": 1000,
+        "gridPosition": 0,
+        "locked": true,
+        "speed": 0,
+        "crawl": 0,
+        "travel": 30,
+        "items": [],
+        "baseCost": {
+          "gold": 1000,
+          "silver": 0,
+          "copper": 0
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 1700000,
+      "ownership": {
+        "default": 0,
+        "13p65OEadZSZVLRk": 3
+      },
+      "flags": {
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.IM0nvq37EJdxpWyN",
+            "category": "Transportation & Cargo"
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Compendium.vagabond.gear.Item.IM0nvq37EJdxpWyN",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.365",
+        "systemId": "vagabond",
+        "systemVersion": "6.3.1",
+        "createdTime": 1791645107442,
+        "modifiedTime": 1791645107442,
+        "lastModifiedBy": "13p65OEadZSZVLRk"
+      },
+      "_id": "VvIDem40jBTBXV8K",
+      "_key": "!actors.items!cZlPFfFmGuHfsV9g.VvIDem40jBTBXV8K"
+    },
+    {
+      "name": "Warship",
+      "type": "container",
+      "img": "/icons/weapons/artillery/cannon-engraved-gold.webp",
+      "system": {
+        "description": "<p><strong>Vessel.</strong> Travel Speed 24 mi per Shift · Capacity 2500 Slots.</p>",
+        "slots": 0,
+        "capacity": 2500,
+        "gridPosition": 0,
+        "locked": true,
+        "speed": 0,
+        "crawl": 0,
+        "travel": 24,
+        "items": [],
+        "baseCost": {
+          "gold": 2500,
+          "silver": 0,
+          "copper": 0
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 1800000,
+      "ownership": {
+        "default": 0,
+        "13p65OEadZSZVLRk": 3
+      },
+      "flags": {
+        "vagabond": {
+          "shop": {
+            "sourceUuid": "Compendium.vagabond.gear.Item.hAbGrVjtKx7DbamA",
+            "category": "Transportation & Cargo"
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Compendium.vagabond.gear.Item.hAbGrVjtKx7DbamA",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.369",
+        "systemId": "vagabond",
+        "systemVersion": "6.3.1",
+        "createdTime": 1791645107442,
+        "modifiedTime": 1791646870372,
+        "lastModifiedBy": "22hFZNuh12h5BExY"
+      },
+      "_id": "wYopV2KOjqVZmrUH",
+      "_key": "!actors.items!cZlPFfFmGuHfsV9g.wYopV2KOjqVZmrUH"
+    }
+  ],
+  "effects": [],
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.368",
+    "systemId": "vagabond",
+    "systemVersion": "5.43.0",
+    "createdTime": 1790429357430,
+    "modifiedTime": 1790431493797,
+    "lastModifiedBy": "F8lCaC2xBa4wgj43",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "ownership": {
+    "default": 0,
+    "F8lCaC2xBa4wgj43": 3
+  },
+  "sort": 300000,
+  "_key": "!actors!cZlPFfFmGuHfsV9g"
+}

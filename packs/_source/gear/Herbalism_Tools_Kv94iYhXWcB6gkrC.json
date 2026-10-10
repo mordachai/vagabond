@@ -28,7 +28,7 @@
     "equipmentState": "unequipped",
     "armorType": "light",
     "immunities": [],
-    "gearCategory": "Tools",
+    "gearCategory": "Outdoors",
     "alchemicalType": "concoction",
     "lore": "",
     "toolKind": "herbalism"
@@ -49,7 +49,7 @@
     "lastModifiedBy": "13p65OEadZSZVLRk"
   },
   "_id": "Kv94iYhXWcB6gkrC",
-  "folder": "zjkpcB7upRLmY779",
+  "folder": "JWxsOwy6496521vG",
   "sort": 350000,
   "ownership": {
     "default": 0,

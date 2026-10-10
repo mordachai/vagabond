@@ -28,7 +28,7 @@
     "equipmentState": "unequipped",
     "armorType": "light",
     "immunities": [],
-    "gearCategory": "Tools",
+    "gearCategory": "Containers & Packs",
     "alchemicalType": "concoction",
     "lore": ""
   },
@@ -48,7 +48,7 @@
     "lastModifiedBy": "13p65OEadZSZVLRk"
   },
   "_id": "Y71rYP5OpBrvExfN",
-  "folder": "zjkpcB7upRLmY779",
+  "folder": "a2YDphO1S4SW4bI0",
   "sort": 600000,
   "ownership": {
     "default": 0,
