@@ -68,9 +68,14 @@ export class AlchemyLab {
     return app._alchemyLab ??= this.createState();
   }
 
-  /** Whether `actor` has an Alchemy lab at all (class formula grants — Babele-safe). */
+  /**
+   * Whether `actor` has an Alchemy lab at all (class formula grants — Babele-safe). AE bonus
+   * formulae alone don't open one: without a class grant there is no value cap to learn under.
+   */
   static hasLab(actor) {
-    return actor?.type === 'character' && AlchemyHelper.formulaGrantsFor(actor) > 0;
+    if (actor?.type !== 'character') return false;
+    const level = actor.system?.attributes?.level?.value ?? 1;
+    return AlchemyHelper.formulaGrantsAtLevel(AlchemyHelper.classItemOf(actor), level) > 0;
   }
 
   /** Re-render the lab of `app` (only the lab when the host supports it). */

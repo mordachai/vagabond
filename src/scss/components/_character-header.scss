@@ -1217,6 +1217,17 @@
   }
 }
 
+/* Bonus Spells Known reminder (AE system.bonusSpells) — shares the mana-skill-row layout */
+.mana-skill-row.bonus-spells-row {
+  padding-top: 0;
+
+  .bonus-spells-value {
+    font-size: 14px;
+    font-weight: 600;
+    font-family: $font-secondary;
+  }
+}
+
 /* Mana skill row - label and select on same line, baseline aligned */
 .mana-skill-row {
   display: flex;

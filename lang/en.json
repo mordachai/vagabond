@@ -1714,7 +1714,8 @@
           "mana.current": {"label": "Mana"},
           "mana.max": {"label": "Max Mana"},
           "mana.castingMax": {"label": "Mana/Cast"},
-          "manaSkill": {"label": "Casting Skill:"}
+          "manaSkill": {"label": "Casting Skill:"},
+          "bonusSpells": {"label": "Bonus Spells Known:", "hint": "Extra Spells you can learn on top of your Class (from Active Effects)."}
         },
         "NamePlaceholder": "Character Name"
       },

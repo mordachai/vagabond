@@ -1,5 +1,11 @@
 # Changelog
 
+## 6.4.1
+- **Learn one more Formula or Spell.** Two new effects in the Active Effects compendium (Buffs & Bonuses): **+1 Known Formula** and **+1 Spell**. Drop one on a Character to reward them; drop it again for each extra.
+- **+1 Known Formula** raises the formulae limit: the Alchemy lab Library lets the Character learn one more, and Level Up counts it. Needs a Class that grants formulae (Alchemist).
+- **+1 Spell** shows "Bonus Spells Known: +1" on the Magic tab under Casting Skill. Spells Known are not limited, so drag the new Spell onto the sheet as usual.
+- For custom effects: the keys are `system.craft.bonusFormulas` and `system.bonusSpells` (Add, numbers or formulas).
+
 ## 6.4.0
 - Fixed the gear compendium to match the book. Added folders: Smithy, Transportation & Cargo. Removed folders: Tools, Trade Goods.
 - Fixed shop contents to match. Added shops: Apothecary, Docks, Magic Shop (was Magical Trinkets). Removed shops: Reliquary, Trade House.

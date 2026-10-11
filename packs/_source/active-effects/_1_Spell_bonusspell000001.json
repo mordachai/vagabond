@@ -1,0 +1,51 @@
+{
+  "name": "+1 Spell",
+  "_id": "bonusspell000001",
+  "img": "icons/svg/daze.svg",
+  "type": "base",
+  "system": {
+    "changes": [
+      {
+        "key": "system.bonusSpells",
+        "type": "add",
+        "value": "1",
+        "phase": "initial",
+        "priority": null
+      }
+    ]
+  },
+  "disabled": false,
+  "start": null,
+  "duration": {
+    "value": null,
+    "units": "seconds",
+    "expiry": null,
+    "expired": false
+  },
+  "description": "<p>You can learn 1 more Spell than your Class grants. Stacks: drop it again for each extra Spell.</p>",
+  "origin": null,
+  "tint": "#ffffff",
+  "transfer": false,
+  "statuses": [],
+  "showIcon": 2,
+  "folder": "vacatbuff000fold",
+  "flags": {
+    "vagabond": {
+      "applicationMode": "permanent",
+      "canonicalId": "bonus-spell-known-plus-1"
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "6.4.0",
+    "createdTime": 1791678323658,
+    "modifiedTime": 1791678323658,
+    "lastModifiedBy": null,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "sort": 0,
+  "_key": "!effects!bonusspell000001"
+}

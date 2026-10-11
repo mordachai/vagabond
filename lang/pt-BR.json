@@ -1728,7 +1728,8 @@
           "mana.current": {"label": "Mana"},
           "mana.max": {"label": "Mana Máxima"},
           "mana.castingMax": {"label": "Mana/Conjuração"},
-          "manaSkill": {"label": "Perícia de Conjuração:"}
+          "manaSkill": {"label": "Perícia de Conjuração:"},
+          "bonusSpells": {"label": "Magias Conhecidas Extras:", "hint": "Magias extras que você pode aprender além da sua Classe (de Efeitos Ativos)."}
         },
         "NamePlaceholder": "Nome do Personagem"
       },

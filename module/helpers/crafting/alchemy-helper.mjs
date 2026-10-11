@@ -49,10 +49,16 @@ export class AlchemyHelper {
     }
   }
 
-  /** Total formula picks granted by the class at the actor's current level. */
+  /** Extra formula picks from Active Effects (`system.craft.bonusFormulas`, GM rewards). */
+  static bonusFormulasFor(actor) {
+    const bonus = actor?.system?.craft?.bonusFormulas;
+    return typeof bonus === 'number' ? bonus : 0;
+  }
+
+  /** Total formula picks at the actor's current level: class grants + AE bonus. */
   static formulaGrantsFor(actor) {
     const level = actor?.system?.attributes?.level?.value ?? 1;
-    return this.formulaGrantsAtLevel(this.classItemOf(actor), level);
+    return this.formulaGrantsAtLevel(this.classItemOf(actor), level) + this.bonusFormulasFor(actor);
   }
 
   /** Remaining formula picks (grants minus already-known formulas). */

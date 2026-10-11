@@ -19079,6 +19079,7 @@ ol#combat-tracker.directory-list {
   /* Pulse animation for the active tooltip area */
   /* First-time tooltip for sliding panel */
   /* Panel content area */
+  /* Bonus Spells Known reminder (AE system.bonusSpells) — shares the mana-skill-row layout */
   /* Mana skill row - label and select on same line, baseline aligned */
   /* Mana info row - 3 columns, 2 rows (labels top, values bottom) */
   /* =========================================
@@ -25397,6 +25398,14 @@ ol#combat-tracker.directory-list {
   border-bottom: none;
   margin-bottom: 0;
   padding-bottom: 0;
+}
+.vagabond .mana-skill-row.bonus-spells-row {
+  padding-top: 0;
+}
+.vagabond .mana-skill-row.bonus-spells-row .bonus-spells-value {
+  font-size: 14px;
+  font-weight: 600;
+  font-family: "Manofa", serif;
 }
 .vagabond .mana-skill-row {
   display: flex;

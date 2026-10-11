@@ -669,7 +669,20 @@ export default class VagabondCharacter extends VagabondActorBase {
         new fields.StringField({ blank: true }),
         { initial: [], label: "Mix (Combine two Alchemical Items)" }
       ),
+      // Extra formula picks on top of the Class grants (GM reward AE: ADD 1). Counted by
+      // AlchemyHelper.formulaGrantsFor, so the Library lets the player learn one more.
+      bonusFormulas: new fields.ArrayField(
+        new fields.StringField({ blank: true }),
+        { initial: [], label: "Bonus Formulae Known", hint: "Extra Alchemy formula picks on top of the Class grants. Formula-capable." }
+      ),
     });
+
+    // Extra Spells Known on top of the Class table (GM reward AE: ADD 1). Not enforced —
+    // Spells are learned freely — shown on the Magic tab as a reminder.
+    schema.bonusSpells = new fields.ArrayField(
+      new fields.StringField({ blank: true }),
+      { initial: [], label: "Bonus Spells Known", hint: "Extra Spells Known on top of the Class table. Formula-capable." }
+    );
 
     // Bonuses container for various character bonuses
     schema.bonuses = new fields.SchemaField({
@@ -1010,6 +1023,8 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.craft.catalyze = [];
     this.craft.primaMateria = [];
     this.craft.mix = [];
+    this.craft.bonusFormulas = [];
+    this.bonusSpells = [];
 
     // Reset specific die size bonuses (per-weapon-skill, dynamic)
     for (const skill of (CONFIG.VAGABOND.homebrew?.skills ?? []).filter(s => s.isWeaponSkill)) {
@@ -1242,6 +1257,8 @@ export default class VagabondCharacter extends VagabondActorBase {
     this.craft.catalyze = this._evaluateFormulaField(this.craft.catalyze, rollData) > 0;
     this.craft.primaMateria = this._evaluateFormulaField(this.craft.primaMateria, rollData) > 0;
     this.craft.mix = this._evaluateFormulaField(this.craft.mix, rollData) > 0;
+    this.craft.bonusFormulas = Math.max(0, Math.floor(this._evaluateFormulaField(this.craft.bonusFormulas, rollData)));
+    this.bonusSpells = Math.max(0, Math.floor(this._evaluateFormulaField(this.bonusSpells, rollData)));
 
     // Evaluate dice bonuses (join arrays into formula strings)
     this.universalDamageDice = this.universalDamageDice.filter(d => !!d).join(' + ');

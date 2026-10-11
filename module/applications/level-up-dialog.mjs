@@ -319,11 +319,14 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
   }
 
   /**
-   * Formula picks to make at the new Level: the class's total grants by then minus what is known.
+   * Formula picks to make at the new Level: the class's total grants by then (+ AE bonus formulae,
+   * only for a class that grants any) minus what is known.
    * Covers a Level that adds a grant (Alchemist 4 / 7 / 10) and picks still open from earlier Levels.
    */
   get newFormulaSlots() {
-    const grants = AlchemyHelper.formulaGrantsAtLevel(this.classItem, this.newLevel);
+    const classGrants = AlchemyHelper.formulaGrantsAtLevel(this.classItem, this.newLevel);
+    if (!classGrants) return 0;
+    const grants = classGrants + AlchemyHelper.bonusFormulasFor(this.actor);
     return Math.max(0, grants - this.knownFormulas.length);
   }
 
