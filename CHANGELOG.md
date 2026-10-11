@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 6.4.0
 - Fixed the gear compendium to match the book. Added folders: Smithy, Transportation & Cargo. Removed folders: Tools, Trade Goods.
 - Fixed shop contents to match. Added shops: Apothecary, Docks, Magic Shop (was Magical Trinkets). Removed shops: Reliquary, Trade House.
 - Added mounts, vehicles and boats as Container items with the book's cost, capacity and Travel Speed.
