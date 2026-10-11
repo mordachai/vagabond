@@ -1,0 +1,62 @@
+{
+  "name": "Rowboat",
+  "type": "construct",
+  "img": "/icons/skills/melee/hand-grip-staff-yellow-brown.webp",
+  "system": {
+    "kind": "vessel",
+    "type": "",
+    "speed": 0,
+    "crawl": 0,
+    "travel": 6,
+    "biography": "<p><strong>Vessel.</strong> Travel Speed 6 mi per Shift · Capacity 30 Slots.</p><p>Value: 5g.</p>"
+  },
+  "prototypeToken": {
+    "name": "Rowboat",
+    "actorLink": false,
+    "disposition": 0,
+    "width": 1,
+    "height": 1,
+    "texture": {
+      "src": "/icons/skills/melee/hand-grip-staff-yellow-brown.webp",
+      "fit": "contain"
+    },
+    "bar1": {
+      "attribute": null
+    }
+  },
+  "items": [
+    {
+      "name": "Hold",
+      "type": "container",
+      "img": "icons/containers/chest/chest-reinforced-steel-brown.webp",
+      "system": {
+        "description": "<p>Rowboat: carries 30 Slots of Items.</p>",
+        "slots": 0,
+        "capacity": 30,
+        "gridPosition": 0,
+        "items": [],
+        "baseCost": {
+          "gold": 0,
+          "silver": 0,
+          "copper": 0
+        },
+        "locked": true
+      },
+      "effects": [],
+      "flags": {},
+      "sort": 0,
+      "_id": "FCZwd1srR9mCDOm5",
+      "_key": "!actors.items!4TJb4JnqqQlCMtph.FCZwd1srR9mCDOm5"
+    }
+  ],
+  "effects": [],
+  "folder": "C4D159k33OcY3zcc",
+  "flags": {
+    "vagabond": {
+      "sourceItemId": "lDxbTpIQCT3Wcfpu"
+    }
+  },
+  "sort": 1600000,
+  "_id": "4TJb4JnqqQlCMtph",
+  "_key": "!actors!4TJb4JnqqQlCMtph"
+}

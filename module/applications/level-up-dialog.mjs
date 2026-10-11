@@ -20,6 +20,7 @@ import { VagabondChatCard } from '../helpers/chat-card.mjs';
 import { effectModeToChangeType } from '../helpers/effects.mjs';
 import { AlchemyHelper } from '../helpers/crafting/alchemy-helper.mjs';
 import { AlchemyLab } from '../helpers/alchemy-lab.mjs';
+import { GrantedItems } from '../helpers/granted-items.mjs';
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
@@ -1588,9 +1589,8 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
   async _undoLevel() {
     const snap = this._levelSnapshot;
     if (!snap) return;
-    if (snap.classItemId && this.actor.items.has(snap.classItemId)) {
-      await this.actor.deleteEmbeddedDocuments('Item', [snap.classItemId]);
-    }
+    const createdIds = [snap.classItemId, ...(snap.grantedItemIds ?? [])].filter(id => id && this.actor.items.has(id));
+    if (createdIds.length) await this.actor.deleteEmbeddedDocuments('Item', createdIds);
     await this.actor.update({
       'system.attributes.level.value': snap.level,
       'system.attributes.xp': snap.xp,
@@ -1694,6 +1694,7 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
       level: currentLevel,
       xp: this.actor.system.attributes.xp || 0,
       classItemId: null,
+      grantedItemIds: [],
     };
 
     if (classDoc) {
@@ -1706,6 +1707,17 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
     const update = { 'system.attributes.level.value': newLevel };
     if (!destiny) update['system.attributes.xp'] = 0;
     await this.actor.update(update);
+
+    // Granted items of the class features gained at this Level (claws, breath weapons…), created equipped
+    const classItem = this.actor.items.find(i => i.type === 'class');
+    const grants = GrantedItems.entriesFor(classItem, { levels: [newLevel] });
+    if (grants.length) {
+      const grantData = await GrantedItems.buildItemData(grants, { existing: this.actor.items.contents });
+      if (grantData.length) {
+        const created = await this.actor.createEmbeddedDocuments('Item', grantData);
+        this._levelSnapshot.grantedItemIds = created.map(i => i.id);
+      }
+    }
 
     this.levelApplied = true;
     this.xpAwarded = true; // prevent re-awarding

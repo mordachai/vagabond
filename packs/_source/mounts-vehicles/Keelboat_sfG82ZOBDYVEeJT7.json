@@ -1,0 +1,62 @@
+{
+  "name": "Keelboat",
+  "type": "construct",
+  "img": "icons/environment/vehicles/boat-fishing-masted.webp",
+  "system": {
+    "kind": "vessel",
+    "type": "",
+    "speed": 0,
+    "crawl": 0,
+    "travel": 6,
+    "biography": "<p><strong>Vessel.</strong> Travel Speed 6 mi per Shift · Capacity 300 Slots.</p><p>Value: 300g.</p>"
+  },
+  "prototypeToken": {
+    "name": "Keelboat",
+    "actorLink": false,
+    "disposition": 0,
+    "width": 2,
+    "height": 2,
+    "texture": {
+      "src": "icons/environment/vehicles/boat-fishing-masted.webp",
+      "fit": "contain"
+    },
+    "bar1": {
+      "attribute": null
+    }
+  },
+  "items": [
+    {
+      "name": "Hold",
+      "type": "container",
+      "img": "icons/containers/chest/chest-reinforced-steel-brown.webp",
+      "system": {
+        "description": "<p>Keelboat: carries 300 Slots of Items.</p>",
+        "slots": 0,
+        "capacity": 300,
+        "gridPosition": 0,
+        "items": [],
+        "baseCost": {
+          "gold": 0,
+          "silver": 0,
+          "copper": 0
+        },
+        "locked": true
+      },
+      "effects": [],
+      "flags": {},
+      "sort": 0,
+      "_id": "BasJC0pQXbL17nup",
+      "_key": "!actors.items!sfG82ZOBDYVEeJT7.BasJC0pQXbL17nup"
+    }
+  ],
+  "effects": [],
+  "folder": "C4D159k33OcY3zcc",
+  "flags": {
+    "vagabond": {
+      "sourceItemId": "U53zVmT7KdtwzDhW"
+    }
+  },
+  "sort": 1400000,
+  "_id": "sfG82ZOBDYVEeJT7",
+  "_key": "!actors!sfG82ZOBDYVEeJT7"
+}

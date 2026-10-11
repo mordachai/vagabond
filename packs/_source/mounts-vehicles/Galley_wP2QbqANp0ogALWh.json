@@ -1,0 +1,62 @@
+{
+  "name": "Galley",
+  "type": "construct",
+  "img": "icons/environment/settlement/ship.webp",
+  "system": {
+    "kind": "vessel",
+    "type": "",
+    "speed": 0,
+    "crawl": 0,
+    "travel": 24,
+    "biography": "<p><strong>Vessel.</strong> Travel Speed 24 mi per Shift · Capacity 3000 Slots.</p><p>Value: 3000g.</p>"
+  },
+  "prototypeToken": {
+    "name": "Galley",
+    "actorLink": false,
+    "disposition": 0,
+    "width": 4,
+    "height": 4,
+    "texture": {
+      "src": "icons/environment/settlement/ship.webp",
+      "fit": "contain"
+    },
+    "bar1": {
+      "attribute": null
+    }
+  },
+  "items": [
+    {
+      "name": "Hold",
+      "type": "container",
+      "img": "icons/containers/chest/chest-reinforced-steel-brown.webp",
+      "system": {
+        "description": "<p>Galley: carries 3000 Slots of Items.</p>",
+        "slots": 0,
+        "capacity": 3000,
+        "gridPosition": 0,
+        "items": [],
+        "baseCost": {
+          "gold": 0,
+          "silver": 0,
+          "copper": 0
+        },
+        "locked": true
+      },
+      "effects": [],
+      "flags": {},
+      "sort": 0,
+      "_id": "cGHjWbaxU8PMw5z1",
+      "_key": "!actors.items!wP2QbqANp0ogALWh.cGHjWbaxU8PMw5z1"
+    }
+  ],
+  "effects": [],
+  "folder": "C4D159k33OcY3zcc",
+  "flags": {
+    "vagabond": {
+      "sourceItemId": "CGwh9VjHJmS8TFPU"
+    }
+  },
+  "sort": 1300000,
+  "_id": "wP2QbqANp0ogALWh",
+  "_key": "!actors!wP2QbqANp0ogALWh"
+}

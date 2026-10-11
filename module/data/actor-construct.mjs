@@ -14,6 +14,9 @@ export default class VagabondConstruct extends VagabondActorBase {
     // Construct type label (e.g. "Galleon", "Mech", "Fortress")
     schema.type = new fields.StringField({ initial: '', label: 'Construct Type' });
 
+    // Kind (CONFIG.VAGABOND.constructKinds): mount / vehicle / vessel / structure
+    schema.kind = new fields.StringField({ initial: 'vehicle', blank: false, label: 'Kind' });
+
     // Movement speeds
     schema.speed = new fields.NumberField({ ...requiredInteger, initial: 0, min: 0, label: 'Speed' });
     schema.crawl = new fields.NumberField({ ...requiredInteger, initial: 0, min: 0, label: 'Crawl Speed' });

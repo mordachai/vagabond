@@ -309,7 +309,7 @@ export class RollHandler {
         if (extraTargets > 0 && baseDieIdx >= 0) {
           cleaveDieOverride = dieSteps[Math.max(0, baseDieIdx - extraTargets)];
         }
-      } else if (targetsAtRollTime.length > 1) {
+      } else if (targetsAtRollTime.length > 1 && !item.system.areaAttack) {
         targetsAtRollTime.splice(1);
       }
 

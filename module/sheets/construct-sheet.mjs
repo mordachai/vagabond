@@ -4,6 +4,7 @@ import { TargetHelper } from '../helpers/target-helper.mjs';
 import { VagabondDamageHelper } from '../helpers/damage-helper.mjs';
 import { VagabondDiceAppearance } from '../helpers/dice-appearance.mjs';
 import { bindPartHpClickers } from '../helpers/part-hp-clicker.mjs';
+import { TradeHelper } from '../helpers/trade-helper.mjs';
 
 /**
  * Construct actor sheet.
@@ -89,6 +90,9 @@ export class VagabondConstructSheet extends VagabondActorSheet {
     // Raw items — resolved per-part in _preparePartContext
     context.constructParts = this.actor.items.filter(i => i.type === 'vehiclePart');
     context.hold = this.actor.items.filter(i => i.type === 'container');
+    context.kinds = Object.entries(CONFIG.VAGABOND.constructKinds).map(([key, k]) => ({
+      key, label: k.label, icon: k.icon, selected: key === this.actor.system.kind,
+    }));
 
     return context;
   }
@@ -183,6 +187,14 @@ export class VagabondConstructSheet extends VagabondActorSheet {
    * @private
    */
   _bindConstructActions(signal) {
+    // Kind cards → write the kind (one click = one update)
+    this.element.querySelectorAll('.construct-kind[data-kind]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (!this.isEditable || btn.classList.contains('is-selected')) return;
+        this.actor.update({ 'system.kind': btn.dataset.kind });
+      }, { signal });
+    });
+
     // Add part
     this.element.querySelectorAll('[data-action="addPart"]').forEach(btn => {
       btn.addEventListener('click', async () => {
@@ -565,6 +577,47 @@ export class VagabondConstructSheet extends VagabondActorSheet {
   }
 
   /** @override */
+  /**
+   * The Hold a non-container drop goes into: the Hold card under the cursor, else the first one.
+   * Null (warned) when the construct has no Hold — an item embedded on it would not show anywhere.
+   */
+  _dropHold(event) {
+    const id = event.target?.closest?.('.construct-hold-card[data-item-id]')?.dataset.itemId;
+    const hold = (id && this.actor.items.get(id)) || this.actor.items.find((i) => i.type === 'container');
+    if (!hold) ui.notifications.warn(game.i18n.localize('VAGABOND.Actor.Party.Transport.NoHoldDrop'));
+    return hold ?? null;
+  }
+
+  /**
+   * Containers dropped here become Holds (base behaviour); any other inventory item goes into a
+   * Hold through free trade.
+   * @override
+   */
+  async _onDropItem(event, data) {
+    if (!this.actor.isOwner) return false;
+    const item = await Item.implementation.fromDropData(data);
+    if (!item || item.type !== 'equipment' || item.parent?.uuid === this.actor.uuid) return super._onDropItem(event, data);
+    const hold = this._dropHold(event);
+    if (!hold) return false;
+    const qty = await TradeHelper.pickQuantity(item, event);
+    if (!qty) return false;
+    return TradeHelper.moveItem({ source: { itemUuid: item.uuid }, dest: { containerUuid: hold.uuid }, qty });
+  }
+
+  /** @override */
+  async _onDropContainerItem(event, data) {
+    if (!this.actor.isOwner || !data?.containerUuid) return false;
+    const hold = this._dropHold(event);
+    if (!hold) return false;
+    const qty = await TradeHelper.pickQuantity(data.itemData, event);
+    if (!qty) return false;
+    return TradeHelper.moveItem({
+      source: { containerUuid: data.containerUuid, entryId: data.entryId ?? data.itemData?._id ?? null, index: data.itemIndex },
+      dest: { containerUuid: hold.uuid },
+      qty,
+    });
+  }
+
   async close(options) {
     this._listenerController?.abort();
     this._listenerController = null;

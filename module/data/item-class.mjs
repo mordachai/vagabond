@@ -110,6 +110,13 @@ export default class VagabondClass extends VagabondItemBase {
           { initial: [] }
         ),
 
+        // Granted items - items the character receives (created + equipped) when this grant is gained,
+        // e.g. Draken's Breath Attack weapon, natural claws (array of UUIDs; see helpers/granted-items.mjs)
+        grantedItems: new fields.ArrayField(
+          new fields.StringField({ initial: '', blank: true }),
+          { initial: [] }
+        ),
+
         // Perk amount - number of perks granted by this feature
         perkAmount: new fields.NumberField({ initial: 0, integer: true, min: 0, max: 10 }),
 

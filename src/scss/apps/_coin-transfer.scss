@@ -1,0 +1,282 @@
+// Coin transfer dialog (TradeHelper.moveCoins): From column (giving purse) | To column (recipients),
+// amount + Split in the footer. Neutral tan frames, yellow for the picked giver / recipients,
+// green only on the Split button once it can run. Colors are the theme-aware $c-* tokens.
+
+.coin-transfer-dialog {
+  .window-content { padding: 10px; }
+
+  .ct-root {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-family: $font-title;
+    color: $c-text-1;
+  }
+
+  // Buttons inherit Foundry's fixed metrics: reset them on every custom button
+  button {
+    height: auto;
+    line-height: normal;
+  }
+
+  .ct-abbr {
+    margin-left: 1px;
+    color: $c-text-2;
+  }
+
+  /* ---- Columns ---- */
+
+  .ct-columns {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .ct-col {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+    max-height: 360px;
+    padding: 6px 8px 8px;
+    overflow-y: auto;
+    border: 2px solid $c-tan-lite;
+    border-radius: 8px;
+    background: $c-inset-2;
+  }
+
+  .ct-col-title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0 0 2px;
+    padding: 0;
+    border: none;
+    font-family: $font-title;
+    font-size: 1.1rem;
+    color: $c-text-1;
+
+    i { color: $c-text-2; }
+  }
+
+  .ct-arrow {
+    align-self: center;
+    font-size: 1.2rem;
+    color: $c-text-2;
+  }
+
+  /* ---- Section labels ---- */
+
+  .ct-section-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 4px 0 2px;
+    padding: 0;
+    font-family: $font-title;
+    font-size: 0.8rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: $c-text-2;
+
+    &::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: $c-tan;
+    }
+  }
+
+  // Group heading doubles as "select all / none"
+  .ct-group-toggle {
+    width: 100%;
+    background: none;
+    border: none;
+    box-shadow: none;
+    cursor: pointer;
+    text-align: left;
+
+    &:hover { color: $c-text-1; }
+    &:focus,
+    &:focus-visible { outline: none; box-shadow: none; }
+  }
+
+  /* ---- Rows (givers + recipients) ---- */
+
+  .ct-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    min-width: 0;
+    margin: 0;
+    padding: 3px 6px;
+    font-family: $font-title;
+    font-size: 0.95rem;
+    color: $c-text-1;
+    text-align: left;
+    background: $c-inset-1;
+    border: 2px solid transparent;
+    border-radius: 6px;
+    cursor: pointer;
+    opacity: 0.75;
+    transition: border-color 0.15s, box-shadow 0.15s, opacity 0.15s;
+
+    &:hover { opacity: 1; border-color: $c-tan-lite; }
+
+    &.is-selected {
+      opacity: 1;
+      border-color: $c-yellow;
+      box-shadow: 0 0 8px -2px $c-yellow, inset 0 0 0 1px $c-yellow;
+    }
+
+    &:focus,
+    &:focus-visible { outline: none; }
+  }
+
+  .ct-row-img {
+    width: 28px;
+    height: 28px;
+    flex: none;
+    object-fit: cover;
+    object-position: top center;
+    border: none;
+    border-radius: 4px;
+    background: $c-black;
+  }
+
+  .ct-row-name {
+    flex: 1;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .ct-purse {
+    flex: none;
+    display: flex;
+    gap: 6px;
+    font-size: 0.9rem;
+  }
+
+  .ct-check {
+    flex: none;
+    font-size: 0.8rem;
+    color: $c-yellow;
+    visibility: hidden;
+  }
+  .ct-row.is-selected .ct-check { visibility: visible; }
+
+  .ct-none {
+    font-style: italic;
+    color: $c-muted;
+  }
+
+  /* ---- Footer: amount + split ---- */
+
+  .ct-footer {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .ct-amount-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .ct-amount-label {
+    margin: 0;
+    &::after { display: none; }
+  }
+
+  .ct-coin {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 2px;
+    font-size: 1.1rem;
+
+    input {
+      width: 64px;
+      height: 28px;
+      padding: 0 4px;
+      text-align: right;
+      font-family: $font-title;
+      font-size: 1.1rem;
+      color: $c-text-1;
+      background: $c-inset-1;
+      border: 1px solid $c-tan-lite;
+      border-radius: 4px;
+
+      &:focus { outline: none; border-color: $c-yellow; }
+    }
+  }
+
+  // Coin letter = stepper (left-click +1, right-click −1)
+  .ct-step {
+    padding: 0 3px;
+    border-radius: 4px;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s, color 0.15s;
+
+    &:hover { color: $c-text-1; background: $c-inset-1; }
+  }
+
+  .ct-chip {
+    flex: none;
+    padding: 3px 10px;
+    font-family: $font-title;
+    font-size: 0.95rem;
+    color: $c-text-1;
+    background: $c-inset-2;
+    border: 1px solid $c-tan-lite;
+    border-radius: 12px;
+    cursor: pointer;
+
+    &:hover { border-color: $c-yellow; }
+  }
+  .ct-chip:not(.ct-chip--icon) { margin-left: auto; }
+  .ct-chip--icon { padding: 3px 8px; }
+
+  .ct-preview {
+    min-height: 1.2em;
+    text-align: center;
+    font-size: 0.95rem;
+    color: $c-text-2;
+  }
+
+  // Neutral until it can run; ready = green border + green tint
+  .ct-split {
+    align-self: center;
+    min-width: 190px;
+    height: 34px;
+    padding: 0 18px;
+    font-family: $font-primary;
+    font-size: 1.05rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: $c-muted;
+    background: $c-inset-1;
+    border: 2px solid $c-faint;
+    border-radius: 8px;
+    transition: background 0.15s ease, box-shadow 0.15s ease;
+
+    &.is-ready {
+      color: $c-text-1;
+      border-color: $c-green;
+      background: color-mix(in srgb, #{$c-green} 30%, transparent);
+
+      i { color: $c-yellow; }
+
+      &:hover {
+        background: color-mix(in srgb, #{$c-green} 55%, transparent);
+        box-shadow: 0 0 8px -2px $c-green;
+      }
+    }
+  }
+}

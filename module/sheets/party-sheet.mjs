@@ -7,6 +7,8 @@ import { DowntimeHelper, SHIFTS_PER_DAY } from '../helpers/downtime-helper.mjs';
 import { ProgressClock } from '../documents/progress-clock.mjs';
 import { EquipmentHelper } from '../helpers/equipment-helper.mjs';
 import { CurrencyHelper } from '../helpers/currency-helper.mjs';
+import { TradeHelper } from '../helpers/trade-helper.mjs';
+import { CoinTransferDialog } from '../applications/coin-transfer-dialog.mjs';
 import { VagabondTextParser } from '../helpers/text-parser.mjs';
 import { buildStatsSection, buildSlotsRow, buildWeaponProperties } from '../helpers/item-sections.mjs';
 
@@ -30,6 +32,7 @@ export class VagabondPartySheet extends VagabondActorSheet {
     /** UUIDs of the inventory items whose detail accordion is open (survives re-renders). */
     this._invOpen = new Set();
     this._removeMode = false;
+    this._transportEdit = false;
   }
 
   /**
@@ -120,6 +123,12 @@ export class VagabondPartySheet extends VagabondActorSheet {
 
     // Aggregate supplies across all members (characters only)
     context.supplies = this._aggregateSupplies(context.members);
+
+    // Party token look: the grouped party art, or the transport it travels with
+    context.tokenMode = this._tokenModeView();
+
+    // GM note: players of the party's Characters who don't own the party sheet
+    context.partyOwnershipNote = this._ownershipNote(this.actor);
 
     return context;
   }
@@ -260,6 +269,8 @@ export class VagabondPartySheet extends VagabondActorSheet {
         value: sys.health.value,
         max: sys.health.max,
         pct: hpPct,
+        // The bar turns red at 20% HP or less (yellow above)
+        low: hpPct <= 20,
       },
       fatigue,
       fatigueMax,
@@ -347,12 +358,15 @@ export class VagabondPartySheet extends VagabondActorSheet {
       { rations: 0, beverages: 0, currency: { gold: 0, silver: 0, copper: 0 } }
     );
 
-    // Rations / Beverages stored in the party's own containers count too
-    const stored = this._containerSupplyRows();
+    // Rations / Beverages stored in the transports' Holds count too
+    const stored = this._holdSupplyRows();
     totals.rations += stored.reduce((n, r) => n + r._supplyRations, 0);
     totals.beverages += stored.reduce((n, r) => n + r._supplyBeverages, 0);
+    for (const row of stored) {
+      for (const coin of CurrencyHelper.DENOMINATIONS) totals.currency[coin] += row.currency[coin] ?? 0;
+    }
 
-    // Hover breakdowns (per character member, then per party container). Wealth breakdown is GM-only.
+    // Hover breakdowns (per character member, then per transport Hold). Wealth breakdown is GM-only.
     const characters = members.filter(m => !m.isNPC);
     totals.rationsTooltip = this._supplyBreakdownHtml(
       'VAGABOND.Actor.Party.Card.Rations', [...characters, ...stored], m => [m._supplyRations ?? 0]);
@@ -361,7 +375,7 @@ export class VagabondPartySheet extends VagabondActorSheet {
     if (game.user.isGM) {
       const abbr = key => game.i18n.localize(`VAGABOND.Currency.${key}.abbr`);
       totals.currencyTooltip = this._supplyBreakdownHtml(
-        'VAGABOND.Actor.Party.Card.TotalWealth', characters,
+        'VAGABOND.Actor.Party.Card.TotalWealth', [...characters, ...stored],
         m => [m.currency.gold, m.currency.silver, m.currency.copper],
         [abbr('Gold'), abbr('Silver'), abbr('Copper')]);
     }
@@ -369,22 +383,23 @@ export class VagabondPartySheet extends VagabondActorSheet {
   }
 
   /**
-   * One row per party Container item with the Rations / Beverages stored inside it
-   * (a container's contents are item snapshots in `system.items`, not embedded items).
-   * @returns {{name: string, _supplyRations: number, _supplyBeverages: number}[]}
+   * One row per Hold (Container item) of the party's transports with the Rations / Beverages
+   * and coins stored inside it (a container's contents are item snapshots in `system.items`, not embedded items).
+   * @returns {{name: string, _supplyRations: number, _supplyBeverages: number, currency: Object}[]}
    * @private
    */
-  _containerSupplyRows() {
+  _holdSupplyRows() {
     const count = (contents, flag) => (contents ?? [])
       .filter(data => data?.type === 'equipment' && data.system?.[flag])
       .reduce((n, data) => n + (Number(data.system.quantity ?? 1) || 0), 0);
-    return this.actor.items
+    return this._transportEntries().filter((entry) => this._inUse(entry)).flatMap(({ actor }) => actor.items
       .filter(item => item.type === 'container')
       .map(item => ({
-        name: item.name,
+        name: `${actor.name} · ${item.name}`,
         _supplyRations: count(item.system.items, 'isSupply'),
         _supplyBeverages: count(item.system.items, 'isBeverage'),
-      }));
+        currency: { gold: 0, silver: 0, copper: 0, ...item.system.currency },
+      })));
   }
 
   /**
@@ -604,8 +619,9 @@ export class VagabondPartySheet extends VagabondActorSheet {
     } else if (partId === 'inventory') {
       partContext.tab = context.tabs[partId];
       partContext.inventoryCards = this._inventoryCards();
-      partContext.containers = this._containerChips();
-      partContext.canEditContainers = this.actor.isOwner;
+      partContext.transports = this._transportCards();
+      partContext.canEditTransports = this.isEditable;
+      partContext.transportEditing = this._transportEditing();
     } else if (partId === 'notes') {
       partContext.tab = context.tabs[partId];
       const TE = foundry.applications.ux.TextEditor.implementation;
@@ -669,8 +685,11 @@ export class VagabondPartySheet extends VagabondActorSheet {
 
     // Re-register actor update hook (re-renders only the party tab)
     if (this._actorUpdateHookId) Hooks.off('updateActor', this._actorUpdateHookId);
-    this._actorUpdateHookId = Hooks.on('updateActor', () => {
-      this.render(false, { parts: ['party'] });
+    this._actorUpdateHookId = Hooks.on('updateActor', (actor) => {
+      // Members and transports also show in the Inventory tab (items, coins)
+      const shown = (this.actor.system.transports ?? []).some((t) => t.uuid === actor.uuid)
+        || (this.actor.system.members ?? []).includes(actor.uuid);
+      this.render(false, { parts: shown ? ['party', 'inventory'] : ['party'] });
     });
 
     // Re-register ActiveEffect hooks so status changes on members refresh the party tab immediately.
@@ -699,11 +718,12 @@ export class VagabondPartySheet extends VagabondActorSheet {
     }
     const refreshInventory = foundry.utils.debounce(
       () => this.render(false, { parts: ['party', 'inventory'] }), 100);
-    // ...and so do the party's own container items (the sleeve at the top of the tab)
+    // ...and so do the transports' Holds (the Transport sleeve at the top of the tab)
     const onMemberItem = (item) => {
       const parentUuid = item.parent?.uuid;
       if (!parentUuid) return;
-      if (parentUuid === this.actor.uuid || this.actor.system.members?.includes(parentUuid)) refreshInventory();
+      if (this.actor.system.members?.includes(parentUuid)
+        || (this.actor.system.transports ?? []).some((t) => t.uuid === parentUuid)) refreshInventory();
     };
     this._itemHookIds = {
       create: Hooks.on('createItem', onMemberItem),
@@ -953,13 +973,10 @@ export class VagabondPartySheet extends VagabondActorSheet {
       if (this.isEditable) this.actor.update({ 'system.hazardous': !this.actor.system.hazardous });
     });
     on('partyTravelStep', (el) => this._stepTravelShifts(Number(el.dataset.step)));
+    on('toggleTokenMode', () => this._toggleTokenMode());
     on('partyTravel', () => this._partyTravel());
     on('partyTravelReset', () => {
       if (game.user.isGM) this.actor.update({ 'system.travelShifts': 0 });
-    });
-    on('toggleSpeedSource', () => {
-      if (!this.isEditable) return;
-      this.actor.update({ 'system.speedSource': this._speedSource() === 'container' ? 'party' : 'container' });
     });
 
     // Travel field shows the Pace / Hazardous miles; while focused it edits the base Travel Speed
@@ -982,11 +999,23 @@ export class VagabondPartySheet extends VagabondActorSheet {
       applyRemoveMode();
     });
     on('toggleInvItem', (el) => this._toggleInventoryItem(el.closest('.inv-item')));
-    on('openContainer', (el) => fromUuidSync(el.closest('[data-item-uuid]')?.dataset.itemUuid)?.sheet?.render(true));
-    on('deleteContainer', (el) => this._deleteContainer(el.closest('[data-item-uuid]')?.dataset.itemUuid));
+    on('shareCoins', (el) => {
+      const member = this._syncActor(el.closest('[data-actor-uuid]')?.dataset.actorUuid);
+      if (member) CoinTransferDialog.open(member, { party: this.actor });
+    });
+    this._bindTradeDrag(signal);
+    on('openContainer', (el) => { try { fromUuidSync(el.closest('[data-item-uuid]')?.dataset.itemUuid)?.sheet?.render(true); } catch { /* gone */ } });
+    on('openTransport', (el) => this._syncActor(el.closest('[data-transport-uuid]')?.dataset.transportUuid)?.sheet?.render(true));
+    on('removeTransport', (el) => this._removeTransport(el.closest('[data-transport-uuid]')?.dataset.transportUuid));
+    on('toggleRider', (el) => this._toggleRider(el.closest('[data-transport-uuid]')?.dataset.transportUuid, el.dataset.actorUuid));
+    on('activateTransport', (el) => this._activateTransport(el.closest('[data-transport-uuid]')?.dataset.transportUuid));
+    on('toggleTransportEdit', () => {
+      this._transportEdit = !this._transportEditing();
+      this.render(false, { parts: ['inventory'] });
+    });
 
-    // Containers sleeve: lit while a drag hovers it (the drop itself goes through _onDropItem)
-    this.element.querySelectorAll('.party-containers').forEach((zone) => {
+    // Transport sleeve: lit while a drag hovers it (the drop itself goes through _onDropActor / _onDropItem)
+    this.element.querySelectorAll('.party-transports').forEach((zone) => {
       const over = (on) => zone.classList.toggle('is-over', on);
       zone.addEventListener('dragenter', () => over(true), { signal });
       zone.addEventListener('dragover', () => over(true), { signal });
@@ -1039,32 +1068,33 @@ export class VagabondPartySheet extends VagabondActorSheet {
   }
 
   /**
-   * Inventory tab data: one card per Character with its items grouped by type
-   * (Weapon, Armor, Alchemical, Relic, Gear). Slots and Value are for the whole stack.
+   * Inventory tab cards: one per Character with its coins and items grouped by type (Weapon,
+   * Armor, Alchemical, Relic, Gear). Each card is a free-trade drop target (TradeHelper); rows
+   * drag only where the user may take (their own Character, or any for the GM). Transport Holds
+   * open as container sheets from the Transport row.
    * @returns {Object[]}
    */
   _inventoryCards() {
     const cards = [];
     for (const uuid of this.actor.system.members ?? []) {
-      let member = null;
-      try { member = fromUuidSync(uuid); } catch { member = null; }
+      const member = this._syncActor(uuid);
       if (member?.type !== 'character') continue;
+      const canTake = TradeHelper.canTake(game.user, member);
 
       const buckets = Object.fromEntries(INVENTORY_GROUPS.map((key) => [key, []]));
       for (const item of member.items) {
-        if (item.type !== 'equipment' && item.type !== 'container') continue;
+        if (!TradeHelper.TRADE_TYPES.includes(item.type) || item.system.containerId) continue;
         const type = item.system.equipmentType;
-        const key = INVENTORY_GROUPS.includes(type) ? type : 'gear';
-        const quantity = Math.max(0, Number(item.system.quantity ?? 1));
-        buckets[key].push({
+        buckets[INVENTORY_GROUPS.includes(type) ? type : 'gear'].push({
           uuid: item.uuid,
           name: item.name,
           img: item.img,
-          quantity,
+          quantity: TradeHelper.quantityOf(item),
+          equipped: EquipmentHelper.isEquipped(item),
+          draggable: canTake,
           open: this._invOpen.has(item.uuid),
         });
       }
-
       const groups = INVENTORY_GROUPS
         .filter((key) => buckets[key].length)
         .map((key) => ({
@@ -1073,12 +1103,18 @@ export class VagabondPartySheet extends VagabondActorSheet {
           items: buckets[key].sort((a, b) => a.name.localeCompare(b.name)),
         }));
 
+      const wallet = CurrencyHelper.walletOf(member);
       cards.push({
         uuid: member.uuid,
         name: member.name,
         img: member.img,
+        canTake,
+        locked: !canTake,
         slotsUsed: member.system.inventory?.occupiedSlots ?? 0,
         slotsTotal: member.system.inventory?.maxSlots ?? 0,
+        coins: CurrencyHelper.DENOMINATIONS.map((key) => ({
+          key, value: wallet?.[key] ?? 0, abbr: game.i18n.localize(`VAGABOND.Currency.${key.capitalize()}.abbr`),
+        })),
         groups,
       });
     }
@@ -1093,30 +1129,235 @@ export class VagabondPartySheet extends VagabondActorSheet {
     return copper > 0 ? CurrencyHelper.format(copper) : '';
   }
 
-  /** The party's own Container items, for the sleeve at the top of the Inventory tab. */
-  _containerChips() {
-    return this.actor.items
-      .filter((item) => item.type === 'container')
-      .map((item) => ({
-        uuid: item.uuid,
-        name: item.name,
-        img: item.img,
-        used: item.system.currentCapacity ?? 0,
-        capacity: item.system.capacity ?? 0,
-      }))
-      .sort((a, b) => a.name.localeCompare(b.name));
+  /**
+   * Free trade drag sources and drop highlights. Rows the user may take carry a plain `Item`
+   * drag payload, so they also drop on Character sheets, container sheets and the HUD.
+   * @param {AbortSignal} signal
+   */
+  _bindTradeDrag(signal) {
+    const root = this.element;
+    for (const row of root.querySelectorAll('.inv-item[draggable="true"]')) {
+      row.addEventListener('dragstart', (event) => {
+        event.stopPropagation();
+        event.dataTransfer.setData('text/plain', JSON.stringify({ type: 'Item', uuid: row.dataset.itemUuid }));
+        // copyMove: other sheets' drop zones may ask for either effect; the trade always moves
+        event.dataTransfer.effectAllowed = 'copyMove';
+        row.classList.add('is-dragging');
+        root.classList.add('is-trading');
+      }, { signal });
+      row.addEventListener('dragend', () => {
+        row.classList.remove('is-dragging');
+        root.classList.remove('is-trading');
+        root.querySelectorAll('.is-over').forEach((el) => el.classList.remove('is-over'));
+      }, { signal });
+    }
+
+    // Light the card / transport / Hold under the cursor
+    for (const zone of root.querySelectorAll('.party-inv-card, .pt-card, .pt-hold')) {
+      const over = (on) => zone.classList.toggle('is-over', on);
+      zone.addEventListener('dragover', () => over(true), { signal });
+      zone.addEventListener('dragleave', (event) => { if (!zone.contains(event.relatedTarget)) over(false); }, { signal });
+      zone.addEventListener('drop', () => {
+        over(false);
+        root.classList.remove('is-trading');
+      }, { signal });
+    }
   }
 
-  /** Remove one of the party's containers (with its contents) after a confirmation. */
-  async _deleteContainer(uuid) {
-    if (!uuid || !this.actor.isOwner) return;
-    const item = fromUuidSync(uuid);
-    if (!item || item.parent?.uuid !== this.actor.uuid) return;
-    const confirmed = await foundry.applications.api.DialogV2.confirm({
-      window: { title: item.name },
-      content: `<p>${game.i18n.format('VAGABOND.Actor.Party.Inventory.Containers.DeleteConfirm', { name: foundry.utils.escapeHTML(item.name) })}</p>`,
+  /**
+   * Where an item dropped on this sheet goes: a Hold button, a transport card (its first Hold),
+   * or a Character's card (Inventory or Party tab). Anywhere else is refused.
+   * @returns {{actorUuid?: string, containerUuid?: string}|null}  null = refused (already warned)
+   */
+  _tradeDest(event) {
+    const target = event.target;
+    const hold = target?.closest?.('.pt-hold[data-item-uuid]');
+    if (hold) return { containerUuid: hold.dataset.itemUuid };
+    const transportUuid = target?.closest?.('[data-transport-uuid]')?.dataset.transportUuid;
+    if (transportUuid) {
+      const first = this._syncActor(transportUuid)?.items.find((item) => item.type === 'container');
+      if (!first) {
+        ui.notifications.warn(this._transportText('NoHoldDrop'));
+        return null;
+      }
+      return { containerUuid: first.uuid };
+    }
+    const member = target?.closest?.('.party-inv-card[data-actor-uuid], .party-member-card[data-actor-uuid]')?.dataset.actorUuid;
+    if (member && this._syncActor(member)?.type === 'character') return { actorUuid: member };
+    // The party itself holds no items: drop on a Character, a transport or a Hold
+    ui.notifications.warn(game.i18n.localize('VAGABOND.Trade.DropOnCard'));
+    return null;
+  }
+
+  /** Localized `VAGABOND.Actor.Party.Transport.<key>`, formatted when `data` is given. */
+  _transportText(key, data) {
+    const path = `VAGABOND.Actor.Party.Transport.${key}`;
+    return data ? game.i18n.format(path, data) : game.i18n.localize(path);
+  }
+
+  /** Non-GM users who own at least one of the party's Characters. */
+  _partyPlayers() {
+    const characters = (this.actor.system.members ?? [])
+      .map((uuid) => this._syncActor(uuid))
+      .filter((a) => a?.type === 'character');
+    const OWNER = CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER;
+    return game.users.filter((u) => !u.isGM && characters.some((a) => a.getUserLevel(u) >= OWNER));
+  }
+
+  /**
+   * Ownership note for a document the party relies on (the party sheet, a transport).
+   * GM: names the party's players who don't own it. Player: shown when they don't own it.
+   * @returns {string|null} tooltip text, null when nothing is missing
+   */
+  _ownershipNote(doc) {
+    const isParty = doc === this.actor;
+    if (!game.user.isGM) {
+      return doc.isOwner ? null : this._transportText(isParty ? 'OwnershipPartyYou' : 'OwnershipYou', { name: doc.name });
+    }
+    const OWNER = CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER;
+    const missing = this._partyPlayers().filter((u) => doc.getUserLevel(u) < OWNER);
+    if (!missing.length) return null;
+    return this._transportText(isParty ? 'OwnershipPartyMissing' : 'OwnershipMissing', {
+      name: doc.name, players: missing.map((u) => u.name).join(', '),
     });
-    if (confirmed) await item.delete();
+  }
+
+  /**
+   * Transport row mode. Edit: add / remove transports (drops accepted). Locked: activate the
+   * transport in use and board members. A party with no transport opens in edit mode.
+   */
+  _transportEditing() {
+    if (!this.isEditable) return false;
+    return this._transportEdit || !this._transportEntries().length;
+  }
+
+  /**
+   * Transport row cards: one per transport with its kind, speeds, Holds (container items),
+   * active state and, while in use, a seat per member (lit = aboard; click to board / get off).
+   * @returns {Object[]}
+   */
+  _transportCards() {
+    const feet = game.i18n.localize('VAGABOND.UI.Units.Feet');
+    const miles = game.i18n.localize('VAGABOND.UI.Units.Miles');
+    const members = (this.actor.system.members ?? [])
+      .map((uuid) => this._syncActor(uuid))
+      .filter((a) => a?.type === 'character' || a?.type === 'npc');
+    const activeUuid = this._activeTransportUuid();
+    const editing = this._transportEditing();
+    return this._transportEntries().map((entry) => {
+      const { actor, riders } = entry;
+      const kind = this._transportKind(actor);
+      const active = actor.uuid === activeUuid;
+      const inUse = this._inUse(entry);
+      const kindCfg = CONFIG.VAGABOND.constructKinds[kind] ?? CONFIG.VAGABOND.constructKinds.vehicle;
+      const speeds = this._transportSpeeds(actor);
+      const speedParts = [speeds.speed && `${speeds.speed}${feet}`, speeds.travel && `${speeds.travel} ${miles}`].filter(Boolean);
+      return {
+        uuid: actor.uuid,
+        name: actor.name,
+        img: actor.img,
+        kindIcon: kindCfg.icon,
+        kindLabel: game.i18n.localize(kindCfg.label),
+        // Kind icon tooltip: kind · speeds (the Travel miles also show on the party tab)
+        infoTooltip: [game.i18n.localize(kindCfg.label),
+          speedParts.length ? speedParts.join(' · ') : this._transportText('PulledTooltip')].join(' · '),
+        active,
+        parked: !inUse,
+        activateTooltip: this._transportText(active ? 'Active' : 'Activate', { name: actor.name }),
+        showSeats: inUse && !editing,
+        ownershipNote: this._ownershipNote(actor),
+        holds: actor.items
+          .filter((item) => item.type === 'container')
+          .map((item) => ({
+            uuid: item.uuid,
+            name: item.name,
+            img: item.img,
+            used: item.system.currentCapacity ?? 0,
+            capacity: item.system.capacity ?? 0,
+          })),
+        seats: members
+          .filter((m) => m.uuid !== actor.uuid)
+          .map((m) => {
+            const aboard = riders.includes(m.uuid);
+            return { uuid: m.uuid, name: m.name, img: m.img, aboard, tooltip: this._transportText(aboard ? 'Aboard' : 'Board', { name: m.name }) };
+          }),
+      };
+    });
+  }
+
+  /** Board a member on a transport (leaving any other one), or get them off when already aboard. */
+  async _toggleRider(transportUuid, memberUuid) {
+    if (!this.isEditable || !transportUuid || !memberUuid) return;
+    const transports = foundry.utils.deepClone(this.actor.system.transports ?? []);
+    const target = transports.find((entry) => entry.uuid === transportUuid);
+    const actor = this._syncActor(transportUuid);
+    if (!target || !actor || !this._inUse({ actor, riders: target.riders })) return;
+    const aboard = target.riders.includes(memberUuid);
+    for (const entry of transports) entry.riders = entry.riders.filter((uuid) => uuid !== memberUuid);
+    if (!aboard) target.riders.push(memberUuid);
+    await this.actor.update({ 'system.transports': transports });
+    await this._syncTokenImage();
+  }
+
+  /**
+   * Add a transport: a Mount / Vehicle / Structure actor or an NPC beast. A compendium actor is
+   * imported into the world first (needs the right to create actors).
+   */
+  async _addTransport(actor) {
+    if (actor.pack) {
+      if (!Actor.implementation.canUserCreate(game.user)) {
+        ui.notifications.warn(this._transportText('ImportDenied'));
+        return false;
+      }
+      actor = await game.actors.importFromCompendium(game.packs.get(actor.pack), actor.id);
+      if (!actor) return false;
+    }
+    const transports = foundry.utils.deepClone(this.actor.system.transports ?? []);
+    if (transports.some((entry) => entry.uuid === actor.uuid)) {
+      ui.notifications.warn(this._transportText('Already', { name: actor.name }));
+      return false;
+    }
+    transports.push({ uuid: actor.uuid, riders: [] });
+    await this.actor.update({ 'system.transports': transports });
+    // Adding happens in edit mode: stay there for more drops. A first transport becomes the active one.
+    this._transportEdit = true;
+    if (!this._activeTransportUuid()) await this._activateTransport(actor.uuid);
+    return true;
+  }
+
+  /**
+   * Make a transport the one the party uses (click the active one again to park it). Riders of
+   * the transports left parked get off; a vehicle / vessel / structure boards every member who
+   * doesn't ride a Mount (the Navigator then rides the draft animal of a pulled Cart).
+   */
+  async _activateTransport(uuid) {
+    if (!this.isEditable || !uuid) return;
+    const active = this._activeTransportUuid() === uuid ? '' : uuid;
+    const transports = foundry.utils.deepClone(this.actor.system.transports ?? []);
+    const kindOf = (entryUuid) => this._transportKind(this._syncActor(entryUuid));
+    for (const entry of transports) {
+      if (entry.uuid !== active && kindOf(entry.uuid) !== 'mount') entry.riders = [];
+    }
+    const target = transports.find((entry) => entry.uuid === active);
+    if (target && kindOf(active) !== 'mount') {
+      const mounted = new Set(transports.filter((entry) => kindOf(entry.uuid) === 'mount').flatMap((entry) => entry.riders));
+      const members = (this.actor.system.members ?? [])
+        .filter((memberUuid) => memberUuid !== active && !mounted.has(memberUuid))
+        .filter((memberUuid) => ['character', 'npc'].includes(this._syncActor(memberUuid)?.type));
+      target.riders = [...new Set([...target.riders, ...members])];
+    }
+    await this.actor.update({ 'system.activeTransport': active, 'system.transports': transports });
+    await this._syncTokenImage();
+  }
+
+  /** Take a transport off the party (the actor itself is kept). */
+  async _removeTransport(uuid) {
+    if (!this.isEditable || !uuid) return;
+    const transports = (this.actor.system.transports ?? []).filter((entry) => entry.uuid !== uuid);
+    const update = { 'system.transports': transports };
+    if (this.actor.system.activeTransport === uuid) update['system.activeTransport'] = '';
+    await this.actor.update(update);
+    await this._syncTokenImage();
   }
 
   /** Click on an item name: open / close its info accordion (no re-render). */
@@ -1209,61 +1450,103 @@ export class VagabondPartySheet extends VagabondActorSheet {
     return actors.filter(Boolean);
   }
 
-  /** Where the automatic speeds come from: the slowest member (`party`) or the party's container. */
-  _speedSource() {
-    return this.actor.system.speedSource === 'container' ? 'container' : 'party';
+  /** Resolve a uuid synchronously (null when missing or unresolvable). */
+  _syncActor(uuid) {
+    if (!uuid) return null;
+    try { return fromUuidSync(uuid) ?? null; } catch { return null; }
+  }
+
+  /** The party's transports that still resolve: `{ actor, riders }` in list order. */
+  _transportEntries() {
+    return (this.actor.system.transports ?? [])
+      .map((entry) => ({ actor: this._syncActor(entry.uuid), riders: entry.riders ?? [] }))
+      .filter((entry) => entry.actor);
+  }
+
+  /** `mount|vehicle|vessel|structure`: an NPC beast is a Mount. */
+  _transportKind(actor) {
+    if (!actor) return null;
+    return actor.type === 'npc' ? 'mount' : (actor.system.kind || 'vehicle');
+  }
+
+  /** The active transport's uuid ('' when none is active or it no longer resolves). */
+  _activeTransportUuid() {
+    const uuid = this.actor.system.activeTransport;
+    return uuid && this._transportEntries().some((entry) => entry.actor.uuid === uuid) ? uuid : '';
+  }
+
+  /** In use = the active transport, or a Mount (each one carries whoever rides it). The rest are parked. */
+  _inUse(entry) {
+    return entry.actor.uuid === this._activeTransportUuid() || this._transportKind(entry.actor) === 'mount';
+  }
+
+  /** The transport in use a member rides (null when on foot). */
+  _rideOf(uuid) {
+    return this._transportEntries().find((entry) => entry.riders.includes(uuid) && this._inUse(entry))?.actor ?? null;
   }
 
   /**
-   * Speeds set on the party's Container items (a wagon, a mount…): per field the slowest
-   * container that sets one (> 0), null when none does.
+   * A transport's own speeds, null where it has none (a pulled Cart / Wagon has none at all,
+   * a vessel only a Travel Speed). NPC beasts: Speed, Crawl = 3 × Speed, Travel = Speed ÷ 5 (book).
    * @returns {{speed: number|null, crawl: number|null, travel: number|null}}
    */
-  _containerSpeeds() {
-    const slowest = { speed: null, crawl: null, travel: null };
-    for (const item of this.actor.items) {
-      if (item.type !== 'container') continue;
-      for (const field of Object.keys(slowest)) {
-        const value = Number(item.system[field]);
-        if (value > 0 && (slowest[field] === null || value < slowest[field])) slowest[field] = value;
-      }
+  _transportSpeeds(transport) {
+    const sys = transport.system;
+    const positive = (v) => (Number(v) > 0 ? Number(v) : null);
+    if (transport.type === 'npc') {
+      const speed = positive(sys.speed);
+      return { speed, crawl: speed && speed * 3, travel: speed && Math.floor(speed / 5) };
     }
-    return slowest;
+    return { speed: positive(sys.speed), crawl: positive(sys.crawl), travel: positive(sys.travel) };
   }
 
   /**
-   * Automatic party speeds: the slowest member's value for each field, or - while the
-   * speed source is the container - the container's own speeds (members' value where it sets none).
-   * Characters supply Speed / Crawl / Travel; NPCs only their Speed (0 = stationary, ignored).
+   * A member's speeds as the party moves: their own, replaced field by field by the speeds of
+   * the transport they ride ("controlled Mounts obey the rider, who uses the Mount's Speed
+   * instead of their own", book p.17). Characters: derived Speed / Crawl / Travel; NPCs:
+   * Speed (0 = stationary, ignored) and Travel = Speed ÷ 5.
+   * @returns {{speed: number|null, crawl: number|null, travel: number|null, ride: Actor|null}}
+   */
+  _effectiveSpeeds(actor) {
+    const finite = (v) => (Number.isFinite(Number(v)) ? Number(v) : null);
+    const own = actor.type === 'character'
+      ? { speed: finite(actor.system.speed?.base), crawl: finite(actor.system.speed?.crawl), travel: finite(actor.system.speed?.travel) }
+      : { speed: Number(actor.system.speed) > 0 ? Number(actor.system.speed) : null, crawl: null, travel: this._memberTravel(actor) };
+    const ride = this._rideOf(actor.uuid);
+    if (!ride) return { ...own, ride: null };
+    const carried = this._transportSpeeds(ride);
+    return {
+      speed: carried.speed ?? own.speed,
+      crawl: carried.crawl ?? own.crawl,
+      travel: carried.travel ?? own.travel,
+      ride,
+    };
+  }
+
+  /**
+   * Automatic party speeds: Speed and Crawl = the slowest member as the party moves (riders
+   * at their transport's speed); Travel = the Navigator's ("A Group uses the Navigator's
+   * Speed", book p.21), or the slowest member's when none is picked.
    * Read synchronously at render / submit time, so it follows every member's current value.
    * @returns {{speed: number, crawl: number, travel: number}}
    */
   _autoSpeeds() {
     const slowest = { speed: null, crawl: null, travel: null };
-    const take = (field, value) => {
-      if (!Number.isFinite(value)) return;
-      if (slowest[field] === null || value < slowest[field]) slowest[field] = value;
-    };
     for (const uuid of this.actor.system.members ?? []) {
-      let member = null;
-      try { member = fromUuidSync(uuid); } catch { member = null; }
-      if (member?.type === 'character') {
-        take('speed', Number(member.system.speed?.base));
-        take('crawl', Number(member.system.speed?.crawl));
-        take('travel', Number(member.system.speed?.travel));
-      } else if (member?.type === 'npc') {
-        const speed = Number(member.system.speed);
-        if (speed > 0) take('speed', speed);
+      const member = this._syncActor(uuid);
+      if (member?.type !== 'character' && member?.type !== 'npc') continue;
+      const speeds = this._effectiveSpeeds(member);
+      for (const field of Object.keys(slowest)) {
+        const value = speeds[field];
+        if (value !== null && (slowest[field] === null || value < slowest[field])) slowest[field] = value;
       }
     }
-    const carried = this._speedSource() === 'container' ? this._containerSpeeds() : {};
-    // Book: "A Group uses the Navigator's Speed" for Travel (the slowest member's when none is picked)
     const navigator = this._navigatorActor();
-    const navigatorTravel = navigator ? this._memberTravel(navigator) : null;
+    const navigatorTravel = navigator ? this._effectiveSpeeds(navigator).travel : null;
     return {
-      speed: carried.speed ?? slowest.speed ?? 0,
-      crawl: carried.crawl ?? slowest.crawl ?? 0,
-      travel: carried.travel ?? navigatorTravel ?? slowest.travel ?? 0,
+      speed: slowest.speed ?? 0,
+      crawl: slowest.crawl ?? 0,
+      travel: navigatorTravel ?? slowest.travel ?? 0,
     };
   }
 
@@ -1271,10 +1554,10 @@ export class VagabondPartySheet extends VagabondActorSheet {
   _navigatorActor() {
     const uuid = this.actor.system.navigator;
     if (!uuid || !(this.actor.system.members ?? []).includes(uuid)) return null;
-    try { return fromUuidSync(uuid) ?? null; } catch { return null; }
+    return this._syncActor(uuid);
   }
 
-  /** A member's Travel Speed in miles per Shift: a Character's derived value, an NPC's Speed ÷ 5 (book). */
+  /** A member's own Travel Speed in miles per Shift: a Character's derived value, an NPC's Speed ÷ 5 (book). */
   _memberTravel(actor) {
     if (actor.type === 'character') {
       const travel = Number(actor.system.speed?.travel);
@@ -1288,6 +1571,92 @@ export class VagabondPartySheet extends VagabondActorSheet {
   async _toggleNavigator(uuid) {
     if (!this.isEditable || !uuid) return;
     await this.actor.update({ 'system.navigator': this.actor.system.navigator === uuid ? '' : uuid });
+    await this._syncTokenImage();
+  }
+
+  // ── Party token: grouped party art ↔ transport art ─────────────────────────
+
+  /** The transport whose art the party token shows in transport mode: the active one. */
+  _tokenTransport() {
+    return this._syncActor(this._activeTransportUuid() || null);
+  }
+
+  /** Token art of an actor: its prototype token texture, else its portrait. */
+  _tokenArt(actor) {
+    return actor?.prototypeToken?.texture?.src || actor?.img || null;
+  }
+
+  /** `'party'` (grouped party art, e.g. crawling) or `'transport'` (travelling). */
+  _tokenMode() {
+    return this.actor.getFlag('vagabond', 'tokenMode') === 'transport' ? 'transport' : 'party';
+  }
+
+  /** Header button state. */
+  _tokenModeView() {
+    const transport = this._tokenTransport();
+    const mode = this._tokenMode();
+    const t = (key, data) => this._transportText(key, data);
+    const travelling = mode === 'transport' && !!transport;
+    return {
+      transport: mode === 'transport',
+      // The portrait follows the token: the transport's art while travelling with it
+      portrait: travelling ? (transport.img || this._tokenArt(transport)) : this.actor.img,
+      portraitTooltip: travelling ? transport.name : this.actor.name,
+      travelling,
+      disabled: !transport && mode === 'party',
+      tooltip: mode === 'transport'
+        ? t('TokenModeTransport', { name: transport?.name ?? '?' })
+        : (transport ? t('TokenModeParty', { name: transport.name }) : t('TokenModeNone')),
+    };
+  }
+
+  /** Switch the party token between the party art and the transport art. */
+  async _toggleTokenMode() {
+    if (!this.isEditable) return;
+    if (this._tokenMode() === 'transport') return this._setTokenMode('party');
+    if (!this._tokenTransport()) {
+      ui.notifications.warn(this._transportText('TokenModeNone'));
+      return;
+    }
+    return this._setTokenMode('transport');
+  }
+
+  /** In transport mode, follow the current transport (Navigator changed ride, transport removed…). */
+  async _syncTokenImage() {
+    if (this._tokenMode() !== 'transport') return;
+    await this._setTokenMode(this._tokenTransport() ? 'transport' : 'party');
+  }
+
+  /**
+   * Apply a token mode: the prototype token and every placed token of the party, in every
+   * scene, switch to the party art (saved in `flags.vagabond.partyTokenImg` when leaving it)
+   * or to the transport's token art.
+   */
+  async _setTokenMode(mode) {
+    const saved = this.actor.getFlag('vagabond', 'partyTokenImg');
+    const current = this.actor.prototypeToken.texture.src;
+    const partyImg = saved || current || this.actor.img;
+    const src = mode === 'transport' ? this._tokenArt(this._tokenTransport()) : partyImg;
+    if (!src) return;
+
+    const update = { 'flags.vagabond.tokenMode': mode, 'prototypeToken.texture.src': src };
+    // Keep the party's own art while the transport art is shown
+    if (mode === 'transport' && !saved) update['flags.vagabond.partyTokenImg'] = current || this.actor.img;
+    if (mode === 'party') update['flags.vagabond.-=partyTokenImg'] = null;
+    await this.actor.update(update);
+
+    // Placed tokens (linked or not) in every scene, one batch per scene
+    for (const scene of game.scenes) {
+      const updates = scene.tokens
+        .filter((token) => token.actorId === this.actor.id && token.texture.src !== src)
+        .map((token) => ({ _id: token.id, 'texture.src': src }));
+      if (!updates.length) continue;
+      try {
+        await scene.updateEmbeddedDocuments('Token', updates);
+      } catch (err) {
+        console.warn(`Vagabond | Party token image not updated in scene ${scene.name}:`, err);
+      }
+    }
   }
 
   /**
@@ -1300,7 +1669,7 @@ export class VagabondPartySheet extends VagabondActorSheet {
     const hazardous = !!this.actor.system.hazardous;
     const mult = paces[pace].mult * (hazardous ? CONFIG.VAGABOND.hazardousMult : 1);
     const navigator = this._navigatorActor();
-    const fromContainer = this._speedSource() === 'container';
+    const ride = navigator ? this._rideOf(navigator.uuid) : null;
     const t = (key, data) => (data ? game.i18n.format(`VAGABOND.Actor.Party.Travel.${key}`, data) : game.i18n.localize(`VAGABOND.Actor.Party.Travel.${key}`));
     return {
       pace,
@@ -1312,9 +1681,10 @@ export class VagabondPartySheet extends VagabondActorSheet {
         tooltip: t('PaceTooltip', { mult: cfg.mult, roll: game.i18n.localize(cfg.complication) })
           + (key === 'slow' ? ` ${t('ForageHint')}` : ''),
       })),
-      // Who sets the Travel Speed: the container, the Navigator, or (none picked) the slowest member
-      leader: fromContainer ? t('LeaderContainer') : (navigator?.name ?? t('LeaderSlowest')),
-      leaderTooltip: fromContainer ? t('LeaderContainerTooltip') : t('NavigatorTooltip'),
+      // Who sets the Travel Speed: the Navigator (on their transport, if they ride one) or the slowest member
+      leader: navigator ? (ride ? t('LeaderRiding', { name: navigator.name, ride: ride.name }) : navigator.name) : t('LeaderSlowest'),
+      leaderRides: !!ride,
+      leaderTooltip: t('NavigatorTooltip'),
       hazardTooltip: t(hazardous ? 'HazardousOn' : 'HazardousOff'),
       distance: Math.round(travel * mult * 100) / 100,
       modified: mult !== 1,
@@ -1324,16 +1694,11 @@ export class VagabondPartySheet extends VagabondActorSheet {
 
   /**
    * Party speeds as shown: a stored value (> 0) is a manual override, 0 follows the
-   * automatic source (`auto: true`). Also carries the source switch's state and tooltips.
+   * automatic value (`auto: true`).
    */
   _speedsView() {
     const auto = this._autoSpeeds();
-    const fromContainer = this._speedSource() === 'container';
-    const view = {
-      fromContainer,
-      sourceTooltip: this._controlsText(fromContainer ? 'SpeedSourceContainer' : 'SpeedSourceParty'),
-      autoTooltip: this._controlsText(fromContainer ? 'SpeedAutoContainer' : 'SpeedAuto'),
-    };
+    const view = { autoTooltip: this._controlsText('SpeedAuto') };
     for (const field of ['speed', 'crawl', 'travel']) {
       const manual = Number(this.actor.system[field]) || 0;
       view[field] = manual > 0
@@ -1517,47 +1882,93 @@ export class VagabondPartySheet extends VagabondActorSheet {
   }
 
   /**
-   * Handle dropping an actor onto the party sheet — adds them as a member.
-   * Only accepts character and npc actors.
+   * Handle dropping an actor onto the party sheet. A Mount / Vehicle / Structure always becomes
+   * a transport, and so does an NPC dropped on the Transport sleeve (a beast to ride); other
+   * Characters and NPCs join as members (world actors only).
    * @param {DragEvent} event
    * @param {Object} data
    * @override
    */
+  /**
+   * Every party user may drop here: item drops are free trade (TradeHelper checks who may take
+   * and give, relayed through the GM); actor drops still require owning the party.
+   * @override
+   */
+  _canDragDrop() {
+    return true;
+  }
+
+  /** The party holds no items: Item folders are not dropped here. @override */
+  async _onDropFolder() {
+    return false;
+  }
+
   async _onDropActor(event, data) {
-    if (!this.actor.isOwner) return false;
-    const uuid = data.uuid;
-    if (!uuid) return false;
-    try {
-      const actor = await fromUuid(uuid);
-      // Only world actors (not compendium actors — actor.pack would be set for those)
-      if (!actor || actor.pack || (actor.type !== 'character' && actor.type !== 'npc')) return false;
-    } catch {
-      return false;
+    if (!this.actor.isOwner || !data.uuid) return false;
+    let actor;
+    try { actor = await fromUuid(data.uuid); } catch { return false; }
+    if (!actor) return false;
+    const onTransportSleeve = !!event.target?.closest?.('.party-transports');
+    if (actor.type === 'construct' || (actor.type === 'npc' && onTransportSleeve)) {
+      if (!this._transportEditing()) {
+        ui.notifications.warn(this._transportText('UnlockToAdd'));
+        return false;
+      }
+      return this._addTransport(actor);
     }
-    await this._addMember(uuid);
+    // Members: only world actors (not compendium actors — actor.pack would be set for those)
+    if (actor.pack || (actor.type !== 'character' && actor.type !== 'npc')) return false;
+    await this._addMember(actor.uuid);
     return true;
   }
 
   /**
-   * Only Container items can be dropped on the party (they land in the Inventory
-   * tab's sleeve). A container dragged from another Actor you own is moved, not copied.
+   * Item drops = free trade (TradeHelper guard rails) to the spot under the cursor (see
+   * `_tradeDest`). A Container dropped on a transport card becomes one of its Holds (edit mode).
+   * Shift-drop a stack to pick how many to move.
    * @param {DragEvent} event
    * @param {Object} data
    * @override
    */
   async _onDropItem(event, data) {
-    if (!this.actor.isOwner) return false;
     const item = await Item.implementation.fromDropData(data);
     if (!item) return false;
-    if (item.type !== 'container') {
-      ui.notifications.warn(game.i18n.localize('VAGABOND.Actor.Party.Inventory.Containers.OnlyContainers'));
+    if (!TradeHelper.TRADE_TYPES.includes(item.type)) {
+      TradeHelper.warn('notTradable');
       return false;
     }
-    if (item.parent?.uuid === this.actor.uuid) return false;
 
-    const created = await this.actor.createEmbeddedDocuments('Item', [item.toObject()]);
-    if (created?.length && item.parent?.documentName === 'Actor' && item.parent.isOwner) await item.delete();
-    return created;
+    let dest;
+    const transportUuid = event.target?.closest?.('[data-transport-uuid]')?.dataset.transportUuid;
+    if (item.type === 'container' && transportUuid && !event.target.closest('.pt-hold')) {
+      if (!this._transportEditing()) {
+        ui.notifications.warn(this._transportText('UnlockToAdd'));
+        return false;
+      }
+      dest = { actorUuid: transportUuid };
+    } else {
+      dest = this._tradeDest(event);
+    }
+    if (!dest) return false;
+    const qty = await TradeHelper.pickQuantity(item, event);
+    if (!qty) return false;
+    return TradeHelper.moveItem({ source: { itemUuid: item.uuid }, dest, qty });
+  }
+
+  /**
+   * A Hold / container entry dropped on the sheet: same routing as `_onDropItem`.
+   * @override
+   */
+  async _onDropContainerItem(event, data) {
+    if (!data?.containerUuid) return false;
+    const dest = this._tradeDest(event);
+    if (!dest) return false;
+    const qty = await TradeHelper.pickQuantity(data.itemData, event);
+    if (!qty) return false;
+    return TradeHelper.moveItem({
+      source: { containerUuid: data.containerUuid, entryId: data.entryId ?? data.itemData?._id ?? null, index: data.itemIndex },
+      dest, qty,
+    });
   }
 
   /**

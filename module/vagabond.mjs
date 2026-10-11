@@ -92,6 +92,8 @@ import { VagabondRollBuilder } from './helpers/roll-builder.mjs';
 import { CurrencyHelper } from './helpers/currency-helper.mjs';
 import { ShopPricing } from './helpers/shop-pricing.mjs';
 import { ShopTransactions } from './helpers/shop-transactions.mjs';
+import { TradeHelper } from './helpers/trade-helper.mjs';
+import { CoinTransferDialog } from './applications/coin-transfer-dialog.mjs';
 import { ShopApp } from './applications/shop-app.mjs';
 import { CraftingHelper } from './helpers/crafting-helper.mjs';
 import { RelicHelper } from './helpers/relic-helper.mjs';
@@ -172,6 +174,7 @@ async function preloadHandlebarsTemplates() {
     // Item partials
     'systems/vagabond/templates/item/parts/grants-config.hbs',
     'systems/vagabond/templates/item/parts/macro-config.hbs',
+    'systems/vagabond/templates/item/parts/container-treasure.hbs',
     'systems/vagabond/templates/actor/parts/npc-macro-config.hbs',
     // Actor partials
     'systems/vagabond/templates/actor/parts/inventory-card.hbs',
@@ -430,6 +433,8 @@ Hooks.once('init', function () {
 
   // Shop transactions run on the active GM via User#query (buy / sell / party transfer)
   ShopTransactions.registerQueries();
+  // Free trade (items + coins between inventories): GM-relayed moves with guard rails
+  TradeHelper.registerQueries();
   // Crafting: GM-relayed execute query + mode registry (craft, scrap)
   CraftingHelper.registerQueries();
   CraftingHelper.registerModes();
@@ -836,6 +841,14 @@ Hooks.once('ready', function () {
       transactions: ShopTransactions,
       pricing: ShopPricing,
     },
+    // Free trade: game.vagabond.trade.moveItem({source, dest, qty}), .moveCoins({from, to, copper}),
+    // .coins(holder) opens the coin split dialog; .helper = TradeHelper (canTake / canGive).
+    trade: {
+      moveItem: (args) => TradeHelper.moveItem(args),
+      moveCoins: (args) => TradeHelper.moveCoins(args),
+      coins: (holder, opts) => CoinTransferDialog.open(holder, opts),
+      helper: TradeHelper,
+    },
     // Crafting: game.vagabond.craft.config(), .valuePerShift(actor),
     // .evaluate/.execute/.request(actor, modeKey, recipe, opts), .workShift(actor,
     // allocations), .open(actor) opens the Workbench.
@@ -929,6 +942,8 @@ Hooks.once('ready', function () {
   migrateAncestries();
   // One-time: stored copper amounts ×10 (ratio corrected to the book's 1s = 100c).
   CurrencyHelper.migrateCopperScale();
+  // One-time: party actors hold no items any more (old party containers / Stash) — delete leftovers.
+  TradeHelper.purgePartyItems().catch((err) => console.error('Vagabond | Party item purge failed', err));
   // One-time: status effects already on actors get the Alpha 3 changes.
   migrateAlpha3Statuses();
   // One-time: Backpacks become 1 Slot held / +3 Slots worn.

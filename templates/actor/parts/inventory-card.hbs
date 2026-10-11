@@ -32,7 +32,7 @@
       {{/each}}
     </div>
   {{/if}}
-  {{#if (or item.system.isThrowable isSlotZero)}}
+  {{#if showQty}}
     <div
       class='item-qty-badge {{#unless item.system.quantity}}empty{{/unless}}'
       data-action='adjustQuantity'

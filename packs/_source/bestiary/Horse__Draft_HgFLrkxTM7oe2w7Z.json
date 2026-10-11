@@ -134,7 +134,31 @@
     "prependAdjective": false,
     "depth": 2
   },
-  "items": [],
+  "items": [
+    {
+      "name": "Hold",
+      "type": "container",
+      "img": "icons/containers/bags/pack-leather-white-tan.webp",
+      "system": {
+        "description": "<p>Horse, Draft: carries 14 Slots of Items.</p>",
+        "slots": 0,
+        "capacity": 14,
+        "gridPosition": 0,
+        "items": [],
+        "baseCost": {
+          "gold": 0,
+          "silver": 0,
+          "copper": 0
+        },
+        "locked": true
+      },
+      "effects": [],
+      "flags": {},
+      "sort": 0,
+      "_id": "4KllfwcCq29JT124",
+      "_key": "!actors.items!HgFLrkxTM7oe2w7Z.4KllfwcCq29JT124"
+    }
+  ],
   "effects": [],
   "folder": "qtyjtBXZBVC3oOwU",
   "flags": {},

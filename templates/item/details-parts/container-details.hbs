@@ -5,11 +5,11 @@
   data-tab='details'
 >
   <div class='equipment-item-content'>
-    {{! Description Section }}
+    {{! Unlocked: treasure + description editor. Locked: treasure moves to the header, no description }}
+    {{#unless system.locked}}
+    {{> 'systems/vagabond/templates/item/parts/container-treasure.hbs'}}
     <div class='form-group'>
-      {{#unless system.locked}}
-        <label class='resource-label'>{{localize 'VAGABOND.Item.base.FIELDS.description.label'}}</label>
-      {{/unless}}
+      <label class='resource-label'>{{localize 'VAGABOND.Item.base.FIELDS.description.label'}}</label>
       <div class='equipment-description'>
         {{#if editable}}
           <prose-mirror name="system.description" data-document-uuid="{{item.uuid}}" value="{{system.description}}" toggled="true">
@@ -20,6 +20,13 @@
         {{/if}}
       </div>
     </div>
+    {{/unless}}
+
+    {{#if canDeployConstruct}}
+      <button type='button' class='container-deploy-construct' data-action='deployConstruct' data-tooltip='{{localize "VAGABOND.UI.Buttons.DeployConstructHint"}}'>
+        <i class='fas fa-horse'></i> {{localize "VAGABOND.UI.Buttons.DeployConstruct"}}
+      </button>
+    {{/if}}
 
     {{! Container Configuration (only in unlocked mode) }}
     {{#unless system.locked}}
@@ -36,62 +43,52 @@
             <input type="text" class="container-search" placeholder="{{localize 'VAGABOND.UI.Labels.SearchItemsPlaceholder'}}" spellcheck="false">
         </div>
         <div class="item-counter">
-            {{localize "VAGABOND.UI.Labels.Items"}}: <span id="visible-count">{{containerItems.length}}</span> / <span id="total-count">{{containerItems.length}}</span>
+            {{localize "VAGABOND.UI.Labels.Items"}}: <span id="visible-count">{{containerCount}}</span> / <span id="total-count">{{containerCount}}</span>
         </div>
     </div>
-    {{! Container Items List }}
+    {{! Container Items List: type sections (accordions, open by default); a name opens its details }}
     <div class='form-group' data-drop-container='true'>
-      {{#if containerItems.length}}
+      {{#if containerCount}}
         <div class='container-items-list'>
-          <table class='container-items-table'>
-            <thead>
-              <tr>
-                <th>{{localize "VAGABOND.UI.Labels.Name"}}</th>
-                <th>{{localize "VAGABOND.UI.Labels.Damage"}}</th>
-                <th>{{localize "VAGABOND.UI.Labels.Slots"}}</th>
-                <th>{{localize "VAGABOND.UI.Labels.Cost"}}</th>
-                <th>{{localize "VAGABOND.UI.Labels.Actions"}}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {{#each containerItems}}
-                <tr class='container-item-row draggable' data-item-index='{{index}}' draggable='true'>
-                  <td class='item-name'>
-                    <img src='{{img}}' alt='{{name}}' class='item-icon' data-item-index='{{@index}}' />
-                    <div class='item-name-container'>
-                      <div class='item-name-text'>{{name}}</div>
-                      <div class='item-type-text'>{{typeName}}</div>
-                    </div>
-                  </td>
-                  <td class='item-damage'>{{damageDisplay}}</td>
-                  <td class='item-slots'>{{slotsDisplay}}</td>
-                  <td class='item-cost'>{{costDisplay}}</td>
-                  <td class='item-actions'>
-                    {{#if ../item.actor}}
-                      <button
-                        type='button'
-                        class='equip-from-container'
-                        data-action='equipFromContainer'
-                        data-item-index='{{@index}}'
-                        title='{{localize "VAGABOND.UI.Labels.EquipFromContainerTooltip"}}'
-                      >
-                        <i class='fas fa-hand-paper'></i>
-                      </button>
-                    {{/if}}
-                    <button
-                      type='button'
-                      class='delete-from-container'
-                      data-action='deleteFromContainer'
-                      data-item-index='{{@index}}'
-                      title='{{localize "VAGABOND.UI.Labels.DeleteItemTooltip"}}'
-                    >
-                      <i class='fas fa-trash'></i>
+          <div class='ci-columns'>
+            <span class='ci-col-name'>{{localize 'VAGABOND.UI.Labels.ContainerList.Item'}}</span>
+            <span>{{localize 'VAGABOND.UI.Labels.ContainerList.Qty'}}</span>
+            <span>{{localize 'VAGABOND.UI.Labels.ContainerList.Damage'}}</span>
+            <span>{{localize 'VAGABOND.UI.Labels.ContainerList.Slots'}}</span>
+            <span>{{localize 'VAGABOND.UI.Labels.ContainerList.Value'}}</span>
+            <span></span>
+          </div>
+          {{#each containerGroups}}
+          <div class='ci-group{{#if closed}} closed{{/if}}' data-group-key='{{key}}'>
+            <button type='button' class='ci-group-title' data-action='toggleContainerGroup'>
+              <i class='ci-group-icon fas fa-chevron-down'></i>
+              <span class='ci-group-label'>{{label}}</span>
+              <span class='ci-group-count'>{{items.length}}</span>
+            </button>
+            <div class='ci-group-body'>
+              <div class='ci-group-inner'>
+                {{#each items}}
+                <div class='ci-item draggable{{#if open}} open{{/if}}' data-item-index='{{index}}' data-entry-key='{{key}}' draggable='true'>
+                  <div class='ci-row'>
+                    <img class='ci-img' src='{{img}}' alt='' data-action='openContainerItem' data-tooltip='{{localize "VAGABOND.UI.Labels.ContainerList.Open"}}'>
+                    <button type='button' class='ci-name' data-action='toggleContainerItem'>
+                      <span class='ci-name-text'>{{name}}</span>
                     </button>
-                  </td>
-                </tr>
-              {{/each}}
-            </tbody>
-          </table>
+                    <span class='ci-qty'>{{quantity}}</span>
+                    <span class='ci-dmg'>{{damage}}</span>
+                    <span class='ci-slots'{{#if slotsHint}} data-tooltip='{{slotsHint}}'{{/if}}>{{slots}}</span>
+                    <span class='ci-value'>{{value}}</span>
+                    <button type='button' class='ci-menu' data-action='containerItemMenu' data-tooltip='{{localize "VAGABOND.UI.Labels.ContainerList.Menu"}}'>
+                      <i class='fas fa-ellipsis-vertical'></i>
+                    </button>
+                  </div>
+                  <div class='ci-detail'><div class='ci-detail-inner'></div></div>
+                </div>
+                {{/each}}
+              </div>
+            </div>
+          </div>
+          {{/each}}
         </div>
       {{else}}
         <div class='container-empty-state' data-drop-container='true'>

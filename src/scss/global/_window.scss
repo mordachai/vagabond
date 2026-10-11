@@ -71,15 +71,25 @@
   overflow-y: auto !important;
 }
 
+// Thick yellow frame of item sheets, shared by the party sheet and the Give Coins window
+@mixin vagabond-window-frame {
+  border-radius: 1.5em;
+  corner-shape: round round scoop scoop;
+  border: 8px solid $c-yellow;
+}
+
 // Item sheets: auto height to fit content with internal scrollbar only
 .vagabond.item .window-content {
   height: auto;
   min-height: 300px;
   max-height: calc(100vh - 150px);
   overflow-y: auto !important;
-  border-radius: 1.5em;
-  corner-shape: round round scoop scoop;
-  border: 8px solid $c-yellow;
+  @include vagabond-window-frame;
+}
+
+.vagabond.actor.party .window-content,
+.vagabond.coin-transfer-dialog .window-content {
+  @include vagabond-window-frame;
 }
 
 /* Target the main container and the list of tabs */

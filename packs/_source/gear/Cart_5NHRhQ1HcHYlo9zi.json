@@ -25,7 +25,11 @@
     "default": 0,
     "13p65OEadZSZVLRk": 3
   },
-  "flags": {},
+  "flags": {
+    "vagabond": {
+      "constructId": "HktD9x7LEdPizClP"
+    }
+  },
   "_stats": {
     "compendiumSource": null,
     "duplicateSource": null,

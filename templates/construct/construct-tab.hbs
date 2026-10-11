@@ -24,13 +24,20 @@
         class="construct-name"
         placeholder="{{localize 'VAGABOND.Actor.Construct.NamePlaceholder'}}"
       >
-      <input
-        type="text"
-        name="system.type"
-        value="{{system.type}}"
-        class="construct-type"
-        placeholder="{{localize 'VAGABOND.Actor.Construct.TypePlaceholder'}}"
-      >
+      <div class="construct-type-row">
+        <div class="construct-kinds">
+          {{#each kinds}}
+            <button type="button" class="construct-kind {{#if selected}}is-selected{{/if}}" data-kind="{{key}}" data-tooltip="{{localize label}}"><i class="{{icon}}"></i></button>
+          {{/each}}
+        </div>
+        <input
+          type="text"
+          name="system.type"
+          value="{{system.type}}"
+          class="construct-type"
+          placeholder="{{localize 'VAGABOND.Actor.Construct.TypePlaceholder'}}"
+        >
+      </div>
 
       <div class="construct-speeds">
         <div class="construct-speed-stat">

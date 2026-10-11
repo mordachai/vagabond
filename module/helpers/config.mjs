@@ -1481,6 +1481,18 @@ VAGABOND.hazardousMult = 0.5;
 VAGABOND.travelShiftsPerRest = 2;
 
 /**
+ * Construct kinds (Actor type `construct`, shown as "Mount / Vehicle / Structure").
+ * Mounts are ridden (rider uses the Mount's Speed, book p.17); vehicles are pulled
+ * (Cart / Wagon: no Speed of their own); vessels only have a Travel Speed.
+ */
+VAGABOND.constructKinds = {
+  mount:     { label: 'VAGABOND.Actor.Construct.Kind.mount',     icon: 'fas fa-horse' },
+  vehicle:   { label: 'VAGABOND.Actor.Construct.Kind.vehicle',   icon: 'fas fa-cart-flatbed' },
+  vessel:    { label: 'VAGABOND.Actor.Construct.Kind.vessel',    icon: 'fas fa-sailboat' },
+  structure: { label: 'VAGABOND.Actor.Construct.Kind.structure', icon: 'fas fa-chess-rook' },
+};
+
+/**
  * TRAVEL COMPLICATIONS (book Adventuring, d66). Any result not listed (21-66) = no Complication.
  * Text lives in `VAGABOND.Actor.Party.Travel.Complications.<key>`.
  */

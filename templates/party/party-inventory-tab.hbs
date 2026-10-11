@@ -4,37 +4,93 @@
   data-group="primary"
   data-tab="inventory"
 >
-  {{! Party containers: a thin sleeve that takes dropped Container items and lists them }}
-  <div class="party-containers" data-tooltip="{{localize 'VAGABOND.Actor.Party.Inventory.Containers.Tooltip'}}">
-    <span class="pc-label"><i class="fas fa-box-open"></i> {{localize 'VAGABOND.Actor.Party.Inventory.Containers.Label'}}</span>
-    {{#each containers}}
-    <span class="pc-chip" data-item-uuid="{{uuid}}">
-      <button type="button" class="pc-open" data-action="openContainer" data-tooltip="{{localize 'VAGABOND.Actor.Party.Inventory.Containers.Open'}}">
-        <img class="pc-img" src="{{img}}" alt="">
-        <span class="pc-name">{{name}}</span>
-        <span class="pc-fill">{{used}}/{{capacity}}</span>
-      </button>
-      {{#if ../canEditContainers}}
-      <button type="button" class="pc-delete" data-action="deleteContainer" data-tooltip="{{localize 'VAGABOND.Actor.Party.Inventory.Containers.Delete'}}"><i class="fa-solid fa-xmark"></i></button>
-      {{/if}}
+  {{! Transport row: Mounts / Vehicles / Structures (and NPC beasts) the party owns.
+      Edit mode: drop one here / remove it; drop a Container item on a card to add a Hold.
+      Locked mode: star = the transport in use (one at a time); seats board members. }}
+  <div class="party-transports{{#if transportEditing}} is-editing{{/if}}">
+    <span class="pt-label">
+      <span class="pt-label-icons">
+        <i class="fas fa-horse"></i>
+        {{#if canEditTransports}}
+        <button type="button" class="pt-edit" data-action="toggleTransportEdit" data-tooltip="{{#if transportEditing}}{{localize 'VAGABOND.Actor.Party.Transport.Lock'}}{{else}}{{localize 'VAGABOND.Actor.Party.Transport.Edit'}}{{/if}}">
+          <i class="fa-solid {{#if transportEditing}}fa-lock-open{{else}}fa-lock{{/if}}"></i>
+        </button>
+        {{/if}}
+      </span>
+      {{localize 'VAGABOND.Actor.Party.Transport.Label'}}
     </span>
-    {{else}}
-    <span class="pc-hint">{{localize 'VAGABOND.Actor.Party.Inventory.Containers.Drop'}}</span>
-    {{/each}}
+    <div class="pt-cards">
+      {{#each transports}}
+      {{! Locked: click the card to make it the transport in use (again to park it) }}
+      <div class="pt-card{{#if active}} is-active{{/if}}{{#if parked}} is-parked{{/if}}" data-transport-uuid="{{uuid}}"{{#unless ../transportEditing}}{{#if ../canEditTransports}} data-action="activateTransport" data-tooltip="{{activateTooltip}}"{{/if}}{{/unless}}>
+        <button type="button" class="pt-open" data-action="openTransport" data-tooltip="{{kindLabel}}">
+          <img class="pt-img" src="{{img}}" alt="">
+        </button>
+        <div class="pt-title">
+          <i class="pt-kind {{kindIcon}}" data-tooltip="{{infoTooltip}}"></i>
+          <span class="pt-name">{{name}}</span>
+          {{#if ownershipNote}}
+          <i class="pt-ownership fa-solid fa-triangle-exclamation" data-tooltip="{{ownershipNote}}"></i>
+          {{/if}}
+          {{#if ../transportEditing}}
+          <button type="button" class="pt-remove" data-action="removeTransport" data-tooltip="{{localize 'VAGABOND.Actor.Party.Transport.Remove'}}"><i class="fa-solid fa-xmark"></i></button>
+          {{/if}}
+        </div>
+        <div class="pt-holds">
+          {{#each holds}}
+          <button type="button" class="pt-hold" data-item-uuid="{{uuid}}" data-action="openContainer" data-tooltip="{{name}}: {{localize 'VAGABOND.Actor.Party.Transport.OpenHold'}}">
+            <img class="pt-hold-img" src="{{img}}" alt="{{name}}">
+            <span class="pt-hold-fill">{{used}}/{{capacity}}</span>
+          </button>
+          {{else}}
+          <span class="pt-none">{{localize 'VAGABOND.Actor.Party.Transport.NoHold'}}</span>
+          {{/each}}
+        </div>
+        {{#if showSeats}}
+        <span class="pt-seats">
+          {{#each seats}}
+          <img class="pt-seat{{#if aboard}} is-aboard{{/if}}" src="{{img}}" alt="{{name}}" data-action="toggleRider" data-actor-uuid="{{uuid}}" data-tooltip="{{tooltip}}">
+          {{/each}}
+        </span>
+        {{/if}}
+      </div>
+      {{/each}}
+      {{#if transportEditing}}
+      <span class="pt-hint">{{localize 'VAGABOND.Actor.Party.Transport.Drop'}}</span>
+      {{/if}}
+    </div>
   </div>
 
+  {{! Free trade: drag a row onto another Character's card, a transport or a Hold (above) to move it.
+      Rows only drag where you may take them (your own Character; any for the GM). }}
   {{#if inventoryCards.length}}
+  <p class="party-trade-hint"><i class="fa-solid fa-arrows-left-right"></i> {{localize 'VAGABOND.Trade.Hint'}}</p>
   <div class="party-member-grid party-inventory-grid" style="--member-count: {{inventoryCards.length}}">
     {{#each inventoryCards}}
-    <div class="party-inv-card" data-actor-uuid="{{uuid}}">
+    <div class="party-inv-card{{#if locked}} is-locked{{/if}}" data-actor-uuid="{{uuid}}">
 
       <header class="inv-card-header" data-action="openMemberSheet">
         <img class="inv-card-portrait" src="{{img}}" alt="{{name}}">
         <h3 class="inv-card-name">{{name}}</h3>
+        {{#if locked}}
+        <i class="inv-card-lock fa-solid fa-lock" data-tooltip="{{localize 'VAGABOND.Trade.LockedHint'}}"></i>
+        {{/if}}
         <span class="inv-card-slots" data-tooltip="{{localize 'VAGABOND.Actor.Party.Card.Slots'}}">
           <i class="fas fa-backpack"></i> {{slotsUsed}}/{{slotsTotal}}
         </span>
       </header>
+
+      <div class="inv-coins">
+        <i class="inv-coins-icon fa-solid fa-coins"></i>
+        {{#each coins}}
+        <span class="inv-coin">{{value}}<span class="currency-abbr">{{abbr}}</span></span>
+        {{/each}}
+        {{#if canTake}}
+        <button type="button" class="inv-coins-share" data-action="shareCoins" data-tooltip="{{localize 'VAGABOND.Trade.Coins.Open'}}">
+          <i class="fa-solid fa-hand-holding-dollar"></i>
+        </button>
+        {{/if}}
+      </div>
 
       {{#if groups.length}}
       <div class="inv-columns">
@@ -45,11 +101,12 @@
       <div class="inv-group">
         <h4 class="inv-group-title">{{label}}</h4>
         {{#each items}}
-        <div class="inv-item{{#if open}} open{{/if}}" data-item-uuid="{{uuid}}">
+        <div class="inv-item{{#if open}} open{{/if}}{{#if draggable}} is-draggable{{/if}}" data-item-uuid="{{uuid}}"{{#if draggable}} draggable="true"{{/if}}>
           <div class="inv-row">
             <img class="inv-img" src="{{img}}" alt="">
             <button type="button" class="inv-name" data-action="toggleInvItem">
               <span class="inv-name-text">{{name}}</span>
+              {{#if equipped}}<i class="inv-equipped fa-solid fa-hand" data-tooltip="{{localize 'VAGABOND.Trade.Equipped'}}"></i>{{/if}}
             </button>
             <span class="inv-qty">{{quantity}}</span>
           </div>

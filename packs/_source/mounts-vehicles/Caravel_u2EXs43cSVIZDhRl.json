@@ -1,0 +1,62 @@
+{
+  "name": "Caravel",
+  "type": "construct",
+  "img": "/icons/tools/nautical/steering-wheel.webp",
+  "system": {
+    "kind": "vessel",
+    "type": "",
+    "speed": 0,
+    "crawl": 0,
+    "travel": 30,
+    "biography": "<p><strong>Vessel.</strong> Travel Speed 30 mi per Shift · Capacity 1000 Slots.</p><p>Value: 1000g.</p>"
+  },
+  "prototypeToken": {
+    "name": "Caravel",
+    "actorLink": false,
+    "disposition": 0,
+    "width": 4,
+    "height": 4,
+    "texture": {
+      "src": "/icons/tools/nautical/steering-wheel.webp",
+      "fit": "contain"
+    },
+    "bar1": {
+      "attribute": null
+    }
+  },
+  "items": [
+    {
+      "name": "Hold",
+      "type": "container",
+      "img": "icons/containers/chest/chest-reinforced-steel-brown.webp",
+      "system": {
+        "description": "<p>Caravel: carries 1000 Slots of Items.</p>",
+        "slots": 0,
+        "capacity": 1000,
+        "gridPosition": 0,
+        "items": [],
+        "baseCost": {
+          "gold": 0,
+          "silver": 0,
+          "copper": 0
+        },
+        "locked": true
+      },
+      "effects": [],
+      "flags": {},
+      "sort": 0,
+      "_id": "4ISKIzTqvcA1bT9I",
+      "_key": "!actors.items!u2EXs43cSVIZDhRl.4ISKIzTqvcA1bT9I"
+    }
+  ],
+  "effects": [],
+  "folder": "C4D159k33OcY3zcc",
+  "flags": {
+    "vagabond": {
+      "sourceItemId": "S7AWNc6MKMEYLoDy"
+    }
+  },
+  "sort": 1200000,
+  "_id": "u2EXs43cSVIZDhRl",
+  "_key": "!actors!u2EXs43cSVIZDhRl"
+}

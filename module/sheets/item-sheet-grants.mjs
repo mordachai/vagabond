@@ -2,6 +2,7 @@
  * Unified grants system handlers for item sheets (ancestry traits and class features).
  * All handlers use data-array-path and data-item-index to work generically for both types.
  */
+import { GrantedItems } from '../helpers/granted-items.mjs';
 
 export class GrantsHandlers {
   /**
@@ -77,6 +78,62 @@ export class GrantsHandlers {
     perks.splice(perkIndex, 1);
     items[itemIndex].allowedPerks = perks;
     await sheet.item.update({ [arrayPath]: items });
+  }
+
+  /**
+   * Add a dropped item (weapon, natural attack…) to a trait/feature's `grantedItems`.
+   * @param {HTMLElement} zone  `.item-grant-drop-zone` carrying data-array-path / data-item-index
+   */
+  static async dropGrantItem(sheet, zone, data) {
+    const { arrayPath, itemIndex } = GrantsHandlers.#attrs(zone, ['arrayPath', 'itemIndex']);
+    if (!arrayPath || itemIndex === null) return false;
+
+    const dropped = await Item.implementation.fromDropData(data);
+    if (!dropped) return false;
+    if (!GrantedItems.TYPES.includes(dropped.type)) {
+      ui.notifications.warn(game.i18n.localize('VAGABOND.UI.Hints.GrantItemWrongType'));
+      return false;
+    }
+    if (dropped.parent) {
+      ui.notifications.warn(game.i18n.localize('VAGABOND.UI.Hints.GrantItemOwned'));
+      return false;
+    }
+
+    const prop = arrayPath.replace(/^system\./, '');
+    const items = sheet._collectArrayFromDOM(arrayPath, prop);
+    if (!items[itemIndex]) return false;
+    const current = items[itemIndex].grantedItems || [];
+    if (current.includes(dropped.uuid)) return false;
+
+    items[itemIndex].grantedItems = [...current, dropped.uuid];
+    await sheet.item.update({ [arrayPath]: items });
+    return true;
+  }
+
+  /**
+   * Remove a granted item from a trait or feature by index.
+   */
+  static async removeGrantItem(sheet, event, target) {
+    const { arrayPath, itemIndex, grantIndex } = GrantsHandlers.#attrs(target, ['arrayPath', 'itemIndex', 'grantIndex']);
+    if (!arrayPath || itemIndex === null || grantIndex === null) return;
+
+    const prop = arrayPath.replace(/^system\./, '');
+    const items = sheet._collectArrayFromDOM(arrayPath, prop);
+    const granted = [...(items[itemIndex]?.grantedItems || [])];
+    granted.splice(grantIndex, 1);
+    items[itemIndex].grantedItems = granted;
+    await sheet.item.update({ [arrayPath]: items });
+  }
+
+  /** `grantedItems` uuids → `[{uuid, name, img}]` for the grants editor list. */
+  static async enrichGrantedItems(uuids) {
+    const out = [];
+    for (const uuid of uuids || []) {
+      if (!uuid) continue;
+      const doc = await fromUuid(uuid).catch(() => null);
+      out.push({ uuid, name: doc?.name || uuid, img: doc?.img || 'icons/svg/item-bag.svg' });
+    }
+    return out;
   }
 
   /**

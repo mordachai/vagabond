@@ -25,8 +25,16 @@ export default class VagabondParty extends VagabondActorBase {
     schema.speed  = new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 });
     schema.crawl  = new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 });
     schema.travel = new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 });
-    // Where the automatic speeds come from: the slowest member, or the party's container (wagon, mount…)
-    schema.speedSource = new fields.StringField({ required: true, initial: 'party', choices: ['party', 'container'] });
+    // Transports (Mount / Vehicle / Structure actors, or NPC beasts) the party travels with.
+    // `riders` = member uuids aboard: a rider uses the transport's Speed instead of their own
+    // (book p.17 Riding Animals). Their Holds (container items) carry the party's cargo.
+    schema.transports = new fields.ArrayField(new fields.SchemaField({
+      uuid: new fields.StringField({ required: true, blank: false }),
+      riders: new fields.ArrayField(new fields.StringField({ required: true, blank: false }), { initial: [] }),
+    }), { initial: [] });
+    // The transport the party currently uses (uuid, '' = none): drives the party token art and
+    // its non-mount riders. Mounts stay in use for whoever rides them; other transports are parked.
+    schema.activeTransport = new fields.StringField({ required: true, blank: true, initial: '' });
 
     // Travel (book Exploration): the Group uses its Navigator's Travel Speed (member uuid, '' = none
     // picked → slowest member); the Pace multiplies the miles per Shift; Hazardous Lands halve them.

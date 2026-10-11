@@ -248,6 +248,10 @@ export default class VagabondEquipment extends VagabondItemBase {
       choices: ['1H', '2H', 'V', '0']
     });
 
+    // Area attack (Breath Attack cone…): one Check against every Target instead of
+    // the single-Target limit weapon attacks otherwise get (Cleave has its own rule)
+    schema.areaAttack = new fields.BooleanField({ required: true, initial: false });
+
     // Damage one-handed (for weapons)
     schema.damageOneHand = new fields.StringField({
       required: false,
@@ -514,8 +518,12 @@ export default class VagabondEquipment extends VagabondItemBase {
       // Auto-recognition: with no Hit file set, derive the animation from the item
       // (see VagabondFXDb.autoSpec). Off = this item stays silent until a file is set.
       auto:           new fields.BooleanField({ initial: true }),
-      // 'auto' = derive from weaponSkill (weapons only); 'ranged' = beam; 'melee' = impact
+      // 'auto' = cone if the Hit file is a cone/breath clip, else from weaponSkill;
+      // 'ranged' = beam to each target; 'chain' = beam hopping target to target;
+      // 'melee' = impact; 'cone' = from the attacker toward the target
       animType:       new fields.StringField({ initial: 'auto' }),
+      // Cone reach in feet (e.g. Breath Attack 15'); 0 = the clip's own size
+      coneLength:     new fields.NumberField({ initial: 0, min: 0 }),
       hitFile:        new fields.StringField({ initial: '' }),
       hitScale:       new fields.NumberField({ initial: 1.0, min: 0.1 }),
       hitOffsetX:     new fields.NumberField({ initial: 0, integer: true }),

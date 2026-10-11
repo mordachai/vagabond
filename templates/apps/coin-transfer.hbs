@@ -1,0 +1,81 @@
+{{! Coin transfer: From (pick the giving purse) | To (recipients, members on by default); amount + Split below }}
+<div class="ct-root">
+  <div class="ct-columns">
+
+    {{! ── From ── }}
+    <section class="ct-col ct-from">
+      <h3 class="ct-col-title"><i class="fa-solid fa-sack-dollar"></i> {{localize 'VAGABOND.Trade.Coins.From'}}</h3>
+      {{#if from.members.length}}
+      <span class="ct-section-label">{{localize 'VAGABOND.Trade.Coins.Members'}}</span>
+      {{#each from.members}}
+      <button type="button" class="ct-row ct-giver{{#if active}} is-selected{{/if}}" data-action="pickGiver" data-uuid="{{uuid}}" aria-pressed="{{active}}">
+        <img class="ct-row-img" src="{{img}}" alt="">
+        <span class="ct-row-name">{{name}}</span>
+        <span class="ct-purse">{{#each purse}}<span class="ct-purse-coin">{{value}}<span class="ct-abbr">{{abbr}}</span></span>{{/each}}</span>
+      </button>
+      {{/each}}
+      {{/if}}
+      {{#if from.shared.length}}
+      <span class="ct-section-label">{{localize 'VAGABOND.Trade.Coins.Shared'}}</span>
+      {{#each from.shared}}
+      <button type="button" class="ct-row ct-giver{{#if active}} is-selected{{/if}}" data-action="pickGiver" data-uuid="{{uuid}}" aria-pressed="{{active}}">
+        <img class="ct-row-img" src="{{img}}" alt="">
+        <span class="ct-row-name">{{name}}</span>
+        <span class="ct-purse">{{#each purse}}<span class="ct-purse-coin">{{value}}<span class="ct-abbr">{{abbr}}</span></span>{{/each}}</span>
+      </button>
+      {{/each}}
+      {{/if}}
+    </section>
+
+    <i class="ct-arrow fa-solid fa-angles-right"></i>
+
+    {{! ── To ── }}
+    <section class="ct-col ct-to">
+      <h3 class="ct-col-title"><i class="fa-solid fa-hand-holding-dollar"></i> {{localize 'VAGABOND.Trade.Coins.To'}}</h3>
+      <button type="button" class="ct-section-label ct-group-toggle" data-action="selectAllRecipients" data-group="member" data-tooltip="{{localize 'VAGABOND.Trade.Coins.ToggleGroup'}}">
+        {{localize 'VAGABOND.Trade.Coins.Members'}}
+      </button>
+      {{#each to.members}}
+      <button type="button" class="ct-row ct-recipient{{#if selected}} is-selected{{/if}}" data-action="toggleRecipient" data-uuid="{{uuid}}" aria-pressed="{{selected}}">
+        <img class="ct-row-img" src="{{img}}" alt="">
+        <span class="ct-row-name">{{name}}</span>
+        <i class="ct-check fa-solid fa-check"></i>
+      </button>
+      {{else}}
+      <span class="ct-none">{{localize 'VAGABOND.Trade.Coins.NoMembers'}}</span>
+      {{/each}}
+      {{#if to.shared.length}}
+      <button type="button" class="ct-section-label ct-group-toggle" data-action="selectAllRecipients" data-group="shared" data-tooltip="{{localize 'VAGABOND.Trade.Coins.ToggleGroup'}}">
+        {{localize 'VAGABOND.Trade.Coins.Shared'}}
+      </button>
+      {{#each to.shared}}
+      <button type="button" class="ct-row ct-recipient{{#if selected}} is-selected{{/if}}" data-action="toggleRecipient" data-uuid="{{uuid}}" aria-pressed="{{selected}}">
+        <img class="ct-row-img" src="{{img}}" alt="">
+        <span class="ct-row-name">{{name}}</span>
+        <i class="ct-check fa-solid fa-check"></i>
+      </button>
+      {{/each}}
+      {{/if}}
+    </section>
+  </div>
+
+  {{! ── Amount + Split ── }}
+  <footer class="ct-footer">
+    <div class="ct-amount-row">
+      <span class="ct-section-label ct-amount-label">{{localize 'VAGABOND.Trade.Coins.Amount'}}</span>
+      {{#each coins}}
+      <div class="ct-coin ct-coin--{{key}}">
+        <input type="number" class="ct-coin-input" data-coin="{{key}}" value="{{value}}" min="0" step="1" data-tooltip="{{label}}">
+        {{! Left-click +1, right-click −1 (Shift: 10) }}
+        <span class="ct-abbr ct-step" data-coin="{{key}}" data-tooltip="{{localize 'VAGABOND.Trade.Coins.StepHint'}}">{{abbr}}</span>
+      </div>
+      {{/each}}
+      <button type="button" class="ct-chip" data-action="coinAll" data-tooltip="{{localize 'VAGABOND.Trade.Coins.AllHint'}}">{{localize 'VAGABOND.Trade.Coins.All'}}</button>
+      <button type="button" class="ct-chip ct-chip--icon" data-action="coinClear" data-tooltip="{{localize 'VAGABOND.Trade.Coins.Clear'}}"><i class="fa-solid fa-rotate-left"></i></button>
+    </div>
+    <span class="ct-preview">{{hint}}</span>
+    <button type="button" class="ct-split{{#if canSplit}} is-ready{{/if}}" data-action="splitCoins"{{#unless canSplit}} disabled{{/unless}}>
+      <i class="fa-solid fa-coins"></i> <span class="ct-split-label">{{splitLabel}}</span>
+    </button>
+  </footer>
+</div>

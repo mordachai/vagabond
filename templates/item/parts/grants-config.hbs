@@ -228,6 +228,42 @@
     </div>
   </div>
 
+  {{! ── GRANTED ITEMS (created equipped when gained, e.g. Breath Attack) ─ }}
+  <div class='accordion-item collapsed' data-accordion-id='grant-{{itemIndex}}-items'>
+    <div class='accordion-header' data-action='toggleAccordion'>
+      <i class='accordion-icon fas fa-chevron-right'></i>
+      <strong>{{localize "VAGABOND.UI.Sections.GrantedItems"}}</strong>
+    </div>
+    <div class='accordion-content'>
+      <div class='grants-accordion-body'>
+        <div class='item-grant-drop-zone'
+          data-array-path='{{arrayPath}}'
+          data-item-index='{{itemIndex}}'>
+          {{#if enrichedGrant.enrichedItems.length}}
+            <ul class='grants-list'>
+              {{#each enrichedGrant.enrichedItems as |granted grantIndex|}}
+                <li class='grant-tag'>
+                  <img src='{{granted.img}}' alt='{{granted.name}}' class='grant-tag-icon' />
+                  <span class='grant-tag-label'>{{granted.name}}</span>
+                  {{#if ../editable}}
+                    <a class='grant-tag-remove'
+                      data-action='removeGrantItem'
+                      data-array-path='{{../arrayPath}}'
+                      data-item-index='{{../itemIndex}}'
+                      data-grant-index='{{grantIndex}}'>
+                      <i class='fas fa-times'></i>
+                    </a>
+                  {{/if}}
+                </li>
+              {{/each}}
+            </ul>
+          {{/if}}
+          <p class='drop-hint text-muted'>{{localize "VAGABOND.UI.Hints.DropGrantedItem"}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
   {{! ── ALCHEMY FORMULAS (class features only) ─────────────────────────── }}
   {{#if isClassFeature}}
   <div class='accordion-item collapsed' data-accordion-id='grant-{{itemIndex}}-formulas'>

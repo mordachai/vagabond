@@ -114,12 +114,13 @@
             </div>
           </div>
           <div class='resource'>
-            <label class='resource-label'>{{localize "VAGABOND.UI.Labels.Cost"}}</label>
+            <label class='resource-label'>{{localize "VAGABOND.UI.Labels.ContainerList.Value"}}</label>
             <div class='calculated-item'>
               <span class='calc-value'>{{system.costDisplay}}</span>
             </div>
           </div>
         </div>
+        {{> 'systems/vagabond/templates/item/parts/container-treasure.hbs'}}
       {{else}}
         <div class='grid grid-1col'>
           <div class='grid grid-3col gap-8'>
@@ -177,38 +178,6 @@
                 type='number'
                 name='system.baseCost.copper'
                 value='{{system.baseCost.copper}}'
-                min='0'
-                data-dtype='Number'
-              />
-            </div>
-          </div>
-          <div class='grid grid-3col gap-8'>
-            <div class='resource'>
-              <label class='resource-label'>{{localize "VAGABOND.Actor.Character.FIELDS.combat.speed.base.label"}}</label>
-              <input
-                type='number'
-                name='system.speed'
-                value='{{system.speed}}'
-                min='0'
-                data-dtype='Number'
-              />
-            </div>
-            <div class='resource'>
-              <label class='resource-label'>{{localize "VAGABOND.Actor.Character.FIELDS.combat.speed.crawl.label"}}</label>
-              <input
-                type='number'
-                name='system.crawl'
-                value='{{system.crawl}}'
-                min='0'
-                data-dtype='Number'
-              />
-            </div>
-            <div class='resource'>
-              <label class='resource-label'>{{localize "VAGABOND.Actor.Character.FIELDS.combat.speed.travel.label"}}</label>
-              <input
-                type='number'
-                name='system.travel'
-                value='{{system.travel}}'
                 min='0'
                 data-dtype='Number'
               />

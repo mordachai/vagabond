@@ -4,6 +4,7 @@ import { EquipmentHelper } from '../helpers/equipment-helper.mjs';
 import { isStackableZeroSlot } from '../helpers/stack-helper.mjs';
 import { CurrencyHelper } from '../helpers/currency-helper.mjs';
 import { HunterHelper } from '../helpers/hunter-helper.mjs';
+import { GrantedItems } from '../helpers/granted-items.mjs';
 
 /**
  * Extend the basic Item with some very simple modifications.
@@ -274,6 +275,12 @@ export class VagabondItem extends Item {
     await super._onCreate(data, options, userId);
 
     console.log(`Vagabond | _onCreate fired for item "${this.name}" (type: ${this.type})`);
+
+    // An Ancestry / Class grants its items (Draken Breath Attack…) however it was added
+    if ((this.type === 'ancestry' || this.type === 'class') && userId === game.user.id) {
+      await GrantedItems.grantOnAdd(this);
+      return;
+    }
 
     // Only handle perks
     if (this.type !== 'perk') return;
@@ -637,6 +644,9 @@ export class VagabondItem extends Item {
 
     // Only run on the triggering client to avoid duplicate operations
     if (userId !== game.user.id) return;
+
+    // Items granted by a removed Ancestry / Class go with it
+    if (this.type === 'ancestry' || this.type === 'class') await GrantedItems.revokeOnRemove(this);
 
     // Remove any actor-level effects that originated from this item
     if (this.parent?.documentName === 'Actor') {

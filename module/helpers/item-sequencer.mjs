@@ -36,17 +36,27 @@ export class VagabondItemSequencer {
 
   /**
    * Resolve animation type for the item.
-   * Weapons auto-derive from weaponSkill; alchemicals/relics use the itemFx.animType field.
+   * An explicit itemFx.animType wins; Auto reads a cone clip (breath weapons) from the
+   * Hit file's path, else derives from weaponSkill (`ranged` skill → beam, else impact).
    * @param {Item} item
-   * @returns {'ranged'|'melee'}
+   * @returns {'ranged'|'melee'|'cone'}
    * @private
    */
   static _resolveAnimType(item) {
     const fx = item.system?.itemFx;
     if (fx?.animType && fx.animType !== 'auto') return fx.animType;
-    // Auto: derive from weapon skill
+    if (/cone|breath/i.test(fx?.hitFile ?? '')) return 'cone';
     const skill = item.system?.weaponSkill;
     return skill === 'ranged' ? 'ranged' : 'melee';
+  }
+
+  /**
+   * Sequencer rotation (degrees, counter-clockwise) that points a left-to-right clip
+   * from `src` toward `dst`.
+   * @private
+   */
+  static _facing(src, dst) {
+    return -Math.toDegrees(Math.atan2(dst.y - src.y, dst.x - src.x));
   }
 
   /**
@@ -78,8 +88,9 @@ export class VagabondItemSequencer {
     const dy = dstPos.y - srcPos.y;
     const dist = Math.hypot(dx, dy);
     if (!dist) {
-      seq.effect().file(file).atLocation(srcPos).scale(scale).duration(duration);
-      return;
+      const eff = seq.effect().file(file).atLocation(srcPos).scale(scale);
+      if (duration) eff.duration(duration);
+      return eff;
     }
     // Y shrinks with distance^0.73, floor at 3 grids to avoid oversized short beams.
     const gridsAway = Math.max(3, dist / canvas.grid.size);
@@ -90,6 +101,35 @@ export class VagabondItemSequencer {
       .stretchTo(dstPos)
       .scale({ y: scaleY });
     if (duration) eff.duration(duration);
+    return eff;
+  }
+
+  /**
+   * Chain hop order: from the attacker to the nearest target, then on to the
+   * nearest one not yet hit from there.
+   * @param {{x,y}} start
+   * @param {Token[]} targets
+   * @param {(t: Token) => {x,y}} center
+   * @returns {Token[]}
+   * @private
+   */
+  static _chainOrder(start, targets, center) {
+    const left = [...targets];
+    const order = [];
+    let from = start;
+    while (left.length) {
+      let best = 0;
+      let bestDist = Infinity;
+      left.forEach((t, i) => {
+        const c = center(t);
+        const d = Math.hypot(c.x - from.x, c.y - from.y);
+        if (d < bestDist) { bestDist = d; best = i; }
+      });
+      const [next] = left.splice(best, 1);
+      order.push(next);
+      from = center(next);
+    }
+    return order;
   }
 
   /**
@@ -222,12 +262,37 @@ export class VagabondItemSequencer {
           for (const target of targetTokens) {
             this._beamEffect(seq, file, scale, duration, center(casterToken), hitPos(target));
           }
+        } else if (animType === 'chain') {
+          // One beam hopping attacker → T1 → T2 …, each hop starting as the last ends
+          let from = center(casterToken);
+          for (const target of this._chainOrder(from, targetTokens, center)) {
+            this._beamEffect(seq, file, scale, duration, from, hitPos(target))?.waitUntilFinished(-100);
+            from = center(target);
+          }
+        } else if (animType === 'cone') {
+          // One cone from the attacker's edge, aimed at the targets' centroid
+          if (!targetTokens.length) return;
+          const src = center(casterToken);
+          const aim = {
+            x: targetTokens.reduce((s, t) => s + center(t).x, 0) / targetTokens.length,
+            y: targetTokens.reduce((s, t) => s + center(t).y, 0) / targetTokens.length,
+          };
+          const eff = seq.effect()
+            .file(file)
+            .atLocation(src)
+            .anchor({ x: 0, y: 0.5 })
+            .rotate(this._facing(src, aim))
+            .scale(scale);
+          const coneFt = Number(fx.coneLength) || 0;
+          if (coneFt > 0) eff.size({ width: coneFt / (canvas.scene.grid.distance || 5) }, { gridUnits: true });
+          if (duration) eff.duration(duration);
         } else {
-          // Impact at each target
+          // Impact at each target, turned so it travels from the attacker's side
           for (const target of targetTokens) {
             const eff = seq.effect()
               .file(file)
               .atLocation(hitPos(target))
+              .rotate(this._facing(center(casterToken), center(target)))
               .scale(scale);
             if (duration) eff.duration(duration);
           }

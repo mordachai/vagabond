@@ -48,7 +48,7 @@ export default class VagabondContainerData extends VagabondItemBase {
       initial: false
     });
 
-    // Speeds a party gets while it follows this container (a wagon, a mount…); 0 = none
+    // Legacy (unused): speeds now live on Mount / Vehicle / Structure actors (party transports)
     schema.speed = new fields.NumberField({ required: true, nullable: false, integer: true, initial: 0, min: 0 });
     schema.crawl = new fields.NumberField({ required: true, nullable: false, integer: true, initial: 0, min: 0 });
     schema.travel = new fields.NumberField({ required: true, nullable: false, integer: true, initial: 0, min: 0 });
@@ -69,6 +69,13 @@ export default class VagabondContainerData extends VagabondItemBase {
       gold: new fields.NumberField({ required: true, integer: true, initial: 0, min: 0 }),
       silver: new fields.NumberField({ required: true, integer: true, initial: 0, min: 0 }),
       copper: new fields.NumberField({ required: true, integer: true, initial: 0, min: 0 })
+    });
+
+    // Coins stored inside (a chest, a Hold): edited on the sheet even while locked
+    schema.currency = new fields.SchemaField({
+      gold: new fields.NumberField({ required: true, nullable: false, integer: true, initial: 0, min: 0 }),
+      silver: new fields.NumberField({ required: true, nullable: false, integer: true, initial: 0, min: 0 }),
+      copper: new fields.NumberField({ required: true, nullable: false, integer: true, initial: 0, min: 0 })
     });
 
     return schema;

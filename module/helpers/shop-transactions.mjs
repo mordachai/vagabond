@@ -68,7 +68,7 @@ export class ShopTransactions {
   /**
    * Buy a whole cart in one all-or-nothing transaction: every line is validated, the
    * total is paid once, items are created in one batch, one receipt is posted.
-   * With `party`, the party treasury pays and the items go into the party's inventory;
+   * With `party`, the party treasury pays and the items go into the buyer's inventory;
    * `buyer` is the member shopping (prices use their Presence).
    * @param {object} args
    * @param {Actor|string} args.shop
@@ -213,7 +213,7 @@ export class ShopTransactions {
     if (!buyer.testUserPermission(user, 'OWNER')) return fail('permission');
     if (!this.canTrade(user, shop)) return fail('closed');
 
-    // Group purchase: the party pays and receives; the buyer must be a member (GM exempt)
+    // Group purchase: the party pays, the buyer receives; the buyer must be a member (GM exempt)
     let party = null;
     if (partyUuid) {
       party = await fromUuid(partyUuid);
@@ -265,12 +265,12 @@ export class ShopTransactions {
     // unequipped stack (or one new stack); everything else = separate quantity-1 items.
     const stackUpdates = new Map(); // stack id → new quantity
     const creates = [];
-    let gridPos = EquipmentHelper.nextGridPosition(payer);
+    let gridPos = EquipmentHelper.nextGridPosition(buyer);
     for (const { item, qty, material } of planned) {
       const data = this.buildItemData(item, { material });
       const stackable = data.type === 'equipment' && EquipmentHelper.itemSlotCost(new Item.implementation(data)) === 0;
       const stack = stackable
-        ? payer.items.find(i => i.type === 'equipment' && !i.system.equipped && !i.system.containerId
+        ? buyer.items.find(i => i.type === 'equipment' && !i.system.equipped && !i.system.containerId
           && EquipmentHelper.itemSlotCost(i) === 0 && this.sameSource(i, data))
         : null;
       if (stack) {
@@ -289,10 +289,10 @@ export class ShopTransactions {
     await payer.update({ 'system.currency': newWallet });
     try {
       if (stackUpdates.size) {
-        await payer.updateEmbeddedDocuments('Item',
+        await buyer.updateEmbeddedDocuments('Item',
           [...stackUpdates].map(([_id, quantity]) => ({ _id, 'system.quantity': quantity })));
       }
-      if (creates.length) await payer.createEmbeddedDocuments('Item', creates);
+      if (creates.length) await buyer.createEmbeddedDocuments('Item', creates);
     } catch (err) {
       await payer.update({ 'system.currency': wallet }); // refund
       throw err;

@@ -42,10 +42,49 @@
       "enabled": true,
       "hitFile": "modules/JB2A_DnD5e/Library/Generic/Template/Cone/Breath_Weapon/BreathWeapon_Fire01_Regular_Orange_30ft_Cone_Burst_600x600.webm",
       "hitDuration": 7000,
-      "hitScale": 1
-    }
+      "hitScale": 1,
+      "coneLength": 15,
+      "animType": "cone"
+    },
+    "areaAttack": true
   },
-  "effects": [],
+  "effects": [
+    {
+      "name": "Breath Attack Charging",
+      "img": "icons/magic/fire/beam-jet-stream-trails-orange.webp",
+      "_id": "BjrG2YmqGEYPoqw2",
+      "type": "base",
+      "system": {
+        "changes": []
+      },
+      "disabled": true,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "<p>Switch on when you spend the Action to begin your Breath Attack. On a later Turn in the same Scene, use an Action or skip your Move to exhale, then switch it off.</p>",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent"
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "6.3.1"
+      },
+      "start": null,
+      "showIcon": 2,
+      "folder": null,
+      "_key": "!items.effects!XzPEUxYpzzhe8kiN.BjrG2YmqGEYPoqw2"
+    }
+  ],
   "folder": "BjNJoIvzJXyagnI4",
   "sort": 100000,
   "ownership": {

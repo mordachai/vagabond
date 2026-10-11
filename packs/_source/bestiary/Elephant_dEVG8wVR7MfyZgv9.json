@@ -149,7 +149,31 @@
     "prependAdjective": false,
     "depth": 3
   },
-  "items": [],
+  "items": [
+    {
+      "name": "Hold",
+      "type": "container",
+      "img": "icons/containers/bags/pack-leather-white-tan.webp",
+      "system": {
+        "description": "<p>Elephant: carries 96 Slots of Items.</p>",
+        "slots": 0,
+        "capacity": 96,
+        "gridPosition": 0,
+        "items": [],
+        "baseCost": {
+          "gold": 0,
+          "silver": 0,
+          "copper": 0
+        },
+        "locked": true
+      },
+      "effects": [],
+      "flags": {},
+      "sort": 0,
+      "_id": "mLndboLruMhIBYkt",
+      "_key": "!actors.items!dEVG8wVR7MfyZgv9.mLndboLruMhIBYkt"
+    }
+  ],
   "effects": [],
   "folder": "qtyjtBXZBVC3oOwU",
   "flags": {},

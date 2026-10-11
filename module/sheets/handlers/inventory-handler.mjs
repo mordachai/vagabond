@@ -54,6 +54,10 @@ export class InventoryHandler {
         weaponSkillIcon: EquipmentHelper.getWeaponSkillIcon(item),
         damageTypeIcon: EquipmentHelper.getDamageTypeIcon(item),
         isSlotZero,
+        // Quantity badge: throwables and 0-Slot stackables only — a 0-Slot weapon / armor (Breath Attack,
+        // claws) never stacks (stack-helper isStackableZeroSlot), unless someone set a real stack on it
+        showQty: !!item.system.isThrowable
+          || (isSlotZero && (!['weapon', 'armor'].includes(item.system.equipmentType) || qty > 1)),
         // Card width: per-unit Slots, capped to the 4-column grid (stacks don't widen the card)
         totalSlots: Math.min(EquipmentHelper.itemSlotCost(item), 4),
         // Capacity consumed by the whole stack (cost × quantity) — drives numbering only

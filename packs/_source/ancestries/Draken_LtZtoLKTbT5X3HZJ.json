@@ -13,6 +13,9 @@
         "statBonusPoints": 0,
         "extraTraining": 0,
         "requiredSpells": [],
+        "grantedItems": [
+          "Compendium.vagabond.weapons.Item.XzPEUxYpzzhe8kiN"
+        ],
         "allowedPerks": [],
         "perkAmount": 0,
         "ignorePerkPrereqs": "none",

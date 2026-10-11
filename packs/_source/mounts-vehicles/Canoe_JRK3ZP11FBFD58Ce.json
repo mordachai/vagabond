@@ -1,0 +1,62 @@
+{
+  "name": "Canoe",
+  "type": "construct",
+  "img": "icons/commodities/wood/lumber-plank.webp",
+  "system": {
+    "kind": "vessel",
+    "type": "",
+    "speed": 0,
+    "crawl": 0,
+    "travel": 12,
+    "biography": "<p><strong>Vessel.</strong> Travel Speed 12 mi per Shift · Capacity 5 Slots.</p><p>Value: 5g.</p>"
+  },
+  "prototypeToken": {
+    "name": "Canoe",
+    "actorLink": false,
+    "disposition": 0,
+    "width": 1,
+    "height": 1,
+    "texture": {
+      "src": "icons/commodities/wood/lumber-plank.webp",
+      "fit": "contain"
+    },
+    "bar1": {
+      "attribute": null
+    }
+  },
+  "items": [
+    {
+      "name": "Hold",
+      "type": "container",
+      "img": "icons/containers/chest/chest-reinforced-steel-brown.webp",
+      "system": {
+        "description": "<p>Canoe: carries 5 Slots of Items.</p>",
+        "slots": 0,
+        "capacity": 5,
+        "gridPosition": 0,
+        "items": [],
+        "baseCost": {
+          "gold": 0,
+          "silver": 0,
+          "copper": 0
+        },
+        "locked": true
+      },
+      "effects": [],
+      "flags": {},
+      "sort": 0,
+      "_id": "YGjztFRhbRyIkw3L",
+      "_key": "!actors.items!JRK3ZP11FBFD58Ce.YGjztFRhbRyIkw3L"
+    }
+  ],
+  "effects": [],
+  "folder": "C4D159k33OcY3zcc",
+  "flags": {
+    "vagabond": {
+      "sourceItemId": "X6zGgajivakWKX4U"
+    }
+  },
+  "sort": 1100000,
+  "_id": "JRK3ZP11FBFD58Ce",
+  "_key": "!actors!JRK3ZP11FBFD58Ce"
+}

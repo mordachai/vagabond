@@ -1,0 +1,62 @@
+{
+  "name": "Sailboat",
+  "type": "construct",
+  "img": "icons/magic/air/wind-weather-sailing-ship.webp",
+  "system": {
+    "kind": "vessel",
+    "type": "",
+    "speed": 0,
+    "crawl": 0,
+    "travel": 30,
+    "biography": "<p><strong>Vessel.</strong> Travel Speed 30 mi per Shift · Capacity 1000 Slots.</p><p>Value: 1000g.</p>"
+  },
+  "prototypeToken": {
+    "name": "Sailboat",
+    "actorLink": false,
+    "disposition": 0,
+    "width": 2,
+    "height": 2,
+    "texture": {
+      "src": "icons/magic/air/wind-weather-sailing-ship.webp",
+      "fit": "contain"
+    },
+    "bar1": {
+      "attribute": null
+    }
+  },
+  "items": [
+    {
+      "name": "Hold",
+      "type": "container",
+      "img": "icons/containers/chest/chest-reinforced-steel-brown.webp",
+      "system": {
+        "description": "<p>Sailboat: carries 1000 Slots of Items.</p>",
+        "slots": 0,
+        "capacity": 1000,
+        "gridPosition": 0,
+        "items": [],
+        "baseCost": {
+          "gold": 0,
+          "silver": 0,
+          "copper": 0
+        },
+        "locked": true
+      },
+      "effects": [],
+      "flags": {},
+      "sort": 0,
+      "_id": "78psvqllmuqgqLbO",
+      "_key": "!actors.items!IlUTvUniHfECkeOv.78psvqllmuqgqLbO"
+    }
+  ],
+  "effects": [],
+  "folder": "C4D159k33OcY3zcc",
+  "flags": {
+    "vagabond": {
+      "sourceItemId": "IM0nvq37EJdxpWyN"
+    }
+  },
+  "sort": 1700000,
+  "_id": "IlUTvUniHfECkeOv",
+  "_key": "!actors!IlUTvUniHfECkeOv"
+}

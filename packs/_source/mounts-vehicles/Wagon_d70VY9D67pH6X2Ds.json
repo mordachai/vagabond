@@ -1,0 +1,62 @@
+{
+  "name": "Wagon",
+  "type": "construct",
+  "img": "icons/environment/settlement/wagon.webp",
+  "system": {
+    "kind": "vehicle",
+    "type": "",
+    "speed": 0,
+    "crawl": 0,
+    "travel": 0,
+    "biography": "<p><strong>Vehicle.</strong> +150 Slots.</p><p>Value: 15g.</p>"
+  },
+  "prototypeToken": {
+    "name": "Wagon",
+    "actorLink": false,
+    "disposition": 0,
+    "width": 2,
+    "height": 2,
+    "texture": {
+      "src": "icons/environment/settlement/wagon.webp",
+      "fit": "contain"
+    },
+    "bar1": {
+      "attribute": null
+    }
+  },
+  "items": [
+    {
+      "name": "Hold",
+      "type": "container",
+      "img": "icons/containers/chest/chest-reinforced-steel-brown.webp",
+      "system": {
+        "description": "<p>Wagon: carries 150 Slots of Items.</p>",
+        "slots": 0,
+        "capacity": 150,
+        "gridPosition": 0,
+        "items": [],
+        "baseCost": {
+          "gold": 0,
+          "silver": 0,
+          "copper": 0
+        },
+        "locked": true
+      },
+      "effects": [],
+      "flags": {},
+      "sort": 0,
+      "_id": "sy4nwWxCUdiHAJlf",
+      "_key": "!actors.items!d70VY9D67pH6X2Ds.sy4nwWxCUdiHAJlf"
+    }
+  ],
+  "effects": [],
+  "folder": "yostnoMH5CPrrJ61",
+  "flags": {
+    "vagabond": {
+      "sourceItemId": "XJTjKKpbc7b5E0J2"
+    }
+  },
+  "sort": 1000000,
+  "_id": "d70VY9D67pH6X2Ds",
+  "_key": "!actors!d70VY9D67pH6X2Ds"
+}

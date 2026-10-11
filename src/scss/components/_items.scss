@@ -1212,6 +1212,25 @@
   }
 }
 
+// Granted items drop zone (ancestry trait / class feature grants)
+.item-grant-drop-zone {
+  min-height: 40px;
+  padding: 8px;
+  border: 2px dashed $c-faint;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.3);
+
+  .grants-list {
+    margin-bottom: 4px;
+  }
+
+  .drop-hint {
+    font-size: 12px;
+    font-style: italic;
+    margin: 0;
+  }
+}
+
 // Suggested Starting Packs drop zone (class sheet)
 .suggested-packs-drop-zone {
   min-height: 40px;

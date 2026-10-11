@@ -440,6 +440,12 @@
             </div>
           </div>
         </div>
+        <div class='form-group'>
+          <label class='resource-label' data-tooltip='{{localize "VAGABOND.Item.Weapon.FIELDS.areaAttack.hint"}}'>
+            <input type='checkbox' name='system.areaAttack' {{checked system.areaAttack}}>
+            {{localize "VAGABOND.Item.Weapon.FIELDS.areaAttack.label"}}
+          </label>
+        </div>
 
         {{! Weapon Damage Fields
             0 / 1H -> one row (one-hand damage)    2H -> one row (two-hand damage)
@@ -1481,15 +1487,20 @@
               <summary>{{localize "VAGABOND.ItemFx.Advanced"}}</summary>
               <div class='ifx-advanced-body'>
                 <p class='item-fx-hint'>{{localize "VAGABOND.ItemFx.AdvancedHint"}}</p>
-                {{#unless isWeapon}}
-                  <div class='form-group'>
-                    <label class='resource-label'>{{localize "VAGABOND.ItemFx.AnimType"}}</label>
-                    <select name='system.itemFx.animType' data-dtype='String'>
-                      <option value='melee' {{#if (eq system.itemFx.animType 'melee')}}selected{{/if}}>{{localize "VAGABOND.ItemFx.AnimTypeMelee"}}</option>
-                      <option value='ranged' {{#if (eq system.itemFx.animType 'ranged')}}selected{{/if}}>{{localize "VAGABOND.ItemFx.AnimTypeRanged"}}</option>
-                    </select>
-                  </div>
-                {{/unless}}
+                <div class='form-group'>
+                  <label class='resource-label'>{{localize "VAGABOND.ItemFx.AnimType"}}</label>
+                  <select name='system.itemFx.animType' data-dtype='String'>
+                    <option value='auto' {{#if (eq system.itemFx.animType 'auto')}}selected{{/if}}>{{localize "VAGABOND.ItemFx.AnimTypeAuto"}}</option>
+                    <option value='melee' {{#if (eq system.itemFx.animType 'melee')}}selected{{/if}}>{{localize "VAGABOND.ItemFx.AnimTypeMelee"}}</option>
+                    <option value='ranged' {{#if (eq system.itemFx.animType 'ranged')}}selected{{/if}}>{{localize "VAGABOND.ItemFx.AnimTypeRanged"}}</option>
+                    <option value='chain' {{#if (eq system.itemFx.animType 'chain')}}selected{{/if}}>{{localize "VAGABOND.ItemFx.AnimTypeChain"}}</option>
+                    <option value='cone' {{#if (eq system.itemFx.animType 'cone')}}selected{{/if}}>{{localize "VAGABOND.ItemFx.AnimTypeCone"}}</option>
+                  </select>
+                </div>
+                <div class='form-group'>
+                  <label class='resource-label' data-tooltip='{{localize "VAGABOND.ItemFx.ConeLengthHint"}}'>{{localize "VAGABOND.ItemFx.ConeLength"}}</label>
+                  <input type='number' name='system.itemFx.coneLength' value='{{system.itemFx.coneLength}}' min='0' step='5' data-dtype='Number'>
+                </div>
                 <label class='resource-label'>{{localize "VAGABOND.ItemFx.HitAnimation"}}</label>
                 <div class='item-fx-file-row'>
                   <input type='text' name='system.itemFx.hitFile' value='{{system.itemFx.hitFile}}' placeholder='jb2a.rapier.melee  |  path/Weapon*  |  anim01.webm | anim02.webm' data-dtype='String'>

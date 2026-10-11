@@ -144,7 +144,31 @@
     "prependAdjective": false,
     "depth": 2
   },
-  "items": [],
+  "items": [
+    {
+      "name": "Hold",
+      "type": "container",
+      "img": "icons/containers/bags/pack-leather-white-tan.webp",
+      "system": {
+        "description": "<p>Horse, Riding: carries 12 Slots of Items.</p>",
+        "slots": 0,
+        "capacity": 12,
+        "gridPosition": 0,
+        "items": [],
+        "baseCost": {
+          "gold": 0,
+          "silver": 0,
+          "copper": 0
+        },
+        "locked": true
+      },
+      "effects": [],
+      "flags": {},
+      "sort": 0,
+      "_id": "Ge5YbGyHyLC3eX5E",
+      "_key": "!actors.items!b8UREGXp4ESbUZQj.Ge5YbGyHyLC3eX5E"
+    }
+  ],
   "effects": [],
   "folder": "qtyjtBXZBVC3oOwU",
   "flags": {},

@@ -53,11 +53,49 @@
       2px -2px 0 $c-black;
   }
 
+  .construct-type-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .construct-kinds {
+    display: flex;
+    gap: 2px;
+    flex-shrink: 0;
+  }
+
+  .construct-kind {
+    width: 26px;
+    height: 26px;
+    line-height: normal;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid transparent;
+    border-radius: 6px;
+    color: $c-white;
+    opacity: 0.55;
+    cursor: pointer;
+
+    &:hover { opacity: 0.85; }
+
+    &.is-selected {
+      opacity: 1;
+      color: $c-yellow;
+      border-color: $c-yellow;
+      box-shadow: 0 0 8px -1px $c-yellow, inset 0 0 0 1px $c-yellow;
+    }
+  }
+
   .construct-type {
+    flex: 1;
+    min-width: 0;
     font-family: $font-title;
     font-size: 1.3em;
     color: $c-yellow;
-    width: 100%;
   }
 
   .construct-speeds {

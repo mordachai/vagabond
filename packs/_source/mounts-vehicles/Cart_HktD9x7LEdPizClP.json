@@ -1,0 +1,62 @@
+{
+  "name": "Cart",
+  "type": "construct",
+  "img": "icons/commodities/wood/wood-wheel-brown.webp",
+  "system": {
+    "kind": "vehicle",
+    "type": "",
+    "speed": 0,
+    "crawl": 0,
+    "travel": 0,
+    "biography": "<p><strong>Vehicle.</strong> +50 Slots.</p><p>Value: 5g.</p>"
+  },
+  "prototypeToken": {
+    "name": "Cart",
+    "actorLink": false,
+    "disposition": 0,
+    "width": 1,
+    "height": 1,
+    "texture": {
+      "src": "icons/commodities/wood/wood-wheel-brown.webp",
+      "fit": "contain"
+    },
+    "bar1": {
+      "attribute": null
+    }
+  },
+  "items": [
+    {
+      "name": "Hold",
+      "type": "container",
+      "img": "icons/containers/chest/chest-reinforced-steel-brown.webp",
+      "system": {
+        "description": "<p>Cart: carries 50 Slots of Items.</p>",
+        "slots": 0,
+        "capacity": 50,
+        "gridPosition": 0,
+        "items": [],
+        "baseCost": {
+          "gold": 0,
+          "silver": 0,
+          "copper": 0
+        },
+        "locked": true
+      },
+      "effects": [],
+      "flags": {},
+      "sort": 0,
+      "_id": "aCC8NHmbCvyGUANO",
+      "_key": "!actors.items!HktD9x7LEdPizClP.aCC8NHmbCvyGUANO"
+    }
+  ],
+  "effects": [],
+  "folder": "yostnoMH5CPrrJ61",
+  "flags": {
+    "vagabond": {
+      "sourceItemId": "5NHRhQ1HcHYlo9zi"
+    }
+  },
+  "sort": 900000,
+  "_id": "HktD9x7LEdPizClP",
+  "_key": "!actors!HktD9x7LEdPizClP"
+}

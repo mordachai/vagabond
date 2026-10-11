@@ -13,6 +13,7 @@ import { buildSpellMenuItems } from '../helpers/item-menu.mjs';
 import { EnrichmentHelper } from '../helpers/enrichment-helper.mjs';
 import { EquipmentHelper } from '../helpers/equipment-helper.mjs';
 import { CurrencyHelper } from '../helpers/currency-helper.mjs';
+import { TradeHelper } from '../helpers/trade-helper.mjs';
 import { activateHandItem } from '../helpers/hand-item-activation.mjs';
 import * as ItemSections from '../helpers/item-sections.mjs';
 import { setupDragReorder } from '../helpers/drag-reorder.mjs';
@@ -2497,6 +2498,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     if (!this.actor.isOwner) return false;
 
     const item = await Item.implementation.fromDropData(data);
+    if (!item) return false;
     const itemData = item.toObject();
 
     // Handle item from same actor (sorting)
@@ -2504,50 +2506,35 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       return this._onSortItem(event, itemData);
     }
 
-    const created = await this._onDropItemCreate(itemData, event);
-
-    // Transfer (not copy): delete from source actor if it's actor-owned equipment
-    if (created?.length && item.parent?.documentName === 'Actor' && item.type === 'equipment' && item.parent.isOwner) {
-      await item.delete();
+    // Inventory items from another actor change hands through free trade: moved (never copied),
+    // only out of inventories the user may take from (TradeHelper guard rails, GM relay).
+    if (item.parent?.documentName === 'Actor' && TradeHelper.TRADE_TYPES.includes(item.type)) {
+      const qty = await TradeHelper.pickQuantity(item, event);
+      if (!qty) return false;
+      return TradeHelper.moveItem({ source: { itemUuid: item.uuid }, dest: { actorUuid: this.actor.uuid }, qty });
     }
 
-    return created;
+    return this._onDropItemCreate(itemData, event);
   }
 
   /**
-   * Handle dropping a ContainerItem (dragged from a container sheet) onto this actor sheet.
-   * Moves the item out of the container and into the actor's inventory.
+   * Handle dropping a ContainerItem (dragged from a container sheet or a party Hold) onto this
+   * actor: moved out of the container into the inventory through free trade.
    * @param {DragEvent} event
-   * @param {Object} data  - { type, containerUuid, itemIndex, itemData }
+   * @param {Object} data  - { type, containerUuid, itemIndex, entryId?, itemData }
    * @private
    */
   async _onDropContainerItem(event, data) {
     if (!this.actor.isOwner) return false;
-
     const { containerUuid, itemIndex, itemData } = data;
-    if (!containerUuid || itemIndex === undefined || !itemData) return false;
-
-    const containerItem = await fromUuid(containerUuid);
-    if (!containerItem || containerItem.type !== 'container') return false;
-
-    // User must have permission to edit the source container (handles same-actor
-    // inventory containers and cross-actor cases like a Construct's Hold)
-    if (!containerItem.isOwner) return false;
-
-    // Prepare item data for the inventory — strip stored _id, clear containerId
-    const newItemData = foundry.utils.deepClone(itemData);
-    delete newItemData._id;
-    newItemData.system.containerId = null;
-
-    // Assign next available gridPosition
-    newItemData.system.gridPosition = EquipmentHelper.nextGridPosition(this.actor);
-
-    // Create the item on the actor, then remove it from the container
-    await this.actor.createEmbeddedDocuments('Item', [newItemData]);
-    const newItems = containerItem.system.items.filter((_, i) => i !== itemIndex);
-    await containerItem.update({ 'system.items': newItems });
-
-    return true;
+    if (!containerUuid) return false;
+    const qty = await TradeHelper.pickQuantity(itemData, event);
+    if (!qty) return false;
+    return TradeHelper.moveItem({
+      source: { containerUuid, entryId: data.entryId ?? itemData?._id ?? null, index: itemIndex },
+      dest: { actorUuid: this.actor.uuid },
+      qty,
+    });
   }
 
   /**

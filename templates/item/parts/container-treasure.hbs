@@ -1,0 +1,15 @@
+{{! Coins stored in a container: editable even while locked; the hand button splits them between party members }}
+<div class='container-treasure'>
+  <i class='container-treasure-icon fa-solid fa-coins'></i>
+  {{#each containerCoins}}
+  <label class='container-coin container-coin--{{key}}' data-tooltip='{{label}}'>
+    <input type='number' name='system.currency.{{key}}' value='{{value}}' min='0' step='1'{{#unless @root.editable}} disabled{{/unless}}>
+    <span class='container-coin-abbr'>{{abbr}}</span>
+  </label>
+  {{/each}}
+  {{#if containerCanShare}}
+  <button type='button' class='container-treasure-share' data-action='shareContainerCoins' data-tooltip='{{localize "VAGABOND.Trade.Coins.Open"}}'>
+    <i class='fa-solid fa-hand-holding-dollar'></i>
+  </button>
+  {{/if}}
+</div>

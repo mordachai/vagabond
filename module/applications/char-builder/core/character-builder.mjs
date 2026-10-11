@@ -14,6 +14,7 @@ import { CharacterBuilderDataService } from '../services/data-service.mjs';
 import { CharacterBuilderUIComponents } from '../ui/ui-components.mjs';
 import { isTrainingComplete } from '../steps/training-manager.mjs';
 import { BuildGuideService } from '../services/build-guide-service.mjs';
+import { GrantedItems } from '../../../helpers/granted-items.mjs';
 import { isStepUnlocked, canFinishBuild, furthestAfter, applicableSteps, isStepApplicable, isStepDone, DEFAULT_STEP_ORDER } from '../steps/step-gating.mjs';
 
 // Import all step managers
@@ -1039,6 +1040,16 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
       }
     }
     if (keepsGuideClass) foundry.utils.setProperty(actorData, 'flags.vagabond.buildGuide', foundry.utils.deepClone(guidePlan));
+
+    // Granted items (Ancestry traits + Level-1 class features), e.g. Draken's Breath Attack — created equipped
+    const ancestryItemObj = state.selectedAncestry ? await fromUuid(state.selectedAncestry) : null;
+    const grantEntries = [
+      ...GrantedItems.entriesFor(ancestryItemObj),
+      ...GrantedItems.entriesFor(classItemObj, { levels: [1] }),
+    ];
+    if (grantEntries.length) {
+      actorData.items.push(...await GrantedItems.buildItemData(grantEntries, { existing: actorData.items }));
+    }
 
     // Alchemist formula picks (Alchemy step)
     if ((state.formulaLimit || 0) > 0) {

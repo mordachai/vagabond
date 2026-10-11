@@ -8,8 +8,12 @@ import { VagabondSpellSequencer } from '../helpers/spell-sequencer.mjs';
 import { VagabondItemSequencer } from '../helpers/item-sequencer.mjs';
 import { VagabondFXDb } from '../helpers/item-fx-db.mjs';
 import { EquipmentHelper } from '../helpers/equipment-helper.mjs';
+import { TradeHelper } from '../helpers/trade-helper.mjs';
+import { CoinTransferDialog } from '../applications/coin-transfer-dialog.mjs';
 import { ItemFxPicker } from '../applications/item-fx-picker.mjs';
 import { levelTableCap } from '../helpers/homebrew-config.mjs';
+import { CurrencyHelper } from '../helpers/currency-helper.mjs';
+import { ContextMenuHelper } from '../helpers/context-menu-helper.mjs';
 
 const { api, sheets } = foundry.applications;
 const DragDrop = foundry.applications.ux.DragDrop;
@@ -26,6 +30,9 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     this._savedOpenDetails = new Set();
     this._savedOpenAccordions = new Set();
     this._updateQueue = Promise.resolve();
+    // Container list: closed type sections (all open by default) and open item details
+    this._containerClosedGroups = new Set();
+    this._containerOpenItems = new Set();
   }
 
   /**
@@ -53,6 +60,8 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       previewItemFxSlot: this._onPreviewItemFxSlot,
       disableAAAutoRec: this._onDisableAAAutoRec,
       resetItemFx: this._onResetItemFx,
+      deployConstruct: this._onDeployConstruct,
+      shareContainerCoins: this._onShareContainerCoins,
       previewSpellFx: this._onPreviewSpellFx,
       viewDoc: this._viewEffect,
       createDoc: this._createEffect,
@@ -106,6 +115,10 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       removePackItem: this._onRemovePackItem,
       equipFromContainer: this._onEquipFromContainer,
       deleteFromContainer: this._onDeleteFromContainer,
+      toggleContainerGroup: this._onToggleContainerGroup,
+      toggleContainerItem: this._onToggleContainerItem,
+      openContainerItem: this._onOpenContainerItem,
+      containerItemMenu: this._onContainerItemMenu,
       addGuaranteedSkill: this._onAddGuaranteedSkill,
       removeGuaranteedSkill: this._onRemoveGuaranteedSkill,
       removeSuggestedStartingPack: this._onRemoveSuggestedStartingPack,
@@ -123,6 +136,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       removeGrantSpell: this._onRemoveGrantSpell,
       addGrantPerk: this._onAddGrantPerk,
       removeGrantPerk: this._onRemoveGrantPerk,
+      removeGrantItem: this._onRemoveGrantItem,
       addGrantSkillChoiceGroup: this._onAddGrantSkillChoiceGroup,
       removeGrantSkillChoiceGroup: this._onRemoveGrantSkillChoiceGroup,
       toggleBound: this._onToggleBound,
@@ -321,6 +335,11 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
   async _preparePartContext(partId, context) {
     switch (partId) {
       case 'header':
+        // Container coins sit in the header while locked
+        if (this.item.type === 'container') {
+          context.containerCoins = this._containerCoins();
+          context.containerCanShare = this._containerCanShare();
+        }
         // Enrich description for perks and spells in header
         if (this.item.type === 'perk' || this.item.type === 'spell') {
           context.enriched = {
@@ -457,6 +476,8 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
             }
           }
 
+          enrichedTrait.enrichedItems = await GrantsHandlers.enrichGrantedItems(trait.grantedItems);
+
           context.enrichedTraits.push(enrichedTrait);
         }
         break;
@@ -539,6 +560,8 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
                 }
               }
             }
+
+            feature.enrichedItems = await GrantsHandlers.enrichGrantedItems(feature.grantedItems);
           }
 
           // Get spells for this level (level - 1 because array is 0-indexed but levels start at 1)
@@ -749,6 +772,9 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       case 'containerDetails':
         // Container gets enriched description and loaded items
         context.tab = context.tabs[partId];
+        // Transport gear: button that creates its Mount / Vehicle / Structure actor
+        context.canDeployConstruct = !!this.item.flags?.vagabond?.constructId
+          && Actor.implementation.canUserCreate(game.user);
         context.enriched = {
           description: await foundry.applications.ux.TextEditor.enrichHTML(
             this.item.system.description,
@@ -760,67 +786,11 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
           )
         };
 
-        // Load items from stored item data
-        context.containerItems = [];
-        for (let i = 0; i < this.item.system.items.length; i++) {
-          const itemData = this.item.system.items[i];
-          try {
-            // itemData is now the full item object, not just a reference
-            let damageDisplay = '—';
-            let metalDisplay = '—';
-            let ratingDisplay = '—';
-            let slotsDisplay = '—';
-            let costDisplay = '—';
-            let typeName = game.i18n.localize(`TYPES.Item.${itemData.type}`);
-
-            if (itemData.type === 'equipment') {
-              const sys = itemData.system;
-              slotsDisplay = sys.baseSlots !== undefined ? sys.baseSlots : 0;
-              const cost = sys.baseCost || {};
-              const costs = [];
-              const copperAbbr = game.i18n.localize('VAGABOND.Currency.Copper.abbr');
-              if (cost.gold > 0) costs.push(`${cost.gold}${game.i18n.localize('VAGABOND.Currency.Gold.abbr')}`);
-              if (cost.silver > 0) costs.push(`${cost.silver}${game.i18n.localize('VAGABOND.Currency.Silver.abbr')}`);
-              if (cost.copper > 0) costs.push(`${cost.copper}${copperAbbr}`);
-              costDisplay = costs.length > 0 ? costs.join(' ') : `0${copperAbbr}`;
-              metalDisplay = (sys.metal && sys.metal !== 'none')
-                ? (game.i18n.localize(CONFIG.VAGABOND?.metalTypes?.[sys.metal]) || sys.metal)
-                : '—';
-
-              const equipTypeKey = CONFIG.VAGABOND?.equipmentTypes?.[sys.equipmentType];
-              typeName = equipTypeKey ? game.i18n.localize(equipTypeKey) : typeName;
-
-              if (sys.equipmentType === 'weapon') {
-                damageDisplay = sys.grip === 'V'
-                  ? `${sys.damage1H || '—'} / ${sys.damage2H || '—'}`
-                  : (sys.currentDamage || '—');
-              } else if (sys.equipmentType === 'armor') {
-                ratingDisplay = sys.rating || 0;
-              } else if (sys.equipmentType === 'alchemical') {
-                damageDisplay = VagabondDamagePipeline.markExplode(sys.damageAmount, { type: 'equipment', system: sys }) || '—';
-              }
-            } else {
-              // For non-equipment items, check for baseSlots
-              slotsDisplay = itemData.system?.baseSlots !== undefined ? itemData.system.baseSlots : 0;
-            }
-
-            const displayData = {
-              name: itemData.name,
-              img: itemData.img,
-              type: itemData.type,
-              typeName: typeName,
-              damageDisplay: damageDisplay,
-              metalDisplay: metalDisplay,
-              ratingDisplay: ratingDisplay,
-              slotsDisplay: slotsDisplay,
-              costDisplay: costDisplay,
-              index: i
-            };
-            context.containerItems.push(displayData);
-          } catch (error) {
-            console.warn(`Failed to load item at index ${i}:`, error);
-          }
-        }
+        // Stored items, grouped like the party Inventory (accordion sections, all open by default)
+        context.containerGroups = this._containerGroups();
+        context.containerCount = this.item.system.items.length;
+        context.containerCoins = this._containerCoins();
+        context.containerCanShare = this._containerCanShare();
         break;
 
       case 'description':
@@ -1049,55 +1019,45 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
         });
       }
 
-      // --- SEARCH FILTER LOGIC ---
+      // --- SEARCH FILTER LOGIC --- (type sections with no match are hidden too)
       const searchInput = this.element.querySelector('.container-search');
       const visibleDisplay = this.element.querySelector('#visible-count');
 
       if (searchInput) {
         searchInput.addEventListener('input', (event) => {
           const query = event.target.value.toLowerCase();
-          const rows = this.element.querySelectorAll('.container-item-row');
           let visibleCount = 0;
-          
-          rows.forEach(row => {
-            const itemName = row.querySelector('.item-name-text')?.textContent.toLowerCase() || "";
-            const itemType = row.querySelector('.item-type-text')?.textContent.toLowerCase() || "";
-            
-            if (itemName.includes(query) || itemType.includes(query)) {
-              row.style.display = "";
-              visibleCount++;
-            } else {
-              row.style.display = "none";
-            }
+
+          this.element.querySelectorAll('.ci-group').forEach((group) => {
+            let groupCount = 0;
+            group.querySelectorAll('.ci-item').forEach((row) => {
+              const itemName = row.querySelector('.ci-name-text')?.textContent.toLowerCase() || '';
+              const match = itemName.includes(query);
+              row.style.display = match ? '' : 'none';
+              if (match) groupCount++;
+            });
+            group.style.display = groupCount ? '' : 'none';
+            visibleCount += groupCount;
           });
 
           // Update the "y" value in "y/X"
           if (visibleDisplay) visibleDisplay.textContent = visibleCount;
-        });
+        }, { signal });
       }
 
-      // Add click listeners to container item icons for mini-sheet
-      const itemIcons = this.element.querySelectorAll('.container-items-table .item-icon');
-      itemIcons.forEach(icon => {
-        icon.addEventListener('click', async (event) => {
-          event.preventDefault();
-          event.stopPropagation();
+      // Coins: whole, non-negative (runs before the auto-save listener below)
+      this.element.querySelectorAll('.container-coin input').forEach((input) => {
+        input.addEventListener('change', () => {
+          input.value = Math.max(0, Math.floor(Number(input.value) || 0));
+        }, { signal });
+      });
 
-          const itemIndex = parseInt(icon.dataset.itemIndex);
-          const itemData = this.item.system.items[itemIndex];
-
-          if (itemData) {
-            // Create a temporary item document for the sheet
-            const tempItem = await Item.implementation.create(itemData, {
-              temporary: true,
-              parent: this.item.actor || null
-            });
-
-            if (tempItem) {
-              tempItem.sheet.render(true);
-            }
-          }
-        });
+      // Open item details stay open across re-renders; right-click a row = its kebab menu
+      this.element.querySelectorAll('.ci-item.open').forEach((row) => this._fillContainerDetail(row));
+      this.element.querySelectorAll('.ci-item .ci-row').forEach((row) => {
+        row.addEventListener('contextmenu', (event) => {
+          VagabondItemSheet._onContainerItemMenu.call(this, event, row);
+        }, { signal });
       });
     }
 
@@ -2553,6 +2513,21 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
   }
 
   /**
+   * Transport gear (Container item linked by `flags.vagabond.constructId`): create its
+   * Mount / Vehicle / Structure actor in the world from the "Mounts & Vehicles" pack and open it.
+   * @this VagabondItemSheet
+   * @protected
+   */
+  static async _onDeployConstruct(event) {
+    event.preventDefault();
+    const id = this.item.flags?.vagabond?.constructId;
+    const pack = game.packs.get('vagabond.mounts-vehicles');
+    if (!id || !pack || !Actor.implementation.canUserCreate(game.user)) return;
+    const actor = await game.actors.importFromCompendium(pack, id);
+    actor?.sheet.render(true);
+  }
+
+  /**
    * Clear a slot: Hit and Throw go back to auto-recognition, Miss goes back to no animation.
    * @this VagabondItemSheet
    * @protected
@@ -2801,6 +2776,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
           type: 'ContainerItem',
           containerUuid: this.item.uuid,
           itemIndex: index,
+          entryId: itemData._id ?? null,
           itemData: itemData
         };
       }
@@ -2856,6 +2832,8 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
         return this._onDropActor(event, data);
       case 'Item':
         return this._onDropItem(event, data);
+      case 'ContainerItem':
+        return this._onDropContainerEntry(event, data);
       case 'Folder':
         return this._onDropFolder(event, data);
       case 'Macro':
@@ -2958,6 +2936,10 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
    */
   async _onDropItem(event, data) {
     if (!this.item.isOwner) return false;
+
+    // 0a. Granted items (weapons, natural attacks…) onto a trait/feature "Items" grant zone
+    const itemGrantZone = event.target.closest('.item-grant-drop-zone');
+    if (itemGrantZone) return GrantsHandlers.dropGrantItem(this, itemGrantZone, data);
 
     // 0. Handle dropping spells/perks onto trait/feature grant zones
     const dropZone = event.target.closest('.spell-drop-zone, .perk-drop-zone');
@@ -3105,18 +3087,19 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
         return false; 
       }
 
-      // Prepare item data snapshot for storage
+      // From an actor's inventory: free trade moves it in (guard rails, GM relay, never copied)
+      if (droppedItem.parent?.documentName === 'Actor') {
+        const qty = await TradeHelper.pickQuantity(droppedItem, event);
+        if (!qty) return false;
+        const result = await TradeHelper.moveItem({ source: { itemUuid: droppedItem.uuid }, dest: { containerUuid: this.item.uuid }, qty });
+        return !!result?.ok;
+      }
+
+      // Prepare item data snapshot for storage (sidebar / compendium copy)
       const itemData = droppedItem.toObject();
       
       // Set the containerId to track which container this item belongs to
       itemData.system.containerId = this.item.id;
-
-      // MOVE vs COPY logic:
-      // Delete the original whenever it came from any actor the current user owns.
-      // Items from compendiums or the sidebar have no parent, so they are copied.
-      if (droppedItem.parent?.documentName === 'Actor' && droppedItem.parent.isOwner) {
-        await droppedItem.delete();
-      }
 
       // Add to container items array
       const newItems = [...this.item.system.items, itemData];
@@ -3135,6 +3118,23 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
 
   async _onDropFolder(event, data) {
     if (!this.item.isOwner) return [];
+  }
+
+  /**
+   * An entry dragged out of another container (a Hold, a chest) onto this container's sheet:
+   * moved across through free trade.
+   */
+  async _onDropContainerEntry(event, data) {
+    if (this.item.type !== 'container' || !data?.containerUuid) return false;
+    if (data.containerUuid === this.item.uuid) return false;
+    const qty = await TradeHelper.pickQuantity(data.itemData, event);
+    if (!qty) return false;
+    const result = await TradeHelper.moveItem({
+      source: { containerUuid: data.containerUuid, entryId: data.entryId ?? data.itemData?._id ?? null, index: data.itemIndex },
+      dest: { containerUuid: this.item.uuid },
+      qty,
+    });
+    return !!result?.ok;
   }
 
   /**
@@ -3163,112 +3163,6 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     const items = this.item.system.items || [];
     const newItems = items.filter((_, i) => i !== index);
     await this.item.update({ 'system.items': newItems });
-  }
-
-  /**
-   * Handle equipping an item from container to character inventory
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @private
-   */
-  static async _onEquipFromContainer(event, target) {
-    if (this.item.type !== 'container') return;
-    if (!this.item.actor) {
-      ui.notifications.warn('Container must be owned by a character to equip items.');
-      return;
-    }
-
-    const index = parseInt(target.dataset.itemIndex);
-    if (isNaN(index)) return;
-
-    const itemData = this.item.system.items[index];
-    if (!itemData) return;
-
-    try {
-      // RAW carry limit is warn-only — flag an overload but never block the move.
-      const itemSlots = itemData.system?.baseSlots || 0;
-      const actor = this.item.actor;
-      const inv = actor.system.inventory ?? {};
-      const availableSlots = (inv.maxSlots ?? 0) - (inv.occupiedSlots ?? 0);
-
-      if (itemSlots > 0 && availableSlots < itemSlots) {
-        ui.notifications.warn(`${itemData.name} pushes you over your Inventory Slots (${inv.occupiedSlots ?? 0}/${inv.maxSlots ?? 0}).`);
-      }
-
-      // Set equipped state based on item type
-      if (itemData.type === 'equipment') {
-        if (itemData.system.equipmentType === 'weapon') {
-          // Equip weapon based on grip
-          if (itemData.system.grip === '1H' || itemData.system.grip === 'V') {
-            itemData.system.equipmentState = 'oneHand';
-          } else if (itemData.system.grip === '2H') {
-            itemData.system.equipmentState = 'twoHands';
-          } else if (itemData.system.grip === '0') {
-            itemData.system.equipmentState = 'worn'; // Zero Grip: equipped, no hands
-          }
-        } else if (itemData.system.equipmentType === 'armor') {
-          itemData.system.equipmentState = 'worn'; // equipped, occupies no hands
-        }
-      }
-
-      // Clear containerId when moving item back to inventory
-      itemData.system.containerId = null;
-
-      await actor.createEmbeddedDocuments('Item', [itemData]);
-
-      // Remove from container
-      const newItems = this.item.system.items.filter((_, i) => i !== index);
-      await this.item.update({ 'system.items': newItems });
-
-      ui.notifications.info(`${itemData.name} equipped to character inventory.`);
-
-      // Force re-render to show updated items list
-      this.render();
-    } catch (error) {
-      console.error('Error equipping item from container:', error);
-      ui.notifications.error('Failed to equip item.');
-    }
-  }
-
-  /**
-   * Handle deleting an item from container
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @private
-   */
-  static async _onDeleteFromContainer(event, target) {
-    if (this.item.type !== 'container') return;
-
-    const index = parseInt(target.dataset.itemIndex);
-    if (isNaN(index)) return;
-
-    const itemData = this.item.system.items[index];
-    if (!itemData) return;
-
-    try {
-      const itemName = itemData.name || 'Unknown Item';
-
-      const confirmed = await foundry.applications.api.DialogV2.confirm({
-        window: { title: 'Delete Item' },
-        content: `<p>Are you sure you want to delete <strong>${itemName}</strong> from this container?</p><p>This action cannot be undone.</p>`,
-        rejectClose: false,
-        modal: true
-      });
-
-      if (!confirmed) return;
-
-      // Remove from container
-      const newItems = this.item.system.items.filter((_, i) => i !== index);
-      await this.item.update({ 'system.items': newItems });
-
-      ui.notifications.info(`${itemName} deleted from container.`);
-
-      // Force re-render to show updated items list
-      this.render();
-    } catch (error) {
-      console.error('Error deleting item from container:', error);
-      ui.notifications.error('Failed to delete item.');
-    }
   }
 
   /**
@@ -3323,6 +3217,9 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
   }
   static async _onRemoveGrantPerk(event, target) {
     return GrantsHandlers.removeGrantPerk(this, event, target);
+  }
+  static async _onRemoveGrantItem(event, target) {
+    return GrantsHandlers.removeGrantItem(this, event, target);
   }
 
   /**
@@ -3685,5 +3582,305 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     if (!confirmed) return;
     const { VagabondImbueHelper } = await import('../helpers/imbue-helper.mjs');
     await VagabondImbueHelper.clearImbue(this.document);
+  }
+
+  // ── Container list ─────────────────────────────────────────────────────────
+
+  /**
+   * A live, unsaved Item built from one stored container entry, so derived data
+   * (material damage, Slots, Value) reads exactly like an owned item.
+   * @param {number} index
+   * @returns {Item|null}
+   */
+  _containerEntryDoc(index) {
+    const data = this.item.system.items?.[index];
+    if (!data) return null;
+    try {
+      return new Item.implementation(foundry.utils.deepClone(data), { parent: this.item.actor ?? null });
+    } catch (error) {
+      console.warn(`Vagabond | Container entry ${index} could not be read:`, error);
+      return null;
+    }
+  }
+
+  /**
+   * Whether the treasure bar offers the coin split button: the user may take from the container
+   * (the dialog finds its party — the transport's / owner's, else the user's own).
+   */
+  _containerCanShare() {
+    return this.item.type === 'container' && !this.item.pack && TradeHelper.canTake(game.user, this.item);
+  }
+
+  /** Treasure bar button: give / split the stored coins between party members. */
+  static _onShareContainerCoins() {
+    CoinTransferDialog.open(this.item);
+  }
+
+  /** Coins stored in the container, one entry per denomination (treasure bar). */
+  _containerCoins() {
+    return CurrencyHelper.DENOMINATIONS.map((key) => {
+      const name = key.charAt(0).toUpperCase() + key.slice(1);
+      return {
+        key,
+        value: this.item.system.currency?.[key] ?? 0,
+        label: game.i18n.localize(`VAGABOND.Wealth.${name}`),
+        abbr: game.i18n.localize(`VAGABOND.Currency.${name}.abbr`),
+      };
+    });
+  }
+
+  /**
+   * Container list rows grouped by type (Weapon, Armor, Alchemical, Relic, Gear), each sorted by
+   * name. Slots and Value are for the whole stack; a zero-Slot stack shows its share of a Slot
+   * (RAW: every 10 zero-Slot items take 1 Slot).
+   * @returns {Object[]}
+   */
+  _containerGroups() {
+    const keys = ['weapon', 'armor', 'alchemical', 'relic', 'gear'];
+    const buckets = Object.fromEntries(keys.map((key) => [key, []]));
+    const stack = CONFIG.VAGABOND?.zeroSlotStackSize || 10;
+
+    (this.item.system.items ?? []).forEach((data, index) => {
+      const doc = this._containerEntryDoc(index);
+      if (!doc) return;
+      const quantity = Math.max(0, Number(doc.system.quantity ?? 1));
+      const unitSlots = EquipmentHelper.itemSlotCost(doc);
+      const unitCost = doc.type === 'container' ? doc.system.baseCost : doc.system.cost;
+      const copper = CurrencyHelper.toCopper(unitCost ?? {}) * quantity;
+      const entryKey = data._id ?? `entry-${index}`;
+      const type = doc.system.equipmentType;
+
+      buckets[keys.includes(type) ? type : 'gear'].push({
+        index,
+        key: entryKey,
+        name: doc.name,
+        img: doc.img,
+        quantity,
+        damage: this._containerEntryDamage(doc),
+        slots: unitSlots > 0 ? unitSlots * quantity : Number((quantity / stack).toFixed(1)),
+        slotsHint: unitSlots > 0 ? '' : game.i18n.localize('VAGABOND.UI.Labels.ContainerList.ZeroSlotHint'),
+        value: copper > 0 ? CurrencyHelper.format(copper) : '—',
+        open: this._containerOpenItems.has(entryKey),
+      });
+    });
+
+    return keys
+      .filter((key) => buckets[key].length)
+      .map((key) => ({
+        key,
+        label: game.i18n.localize(`VAGABOND.Actor.Party.Inventory.Groups.${key}`),
+        closed: this._containerClosedGroups.has(key),
+        items: buckets[key].sort((a, b) => a.name.localeCompare(b.name)),
+      }));
+  }
+
+  /** Damage shown in the container list: weapon (material-adjusted) or alchemical damage. */
+  _containerEntryDamage(doc) {
+    const sys = doc.system;
+    if (EquipmentHelper.isWeapon(doc)) {
+      if (sys.grip === 'V') return `${sys.finalDamageOneHand || '—'} / ${sys.finalDamageTwoHands || '—'}`;
+      return sys.currentDamage && sys.currentDamage !== '-' ? sys.currentDamage : '—';
+    }
+    if (EquipmentHelper.isAlchemical(doc) && sys.damageAmount) {
+      return VagabondDamagePipeline.markExplode(sys.damageAmount, doc) || '—';
+    }
+    return '—';
+  }
+
+  /** Fill an open container row with the shared item detail body (description, stats, properties). */
+  async _fillContainerDetail(row) {
+    const host = row?.querySelector('.ci-detail-inner');
+    if (!host || host.dataset.loaded) return;
+    const doc = this._containerEntryDoc(Number(row.dataset.itemIndex));
+    if (!doc) return;
+    host.dataset.loaded = '1';
+
+    const TE = foundry.applications.ux.TextEditor.implementation;
+    const description = doc.system.description
+      ? await TE.enrichHTML(doc.system.description, { relativeTo: doc })
+      : '';
+    let html = description ? `<div class="mini-sheet-description">${description}</div>` : '';
+    html += doc.type === 'container'
+      ? `<div class="mini-sheet-stats">${ItemSections.buildSlotsRow(doc)}</div>`
+      : ItemSections.buildStatsSection(doc, { compact: true });
+    if (EquipmentHelper.isWeapon(doc) && doc.system.properties?.length) {
+      html += ItemSections.buildWeaponProperties(doc, { tooltips: true });
+    }
+    host.innerHTML = html;
+  }
+
+  /** Type section header: open / close the section (no re-render). */
+  static _onToggleContainerGroup(event, target) {
+    const group = target.closest('.ci-group');
+    const key = group?.dataset.groupKey;
+    if (!key) return;
+    if (group.classList.toggle('closed')) this._containerClosedGroups.add(key);
+    else this._containerClosedGroups.delete(key);
+  }
+
+  /** Item name: open / close its details (no re-render). */
+  static _onToggleContainerItem(event, target) {
+    const row = target.closest('.ci-item');
+    const key = row?.dataset.entryKey;
+    if (!key) return;
+    if (row.classList.toggle('open')) {
+      this._containerOpenItems.add(key);
+      this._fillContainerDetail(row);
+    } else {
+      this._containerOpenItems.delete(key);
+    }
+  }
+
+  /** Item image: open the stored item's sheet (an unsaved snapshot). */
+  static _onOpenContainerItem(event, target) {
+    const index = Number(target.closest('.ci-item')?.dataset.itemIndex);
+    this._containerEntryDoc(index)?.sheet.render(true);
+  }
+
+  /** Kebab (or right-click on a row): Open, Send to Chat, Take to Inventory, Delete. */
+  static _onContainerItemMenu(event, target) {
+    event.preventDefault();
+    event.stopPropagation();
+    const index = Number(target.closest('.ci-item')?.dataset.itemIndex);
+    // One menu at a time (the click is stopped, so the menu's click-outside close never sees it);
+    // clicking the same row's kebab again just closes it.
+    const reopen = document.querySelector('.vagabond-context-menu')?.dataset.containerEntry !== String(index);
+    ContextMenuHelper.closeAll();
+    if (!reopen && event.type === 'click') return;
+    const doc = this._containerEntryDoc(index);
+    if (!doc) return;
+    const actor = this.item.actor;
+    const L = (key) => game.i18n.localize(`VAGABOND.UI.Labels.ContainerList.${key}`);
+    const menu = ContextMenuHelper.create({
+      position: { x: event.clientX, y: event.clientY },
+      className: 'inventory-context-menu',
+      items: [
+        { label: L('Open'), icon: 'fas fa-up-right-from-square', action: () => doc.sheet.render(true) },
+        {
+          label: game.i18n.localize('VAGABOND.ContextMenu.SendToChat'),
+          icon: 'fas fa-comment',
+          enabled: !!actor,
+          action: async () => {
+            const { VagabondChatCard } = await import('../helpers/chat-card.mjs');
+            await VagabondChatCard.gearUse(actor, doc);
+          },
+        },
+        {
+          label: L('Take'),
+          icon: 'fas fa-hand-paper',
+          enabled: !!actor?.isOwner && this.isEditable,
+          action: () => this._takeFromContainer(index),
+        },
+        { divider: true },
+        {
+          label: L('Delete'),
+          icon: 'fas fa-trash',
+          enabled: this.isEditable,
+          action: () => this._deleteFromContainer(index),
+        },
+      ],
+    });
+    if (menu) menu.dataset.containerEntry = String(index);
+  }
+
+  /**
+   * Handle equipping an item from container to character inventory
+   * @param {PointerEvent} event   The originating click event
+   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
+   * @private
+   */
+  static async _onEquipFromContainer(event, target) {
+    return this._takeFromContainer(parseInt(target.dataset.itemIndex));
+  }
+
+  /**
+   * Move a stored item into the owning actor's inventory (Weapons and Armor get equipped on a
+   * Character, through the hand limit).
+   * @param {number} index
+   */
+  async _takeFromContainer(index) {
+    if (this.item.type !== 'container' || isNaN(index)) return;
+    const actor = this.item.actor;
+    if (!actor) {
+      ui.notifications.warn('Container must be owned by a character to equip items.');
+      return;
+    }
+
+    const itemData = foundry.utils.deepClone(this.item.system.items[index]);
+    if (!itemData) return;
+
+    try {
+      // RAW carry limit is warn-only — flag an overload but never block the move.
+      const itemSlots = itemData.system?.baseSlots || 0;
+      const inv = actor.system.inventory ?? {};
+      const availableSlots = (inv.maxSlots ?? 0) - (inv.occupiedSlots ?? 0);
+      if (itemSlots > 0 && availableSlots < itemSlots) {
+        ui.notifications.warn(`${itemData.name} pushes you over your Inventory Slots (${inv.occupiedSlots ?? 0}/${inv.maxSlots ?? 0}).`);
+      }
+
+      // Clear containerId when moving item back to inventory; equipping goes through the hand limit below
+      itemData.system.containerId = null;
+      if (itemData.type === 'equipment') itemData.system.equipmentState = 'unequipped';
+
+      const [created] = await actor.createEmbeddedDocuments('Item', [itemData]);
+      const newItems = this.item.system.items.filter((_, i) => i !== index);
+      await this.item.update({ 'system.items': newItems });
+
+      const equips = created && (EquipmentHelper.isWeapon(created) || EquipmentHelper.isArmor(created));
+      if (equips && actor.type === 'character') {
+        await EquipmentHelper.equipWithHandLimit(actor, created.id, EquipmentHelper.defaultEquipState(created));
+      }
+
+      ui.notifications.info(`${itemData.name} equipped to character inventory.`);
+      this.render();
+    } catch (error) {
+      console.error('Error equipping item from container:', error);
+      ui.notifications.error('Failed to equip item.');
+    }
+  }
+
+  /**
+   * Handle deleting an item from container
+   * @param {PointerEvent} event   The originating click event
+   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
+   * @private
+   */
+  static async _onDeleteFromContainer(event, target) {
+    return this._deleteFromContainer(parseInt(target.dataset.itemIndex));
+  }
+
+  /**
+   * Delete a stored item (after confirmation).
+   * @param {number} index
+   */
+  async _deleteFromContainer(index) {
+    if (this.item.type !== 'container' || isNaN(index)) return;
+    const itemData = this.item.system.items[index];
+    if (!itemData) return;
+
+    try {
+      const itemName = itemData.name || 'Unknown Item';
+
+      const confirmed = await foundry.applications.api.DialogV2.confirm({
+        window: { title: 'Delete Item' },
+        content: `<p>Are you sure you want to delete <strong>${itemName}</strong> from this container?</p><p>This action cannot be undone.</p>`,
+        rejectClose: false,
+        modal: true
+      });
+
+      if (!confirmed) return;
+
+      // Remove from container
+      const newItems = this.item.system.items.filter((_, i) => i !== index);
+      await this.item.update({ 'system.items': newItems });
+
+      ui.notifications.info(`${itemName} deleted from container.`);
+
+      // Force re-render to show updated items list
+      this.render();
+    } catch (error) {
+      console.error('Error deleting item from container:', error);
+      ui.notifications.error('Failed to delete item.');
+    }
   }
 }

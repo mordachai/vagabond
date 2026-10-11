@@ -308,6 +308,19 @@
       "flags": {}
     },
     {
+      "name": "mounts-vehicles",
+      "label": "Mounts & Vehicles",
+      "system": "vagabond",
+      "path": "packs/characters/mounts-vehicles",
+      "type": "Actor",
+      "ownership": {
+        "PLAYER": "NONE",
+        "ASSISTANT": "OWNER"
+      },
+      "private": false,
+      "flags": {}
+    },
+    {
       "name": "stores",
       "label": "Stores",
       "system": "vagabond",
@@ -388,6 +401,7 @@
             "bestiary",
             "humanlike",
             "build-guides",
+            "mounts-vehicles",
             "stores"
           ],
           "folders": []

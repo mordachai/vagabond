@@ -1,0 +1,62 @@
+{
+  "name": "Warship",
+  "type": "construct",
+  "img": "/icons/weapons/artillery/cannon-engraved-gold.webp",
+  "system": {
+    "kind": "vessel",
+    "type": "",
+    "speed": 0,
+    "crawl": 0,
+    "travel": 24,
+    "biography": "<p><strong>Vessel.</strong> Travel Speed 24 mi per Shift · Capacity 2500 Slots.</p><p>Value: 2500g.</p>"
+  },
+  "prototypeToken": {
+    "name": "Warship",
+    "actorLink": false,
+    "disposition": 0,
+    "width": 4,
+    "height": 4,
+    "texture": {
+      "src": "/icons/weapons/artillery/cannon-engraved-gold.webp",
+      "fit": "contain"
+    },
+    "bar1": {
+      "attribute": null
+    }
+  },
+  "items": [
+    {
+      "name": "Hold",
+      "type": "container",
+      "img": "icons/containers/chest/chest-reinforced-steel-brown.webp",
+      "system": {
+        "description": "<p>Warship: carries 2500 Slots of Items.</p>",
+        "slots": 0,
+        "capacity": 2500,
+        "gridPosition": 0,
+        "items": [],
+        "baseCost": {
+          "gold": 0,
+          "silver": 0,
+          "copper": 0
+        },
+        "locked": true
+      },
+      "effects": [],
+      "flags": {},
+      "sort": 0,
+      "_id": "KXFXpmvz5aecwY7l",
+      "_key": "!actors.items!Ome9PLKCbF6GY7BB.KXFXpmvz5aecwY7l"
+    }
+  ],
+  "effects": [],
+  "folder": "C4D159k33OcY3zcc",
+  "flags": {
+    "vagabond": {
+      "sourceItemId": "hAbGrVjtKx7DbamA"
+    }
+  },
+  "sort": 1800000,
+  "_id": "Ome9PLKCbF6GY7BB",
+  "_key": "!actors!Ome9PLKCbF6GY7BB"
+}
