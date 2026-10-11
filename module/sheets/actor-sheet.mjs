@@ -19,6 +19,7 @@ import * as ItemSections from '../helpers/item-sections.mjs';
 import { setupDragReorder } from '../helpers/drag-reorder.mjs';
 import { NpcRules } from '../helpers/npc-rules.mjs';
 import { AlchemyLab } from '../helpers/alchemy-lab.mjs';
+import { FeatureOrder } from '../helpers/feature-order.mjs';
 
 const { api, sheets } = foundry.applications;
 
@@ -788,6 +789,11 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     context.containers = containers;
     context.spells = spells;
     context.perks = perks;
+
+    // Player-chosen order (drag-reorder on the Features tab / HUD)
+    context.features = FeatureOrder.sort(this.actor, 'features', context.features);
+    context.traits = FeatureOrder.sort(this.actor, 'traits', context.traits);
+    context.perks = FeatureOrder.sort(this.actor, 'perks', context.perks);
 
     // Prepare inventory grid (delegates to inventoryHandler if available)
     if (this.inventoryHandler) {

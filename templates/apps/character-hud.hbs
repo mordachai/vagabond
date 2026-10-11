@@ -13,32 +13,47 @@
 
     {{!-- Features / Traits / Perks --}}
     <div class="vh-panel-content {{#unless (eq activeTab 'traits')}}hidden{{/unless}}" data-tab="traits">
-      {{#if features.length}}
-        <h4 class="vh-section-title">{{localize "VAGABOND.UI.Sections.Features"}}</h4>
-        {{#each features}}
-          <div class="accordion-item collapsed" data-accordion-id="hud-feature-{{_id}}">
-            <div class="accordion-header" data-action="toggleFeature"><i class="accordion-icon fas fa-chevron-right"></i><span class="vh-acc-name">{{name}}</span>{{#if fx}}<button type="button" class="vh-fx-btn{{#if fx.active}} is-active{{/if}}" data-action="featureAction" data-action-key="{{fx.key}}" title="{{fx.tip}}"{{#if fx.count}} data-count="{{fx.count}}"{{/if}}><i class="{{fx.icon}}"></i></button>{{/if}}</div>
-            <div class="accordion-content collapsed"><div class="vh-acc-body">{{#if levelLabels.length}}<div class="vh-feature-levels">{{#each levelLabels}}<span class="vh-feature-level">{{this}}</span>{{/each}}</div>{{/if}}{{{description}}}</div></div>
-          </div>
-        {{/each}}
+      {{!-- Features | Perks side by side (a lone one spans both); Traits full width below --}}
+      {{#if (or features.length perks.length)}}
+        <div class="vh-feat-grid">
+          {{#if features.length}}
+            <div class="vh-feat-col">
+              <h4 class="vh-section-title">{{localize "VAGABOND.UI.Sections.Features"}}</h4>
+              <div class="vh-sort-list" data-sort-list="features">
+                {{#each features}}
+                  <div class="accordion-item collapsed" data-sort-id="{{_id}}" data-accordion-id="hud-feature-{{_id}}">
+                    <div class="accordion-header" data-action="toggleFeature"><i class="accordion-icon fas fa-chevron-right"></i><span class="vh-acc-name">{{name}}</span>{{#if fx}}<button type="button" class="vh-fx-btn{{#if fx.active}} is-active{{/if}}" data-action="featureAction" data-action-key="{{fx.key}}" title="{{fx.tip}}"{{#if fx.count}} data-count="{{fx.count}}"{{/if}}><i class="{{fx.icon}}"></i></button>{{/if}}</div>
+                    <div class="accordion-content collapsed"><div class="vh-acc-body">{{#if levelLabels.length}}<div class="vh-feature-levels">{{#each levelLabels}}<span class="vh-feature-level">{{this}}</span>{{/each}}</div>{{/if}}{{{description}}}</div></div>
+                  </div>
+                {{/each}}
+              </div>
+            </div>
+          {{/if}}
+          {{#if perks.length}}
+            <div class="vh-feat-col">
+              <h4 class="vh-section-title">{{localize "VAGABOND.UI.Sections.Perks"}}</h4>
+              <div class="vh-sort-list" data-sort-list="perks">
+                {{#each perks}}
+                  <div class="accordion-item collapsed" data-sort-id="{{_id}}" data-accordion-id="hud-perk-{{_id}}">
+                    <div class="accordion-header" data-action="togglePerk"><i class="accordion-icon fas fa-chevron-right"></i><span class="vh-acc-name">{{name}}</span>{{#if fx}}<button type="button" class="vh-fx-btn{{#if fx.active}} is-active{{/if}}" data-action="featureAction" data-action-key="{{fx.key}}" title="{{fx.tip}}"{{#if fx.count}} data-count="{{fx.count}}"{{/if}}><i class="{{fx.icon}}"></i></button>{{/if}}</div>
+                    <div class="accordion-content collapsed"><div class="vh-acc-body">{{{system.description}}}</div></div>
+                  </div>
+                {{/each}}
+              </div>
+            </div>
+          {{/if}}
+        </div>
       {{/if}}
       {{#if traits.length}}
         <h4 class="vh-section-title">{{localize "VAGABOND.UI.Sections.Traits"}}</h4>
-        {{#each traits}}
-          <div class="accordion-item collapsed" data-accordion-id="hud-trait-{{_id}}">
-            <div class="accordion-header" data-action="toggleTrait"><i class="accordion-icon fas fa-chevron-right"></i><span class="vh-acc-name">{{name}}</span>{{#if fx}}<button type="button" class="vh-fx-btn{{#if fx.active}} is-active{{/if}}" data-action="featureAction" data-action-key="{{fx.key}}" title="{{fx.tip}}"{{#if fx.count}} data-count="{{fx.count}}"{{/if}}><i class="{{fx.icon}}"></i></button>{{/if}}</div>
-            <div class="accordion-content collapsed"><div class="vh-acc-body">{{{description}}}</div></div>
-          </div>
-        {{/each}}
-      {{/if}}
-      {{#if perks.length}}
-        <h4 class="vh-section-title">{{localize "VAGABOND.UI.Sections.Perks"}}</h4>
-        {{#each perks}}
-          <div class="accordion-item collapsed" data-accordion-id="hud-perk-{{_id}}">
-            <div class="accordion-header" data-action="togglePerk"><i class="accordion-icon fas fa-chevron-right"></i><span class="vh-acc-name">{{name}}</span>{{#if fx}}<button type="button" class="vh-fx-btn{{#if fx.active}} is-active{{/if}}" data-action="featureAction" data-action-key="{{fx.key}}" title="{{fx.tip}}"{{#if fx.count}} data-count="{{fx.count}}"{{/if}}><i class="{{fx.icon}}"></i></button>{{/if}}</div>
-            <div class="accordion-content collapsed"><div class="vh-acc-body">{{{system.description}}}</div></div>
-          </div>
-        {{/each}}
+        <div class="vh-sort-list" data-sort-list="traits">
+          {{#each traits}}
+            <div class="accordion-item collapsed" data-sort-id="{{_id}}" data-accordion-id="hud-trait-{{_id}}">
+              <div class="accordion-header" data-action="toggleTrait"><i class="accordion-icon fas fa-chevron-right"></i><span class="vh-acc-name">{{name}}</span>{{#if fx}}<button type="button" class="vh-fx-btn{{#if fx.active}} is-active{{/if}}" data-action="featureAction" data-action-key="{{fx.key}}" title="{{fx.tip}}"{{#if fx.count}} data-count="{{fx.count}}"{{/if}}><i class="{{fx.icon}}"></i></button>{{/if}}</div>
+              <div class="accordion-content collapsed"><div class="vh-acc-body">{{{description}}}</div></div>
+            </div>
+          {{/each}}
+        </div>
       {{/if}}
       {{#unless (or features.length (or traits.length perks.length))}}
         <p class="vh-empty">{{localize "VAGABOND.Hud.Empty.Features"}}</p>

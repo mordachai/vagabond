@@ -24,6 +24,9 @@ export function setupDragReorder({ container, itemSelector, idAttr = 'itemId', b
   function bindItem(el) {
     el.setAttribute('draggable', 'true');
     el.addEventListener('dragstart', (e) => {
+      // A nested draggable (feature action button → Belt, content link) owns its own drag:
+      // don't hijack it into a reorder (that would also clobber its effectAllowed).
+      if (e.target instanceof Element && e.target.closest('[draggable="true"]') !== el) return;
       e.dataTransfer.effectAllowed = 'move';
       dragState = { active: true, draggedEl: el, originalNextSibling: el.nextSibling };
       requestAnimationFrame(() => { if (dragState?.active) el.classList.add('reorder-dragging'); });

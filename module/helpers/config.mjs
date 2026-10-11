@@ -1630,6 +1630,16 @@ VAGABOND.defenseRules = [
 VAGABOND.nonRelicImmuneTypes = ['physical', 'blunt', 'piercing', 'slashing'];
 
 /**
+ * Umbrella damage types for Immune / Weak lists: an entry of the family key also covers each
+ * member ("Immune: Physical" stops Blunt, Piercing and Slashing). One-way — Immune to Slashing
+ * does not stop generic Physical. Read via `VagabondDamagePipeline.typeListCovers`.
+ * @type {Object<string,string[]>}
+ */
+VAGABOND.damageTypeFamilies = {
+  physical: ['blunt', 'piercing', 'slashing'],
+};
+
+/**
  * Attack-Favor rules: situational "your attacks are Favored against X" features
  * (e.g. Barbarian Bloodthirsty). An Active Effect ADDs a rule key to
  * `system.attackFavorVs`; `Item#rollAttack` casts ONE 'favor' vote (merged via

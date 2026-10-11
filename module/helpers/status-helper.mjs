@@ -1,4 +1,5 @@
 import { emitSocket } from './socket-helper.mjs';
+import { VagabondDamagePipeline } from './damage-pipeline.mjs';
 
 /**
  * StatusHelper — central logic for on-hit status effect application.
@@ -338,12 +339,12 @@ export class StatusHelper {
     // Only check immunity (typed damage only; typeless '-' always applies).
     const normalizedType = damageType?.toLowerCase() ?? '-';
     const isImmune = normalizedType !== '-' && (
-      actor.system.immunities?.includes(normalizedType) ||
+      VagabondDamagePipeline.typeListCovers(actor.system.immunities, normalizedType) ||
       (actor.type === 'character' && (() => {
         const armor = actor.items.find(i =>
           i.type === 'equipment' && i.system.equipmentType === 'armor' && i.system.equipped
         );
-        return armor?.system.immunities?.includes(normalizedType);
+        return VagabondDamagePipeline.typeListCovers(armor?.system.immunities, normalizedType);
       })())
     );
     const finalDamage = isImmune ? 0 : rawDamage;

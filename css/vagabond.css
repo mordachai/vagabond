@@ -4718,6 +4718,27 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .vbd-hud .vh-panel-alchemy .alchemy-lab .al-header {
   padding: 0 24px;
 }
+.vbd-hud .vh-panel:has(> .vh-panel-content[data-tab=traits]:not(.hidden) > .vh-feat-grid) .vh-panel-close--float {
+  position: absolute;
+  top: var(--vh-gap);
+  right: var(--vh-gap);
+  z-index: 2;
+  float: none;
+  margin: 0;
+}
+.vbd-hud .vh-feat-grid {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  column-gap: 12px;
+  align-items: start;
+}
+.vbd-hud .vh-feat-grid > .vh-feat-col:last-child > .vh-section-title {
+  padding-right: 24px;
+}
+.vbd-hud .vh-feat-col {
+  min-width: 0;
+}
 .vbd-hud .vh-panel-header {
   display: flex;
   align-items: center;
@@ -5175,29 +5196,41 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .vbd-hud .accordion-item {
   border-bottom: 1px solid rgba(0, 0, 0, 0.25);
 }
+.vbd-hud .accordion-item:not(.vh-spell):not(.vh-inv) {
+  margin: 0;
+  border-radius: 0;
+  overflow: visible;
+}
+.vbd-hud .accordion-item:not(.vh-spell):not(.vh-inv) > .accordion-header {
+  min-height: 24px;
+  padding: 1px 0 1px 2px;
+}
 .vbd-hud .accordion-item .accordion-header {
   display: flex;
   align-items: center;
-  gap: 2px;
-  padding: 2px;
+  gap: 4px;
+  background: none;
   cursor: pointer;
 }
 .vbd-hud .accordion-item .accordion-header .vh-acc-name {
+  flex: 1;
+  min-width: 0;
   font-family: "Germania", serif;
-  font-size: calc(1.1rem * var(--vh-font-scale));
+  font-size: calc(1.2rem * var(--vh-font-scale));
+  line-height: 1.15;
   color: var(--vagabond-c-lite);
 }
 .vbd-hud .accordion-item .accordion-header:hover .vh-acc-name {
   color: var(--vagabond-c-chat-yellow);
 }
 .vbd-hud .accordion-item .accordion-header .vh-fx-btn {
-  margin-left: auto;
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
   min-width: 0;
   min-height: 0;
+  margin: 0;
   box-sizing: border-box;
-  line-height: normal;
+  line-height: 1;
   padding: 0;
   display: inline-flex;
   align-items: center;
@@ -5209,6 +5242,13 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   color: var(--vagabond-c-chat-yellow);
   font-size: calc(0.8rem * var(--vh-font-scale));
   cursor: pointer;
+}
+.vbd-hud .accordion-item .accordion-header .vh-fx-btn i {
+  display: block;
+  width: 1em;
+  line-height: 1;
+  text-align: center;
+  margin: 0;
 }
 .vbd-hud .accordion-item .accordion-header .vh-fx-btn:hover {
   box-shadow: 0 0 5px var(--vagabond-c-chat-yellow);
@@ -5254,7 +5294,15 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
     animation: none;
   }
 }
+.vbd-hud .accordion-item.reorder-dragging {
+  opacity: 0.4;
+  outline: 1px dashed var(--vagabond-c-chat-yellow);
+  outline-offset: -1px;
+}
 .vbd-hud .accordion-item .accordion-icon {
+  width: 12px;
+  flex-shrink: 0;
+  text-align: center;
   transition: transform 0.15s ease;
   color: var(--vagabond-c-tan);
   font-size: calc(0.7rem * var(--vh-font-scale));
@@ -20467,8 +20515,17 @@ ol#combat-tracker.directory-list {
   border-radius: 10px;
   opacity: 0.85;
 }
+.vagabond .features-column .traits-title {
+  margin-top: 12px;
+}
 .vagabond .traits-list {
   margin-bottom: 16px;
+}
+.vagabond .features-list .accordion-item.reorder-dragging,
+.vagabond .traits-list .accordion-item.reorder-dragging,
+.vagabond .perks-list .accordion-item.reorder-dragging {
+  opacity: 0.5;
+  outline: 1px dashed var(--vagabond-c-chat-yellow);
 }
 .vagabond .perks-list .perk-content.accordion-content .perk-origin {
   display: inline-block;

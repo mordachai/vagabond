@@ -555,6 +555,27 @@
   }
   .vh-panel-alchemy .alchemy-lab .al-header { padding: 0 24px; }
 
+  // Traits panel: Features | Perks grid (a lone column spans the width), Traits full width below.
+  // The grid is a BFC too, so the close is pinned like the Alchemy one and the right column's
+  // title keeps clear of it.
+  .vh-panel:has(> .vh-panel-content[data-tab="traits"]:not(.hidden) > .vh-feat-grid) .vh-panel-close--float {
+    position: absolute;
+    top: var(--vh-gap);
+    right: var(--vh-gap);
+    z-index: 2;
+    float: none;
+    margin: 0;
+  }
+  .vh-feat-grid {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+    column-gap: 12px;
+    align-items: start;
+    > .vh-feat-col:last-child > .vh-section-title { padding-right: 24px; }
+  }
+  .vh-feat-col { min-width: 0; }
+
   // --- Panel header + close button (shared by PC tab panel + NPC detail panel) ---
   // A flex row; any title takes flex:1 so the close button stays at the right end.
   // The PC panel header has only the close button, so flex-end keeps it right.
@@ -949,23 +970,42 @@
   // accordions (features / traits / perks)
   .accordion-item {
     border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+    // Features / traits / perks: reset the global `.vagabond .accordion-item` chrome (margin-bottom 8px,
+    // radius, overflow clip, 10px header padding — that rule compiles later at equal specificity, hence the
+    // :not() bump). Spell / inventory rows keep theirs.
+    &:not(.vh-spell):not(.vh-inv) {
+      margin: 0;
+      border-radius: 0;
+      overflow: visible;
+      > .accordion-header {
+        min-height: 24px;
+        padding: 1px 0 1px 2px; // no right pad: the action button sits flush with the section rule
+      }
+    }
     .accordion-header {
       display: flex;
       align-items: center;
-      gap: 2px;
-      padding: 2px;
+      gap: 4px;
+      background: none;
       cursor: pointer;
-      .vh-acc-name { font-family: $font-title; font-size: calc(1.1rem * var(--vh-font-scale)); color: $c-lite; }
+      .vh-acc-name {
+        flex: 1;
+        min-width: 0;
+        font-family: $font-title;
+        font-size: calc(1.2rem * var(--vh-font-scale));
+        line-height: 1.15;
+        color: $c-lite;
+      }
       &:hover .vh-acc-name { color: $c-yellow; }
       // Feature / trait / perk action button (FeatureAction)
       .vh-fx-btn {
-        margin-left: auto;
-        width: 20px;
-        height: 20px;
+        width: 22px;
+        height: 22px;
         min-width: 0;
         min-height: 0; // Foundry buttons force min-height: var(--button-size)
+        margin: 0;
         box-sizing: border-box;
-        line-height: normal;
+        line-height: 1;
         padding: 0;
         display: inline-flex;
         align-items: center;
@@ -977,11 +1017,26 @@
         color: $c-yellow;
         font-size: calc(0.8rem * var(--vh-font-scale));
         cursor: pointer;
+        // Glyph box = 1em square so the icon centres on the button's own borders.
+        i { display: block; width: 1em; line-height: 1; text-align: center; margin: 0; }
         &:hover { box-shadow: 0 0 5px $c-yellow; }
         &.is-active { @include feature-action-active; }
       }
     }
-    .accordion-icon { transition: transform 0.15s ease; color: $c-tan; font-size: calc(0.7rem * var(--vh-font-scale)); }
+    // Drag-reordered (FeatureOrder) — Features / Perks / Traits lists
+    &.reorder-dragging {
+      opacity: 0.4;
+      outline: 1px dashed $c-yellow;
+      outline-offset: -1px;
+    }
+    .accordion-icon {
+      width: 12px;
+      flex-shrink: 0;
+      text-align: center;
+      transition: transform 0.15s ease;
+      color: $c-tan;
+      font-size: calc(0.7rem * var(--vh-font-scale));
+    }
     &.expanded .accordion-icon { transform: rotate(90deg); }
     .accordion-content {
       &.collapsed { display: none; }

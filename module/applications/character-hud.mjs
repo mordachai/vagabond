@@ -18,6 +18,7 @@ import { FeatureAction } from '../helpers/feature-action.mjs';
 import { EnrichmentHelper } from '../helpers/enrichment-helper.mjs';
 import { VagabondDamagePipeline } from '../helpers/damage-pipeline.mjs';
 import { AlchemyLab } from '../helpers/alchemy-lab.mjs';
+import { FeatureOrder } from '../helpers/feature-order.mjs';
 
 /** Inventory tab groupings, in display order, keyed by equipmentType. */
 const INV_GROUPS = [
@@ -491,7 +492,10 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
     context.spells = spells.map(s => this._spellRow(s));
     context.favoritedSpells = spells.filter(s => s.system.favorite);
     for (const perk of perks) perk.fx = FeatureAction.row(actor, perk, 'action', perk.name);
-    context.perks = perks;
+    // Player-chosen order, shared with the sheet's Features tab
+    context.features = FeatureOrder.sort(actor, 'features', context.features);
+    context.traits = FeatureOrder.sort(actor, 'traits', context.traits);
+    context.perks = FeatureOrder.sort(actor, 'perks', perks);
 
     // Inventory tab = the full carried inventory, grouped by equipment type
     // (Weapons / Armors / Gear / Relics / Alchemicals). Each row carries the
@@ -757,6 +761,9 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
 
     // Alchemy panel: card / tile selection, Mix slot drag-drop, carousel.
     AlchemyLab.wire(this, this.element, signal);
+
+    // Traits panel: drag Features / Perks / Traits rows into the player's order
+    FeatureOrder.wire(this.element, this.actor, signal);
 
     // Status icons (left of portrait): right-click → Send to Chat / Remove Status.
     // Reuse the sheet's exact menu — left-click chat is handled by the statusClick action.

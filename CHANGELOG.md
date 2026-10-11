@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+- **Fix: Immune / Weak to Physical now covers Blunt, Piercing and Slashing.** An NPC Immune to Physical took full damage from a Slashing sword unless the three types were also ticked. Physical now counts for all three (attacks, Saves, Apply Direct and ongoing status damage). It works one way only: Immune to Slashing still takes damage typed as plain Physical.
+- **Reorder Features, Perks and Traits.** Drag the rows on the sheet's Features tab or the HUD's Traits panel into the order you want; both share it, and Features keep their place when you Level Up.
+- Sheet Features tab: Ancestry Traits moved under the Features (left column), Perks have the right column to themselves. HUD Traits panel: Features and Perks side by side, Traits full width below.
+
 ## 6.4.1
 - **Learn one more Formula or Spell.** Two new effects in the Active Effects compendium (Buffs & Bonuses): **+1 Known Formula** and **+1 Spell**. Drop one on a Character to reward them; drop it again for each extra.
 - **+1 Known Formula** raises the formulae limit: the Alchemy lab Library lets the Character learn one more, and Level Up counts it. Needs a Class that grants formulae (Alchemist).

@@ -994,12 +994,12 @@ export class VagabondDamageHelper {
     // RAW: Weak - Ignores Armor and Immune, and deals an extra damage die
     // (Extra die is handled at roll/apply time, not here — armor/immunity just bypassed.
     //  Weak targets also skip the berserk reduction: weakness bypasses all reductions.)
-    if (weaknesses.includes(normalizedType) || HunterHelper.isMarkWeak(opts.attackerActor, actor) || WitchHelper.isHexWeak(opts.attackerActor, actor)) {
+    if (VagabondDamagePipeline.typeListCovers(weaknesses, normalizedType) || HunterHelper.isMarkWeak(opts.attackerActor, actor) || WitchHelper.isHexWeak(opts.attackerActor, actor)) {
       return { final: finalDamage, armorReduction: 0, berserkReduction: 0, flankedBonus, path: 'weak' };
     }
 
     // RAW: Immune - Unharmed by the damage type (Beast Mode attacks ignore non-Relic Immune)
-    if (immunities.includes(normalizedType) && !DruidHelper.ignoresNonRelicImmune(opts.attackerActor, normalizedType)
+    if (VagabondDamagePipeline.typeListCovers(immunities, normalizedType) && !DruidHelper.ignoresNonRelicImmune(opts.attackerActor, normalizedType)
       && !NpcRules.relicBypassesImmunity(actor, normalizedType, attackingWeapon)) {
       return { final: 0, armorReduction: 0, berserkReduction: 0, flankedBonus: 0, path: 'immune' };
     }

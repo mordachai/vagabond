@@ -7,6 +7,7 @@ import {
 } from './handlers/_module.mjs';
 import { bindHudTooltips } from '../helpers/hud-tooltip.mjs';
 import { AlchemyLab } from '../helpers/alchemy-lab.mjs';
+import { FeatureOrder } from '../helpers/feature-order.mjs';
 
 /**
  * Character-specific actor sheet
@@ -79,6 +80,9 @@ export class VagabondCharacterSheet extends VagabondActorSheet {
 
     // Alchemy tab: selection, drag-drop (learn / Mix slots), Library search, Mix carousel
     AlchemyLab.wire(this, this.element, signal);
+
+    // Features tab: drag Features / Perks / Traits rows into the player's order
+    FeatureOrder.wire(this.element, this.actor, signal);
 
     // Stat boxes display the TOTAL (base + perks/effects) but edit the BASE.
     // Unfocused they carry no `name`, so form submits never write total into base.

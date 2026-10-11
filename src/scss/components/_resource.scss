@@ -830,8 +830,22 @@
   }
 }
 
+.features-column .traits-title {
+  margin-top: 12px;
+}
+
 .traits-list {
   margin-bottom: 16px;
+}
+
+// Drag-to-reorder rows (FeatureOrder via setupDragReorder)
+.features-list,
+.traits-list,
+.perks-list {
+  .accordion-item.reorder-dragging {
+    opacity: 0.5;
+    outline: 1px dashed $c-yellow;
+  }
 }
 
 .perks-list {

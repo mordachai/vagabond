@@ -701,7 +701,21 @@ export class VagabondDamagePipeline {
     if (HunterHelper.isMarkWeak(attacker, targetActor) || WitchHelper.isHexWeak(attacker, targetActor)) return true;
     const weaknesses = targetActor.system.weaknesses || [];
     if (this.weaponTriggersWeakness(attackingWeapon, weaknesses)) return true;
-    return weaknesses.includes(normalizedType);
+    return this.typeListCovers(weaknesses, normalizedType);
+  }
+
+  /**
+   * Does an Immune / Weak list cover `type`? Exact key, or a family key that contains it
+   * (`CONFIG.VAGABOND.damageTypeFamilies`: Physical covers Blunt / Piercing / Slashing).
+   * @param {string[]} list
+   * @param {string} type - normalized (lowercase) incoming type
+   * @returns {boolean}
+   */
+  static typeListCovers(list, type) {
+    if (!list?.length || !type) return false;
+    if (list.includes(type)) return true;
+    const families = CONFIG.VAGABOND?.damageTypeFamilies ?? {};
+    return list.some(k => families[k]?.includes(type));
   }
 
   /**
