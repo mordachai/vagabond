@@ -18,7 +18,9 @@
       "label": "Tempo -",
       "runAsGM": true
     },
-    "locked": true
+    "locked": true,
+    "targetBeings": true,
+    "targetObjects": false
   },
   "effects": [],
   "folder": null,

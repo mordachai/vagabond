@@ -9,12 +9,14 @@
     "crit": "The Target is Restrained.",
     "favorite": false,
     "noRollRequired": false,
+    "targetBeings": true,
+    "targetObjects": false,
     "fxSchool": "nature",
     "locked": true,
     "critCausedStatuses": [
       {
         "statusId": "restrained",
-        "requiresDamage": true,
+        "requiresDamage": false,
         "saveType": "reflex",
         "duration": "focusing",
         "tickDamageEnabled": false,

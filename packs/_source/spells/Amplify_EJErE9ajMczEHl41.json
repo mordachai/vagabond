@@ -9,7 +9,9 @@
     "crit": "Duration is continual.",
     "favorite": false,
     "fxSchool": "arcane",
-    "locked": true
+    "locked": true,
+    "targetBeings": true,
+    "targetObjects": false
   },
   "effects": [],
   "folder": null,

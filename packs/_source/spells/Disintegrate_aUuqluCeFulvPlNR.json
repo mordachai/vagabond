@@ -8,7 +8,9 @@
     "duration": "Until your next turn",
     "crit": "",
     "favorite": false,
-    "locked": true
+    "locked": true,
+    "targetBeings": true,
+    "targetObjects": true
   },
   "effects": [],
   "folder": null,

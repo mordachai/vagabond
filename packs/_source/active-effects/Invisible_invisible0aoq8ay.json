@@ -22,7 +22,7 @@
     "expiry": null,
     "expired": false
   },
-  "description": "<p>Can't be seen. Attackers act as Blinded (attacks Hindered).</p>",
+  "description": "<ul><li>Can't be seen by normal senses</li><li>Attacks, Casts and their Saves: those that can't see it act as Blinded</li><li data-manual>Other Checks and Saves involving it: those that can't see it act as Blinded</li></ul>",
   "origin": null,
   "tint": "#ffffff",
   "transfer": false,

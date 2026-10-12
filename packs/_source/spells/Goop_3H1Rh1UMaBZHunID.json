@@ -39,7 +39,9 @@
         "damageOnTick": "",
         "damageType": "-"
       }
-    ]
+    ],
+    "targetBeings": true,
+    "targetObjects": false
   },
   "effects": [],
   "folder": null,

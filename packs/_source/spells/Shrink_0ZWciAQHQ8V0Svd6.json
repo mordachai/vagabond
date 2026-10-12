@@ -16,7 +16,9 @@
       "command": "system:spell.status.shrunk",
       "label": "Shrink",
       "runAsGM": true
-    }
+    },
+    "targetBeings": true,
+    "targetObjects": false
   },
   "effects": [],
   "folder": null,

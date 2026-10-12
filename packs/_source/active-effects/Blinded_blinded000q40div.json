@@ -29,7 +29,7 @@
     "expiry": null,
     "expired": false
   },
-  "description": "<p>Can't see. Vulnerable.</p>",
+  "description": "<ul><li>Can't see</li><li>Vulnerable</li></ul>",
   "origin": null,
   "tint": "#ffffff",
   "transfer": false,

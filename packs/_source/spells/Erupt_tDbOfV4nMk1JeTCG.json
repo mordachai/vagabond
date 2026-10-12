@@ -9,12 +9,14 @@
     "crit": "Targets Burning (Cd4 while in the area).",
     "favorite": false,
     "noRollRequired": true,
+    "targetBeings": true,
+    "targetObjects": false,
     "fxSchool": "lava",
     "locked": true,
     "critCausedStatuses": [
       {
         "statusId": "burning",
-        "requiresDamage": true,
+        "requiresDamage": false,
         "saveType": "none",
         "duration": "d4",
         "tickDamageEnabled": true,

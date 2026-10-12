@@ -29,7 +29,7 @@
     "expiry": null,
     "expired": false
   },
-  "description": "<p>Drop or stand by using 10' of Speed. Moves only by crawling (2' of Speed for 1' of movement) and can't Rush. Vulnerable for the purposes of Melee attacks and Reflex Saves.</p>",
+  "description": "<ul><li>Moves only by crawling (2' of Speed per 1')</li><li>Vulnerable for Melee attacks and Reflex Saves</li><li data-manual>Dropping or standing uses 10' of Speed</li><li data-manual>Can't Rush</li></ul>",
   "origin": null,
   "tint": "#ffffff",
   "transfer": false,

@@ -907,11 +907,20 @@
     -45deg,
     rgba(222, 214, 86, 0.3),
     rgba(222, 214, 86, 0.3) 5px,
-    rgba(147, 201, 85, 0.5) 5px,
-    rgba(147, 201, 85, 0.5) 10px
+    rgba(46, 230, 255, 0.5) 5px,
+    rgba(46, 230, 255, 0.5) 10px
   );
   background-size: 40px 40px;
   animation: focus-stripes 3.2s linear infinite;
   border-radius: 5px;
   font-weight: 600;
+
+  // Beats the list row's `.favorited-spell .spell-trigger .spell-name-container .spell-name` (+ hover)
+  .spell-name-container .spell-name,
+  .spell-trigger .spell-name-container .spell-name,
+  .spell-trigger .spell-name-container:hover .spell-name {
+    padding: 0 4px;
+    color: $c-electric-blue;
+    text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000;
+  }
 }

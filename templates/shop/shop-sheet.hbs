@@ -146,7 +146,10 @@
           <input type="text" class="shop-stock-category" data-category-for="{{id}}" value="{{category}}"
             placeholder="{{localize 'VAGABOND.Shop.Tabs.general'}}" {{disabled (not @root.editable)}}>
           {{/if}}
-          <span class="shop-stock-qty">{{#if unlimited}}&infin;{{else}}{{quantity}}{{/if}}</span>
+          {{#if unlimited}}<span class="shop-stock-qty">&infin;</span>
+          {{else if qtyEditable}}
+          <input type="number" class="shop-stock-qty" data-qty-for="{{id}}" value="{{quantity}}" min="0" step="1">
+          {{else}}<span class="shop-stock-qty">{{quantity}}</span>{{/if}}
           <span class="shop-stock-base">{{base}}</span>
           <span class="shop-stock-price">{{price}}</span>
           {{#if @root.editable}}

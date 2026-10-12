@@ -16,7 +16,9 @@
       "command": "system:druid.polymorph",
       "label": "Polymorph",
       "runAsGM": false
-    }
+    },
+    "targetBeings": true,
+    "targetObjects": false
   },
   "effects": [],
   "folder": null,

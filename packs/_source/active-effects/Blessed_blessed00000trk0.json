@@ -1,5 +1,5 @@
 {
-  "name": "Blessed",
+  "name": "Bless: +d4 Saves",
   "_id": "blessed00000trk0",
   "img": "icons/magic/holy/saint-glass-portrait-halo.webp",
   "type": "base",
@@ -22,7 +22,7 @@
     "expiry": null,
     "expired": false
   },
-  "description": "<p>Under the Bless Spell: d4 bonus to Saves.</p>",
+  "description": "<ul><li>d4 bonus to Saves</li><li>Ends when the caster stops Focusing</li></ul>",
   "origin": null,
   "tint": "#ffffff",
   "transfer": false,

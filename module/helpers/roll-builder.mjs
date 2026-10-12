@@ -223,7 +223,8 @@ export class VagabondRollBuilder {
    * - Vulnerable target (`vulnerable`) / generic `incomingAttacksModifier`: Favor;
    * - Invisible target (`attackersAreBlinded`): the attacker can't see it, acts as Blinded → Hinder;
    * - Invisible attacker: the target can't see it, acts as Blinded (Vulnerable) → Favor;
-   * - Prone (`meleeReflexVulnerable`), Melee only: Prone target → Favor, Prone attacker → Hinder.
+   * - Prone (`meleeReflexVulnerable`), Melee only: Prone target → Favor, Prone attacker → Hinder;
+   * - Guided target (Guide Spell): Favor from an attacker who can see it.
    * @param {Actor} attacker
    * @param {Actor|null} targetActor - first target (multi-target rolls consult only the first)
    * @param {{melee?: boolean}} [opts] - melee: a Melee attack or a Close (Touch) Cast
@@ -239,6 +240,10 @@ export class VagabondRollBuilder {
     if (t.defenderStatusModifiers?.attackersAreBlinded) votes.push('hinder');
     if (attacker?.system?.defenderStatusModifiers?.attackersAreBlinded) votes.push('favor');
     if (melee && t.meleeReflexVulnerable) votes.push('favor');
+    // Guide Spell Tracker: "Checks that rely on sight made against the Target have Favor" — only from an
+    // attacker who can see it (not Blinded, target not Invisible to it).
+    if (targetActor.statuses?.has('guided') && !attacker?.statuses?.has('blinded')
+      && !t.defenderStatusModifiers?.attackersAreBlinded) votes.push('favor');
     return votes;
   }
 

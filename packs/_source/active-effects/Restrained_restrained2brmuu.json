@@ -36,7 +36,7 @@
     "expiry": null,
     "expired": false
   },
-  "description": "<p>Vulnerable + Speed = 0.</p>",
+  "description": "<ul><li>Vulnerable</li><li>Speed 0</li></ul>",
   "origin": null,
   "tint": "#ffffff",
   "transfer": false,

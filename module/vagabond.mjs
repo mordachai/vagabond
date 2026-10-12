@@ -61,7 +61,7 @@ import { VagabondSpellSequencer } from './helpers/spell-sequencer.mjs';
 import { VagabondItemSequencer } from './helpers/item-sequencer.mjs';
 import { VagabondFXResolver } from './helpers/fx-file-resolver.mjs';
 import { registerSocket, emitSocket, registerSocketAction } from './helpers/socket-helper.mjs';
-import { runMacroFromButton, executeItemMacro, registerMacroHandler } from './helpers/item-macro.mjs';
+import { runMacroFromButton, executeItemMacro, registerMacroHandler, registerCastGate, registerMacroQueries } from './helpers/item-macro.mjs';
 import { FeatureAction } from './helpers/feature-action.mjs';
 import { RollExpiry } from './helpers/roll-expiry.mjs';
 import { LightSource } from './helpers/light-source.mjs';
@@ -77,6 +77,7 @@ import { FighterHelper } from './helpers/fighter-helper.mjs';
 import { GunslingerHelper } from './helpers/gunslinger-helper.mjs';
 import { HunterHelper } from './helpers/hunter-helper.mjs';
 import { SpellTrackerHelper } from './helpers/spell-tracker-helper.mjs';
+import { RaiseHelper } from './helpers/raise-helper.mjs';
 import { PugilistHelper } from './helpers/pugilist-helper.mjs';
 import { DefenseHelper } from './helpers/defense-helper.mjs';
 import { RevelatorHelper } from './helpers/revelator-helper.mjs';
@@ -93,6 +94,7 @@ import { CurrencyHelper } from './helpers/currency-helper.mjs';
 import { ShopPricing } from './helpers/shop-pricing.mjs';
 import { ShopTransactions } from './helpers/shop-transactions.mjs';
 import { TradeHelper } from './helpers/trade-helper.mjs';
+import { TokenPortrait } from './helpers/token-portrait.mjs';
 import { CoinTransferDialog } from './applications/coin-transfer-dialog.mjs';
 import { ShopApp } from './applications/shop-app.mjs';
 import { CraftingHelper } from './helpers/crafting-helper.mjs';
@@ -437,6 +439,10 @@ Hooks.once('init', function () {
   TradeHelper.registerQueries();
   // Crafting: GM-relayed execute query + mode registry (craft, scrap)
   CraftingHelper.registerQueries();
+  // Circle token art: players without upload permission relay the crop upload to the GM
+  TokenPortrait.registerQueries();
+  // runAsGM macro / hit-macro buttons: players relay to the active GM and get its warnings back
+  registerMacroQueries();
   CraftingHelper.registerModes();
   CONFIG.Item.dataModels = {
     equipment: models.VagabondEquipment,
@@ -711,6 +717,8 @@ Hooks.once('ready', function () {
   registerMacroHandler('wizard.archwizard', (scope) => WizardHelper.archwizard(scope));
   // Buff Spells' hit macros: system:spell.status.<trackerId>
   SpellTrackerHelper.registerMacroHandlers(registerMacroHandler);
+  // Raise: system:spell.raise + its cast gate (corpses, Being types, HD)
+  RaiseHelper.registerMacroHandlers(registerMacroHandler, registerCastGate);
 
   // Live state of feature buttons: glow while the effect is on, end it from the sheet / HUD
   // (right-click; Momentum is a pure toggle so a left click ends it too).
@@ -755,7 +763,7 @@ Hooks.once('ready', function () {
     await weapon.update({ 'system.imbuedSpell': data });
   });
 
-  // Item/spell/NPC-action macro relay — player clicks a runAsGM button, GM executes.
+  // Legacy socket relay (clients on older code); current clients use the `vagabond.runItemMacro` query.
   registerSocketAction('runItemMacro', async (payload) => {
     try {
       await executeItemMacro(payload);
@@ -815,6 +823,8 @@ Hooks.once('ready', function () {
     // Progress clock cross-reference API: game.vagabond.clocks.value('doom'),
     // .set/.tick/.fill/.empty/.reset (GM only), .read(), .get(), .getAll()
     clocks: ProgressClock,
+    // Circle token art: game.vagabond.tokenPortrait.convertAll() (GM) re-bakes / converts every token
+    tokenPortrait: TokenPortrait,
     // Light-source automation: game.vagabond.lightSource.use({...}) (item macros),
     // .douse(token) (hotbar "Douse Light" macro).
     lightSource: LightSource,
@@ -848,6 +858,10 @@ Hooks.once('ready', function () {
       moveCoins: (args) => TradeHelper.moveCoins(args),
       coins: (holder, opts) => CoinTransferDialog.open(holder, opts),
       helper: TradeHelper,
+    },
+    // Raise: game.vagabond.raise.cleanup() (GM) puts spent Undead corpses back and deletes their Undead Army copies
+    raise: {
+      cleanup: () => RaiseHelper.cleanup(),
     },
     // Crafting: game.vagabond.craft.config(), .valuePerShift(actor),
     // .evaluate/.execute/.request(actor, modeKey, recipe, opts), .workShift(actor,
@@ -964,6 +978,14 @@ Hooks.once('ready', function () {
   migrateVehementMagic();
   // One-time: buff Spell copies (Bless, Ward, Tempo…) get the Tracker hit macro.
   SpellTrackerHelper.migrateWorldSpells();
+  // One-time: Hold / Control / Zap / Cure / Hymn copies get their book-checked handlers; live Trackers show their rule.
+  SpellTrackerHelper.migrateStatusSpells();
+  // One-time: Spells whose Effect stands alone (Burn, Frostburn…) drop requiresDamage (Damage / Effect split).
+  SpellTrackerHelper.migrateSpellEffectEntries();
+  // One-time: Spell copies get the pack's Target Beings / Objects switches (Cast dialog Target picker).
+  SpellTrackerHelper.migrateSpellTargetSwitches();
+  // One-time: Raise copies get the system:spell.raise hit macro.
+  RaiseHelper.migrateWorldSpells();
   // One-time: class items get the Alpha 3 deltas (runs after every earlier class migration settled).
   // Then: class items get the scaling-chain ids (scaleKey) the sheet / HUD collapse features on.
   // Then: feature buttons added to the pack later (Alchemist Mix) reach existing class copies.
@@ -1042,6 +1064,8 @@ GunslingerHelper.registerHooks();
 // Hunter's Mark: Lethal Precision damage (inert unless an actor has a Mark and system.markDamageBonus)
 HunterHelper.registerHooks();
 SpellTrackerHelper.registerHooks();
+// Raise: raised Undead die for good when "Raise: Undead" ends or they are Dead again
+RaiseHelper.registerHooks();
 PugilistHelper.registerHooks();
 // Defense property: Patience tracking (inert unless an actor has system.patienceDefense)
 DefenseHelper.registerHooks();
@@ -1252,6 +1276,15 @@ Hooks.on('getSceneControlButtons', (controls) => {
         button:  true,
         visible: game.user.isGM && game.settings.get('vagabond', 'shopsEnabled'),
         onChange: () => ShopApp.pickAndToggle(),
+      },
+      // Raise: put spent Undead corpses back on their original actors, delete the Undead Army copies
+      raiseCleanup: {
+        name:    'raiseCleanup',
+        title:   game.i18n.localize('VAGABOND.Raise.CleanupTool'),
+        icon:    'fas fa-skull',
+        button:  true,
+        visible: game.user.isGM,
+        onChange: () => RaiseHelper.cleanup(),
       },
       combatCarousel: {
         name:    'combatCarousel',
@@ -1491,9 +1524,14 @@ Hooks.on('deleteJournalEntry', async (journal, options, userId) => {
   if (cdFlags.linkedActorUuid && cdFlags.linkedStatusId) {
     try {
       const actor = await fromUuid(cdFlags.linkedActorUuid);
+      // A stacking status (Burning) from several sources has one die per source: the
+      // status stays while another source's die is still running.
+      const { StatusHelper } = await import('./helpers/status-helper.mjs');
+      const otherSourceDie = actor && StatusHelper.isStackingStatus(cdFlags.linkedStatusId)
+        && StatusHelper.linkedStatusDice(actor, cdFlags.linkedStatusId).some(j => j.id !== journal.id);
       // Only toggle off if the status is still present — guards against a double-delete
       // race when the status was already removed manually or by another cleanup path.
-      if (actor && actor.statuses?.has(cdFlags.linkedStatusId)) {
+      if (actor && !otherSourceDie && actor.statuses?.has(cdFlags.linkedStatusId)) {
         await actor.toggleStatusEffect(cdFlags.linkedStatusId, { active: false });
 
         const statusLabel = game.i18n.localize(
@@ -1613,8 +1651,12 @@ async function _refreshDeadSkull(token) {
     return;
   }
 
+  // Raise: a corpse that already rose once (can't be raised again) gets a black skull
+  const skullTint = RaiseHelper.isSpent(token.document) ? 0x000000 : 0xFFFFFF;
+
   // Reposition only if sprite already exists
   if (token._vagabondDeadSkull && !token._vagabondDeadSkull.destroyed) {
+    token._vagabondDeadSkull.tint = skullTint;
     token._vagabondDeadSkull.width = skullSize;
     token._vagabondDeadSkull.height = skullSize;
     token._vagabondDeadSkull.position.set(cx, cy);
@@ -1640,6 +1682,7 @@ async function _refreshDeadSkull(token) {
   skull.anchor.set(0.5);
   skull.position.set(cx, cy);
   skull.alpha = 0.85;
+  skull.tint = skullTint;
   skull.eventMode = 'none';
   token.addChild(skull);
   token._vagabondDeadSkull = skull;
@@ -1677,6 +1720,12 @@ Hooks.on('drawToken', (token) => { _refreshDeadSkull(token); });
 Hooks.on('refreshToken', (token) => {
   if (!token._vagabondDeadSkull || token._vagabondDeadSkull.destroyed) return;
   _refreshDeadSkull(token);
+});
+
+// Raise: the token went back to its corpse / was flagged spent — re-tint the skull
+Hooks.on('updateToken', (doc, changes) => {
+  if (!('actorId' in changes) && !foundry.utils.hasProperty(changes, 'flags.vagabond.raiseSpent')) return;
+  if (doc.object) _refreshDeadSkull(doc.object);
 });
 
 // Dead AE created — add skull (HP→0 path or manual HUD toggle)
@@ -1809,6 +1858,13 @@ const SHOP_SWEEP = { vagabondShopSweep: true }; // options flag: lets the ready 
 
 Hooks.on('preCreateToken', (token) => {
   if (token.actor?.type === 'shop') token.updateSource(shopTokenRules());
+});
+
+// Circle token art: ring toggled on a placed token → swap to the matching crop variant (ring / plain)
+Hooks.on('updateToken', (token, changes, options, userId) => {
+  if (userId !== game.user.id) return;
+  if (!foundry.utils.hasProperty(changes, 'ring.enabled') && !foundry.utils.hasProperty(changes, 'texture.src')) return;
+  TokenPortrait.syncTokenRing(token).catch(err => console.warn('Vagabond | Token ring art swap failed', err));
 });
 
 // A GM can't flip a shop token hostile / hide its name / unlink it
@@ -2245,9 +2301,17 @@ const FLUKE_REROLL_ENTRY = {
       await VagabondDamageHelper.playFxOrDefer(rerollMessage, { kind: 'item', thrown: !!rerollData.thrown }, actor, weapon, targetsAtRollTime, isSuccess);
 
     } else if (rerollData.type === 'cast') {
-      // Spell cast reroll - show as a skill check with the mana skill
-      const key = rerollData.manaSkillKey || 'magic';
-      await VagabondChatCard._checkRoll(actor, 'cast', key, roll, rerollData.difficulty, isSuccess);
+      // Spell cast reroll — rebuild the whole Cast card (damage, Effect buttons, FX, Mana
+      // difference) via VagabondChatCard.rerollSpellCast. Imbue / Glyph and cards from before
+      // the Cast state was stored fall back to a bare check card (see rerollSpellCast docs).
+      const spell = actor.items.get(rerollData.itemId);
+      const delivery = String(rerollData.deliveryType ?? '').toUpperCase();
+      if (spell && rerollData.damageDice !== undefined && delivery !== 'IMBUE' && delivery !== 'GLYPH') {
+        await VagabondChatCard.rerollSpellCast(actor, spell, rerollData, roll, flags.targetsAtRollTime || []);
+      } else {
+        const key = rerollData.manaSkillKey || 'magic';
+        await VagabondChatCard._checkRoll(actor, 'cast', key, roll, rerollData.difficulty, isSuccess);
+      }
 
     } else {
       // Skill or save reroll
@@ -2368,6 +2432,15 @@ const FORCE_CRIT_ENTRY = {
         }
       }
 
+      // Spell Damage / Effect split: the original Cast state (when stored) gates the statuses,
+      // and an effect-only Cast gets its Apply Effect buttons here too
+      const { VagabondDamageHelper: VDHCrit } = await import('./helpers/damage-helper.mjs');
+      const critSpellCast = (spell && rerollData.damageDice !== undefined)
+        ? VDHCrit.spellCastContext(spell, { damageDice: rerollData.damageDice, useFx: rerollData.useFx })
+        : null;
+      const critEffectButtons = spell
+        ? VDHCrit.createSpellEffectButtons(actor, spell, critSpellCast, { isCritical: true, targetsAtRollTime, attackType: 'cast' })
+        : '';
       const critCastMessage = await VagabondChatCard.createActionCard({
         actor,
         item: spell || null,
@@ -2380,7 +2453,9 @@ const FORCE_CRIT_ENTRY = {
         crit: critText,
         hasDefenses: true,
         attackType: 'cast',
-        targetsAtRollTime
+        targetsAtRollTime,
+        footerActions: critEffectButtons ? [critEffectButtons] : [],
+        spellCast: critSpellCast,
       });
       if (spell && rerollData.deliveryType) {
         const { VagabondDamageHelper } = await import('./helpers/damage-helper.mjs');
@@ -2586,6 +2661,11 @@ Hooks.on('renderChatMessageHTML', (message, html) => {
   // Hide resource value notes (e.g. "HP: 18 → 16") from non-GM players
   if (!game.user.isGM) {
     html.querySelectorAll('.gm-only').forEach(el => el.remove());
+    // Owner-gated controls (NPC damage button): kept for players who own that actor,
+    // e.g. an Undead raised by the Raise Spell and handed to its caster's player.
+    html.querySelectorAll('.owner-only[data-actor-id]').forEach(el => {
+      if (!TargetHelper.resolveActorRef(el.dataset.actorId)?.isOwner) el.remove();
+    });
   }
 
   // ---------------------------------------------------------
@@ -2730,6 +2810,16 @@ Hooks.on('renderChatMessageHTML', (message, html) => {
     });
   });
 
+  // 5a. Apply Effect (effect-only Spell Cast: the Spell's statuses, no damage card)
+  html.querySelectorAll('.vagabond-apply-spell-effect-button').forEach(button => {
+    button.addEventListener('click', (ev) => {
+      ev.preventDefault();
+      import('./helpers/damage-helper.mjs').then(({ VagabondDamageHelper }) => {
+        VagabondDamageHelper.handleApplySpellEffect(button);
+      });
+    });
+  });
+
   // ---------------------------------------------------------
   // 5b. Defense Button Handler (Defense weapon property)
   // ---------------------------------------------------------
@@ -2867,7 +2957,7 @@ Hooks.on('renderChatMessageHTML', (message, html) => {
   // ---------------------------------------------------------
 
   // ---------------------------------------------------------
-  // 9. NPC Damage Button Handler (GM Only)
+  // 9. NPC Damage Button Handler (GM + owners of the NPC — `.owner-only`)
   // ---------------------------------------------------------
   const npcButtons = html.querySelectorAll('.vagabond-npc-damage-button');
 

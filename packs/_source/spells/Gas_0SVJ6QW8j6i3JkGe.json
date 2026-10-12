@@ -9,12 +9,14 @@
     "crit": "The effect lasts 1 Hour unless dispersed.",
     "favorite": false,
     "noRollRequired": true,
+    "targetBeings": true,
+    "targetObjects": false,
     "fxSchool": "poison",
     "locked": true,
     "causedStatuses": [
       {
         "statusId": "sickened",
-        "requiresDamage": true,
+        "requiresDamage": false,
         "saveType": "endure",
         "duration": "focusing",
         "tickDamageEnabled": false,
@@ -25,7 +27,7 @@
     "critCausedStatuses": [
       {
         "statusId": "sickened",
-        "requiresDamage": true,
+        "requiresDamage": false,
         "saveType": "endure",
         "duration": "",
         "tickDamageEnabled": false,

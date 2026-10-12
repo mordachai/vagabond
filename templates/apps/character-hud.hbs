@@ -239,7 +239,7 @@
 
         <div class="vh-slots">
           {{#each itemSlots}}
-            <div class="vh-slot {{#if filled}}filled{{/if}} {{#if (eq type 'action')}}vh-slot-action{{/if}} {{#if active}}is-active{{/if}} {{#if inert}}is-inert{{/if}} {{#if throwable}}{{#unless quantity}}empty{{/unless}}{{/if}}" data-slot-index="{{@index}}" {{#if filled}}data-action="slotUse" data-type="{{type}}" data-item-id="{{id}}" title="{{#if tip}}{{tip}}{{else}}{{name}}{{/if}}{{#if throwable}} ×{{quantity}}{{/if}}"{{/if}}{{#if count}} data-count="{{count}}"{{/if}}>
+            <div class="vh-slot {{#if filled}}filled{{/if}} {{#if (eq type 'action')}}vh-slot-action{{/if}} {{#if active}}is-active{{/if}} {{#if focused}}is-focused{{/if}} {{#if inert}}is-inert{{/if}} {{#if throwable}}{{#unless quantity}}empty{{/unless}}{{/if}}" data-slot-index="{{@index}}" {{#if filled}}data-action="slotUse" data-type="{{type}}" data-item-id="{{id}}" title="{{#if tip}}{{tip}}{{else}}{{name}}{{/if}}{{#if throwable}} ×{{quantity}}{{/if}}"{{/if}}{{#if count}} data-count="{{count}}"{{/if}}>
               {{#if filled}}{{#if icon}}<i class="{{icon}}"></i>{{else}}<img src="{{img}}" alt="{{name}}" draggable="false" />{{/if}}{{/if}}
             </div>
           {{/each}}

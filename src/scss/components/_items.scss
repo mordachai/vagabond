@@ -363,6 +363,16 @@
   }
 }
 
+// Weapon counts as another material (system.countsAs, from "This item" effects — Bless: Silvered)
+.imbue-badge.silvered-badge {
+  background: rgba(190, 195, 205, 0.15);
+  border-color: rgba(190, 195, 205, 0.6);
+
+  i.fa-hands-praying {
+    color: rgb(215, 220, 230);
+  }
+}
+
 // Equipment Details — consolidated cost/slots/metal/calculated row layout
 .equip-cost-slots-row {
   display: flex;

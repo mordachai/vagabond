@@ -50,6 +50,20 @@
         </div>
       {{/if}}
 
+      {{! Target picker }}
+      {{#if (or system.targetBeings system.targetObjects)}}
+        <div class='locked-section'>
+          <div class='locked-stat'>
+            <span class='stat-label'>{{localize "VAGABOND.Item.Spell.FIELDS.pickTargets.label"}}:</span>
+            <span class='stat-value'>
+              {{#if system.targetBeings}}{{localize "VAGABOND.Item.Spell.FIELDS.targetBeings.label"}}{{/if}}
+              {{#if (and system.targetBeings system.targetObjects)}}·{{/if}}
+              {{#if system.targetObjects}}{{localize "VAGABOND.Item.Spell.FIELDS.targetObjects.label"}}{{/if}}
+            </span>
+          </div>
+        </div>
+      {{/if}}
+
       {{! Animation preview (Sequencer) }}
       {{#if spellFx}}
         <div class='locked-section'>
@@ -163,6 +177,22 @@
           <p class='notes'>{{localize "VAGABOND.UI.Labels.UsesDiceScalingHint"}}</p>
         </div>
 
+        {{! Target picker switches (SpellTargetPicker) }}
+        <div class='form-group'>
+          <label class='checkbox-label'>
+            <input type='checkbox' name='system.targetBeings' {{#if system.targetBeings}}checked{{/if}} data-dtype='Boolean' />
+            <span>{{localize "VAGABOND.Item.Spell.FIELDS.targetBeings.label"}}</span>
+          </label>
+          <p class='notes'>{{localize "VAGABOND.Item.Spell.FIELDS.targetBeings.hint"}}</p>
+        </div>
+        <div class='form-group'>
+          <label class='checkbox-label'>
+            <input type='checkbox' name='system.targetObjects' {{#if system.targetObjects}}checked{{/if}} data-dtype='Boolean' />
+            <span>{{localize "VAGABOND.Item.Spell.FIELDS.targetObjects.label"}}</span>
+          </label>
+          <p class='notes'>{{localize "VAGABOND.Item.Spell.FIELDS.targetObjects.hint"}}</p>
+        </div>
+
         {{! Dice Scaling Label (only relevant when scaling is on) }}
         {{#if system.usesDiceScaling}}
         <div class='form-group'>
@@ -243,10 +273,10 @@
                   class='caused-status-fatigue-tick'>
                 --}}
                 {{/if}}
-                <label class='caused-status-req' title='{{localize "VAGABOND.Status.RequiresDamageHint"}}'>
+                <label class='caused-status-req' title='{{localize "VAGABOND.Status.RequiresDamageCastHint"}}'>
                   <input type='checkbox' name='system.causedStatuses.{{index}}.requiresDamage'
                     {{#if entry.requiresDamage}}checked{{/if}}>
-                  {{localize 'VAGABOND.Status.RequiresDamageShort'}}
+                  {{localize 'VAGABOND.Status.RequiresDamageCastShort'}}
                 </label>
                 <button type='button' class='caused-status-remove' data-action='removeCausedStatus' data-index='{{index}}'>
                   <i class='fas fa-times'></i>
@@ -312,10 +342,10 @@
                   class='caused-status-fatigue-tick'>
                 --}}
                 {{/if}}
-                <label class='caused-status-req' title='{{localize "VAGABOND.Status.RequiresDamageHint"}}'>
+                <label class='caused-status-req' title='{{localize "VAGABOND.Status.RequiresDamageCastHint"}}'>
                   <input type='checkbox' name='system.critCausedStatuses.{{index}}.requiresDamage'
                     {{#if entry.requiresDamage}}checked{{/if}}>
-                  {{localize 'VAGABOND.Status.RequiresDamageShort'}}
+                  {{localize 'VAGABOND.Status.RequiresDamageCastShort'}}
                 </label>
                 <button type='button' class='caused-status-remove' data-action='removeCritCausedStatus' data-index='{{index}}'>
                   <i class='fas fa-times'></i>

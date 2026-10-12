@@ -14,7 +14,7 @@
     "expiry": null,
     "expired": false
   },
-  "description": "<p>Can't willingly make an Attack Action targeting the one who Charmed it.</p>",
+  "description": "<ul><li data-manual>Can't willingly attack the charmer</li></ul>",
   "origin": null,
   "tint": "#ffffff",
   "transfer": false,

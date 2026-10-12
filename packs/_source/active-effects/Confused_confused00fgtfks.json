@@ -29,7 +29,7 @@
     "expiry": null,
     "expired": false
   },
-  "description": "<p>Checks and Saves have Hinder. Saves against its Actions have Favor.</p>",
+  "description": "<ul><li>Its Checks and Saves have Hinder</li><li>Saves against its Actions have Favor</li></ul>",
   "origin": null,
   "tint": "#ffffff",
   "transfer": false,

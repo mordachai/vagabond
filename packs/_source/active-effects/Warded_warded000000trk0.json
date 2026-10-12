@@ -1,5 +1,5 @@
 {
-  "name": "Warded",
+  "name": "Ward: +1 Armor",
   "_id": "warded000000trk0",
   "img": "icons/magic/defensive/shield-barrier-deflect-gold.webp",
   "type": "base",
@@ -22,7 +22,7 @@
     "expiry": null,
     "expired": false
   },
-  "description": "<p>Under the Ward Spell: +1 Armor.</p>",
+  "description": "<ul><li>+1 Armor</li><li>Ends when the caster stops Focusing</li><li data-manual>Upcast: Cast Check to reduce damage by 1d6 per Mana</li></ul>",
   "origin": null,
   "tint": "#ffffff",
   "transfer": false,

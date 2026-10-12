@@ -58,6 +58,58 @@ export class StatusHelper {
     return actor.effects.some(e => !e.disabled && e.statuses?.has(statusId));
   }
 
+  // ---------------------------------------------------------------------------
+  // Stacking statuses (Burning)
+  // ---------------------------------------------------------------------------
+  //
+  // Book, Burning: "can stack from multiple sources, but never from the same source".
+  // Foundry keeps ONE status effect per id on an actor, so a stack is modelled as that
+  // one status + one countdown die per source (each die ticks its own damage). The die
+  // stores the source in `flags.vagabond.countdownDice.linkedSourceKey`; the status only
+  // ends when the LAST linked die expires (deleteJournalEntry hook in vagabond.mjs).
+  //
+  // Ruling (user, 2026-10-11): a source = one caster + one item/action. The same Burn
+  // Spell from the same Wizard never stacks; Burn from two different Wizards does, and so
+  // does Burn + Goop from the same Wizard. Only Burning stacks (no other status says so) —
+  // extend `CONFIG.VAGABOND.stackingStatuses` if the book ever adds another.
+
+  /**
+   * Stable key for "the same source" of a stacking status: caster actor + item (or NPC action).
+   * '' when the source is unknown (manual applies) — an unknown source never stacks.
+   * @param {Actor|null} sourceActor
+   * @param {Item|null} [sourceItem]
+   * @param {number|null} [actionIdx]
+   * @returns {string}
+   */
+  static sourceKeyFor(sourceActor, sourceItem = null, actionIdx = null) {
+    if (!sourceActor?.uuid) return '';
+    if (sourceItem?.id) return `${sourceActor.uuid}|item:${sourceItem.id}`;
+    if (actionIdx !== null && actionIdx !== undefined && !isNaN(actionIdx)) return `${sourceActor.uuid}|action:${actionIdx}`;
+    return '';
+  }
+
+  /** @returns {boolean} true when this status stacks across sources (book: Burning). */
+  static isStackingStatus(statusId) {
+    return (CONFIG.VAGABOND?.stackingStatuses ?? []).includes(statusId);
+  }
+
+  /**
+   * Countdown dice currently linked to an actor's status (optionally only one source's).
+   * @param {Actor} actor
+   * @param {string} statusId
+   * @param {string|null} [sourceKey] - when set, only dice from that source
+   * @returns {JournalEntry[]}
+   */
+  static linkedStatusDice(actor, statusId, sourceKey = null) {
+    return game.journal.filter((j) => {
+      const cd = j.flags?.vagabond?.countdownDice;
+      return cd?.type === 'countdownDice'
+        && cd.linkedActorUuid === actor.uuid
+        && cd.linkedStatusId === statusId
+        && (sourceKey === null || cd.linkedSourceKey === sourceKey);
+    });
+  }
+
   /**
    * Remove a status condition from an actor AND delete any countdown dice linked to it
    * (linkedActorUuid + linkedStatusId), so the on-screen die disappears with the status.
@@ -123,18 +175,28 @@ export class StatusHelper {
    * @param {string} sourceName
    * @returns {Promise<Object>} { outcome, saveResult? }
    *   outcome values: 'skipped_nodamage' | 'already_active' | 'immune' | 'resisted' | 'applied'
+   *   | 'stacked' (stacking status from a new source: its own die added) | 'cancelled'
+   *   options.sourceKey — `sourceKeyFor(...)`, identifies the source for stacking statuses
    */
   static async applyStatus(actor, entry, damageWasBlocked, sourceName = '', options = {}) {
-    const { preRolledSave = null, skipSaveRoll = false, sourceActorName = '' } = options;
+    const { preRolledSave = null, skipSaveRoll = false, sourceActorName = '', sourceKey = '' } = options;
 
-    // 1. Skip if status requires damage and damage was fully blocked
+    // 1. Skip if status requires damage and damage was fully blocked.
+    //    (Spell entries never reach here with requiresDamage set — resolveIncomingStatusEntries
+    //    turns it into "the Cast included damage" and clears it; see the Damage / Effect split there.)
     if (entry.requiresDamage && damageWasBlocked) {
       return { outcome: 'skipped_nodamage' };
     }
 
-    // 2. Skip if target already has this status (no re-application)
+    // 2. Skip if target already has this status (no re-application) — EXCEPT a stacking status
+    //    (Burning) from a source that has no die on this target yet: it adds its own countdown die.
+    let stacking = false;
     if (this.actorHasStatus(actor, entry.statusId)) {
-      return { outcome: 'already_active' };
+      const canStack = this.isStackingStatus(entry.statusId) && sourceKey && entry.duration
+        && entry.duration !== 'focusing'
+        && this.linkedStatusDice(actor, entry.statusId, sourceKey).length === 0;
+      if (!canStack) return { outcome: 'already_active' };
+      stacking = true;
     }
 
     // 3. Full immunity — status cannot be applied
@@ -178,20 +240,23 @@ export class StatusHelper {
       return { outcome: 'cancelled' };
     }
 
-    if (actor.isOwner || game.user.isGM) {
-      await actor.toggleStatusEffect(entry.statusId, { active: true });
-    } else {
-      const { emitSocket } = await import('./socket-helper.mjs');
-      emitSocket('applyStatus', { actorUuid: actor.uuid, statusId: entry.statusId, active: true });
+    // A stack keeps the one status effect already on the actor — only its new die is added
+    if (!stacking) {
+      if (actor.isOwner || game.user.isGM) {
+        await actor.toggleStatusEffect(entry.statusId, { active: true });
+      } else {
+        const { emitSocket } = await import('./socket-helper.mjs');
+        emitSocket('applyStatus', { actorUuid: actor.uuid, statusId: entry.statusId, active: true });
+      }
     }
-    Hooks.callAll('vagabond.postStatusApply', { actor, statusId: entry.statusId, sourceName, saveType: entry.saveType || 'none', damageWasBlocked });
+    Hooks.callAll('vagabond.postStatusApply', { actor, statusId: entry.statusId, sourceName, saveType: entry.saveType || 'none', damageWasBlocked, stacked: stacking });
 
     // 6. Create a linked countdown die if a duration is set
     if (entry.duration) {
-      await this._createStatusCountdown(actor, entry, sourceName, sourceActorName);
+      await this._createStatusCountdown(actor, entry, sourceName, sourceActorName, sourceKey);
     }
 
-    return { outcome: 'applied' };
+    return { outcome: stacking ? 'stacked' : 'applied' };
   }
 
   // ---------------------------------------------------------------------------
@@ -257,7 +322,7 @@ export class StatusHelper {
    * @param {Object} entry  - causedStatuses entry (duration, damageOnTick, damageType, statusId)
    * @param {string} sourceName
    */
-  static async _createStatusCountdown(actor, entry, sourceName = '', sourceActorName = '') {
+  static async _createStatusCountdown(actor, entry, sourceName = '', sourceActorName = '', sourceKey = '') {
     // 'focusing' duration means the status lasts while the caster is focusing — no countdown die
     if (entry.duration === 'focusing') return;
 
@@ -287,6 +352,8 @@ export class StatusHelper {
       size: 'M',
       linkedActorUuid:    actor.uuid,
       linkedStatusId:     entry.statusId,
+      // Which source put this die here — a stacking status (Burning) refuses a 2nd die from it
+      linkedSourceKey:    sourceKey || null,
       tickDamageEnabled:  entry.tickDamageEnabled ?? false,
       tickDamageFormula:  entry.damageOnTick  ?? '',
       tickDamageType:     entry.damageType    ?? '-',
@@ -408,6 +475,12 @@ export class StatusHelper {
           return `<p class="status-result status-applied">
             <i class="fas fa-circle-dot"></i>
             ${game.i18n.format('VAGABOND.Status.Applied', { actor: targetName, status: statusLabel })}
+          </p>`;
+        }
+        case 'stacked': {
+          return `<p class="status-result status-applied">
+            <i class="fas fa-layer-group"></i>
+            ${game.i18n.format('VAGABOND.Status.Stacked', { actor: targetName, status: statusLabel })}
           </p>`;
         }
         case 'immune': {

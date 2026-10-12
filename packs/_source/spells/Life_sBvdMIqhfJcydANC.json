@@ -9,6 +9,8 @@
     "crit": "",
     "favorite": false,
     "noRollRequired": true,
+    "targetBeings": true,
+    "targetObjects": false,
     "noFreeDie": true,
     "fxSchool": "healing",
     "locked": true

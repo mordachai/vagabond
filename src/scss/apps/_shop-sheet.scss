@@ -362,6 +362,13 @@ $shop-font-number: $font-title;
         }
       }
 
+      // Limited stock: editable quantity
+      input.shop-stock-qty {
+        width: 100%;
+        min-width: 0;
+        padding: 0 2px;
+      }
+
       .shop-stock-name {
         overflow: hidden;
         text-overflow: ellipsis;

@@ -15,6 +15,7 @@ import { CharacterBuilderUIComponents } from '../ui/ui-components.mjs';
 import { isTrainingComplete } from '../steps/training-manager.mjs';
 import { BuildGuideService } from '../services/build-guide-service.mjs';
 import { GrantedItems } from '../../../helpers/granted-items.mjs';
+import { TokenPortrait } from '../../../helpers/token-portrait.mjs';
 import { isStepUnlocked, canFinishBuild, furthestAfter, applicableSteps, isStepApplicable, isStepDone, DEFAULT_STEP_ORDER } from '../steps/step-gating.mjs';
 
 // Import all step managers
@@ -1067,7 +1068,7 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
       if (!actorData.img || actorData.img === defaultPortrait) actorData.img = classArt;
       const tokenTexture = actorData.prototypeToken?.texture;
       if (tokenTexture && (!tokenTexture.src || tokenTexture.src === CONST.DEFAULT_TOKEN)) {
-        tokenTexture.src = classArt;
+        tokenTexture.src = (TokenPortrait.enabled() && await TokenPortrait.circleFor(classArt)) || classArt;
       }
     }
 

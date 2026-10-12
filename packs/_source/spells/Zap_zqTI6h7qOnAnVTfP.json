@@ -13,7 +13,7 @@
     "causedStatuses": [
       {
         "statusId": "dazed",
-        "requiresDamage": true,
+        "requiresDamage": false,
         "saveType": "endure",
         "duration": "focusing",
         "tickDamageEnabled": false,
@@ -24,7 +24,7 @@
     "critCausedStatuses": [
       {
         "statusId": "paralyzed",
-        "requiresDamage": true,
+        "requiresDamage": false,
         "saveType": "endure",
         "duration": "focusing",
         "tickDamageEnabled": false,
@@ -35,10 +35,12 @@
     "hitMacro": {
       "enabled": true,
       "uuid": "",
-      "command": "const tgts = (typeof targets !== \"undefined\" && targets?.length)\n  ? targets\n  : Array.from(game.user.targets);\nif (!tgts.length) return ui.notifications.warn(\"No token targeted.\");\n\nfor (const t of tgts) {\n  // Crit: Paralyzed rather than Dazed\n  await t.actor.toggleStatusEffect(isCritical ? \"paralyzed\" : \"dazed\", { active: true });\n}\n\n//ui.notifications.info(`Zap applied to ${tgts.length} target(s).`);",
+      "command": "system:spell.zap",
       "label": "Zap",
       "runAsGM": true
-    }
+    },
+    "targetBeings": true,
+    "targetObjects": false
   },
   "effects": [],
   "folder": null,

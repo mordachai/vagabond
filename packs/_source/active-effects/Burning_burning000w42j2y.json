@@ -14,7 +14,7 @@
     "expiry": null,
     "expired": false
   },
-  "description": "<p>Takes damage at the start of its turn. Can be ended by an appropriate action.</p>",
+  "description": "<ul><li data-manual>Takes the damage in parentheses at the start of its Turns</li><li data-manual>Ends when an action ends it (such as dousing fire)</li><li data-manual>Stacks from different sources, never from the same source</li></ul>",
   "origin": null,
   "tint": "#ffffff",
   "transfer": false,

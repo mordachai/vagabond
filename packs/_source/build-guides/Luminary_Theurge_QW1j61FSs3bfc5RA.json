@@ -1177,9 +1177,9 @@
         "hitMacro": {
           "enabled": true,
           "uuid": "",
-          "command": "system:spell.status.blessed",
+          "command": "system:spell.bless",
           "label": "Bless",
-          "runAsGM": true
+          "runAsGM": false
         }
       },
       "effects": [],
@@ -1223,7 +1223,7 @@
         "critCausedStatuses": [
           {
             "statusId": "blinded",
-            "requiresDamage": true,
+            "requiresDamage": false,
             "saveType": "none",
             "duration": "d4",
             "tickDamageEnabled": false,

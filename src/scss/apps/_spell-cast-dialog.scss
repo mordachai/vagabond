@@ -32,7 +32,7 @@
 
 .vsc-root {
   position: relative;
-  width: 350px;
+  width: 375px;
   padding: 0 0.5rem 1rem;
 
   // Minimized: hide body, keep header only. Toggled via dblclick on header.
@@ -50,7 +50,7 @@
   // boundary + triangle + nodes stay the SAME pixel size; the dialog
   // container shrinks because the trimmed SVG occupies less width.
   &.no-rings {
-    width: 260px; // narrower footprint; SVG fills 100% of this
+    width: 285px; // narrower footprint; SVG fills 100% of this
     .vsc-circle {
       .outer-ring,
       .middle-ring,
@@ -79,7 +79,23 @@
     .vsc-mana-info    { top: calc(89.1% - 4px); }
     // Imbue ring buttons position via viewBox-unit CSS vars — remap them to
     // the cropped viewBox (56..304, span 248).
-    .vsc-imbue-ring   { --vb-min: 56; --vb-span: 248; }
+    .vsc-imbue-ring,
+    .vsc-pick-ring    { --vb-min: 56; --vb-span: 248; }
+  }
+
+  // Target picker (SpellTargetPicker): the picks sit on two side arcs, so the
+  // bottom nodes move to the lower corners, mirroring the Focus / FX toggles
+  // (user units): bl (94,230) → (34,318), br (266,230) → (326,318).
+  // Compact (cropped 56..304): → (78,280) / (282,280), shrunk to fit.
+  &.picks-active .vsc-circle {
+    .vsc-node.bl { transform: translate(-60px, 88px); }
+    .vsc-node.br { transform: translate(60px, 88px); }
+  }
+  &.picks-active.no-rings .vsc-circle {
+    .vsc-node.bl,
+    .vsc-node.br { transform-box: fill-box; transform-origin: center; }
+    .vsc-node.bl { transform: translate(-16px, 50px) scale(0.8); }
+    .vsc-node.br { transform: translate(16px, 50px) scale(0.8); }
   }
   color: rgb(var(--ac));
   font-family: $font-text;
@@ -577,6 +593,54 @@
     }
   }
 
+
+  // ── Target picker (Beings or Objects on two side arcs) ──────────────
+  // Same viewBox → % mapping as the Imbue ring. Beings show token art,
+  // Objects the weapon art; the border is the owner's player color (--pc).
+  .vsc-pick-ring {
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    pointer-events: none;
+    --vb-min: 0;
+    --vb-span: 360;
+  }
+
+  .vsc-pick {
+    position: absolute;
+    left: calc((var(--ix) - var(--vb-min)) / var(--vb-span) * 100%);
+    top: calc((var(--iy) - var(--vb-min)) / var(--vb-span) * 100%);
+    transform: translate(-50%, -50%);
+    width: var(--icon-size, 44px);
+    height: var(--icon-size, 44px);
+    line-height: normal;
+    border-radius: 50%;
+    border: 2px solid var(--pc, rgb(var(--ac)));
+    background: rgba(0, 0, 0, 0.5);
+    padding: 2px;
+    cursor: pointer;
+    pointer-events: auto;
+    opacity: 0.45;
+    transition: opacity 0.15s, filter 0.15s, box-shadow 0.15s;
+
+    > img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+      display: block;
+      border: none;
+    }
+
+    &:hover { opacity: 0.7; }
+
+    &.is-selected {
+      opacity: 1;
+      background: rgba(var(--ac), 0.25);
+      filter: brightness(1.15);
+      box-shadow: 0 0 10px 0 var(--pc, rgb(var(--ac)));
+    }
+  }
 
   // ── Cast button (styling copied from chat .vagabond-apply-direct-button) ─
   // Standalone copy — do not consolidate with chat selectors.

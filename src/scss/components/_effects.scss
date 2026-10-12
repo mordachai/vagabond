@@ -591,6 +591,27 @@
   }
 }
 
+// Status / Tracker rule lists (sheet + status chat card): bullets the system handles, then the
+// hand-marked ones the table handles (`markManualBullets` in helpers/effects.mjs).
+.fx-description ul,
+.status-effect-info ul {
+  margin: 0.15em 0;
+  padding-left: 1.3em;
+}
+
+li.fx-manual {
+  list-style: none;
+
+  > i {
+    display: inline-block;
+    text-align: center;
+    width: 1.3em;
+    margin-left: -1.3em;
+    font-size: 0.85em;
+    opacity: 0.75;
+  }
+}
+
 .fx-actions {
   display: flex;
   align-items: center;

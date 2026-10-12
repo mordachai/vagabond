@@ -22,7 +22,7 @@
     "expiry": null,
     "expired": false
   },
-  "description": "<p>It has a -2 penalty to each healing die received.</p>",
+  "description": "<ul><li>-2 to each healing die received</li><li data-manual>Effects in parentheses apply while Sickened</li></ul>",
   "origin": null,
   "tint": "#ffffff",
   "transfer": false,

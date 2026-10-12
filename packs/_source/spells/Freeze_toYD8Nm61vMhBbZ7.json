@@ -9,6 +9,8 @@
     "crit": "Duration is continual.",
     "favorite": false,
     "noRollRequired": true,
+    "targetBeings": true,
+    "targetObjects": false,
     "locked": true,
     "hitMacro": {
       "enabled": true,

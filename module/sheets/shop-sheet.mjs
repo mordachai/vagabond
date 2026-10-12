@@ -84,6 +84,8 @@ export class VagabondShopSheet extends HandlebarsApplicationMixin(ActorSheetV2) 
         img: item.img,
         quantity: ShopTransactions.quantityOf(item),
         unlimited: ShopTransactions.isUnlimited(item, actor),
+        // Containers have no quantity (always 1)
+        qtyEditable: this.isEditable && item.type !== 'container',
         category: ShopPricing.itemFlags(item).category ?? '',
         base: CurrencyHelper.format(ShopPricing.baseCopper(item)),
         price: CurrencyHelper.format(ShopPricing.price(item, { shop: actor, mode: 'buy' }).copper),
@@ -152,6 +154,14 @@ export class VagabondShopSheet extends HandlebarsApplicationMixin(ActorSheetV2) 
         const item = this.actor.items.get(ev.currentTarget.dataset.categoryFor);
         const value = ev.currentTarget.value.trim();
         item?.update({ 'flags.vagabond.shop.category': value || null });
+      });
+    }
+    // Stock quantity inputs (limited stock only) write the item directly, same as category
+    for (const input of this.element.querySelectorAll('input[data-qty-for]')) {
+      input.addEventListener('change', (ev) => {
+        const item = this.actor.items.get(ev.currentTarget.dataset.qtyFor);
+        const qty = Math.max(0, Math.floor(Number(ev.currentTarget.value) || 0));
+        item?.update({ 'system.quantity': qty });
       });
     }
     // Pricing sliders: live readout while dragging (the form saves on release)

@@ -9,12 +9,14 @@
     "crit": "Beings of your choice within the Light when you Cast the Spell are Blinded (Cd4).",
     "favorite": false,
     "noRollRequired": false,
+    "targetBeings": true,
+    "targetObjects": false,
     "fxSchool": "radiant",
     "locked": true,
     "critCausedStatuses": [
       {
         "statusId": "blinded",
-        "requiresDamage": true,
+        "requiresDamage": false,
         "saveType": "none",
         "duration": "d4",
         "tickDamageEnabled": false,

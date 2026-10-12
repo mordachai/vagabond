@@ -22,7 +22,7 @@
     "expiry": null,
     "expired": false
   },
-  "description": "<p>It has a -2 penalty to each damage die it deals.</p>",
+  "description": "<ul><li>-2 to each damage die it deals</li></ul>",
   "origin": null,
   "tint": "#ffffff",
   "transfer": false,

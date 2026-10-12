@@ -390,6 +390,18 @@ export function registerGameSettings({ refreshClockDependents, applyTokenEffectV
     onChange: reRenderAllApps,
   });
 
+  // Target picker on every Spell: Beings in the area are picked in the Cast dialog (SpellTargetPicker).
+  // Off: only Spells with Target Objects show the picker (their Objects can't be targeted any other way).
+  game.settings.register('vagabond', 'castTargetPicker', {
+    name: 'VAGABOND.Settings.castTargetPicker.name',
+    hint: 'VAGABOND.Settings.castTargetPicker.hint',
+    scope: 'client',
+    config: false,
+    type: Boolean,
+    default: false,
+    onChange: reRenderAllApps,
+  });
+
   // ── Spell areas (per player overrides of the table defaults) ──────────────
   // 'inherit' = use the GM table default (regionBorderMode).
   game.settings.register('vagabond', 'regionBorderModeUser', {
@@ -697,6 +709,17 @@ export function registerGameSettings({ refreshClockDependents, applyTokenEffectV
     }
   });
 
+  // Portrait copied onto the token (new actor, default token, Character Builder art) → baked circle crop
+  // in assets/vagabond/tokens/. Token art chosen explicitly in Token config is never touched.
+  game.settings.register('vagabond', 'circleTokenPortrait', {
+    name: 'VAGABOND.Settings.circleTokenPortrait.name',
+    hint: 'VAGABOND.Settings.circleTokenPortrait.hint',
+    scope: 'world',
+    config: false,
+    type: Boolean,
+    default: true,
+  });
+
   // Status-driven dynamic token ring effects (Focusing arcs, Burning flames, etc.).
   // When off, the rings still work but our custom shader/effects are never applied —
   // leaving tokens free for other animation modules. Requires reload (rebuilds ring config).
@@ -997,7 +1020,8 @@ export function registerGameSettings({ refreshClockDependents, applyTokenEffectV
     'alpha3StatusesMigrated', 'alpha3BackpackMigrated', 'alpha3RationsMigrated', 'alpha3DefensePerksMigrated',
     'alpha3ClassPerksMigrated', 'alpha3PerksMigrated', 'alpha3ClassesMigrated', 'alpha3AncestriesMigrated',
     'classFeatureScaleKeysMigrated', 'classFeatureActionsMigrated', 'spellTrackerMacrosMigrated', 'classFeatureEffectsMigrated',
-    'lifeNoFreeDieMigrated', 'vehementMagicMigrated', 'partyStashPurged',
+    'lifeNoFreeDieMigrated', 'vehementMagicMigrated', 'partyStashPurged', 'spellStatusRulesMigrated3',
+    'spellEffectEntriesMigrated', 'spellTargetSwitchesMigrated', 'raiseSpellMigrated',
   ];
   for (const key of MIGRATION_GUARDS) {
     game.settings.register('vagabond', key, {

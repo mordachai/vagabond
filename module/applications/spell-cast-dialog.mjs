@@ -1,5 +1,6 @@
 import { VagabondMeasureTemplates } from './measure-templates.mjs';
 import { EquipmentHelper } from '../helpers/equipment-helper.mjs';
+import { SpellTargetPicker } from '../helpers/spell-target-picker.mjs';
 
 const { api } = foundry.applications;
 
@@ -101,6 +102,8 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
   #previewEl = null;  // body-level floating delivery-image preview (anchored to the ? icon)
   #messages = [];     // last-computed message list (validation + module-contributed)
   #targetHookId = null; // Foundry 'targetToken' hook — keeps area-requirement message live
+  #tokenHookIds = null; // token create/update/delete hooks — keeps the Target picker's area list live
+  #pickKey = '';        // Target picker entry keys at the last render (skip renders when nothing changed)
   #renderDebounce = foundry.utils.debounce(() => { if (this.rendered) this.render(); }, 50);
   #previewDebounce = foundry.utils.debounce(() => this._refreshPreview(), 80);
 
@@ -128,6 +131,7 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
       previewActive: false,
       manaOverrideDelta: 0,
       imbueAssignments: {}, // weaponUuid -> true (multi-select, not one-per-target)
+      targetPicks: {},      // Target picker: entry key -> bool (explicit choices; see SpellTargetPicker)
     };
   }
 
@@ -135,7 +139,7 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
     id: 'spell-cast-dialog-{id}',
     classes: ['vagabond', 'spell-cast-dialog'],
     window: { frame: false },
-    position: { width: 350, height: 'auto' },
+    position: { width: 375, height: 'auto' },
     actions: {
       vscClose:          SpellCastDialog._onClose,
       vscCast:           SpellCastDialog._onCast,
@@ -149,6 +153,7 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
       vscToggleFx:       SpellCastDialog._onToggleFx,
       vscModifyMana:     SpellCastDialog._onModifyMana,
       vscPickImbueWeapon: SpellCastDialog._onPickImbueWeapon,
+      vscPickTarget:     SpellCastDialog._onPickTarget,
     },
   };
 
@@ -174,6 +179,15 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
     if (state.deliveryType === 'imbue') {
       state.deliveryIncrease = Math.max(0, this._imbueCandidates().filter(c => c.selected).length - 1);
     }
+
+    // Target picker (Spells that pick their Beings / Objects): a Remote Increase is the number of picks.
+    const pickModes = SpellTargetPicker.modes(spell, state.deliveryType);
+    const pickEntries = pickModes ? SpellTargetPicker.candidates(actor, spell, state) : [];
+    if (pickModes && SpellTargetPicker.picksDriveIncrease(state.deliveryType)) {
+      state.deliveryIncrease = Math.max(0, SpellTargetPicker.targetCount(actor, spell, state) - 1);
+    }
+    const pickRing = SpellTargetPicker.layout(pickEntries);
+    this.#pickKey = pickEntries.map(e => e.key).join('|');
 
     const costs = SpellCastDialog.calculateCosts(spell, actor, state);
     const finalMana = Math.max(0, costs.totalCost + state.manaOverrideDelta);
@@ -252,6 +266,9 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
       imbueWeapons: imbueRing.weapons,
       imbueIconSize: imbueRing.iconSize,
       hideDiceFx,
+      picksActive: !!pickModes,
+      pickEntries: pickRing.entries,
+      pickIconSize: pickRing.iconSize,
     });
   }
 
@@ -315,13 +332,21 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
     // the weapon-picker panel omits them entirely, so surface it here.
     if (state.deliveryType === 'imbue') {
       for (const token of this._imbueTargetTokens()) {
-        const hasWeapon = token.actor?.items.some(i => EquipmentHelper.isWeapon(i) && EquipmentHelper.isEquipped(i));
+        const hasWeapon = token.actor?.items.some(i => EquipmentHelper.canImbue(i));
         if (hasWeapon) continue;
         messages.push({
           text: game.i18n.format('VAGABOND.SpellCast.ImbueNoWeaponSkip', { name: token.name }),
           type: 'warning',
           blocking: false,
         });
+      }
+    }
+
+    // 3d. Target picker: Targets listed but none picked.
+    if (SpellTargetPicker.modes(this.#spell, state.deliveryType)?.beings) {
+      const entries = SpellTargetPicker.candidates(this.#actor, this.#spell, state);
+      if (entries.length && !entries.some(c => c.selected)) {
+        messages.push({ text: game.i18n.localize('VAGABOND.SpellCast.NoTargetPicked'), type: 'warning', blocking: false });
       }
     }
 
@@ -390,7 +415,7 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
     if (!el) return pos;
     // Compact mode renders a narrower root (matches .vsc-root.no-rings width)
     const hideRings = game.settings.get('vagabond', 'hideCastRings');
-    const w = hideRings ? 260 : 350;
+    const w = hideRings ? 285 : 375;
     // Measure the inner root (the actual painted dialog) — el is the
     // V2 wrapper and can report 0 or a very large value before layout.
     const inner = el.querySelector('.vsc-root');
@@ -566,6 +591,29 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
         this.#previewDebounce();
       });
     }
+    // Target picker: Beings walking in / out of the area refresh the ring.
+    // One check per move, after the token stops (the area is built from the
+    // animated Token#center); the dialog re-renders only when the list changed,
+    // the preview redraws only when the caster or a Target moved (shape moved).
+    if (this.#tokenHookIds == null) {
+      const settled = (doc) => {
+        if (!this.rendered || !SpellTargetPicker.modes(this.#spell, this.#state.deliveryType)) return;
+        const tok = doc?.object;
+        if (tok && (tok === SpellTargetPicker.casterToken(this.#actor) || game.user.targets.has(tok))) this.#previewDebounce();
+        if (this.#pickListKey() !== this.#pickKey) this.#renderDebounce();
+      };
+      const onUpdate = (doc, change) => {
+        if (!('x' in change || 'y' in change || 'width' in change || 'height' in change || 'hidden' in change)) return;
+        const anim = doc.object?.movementAnimationPromise;
+        if (anim?.then) anim.then(() => settled(doc), () => settled(doc));
+        else settled(doc);
+      };
+      this.#tokenHookIds = [
+        ['createToken', Hooks.on('createToken', () => settled(null))],
+        ['updateToken', Hooks.on('updateToken', onUpdate)],
+        ['deleteToken', Hooks.on('deleteToken', () => settled(null))],
+      ];
+    }
 
     // Restore minimized state across re-renders
     const rootEl = this.element.querySelector('.vsc-root');
@@ -692,6 +740,8 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
       Hooks.off('targetToken', this.#targetHookId);
       this.#targetHookId = null;
     }
+    for (const [hook, id] of this.#tokenHookIds ?? []) Hooks.off(hook, id);
+    this.#tokenHookIds = null;
     if (this.#state.previewActive) {
       await globalThis.vagabond?.managers?.templates?.clearPreview(this.#actor.id, this.#spell.id);
     }
@@ -757,7 +807,7 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
     for (const token of this._imbueTargetTokens()) {
       const actor = token.actor;
       if (!actor) continue;
-      const weapons = actor.items.filter(i => EquipmentHelper.isWeapon(i) && EquipmentHelper.isEquipped(i));
+      const weapons = actor.items.filter(i => EquipmentHelper.canImbue(i));
       for (const w of weapons) {
         candidates.push({
           tokenId: token.id,
@@ -805,6 +855,8 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
     if (!deliveryType) return true;
     // Imbue's target count is driven by weapon selection, never bumped manually.
     if (deliveryType === 'imbue') return true;
+    // Same for a Remote Cast whose Targets come from the Target picker.
+    if (SpellTargetPicker.modes(this.#spell, deliveryType) && SpellTargetPicker.picksDriveIncrease(deliveryType)) return true;
     const inc = CONFIG.VAGABOND.deliveryIncrement[deliveryType] ?? 0;
     const base = CONFIG.VAGABOND.deliveryBaseRanges[deliveryType];
     return inc === 0 || !base || base.value == null;
@@ -815,6 +867,11 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
     // Imbue: read-only counter of selected weapons — starts at 0.
     if (deliveryType === 'imbue') {
       const n = this._imbueCandidates().filter(c => c.selected).length;
+      return { value: String(n), unit: n === 1 ? 'target' : 'targets' };
+    }
+    // Target picker on a Remote Cast: read-only counter of picks, like Imbue.
+    if (SpellTargetPicker.modes(this.#spell, deliveryType) && SpellTargetPicker.picksDriveIncrease(deliveryType)) {
+      const n = SpellTargetPicker.targetCount(this.#actor, this.#spell, this.#state);
       return { value: String(n), unit: n === 1 ? 'target' : 'targets' };
     }
     const base = CONFIG.VAGABOND.deliveryBaseRanges[deliveryType];
@@ -852,6 +909,12 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
       hasOrigin: !!casterToken,
     });
     return err ? { text: err, type: 'warning', blocking: false } : null;
+  }
+
+  /** Target picker entry keys right now (compared with #pickKey from the last render). */
+  #pickListKey() {
+    if (!SpellTargetPicker.modes(this.#spell, this.#state.deliveryType)) return '';
+    return SpellTargetPicker.candidates(this.#actor, this.#spell, this.#state).map(e => e.key).join('|');
   }
 
   async _refreshPreview() {
@@ -950,19 +1013,8 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
     const focusIds = this.#actor.system.focus?.spellIds ?? [];
     const currentlyFocused = focusIds.includes(this.#spell.id);
     if (state.focusOn !== currentlyFocused) {
-      let next = state.focusOn
-        ? [...focusIds, this.#spell.id]
-        : focusIds.filter(id => id !== this.#spell.id);
-      const focusMax = this.#actor.system.focus?.max ?? 5;
-      if (state.focusOn && focusIds.length >= focusMax) {
-        next = focusIds; // ignore — can't add
-      }
-      await this.#actor.update({ 'system.focus.spellIds': next });
-      const wasFocusing = focusIds.length > 0;
-      const isFocusing = next.length > 0;
-      if (isFocusing !== wasFocusing) {
-        await this.#actor.toggleStatusEffect('focusing', { active: isFocusing });
-      }
+      const { SpellHandler } = await import('../sheets/handlers/spell-handler.mjs');
+      await SpellHandler.setFocus(this.#actor, this.#spell.id, state.focusOn);
     }
     // Clear preview before cast (sequencer takes over)
     if (state.previewActive) {
@@ -974,6 +1026,7 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
     if (state.deliveryType === 'imbue') {
       imbueAssignments = this._imbueCandidates().filter(c => c.selected).map(c => c.uuid);
     }
+    const targetPicks = SpellTargetPicker.result(this.#actor, this.#spell, state);
     if (typeof this.#onCast === 'function') {
       await this.#onCast(event, {
         damageDice: state.damageDice,
@@ -981,6 +1034,7 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
         deliveryIncrease: state.deliveryIncrease,
         useFx: state.useFx,
         imbueAssignments,
+        targetPicks,
       }, state.manaOverrideDelta);
     }
     return this.close();
@@ -1006,6 +1060,7 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
     this.#state.deliveryType = key;
     this.#state.deliveryIncrease = 0;
     this.#state.imbueAssignments = {};
+    this.#state.targetPicks = {};
     this._emitChange();
     this.render();
     this._refreshPreview();
@@ -1020,6 +1075,19 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
     // Re-derive before emitting so listeners see the fresh target count/cost
     // (render would recompute it anyway, but _emitChange fires first).
     this.#state.deliveryIncrease = Math.max(0, this._imbueCandidates().filter(c => c.selected).length - 1);
+    this._emitChange();
+    this.render();
+  }
+
+  /** @this {SpellCastDialog} */
+  static async _onPickTarget(event, target) {
+    const key = target.dataset.pickKey;
+    if (!key) return;
+    this.#state.targetPicks = SpellTargetPicker.toggle(this.#actor, this.#spell, this.#state, key);
+    if (SpellTargetPicker.picksDriveIncrease(this.#state.deliveryType)) {
+      const n = SpellTargetPicker.targetCount(this.#actor, this.#spell, this.#state);
+      this.#state.deliveryIncrease = Math.max(0, n - 1);
+    }
     this._emitChange();
     this.render();
   }

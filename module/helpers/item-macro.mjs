@@ -6,12 +6,11 @@
  * document by UUID (preferred) or hold an inline script `command`. A chat-card
  * button runs the slot with { actor, item, token, targets, speaker, isCritical } in scope.
  *
- * runAsGM: when set, a non-GM clicking the button relays execution to the GM
- * client via the system socket (see vagabond.mjs 'runItemMacro' handler), so the
- * macro runs with GM permissions (needed for module APIs that mutate the world).
+ * runAsGM: when set, a non-GM clicking the button relays execution to the active GM
+ * (User#query `vagabond.runItemMacro`, see registerMacroQueries), so the macro runs with
+ * GM permissions (needed for module APIs that mutate the world). The player waits for the
+ * answer and sees the GM-side warnings (`macroNotify`) and errors.
  */
-
-import { emitSocket } from './socket-helper.mjs';
 
 /**
  * Built-in handlers a macro slot can call as `system:<name>` instead of a script. Unlike script
@@ -26,6 +25,27 @@ const _handlers = new Map();
  */
 export function registerMacroHandler(name, fn) {
   _handlers.set(name, fn);
+}
+
+/** Cast gates of built-in Spell hit macros: `system:<name>` → (ctx) => error message | null. */
+const _castGates = new Map();
+
+/**
+ * A Spell whose hit macro is `system:<name>` runs `fn` before its Cast is rolled or paid for. A returned
+ * message blocks the Cast (warning toast). ctx = { actor, spell, state, tokens } (tokens = the Cast's Targets).
+ * @param {string} name  e.g. 'spell.raise'
+ * @param {(ctx: object) => (string|null)} fn
+ */
+export function registerCastGate(name, fn) {
+  _castGates.set(name, fn);
+}
+
+/** Run the cast gate of `spell`'s hit macro, if any. @returns {string|null} the blocking message */
+export function castGateMessage(ctx) {
+  const command = String(ctx.spell?.system?.hitMacro?.command ?? '').trim();
+  if (!command.startsWith('system:')) return null;
+  const fn = _castGates.get(command.slice('system:'.length).trim());
+  return fn ? (fn(ctx) || null) : null;
 }
 
 /**
@@ -80,7 +100,9 @@ async function _resolveSlot(d) {
  * @returns {Token[]}
  */
 function _resolveTargets(d) {
-  if (Array.isArray(d.targetTokenIds) && d.targetTokenIds.length) {
+  // Targets picked in the Cast dialog are final: an empty pick never falls back to the user's targets
+  const picked = !!d.extraScope?.targetsPicked;
+  if (Array.isArray(d.targetTokenIds) && (d.targetTokenIds.length || picked)) {
     const scene = d.sceneId ? game.scenes.get(d.sceneId) : canvas.scene;
     // Prefer live placeables on the active canvas; else the scene's token docs.
     if (scene && canvas.scene?.id === scene.id) {
@@ -90,6 +112,7 @@ function _resolveTargets(d) {
     if (scene) {
       return d.targetTokenIds.map(id => scene.tokens.get(id)?.object ?? scene.tokens.get(id)).filter(Boolean);
     }
+    if (picked) return [];
   }
   return Array.from(game.user.targets);
 }
@@ -109,7 +132,7 @@ export async function executeItemMacro(d) {
 async function _executeItemMacro(d) {
   const { cfg, item, actor } = await _resolveSlot(d);
   if (!cfg) {
-    ui.notifications.warn('Macro configuration not found.');
+    macroNotify('warn', 'Macro configuration not found.');
     return;
   }
 
@@ -126,13 +149,17 @@ async function _executeItemMacro(d) {
   // cannot clobber the core scope keys.
   const extraScope = (d.extraScope && typeof d.extraScope === 'object') ? d.extraScope : {};
   const scope = { actor, item: scopeItem, token, targets, isCritical, itemName, speaker: ChatMessage.getSpeaker({ actor }), ...extraScope };
+  // Target picker Objects travel as uuids; macros get the Items
+  if (Array.isArray(extraScope.targetObjects)) {
+    scope.targetObjects = (await Promise.all(extraScope.targetObjects.map(u => (typeof u === 'string' ? fromUuid(u) : u)))).filter(Boolean);
+  }
 
   // `system:<name>` → built-in handler (no script permission needed, full scope as one object)
   if (!cfg.uuid && typeof cfg.command === 'string' && cfg.command.trim().startsWith('system:')) {
     const name = cfg.command.trim().slice('system:'.length).trim();
     const fn = _handlers.get(name);
     if (!fn) {
-      ui.notifications.warn(`Unknown built-in action "${name}".`);
+      macroNotify('warn', `Unknown built-in action "${name}".`);
       return;
     }
     return fn(scope);
@@ -141,7 +168,7 @@ async function _executeItemMacro(d) {
   if (cfg.uuid) {
     const macro = await fromUuid(cfg.uuid);
     if (!macro) {
-      ui.notifications.warn('Linked macro not found.');
+      macroNotify('warn', 'Linked macro not found.');
       return;
     }
     return macro.execute(scope);
@@ -156,21 +183,67 @@ async function _executeItemMacro(d) {
     });
     return tmp.execute(scope);
   }
-  ui.notifications.warn('This macro slot has no macro linked and no inline command.');
+  macroNotify('warn', 'This macro slot has no macro linked and no inline command.');
+}
+
+/* -------------------------------------------- */
+/*  runAsGM relay (User#query)                  */
+/* -------------------------------------------- */
+
+const MACRO_QUERY = 'vagabond.runItemMacro';
+
+/** Notes collected while the GM runs a relayed macro (sent back to the requester), else null. */
+let _relayNotes = null;
+/** Relayed macros run one at a time, so their notes never mix. */
+let _relayChain = Promise.resolve();
+
+/**
+ * Warn / inform from inside a macro or built-in handler. Toasts locally and, while the GM runs a
+ * relayed macro, also reaches the player who clicked (a plain `ui.notifications` call on the GM
+ * would only show on the GM's screen).
+ * @param {'info'|'warn'|'error'} level
+ * @param {string} message
+ */
+export function macroNotify(level, message) {
+  ui.notifications[level]?.(message);
+  _relayNotes?.push({ level, message });
+}
+
+/** GM side of the relay. Called once from init. */
+export function registerMacroQueries() {
+  CONFIG.queries[MACRO_QUERY] = (data) => {
+    const run = _relayChain.then(async () => {
+      const notes = [];
+      _relayNotes = notes;
+      try {
+        await executeItemMacro(data);
+        return { notes };
+      } catch (err) {
+        console.error('VAGABOND | GM-relayed macro execution failed:', err);
+        return { notes, error: err?.message ?? String(err) };
+      } finally {
+        _relayNotes = null;
+      }
+    });
+    _relayChain = run.catch(() => {});
+    return run;
+  };
 }
 
 /**
  * Entry point for a chat-button click. Runs locally, or relays to the GM when
- * the slot is flagged runAsGM and the clicker is not a GM.
+ * the slot is flagged runAsGM and the clicker is not a GM. The relay waits for the GM's answer, so the
+ * player sees the GM's warnings and any failure (a GM that doesn't answer, an error in the macro).
  * @param {object} d  descriptor (see executeItemMacro) plus { runAsGM }
  */
 export async function runMacroFromButton(d) {
   if (d.runAsGM && !game.user.isGM) {
-    if (!game.users.activeGM) {
-      ui.notifications.warn('No GM is connected to run this macro.');
+    const gm = game.users.activeGM;
+    if (!gm) {
+      ui.notifications.warn(game.i18n.localize('VAGABOND.Macro.NoGM'));
       return;
     }
-    emitSocket('runItemMacro', {
+    const payload = {
       itemUuid: d.itemUuid ?? null,
       itemName: d.itemName ?? null,
       actorUuid: d.actorUuid ?? null,
@@ -181,7 +254,17 @@ export async function runMacroFromButton(d) {
       sceneId: d.sceneId ?? null,
       isCritical: d.isCritical ?? false,
       extraScope: d.extraScope ?? null,
-    });
+    };
+    let result;
+    try {
+      result = await gm.query(MACRO_QUERY, payload, { timeout: 60 * 1000 });
+    } catch (err) {
+      console.error(`VAGABOND | GM relay to ${gm.name} failed:`, err);
+      ui.notifications.error(game.i18n.format('VAGABOND.Macro.RelayFailed', { gm: gm.name }));
+      return;
+    }
+    for (const n of result?.notes ?? []) ui.notifications[n.level]?.(n.message);
+    if (result?.error) ui.notifications.error(game.i18n.format('VAGABOND.Macro.RelayError', { error: result.error }));
     return;
   }
   return executeItemMacro(d);

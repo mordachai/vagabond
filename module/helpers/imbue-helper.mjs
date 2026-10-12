@@ -21,6 +21,7 @@ export class VagabondImbueHelper {
       deferredMana: 0,
       deferredPayment: false,
       manaSkillKey: '',
+      useFx: null,
     };
   }
 
@@ -38,9 +39,7 @@ export class VagabondImbueHelper {
     for (const token of targets.slice(0, count)) {
       const targetActor = token.actor;
       if (!targetActor) continue;
-      const weapons = targetActor.items.filter(
-        (i) => EquipmentHelper.isWeapon(i) && EquipmentHelper.isEquipped(i)
-      );
+      const weapons = targetActor.items.filter((i) => EquipmentHelper.canImbue(i));
       if (!weapons.length) {
         ui.notifications.warn(
           game.i18n.format('VAGABOND.Status.Imbue.NoWeapons', { actor: targetActor.name })
@@ -78,9 +77,9 @@ export class VagabondImbueHelper {
   /**
    * Write the imbue payload onto `weapon`.
    * @param {Item} weapon
-   * @param {{sourceActor: Actor, spell: Item, damageDice: number, deferredMana: number, deferredPayment: boolean, manaSkillKey: string}} opts
+   * @param {{sourceActor: Actor, spell: Item, damageDice: number, deferredMana: number, deferredPayment: boolean, manaSkillKey: string, useFx?: boolean}} opts
    */
-  static async imbueWeapon(weapon, { sourceActor, spell, damageDice, deferredMana, deferredPayment, manaSkillKey }) {
+  static async imbueWeapon(weapon, { sourceActor, spell, damageDice, deferredMana, deferredPayment, manaSkillKey, useFx = null }) {
     await this._writeImbuePayload(weapon, {
       ...this._emptyPayload(),
       active: true,
@@ -95,6 +94,8 @@ export class VagabondImbueHelper {
       deferredMana: deferredMana || 0,
       deferredPayment: !!deferredPayment,
       manaSkillKey: manaSkillKey || '',
+      // Spell Damage / Effect split — deferred mode picks Fx at delivery (chosenState) instead
+      useFx: deferredPayment ? null : (useFx ?? null),
     });
   }
 
@@ -369,6 +370,17 @@ export class VagabondImbueHelper {
 
     const critText = isCritical && spell.system.crit ? spell.system.formatDescription(spell.system.crit) : null;
 
+    // Spell Damage / Effect split: deferred mode → Fx chosen at delivery; upfront → stored at Cast
+    // (null on payloads imbued before the field existed → statuses as authored)
+    const deliveredFx = payload.deferredPayment ? !!chosenState?.useFx : payload.useFx;
+    const spellCast = (deliveredFx === null || deliveredFx === undefined)
+      ? null
+      : VagabondDamageHelper.spellCastContext(spell, { damageDice, useFx: deliveredFx });
+    const attackType = CONFIG.VAGABOND.spellDeliveryAttackTypes.imbue;
+    const effectButtons = VagabondDamageHelper.createSpellEffectButtons(sourceActor, spell, spellCast, {
+      isCritical, targetsAtRollTime: hitTargets, attackType,
+    });
+
     const result = await VagabondChatCard.createActionCard({
       actor: sourceActor,
       item: spell,
@@ -380,8 +392,10 @@ export class VagabondImbueHelper {
       description: spell.system.formatDescription(spell.system.description),
       crit: critText,
       hasDefenses: true,
-      attackType: CONFIG.VAGABOND.spellDeliveryAttackTypes.imbue,
+      attackType,
       targetsAtRollTime: hitTargets,
+      footerActions: effectButtons ? [effectButtons] : [],
+      spellCast,
     });
 
     if (isCritical && !critStatBonus) {

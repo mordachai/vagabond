@@ -57,6 +57,12 @@ export default class VagabondEquipment extends VagabondItemBase {
       initial: false
     });
 
+    // Weapons only: never offered as an Imbue Target (Breath Attack and other natural / granted attacks)
+    schema.noImbue = new fields.BooleanField({
+      required: true,
+      initial: false
+    });
+
     // Quantity (for stackable items)
     schema.quantity = new fields.NumberField({
       ...requiredInteger,
@@ -173,6 +179,10 @@ export default class VagabondEquipment extends VagabondItemBase {
       choices: ['none', 'adamant', 'bronze', 'coldIron', 'gold', 'iron', 'silver',
         'mythral', 'orichalcum', 'steel']
     });
+
+    // Materials this item also counts as, for Weakness (keys of CONFIG.VAGABOND.materialWeaknesses). Filled by
+    // "This item" Active Effects (Bless: ADD silver) — counts as, without changing what it is made of.
+    schema.countsAs = new fields.ArrayField(new fields.StringField({ blank: true }), { initial: [] });
 
     // Damage Type - universal damage/healing type
     schema.damageType = new fields.StringField({
@@ -508,6 +518,9 @@ export default class VagabondEquipment extends VagabondItemBase {
       // the dice/effect choice itself defer to delivery-on-hit (see imbue-helper.mjs)
       deferredPayment:    new fields.BooleanField({ required: true, initial: false }),
       manaSkillKey:       new fields.StringField({ required: false, blank: true, initial: '' }),
+      // Upfront mode: whether the Cast included its Effect (Spell Damage / Effect split).
+      // null = unknown (imbued before this field) → statuses apply as authored.
+      useFx:              new fields.BooleanField({ required: false, nullable: true, initial: null }),
     });
 
     // ===== SEQUENCER FX FIELDS =====

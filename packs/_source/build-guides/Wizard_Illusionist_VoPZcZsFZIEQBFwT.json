@@ -1140,7 +1140,7 @@
         "causedStatuses": [
           {
             "statusId": "blinded",
-            "requiresDamage": true,
+            "requiresDamage": false,
             "saveType": "none",
             "duration": "focusing",
             "tickDamageEnabled": false,
@@ -1151,7 +1151,7 @@
         "critCausedStatuses": [
           {
             "statusId": "blinded",
-            "requiresDamage": true,
+            "requiresDamage": false,
             "saveType": "none",
             "duration": "",
             "tickDamageEnabled": false,

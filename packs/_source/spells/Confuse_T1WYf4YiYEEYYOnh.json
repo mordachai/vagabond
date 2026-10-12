@@ -14,10 +14,12 @@
     "explodeValues": "",
     "damageDieSize": null,
     "noRollRequired": false,
+    "targetBeings": true,
+    "targetObjects": false,
     "critCausedStatuses": [
       {
         "statusId": "confused",
-        "requiresDamage": true,
+        "requiresDamage": false,
         "saveType": "will",
         "duration": "",
         "tickDamageEnabled": false,
@@ -28,7 +30,7 @@
     "causedStatuses": [
       {
         "statusId": "confused",
-        "requiresDamage": true,
+        "requiresDamage": false,
         "saveType": "will",
         "duration": "focusing",
         "tickDamageEnabled": false,

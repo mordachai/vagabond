@@ -334,6 +334,14 @@
     &.vh-slot-action > i { font-size: 16px; color: $c-yellow; }
     // Pinned action whose effect is on: running glow (inset ring — the slot clips overflow)
     &.vh-slot-action.is-active { overflow: visible; @include feature-action-active(0); }
+    // Focused Spell: same running light, electric blue
+    &.is-focused {
+      overflow: visible;
+      border-color: $c-electric-blue;
+      @include feature-action-active(0, $c-electric-blue);
+      img { border-radius: 4px; }
+      &:hover { border-color: $c-electric-blue; box-shadow: 0 0 8px 1px $c-electric-blue; }
+    }
     &.filled { cursor: pointer; }
     &.filled:hover { border-color: $c-yellow; box-shadow: 0 0 5px $c-yellow; }
 

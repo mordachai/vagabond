@@ -1,5 +1,6 @@
 import { armorWornRollData, combatRollData } from '../helpers/rule-rolldata.mjs';
 import { HunterHelper } from '../helpers/hunter-helper.mjs';
+import { TokenPortrait } from '../helpers/token-portrait.mjs';
 
 /**
  * Extend the base Actor document by defining a custom roll data structure which is ideal for the Simple system.
@@ -10,6 +11,9 @@ export class VagabondActor extends Actor {
   /** @override */
   async _preCreate(data, options, user) {
     await super._preCreate(data, options, user);
+
+    // Portrait copied onto an art-less token → circle-cropped copy (setting circleTokenPortrait)
+    await TokenPortrait.onPreCreate(this, data);
 
     // Set default prototype token for characters
     if (data.type === 'character') {
@@ -29,6 +33,9 @@ export class VagabondActor extends Actor {
   async _preUpdate(changed, options, user) {
     const allowed = await super._preUpdate(changed, options, user);
     if (allowed === false) return false;
+
+    // Token following the portrait → circle-cropped copy (setting circleTokenPortrait)
+    await TokenPortrait.onPreUpdate(this, changed);
 
     const newName = changed.name;
     if (typeof newName !== 'string' || !newName || newName === this.name || this.isToken) return allowed;

@@ -280,6 +280,14 @@ VAGABOND.bookStatusIds = new Set([
   'invisible', 'paralyzed', 'prone', 'restrained', 'sickened', 'suffocating', 'unconscious', 'vulnerable',
 ]);
 
+/**
+ * Statuses that stack across sources (book, Burning: "can stack from multiple sources, but never
+ * from the same source"). One status effect + one countdown die per source — see
+ * `StatusHelper.applyStatus` / `sourceKeyFor`. Only Burning carries that text in the book.
+ * @type {string[]}
+ */
+VAGABOND.stackingStatuses = ['burning'];
+
 VAGABOND.statusEffectDefinitions = [
   // AUTO-MANAGED (applied/removed by system code)
   {
@@ -287,7 +295,7 @@ VAGABOND.statusEffectDefinitions = [
     name: 'VAGABOND.StatusConditions.Focusing',
     img: '/icons/magic/lightning/projectile-tendrils-teal.webp',
     statuses: ['focusing'],
-    description: 'Currently sustaining one or more spells through Focus.'
+    description: "<ul><li>System marker, not a book Status</li><li>Sustaining one or more Spells through Focus</li></ul>"
   },
 
   // MANUAL TRACKING
@@ -296,21 +304,21 @@ VAGABOND.statusEffectDefinitions = [
     name: 'VAGABOND.StatusConditions.Berserk',
     img: '/icons/magic/perception/eye-ringed-glow-angry-large-red.webp',
     statuses: ['berserk'],
-    description: 'Can\'t take Cast Action or Focus. Doesn\'t make Morale Checks. Can\'t be Frightened. Class-specific bonuses (e.g. Barbarian Rage) are applied via the class item\'s Active Effects using @statuses.berserk formulas.'
+    description: "<ul><li data-manual>Can't Cast or Focus</li><li data-manual>Can't be Frightened</li><li data-manual>Doesn't make Morale Checks</li></ul>"
   },
   {
     id: 'burning',
     name: 'VAGABOND.StatusConditions.Burning',
     img: '/icons/magic/fire/flame-burning-creature-skeleton.webp',
     statuses: ['burning'],
-    description: 'Takes damage at the start of its turn. Can be ended by an appropriate action. [MANUAL TRACKING]'
+    description: "<ul><li data-manual>Takes the damage in parentheses at the start of its Turns</li><li data-manual>Ends when an action ends it (such as dousing fire)</li><li data-manual>Stacks from different sources, never from the same source</li></ul>"
   },
   {
     id: 'charmed',
     name: 'VAGABOND.StatusConditions.Charmed',
     img: '/icons/magic/life/heart-cross-strong-flame-purple-orange.webp',
     statuses: ['charmed'],
-    description: 'Can\'t willingly make an Attack Action targeting the one who Charmed it. [MANUAL TRACKING]'
+    description: "<ul><li data-manual>Can't willingly attack the charmer</li></ul>"
   },
   {
     // Not a book Status: marks a Being standing in Sunlight so Nightwalker / Sunlight Hypersensitivity /
@@ -319,14 +327,14 @@ VAGABOND.statusEffectDefinitions = [
     name: 'VAGABOND.StatusConditions.Sunlit',
     img: '/icons/magic/light/beam-rays-yellow.webp',
     statuses: ['sunlit'],
-    description: 'Standing in Sunlight. Nightwalkers burn and are Incapacitated, Vampires burn and stop regenerating, Zombies lose their 1 HP floor. [MANUAL TOGGLE]'
+    description: "<ul><li>System marker, not a book Status</li><li>Nightwalker: burns, Incapacitated</li><li>Vampire: burns, stops regenerating</li><li>Zombie: loses its 1 HP floor</li><li data-manual>Toggle it while the Being stands in Sunlight</li></ul>"
   },
   {
     id: 'suffocating',
     name: 'VAGABOND.StatusConditions.Suffocating',
     img: '/icons/magic/death/skeleton-skull-soul-blue.webp',
     statuses: ['suffocating'],
-    description: 'After not breathing for 1 minute, each round: Heroes roll d8 (if ≥ Might, gain 1 Fatigue), Enemies gain 1 Fatigue. [MANUAL TRACKING]'
+    description: "<ul><li data-manual>Begins after 1 Minute without breathing</li><li data-manual>Heroes: each Round, roll d8; Might or higher = +1 Fatigue</li><li data-manual>Enemies: +1 Fatigue each Round</li></ul>"
   },
 
   // PARTIAL AUTOMATION
@@ -335,7 +343,7 @@ VAGABOND.statusEffectDefinitions = [
     name: 'VAGABOND.StatusConditions.Dazed',
     img: '/icons/magic/air/wind-vortex-swirl-blue-purple.webp',
     statuses: ['dazed'],
-    description: 'Can\'t Focus or Move unless it uses an Action to do so. Speed reduced to 0. [AUTOMATED: Speed = 0. MANUAL: Action restrictions]',
+    description: "<ul><li data-manual>Can't Focus or Move unless it uses an Action to do so</li></ul>",
     changes: [
       {
         key: 'system.speed.bonus',
@@ -349,7 +357,7 @@ VAGABOND.statusEffectDefinitions = [
     name: 'VAGABOND.StatusConditions.Fatigued',
     img: '/icons/skills/wounds/injury-pain-body-orange.webp',
     statuses: ['fatigued'],
-    description: 'Each Fatigue occupies an Item Slot. At 3+ Fatigue, can\'t Rush. At 5 Fatigue, dies. [AUTOMATED: Use Fatigue tracker (skull icons) on character sheet. Slot reduction is automatic.]'
+    description: "<ul><li>Each Fatigue occupies an Item Slot</li><li data-manual>At 3+ Fatigue: can't Rush</li><li data-manual>At 5 Fatigue: Max and Current HP are 0</li></ul>"
     // NOTE: Fatigued is managed via system.fatigue value, not Active Effects
   },
   {
@@ -357,7 +365,7 @@ VAGABOND.statusEffectDefinitions = [
     name: 'VAGABOND.StatusConditions.Prone',
     img: '/icons/magic/movement/chevrons-down-yellow.webp',
     statuses: ['prone'],
-    description: 'Drop or stand by using 10\' of Speed. Moves only by crawling (2\' of Speed per 1\'), can\'t Rush. Vulnerable for Melee attacks and Reflex Saves. [AUTOMATED: Speed halved; its Melee attacks and Reflex Saves Hindered, Melee attacks against it and Saves vs its Melee attacks Favored. MANUAL: stand cost, no Rush]',
+    description: "<ul><li>Moves only by crawling (2' of Speed per 1')</li><li>Vulnerable for Melee attacks and Reflex Saves</li><li data-manual>Dropping or standing uses 10' of Speed</li><li data-manual>Can't Rush</li></ul>",
     changes: [
       {
         key: 'system.speedHalved',
@@ -378,7 +386,7 @@ VAGABOND.statusEffectDefinitions = [
     name: 'VAGABOND.StatusConditions.Frightened',
     img: '/icons/magic/control/fear-fright-monster-grin-purple-blue.webp',
     statuses: ['frightened'],
-    description: 'It has a -2 penalty to each damage die it deals. [FULLY AUTOMATED]',
+    description: "<ul><li>-2 to each damage die it deals</li></ul>",
     changes: [
       {
         key: 'system.damageDiePenalty',
@@ -392,7 +400,7 @@ VAGABOND.statusEffectDefinitions = [
     name: 'VAGABOND.StatusConditions.Sickened',
     img: '/icons/magic/acid/dissolve-pool-bubbles.webp',
     statuses: ['sickened'],
-    description: 'It has a -2 penalty to each healing die received. [FULLY AUTOMATED]',
+    description: "<ul><li>-2 to each healing die received</li><li data-manual>Effects in parentheses apply while Sickened</li></ul>",
     changes: [
       {
         key: 'system.healingDiePenalty',
@@ -406,7 +414,7 @@ VAGABOND.statusEffectDefinitions = [
     name: 'VAGABOND.StatusConditions.Confused',
     img: '/icons/magic/symbols/question-stone-yellow.webp',
     statuses: ['confused'],
-    description: 'Checks and Saves have Hinder. Saves against its Actions have Favor. [FULLY AUTOMATED]',
+    description: "<ul><li>Its Checks and Saves have Hinder</li><li>Saves against its Actions have Favor</li></ul>",
     changes: [
       {
         key: 'system.favorHinder',
@@ -425,7 +433,7 @@ VAGABOND.statusEffectDefinitions = [
     name: 'VAGABOND.StatusConditions.Vulnerable',
     img: '/icons/magic/movement/abstract-ribbons-red-orange.webp',
     statuses: ['vulnerable'],
-    description: 'Its Checks and Saves have Hinder. Attacks and Casts targeting it, and Saves against its attacks and Casts, have Favor.',
+    description: "<ul><li>Its attacks and its Saves against attacks have Hinder</li><li>Attacks targeting it and Saves against its attacks have Favor</li></ul>",
     changes: [
       // Vulnerable: its Checks and Saves have Hinder (blanket), and system.vulnerable gives
       // attacks / Casts targeting it and Saves against its attacks / Casts Favor
@@ -455,7 +463,7 @@ VAGABOND.statusEffectDefinitions = [
     name: 'VAGABOND.StatusConditions.Flanked',
     img: '/icons/skills/melee/strike-slashes-red.webp',
     statuses: ['flanked'],
-    description: 'Vulnerable (its attacks and Saves against attacks have Hinder; attacks targeting it and Saves against its attacks have Favor), and takes an extra 2 damage from attacks (before Armor).',
+    description: "<ul><li>Vulnerable</li><li>+2 damage from attacks, before Armor</li></ul>",
     changes: [
       // Vulnerable: its Checks and Saves have Hinder (blanket), and system.vulnerable gives
       // attacks / Casts targeting it and Saves against its attacks / Casts Favor
@@ -483,7 +491,7 @@ VAGABOND.statusEffectDefinitions = [
     statuses: ['flanking'],
     // Generic fallback only — when auto-applied, FlankingHelper overwrites this
     // with live text naming the Foe(s) being pinned and the co-flanker(s).
-    description: 'Flanking an adjacent Foe alongside an ally. +2 damage on attacks against it, and it is Vulnerable while two of you stay Close.',
+    description: "<ul><li>System marker, not a book Status</li><li>Flanking an adjacent Foe alongside an ally</li><li>That Foe is Flanked</li></ul>",
     changes: []
   },
   {
@@ -494,7 +502,7 @@ VAGABOND.statusEffectDefinitions = [
     name: 'VAGABOND.StatusConditions.Hexed',
     img: '/icons/magic/symbols/runes-triangle-blue.webp',
     statuses: ['hexed'],
-    description: "Under a Witch's Hex.",
+    description: "<ul><li>System marker, not a book Status</li><li>Target of a Witch's Hex</li><li>Rules: the Witch's Hex</li></ul>",
     changes: []
   },
   {
@@ -505,19 +513,20 @@ VAGABOND.statusEffectDefinitions = [
     name: 'VAGABOND.StatusConditions.Marked',
     img: '/icons/skills/targeting/crosshair-pointed-orange.webp',
     statuses: ['marked'],
-    description: "A Hunter's Mark.",
+    description: "<ul><li>System marker, not a book Status</li><li>Target of a Hunter's Mark</li><li>Rules: the Hunter's Mark</li></ul>",
     changes: []
   },
 
   // SPELL TRACKERS (not book Statuses): put on a Being under a buff Spell so its numbers change while it lasts.
-  // Toggled by hand from the token HUD; remove them when the caster's Focus ends.
+  // Named "<Spell>: <effect>" so the table reads why it is there; the description quotes the Spell's rule.
+  // Applied by the Spell's hit macro (SpellTrackerHelper), removed when the caster's Focus ends, or by hand.
   {
     // Bless: "Targeted Beings of your choice have a d4 bonus to Saves."
     id: 'blessed',
     name: 'VAGABOND.StatusConditions.Blessed',
     img: '/icons/magic/holy/saint-glass-portrait-halo.webp',
     statuses: ['blessed'],
-    description: 'Under the Bless Spell: d4 bonus to Saves.',
+    description: "<ul><li>d4 bonus to Saves</li><li>Ends when the caster stops Focusing</li></ul>",
     changes: [
       { key: 'system.saveBonusDice', type: 'add', value: '1d4' }
     ]
@@ -529,7 +538,7 @@ VAGABOND.statusEffectDefinitions = [
     name: 'VAGABOND.StatusConditions.Exalted',
     img: '/icons/skills/melee/sword-winged-holy-orange.webp',
     statuses: ['exalted'],
-    description: 'Under the Exalt Spell: +1 to each damage die it deals and to Will Saves against Frightened, doubled against Hellspawn and Undead.',
+    description: "<ul><li>+1 to each damage die it deals (doubled vs Hellspawn or Undead)</li><li>+1 to Will Saves vs Frightened</li><li>Ends when the caster stops Focusing</li><li data-manual>Will Save bonus doubled vs Hellspawn or Undead</li></ul>",
     changes: [
       { key: 'system.bonusPerDamageDie', type: 'add', value: '1' },
       { key: 'system.bonusPerDamageDieDoubleVsBeingTypes', type: 'add', value: 'Hellspawn' },
@@ -543,21 +552,20 @@ VAGABOND.statusEffectDefinitions = [
     name: 'VAGABOND.StatusConditions.Warded',
     img: '/icons/magic/defensive/shield-barrier-deflect-gold.webp',
     statuses: ['warded'],
-    description: 'Under the Ward Spell: +1 Armor.',
+    description: "<ul><li>+1 Armor</li><li>Ends when the caster stops Focusing</li><li data-manual>Upcast: Cast Check to reduce damage by 1d6 per Mana</li></ul>",
     changes: [
       { key: 'system.armorBonus', type: 'add', value: '1' }
     ]
   },
   {
-    // Guide: "Checks that rely on sight made against the Target have Favor." Attacks and Casts at it are Favored.
+    // Guide: "Checks that rely on sight made against the Target have Favor." No change of its own: attacks and Casts
+    // at it get the Favor vote in VagabondRollBuilder.targetingVotes, only from an attacker who can see it.
     id: 'guided',
     name: 'VAGABOND.StatusConditions.Guided',
     img: '/icons/skills/ranged/target-bullseye-arrow-glowing.webp',
     statuses: ['guided'],
-    description: 'Under the Guide Spell: Checks that rely on sight made against it have Favor.',
-    changes: [
-      { key: 'system.incomingAttacksModifier', type: 'override', value: 'favor' }
-    ]
+    description: "<ul><li>Favor on attacks and Casts against it from Beings that can see it</li><li>Ends when the caster stops Focusing</li><li data-manual>Favor on other Checks against it that rely on sight</li></ul>",
+    changes: []
   },
   {
     // Tempo +: Speed +5' (upcast: edit the effect's value for more).
@@ -565,7 +573,7 @@ VAGABOND.statusEffectDefinitions = [
     name: 'VAGABOND.StatusConditions.Hastened',
     img: '/icons/magic/time/clock-stopwatch-white-blue.webp',
     statuses: ['hastened'],
-    description: "Under the Tempo + Spell: Speed +5'.",
+    description: "<ul><li>Speed +5'</li><li>+5' per extra Mana</li><li>Ends when the caster stops Focusing</li></ul>",
     changes: [
       { key: 'system.speedModifier', type: 'add', value: '5' }
     ]
@@ -576,7 +584,7 @@ VAGABOND.statusEffectDefinitions = [
     name: 'VAGABOND.StatusConditions.Slowed',
     img: '/icons/magic/time/hourglass-tilted-gray.webp',
     statuses: ['slowed'],
-    description: "Under the Tempo - Spell: Speed -5'.",
+    description: "<ul><li>Speed -5'</li><li>-5' per extra Mana</li><li>Ends when the caster stops Focusing</li></ul>",
     changes: [
       { key: 'system.speedModifier', type: 'add', value: '-5' }
     ]
@@ -587,7 +595,7 @@ VAGABOND.statusEffectDefinitions = [
     name: 'VAGABOND.StatusConditions.Frozen',
     img: '/icons/magic/water/barrier-ice-crystal-wall-faceted-blue.webp',
     statuses: ['frozen'],
-    description: "Under the Freeze Spell: Speed -10'.",
+    description: "<ul><li>Speed -10'</li><li>Ends when the caster stops Focusing</li></ul>",
     changes: [
       { key: 'system.speedModifier', type: 'add', value: '-10' }
     ]
@@ -599,9 +607,27 @@ VAGABOND.statusEffectDefinitions = [
     name: 'VAGABOND.StatusConditions.Shrunk',
     img: '/icons/magic/control/silhouette-grow-shrink-blue.webp',
     statuses: ['shrunk'],
-    description: 'Under the Shrink Spell: size and damage dice one size smaller.',
+    description: "<ul><li>Damage dice one size smaller (character weapons and Spells)</li><li>Ends when the caster stops Focusing</li><li data-manual>Size one smaller</li><li data-manual>NPC action damage dice one size smaller</li></ul>",
     changes: [
       { key: 'system.spellDamageDieSizeBonus', type: 'add', value: '-2' }
+    ]
+  },
+  {
+    // Raise: "It is an Undead. It has Darksight, is Immune to Poison, Weak to Silvered Weapons, and can't be
+    // Sickened." Put on the raised copy by RaiseHelper (stamped spellTracker + raiseUndead). Being type lives on
+    // `system.beingType` (NPC) / `system.attributes.beingType` (Character): both overridden, the other is inert.
+    id: 'raised',
+    name: 'VAGABOND.StatusConditions.Raised',
+    img: 'icons/magic/death/skeleton-glow-yellow-black.webp',
+    statuses: ['raised'],
+    description: "<ul><li>It is an Undead</li><li>Darksight, Immune to Poison, Weak to Silvered Weapons, can't be Sickened</li><li>Under the caster's control; commanded when the caster Focuses on this Cast, using the caster's Cast Skill for its Checks</li><li>Ends when the caster stops Focusing: it dies and can't be raised by this Spell again</li></ul>",
+    changes: [
+      { key: 'system.beingType', type: 'override', value: 'Undead' },
+      { key: 'system.attributes.beingType', type: 'override', value: 'Undead' },
+      { key: 'system.senses', type: 'add', value: 'darksight' },
+      { key: 'system.immunities', type: 'add', value: 'poison' },
+      { key: 'system.weaknesses', type: 'add', value: 'silver' },
+      { key: 'system.statusImmunities', type: 'add', value: 'sickened' }
     ]
   },
   {
@@ -612,7 +638,7 @@ VAGABOND.statusEffectDefinitions = [
     name: 'VAGABOND.StatusConditions.Flying',
     img: '/icons/creatures/abilities/wings-birdlike-blue.webp',
     statuses: ['flying'],
-    description: 'Airborne. Not touching the ground, so Seismicsense can\'t detect it.',
+    description: "<ul><li>System marker, not a book Status</li><li>Seismicsense can't detect it</li><li data-manual>Toggle it while the Being is airborne</li></ul>",
     changes: []
   },
   {
@@ -620,7 +646,7 @@ VAGABOND.statusEffectDefinitions = [
     name: 'VAGABOND.StatusConditions.Blinded',
     img: '/icons/creatures/eyes/humanoid-single-blind.webp',
     statuses: ['blinded'],
-    description: 'Can\'t see. Vulnerable. [FULLY AUTOMATED]',
+    description: "<ul><li>Can't see</li><li>Vulnerable</li></ul>",
     changes: [
       // Same as Vulnerable
       // Vulnerable: its Checks and Saves have Hinder (blanket), and system.vulnerable gives
@@ -642,7 +668,7 @@ VAGABOND.statusEffectDefinitions = [
     name: 'VAGABOND.StatusConditions.Invisible',
     img: '/icons/magic/control/silhouette-hold-change-blue.webp',
     statuses: ['invisible'],
-    description: 'Can\'t be seen by normal senses; those that can\'t see it act as Blinded for Checks and Saves involving it. [AUTOMATED: attacks / Casts against it Hindered, its attacks / Casts Favored, Saves against its attacks / Casts Hindered, its Saves against them Favored]',
+    description: "<ul><li>Can't be seen by normal senses</li><li>Attacks, Casts and their Saves: those that can't see it act as Blinded</li><li data-manual>Other Checks and Saves involving it: those that can't see it act as Blinded</li></ul>",
     changes: [
       {
         key: 'system.defenderStatusModifiers.attackersAreBlinded',
@@ -656,7 +682,7 @@ VAGABOND.statusEffectDefinitions = [
     name: 'VAGABOND.StatusConditions.Restrained',
     img: '/icons/magic/control/debuff-chains-shackles-movement-blue.webp',
     statuses: ['restrained'],
-    description: 'Vulnerable + Speed = 0. [FULLY AUTOMATED]',
+    description: "<ul><li>Vulnerable</li><li>Speed 0</li></ul>",
     changes: [
       // Vulnerable + Speed = 0
       {
@@ -683,7 +709,7 @@ VAGABOND.statusEffectDefinitions = [
     name: 'VAGABOND.StatusConditions.Grappling',
     img: '/icons/skills/melee/hand-grip-staff-blue.webp',
     statuses: ['grappling'],
-    description: 'Restraining a target. Speed halved unless target is smaller. [PARTIALLY AUTOMATED — speed penalty applied at grapple time]'
+    description: "<ul><li>System marker, not a book Status</li><li>Restraining a Being</li><li>Speed halved unless the Target is smaller</li></ul>"
     // No static changes — speed penalty is computed dynamically in handleGrapple based on current speed and size comparison
   },
   {
@@ -691,7 +717,7 @@ VAGABOND.statusEffectDefinitions = [
     name: 'VAGABOND.StatusConditions.Incapacitated',
     img: '/icons/skills/wounds/injury-eyes-blood-red-pink.webp',
     statuses: ['incapacitated'],
-    description: 'Can\'t Focus, use Actions, or Move. Fails all Skills and Saves that use Might or Dexterity. Vulnerable. Speed = 0. [FULLY AUTOMATED]',
+    description: "<ul><li>Can't Move</li><li>Fails all Might Checks, Dexterity Checks and Reflex Saves</li><li>Vulnerable</li><li data-manual>Can't Focus or use its Actions</li></ul>",
     changes: [
       // Auto-fail Might/Dex
       {
@@ -730,7 +756,7 @@ VAGABOND.statusEffectDefinitions = [
     name: 'VAGABOND.StatusConditions.Paralyzed',
     img: '/icons/magic/control/debuff-energy-hold-green.webp',
     statuses: ['paralyzed'],
-    description: 'Incapacitated + Speed = 0. [FULLY AUTOMATED]',
+    description: "<ul><li>Incapacitated</li><li>Speed 0</li><li data-manual>Can't Focus or use its Actions (Incapacitated)</li></ul>",
     changes: [
       // Same as Incapacitated (already includes Speed = 0)
       {
@@ -767,7 +793,7 @@ VAGABOND.statusEffectDefinitions = [
     name: 'VAGABOND.StatusConditions.Unconscious',
     img: '/icons/magic/nature/moon-crescent.webp',
     statuses: ['unconscious'],
-    description: 'Blinded + Incapacitated + Prone. Close Attacks (range: close) always Crit. [FULLY AUTOMATED]',
+    description: "<ul><li>Blinded, Incapacitated and Prone</li><li>Close Attacks targeting it always Crit</li><li data-manual>Can't Focus or use its Actions (Incapacitated)</li></ul>",
     changes: [
       // All Incapacitated effects
       {
@@ -810,7 +836,7 @@ VAGABOND.statusEffectDefinitions = [
     name: 'VAGABOND.StatusConditions.Dead',
     img: '/icons/magic/death/grave-tombstone-glow-teal.webp',
     statuses: ['dead'],
-    description: 'Same as Incapacitated but automatically fails ALL rolls (stats, skills, saves, attacks). [FULLY AUTOMATED]',
+    description: "<ul><li>System marker, not a book Status</li><li>Fails every roll</li><li>Speed 0</li><li>Vulnerable</li></ul>",
     changes: [
       // Auto-fail ALL rolls (new field)
       {
@@ -1738,6 +1764,12 @@ VAGABOND.effectApplicationModes = {
     label: 'VAGABOND.Effect.ApplicationMode.OnUse',
     hint: 'VAGABOND.Effect.ApplicationMode.OnUseHint',
     icon: 'fa-solid fa-sparkles'
+  },
+  // Changes the item itself (VagabondItem#_applySelfEffects), never its bearer
+  'self': {
+    label: 'VAGABOND.Effect.ApplicationMode.Self',
+    hint: 'VAGABOND.Effect.ApplicationMode.SelfHint',
+    icon: 'fa-solid fa-cube'
   }
 };
 

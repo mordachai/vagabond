@@ -329,7 +329,9 @@ export class VagabondChatCard {
                 itemId: item?.id || null,
                 targetsAtRollTime: this.data.targetsAtRollTime || [],
                 ...(snapshot ? { itemSnapshot: snapshot } : {}),
-                ...(this.data.rerollData ? { rerollData: this.data.rerollData } : {})
+                ...(this.data.rerollData ? { rerollData: this.data.rerollData } : {}),
+                // Read back by VagabondDamageHelper.spellCastFromButton (Spell Damage / Effect split)
+                ...(this.data.spellCast ? { spellCast: this.data.spellCast } : {})
             }
         };
       }
@@ -353,8 +355,12 @@ export class VagabondChatCard {
     weaknessPreRolled = false,
     macroExtraScope = null,
     imbueSection = null,
+    // Spell Damage / Effect split: { effect, damage } of the Cast behind this card
+    // (VagabondDamageHelper.spellCastContext). Stored as flags.vagabond.spellCast.
+    spellCast = null,
   }) {
       const card = new VagabondChatCard();
+      if (spellCast) card.data.spellCast = spellCast;
       const iconStyle = game.settings.get('vagabond', 'chatCardIconStyle');
 
       // LOGIC: The "First Set Wins" Rule
@@ -455,8 +461,13 @@ export class VagabondChatCard {
         : (actionIndex !== null && actor?.system?.actions?.[actionIndex]?.critCausedStatuses?.length)
           ? actor.system.actions[actionIndex].critCausedStatuses
           : null;
-      // Set of save types required to resist on-hit statuses (both normal and crit)
-      const allPreviewEntries = [...(previewEntries ?? []), ...(critPreviewEntries ?? [])];
+      // Set of save types required to resist on-hit statuses (both normal and crit).
+      // A Spell's statuses are its Effect: gated by what the Cast included (damage-only → no tint).
+      let allPreviewEntries = [...(previewEntries ?? []), ...(critPreviewEntries ?? [])];
+      if (item?.type === 'spell' && spellCast) {
+        const { VagabondDamageHelper: VDHGate } = await import('./damage-helper.mjs');
+        allPreviewEntries = VDHGate.gateSpellEffectEntries(allPreviewEntries, spellCast);
+      }
       const statusSaveTypes = new Set(
         allPreviewEntries.filter(e => e.saveType && e.saveType !== 'none').map(e => e.saveType)
       );
@@ -1012,8 +1023,8 @@ export class VagabondChatCard {
       // 1. Skill Tag
       tags.push({ label: manaSkill?.label || 'Magic', cssClass: 'tag-skill' });
       
-      // 2. Damage Tag (suppressed for dice-scaling spells — dice aren't damage)
-      if (spellState.damageDice && spellState.damageDice > 0 && !spell.system.usesDiceScaling) {
+      // 2. Damage Tag — only when the Cast deals damage (not dice-scaling dice, not a typeless Spell's default die)
+      if (SpellDmgHelper.spellCastContext(spell, spellState)?.damage) {
           const dType = spell.system.damageType;
           const dieSize = SpellDmgHelper.spellDieSize(actor, spell);
 
@@ -1051,8 +1062,10 @@ export class VagabondChatCard {
 
       // Calculate spell damage formula for manual damage button
       // This must include the increased damage dice from mana expenditure
+      // Only a Cast that deals damage gets one (spellCastContext.damage): a typeless Spell (Raise, Bless…)
+      // would otherwise show a Roll Damage button from its default die, and its FX would wait on that button.
       let spellDamageFormula = null;
-      if (spellState.damageDice && spellState.damageDice > 0 && !spell.system.usesDiceScaling) {
+      if (SpellDmgHelper.spellCastContext(spell, spellState)?.damage) {
           const dieSize = SpellDmgHelper.spellDieSize(actor, spell);
           spellDamageFormula = `${spellState.damageDice}d${dieSize}`;
       }
@@ -1077,6 +1090,14 @@ export class VagabondChatCard {
       // button here; footerActions carries the Trigger/Dismiss row instead.
       const isGlyph = spellState.deliveryType?.toUpperCase() === 'GLYPH';
 
+      // Spell Damage / Effect split (see VagabondDamageHelper): what this Cast included.
+      // An effect-only Cast has no damage card, so its statuses get buttons right here.
+      const spellCast = SpellDmgHelper.spellCastContext(spell, spellState);
+      const attackType = VagabondChatCard.attackTypeForSpellDelivery(spellState.deliveryType);
+      const effectButtons = (isSuccess && !isImbue && !isGlyph)
+        ? SpellDmgHelper.createSpellEffectButtons(actor, spell, spellCast, { isCritical, targetsAtRollTime, attackType })
+        : '';
+
       const result = await this.createActionCard({
           actor, item: spell, title: spell.name,
           rollData: { roll, difficulty, isSuccess, isCritical, isHit: (isImbue || isGlyph) ? false : isSuccess, manaSkill, critStatBonus: spellCritStatBonus },  // ✅ FIX: Include manaSkill for statKey lookup
@@ -1087,10 +1108,11 @@ export class VagabondChatCard {
           description: spell.system.formatDescription(spell.system.description),  // Format for countdown dice triggers
           crit: critText,  // Include crit text if critical
           hasDefenses: !isImbue && !isGlyph,
-          attackType: VagabondChatCard.attackTypeForSpellDelivery(spellState.deliveryType),  // touch → melee, others → cast
+          attackType,  // touch → melee, others → cast
           damageFormula: (isImbue || isGlyph) ? null : spellDamageFormula,  // ✅ FIX: Pass actual spell damage formula with increased dice
           targetsAtRollTime,
-          footerActions,
+          footerActions: effectButtons ? [...footerActions, effectButtons] : footerActions,
+          spellCast,
           rerollData: {
             type: 'cast',
             itemId: spell.id,
@@ -1098,13 +1120,24 @@ export class VagabondChatCard {
             deliveryType: spellState.deliveryType || null,
             deliveryIncrease: spellState.deliveryIncrease ?? 0,
             formula: roll?.formula || null,
-            difficulty: difficulty
+            difficulty: difficulty,
+            // A Luck reroll / Force Crit rebuilds the whole Cast card from these (no Mana re-spent)
+            damageDice: spellState.damageDice ?? 0,
+            useFx: !!spellState.useFx,
+            manaSpent: costs?.manaSpent ?? costs?.totalCost ?? 0,
+            totalCost: costs?.totalCost ?? 0,
+            deliveryText: deliveryText || null,
+            targetObjects: spellState.targetObjects ?? [],
+            targetsPicked: !!spellState.targetsPicked,
           },
-          // Expose this cast's chosen dice + total mana to spell macros (scope.spellDamageDice / scope.manaSpent)
+          // Expose this cast's chosen dice + total mana to spell macros (scope.spellDamageDice / scope.manaSpent),
+          // plus the Target picker's choices (scope.targetObjects as Items, scope.targetsPicked = Targets are final)
           macroExtraScope: {
             spellDamageDice: spellState.damageDice ?? 0,
             manaSpent: costs?.manaSpent ?? costs?.totalCost ?? 0,
             manaOverrideDelta: manaOverrideDelta ?? 0,
+            ...(spellState.targetObjects?.length ? { targetObjects: spellState.targetObjects } : {}),
+            ...(spellState.targetsPicked ? { targetsPicked: true } : {}),
           }
       });
       // Only auto-grant luck when there's no crit toggle (toggle manages luck itself)
@@ -1112,6 +1145,83 @@ export class VagabondChatCard {
       return result;
   }
   
+  /**
+   * Luck reroll (Fluke) of a Spell Cast: rebuild the WHOLE Cast card from the Cast state stored in
+   * `rerollData` (damage dice, delivery, Effect toggle) instead of a bare check — so a failed Cast
+   * rerolled into a success still gets its damage roll / Roll Damage button, its Effect buttons,
+   * its macros and its FX (user request 2026-10-11).
+   *
+   * Mana: the Cast is billed again for what the NEW outcome costs (spellManaOnCastFail rules) and
+   * only the difference to what the original card charged is taken or refunded — never paid twice.
+   * Not handled here (caller keeps the plain check card): Imbue / Glyph (weapon pick / glyph
+   * placement happen before the card and are skipped on a failed Cast) and cards posted before
+   * `rerollData.damageDice` existed. Focus, Twinned Spell and post-roll hooks are not re-run.
+   *
+   * @param {Actor} actor
+   * @param {Item} spell
+   * @param {Object} rerollData - flags.vagabond.rerollData of the original Cast card
+   * @param {Roll} roll - the new casting Check
+   * @param {Array} targetsAtRollTime
+   * @returns {Promise<ChatMessage>}
+   */
+  static async rerollSpellCast(actor, spell, rerollData, roll, targetsAtRollTime = []) {
+    const { VagabondRollBuilder } = await import('./roll-builder.mjs');
+    const { VagabondDamageHelper } = await import('./damage-helper.mjs');
+
+    const difficulty = rerollData.difficulty;
+    const isSuccess = roll.total >= difficulty;
+    // Same crit test as SpellHandler._executeCast (natural d20 vs the spell crit threshold)
+    const critNumber = VagabondRollBuilder.calculateCritThreshold(actor.getRollDataWithItemEffects(spell), 'spell');
+    const d20 = roll.terms.find(t => t.constructor.name === 'Die' && t.faces === 20)?.results?.[0]?.result || 0;
+    const isCritical = d20 >= critNumber;
+
+    // Re-bill the Cast for the new outcome; charge / refund only the difference
+    const totalCost = rerollData.totalCost ?? rerollData.manaSpent ?? 0;
+    const failMode = game.settings.get('vagabond', 'spellManaOnCastFail');
+    const owed = isSuccess || failMode === 'fullOnFail' ? totalCost
+      : failMode === 'halfOnFail' ? Math.ceil(totalCost / 2) : 0;
+    const delta = owed - (rerollData.manaSpent ?? 0);
+    if (delta !== 0) {
+      const current = actor.system.mana?.current ?? 0;
+      if (delta > current) ui.notifications.warn(game.i18n.format('VAGABOND.Status.RerollManaShort', { name: actor.name, cost: delta, mana: current }));
+      await actor.update({ 'system.mana.current': Math.max(0, current - delta) });
+    }
+    if (isSuccess) Hooks.callAll('vagabond.actorActed', actor, { source: 'cast', itemId: spell.id });
+
+    const spellState = {
+      damageDice: rerollData.damageDice ?? 0,
+      deliveryType: rerollData.deliveryType,
+      deliveryIncrease: rerollData.deliveryIncrease ?? 0,
+      useFx: !!rerollData.useFx,
+      targetObjects: rerollData.targetObjects ?? [],
+      targetsPicked: !!rerollData.targetsPicked,
+    };
+    const manaSkillKey = rerollData.manaSkillKey || null;
+    const manaSkill = manaSkillKey ? actor.system.skills?.[manaSkillKey] ?? null : null;
+
+    // Same auto-roll rule as SpellHandler._createSpellChatCard
+    let damageRoll = null;
+    if (spell.system.damageType !== '-' && spellState.damageDice > 0 && VagabondDamageHelper.shouldRollDamage(isSuccess)) {
+      damageRoll = await VagabondDamageHelper.rollSpellDamage(actor, spell, spellState, isCritical, manaSkill?.stat || 'reason', targetsAtRollTime);
+    }
+
+    const deliveryText = rerollData.deliveryText
+      || game.i18n.localize(CONFIG.VAGABOND.deliveryTypes?.[spellState.deliveryType] ?? spellState.deliveryType ?? '');
+    const message = await this.spellCast(actor, spell, {
+      roll, difficulty, isSuccess, isCritical, manaSkill, manaSkillKey,
+      spellState, costs: { totalCost, manaSpent: owed }, deliveryText, manaOverrideDelta: 0,
+    }, damageRoll, targetsAtRollTime);
+
+    if (spellState.deliveryType) {
+      await VagabondDamageHelper.playFxOrDefer(
+        message,
+        { kind: 'spell', deliveryType: spellState.deliveryType, deliveryIncrease: spellState.deliveryIncrease },
+        actor, spell, targetsAtRollTime, isSuccess
+      );
+    }
+    return message;
+  }
+
   static async npcAction(actor, action, actionIndex, targetsAtRollTime = []) {
     const tags = [];
     
@@ -1173,6 +1283,23 @@ export class VagabondChatCard {
     // Normalize attack type for the helpers
     const attackType = VagabondChatCard.normalizeAttackType(action.attackType);
 
+    // 7b. Commanded Beings (Raise): an action is a Check with the caster's Cast Skill while the caster
+    // Focuses on the Cast; a miss deals no damage. Not Focusing: no command, the card says so.
+    let commandCheck = null;
+    if (!(actor.system.abilities ?? []).includes(action)) {
+        const { RaiseHelper } = await import('./raise-helper.mjs');
+        const cmd = RaiseHelper.commander(actor);
+        if (cmd && !cmd.focusing) {
+            tags.push({ label: game.i18n.format('VAGABOND.Raise.NotCommanded', { caster: cmd.caster.name }), cssClass: 'tag-standard' });
+        } else if (cmd) {
+            const first = targetsAtRollTime[0];
+            const target = first ? game.scenes.get(first.sceneId)?.tokens.get(first.tokenId)?.actor ?? null : null;
+            commandCheck = await RaiseHelper.rollCommandCheck(actor, cmd, target, attackType);
+            if (commandCheck) tags.unshift({ label: commandCheck.label, cssClass: 'tag-skill' });
+        }
+    }
+    const commandMissed = !!commandCheck && !commandCheck.isHit;
+
     // Pre-compute save types required by on-hit statuses (used in both branches below)
     const allActionStatuses = [...(action.causedStatuses ?? []), ...(action.critCausedStatuses ?? [])];
     const reminderStatusSaveTypes = new Set(
@@ -1184,7 +1311,7 @@ export class VagabondChatCard {
 
     const preferFlat     = game.settings.get('vagabond', 'npcUseFlatDamage');
     const rollWithCheck  = game.settings.get('vagabond', 'rollDamageWithCheck');
-    const hasDamage      = !!(action.flatDamage || action.rollDamage);
+    const hasDamage      = !!(action.flatDamage || action.rollDamage) && !commandMissed;
 
     // Show damage buttons even for "-" (typeless damage)
     if (hasDamage) {
@@ -1209,7 +1336,7 @@ export class VagabondChatCard {
         }
         // rollWithCheck ON → no buttons; damage fires automatically below.
         // Manual mode: saves and defending options appear on the damage card (postNPCActionDamage).
-    } else {
+    } else if (!commandMissed) {
         // No damage — this card IS the only card, so save reminder buttons must live here.
         footerActions.push(VagabondDamageHelper.createSaveReminderButtons(
           attackType, targetsAtRollTime, actor.uuid, null, actionIndex, reminderStatusSaveTypes
@@ -1270,7 +1397,11 @@ export class VagabondChatCard {
         attackType,
         actionIndex,
         hasDefenses: !!damageRoll,
-        targetsAtRollTime
+        targetsAtRollTime,
+        rollData: commandCheck ? {
+            roll: commandCheck.roll, difficulty: commandCheck.difficulty,
+            isHit: commandCheck.isHit, isCritical: commandCheck.isCritical,
+        } : undefined,
     });
   }
 
@@ -2125,6 +2256,13 @@ export class VagabondChatCard {
 
     // Prepare metadata array
     const metadata = [];
+    // Spell Tracker / Cure-Hymn immunity: who cast which Spell (kept out of the rule text)
+    const tracker = effect.flags?.vagabond?.spellTracker;
+    if (tracker?.casterName || tracker?.spellName) {
+      metadata.push({
+        value: game.i18n.format('VAGABOND.SpellTracker.By', { name: tracker.casterName ?? '', spell: tracker.spellName ?? '' })
+      });
+    }
     if (automationStatus) {
       metadata.push({
         value: automationStatus

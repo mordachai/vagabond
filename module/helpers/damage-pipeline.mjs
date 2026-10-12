@@ -720,8 +720,9 @@ export class VagabondDamagePipeline {
 
   /**
    * Weapon-based weaknesses: the weapon's material (Cold Iron, Silver, Adamant) or the weapon itself
-   * ("damage from axes"). Ignores Armor and Immune like any Weakness. The wielder's `system.weaponsCountAs`
-   * adds materials every weapon they wield counts as (Holy Diver: Silvered).
+   * ("damage from axes"). Ignores Armor and Immune like any Weakness. The weapon's `system.countsAs` (filled by
+   * "This item" effects — Bless: Silvered) and the wielder's `system.weaponsCountAs` (Holy Diver) add materials it
+   * counts as.
    * @param {Item|null} weapon
    * @param {string[]} weaknesses
    */
@@ -729,6 +730,7 @@ export class VagabondDamagePipeline {
     if (!weapon || !weaknesses?.length) return false;
     const metal = weapon.system?.metal;
     if (metal && weaknesses.includes(metal)) return true;
+    if ((weapon.system?.countsAs ?? []).some(m => weaknesses.includes(m))) return true;
     if ((weapon.actor?.system?.weaponsCountAs ?? []).some(m => weaknesses.includes(m))) return true;
     return weaknesses.includes('axe') && isAxe(weapon);
   }

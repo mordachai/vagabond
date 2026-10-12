@@ -22,7 +22,7 @@
     "expiry": null,
     "expired": false
   },
-  "description": "<p>Can't Focus or Move unless it uses an Action to do so. Speed reduced to 0.</p>",
+  "description": "<ul><li data-manual>Can't Focus or Move unless it uses an Action to do so</li></ul>",
   "origin": null,
   "tint": "#ffffff",
   "transfer": false,

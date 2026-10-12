@@ -1810,6 +1810,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
      sitting at the right end of the saves row; expanding opens the text below. */
 }
 .vagabond-chat-card-v2 .card-actions button.vagabond-apply-direct-button,
+.vagabond-chat-card-v2 .card-actions button.vagabond-apply-spell-effect-button,
 .vagabond-chat-card-v2 .card-actions button.vagabond-grapple-button,
 .vagabond-chat-card-v2 .card-actions button.vagabond-macro-button,
 .vagabond-chat-card-v2 .card-actions button.vagabond-npc-damage-button,
@@ -1846,6 +1847,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   line-height: 1.2;
 }
 .vagabond-chat-card-v2 .card-actions button.vagabond-apply-direct-button:hover,
+.vagabond-chat-card-v2 .card-actions button.vagabond-apply-spell-effect-button:hover,
 .vagabond-chat-card-v2 .card-actions button.vagabond-grapple-button:hover,
 .vagabond-chat-card-v2 .card-actions button.vagabond-macro-button:hover,
 .vagabond-chat-card-v2 .card-actions button.vagabond-npc-damage-button:hover,
@@ -1860,6 +1862,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   filter: brightness(1.6);
 }
 .vagabond-chat-card-v2 .card-actions button.vagabond-apply-direct-button:disabled,
+.vagabond-chat-card-v2 .card-actions button.vagabond-apply-spell-effect-button:disabled,
 .vagabond-chat-card-v2 .card-actions button.vagabond-grapple-button:disabled,
 .vagabond-chat-card-v2 .card-actions button.vagabond-macro-button:disabled,
 .vagabond-chat-card-v2 .card-actions button.vagabond-npc-damage-button:disabled,
@@ -1876,6 +1879,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   filter: grayscale(1);
 }
 .vagabond-chat-card-v2 .card-actions button.vagabond-apply-direct-button i,
+.vagabond-chat-card-v2 .card-actions button.vagabond-apply-spell-effect-button i,
 .vagabond-chat-card-v2 .card-actions button.vagabond-grapple-button i,
 .vagabond-chat-card-v2 .card-actions button.vagabond-macro-button i,
 .vagabond-chat-card-v2 .card-actions button.vagabond-npc-damage-button i,
@@ -1917,7 +1921,8 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   align-items: center;
   gap: 8px;
 }
-.vagabond-chat-card-v2 .card-actions .save-buttons-top button.vagabond-apply-direct-button {
+.vagabond-chat-card-v2 .card-actions .save-buttons-top button.vagabond-apply-direct-button,
+.vagabond-chat-card-v2 .card-actions .save-buttons-top button.vagabond-apply-spell-effect-button {
   flex: 1 1 0;
   width: auto;
   min-width: 0;
@@ -4500,6 +4505,56 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   .vbd-hud .vh-slot.vh-slot-action.is-active::before {
     animation: none;
   }
+}
+.vbd-hud .vh-slot.is-focused {
+  overflow: visible;
+  border-color: #4febff;
+  position: relative;
+  color: #4febff;
+  box-shadow: 0 0 8px 1px #4febff;
+}
+.vbd-hud .vh-slot.is-focused::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 2px;
+  border-radius: inherit;
+  background: conic-gradient(from var(--vg-fx-angle), transparent 0 45%, #4febff 80%, #fff 100%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: vg-fx-run 1.6s linear infinite;
+  pointer-events: none;
+}
+.vbd-hud .vh-slot.is-focused[data-count]::after {
+  content: attr(data-count);
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  min-width: 13px;
+  height: 13px;
+  padding: 0 3px;
+  box-sizing: border-box;
+  border-radius: 7px;
+  background: #4febff;
+  color: #000;
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 13px;
+  text-align: center;
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .vbd-hud .vh-slot.is-focused::before {
+    animation: none;
+  }
+}
+.vbd-hud .vh-slot.is-focused img {
+  border-radius: 4px;
+}
+.vbd-hud .vh-slot.is-focused:hover {
+  border-color: #4febff;
+  box-shadow: 0 0 8px 1px #4febff;
 }
 .vbd-hud .vh-slot.filled {
   cursor: pointer;
@@ -13772,7 +13827,7 @@ ol#combat-tracker.directory-list {
 }
 .vsc-root {
   position: relative;
-  width: 350px;
+  width: 375px;
   padding: 0 0.5rem 1rem;
   color: rgb(var(--ac));
   font-family: "Paradigm", serif;
@@ -13796,7 +13851,7 @@ ol#combat-tracker.directory-list {
   display: none !important;
 }
 .vsc-root.no-rings {
-  width: 260px;
+  width: 285px;
 }
 .vsc-root.no-rings .vsc-circle .outer-ring,
 .vsc-root.no-rings .vsc-circle .middle-ring,
@@ -13827,9 +13882,27 @@ ol#combat-tracker.directory-list {
 .vsc-root.no-rings .vsc-mana-info {
   top: calc(89.1% - 4px);
 }
-.vsc-root.no-rings .vsc-imbue-ring {
+.vsc-root.no-rings .vsc-imbue-ring,
+.vsc-root.no-rings .vsc-pick-ring {
   --vb-min: 56;
   --vb-span: 248;
+}
+.vsc-root.picks-active .vsc-circle .vsc-node.bl {
+  transform: translate(-60px, 88px);
+}
+.vsc-root.picks-active .vsc-circle .vsc-node.br {
+  transform: translate(60px, 88px);
+}
+.vsc-root.picks-active.no-rings .vsc-circle .vsc-node.bl,
+.vsc-root.picks-active.no-rings .vsc-circle .vsc-node.br {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.vsc-root.picks-active.no-rings .vsc-circle .vsc-node.bl {
+  transform: translate(-16px, 50px) scale(0.8);
+}
+.vsc-root.picks-active.no-rings .vsc-circle .vsc-node.br {
+  transform: translate(16px, 50px) scale(0.8);
 }
 .vsc-root:active {
   cursor: grabbing;
@@ -14258,6 +14331,48 @@ ol#combat-tracker.directory-list {
   background: rgba(var(--ac), 0.25);
   filter: brightness(1.15);
   box-shadow: 0 0 8px -1px rgb(var(--ac)), inset 0 0 0 1px rgb(var(--ac));
+}
+.vsc-root .vsc-pick-ring {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  --vb-min: 0;
+  --vb-span: 360;
+}
+.vsc-root .vsc-pick {
+  position: absolute;
+  left: calc((var(--ix) - var(--vb-min)) / var(--vb-span) * 100%);
+  top: calc((var(--iy) - var(--vb-min)) / var(--vb-span) * 100%);
+  transform: translate(-50%, -50%);
+  width: var(--icon-size, 44px);
+  height: var(--icon-size, 44px);
+  line-height: normal;
+  border-radius: 50%;
+  border: 2px solid var(--pc, rgb(var(--ac)));
+  background: rgba(0, 0, 0, 0.5);
+  padding: 2px;
+  cursor: pointer;
+  pointer-events: auto;
+  opacity: 0.45;
+  transition: opacity 0.15s, filter 0.15s, box-shadow 0.15s;
+}
+.vsc-root .vsc-pick > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+  border: none;
+}
+.vsc-root .vsc-pick:hover {
+  opacity: 0.7;
+}
+.vsc-root .vsc-pick.is-selected {
+  opacity: 1;
+  background: rgba(var(--ac), 0.25);
+  filter: brightness(1.15);
+  box-shadow: 0 0 10px 0 var(--pc, rgb(var(--ac)));
 }
 .vsc-root .vsc-cast {
   display: flex !important;
@@ -15735,6 +15850,11 @@ ol#combat-tracker.directory-list {
 .vagabond.shop-sheet .shop-stock-list .shop-stock-row .shop-stock-category::placeholder {
   color: var(--vagabond-c-muted);
   font-style: italic;
+}
+.vagabond.shop-sheet .shop-stock-list .shop-stock-row input.shop-stock-qty {
+  width: 100%;
+  min-width: 0;
+  padding: 0 2px;
 }
 .vagabond.shop-sheet .shop-stock-list .shop-stock-row .shop-stock-name {
   overflow: hidden;
@@ -20571,11 +20691,18 @@ ol#combat-tracker.directory-list {
   }
 }
 .vagabond .favorited-spell.focused {
-  background: repeating-linear-gradient(-45deg, rgba(222, 214, 86, 0.3), rgba(222, 214, 86, 0.3) 5px, rgba(147, 201, 85, 0.5) 5px, rgba(147, 201, 85, 0.5) 10px);
+  background: repeating-linear-gradient(-45deg, rgba(222, 214, 86, 0.3), rgba(222, 214, 86, 0.3) 5px, rgba(46, 230, 255, 0.5) 5px, rgba(46, 230, 255, 0.5) 10px);
   background-size: 40px 40px;
   animation: focus-stripes 3.2s linear infinite;
   border-radius: 5px;
   font-weight: 600;
+}
+.vagabond .favorited-spell.focused .spell-name-container .spell-name,
+.vagabond .favorited-spell.focused .spell-trigger .spell-name-container .spell-name,
+.vagabond .favorited-spell.focused .spell-trigger .spell-name-container:hover .spell-name {
+  padding: 0 4px;
+  color: #4febff;
+  text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000;
 }
 .vagabond.item section.tab {
   overflow-anchor: none;
@@ -20869,6 +20996,13 @@ ol#combat-tracker.directory-list {
 }
 .vagabond .imbue-badge button:hover {
   color: var(--vagabond-c-red);
+}
+.vagabond .imbue-badge.silvered-badge {
+  background: rgba(190, 195, 205, 0.15);
+  border-color: rgba(190, 195, 205, 0.6);
+}
+.vagabond .imbue-badge.silvered-badge i.fa-hands-praying {
+  color: rgb(215, 220, 230);
 }
 .vagabond .equip-cost-slots-row {
   display: flex;
@@ -24400,6 +24534,22 @@ ol#combat-tracker.directory-list {
 }
 .vagabond .fx-description img {
   max-width: 100%;
+}
+.vagabond .fx-description ul,
+.vagabond .status-effect-info ul {
+  margin: 0.15em 0;
+  padding-left: 1.3em;
+}
+.vagabond li.fx-manual {
+  list-style: none;
+}
+.vagabond li.fx-manual > i {
+  display: inline-block;
+  text-align: center;
+  width: 1.3em;
+  margin-left: -1.3em;
+  font-size: 0.85em;
+  opacity: 0.75;
 }
 .vagabond .fx-actions {
   display: flex;
@@ -30666,7 +30816,7 @@ details[open] .vagabond .npc-immunity-toggle i {
   font-size: 0.95rem;
   line-height: 1.1;
   color: var(--vagabond-c-text-primary);
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.85);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -30674,8 +30824,8 @@ details[open] .vagabond .npc-immunity-toggle i {
   max-width: 100%;
 }
 .vagabond .favorited-spells-grid .favorited-spell.focused .spell-grid-frame {
-  box-shadow: 0 0 12px var(--vagabond-c-chat-yellow);
-  border-color: var(--vagabond-c-chat-yellow);
+  box-shadow: 0 0 12px #4febff;
+  border-color: #4febff;
   filter: brightness(1.15);
 }
 @keyframes fadein {

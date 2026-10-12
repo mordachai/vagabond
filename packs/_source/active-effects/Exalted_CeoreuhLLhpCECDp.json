@@ -1,5 +1,5 @@
 {
-  "name": "Exalted",
+  "name": "Exalt: +1 per Damage Die",
   "_id": "CeoreuhLLhpCECDp",
   "img": "icons/skills/melee/sword-winged-holy-orange.webp",
   "type": "base",
@@ -43,7 +43,7 @@
     "expiry": null,
     "expired": false
   },
-  "description": "<p>Under the Exalt Spell: +1 to each damage die it deals and to Will Saves against Frightened, doubled against Hellspawn and Undead.</p>",
+  "description": "<ul><li>+1 to each damage die it deals (doubled vs Hellspawn or Undead)</li><li>+1 to Will Saves vs Frightened</li><li>Ends when the caster stops Focusing</li><li data-manual>Will Save bonus doubled vs Hellspawn or Undead</li></ul>",
   "origin": null,
   "tint": "#ffffff",
   "transfer": false,

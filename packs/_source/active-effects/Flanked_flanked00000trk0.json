@@ -29,7 +29,7 @@
     "expiry": null,
     "expired": false
   },
-  "description": "<p>Vulnerable (its attacks and Saves against attacks have Hinder; attacks targeting it and Saves against its attacks have Favor), and takes an extra 2 damage from attacks (before Armor).</p>",
+  "description": "<ul><li>Vulnerable</li><li>+2 damage from attacks, before Armor</li></ul>",
   "origin": null,
   "tint": "#ffffff",
   "transfer": false,

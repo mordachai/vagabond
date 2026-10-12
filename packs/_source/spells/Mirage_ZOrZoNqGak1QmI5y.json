@@ -9,7 +9,9 @@
     "crit": "",
     "favorite": false,
     "fxSchool": "genericlight",
-    "locked": true
+    "locked": true,
+    "targetBeings": true,
+    "targetObjects": false
   },
   "effects": [],
   "folder": null,

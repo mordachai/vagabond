@@ -12,7 +12,7 @@
     "causedStatuses": [
       {
         "statusId": "burning",
-        "requiresDamage": true,
+        "requiresDamage": false,
         "saveType": "none",
         "duration": "d4",
         "tickDamageEnabled": true,
@@ -23,14 +23,16 @@
     "critCausedStatuses": [
       {
         "statusId": "burning",
-        "requiresDamage": true,
+        "requiresDamage": false,
         "saveType": "none",
         "duration": "d6",
         "tickDamageEnabled": true,
         "damageOnTick": "",
         "damageType": "-"
       }
-    ]
+    ],
+    "targetBeings": true,
+    "targetObjects": false
   },
   "effects": [],
   "folder": null,

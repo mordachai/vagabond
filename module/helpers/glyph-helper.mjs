@@ -410,6 +410,14 @@ export class VagabondGlyphHelper {
           )
         : null;
 
+    // Spell Damage / Effect split: the Cast snapshot says whether the Effect was included
+    const spellCast = payload.useFx === undefined ? null
+      : VagabondDamageHelper.spellCastContext(spell, { damageDice: payload.damageDice, useFx: payload.useFx });
+    const attackType = CONFIG.VAGABOND.spellDeliveryAttackTypes.glyph;
+    const effectButtons = VagabondDamageHelper.createSpellEffectButtons(sourceActor, spell, spellCast, {
+      targetsAtRollTime, attackType,
+    });
+
     await VagabondChatCard.createActionCard({
       actor: sourceActor,
       item: spell,
@@ -423,8 +431,10 @@ export class VagabondGlyphHelper {
       damageType: spell.system.damageType,
       description: spell.system.formatDescription(spell.system.description),
       hasDefenses: true,
-      attackType: CONFIG.VAGABOND.spellDeliveryAttackTypes.glyph,
+      attackType,
       targetsAtRollTime,
+      footerActions: effectButtons ? [effectButtons] : [],
+      spellCast,
     });
 
     // "…then the glyph disappears."

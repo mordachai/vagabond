@@ -9,6 +9,8 @@
     "crit": "The effect is completely dispelled if it is not a Relic's Power.",
     "favorite": false,
     "noRollRequired": true,
+    "targetBeings": true,
+    "targetObjects": false,
     "fxSchool": "defense",
     "locked": true
   },

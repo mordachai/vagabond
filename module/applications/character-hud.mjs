@@ -643,6 +643,7 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
   _slotEntry(item, type) {
     if (!item) return { filled: false, type };
     const entry = { filled: true, type, id: item.id, img: item.img, name: item.name, inert: !!item.flags?.vagabond?.mix?.inert };
+    if (type === 'spell') entry.focused = (this.actor.system.focus?.spellIds ?? []).includes(item.id);
     if (type === 'weapon') {
       const { EquipmentHelper } = globalThis.vagabond.utils;
       entry.versatile = EquipmentHelper.isVersatileWeapon(item);

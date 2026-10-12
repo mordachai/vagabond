@@ -9,6 +9,7 @@
  *  - `permanent`     always applies
  *  - `when-equipped` applies only while the parent item is equipped (any hand state or 'worn')
  *  - `on-use`        never applies passively — applied manually per roll (Actor#getRollDataWithItemEffects)
+ *  - `self`          changes its own item, never the bearer (`transfer: false`, VagabondItem#_applySelfEffects)
  *
  *
  * Independent of applicationMode, `flags.vagabond.minLevel` (number) suppresses the effect

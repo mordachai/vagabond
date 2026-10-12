@@ -1,5 +1,5 @@
 {{!-- Spell Cast Dialog. Single root element. --}}
-<div class="vsc-root" style="--ac: {{accentRGB}};">
+<div class="vsc-root {{#if picksActive}}picks-active{{/if}}" style="--ac: {{accentRGB}};">
 
   <button type="button" class="vsc-close" data-action="vscClose" aria-label="Close">
     <i class="fa-solid fa-xmark"></i>
@@ -40,15 +40,15 @@
       {{!-- Inner ring boundary --}}
       <circle class="vsc-stroke static" cx="180" cy="180" r="124" fill="none"/>
 
-      {{#unless imbueActive}}
-      {{!-- Triangle (main) --}}
+      {{#unless (or imbueActive picksActive)}}
+      {{!-- Triangle (main) — hidden while the Imbue / Target picker rings are up --}}
       <polygon class="vsc-tri" points="180,80 94,230 266,230" fill="none"/>
       {{!-- Triangle (inner decorative) --}}
       <polygon class="vsc-tri inner" points="180,98 110,222 250,222" fill="none"/>
       {{/unless}}
 
       {{!-- Edge labels (clickable — same actions as their paired vertex node) --}}
-      {{#unless imbueActive}}
+      {{#unless (or imbueActive picksActive)}}
       <text class="vsc-edge-label left {{#unless rangeInactive}}clickable{{/unless}}"
             text-anchor="middle"
             data-action="vscBumpRange"
@@ -58,7 +58,7 @@
             text-anchor="middle"
             data-action="vscOpenDelivery"
             x="180" y="258">{{deliveryLabel}}</text>
-      {{#unless hideDiceFx}}
+      {{#unless (or hideDiceFx picksActive)}}
       <text class="vsc-edge-label right {{#if diceClickable}}clickable{{/if}}"
             text-anchor="middle"
             data-action="vscBumpDice"
@@ -149,6 +149,22 @@
               title="{{w.tooltip}}"
               style="--ix: {{w.x}}; --iy: {{w.y}};">
         <img src="{{w.img}}" alt="" />
+      </button>
+      {{/each}}
+    </div>
+    {{/if}}
+
+    {{#if picksActive}}
+    {{!-- Target picker (SpellTargetPicker) — Beings (token art) or Objects (weapon art) on two side arcs near the
+          inner ring, bordered with their player's color (--pc); the bottom nodes move to the lower corners (.picks-active).
+          --ix/--iy are viewBox units. --}}
+    <div class="vsc-pick-ring" style="--icon-size: {{pickIconSize}}px;">
+      {{#each pickEntries as |p|}}
+      <button type="button" class="vsc-pick vsc-pick--{{p.kind}} {{#if p.selected}}is-selected{{/if}}"
+              data-action="vscPickTarget" data-pick-key="{{p.key}}"
+              data-tooltip="{{p.tooltip}}"
+              style="--ix: {{p.x}}; --iy: {{p.y}};{{#if p.color}} --pc: {{p.color}};{{/if}}">
+        <img src="{{p.img}}" alt="" />
       </button>
       {{/each}}
     </div>

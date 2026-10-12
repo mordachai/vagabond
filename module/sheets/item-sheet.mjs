@@ -287,6 +287,10 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       // Necessary for formInput and formFields helpers
       fields: this.document.schema.fields,
       systemFields: this.document.system.schema.fields,
+      // Materials the item counts as ("This item" effects, e.g. Bless: Silvered) for the badge
+      countsAsLabel: (this.item.system.countsAs ?? []).filter(Boolean)
+        .map(m => CONFIG.VAGABOND.materialWeaknesses?.[m] ? game.i18n.localize(CONFIG.VAGABOND.materialWeaknesses[m]) : m)
+        .join(', '),
     };
 
     // Weapons: the skill attacks roll with (preferred, else default) and every
@@ -3370,7 +3374,8 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     const current = foundry.utils.deepClone(this.document.system.causedStatuses ?? []);
     current.push({
       statusId: '',
-      requiresDamage: true,
+      // Spells: the flag means "only if also Cast to deal damage" — off by default (Effect stands alone)
+      requiresDamage: this.document.type !== 'spell',
       saveType: 'none',
       duration: '',
       tickDamageEnabled: false,
@@ -3427,7 +3432,8 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     const current = foundry.utils.deepClone(this.document.system.critCausedStatuses ?? []);
     current.push({
       statusId: '',
-      requiresDamage: true,
+      // Spells: the flag means "only if also Cast to deal damage" — off by default (Effect stands alone)
+      requiresDamage: this.document.type !== 'spell',
       saveType: 'none',
       duration: '',
       tickDamageEnabled: false,

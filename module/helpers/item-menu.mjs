@@ -1,5 +1,6 @@
 import { activateHandItem } from './hand-item-activation.mjs';
 import { isStackableZeroSlot } from './stack-helper.mjs';
+import { SpellHandler } from '../sheets/handlers/spell-handler.mjs';
 
 /**
  * Whether an item has a meaningful "Use" action. Weapons always do (Use
@@ -20,8 +21,8 @@ export function itemHasUse(item) {
 
 /**
  * Shared spell context-menu entries used by the HUD (Spells tab rows + belt
- * slots) and the sheet's favorited-spells panel: Cast, Open, Send to Chat,
- * Favorite ⇄ Unfavorite.
+ * slots) and the sheet's favorited-spells panel: Cast, Focus ⇄ Stop Focusing (Focus after the fact, when it
+ * was forgotten in the Cast dialog), Open, Send to Chat, Favorite ⇄ Unfavorite.
  *
  * @param {object} o
  * @param {Actor} o.actor
@@ -34,12 +35,18 @@ export function buildSpellMenuItems({ actor, spell, event, spellHandler }) {
   const { VagabondChatCard } = globalThis.vagabond.utils;
   const L = (k) => game.i18n.localize(k);
   const isFavorite = !!spell.system.favorite;
+  const isFocused = (actor.system.focus?.spellIds ?? []).includes(spell.id);
 
   return [
     {
       label: L('VAGABOND.Hud.Menu.Cast'),
       icon: 'fas fa-wand-sparkles',
       action: () => spellHandler.castSpell(event, { dataset: { spellId: spell.id } }),
+    },
+    {
+      label: L(isFocused ? 'VAGABOND.ContextMenu.StopFocusing' : 'VAGABOND.ContextMenu.Focus'),
+      icon: 'fas fa-star-christmas',
+      action: () => SpellHandler.setFocus(actor, spell.id, !isFocused),
     },
     {
       label: L('VAGABOND.Hud.Menu.Open'),

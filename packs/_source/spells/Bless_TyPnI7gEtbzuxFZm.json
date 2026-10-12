@@ -9,15 +9,17 @@
     "crit": "",
     "favorite": false,
     "noRollRequired": true,
+    "targetBeings": true,
+    "targetObjects": true,
     "fxSchool": "radiant",
     "locked": true,
     "causedStatuses": [],
     "hitMacro": {
       "enabled": true,
       "uuid": "",
-      "command": "system:spell.status.blessed",
+      "command": "system:spell.bless",
       "label": "Bless",
-      "runAsGM": true
+      "runAsGM": false
     }
   },
   "effects": [],

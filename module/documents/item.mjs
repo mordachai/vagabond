@@ -21,6 +21,44 @@ export class VagabondItem extends Item {
   }
 
   /**
+   * Core v14 applies an item's effects only to its actor. Effects in the "This item" mode
+   * (`flags.vagabond.applicationMode: 'self'`, always `transfer: false`) change the item itself instead —
+   * e.g. override `system.metal` (made of another material) or ADD to `system.countsAs` (counts as Silvered).
+   * Applied after base data and before derived data, so cost / slots / damage follow the new values.
+   * @override
+   */
+  prepareEmbeddedDocuments() {
+    super.prepareEmbeddedDocuments();
+    this._applySelfEffects();
+  }
+
+  /**
+   * Apply the item's "This item" effects to itself. Plain members (no #private): Foundry prepares data inside the
+   * base constructor, before subclass private members exist. `_selfEffectKeys` = keys the last pass changed,
+   * restored from source first (prepareData can run again without a reset).
+   */
+  _applySelfEffects() {
+    for (const key of this._selfEffectKeys ?? []) {
+      foundry.utils.setProperty(this, key, foundry.utils.deepClone(foundry.utils.getProperty(this._source, key)));
+    }
+    this._selfEffectKeys = [];
+    const changes = [];
+    for (const effect of this.effects) {
+      if (effect.flags?.vagabond?.applicationMode !== 'self' || !effect.active) continue;
+      for (const change of effect.system?.changes ?? []) {
+        if (change.key) changes.push({ ...foundry.utils.deepClone(change), effect });
+      }
+    }
+    if (!changes.length) return;
+    changes.sort((a, b) => (a.priority ?? 0) - (b.priority ?? 0));
+    const ActiveEffectClass = CONFIG.ActiveEffect.documentClass;
+    for (const change of changes) {
+      ActiveEffectClass.applyChange(this, change, { replacementData: {} });
+      this._selfEffectKeys.push(change.key);
+    }
+  }
+
+  /**
    * Prepare a data object which defines the data schema used by dice roll commands against this Item
    * @override
    */

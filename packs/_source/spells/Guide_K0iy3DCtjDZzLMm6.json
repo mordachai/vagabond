@@ -9,6 +9,8 @@
     "crit": "Duration is 1 Minute (no Focus required).",
     "favorite": false,
     "noRollRequired": true,
+    "targetBeings": true,
+    "targetObjects": false,
     "fxSchool": "radiant",
     "locked": true,
     "hitMacro": {

@@ -50,7 +50,7 @@
     "expiry": null,
     "expired": false
   },
-  "description": "<p>Incapacitated + Speed = 0.</p>",
+  "description": "<ul><li>Incapacitated</li><li>Speed 0</li><li data-manual>Can't Focus or use its Actions (Incapacitated)</li></ul>",
   "origin": null,
   "tint": "#ffffff",
   "transfer": false,

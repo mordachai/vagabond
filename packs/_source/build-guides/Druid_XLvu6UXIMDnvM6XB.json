@@ -1279,7 +1279,7 @@
         "critCausedStatuses": [
           {
             "statusId": "restrained",
-            "requiresDamage": true,
+            "requiresDamage": false,
             "saveType": "reflex",
             "duration": "focusing",
             "tickDamageEnabled": false,

@@ -197,6 +197,19 @@ export class VagabondActiveEffect extends ActiveEffect {
     return raw;
   }
 
+  /** "This item" effects (applicationMode 'self') change their item, never its bearer: keep them off the actor. */
+  async _preCreate(data, options, user) {
+    if ((await super._preCreate(data, options, user)) === false) return false;
+    if (this.flags?.vagabond?.applicationMode === 'self' && this.transfer) this.updateSource({ transfer: false });
+  }
+
+  /** @override */
+  async _preUpdate(changes, options, user) {
+    if ((await super._preUpdate(changes, options, user)) === false) return false;
+    const mode = foundry.utils.getProperty(changes, 'flags.vagabond.applicationMode') ?? this.flags?.vagabond?.applicationMode;
+    if (mode === 'self') changes.transfer = false;
+  }
+
   /**
    * Provide attribute key choices for the Active Effect configuration form.
    * This populates the "Attribute Key" dropdown with all available system variables.
@@ -284,6 +297,10 @@ export class VagabondActiveEffect extends ActiveEffect {
       'system.saveRollsTwice': 'Saves Rolled Twice, keep higher d20 (ADD a save key, e.g. reflex)',
       'system.saveBonusDice': 'Save Bonus Dice (ADD dice, e.g. 1d4 for Bless)',
       'system.weaponsCountAs': 'Wielded Weapons Count As (ADD a material for Weakness, e.g. silver)',
+
+      // -- "This item" mode (effect changes its own item) --
+      'system.metal': 'This item: Material (OVERRIDE, e.g. silver, coldIron, adamant)',
+      'system.countsAs': 'This item: Counts As material for Weakness (ADD, e.g. silver)',
       'system.bonusDiceExplode': 'Favor + Healing Bonus Dice Explode (1 = on)',
       'system.healingBonusDice': 'Healing Rolls (Dice Bonus, e.g. 1d6)',
       'system.healingExplode': 'Healing Spell Rolls Explode (ADD a face: 1, 2, max or max-1)',

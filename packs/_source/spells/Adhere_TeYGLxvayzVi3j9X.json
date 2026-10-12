@@ -11,7 +11,7 @@
     "causedStatuses": [
       {
         "statusId": "restrained",
-        "requiresDamage": true,
+        "requiresDamage": false,
         "saveType": "none",
         "duration": "",
         "tickDamageEnabled": false,
@@ -19,7 +19,9 @@
         "damageType": "-"
       }
     ],
-    "locked": true
+    "locked": true,
+    "targetBeings": true,
+    "targetObjects": false
   },
   "effects": [],
   "folder": null,

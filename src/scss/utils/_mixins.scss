@@ -246,10 +246,10 @@
   to { --vg-fx-angle: 360deg; }
 }
 
-@mixin feature-action-active($inset: -1px) {
+@mixin feature-action-active($inset: -1px, $color: $c-yellow) {
   position: relative;
-  color: $c-yellow;
-  box-shadow: 0 0 8px 1px $c-yellow;
+  color: $color;
+  box-shadow: 0 0 8px 1px $color;
 
   &::before {
     content: '';
@@ -257,7 +257,7 @@
     inset: $inset;
     padding: 2px;
     border-radius: inherit;
-    background: conic-gradient(from var(--vg-fx-angle), transparent 0 45%, $c-yellow 80%, #fff 100%);
+    background: conic-gradient(from var(--vg-fx-angle), transparent 0 45%, $color 80%, #fff 100%);
     -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
@@ -275,7 +275,7 @@
     padding: 0 3px;
     box-sizing: border-box;
     border-radius: 7px;
-    background: $c-yellow;
+    background: $color;
     color: #000;
     font-size: 9px;
     font-weight: 700;

@@ -14,7 +14,7 @@
     "expiry": null,
     "expired": false
   },
-  "description": "<p>Can't take Cast Action or Focus. Doesn't make Morale Checks. Can't be Frightened. Class-specific bonuses (e.g. Barbarian Rage) applied via @statuses.berserk AE formulas.</p>",
+  "description": "<ul><li data-manual>Can't Cast or Focus</li><li data-manual>Can't be Frightened</li><li data-manual>Doesn't make Morale Checks</li></ul>",
   "origin": null,
   "tint": "#ffffff",
   "transfer": false,

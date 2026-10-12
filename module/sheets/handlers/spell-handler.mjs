@@ -540,6 +540,7 @@ export class SpellHandler {
 
     // Use the dialog-provided state for this cast
     const state = finalState;
+    let _spellObjectsMeta = null;
 
     // Recompute costs from the explicit state (do not read this.spellStates)
     const { SpellCastDialog } = await import('../../applications/spell-cast-dialog.mjs');
@@ -571,7 +572,29 @@ export class SpellHandler {
 
     // Capture targeted tokens at cast time. For Imbue this gets replaced
     // below with the resolved WEAPONS (the book's actual targets).
-    let targetsAtRollTime = Array.from(game.user.targets).map((token) => ({
+    // Target picker (Spells with Target Beings / Objects, see SpellTargetPicker): picked Beings replace
+    // the user's targets; picked Objects ride the card to the hit macro (scope.targetObjects).
+    const { SpellTargetPicker } = await import('../../helpers/spell-target-picker.mjs');
+    const picked = await SpellTargetPicker.resolve(state.targetPicks ?? null);
+    const castTargets = picked.tokens ?? Array.from(game.user.targets);
+    state.targetsPicked = !!picked.tokens;
+    state.targetObjects = picked.objects?.map(i => i.uuid) ?? [];
+    if (picked.objects?.length) {
+      _spellObjectsMeta = {
+        label: game.i18n.localize('VAGABOND.SpellCast.TargetObjects'),
+        value: picked.objects.map(i => `${i.name} (${i.actor?.name ?? ''})`).join(', '),
+      };
+    }
+
+    // Spell-specific cast gate (Raise: corpses, Being types, HD) — before any roll or Mana
+    const { castGateMessage } = await import('../../helpers/item-macro.mjs');
+    const gateMessage = castGateMessage({ actor: this.actor, spell, state, tokens: castTargets });
+    if (gateMessage) {
+      ui.notifications.warn(gateMessage);
+      return;
+    }
+
+    let targetsAtRollTime = castTargets.map((token) => ({
       tokenId: token.id,
       sceneId: token.scene.id,
       actorId: token.actor?.id,
@@ -644,7 +667,7 @@ export class SpellHandler {
         // Unconditional Favor on Casts (system.favorChecks, e.g. Virtuoso: Valor)
         VagabondRollBuilder.checkFavorVote(this.actor, 'cast'),
         // Status votes vs the first target (Vulnerable, Invisible; Prone for a Touch Cast)
-        ...VagabondRollBuilder.targetingVotes(this.actor, Array.from(game.user.targets)[0]?.actor ?? null, {
+        ...VagabondRollBuilder.targetingVotes(this.actor, castTargets[0]?.actor ?? null, {
           melee: (await import('../../helpers/chat-card.mjs')).VagabondChatCard.attackTypeForSpellDelivery(state.deliveryType) === 'melee',
         })
       );
@@ -693,7 +716,7 @@ export class SpellHandler {
           const weapon = await fromUuid(weaponUuid);
           const targetActor = weapon?.parent;
           if (!weapon || !targetActor) continue;
-          if (!(EquipmentHelper.isWeapon(weapon) && EquipmentHelper.isEquipped(weapon))) continue;
+          if (!EquipmentHelper.canImbue(weapon)) continue;
           assignments.push({ targetActor, weapon });
         }
       } else {
@@ -730,6 +753,7 @@ export class SpellHandler {
           deferredMana: imbueUpfront ? costs.deferredMana : 0,
           deferredPayment: !imbueUpfront,
           manaSkillKey: manaSkill,
+          useFx: !!state.useFx,  // Spell Damage / Effect split (upfront mode)
         });
       }
     }
@@ -778,7 +802,7 @@ export class SpellHandler {
       isSuccess,
       isCritical,
       targetsAtRollTime,
-      _spellExtraMetadata,
+      _spellObjectsMeta ? [..._spellExtraMetadata, _spellObjectsMeta] : _spellExtraMetadata,
       _spellExtraTags,
       manaOverrideDelta,
       placedGlyphRegion
@@ -803,7 +827,7 @@ export class SpellHandler {
         { kind: 'spell', deliveryType: state.deliveryType, deliveryIncrease: state.deliveryIncrease }
       );
       if (!fxDeferred) {
-        const liveTargets = Array.from(game.user.targets);
+        const liveTargets = picked.tokens ?? Array.from(game.user.targets);
         VagabondSpellSequencer.play(spell, state.deliveryType, state.deliveryIncrease, casterToken, liveTargets, { deliveryEnabled: isSuccess });
       }
     }
@@ -948,27 +972,37 @@ export class SpellHandler {
   async toggleSpellFocus(event, target) {
     event.preventDefault();
     const spellId = target.dataset.spellId;
-    const current = this.actor.system.focus?.spellIds || [];
-    const focusMax = this.actor.system.focus?.max ?? 5;
+    const focused = (this.actor.system.focus?.spellIds || []).includes(spellId);
+    await SpellHandler.setFocus(this.actor, spellId, !focused);
+  }
 
-    let next;
-    if (current.includes(spellId)) {
-      next = current.filter(id => id !== spellId);
-    } else {
-      if (current.length >= focusMax) return;
-      next = [...current, spellId];
+  /**
+   * Start or stop Focusing on a Spell — the ONE writer of `system.focus.spellIds` (sheet star, spell context
+   * menu on sheet + HUD, Cast dialog). Keeps the `focusing` status in step. Dropping a Spell clears what its
+   * Casts applied (SpellTrackerHelper hook).
+   * @param {Actor} actor
+   * @param {string} spellId
+   * @param {boolean} on
+   * @returns {Promise<boolean>} false when the Focus limit is reached
+   */
+  static async setFocus(actor, spellId, on) {
+    const current = actor.system.focus?.spellIds || [];
+    if (on === current.includes(spellId)) return true;
+    const focusMax = actor.system.focus?.max ?? 5;
+    if (on && current.length >= focusMax) {
+      ui.notifications.warn(game.i18n.format('VAGABOND.ContextMenu.FocusLimit', { max: focusMax }));
+      return false;
     }
-
-    await this.actor.update({ 'system.focus.spellIds': next });
+    const next = on ? [...current, spellId] : current.filter(id => id !== spellId);
+    await actor.update({ 'system.focus.spellIds': next });
 
     // Sync the "focusing" status effect with focus state
-    const wasFocusing = current.length > 0;
-    const isFocusing  = next.length > 0;
-    if (isFocusing !== wasFocusing) {
-      await this.actor.toggleStatusEffect('focusing', { active: isFocusing });
+    const isFocusing = next.length > 0;
+    if (isFocusing !== (current.length > 0)) {
+      await actor.toggleStatusEffect('focusing', { active: isFocusing });
     }
-
     ui.combat?.render(false);
+    return true;
   }
 
   /**

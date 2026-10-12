@@ -9,6 +9,8 @@
     "crit": "Duration is continual.",
     "favorite": false,
     "noRollRequired": true,
+    "targetBeings": true,
+    "targetObjects": true,
     "fxSchool": "necrotic",
     "locked": true
   },

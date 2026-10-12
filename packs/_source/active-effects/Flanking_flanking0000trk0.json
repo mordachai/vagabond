@@ -14,7 +14,7 @@
     "expiry": null,
     "expired": false
   },
-  "description": "<p>Flanking an adjacent Foe alongside an ally. +2 damage on attacks against it, and it is Vulnerable while two of you stay Close.</p>",
+  "description": "<ul><li>System marker, not a book Status</li><li>Flanking an adjacent Foe alongside an ally</li><li>That Foe is Flanked</li></ul>",
   "origin": null,
   "tint": "#ffffff",
   "transfer": false,

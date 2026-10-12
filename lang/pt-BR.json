@@ -342,9 +342,41 @@
       "Unpick": "Remover esta escolha"
     },
     "SpellTracker": {
-      "By": "{spell} — conjurada por {name}.",
-      "NoTarget": "Mire em um token para a Magia primeiro.",
-      "Unavailable": "O status {status} não está disponível (modo de status do Foundry)."
+      "Silvered": "{weapon} ({bearer}) conta como Prateada.",
+      "SilveredName": "Abençoar: Prateada",
+      "SilveredDesc": "<ul><li>Conta como Prateada (Abençoar: Objetos Alvo contam como Prateados).</li><li>Termina quando o conjurador deixa de se Concentrar.</li></ul>",
+      "By": "Conjurado por {name} ({spell})",
+      "TempoName": "Tempo: {speed}' Velocidade",
+      "NoTarget": "Selecione um token como Alvo da Magia primeiro.",
+      "Unavailable": "O status {status} não está disponível (modo de status do Foundry).",
+      "ImmuneName": "{spell}: Imune a {statuses}",
+      "ImmuneDesc": "<ul><li>Imune a {statuses}</li><li>Termina quando o conjurador deixa de se Concentrar</li></ul>",
+      "Applied": "{target}: {status}.",
+      "StatusImmune": "{target} é Imune a {status}: não é afetado.",
+      "LevelTooHigh": "{target} não é afetado: seu {kind} ({value}) precisa ser {need} ou menos.",
+      "ShockImmune": "{target} não pode sofrer dano de choque: não é afetado.",
+      "Cured": "{target}: {statuses} encerrado; Imune a {all} pela duração.",
+      "CuredNone": "{target}: Imune a {all} pela duração.",
+      "Level": "Nível",
+      "HD": "DV"
+    },
+    "Macro": {
+      "NoGM": "Nenhum Mestre conectado para executar isto.",
+      "RelayFailed": "O Mestre ({gm}) não respondeu. Peça para ele recarregar e tente de novo.",
+      "RelayError": "Falhou no lado do Mestre: {error}"
+    },
+    "Raise": {
+      "FolderName": "Exército Morto-Vivo",
+      "NoCorpse": "Reerguer: nenhum cadáver entre os alvos pode se erguer (um token Morto, não Artificial nem Morto-Vivo, nunca reerguido antes, não um Personagem de jogador).",
+      "NoneFit": "Reerguer: nenhum cadáver alvo tem DV {level} ou menos.",
+      "NeedGM": "Reerguer precisa de um Mestre para alterar os tokens.",
+      "Rose": "{target} se ergue como Morto-Vivo (DV {hd}).",
+      "TooStrong": "{target} continua caído: DV {hd} passaria o total do Nível {level}.",
+      "Failed": "{target} não pôde ser reerguido (veja o console).",
+      "NotCommanded": "Sem comando ({caster} não está Concentrado)",
+      "CheckLabel": "{skill} ({caster})",
+      "CleanupTool": "Limpar Exército Morto-Vivo (Mortos-Vivos reerguidos mortos voltam a ser cadáveres)",
+      "CleanedUp": "Reerguer: {restored} cadáver(es) devolvido(s), {removed} ficha(s) do Exército Morto-Vivo excluída(s)."
     },
     "HuntersMark": {
       "Title": "Marca do Caçador",
@@ -482,14 +514,15 @@
       "Flying": "Voando",
       "Hexed": "Amaldiçoado",
       "Marked": "Marcado",
-      "Blessed": "Abençoado",
-      "Exalted": "Exaltado",
-      "Warded": "Protegido",
-      "Guided": "Guiado",
-      "Hastened": "Acelerado",
-      "Slowed": "Lento",
-      "Frozen": "Congelado",
-      "Shrunk": "Encolhido",
+      "Blessed": "Bênção: +d4 Salvaguardas",
+      "Exalted": "Exaltar: +1 por Dado de Dano",
+      "Warded": "Proteção: +1 Armadura",
+      "Guided": "Guiar: Ataques Visíveis c/ Vantagem",
+      "Hastened": "Tempo: +5' Velocidade",
+      "Slowed": "Tempo: -5' Velocidade",
+      "Frozen": "Congelar: -10' Velocidade",
+      "Shrunk": "Encolher: Um Tamanho Menor",
+      "Raised": "Reerguer: Morto-Vivo",
       "Focusing": "Concentrado",
       "Frightened": "Amedrontado",
       "Incapacitated": "Incapacitado",
@@ -505,38 +538,41 @@
       "Vulnerable": "Vulnerável"
     },
     "StatusConditionDescriptions": {
-      "Frightened": "-2 de penalidade em cada dado de dano que causa [AUTOMATIZADO]",
-      "Dazed": "Não pode Concentrar-se ou Mover-se a menos que use uma Ação. Velocidade = 0 [PARCIAL - Velocidade automatizada]",
-      "Dead": "Igual a Incapacitado, mas falha automaticamente TODAS as rolagens (atributos, perícias, salvaguardas, ataques) [TOTALMENTE AUTOMATIZADO]",
-      "Fatigued": "Cada Fadiga ocupa um Espaço no Inventário. Em 3+: não pode Correr. Em 5: morre [PARCIAL - Inventário automatizado]",
-      "Prone": "Cair ou levantar custa 10' de Velocidade. Só rastejar (metade da Velocidade), não pode Correr. Vulnerável para ataques Corpo a Corpo e Salvaguardas de Reflexo [PARCIAL - Velocidade e Vulnerável automatizados]",
-      "Confused": "Testes/Salvaguardas com Desvantagem. Salvaguardas contra suas Ações com Vantagem [AUTOMATIZADO]",
-      "Sickened": "-2 de penalidade em cada dado de cura recebido [AUTOMATIZADO]",
-      "Vulnerable": "Seus ataques e suas Salvaguardas contra ataques têm Desvantagem. Ataques direcionados a ele e Salvaguardas contra seus ataques têm Vantagem [AUTOMATIZADO]",
-      "Flanked": "Vulnerável (seus ataques e Salvaguardas contra ataques têm Desvantagem; ataques direcionados a ele e Salvaguardas contra seus ataques têm Vantagem) e sofre 2 de dano extra de ataques, antes da Armadura [AUTOMATIZADO]",
-      "Flanking": "Flanqueando um Inimigo adjacente junto de um aliado. +2 de dano em ataques contra ele, e ele fica Vulnerável enquanto dois de vocês permanecerem Próximos. [AUTOMATIZADO]",
-      "Flying": "No ar. Não toca o chão, então o Sentido Sísmico não o detecta. [MANUAL]",
-      "Hexed": "Sob o Feitiço de uma Bruxa. [MANUAL]",
-      "Marked": "A Marca de um Caçador. [MANUAL]",
-      "Blessed": "Sob a magia Bênção: bônus de d4 nas Salvaguardas. [AUTOMATIZADO]",
-      "Exalted": "Sob a magia Exaltar: +1 em cada dado de dano que causa e nas Salvaguardas de Vontade contra Amedrontado, dobrado contra Infernais e Mortos-Vivos. [AUTOMATIZADO: dano. MANUAL: bônus dobrado na Salvaguarda]",
-      "Warded": "Sob a magia Proteção: +1 de Armadura. [AUTOMATIZADO: Armadura. MANUAL: redução de dano ao aprimorar]",
-      "Guided": "Sob a magia Guiar: Testes que dependem de visão feitos contra ele têm Vantagem. [AUTOMATIZADO: ataques e Conjurações]",
-      "Hastened": "Sob a magia Tempo +: Velocidade +5'. [AUTOMATIZADO: edite o efeito para Velocidade aprimorada]",
-      "Slowed": "Sob a magia Tempo -: Velocidade -5'. [AUTOMATIZADO: edite o efeito para Velocidade aprimorada]",
-      "Frozen": "Sob a magia Congelar: Velocidade -10'. [AUTOMATIZADO]",
-      "Shrunk": "Sob a magia Encolher: tamanho e dados de dano um tamanho menor. [AUTOMATIZADO: dados de arma e Magia do personagem. MANUAL: tamanho, ações de NPC]",
-      "Restrained": "Vulnerável + Velocidade = 0 [AUTOMATIZADO]",
-      "Grappling": "Contendo um alvo. Velocidade reduzida à metade a menos que o alvo seja menor. [PARCIALMENTE AUTOMATIZADO]",
-      "Blinded": "Não pode ver. Vulnerável [AUTOMATIZADO]",
-      "Incapacitated": "Não pode Concentrar-se/Agir/Mover-se. Falha em Perícias e Salvaguardas que usam Força ou Destreza. Vulnerável. Velocidade = 0 [AUTOMATIZADO]",
-      "Paralyzed": "Incapacitado + Velocidade = 0 [AUTOMATIZADO]",
-      "Unconscious": "Cego + Incapacitado + Caído. Ataques Próximos são críticos automáticos [AUTOMATIZADO]",
-      "Invisible": "Não pode ser visto por sentidos normais; quem não o vê age como Cego em Testes e Salvaguardas que o envolvem [AUTOMATIZADO: ataques e Conjurações]",
-      "Berserk": "Não pode usar a Ação de Conjurar ou Concentrar-se, não pode ficar Amedrontado, e não faz Testes de Moral [PARCIAL - Rastreamento manual]",
-      "Burning": "Sofre dano no início do turno [FUTURO - Requer ganchos do rastreador de combate]",
-      "Charmed": "Não pode atacar voluntariamente quem o enfeitiçou [FUTURO - Requer validação de alvo]",
-      "Suffocating": "Após 1 minuto: Heróis rolam d8 vs Força para fadiga. Inimigos ganham 1 fadiga [FUTURO - Requer rastreador de combate]"
+      "Sunlit": "<ul><li>Marcador do sistema, não é um Status do livro</li><li>Andarilho Noturno: queima, Incapacitado</li><li>Vampiro: queima, para de regenerar</li><li>Zumbi: perde o piso de 1 PV</li><li data-manual>Ative enquanto o Ser estiver sob a Luz do Sol</li></ul>",
+      "Focusing": "<ul><li>Marcador do sistema, não é um Status do livro</li><li>Sustentando uma ou mais Magias com Concentração</li></ul>",
+      "Frightened": "<ul><li>-2 em cada dado de dano que causa</li></ul>",
+      "Dazed": "<ul><li data-manual>Não pode se Concentrar nem se Mover a menos que use uma Ação para isso</li></ul>",
+      "Dead": "<ul><li>Marcador do sistema, não é um Status do livro</li><li>Falha em todas as rolagens</li><li>Velocidade 0</li><li>Vulnerável</li></ul>",
+      "Fatigued": "<ul><li>Cada Fadiga ocupa um Espaço de Item</li><li data-manual>Com 3+ de Fadiga: não pode Correr</li><li data-manual>Com 5 de Fadiga: PV Máximo e Atual são 0</li></ul>",
+      "Prone": "<ul><li>Só se move rastejando (2' de Velocidade por 1')</li><li>Vulnerável para ataques Corpo a Corpo e Salvaguardas de Reflexo</li><li data-manual>Cair ou levantar usa 10' de Velocidade</li><li data-manual>Não pode Correr</li></ul>",
+      "Confused": "<ul><li>Seus Testes e Salvaguardas têm Desvantagem</li><li>Salvaguardas contra suas Ações têm Vantagem</li></ul>",
+      "Sickened": "<ul><li>-2 em cada dado de cura recebido</li><li data-manual>Efeitos entre parênteses valem enquanto estiver Nauseado</li></ul>",
+      "Vulnerable": "<ul><li>Seus ataques e suas Salvaguardas contra ataques têm Desvantagem</li><li>Ataques contra ele e Salvaguardas contra seus ataques têm Vantagem</li></ul>",
+      "Flanked": "<ul><li>Vulnerável</li><li>+2 de dano de ataques, antes da Armadura</li></ul>",
+      "Flanking": "<ul><li>Marcador do sistema, não é um Status do livro</li><li>Flanqueando um Inimigo adjacente junto de um aliado</li><li>Esse Inimigo fica Flanqueado</li></ul>",
+      "Flying": "<ul><li>Marcador do sistema, não é um Status do livro</li><li>O Sentido Sísmico não o detecta</li><li data-manual>Ative enquanto o Ser estiver no ar</li></ul>",
+      "Hexed": "<ul><li>Marcador do sistema, não é um Status do livro</li><li>Alvo do Feitiço de uma Bruxa</li><li>Regras: o Feitiço da Bruxa</li></ul>",
+      "Marked": "<ul><li>Marcador do sistema, não é um Status do livro</li><li>Alvo da Marca de um Caçador</li><li>Regras: a Marca do Caçador</li></ul>",
+      "Blessed": "<ul><li>Bônus de d4 nas Salvaguardas</li><li>Termina quando o conjurador deixa de se Concentrar</li></ul>",
+      "Exalted": "<ul><li>+1 em cada dado de dano que causa (dobrado contra Infernais ou Mortos-Vivos)</li><li>+1 nas Salvaguardas de Vontade contra Amedrontado</li><li>Termina quando o conjurador deixa de se Concentrar</li><li data-manual>Bônus na Salvaguarda de Vontade dobrado contra Infernais ou Mortos-Vivos</li></ul>",
+      "Warded": "<ul><li>+1 de Armadura</li><li>Termina quando o conjurador deixa de se Concentrar</li><li data-manual>Aprimorar: Teste de Conjuração para reduzir o dano em 1d6 por Mana</li></ul>",
+      "Guided": "<ul><li>Vantagem em ataques e Conjurações contra ele de Seres que conseguem vê-lo</li><li>Termina quando o conjurador deixa de se Concentrar</li><li data-manual>Vantagem em outros Testes contra ele que dependem de visão</li></ul>",
+      "Hastened": "<ul><li>Velocidade +5'</li><li>+5' por Mana extra</li><li>Termina quando o conjurador deixa de se Concentrar</li></ul>",
+      "Slowed": "<ul><li>Velocidade -5'</li><li>-5' por Mana extra</li><li>Termina quando o conjurador deixa de se Concentrar</li></ul>",
+      "Frozen": "<ul><li>Velocidade -10'</li><li>Termina quando o conjurador deixa de se Concentrar</li></ul>",
+      "Shrunk": "<ul><li>Dados de dano um tamanho menor (armas e Magias de personagem)</li><li>Termina quando o conjurador deixa de se Concentrar</li><li data-manual>Tamanho um menor</li><li data-manual>Dados de dano de ações de NPC um tamanho menor</li></ul>",
+      "Raised": "<ul><li>É um Morto-Vivo</li><li>Visão no Escuro, Imune a Veneno, Fraco a Armas Prateadas, não pode ficar Doente</li><li>Sob o controle do conjurador; comandado quando o conjurador se Concentra nesta Conjuração, usando a Perícia de Conjuração do conjurador para os Testes dele</li><li>Termina quando o conjurador para de se Concentrar: ele morre e não pode ser reerguido por esta Magia de novo</li></ul>",
+      "Restrained": "<ul><li>Vulnerável</li><li>Velocidade 0</li></ul>",
+      "Grappling": "<ul><li>Marcador do sistema, não é um Status do livro</li><li>Contendo um Ser</li><li>Velocidade reduzida à metade a menos que o Alvo seja menor</li></ul>",
+      "Blinded": "<ul><li>Não consegue ver</li><li>Vulnerável</li></ul>",
+      "Incapacitated": "<ul><li>Não pode se Mover</li><li>Falha em todos os Testes de Força, Testes de Destreza e Salvaguardas de Reflexo</li><li>Vulnerável</li><li data-manual>Não pode se Concentrar nem usar suas Ações</li></ul>",
+      "Paralyzed": "<ul><li>Incapacitado</li><li>Velocidade 0</li><li data-manual>Não pode se Concentrar nem usar suas Ações (Incapacitado)</li></ul>",
+      "Unconscious": "<ul><li>Cego, Incapacitado e Caído</li><li>Ataques Próximos contra ele sempre são Críticos</li><li data-manual>Não pode se Concentrar nem usar suas Ações (Incapacitado)</li></ul>",
+      "Invisible": "<ul><li>Não pode ser visto por sentidos normais</li><li>Ataques, Conjurações e suas Salvaguardas: quem não consegue vê-lo age como Cego</li><li data-manual>Outros Testes e Salvaguardas que o envolvem: quem não consegue vê-lo age como Cego</li></ul>",
+      "Berserk": "<ul><li data-manual>Não pode Conjurar nem se Concentrar</li><li data-manual>Não pode ficar Amedrontado</li><li data-manual>Não faz Testes de Moral</li></ul>",
+      "Burning": "<ul><li data-manual>Sofre o dano entre parênteses no início de seus Turnos</li><li data-manual>Termina quando uma ação o encerra (como apagar o fogo)</li><li data-manual>Acumula de fontes diferentes, nunca da mesma fonte</li></ul>",
+      "Charmed": "<ul><li data-manual>Não pode atacar voluntariamente quem o encantou</li></ul>",
+      "Suffocating": "<ul><li data-manual>Começa após 1 Minuto sem respirar</li><li data-manual>Heróis: a cada Rodada, role d8; Força ou mais = +1 Fadiga</li><li data-manual>Inimigos: +1 Fadiga a cada Rodada</li></ul>"
     },
     "StatusModifiers": {
       "IncomingHealingModifier": "Modificador de Cura Recebida",
@@ -1078,6 +1114,10 @@
         "name": "Ocultar Anéis do Diálogo de Conjuração",
         "hint": "Oculta o anel rúnico externo, o divisor do meio e o anel rúnico interno no diálogo de conjuração. O diálogo é renderizado menor neste modo."
       },
+      "castTargetPicker": {
+        "name": "Escolher Alvos no Diálogo de Conjuração",
+        "hint": "Conjurações em área listam ao redor do círculo cada Ser que a área toca; clique para escolher quem é Alvo. Desligado: só Magias que miram Objetos (Abençoar…) mostram o seletor."
+      },
       "regionHighlightMode": {
         "name": "Estilo de Desenho da Área de Magia",
         "hint": "Como as regiões de área de magia são desenhadas no cenário. Forma Verdadeira desenha a forma geométrica exata (mais bonito). Espaços de Grade Cobertos destaca cada célula de grade que a forma toca.",
@@ -1099,6 +1139,10 @@
       "spellCastDialogDarkness": {
         "name": "Escuridão do Diálogo de Conjuração",
         "hint": "Opacidade do fundo cinza escuro (0–100%) atrás do diálogo de conjuração de magia. 0 desativa o efeito."
+      },
+      "circleTokenPortrait": {
+        "name": "Token Circular a partir do Retrato",
+        "hint": "Quando um retrato vira a arte do token (ator novo, token ainda padrão, arte do Criador de Personagem), o token recebe uma cópia recortada em círculo, salva em assets/vagabond/tokens. Arte definida na configuração do Token nunca é alterada."
       },
       "statusRingEffects": {
         "name": "Efeitos de Anel de Token para Status",
@@ -1187,7 +1231,7 @@
       },
       "statusEffectsMode": {
         "name": "Modo de Condições de Status",
-        "hint": "Escolha quais condições de status aparecem no menu do HUD de token. Os 17 Status do livro vêm primeiro; Marcadores são auxílios do sistema (Concentrado, Flanqueado, Amaldiçoado, Marcado, efeitos de magias como Abençoado ou Protegido). Ocultar os Marcadores só os remove do menu: o sistema continua aplicando-os. O modo Foundry mostra as condições padrão do Foundry. Requer recarregar o mundo para aplicar.",
+        "hint": "Escolha quais condições de status aparecem no menu do HUD de token. Os 17 Status do livro vêm primeiro; Marcadores são auxílios do sistema (Concentrado, Flanqueado, Amaldiçoado, Marcado, efeitos de magias como \"Bênção: +d4 Salvaguardas\" ou \"Congelar: -10' Velocidade\"). Ocultar os Marcadores só os remove do menu: o sistema continua aplicando-os. O modo Foundry mostra as condições padrão do Foundry. Requer recarregar o mundo para aplicar.",
         "vagabond": "Status Vagabond + Marcadores (Padrão)",
         "vagabondBook": "Apenas Status Vagabond",
         "foundry": "Condições Padrão do Foundry"
@@ -2219,7 +2263,10 @@
           "crit": {
             "label": "Crítico",
             "hint": "Efeito em um sucesso crítico"
-          }
+          },
+          "pickTargets": {"label": "Escolhe Alvos"},
+          "targetBeings": {"label": "Alvos Seres", "hint": "A Magia pode ter Seres como Alvo: com a opção de jogador Escolher Alvos no Diálogo de Conjuração ligada, o diálogo lista os Seres dentro da área para escolher quem é afetado (com Alvos Objetos ligado, também ao lado das suas armas em qualquer entrega). Entregas em área nunca pagam por Alvo."},
+          "targetObjects": {"label": "Alvos Objetos", "hint": "O diálogo de Conjuração lista as armas equipadas dos Seres na área (senão dos alvos, senão as suas) para escolher como Alvos. Elas chegam ao macro de acerto como scope.targetObjects."}
         },
         "AddSpell": "Adicionar Magia",
         "FxSchool": {
@@ -2411,6 +2458,7 @@
             "hands2": "Duas Mãos"
           },
           "isTrinket": {"label": "Trinket", "hint": "Permite conjurar magias enquanto equipado"},
+          "noImbue": {"label": "Não pode ser Imbuída", "hint": "Nunca é oferecida como Alvo de Imbuir (ataques naturais ou concedidos, como um Ataque de Sopro)"},
           "noSlotsWhenWorn": {"label": "Sem Espaço quando vestido", "hint": "Não ocupa Espaço de Inventário enquanto vestido (ex.: uma Mochila: 1 Espaço carregada; vestida, aumenta a capacidade)"}
         },
         "IsSupply": "Ração",
@@ -2472,6 +2520,9 @@
       "Delete": "Excluir Item"
     },
     "Effect": {
+      "ByHand": "Não automatizado: resolva na mesa",
+      "CountsAs": "Conta como {materials}",
+      "CountsAsTip": "Dos efeitos deste item (aba Efeitos): conta como este material para Fraqueza.",
       "Source": "Origem",
       "Toggle": "Alternar Efeito",
       "Temporary": "Efeitos Temporários",
@@ -2508,7 +2559,9 @@
         "WhenEquipped": "Quando Equipado",
         "WhenEquippedHint": "Este efeito só se aplica enquanto o item está equipado (armas, armaduras, acessórios). O efeito desliga quando desequipado.",
         "OnUse": "Apenas ao Usar",
-        "OnUseHint": "Este efeito só se aplica ao fazer rolagens COM este item específico. Use para propriedades de arma (Afiada, Cruel), modificadores de magia, ou bônus específicos de item."
+        "OnUseHint": "Este efeito só se aplica ao fazer rolagens COM este item específico. Use para propriedades de arma (Afiada, Cruel), modificadores de magia, ou bônus específicos de item.",
+        "Self": "Este item",
+        "SelfHint": "Muda o próprio item, nunca quem o carrega. Ex.: OVERRIDE system.metal (feito de outro material) ou ADD em system.countsAs (conta como Prateada)."
       },
       "FormulaHelp": {
         "Summary": "Suporte a Fórmulas para Valores de Efeito",
@@ -2737,6 +2790,9 @@
       "Delete": "Excluir",
       "Favorite": "Favoritar",
       "Unfavorite": "Remover dos Favoritos",
+      "Focus": "Concentrar",
+      "StopFocusing": "Parar de Concentrar",
+      "FocusLimit": "Você pode se Concentrar em no máximo {max} Magias.",
       "RemoveStatus": "Remover Status",
       "DeleteItemTitle": "Excluir {name}?",
       "DeleteItemContent": "<p>Tem certeza que deseja excluir <strong>{name}</strong>?</p>"
@@ -2953,6 +3009,8 @@
       "OpenHandsGateWarned": "Conjurando com as mãos ocupadas e sem Trinket empunhado.",
       "NoDelivery": "Selecione um tipo de entrega.",
       "NoImbueTarget": "Mire em um ser disposto com uma arma equipada.",
+      "NoTargetPicked": "Nenhum Alvo escolhido.",
+      "TargetObjects": "Objetos",
       "ImbueNoWeaponSkip": "{name} não tem arma equipada e será ignorado.",
       "TogglePreview": "Alternar pré-visualização do modelo",
       "Damage": "Dano",
@@ -3446,6 +3504,7 @@
         "npcs": "Informações de NPCs",
         "conditions": "Condições",
         "statusDisplay": "Exibição",
+        "tokenArt": "Arte do Token",
         "fxWorld": "Animações do Mundo",
         "fxMine": "Sua Tela",
         "hud": "HUD do Personagem",
@@ -3987,6 +4046,8 @@
       "AddCritEffect": "Adicionar Efeito Crítico",
       "RequiresDamageShort": "Se Acertar",
       "RequiresDamageHint": "O status só se aplica se o dano não for totalmente bloqueado",
+      "RequiresDamageCastShort": "Com Dano",
+      "RequiresDamageCastHint": "Só quando a Conjuração também causa dano (livro: \"Se também Conjurada para causar dano\"). O status faz parte do Efeito: uma Conjuração sem o Efeito nunca o aplica, e a Armadura bloqueando o dano não o impede.",
       "Save": {
         "None": "Sem Salvaguarda",
         "Any": "Qualquer Salvaguarda",
@@ -4042,6 +4103,10 @@
       "Immune": "{actor} é imune a {status}.",
       "Resisted": "{actor} resistiu a {status} ({saveType}: {total} vs {difficulty}).",
       "AlreadyActive": "{actor} já possui {status}.",
+      "Stacked": "{actor} recebe outro {status} de uma nova fonte (dado de contagem próprio).",
+      "ApplyEffect": "Aplicar Efeito",
+      "RerollManaShort": "{name} precisa de mais {cost} de Mana para a Conjuração rerrolada, mas tem {mana}.",
+      "ApplyEffectHint": "Aplica o Efeito desta Magia aos Alvos, sem Salvaguardas: {statuses}",
       "RequiresDamage": "{status} não foi aplicado a {actor} (nenhum dano passou).",
       "OngoingDamage": "Dano Contínuo",
       "ApplyTickDamage": "Aplicar {amount} de dano a {actor}",

@@ -13,7 +13,7 @@
     "causedStatuses": [
       {
         "statusId": "paralyzed",
-        "requiresDamage": true,
+        "requiresDamage": false,
         "saveType": "none",
         "duration": "focusing",
         "tickDamageEnabled": false,
@@ -24,7 +24,7 @@
     "critCausedStatuses": [
       {
         "statusId": "paralyzed",
-        "requiresDamage": true,
+        "requiresDamage": false,
         "saveType": "none",
         "duration": "",
         "tickDamageEnabled": false,
@@ -35,10 +35,14 @@
     "hitMacro": {
       "enabled": true,
       "uuid": "",
-      "command": "const tgts = (typeof targets !== \"undefined\" && targets?.length)\n  ? targets\n  : Array.from(game.user.targets);\nif (!tgts.length) return ui.notifications.warn(\"No token targeted.\");\n\nfor (const t of tgts) {\n  await t.actor.toggleStatusEffect(\"paralyzed\", { active: true });\n}\n\n//ui.notifications.info(`Hold applied to ${tgts.length} target(s).`);",
+      "command": "system:spell.hold",
       "label": "Hold",
       "runAsGM": true
-    }
+    },
+    "usesDiceScaling": true,
+    "diceScaleLabel": "Level",
+    "targetBeings": true,
+    "targetObjects": false
   },
   "effects": [],
   "folder": null,

@@ -97,6 +97,15 @@ export class EquipmentHelper {
   // ===========================
 
   /**
+   * Weapon that may be offered as an Imbue Target (equipped, not flagged `noImbue`)
+   * @param {Object} item
+   * @returns {boolean}
+   */
+  static canImbue(item) {
+    return this.isWeapon(item) && this.isEquipped(item) && !item.system.noImbue;
+  }
+
+  /**
    * Check if an item is currently equipped
    * @param {Object} item - The item to check
    * @returns {boolean} True if the item is equipped

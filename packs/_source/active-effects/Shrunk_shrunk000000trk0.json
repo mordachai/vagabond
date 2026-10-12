@@ -1,5 +1,5 @@
 {
-  "name": "Shrunk",
+  "name": "Shrink: One Size Smaller",
   "_id": "shrunk000000trk0",
   "img": "icons/magic/control/silhouette-grow-shrink-blue.webp",
   "type": "base",
@@ -50,7 +50,7 @@
     "expiry": null,
     "expired": false
   },
-  "description": "<p>Under the Shrink Spell: size and damage dice one size smaller.</p>",
+  "description": "<ul><li>Damage dice one size smaller (character weapons and Spells)</li><li>Ends when the caster stops Focusing</li><li data-manual>Size one smaller</li><li data-manual>NPC action damage dice one size smaller</li></ul>",
   "origin": null,
   "tint": "#ffffff",
   "transfer": false,

@@ -1146,6 +1146,7 @@ li.chat-message:has(.vagabond-chat-card-v2) {
 
         /* Apply Direct (Full Width) */
         button.vagabond-apply-direct-button,
+        button.vagabond-apply-spell-effect-button,
         button.vagabond-grapple-button,
         button.vagabond-macro-button,
         button.vagabond-npc-damage-button,
@@ -1214,7 +1215,8 @@ li.chat-message:has(.vagabond-chat-card-v2) {
             align-items: center;
             gap: 8px;
 
-            button.vagabond-apply-direct-button {
+            button.vagabond-apply-direct-button,
+            button.vagabond-apply-spell-effect-button {
                 flex: 1 1 0;
                 width: auto;
                 min-width: 0;

@@ -324,14 +324,15 @@ export class VagabondDamageHelper {
 
     // Post a SEPARATE damage message instead of updating the attack card
     // This prevents double-rolling issues and matches the save result flow
-    await this.postDamageResult(damageRoll, damageTypeLabel, context.isCritical, actor, item, finalDamageTypeKey, attackType, critStatBonus, damageRoll._weaknessPreRolled ?? false, storedTargetsForWeak, hasCritToggle, !critBenefitOn);
+    // The Cast card's Damage / Effect context carries over to the damage card it spawns
+    await this.postDamageResult(damageRoll, damageTypeLabel, context.isCritical, actor, item, finalDamageTypeKey, attackType, critStatBonus, damageRoll._weaknessPreRolled ?? false, storedTargetsForWeak, hasCritToggle, !critBenefitOn, this.spellCastFromButton(button));
   }
 
   /**
    * Post a separate damage result message with save buttons
    * Uses existing createActionCard() to avoid code duplication
    */
-  static async postDamageResult(damageRoll, damageType, isCritical, actor, item, damageTypeKey = null, attackType = 'melee', critStatBonus = 0, weaknessPreRolled = false, targetsAtRollTime = [], critLocked = false, critBenefitOff = false) {
+  static async postDamageResult(damageRoll, damageType, isCritical, actor, item, damageTypeKey = null, attackType = 'melee', critStatBonus = 0, weaknessPreRolled = false, targetsAtRollTime = [], critLocked = false, critBenefitOff = false, spellCast = null) {
     const { VagabondChatCard } = await import('./chat-card.mjs');
 
     return await VagabondChatCard.createActionCard({
@@ -345,6 +346,7 @@ export class VagabondDamageHelper {
       rollData: isCritical ? { isCritical: true, critStatBonus, critLocked, critBenefitOff } : null,
       weaknessPreRolled,
       targetsAtRollTime,
+      spellCast,
     });
   }
 
@@ -394,7 +396,8 @@ export class VagabondDamageHelper {
   }
 
   /**
-   * Create a GM-only NPC damage button (flat or roll)
+   * Create an NPC damage button (flat or roll). `.owner-only`: the chat render hook keeps it
+   * for the GM and for players who own the NPC (e.g. Undead raised by the Raise Spell).
    * @param {string} actorId - NPC actor ID
    * @param {number} actionIndex - Index of the action in the actions array
    * @param {string} damageValue - Flat damage value or roll formula
@@ -412,7 +415,7 @@ export class VagabondDamageHelper {
 
     return `
       <button
-        class="vagabond-npc-damage-button gm-only"
+        class="vagabond-npc-damage-button owner-only"
         data-actor-id="${actorId}"
         data-action-index="${actionIndex}"
         data-damage-value="${damageValue}"
@@ -653,6 +656,10 @@ export class VagabondDamageHelper {
       ui.notifications.error('NPC not found!');
       return;
     }
+    if (!actor.isOwner && !game.user.isGM) {
+      ui.notifications.warn("You don't have permission to roll damage for this actor.");
+      return;
+    }
 
     const action = actor.system.actions[actionIndex] ?? actor.system.abilities?.[actionIndex];
     if (!action) {
@@ -825,7 +832,7 @@ export class VagabondDamageHelper {
    */
   static createApplySaveDamageButton(actorId, actorName, finalDamage, damageType, statusContext = null, critNormalDamage = null) {
     // statusContext carries everything needed to process on-hit statuses at apply-time
-    // { sourceActorId, sourceItemId, sourceActionIndex, saveType, saveSuccess, saveDifficulty, saveTotal, attackWasCrit }
+    // { sourceActorId, sourceItemId, sourceActionIndex, saveType, saveSuccess, saveDifficulty, saveTotal, attackWasCrit, spellCast }
     const sc = statusContext;
     const statusAttrs = sc ? `
           data-source-actor-id="${sc.sourceActorId || ''}"
@@ -835,7 +842,7 @@ export class VagabondDamageHelper {
           data-save-success="${sc.saveSuccess}"
           data-save-difficulty="${sc.saveDifficulty}"
           data-save-total="${sc.saveTotal}"
-          data-attack-was-crit="${sc.attackWasCrit}"` : '';
+          data-attack-was-crit="${sc.attackWasCrit}"${this.spellCastAttrs(sc.spellCast)}` : '';
     // critNormalDamage: when set, this is a crit save apply button.
     // data-damage-crit = 0 (benefit claimed), data-damage-normal = save-reduced value (Luck kept)
     const critAttrs = critNormalDamage !== null
@@ -1332,6 +1339,179 @@ ${npcOnly ? '' : `
     return data ? new CONFIG.Item.documentClass(data, { parent: sourceActor }) : null;
   }
 
+  // ---------------------------------------------------------------------------
+  // Spell Damage / Effect split
+  // ---------------------------------------------------------------------------
+  //
+  // Book: a Spell is Cast to deal damage, for its Effect, or both (both = +1 Mana; the Cast
+  // dialog's Fx toggle = `useFx` in SpellHandler state). A Spell's on-hit statuses
+  // (`causedStatuses` / `critCausedStatuses`) ARE its Effect, so (user ruling 2026-10-11):
+  //   - Damage-only Cast  → the Spell's own statuses never apply (Burn cast for damage ≠ Burning).
+  //   - Effect in the Cast → they apply whether or not Armor soaks the damage — the Effect is not
+  //     damage. So `requiresDamage: true` on a SPELL entry no longer means "damage got through":
+  //     it means "only if the Cast ALSO included damage" (Goop: "If also Cast to deal damage,
+  //     those in the area are Burning"). The flag is cleared on the returned copies, so
+  //     StatusHelper.applyStatus never skips a Spell entry for blocked damage.
+  //   - Effect-only Cast  → no damage card exists, so the cast card itself carries Apply Effect +
+  //     Save buttons (`createSpellEffectButtons`), as do effect-only Glyph / Imbue deliveries.
+  //
+  // `spellCast` = { effect, damage } = what ONE Cast included (`spellCastContext`). It rides the
+  // cast card and every damage card made from it as `flags.vagabond.spellCast` (createActionCard
+  // param), and the deferred Apply button of a Save card as `data-spell-effect/-damage`
+  // (statusContext). Handlers read it with `spellCastFromButton`.
+  // `spellCast === null` (cards posted before this rule, macro-made cards) = legacy behavior:
+  // entries apply as authored, `requiresDamage` = damage got through.
+  //
+  // NOT touched: weapon coatings and equipped-item passives (not the Spell's Effect); NPC
+  // actions and weapons (`requiresDamage` keeps its "If Hit" meaning there).
+  // Rulings to revisit if the table disagrees:
+  //   - Crit entries count as part of the Effect (crit text modifies it — Burn "Cd4 instead
+  //     starts at a Cd6"), so a damage-only Crit applies none of them (Light's crit Blinded too).
+  //   - Spells whose hit macro applies the status (Color, Confuse, Zap, Hold…) get no Apply
+  //     Effect button — the macro button already is the Effect.
+
+  /**
+   * What a Spell Cast included, from the Cast state.
+   * @param {Item} spell
+   * @param {{damageDice?: number, useFx?: boolean}} state - SpellHandler / glyph / imbue cast state
+   * @returns {{effect: boolean, damage: boolean}|null} null when not a Spell
+   */
+  static spellCastContext(spell, state) {
+    if (spell?.type !== 'spell' || !state) return null;
+    return {
+      effect: !!state.useFx,
+      // Dice-scaling dice (Hold's extra Levels) and typeless Spells are not damage
+      damage: spell.system.damageType !== '-' && !spell.system.usesDiceScaling && (state.damageDice ?? 0) > 0,
+    };
+  }
+
+  /**
+   * Read the Cast context for a clicked chat button: its own data attrs (deferred Apply button
+   * of a Save card), else the flags of the message it sits in (cast card / damage card).
+   * @param {HTMLElement} button
+   * @returns {{effect: boolean, damage: boolean}|null}
+   */
+  static spellCastFromButton(button) {
+    const ds = button?.dataset ?? {};
+    if (ds.spellEffect !== undefined && ds.spellEffect !== '') {
+      return { effect: ds.spellEffect === 'true', damage: ds.spellDamage === 'true' };
+    }
+    const msgId = button?.closest?.('[data-message-id]')?.dataset.messageId;
+    return game.messages.get(msgId)?.flags?.vagabond?.spellCast ?? null;
+  }
+
+  /**
+   * Data attributes carrying a Cast context across cards (Save card → its Apply button).
+   * @param {{effect: boolean, damage: boolean}|null} spellCast
+   * @returns {string}
+   */
+  static spellCastAttrs(spellCast) {
+    return spellCast ? ` data-spell-effect="${!!spellCast.effect}" data-spell-damage="${!!spellCast.damage}"` : '';
+  }
+
+  /**
+   * Gate a Spell's own status entries by what the Cast included (rules above).
+   * @param {Array} entries - the Spell's causedStatuses or critCausedStatuses
+   * @param {{effect: boolean, damage: boolean}|null} spellCast
+   * @returns {Array} entries that apply (copies, `requiresDamage` cleared), or the input when unknown
+   */
+  static gateSpellEffectEntries(entries, spellCast) {
+    if (!spellCast || !entries?.length) return entries ?? [];
+    if (!spellCast.effect) return [];
+    return entries
+      .filter(e => !e.requiresDamage || spellCast.damage)
+      .map(e => ({ ...e, requiresDamage: false }));
+  }
+
+  /**
+   * The Spell's own Effect statuses for one Cast: gated entries, crit entries replacing
+   * same-statusId normal ones. No coating / passives — those ride hits, not the Effect.
+   * @returns {Array}
+   */
+  static _spellEffectEntries(spell, spellCast, isCritical = false) {
+    const own = this.gateSpellEffectEntries(spell?.system?.causedStatuses ?? [], spellCast);
+    const crit = isCritical ? this.gateSpellEffectEntries(spell?.system?.critCausedStatuses ?? [], spellCast) : [];
+    return [...crit, ...own.filter(e => !crit.some(c => c.statusId === e.statusId))].filter(e => e.statusId);
+  }
+
+  /**
+   * Effect-only Cast (no damage card to carry the statuses): an Apply Effect button (every
+   * Effect status, no Saves — the table's call, like Apply Direct) plus the Save row for PC
+   * Targets when an entry allows a Save (handled by handleSaveReminderRoll, which reads the
+   * card's spellCast flag). Also used by effect-only Glyph triggers and Imbue deliveries.
+   * Returns '' when the Cast includes damage (the damage card carries the statuses), has no
+   * Effect, has no Effect statuses, or the Spell's hit macro already applies its Effect
+   * (Color, Confuse, Fade, Zap, Hold… — the macro button IS the Effect there).
+   * @param {Actor} actor - caster
+   * @param {Item} spell
+   * @param {{effect: boolean, damage: boolean}|null} spellCast
+   * @param {{isCritical?: boolean, targetsAtRollTime?: Array, attackType?: string}} [opts]
+   * @returns {string} HTML
+   */
+  static createSpellEffectButtons(actor, spell, spellCast, { isCritical = false, targetsAtRollTime = [], attackType = 'cast' } = {}) {
+    if (spell?.type !== 'spell' || !spellCast?.effect || spellCast.damage) return '';
+    const hit = spell.system.hitMacro;
+    if (hit?.enabled && (String(hit.command ?? '').trim() || hit.uuid)) return '';
+    const entries = this._spellEffectEntries(spell, spellCast, isCritical);
+    if (!entries.length) return '';
+
+    const esc = (s) => foundry.utils.escapeHTML?.(s) ?? s;
+    const names = [...new Set(entries.map(e =>
+      game.i18n.localize(CONFIG.VAGABOND?.statusConditions?.[e.statusId] ?? e.statusId)))].join(', ');
+    const targetsJson = JSON.stringify(targetsAtRollTime).replace(/"/g, '&quot;');
+    const applyBtn = `
+      <div class="vagabond-save-buttons-container" style="--save-cols:1">
+        <div class="save-buttons-top">
+          <button class="vagabond-apply-spell-effect-button"
+            title="${esc(game.i18n.format('VAGABOND.Status.ApplyEffectHint', { statuses: names }))}"
+            data-actor-id="${actor.uuid}"
+            data-item-id="${spell.id}"
+            data-is-critical="${!!isCritical}"
+            data-targets="${targetsJson}">
+            <i class="fas fa-wand-sparkles"></i> ${esc(game.i18n.localize('VAGABOND.Status.ApplyEffect'))}
+          </button>
+        </div>
+      </div>`;
+
+    const saveTypes = new Set(entries.filter(e => e.saveType && e.saveType !== 'none').map(e => e.saveType));
+    if (!saveTypes.size) return applyBtn;
+    if (saveTypes.has('any')) for (const save of this.getConfiguredSaves()) saveTypes.add(save.key);
+    return applyBtn + this.createSaveReminderButtons(attackType, targetsAtRollTime, actor.uuid, spell.id, null, saveTypes);
+  }
+
+  /**
+   * Apply Effect button (effect-only Spell Cast): every Effect status of the Spell onto the
+   * card's Targets, no Saves (skipSaveRoll — same authority as Apply Direct). Stacking
+   * statuses (Burning) are keyed to this caster + Spell.
+   * @param {HTMLElement} button
+   */
+  static async handleApplySpellEffect(button) {
+    const sourceActor = TargetHelper.resolveActorRef(button.dataset.actorId);
+    const spell = this._resolveSourceItem(sourceActor, button.dataset.itemId);
+    if (!sourceActor || !spell) return;
+    const entries = this._spellEffectEntries(spell, this.spellCastFromButton(button) ?? { effect: true, damage: false },
+      button.dataset.isCritical === 'true');
+    if (!entries.length) return;
+
+    const storedTargets = this._getTargetsFromButton(button);
+    if (!storedTargets.length) {
+      ui.notifications.warn('No tokens targeted. Please target at least one token.');
+      return;
+    }
+    const { StatusHelper } = await import('./status-helper.mjs');
+    const { VagabondChatCard } = await import('./chat-card.mjs');
+    const sourceActorName = canvas.tokens?.placeables?.find(t => t.actor?.id === sourceActor.id)?.document.name || sourceActor.name;
+    const sourceKey = StatusHelper.sourceKeyFor(sourceActor, spell);
+    for (const token of this._resolveStoredTargets(storedTargets)) {
+      const targetActor = token.actor;
+      if (!targetActor) continue;
+      const results = await StatusHelper.processCausedStatuses(
+        targetActor, entries, false, spell.name, { skipSaveRoll: true, sourceActorName, sourceKey }
+      );
+      await VagabondChatCard.statusResults(results, targetActor, spell.name, spell.img ?? null);
+    }
+  }
+
   /**
    * Collect every on-hit status entry threatening a target from one attack source.
    * Single source of truth for the item/NPC-action fallback, crit-replaces-normal
@@ -1343,19 +1523,26 @@ ${npcOnly ? '' : `
    * @param {number|null} [opts.actionIdx=null] - NPC action index fallback
    * @param {boolean} [opts.attackWasCrit=false] - crit entries REPLACE same-statusId normal entries
    * @param {boolean} [opts.includeCoating=true]
+   * @param {{effect: boolean, damage: boolean}|null} [opts.spellCast=null] - what a Spell Cast
+   *   included (see "Spell Damage / Effect split" below); null = unknown → entries as authored
    * @returns {{entries: Array, coatingEntries: Array}} entries = merged + coating + passive;
    *   coatingEntries returned separately so callers can clear coating charges after application
    */
-  static resolveIncomingStatusEntries({ sourceActor, sourceItem = null, actionIdx = null, attackWasCrit = false, includeCoating = true }) {
+  static resolveIncomingStatusEntries({ sourceActor, sourceItem = null, actionIdx = null, attackWasCrit = false, includeCoating = true, spellCast = null }) {
     const action = (actionIdx !== null && !isNaN(actionIdx)) ? sourceActor?.system?.actions?.[actionIdx] : null;
-    const normalEntries = sourceItem?.system?.causedStatuses?.length
+    let normalEntries = sourceItem?.system?.causedStatuses?.length
       ? sourceItem.system.causedStatuses
       : (action?.causedStatuses?.length ? action.causedStatuses : []);
-    const critEntries = attackWasCrit
+    let critEntries = attackWasCrit
       ? (sourceItem?.system?.critCausedStatuses?.length
           ? sourceItem.system.critCausedStatuses
           : (action?.critCausedStatuses?.length ? action.critCausedStatuses : []))
       : [];
+    // A Spell's own statuses are its Effect — gated by what this Cast included
+    if (sourceItem?.type === 'spell') {
+      normalEntries = this.gateSpellEffectEntries(normalEntries, spellCast);
+      critEntries = this.gateSpellEffectEntries(critEntries, spellCast);
+    }
     const mergedEntries = attackWasCrit
       ? [...critEntries, ...normalEntries.filter(e => !critEntries.some(c => c.statusId === e.statusId))]
       : normalEntries;
@@ -1373,9 +1560,9 @@ ${npcOnly ? '' : `
    * granting an independent Favor vote on the save. Must run BEFORE the dice roll.
    * @returns {Promise<boolean>}
    */
-  static async _hasStatusResistanceForSave(targetActor, saveType, { sourceActor, sourceItem, actionIdx, attackWasCrit = false }) {
+  static async _hasStatusResistanceForSave(targetActor, saveType, { sourceActor, sourceItem, actionIdx, attackWasCrit = false, spellCast = null }) {
     const { StatusHelper } = await import('./status-helper.mjs');
-    const { entries } = this.resolveIncomingStatusEntries({ sourceActor, sourceItem, actionIdx, attackWasCrit });
+    const { entries } = this.resolveIncomingStatusEntries({ sourceActor, sourceItem, actionIdx, attackWasCrit, spellCast });
     return entries.some(e =>
       (e.saveType === saveType || e.saveType === 'any') && StatusHelper.isStatusResisted(targetActor, e.statusId)
     );
@@ -1430,7 +1617,7 @@ ${npcOnly ? '' : `
    * @param {string} saveType
    * @param {string} attackType
    * @param {Actor|null} sourceActor
-   * @param {{sourceItem?: Item|null, actionIdx?: number|null, attackWasCrit?: boolean}} sourceCtx
+   * @param {{sourceItem?: Item|null, actionIdx?: number|null, attackWasCrit?: boolean, spellCast?: object|null}} sourceCtx
    * @param {Event|null} event - Click event (keyboard favor/hinder modifiers)
    * @returns {Promise<{saveRoll: Roll, difficulty: number, isSuccess: boolean, isCritical: boolean, isHindered: boolean}>}
    */
@@ -1480,6 +1667,8 @@ ${npcOnly ? '' : `
     const attackWasCrit = button.dataset.attackWasCrit === 'true';
     const actionIndexRaw = button.dataset.actionIndex;
     const actionIdx = (actionIndexRaw !== '' && actionIndexRaw != null) ? parseInt(actionIndexRaw) : null;
+    // Spell Damage / Effect split: what the Cast behind this card included
+    const spellCast = this.spellCastFromButton(button);
 
     // Resolve which actors roll (shared GM/player logic)
     const actorsToRoll = this._resolveSaveActors(button);
@@ -1510,7 +1699,7 @@ ${npcOnly ? '' : `
       const sourceActor = TargetHelper.resolveActorRef(actorId);
       const { saveRoll, difficulty, isSuccess, isCritical, isHindered } = await this._computeSaveOutcome(
         targetActor, saveType, attackType, sourceActor,
-        { sourceItem: this._resolveSourceItem(sourceActor, itemId), actionIdx, attackWasCrit },
+        { sourceItem: this._resolveSourceItem(sourceActor, itemId), actionIdx, attackWasCrit, spellCast },
         event
       );
       const { VagabondChatCard } = await import('./chat-card.mjs');
@@ -1562,7 +1751,7 @@ ${npcOnly ? '' : `
       // Collect on-hit status entries (single source of truth: item/action fallback + crit merge + coating + passives)
       const { StatusHelper } = await import('./status-helper.mjs');
       const { entries: allStatusEntries, coatingEntries } = this.resolveIncomingStatusEntries({
-        sourceActor, sourceItem, actionIdx, attackWasCrit,
+        sourceActor, sourceItem, actionIdx, attackWasCrit, spellCast,
       });
 
       // statusContext is embedded in the Apply button so handleApplySaveDamage can process
@@ -1576,6 +1765,7 @@ ${npcOnly ? '' : `
         saveDifficulty:   difficulty,
         saveTotal:        saveRoll.total,
         attackWasCrit,
+        spellCast,
       } : null;
 
       // Post save result to chat
@@ -1619,7 +1809,7 @@ ${npcOnly ? '' : `
         };
         const sourceActorTokenName1 = canvas.tokens?.placeables?.find(t => t.actor?.id === sourceActor?.id)?.document.name || sourceActor?.name || '';
         const statusResults = await StatusHelper.processCausedStatuses(
-          targetActor, allStatusEntries, damageWasBlocked, sourceItem?.name ?? '', { preRolledSave, sourceActorName: sourceActorTokenName1 }
+          targetActor, allStatusEntries, damageWasBlocked, sourceItem?.name ?? '', { preRolledSave, sourceActorName: sourceActorTokenName1, sourceKey: StatusHelper.sourceKeyFor(sourceActor, sourceItem, actionIdx) }
         );
         if (coatingEntries.length > 0 && sourceActor.items.has(sourceItem.id)) {
           await sourceItem.update({
@@ -1648,6 +1838,8 @@ ${npcOnly ? '' : `
     const itemId = button.dataset.itemId;
     const actionIndexRaw = button.dataset.actionIndex;
     const actionIdx = (actionIndexRaw !== '' && actionIndexRaw != null) ? parseInt(actionIndexRaw) : null;
+    // Spell Damage / Effect split: what the Cast behind this card included
+    const spellCast = this.spellCastFromButton(button);
 
     // Resolve which actors roll (shared GM/player logic)
     const actorsToRoll = this._resolveSaveActors(button);
@@ -1673,7 +1865,7 @@ ${npcOnly ? '' : `
       const sourceActor = TargetHelper.resolveActorRef(actorId);
       const { saveRoll, difficulty, isSuccess, isCritical, isHindered } = await this._computeSaveOutcome(
         targetActor, saveType, attackType, sourceActor,
-        { sourceItem: this._resolveSourceItem(sourceActor, itemId), actionIdx },
+        { sourceItem: this._resolveSourceItem(sourceActor, itemId), actionIdx, spellCast },
         event
       );
       const { VagabondChatCard } = await import('./chat-card.mjs');
@@ -1695,7 +1887,7 @@ ${npcOnly ? '' : `
       // (reminder path never merges crit entries — attackWasCrit stays false)
       const sourceItem = this._resolveSourceItem(sourceActor, itemId);
       const { entries: allStatusEntries, coatingEntries } = this.resolveIncomingStatusEntries({
-        sourceActor, sourceItem, actionIdx,
+        sourceActor, sourceItem, actionIdx, spellCast,
       });
       if (allStatusEntries.length > 0) {
         const { StatusHelper } = await import('./status-helper.mjs');
@@ -1709,7 +1901,7 @@ ${npcOnly ? '' : `
         const sourceName = sourceItem?.name ?? (actionIdx !== null ? sourceActor?.system?.actions?.[actionIdx]?.name : '') ?? '';
         const sourceActorTokenName2 = canvas.tokens?.placeables?.find(t => t.actor?.id === sourceActor?.id)?.document.name || sourceActor?.name || '';
         const statusResults = await StatusHelper.processCausedStatuses(
-          targetActor, allStatusEntries, false, sourceName, { preRolledSave, sourceActorName: sourceActorTokenName2 }
+          targetActor, allStatusEntries, false, sourceName, { preRolledSave, sourceActorName: sourceActorTokenName2, sourceKey: StatusHelper.sourceKeyFor(sourceActor, sourceItem, actionIdx) }
         );
         if (coatingEntries.length > 0 && sourceActor.items.has(sourceItem.id)) {
           await sourceItem.update({
@@ -1750,6 +1942,8 @@ ${npcOnly ? '' : `
     const sourceActor = TargetHelper.resolveActorRef(actorId);
     const sourceItem = this._resolveSourceItem(sourceActor, itemId);
     const slot = Math.max(1, parseInt(button.dataset.defenseSlot) || 1);
+    // Spell Damage / Effect split: what the Cast behind this card included
+    const spellCast = this.spellCastFromButton(button);
 
     const { VagabondChatCard } = await import('./chat-card.mjs');
     const { StatusHelper } = await import('./status-helper.mjs');
@@ -1763,7 +1957,7 @@ ${npcOnly ? '' : `
 
       // The Check replaces the Reflex Save: Save-side votes apply (attacker modifier, status resistance)
       const resistanceFavor = await this._hasStatusResistanceForSave(targetActor, 'reflex', {
-        sourceActor, sourceItem, actionIdx, attackWasCrit,
+        sourceActor, sourceItem, actionIdx, attackWasCrit, spellCast,
       });
       const attackType = button.dataset.attackType || 'melee';
       const check = await DefenseHelper.rollCheck(targetActor, weapon, {
@@ -1804,12 +1998,12 @@ ${npcOnly ? '' : `
       if (autoApply) await this._applyDamageToActor(targetActor, finalDamage, damageType, sourceItem, sourceActor);
 
       const { entries: allStatusEntries, coatingEntries } = this.resolveIncomingStatusEntries({
-        sourceActor, sourceItem, actionIdx, attackWasCrit,
+        sourceActor, sourceItem, actionIdx, attackWasCrit, spellCast,
       });
       const statusContext = allStatusEntries.length > 0 ? {
         sourceActorId: actorId, sourceItemId: itemId, sourceActionIndex: actionIdx,
         saveType: 'reflex', saveSuccess: check.isSuccess, saveDifficulty: check.difficulty,
-        saveTotal: check.roll.total, attackWasCrit,
+        saveTotal: check.roll.total, attackWasCrit, spellCast,
       } : null;
 
       // A failed Check is a failed Reflex Save → Close Protectors may step in
@@ -1835,7 +2029,7 @@ ${npcOnly ? '' : `
         const sourceActorTokenName = canvas.tokens?.placeables?.find(t => t.actor?.id === sourceActor?.id)?.document.name || sourceActor?.name || '';
         const preRolledSave = { saveType: 'reflex', roll: check.roll, total: check.roll.total, success: check.isSuccess, difficulty: check.difficulty };
         const statusResults = await StatusHelper.processCausedStatuses(
-          targetActor, allStatusEntries, finalDamage === 0, sourceName, { preRolledSave, sourceActorName: sourceActorTokenName }
+          targetActor, allStatusEntries, finalDamage === 0, sourceName, { preRolledSave, sourceActorName: sourceActorTokenName, sourceKey: StatusHelper.sourceKeyFor(sourceActor, sourceItem, actionIdx) }
         );
         if (coatingEntries.length > 0 && sourceActor?.items.has(sourceItem?.id)) {
           await sourceItem.update({ 'system.coating.charges': 0, 'system.coating.causedStatuses': [] });
@@ -2647,6 +2841,7 @@ ${npcOnly ? '' : `
       const isCritical = button.dataset.isCritical === 'true';
       const { entries: allStatusEntries, coatingEntries } = this.resolveIncomingStatusEntries({
         sourceActor, sourceItem, actionIdx, attackWasCrit: isCritical,
+        spellCast: this.spellCastFromButton(button),  // Spell Damage / Effect split
       });
       if (allStatusEntries.length > 0) {
         const sourceName = sourceItem?.name ?? (actionIdx !== null ? sourceActor?.system?.actions?.[actionIdx]?.name : '') ?? '';
@@ -2654,7 +2849,7 @@ ${npcOnly ? '' : `
         const sourceActorTokenName3 = canvas.tokens?.placeables?.find(t => t.actor?.id === sourceActor?.id)?.document.name || sourceActor?.name || '';
         // Apply Direct bypasses all saves — statuses are applied unconditionally
         const statusResults = await StatusHelper.processCausedStatuses(
-          targetActor, allStatusEntries, damageWasBlocked, sourceName, { skipSaveRoll: true, sourceActorName: sourceActorTokenName3 }
+          targetActor, allStatusEntries, damageWasBlocked, sourceName, { skipSaveRoll: true, sourceActorName: sourceActorTokenName3, sourceKey: StatusHelper.sourceKeyFor(sourceActor, sourceItem, actionIdx) }
         );
         if (coatingEntries.length > 0 && sourceActor.items.has(sourceItem.id)) {
           await sourceItem.update({
@@ -2749,6 +2944,7 @@ ${npcOnly ? '' : `
 
       const { entries: allStatusEntries, coatingEntries } = this.resolveIncomingStatusEntries({
         sourceActor, sourceItem, actionIdx: sourceActionIdx, attackWasCrit,
+        spellCast: this.spellCastFromButton(button),  // data-spell-effect/-damage from statusContext
       });
 
       if (allStatusEntries.length > 0) {
@@ -2759,7 +2955,7 @@ ${npcOnly ? '' : `
         const sourceName = sourceItem?.name ?? (sourceActionIdx !== null ? sourceActor?.system?.actions?.[sourceActionIdx]?.name : '') ?? '';
         const sourceActorTokenName4 = canvas.tokens?.placeables?.find(t => t.actor?.id === sourceActor?.id)?.document.name || sourceActor?.name || '';
         const statusResults = await StatusHelper.processCausedStatuses(
-          actor, allStatusEntries, damageWasBlocked, sourceName, { preRolledSave, sourceActorName: sourceActorTokenName4 }
+          actor, allStatusEntries, damageWasBlocked, sourceName, { preRolledSave, sourceActorName: sourceActorTokenName4, sourceKey: StatusHelper.sourceKeyFor(sourceActor, sourceItem, sourceActionIdx) }
         );
         if (coatingEntries.length > 0 && sourceActor.items.has(sourceItem.id)) {
           await sourceItem.update({

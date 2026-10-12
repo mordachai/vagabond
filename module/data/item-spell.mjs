@@ -91,6 +91,12 @@ export default class VagabondSpell extends VagabondItemBase {
       hint: "Every die costs 1 Mana, including the first."
     });
 
+    // Target picker (SpellTargetPicker): the Cast dialog lists what the Spell may Target and the caster picks.
+    // targetBeings: Beings inside the area (area deliveries; beside the Objects for Remote / Touch).
+    // targetObjects: equipped weapons of those Beings (or the targets / the caster) → hit macro scope.targetObjects.
+    schema.targetBeings = new fields.BooleanField({ required: true, initial: false });
+    schema.targetObjects = new fields.BooleanField({ required: true, initial: false });
+
     // Optional label shown on the dice node when using dice scaling (e.g. "Speed").
     schema.diceScaleLabel = new fields.StringField({
       required: false,

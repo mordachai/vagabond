@@ -57,7 +57,7 @@
     "expiry": null,
     "expired": false
   },
-  "description": "<p>Blinded + Incapacitated + Prone. Close Attacks always Crit.</p>",
+  "description": "<ul><li>Blinded, Incapacitated and Prone</li><li>Close Attacks targeting it always Crit</li><li data-manual>Can't Focus or use its Actions (Incapacitated)</li></ul>",
   "origin": null,
   "tint": "#ffffff",
   "transfer": false,

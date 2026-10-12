@@ -29,7 +29,7 @@
     "expiry": null,
     "expired": false
   },
-  "description": "<p>Its attacks and saves have Hinder. Attacks targeting it have Favor. Saves against its attacks have Favor.</p>",
+  "description": "<ul><li>Its attacks and its Saves against attacks have Hinder</li><li>Attacks targeting it and Saves against its attacks have Favor</li></ul>",
   "origin": null,
   "tint": "#ffffff",
   "transfer": false,

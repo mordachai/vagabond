@@ -1114,7 +1114,7 @@
         "causedStatuses": [
           {
             "statusId": "sickened",
-            "requiresDamage": true,
+            "requiresDamage": false,
             "saveType": "endure",
             "duration": "focusing",
             "tickDamageEnabled": false,
@@ -1125,7 +1125,7 @@
         "critCausedStatuses": [
           {
             "statusId": "sickened",
-            "requiresDamage": true,
+            "requiresDamage": false,
             "saveType": "endure",
             "duration": "",
             "tickDamageEnabled": false,

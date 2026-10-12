@@ -14,7 +14,7 @@
     "expiry": null,
     "expired": false
   },
-  "description": "<p>After not breathing for 1 minute, each round: Heroes roll d8 (if >= Might, gain 1 Fatigue), Enemies gain 1 Fatigue.</p>",
+  "description": "<ul><li data-manual>Begins after 1 Minute without breathing</li><li data-manual>Heroes: each Round, roll d8; Might or higher = +1 Fatigue</li><li data-manual>Enemies: +1 Fatigue each Round</li></ul>",
   "origin": null,
   "tint": "#ffffff",
   "transfer": false,

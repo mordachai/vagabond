@@ -9,6 +9,8 @@
     "crit": "",
     "favorite": false,
     "noRollRequired": true,
+    "targetBeings": true,
+    "targetObjects": true,
     "fxSchool": "arcane",
     "locked": true
   },

@@ -14,7 +14,7 @@
     "expiry": null,
     "expired": false
   },
-  "description": "<p>Standing in Sunlight. Nightwalkers burn and are Incapacitated, Vampires burn and stop regenerating, Zombies lose their 1 HP floor. [MANUAL TOGGLE]</p>",
+  "description": "<ul><li>System marker, not a book Status</li><li>Nightwalker: burns, Incapacitated</li><li>Vampire: burns, stops regenerating</li><li>Zombie: loses its 1 HP floor</li><li data-manual>Toggle it while the Being stands in Sunlight</li></ul>",
   "origin": null,
   "tint": "#ffffff",
   "transfer": false,

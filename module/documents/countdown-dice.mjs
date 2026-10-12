@@ -87,6 +87,8 @@ export class CountdownDice {
             // Optional linking for status automation (set by StatusHelper)
             linkedActorUuid:   data.linkedActorUuid   ?? null,
             linkedStatusId:    data.linkedStatusId    ?? null,
+            // Source of a stacking status die (StatusHelper.sourceKeyFor) — Burning: one die per source
+            linkedSourceKey:   data.linkedSourceKey   ?? null,
             tickDamageEnabled: data.tickDamageEnabled ?? false,
             tickDamageFormula: data.tickDamageFormula ?? '',
             tickDamageType:    data.tickDamageType    ?? '-',

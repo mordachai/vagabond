@@ -45,6 +45,11 @@
               {{/if}}
             </div>
           {{/if}}
+          {{#if @root.countsAsLabel}}
+            <div class="imbue-badge silvered-badge" data-tooltip="{{localize 'VAGABOND.Effect.CountsAsTip'}}">
+              <i class="fa-solid fa-hands-praying"></i> {{localize 'VAGABOND.Effect.CountsAs' materials=@root.countsAsLabel}}
+            </div>
+          {{/if}}
           <div class='locked-stats-grid'>
             <div class='locked-stat'>
               <span class='stat-label'>{{localize "VAGABOND.UI.Labels.SkillColon"}}</span>
@@ -321,6 +326,12 @@
                   {{/if}}
                 </div>
               {{/if}}
+              {{#if (and system.noImbue (eq system.equipmentType 'weapon'))}}
+                <div class='locked-stat'>
+                  <span class='stat-label' data-tooltip='{{localize "VAGABOND.Item.Equipment.FIELDS.noImbue.hint"}}'>{{localize "VAGABOND.Item.Equipment.FIELDS.noImbue.label"}}:</span>
+                  <span class='stat-value'>{{localize "VAGABOND.UI.Labels.Yes"}}</span>
+                </div>
+              {{/if}}
               {{#if (gt system.quantity 1)}}
                 <div class='locked-stat'>
                   <span class='stat-label'>{{localize "VAGABOND.UI.Labels.Quantity"}}:</span>
@@ -414,6 +425,11 @@
             <button type="button" data-action="clearImbue" data-tooltip="{{localize 'VAGABOND.Status.Imbue.ClearButton'}}">
               <i class="fa-solid fa-xmark"></i>
             </button>
+          </div>
+        {{/if}}
+        {{#if @root.countsAsLabel}}
+          <div class="imbue-badge silvered-badge" data-tooltip="{{localize 'VAGABOND.Effect.CountsAsTip'}}">
+            <i class="fa-solid fa-hands-praying"></i> {{localize 'VAGABOND.Effect.CountsAs' materials=@root.countsAsLabel}}
           </div>
         {{/if}}
         {{! Weapon Skill and Damage Row }}
@@ -903,6 +919,12 @@
               <span data-tooltip='{{localize "VAGABOND.Item.Equipment.FIELDS.isTrinket.hint"}}'>{{localize 'VAGABOND.Item.Equipment.FIELDS.isTrinket.label'}}</span>
             </label>
           {{/unless}}
+          {{#if (eq system.equipmentType 'weapon')}}
+            <label class='checkbox-label'>
+              <input type='checkbox' name='system.noImbue' {{#if system.noImbue}}checked{{/if}} data-dtype='Boolean'/>
+              <span data-tooltip='{{localize "VAGABOND.Item.Equipment.FIELDS.noImbue.hint"}}'>{{localize 'VAGABOND.Item.Equipment.FIELDS.noImbue.label'}}</span>
+            </label>
+          {{/if}}
           {{#unless (eq system.equipmentType 'alchemical')}}
             <label class='checkbox-label'>
               <input type='checkbox' name='system.requiresBound' {{#if system.requiresBound}}checked{{/if}} data-dtype='Boolean'/>

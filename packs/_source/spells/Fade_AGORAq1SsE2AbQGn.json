@@ -9,12 +9,14 @@
     "crit": "",
     "favorite": false,
     "noRollRequired": true,
+    "targetBeings": true,
+    "targetObjects": false,
     "fxSchool": "arcane",
     "locked": true,
     "causedStatuses": [
       {
         "statusId": "invisible",
-        "requiresDamage": true,
+        "requiresDamage": false,
         "saveType": "none",
         "duration": "focusing",
         "tickDamageEnabled": false,

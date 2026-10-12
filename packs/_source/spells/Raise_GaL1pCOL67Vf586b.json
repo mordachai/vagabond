@@ -9,6 +9,15 @@
     "crit": "",
     "favorite": false,
     "noRollRequired": true,
+    "targetBeings": true,
+    "targetObjects": false,
+    "hitMacro": {
+      "enabled": true,
+      "uuid": "",
+      "command": "system:spell.raise",
+      "label": "Raise",
+      "runAsGM": true
+    },
     "fxSchool": "necrotic",
     "locked": true
   },

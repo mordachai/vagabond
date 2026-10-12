@@ -9,12 +9,14 @@
     "crit": "Duration is continual.",
     "favorite": false,
     "noRollRequired": true,
+    "targetBeings": true,
+    "targetObjects": true,
     "fxSchool": "genericlight",
     "locked": true,
     "causedStatuses": [
       {
         "statusId": "blinded",
-        "requiresDamage": true,
+        "requiresDamage": false,
         "saveType": "none",
         "duration": "focusing",
         "tickDamageEnabled": false,
@@ -25,7 +27,7 @@
     "critCausedStatuses": [
       {
         "statusId": "blinded",
-        "requiresDamage": true,
+        "requiresDamage": false,
         "saveType": "none",
         "duration": "",
         "tickDamageEnabled": false,

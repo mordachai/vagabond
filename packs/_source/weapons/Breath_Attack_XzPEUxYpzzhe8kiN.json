@@ -6,6 +6,7 @@
   "system": {
     "description": "<p>You have a Breath Attack that requires an <strong>Action</strong> to begin. On a subsequent Turn within the same Scene, you can then use an <strong>Action</strong> or skip your <strong>Move</strong> to exhale a 15’ Cone of energy that deals <strong>2d6!</strong>, using an Endure or Will Save for the Check.</p>",
     "equipmentType": "weapon",
+    "noImbue": true,
     "locked": false,
     "equipped": false,
     "quantity": 1,

@@ -1,5 +1,5 @@
 {
-  "name": "Slowed",
+  "name": "Tempo: -5' Speed",
   "_id": "slowed000000trk0",
   "img": "icons/magic/time/hourglass-tilted-gray.webp",
   "type": "base",
@@ -22,7 +22,7 @@
     "expiry": null,
     "expired": false
   },
-  "description": "<p>Under the Tempo - Spell: Speed -5'.</p>",
+  "description": "<ul><li>Speed -5'</li><li>-5' per extra Mana</li><li>Ends when the caster stops Focusing</li></ul>",
   "origin": null,
   "tint": "#ffffff",
   "transfer": false,

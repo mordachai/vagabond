@@ -1,5 +1,5 @@
 {
-  "name": "Frozen",
+  "name": "Freeze: -10' Speed",
   "_id": "frozen000000trk0",
   "img": "icons/magic/water/barrier-ice-crystal-wall-faceted-blue.webp",
   "type": "base",
@@ -22,7 +22,7 @@
     "expiry": null,
     "expired": false
   },
-  "description": "<p>Under the Freeze Spell: Speed -10'.</p>",
+  "description": "<ul><li>Speed -10'</li><li>Ends when the caster stops Focusing</li></ul>",
   "origin": null,
   "tint": "#ffffff",
   "transfer": false,

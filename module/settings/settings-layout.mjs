@@ -77,6 +77,7 @@ export const SETTINGS_SUBJECTS = [
       { id: 'castDialog', scope: 'client', rows: [
         { key: 'useSpellCastDialog' },
         { key: 'hideCastRings', dep: 'useSpellCastDialog' },
+        { key: 'castTargetPicker', dep: 'useSpellCastDialog' },
         { key: 'spellCastDialogDarkness', format: 'percent', dep: 'useSpellCastDialog' },
         { key: 'spellCastDialogBlur', format: 'px', dep: 'useSpellCastDialog' },
       ]},
@@ -125,6 +126,9 @@ export const SETTINGS_SUBJECTS = [
       { id: 'statusDisplay', scope: 'world', rows: [
         { key: 'tokenStatusDisplay' },
         { key: 'statusRingEffects' },
+      ]},
+      { id: 'tokenArt', scope: 'world', rows: [
+        { key: 'circleTokenPortrait' },
       ]},
     ],
   },

@@ -1,0 +1,89 @@
+{
+  "name": "Raise: Undead",
+  "_id": "raised000000trk0",
+  "img": "icons/magic/death/skeleton-glow-yellow-black.webp",
+  "type": "base",
+  "system": {
+    "changes": [
+      {
+        "key": "system.beingType",
+        "type": "override",
+        "value": "Undead",
+        "phase": "initial",
+        "priority": null
+      },
+      {
+        "key": "system.attributes.beingType",
+        "type": "override",
+        "value": "Undead",
+        "phase": "initial",
+        "priority": null
+      },
+      {
+        "key": "system.senses",
+        "type": "add",
+        "value": "darksight",
+        "phase": "initial",
+        "priority": null
+      },
+      {
+        "key": "system.immunities",
+        "type": "add",
+        "value": "poison",
+        "phase": "initial",
+        "priority": null
+      },
+      {
+        "key": "system.weaknesses",
+        "type": "add",
+        "value": "silver",
+        "phase": "initial",
+        "priority": null
+      },
+      {
+        "key": "system.statusImmunities",
+        "type": "add",
+        "value": "sickened",
+        "phase": "initial",
+        "priority": null
+      }
+    ]
+  },
+  "disabled": false,
+  "start": null,
+  "duration": {
+    "value": null,
+    "units": "seconds",
+    "expiry": null,
+    "expired": false
+  },
+  "description": "<ul><li>It is an Undead</li><li>Darksight, Immune to Poison, Weak to Silvered Weapons, can't be Sickened</li><li>Under the caster's control; commanded when the caster Focuses on this Cast, using the caster's Cast Skill for its Checks</li><li>Ends when the caster stops Focusing: it dies and can't be raised by this Spell again</li></ul>",
+  "origin": null,
+  "tint": "#ffffff",
+  "transfer": false,
+  "statuses": [
+    "raised"
+  ],
+  "showIcon": 2,
+  "folder": "vacattracker0fld",
+  "flags": {
+    "vagabond": {
+      "applicationMode": "permanent",
+      "canonicalId": "raised",
+      "automation": "fully_automated"
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "6.4.1",
+    "createdTime": 1791763200000,
+    "modifiedTime": 1791763200000,
+    "lastModifiedBy": null,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "sort": 0,
+  "_key": "!effects!raised000000trk0"
+}

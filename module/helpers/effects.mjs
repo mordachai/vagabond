@@ -159,9 +159,23 @@ export function resolveEffectDescription(effect) {
   // Item-owned effect with no text of its own → inherit from the owning item / trait
   if (!full) full = inheritedDescription(effect);
 
+  full = markManualBullets(full);
   const match = full.match(/\[(.*?)\]$/);
   if (!match) return { description: full, automation: '' };
   return { description: full.replace(/\s*\[.*?\]$/, '').trim(), automation: match[1] };
+}
+
+/**
+ * Status / Tracker rule lists flag the bullets the system does NOT handle as `<li data-manual>` (listed last).
+ * They render with a hand icon + tooltip so the table sees what it must handle; unmarked bullets are automated.
+ * @param {string} html
+ * @returns {string}
+ */
+function markManualBullets(html) {
+  if (!html.includes('<li data-manual>')) return html;
+  const tip = foundry.utils.escapeHTML(game.i18n.localize('VAGABOND.Effect.ByHand'));
+  return html.replaceAll('<li data-manual>',
+    `<li class="fx-manual" data-tooltip="${tip}"><i class="fa-solid fa-hand" aria-hidden="true"></i>`);
 }
 
 /**
@@ -225,7 +239,8 @@ async function buildEffectRow(effect, actor, editable, open) {
 
   let descriptionHtml = '';
   if (description) {
-    descriptionHtml = isStatus
+    // Status text is plain, except the Tracker / marker lists (trusted lang HTML)
+    descriptionHtml = isStatus && !/^\s*</.test(description)
       ? foundry.utils.escapeHTML(description)
       : await TextEditor.enrichHTML(description, { secrets: actor.isOwner, relativeTo: effect });
   }

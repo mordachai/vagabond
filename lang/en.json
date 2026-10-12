@@ -352,9 +352,41 @@
       "Dropped": "<strong>{name}</strong> drops the Mark on <strong>{target}</strong>."
     },
     "SpellTracker": {
-      "By": "{spell} — cast by {name}.",
+      "Silvered": "{weapon} ({bearer}) counts as Silvered.",
+      "SilveredName": "Bless: Silvered",
+      "SilveredDesc": "<ul><li>Counts as Silvered (Bless: Targeted Objects count as Silvered).</li><li>Ends when the caster stops Focusing.</li></ul>",
+      "By": "Cast by {name} ({spell})",
+      "TempoName": "Tempo: {speed}' Speed",
       "NoTarget": "Target a token for the Spell first.",
-      "Unavailable": "The {status} status is not available (Foundry status mode)."
+      "Unavailable": "The {status} status is not available (Foundry status mode).",
+      "ImmuneName": "{spell}: Immune to {statuses}",
+      "ImmuneDesc": "<ul><li>Immune to {statuses}</li><li>Ends when the caster stops Focusing</li></ul>",
+      "Applied": "{target}: {status}.",
+      "StatusImmune": "{target} is Immune to {status}: not affected.",
+      "LevelTooHigh": "{target} is not affected: its {kind} ({value}) must be {need} or lower.",
+      "ShockImmune": "{target} can't be damaged by shocks: not affected.",
+      "Cured": "{target}: {statuses} ended; Immune to {all} for the duration.",
+      "CuredNone": "{target}: Immune to {all} for the duration.",
+      "Level": "Level",
+      "HD": "HD"
+    },
+    "Macro": {
+      "NoGM": "No GM is connected to run this.",
+      "RelayFailed": "The GM ({gm}) did not answer. Ask them to reload, then try again.",
+      "RelayError": "Failed on the GM's side: {error}"
+    },
+    "Raise": {
+      "FolderName": "Undead Army",
+      "NoCorpse": "Raise: no corpse that can rise among the Targets (a Dead token, not Artificial or Undead, never raised before, not a player's Character).",
+      "NoneFit": "Raise: no Targeted corpse has HD {level} or lower.",
+      "NeedGM": "Raise needs a GM to change the tokens.",
+      "Rose": "{target} rises as an Undead (HD {hd}).",
+      "TooStrong": "{target} stays down: HD {hd} would put the total above Level {level}.",
+      "Failed": "{target} could not be raised (see console).",
+      "NotCommanded": "Not commanded ({caster} isn't Focusing)",
+      "CheckLabel": "{skill} ({caster})",
+      "CleanupTool": "Clean Up Undead Army (dead raised Undead back to their corpses)",
+      "CleanedUp": "Raise: {restored} corpse(s) put back, {removed} Undead Army sheet(s) deleted."
     },
     "Haymaker": {
       "Title": "Haymaker",
@@ -482,14 +514,15 @@
       "Flying": "Flying",
       "Hexed": "Hexed",
       "Marked": "Marked",
-      "Blessed": "Blessed",
-      "Exalted": "Exalted",
-      "Warded": "Warded",
-      "Guided": "Guided",
-      "Hastened": "Hastened",
-      "Slowed": "Slowed",
-      "Frozen": "Frozen",
-      "Shrunk": "Shrunk",
+      "Blessed": "Bless: +d4 Saves",
+      "Exalted": "Exalt: +1 per Damage Die",
+      "Warded": "Ward: +1 Armor",
+      "Guided": "Guide: Seen Attacks Favored",
+      "Hastened": "Tempo: +5' Speed",
+      "Slowed": "Tempo: -5' Speed",
+      "Frozen": "Freeze: -10' Speed",
+      "Shrunk": "Shrink: One Size Smaller",
+      "Raised": "Raise: Undead",
       "Focusing": "Focusing",
       "Frightened": "Frightened",
       "Incapacitated": "Incapacitated",
@@ -505,38 +538,41 @@
       "Vulnerable": "Vulnerable"
     },
     "StatusConditionDescriptions": {
-      "Frightened": "-2 penalty to each damage die it deals [AUTOMATED]",
-      "Dazed": "Can't Focus or Move unless uses an Action. Speed = 0 [PARTIAL - Speed automated]",
-      "Dead": "Same as Incapacitated but automatically fails ALL rolls (stats, skills, saves, attacks) [FULLY AUTOMATED]",
-      "Fatigued": "Each Fatigue occupies an Item Slot. At 3+: can't Rush. At 5: dies [PARTIAL - Slots automated]",
-      "Prone": "Drop or stand by using 10' of Speed. Crawl only (half Speed), can't Rush. Vulnerable for Melee attacks and Reflex Saves [PARTIAL - Speed and Vulnerable automated]",
-      "Confused": "Checks/Saves Hindered. Saves against its Actions Favored [AUTOMATED]",
-      "Sickened": "-2 penalty to each healing die received [AUTOMATED]",
-      "Vulnerable": "Its attacks and its Saves against attacks have Hinder. Attacks targeting it and Saves against its attacks have Favor [AUTOMATED]",
-      "Flanked": "Vulnerable (its attacks and Saves against attacks have Hinder; attacks targeting it and Saves against its attacks have Favor) and takes an extra 2 damage from attacks, before Armor [AUTOMATED]",
-      "Flanking": "Flanking an adjacent Foe alongside an ally. +2 damage on attacks against it, and it is Vulnerable while two of you stay Close. [AUTOMATED]",
-      "Flying": "Airborne. Not touching the ground, so Seismicsense can't detect it. [MANUAL]",
-      "Hexed": "Under a Witch's Hex. [MANUAL]",
-      "Marked": "A Hunter's Mark. [MANUAL]",
-      "Blessed": "Under the Bless Spell: d4 bonus to Saves. [AUTOMATED]",
-      "Exalted": "Under the Exalt Spell: +1 to each damage die it deals and to Will Saves against Frightened, doubled against Hellspawn and Undead. [AUTOMATED: damage. MANUAL: doubled Save bonus]",
-      "Warded": "Under the Ward Spell: +1 Armor. [AUTOMATED: Armor. MANUAL: upcast damage reduction]",
-      "Guided": "Under the Guide Spell: Checks that rely on sight made against it have Favor. [AUTOMATED: attacks and Casts]",
-      "Hastened": "Under the Tempo + Spell: Speed +5'. [AUTOMATED: edit the effect for upcast Speed]",
-      "Slowed": "Under the Tempo - Spell: Speed -5'. [AUTOMATED: edit the effect for upcast Speed]",
-      "Frozen": "Under the Freeze Spell: Speed -10'. [AUTOMATED]",
-      "Shrunk": "Under the Shrink Spell: size and damage dice one size smaller. [AUTOMATED: character weapon and Spell dice. MANUAL: size, NPC actions]",
-      "Restrained": "Vulnerable + Speed = 0 [AUTOMATED]",
-      "Grappling": "Restraining a target. Speed halved unless target is smaller. [PARTIALLY AUTOMATED]",
-      "Blinded": "Can't see. Vulnerable [AUTOMATED]",
-      "Incapacitated": "Can't Focus/Actions/Move. Fails Skills and Saves that use Might or Dexterity. Vulnerable. Speed = 0 [AUTOMATED]",
-      "Paralyzed": "Incapacitated + Speed = 0 [AUTOMATED]",
-      "Unconscious": "Blinded + Incapacitated + Prone. Close Attacks auto-crit [AUTOMATED]",
-      "Invisible": "Can't be seen by normal senses; those that can't see it act as Blinded for Checks and Saves involving it [AUTOMATED: attacks and Casts]",
-      "Berserk": "It can’t take the Cast Action or Focus, it can’t be Frightened, and it doesn’t make Morale Checks [PARTIAL - Manual tracking]",
-      "Burning": "Takes damage at start of turn [FUTURE - Requires combat tracker hooks]",
-      "Charmed": "Can't willingly attack the charmer [FUTURE - Requires target validation]",
-      "Suffocating": "After 1 minute: Heroes roll d8 vs Might for fatigue. Enemies gain 1 fatigue [FUTURE - Requires combat tracker]"
+      "Sunlit": "<ul><li>System marker, not a book Status</li><li>Nightwalker: burns, Incapacitated</li><li>Vampire: burns, stops regenerating</li><li>Zombie: loses its 1 HP floor</li><li data-manual>Toggle it while the Being stands in Sunlight</li></ul>",
+      "Focusing": "<ul><li>System marker, not a book Status</li><li>Sustaining one or more Spells through Focus</li></ul>",
+      "Frightened": "<ul><li>-2 to each damage die it deals</li></ul>",
+      "Dazed": "<ul><li data-manual>Can't Focus or Move unless it uses an Action to do so</li></ul>",
+      "Dead": "<ul><li>System marker, not a book Status</li><li>Fails every roll</li><li>Speed 0</li><li>Vulnerable</li></ul>",
+      "Fatigued": "<ul><li>Each Fatigue occupies an Item Slot</li><li data-manual>At 3+ Fatigue: can't Rush</li><li data-manual>At 5 Fatigue: Max and Current HP are 0</li></ul>",
+      "Prone": "<ul><li>Moves only by crawling (2' of Speed per 1')</li><li>Vulnerable for Melee attacks and Reflex Saves</li><li data-manual>Dropping or standing uses 10' of Speed</li><li data-manual>Can't Rush</li></ul>",
+      "Confused": "<ul><li>Its Checks and Saves have Hinder</li><li>Saves against its Actions have Favor</li></ul>",
+      "Sickened": "<ul><li>-2 to each healing die received</li><li data-manual>Effects in parentheses apply while Sickened</li></ul>",
+      "Vulnerable": "<ul><li>Its attacks and its Saves against attacks have Hinder</li><li>Attacks targeting it and Saves against its attacks have Favor</li></ul>",
+      "Flanked": "<ul><li>Vulnerable</li><li>+2 damage from attacks, before Armor</li></ul>",
+      "Flanking": "<ul><li>System marker, not a book Status</li><li>Flanking an adjacent Foe alongside an ally</li><li>That Foe is Flanked</li></ul>",
+      "Flying": "<ul><li>System marker, not a book Status</li><li>Seismicsense can't detect it</li><li data-manual>Toggle it while the Being is airborne</li></ul>",
+      "Hexed": "<ul><li>System marker, not a book Status</li><li>Target of a Witch's Hex</li><li>Rules: the Witch's Hex</li></ul>",
+      "Marked": "<ul><li>System marker, not a book Status</li><li>Target of a Hunter's Mark</li><li>Rules: the Hunter's Mark</li></ul>",
+      "Blessed": "<ul><li>d4 bonus to Saves</li><li>Ends when the caster stops Focusing</li></ul>",
+      "Exalted": "<ul><li>+1 to each damage die it deals (doubled vs Hellspawn or Undead)</li><li>+1 to Will Saves vs Frightened</li><li>Ends when the caster stops Focusing</li><li data-manual>Will Save bonus doubled vs Hellspawn or Undead</li></ul>",
+      "Warded": "<ul><li>+1 Armor</li><li>Ends when the caster stops Focusing</li><li data-manual>Upcast: Cast Check to reduce damage by 1d6 per Mana</li></ul>",
+      "Guided": "<ul><li>Favor on attacks and Casts against it from Beings that can see it</li><li>Ends when the caster stops Focusing</li><li data-manual>Favor on other Checks against it that rely on sight</li></ul>",
+      "Hastened": "<ul><li>Speed +5'</li><li>+5' per extra Mana</li><li>Ends when the caster stops Focusing</li></ul>",
+      "Slowed": "<ul><li>Speed -5'</li><li>-5' per extra Mana</li><li>Ends when the caster stops Focusing</li></ul>",
+      "Frozen": "<ul><li>Speed -10'</li><li>Ends when the caster stops Focusing</li></ul>",
+      "Shrunk": "<ul><li>Damage dice one size smaller (character weapons and Spells)</li><li>Ends when the caster stops Focusing</li><li data-manual>Size one smaller</li><li data-manual>NPC action damage dice one size smaller</li></ul>",
+      "Raised": "<ul><li>It is an Undead</li><li>Darksight, Immune to Poison, Weak to Silvered Weapons, can't be Sickened</li><li>Under the caster's control; commanded when the caster Focuses on this Cast, using the caster's Cast Skill for its Checks</li><li>Ends when the caster stops Focusing: it dies and can't be raised by this Spell again</li></ul>",
+      "Restrained": "<ul><li>Vulnerable</li><li>Speed 0</li></ul>",
+      "Grappling": "<ul><li>System marker, not a book Status</li><li>Restraining a Being</li><li>Speed halved unless the Target is smaller</li></ul>",
+      "Blinded": "<ul><li>Can't see</li><li>Vulnerable</li></ul>",
+      "Incapacitated": "<ul><li>Can't Move</li><li>Fails all Might Checks, Dexterity Checks and Reflex Saves</li><li>Vulnerable</li><li data-manual>Can't Focus or use its Actions</li></ul>",
+      "Paralyzed": "<ul><li>Incapacitated</li><li>Speed 0</li><li data-manual>Can't Focus or use its Actions (Incapacitated)</li></ul>",
+      "Unconscious": "<ul><li>Blinded, Incapacitated and Prone</li><li>Close Attacks targeting it always Crit</li><li data-manual>Can't Focus or use its Actions (Incapacitated)</li></ul>",
+      "Invisible": "<ul><li>Can't be seen by normal senses</li><li>Attacks, Casts and their Saves: those that can't see it act as Blinded</li><li data-manual>Other Checks and Saves involving it: those that can't see it act as Blinded</li></ul>",
+      "Berserk": "<ul><li data-manual>Can't Cast or Focus</li><li data-manual>Can't be Frightened</li><li data-manual>Doesn't make Morale Checks</li></ul>",
+      "Burning": "<ul><li data-manual>Takes the damage in parentheses at the start of its Turns</li><li data-manual>Ends when an action ends it (such as dousing fire)</li><li data-manual>Stacks from different sources, never from the same source</li></ul>",
+      "Charmed": "<ul><li data-manual>Can't willingly attack the charmer</li></ul>",
+      "Suffocating": "<ul><li data-manual>Begins after 1 Minute without breathing</li><li data-manual>Heroes: each Round, roll d8; Might or higher = +1 Fatigue</li><li data-manual>Enemies: +1 Fatigue each Round</li></ul>"
     },
     "StatusModifiers": {
       "IncomingHealingModifier": "Incoming Healing Modifier",
@@ -1064,6 +1100,10 @@
         "name": "Hide Cast Dialog Rings",
         "hint": "Hide the outer rune ring, middle divider, and inner rune ring on the spell cast dialog. The dialog renders smaller in this mode."
       },
+      "castTargetPicker": {
+        "name": "Pick Targets in the Cast Dialog",
+        "hint": "Area Casts list every Being the area touches around the circle; click to choose who is a Target. Off: only Spells that target Objects (Bless…) show the picker."
+      },
       "regionHighlightMode": {
         "name": "Spell Area Drawing Style",
         "hint": "How spell area regions are drawn on the canvas. True Shape draws the exact geometric shape (prettier). Covered Grid Spaces highlights every grid cell the shape touches.",
@@ -1085,6 +1125,10 @@
       "spellCastDialogDarkness": {
         "name": "Spell Cast Dialog Darkness",
         "hint": "Dark gray backdrop opacity (0–100%) behind the spell cast dialog. 0 disables the effect."
+      },
+      "circleTokenPortrait": {
+        "name": "Circle Token from Portrait",
+        "hint": "When a portrait becomes the token art (new actor, token still default, Character Builder art), the token gets a circle-cropped copy of it, saved in assets/vagabond/tokens. Token art set in Token config is never changed."
       },
       "statusRingEffects": {
         "name": "Statuses Token Ring Effects",
@@ -1173,7 +1217,7 @@
       },
       "statusEffectsMode": {
         "name": "Status Conditions Mode",
-        "hint": "Choose which status conditions appear in the token HUD menu. The rulebook's 17 Statuses come first; Trackers are system aids (Focusing, Flanked, Hexed, Marked, spell effects like Blessed or Warded). Hiding the Trackers only removes them from the menu: the system still applies them. Foundry mode shows Foundry's default conditions instead. Requires world reload to apply.",
+        "hint": "Choose which status conditions appear in the token HUD menu. The rulebook's 17 Statuses come first; Trackers are system aids (Focusing, Flanked, Hexed, Marked, spell effects like \"Bless: +d4 Saves\" or \"Freeze: -10' Speed\"). Hiding the Trackers only removes them from the menu: the system still applies them. Foundry mode shows Foundry's default conditions instead. Requires world reload to apply.",
         "vagabond": "Vagabond Statuses + Trackers (Default)",
         "vagabondBook": "Vagabond Statuses only",
         "foundry": "Foundry Default Conditions"
@@ -2205,7 +2249,10 @@
           "crit": {
             "label": "Crit",
             "hint": "Effect on a critical success"
-          }
+          },
+          "pickTargets": {"label": "Picks Targets"},
+          "targetBeings": {"label": "Target Beings", "hint": "The Spell can Target Beings: with the player option Pick Targets in the Cast Dialog on, the Cast dialog lists the Beings inside the area to choose who is affected (with Target Objects on, also beside their weapons on any delivery). Area deliveries never pay per Target."},
+          "targetObjects": {"label": "Target Objects", "hint": "The Cast dialog lists the equipped weapons of the Beings in the area (else the targets, else you) to pick as Targets. They reach the hit macro as scope.targetObjects."}
         },
         "AddSpell": "Add Spell",
         "FxSchool": {
@@ -2397,6 +2444,7 @@
             "hands2": "Two Hands"
           },
           "isTrinket": {"label": "Trinket", "hint": "Enables spellcasting while equipped"},
+          "noImbue": {"label": "Can't be Imbued", "hint": "Never offered as an Imbue Target (natural or granted attacks such as a Breath Attack)"},
           "noSlotsWhenWorn": {"label": "No Slot while worn", "hint": "Occupies no Inventory Slot while worn (e.g. a Backpack: 1 Slot carried, worn it adds capacity instead)"}
         },
         "IsSupply": "Rations",
@@ -2458,6 +2506,9 @@
       "Delete": "Delete Item"
     },
     "Effect": {
+      "ByHand": "Not automated: handle it at the table",
+      "CountsAs": "Counts as {materials}",
+      "CountsAsTip": "From this item's effects (Effects tab): counts as this material for Weakness.",
       "Source": "Source",
       "Toggle": "Toggle Effect",
       "Temporary": "Temporary Effects",
@@ -2494,7 +2545,9 @@
         "WhenEquipped": "When Equipped",
         "WhenEquippedHint": "This effect only applies while the item is equipped (weapons, armor, accessories). The effect turns off when unequipped.",
         "OnUse": "On Use Only",
-        "OnUseHint": "This effect only applies when making rolls WITH this specific item. Use for weapon properties (Keen, Vicious), spell modifiers, or item-specific bonuses."
+        "OnUseHint": "This effect only applies when making rolls WITH this specific item. Use for weapon properties (Keen, Vicious), spell modifiers, or item-specific bonuses.",
+        "Self": "This item",
+        "SelfHint": "Changes this item itself, never its bearer. E.g. OVERRIDE system.metal (made of another material) or ADD to system.countsAs (counts as Silvered)."
       },
       "FormulaHelp": {
         "Summary": "Formula Support for Effect Values",
@@ -2723,6 +2776,9 @@
       "Delete": "Delete",
       "Favorite": "Favorite",
       "Unfavorite": "Unfavorite",
+      "Focus": "Focus",
+      "StopFocusing": "Stop Focusing",
+      "FocusLimit": "You can Focus on at most {max} Spells.",
       "RemoveStatus": "Remove Status",
       "DeleteItemTitle": "Delete {name}?",
       "DeleteItemContent": "<p>Are you sure you want to delete <strong>{name}</strong>?</p>"
@@ -2939,6 +2995,8 @@
       "OpenHandsGateWarned": "Casting with your hands full and no Trinket held.",
       "NoDelivery": "Select a delivery type.",
       "NoImbueTarget": "Target a willing being with an equipped weapon.",
+      "NoTargetPicked": "No Target picked.",
+      "TargetObjects": "Objects",
       "ImbueNoWeaponSkip": "{name} has no equipped weapon and will be skipped.",
       "TogglePreview": "Toggle template preview",
       "Damage": "Damage",
@@ -3432,6 +3490,7 @@
         "npcs": "NPC Information",
         "conditions": "Conditions",
         "statusDisplay": "Display",
+        "tokenArt": "Token Art",
         "fxWorld": "World Animations",
         "fxMine": "Your Screen",
         "hud": "Character HUD",
@@ -3973,6 +4032,8 @@
       "AddCritEffect": "Add Crit Effect",
       "RequiresDamageShort": "If Hit",
       "RequiresDamageHint": "Status only applies if damage is not fully blocked",
+      "RequiresDamageCastShort": "With Damage",
+      "RequiresDamageCastHint": "Only when the Cast also deals damage (book: \"If also Cast to deal damage\"). The status is part of the Effect: a Cast without its Effect never applies it, and Armor blocking the damage does not stop it.",
       "Save": {
         "None": "No Save",
         "Any": "Any Save",
@@ -4028,6 +4089,10 @@
       "Immune": "{actor} is immune to {status}.",
       "Resisted": "{actor} resisted {status} ({saveType}: {total} vs {difficulty}).",
       "AlreadyActive": "{actor} already has {status}.",
+      "Stacked": "{actor} gains another {status} from a new source (own countdown die).",
+      "ApplyEffect": "Apply Effect",
+      "RerollManaShort": "{name} needs {cost} more Mana for the rerolled Cast but has {mana}.",
+      "ApplyEffectHint": "Apply this Spell's Effect to the Targets, without Saves: {statuses}",
       "RequiresDamage": "{status} was not applied to {actor} (no damage went through).",
       "OngoingDamage": "Ongoing Damage",
       "ApplyTickDamage": "Apply {amount} damage to {actor}",

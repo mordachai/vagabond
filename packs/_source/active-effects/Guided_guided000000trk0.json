@@ -1,18 +1,10 @@
 {
-  "name": "Guided",
+  "name": "Guide: Seen Attacks Favored",
   "_id": "guided000000trk0",
   "img": "icons/skills/ranged/target-bullseye-arrow-glowing.webp",
   "type": "base",
   "system": {
-    "changes": [
-      {
-        "key": "system.incomingAttacksModifier",
-        "type": "override",
-        "value": "favor",
-        "phase": "initial",
-        "priority": null
-      }
-    ]
+    "changes": []
   },
   "disabled": false,
   "start": null,
@@ -22,7 +14,7 @@
     "expiry": null,
     "expired": false
   },
-  "description": "<p>Under the Guide Spell: Checks that rely on sight made against it have Favor.</p>",
+  "description": "<ul><li>Favor on attacks and Casts against it from Beings that can see it</li><li>Ends when the caster stops Focusing</li><li data-manual>Favor on other Checks against it that rely on sight</li></ul>",
   "origin": null,
   "tint": "#ffffff",
   "transfer": false,

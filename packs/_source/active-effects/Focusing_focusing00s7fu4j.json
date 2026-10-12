@@ -14,7 +14,7 @@
     "expiry": null,
     "expired": false
   },
-  "description": "<p>Currently sustaining one or more spells through Focus.</p>",
+  "description": "<ul><li>System marker, not a book Status</li><li>Sustaining one or more Spells through Focus</li></ul>",
   "origin": null,
   "tint": "#ffffff",
   "transfer": false,

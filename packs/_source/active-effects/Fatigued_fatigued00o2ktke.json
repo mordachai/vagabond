@@ -14,7 +14,7 @@
     "expiry": null,
     "expired": false
   },
-  "description": "<p>Each Fatigue occupies an Item Slot. At 3+ Fatigue, can't Rush. At 5 Fatigue, dies.</p>",
+  "description": "<ul><li>Each Fatigue occupies an Item Slot</li><li data-manual>At 3+ Fatigue: can't Rush</li><li data-manual>At 5 Fatigue: Max and Current HP are 0</li></ul>",
   "origin": null,
   "tint": "#ffffff",
   "transfer": false,
