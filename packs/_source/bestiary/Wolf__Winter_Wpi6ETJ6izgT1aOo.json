@@ -38,7 +38,7 @@
         "attackType": "castClose",
         "flatDamage": "15",
         "rollDamage": "6d4",
-        "damageType": "-",
+        "damageType": "cold",
         "extraInfo": ""
       },
       {
@@ -48,7 +48,7 @@
         "attackType": "melee",
         "flatDamage": "7",
         "rollDamage": "2d6",
-        "damageType": "-",
+        "damageType": "piercing",
         "extraInfo": ""
       }
     ],

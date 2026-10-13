@@ -46,7 +46,7 @@
         "attackType": "castRanged",
         "flatDamage": "24",
         "rollDamage": "8d6",
-        "damageType": "-",
+        "damageType": "shock",
         "extraInfo": "and +1 Fatigue",
         "causedStatuses": [
           {
@@ -69,7 +69,7 @@
         "attackType": "melee",
         "flatDamage": "3",
         "rollDamage": "1d6",
-        "damageType": "-",
+        "damageType": "blunt",
         "extraInfo": "and pass an [Endure] Save or knocked Prone and be Dazed for 1 Round.",
         "causedStatuses": [
           {
@@ -119,7 +119,7 @@
       "scaleX": 1,
       "scaleY": 1,
       "tint": "#ffffff",
-      "alphaThreshold": 0.75
+      "alphaThreshold": 0.7
     },
     "lockRotation": false,
     "rotation": 0,

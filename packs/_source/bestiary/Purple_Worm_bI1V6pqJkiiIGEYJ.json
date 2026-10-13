@@ -50,7 +50,7 @@
         "attackType": "melee",
         "flatDamage": "9",
         "rollDamage": "2d8",
-        "damageType": "-",
+        "damageType": "piercing",
         "extraInfo": "or half to all Targets Close to its mouth.",
         "causedStatuses": [],
         "critCausedStatuses": []
@@ -62,7 +62,7 @@
         "attackType": "melee",
         "flatDamage": "4",
         "rollDamage": "1d8",
-        "damageType": "-",
+        "damageType": "poison",
         "extraInfo": "and pass [Endure] or become Sickened (+1 Fatigue for Cd12).",
         "causedStatuses": [
           {

@@ -53,7 +53,7 @@
         "attackType": "melee",
         "flatDamage": "9",
         "rollDamage": "2d8",
-        "damageType": "-",
+        "damageType": "blunt",
         "extraInfo": "and Restrained and Suffocating if it's this Being's second Slam attack to hit it this Turn, and the Target is this Being's size or smaller",
         "causedStatuses": [
           {

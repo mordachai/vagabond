@@ -44,7 +44,7 @@
         "recharge": "1/Day",
         "flatDamage": "0",
         "rollDamage": "",
-        "damageType": "-",
+        "damageType": "healing",
         "attackType": "castClose",
         "extraInfo": "Regains 7 (2d6) HP and removes the Blinded, Confused, Paralyzed, or Sickened Status"
       },
@@ -64,7 +64,7 @@
         "recharge": "",
         "flatDamage": "4",
         "rollDamage": "1d8",
-        "damageType": "-",
+        "damageType": "blunt",
         "attackType": "melee",
         "extraInfo": ""
       },
@@ -74,7 +74,7 @@
         "recharge": "",
         "flatDamage": "4",
         "rollDamage": "1d8",
-        "damageType": "-",
+        "damageType": "piercing",
         "attackType": "melee",
         "extraInfo": ""
       },

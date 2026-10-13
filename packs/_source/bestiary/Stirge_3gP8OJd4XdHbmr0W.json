@@ -37,7 +37,7 @@
         "attackType": "melee",
         "flatDamage": "1",
         "rollDamage": "1d3",
-        "damageType": "-",
+        "damageType": "piercing",
         "extraInfo": "and Restrained (d4 damage each Round while Restrained this way)",
         "causedStatuses": [
           {
@@ -88,7 +88,7 @@
     "lockRotation": false,
     "rotation": 0,
     "alpha": 1,
-    "disposition": -1,
+    "disposition": 1,
     "displayBars": 0,
     "bar1": {
       "attribute": "health"

@@ -39,7 +39,7 @@
         "attackType": "ranged",
         "flatDamage": "",
         "rollDamage": "",
-        "damageType": "-",
+        "damageType": "physical",
         "extraInfo": "Restrained by Webs.",
         "causedStatuses": [
           {
@@ -61,7 +61,7 @@
         "attackType": "melee",
         "flatDamage": "4",
         "rollDamage": "1d8",
-        "damageType": "-",
+        "damageType": "piercing",
         "extraInfo": "and pass [Endure] against Sickened or take another 4 (d8) damage and be Sickened (Cd8, Paralyzed).",
         "causedStatuses": [
           {
@@ -113,7 +113,7 @@
       "scaleX": 1,
       "scaleY": 1,
       "tint": "#ffffff",
-      "alphaThreshold": 0.75
+      "alphaThreshold": 0.7
     },
     "lockRotation": false,
     "rotation": 0,

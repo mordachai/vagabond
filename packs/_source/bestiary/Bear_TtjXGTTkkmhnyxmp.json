@@ -37,7 +37,7 @@
         "rollDamage": "",
         "extraInfo": "2×Claws and 1×Bite. If both Claws hit the same Target, the Bite can automatically hit the Target.",
         "recharge": "",
-        "damageType": null
+        "damageType": "-"
       },
       {
         "name": "Claws",
@@ -47,7 +47,7 @@
         "rollDamage": "1d6",
         "extraInfo": "",
         "recharge": "",
-        "damageType": null
+        "damageType": "slashing"
       },
       {
         "name": "Bite",
@@ -57,7 +57,7 @@
         "rollDamage": "1d8",
         "extraInfo": "",
         "recharge": "",
-        "damageType": null
+        "damageType": "piercing"
       }
     ],
     "abilities": [

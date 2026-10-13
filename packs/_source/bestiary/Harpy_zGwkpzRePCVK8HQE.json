@@ -36,7 +36,7 @@
         "attackType": "castRanged",
         "flatDamage": "",
         "rollDamage": "",
-        "damageType": "-",
+        "damageType": "psychic",
         "extraInfo": "Charmed (Cd4) and must Move toward this Being.",
         "causedStatuses": [
           {
@@ -58,7 +58,7 @@
         "attackType": "melee",
         "flatDamage": "3",
         "rollDamage": "1d6",
-        "damageType": "-",
+        "damageType": "slashing",
         "extraInfo": "",
         "causedStatuses": [],
         "critCausedStatuses": []
@@ -70,7 +70,7 @@
         "attackType": "melee",
         "flatDamage": "3",
         "rollDamage": "1d6",
-        "damageType": "-",
+        "damageType": "physical",
         "extraInfo": "or (by Weapon)",
         "causedStatuses": [],
         "critCausedStatuses": []

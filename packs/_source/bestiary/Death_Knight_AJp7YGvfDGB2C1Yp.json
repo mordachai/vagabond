@@ -48,7 +48,7 @@
         "attackType": "castRanged",
         "flatDamage": "",
         "rollDamage": "",
-        "damageType": "-",
+        "damageType": "psychic",
         "extraInfo": "Paralyzed (Cd6 Rounds)",
         "causedStatuses": [
           {
@@ -82,7 +82,7 @@
         "attackType": "melee",
         "flatDamage": "6",
         "rollDamage": "1d8+2",
-        "damageType": "-",
+        "damageType": "slashing",
         "extraInfo": "",
         "causedStatuses": [],
         "critCausedStatuses": []

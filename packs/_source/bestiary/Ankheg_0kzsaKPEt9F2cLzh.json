@@ -37,7 +37,7 @@
         "attackType": "ranged",
         "flatDamage": "18",
         "rollDamage": "4d8",
-        "damageType": "-",
+        "damageType": "acid",
         "extraInfo": "and Burning (Cd4)",
         "causedStatuses": [
           {
@@ -59,7 +59,7 @@
         "attackType": "melee",
         "flatDamage": "10",
         "rollDamage": "3d6",
-        "damageType": "-",
+        "damageType": "piercing",
         "extraInfo": "and Burning (Cd4)",
         "causedStatuses": [
           {

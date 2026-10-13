@@ -36,7 +36,7 @@
         "attackType": "melee",
         "flatDamage": "2",
         "rollDamage": "1d4",
-        "damageType": "-",
+        "damageType": "piercing",
         "extraInfo": "healing this Being for the damage",
         "causedStatuses": [],
         "critCausedStatuses": []
@@ -48,7 +48,7 @@
         "attackType": "melee",
         "flatDamage": "2",
         "rollDamage": "1d4",
-        "damageType": "-",
+        "damageType": "piercing",
         "extraInfo": "and Restrained if Medium or smaller",
         "causedStatuses": [
           {

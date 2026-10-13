@@ -68,7 +68,7 @@
         "attackType": "melee",
         "flatDamage": "14",
         "rollDamage": "4d6",
-        "damageType": "-",
+        "damageType": "slashing",
         "extraInfo": "",
         "causedStatuses": [],
         "critCausedStatuses": []
@@ -80,7 +80,7 @@
         "attackType": "castRanged",
         "flatDamage": "27",
         "rollDamage": "5d10",
-        "damageType": "-",
+        "damageType": "magical",
         "extraInfo": "",
         "causedStatuses": [],
         "critCausedStatuses": []
@@ -160,7 +160,7 @@
         "attackType": "melee",
         "flatDamage": "13",
         "rollDamage": "3d8",
-        "damageType": "-",
+        "damageType": "magical",
         "extraInfo": "",
         "causedStatuses": [],
         "critCausedStatuses": []

@@ -34,7 +34,7 @@
         "attackType": "castRanged",
         "flatDamage": "3",
         "rollDamage": "1d4+1",
-        "damageType": "-",
+        "damageType": "psychic",
         "extraInfo": "Gains 3 (d4+1) Fatigue."
       },
       {

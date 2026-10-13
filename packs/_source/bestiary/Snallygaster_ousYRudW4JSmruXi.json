@@ -52,7 +52,7 @@
         "attackType": "melee",
         "flatDamage": "5",
         "rollDamage": "2d4",
-        "damageType": "-",
+        "damageType": "necrotic",
         "extraInfo": "HP is drained from the Target",
         "causedStatuses": [],
         "critCausedStatuses": []
@@ -64,7 +64,7 @@
         "attackType": "melee",
         "flatDamage": "7",
         "rollDamage": "2d6",
-        "damageType": "-",
+        "damageType": "slashing",
         "extraInfo": "and Restrained if its this Being's second Talon to hit it this Turn",
         "causedStatuses": [
           {

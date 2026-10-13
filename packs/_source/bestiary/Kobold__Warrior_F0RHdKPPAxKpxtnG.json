@@ -37,7 +37,7 @@
         "rollDamage": "1d6",
         "extraInfo": "",
         "recharge": "",
-        "damageType": null
+        "damageType": "piercing"
       }
     ],
     "abilities": [

@@ -51,7 +51,7 @@
         "rollDamage": "1d8",
         "extraInfo": "plus 4 (d8) if in water",
         "recharge": "",
-        "damageType": null
+        "damageType": "blunt"
       }
     ],
     "abilities": [

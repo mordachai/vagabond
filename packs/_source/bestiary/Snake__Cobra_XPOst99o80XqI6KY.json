@@ -34,7 +34,7 @@
         "attackType": "ranged",
         "flatDamage": "",
         "rollDamage": "",
-        "damageType": "-",
+        "damageType": "poison",
         "extraInfo": "0 and, if failed by 5 or more, Blinded",
         "causedStatuses": [
           {
@@ -56,7 +56,7 @@
         "attackType": "melee",
         "flatDamage": "1",
         "rollDamage": "1d3",
-        "damageType": "-",
+        "damageType": "piercing",
         "extraInfo": "and pass [Endure] or become Sickened (Cd6 damage each minute)",
         "causedStatuses": [
           {
@@ -90,7 +90,7 @@
       "scaleX": 1,
       "scaleY": 1,
       "tint": "#ffffff",
-      "alphaThreshold": 0.75
+      "alphaThreshold": 0.7
     },
     "lockRotation": false,
     "rotation": 0,

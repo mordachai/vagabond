@@ -47,7 +47,7 @@
         "recharge": "",
         "flatDamage": "5",
         "rollDamage": "2d4",
-        "damageType": "-",
+        "damageType": "slashing",
         "attackType": "melee",
         "extraInfo": ""
       },
@@ -57,7 +57,7 @@
         "recharge": "",
         "flatDamage": "",
         "rollDamage": "",
-        "damageType": "-",
+        "damageType": "physical",
         "attackType": "ranged",
         "extraInfo": "Restrained by Filament and pulled Close."
       }

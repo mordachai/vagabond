@@ -38,7 +38,7 @@
         "attackType": "melee",
         "flatDamage": "7",
         "rollDamage": "3d4",
-        "damageType": "-",
+        "damageType": "piercing",
         "extraInfo": "",
         "causedStatuses": [],
         "critCausedStatuses": []
@@ -50,7 +50,7 @@
         "attackType": "castRanged",
         "flatDamage": "3",
         "rollDamage": "1d6",
-        "damageType": "-",
+        "damageType": "necrotic",
         "extraInfo": "and Sickened (Cd6, any healing that affects it heals this Being instead)",
         "causedStatuses": [
           {

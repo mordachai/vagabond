@@ -43,7 +43,7 @@
         "recharge": "",
         "flatDamage": "",
         "rollDamage": "",
-        "damageType": "-",
+        "damageType": "blunt",
         "attackType": "melee",
         "extraInfo": "Restrained, Corroding, and Burning (d6) while Restrained",
         "causedStatuses": [

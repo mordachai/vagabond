@@ -54,7 +54,7 @@
         "attackType": "melee",
         "flatDamage": "4",
         "rollDamage": "1d8",
-        "damageType": "-",
+        "damageType": "blunt",
         "extraInfo": "and Restrained",
         "causedStatuses": [
           {
@@ -76,7 +76,7 @@
         "attackType": "melee",
         "flatDamage": "3",
         "rollDamage": "1d6",
-        "damageType": "-",
+        "damageType": "blunt",
         "extraInfo": "Any Huge or smaller Being in its path is pushed in front of it for the Move. If there is no open space within Close for the Being to go when this happens, it takes 3 (d6) for every 5' of Speed this Being has remaining.",
         "causedStatuses": [],
         "critCausedStatuses": []

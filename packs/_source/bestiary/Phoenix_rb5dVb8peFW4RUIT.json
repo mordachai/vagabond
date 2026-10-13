@@ -48,7 +48,7 @@
         "recharge": "1/Day",
         "flatDamage": "0",
         "rollDamage": "",
-        "damageType": "-",
+        "damageType": "healing",
         "attackType": "castClose",
         "extraInfo": "Revived at Full HP with 0 Fatigue"
       },
@@ -68,7 +68,7 @@
         "recharge": "",
         "flatDamage": "7",
         "rollDamage": "2d6",
-        "damageType": "-",
+        "damageType": "slashing",
         "attackType": "melee",
         "extraInfo": ""
       },
@@ -78,7 +78,7 @@
         "recharge": "",
         "flatDamage": "14",
         "rollDamage": "4d6",
-        "damageType": "-",
+        "damageType": "piercing",
         "attackType": "melee",
         "extraInfo": ""
       }

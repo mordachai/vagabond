@@ -55,7 +55,7 @@
         "attackType": "melee",
         "flatDamage": "13",
         "rollDamage": "2d12",
-        "damageType": "-",
+        "damageType": "piercing",
         "extraInfo": ""
       },
       {
@@ -65,7 +65,7 @@
         "attackType": "ranged",
         "flatDamage": "11",
         "rollDamage": "3d6",
-        "damageType": "-",
+        "damageType": "blunt",
         "extraInfo": ""
       }
     ],

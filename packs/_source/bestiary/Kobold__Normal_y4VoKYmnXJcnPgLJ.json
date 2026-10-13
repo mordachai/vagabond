@@ -37,7 +37,7 @@
         "attackType": "ranged",
         "flatDamage": "2",
         "rollDamage": "d4",
-        "damageType": "-",
+        "damageType": "blunt",
         "extraInfo": "",
         "causedStatuses": [],
         "critCausedStatuses": []
@@ -49,7 +49,7 @@
         "attackType": "melee",
         "flatDamage": "2",
         "rollDamage": "d4",
-        "damageType": "-",
+        "damageType": "piercing",
         "extraInfo": "",
         "causedStatuses": [],
         "critCausedStatuses": []

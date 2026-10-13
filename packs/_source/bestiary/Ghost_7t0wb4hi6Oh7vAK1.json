@@ -77,7 +77,7 @@
       },
       {
         "name": "Nightwalker",
-        "description": "Can’t Move or Target over lines of salt or in areas illuminated by Sunlight. It is Incapacitated and Burning (d8) while in Sunlight."
+        "description": "Can't Move or Target over lines of salt or in areas illuminated by Sunlight. It is Incapacitated and Burning (d8) while in Sunlight."
       }
     ],
     "universalDamageBonus": 0,

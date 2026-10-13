@@ -68,7 +68,7 @@
         "attackType": "melee",
         "flatDamage": "",
         "rollDamage": "",
-        "damageType": "-",
+        "damageType": "physical",
         "extraInfo": "Restrained",
         "causedStatuses": [
           {

@@ -57,7 +57,7 @@
         "recharge": "",
         "flatDamage": "9",
         "rollDamage": "2d8",
-        "damageType": "-",
+        "damageType": "blunt",
         "attackType": "melee",
         "extraInfo": "(+2 if this Being is Berserk)"
       }

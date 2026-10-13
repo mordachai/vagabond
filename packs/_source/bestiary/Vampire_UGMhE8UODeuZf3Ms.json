@@ -52,7 +52,7 @@
         "attackType": "castRanged",
         "flatDamage": "",
         "rollDamage": "",
-        "damageType": "-",
+        "damageType": "psychic",
         "extraInfo": "Target is Charmed (Cd6) and must do all it can to defend this Being. A Target that passes the Save is immune to this for 1 Day.",
         "causedStatuses": [
           {
@@ -86,7 +86,7 @@
         "attackType": "melee",
         "flatDamage": "7",
         "rollDamage": "2d6",
-        "damageType": "-",
+        "damageType": "piercing",
         "extraInfo": "and this Being is healed for the damage dealt. A Being that takes damage from this attack must pass [Endure] or be Cursed with Vampirism.",
         "causedStatuses": [],
         "critCausedStatuses": []
@@ -98,7 +98,7 @@
         "attackType": "melee",
         "flatDamage": "7",
         "rollDamage": "3d4",
-        "damageType": "-",
+        "damageType": "slashing",
         "extraInfo": "",
         "causedStatuses": [],
         "critCausedStatuses": []

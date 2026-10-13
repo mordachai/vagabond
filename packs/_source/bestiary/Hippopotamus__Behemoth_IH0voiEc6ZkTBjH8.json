@@ -36,7 +36,7 @@
         "attackType": "melee",
         "flatDamage": "13",
         "rollDamage": "3d8",
-        "damageType": "-",
+        "damageType": "piercing",
         "extraInfo": "and Restrained if it is smaller. This always hits a Target Restrained this way.",
         "causedStatuses": [
           {

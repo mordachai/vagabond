@@ -36,7 +36,7 @@
         "attackType": "castRanged",
         "flatDamage": "",
         "rollDamage": "",
-        "damageType": "-",
+        "damageType": "magical",
         "extraInfo": "Berserk (Cd4)",
         "causedStatuses": [
           {
@@ -58,7 +58,7 @@
         "attackType": "castClose",
         "flatDamage": "7",
         "rollDamage": "2d6",
-        "damageType": "-",
+        "damageType": "fire",
         "extraInfo": "",
         "causedStatuses": [],
         "critCausedStatuses": []
@@ -70,7 +70,7 @@
         "attackType": "melee",
         "flatDamage": "2",
         "rollDamage": "1d4",
-        "damageType": "-",
+        "damageType": "blunt",
         "extraInfo": "",
         "causedStatuses": [],
         "critCausedStatuses": []

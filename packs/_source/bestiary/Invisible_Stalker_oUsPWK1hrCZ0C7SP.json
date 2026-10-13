@@ -47,7 +47,7 @@
         "rollDamage": "4d4",
         "extraInfo": "",
         "recharge": "",
-        "damageType": null
+        "damageType": "blunt"
       }
     ],
     "abilities": [

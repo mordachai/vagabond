@@ -48,7 +48,7 @@
         "attackType": "castRanged",
         "flatDamage": "",
         "rollDamage": "",
-        "damageType": "-",
+        "damageType": "psychic",
         "extraInfo": "Cursed (Cd6 Rounds, -4 penalty to Attack Checks and a -2 to [Reflex] Saves)",
         "causedStatuses": [],
         "critCausedStatuses": []
@@ -94,7 +94,7 @@
         "attackType": "melee",
         "flatDamage": "10",
         "rollDamage": "3d6",
-        "damageType": "-",
+        "damageType": "piercing",
         "extraInfo": "and pass [Endure] with a -1 penalty or become Sickened (Cd6 damage)",
         "causedStatuses": [
           {
@@ -116,7 +116,7 @@
         "attackType": "melee",
         "flatDamage": "5",
         "rollDamage": "1d6+2",
-        "damageType": "-",
+        "damageType": "blunt",
         "extraInfo": "and Burning (Cd6)",
         "causedStatuses": [
           {
@@ -138,7 +138,7 @@
         "attackType": "castRanged",
         "flatDamage": "",
         "rollDamage": "",
-        "damageType": "-",
+        "damageType": "fire",
         "extraInfo": "Burning (2d6)",
         "causedStatuses": [
           {
@@ -160,7 +160,7 @@
         "attackType": "castRanged",
         "flatDamage": "",
         "rollDamage": "",
-        "damageType": "-",
+        "damageType": "magical",
         "extraInfo": "Paralyzed (Cd4)",
         "causedStatuses": [
           {
@@ -182,7 +182,7 @@
         "attackType": "melee",
         "flatDamage": "5",
         "rollDamage": "2d4",
-        "damageType": "-",
+        "damageType": "blunt",
         "extraInfo": "and Restrained, taking 5 (2d4) at the start of this Being's Turns while Restrained this way",
         "causedStatuses": [
           {
@@ -234,7 +234,7 @@
       "scaleX": 1,
       "scaleY": 1,
       "tint": "#ffffff",
-      "alphaThreshold": 0.75
+      "alphaThreshold": 0.7
     },
     "lockRotation": false,
     "rotation": 0,

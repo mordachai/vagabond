@@ -53,7 +53,7 @@
         "rollDamage": "3d8",
         "extraInfo": "and Restrained",
         "recharge": "",
-        "damageType": null
+        "damageType": "physical"
       }
     ],
     "abilities": [

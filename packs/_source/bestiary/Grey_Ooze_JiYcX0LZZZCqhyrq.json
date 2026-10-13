@@ -49,7 +49,7 @@
         "rollDamage": "2d8",
         "extraInfo": "and Corroding",
         "recharge": "",
-        "damageType": null
+        "damageType": "blunt"
       }
     ],
     "abilities": [

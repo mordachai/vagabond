@@ -51,7 +51,7 @@
         "attackType": "castClose",
         "flatDamage": "5",
         "rollDamage": "1d10",
-        "damageType": "-",
+        "damageType": "shock",
         "extraInfo": "healing this Being for the damage dealt",
         "causedStatuses": [],
         "critCausedStatuses": []
@@ -104,7 +104,7 @@
     "lockRotation": false,
     "rotation": 0,
     "alpha": 1,
-    "disposition": -1,
+    "disposition": 0,
     "displayBars": 0,
     "bar1": {
       "attribute": "health"

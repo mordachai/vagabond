@@ -35,7 +35,7 @@
         "flatDamage": "7",
         "rollDamage": "2d6",
         "extraInfo": "half on pass and not a Crit.",
-        "damageType": null
+        "damageType": "poison"
       },
       {
         "name": "Bite",
@@ -45,7 +45,7 @@
         "rollDamage": "1d6",
         "extraInfo": "",
         "recharge": "",
-        "damageType": null
+        "damageType": "piercing"
       }
     ],
     "abilities": [],

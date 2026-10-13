@@ -35,7 +35,7 @@
         "rollDamage": "2d4",
         "extraInfo": "",
         "recharge": "",
-        "damageType": null
+        "damageType": "piercing"
       },
       {
         "name": "Stomp",
@@ -45,7 +45,7 @@
         "rollDamage": "2d8",
         "extraInfo": "",
         "recharge": "",
-        "damageType": null
+        "damageType": "blunt"
       }
     ],
     "abilities": [

@@ -37,7 +37,7 @@
         "rollDamage": "1d4",
         "extraInfo": "",
         "recharge": "",
-        "damageType": null
+        "damageType": "piercing"
       },
       {
         "name": "Dagger",
@@ -47,13 +47,13 @@
         "rollDamage": "1d4",
         "extraInfo": "",
         "recharge": "",
-        "damageType": null
+        "damageType": "piercing"
       }
     ],
     "abilities": [
       {
         "name": "Pack Instincts",
-        "description": "If one of its Allies is within 5 feet of a Target of this Being’s Attack, that Target is Vulnerable against the Attack."
+        "description": "If one of its Allies is within 5 feet of a Target of this Being's Attack, that Target is Vulnerable against the Attack."
       }
     ],
     "universalDamageBonus": 0,

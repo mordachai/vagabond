@@ -46,7 +46,7 @@
         "recharge": "",
         "flatDamage": "5",
         "rollDamage": "1d10",
-        "damageType": "-",
+        "damageType": "piercing",
         "attackType": "melee",
         "extraInfo": ""
       },
@@ -56,7 +56,7 @@
         "recharge": "",
         "flatDamage": "3",
         "rollDamage": "1d6",
-        "damageType": "-",
+        "damageType": "slashing",
         "attackType": "melee",
         "extraInfo": ""
       }
@@ -64,11 +64,11 @@
     "abilities": [
       {
         "name": "Lesser Regenerate I",
-        "description": "Regains 4 (d8) HP on each of its Turns unless it took damage it was Weak to in the last Round. It can’t be reduced below 1 HP except by damage it is Weak to."
+        "description": "Regains 4 (d8) HP on each of its Turns unless it took damage it was Weak to in the last Round. It can't be reduced below 1 HP except by damage it is Weak to."
       },
       {
         "name": "Sunlight Aversion",
-        "description": "The troll’s Armor and Lesser Regenerate trait are suspended while it is in sunlight, and it is Burning (d6). If the troll dies within sunlight, it is turned to stone."
+        "description": "The troll's Armor and Lesser Regenerate trait are suspended while it is in sunlight, and it is Burning (d6). If the troll dies within sunlight, it is turned to stone."
       }
     ],
     "universalDamageBonus": 0,

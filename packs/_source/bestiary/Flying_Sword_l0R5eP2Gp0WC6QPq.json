@@ -46,7 +46,7 @@
         "attackType": "melee",
         "flatDamage": "4",
         "rollDamage": "1d8",
-        "damageType": "-",
+        "damageType": "slashing",
         "extraInfo": ""
       }
     ],

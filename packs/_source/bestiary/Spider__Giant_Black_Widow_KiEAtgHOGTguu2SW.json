@@ -37,7 +37,7 @@
         "recharge": "",
         "flatDamage": "7",
         "rollDamage": "2d6",
-        "damageType": "-",
+        "damageType": "piercing",
         "attackType": "melee",
         "extraInfo": "and pass [Endure] or become Sickened (Cd4, +1 Fatigue each Round).",
         "causedStatuses": [

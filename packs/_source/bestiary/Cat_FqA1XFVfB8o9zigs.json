@@ -39,13 +39,13 @@
         "rollDamage": "",
         "extraInfo": "",
         "recharge": "",
-        "damageType": null
+        "damageType": "slashing"
       }
     ],
     "abilities": [
       {
         "name": "Righting Reflex",
-        "description": "It doesn’t take falling damage from falling 40' or less."
+        "description": "It doesn't take falling damage from falling 40' or less."
       }
     ],
     "universalDamageBonus": 0,

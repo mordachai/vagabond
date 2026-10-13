@@ -49,7 +49,7 @@
         "attackType": "melee",
         "flatDamage": "2",
         "rollDamage": "1d4",
-        "damageType": "-",
+        "damageType": "piercing",
         "extraInfo": "and Sickened (Cd4, Unconscious and +1 Fatigue each Round). If failed by 5 or more, it is also Restrained (5 (2d4) each Round)",
         "causedStatuses": [
           {

@@ -43,7 +43,7 @@
         "recharge": "",
         "flatDamage": "2",
         "rollDamage": "1d4",
-        "damageType": "-",
+        "damageType": "blunt",
         "attackType": "melee",
         "extraInfo": ""
       }

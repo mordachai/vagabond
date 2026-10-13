@@ -55,7 +55,7 @@
         "attackType": "melee",
         "flatDamage": "5",
         "rollDamage": "2d4",
-        "damageType": "-",
+        "damageType": "piercing",
         "extraInfo": "and Restrained (Continual).",
         "causedStatuses": [
           {
@@ -77,7 +77,7 @@
         "attackType": "melee",
         "flatDamage": "3",
         "rollDamage": "1d6",
-        "damageType": "-",
+        "damageType": "slashing",
         "extraInfo": "",
         "causedStatuses": [],
         "critCausedStatuses": []
@@ -101,7 +101,7 @@
       "scaleX": 1,
       "scaleY": 1,
       "tint": "#ffffff",
-      "alphaThreshold": 0.75
+      "alphaThreshold": 0.7
     },
     "lockRotation": false,
     "rotation": 0,

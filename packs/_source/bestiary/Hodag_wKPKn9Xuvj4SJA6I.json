@@ -52,7 +52,7 @@
         "rollDamage": "1d8",
         "extraInfo": "",
         "recharge": "",
-        "damageType": null
+        "damageType": "piercing"
       },
       {
         "name": "Bite",
@@ -62,7 +62,7 @@
         "rollDamage": "1d6",
         "extraInfo": "",
         "recharge": "",
-        "damageType": null
+        "damageType": "piercing"
       }
     ],
     "abilities": [

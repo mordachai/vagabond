@@ -42,7 +42,7 @@
         "attackType": "melee",
         "flatDamage": "7",
         "rollDamage": "2d6",
-        "damageType": "-",
+        "damageType": "piercing",
         "extraInfo": "and pass [Endure] with a -3 penalty or be Sickened (Cd4, Paralyzed).",
         "causedStatuses": [
           {

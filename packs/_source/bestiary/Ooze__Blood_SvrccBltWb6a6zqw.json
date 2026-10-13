@@ -48,7 +48,7 @@
         "rollDamage": "2d6",
         "extraInfo": "and this Being is healed for the damage dealt",
         "recharge": "",
-        "damageType": null
+        "damageType": "blunt"
       }
     ],
     "abilities": [

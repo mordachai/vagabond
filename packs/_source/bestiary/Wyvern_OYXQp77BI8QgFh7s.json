@@ -39,7 +39,7 @@
         "rollDamage": "",
         "extraInfo": "1xStinger and 1xBite; or 2xClaw and 1xBite",
         "recharge": "",
-        "damageType": null
+        "damageType": "-"
       },
       {
         "name": "Stinger",
@@ -49,7 +49,7 @@
         "flatDamage": "3",
         "rollDamage": "1d6",
         "extraInfo": "and Sickened (Cd4, +1 Fatigue each Round)",
-        "damageType": null
+        "damageType": "piercing"
       },
       {
         "name": "Claw",
@@ -59,7 +59,7 @@
         "rollDamage": "1d6",
         "extraInfo": "",
         "recharge": "",
-        "damageType": null
+        "damageType": "slashing"
       },
       {
         "name": "Bite",
@@ -69,7 +69,7 @@
         "rollDamage": "2d8",
         "extraInfo": "",
         "recharge": "",
-        "damageType": null
+        "damageType": "piercing"
       }
     ],
     "abilities": [],

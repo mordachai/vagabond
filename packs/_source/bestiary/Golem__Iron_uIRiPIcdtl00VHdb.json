@@ -68,7 +68,7 @@
         "recharge": "",
         "flatDamage": "13",
         "rollDamage": "2d12",
-        "damageType": "-",
+        "damageType": "slashing",
         "attackType": "melee",
         "extraInfo": ""
       }

@@ -48,14 +48,14 @@
         "attackType": "castClose",
         "flatDamage": "7",
         "rollDamage": "2d6",
-        "damageType": "-",
+        "damageType": "blunt",
         "extraInfo": "and pass [Endure] or Sickened (Cd4 damage). This Being dies."
       }
     ],
     "abilities": [
       {
         "name": "Nightwalker",
-        "description": "Can’t Move or Target over lines of salt or in areas illuminated by Sunlight. It is Incapacitated and Burning (d8) while in Sunlight."
+        "description": "Can't Move or Target over lines of salt or in areas illuminated by Sunlight. It is Incapacitated and Burning (d8) while in Sunlight."
       },
       {
         "name": "Zombie",

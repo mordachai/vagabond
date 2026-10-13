@@ -75,7 +75,7 @@
         "attackType": "castRanged",
         "flatDamage": "",
         "rollDamage": "",
-        "damageType": "-",
+        "damageType": "shock",
         "extraInfo": "Frightened (Cd4, and Dazed if within Near)",
         "causedStatuses": [
           {
@@ -106,7 +106,7 @@
         "attackType": "melee",
         "flatDamage": "7",
         "rollDamage": "2d6",
-        "damageType": "-",
+        "damageType": "slashing",
         "extraInfo": "",
         "causedStatuses": [],
         "critCausedStatuses": []
@@ -118,7 +118,7 @@
         "attackType": "castRanged",
         "flatDamage": "",
         "rollDamage": "",
-        "damageType": "-",
+        "damageType": "magical",
         "extraInfo": "A magic effect of its choice is dispelled or suspended for 2d6 hours if it is a Curse or Relic Power",
         "causedStatuses": [],
         "critCausedStatuses": []

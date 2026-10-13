@@ -50,7 +50,7 @@
         "recharge": "",
         "flatDamage": "4",
         "rollDamage": "1d8",
-        "damageType": "-",
+        "damageType": "slashing",
         "attackType": "melee",
         "extraInfo": "and Restrained if it's this Being's second Claw to hit it this Turn",
         "causedStatuses": [],

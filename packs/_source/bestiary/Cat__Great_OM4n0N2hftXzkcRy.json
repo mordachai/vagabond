@@ -43,7 +43,7 @@
         "recharge": "",
         "flatDamage": "5",
         "rollDamage": "1d10",
-        "damageType": "-",
+        "damageType": "piercing",
         "attackType": "melee",
         "extraInfo": ""
       },
@@ -53,7 +53,7 @@
         "recharge": "",
         "flatDamage": "3",
         "rollDamage": "1d6",
-        "damageType": "-",
+        "damageType": "slashing",
         "attackType": "melee",
         "extraInfo": ""
       }

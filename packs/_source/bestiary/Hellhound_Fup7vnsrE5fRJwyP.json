@@ -64,7 +64,7 @@
         "attackType": "melee",
         "flatDamage": "3",
         "rollDamage": "1d6",
-        "damageType": "-",
+        "damageType": "piercing",
         "extraInfo": "",
         "causedStatuses": [],
         "critCausedStatuses": []

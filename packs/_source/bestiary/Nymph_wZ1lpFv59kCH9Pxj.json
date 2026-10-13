@@ -39,7 +39,7 @@
         "rollDamage": "",
         "extraInfo": "Cursed (Cd8 Rounds, can only breathe water).",
         "recharge": "",
-        "damageType": null
+        "damageType": "magical"
       }
     ],
     "abilities": [

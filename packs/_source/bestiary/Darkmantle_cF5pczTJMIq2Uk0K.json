@@ -39,7 +39,7 @@
         "rollDamage": "",
         "extraInfo": "Extinguishes all light sources, and the Area becomes magic darkness. If the light source was Magic, it is dispelled.",
         "recharge": "",
-        "damageType": null
+        "damageType": "-"
       },
       {
         "name": "Bite",
@@ -49,7 +49,7 @@
         "rollDamage": "1d6",
         "extraInfo": "",
         "recharge": "",
-        "damageType": null
+        "damageType": "piercing"
       }
     ],
     "abilities": [],

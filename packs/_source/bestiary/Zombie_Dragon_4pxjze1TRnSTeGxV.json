@@ -64,7 +64,7 @@
         "attackType": "castRanged",
         "flatDamage": "7",
         "rollDamage": "2d6",
-        "damageType": "-",
+        "damageType": "poison",
         "extraInfo": "and Sickened (Cd6)",
         "causedStatuses": [
           {
@@ -86,7 +86,7 @@
         "attackType": "melee",
         "flatDamage": "9",
         "rollDamage": "2d8",
-        "damageType": "-",
+        "damageType": "piercing",
         "extraInfo": "",
         "causedStatuses": [],
         "critCausedStatuses": []
@@ -98,7 +98,7 @@
         "attackType": "melee",
         "flatDamage": "4",
         "rollDamage": "1d6+1",
-        "damageType": "-",
+        "damageType": "slashing",
         "extraInfo": "",
         "causedStatuses": [],
         "critCausedStatuses": []

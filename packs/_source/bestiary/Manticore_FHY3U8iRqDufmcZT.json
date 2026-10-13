@@ -39,7 +39,7 @@
         "flatDamage": "",
         "rollDamage": "",
         "extraInfo": "3 (d6)xTail Spike",
-        "damageType": null
+        "damageType": "-"
       },
       {
         "name": "Combo 2",
@@ -49,7 +49,7 @@
         "rollDamage": "",
         "extraInfo": "2xClaws and 1xBite",
         "recharge": "",
-        "damageType": null
+        "damageType": "-"
       },
       {
         "name": "Bite",
@@ -59,7 +59,7 @@
         "rollDamage": "2d4",
         "extraInfo": "",
         "recharge": "",
-        "damageType": null
+        "damageType": "piercing"
       },
       {
         "name": "Claws",
@@ -69,7 +69,7 @@
         "rollDamage": "1d4",
         "extraInfo": "",
         "recharge": "",
-        "damageType": null
+        "damageType": "slashing"
       },
       {
         "name": "Tail Spike",
@@ -79,7 +79,7 @@
         "rollDamage": "1d6",
         "extraInfo": "",
         "recharge": "",
-        "damageType": null
+        "damageType": "piercing"
       }
     ],
     "abilities": [],

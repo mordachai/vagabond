@@ -51,7 +51,7 @@
         "attackType": "castRanged",
         "flatDamage": "",
         "rollDamage": "",
-        "damageType": "-",
+        "damageType": "magical",
         "extraInfo": "Frightened (Cd4, Paralyzed)",
         "causedStatuses": [
           {
@@ -82,7 +82,7 @@
         "attackType": "melee",
         "flatDamage": "10",
         "rollDamage": "3d6",
-        "damageType": "-",
+        "damageType": "necrotic",
         "extraInfo": "and pass an [Endure] Save or be Cursed (can't regain HP, and it loses 10 (3d6) HP every day)",
         "causedStatuses": [],
         "critCausedStatuses": []
@@ -134,7 +134,7 @@
       "scaleX": 1,
       "scaleY": 1,
       "tint": "#ffffff",
-      "alphaThreshold": 0.75
+      "alphaThreshold": 0.7
     },
     "lockRotation": false,
     "rotation": 0,
