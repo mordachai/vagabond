@@ -73,7 +73,7 @@
         "recharge": "",
         "flatDamage": "7",
         "rollDamage": "2d6",
-        "damageType": "-",
+        "damageType": "necrotic",
         "attackType": "castRanged",
         "extraInfo": "and pass [Endure] or become Sickened (Cd4 damage, Blinded and Deafened).",
         "causedStatuses": [

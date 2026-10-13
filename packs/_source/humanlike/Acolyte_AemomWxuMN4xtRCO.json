@@ -58,7 +58,7 @@
         "attackType": "castClose",
         "flatDamage": "7",
         "rollDamage": "2d6",
-        "damageType": "-",
+        "damageType": "fire",
         "extraInfo": "and Blinded (Cd4)",
         "causedStatuses": [
           {
@@ -80,7 +80,7 @@
         "attackType": "melee",
         "flatDamage": "3",
         "rollDamage": "d6",
-        "damageType": "-",
+        "damageType": "physical",
         "extraInfo": "",
         "causedStatuses": [],
         "critCausedStatuses": []

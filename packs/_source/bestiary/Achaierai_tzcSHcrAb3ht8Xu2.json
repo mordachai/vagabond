@@ -55,7 +55,7 @@
         "recharge": "",
         "flatDamage": "5",
         "rollDamage": "1d10",
-        "damageType": "-",
+        "damageType": "physical",
         "attackType": "melee",
         "extraInfo": ""
       },
@@ -65,7 +65,7 @@
         "recharge": "",
         "flatDamage": "4",
         "rollDamage": "1d8",
-        "damageType": "-",
+        "damageType": "physical",
         "attackType": "melee",
         "extraInfo": ""
       }

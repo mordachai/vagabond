@@ -14,7 +14,7 @@
     "expiry": null,
     "expired": false
   },
-  "description": "<ul><li>System marker, not a book Status</li><li>Target of a Hunter's Mark</li><li>Rules: the Hunter's Mark</li></ul>",
+  "description": "<ul><li>Target of a Hunter's Mark</li><li>Rules: the Hunter's Mark</li></ul>",
   "origin": null,
   "tint": "#ffffff",
   "transfer": false,

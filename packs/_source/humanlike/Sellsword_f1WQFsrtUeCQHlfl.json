@@ -55,7 +55,7 @@
         "attackType": "melee",
         "flatDamage": "4",
         "rollDamage": "d8",
-        "damageType": "-",
+        "damageType": "piercing",
         "extraInfo": "or 9 (2d8) if failed on a 1.",
         "causedStatuses": [],
         "critCausedStatuses": []
@@ -67,7 +67,7 @@
         "attackType": "melee",
         "flatDamage": "2",
         "rollDamage": "d4",
-        "damageType": "-",
+        "damageType": "physical",
         "extraInfo": "and pass [Endure] or be shoved Prone if Medium or smaller.",
         "causedStatuses": [
           {

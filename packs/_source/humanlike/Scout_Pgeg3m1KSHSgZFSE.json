@@ -34,7 +34,7 @@
         "attackType": "ranged",
         "flatDamage": "4",
         "rollDamage": "d8",
-        "damageType": "-",
+        "damageType": "piercing",
         "extraInfo": ""
       },
       {
@@ -44,7 +44,7 @@
         "attackType": "melee",
         "flatDamage": "2",
         "rollDamage": "d4",
-        "damageType": "-",
+        "damageType": "slashing",
         "extraInfo": ""
       }
     ],

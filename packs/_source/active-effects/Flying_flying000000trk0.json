@@ -14,7 +14,7 @@
     "expiry": null,
     "expired": false
   },
-  "description": "<ul><li>System marker, not a book Status</li><li>Seismicsense can't detect it</li><li data-manual>Toggle it while the Being is airborne</li></ul>",
+  "description": "<ul><li>Seismicsense can't detect it</li><li data-manual>Toggle it while the Being is airborne</li></ul>",
   "origin": null,
   "tint": "#ffffff",
   "transfer": false,

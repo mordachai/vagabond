@@ -45,7 +45,7 @@
         "attackType": "melee",
         "flatDamage": "2",
         "rollDamage": "d4",
-        "damageType": "-",
+        "damageType": "slashing",
         "extraInfo": "and Sneak Attack"
       }
     ],

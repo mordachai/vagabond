@@ -51,7 +51,7 @@
         "rollDamage": "d6",
         "extraInfo": "or (by Weapon)",
         "recharge": "",
-        "damageType": "-"
+        "damageType": "physical"
       },
       {
         "name": "Arbalest",
@@ -61,7 +61,7 @@
         "rollDamage": "d10",
         "extraInfo": "",
         "recharge": "",
-        "damageType": "-"
+        "damageType": "piercing"
       }
     ],
     "abilities": []

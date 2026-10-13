@@ -14,7 +14,7 @@
     "expiry": null,
     "expired": false
   },
-  "description": "<ul><li>System marker, not a book Status</li><li>Flanking an adjacent Foe alongside an ally</li><li>That Foe is Flanked</li></ul>",
+  "description": "<ul><li>Flanking an adjacent Foe alongside an ally</li><li>That Foe is Flanked</li></ul>",
   "origin": null,
   "tint": "#ffffff",
   "transfer": false,

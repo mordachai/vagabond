@@ -51,7 +51,7 @@
         "rollDamage": "d8",
         "extraInfo": "",
         "recharge": "",
-        "damageType": "-"
+        "damageType": "physical"
       },
       {
         "name": "Weapon",
@@ -61,7 +61,7 @@
         "rollDamage": "d6",
         "extraInfo": "or (by Weapon)",
         "recharge": "",
-        "damageType": "-"
+        "damageType": "physical"
       }
     ],
     "abilities": [

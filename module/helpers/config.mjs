@@ -295,7 +295,7 @@ VAGABOND.statusEffectDefinitions = [
     name: 'VAGABOND.StatusConditions.Focusing',
     img: '/icons/magic/lightning/projectile-tendrils-teal.webp',
     statuses: ['focusing'],
-    description: "<ul><li>System marker, not a book Status</li><li>Sustaining one or more Spells through Focus</li></ul>"
+    description: "<ul><li>Sustaining one or more Spells through Focus</li></ul>"
   },
 
   // MANUAL TRACKING
@@ -327,7 +327,7 @@ VAGABOND.statusEffectDefinitions = [
     name: 'VAGABOND.StatusConditions.Sunlit',
     img: '/icons/magic/light/beam-rays-yellow.webp',
     statuses: ['sunlit'],
-    description: "<ul><li>System marker, not a book Status</li><li>Nightwalker: burns, Incapacitated</li><li>Vampire: burns, stops regenerating</li><li>Zombie: loses its 1 HP floor</li><li data-manual>Toggle it while the Being stands in Sunlight</li></ul>"
+    description: "<ul><li>Nightwalker: burns, Incapacitated</li><li>Vampire: burns, stops regenerating</li><li>Zombie: loses its 1 HP floor</li><li data-manual>Toggle it while the Being stands in Sunlight</li></ul>"
   },
   {
     id: 'suffocating',
@@ -491,7 +491,7 @@ VAGABOND.statusEffectDefinitions = [
     statuses: ['flanking'],
     // Generic fallback only — when auto-applied, FlankingHelper overwrites this
     // with live text naming the Foe(s) being pinned and the co-flanker(s).
-    description: "<ul><li>System marker, not a book Status</li><li>Flanking an adjacent Foe alongside an ally</li><li>That Foe is Flanked</li></ul>",
+    description: "<ul><li>Flanking an adjacent Foe alongside an ally</li><li>That Foe is Flanked</li></ul>",
     changes: []
   },
   {
@@ -502,7 +502,7 @@ VAGABOND.statusEffectDefinitions = [
     name: 'VAGABOND.StatusConditions.Hexed',
     img: '/icons/magic/symbols/runes-triangle-blue.webp',
     statuses: ['hexed'],
-    description: "<ul><li>System marker, not a book Status</li><li>Target of a Witch's Hex</li><li>Rules: the Witch's Hex</li></ul>",
+    description: "<ul><li>Target of a Witch's Hex</li><li>Rules: the Witch's Hex</li></ul>",
     changes: []
   },
   {
@@ -513,7 +513,7 @@ VAGABOND.statusEffectDefinitions = [
     name: 'VAGABOND.StatusConditions.Marked',
     img: '/icons/skills/targeting/crosshair-pointed-orange.webp',
     statuses: ['marked'],
-    description: "<ul><li>System marker, not a book Status</li><li>Target of a Hunter's Mark</li><li>Rules: the Hunter's Mark</li></ul>",
+    description: "<ul><li>Target of a Hunter's Mark</li><li>Rules: the Hunter's Mark</li></ul>",
     changes: []
   },
 
@@ -638,7 +638,7 @@ VAGABOND.statusEffectDefinitions = [
     name: 'VAGABOND.StatusConditions.Flying',
     img: '/icons/creatures/abilities/wings-birdlike-blue.webp',
     statuses: ['flying'],
-    description: "<ul><li>System marker, not a book Status</li><li>Seismicsense can't detect it</li><li data-manual>Toggle it while the Being is airborne</li></ul>",
+    description: "<ul><li>Seismicsense can't detect it</li><li data-manual>Toggle it while the Being is airborne</li></ul>",
     changes: []
   },
   {
@@ -709,7 +709,7 @@ VAGABOND.statusEffectDefinitions = [
     name: 'VAGABOND.StatusConditions.Grappling',
     img: '/icons/skills/melee/hand-grip-staff-blue.webp',
     statuses: ['grappling'],
-    description: "<ul><li>System marker, not a book Status</li><li>Restraining a Being</li><li>Speed halved unless the Target is smaller</li></ul>"
+    description: "<ul><li>Restraining a Being</li><li>Speed halved unless the Target is smaller</li></ul>"
     // No static changes — speed penalty is computed dynamically in handleGrapple based on current speed and size comparison
   },
   {
@@ -836,7 +836,7 @@ VAGABOND.statusEffectDefinitions = [
     name: 'VAGABOND.StatusConditions.Dead',
     img: '/icons/magic/death/grave-tombstone-glow-teal.webp',
     statuses: ['dead'],
-    description: "<ul><li>System marker, not a book Status</li><li>Fails every roll</li><li>Speed 0</li><li>Vulnerable</li></ul>",
+    description: "<ul><li>Fails every roll</li><li>Speed 0</li><li>Vulnerable</li></ul>",
     changes: [
       // Auto-fail ALL rolls (new field)
       {

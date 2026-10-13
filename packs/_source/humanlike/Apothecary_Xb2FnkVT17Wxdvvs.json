@@ -54,7 +54,7 @@
         "attackType": "ranged",
         "flatDamage": "2",
         "rollDamage": "d4",
-        "damageType": "-",
+        "damageType": "piercing",
         "extraInfo": ""
       }
     ],

@@ -51,8 +51,9 @@
     {{!-- Ongoing status icons — floating vertical strip in the left gutter.
          Same .status-icon markup + menu as the sheet: left-click = chat,
          right-click = Send to Chat / Remove. --}}
-    <div class="vh-hud-statuses">{{~#each statusEffects}}<div class="status-icon" data-effect-id="{{id}}" data-effect-uuid="{{uuid}}" data-hud-tip="{{name}}" data-action="statusClick"><img src="{{icon}}" alt="{{name}}" /></div>{{/each~}}</div>
-
+    {{#if statusEffects}}
+      <div class="vh-hud-statuses">{{~#each statusEffects}}<div class="status-icon" data-effect-id="{{id}}" data-effect-uuid="{{uuid}}" data-hud-tip="{{name}}" data-action="statusClick"><img src="{{icon}}" alt="{{name}}" /></div>{{/each~}}</div>
+    {{/if}}
     {{!-- Main row: portrait | vitals | center --}}
     <div class="vh-main-grid">
 
@@ -82,6 +83,9 @@
               <i class="fas fa-book-open"></i>
             </button>
           {{/if}}
+          <div class="vh-armor" data-hud-tip="{{system.armorDescription}}">
+            <i class="fas fa-shield"></i><span class="vh-armor-val">{{armor}}</span>
+          </div>
         </div>
         <div class="vh-hp-bar" data-hud-tip="{{hp.value}}/{{hp.max}}"><span class="vh-hp-bar-fill" style="width:{{hpBar.pct}}%;background-color:{{hpBar.color}};"></span></div>
 
@@ -103,9 +107,6 @@
 
     {{!-- Always-on info strip: armor + senses + resistances --}}
     <div class="vh-npc-info">
-      <div class="vh-armor" data-hud-tip="{{system.armorDescription}}">
-        <i class="fas fa-shield"></i><span class="vh-armor-val">{{armor}}</span>
-      </div>
       {{#if hasInfoStrip}}
         {{#if (or senses.length sensesNote)}}<fieldset class="vh-info-group vh-info-senses"><legend>{{localize 'VAGABOND.Actor.NPC.FIELDS.senses.short'}}</legend><div class="vh-info-body">{{#each senses}}<span data-hud-tip="{{hint}}">{{label}}</span>{{#unless @last}}, {{/unless}}{{/each}}{{#if sensesNote}}{{#if senses.length}} — {{/if}}{{sensesNote}}{{/if}}</div></fieldset>{{/if}}
         {{#if immunities.length}}<fieldset class="vh-info-group"><legend>{{localize 'VAGABOND.Actor.NPC.FIELDS.immunities.short'}}</legend><div class="vh-info-body">{{#each immunities}}<i class="{{icon}} vh-info-immune" data-hud-tip="{{localize 'VAGABOND.Actor.NPC.FIELDS.immunities.label'}}: {{label}}"></i>{{/each}}</div></fieldset>{{/if}}

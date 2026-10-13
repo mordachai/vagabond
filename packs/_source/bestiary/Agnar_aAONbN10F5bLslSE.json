@@ -36,7 +36,7 @@
         "attackType": "castClose",
         "flatDamage": "9",
         "rollDamage": "2d8",
-        "damageType": "-",
+        "damageType": "physical",
         "extraInfo": "deals half on a pass and heals this Being for the damage roll. (It can only use this Action while at or below half HP)",
         "causedStatuses": [],
         "critCausedStatuses": []
@@ -48,7 +48,7 @@
         "attackType": "melee",
         "flatDamage": "10",
         "rollDamage": "3d6",
-        "damageType": "-",
+        "damageType": "physical",
         "extraInfo": "and Restrained",
         "causedStatuses": [
           {

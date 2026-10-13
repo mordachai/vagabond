@@ -34,7 +34,7 @@
         "attackType": "melee",
         "flatDamage": "3",
         "rollDamage": "d6",
-        "damageType": "-",
+        "damageType": "piercing",
         "extraInfo": "or 7 (2d6) if failed on a 1."
       },
       {

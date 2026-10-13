@@ -34,7 +34,7 @@
         "attackType": "castRanged",
         "flatDamage": "10",
         "rollDamage": "3d6",
-        "damageType": "-",
+        "damageType": "cold",
         "extraInfo": "and filling the area with snow (Difficult Terrain)"
       },
       {
@@ -44,7 +44,7 @@
         "attackType": "castRanged",
         "flatDamage": "7",
         "rollDamage": "2d6",
-        "damageType": "-",
+        "damageType": "piercing",
         "extraInfo": "and its Speed is reduced by half for the duration"
       }
     ],

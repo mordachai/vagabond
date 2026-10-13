@@ -4174,7 +4174,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   --vh-portrait-w: 100px;
   --vh-portrait-h: 100px;
   --vh-float-w: 94px;
-  --vh-status-w: 18px;
+  --vh-status-w: 32px;
   --vh-wpn0-top: 12px;
   --vh-wpn0-right: 40px;
   --vh-wpn1-top: 42px;
@@ -5413,7 +5413,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 }
 .vbd-hud--npc .vh-body {
   min-width: 360px;
-  max-width: 800px;
+  max-width: 580px;
 }
 .vbd-hud--npc .vh-vital--hd {
   cursor: default;

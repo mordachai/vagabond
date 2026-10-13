@@ -34,7 +34,7 @@
         "attackType": "ranged",
         "flatDamage": "1",
         "rollDamage": "",
-        "damageType": "-",
+        "damageType": "physical",
         "extraInfo": ""
       }
     ],

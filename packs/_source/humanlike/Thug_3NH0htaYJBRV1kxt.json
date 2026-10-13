@@ -34,7 +34,7 @@
         "attackType": "melee",
         "flatDamage": "3",
         "rollDamage": "d6",
-        "damageType": "-",
+        "damageType": "physical",
         "extraInfo": "or (by Weapon)"
       },
       {
@@ -44,7 +44,7 @@
         "attackType": "ranged",
         "flatDamage": "5",
         "rollDamage": "d10",
-        "damageType": "-",
+        "damageType": "piercing",
         "extraInfo": ""
       }
     ],

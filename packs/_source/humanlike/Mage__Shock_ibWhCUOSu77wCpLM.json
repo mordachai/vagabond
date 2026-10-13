@@ -34,7 +34,7 @@
         "attackType": "castRanged",
         "flatDamage": "10",
         "rollDamage": "3d6",
-        "damageType": "-",
+        "damageType": "shock",
         "extraInfo": "and Dazed (Cd4, or Cd6 if failed as a 1)",
         "causedStatuses": [
           {
@@ -56,7 +56,7 @@
         "attackType": "castRanged",
         "flatDamage": "7",
         "rollDamage": "2d6",
-        "damageType": "-",
+        "damageType": "shock",
         "extraInfo": "and Dazed (Cd4, or Cd6 if failed as a 1)",
         "causedStatuses": [
           {

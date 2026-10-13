@@ -63,7 +63,7 @@
         "recharge": "",
         "flatDamage": "",
         "rollDamage": "",
-        "damageType": "-"
+        "damageType": "physical"
       },
       {
         "name": "Dagger",
@@ -73,7 +73,7 @@
         "rollDamage": "d4",
         "extraInfo": "and Sneak Attack",
         "recharge": "",
-        "damageType": "-"
+        "damageType": "slashing"
       }
     ],
     "abilities": [

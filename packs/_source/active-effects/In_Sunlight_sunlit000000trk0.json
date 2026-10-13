@@ -14,7 +14,7 @@
     "expiry": null,
     "expired": false
   },
-  "description": "<ul><li>System marker, not a book Status</li><li>Nightwalker: burns, Incapacitated</li><li>Vampire: burns, stops regenerating</li><li>Zombie: loses its 1 HP floor</li><li data-manual>Toggle it while the Being stands in Sunlight</li></ul>",
+  "description": "<ul><li>Nightwalker: burns, Incapacitated</li><li>Vampire: burns, stops regenerating</li><li>Zombie: loses its 1 HP floor</li><li data-manual>Toggle it while the Being stands in Sunlight</li></ul>",
   "origin": null,
   "tint": "#ffffff",
   "transfer": false,

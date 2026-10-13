@@ -34,7 +34,7 @@
         "attackType": "melee",
         "flatDamage": "6",
         "rollDamage": "d12",
-        "damageType": "-",
+        "damageType": "slashing",
         "extraInfo": "or 13 (2d12!) if this Being is Berserk"
       }
     ],

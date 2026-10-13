@@ -14,7 +14,7 @@
     "expiry": null,
     "expired": false
   },
-  "description": "<ul><li>System marker, not a book Status</li><li>Restraining a Being</li><li>Speed halved unless the Target is smaller</li></ul>",
+  "description": "<ul><li>Restraining a Being</li><li>Speed halved unless the Target is smaller</li></ul>",
   "origin": null,
   "tint": "#ffffff",
   "transfer": false,

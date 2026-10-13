@@ -51,7 +51,7 @@
         "rollDamage": "d8",
         "extraInfo": "",
         "recharge": "",
-        "damageType": "-"
+        "damageType": "piercing"
       },
       {
         "name": "Dagger",
@@ -61,7 +61,7 @@
         "rollDamage": "d4",
         "extraInfo": "",
         "recharge": "",
-        "damageType": "-"
+        "damageType": "slashing"
       }
     ],
     "abilities": [

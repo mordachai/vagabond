@@ -51,7 +51,7 @@
         "rollDamage": "d4",
         "extraInfo": "",
         "recharge": "",
-        "damageType": "-"
+        "damageType": "slashing"
       }
     ],
     "abilities": []

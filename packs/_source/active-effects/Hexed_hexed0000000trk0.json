@@ -14,7 +14,7 @@
     "expiry": null,
     "expired": false
   },
-  "description": "<ul><li>System marker, not a book Status</li><li>Target of a Witch's Hex</li><li>Rules: the Witch's Hex</li></ul>",
+  "description": "<ul><li>Target of a Witch's Hex</li><li>Rules: the Witch's Hex</li></ul>",
   "origin": null,
   "tint": "#ffffff",
   "transfer": false,

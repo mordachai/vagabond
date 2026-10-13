@@ -51,7 +51,7 @@
         "rollDamage": "d8",
         "extraInfo": "",
         "recharge": "",
-        "damageType": "-"
+        "damageType": "physical"
       },
       {
         "name": "Light Crossbow",
@@ -61,7 +61,7 @@
         "rollDamage": "d4",
         "extraInfo": "",
         "recharge": "",
-        "damageType": "-"
+        "damageType": "piercing"
       }
     ],
     "abilities": []

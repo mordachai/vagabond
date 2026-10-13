@@ -51,7 +51,7 @@
         "rollDamage": "d10",
         "extraInfo": "",
         "recharge": "",
-        "damageType": "-"
+        "damageType": "blunt"
       },
       {
         "name": "Rally",

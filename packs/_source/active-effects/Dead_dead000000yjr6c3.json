@@ -43,7 +43,7 @@
     "expiry": null,
     "expired": false
   },
-  "description": "<ul><li>System marker, not a book Status</li><li>Fails every roll</li><li>Speed 0</li><li>Vulnerable</li></ul>",
+  "description": "<ul><li>Fails every roll</li><li>Speed 0</li><li>Vulnerable</li></ul>",
   "origin": null,
   "tint": "#ffffff",
   "transfer": false,
