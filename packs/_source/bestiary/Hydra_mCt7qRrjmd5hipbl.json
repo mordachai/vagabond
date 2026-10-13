@@ -48,7 +48,7 @@
         "attackType": "melee",
         "flatDamage": "5",
         "rollDamage": "1d10",
-        "damageType": "-",
+        "damageType": "piercing",
         "extraInfo": "and Restrained if smaller.",
         "causedStatuses": [
           {

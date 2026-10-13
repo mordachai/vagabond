@@ -48,7 +48,7 @@
         "recharge": "",
         "flatDamage": "3",
         "rollDamage": "d6",
-        "damageType": "-",
+        "damageType": "blunt",
         "attackType": "ranged",
         "extraInfo": ""
       },
@@ -58,7 +58,7 @@
         "recharge": "",
         "flatDamage": "2",
         "rollDamage": "d4",
-        "damageType": "-",
+        "damageType": "blunt",
         "attackType": "melee",
         "extraInfo": ""
       }
@@ -96,7 +96,7 @@
       "scaleX": 1,
       "scaleY": 1,
       "tint": "#ffffff",
-      "alphaThreshold": 0.75
+      "alphaThreshold": 0.7
     },
     "lockRotation": false,
     "rotation": 0,

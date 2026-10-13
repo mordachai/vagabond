@@ -39,7 +39,7 @@
         "attackType": "castRanged",
         "flatDamage": "13",
         "rollDamage": "3d8",
-        "damageType": "-",
+        "damageType": "magical",
         "extraInfo": "and +2 (d4) Fatigue"
       },
       {

@@ -35,7 +35,7 @@
         "recharge": "",
         "flatDamage": "7",
         "rollDamage": "2d6",
-        "damageType": "-",
+        "damageType": "poison",
         "attackType": "melee",
         "extraInfo": "Fills a 10-foot sphere with black smoke. Other Beings in the area must pass [Endure] or take 7 (2d6)."
       },

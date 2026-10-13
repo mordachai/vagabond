@@ -40,7 +40,7 @@
         "attackType": "castRanged",
         "flatDamage": "0",
         "rollDamage": "",
-        "damageType": "-",
+        "damageType": "fire",
         "extraInfo": "Burning (d6, while in the flames).",
         "causedStatuses": [
           {
@@ -86,7 +86,7 @@
         "attackType": "melee",
         "flatDamage": "9",
         "rollDamage": "2d8",
-        "damageType": "-",
+        "damageType": "blunt",
         "extraInfo": "",
         "causedStatuses": [],
         "critCausedStatuses": []

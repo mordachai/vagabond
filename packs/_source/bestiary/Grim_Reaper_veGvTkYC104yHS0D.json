@@ -51,7 +51,7 @@
         "recharge": "",
         "flatDamage": "9",
         "rollDamage": "2d8",
-        "damageType": "-",
+        "damageType": "slashing",
         "extraInfo": "",
         "saves": null
       }

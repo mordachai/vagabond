@@ -46,7 +46,7 @@
         "attackType": "ranged",
         "flatDamage": "3",
         "rollDamage": "1d6",
-        "damageType": "-",
+        "damageType": "blunt",
         "extraInfo": "and pass [Endure] or become Sickened (Cd6, stinks and can't speak from retching).",
         "causedStatuses": [
           {

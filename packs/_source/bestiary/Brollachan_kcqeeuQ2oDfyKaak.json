@@ -48,7 +48,7 @@
         "rollDamage": "2d8",
         "extraInfo": "",
         "recharge": "",
-        "damageType": null
+        "damageType": "physical"
       }
     ],
     "abilities": [

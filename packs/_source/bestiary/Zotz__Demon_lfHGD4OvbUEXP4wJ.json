@@ -47,7 +47,7 @@
         "attackType": "castRanged",
         "flatDamage": "",
         "rollDamage": "",
-        "damageType": "-",
+        "damageType": "psychic",
         "extraInfo": "Frightened (Cd6, it can't hear)",
         "causedStatuses": [
           {
@@ -81,7 +81,7 @@
         "attackType": "melee",
         "flatDamage": "9",
         "rollDamage": "2d6+2",
-        "damageType": "-",
+        "damageType": "slashing",
         "extraInfo": "",
         "causedStatuses": [],
         "critCausedStatuses": []
@@ -93,7 +93,7 @@
         "attackType": "melee",
         "flatDamage": "15",
         "rollDamage": "3d8+2",
-        "damageType": "-",
+        "damageType": "piercing",
         "extraInfo": "and this Being is healed for the damage dealt",
         "causedStatuses": [],
         "critCausedStatuses": []
@@ -110,7 +110,7 @@
       },
       {
         "name": "Nimble",
-        "description": "Attacks against it can’t be Favored if it can Move."
+        "description": "Attacks against it can't be Favored if it can Move."
       }
     ],
     "universalDamageBonus": 0,

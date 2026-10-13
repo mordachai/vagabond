@@ -46,7 +46,7 @@
         "attackType": "melee",
         "flatDamage": "1",
         "rollDamage": "1d3",
-        "damageType": "-",
+        "damageType": "slashing",
         "extraInfo": ""
       },
       {
@@ -56,7 +56,7 @@
         "attackType": "melee",
         "flatDamage": "2",
         "rollDamage": "1d4",
-        "damageType": "-",
+        "damageType": "piercing",
         "extraInfo": ""
       }
     ],

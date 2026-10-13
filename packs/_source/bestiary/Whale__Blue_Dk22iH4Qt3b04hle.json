@@ -39,7 +39,7 @@
         "rollDamage": "6d12",
         "extraInfo": "",
         "recharge": "",
-        "damageType": null
+        "damageType": "blunt"
       }
     ],
     "abilities": [

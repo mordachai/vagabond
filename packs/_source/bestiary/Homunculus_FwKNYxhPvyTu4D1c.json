@@ -44,7 +44,7 @@
         "attackType": "melee",
         "flatDamage": "1",
         "rollDamage": "1d3",
-        "damageType": "-",
+        "damageType": "piercing",
         "extraInfo": "and (1/Day) pass [Endure] or become Sickened (Cd6 Rounds, Unconscious until it takes damage).",
         "causedStatuses": [
           {
@@ -75,7 +75,7 @@
         "attackType": "ranged",
         "flatDamage": "2",
         "rollDamage": "1d4",
-        "damageType": "-",
+        "damageType": "acid",
         "extraInfo": "and Burning (Cd4)",
         "causedStatuses": [
           {

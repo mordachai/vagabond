@@ -52,7 +52,7 @@
         "attackType": "melee",
         "flatDamage": "5",
         "rollDamage": "1d10",
-        "damageType": "-",
+        "damageType": "piercing",
         "extraInfo": "and pass [Endure] or be Sickened (Cd4, +1 Fatigue each Round)",
         "causedStatuses": [
           {
@@ -74,7 +74,7 @@
         "attackType": "melee",
         "flatDamage": "3",
         "rollDamage": "1d6",
-        "damageType": "-",
+        "damageType": "physical",
         "extraInfo": "or (by Weapon)",
         "causedStatuses": [],
         "critCausedStatuses": []

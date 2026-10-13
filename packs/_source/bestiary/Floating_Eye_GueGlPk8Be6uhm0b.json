@@ -44,7 +44,7 @@
         "attackType": "castRanged",
         "flatDamage": "",
         "rollDamage": "",
-        "damageType": "-",
+        "damageType": "magical",
         "extraInfo": "Transformed into a stone statue (Cd4)",
         "causedStatuses": [],
         "critCausedStatuses": []
@@ -56,7 +56,7 @@
         "attackType": "castRanged",
         "flatDamage": "",
         "rollDamage": "",
-        "damageType": "-",
+        "damageType": "magical",
         "extraInfo": "Confused (Cd4)",
         "causedStatuses": [
           {
@@ -78,7 +78,7 @@
         "attackType": "castRanged",
         "flatDamage": "",
         "rollDamage": "",
-        "damageType": "-",
+        "damageType": "magical",
         "extraInfo": "Berserk (Cd4)",
         "causedStatuses": [
           {

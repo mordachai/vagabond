@@ -34,7 +34,7 @@
         "attackType": "melee",
         "flatDamage": "25",
         "rollDamage": "4d10+3",
-        "damageType": "-",
+        "damageType": "blunt",
         "extraInfo": "",
         "causedStatuses": [],
         "critCausedStatuses": []
@@ -46,7 +46,7 @@
         "attackType": "melee",
         "flatDamage": "22",
         "rollDamage": "5d8",
-        "damageType": "-",
+        "damageType": "blunt",
         "extraInfo": "and shoved Prone 30' away",
         "causedStatuses": [
           {

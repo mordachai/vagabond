@@ -47,7 +47,7 @@
         "attackType": "melee",
         "flatDamage": "",
         "rollDamage": "",
-        "damageType": "-",
+        "damageType": "blunt",
         "extraInfo": "Restrained",
         "causedStatuses": [
           {

@@ -49,7 +49,7 @@
         "attackType": "melee",
         "flatDamage": "4",
         "rollDamage": "1d8",
-        "damageType": "-",
+        "damageType": "piercing",
         "extraInfo": "and Medium or smaller Targets must pass [Endure] or be knocked Prone",
         "causedStatuses": [
           {
@@ -71,7 +71,7 @@
         "attackType": "castClose",
         "flatDamage": "",
         "rollDamage": "",
-        "damageType": "-",
+        "damageType": "psychic",
         "extraInfo": "Confused (Cd4)",
         "causedStatuses": [
           {
@@ -93,7 +93,7 @@
         "attackType": "ranged",
         "flatDamage": "",
         "rollDamage": "",
-        "damageType": "-",
+        "damageType": "acid",
         "extraInfo": "Blinded (Cd4)",
         "causedStatuses": [
           {
@@ -132,7 +132,7 @@
       "scaleX": 1,
       "scaleY": 1,
       "tint": "#ffffff",
-      "alphaThreshold": 0.75
+      "alphaThreshold": 0.7
     },
     "lockRotation": false,
     "rotation": 0,

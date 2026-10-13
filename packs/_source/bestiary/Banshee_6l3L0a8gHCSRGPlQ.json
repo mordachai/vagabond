@@ -55,7 +55,7 @@
         "attackType": "castClose",
         "flatDamage": "",
         "rollDamage": "",
-        "damageType": "-",
+        "damageType": "psychic",
         "extraInfo": "Frightened (Cd4) or immediate death if failed by 5 or more",
         "causedStatuses": [
           {
@@ -86,7 +86,7 @@
     "abilities": [
       {
         "name": "Nightwalker",
-        "description": "Can’t Move or Target over lines of salt or in areas illuminated by Sunlight. It is Incapacitated and Burning (d8) while in Sunlight."
+        "description": "Can't Move or Target over lines of salt or in areas illuminated by Sunlight. It is Incapacitated and Burning (d8) while in Sunlight."
       },
       {
         "name": "Terror II",
@@ -115,7 +115,7 @@
       "scaleX": 1,
       "scaleY": 1,
       "tint": "#ffffff",
-      "alphaThreshold": 0.75
+      "alphaThreshold": 0.7
     },
     "lockRotation": false,
     "rotation": 0,

@@ -37,7 +37,7 @@
         "recharge": "",
         "flatDamage": "0",
         "rollDamage": "",
-        "damageType": "-",
+        "damageType": "magical",
         "attackType": "castRanged",
         "extraInfo": "The tree acts as a Treant, though it has a Speed of 10' and doesn't have this Animate Trees Action."
       },
@@ -57,7 +57,7 @@
         "recharge": "",
         "flatDamage": "7",
         "rollDamage": "2d6",
-        "damageType": "-",
+        "damageType": "blunt",
         "attackType": "melee",
         "extraInfo": ""
       }

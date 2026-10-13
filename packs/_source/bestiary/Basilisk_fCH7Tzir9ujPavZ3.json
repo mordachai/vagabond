@@ -37,7 +37,7 @@
         "flatDamage": "",
         "rollDamage": "",
         "extraInfo": "Cursed (Continual, turned to stone)",
-        "damageType": null
+        "damageType": "magical"
       },
       {
         "name": "Bite",
@@ -47,7 +47,7 @@
         "rollDamage": "1d10",
         "extraInfo": "and pass an [Endure] Save or be Cursed (Continual, turned to stone)",
         "recharge": "",
-        "damageType": null
+        "damageType": "piercing"
       }
     ],
     "abilities": [],

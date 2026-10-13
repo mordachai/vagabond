@@ -69,7 +69,7 @@
         "attackType": "melee",
         "flatDamage": "21",
         "rollDamage": "6d6",
-        "damageType": "-",
+        "damageType": "blunt",
         "extraInfo": "and Prone",
         "causedStatuses": [
           {
@@ -91,7 +91,7 @@
         "attackType": "ranged",
         "flatDamage": "14",
         "rollDamage": "4d6",
-        "damageType": "-",
+        "damageType": "fire",
         "extraInfo": "",
         "causedStatuses": [],
         "critCausedStatuses": []
@@ -132,7 +132,7 @@
       "scaleX": 1,
       "scaleY": 1,
       "tint": "#ffffff",
-      "alphaThreshold": 0.75
+      "alphaThreshold": 0.7
     },
     "lockRotation": false,
     "rotation": 0,

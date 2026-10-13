@@ -54,7 +54,7 @@
         "attackType": "melee",
         "flatDamage": "3",
         "rollDamage": "1d6",
-        "damageType": "-",
+        "damageType": "slashing",
         "extraInfo": "plus 9 (2d8) if failed by 5 or more",
         "causedStatuses": [],
         "critCausedStatuses": []
@@ -66,7 +66,7 @@
         "attackType": "castRanged",
         "flatDamage": "",
         "rollDamage": "",
-        "damageType": "-",
+        "damageType": "psychic",
         "extraInfo": "Frightened (Cd4, Paralyzed)",
         "causedStatuses": [
           {

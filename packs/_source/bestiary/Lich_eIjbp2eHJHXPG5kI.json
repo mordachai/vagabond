@@ -66,7 +66,7 @@
         "attackType": "castRanged",
         "flatDamage": "10",
         "rollDamage": "3d6",
-        "damageType": "-",
+        "damageType": "necrotic",
         "extraInfo": "and this Being is healed equal to the damage",
         "causedStatuses": [],
         "critCausedStatuses": []
@@ -78,7 +78,7 @@
         "attackType": "castRanged",
         "flatDamage": "21",
         "rollDamage": "6d6",
-        "damageType": "-",
+        "damageType": "necrotic",
         "extraInfo": "and disintegrated if killed this way",
         "causedStatuses": [],
         "critCausedStatuses": []
@@ -102,7 +102,7 @@
         "attackType": "melee",
         "flatDamage": "5",
         "rollDamage": "d10",
-        "damageType": "-",
+        "damageType": "necrotic",
         "extraInfo": "and Paralyzed (Cd6)",
         "causedStatuses": [
           {
@@ -146,7 +146,7 @@
         "attackType": "melee",
         "flatDamage": "10",
         "rollDamage": "3d6",
-        "damageType": "-",
+        "damageType": "necrotic",
         "extraInfo": ", (half on pass) and +1 Fatigue",
         "causedStatuses": [],
         "critCausedStatuses": []

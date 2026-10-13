@@ -54,7 +54,7 @@
         "attackType": "melee",
         "flatDamage": "10",
         "rollDamage": "3d6",
-        "damageType": "-",
+        "damageType": "piercing",
         "extraInfo": "and Restrained if it is Large or smaller. If this Being has a Target this way, it can only Bite the Restrained Target.",
         "causedStatuses": [
           {
@@ -76,7 +76,7 @@
         "attackType": "melee",
         "flatDamage": "11",
         "rollDamage": "2d10",
-        "damageType": "-",
+        "damageType": "blunt",
         "extraInfo": "and shoved Prone if Large or smaller than this Being.",
         "causedStatuses": [
           {
@@ -126,7 +126,7 @@
       "scaleX": 1,
       "scaleY": 1,
       "tint": "#ffffff",
-      "alphaThreshold": 0.75
+      "alphaThreshold": 0.7
     },
     "lockRotation": false,
     "rotation": 0,

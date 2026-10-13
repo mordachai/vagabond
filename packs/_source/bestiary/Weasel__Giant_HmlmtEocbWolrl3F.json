@@ -34,7 +34,7 @@
         "attackType": "melee",
         "flatDamage": "5",
         "rollDamage": "2d6",
-        "damageType": "-",
+        "damageType": "necrotic",
         "extraInfo": "",
         "causedStatuses": [],
         "critCausedStatuses": []
@@ -46,7 +46,7 @@
         "attackType": "melee",
         "flatDamage": "2",
         "rollDamage": "1d4",
-        "damageType": "-",
+        "damageType": "piercing",
         "extraInfo": "and Restrained.",
         "causedStatuses": [
           {

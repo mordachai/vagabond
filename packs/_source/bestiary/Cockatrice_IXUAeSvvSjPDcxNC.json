@@ -39,7 +39,7 @@
         "rollDamage": "1d6",
         "extraInfo": "and pass [Endure] or be Cursed (turned to stone for 1 Day)",
         "recharge": "",
-        "damageType": null
+        "damageType": "piercing"
       }
     ],
     "abilities": [],

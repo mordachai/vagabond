@@ -49,7 +49,7 @@
         "attackType": "melee",
         "flatDamage": "7",
         "rollDamage": "3d4",
-        "damageType": "-",
+        "damageType": "piercing",
         "extraInfo": "and Prone if failed by 10 or more.",
         "causedStatuses": [
           {
@@ -71,7 +71,7 @@
         "attackType": "melee",
         "flatDamage": "5",
         "rollDamage": "1d10",
-        "damageType": "-",
+        "damageType": "slashing",
         "extraInfo": "or half to two Targets",
         "causedStatuses": [],
         "critCausedStatuses": []

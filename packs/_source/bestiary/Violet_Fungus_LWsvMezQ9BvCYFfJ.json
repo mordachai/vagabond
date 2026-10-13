@@ -56,7 +56,7 @@
         "attackType": "melee",
         "flatDamage": "5",
         "rollDamage": "2d4",
-        "damageType": "-",
+        "damageType": "blunt",
         "extraInfo": "and pass [Endure] or become Sickened (Cd8, +1 Fatigue each Round)",
         "causedStatuses": [
           {
@@ -112,7 +112,7 @@
       "color": null,
       "coloration": 1,
       "dim": 0,
-      "attenuation": 0.5,
+      "attenuation": 0,
       "luminosity": 0.5,
       "saturation": 0,
       "contrast": 0,

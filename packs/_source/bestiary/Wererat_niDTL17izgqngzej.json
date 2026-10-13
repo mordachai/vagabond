@@ -49,7 +49,7 @@
         "recharge": "",
         "flatDamage": "3",
         "rollDamage": "1d6",
-        "damageType": "-",
+        "damageType": "piercing",
         "attackType": "melee",
         "extraInfo": "and pass [Will] or be cursed with Wererat Lycanthropy."
       },
@@ -59,7 +59,7 @@
         "recharge": "",
         "flatDamage": "3",
         "rollDamage": "1d6",
-        "damageType": "-",
+        "damageType": "slashing",
         "attackType": "melee",
         "extraInfo": "or (by Weapon)"
       }

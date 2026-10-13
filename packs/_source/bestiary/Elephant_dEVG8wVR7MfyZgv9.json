@@ -35,7 +35,7 @@
         "flatDamage": "18",
         "rollDamage": "4d8",
         "extraInfo": "",
-        "damageType": null
+        "damageType": "blunt"
       },
       {
         "name": "Tusk",
@@ -45,7 +45,7 @@
         "rollDamage": "2d4",
         "extraInfo": "",
         "recharge": "",
-        "damageType": null
+        "damageType": "piercing"
       }
     ],
     "abilities": [

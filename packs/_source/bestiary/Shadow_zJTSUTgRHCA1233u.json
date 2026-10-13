@@ -53,14 +53,14 @@
         "attackType": "melee",
         "flatDamage": "5",
         "rollDamage": "2d4",
-        "damageType": "-",
+        "damageType": "necrotic",
         "extraInfo": "and pass [Endure] or +1 Fatigue. If this kills it, it rises as a Shadow."
       }
     ],
     "abilities": [
       {
         "name": "Nightwalker",
-        "description": "Can’t Move or Target over lines of salt or in areas illuminated by Sunlight. It is Incapacitated and Burning (d8) while in Sunlight."
+        "description": "Can't Move or Target over lines of salt or in areas illuminated by Sunlight. It is Incapacitated and Burning (d8) while in Sunlight."
       },
       {
         "name": "Shadow Stealth",
@@ -86,7 +86,7 @@
       "scaleX": 1,
       "scaleY": 1,
       "tint": "#ffffff",
-      "alphaThreshold": 0.75
+      "alphaThreshold": 0.7
     },
     "lockRotation": false,
     "rotation": 0,

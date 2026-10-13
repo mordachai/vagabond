@@ -56,7 +56,7 @@
         "attackType": "melee",
         "flatDamage": "17",
         "rollDamage": "5d6",
-        "damageType": "-",
+        "damageType": "piercing",
         "extraInfo": "",
         "causedStatuses": [],
         "critCausedStatuses": []
@@ -68,7 +68,7 @@
         "attackType": "melee",
         "flatDamage": "",
         "rollDamage": "",
-        "damageType": "-",
+        "damageType": "blunt",
         "extraInfo": "Restrained and pulled Close",
         "causedStatuses": [
           {

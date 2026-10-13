@@ -41,7 +41,7 @@
         "attackType": "melee",
         "flatDamage": "4",
         "rollDamage": "1d8",
-        "damageType": "-",
+        "damageType": "blunt",
         "extraInfo": "or (by Weapon)"
       }
     ],
@@ -52,7 +52,7 @@
       },
       {
         "name": "Iron Absorption",
-        "description": "When hit with a metal weapon that isn’t a Relic, the attacker must pass [Will] or the weapon becomes stuck in this Being's body, and can only be removed if this Being is killed."
+        "description": "When hit with a metal weapon that isn't a Relic, the attacker must pass [Will] or the weapon becomes stuck in this Being's body, and can only be removed if this Being is killed."
       }
     ],
     "universalDamageBonus": 0,

@@ -46,7 +46,7 @@
         "attackType": "melee",
         "flatDamage": "0",
         "rollDamage": "",
-        "damageType": "-",
+        "damageType": "magical",
         "extraInfo": "Dethbat's Curse (Continual, until removed)",
         "causedStatuses": [],
         "critCausedStatuses": []
@@ -58,7 +58,7 @@
         "attackType": "castClose",
         "flatDamage": "0",
         "rollDamage": "",
-        "damageType": "-",
+        "damageType": "psychic",
         "extraInfo": "Frightened (Cd4, Paralyzed)",
         "causedStatuses": [
           {
@@ -89,7 +89,7 @@
         "attackType": "melee",
         "flatDamage": "2",
         "rollDamage": "1d4",
-        "damageType": "-",
+        "damageType": "piercing",
         "extraInfo": "",
         "causedStatuses": [],
         "critCausedStatuses": []
@@ -97,7 +97,7 @@
     ],
     "abilities": [
       {
-        "name": "Dethbat’s Curse",
+        "name": "Dethbat's Curse",
         "description": "[Curse] Every hour while cursed and not in Sunlight, the victim rolls a d6, progressing the curse by 1 stage on a roll of 1: \n1. Their hair falls out. \n2. Their ears transform into wings and their teeth become fangs. \n3. They gain 1 Fatigue. If they die due to this, their head rips from their body and becomes a Dethbat."
       }
     ],

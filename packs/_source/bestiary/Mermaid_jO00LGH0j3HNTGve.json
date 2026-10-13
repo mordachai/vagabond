@@ -42,7 +42,7 @@
         "flatDamage": "0",
         "rollDamage": "",
         "extraInfo": "Terror-Bound Being arrives in Cd4.",
-        "damageType": null
+        "damageType": "-"
       },
       {
         "name": "Enchanting Song",
@@ -52,7 +52,7 @@
         "rollDamage": "",
         "extraInfo": "Enchanting Song",
         "recharge": "",
-        "damageType": null
+        "damageType": "-"
       },
       {
         "name": "Trident",
@@ -62,7 +62,7 @@
         "rollDamage": "1d6",
         "extraInfo": "",
         "recharge": "",
-        "damageType": null
+        "damageType": "piercing"
       },
       {
         "name": "Storm Bringer",
@@ -72,7 +72,7 @@
         "flatDamage": "0",
         "rollDamage": "",
         "extraInfo": "A storm stirs out to 1 mile from it, and lasts for Cd4 hours.",
-        "damageType": null
+        "damageType": "-"
       }
     ],
     "abilities": [
@@ -90,7 +90,7 @@
       },
       {
         "name": "Immortal of the Sea",
-        "description": "It can’t be reduced below 1 HP while in contact with a body of water."
+        "description": "It can't be reduced below 1 HP while in contact with a body of water."
       },
       {
         "name": "Terror-Bound",

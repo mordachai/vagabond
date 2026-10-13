@@ -45,7 +45,7 @@
         "recharge": "",
         "flatDamage": "3",
         "rollDamage": "1d6",
-        "damageType": "-",
+        "damageType": "slashing",
         "attackType": "melee",
         "extraInfo": ""
       },
@@ -55,7 +55,7 @@
         "recharge": "",
         "flatDamage": "5",
         "rollDamage": "2d4",
-        "damageType": "-",
+        "damageType": "piercing",
         "attackType": "melee",
         "extraInfo": ""
       },
@@ -65,7 +65,7 @@
         "recharge": "",
         "flatDamage": "4",
         "rollDamage": "1d8",
-        "damageType": "-",
+        "damageType": "piercing",
         "attackType": "melee",
         "extraInfo": ""
       },
@@ -75,7 +75,7 @@
         "recharge": "Cd6",
         "flatDamage": "10",
         "rollDamage": "3d6",
-        "damageType": "-",
+        "damageType": "fire",
         "attackType": "castRanged",
         "extraInfo": ""
       },
@@ -85,7 +85,7 @@
         "recharge": "",
         "flatDamage": "",
         "rollDamage": "3d4",
-        "damageType": "-",
+        "damageType": "piercing",
         "attackType": "melee",
         "extraInfo": ""
       }
@@ -111,7 +111,7 @@
       "scaleX": 1,
       "scaleY": 1,
       "tint": "#ffffff",
-      "alphaThreshold": 0.75
+      "alphaThreshold": 0.7
     },
     "lockRotation": false,
     "rotation": 0,

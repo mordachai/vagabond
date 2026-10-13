@@ -41,7 +41,7 @@
         "attackType": "melee",
         "flatDamage": "9",
         "rollDamage": "2d8",
-        "damageType": "-",
+        "damageType": "blunt",
         "extraInfo": ""
       }
     ],

@@ -48,7 +48,7 @@
         "attackType": "melee",
         "flatDamage": "2",
         "rollDamage": "1d4",
-        "damageType": "-",
+        "damageType": "poison",
         "extraInfo": "and pass [Endure] against Sickened or gain 1 Fatigue",
         "causedStatuses": [
           {
@@ -70,7 +70,7 @@
         "attackType": "melee",
         "flatDamage": "5",
         "rollDamage": "1d10",
-        "damageType": "-",
+        "damageType": "slashing",
         "extraInfo": "and Restrained if its the second of this Being's Claw to hit it this Turn",
         "causedStatuses": [],
         "critCausedStatuses": []

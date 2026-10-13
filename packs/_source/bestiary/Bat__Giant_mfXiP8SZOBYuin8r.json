@@ -39,7 +39,7 @@
         "attackType": "melee",
         "flatDamage": "2",
         "rollDamage": "1d4",
-        "damageType": "-",
+        "damageType": "piercing",
         "extraInfo": "and pass [Endure] or become Sickened (Cd6 days)",
         "causedStatuses": [
           {

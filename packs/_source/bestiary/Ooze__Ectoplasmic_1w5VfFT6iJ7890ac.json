@@ -53,7 +53,7 @@
         "rollDamage": "2d6",
         "extraInfo": "and pass [Endure] or +1 Fatigue",
         "recharge": "",
-        "damageType": null
+        "damageType": "physical"
       }
     ],
     "abilities": [

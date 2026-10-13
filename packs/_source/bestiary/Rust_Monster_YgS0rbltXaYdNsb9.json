@@ -37,7 +37,7 @@
         "rollDamage": "",
         "extraInfo": "Rust Touch",
         "recharge": "",
-        "damageType": null
+        "damageType": "acid"
       },
       {
         "name": "Bite",
@@ -47,7 +47,7 @@
         "rollDamage": "1d6",
         "extraInfo": "",
         "recharge": "",
-        "damageType": null
+        "damageType": "piercing"
       }
     ],
     "abilities": [

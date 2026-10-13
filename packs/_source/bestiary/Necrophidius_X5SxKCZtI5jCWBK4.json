@@ -45,7 +45,7 @@
         "attackType": "castRanged",
         "flatDamage": "",
         "rollDamage": "",
-        "damageType": "-",
+        "damageType": "necrotic",
         "extraInfo": "Dazed (Cd4)",
         "causedStatuses": [
           {
@@ -67,7 +67,7 @@
         "attackType": "melee",
         "flatDamage": "4",
         "rollDamage": "1d8",
-        "damageType": "-",
+        "damageType": "piercing",
         "extraInfo": "and pass [Endure] or become Sickened (Cd4, Paralyzed)",
         "causedStatuses": [
           {

@@ -37,7 +37,7 @@
         "rollDamage": "1d8",
         "extraInfo": "or (by Weapon).",
         "recharge": "",
-        "damageType": null
+        "damageType": "physical"
       }
     ],
     "abilities": [

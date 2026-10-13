@@ -80,7 +80,7 @@
         "attackType": "melee",
         "flatDamage": "9",
         "rollDamage": "2d8",
-        "damageType": "-",
+        "damageType": "piercing",
         "extraInfo": "",
         "causedStatuses": [],
         "critCausedStatuses": []
@@ -92,7 +92,7 @@
         "attackType": "melee",
         "flatDamage": "3",
         "rollDamage": "1d6",
-        "damageType": "-",
+        "damageType": "slashing",
         "extraInfo": "",
         "causedStatuses": [],
         "critCausedStatuses": []
@@ -104,7 +104,7 @@
         "attackType": "melee",
         "flatDamage": "5",
         "rollDamage": "1d8",
-        "damageType": "-",
+        "damageType": "blunt",
         "extraInfo": "and shoved Prone 10' away",
         "causedStatuses": [
           {

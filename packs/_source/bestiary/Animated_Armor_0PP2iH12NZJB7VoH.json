@@ -48,7 +48,7 @@
         "attackType": "melee",
         "flatDamage": "3",
         "rollDamage": "d6",
-        "damageType": "-",
+        "damageType": "physical",
         "extraInfo": "or (by Weapon)"
       }
     ],

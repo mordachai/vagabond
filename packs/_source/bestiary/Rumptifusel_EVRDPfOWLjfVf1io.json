@@ -52,7 +52,7 @@
         "attackType": "melee",
         "flatDamage": "2",
         "rollDamage": "1d4",
-        "damageType": "-",
+        "damageType": "necrotic",
         "extraInfo": "and this Being is healed for the damage dealt",
         "causedStatuses": [],
         "critCausedStatuses": []
@@ -64,7 +64,7 @@
         "attackType": "melee",
         "flatDamage": "",
         "rollDamage": "",
-        "damageType": "-",
+        "damageType": "blunt",
         "extraInfo": "Restrained",
         "causedStatuses": [
           {

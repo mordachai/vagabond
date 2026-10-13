@@ -54,7 +54,7 @@
         "attackType": "melee",
         "flatDamage": "5",
         "rollDamage": "1d10",
-        "damageType": "-",
+        "damageType": "piercing",
         "extraInfo": "and pass [Endure] or become Sickened (until cured, Otyugh Disease)",
         "causedStatuses": [
           {
@@ -76,7 +76,7 @@
         "attackType": "melee",
         "flatDamage": "4",
         "rollDamage": "1d8",
-        "damageType": "-",
+        "damageType": "blunt",
         "extraInfo": "and Restrained. If the Target is already Restrained this way, it is instead slammed into something and takes 7 (2d6) and must pass an [Endure] Save or be Dazed for 1 Round.",
         "causedStatuses": [
           {

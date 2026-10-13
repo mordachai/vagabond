@@ -38,7 +38,7 @@
         "attackType": "melee",
         "flatDamage": "2",
         "rollDamage": "1d4",
-        "damageType": "-",
+        "damageType": "blunt",
         "extraInfo": "and Restrained (Suffocating)",
         "causedStatuses": [
           {

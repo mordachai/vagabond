@@ -40,7 +40,7 @@
         "flatDamage": "0",
         "rollDamage": "",
         "extraInfo": "Appears to be a Being of humanoid form it has seen.",
-        "damageType": null
+        "damageType": "-"
       },
       {
         "name": "Bite",
@@ -50,7 +50,7 @@
         "rollDamage": "1d12",
         "extraInfo": "",
         "recharge": "",
-        "damageType": null
+        "damageType": "piercing"
       }
     ],
     "abilities": [

@@ -47,7 +47,7 @@
         "attackType": "castRanged",
         "flatDamage": "21",
         "rollDamage": "6d6",
-        "damageType": "-",
+        "damageType": "psychic",
         "extraInfo": "and Dazed (Cd6 Rounds)",
         "causedStatuses": [
           {
@@ -81,7 +81,7 @@
         "attackType": "melee",
         "flatDamage": "14",
         "rollDamage": "4d6",
-        "damageType": "-",
+        "damageType": "piercing",
         "extraInfo": "",
         "causedStatuses": [],
         "critCausedStatuses": []
@@ -93,7 +93,7 @@
         "attackType": "melee",
         "flatDamage": "13",
         "rollDamage": "3d8",
-        "damageType": "-",
+        "damageType": "slashing",
         "extraInfo": "and Restrained if failed by 5 or more.",
         "causedStatuses": [
           {

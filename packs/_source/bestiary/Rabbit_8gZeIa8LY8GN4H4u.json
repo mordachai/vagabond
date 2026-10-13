@@ -41,7 +41,7 @@
     "abilities": [
       {
         "name": "Nimble",
-        "description": "Attacks against it can’t be Favored if it can Move."
+        "description": "Attacks against it can't be Favored if it can Move."
       }
     ],
     "universalDamageBonus": 0,

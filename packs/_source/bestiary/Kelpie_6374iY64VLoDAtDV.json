@@ -38,7 +38,7 @@
         "attackType": "melee",
         "flatDamage": "0",
         "rollDamage": "",
-        "damageType": "-",
+        "damageType": "physical",
         "extraInfo": "Restrained",
         "causedStatuses": [
           {
@@ -60,7 +60,7 @@
         "attackType": "castRanged",
         "flatDamage": "0",
         "rollDamage": "",
-        "damageType": "-",
+        "damageType": "psychic",
         "extraInfo": "Charmed (Cd6, it must Move closer to this Being)",
         "causedStatuses": [
           {

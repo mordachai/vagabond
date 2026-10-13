@@ -62,7 +62,7 @@
         "attackType": "melee",
         "flatDamage": "18",
         "rollDamage": "4d8",
-        "damageType": "-",
+        "damageType": "slashing",
         "extraInfo": "",
         "causedStatuses": [],
         "critCausedStatuses": []
@@ -74,7 +74,7 @@
         "attackType": "melee",
         "flatDamage": "16",
         "rollDamage": "3d10",
-        "damageType": "-",
+        "damageType": "blunt",
         "extraInfo": "",
         "causedStatuses": [],
         "critCausedStatuses": []
@@ -86,7 +86,7 @@
         "attackType": "melee",
         "flatDamage": "27",
         "rollDamage": "5d10",
-        "damageType": "-",
+        "damageType": "piercing",
         "extraInfo": "and the Target loses a limb of its choice if failed by 10 or more",
         "causedStatuses": [],
         "critCausedStatuses": []
@@ -98,7 +98,7 @@
         "attackType": "melee",
         "flatDamage": "13",
         "rollDamage": "3d8",
-        "damageType": "-",
+        "damageType": "blunt",
         "extraInfo": "and shoved Prone",
         "causedStatuses": [
           {

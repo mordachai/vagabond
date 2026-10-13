@@ -57,7 +57,7 @@
         "attackType": "ranged",
         "flatDamage": "7",
         "rollDamage": "2d6",
-        "damageType": "-",
+        "damageType": "fire",
         "extraInfo": "and Burning (Cd6)",
         "causedStatuses": [
           {

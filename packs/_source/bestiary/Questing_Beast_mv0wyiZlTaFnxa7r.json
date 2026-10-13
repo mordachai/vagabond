@@ -48,7 +48,7 @@
         "attackType": "melee",
         "flatDamage": "6",
         "rollDamage": "1d12",
-        "damageType": "-",
+        "damageType": "piercing",
         "extraInfo": "and pass [Endure] or become Sickened (Cd6 damage)",
         "causedStatuses": [
           {
@@ -70,7 +70,7 @@
         "attackType": "melee",
         "flatDamage": "3",
         "rollDamage": "1d6",
-        "damageType": "-",
+        "damageType": "slashing",
         "extraInfo": "",
         "causedStatuses": [],
         "critCausedStatuses": []

@@ -35,7 +35,7 @@
         "rollDamage": "",
         "extraInfo": "2xClaw and 1xBite",
         "recharge": "",
-        "damageType": null
+        "damageType": "-"
       },
       {
         "name": "Bite",
@@ -45,7 +45,7 @@
         "rollDamage": "2d8",
         "extraInfo": "",
         "recharge": "",
-        "damageType": null
+        "damageType": "piercing"
       },
       {
         "name": "Claws",
@@ -55,7 +55,7 @@
         "rollDamage": "1d8",
         "extraInfo": "",
         "recharge": "",
-        "damageType": null
+        "damageType": "slashing"
       }
     ],
     "abilities": [

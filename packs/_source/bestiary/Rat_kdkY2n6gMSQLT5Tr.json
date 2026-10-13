@@ -36,7 +36,7 @@
         "attackType": "melee",
         "flatDamage": "1",
         "rollDamage": "",
-        "damageType": "-",
+        "damageType": "piercing",
         "extraInfo": "and Sickened (Cd6 Days).",
         "causedStatuses": [
           {
@@ -55,7 +55,7 @@
     "abilities": [
       {
         "name": "Nimble",
-        "description": "Attacks against it can’t be Favored if it can Move."
+        "description": "Attacks against it can't be Favored if it can Move."
       },
       {
         "name": "Pack Hunter",

@@ -41,7 +41,7 @@
         "rollDamage": "",
         "extraInfo": "2xClaw and 1xBeak",
         "recharge": "",
-        "damageType": null
+        "damageType": "-"
       },
       {
         "name": "Beak",
@@ -51,7 +51,7 @@
         "rollDamage": "8d6",
         "extraInfo": "",
         "recharge": "",
-        "damageType": null
+        "damageType": "piercing"
       },
       {
         "name": "Claw",
@@ -59,9 +59,9 @@
         "attackType": "melee",
         "flatDamage": "10",
         "rollDamage": "3d6",
-        "extraInfo": "and Restrained if it’s this Being's second Claw attack to hit it this Turn.",
+        "extraInfo": "and Restrained if it's this Being's second Claw attack to hit it this Turn.",
         "recharge": "",
-        "damageType": null
+        "damageType": "slashing"
       }
     ],
     "abilities": [

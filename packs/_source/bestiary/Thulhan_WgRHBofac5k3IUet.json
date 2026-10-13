@@ -50,7 +50,7 @@
         "attackType": "melee",
         "flatDamage": "5",
         "rollDamage": "d8+1",
-        "damageType": "-",
+        "damageType": "slashing",
         "extraInfo": "Fatigue. If it dies to Fatigue this way, its brain is extracted.",
         "causedStatuses": [],
         "critCausedStatuses": []
@@ -62,7 +62,7 @@
         "attackType": "melee",
         "flatDamage": "10",
         "rollDamage": "3d6",
-        "damageType": "-",
+        "damageType": "psychic",
         "extraInfo": "and Paralyzed (1 Round)",
         "causedStatuses": [
           {
@@ -84,7 +84,7 @@
         "attackType": "melee",
         "flatDamage": "2",
         "rollDamage": "d4",
-        "damageType": "-",
+        "damageType": "blunt",
         "extraInfo": "and Restrained if Medium or smaller",
         "causedStatuses": [
           {
@@ -140,7 +140,7 @@
       "scaleX": 1,
       "scaleY": 1,
       "tint": "#ffffff",
-      "alphaThreshold": 0.75
+      "alphaThreshold": 0.7
     },
     "lockRotation": false,
     "rotation": 0,

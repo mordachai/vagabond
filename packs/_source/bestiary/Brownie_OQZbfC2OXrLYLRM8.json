@@ -38,7 +38,7 @@
         "rollDamage": "1d4",
         "extraInfo": "",
         "recharge": "",
-        "damageType": "-"
+        "damageType": "piercing"
       },
       {
         "name": "Dancing Lights",
@@ -48,7 +48,7 @@
         "rollDamage": "",
         "extraInfo": "Causes dancing lights of any shape no larger than Medium within Near",
         "recharge": "",
-        "damageType": "-"
+        "damageType": "magical"
       },
       {
         "name": "Dimension Door",
@@ -58,7 +58,7 @@
         "flatDamage": "0",
         "rollDamage": "",
         "extraInfo": "Teleports to an open Area it is aware of within 360'",
-        "damageType": "-"
+        "damageType": "magical"
       }
     ],
     "abilities": [

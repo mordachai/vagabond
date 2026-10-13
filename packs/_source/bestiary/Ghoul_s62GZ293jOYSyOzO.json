@@ -57,7 +57,7 @@
         "attackType": "melee",
         "flatDamage": "2",
         "rollDamage": "1d4",
-        "damageType": "-",
+        "damageType": "piercing",
         "extraInfo": "and pass [Endure] or be Paralyzed (Cd4)",
         "causedStatuses": [
           {
@@ -79,7 +79,7 @@
         "attackType": "melee",
         "flatDamage": "2",
         "rollDamage": "1d4",
-        "damageType": "-",
+        "damageType": "slashing",
         "extraInfo": "and pass [Endure] or be Paralyzed (Cd4)",
         "causedStatuses": [
           {
