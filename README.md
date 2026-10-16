@@ -33,6 +33,8 @@ All Print Wave 3 / Alpha 3 content is now in the system:
 
 Turn any weapon, armor, gear or alchemical into a Relic. Give it Relic Slots, drag Relics onto them and the item gains their Powers on the spot.
 
+<img width="501" alt="image" src="https://github.com/user-attachments/assets/c0e7fb68-b8ad-46ac-830d-e63bed5e65b0" />
+
 - **Drag and drop:** set **Relic Slots** in the item's Handling section, then drag any Relic from a compendium or an inventory onto a slot. Click a slot to read the Relic or remove it. A Relic taken from an inventory goes back there when you remove it.
 - **Powers that work:** a **Bonus - Weapon +2** adds +2 damage to attacks with that weapon only, and Merchant **Midas Touch** still boosts it.
 - **Is Relic:** one switch decides if the item counts as a Relic, so it gets through **Physical vs. Non-Relics** Immunity. Attaching a Relic turns it on; the GM can turn it off any time.
@@ -42,6 +44,8 @@ Turn any weapon, armor, gear or alchemical into a Relic. Give it Relic Slots, dr
 ---
 
 ### **Changed:** Loot and Animations
+
+<img width="950" alt="image" src="https://github.com/user-attachments/assets/070f9a7b-c99a-4b03-8fc4-aaa6f10e83f7" />
 
 Two integrations got simpler and more modern:
 
