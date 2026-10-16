@@ -32,10 +32,11 @@
     "alchemicalType": "concoction",
     "lore": "",
     "itemFx": {
-      "enabled": true,
+      "enabled": false,
       "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Melee/Group01/TrailAttack01_01_02_Regular_BlueYellow_800x600.webm",
       "hitDuration": 1000,
-      "hitOffsetX": -100
+      "hitOffsetX": -100,
+      "auto": false
     },
     "damageTypeOneHand": "slashing",
     "altSkills": [

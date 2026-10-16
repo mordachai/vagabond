@@ -34,7 +34,8 @@
     "itemFx": {
       "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Ranged/Arrow02_01_Regular_Blue_Physical_30ft_1600x400.webm",
       "hitDuration": 1000,
-      "enabled": true
+      "enabled": false,
+      "auto": false
     },
     "damageTypeOneHand": "piercing",
     "damageTypeTwoHands": "piercing"

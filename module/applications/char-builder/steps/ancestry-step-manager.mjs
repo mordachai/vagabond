@@ -2,6 +2,8 @@
  * Ancestry Step Manager - Handles ancestry selection logic
  */
 import { BaseStepManager } from './base-step-manager.mjs';
+import { isStepDone } from './step-gating.mjs';
+import { setGroups, choicesView, attachChoices } from './item-choice-manager.mjs';
 
 export class AncestryStepManager extends BaseStepManager {
   constructor(stateManager, dataService, configSystem) {
@@ -65,7 +67,8 @@ export class AncestryStepManager extends BaseStepManager {
 
           selectedItem = {
             ...item.toObject(),
-            traits: item.system.traits || [],
+            // Trait item choices (Draken Breath Attack element): picker under their trait in the reference column
+            traits: attachChoices(item.system.traits, await choicesView(item, state)),
             size: item.system.size || 'medium',
             ancestryType: item.system.ancestryType || 'Humanlike',
             enrichedDescription: enrichedDescription
@@ -167,6 +170,7 @@ export class AncestryStepManager extends BaseStepManager {
       if (prevAncestry && prevAncestry !== uuid) {
         this.updateState('perks', [], { skipValidation: true });
       }
+      if (prevAncestry !== uuid) setGroups(this.stateManager, item, 'ancestry');
       this.updateState('selectedAncestry', uuid, { skipValidation: true });
       this.updateState('previewUuid', uuid, { skipValidation: true });
 
@@ -196,6 +200,7 @@ export class AncestryStepManager extends BaseStepManager {
       }
 
       // Update state with selected ancestry
+      if (this.getCurrentState().selectedAncestry !== uuid) setGroups(this.stateManager, item, 'ancestry');
       this.updateState('selectedAncestry', uuid);
       this.updateState('previewUuid', uuid);
       
@@ -236,10 +241,16 @@ export class AncestryStepManager extends BaseStepManager {
     }
 
     if (selectedAncestry) {
+      const item = await fromUuid(selectedAncestry.uuid).catch(() => null);
+      setGroups(this.stateManager, item, 'ancestry', { randomize: true });
       this.updateState('selectedAncestry', selectedAncestry.uuid);
       this.updateState('previewUuid', selectedAncestry.uuid);
-      
     }
+  }
+
+  /** Ancestry picked and its item choices made (step-gating `isStepDone`). */
+  isComplete() {
+    return isStepDone('ancestry', this.getCurrentState());
   }
 
   /**

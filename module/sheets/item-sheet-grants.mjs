@@ -85,7 +85,7 @@ export class GrantsHandlers {
    * @param {HTMLElement} zone  `.item-grant-drop-zone` carrying data-array-path / data-item-index
    */
   static async dropGrantItem(sheet, zone, data) {
-    const { arrayPath, itemIndex } = GrantsHandlers.#attrs(zone, ['arrayPath', 'itemIndex']);
+    const { arrayPath, itemIndex, choiceIndex } = GrantsHandlers.#attrs(zone, ['arrayPath', 'itemIndex', 'choiceIndex']);
     if (!arrayPath || itemIndex === null) return false;
 
     const dropped = await Item.implementation.fromDropData(data);
@@ -102,27 +102,68 @@ export class GrantsHandlers {
     const prop = arrayPath.replace(/^system\./, '');
     const items = sheet._collectArrayFromDOM(arrayPath, prop);
     if (!items[itemIndex]) return false;
-    const current = items[itemIndex].grantedItems || [];
+    // A choice group's drop zone (data-choice-index) fills that group's pool
+    const choice = choiceIndex !== null ? items[itemIndex].itemChoices?.[choiceIndex] : null;
+    if (choiceIndex !== null && !choice) return false;
+    const current = (choice ? choice.pool : items[itemIndex].grantedItems) || [];
     if (current.includes(dropped.uuid)) return false;
 
-    items[itemIndex].grantedItems = [...current, dropped.uuid];
+    if (choice) choice.pool = [...current, dropped.uuid];
+    else items[itemIndex].grantedItems = [...current, dropped.uuid];
     await sheet.item.update({ [arrayPath]: items });
     return true;
   }
 
   /**
-   * Remove a granted item from a trait or feature by index.
+   * Remove a granted item (or, with data-choice-index, a choice group pool item) from a trait or feature by index.
    */
   static async removeGrantItem(sheet, event, target) {
-    const { arrayPath, itemIndex, grantIndex } = GrantsHandlers.#attrs(target, ['arrayPath', 'itemIndex', 'grantIndex']);
+    const { arrayPath, itemIndex, grantIndex, choiceIndex } = GrantsHandlers.#attrs(target, ['arrayPath', 'itemIndex', 'grantIndex', 'choiceIndex']);
     if (!arrayPath || itemIndex === null || grantIndex === null) return;
 
     const prop = arrayPath.replace(/^system\./, '');
     const items = sheet._collectArrayFromDOM(arrayPath, prop);
-    const granted = [...(items[itemIndex]?.grantedItems || [])];
-    granted.splice(grantIndex, 1);
-    items[itemIndex].grantedItems = granted;
+    if (choiceIndex !== null) {
+      const choice = items[itemIndex]?.itemChoices?.[choiceIndex];
+      if (!choice) return;
+      choice.pool = (choice.pool || []).filter((_, i) => i !== grantIndex);
+    } else {
+      const granted = [...(items[itemIndex]?.grantedItems || [])];
+      granted.splice(grantIndex, 1);
+      items[itemIndex].grantedItems = granted;
+    }
     await sheet.item.update({ [arrayPath]: items });
+  }
+
+  /** Add an empty item choice group to a trait or feature. */
+  static async addGrantItemChoiceGroup(sheet, event, target) {
+    const { arrayPath, itemIndex } = GrantsHandlers.#attrs(target, ['arrayPath', 'itemIndex']);
+    if (!arrayPath || itemIndex === null) return;
+    const prop = arrayPath.replace(/^system\./, '');
+    const items = sheet._collectArrayFromDOM(arrayPath, prop);
+    if (!items[itemIndex]) return;
+    items[itemIndex].itemChoices = [...(items[itemIndex].itemChoices || []), { count: 1, pool: [], label: '' }];
+    await sheet.item.update({ [arrayPath]: items });
+  }
+
+  /** Remove an item choice group from a trait or feature. */
+  static async removeGrantItemChoiceGroup(sheet, event, target) {
+    const { arrayPath, itemIndex, choiceIndex } = GrantsHandlers.#attrs(target, ['arrayPath', 'itemIndex', 'choiceIndex']);
+    if (!arrayPath || itemIndex === null || choiceIndex === null) return;
+    const prop = arrayPath.replace(/^system\./, '');
+    const items = sheet._collectArrayFromDOM(arrayPath, prop);
+    if (!items[itemIndex]?.itemChoices) return;
+    items[itemIndex].itemChoices = items[itemIndex].itemChoices.filter((_, i) => i !== choiceIndex);
+    await sheet.item.update({ [arrayPath]: items });
+  }
+
+  /** `itemChoices` → `[{count, label, items: [{uuid, name, img}]}]` for the grants editor. */
+  static async enrichItemChoices(choices) {
+    const out = [];
+    for (const c of choices || []) {
+      out.push({ count: c.count, label: c.label, items: await GrantsHandlers.enrichGrantedItems(c.pool) });
+    }
+    return out;
   }
 
   /** `grantedItems` uuids → `[{uuid, name, img}]` for the grants editor list. */

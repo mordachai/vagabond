@@ -650,10 +650,11 @@
         "alchemicalType": "concoction",
         "lore": "",
         "itemFx": {
-          "enabled": true,
+          "enabled": false,
           "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Melee/Group02/MeleeAttack02_Mace01*",
           "hitDuration": 1000,
-          "hitOffsetX": -100
+          "hitOffsetX": -100,
+          "auto": false
         },
         "damageTypeOneHand": "blunt"
       },

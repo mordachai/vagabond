@@ -360,7 +360,9 @@
     z-index: 10;
     font-size: 10px;
     font-weight: bold;
-    color: $c-white;
+    // Card art is light in the light theme: white digits + black outline read on any card
+    color: #fff;
+    text-shadow: var(--vh-outline-1);
     cursor: pointer;
     &.empty { color: $c-red; }
   }
@@ -447,8 +449,9 @@
 
     .bound-pip {
       font-size: 11px;
-      color: $c-dark-bluey;
-      -webkit-text-stroke: 1px $c-dark-bluey;
+      // Empty pips sit on a black plate in both themes (dark-bluey @50% vanished)
+      color: var(--vagabond-c-lightgrey);
+      -webkit-text-stroke: 0;
       opacity: 0.5;
 
       &.filled {
@@ -528,9 +531,10 @@
         }
 
         &.unbound {
-          color: $c-dark-bluey;
-          -webkit-text-stroke: 1px $c-dark-bluey;
-          opacity: 0.5;
+          // Theme-aware (dark-bluey at 50% vanished on dark paper)
+          color: $c-muted;
+          -webkit-text-stroke: 0;
+          opacity: 0.85;
         }
       }
 
@@ -565,10 +569,11 @@
   }
 
   .wealth-trade {
-    color: $c-muted;
+    // Sits on the black wealth plate in both themes
+    color: var(--vagabond-c-lightgrey);
     align-self: center;
     margin-left: 4px;
-    opacity: 0.8;
+    opacity: 0.85;
 
     &:hover {
       color: $c-yellow;

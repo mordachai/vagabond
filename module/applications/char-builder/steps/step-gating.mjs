@@ -1,4 +1,5 @@
 import { isTrainingComplete } from './training-manager.mjs';
+import { isItemChoiceComplete } from './item-choice-manager.mjs';
 
 /**
  * Step gating — which builder tabs are revealed.
@@ -63,7 +64,8 @@ export function applicableSteps(state, order = DEFAULT_STEP_ORDER) {
 export function isStepDone(stepName, state) {
   switch (stepName) {
     case 'ancestry':
-      return !!state.selectedAncestry;
+      // Item choices of the Ancestry's traits (Draken Breath Attack element) are picked on this step
+      return !!state.selectedAncestry && isItemChoiceComplete(state, 'ancestry');
     case 'path':
       return !!state.creationPath;
     case 'guides':

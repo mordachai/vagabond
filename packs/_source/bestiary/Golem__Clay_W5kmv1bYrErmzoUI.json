@@ -24,8 +24,7 @@
     "armorDescription": "as Unarmored",
     "locked": true,
     "immunities": [
-      "poison",
-      "physical"
+      "poison"
     ],
     "weaknesses": [
       "adamant"

@@ -29,8 +29,7 @@
     "immunities": [
       "cold",
       "acid",
-      "poison",
-      "physical"
+      "poison"
     ],
     "weaknesses": [
       "silver"

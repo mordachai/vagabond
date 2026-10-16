@@ -357,7 +357,11 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     }
 
     // NPC statblock rules (relic-immune, HP floor, Sunlight, regen) for the locked view
-    if (context.isNPC) context.npcRulesView = NpcRules.describe(this.actor);
+    if (context.isNPC) {
+      context.npcRulesView = NpcRules.describe(this.actor);
+      context.npcRelicBadge = NpcRules.relicBadge(this.actor);
+      context.npcImmunitiesShown = NpcRules.shownImmunities(this.actor);
+    }
 
     // Add character-specific data
     if (context.isCharacter) {

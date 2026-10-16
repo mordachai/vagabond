@@ -260,6 +260,76 @@
           {{/if}}
           <p class='drop-hint text-muted'>{{localize "VAGABOND.UI.Hints.DropGrantedItem"}}</p>
         </div>
+
+        {{! Item choice groups: the player picks Count items of the pool (Draken Breath Attack element) }}
+        <div class='grants-choice-groups'>
+          <div class='grants-choice-header'>
+            <label>{{localize "VAGABOND.ItemChoice.Groups"}}</label>
+            {{#if editable}}
+              <button type='button' class='btn-sm'
+                data-action='addGrantItemChoiceGroup'
+                data-array-path='{{arrayPath}}'
+                data-item-index='{{itemIndex}}'>
+                <i class='fas fa-plus'></i> {{localize "VAGABOND.UI.Buttons.AddChoiceGroup"}}
+              </button>
+            {{/if}}
+          </div>
+          {{#each enrichedGrant.enrichedItemChoices as |choice choiceIndex|}}
+            <div class='choice-group-card'>
+              <div class='choice-group-header'>
+                <strong>{{localize "VAGABOND.UI.Labels.Group"}} {{add choiceIndex 1}}</strong>
+                {{#if ../editable}}
+                  <a data-action='removeGrantItemChoiceGroup'
+                    data-array-path='{{../arrayPath}}'
+                    data-item-index='{{../itemIndex}}'
+                    data-choice-index='{{choiceIndex}}'
+                    class='text-danger'>
+                    <i class='fas fa-trash'></i>
+                  </a>
+                {{/if}}
+              </div>
+              <div class='grants-row'>
+                <label>{{localize "VAGABOND.UI.Labels.Count"}}</label>
+                <input type='number'
+                  name='{{../arrayPath}}.{{../itemIndex}}.itemChoices.{{choiceIndex}}.count'
+                  value='{{choice.count}}'
+                  min='1' max='10'
+                  class='grants-num-input' />
+                <input type='text'
+                  name='{{../arrayPath}}.{{../itemIndex}}.itemChoices.{{choiceIndex}}.label'
+                  value='{{choice.label}}'
+                  placeholder='{{localize "VAGABOND.ItemChoice.LabelPlaceholder"}}'
+                  class='grants-label-input' />
+              </div>
+              <div class='item-grant-drop-zone'
+                data-array-path='{{../arrayPath}}'
+                data-item-index='{{../itemIndex}}'
+                data-choice-index='{{choiceIndex}}'>
+                {{#if choice.items.length}}
+                  <ul class='grants-list'>
+                    {{#each choice.items as |granted grantIndex|}}
+                      <li class='grant-tag'>
+                        <img src='{{granted.img}}' alt='{{granted.name}}' class='grant-tag-icon' />
+                        <span class='grant-tag-label'>{{granted.name}}</span>
+                        {{#if ../../editable}}
+                          <a class='grant-tag-remove'
+                            data-action='removeGrantItem'
+                            data-array-path='{{../../arrayPath}}'
+                            data-item-index='{{../../itemIndex}}'
+                            data-choice-index='{{choiceIndex}}'
+                            data-grant-index='{{grantIndex}}'>
+                            <i class='fas fa-times'></i>
+                          </a>
+                        {{/if}}
+                      </li>
+                    {{/each}}
+                  </ul>
+                {{/if}}
+                <p class='drop-hint text-muted'>{{localize "VAGABOND.ItemChoice.DropHint"}}</p>
+              </div>
+            </div>
+          {{/each}}
+        </div>
       </div>
     </div>
   </div>

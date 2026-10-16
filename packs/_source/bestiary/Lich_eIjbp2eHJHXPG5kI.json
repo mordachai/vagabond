@@ -27,8 +27,7 @@
     "armorDescription": "as (+1) Plate",
     "locked": true,
     "immunities": [
-      "poison",
-      "physical"
+      "poison"
     ],
     "weaknesses": [
       "silver"

@@ -132,6 +132,27 @@
     }
   }
 
+  // Item choice grants (GrantedItems.promptChoices): radio / checkbox rows with the item art.
+  .vbd-item-choice-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 4px 10px;
+  }
+
+  .vbd-item-choice-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+
+    img {
+      width: 28px;
+      height: 28px;
+      border: none;
+      border-radius: 3px;
+    }
+  }
+
   // Hint, below its card.
   .vbd-choice-sub {
     font-family: $font-secondary;

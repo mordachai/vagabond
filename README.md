@@ -330,13 +330,15 @@ https://github.com/mordachai/vagabond/releases/latest/download/system.json
 ```
 ---
 
-### Item Piles integration
+### Canvas Loot integration
 
-If you want to use the module Item Piles to manage treasures and shop in your game install together the module below:
+Want to place items in the scene for your players to discover, and let them drop, throw and hand items to each other? Check out [Canvas Loot](https://github.com/brunocalado/canvas-loot) and read its README to set it up.
 
-```
-https://github.com/mordachai/item-piles-vagabond/releases/latest/download/module.json
-```
+### ~~Item Piles integration~~
+
+~~If you want to use the module Item Piles to manage treasures and shop in your game install together the module below:~~
+
+~~https://github.com/mordachai/item-piles-vagabond/releases/latest/download/module.json~~
 
 ---
 

@@ -37,7 +37,11 @@ export class CharacterBuilderStateManager {
       selectedAncestry: null,
       selectedClass: null,
       selectedStartingPack: null,
-      
+
+      // Item choice grants (steps/item-choice-manager.mjs): groups [{key, source, count}] + picks { [key]: uuid[] }
+      itemChoiceGroups: [],
+      itemChoicePicks: {},
+
       // Stats
       selectedArrayId: null,
       assignedStats: Object.fromEntries(
@@ -220,6 +224,7 @@ export class CharacterBuilderStateManager {
     const resetMap = {
       ancestry: () => {
         this.updateState('selectedAncestry', null);
+        this.updateState('itemChoiceGroups', (this.builderData.itemChoiceGroups ?? []).filter(g => g.source !== 'ancestry'), { skipValidation: true });
       },
       class: () => {
         this.updateMultiple({
@@ -303,7 +308,7 @@ export class CharacterBuilderStateManager {
    */
   isStepComplete(stepName) {
     const completionMap = {
-      ancestry: () => !!this.builderData.selectedAncestry,
+      ancestry: () => isStepDone('ancestry', this.builderData),
       path: () => isStepDone('path', this.builderData),
       guides: () => isStepDone('guides', this.builderData),
       class: () => !!this.builderData.selectedClass,

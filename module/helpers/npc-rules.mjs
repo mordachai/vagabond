@@ -21,15 +21,69 @@ export class NpcRules {
     const sy = actor?.system ?? {};
     const L = (k, d) => game.i18n.format(`VAGABOND.Actor.NPC.Rules.${k}`, d);
     const out = [];
-    if (sy.relicImmunityMin !== null && sy.relicImmunityMin !== undefined) {
-      out.push(`${L('RelicImmunity')}: ${sy.relicImmunityMin > 0 ? L('RelicMin', { n: sy.relicImmunityMin }) : L('RelicAny')}`);
-    }
+    // relicImmunityMin is shown as an inline badge in the Immunities row (`relicBadge`), not a text line
     if (sy.hpFloor && sy.hpFloor !== 'none') out.push(`${L('HpFloor')}: ${L(sy.hpFloor === 'zombie' ? 'HpFloorZombie' : 'HpFloorAlways')}`);
     if (sy.sunlightHarm && sy.sunlightHarm !== 'none') {
       out.push(`${L('SunlightHarm')}: ${L(sy.sunlightHarm === 'burn' ? 'SunlightHarmBurn' : 'SunlightHarmBurnIncapacitated')}`);
     }
     if (sy.regenPerTurn) out.push(`${L('RegenPerTurn')}: ${sy.regenPerTurn}${sy.regenStopsInSunlight ? ` (${L('RegenStopsInSunlight')})` : ''}`);
     return out;
+  }
+
+  /**
+   * Inline Immunities-row badge for `relicImmunityMin`: short label + full rule as tooltip. Null when unset.
+   * @returns {{label: string, tooltip: string, icon: string}|null}
+   */
+  static relicBadge(actor) {
+    const min = actor?.system?.relicImmunityMin;
+    if (min === null || min === undefined) return null;
+    const L = (k, d) => game.i18n.format(`VAGABOND.Actor.NPC.Rules.${k}`, d);
+    const name = (k) => game.i18n.localize(CONFIG.VAGABOND.damageTypes?.[k] ?? k);
+    const keys = this.relicTypes(actor);
+    // Physical is the umbrella: spell out its three forms in the tooltip
+    const tipTypes = keys.map((k) => (k === 'physical'
+      ? `${name(k)} (${CONFIG.VAGABOND.nonRelicImmuneTypes.filter((t) => t !== 'physical').map(name).join(', ')})`
+      : name(k))).join(', ');
+    const types = keys.map(name).join(', ');
+    return {
+      label: min > 0 ? L('RelicBadgeMin', { types, n: min }) : L('RelicBadgeAny', { types }),
+      tooltip: min > 0 ? L('RelicTipMin', { types: tipTypes, n: min }) : L('RelicTipAny', { types: tipTypes }),
+      iconClass: 'fa-solid fa-khanda' // Font Awesome, like the other damage-type immunities (sheet + HUD)
+    };
+  }
+
+  /**
+   * The actor's damage Immunities with the one `relicImmunityMin` implies: a Relic-exception NPC is Immune to
+   * Physical (from non-Relics) without listing it — the badge IS that Immunity. An explicit physical-family
+   * entry (Giant Slug: Blunt) is kept as written and nothing is added.
+   * @returns {string[]}
+   */
+  static immunitiesOf(actor) {
+    const list = actor?.system?.immunities ?? [];
+    const min = actor?.system?.relicImmunityMin;
+    if (min === null || min === undefined) return list;
+    const family = CONFIG.VAGABOND.nonRelicImmuneTypes ?? [];
+    return list.some((t) => family.includes(t)) ? list : [...list, 'physical'];
+  }
+
+  /**
+   * Damage types the Relic exception covers: the physical-family Immunities listed on the actor (Giant Slug:
+   * Blunt), else the Physical umbrella. Empty when the actor has no Relic exception.
+   * @returns {string[]}
+   */
+  static relicTypes(actor) {
+    const min = actor?.system?.relicImmunityMin;
+    if (min === null || min === undefined) return [];
+    const family = CONFIG.VAGABOND.nonRelicImmuneTypes ?? [];
+    const listed = (actor.system.immunities ?? []).filter((t) => family.includes(t));
+    return listed.length ? listed : ['physical'];
+  }
+
+  /** Immunities for the locked sheet / HUD: the badge already names the physical-family ones it covers. */
+  static shownImmunities(actor) {
+    const list = actor?.system?.immunities ?? [];
+    const covered = this.relicTypes(actor);
+    return covered.length ? list.filter((t) => !covered.includes(t)) : list;
   }
 
   /** Is the actor standing in Sunlight (the `sunlit` status)? */

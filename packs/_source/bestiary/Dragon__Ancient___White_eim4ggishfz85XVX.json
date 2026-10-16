@@ -26,7 +26,6 @@
     "armorDescription": "as (+3) Plate and Shield",
     "locked": true,
     "immunities": [
-      "physical",
       "cold"
     ],
     "weaknesses": [],

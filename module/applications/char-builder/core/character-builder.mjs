@@ -15,6 +15,7 @@ import { CharacterBuilderUIComponents } from '../ui/ui-components.mjs';
 import { isTrainingComplete } from '../steps/training-manager.mjs';
 import { BuildGuideService } from '../services/build-guide-service.mjs';
 import { GrantedItems } from '../../../helpers/granted-items.mjs';
+import { togglePick } from '../steps/item-choice-manager.mjs';
 import { TokenPortrait } from '../../../helpers/token-portrait.mjs';
 import { isStepUnlocked, canFinishBuild, furthestAfter, applicableSteps, isStepApplicable, isStepDone, DEFAULT_STEP_ORDER } from '../steps/step-gating.mjs';
 
@@ -308,7 +309,7 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
     // Check the actual state data directly to avoid step manager issues
     const state = this.stateManager.getCurrentState();
 
-    const ancestryComplete = !!state.selectedAncestry;
+    const ancestryComplete = isStepDone('ancestry', state);
     const classComplete = !!state.selectedClass;
     const statCount = Object.keys(CONFIG.VAGABOND.stats ?? {}).length || 6;
     const statsComplete = state.assignedStats &&
@@ -358,7 +359,8 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
       removeStatBonus: VagabondCharBuilder.prototype._delegateToStepManager,
       unassignStat: VagabondCharBuilder.prototype._delegateToStepManager,
       toggleTraining: VagabondCharBuilder.prototype._delegateToStepManager,
-      focusSkillStat: VagabondCharBuilder.prototype._delegateToStepManager
+      focusSkillStat: VagabondCharBuilder.prototype._delegateToStepManager,
+      pickGrantItem: VagabondCharBuilder.prototype._onPickGrantItem
     }
   };
 
@@ -676,6 +678,15 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
       console.error(`Error handling action '${action}' in step '${this.currentStep}':`, error);
       ui.notifications.error(`Failed to handle ${action} action`);
     }
+  }
+
+  /**
+   * Item choice card (`item-choices.hbs`, any step): pick / toggle a grant item of a choice group
+   * @private
+   */
+  async _onPickGrantItem(event, target) {
+    await this._ensureInitialized();
+    if (togglePick(this.stateManager, target.dataset.groupKey, target.dataset.uuid)) this.render();
   }
 
   /**
@@ -1047,6 +1058,9 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
     const grantEntries = [
       ...GrantedItems.entriesFor(ancestryItemObj),
       ...GrantedItems.entriesFor(classItemObj, { levels: [1] }),
+      // Item choice picks (Draken Breath Attack element)
+      ...GrantedItems.entriesFromPicks(GrantedItems.choiceGroupsFor(ancestryItemObj), state.itemChoicePicks),
+      ...GrantedItems.entriesFromPicks(GrantedItems.choiceGroupsFor(classItemObj, { levels: [1] }), state.itemChoicePicks),
     ];
     if (grantEntries.length) {
       actorData.items.push(...await GrantedItems.buildItemData(grantEntries, { existing: actorData.items }));

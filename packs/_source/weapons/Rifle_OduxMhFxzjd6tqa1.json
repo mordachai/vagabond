@@ -32,9 +32,10 @@
     "alchemicalType": "concoction",
     "lore": "",
     "itemFx": {
-      "enabled": true,
+      "enabled": false,
       "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Ranged/Bullet_01_Regular_Orange_15ft_1000x400.webm",
-      "hitDuration": 1000
+      "hitDuration": 1000,
+      "auto": false
     },
     "damageTypeOneHand": "piercing",
     "damageTypeTwoHands": "piercing"

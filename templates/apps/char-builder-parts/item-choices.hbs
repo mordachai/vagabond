@@ -1,0 +1,22 @@
+{{!-- Item choice grants (steps/item-choice-manager.mjs) under their trait / feature row: pass itemChoices=row.choices.
+      One card grid per group, click = pick (action pickGrantItem). --}}
+<div class="builder-item-choices">
+    {{#each itemChoices as |group|}}
+        <div class="item-choice-group {{#if group.done}}is-done{{/if}}">
+            <div class="item-choice-head">
+                <span>{{#if group.ownLabel}}{{group.ownLabel}} · {{/if}}{{localize "VAGABOND.ItemChoice.ChooseN" n=group.count}}</span>
+                <span class="item-choice-count">{{group.picked}}/{{group.count}}</span>
+            </div>
+            <div class="item-choice-grid">
+                {{#each group.options as |opt|}}
+                    <button type="button" class="item-choice-card {{#if opt.picked}}is-selected{{/if}}"
+                        data-action="pickGrantItem" data-group-key="{{group.key}}" data-uuid="{{opt.uuid}}"
+                        data-tooltip="{{opt.name}}">
+                        <img src="{{opt.img}}" alt="">
+                        <span class="item-choice-name">{{#if opt.icon}}<i class="{{opt.icon}}"></i> {{/if}}{{opt.short}}</span>
+                    </button>
+                {{/each}}
+            </div>
+        </div>
+    {{/each}}
+</div>

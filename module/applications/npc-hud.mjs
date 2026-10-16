@@ -5,6 +5,7 @@ import { VagabondTextParser } from '../helpers/text-parser.mjs';
 import { applyHudDisplayPrefs, bindHudBodyDrag, getHudHealthBar, isItemPile } from '../helpers/hud-display.mjs';
 import { bindHudTooltips } from '../helpers/hud-tooltip.mjs';
 import { buildEffectMenuItems } from '../helpers/effects.mjs';
+import { NpcRules } from '../helpers/npc-rules.mjs';
 
 const { api } = foundry.applications;
 
@@ -280,9 +281,10 @@ export class VagabondNPCHud extends api.HandlebarsApplicationMixin(api.Applicati
       label: L(config.senses?.[k]), hint: L(config.senseHints?.[k]),
     }));
     context.sensesNote = sys.sensesNote || '';
-    context.immunities = (sys.immunities ?? []).map((k) => ({
+    context.immunities = NpcRules.shownImmunities(actor).map((k) => ({
       icon: config.damageTypeIcons?.[k], label: L(config.damageTypes?.[k]),
     }));
+    context.relicBadge = NpcRules.relicBadge(actor);
     context.weaknesses = (sys.weaknesses ?? []).map((k) => ({
       icon: config.damageTypeIcons?.[k], label: L(config.allWeaknessTypes?.[k]),
     }));
@@ -290,7 +292,7 @@ export class VagabondNPCHud extends api.HandlebarsApplicationMixin(api.Applicati
       icon: config.statusConditionIcons?.[k], label: L(config.statusConditions?.[k]),
     }));
     context.hasInfoStrip = !!(context.senses.length || context.sensesNote || context.immunities.length
-      || context.weaknesses.length || context.statusImmunities.length);
+      || context.relicBadge || context.weaknesses.length || context.statusImmunities.length);
 
     // --- Status effect icons (portrait overlay) ---
     context.statusEffects = actor.effects

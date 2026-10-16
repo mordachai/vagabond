@@ -638,7 +638,7 @@ export class ContextComponent {
   _isStepCompleted(stepName, state) {
     switch (stepName) {
       case 'ancestry':
-        return !!state.selectedAncestry;
+        return isStepDone('ancestry', state);
       case 'class':
         return !!state.selectedClass;
 

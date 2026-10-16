@@ -58,13 +58,14 @@ import { VagabondNPCHud } from './applications/npc-hud.mjs';
 import { isItemPile } from './helpers/hud-display.mjs';
 import VagabondActiveEffectConfig from './applications/active-effect-config.mjs';
 import { VagabondSpellSequencer } from './helpers/spell-sequencer.mjs';
-import { VagabondItemSequencer } from './helpers/item-sequencer.mjs';
+import { ConeFx } from './helpers/cone-fx.mjs';
 import { VagabondFXResolver } from './helpers/fx-file-resolver.mjs';
 import { registerSocket, emitSocket, registerSocketAction } from './helpers/socket-helper.mjs';
 import { runMacroFromButton, executeItemMacro, registerMacroHandler, registerCastGate, registerMacroQueries } from './helpers/item-macro.mjs';
 import { FeatureAction } from './helpers/feature-action.mjs';
 import { RollExpiry } from './helpers/roll-expiry.mjs';
 import { LightSource } from './helpers/light-source.mjs';
+import { registerCanvasLootChat } from './helpers/canvas-loot-chat.mjs';
 import { VagabondDamageHelper } from './helpers/damage-helper.mjs';
 import { VagabondDamagePipeline } from './helpers/damage-pipeline.mjs';
 import { StatusHelper } from './helpers/status-helper.mjs';
@@ -172,6 +173,7 @@ async function preloadHandlebarsTemplates() {
     'systems/vagabond/templates/shared/bonus-stats-selector.hbs',
     // Char builder partials
     'systems/vagabond/templates/apps/char-builder-parts/training-panel.hbs',
+    'systems/vagabond/templates/apps/char-builder-parts/item-choices.hbs',
     'systems/vagabond/templates/apps/char-builder-parts/training-skills.hbs',
     // Item partials
     'systems/vagabond/templates/item/parts/grants-config.hbs',
@@ -830,6 +832,11 @@ Hooks.once('ready', function () {
     lightSource: LightSource,
     // Money math (g/s/c): game.vagabond.currency.format(copper), .pay(wallet, copper), …
     currency: CurrencyHelper,
+    // FX: game.vagabond.fx.cone({ source, targets, file, length }) — fixed-length cone
+    // (Automated Animations macro "Cone Animation" in the FX Macros pack)
+    fx: {
+      cone: (opts) => ConeFx.cone(opts),
+    },
     // Shops: game.vagabond.shop.open(ref), .openShop/.closeShop/.toggleOpen(ref) (GM; .show = openShop),
     // .isOpen(ref), .setAllOpen(bool),
     // .buy({ shop, buyer, itemId, qty }), .buyCart({ shop, buyer, party?, lines }),
@@ -2091,6 +2098,9 @@ Hooks.once('ready', () => {
   for (const actor of game.actors) EquipmentHelper.queueArmorRestrainedSync(actor);
 });
 
+// Canvas Loot (optional module): drop / throw / pickup messages as Vagabond cards
+registerCanvasLootChat();
+
 /* -------------------------------------------- */
 /*  Token Movement Hooks                        */
 /* -------------------------------------------- */
@@ -2297,8 +2307,7 @@ const FLUKE_REROLL_ENTRY = {
         const cleaveDie = globalThis.vagabond.utils.EquipmentHelper.cleaveDieFor(weapon, targetsAtRollTime.length);
         damageRoll = await weapon.rollDamage(actor, isCritical, statKey, targetsAtRollTime, cleaveDie, weaponSkillKey);
       }
-      const rerollMessage = await VagabondChatCard.weaponAttack(actor, weapon, attackResult, damageRoll, targetsAtRollTime);
-      await VagabondDamageHelper.playFxOrDefer(rerollMessage, { kind: 'item', thrown: !!rerollData.thrown }, actor, weapon, targetsAtRollTime, isSuccess);
+      await VagabondChatCard.weaponAttack(actor, weapon, attackResult, damageRoll, targetsAtRollTime);
 
     } else if (rerollData.type === 'cast') {
       // Spell cast reroll — rebuild the whole Cast card (damage, Effect buttons, FX, Mana
@@ -2391,9 +2400,7 @@ const FORCE_CRIT_ENTRY = {
           critDamageRoll = Roll.fromData(rollJSON);
         }
       }
-      const critMessage = await VagabondChatCard.weaponAttack(actor, weapon, attackResult, critDamageRoll, targetsAtRollTime);
-      const { VagabondDamageHelper } = await import('./helpers/damage-helper.mjs');
-      await VagabondDamageHelper.playFxOrDefer(critMessage, { kind: 'item', thrown: !!rerollData.thrown }, actor, weapon, targetsAtRollTime, true);
+      await VagabondChatCard.weaponAttack(actor, weapon, attackResult, critDamageRoll, targetsAtRollTime);
 
     } else if (rerollData.type === 'cast') {
       const spell = actor.items.get(rerollData.itemId);

@@ -27,8 +27,7 @@
     "locked": true,
     "immunities": [
       "cold",
-      "poison",
-      "physical"
+      "poison"
     ],
     "weaknesses": [
       "silver"

@@ -99,21 +99,7 @@ Slot changes also shift the Reflex penalty (`finalReflexPenalty`).
     "isConsumable": false,
     "linkedConsumable": "",
     "alchemicalType": "concoction",
-    "lore": "",
-    "itemFx": {
-      "enabled": false,
-      "animType": "auto",
-      "hitFile": "",
-      "hitScale": 1.0,
-      "hitOffsetX": 0,
-      "hitDuration": 800,
-      "hitSound": "",
-      "missFile": "",
-      "missScale": 1.0,
-      "missDuration": 600,
-      "missSound": "",
-      "soundVolume": 0.6
-    }
+    "lore": ""
   }
 }
 ```
@@ -171,8 +157,7 @@ Slot changes also shift the Reflex penalty (`finalReflexPenalty`).
     "immunities": [],
     "gearCategory": "", "isSupply": false, "isBeverage": false,
     "isConsumable": false, "linkedConsumable": "",
-    "alchemicalType": "concoction", "lore": "",
-    "itemFx": { "enabled": false, "animType": "auto", "hitFile": "", "hitScale": 1.0, "hitOffsetX": 0, "hitDuration": 800, "hitSound": "", "missFile": "", "missScale": 1.0, "missDuration": 600, "missSound": "", "soundVolume": 0.6 }
+    "alchemicalType": "concoction", "lore": ""
   }
 }
 ```
@@ -201,8 +186,7 @@ Slot changes also shift the Reflex penalty (`finalReflexPenalty`).
     "immunities": [],
     "gearCategory": "", "isSupply": false, "isBeverage": false,
     "isConsumable": false, "linkedConsumable": "",
-    "alchemicalType": "concoction", "lore": "",
-    "itemFx": { "enabled": false, "animType": "auto", "hitFile": "", "hitScale": 1.0, "hitOffsetX": 0, "hitDuration": 800, "hitSound": "", "missFile": "", "missScale": 1.0, "missDuration": 600, "missSound": "", "soundVolume": 0.6 }
+    "alchemicalType": "concoction", "lore": ""
   }
 }
 ```

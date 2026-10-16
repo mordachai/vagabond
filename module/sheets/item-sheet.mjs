@@ -5,12 +5,9 @@ import * as ItemSections from '../helpers/item-sections.mjs';
 import { VideoPreviewDialog } from '../applications/video-preview-dialog.mjs';
 import { VagabondDamagePipeline } from '../helpers/damage-pipeline.mjs';
 import { VagabondSpellSequencer } from '../helpers/spell-sequencer.mjs';
-import { VagabondItemSequencer } from '../helpers/item-sequencer.mjs';
-import { VagabondFXDb } from '../helpers/item-fx-db.mjs';
 import { EquipmentHelper } from '../helpers/equipment-helper.mjs';
 import { TradeHelper } from '../helpers/trade-helper.mjs';
 import { CoinTransferDialog } from '../applications/coin-transfer-dialog.mjs';
-import { ItemFxPicker } from '../applications/item-fx-picker.mjs';
 import { levelTableCap } from '../helpers/homebrew-config.mjs';
 import { CurrencyHelper } from '../helpers/currency-helper.mjs';
 import { ContextMenuHelper } from '../helpers/context-menu-helper.mjs';
@@ -52,14 +49,6 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     classes: ['vagabond', 'item'],
     actions: {
       onEditImage: this._onEditImage,
-      browseItemFxFile: this._onBrowseItemFxFile,
-      browseItemFxSound: this._onBrowseItemFxSound,
-      previewItemFx: this._onPreviewItemFx,
-      toggleItemFx: this._onToggleItemFx,
-      openItemFxPicker: this._onOpenItemFxPicker,
-      previewItemFxSlot: this._onPreviewItemFxSlot,
-      disableAAAutoRec: this._onDisableAAAutoRec,
-      resetItemFx: this._onResetItemFx,
       deployConstruct: this._onDeployConstruct,
       shareContainerCoins: this._onShareContainerCoins,
       previewSpellFx: this._onPreviewSpellFx,
@@ -137,6 +126,8 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       addGrantPerk: this._onAddGrantPerk,
       removeGrantPerk: this._onRemoveGrantPerk,
       removeGrantItem: this._onRemoveGrantItem,
+      addGrantItemChoiceGroup: this._onAddGrantItemChoiceGroup,
+      removeGrantItemChoiceGroup: this._onRemoveGrantItemChoiceGroup,
       addGrantSkillChoiceGroup: this._onAddGrantSkillChoiceGroup,
       removeGrantSkillChoiceGroup: this._onRemoveGrantSkillChoiceGroup,
       toggleBound: this._onToggleBound,
@@ -385,16 +376,6 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
         }
         // Multi-use pips for the Consumable Configuration section
         context.usesPips = ItemSections.usesPipsArray(this.item);
-        // Sequencer FX availability for per-item animation config
-        context.sequencerAvailable = !!game.modules.get('sequencer')?.active;
-        context.isWeapon = this.item.system.equipmentType === 'weapon';
-        if (context.sequencerAvailable && ['weapon', 'alchemical', 'relic'].includes(this.item.system.equipmentType)) {
-          context.itemFxView = VagabondItemSheet._itemFxView(this.item);
-          // File validation for locked view indicator (only when relevant)
-          if (this.item.system.locked && context.itemFxView.on) {
-            context.itemFxValidation = await VagabondItemSheet._checkFxFiles(this.item.system.itemFx);
-          }
-        }
         context.macroNames = VagabondItemSheet._resolveMacroNames(this.item);
         break;
 
@@ -481,6 +462,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
           }
 
           enrichedTrait.enrichedItems = await GrantsHandlers.enrichGrantedItems(trait.grantedItems);
+          enrichedTrait.enrichedItemChoices = await GrantsHandlers.enrichItemChoices(trait.itemChoices);
 
           context.enrichedTraits.push(enrichedTrait);
         }
@@ -566,6 +548,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
             }
 
             feature.enrichedItems = await GrantsHandlers.enrichGrantedItems(feature.grantedItems);
+            feature.enrichedItemChoices = await GrantsHandlers.enrichItemChoices(feature.itemChoices);
           }
 
           // Get spells for this level (level - 1 because array is 0-indexed but levels start at 1)
@@ -2360,163 +2343,6 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
   }
 
   /**
-   * Locked-view film icon: open the floating preview with the item's Hit / Miss animations.
-   * @this VagabondItemSheet
-   * @protected
-   */
-  static _onPreviewItemFx(event, target) {
-    const fx = this.item.system.itemFx ?? {};
-    const groups = [];
-    const volume = fx.soundVolume ?? 0.6;
-    const hit = VagabondItemSequencer.specFor(this.item, true);
-    const miss = VagabondItemSequencer.specFor(this.item, false);
-    if (EquipmentHelper.isThrowable(this.item) || EquipmentHelper.isThrownAlchemical(this.item)) {
-      const thrown = VagabondItemSequencer.specFor(this.item, true, { thrown: true });
-      if (thrown?.thrown && thrown.spec !== hit?.spec) groups.push({ label: game.i18n.localize('VAGABOND.ItemFx.Throw'), spec: thrown.spec, sound: fx.hitSound, volume });
-    }
-    if (hit) groups.push({ label: game.i18n.localize('VAGABOND.ItemFx.Hit'), spec: hit.spec, sound: fx.hitSound, volume });
-    if (miss) groups.push({ label: game.i18n.localize('VAGABOND.ItemFx.Miss'), spec: miss.spec, sound: fx.missSound, volume });
-    if (!groups.length) return;
-    VideoPreviewDialog.open(groups, { title: this.item.name });
-  }
-
-  /**
-   * Preview button on one FX slot (Hit / Throw / Miss) of the unlocked sheet: opens
-   * the floating preview with exactly what that slot plays in-game.
-   * @this VagabondItemSheet
-   * @protected
-   */
-  static _onPreviewItemFxSlot(event, target) {
-    event.preventDefault();
-    const slot = target.dataset.slot;
-    const fx = this.item.system.itemFx ?? {};
-    const choice = slot === 'miss'
-      ? VagabondItemSequencer.specFor(this.item, false)
-      : VagabondItemSequencer.specFor(this.item, true, { thrown: slot === 'throw' });
-    if (!choice) return;
-    const label = game.i18n.localize({ hit: 'VAGABOND.ItemFx.Hit', miss: 'VAGABOND.ItemFx.Miss', throw: 'VAGABOND.ItemFx.Throw' }[slot]);
-    VideoPreviewDialog.open(
-      [{ label, spec: choice.spec, sound: slot === 'miss' ? fx.missSound : fx.hitSound, volume: fx.soundVolume ?? 0.6 }],
-      { title: `${this.item.name} — ${label}` }
-    );
-  }
-
-  /**
-   * One Hit / Miss slot of the FX section: where the clip comes from and a preview frame.
-   * @param {string} spec         stored path string ('' = nothing)
-   * @param {string|null} autoPath  auto-recognised database path, used when spec is empty
-   * @returns {object}
-   * @private
-   */
-  static _fxSlotView(spec, autoPath) {
-    const effective = spec || autoPath || '';
-    if (!effective) return { kind: 'none' };
-    const parts = effective.split('|').map(s => s.trim()).filter(Boolean);
-    const isDb = parts.length === 1 && VagabondFXDb.isDbPath(parts[0]);
-    let video = '';
-    let count = parts.length;
-    let crumbs;
-    if (isDb) {
-      const path = parts[0].replace(/(\.?\*)+$/, '');
-      const files = VagabondFXDb.available() ? VagabondFXDb.files(path, 24) : [];
-      video = files[0] ?? '';
-      count = files.length;
-      crumbs = path.split('.');
-    } else {
-      const first = parts[0] ?? '';
-      if (!first.includes('*')) video = first;
-      crumbs = [decodeURIComponent(first.split('/').pop() ?? first)];
-      if (parts.length > 1) crumbs.push(`+${parts.length - 1}`);
-    }
-    return {
-      kind: spec ? 'custom' : 'auto',
-      crumbs,
-      label: crumbs.join(' › '),
-      count,
-      video: video ? `${video}#t=0.6` : '',
-    };
-  }
-
-  /**
-   * Everything the FX section needs to draw: on/off state, both slots, and warnings.
-   * @param {Item} item
-   * @returns {object}
-   * @private
-   */
-  static _itemFxView(item) {
-    const fx = item.system.itemFx ?? {};
-    const hitFile = fx.hitFile?.trim() ?? '';
-    const missFile = fx.missFile?.trim() ?? '';
-    const throwFile = fx.throwFile?.trim() ?? '';
-    const autoOn = fx.auto !== false;
-    const auto = !hitFile && autoOn ? VagabondFXDb.autoSpec(item) : null;
-    const on = hitFile ? !!fx.enabled : (autoOn || (!!missFile && !!fx.enabled));
-    // Throw slot: only items that can be thrown (Thrown weapons, damaging Alchemicals)
-    const throwable = EquipmentHelper.isThrowable(item) || EquipmentHelper.isThrownAlchemical(item);
-    const autoThrow = throwable && !throwFile && autoOn ? VagabondFXDb.autoThrownSpec(item) : null;
-    return {
-      on,
-      throwable,
-      throw: VagabondItemSheet._fxSlotView(throwFile, autoThrow?.path ?? ''),
-      noAutoThrowMatch: throwable && !throwFile && autoOn && !autoThrow,
-      hit: VagabondItemSheet._fxSlotView(hitFile, auto?.path ?? ''),
-      miss: VagabondItemSheet._fxSlotView(missFile, ''),
-      noAutoMatch: !hitFile && autoOn && !auto,
-      // Automated Animations only duplicates our FX while its global auto-recognition is on
-      aaWarning: VagabondItemSheet._aaAutoRecActive(),
-      aaCanDisable: game.user.isGM,
-    };
-  }
-
-  /** Automated Animations installed, active and with its global auto-recognition enabled. */
-  static _aaAutoRecActive() {
-    if (!game.modules.get('autoanimations')?.active) return false;
-    try { return !game.settings.get('autoanimations', 'disableAutoRec'); } catch { return true; }
-  }
-
-  /**
-   * Turn off Automated Animations' world-wide auto-recognition (GM only), so only items
-   * configured inside AA itself play AA animations and ours stop doubling up.
-   * @this VagabondItemSheet
-   * @protected
-   */
-  static async _onDisableAAAutoRec(event, target) {
-    event.preventDefault();
-    if (!game.user.isGM) return;
-    try {
-      await game.settings.set('autoanimations', 'disableAutoRec', true);
-      ui.notifications.info(game.i18n.localize('VAGABOND.ItemFx.AADisabled'));
-      this.render();
-    } catch (err) {
-      console.warn('Vagabond | Could not disable Automated Animations auto-recognition:', err);
-    }
-  }
-
-  /**
-   * The header switch: one on/off for the whole animation. "Off" silences the item
-   * (Auto off + Enable off); "On" re-enables both so a file or the auto pick plays.
-   * @this VagabondItemSheet
-   * @protected
-   */
-  static async _onToggleItemFx(event, target) {
-    event.preventDefault();
-    event.stopPropagation();
-    const on = VagabondItemSheet._itemFxView(this.item).on;
-    await this.item.update({ 'system.itemFx.enabled': !on, 'system.itemFx.auto': !on });
-  }
-
-  /**
-   * Open the floating FX picker for the Hit or Miss slot.
-   * @this VagabondItemSheet
-   * @protected
-   */
-  static _onOpenItemFxPicker(event, target) {
-    event.preventDefault();
-    const field = { miss: 'missFile', throw: 'throwFile' }[target.dataset.slot] ?? 'hitFile';
-    ItemFxPicker.open(this.item, field);
-  }
-
-  /**
    * Transport gear (Container item linked by `flags.vagabond.constructId`): create its
    * Mount / Vehicle / Structure actor in the world from the "Mounts & Vehicles" pack and open it.
    * @this VagabondItemSheet
@@ -2532,20 +2358,6 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
   }
 
   /**
-   * Clear a slot: Hit and Throw go back to auto-recognition, Miss goes back to no animation.
-   * @this VagabondItemSheet
-   * @protected
-   */
-  static async _onResetItemFx(event, target) {
-    event.preventDefault();
-    const slot = target.dataset.slot;
-    await this.item.update({
-      miss: { 'system.itemFx.missFile': '' },
-      throw: { 'system.itemFx.throwFile': '', 'system.itemFx.auto': true, 'system.itemFx.enabled': true },
-    }[slot] ?? { 'system.itemFx.hitFile': '', 'system.itemFx.auto': true, 'system.itemFx.enabled': true });
-  }
-
-  /**
    * Preview groups for a spell's FX school: the cast anim, then one group per
    * delivery type that has an area anim configured.
    * @param {Item} item  spell
@@ -2558,7 +2370,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     const groups = [];
     const cast = cfg.castAnims?.[school];
     if (cast?.file) {
-      groups.push({ label: game.i18n.localize('VAGABOND.ItemFx.Cast'), spec: cast.file, sound: cast.sound, volume: cast.volume ?? 0.45 });
+      groups.push({ label: game.i18n.localize('VAGABOND.SpellFx.Cast'), spec: cast.file, sound: cast.sound, volume: cast.volume ?? 0.45 });
     }
     for (const [delivery, entry] of Object.entries(cfg.areaAnims?.[school] ?? {})) {
       if (!entry?.file) continue;
@@ -2579,86 +2391,6 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     const { schoolLabel, groups } = VagabondItemSheet._spellFxGroups(this.item);
     if (!groups.length) return;
     VideoPreviewDialog.open(groups, { title: `${this.item.name} (${schoolLabel})` });
-  }
-
-  /**
-   * Browse for an item FX video file and populate the target input field.
-   *
-   * @this VagabondItemSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @protected
-   */
-  static async _onBrowseItemFxFile(event, target) {
-    const fieldName = target.dataset.field;
-    const input = this.element.querySelector(`input[name="${fieldName}"]`);
-    const FP = foundry.applications.apps.FilePicker.implementation ?? foundry.applications.apps.FilePicker;
-    new FP({
-      type: 'video',
-      current: input?.value?.split('|').pop()?.trim() || '',
-      callback: path => {
-        if (!input) return;
-        const existing = input.value.trim();
-        input.value = existing ? `${existing} | ${path}` : path;
-      },
-    }).browse();
-  }
-
-  /**
-   * Opens an audio FilePicker for an item FX sound field.
-   * @this VagabondItemSheet
-   * @param {PointerEvent} event
-   * @param {HTMLElement} target
-   * @protected
-   */
-  static async _onBrowseItemFxSound(event, target) {
-    const fieldName = target.dataset.field;
-    const input = this.element.querySelector(`input[name="${fieldName}"]`);
-    const FP = foundry.applications.apps.FilePicker.implementation ?? foundry.applications.apps.FilePicker;
-    new FP({
-      type: 'audio',
-      current: input?.value?.split('|').pop()?.trim() || '',
-      callback: path => {
-        if (!input) return;
-        const existing = input.value.trim();
-        input.value = existing ? `${existing} | ${path}` : path;
-      },
-    }).browse();
-  }
-
-  /**
-   * Checks whether each FX file path is accessible via HTTP.
-   * Returns per-path booleans (true = exists, false = 404, null = not configured).
-   * Wildcards (*) and pipe-separated paths are treated as valid (can't verify).
-   * @param {Object} itemFx - The item's itemFx system data
-   * @returns {Promise<Object>}
-   */
-  static async _checkFxFiles(itemFx) {
-    const check = async (path) => {
-      if (!path) return null;
-      if (path.includes('*') || path.includes('|')) return true;
-      // Sequencer database paths have no file to fetch — check the database instead.
-      if (VagabondFXDb.isDbPath(path)) return !VagabondFXDb.available() || VagabondFXDb.exists(path);
-      try {
-        const r = await fetch(path, { method: 'HEAD' });
-        return r.ok;
-      } catch {
-        return false;
-      }
-    };
-    const [hitFile, missFile, throwFile, hitSound, missSound] = await Promise.all([
-      check(itemFx.hitFile),
-      check(itemFx.missFile),
-      check(itemFx.throwFile),
-      check(itemFx.hitSound),
-      check(itemFx.missSound),
-    ]);
-    return {
-      hitFile, missFile, throwFile, hitSound, missSound,
-      animInvalid: (itemFx.hitFile && hitFile === false) || (itemFx.missFile && missFile === false)
-        || (itemFx.throwFile && throwFile === false),
-      soundInvalid: (itemFx.hitSound && hitSound === false) || (itemFx.missSound && missSound === false),
-    };
   }
 
   /**
@@ -3224,6 +2956,12 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
   }
   static async _onRemoveGrantItem(event, target) {
     return GrantsHandlers.removeGrantItem(this, event, target);
+  }
+  static async _onAddGrantItemChoiceGroup(event, target) {
+    return GrantsHandlers.addGrantItemChoiceGroup(this, event, target);
+  }
+  static async _onRemoveGrantItemChoiceGroup(event, target) {
+    return GrantsHandlers.removeGrantItemChoiceGroup(this, event, target);
   }
 
   /**

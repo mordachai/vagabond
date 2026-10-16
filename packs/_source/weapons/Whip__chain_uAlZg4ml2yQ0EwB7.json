@@ -35,9 +35,10 @@
     "lore": "",
     "itemFx": {
       "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Melee/Group05/TrailAttack*",
-      "enabled": true,
+      "enabled": false,
       "hitDuration": 1000,
-      "hitOffsetX": -100
+      "hitOffsetX": -100,
+      "auto": false
     },
     "damageTypeOneHand": "blunt"
   },

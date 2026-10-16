@@ -29,8 +29,7 @@
     "locked": true,
     "immunities": [
       "poison",
-      "fire",
-      "physical"
+      "fire"
     ],
     "weaknesses": [
       "silver"

@@ -329,7 +329,7 @@
     }
 
     &::placeholder {
-      color: rgba($c-white, 0.5);
+      color: rgba($c-white, 0.75);
       opacity: 1;
       -webkit-text-stroke-color: $c-red;
       -webkit-text-stroke-width: 1px;
@@ -385,7 +385,9 @@
   }
 
   &.fatigue-inactive {
-    opacity: 0.4;
+    // Teal plate in both themes: explicit light skull (inherited black vanished in dark)
+    color: #ececec;
+    opacity: 0.55;
 
     &:hover {
       color: $c-white;
@@ -572,7 +574,8 @@
     font-size: 1.1em;
     padding: 0 1px;
     margin: 0 1px;
-    color: $c-text-1;
+    // Dark header plate in both themes ($c-text-1 is navy in light)
+    color: #ececec;
 
     &:hover,
     &:focus {
@@ -852,7 +855,7 @@
     .speed-group-unit {
       font-size: 0.9em;
       font-weight: 400;
-      opacity: 0.6;
+      opacity: 0.85;
 
     }
   }
@@ -884,7 +887,7 @@
   .modifiers-group-icon {
     font-size: 12px;
     cursor: pointer;
-    opacity: 0.7;
+    opacity: 0.9;
 
     &:hover {
       opacity: 1;

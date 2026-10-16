@@ -236,7 +236,6 @@
     &::placeholder {
       font-family: var(--font-primary);
       font-style: italic;
-      opacity: 0.6;
     }
 
     &:focus {
@@ -425,17 +424,17 @@
     }
 
     .fx-body {
-      opacity: 0.5;
+      opacity: 0.7;
       filter: grayscale(0.6);
     }
   }
 
   &.is-off .fx-details {
-    opacity: 0.6;
+    opacity: 0.8;
   }
 
   &.is-suppressed .fx-body {
-    opacity: 0.5;
+    opacity: 0.7;
   }
 
   // Name = accordion trigger: description slides open below the row
@@ -489,7 +488,7 @@
 
   .fx-chevron {
     font-size: 11px;
-    opacity: 0.7;
+    opacity: 0.85;
     transition: color 0.2s ease, opacity 0.2s ease;
   }
 }
@@ -555,9 +554,10 @@
   color: $c-text-1;
   white-space: nowrap;
 
+  // --vagabond-c-yellow-2 is only defined for dark; the light fallback must be dark enough on paper
   &.fx-suppressed {
-    border-color: var(--vagabond-c-yellow-2, #b8860b);
-    color: var(--vagabond-c-yellow-2, #b8860b);
+    border-color: var(--vagabond-c-yellow-2, #5c4300);
+    color: var(--vagabond-c-yellow-2, #5c4300);
   }
 }
 
@@ -569,7 +569,6 @@
   font-size: 10px;
   line-height: 1.5;
   color: $c-text-1;
-  opacity: 0.85;
 }
 
 .fx-description {

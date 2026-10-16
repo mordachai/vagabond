@@ -32,10 +32,11 @@
     "alchemicalType": "concoction",
     "lore": "",
     "itemFx": {
-      "enabled": true,
+      "enabled": false,
       "hitFile": "modules/JB2A_DnD5e/Library/Generic/Creature/Fist/CreatureAttackFist*",
       "hitOffsetX": -100,
-      "hitDuration": 1000
+      "hitDuration": 1000,
+      "auto": false
     },
     "damageTypeOneHand": "blunt",
     "altSkills": []

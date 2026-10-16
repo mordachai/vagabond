@@ -58,21 +58,7 @@ Use this document to prompt an AI assistant to generate relic items for the Vaga
     "isConsumable": false,
     "linkedConsumable": "",
     "alchemicalType": "concoction",
-    "lore": "Forged by a blind astrologer who could see the future in starlight, this amulet was passed down through three generations of wanderers before being lost in the Ashwood Collapse.",
-    "itemFx": {
-      "enabled": false,
-      "animType": "auto",
-      "hitFile": "",
-      "hitScale": 1.0,
-      "hitOffsetX": 0,
-      "hitDuration": 800,
-      "hitSound": "",
-      "missFile": "",
-      "missScale": 1.0,
-      "missDuration": 600,
-      "missSound": "",
-      "soundVolume": 0.6
-    }
+    "lore": "Forged by a blind astrologer who could see the future in starlight, this amulet was passed down through three generations of wanderers before being lost in the Ashwood Collapse."
   }
 }
 ```
@@ -141,8 +127,7 @@ Relics frequently use Active Effects for their mechanical bonuses. These are att
     "gearCategory": "", "isSupply": false, "isBeverage": false,
     "isConsumable": false, "linkedConsumable": "",
     "alchemicalType": "concoction",
-    "lore": "Cast from iron pulled from the heart of a defeated golem. The smith who made it never felt pain again after the forging.",
-    "itemFx": { "enabled": false, "animType": "auto", "hitFile": "", "hitScale": 1.0, "hitOffsetX": 0, "hitDuration": 800, "hitSound": "", "missFile": "", "missScale": 1.0, "missDuration": 600, "missSound": "", "soundVolume": 0.6 }
+    "lore": "Cast from iron pulled from the heart of a defeated golem. The smith who made it never felt pain again after the forging."
   }
 }
 ```
@@ -171,8 +156,7 @@ Relics frequently use Active Effects for their mechanical bonuses. These are att
     "gearCategory": "", "isSupply": false, "isBeverage": false,
     "isConsumable": true, "linkedConsumable": "",
     "alchemicalType": "concoction",
-    "lore": "Lifegems grow in ancient ruins where heroes fell in battle. They absorb the lingering vitality of the dead and hold it until needed.",
-    "itemFx": { "enabled": false, "animType": "auto", "hitFile": "", "hitScale": 1.0, "hitOffsetX": 0, "hitDuration": 800, "hitSound": "", "missFile": "", "missScale": 1.0, "missDuration": 600, "missSound": "", "soundVolume": 0.6 }
+    "lore": "Lifegems grow in ancient ruins where heroes fell in battle. They absorb the lingering vitality of the dead and hold it until needed."
   }
 }
 ```

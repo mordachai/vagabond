@@ -36,8 +36,9 @@
       "hitSound": "",
       "hitOffsetX": -100,
       "hitDuration": 1000,
-      "enabled": true,
-      "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Melee/Group05/TrailAttack*"
+      "enabled": false,
+      "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Melee/Group05/TrailAttack*",
+      "auto": false
     },
     "damageTypeOneHand": "slashing",
     "altSkills": [

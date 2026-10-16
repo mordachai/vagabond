@@ -270,7 +270,8 @@ export class VagabondChatCard {
   /* Render & Send                               */
   /* -------------------------------------------- */
   
-  async render() {
+  /** Derive the render-only fields (dice markup, favor/hinder flags, config) onto `this.data`. */
+  _prepareData() {
       // 1. Attack/Skill Rolls (isDamage = false)
       if (this.data.roll) {
           const f = this.data.roll.formula || '';
@@ -298,8 +299,23 @@ export class VagabondChatCard {
       }
 
       this.data.config = CONFIG.VAGABOND;
+  }
+
+  async render() {
+      this._prepareData();
       const template = 'systems/vagabond/templates/chat/chat-card.hbs';
       return await foundry.applications.handlebars.renderTemplate(template, this.data);
+  }
+
+  /**
+   * Synchronous render for callers that cannot await (non-awaited hooks). The caller supplies the
+   * compiled template, e.g. from `foundry.applications.handlebars.getTemplate()` done ahead of time.
+   * @param {Function} compiled - Compiled `chat-card.hbs`
+   * @returns {string}
+   */
+  renderSync(compiled) {
+      this._prepareData();
+      return compiled(this.data, { allowProtoMethodsByDefault: true, allowProtoPropertiesByDefault: true });
   }
   
   async send() {

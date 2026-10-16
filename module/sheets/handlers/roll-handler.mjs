@@ -1,6 +1,5 @@
 import { TargetHelper } from '../../helpers/target-helper.mjs';
 import { VagabondTextParser } from '../../helpers/text-parser.mjs';
-import { VagabondItemSequencer } from '../../helpers/item-sequencer.mjs';
 import { VagabondChatHelper } from '../../helpers/chat-helper.mjs';
 import { RageHelper } from '../../helpers/rage-helper.mjs';
 import { HunterHelper } from '../../helpers/hunter-helper.mjs';
@@ -266,11 +265,6 @@ export class RollHandler {
           });
         }
 
-        // Play item FX animation (alchemicals always "hit" — no attack roll)
-        const alcCasterToken = this.actor.token?.object ?? this.actor.getActiveTokens(true)[0];
-        const alcTargets = TargetHelper.resolveTargets(targetsAtRollTime);
-        VagabondItemSequencer.play(item, alcCasterToken, alcTargets, true);
-
         // Use createActionCard for consistency with other items
         await VagabondChatCard.createActionCard({
           actor: this.actor,
@@ -410,7 +404,7 @@ export class RollHandler {
         damageRoll = await item.rollDamage(this.actor, attackResult.isCritical, statKey, targetsAtRollTime, cleaveDieOverride, attackResult.weaponSkillKey);
       }
 
-      const attackMessage = await VagabondChatCard.weaponAttack(
+      await VagabondChatCard.weaponAttack(
         this.actor,
         item,
         attackResult,
@@ -420,14 +414,6 @@ export class RollHandler {
         _wpnPostCtx.extraTags
       );
 
-      // Item FX: with a manual Roll Damage button on the card the animation waits for
-      // that click (lands with the damage); otherwise it plays right after the check.
-      const fxDeferred = attackResult.isHit
-        && await VagabondDamageHelper.deferFxToDamageButton(attackMessage, { kind: 'item', thrown: !!thrown });
-      if (!fxDeferred) {
-        const casterToken = this.actor.token?.object ?? this.actor.getActiveTokens(true)[0];
-        VagabondItemSequencer.play(item, casterToken, TargetHelper.resolveTargets(targetsAtRollTime), attackResult.isHit, { thrown: !!thrown });
-      }
       if (alchemicalThrow && attackResult.isHit) await this._postMixCompanion(item, targetsAtRollTime, 'ranged');
       // Handle consumption after successful attack (regardless of hit/miss).
       // A weapon throw already spends quantity in activateHandItem; a thrown

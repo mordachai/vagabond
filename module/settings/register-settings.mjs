@@ -748,18 +748,7 @@ export function registerGameSettings({ refreshClockDependents, applyTokenEffectV
     requiresReload: false,
   });
 
-  // World-level master switch for weapon/alchemical/relic FX
-  game.settings.register('vagabond', 'useItemAnimations', {
-    name: 'VAGABOND.Settings.useItemAnimations.name',
-    hint: 'VAGABOND.Settings.useItemAnimations.hint',
-    scope: 'world',
-    config: false,
-    type: Boolean,
-    default: false,
-    requiresReload: false,
-  });
-
-  // Per-device toggle for spell AND item FX
+  // Per-device toggle for spell FX
   game.settings.register('vagabond', 'useSequencerFX', {
     name: 'VAGABOND.Settings.useSequencerFX.name',
     hint: 'VAGABOND.Settings.useSequencerFX.hint',

@@ -1,5 +1,24 @@
 # Changelog
 
+## v6.6.0
+- **[Added]** Canvas Loot integration: its drop, throw, pickup and place messages now use Vagabond chat cards, with a Show button that pans to the loot. README recommends Canvas Loot (Item Piles recommendation struck out).
+- **[Added]** Relic badge on NPC sheet and HUD: "Physical vs. Non-Relics" with a plain tooltip (Relic Weapons of (+N) or higher ignore the Immunity). Replaces the long yellow text line.
+- **[Added]** The badge names the actual type: Giant Slug shows "Blunt vs. Non-Relics"; Physical stays the umbrella over Blunt, Piercing and Slashing.
+- **[Fixed]** NPCs with the Relic exception no longer list a separate "Physical" Immunity. The badge is the Physical Immunity; old copies in the world are cleaned on load.
+- **[Changed]** 53 bestiary creatures dropped the redundant plain Physical entry (compendium needs a rebuild).
+- **[Fixed]** Contrast pass in dark and light themes: text on the NPC sheet's yellow and grey panels (Special Rules, Resistances, Senses, header banner) is dark again instead of light grey on yellow.
+- **[Fixed]** NPC immunity, weakness and speed dropdown panels no longer render black text over the dark sheet.
+- **[Fixed]** Lock / Unlock buttons are visible: NPC sheet lock is a larger outlined white glyph (yellow when unlocked); item sheet lock is a dark button with a light icon.
+- **[Fixed]** Unreadable text in light theme: inventory quantity badges, shop section titles, character level number, construct hints; in dark theme: key-stat chips, delete buttons, item macro labels, Perk detail headers.
+- **[Fixed]** Faded text raised to readable levels: Effects list rows (off / suppressed), empty Focus, Slot and Bound pips, equipped drop hints, Item FX placeholders and hints.
+- **[Changed]** All placeholders follow one rule: the field's own text colour at 60% (`--vagabond-placeholder-opacity`). Only the outlined yellow titles keep a fixed colour.
+- **[Added]** Breath Attack comes in six elements: Fire, Cold, Poison, Necrotic, Acid and Shock (weapons compendium; the old Breath Attack is now Breath Attack: Fire).
+- **[Added]** Item choices on Ancestry traits and Class features (edit mode > Granted Items > Item Choices): the player picks N items from a list. The Character Builder shows the cards right under their trait; added any other way, a dialog asks.
+- **[Changed]** Draken pick their Breath Attack element in the Character Builder.
+- **[Fixed]** Breath Attack animations (Automated Animations config) play a 15' cone toward the targets instead of stretching all the way to them. New FX Macros compendium: "Cone Animation" macro for any AA entry (Macro section, Run macro only; Args = file, length).
+- **[Changed]** Weapon, alchemical and relic animations now come from Automated Animations only. The item sheet's Item FX section, the FX picker and the "Use Item Animations" setting are gone. Spell FX are unchanged.
+- **[Added]** Automated Animations menu files for every compendium weapon (English and Portuguese) in `assets/config/`: import them in AA's Autorec menu. Thrown weapons animate as throws.
+
 ## v6.5.0
 - **Round tokens from portraits.** When a portrait becomes the token art (a new actor, a token still on the default art, or the Character Builder's Class / Guide art), the token gets a circle-cropped copy of it. Changing the portrait later updates the round token too. Token art picked in Token config is never changed. Setting: Statuses & Tokens > Token Art (on by default). Crops are saved once per image in `assets/vagabond/tokens/`. With a dynamic Token Ring on, the round image shrinks inside the ring so the ring shows; turning the ring off puts the full-size circle back.
 - **Fix: Immune / Weak to Physical now covers Blunt, Piercing and Slashing.** An NPC Immune to Physical took full damage from a Slashing sword unless the three types were also ticked. Physical now counts for all three (attacks, Saves, Apply Direct and ongoing status damage). It works one way only: Immune to Slashing still takes damage typed as plain Physical.

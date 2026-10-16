@@ -35,9 +35,7 @@
     "universalAlchemicalDamageBonus": 0,
     "universalAlchemicalDamageDice": "",
     "locked": true,
-    "immunities": [
-      "physical"
-    ],
+    "immunities": [],
     "weaknesses": [],
     "statusImmunities": [
       "berserk",

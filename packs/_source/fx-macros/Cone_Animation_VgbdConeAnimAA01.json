@@ -1,0 +1,27 @@
+{
+  "name": "Cone Animation (Automated Animations)",
+  "type": "script",
+  "author": "13p65OEadZSZVLRk",
+  "img": "icons/magic/fire/beam-jet-stream-trails-orange.webp",
+  "scope": "global",
+  "command": "/**\n * Vagabond — Cone Animation (for Automated Animations)\n * Plays a fixed-length cone from the attacker toward its targets, instead of AA's\n * range clip that stretches all the way to each target.\n *\n * In an AA entry: Macro section ON, \"Run macro only\" (playWhen 2),\n * Name = Compendium.vagabond.fx-macros.Macro.VgbdConeAnimAA01\n * Args = file, length[, width[, color]]   e.g.  jb2a.breath_weapons.fire.cone.orange.01, 15\n *   file   = Sequencer DB key or file path\n *   length = cone length in feet (default 15)\n *   width  = optional cone width in feet (empty keeps the clip's shape)\n *   color  = optional recolor: hue shift in degrees (255 turns orange fire purple) or #rrggbb tint\n *            e.g.  jb2a.breath_weapons.fire.cone.orange.01, 15, , 255\n */\nconst [, handler, userArgs = []] = args ?? [];\nconst [file, length, width, color] = Array.isArray(userArgs) ? userArgs : [userArgs];\nif (!handler?.sourceToken || !file) return;\nawait game.vagabond.fx.cone({\n  source: handler.sourceToken,\n  targets: handler.allTargets ?? [],\n  file: String(file).trim(),\n  length: Number(length) || 15,\n  width: Number(width) || undefined,\n  color: color || undefined,\n});\n",
+  "folder": null,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.365",
+    "systemId": "vagabond",
+    "systemVersion": "6.5.0",
+    "lastModifiedBy": "13p65OEadZSZVLRk",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "createdTime": 1791000000000,
+    "modifiedTime": 1791000000000
+  },
+  "sort": 0,
+  "_id": "VgbdConeAnimAA01",
+  "_key": "!macros!VgbdConeAnimAA01"
+}

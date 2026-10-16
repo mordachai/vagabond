@@ -25,9 +25,7 @@
     "armor": 0,
     "armorDescription": "as Unarmored",
     "locked": true,
-    "immunities": [
-      "physical"
-    ],
+    "immunities": [],
     "weaknesses": [
       "coldIron"
     ],

@@ -14465,7 +14465,7 @@
         "alchemicalType": "concoction",
         "lore": "",
         "itemFx": {
-          "enabled": true,
+          "enabled": false,
           "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Melee/Group02/MeleeAttack02_Hammer01*",
           "hitDuration": 1000,
           "hitOffsetX": -100,
@@ -14476,7 +14476,8 @@
           "missScale": 1,
           "missDuration": 600,
           "missSound": "",
-          "soundVolume": 0.6
+          "soundVolume": 0.6,
+          "auto": false
         },
         "damageTypeOneHand": "blunt",
         "armorRating": 1,
@@ -14682,7 +14683,7 @@
         "alchemicalType": "concoction",
         "lore": "",
         "itemFx": {
-          "enabled": true,
+          "enabled": false,
           "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Melee/Group02/MeleeAttack02_BattleAxe*",
           "hitDuration": 1000,
           "animType": "auto",
@@ -14693,7 +14694,8 @@
           "missScale": 1,
           "missDuration": 600,
           "missSound": "",
-          "soundVolume": 0.6
+          "soundVolume": 0.6,
+          "auto": false
         },
         "damageTypeOneHand": "slashing",
         "damageTypeTwoHands": "slashing",
@@ -14853,7 +14855,7 @@
           "hitOffsetX": -100,
           "hitDuration": 1000,
           "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Melee/Group03/MeleeAttack03_GreatAxe*",
-          "enabled": true,
+          "enabled": false,
           "animType": "auto",
           "hitScale": 1,
           "hitSound": "",
@@ -14861,7 +14863,8 @@
           "missScale": 1,
           "missDuration": 600,
           "missSound": "",
-          "soundVolume": 0.6
+          "soundVolume": 0.6,
+          "auto": false
         },
         "damageTypeOneHand": "slashing",
         "damageTypeTwoHands": "slashing",
@@ -15067,7 +15070,7 @@
         "alchemicalType": "concoction",
         "lore": "",
         "itemFx": {
-          "enabled": true,
+          "enabled": false,
           "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Melee/Group01/TrailAttack01*",
           "hitOffsetX": -100,
           "hitDuration": 1000,
@@ -15078,7 +15081,8 @@
           "missScale": 1,
           "missDuration": 600,
           "missSound": "",
-          "soundVolume": 0.6
+          "soundVolume": 0.6,
+          "auto": false
         },
         "damageTypeOneHand": "blunt",
         "damageTypeTwoHands": "blunt",
@@ -15285,7 +15289,7 @@
         "alchemicalType": "concoction",
         "lore": "",
         "itemFx": {
-          "enabled": true,
+          "enabled": false,
           "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Melee/Glaive01_01_Regular*",
           "hitOffsetX": -100,
           "hitDuration": 1000,
@@ -15296,7 +15300,8 @@
           "missScale": 1,
           "missDuration": 600,
           "missSound": "",
-          "soundVolume": 0.6
+          "soundVolume": 0.6,
+          "auto": false
         },
         "damageTypeOneHand": "piercing",
         "damageTypeTwoHands": "piercing",
@@ -15506,7 +15511,7 @@
           "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Melee/Glaive01*",
           "hitDuration": 1000,
           "hitOffsetX": -100,
-          "enabled": true,
+          "enabled": false,
           "animType": "auto",
           "hitScale": 1,
           "hitSound": "",
@@ -15514,7 +15519,8 @@
           "missScale": 1,
           "missDuration": 600,
           "missSound": "",
-          "soundVolume": 0.6
+          "soundVolume": 0.6,
+          "auto": false
         },
         "damageTypeOneHand": "piercing",
         "damageTypeTwoHands": "piercing",
@@ -15721,7 +15727,7 @@
           "hitOffsetX": -150,
           "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Melee/Group03/MeleeAttack03_GreatClub*",
           "hitDuration": 1000,
-          "enabled": true,
+          "enabled": false,
           "animType": "auto",
           "hitScale": 1,
           "hitSound": "",
@@ -15729,7 +15735,8 @@
           "missScale": 1,
           "missDuration": 600,
           "missSound": "",
-          "soundVolume": 0.6
+          "soundVolume": 0.6,
+          "auto": false
         },
         "damageTypeOneHand": "blunt",
         "damageTypeTwoHands": "blunt",
@@ -15888,7 +15895,7 @@
           "hitOffsetX": -150,
           "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Melee/Group03/MeleeAttack03_GreatClub*",
           "hitDuration": 1000,
-          "enabled": true,
+          "enabled": false,
           "animType": "auto",
           "hitScale": 1,
           "hitSound": "",
@@ -15896,7 +15903,8 @@
           "missScale": 1,
           "missDuration": 600,
           "missSound": "",
-          "soundVolume": 0.6
+          "soundVolume": 0.6,
+          "auto": false
         },
         "damageTypeOneHand": "blunt",
         "damageTypeTwoHands": "blunt",
@@ -16105,7 +16113,7 @@
           "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Melee/Group04/TrailAttack04_01_*",
           "hitDuration": 1000,
           "hitOffsetX": -100,
-          "enabled": true,
+          "enabled": false,
           "animType": "auto",
           "hitScale": 1,
           "hitSound": "",
@@ -16113,7 +16121,8 @@
           "missScale": 1,
           "missDuration": 600,
           "missSound": "",
-          "soundVolume": 0.6
+          "soundVolume": 0.6,
+          "auto": false
         },
         "damageTypeOneHand": "piercing",
         "damageTypeTwoHands": "piercing",
@@ -16319,7 +16328,7 @@
         "alchemicalType": "concoction",
         "lore": "",
         "itemFx": {
-          "enabled": true,
+          "enabled": false,
           "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Melee/Slash02/GenericSlash02*",
           "hitOffsetX": -100,
           "hitDuration": 1000,
@@ -16330,7 +16339,8 @@
           "missScale": 1,
           "missDuration": 600,
           "missSound": "",
-          "soundVolume": 0.6
+          "soundVolume": 0.6,
+          "auto": false
         },
         "damageTypeOneHand": "piercing",
         "armorRating": 1,
@@ -16487,7 +16497,7 @@
         "alchemicalType": "concoction",
         "lore": "",
         "itemFx": {
-          "enabled": true,
+          "enabled": false,
           "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Melee/Group03/TrailAttack03*",
           "hitOffsetX": -100,
           "hitDuration": 1000,
@@ -16498,7 +16508,8 @@
           "missScale": 1,
           "missDuration": 600,
           "missSound": "",
-          "soundVolume": 0.6
+          "soundVolume": 0.6,
+          "auto": false
         },
         "damageTypeOneHand": "blunt",
         "damageTypeTwoHands": "blunt",
@@ -16704,7 +16715,7 @@
         "alchemicalType": "concoction",
         "lore": "",
         "itemFx": {
-          "enabled": true,
+          "enabled": false,
           "hitFile": "modules/JB2A_DnD5e/Library/Generic/Creature/Fist/CreatureAttackFist*",
           "hitOffsetX": -100,
           "hitDuration": 1000,
@@ -16715,7 +16726,8 @@
           "missScale": 1,
           "missDuration": 600,
           "missSound": "",
-          "soundVolume": 0.6
+          "soundVolume": 0.6,
+          "auto": false
         },
         "damageTypeOneHand": "blunt",
         "altSkills": [],
@@ -16873,7 +16885,7 @@
         "itemFx": {
           "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Ranged/Arrow02_01_Regular_Blue_Physical_30ft_1600x400.webm",
           "hitDuration": 1000,
-          "enabled": true,
+          "enabled": false,
           "animType": "auto",
           "hitScale": 1,
           "hitOffsetX": 0,
@@ -16882,7 +16894,8 @@
           "missScale": 1,
           "missDuration": 600,
           "missSound": "",
-          "soundVolume": 0.6
+          "soundVolume": 0.6,
+          "auto": false
         },
         "damageTypeOneHand": "piercing",
         "damageTypeTwoHands": "piercing",
@@ -17094,7 +17107,7 @@
           "hitFile": "modules/JB2A_DnD5e/Library/Generic/Creature/Claw/CreatureAttackClaw_001*",
           "hitOffsetX": -100,
           "hitDuration": 1000,
-          "enabled": true,
+          "enabled": false,
           "animType": "auto",
           "hitScale": 1,
           "hitSound": "",
@@ -17102,7 +17115,8 @@
           "missScale": 1,
           "missDuration": 600,
           "missSound": "",
-          "soundVolume": 0.6
+          "soundVolume": 0.6,
+          "auto": false
         },
         "damageTypeOneHand": "slashing",
         "armorRating": 1,
@@ -17314,7 +17328,7 @@
         "itemFx": {
           "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Melee/Dagger02_01_Regular_White_800x600.webm",
           "hitDuration": 1000,
-          "enabled": true,
+          "enabled": false,
           "hitOffsetX": 100,
           "animType": "auto",
           "hitScale": 1,
@@ -17323,7 +17337,8 @@
           "missScale": 1,
           "missDuration": 600,
           "missSound": "",
-          "soundVolume": 0.6
+          "soundVolume": 0.6,
+          "auto": false
         },
         "damageTypeOneHand": "slashing",
         "armorRating": 1,
@@ -17529,7 +17544,7 @@
         "alchemicalType": "concoction",
         "lore": "",
         "itemFx": {
-          "enabled": true,
+          "enabled": false,
           "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Melee/Group06/MeleeAttack06_Shield01*",
           "hitOffsetX": -100,
           "hitDuration": 1000,
@@ -17540,7 +17555,8 @@
           "missScale": 1,
           "missDuration": 600,
           "missSound": "",
-          "soundVolume": 0.6
+          "soundVolume": 0.6,
+          "auto": false
         },
         "damageTypeOneHand": "blunt",
         "handsRequired": 0,
@@ -17700,7 +17716,7 @@
           "hitSound": "",
           "hitOffsetX": -100,
           "hitDuration": 1000,
-          "enabled": true,
+          "enabled": false,
           "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Melee/Group05/TrailAttack*",
           "animType": "auto",
           "hitScale": 1,
@@ -17708,7 +17724,8 @@
           "missScale": 1,
           "missDuration": 600,
           "missSound": "",
-          "soundVolume": 0.6
+          "soundVolume": 0.6,
+          "auto": false
         },
         "damageTypeOneHand": "slashing",
         "altSkills": [
@@ -17869,7 +17886,7 @@
         "itemFx": {
           "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Ranged/Snipe_01_Regular_Blue_15ft_1000x400.webm",
           "hitDuration": 1000,
-          "enabled": true,
+          "enabled": false,
           "animType": "auto",
           "hitScale": 1,
           "hitOffsetX": 0,
@@ -17878,7 +17895,8 @@
           "missScale": 1,
           "missDuration": 600,
           "missSound": "",
-          "soundVolume": 0.6
+          "soundVolume": 0.6,
+          "auto": false
         },
         "damageTypeOneHand": "piercing",
         "damageTypeTwoHands": "piercing",
@@ -18084,7 +18102,7 @@
         "alchemicalType": "concoction",
         "lore": "",
         "itemFx": {
-          "enabled": true,
+          "enabled": false,
           "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Melee/Sword01*",
           "hitDuration": 1000,
           "hitOffsetX": -100,
@@ -18095,7 +18113,8 @@
           "missScale": 1,
           "missDuration": 600,
           "missSound": "",
-          "soundVolume": 0.6
+          "soundVolume": 0.6,
+          "auto": false
         },
         "damageTypeOneHand": "slashing",
         "damageTypeTwoHands": "slashing",
@@ -18301,7 +18320,7 @@
         "alchemicalType": "concoction",
         "lore": "",
         "itemFx": {
-          "enabled": true,
+          "enabled": false,
           "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Ranged/Bullet_01_Regular_Orange_15ft_1000x400.webm",
           "hitDuration": 1000,
           "animType": "auto",
@@ -18312,7 +18331,8 @@
           "missScale": 1,
           "missDuration": 600,
           "missSound": "",
-          "soundVolume": 0.6
+          "soundVolume": 0.6,
+          "auto": false
         },
         "damageTypeOneHand": "piercing",
         "damageTypeTwoHands": "piercing",
@@ -18518,7 +18538,7 @@
         "alchemicalType": "concoction",
         "lore": "",
         "itemFx": {
-          "enabled": true,
+          "enabled": false,
           "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Melee/Group01/MeleeAttack01_ShortSword01*",
           "hitOffsetX": -100,
           "hitDuration": 1000,
@@ -18529,7 +18549,8 @@
           "missScale": 1,
           "missDuration": 600,
           "missSound": "",
-          "soundVolume": 0.6
+          "soundVolume": 0.6,
+          "auto": false
         },
         "damageTypeOneHand": "slashing",
         "altSkills": [
@@ -18736,7 +18757,7 @@
         "alchemicalType": "concoction",
         "lore": "",
         "itemFx": {
-          "enabled": true,
+          "enabled": false,
           "hitFile": "modules/JB2A_DnD5e/Library/Generic/RangedSpell/01/RangedInstant01_01_Dark_Orange_30ft_1600x400.webm",
           "hitDuration": 1000,
           "animType": "auto",
@@ -18747,7 +18768,8 @@
           "missScale": 1,
           "missDuration": 600,
           "missSound": "",
-          "soundVolume": 0.6
+          "soundVolume": 0.6,
+          "auto": false
         },
         "damageTypeOneHand": "blunt",
         "armorRating": 1,
@@ -18903,7 +18925,7 @@
         "alchemicalType": "concoction",
         "lore": "",
         "itemFx": {
-          "enabled": true,
+          "enabled": false,
           "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Melee/Group03/MeleeAttack03_Maul*",
           "hitOffsetX": -100,
           "hitDuration": 1000,
@@ -18914,7 +18936,8 @@
           "missScale": 1,
           "missDuration": 600,
           "missSound": "",
-          "soundVolume": 0.6
+          "soundVolume": 0.6,
+          "auto": false
         },
         "damageTypeOneHand": "blunt",
         "damageTypeTwoHands": "blunt",
@@ -19169,7 +19192,7 @@
         "alchemicalType": "concoction",
         "lore": "",
         "itemFx": {
-          "enabled": true,
+          "enabled": false,
           "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Ranged/Arrow01_01_Regular_White_05ft_600x400.webm",
           "hitDuration": 1000,
           "animType": "auto",
@@ -19180,7 +19203,8 @@
           "missScale": 1,
           "missDuration": 600,
           "missSound": "",
-          "soundVolume": 0.6
+          "soundVolume": 0.6,
+          "auto": false
         },
         "damageTypeOneHand": "piercing",
         "damageTypeTwoHands": "piercing",
@@ -19387,7 +19411,7 @@
         "lore": "",
         "itemFx": {
           "hitFile": "modules/JB2A_DnD5e/Library/Generic/Template/Line/Projectile/VolleyProjectileBullet001_001_01_Line_OrangeYellow_15ft_1000x400.webm",
-          "enabled": true,
+          "enabled": false,
           "animType": "auto",
           "hitScale": 1,
           "hitOffsetX": 0,
@@ -19397,7 +19421,8 @@
           "missScale": 1,
           "missDuration": 600,
           "missSound": "",
-          "soundVolume": 0.6
+          "soundVolume": 0.6,
+          "auto": false
         },
         "damageTypeOneHand": "piercing",
         "armorRating": 1,
@@ -19603,7 +19628,7 @@
         "alchemicalType": "concoction",
         "lore": "",
         "itemFx": {
-          "enabled": true,
+          "enabled": false,
           "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Ranged/Bullet_01_Regular_Orange_05ft_600x400.webm",
           "hitDuration": 1000,
           "animType": "auto",
@@ -19614,7 +19639,8 @@
           "missScale": 1,
           "missDuration": 600,
           "missSound": "",
-          "soundVolume": 0.6
+          "soundVolume": 0.6,
+          "auto": false
         },
         "damageTypeOneHand": "piercing",
         "armorRating": 1,
@@ -19821,7 +19847,7 @@
         "alchemicalType": "concoction",
         "lore": "",
         "itemFx": {
-          "enabled": true,
+          "enabled": false,
           "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Melee/Group06/MeleeAttack06_Shield01*",
           "hitOffsetX": -100,
           "hitDuration": 1000,
@@ -19832,7 +19858,8 @@
           "missScale": 1,
           "missDuration": 600,
           "missSound": "",
-          "soundVolume": 0.6
+          "soundVolume": 0.6,
+          "auto": false
         },
         "damageTypeOneHand": "blunt",
         "handsRequired": 0,
@@ -20037,7 +20064,7 @@
         "lore": "",
         "itemFx": {
           "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Ranged/Bolt01_01_Regular_Orange_Physical_15ft_1000x400.webm",
-          "enabled": true,
+          "enabled": false,
           "hitDuration": 1000,
           "animType": "auto",
           "hitScale": 1,
@@ -20047,7 +20074,8 @@
           "missScale": 1,
           "missDuration": 600,
           "missSound": "",
-          "soundVolume": 0.6
+          "soundVolume": 0.6,
+          "auto": false
         },
         "damageTypeOneHand": "piercing",
         "armorRating": 1,
@@ -20260,7 +20288,8 @@
           "missScale": 1,
           "missDuration": 600,
           "missSound": "",
-          "soundVolume": 0.6
+          "soundVolume": 0.6,
+          "auto": false
         },
         "macro": {
           "enabled": false,
@@ -20484,7 +20513,8 @@
           "missScale": 1,
           "missDuration": 600,
           "missSound": "",
-          "soundVolume": 0.6
+          "soundVolume": 0.6,
+          "auto": false
         },
         "damageTypeOneHand": "slashing",
         "armorRating": 1,
@@ -20638,7 +20668,7 @@
         "alchemicalType": "concoction",
         "lore": "",
         "itemFx": {
-          "enabled": true,
+          "enabled": false,
           "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Ranged/Bolt01_01_Regular_Orange_Physical_15ft_1000x400.webm",
           "hitDuration": 1000,
           "animType": "auto",
@@ -20649,7 +20679,8 @@
           "missScale": 1,
           "missDuration": 600,
           "missSound": "",
-          "soundVolume": 0.6
+          "soundVolume": 0.6,
+          "auto": false
         },
         "damageTypeOneHand": "piercing",
         "damageTypeTwoHands": "piercing",
@@ -20805,7 +20836,7 @@
         "alchemicalType": "concoction",
         "lore": "",
         "itemFx": {
-          "enabled": true,
+          "enabled": false,
           "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Melee/Group06/MeleeAttack06_Shield01*",
           "hitOffsetX": -100,
           "hitDuration": 1000,
@@ -20816,7 +20847,8 @@
           "missScale": 1,
           "missDuration": 600,
           "missSound": "",
-          "soundVolume": 0.6
+          "soundVolume": 0.6,
+          "auto": false
         },
         "damageTypeOneHand": "blunt",
         "handsRequired": 0,
@@ -20978,7 +21010,7 @@
           "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Melee/Halberd01*",
           "hitOffsetX": -100,
           "hitDuration": 1000,
-          "enabled": true,
+          "enabled": false,
           "animType": "auto",
           "hitScale": 1,
           "hitSound": "",
@@ -20986,7 +21018,8 @@
           "missScale": 1,
           "missDuration": 600,
           "missSound": "",
-          "soundVolume": 0.6
+          "soundVolume": 0.6,
+          "auto": false
         },
         "damageTypeOneHand": "slashing",
         "damageTypeTwoHands": "slashing",
@@ -21140,7 +21173,7 @@
         "alchemicalType": "concoction",
         "lore": "",
         "itemFx": {
-          "enabled": true,
+          "enabled": false,
           "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Melee/Group02/MeleeAttack02_Mace01*",
           "hitDuration": 1000,
           "hitOffsetX": -100,
@@ -21151,7 +21184,8 @@
           "missScale": 1,
           "missDuration": 600,
           "missSound": "",
-          "soundVolume": 0.6
+          "soundVolume": 0.6,
+          "auto": false
         },
         "damageTypeOneHand": "blunt",
         "armorRating": 1,
@@ -21311,7 +21345,7 @@
           "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Melee/Group03/MeleeAttack03_GreatSword*",
           "hitDuration": 1000,
           "hitOffsetX": -100,
-          "enabled": true,
+          "enabled": false,
           "animType": "auto",
           "hitScale": 1,
           "hitSound": "",
@@ -21319,7 +21353,8 @@
           "missScale": 1,
           "missDuration": 600,
           "missSound": "",
-          "soundVolume": 0.6
+          "soundVolume": 0.6,
+          "auto": false
         },
         "damageTypeOneHand": "slashing",
         "damageTypeTwoHands": "slashing",
@@ -21528,7 +21563,7 @@
         "lore": "",
         "itemFx": {
           "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Melee/Group05/TrailAttack*",
-          "enabled": true,
+          "enabled": false,
           "hitDuration": 1000,
           "hitOffsetX": -100,
           "animType": "auto",
@@ -21538,7 +21573,8 @@
           "missScale": 1,
           "missDuration": 600,
           "missSound": "",
-          "soundVolume": 0.6
+          "soundVolume": 0.6,
+          "auto": false
         },
         "damageTypeOneHand": "blunt",
         "armorRating": 1,
@@ -21745,7 +21781,7 @@
         "lore": "",
         "itemFx": {
           "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Melee/Quarterstaff*",
-          "enabled": true,
+          "enabled": false,
           "hitOffsetX": -100,
           "hitDuration": 1000,
           "animType": "auto",
@@ -21755,7 +21791,8 @@
           "missScale": 1,
           "missDuration": 600,
           "missSound": "",
-          "soundVolume": 0.6
+          "soundVolume": 0.6,
+          "auto": false
         },
         "damageTypeOneHand": "blunt",
         "damageTypeTwoHands": "blunt",
@@ -21912,7 +21949,7 @@
         "alchemicalType": "concoction",
         "lore": "",
         "itemFx": {
-          "enabled": true,
+          "enabled": false,
           "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Melee/Group02/MeleeAttack02_Club*",
           "hitDuration": 1000,
           "animType": "auto",
@@ -21923,7 +21960,8 @@
           "missScale": 1,
           "missDuration": 600,
           "missSound": "",
-          "soundVolume": 0.6
+          "soundVolume": 0.6,
+          "auto": false
         },
         "damageTypeOneHand": "blunt",
         "armorRating": 1,
@@ -22083,7 +22121,7 @@
         "lore": "",
         "itemFx": {
           "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Ranged/Arrow02_01_Regular_Blue_Physical_15ft_1000x400.webm",
-          "enabled": true,
+          "enabled": false,
           "animType": "auto",
           "hitScale": 1,
           "hitOffsetX": 0,
@@ -22093,7 +22131,8 @@
           "missScale": 1,
           "missDuration": 600,
           "missSound": "",
-          "soundVolume": 0.6
+          "soundVolume": 0.6,
+          "auto": false
         },
         "damageTypeOneHand": "piercing",
         "damageTypeTwoHands": "piercing",
@@ -22299,7 +22338,7 @@
         "alchemicalType": "concoction",
         "lore": "",
         "itemFx": {
-          "enabled": true,
+          "enabled": false,
           "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Melee/Group01/TrailAttack01_01_02_Regular_BlueYellow_800x600.webm",
           "hitDuration": 1000,
           "hitOffsetX": -100,
@@ -22310,7 +22349,8 @@
           "missScale": 1,
           "missDuration": 600,
           "missSound": "",
-          "soundVolume": 0.6
+          "soundVolume": 0.6,
+          "auto": false
         },
         "damageTypeOneHand": "slashing",
         "altSkills": [
@@ -22469,7 +22509,7 @@
         "alchemicalType": "concoction",
         "lore": "",
         "itemFx": {
-          "enabled": true,
+          "enabled": false,
           "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Melee/Spear01*",
           "hitOffsetX": -100,
           "hitDuration": 1000,
@@ -22480,7 +22520,8 @@
           "missScale": 1,
           "missDuration": 600,
           "missSound": "",
-          "soundVolume": 0.6
+          "soundVolume": 0.6,
+          "auto": false
         },
         "damageTypeOneHand": "piercing",
         "armorRating": 1,

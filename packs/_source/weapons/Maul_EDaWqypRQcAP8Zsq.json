@@ -35,7 +35,8 @@
       "hitOffsetX": -150,
       "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Melee/Group03/MeleeAttack03_GreatClub*",
       "hitDuration": 1000,
-      "enabled": true
+      "enabled": false,
+      "auto": false
     },
     "damageTypeOneHand": "blunt",
     "damageTypeTwoHands": "blunt"

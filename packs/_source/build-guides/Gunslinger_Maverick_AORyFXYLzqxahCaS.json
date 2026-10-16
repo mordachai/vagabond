@@ -409,9 +409,10 @@
         "alchemicalType": "concoction",
         "lore": "",
         "itemFx": {
-          "enabled": true,
+          "enabled": false,
           "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Ranged/Bullet_01_Regular_Orange_05ft_600x400.webm",
-          "hitDuration": 1000
+          "hitDuration": 1000,
+          "auto": false
         },
         "damageTypeOneHand": "piercing"
       },
@@ -575,8 +576,9 @@
         "itemFx": {
           "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Melee/Dagger02_01_Regular_White_800x600.webm",
           "hitDuration": 1000,
-          "enabled": true,
-          "hitOffsetX": 100
+          "enabled": false,
+          "hitOffsetX": 100,
+          "auto": false
         },
         "damageTypeOneHand": "slashing"
       },
@@ -662,8 +664,9 @@
         "itemFx": {
           "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Melee/Dagger02_01_Regular_White_800x600.webm",
           "hitDuration": 1000,
-          "enabled": true,
-          "hitOffsetX": 100
+          "enabled": false,
+          "hitOffsetX": 100,
+          "auto": false
         },
         "damageTypeOneHand": "slashing"
       },
@@ -745,7 +748,8 @@
         "itemFx": {
           "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Ranged/Snipe_01_Regular_Blue_15ft_1000x400.webm",
           "hitDuration": 1000,
-          "enabled": true
+          "enabled": false,
+          "auto": false
         },
         "damageTypeOneHand": "piercing",
         "damageTypeTwoHands": "piercing"

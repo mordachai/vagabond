@@ -26,8 +26,7 @@
     "armorDescription": "as Plate",
     "locked": true,
     "immunities": [
-      "fire",
-      "physical"
+      "fire"
     ],
     "weaknesses": [],
     "statusImmunities": [

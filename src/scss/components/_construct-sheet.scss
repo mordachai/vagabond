@@ -96,6 +96,11 @@
     font-family: $font-title;
     font-size: 1.3em;
     color: $c-yellow;
+
+    &::placeholder {
+      color: $c-yellow;
+      opacity: 0.7;
+    }
   }
 
   .construct-speeds {
@@ -202,7 +207,7 @@
   font-family: $font-title;
 
   p { margin: 4px 0; }
-  .hint { font-size: 12px; opacity: 0.7; }
+  .hint { font-size: 12px; color: $c-muted; }
 }
 
 // ── Parts grid ─────────────────────────────────────────────────────────
@@ -595,7 +600,6 @@
 .construct-hold-hint {
   margin: 4px 10px 6px;
   font-size: 12px;
-  opacity: 0.7;
   color: $c-muted;
 }
 

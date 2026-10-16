@@ -91,7 +91,8 @@
       "missScale": 1,
       "missDuration": 600,
       "missSound": "",
-      "soundVolume": 0.6
+      "soundVolume": 0.6,
+      "auto": false
     },
     "macro": {
       "enabled": false,

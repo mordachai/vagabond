@@ -26,7 +26,6 @@
     "armorDescription": "as Plate",
     "locked": true,
     "immunities": [
-      "physical",
       "acid",
       "poison"
     ],

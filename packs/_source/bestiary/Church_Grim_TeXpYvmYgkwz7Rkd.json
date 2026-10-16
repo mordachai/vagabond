@@ -23,9 +23,7 @@
     "armor": 2,
     "armorDescription": "as Chain",
     "locked": true,
-    "immunities": [
-      "physical"
-    ],
+    "immunities": [],
     "weaknesses": [
       "silver"
     ],

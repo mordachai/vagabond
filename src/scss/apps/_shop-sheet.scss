@@ -89,7 +89,9 @@ $shop-font-number: $font-title;
       line-height: 1.2;
       white-space: pre-wrap;
 
-      &::placeholder { color: $c-yellow; opacity: 0.5; }
+      text-shadow: var(--vh-outline-1);
+
+      &::placeholder { color: $c-yellow; opacity: 0.75; }
       &:hover, &:focus { border-color: $c-yellow; }
     }
 
@@ -118,22 +120,18 @@ $shop-font-number: $font-title;
     margin-bottom: 6px;
   }
 
-  // Yellow title, black outline
+  // Yellow title on a dark plate (the old translucent plate left yellow on near-white in light)
   .shop-section-title {
     font-family: $font-title;
     font-size: 1.2em;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     color: $c-yellow;
-    text-shadow:
-      1px 1px 0 $c-black,
-      -1px 1px 0 $c-black,
-      -1px -1px 0 $c-black,
-      1px -1px 0 $c-black;
     margin: 0 0 6px;
     padding: 6px 10px;
     border-bottom: 1px solid $c-tan-lite;
-    background: $c-inset-2;
+    border-radius: 3px;
+    background: var(--vagabond-c-dark);
   }
 
   // Inputs: themed surface (light/dark aware), not the transparent sheet default
@@ -357,7 +355,6 @@ $shop-font-number: $font-title;
         text-align: left;
 
         &::placeholder {
-          color: $c-muted;
           font-style: italic;
         }
       }

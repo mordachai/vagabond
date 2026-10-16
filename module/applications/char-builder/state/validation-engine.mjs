@@ -726,8 +726,8 @@ export class ValidationEngine {
   _validateStepCompleteFallback(stepName, state) {
     switch (stepName) {
       case 'ancestry':
-        // Just need to select an ancestry
-        return { isValid: !!state.selectedAncestry };
+        // An ancestry + its item choices
+        return { isValid: isStepDone('ancestry', state) };
 
       case 'class':
         return { isValid: !!state.selectedClass };

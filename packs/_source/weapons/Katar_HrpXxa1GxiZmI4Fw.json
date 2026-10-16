@@ -38,7 +38,8 @@
       "hitFile": "modules/JB2A_DnD5e/Library/Generic/Creature/Claw/CreatureAttackClaw_001*",
       "hitOffsetX": -100,
       "hitDuration": 1000,
-      "enabled": true
+      "enabled": false,
+      "auto": false
     },
     "damageTypeOneHand": "slashing"
   },

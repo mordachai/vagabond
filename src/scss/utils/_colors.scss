@@ -46,6 +46,9 @@
   --vagabond-inventory-blend-hover: multiply;
   --vagabond-c-input-bg: rgba(255, 255, 255, 0.8);
   --vagabond-c-surface: rgba(255, 255, 255, 0.35);
+  // Placeholder = the field's own text colour at this opacity (rule lives in _forms.scss).
+  // Only outlined yellow titles keep a fixed placeholder colour.
+  --vagabond-placeholder-opacity: 0.6;
 
   --vh-outline-1: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
   --vh-outline-2: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000;

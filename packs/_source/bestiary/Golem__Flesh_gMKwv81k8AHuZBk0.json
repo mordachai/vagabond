@@ -24,7 +24,6 @@
     "armorDescription": "as Unarmored",
     "locked": true,
     "immunities": [
-      "physical",
       "shock",
       "cold",
       "poison"

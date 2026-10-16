@@ -146,13 +146,13 @@ export class VagabondDamageHelper {
   }
 
   /**
-   * Manual damage mode: when the attack/cast card carries a Roll Damage button, hold
-   * the item/spell FX until that button is clicked (the animation lands with the
-   * damage, not the check). Stores the FX payload on the message and returns true;
-   * returns false when there is no button (miss, no damage, auto-rolled) so the
-   * caller plays the FX immediately.
+   * Manual damage mode: when the Cast card carries a Roll Damage button, hold the
+   * spell FX until that button is clicked (the animation lands with the damage, not
+   * the check). Stores the FX payload on the message and returns true; returns false
+   * when there is no button (miss, no damage, auto-rolled) so the caller plays the FX
+   * immediately. Weapon / item animations are left to Automated Animations.
    * @param {ChatMessage|null} message
-   * @param {{kind: 'item'|'spell', thrown?: boolean, deliveryType?: string, deliveryIncrease?: number}} payload
+   * @param {{kind: 'spell', deliveryType?: string, deliveryIncrease?: number}} payload
    * @returns {Promise<boolean>}
    */
   static async deferFxToDamageButton(message, payload) {
@@ -175,34 +175,26 @@ export class VagabondDamageHelper {
    */
   static _playPendingFx(message, actor, item, storedTargets) {
     const fx = message?.flags?.vagabond?.pendingFx;
-    if (!fx) return;
-    // A consumed item (thrown alchemical, last dagger) is gone by click time — the
-    // card's snapshot still carries its FX config.
-    item ??= message.flags.vagabond.itemSnapshot ?? null;
+    // Cards from before item FX were removed may still hold a `kind: 'item'` payload
+    if (fx?.kind !== 'spell') return;
     this._playFx(fx, actor, item, storedTargets, true);
   }
 
   /**
-   * Play item/spell FX now. Fire-and-forget.
-   * @param {{kind: 'item'|'spell', thrown?: boolean, deliveryType?: string, deliveryIncrease?: number}} fx
+   * Play spell FX now. Fire-and-forget.
+   * @param {{kind: 'spell', deliveryType?: string, deliveryIncrease?: number}} fx
    * @param {Actor} actor
-   * @param {Item|object|null} item
+   * @param {Item|null} item  the spell
    * @param {Array} storedTargets - Target data captured at roll time
    * @param {boolean} isHit
    */
   static _playFx(fx, actor, item, storedTargets, isHit) {
-    if (!fx || !item) return;
+    if (fx?.kind !== 'spell' || !item) return;
     const casterToken = actor.token?.object ?? actor.getActiveTokens(true)[0];
     const targets = TargetHelper.resolveTargets(storedTargets);
-    if (fx.kind === 'spell') {
-      import('./spell-sequencer.mjs').then(({ VagabondSpellSequencer }) => {
-        VagabondSpellSequencer.play(item, fx.deliveryType, fx.deliveryIncrease ?? 0, casterToken, targets, { deliveryEnabled: isHit });
-      });
-    } else {
-      import('./item-sequencer.mjs').then(({ VagabondItemSequencer }) => {
-        VagabondItemSequencer.play(item, casterToken, targets, isHit, { thrown: !!fx.thrown });
-      });
-    }
+    import('./spell-sequencer.mjs').then(({ VagabondSpellSequencer }) => {
+      VagabondSpellSequencer.play(item, fx.deliveryType, fx.deliveryIncrease ?? 0, casterToken, targets, { deliveryEnabled: isHit });
+    });
   }
 
   /**
@@ -976,7 +968,7 @@ export class VagabondDamageHelper {
     }
 
     // Get immunities and weaknesses arrays (for NPCs and from equipped armor)
-    let immunities = actor.system.immunities || [];
+    let immunities = NpcRules.immunitiesOf(actor);
     const weaknesses = actor.system.weaknesses || [];
 
     // For PCs, also check equipped armor for immunities

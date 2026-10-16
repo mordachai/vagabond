@@ -412,10 +412,11 @@
         "alchemicalType": "concoction",
         "lore": "",
         "itemFx": {
-          "enabled": true,
+          "enabled": false,
           "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Melee/Group01/MeleeAttack01_ShortSword01*",
           "hitOffsetX": -100,
-          "hitDuration": 1000
+          "hitDuration": 1000,
+          "auto": false
         },
         "damageTypeOneHand": "slashing",
         "altSkills": [

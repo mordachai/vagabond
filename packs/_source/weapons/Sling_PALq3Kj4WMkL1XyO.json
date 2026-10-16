@@ -30,9 +30,10 @@
     "alchemicalType": "concoction",
     "lore": "",
     "itemFx": {
-      "enabled": true,
+      "enabled": false,
       "hitFile": "modules/JB2A_DnD5e/Library/Generic/RangedSpell/01/RangedInstant01_01_Dark_Orange_30ft_1600x400.webm",
-      "hitDuration": 1000
+      "hitDuration": 1000,
+      "auto": false
     },
     "damageTypeOneHand": "blunt"
   },

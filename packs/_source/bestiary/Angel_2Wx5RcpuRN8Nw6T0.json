@@ -31,8 +31,7 @@
     "armorDescription": "as (+3) Plate; Divine Armor",
     "locked": true,
     "immunities": [
-      "poison",
-      "physical"
+      "poison"
     ],
     "weaknesses": [],
     "statusImmunities": [

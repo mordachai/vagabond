@@ -137,7 +137,6 @@ export const SETTINGS_SUBJECTS = [
     sections: [
       { id: 'fxWorld', scope: 'world', rows: [
         { key: 'useAnimations' },
-        { key: 'useItemAnimations' },
         { kind: 'launcher', app: 'sequencerFx', icon: 'fa-folder-open',
           label: 'VAGABOND.Settings.sequencerFxConfig.name', hint: 'VAGABOND.Settings.sequencerFxConfig.hint' },
         { kind: 'launcher', app: 'dsnDamage', icon: 'fa-dice-d20',

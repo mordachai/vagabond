@@ -33,7 +33,8 @@
     "lore": "",
     "itemFx": {
       "hitFile": "modules/JB2A_DnD5e/Library/Generic/Template/Line/Projectile/VolleyProjectileBullet001_001_01_Line_OrangeYellow_15ft_1000x400.webm",
-      "enabled": true
+      "enabled": false,
+      "auto": false
     },
     "damageTypeOneHand": "piercing"
   },

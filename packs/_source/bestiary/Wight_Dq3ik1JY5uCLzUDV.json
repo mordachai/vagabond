@@ -24,8 +24,7 @@
     "armorDescription": "as Chain",
     "locked": true,
     "immunities": [
-      "poison",
-      "physical"
+      "poison"
     ],
     "weaknesses": [
       "silver"

@@ -33,7 +33,9 @@
     "lore": "",
     "itemFx": {
       "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Melee/Group02/MeleeAttack02_HandAxe*",
-      "hitDuration": 1000
+      "hitDuration": 1000,
+      "enabled": false,
+      "auto": false
     },
     "damageTypeOneHand": "slashing"
   },

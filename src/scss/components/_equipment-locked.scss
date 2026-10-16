@@ -7,8 +7,9 @@
   width: 36px;
   height: 36px;
   padding: 6px;
-  background: $c-tan;
-  border: 2px solid $c-dark;
+  // Dark button + light glyph in both themes (tan fill gave a washed-out icon)
+  background: $c-dark;
+  border: 2px solid $c-lite;
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -18,11 +19,15 @@
 
   i {
     font-size: 16px;
+    color: $c-lite;
   }
 
   &:hover {
-    background: $c-tan;
+    background: $c-dark;
+    border-color: $c-yellow;
     transform: scale(1.05);
+
+    i { color: $c-yellow; }
   }
 
   &:active {
@@ -106,8 +111,6 @@
     }
 
   }
-
-  .fx-icon-invalid { color: #c62828; }
 
   .locked-properties {
     margin-top: 12px;

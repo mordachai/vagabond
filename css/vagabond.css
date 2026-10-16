@@ -96,6 +96,7 @@
   --vagabond-inventory-blend-hover: multiply;
   --vagabond-c-input-bg: rgba(255, 255, 255, 0.8);
   --vagabond-c-surface: rgba(255, 255, 255, 0.35);
+  --vagabond-placeholder-opacity: 0.6;
   --vh-outline-1: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
   --vh-outline-2: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000;
   --vh-outline-3: -2px -2px 0 #fff, 2px -2px 0 #fff, -2px 2px 0 #fff, 2px 2px 0 #fff;
@@ -900,8 +901,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   /* The Properties Group (Clickable) */
 }
 .vagabond-chat-card-v2 .card-header .header-info .metadata-tags-row .meta-tag {
-  font-size: 16px;
-  font-weight: bold;
+  font-size: 13px;
   color: var(--c-dark-blue);
   display: flex;
   align-items: center;
@@ -947,7 +947,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .vagabond-chat-card-v2 .card-header .header-info .metadata-tags-row .tag-separator {
   color: var(--c-dark-blue);
   font-weight: 300;
-  font-size: 14px;
+  font-size: 12px;
   user-select: none;
   flex-shrink: 0;
 }
@@ -1008,15 +1008,19 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   background-size: 100% 100%;
   background-position: center;
   margin: 0 -2px 0 -2px;
-  padding: 0 5px 0 2px;
+  padding: 22px 5px 8px 2px; /* top leaves room for the skill label above the banner */
   display: flex;
   align-items: center; /* Vertically center everything */
   justify-content: flex-start; /* FIX: Pack items to the left */
   gap: 10px; /* FIX: 10px margin between Banner and Dice */
-  height: 100px;
+  min-height: 70px; /* hugs the content; grows only when dice wrap to extra lines */
   box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
   /* The Skill Label (FINESSE, etc.) */
   /* Crit Label for Saves (positioned on the right of the banner) */
+}
+.vagabond-chat-card-v2 .roll-strip .roll-dice-container {
+  flex: 1 1 0;
+  min-width: 0; /* let dice wrap inside the remaining width */
 }
 .vagabond-chat-card-v2 .roll-strip .roll-info-group {
   position: relative;
@@ -2166,7 +2170,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   height: 45px !important;
 }
 .vb-die-wrapper.die-type-check .vb-die-val {
-  font-size: 32px;
+  font-size: 28px;
 }
 .vb-die-wrapper.die-type-damage {
   width: 32px !important; /* Make them smaller */
@@ -2372,16 +2376,17 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   filter: brightness(1.2);
 }
 .chat-targets-section .target-token:hover img {
-  box-shadow: 0 0 0 2px #000, 0 0 8px 2px rgba(222, 214, 86, 0.7);
+  box-shadow: 0 0 8px 2px rgba(222, 214, 86, 0.7);
 }
 .chat-targets-section .target-token img {
   flex: 0 0 auto;
-  width: 34px;
-  height: 34px;
-  margin: 2px;
-  border: 2px solid var(--vagabond-c-chat-yellow);
-  border-radius: 50%;
-  box-shadow: 0 0 0 2px #000;
+  width: 48px;
+  height: 48px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 4px;
+  box-shadow: none;
   object-fit: cover;
   transition: box-shadow 0.2s ease;
 }
@@ -2420,12 +2425,12 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   display: none;
 }
 .chat-targets-section.targets-many .target-token img {
-  width: 28px;
-  height: 28px;
+  width: 38px;
+  height: 38px;
 }
 .chat-targets-section.targets-crowd .target-token img {
-  width: 22px;
-  height: 22px;
+  width: 30px;
+  height: 30px;
 }
 
 /* Level Up Card Styling */
@@ -8493,6 +8498,60 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   display: block;
   font-size: 1rem;
 }
+.vagabond-builder .builder-body .content-zone .reference-column .builder-item-choices {
+  margin-top: 6px;
+}
+.vagabond-builder .builder-body .content-zone .reference-column .builder-item-choices .item-choice-head {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px;
+  font-family: "Germania", serif;
+  font-size: 0.95rem;
+}
+.vagabond-builder .builder-body .content-zone .reference-column .builder-item-choices .item-choice-count {
+  color: var(--vagabond-c-text-secondary);
+}
+.vagabond-builder .builder-body .content-zone .reference-column .builder-item-choices .item-choice-group.is-done .item-choice-count {
+  color: var(--vagabond-c-chat-yellow);
+}
+.vagabond-builder .builder-body .content-zone .reference-column .builder-item-choices .item-choice-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 5px;
+}
+.vagabond-builder .builder-body .content-zone .reference-column .builder-item-choices .item-choice-card {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: auto;
+  line-height: normal;
+  margin: 0;
+  padding: 4px 6px;
+  border: 1px solid var(--vagabond-c-text-secondary);
+  border-radius: 5px;
+  background: var(--vagabond-c-bg1);
+  color: var(--vagabond-c-text-primary);
+  text-align: left;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.vagabond-builder .builder-body .content-zone .reference-column .builder-item-choices .item-choice-card img {
+  width: 24px;
+  height: 24px;
+  flex: none;
+  border: none;
+  border-radius: 3px;
+}
+.vagabond-builder .builder-body .content-zone .reference-column .builder-item-choices .item-choice-card .item-choice-name {
+  font-size: 0.85rem;
+  line-height: 1.1;
+}
+.vagabond-builder .builder-body .content-zone .reference-column .builder-item-choices .item-choice-card:hover {
+  border-color: var(--vagabond-c-chat-yellow);
+}
+.vagabond-builder .builder-body .content-zone .reference-column .builder-item-choices .item-choice-card.is-selected {
+  border-color: var(--vagabond-c-chat-yellow);
+  box-shadow: 0 0 8px -1px var(--vagabond-c-chat-yellow), inset 0 0 0 1px var(--vagabond-c-chat-yellow);
+}
 .vagabond-builder .builder-body .content-zone .reference-column .mana-stats-row {
   display: flex;
   justify-content: space-around;
@@ -13465,161 +13524,6 @@ ol#combat-tracker.directory-list {
   white-space: nowrap;
 }
 
-.vagabond-item-fx-picker .window-content {
-  padding: 0;
-}
-.vagabond-item-fx-picker .ifp-wrapper {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  min-height: 0;
-}
-.vagabond-item-fx-picker .ifp-crumbs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 2px;
-  padding: 6px 8px;
-  border-bottom: 1px solid var(--vagabond-c-faint);
-}
-.vagabond-item-fx-picker .ifp-crumb {
-  width: auto;
-  height: auto;
-  line-height: normal;
-  padding: 2px 8px;
-  font-size: 12px;
-  border-radius: 10px;
-}
-.vagabond-item-fx-picker .ifp-crumb:last-child {
-  border-color: var(--vagabond-c-chat-yellow);
-  box-shadow: inset 0 0 0 1px var(--vagabond-c-chat-yellow);
-  font-weight: bold;
-}
-.vagabond-item-fx-picker .ifp-body {
-  flex: 1;
-  min-height: 0;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 8px;
-}
-.vagabond-item-fx-picker .ifp-filter {
-  width: 100%;
-  margin-bottom: 4px;
-}
-.vagabond-item-fx-picker .ifp-choices {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-}
-.vagabond-item-fx-picker .ifp-choice {
-  width: auto;
-  height: auto;
-  line-height: normal;
-  padding: 3px 9px;
-  font-size: 12px;
-}
-.vagabond-item-fx-picker .ifp-choice[hidden] {
-  display: none;
-}
-.vagabond-item-fx-picker .ifp-choice.is-branch::after {
-  content: "›";
-  margin-left: 5px;
-  opacity: 0.6;
-}
-.vagabond-item-fx-picker .ifp-stage {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-.vagabond-item-fx-picker .ifp-main {
-  background: #1a1a1a;
-  border-radius: 3px;
-  min-height: 140px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-}
-.vagabond-item-fx-picker .ifp-main-video {
-  max-width: 100%;
-  max-height: 260px;
-  display: block;
-}
-.vagabond-item-fx-picker .ifp-main-name {
-  font-size: 11px;
-  text-align: center;
-  opacity: 0.7;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.vagabond-item-fx-picker .ifp-tiles {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
-  gap: 6px;
-}
-.vagabond-item-fx-picker .ifp-tile {
-  width: 100%;
-  height: 64px;
-  line-height: normal;
-  padding: 0;
-  overflow: hidden;
-  background: #1a1a1a;
-  border: 1px solid rgba(0, 0, 0, 0.4);
-  border-radius: 3px;
-  cursor: pointer;
-}
-.vagabond-item-fx-picker .ifp-tile video {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  display: block;
-  pointer-events: none;
-}
-.vagabond-item-fx-picker .ifp-tile:hover, .vagabond-item-fx-picker .ifp-tile:focus-visible {
-  border-color: var(--vagabond-c-chat-yellow);
-  box-shadow: 0 0 8px -1px var(--vagabond-c-chat-yellow), inset 0 0 0 1px var(--vagabond-c-chat-yellow);
-}
-.vagabond-item-fx-picker .ifp-more,
-.vagabond-item-fx-picker .ifp-hint,
-.vagabond-item-fx-picker .ifp-empty {
-  margin: 0;
-  font-size: 11px;
-  opacity: 0.65;
-}
-.vagabond-item-fx-picker .ifp-footer {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 8px;
-  border-top: 1px solid var(--vagabond-c-faint);
-  background: rgba(0, 0, 0, 0.04);
-}
-.vagabond-item-fx-picker .ifp-path {
-  flex: 1;
-  min-width: 0;
-  font-size: 11px;
-  opacity: 0.7;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.vagabond-item-fx-picker .ifp-use {
-  flex: 0 0 auto;
-  width: auto;
-  height: auto;
-  line-height: normal;
-  padding: 4px 12px;
-  font-size: 12px;
-  gap: 5px;
-}
-.vagabond-item-fx-picker .ifp-use:not(:disabled) {
-  border-color: var(--vagabond-c-chat-yellow);
-  box-shadow: inset 0 0 0 1px var(--vagabond-c-chat-yellow);
-  font-weight: bold;
-}
-
 #dsn-damage-appearance-config.dsn-damage-appearance-form .window-content {
   padding: 0;
   overflow: hidden;
@@ -14614,6 +14518,23 @@ ol#combat-tracker.directory-list {
 .vbd-choice-dialog .vbd-choice-card.is-selected .vbd-choice-label {
   box-shadow: 0 0 12px -1px var(--vagabond-c-chat-yellow), 0 0 0 1px var(--vagabond-c-chat-yellow);
 }
+.vbd-choice-dialog .vbd-item-choice-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 4px 10px;
+}
+.vbd-choice-dialog .vbd-item-choice-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+.vbd-choice-dialog .vbd-item-choice-row img {
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 3px;
+}
 .vbd-choice-dialog .vbd-choice-sub {
   font-family: "Manofa", serif;
   font-size: 0.8rem;
@@ -15580,10 +15501,11 @@ ol#combat-tracker.directory-list {
   field-sizing: content;
   line-height: 1.2;
   white-space: pre-wrap;
+  text-shadow: var(--vh-outline-1);
 }
 .vagabond.shop-sheet .shop-sheet-header .shop-subtitle::placeholder {
   color: var(--vagabond-c-chat-yellow);
-  opacity: 0.5;
+  opacity: 0.75;
 }
 .vagabond.shop-sheet .shop-sheet-header .shop-subtitle:hover, .vagabond.shop-sheet .shop-sheet-header .shop-subtitle:focus {
   border-color: var(--vagabond-c-chat-yellow);
@@ -15613,11 +15535,11 @@ ol#combat-tracker.directory-list {
   text-transform: uppercase;
   letter-spacing: 0.05em;
   color: var(--vagabond-c-chat-yellow);
-  text-shadow: 1px 1px 0 var(--vagabond-c-black), -1px 1px 0 var(--vagabond-c-black), -1px -1px 0 var(--vagabond-c-black), 1px -1px 0 var(--vagabond-c-black);
   margin: 0 0 6px;
   padding: 6px 10px;
   border-bottom: 1px solid var(--vagabond-c-tan-lite);
-  background: var(--vagabond-c-inset-2);
+  border-radius: 3px;
+  background: var(--vagabond-c-dark);
 }
 .vagabond.shop-sheet input[type=text],
 .vagabond.shop-sheet input[type=number] {
@@ -15848,7 +15770,6 @@ ol#combat-tracker.directory-list {
   text-align: left;
 }
 .vagabond.shop-sheet .shop-stock-list .shop-stock-row .shop-stock-category::placeholder {
-  color: var(--vagabond-c-muted);
   font-style: italic;
 }
 .vagabond.shop-sheet .shop-stock-list .shop-stock-row input.shop-stock-qty {
@@ -19354,6 +19275,11 @@ ol#combat-tracker.directory-list {
   flex-direction: column;
   gap: 4px;
 }
+.vagabond input::placeholder,
+.vagabond textarea::placeholder {
+  color: currentColor;
+  opacity: var(--vagabond-placeholder-opacity);
+}
 .vagabond .sheet-tabs {
   flex: 0;
   position: relative;
@@ -19778,7 +19704,8 @@ ol#combat-tracker.directory-list {
 .vagabond .property-tag i {
   cursor: pointer;
   font-size: 10px;
-  color: var(--vagabond-c-muted);
+  color: var(--vagabond-c-text-primary);
+  opacity: 0.8;
   transition: color 0.2s ease;
 }
 .vagabond .property-tag i:hover {
@@ -20226,8 +20153,8 @@ ol#combat-tracker.directory-list {
   filter: drop-shadow(0 0 3px var(--vagabond-dark-yellow));
 }
 .vagabond .favorites-section h4.right-col .equipped-slot-pips .equipped-slot-pip.empty {
-  color: var(--vagabond-dark-yellow);
-  opacity: 0.25;
+  color: var(--vagabond-c-lightgrey);
+  opacity: 0.5;
 }
 .vagabond .favorites-section h4.right-col .equipped-slot-pips .equipped-slot-pip.over {
   color: var(--vagabond-c-red);
@@ -20276,7 +20203,7 @@ ol#combat-tracker.directory-list {
   padding: 4px 8px;
   font-size: 0.85em;
   font-style: italic;
-  opacity: 0.55;
+  opacity: 0.8;
 }
 .vagabond .favorites-section .equipped-action {
   display: flex;
@@ -20679,8 +20606,8 @@ ol#combat-tracker.directory-list {
   filter: drop-shadow(0 0 3px var(--vagabond-dark-yellow));
 }
 .vagabond .focus-pips .focus-pip.empty {
-  color: var(--vagabond-dark-yellow);
-  opacity: 0.2;
+  color: var(--vagabond-c-lightgrey);
+  opacity: 0.5;
 }
 @keyframes focus-stripes {
   0% {
@@ -20781,6 +20708,7 @@ ol#combat-tracker.directory-list {
 .vagabond .items-list .item-controls a {
   text-align: center;
   margin: 0 6px;
+  color: var(--vagabond-c-text-primary);
 }
 .vagabond .items-list .item {
   align-items: center;
@@ -20856,6 +20784,7 @@ ol#combat-tracker.directory-list {
   font-size: 0.95em;
   line-height: 1.5;
   color: var(--vagabond-c-text-primary);
+  background: var(--vagabond-c-input-bg);
   resize: none;
   box-sizing: border-box;
   padding: 4px 6px;
@@ -21302,12 +21231,10 @@ ol#combat-tracker.directory-list {
   color: var(--vagabond-c-dark);
 }
 .vagabond .pool-input::placeholder {
-  color: var(--vagabond-c-red);
+  font-style: italic;
 }
 .vagabond #choice-selected::placeholder,
 .vagabond #choice-target-field::placeholder {
-  color: var(--vagabond-c-red);
-  opacity: 0.8;
   font-style: italic;
 }
 .vagabond .skill-tag {
@@ -21315,7 +21242,7 @@ ol#combat-tracker.directory-list {
   align-items: center;
   gap: 4px;
   padding: 3px 8px;
-  background: rgba(226, 226, 226, 0.3333333333);
+  background: var(--vagabond-c-surface);
   border: 2px solid var(--vagabond-c-tan);
   border-radius: 3px;
   font-size: 13px;
@@ -21430,6 +21357,7 @@ ol#combat-tracker.directory-list {
   font-family: "Manofa", serif;
   font-weight: bold;
   font-size: 16px;
+  color: var(--vagabond-c-text-primary);
 }
 .vagabond .spell-col-name {
   flex: 3;
@@ -21578,7 +21506,7 @@ ol#combat-tracker.directory-list {
   font-weight: bold;
   text-transform: uppercase;
   font-size: 14px;
-  color: var(--vagabond-c-dark);
+  color: var(--vagabond-c-text-primary);
   display: flex;
   align-items: center;
   gap: 5px;
@@ -21683,7 +21611,7 @@ ol#combat-tracker.directory-list {
 }
 .vagabond .perk-details-wrapper .prereq-list .prereq-row .delete-btn {
   flex: 0 0 18px;
-  color: #b93636;
+  color: var(--vagabond-c-red);
   cursor: pointer;
   text-align: center;
   font-size: 16px;
@@ -22099,7 +22027,7 @@ ol#combat-tracker.directory-list {
 .vagabond .grants-hint {
   flex: 1;
   font-size: 0.75em;
-  color: var(--color-text-light-6, #888);
+  color: var(--vagabond-c-muted);
   font-style: italic;
 }
 .vagabond .grants-label-input {
@@ -22233,382 +22161,20 @@ ol#combat-tracker.directory-list {
   border-color: var(--vagabond-c-yellow);
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
 }
-.vagabond .item-fx-details {
-  margin-top: 8px;
-  border: 1px solid var(--vagabond-c-faint);
-  border-radius: 4px;
-  background: var(--vagabond-c-surface);
-  color: var(--vagabond-c-text-primary);
-}
-.vagabond .item-fx-details input[type=text],
-.vagabond .item-fx-details input[type=number],
-.vagabond .item-fx-details select {
-  height: auto;
-  line-height: normal;
-  padding: 3px 6px;
-  border: 1px solid var(--vagabond-c-faint);
-  border-radius: 3px;
-  background: var(--vagabond-c-input-bg);
-  color: var(--vagabond-c-text-primary);
-}
-.vagabond .item-fx-details input[type=text]::placeholder,
-.vagabond .item-fx-details input[type=number]::placeholder,
-.vagabond .item-fx-details select::placeholder {
-  color: var(--vagabond-c-text-primary);
-  opacity: 0.45;
-  font-style: italic;
-}
-.vagabond .item-fx-details input[type=text]:focus,
-.vagabond .item-fx-details input[type=number]:focus,
-.vagabond .item-fx-details select:focus {
-  outline: none;
-  border-color: var(--vagabond-c-yellow);
-}
-.vagabond .item-fx-details .item-fx-summary {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 10px;
-  cursor: pointer;
-  list-style: none;
-  font-weight: 600;
-  font-size: 13px;
-  user-select: none;
-}
-.vagabond .item-fx-details .item-fx-summary::-webkit-details-marker {
-  display: none;
-}
-.vagabond .item-fx-details .item-fx-summary i {
-  font-size: 11px;
-  transition: transform 0.15s;
-}
-.vagabond .item-fx-details .item-fx-summary small {
-  font-weight: 400;
-  opacity: 0.7;
-}
-.vagabond .item-fx-details .item-fx-summary .item-fx-active-badge {
-  margin-left: auto;
-  background: #2e7d32;
-  color: #fff;
-  font-size: 10px;
-  padding: 1px 6px;
-  border-radius: 3px;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-}
-.vagabond .item-fx-details[open] .item-fx-summary i {
-  transform: rotate(90deg);
-}
-.vagabond .item-fx-locked-icons {
+.vagabond .spell-fx-locked-icons {
   display: flex;
   gap: 6px;
   align-items: center;
 }
-.vagabond .item-fx-locked-icons i {
+.vagabond .spell-fx-locked-icons i {
   opacity: 0.85;
 }
-.vagabond .item-fx-locked-icons i[data-action=previewItemFx],
-.vagabond .item-fx-locked-icons i[data-action=previewSpellFx] {
+.vagabond .spell-fx-locked-icons i[data-action=previewSpellFx] {
   cursor: pointer;
 }
-.vagabond .item-fx-locked-icons i[data-action=previewItemFx]:hover,
-.vagabond .item-fx-locked-icons i[data-action=previewSpellFx]:hover {
+.vagabond .spell-fx-locked-icons i[data-action=previewSpellFx]:hover {
   opacity: 1;
   text-shadow: 0 0 6px var(--vagabond-c-chat-yellow);
-}
-.vagabond .item-fx-section {
-  padding: 8px 10px 10px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-.vagabond .item-fx-group {
-  border: 1px solid rgba(0, 0, 0, 0.12);
-  border-radius: 3px;
-  padding: 6px 8px;
-  margin: 0;
-}
-.vagabond .item-fx-group legend {
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  padding: 0 4px;
-  opacity: 0.8;
-}
-.vagabond .item-fx-group .item-fx-hint {
-  font-weight: 400;
-  text-transform: none;
-  letter-spacing: 0;
-  opacity: 0.65;
-  font-size: 10px;
-}
-.vagabond .item-fx-file-row {
-  display: flex;
-  gap: 4px;
-  align-items: center;
-  margin-bottom: 4px;
-}
-.vagabond .item-fx-file-row input[type=text] {
-  flex: 1;
-  min-width: 0;
-  font-size: 12px;
-}
-.vagabond .item-fx-file-row .item-fx-browse-btn {
-  flex-shrink: 0;
-  width: 26px;
-  height: 26px;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid var(--vagabond-c-faint);
-  border-radius: 3px;
-  background: var(--vagabond-c-input-bg);
-  color: var(--vagabond-c-text-primary);
-  cursor: pointer;
-  font-size: 12px;
-}
-.vagabond .item-fx-file-row .item-fx-browse-btn:hover {
-  border-color: var(--vagabond-c-yellow);
-}
-.vagabond .item-fx-scale-row {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  flex-wrap: wrap;
-}
-.vagabond .item-fx-scale-row .resource-label {
-  font-size: 11px;
-  white-space: nowrap;
-  flex-shrink: 0;
-  margin: 0;
-}
-.vagabond .item-fx-scale-row input[type=number] {
-  width: 60px;
-  font-size: 12px;
-  flex-shrink: 0;
-}
-.vagabond .item-fx-details .item-fx-summary .ifx-title {
-  flex: 0 0 auto;
-}
-.vagabond .item-fx-details .item-fx-summary .ifx-summary-line {
-  flex: 1 1 auto;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-weight: 400;
-  font-size: 12px;
-  opacity: 0.75;
-}
-.vagabond .item-fx-details .ifx-switch {
-  flex: 0 0 auto;
-  margin-left: auto;
-  width: 28px;
-  height: 16px;
-  min-height: 0;
-  padding: 0;
-  line-height: normal;
-  border-radius: 8px;
-  border: 1px solid rgba(0, 0, 0, 0.35);
-  background: rgba(0, 0, 0, 0.18);
-  position: relative;
-  cursor: pointer;
-  transition: background 0.15s, border-color 0.15s;
-}
-.vagabond .item-fx-details .ifx-switch .ifx-switch-knob {
-  position: absolute;
-  top: 2px;
-  left: 2px;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: #fff;
-  transition: transform 0.15s;
-}
-.vagabond .item-fx-details .ifx-switch.is-on {
-  background: #2e7d32;
-  border-color: #2e7d32;
-}
-.vagabond .item-fx-details .ifx-switch.is-on .ifx-switch-knob {
-  transform: translateX(12px);
-}
-.vagabond .item-fx-details .ifx-summary-line + .ifx-chip + .ifx-switch,
-.vagabond .item-fx-details .ifx-summary-line + .ifx-switch {
-  margin-left: 4px;
-}
-.vagabond .ifx-chip {
-  flex: 0 0 auto;
-  font-size: 10px;
-  font-weight: 700;
-  line-height: 1;
-  padding: 2px 5px;
-  border-radius: 3px;
-  border: 1px solid var(--vagabond-c-chat-yellow);
-  color: inherit;
-  background: rgba(0, 0, 0, 0.05);
-}
-.vagabond .ifx-warning {
-  display: flex;
-  gap: 6px;
-  align-items: flex-start;
-  margin: 0;
-  padding: 5px 8px;
-  font-size: 11px;
-  border-left: 3px solid var(--vagabond-c-chat-yellow);
-  background: var(--vagabond-c-input-bg);
-}
-.vagabond .ifx-warning i {
-  margin-top: 2px;
-}
-.vagabond .ifx-warning span {
-  flex: 1;
-}
-.vagabond .ifx-warning .ifx-warning-btn {
-  flex: 0 0 auto;
-  width: auto;
-  height: auto;
-  line-height: normal;
-  padding: 3px 8px;
-  font-size: 11px;
-  border: 1px solid var(--vagabond-c-chat-yellow);
-  border-radius: 3px;
-  background: var(--vagabond-c-surface);
-  color: var(--vagabond-c-text-primary);
-  cursor: pointer;
-}
-.vagabond .ifx-warning .ifx-warning-btn:hover {
-  background: var(--vagabond-c-chat-yellow);
-  color: #1a1a1a;
-}
-.vagabond .ifx-slots {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 8px;
-}
-.vagabond .ifx-slot {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  min-width: 0;
-  padding: 6px 8px 8px;
-  border: 1px solid var(--vagabond-c-faint);
-  border-radius: 3px;
-  background: var(--vagabond-c-surface);
-}
-.vagabond .ifx-slot .ifx-slot-head {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 2px 6px;
-  min-height: 16px;
-}
-.vagabond .ifx-slot .ifx-slot-head .item-fx-hint {
-  flex: 1 1 100%;
-}
-.vagabond .ifx-slot .ifx-slot-title {
-  font-weight: 700;
-  font-size: 12px;
-}
-.vagabond .ifx-slot .ifx-slot-main {
-  display: flex;
-  gap: 8px;
-  align-items: stretch;
-}
-.vagabond .ifx-slot .ifx-clip {
-  flex: 0 0 64px;
-  width: 64px;
-  height: auto;
-  min-height: 56px;
-  line-height: normal;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  border: 1px solid var(--vagabond-c-faint);
-  border-radius: 3px;
-  background: var(--vagabond-c-input-bg);
-  color: var(--vagabond-c-text-primary);
-  font-size: 10px;
-  cursor: pointer;
-  transition: box-shadow 0.15s, border-color 0.15s;
-}
-.vagabond .ifx-slot .ifx-clip i {
-  font-size: 18px;
-}
-.vagabond .ifx-slot .ifx-clip:hover {
-  border-color: var(--vagabond-c-chat-yellow);
-  box-shadow: 0 0 8px -1px var(--vagabond-c-chat-yellow);
-}
-.vagabond .ifx-slot .ifx-clip.is-empty {
-  border-style: dashed;
-  opacity: 0.45;
-  cursor: default;
-  box-shadow: none;
-}
-.vagabond .ifx-slot .ifx-clip.is-empty:hover {
-  border-color: var(--vagabond-c-faint);
-}
-.vagabond .ifx-slot .ifx-slot-info {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  justify-content: space-between;
-}
-.vagabond .ifx-slot .ifx-crumbs {
-  font-size: 12px;
-  font-weight: 600;
-  overflow-wrap: anywhere;
-}
-.vagabond .ifx-slot .ifx-count,
-.vagabond .ifx-slot .ifx-none {
-  font-size: 11px;
-  opacity: 0.7;
-}
-.vagabond .ifx-slot .ifx-slot-buttons {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-}
-.vagabond .ifx-slot .ifx-slot-buttons button {
-  height: auto;
-  line-height: normal;
-  width: auto;
-  padding: 3px 7px;
-  font-size: 11px;
-  border: 1px solid var(--vagabond-c-faint);
-  border-radius: 3px;
-  background: var(--vagabond-c-input-bg);
-  color: var(--vagabond-c-text-primary);
-  cursor: pointer;
-}
-.vagabond .ifx-slot .ifx-slot-buttons button:hover {
-  border-color: var(--vagabond-c-chat-yellow);
-}
-.vagabond .ifx-advanced {
-  border-top: 1px dashed var(--vagabond-c-faint);
-  padding-top: 4px;
-}
-.vagabond .ifx-advanced > summary {
-  cursor: pointer;
-  font-size: 11px;
-  font-weight: 600;
-  opacity: 0.8;
-}
-.vagabond .ifx-advanced .ifx-advanced-body {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding-top: 6px;
-}
-.vagabond .ifx-advanced .ifx-advanced-body .resource-label {
-  font-size: 11px;
-  margin: 0;
 }
 .vagabond .macro-section-box {
   /* (?) help icon sitting next to the "Macros" legend */
@@ -22616,7 +22182,7 @@ ol#combat-tracker.directory-list {
 .vagabond .macro-section-box .macro-help {
   font-size: 0.95em;
   cursor: help;
-  opacity: 0.65;
+  opacity: 0.8;
 }
 .vagabond .macro-section-box .macro-help:hover {
   opacity: 1;
@@ -22660,10 +22226,10 @@ ol#combat-tracker.directory-list {
   white-space: nowrap;
 }
 .vagabond .macro-slot[data-macro-slot=macro] .macro-slot-toggle span {
-  color: #1f7e85;
+  color: color-mix(in srgb, #1f7e85 60%, var(--vagabond-c-text-primary));
 }
 .vagabond .macro-slot[data-macro-slot=hitMacro] .macro-slot-toggle span {
-  color: #8a68c9;
+  color: color-mix(in srgb, #8a68c9 60%, var(--vagabond-c-text-primary));
 }
 .vagabond .macro-slot .macro-label-group {
   margin-top: 10px;
@@ -22691,7 +22257,7 @@ ol#combat-tracker.directory-list {
   color: #6b4ba0;
 }
 .vagabond .vagabond-macro-drop .macro-drop-hint {
-  opacity: 0.6;
+  opacity: 0.8;
   font-style: italic;
 }
 .vagabond .vagabond-macro-drop .macro-drop-hint i {
@@ -22720,8 +22286,6 @@ ol#combat-tracker.directory-list {
   font-size: 12px;
 }
 .vagabond .macro-label-input::placeholder {
-  color: var(--vagabond-c-text-primary);
-  opacity: 0.45;
   font-style: italic;
 }
 .vagabond .macro-label-input:focus {
@@ -22761,8 +22325,6 @@ ol#combat-tracker.directory-list {
   line-height: 1.5;
 }
 .vagabond .macro-command-inputtextarea::placeholder {
-  color: var(--vagabond-c-text-primary);
-  opacity: 0.45;
   font-style: italic;
 }
 .vagabond .npc-macro-config {
@@ -22792,7 +22354,7 @@ ol#combat-tracker.directory-list {
 .vagabond .npc-macro-config .action-edit-subheader .macro-help {
   font-size: 0.95em;
   cursor: help;
-  opacity: 0.65;
+  opacity: 0.8;
 }
 .vagabond .npc-macro-config .action-edit-subheader .macro-help:hover {
   opacity: 1;
@@ -22901,8 +22463,6 @@ ol#combat-tracker.directory-list {
   font-size: 12px;
 }
 .vagabond .npc-macro-config .macro-label-input::placeholder {
-  color: var(--vagabond-c-text-primary);
-  opacity: 0.45;
   font-style: italic;
 }
 .vagabond .npc-macro-config .macro-label-input:focus {
@@ -22919,8 +22479,6 @@ ol#combat-tracker.directory-list {
   font-weight: normal;
 }
 .vagabond .npc-macro-config textarea.macro-command-input::placeholder {
-  color: var(--vagabond-c-text-primary);
-  opacity: 0.45;
   font-style: italic;
 }
 .vagabond .action-macro-indicator {
@@ -23198,9 +22756,7 @@ ol#combat-tracker.directory-list {
   font-family: var(--font-primary);
 }
 .vagabond .container-search-header .search-field .container-search::placeholder {
-  color: var(--color-text-dark-secondary);
   font-style: italic;
-  opacity: 0.7;
 }
 .vagabond .container-search-header .search-field .container-search:focus {
   outline: none;
@@ -23867,7 +23423,8 @@ ol#combat-tracker.directory-list {
   z-index: 10;
   font-size: 10px;
   font-weight: bold;
-  color: var(--vagabond-c-white);
+  color: #fff;
+  text-shadow: var(--vh-outline-1);
   cursor: pointer;
 }
 .vagabond .inventory-card .item-qty-badge.empty {
@@ -23940,8 +23497,8 @@ ol#combat-tracker.directory-list {
 }
 .vagabond .inventory-slots-section .weapon-slot-field .weapon-slot-pips .bound-pip {
   font-size: 11px;
-  color: var(--vagabond-c-dark-bluey);
-  -webkit-text-stroke: 1px var(--vagabond-c-dark-bluey);
+  color: var(--vagabond-c-lightgrey);
+  -webkit-text-stroke: 0;
   opacity: 0.5;
 }
 .vagabond .inventory-slots-section .weapon-slot-field .weapon-slot-pips .bound-pip.filled {
@@ -24002,9 +23559,9 @@ ol#combat-tracker.directory-list {
   filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.4));
 }
 .vagabond .equipment-locked-view .bound-toggle-row .bound-toggle .bound-icon.unbound {
-  color: var(--vagabond-c-dark-bluey);
-  -webkit-text-stroke: 1px var(--vagabond-c-dark-bluey);
-  opacity: 0.5;
+  color: var(--vagabond-c-muted);
+  -webkit-text-stroke: 0;
+  opacity: 0.85;
 }
 .vagabond .equipment-locked-view .bound-toggle-row .bound-toggle:hover .bound-icon {
   color: var(--vagabond-c-chat-yellow);
@@ -24031,10 +23588,10 @@ ol#combat-tracker.directory-list {
   color: var(--vagabond-c-chat-yellow);
 }
 .vagabond .inventory-section .wealth-section .wealth-trade {
-  color: var(--vagabond-c-muted);
+  color: var(--vagabond-c-lightgrey);
   align-self: center;
   margin-left: 4px;
-  opacity: 0.8;
+  opacity: 0.85;
 }
 .vagabond .inventory-section .wealth-section .wealth-trade:hover {
   color: var(--vagabond-c-chat-yellow);
@@ -24249,7 +23806,6 @@ ol#combat-tracker.directory-list {
 .vagabond.active-effect-config input[name^="system.changes."][name$=".value"]::placeholder {
   font-family: var(--font-primary);
   font-style: italic;
-  opacity: 0.6;
 }
 .vagabond.active-effect-config input[name^="system.changes."][name$=".value"]:focus {
   outline: 2px solid var(--color-border-highlight-alt);
@@ -24402,14 +23958,14 @@ ol#combat-tracker.directory-list {
   filter: grayscale(1);
 }
 .vagabond .fx-row.is-off .fx-body {
-  opacity: 0.5;
+  opacity: 0.7;
   filter: grayscale(0.6);
 }
 .vagabond .fx-row.is-off .fx-details {
-  opacity: 0.6;
+  opacity: 0.8;
 }
 .vagabond .fx-row.is-suppressed .fx-body {
-  opacity: 0.5;
+  opacity: 0.7;
 }
 .vagabond .fx-row.is-open .fx-details {
   grid-template-rows: 1fr;
@@ -24452,7 +24008,7 @@ ol#combat-tracker.directory-list {
 }
 .vagabond .fx-name-toggle .fx-chevron {
   font-size: 11px;
-  opacity: 0.7;
+  opacity: 0.85;
   transition: color 0.2s ease, opacity 0.2s ease;
 }
 .vagabond .fx-details {
@@ -24508,8 +24064,8 @@ ol#combat-tracker.directory-list {
   white-space: nowrap;
 }
 .vagabond .fx-chip.fx-suppressed {
-  border-color: var(--vagabond-c-yellow-2, #b8860b);
-  color: var(--vagabond-c-yellow-2, #b8860b);
+  border-color: var(--vagabond-c-yellow-2, #5c4300);
+  color: var(--vagabond-c-yellow-2, #5c4300);
 }
 .vagabond .fx-origin {
   padding: 0 6px;
@@ -24518,7 +24074,6 @@ ol#combat-tracker.directory-list {
   font-size: 10px;
   line-height: 1.5;
   color: var(--vagabond-c-text-primary);
-  opacity: 0.85;
 }
 .vagabond .fx-description {
   font-size: 12px;
@@ -24901,7 +24456,7 @@ ol#combat-tracker.directory-list {
   text-shadow: 0 0 3px var(--vagabond-c-white);
 }
 .vagabond .stats-grid .stat-score::placeholder {
-  color: rgba(var(--vagabond-c-white), 0.5);
+  color: rgba(var(--vagabond-c-white), 0.75);
   opacity: 1;
   -webkit-text-stroke-color: var(--vagabond-c-red);
   -webkit-text-stroke-width: 1px;
@@ -24943,7 +24498,8 @@ ol#combat-tracker.directory-list {
   transform: scale(1.1);
 }
 .vagabond .fatigue-row .fatigue-skull.fatigue-inactive {
-  opacity: 0.4;
+  color: #ececec;
+  opacity: 0.55;
 }
 .vagabond .fatigue-row .fatigue-skull.fatigue-inactive:hover {
   color: var(--vagabond-c-white);
@@ -25104,7 +24660,7 @@ ol#combat-tracker.directory-list {
   font-size: 1.1em;
   padding: 0 1px;
   margin: 0 1px;
-  color: var(--vagabond-c-text-primary);
+  color: #ececec;
 }
 .vagabond .character-info-combined-row .level-input:hover, .vagabond .character-info-combined-row .level-input:focus {
   border-bottom: 1px solid rgba(var(--vagabond-c-white), 0.5);
@@ -25313,7 +24869,7 @@ ol#combat-tracker.directory-list {
 .vagabond .speed-stats-row .speed-group .speed-group-unit {
   font-size: 0.9em;
   font-weight: 400;
-  opacity: 0.6;
+  opacity: 0.85;
 }
 .vagabond .modifiers-group {
   position: relative;
@@ -25337,7 +24893,7 @@ ol#combat-tracker.directory-list {
 .vagabond .modifiers-group .modifiers-group-icon {
   font-size: 12px;
   cursor: pointer;
-  opacity: 0.7;
+  opacity: 0.9;
 }
 .vagabond .modifiers-group .modifiers-group-icon:hover {
   opacity: 1;
@@ -26231,7 +25787,7 @@ ol#combat-tracker.directory-list {
   color: var(--vagabond-c-dark);
 }
 .vagabond .npc-fatigue-checkboxes .fatigue-skull.fatigue-inactive {
-  color: rgba(0, 0, 0, 0.2);
+  color: rgba(0, 0, 0, 0.5);
 }
 .vagabond .npc-row-morale-app {
   gap: 6px;
@@ -26399,8 +25955,12 @@ ol#combat-tracker.directory-list {
   padding: 0 4px;
 }
 .vagabond .npc-lock-button i {
-  font-size: 1em;
+  font-size: 1.2em;
   color: var(--vagabond-c-white);
+  text-shadow: var(--vh-outline-1);
+}
+.vagabond .npc-lock-button.unlocked i {
+  color: var(--vagabond-c-chat-yellow);
 }
 .vagabond .npc-lock-button:hover {
   transform: scale(1.1);
@@ -26970,9 +26530,6 @@ ol#combat-tracker.directory-list {
   box-shadow: none;
   outline: none;
 }
-.vagabond .weapon-picker .weapon-picker-panel .weapon-picker-search::placeholder {
-  opacity: 0.5;
-}
 .vagabond .weapon-picker .weapon-picker-panel .weapon-picker-list {
   list-style: none;
   padding: 0;
@@ -27095,6 +26652,7 @@ details[open] .vagabond .npc-immunity-toggle i {
 }
 .vagabond .npc-immunity-checkboxes {
   position: absolute;
+  background: var(--vagabond-c-lite);
   border: 1px solid var(--vagabond-c-dark);
   border-radius: 3px;
   padding: 8px;
@@ -27115,6 +26673,7 @@ details[open] .vagabond .npc-immunity-toggle i {
   flex-direction: column;
   gap: 4px;
   z-index: auto;
+  background: transparent;
   box-shadow: none;
   border: none;
   border-top: 1px solid var(--vagabond-c-tan);
@@ -27189,6 +26748,58 @@ details[open] .vagabond .npc-immunity-toggle i {
   margin-left: 2px;
   margin-right: 4px;
 }
+.vagabond .npc-header i {
+  color: var(--vagabond-c-dark);
+}
+.vagabond .npc-header .npc-stat-field i,
+.vagabond .npc-header .npc-armor-badge i,
+.vagabond .npc-header .npc-tl-container i,
+.vagabond .npc-header .npc-lock-name-row i {
+  color: var(--vagabond-c-white);
+}
+.vagabond .npc-header .npc-field-input, .vagabond .npc-header .npc-text-input, .vagabond .npc-header .npc-number-input, .vagabond .npc-header .npc-armor-desc-input {
+  color: var(--vagabond-c-dark);
+}
+.vagabond .npc-content .npc-senses-section,
+.vagabond .npc-content .npc-resistances-section {
+  color: var(--vagabond-c-dark);
+}
+.vagabond .npc-content .npc-senses-section input,
+.vagabond .npc-content .npc-senses-section select,
+.vagabond .npc-content .npc-senses-section textarea,
+.vagabond .npc-content .npc-senses-section li,
+.vagabond .npc-content .npc-senses-section label,
+.vagabond .npc-content .npc-senses-section i,
+.vagabond .npc-content .npc-senses-section p,
+.vagabond .npc-content .npc-senses-section .fx-list,
+.vagabond .npc-content .npc-senses-section .fx-name,
+.vagabond .npc-content .npc-senses-section .fx-origin,
+.vagabond .npc-content .npc-senses-section .fx-description,
+.vagabond .npc-content .npc-senses-section .fx-btn,
+.vagabond .npc-content .npc-senses-section .fx-empty,
+.vagabond .npc-content .npc-senses-section .fx-chevron,
+.vagabond .npc-content .npc-senses-section .fx-chip:not(.fx-suppressed),
+.vagabond .npc-content .npc-resistances-section input,
+.vagabond .npc-content .npc-resistances-section select,
+.vagabond .npc-content .npc-resistances-section textarea,
+.vagabond .npc-content .npc-resistances-section li,
+.vagabond .npc-content .npc-resistances-section label,
+.vagabond .npc-content .npc-resistances-section i,
+.vagabond .npc-content .npc-resistances-section p,
+.vagabond .npc-content .npc-resistances-section .fx-list,
+.vagabond .npc-content .npc-resistances-section .fx-name,
+.vagabond .npc-content .npc-resistances-section .fx-origin,
+.vagabond .npc-content .npc-resistances-section .fx-description,
+.vagabond .npc-content .npc-resistances-section .fx-btn,
+.vagabond .npc-content .npc-resistances-section .fx-empty,
+.vagabond .npc-content .npc-resistances-section .fx-chevron,
+.vagabond .npc-content .npc-resistances-section .fx-chip:not(.fx-suppressed) {
+  color: var(--vagabond-c-dark);
+}
+.vagabond .npc-content .npc-senses-section .fx-btn:hover,
+.vagabond .npc-content .npc-resistances-section .fx-btn:hover {
+  color: var(--vagabond-c-black);
+}
 .vagabond .npc-field-input, .vagabond .npc-text-input, .vagabond .npc-number-input, .vagabond .npc-armor-desc-input {
   border-bottom: 1px solid var(--vagabond-c-dark);
   border-radius: 0;
@@ -27207,10 +26818,6 @@ details[open] .vagabond .npc-immunity-toggle i {
   border-bottom-color: var(--vagabond-c-dark);
   background: transparent;
   box-shadow: none;
-}
-.vagabond .npc-field-input::placeholder, .vagabond .npc-text-input::placeholder, .vagabond .npc-number-input::placeholder, .vagabond .npc-armor-desc-input::placeholder {
-  color: var(--vagabond-c-red);
-  opacity: 0.9;
 }
 .vagabond .npc-number-input {
   padding: 2px 6px;
@@ -29880,6 +29487,10 @@ details[open] .vagabond .npc-immunity-toggle i {
   font-size: 1.3em;
   color: var(--vagabond-c-chat-yellow);
 }
+.vagabond .construct-header .construct-type::placeholder {
+  color: var(--vagabond-c-chat-yellow);
+  opacity: 0.7;
+}
 .vagabond .construct-header .construct-speeds {
   position: relative;
   bottom: 0;
@@ -29973,7 +29584,7 @@ details[open] .vagabond .npc-immunity-toggle i {
 }
 .vagabond .construct-empty-state .hint {
   font-size: 12px;
-  opacity: 0.7;
+  color: var(--vagabond-c-muted);
 }
 .vagabond .construct-parts-grid {
   display: grid;
@@ -30349,7 +29960,6 @@ details[open] .vagabond .npc-immunity-toggle i {
 .vagabond .construct-hold-hint {
   margin: 4px 10px 6px;
   font-size: 12px;
-  opacity: 0.7;
   color: var(--vagabond-c-muted);
 }
 .vagabond .construct-hold-cards {

@@ -27,8 +27,7 @@
     "locked": true,
     "immunities": [
       "poison",
-      "shock",
-      "physical"
+      "shock"
     ],
     "weaknesses": [],
     "statusImmunities": [

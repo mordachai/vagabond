@@ -1713,7 +1713,10 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
 
     // Granted items of the class features gained at this Level (claws, breath weapons…), created equipped
     const classItem = this.actor.items.find(i => i.type === 'class');
-    const grants = GrantedItems.entriesFor(classItem, { levels: [newLevel] });
+    const grants = [
+      ...GrantedItems.entriesFor(classItem, { levels: [newLevel] }),
+      ...await GrantedItems.promptChoices(this.actor, GrantedItems.choiceGroupsFor(classItem, { levels: [newLevel] })),
+    ];
     if (grants.length) {
       const grantData = await GrantedItems.buildItemData(grants, { existing: this.actor.items.contents });
       if (grantData.length) {

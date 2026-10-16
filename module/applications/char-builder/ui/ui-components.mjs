@@ -33,6 +33,8 @@ export class CharacterBuilderUIComponents {
         'guideOpenSteps',  // Guide path: open steps snapshot
         'guideStats',  // 'guide' stat array
         'selectedAncestry',
+        'itemChoicePicks',  // Item choice picks (Draken Breath Attack element)
+        'itemChoiceGroups',
         'selectedClass',
         'assignedStats',
         'appliedBonuses',  // CRITICAL: Track bonus applications for stat updates
@@ -639,8 +641,6 @@ export class CharacterBuilderUIComponents {
   _isStepCompleted(stepName, state) {
     switch (stepName) {
       case 'ancestry':
-        return !!state.selectedAncestry;
-
       case 'path':
       case 'guides':
         return isStepDone(stepName, state);

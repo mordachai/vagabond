@@ -165,7 +165,7 @@ export class VagabondFXResolver {
 
   /**
    * GM, at ready / on FX-config change: pre-resolve every wildcard path referenced by
-   * the saved spell FX config and by item FX on world + actor-owned items.
+   * the saved spell FX config.
    * Reads the raw `sequencerFxConfig` setting directly to avoid importing the sequencer
    * (and the JB2A fallback, whose paths are DB paths that never browse).
    */
@@ -181,19 +181,6 @@ export class VagabondFXResolver {
       for (const school of Object.values(cfg.areaAnims ?? {}))
         for (const e of Object.values(school ?? {})) if (this._isFsWildcard(e?.file)) paths.add(e.file);
     } catch { /* setting not ready */ }
-
-    // Item FX (pipe-separated hit/miss file fields).
-    const collect = it => {
-      const fx = it?.system?.itemFx;
-      if (!fx) return;
-      for (const f of [fx.hitFile, fx.missFile, fx.throwFile]) {
-        for (const part of String(f ?? '').split('|').map(s => s.trim())) {
-          if (this._isFsWildcard(part)) paths.add(part);
-        }
-      }
-    };
-    for (const it of game.items ?? []) collect(it);
-    for (const a of game.actors ?? []) for (const it of a.items) collect(it);
 
     for (const p of paths) await this._gmResolve(p);
   }

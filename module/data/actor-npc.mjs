@@ -59,6 +59,11 @@ export default class VagabondNPC extends VagabondActorBase {
       data.senses = senses;
       if (sensesNote && !data.sensesNote) data.sensesNote = sensesNote;
     }
+    // Relic exception (`relicImmunityMin`) IS the Physical Immunity (shown as the "Physical vs. Non-Relics" badge,
+    // `NpcRules.immunitiesOf` applies it): a separate plain Physical entry would read as Immune to all Physical.
+    if (data.relicImmunityMin !== null && data.relicImmunityMin !== undefined && Array.isArray(data.immunities)) {
+      data.immunities = data.immunities.filter((t) => t !== 'physical');
+    }
     return super.migrateData(data);
   }
 

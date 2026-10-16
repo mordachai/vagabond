@@ -413,7 +413,8 @@
           "hitOffsetX": -100,
           "hitDuration": 1000,
           "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Melee/Group03/MeleeAttack03_GreatAxe*",
-          "enabled": true
+          "enabled": false,
+          "auto": false
         },
         "damageTypeOneHand": "slashing",
         "damageTypeTwoHands": "slashing"
@@ -494,10 +495,11 @@
         "alchemicalType": "concoction",
         "lore": "",
         "itemFx": {
-          "enabled": true,
+          "enabled": false,
           "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Melee/Slash02/GenericSlash02*",
           "hitOffsetX": -100,
-          "hitDuration": 1000
+          "hitDuration": 1000,
+          "auto": false
         },
         "damageTypeOneHand": "piercing"
       },
@@ -540,10 +542,11 @@
         "alchemicalType": "concoction",
         "lore": "",
         "itemFx": {
-          "enabled": true,
+          "enabled": false,
           "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Melee/Slash02/GenericSlash02*",
           "hitOffsetX": -100,
-          "hitDuration": 1000
+          "hitDuration": 1000,
+          "auto": false
         },
         "damageTypeOneHand": "piercing"
       },

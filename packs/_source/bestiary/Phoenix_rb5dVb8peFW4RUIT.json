@@ -27,8 +27,7 @@
     "armorDescription": "as (+3) Chain",
     "locked": true,
     "immunities": [
-      "fire",
-      "physical"
+      "fire"
     ],
     "weaknesses": [],
     "statusImmunities": [

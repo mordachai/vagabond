@@ -35,10 +35,11 @@
     "alchemicalType": "concoction",
     "lore": "",
     "itemFx": {
-      "enabled": true,
+      "enabled": false,
       "hitDuration": 1000,
       "hitOffsetX": -100,
-      "hitFile": "modules/JB2A_DnD5e/Library/Generic/Unarmed_Attacks/Unarmed_Strike/UnarmedStrike_01_Regular_Blue_Physical*"
+      "hitFile": "modules/JB2A_DnD5e/Library/Generic/Unarmed_Attacks/Unarmed_Strike/UnarmedStrike_01_Regular_Blue_Physical*",
+      "auto": false
     },
     "damageTypeOneHand": "blunt"
   },

@@ -1347,6 +1347,71 @@
           }
         }
 
+        // Item choice grants (item-choices.hbs): pick cards under their trait / feature
+        .builder-item-choices {
+          margin-top: 6px;
+
+          .item-choice-head {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 4px;
+            font-family: $font-title;
+            font-size: 0.95rem;
+          }
+
+          .item-choice-count {
+            color: $c-text-2;
+          }
+
+          .item-choice-group.is-done .item-choice-count {
+            color: $c-yellow;
+          }
+
+          .item-choice-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 5px;
+          }
+
+          .item-choice-card {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            height: auto;
+            line-height: normal;
+            margin: 0;
+            padding: 4px 6px;
+            border: 1px solid $c-text-2;
+            border-radius: 5px;
+            background: $c-bg1;
+            color: $c-text-1;
+            text-align: left;
+            transition: border-color 0.15s, box-shadow 0.15s;
+
+            img {
+              width: 24px;
+              height: 24px;
+              flex: none;
+              border: none;
+              border-radius: 3px;
+            }
+
+            .item-choice-name {
+              font-size: 0.85rem;
+              line-height: 1.1;
+            }
+
+            &:hover {
+              border-color: $c-yellow;
+            }
+
+            &.is-selected {
+              border-color: $c-yellow;
+              box-shadow: 0 0 8px -1px $c-yellow, inset 0 0 0 1px $c-yellow;
+            }
+          }
+        }
+
         .mana-stats-row {
           display: flex;
           justify-content: space-around;

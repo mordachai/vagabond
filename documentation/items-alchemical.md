@@ -79,21 +79,7 @@ Tell the AI:
     "isConsumable": true,
     "linkedConsumable": "",
     "alchemicalType": "explosive",
-    "lore": "",
-    "itemFx": {
-      "enabled": false,
-      "animType": "auto",
-      "hitFile": "",
-      "hitScale": 1.0,
-      "hitOffsetX": 0,
-      "hitDuration": 800,
-      "hitSound": "",
-      "missFile": "",
-      "missScale": 1.0,
-      "missDuration": 600,
-      "missSound": "",
-      "soundVolume": 0.6
-    }
+    "lore": ""
   }
 }
 ```
@@ -154,8 +140,7 @@ Tell the AI:
     "gearCategory": "",
     "isSupply": false, "isBeverage": true,
     "isConsumable": true, "linkedConsumable": "",
-    "alchemicalType": "potion", "lore": "",
-    "itemFx": { "enabled": false, "animType": "auto", "hitFile": "", "hitScale": 1.0, "hitOffsetX": 0, "hitDuration": 800, "hitSound": "", "missFile": "", "missScale": 1.0, "missDuration": 600, "missSound": "", "soundVolume": 0.6 }
+    "alchemicalType": "potion", "lore": ""
   }
 }
 ```
@@ -186,8 +171,7 @@ Tell the AI:
     "gearCategory": "",
     "isSupply": false, "isBeverage": false,
     "isConsumable": true, "linkedConsumable": "",
-    "alchemicalType": "acid", "lore": "",
-    "itemFx": { "enabled": false, "animType": "auto", "hitFile": "", "hitScale": 1.0, "hitOffsetX": 0, "hitDuration": 800, "hitSound": "", "missFile": "", "missScale": 1.0, "missDuration": 600, "missSound": "", "soundVolume": 0.6 }
+    "alchemicalType": "acid", "lore": ""
   }
 }
 ```

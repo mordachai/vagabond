@@ -178,6 +178,14 @@
     "AttackFavorRules": {
       "Wounded": "Targets missing any HP (Bloodthirsty)"
     },
+    "ItemChoice": {
+      "Title": "Choose Granted Items",
+      "Confirm": "Confirm",
+      "ChooseN": "Choose {n}",
+      "Groups": "Item Choices",
+      "LabelPlaceholder": "Label (default: trait name)",
+      "DropHint": "Drop the items the player chooses from"
+    },
     "FeatureAction": {
       "Section": "Action Button",
       "Enabled": "Show action button",
@@ -595,6 +603,14 @@
       "Frontline": "Frontline",
       "Midline": "Midline",
       "Backline": "Backline"
+    },
+    "CanvasLoot": {
+      "Placed": "placed",
+      "Dropped": "dropped",
+      "Threw": "threw",
+      "PickedUp": "picked up",
+      "Show": "Show",
+      "ShowTooltip": "Show on the map"
     },
     "Currency": {
       "Gold": {
@@ -1287,10 +1303,6 @@
         "name": "Damage Dice Appearance (DSN)",
         "label": "Configure Damage Dice",
         "hint": "Customize Dice So Nice colors, textures, and materials per damage type."
-      },
-      "useItemAnimations": {
-        "name": "Use Item Animations",
-        "hint": "Master switch for weapon, alchemical, and relic visual effects. When disabled, no item animations play. Animation files are configured per-item on each item's Details tab. Requires the Sequencer module."
       },
       "revealNpcRecharge": {
         "name": "Reveal NPC Action Recharge",
@@ -2082,6 +2094,10 @@
           "Regenerate": "Regenerate",
           "SunlightBurn": "Sunlight",
           "RelicImmunity": "Physical Immune vs Relic weapons",
+          "RelicBadgeAny": "{types} vs. Non-Relics",
+          "RelicBadgeMin": "{types} vs. Non-Relics, Relics under (+{n})",
+          "RelicTipAny": "Immune to {types} damage unless it comes from a Relic weapon.",
+          "RelicTipMin": "Immune to {types} damage unless it comes from a Relic weapon of (+{n}) or higher.",
           "RelicNone": "Plain Immune (no Relic bypass)",
           "RelicAny": "Ignored by any Relic weapon (non-Relics)",
           "RelicMin": "Ignored by Relic weapons of (+{n}) or more",
@@ -3004,67 +3020,9 @@
       "Focus": "Focus",
       "Fx": "FX"
     },
-    "ItemFx": {
-      "Title": "Item FX",
-      "On": "ON",
-      "Enable": "Enable Animation",
-      "AnimType": "Animation Type",
-      "AnimTypeMelee": "Melee — impact at target",
-      "AnimTypeRanged": "Ranged — beam to target",
-      "AnimTypeAuto": "Auto — from weapon skill / file",
-      "AnimTypeChain": "Chain — beam hops from target to target",
-      "AnimTypeCone": "Cone — from attacker toward target",
-      "ConeLength": "Cone Length (ft)",
-      "ConeLengthHint": "Reach of a Cone animation in feet (e.g. 15 for a Breath Attack). 0 = the clip's own size.",
-      "HitAnimation": "Hit Animation",
-      "MissAnimation": "Miss Animation",
-      "MissHint": "(optional — plays on attacker)",
-      "Throw": "Throw",
-      "AADisable": "Turn it off",
-      "AADisableHint": "Disables Automated Animations' world setting “Disable Automatic Recognition” = on. Items you configured inside Automated Animations itself keep playing.",
-      "AADisabled": "Automated Animations auto-recognition turned off.",
-      "Preview": "Preview",
-      "ThrowAnimation": "Throw Animation",
-      "ThrowHint": "(thrown attacks — flies to the target; uses the Hit scale and sound)",
-      "NoAutoThrowMatch": "No thrown clip found — choose one",
-      "Scale": "Scale",
-      "OffsetX": "Offset X",
-      "DurationMs": "Duration (ms)",
-      "SoundVolume": "Sound Volume",
-      "VolumeHint": "0 – 1 (applies to both sounds)",
-      "BrowseVideo": "Browse video file",
-      "BrowseAudio": "Browse audio file",
-      "FileNotFound": "File not found",
-      "AnimConfigured": "Animation configured",
-      "SoundConfigured": "Sound configured",
-      "Hit": "Hit",
-      "Miss": "Miss",
+    "SpellFx": {
       "ClickToPreview": "Click to preview",
-      "Cast": "Cast",
-      "Auto": "Auto",
-      "NoAnimation": "No animation",
-      "NoAutoMatch": "No match for this item — choose one",
-      "NoMissAnimation": "Nothing plays on a miss",
-      "Variations": "variations",
-      "Change": "Choose",
-      "UseAuto": "Auto",
-      "UseAutoHint": "Go back to the animation picked from the item",
-      "Clear": "Clear",
-      "AAWarning": "Automated Animations is active and may play a second animation for the same attack. Turn off its auto-recognition for this system.",
-      "SoundPlaceholder": "Sound (optional)",
-      "Advanced": "Advanced",
-      "AdvancedHint": "Raw paths: a Sequencer path (jb2a.rapier.melee), a file, a wildcard (path/Weapon*), or several files separated by |.",
-      "Picker": {
-        "Title": "Choose animation",
-        "NoDatabase": "The Sequencer animation database is not loaded.",
-        "Library": "Library",
-        "Filter": "Filter…",
-        "More": "More clips under this level:",
-        "TileHint": "Click a clip to use just that one. Use the button below to use every variation (one plays at random).",
-        "NoClips": "No clips at this level — go deeper.",
-        "PickStart": "Pick a library to start.",
-        "UseLevel": "Use all ({count})"
-      }
+      "Cast": "Cast"
     },
     "UI": {
       "Sections": {

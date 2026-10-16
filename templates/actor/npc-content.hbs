@@ -55,18 +55,19 @@
   {{/unless}}
 
   {{! Immunities, Weaknesses, Status Immunities — locked view draws nothing when all are empty }}
-  {{#unless (and system.locked (not system.immunities.length) (not system.weaknesses.length) (not system.statusImmunities.length) (not npcRulesView.length))}}
+  {{#unless (and system.locked (not system.immunities.length) (not system.weaknesses.length) (not system.statusImmunities.length) (not npcRulesView.length) (not npcRelicBadge))}}
   <div class='npc-resistances-section'>
 
     {{#if system.locked}}
       {{! LOCKED MODE — display selected values as inline text }}
-      {{#if system.immunities.length}}
+      {{#if (or npcImmunitiesShown.length npcRelicBadge)}}
         <div class='npc-detail-row'>
           <label class='npc-field-label'>{{localize "VAGABOND.Actor.NPC.FIELDS.immunities.label"}}</label>
           <div class='npc-immunity-text'>
-            {{#each system.immunities as |immunity index|}}
+            {{#each npcImmunitiesShown as |immunity index|}}
               <i class='{{lookup ../config.damageTypeIcons immunity}} damage-type-icon-prefix'></i>{{localize (lookup ../config.damageTypes immunity)}}{{#unless @last}}, {{/unless}}
             {{/each}}
+            {{#if npcRelicBadge}}{{#if npcImmunitiesShown.length}}, {{/if}}<span class='npc-status-inline' data-tooltip='{{npcRelicBadge.tooltip}}'><i class='{{npcRelicBadge.iconClass}} damage-type-icon-prefix'></i>{{npcRelicBadge.label}}</span>{{/if}}
           </div>
         </div>
       {{/if}}

@@ -26,7 +26,6 @@
     "armorDescription": "as (+2) Armor",
     "locked": true,
     "immunities": [
-      "physical",
       "fire",
       "poison"
     ],

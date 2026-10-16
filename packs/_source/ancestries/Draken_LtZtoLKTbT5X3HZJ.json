@@ -13,14 +13,26 @@
         "statBonusPoints": 0,
         "extraTraining": 0,
         "requiredSpells": [],
-        "grantedItems": [
-          "Compendium.vagabond.weapons.Item.XzPEUxYpzzhe8kiN"
-        ],
+        "grantedItems": [],
         "allowedPerks": [],
         "perkAmount": 0,
         "ignorePerkPrereqs": "none",
         "spellAmount": 0,
-        "skillChoices": []
+        "skillChoices": [],
+        "itemChoices": [
+          {
+            "count": 1,
+            "label": "",
+            "pool": [
+              "Compendium.vagabond.weapons.Item.XzPEUxYpzzhe8kiN",
+              "Compendium.vagabond.weapons.Item.brthCold7Qx2mVd1",
+              "Compendium.vagabond.weapons.Item.brthPoisn4Lw8Rt2",
+              "Compendium.vagabond.weapons.Item.brthNecro5Ty3Ke9",
+              "Compendium.vagabond.weapons.Item.brthAcidd8Pz1Jn4",
+              "Compendium.vagabond.weapons.Item.brthShock2Gh6Yu5"
+            ]
+          }
+        ]
       },
       {
         "name": "Scale",

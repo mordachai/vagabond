@@ -31,8 +31,7 @@
       "cold",
       "fire",
       "poison",
-      "shock",
-      "physical"
+      "shock"
     ],
     "weaknesses": [
       "silver"

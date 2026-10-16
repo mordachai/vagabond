@@ -511,7 +511,7 @@ input[type='checkbox'][name='system.flyingByDefault'] { @include vagabond-switch
       color: $c-dark; 
     }
     &.fatigue-inactive {
-      color: rgba(0,0,0,0.2);
+      color: rgba(0,0,0,0.5);
     }
   }
 }
@@ -718,10 +718,14 @@ input[type='checkbox'][name='system.flyingByDefault'] { @include vagabond-switch
   padding: 0 4px;
   
   i {
-    font-size: 1em;
+    font-size: 1.2em;
     color: $c-white;
+    // Outline: the title plate art is busy, a bare glyph disappears
+    text-shadow: var(--vh-outline-1);
   }
-  
+
+  &.unlocked i { color: $c-yellow; }
+
   &:hover {
       transform: scale(1.1);
   }
@@ -1386,7 +1390,6 @@ input[type='checkbox'][name='system.flyingByDefault'] { @include vagabond-switch
       box-shadow: none;
       outline: none;
 
-      &::placeholder { opacity: 0.5; }
     }
 
     .weapon-picker-list {
@@ -1536,7 +1539,9 @@ input[type='checkbox'][name='system.flyingByDefault'] { @include vagabond-switch
 
 .npc-immunity-checkboxes {
   position: absolute;
-  //background: var(--vagabond-c-lite);
+  // Opaque light fill in both themes: the panel overflows its grey/yellow section onto the
+  // (dark-theme) sheet paper, and its text is black.
+  background: var(--vagabond-c-lite);
   border: 1px solid var(--vagabond-c-dark);
   border-radius: 3px;
   padding: 8px;
@@ -1560,6 +1565,7 @@ input[type='checkbox'][name='system.flyingByDefault'] { @include vagabond-switch
     flex-direction: column;
     gap: 4px;
     z-index: auto;
+    background: transparent;
     box-shadow: none;
     border: none;
     border-top: 1px solid var(--vagabond-c-tan);
@@ -1646,6 +1652,51 @@ input[type='checkbox'][name='system.flyingByDefault'] { @include vagabond-switch
   }
 }
 
+// ── Fixed-colour panels ─────────────────────────────────────────────────
+// The header banner, Senses (grey) and Resistances (yellow) panels keep the same light fill in
+// BOTH themes, but `.npc-content input` and `.npc-content i` paint theme text ($c-text-1 =
+// light grey in dark). One extra class here beats them; text stays dark.
+// NB: this file compiles inside `.vagabond { }` — never prefix `.vagabond` here (it would
+// double up and silently never match).
+.npc-header {
+  i { color: $c-dark; }
+
+  // Icons on the dark HD / Armor / TL plates stay light
+  // (the Lock / Description buttons sit on the dark title plate: the `i` rule above had turned
+  // them dark-on-dark)
+  .npc-stat-field i,
+  .npc-armor-badge i,
+  .npc-tl-container i,
+  .npc-lock-name-row i { color: $c-white; }
+
+  .npc-field-input { color: $c-dark; }
+}
+
+.npc-content .npc-senses-section,
+.npc-content .npc-resistances-section {
+  color: $c-dark;
+
+  input,
+  select,
+  textarea,
+  li,
+  label,
+  i,
+  p,
+  .fx-list,
+  .fx-name,
+  .fx-origin,
+  .fx-description,
+  .fx-btn,
+  .fx-empty,
+  .fx-chevron,
+  .fx-chip:not(.fx-suppressed) {
+    color: $c-dark;
+  }
+
+  .fx-btn:hover { color: $c-black; }
+}
+
 .npc-field-input {
   border-bottom: 1px solid var(--vagabond-c-dark);
   border-radius: 0;
@@ -1668,10 +1719,6 @@ input[type='checkbox'][name='system.flyingByDefault'] { @include vagabond-switch
     box-shadow: none;
   }
 
-  &::placeholder {
-    color: $c-red;
-    opacity: 0.9;
-  }
 }
 
 .npc-number-input {

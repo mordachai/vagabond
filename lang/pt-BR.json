@@ -178,6 +178,14 @@
     "AttackFavorRules": {
       "Wounded": "Alvos com qualquer HP faltando (Sede de Sangue)"
     },
+    "ItemChoice": {
+      "Title": "Escolha os Itens Concedidos",
+      "Confirm": "Confirmar",
+      "ChooseN": "Escolha {n}",
+      "Groups": "Escolhas de Itens",
+      "LabelPlaceholder": "Rótulo (padrão: nome do traço)",
+      "DropHint": "Solte os itens entre os quais o jogador escolhe"
+    },
     "FeatureAction": {
       "Section": "Botão de Ação",
       "Enabled": "Mostrar botão de ação",
@@ -595,6 +603,14 @@
       "Frontline": "Linha de Frente",
       "Midline": "Meio",
       "Backline": "Retaguarda"
+    },
+    "CanvasLoot": {
+      "Placed": "colocou",
+      "Dropped": "largou",
+      "Threw": "arremessou",
+      "PickedUp": "pegou",
+      "Show": "Mostrar",
+      "ShowTooltip": "Mostrar no mapa"
     },
     "Currency": {
       "Gold": {
@@ -1301,10 +1317,6 @@
         "name": "Aparência dos Dados de Dano (DSN)",
         "label": "Configurar Dados de Dano",
         "hint": "Personalize cores, texturas e materiais do Dice So Nice por tipo de dano."
-      },
-      "useItemAnimations": {
-        "name": "Usar Animações de Item",
-        "hint": "Chave mestra para efeitos visuais de armas, alquímicos e relíquias. Quando desativado, nenhuma animação de item toca. Arquivos de animação são configurados por item na aba Detalhes de cada item. Requer o módulo Sequencer."
       },
       "revealNpcRecharge": {
         "name": "Revelar Recarga de Ação de NPC",
@@ -2096,6 +2108,10 @@
           "Regenerate": "Regenerar",
           "SunlightBurn": "Luz do Sol",
           "RelicImmunity": "Imune a Físico contra armas Relíquia",
+          "RelicBadgeAny": "{types} vs. Não-Relíquias",
+          "RelicBadgeMin": "{types} vs. Não-Relíquias, Relíquias abaixo de (+{n})",
+          "RelicTipAny": "Imune a dano {types}, a menos que venha de uma arma Relíquia.",
+          "RelicTipMin": "Imune a dano {types}, a menos que venha de uma arma Relíquia de (+{n}) ou mais.",
           "RelicNone": "Imunidade comum (sem exceção de Relíquia)",
           "RelicAny": "Ignorada por qualquer arma Relíquia (não-Relíquias)",
           "RelicMin": "Ignorada por armas Relíquia de (+{n}) ou mais",
@@ -3018,67 +3034,9 @@
       "Focus": "Concentração",
       "Fx": "FX"
     },
-    "ItemFx": {
-      "Title": "FX do Item",
-      "On": "ATIVO",
-      "Enable": "Habilitar Animação",
-      "AnimType": "Tipo de Animação",
-      "AnimTypeMelee": "Corpo a corpo — impacto no alvo",
-      "AnimTypeRanged": "À distância — feixe até o alvo",
-      "AnimTypeAuto": "Automático — pela perícia / arquivo",
-      "AnimTypeChain": "Corrente — feixe salta de alvo em alvo",
-      "AnimTypeCone": "Cone — do atacante até o alvo",
-      "ConeLength": "Alcance do Cone (pés)",
-      "ConeLengthHint": "Alcance de uma animação de Cone em pés (ex.: 15 para um Ataque de Sopro). 0 = tamanho original do clipe.",
-      "HitAnimation": "Animação de Acerto",
-      "MissAnimation": "Animação de Erro",
-      "MissHint": "(opcional — toca no atacante)",
-      "Throw": "Arremesso",
-      "AADisable": "Desativar",
-      "AADisableHint": "Ativa a configuração de mundo do Automated Animations “Desativar Reconhecimento Automático”. Itens configurados dentro do próprio Automated Animations continuam tocando.",
-      "AADisabled": "Reconhecimento automático do Automated Animations desativado.",
-      "Preview": "Prévia",
-      "ThrowAnimation": "Animação de Arremesso",
-      "ThrowHint": "(ataques arremessados — voa até o alvo; usa a escala e o som de Acerto)",
-      "NoAutoThrowMatch": "Nenhum clipe de arremesso encontrado — escolha um",
-      "Scale": "Escala",
-      "OffsetX": "Deslocamento X",
-      "DurationMs": "Duração (ms)",
-      "SoundVolume": "Volume do Som",
-      "VolumeHint": "0 – 1 (aplica-se aos dois sons)",
-      "BrowseVideo": "Procurar arquivo de vídeo",
-      "BrowseAudio": "Procurar arquivo de áudio",
-      "FileNotFound": "Arquivo não encontrado",
-      "AnimConfigured": "Animação configurada",
-      "SoundConfigured": "Som configurado",
-      "Hit": "Acerto",
-      "Miss": "Erro",
+    "SpellFx": {
       "ClickToPreview": "Clique para pré-visualizar",
-      "Cast": "Conjuração",
-      "Auto": "Auto",
-      "NoAnimation": "Sem animação",
-      "NoAutoMatch": "Nenhuma correspondência para este item — escolha uma",
-      "NoMissAnimation": "Nada toca em um erro",
-      "Variations": "variações",
-      "Change": "Escolher",
-      "UseAuto": "Auto",
-      "UseAutoHint": "Voltar à animação escolhida a partir do item",
-      "Clear": "Limpar",
-      "AAWarning": "O Automated Animations está ativo e pode tocar uma segunda animação para o mesmo ataque. Desative o reconhecimento automático dele para este sistema.",
-      "SoundPlaceholder": "Som (opcional)",
-      "Advanced": "Avançado",
-      "AdvancedHint": "Caminhos brutos: um caminho do Sequencer (jb2a.rapier.melee), um arquivo, um curinga (caminho/Arma*) ou vários arquivos separados por |.",
-      "Picker": {
-        "Title": "Escolher animação",
-        "NoDatabase": "O banco de animações do Sequencer não está carregado.",
-        "Library": "Biblioteca",
-        "Filter": "Filtrar…",
-        "More": "Mais clipes neste nível:",
-        "TileHint": "Clique em um clipe para usar só ele. Use o botão abaixo para usar todas as variações (uma toca aleatoriamente).",
-        "NoClips": "Nenhum clipe neste nível — vá mais fundo.",
-        "PickStart": "Escolha uma biblioteca para começar.",
-        "UseLevel": "Usar todas ({count})"
-      }
+      "Cast": "Conjuração"
     },
     "UI": {
       "Sections": {

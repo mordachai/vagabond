@@ -38,9 +38,7 @@
       font-family: var(--font-primary);
 
       &::placeholder {
-        color: var(--color-text-dark-secondary);
         font-style: italic;
-        opacity: 0.7;
       }
 
       &:focus {

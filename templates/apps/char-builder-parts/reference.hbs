@@ -22,6 +22,9 @@
                     {{#each selectedItem.traits}}
                         <div class="ref-entry">
                             <strong>{{this.name}}:</strong> {{{this.description}}}
+                            {{#if this.choices.length}}
+                                {{> "systems/vagabond/templates/apps/char-builder-parts/item-choices.hbs" itemChoices=this.choices}}
+                            {{/if}}
                         </div>
                     {{/each}}
                 {{/if}}

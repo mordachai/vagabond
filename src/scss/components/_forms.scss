@@ -61,6 +61,16 @@
   }
 }
 
+// THE placeholder rule. Placeholders follow the field's own text colour (already themed / fixed
+// per surface), so they stay readable on yellow plates, banners and paper in both themes.
+// Components must NOT set placeholder color/opacity — only outlined yellow titles are exempt
+// (shop subtitle, construct type, character/item name).
+input::placeholder,
+textarea::placeholder {
+  color: currentColor;
+  opacity: var(--vagabond-placeholder-opacity);
+}
+
 .sheet-tabs {
   flex: 0;
   position: relative;
@@ -631,7 +641,8 @@ prose-mirror .editor-content {
   i {
     cursor: pointer;
     font-size: 10px;
-    color: $c-muted;
+    color: $c-text-1;
+    opacity: 0.8;
     transition: color 0.2s ease;
 
     &:hover {

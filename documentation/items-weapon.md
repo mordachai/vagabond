@@ -104,21 +104,7 @@ Rules live in `CONFIG.VAGABOND.metalData`; damage die sizes step along `CONFIG.V
     "isConsumable": false,
     "linkedConsumable": "",
     "alchemicalType": "concoction",
-    "lore": "",
-    "itemFx": {
-      "enabled": false,
-      "animType": "auto",
-      "hitFile": "",
-      "hitScale": 1.0,
-      "hitOffsetX": 0,
-      "hitDuration": 800,
-      "hitSound": "",
-      "missFile": "",
-      "missScale": 1.0,
-      "missDuration": 600,
-      "missSound": "",
-      "soundVolume": 0.6
-    }
+    "lore": ""
   }
 }
 ```
@@ -158,7 +144,6 @@ Rules live in `CONFIG.VAGABOND.metalData`; damage die sizes step along `CONFIG.V
 | `equipmentState` | string | Current equip state |
 | `isConsumable` | boolean | If true, quantity decreases on use |
 | `linkedConsumable` | string | Item ID consumed when used (for linked ammo etc.) |
-| `itemFx` | object | Sequencer animation config (leave defaults unless needed) |
 
 ---
 
@@ -196,8 +181,7 @@ Rules live in `CONFIG.VAGABOND.metalData`; damage die sizes step along `CONFIG.V
     "immunities": [],
     "gearCategory": "", "isSupply": false, "isBeverage": false,
     "isConsumable": false, "linkedConsumable": "",
-    "alchemicalType": "concoction", "lore": "",
-    "itemFx": { "enabled": false, "animType": "auto", "hitFile": "", "hitScale": 1.0, "hitOffsetX": 0, "hitDuration": 800, "hitSound": "", "missFile": "", "missScale": 1.0, "missDuration": 600, "missSound": "", "soundVolume": 0.6 }
+    "alchemicalType": "concoction", "lore": ""
   }
 }
 ```
@@ -230,8 +214,7 @@ Rules live in `CONFIG.VAGABOND.metalData`; damage die sizes step along `CONFIG.V
     "immunities": [],
     "gearCategory": "", "isSupply": false, "isBeverage": false,
     "isConsumable": false, "linkedConsumable": "",
-    "alchemicalType": "concoction", "lore": "",
-    "itemFx": { "enabled": false, "animType": "auto", "hitFile": "", "hitScale": 1.0, "hitOffsetX": 0, "hitDuration": 800, "hitSound": "", "missFile": "", "missScale": 1.0, "missDuration": 600, "missSound": "", "soundVolume": 0.6 }
+    "alchemicalType": "concoction", "lore": ""
   }
 }
 ```

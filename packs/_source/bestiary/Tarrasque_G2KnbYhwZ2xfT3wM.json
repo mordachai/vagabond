@@ -27,7 +27,6 @@
     "locked": true,
     "immunities": [
       "cold",
-      "physical",
       "shock",
       "fire"
     ],

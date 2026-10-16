@@ -3,8 +3,9 @@ import { sourceDocId } from './source-id.mjs';
 
 /**
  * Granted items — Items a character RECEIVES from an Ancestry trait or a Class level feature
- * (`grantedItems`: UUID list on `system.traits[]` / `system.levelFeatures[]`), e.g. Draken's
- * Breath Attack weapon, natural claws, tentacles.
+ * (`grantedItems`: UUID list on `system.traits[]` / `system.levelFeatures[]`), e.g. natural claws,
+ * tentacles. `itemChoices` groups let the player pick `count` of a `pool` instead (Draken Breath Attack
+ * element): Character Builder picker (`steps/item-choice-manager.mjs`), else `promptChoices`.
  *
  * The copies arrive equipped (`EquipmentHelper.defaultEquipState`: a Zero-Grip weapon is 'worn',
  * a 2H weapon twoHands…) and flagged `flags.vagabond.grantedBy = { source, index }`
@@ -39,6 +40,105 @@ export class GrantedItems {
       }
     });
     return out;
+  }
+
+  /**
+   * Item choice groups (`itemChoices`: pick `count` of the `pool` uuids, e.g. Draken's Breath Attack element)
+   * of one grant owner, filtered like `entriesFor`.
+   * `key` is dot-free (`ancestry-0-0` = source-row-group) so it can be a builder state key.
+   * @returns {Array<{key, source, index, group, label, ownLabel, count, pool: string[]}>}
+   */
+  static choiceGroupsFor(owner, { levels, maxLevel } = {}) {
+    if (!owner) return [];
+    const isClass = owner.type === 'class';
+    const source = isClass ? 'class' : 'ancestry';
+    const rows = isClass ? owner.system?.levelFeatures : owner.system?.traits;
+    const out = [];
+    (rows ?? []).forEach((row, index) => {
+      if (isClass && levels && !levels.includes(row.level)) return;
+      if (isClass && maxLevel !== undefined && row.level > maxLevel) return;
+      (row.itemChoices ?? []).forEach((choice, group) => {
+        const pool = (choice.pool ?? []).filter(Boolean);
+        if (!pool.length) return;
+        out.push({
+          key: `${source}-${index}-${group}`, source, index, group,
+          label: choice.label || row.name || '',
+          ownLabel: choice.label || '',
+          count: Math.max(1, Math.min(choice.count || 1, pool.length)),
+          pool,
+        });
+      });
+    });
+    return out;
+  }
+
+  /**
+   * Grant entries for the picks of choice groups (`picks`: `{ [group.key]: uuid[] }`); picks outside a pool are
+   * ignored, each group is capped at its `count`.
+   */
+  static entriesFromPicks(groups, picks = {}) {
+    const out = [];
+    for (const g of groups) {
+      const chosen = (picks[g.key] ?? []).filter(u => g.pool.includes(u)).slice(0, g.count);
+      for (const uuid of chosen) out.push({ uuid, source: g.source, index: g.index });
+    }
+    return out;
+  }
+
+  /** Pool uuids → `[{uuid, name, img, damageType}]` (unresolvable uuids dropped). */
+  static async choiceOptions(group) {
+    const out = [];
+    for (const uuid of group.pool) {
+      const doc = await fromUuid(uuid).catch(() => null);
+      if (!doc) continue;
+      const damageType = doc.system?.currentDamageType ?? doc.system?.damageTypeOneHand ?? doc.system?.damageType;
+      out.push({ uuid, name: doc.name, img: doc.img, damageType: damageType && damageType !== '-' ? damageType : null });
+    }
+    return out;
+  }
+
+  /**
+   * Ask the player for the picks of choice groups an actor still needs (a group is satisfied when the actor already
+   * owns `count` items from its pool, by compendium source). Used where no builder UI exists: an Ancestry / Class
+   * added by drag, the Level Up dialog.
+   * @returns {Promise<Array<{uuid, source, index}>>} grant entries (empty if cancelled)
+   */
+  static async promptChoices(actor, groups) {
+    const owned = new Set(actor.items.map(i => sourceDocId(i)).filter(Boolean));
+    const open = groups.filter(g => g.pool.filter(u => owned.has(u.split('.').pop())).length < g.count);
+    if (!open.length) return [];
+
+    const esc = foundry.utils.escapeHTML;
+    let html = '<div class="vbd-choice">';
+    for (const g of open) {
+      const type = g.count === 1 ? 'radio' : 'checkbox';
+      html += `<div class="vbd-choice-prompt">${esc(g.label)} (${game.i18n.format('VAGABOND.ItemChoice.ChooseN', { n: g.count })})</div>`
+        + '<div class="vbd-item-choice-list">';
+      for (const opt of await GrantedItems.choiceOptions(g)) {
+        html += `<label class="vbd-item-choice-row"><input type="${type}" name="${g.key}" value="${opt.uuid}">`
+          + `<img src="${opt.img}" alt=""><span>${esc(opt.name)}</span></label>`;
+      }
+      html += '</div>';
+    }
+    html += '</div>';
+
+    const picks = await foundry.applications.api.DialogV2.prompt({
+      classes: ['vbd-choice-dialog'],
+      window: { title: game.i18n.localize('VAGABOND.ItemChoice.Title') },
+      content: html,
+      ok: {
+        label: game.i18n.localize('VAGABOND.ItemChoice.Confirm'),
+        callback: (event, button) => {
+          const out = {};
+          for (const g of open) {
+            out[g.key] = [...button.form.querySelectorAll(`input[name="${g.key}"]:checked`)].map(i => i.value);
+          }
+          return out;
+        },
+      },
+      rejectClose: false,
+    }).catch(() => null);
+    return picks ? GrantedItems.entriesFromPicks(open, picks) : [];
   }
 
   /**
@@ -89,9 +189,12 @@ export class GrantedItems {
   static async grantOnAdd(owner) {
     const actor = owner?.parent;
     if (actor?.type !== 'character' || !['ancestry', 'class'].includes(owner.type)) return;
-    const entries = owner.type === 'class'
-      ? GrantedItems.entriesFor(owner, { maxLevel: actor.system.attributes?.level?.value ?? 1 })
-      : GrantedItems.entriesFor(owner);
+    const opts = owner.type === 'class' ? { maxLevel: actor.system.attributes?.level?.value ?? 1 } : {};
+    const entries = [
+      ...GrantedItems.entriesFor(owner, opts),
+      // Picks the builder already made are owned, so only an Ancestry / Class added by hand asks
+      ...await GrantedItems.promptChoices(actor, GrantedItems.choiceGroupsFor(owner, opts)),
+    ];
     if (!entries.length) return;
     const data = await GrantedItems.buildItemData(entries, { existing: actor.items.contents });
     if (data.length) await actor.createEmbeddedDocuments('Item', data);

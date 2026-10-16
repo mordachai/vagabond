@@ -1,0 +1,109 @@
+{
+  "name": "Breath Attack: Acid",
+  "type": "equipment",
+  "_id": "brthAcidd8Pz1Jn4",
+  "img": "icons/magic/acid/projectile-stream-bubbles.webp",
+  "system": {
+    "description": "<p>You have a Breath Attack that requires an <strong>Action</strong> to begin. On a subsequent Turn within the same Scene, you can then use an <strong>Action</strong> or skip your <strong>Move</strong> to exhale a 15’ Cone of energy that deals <strong>2d6!</strong>, using an Endure or Will Save for the Check.</p>",
+    "equipmentType": "weapon",
+    "noImbue": true,
+    "locked": false,
+    "equipped": false,
+    "quantity": 1,
+    "baseCost": {
+      "gold": 0,
+      "silver": 0,
+      "copper": 0
+    },
+    "baseSlots": 0,
+    "metal": "none",
+    "damageType": "-",
+    "damageAmount": "",
+    "canExplode": true,
+    "explodeValues": "6",
+    "properties": [],
+    "weaponSkill": "endure",
+    "altSkills": [
+      "will"
+    ],
+    "range": "near",
+    "grip": "0",
+    "damageOneHand": "2d6",
+    "damageTwoHands": "d8",
+    "equipmentState": "unequipped",
+    "armorType": "light",
+    "immunities": [],
+    "gearCategory": "",
+    "isConsumable": false,
+    "linkedConsumable": "",
+    "alchemicalType": "concoction",
+    "lore": "",
+    "damageTypeOneHand": "acid",
+    "itemFx": {
+      "enabled": false,
+      "hitFile": "modules/JB2A_DnD5e/Library/Generic/Template/Cone/Breath_Weapon/BreathWeapon_Poison01_Regular_Green_30ft_Cone_Burst_600x600.webm",
+      "hitDuration": 7000,
+      "hitScale": 1,
+      "coneLength": 15,
+      "animType": "cone",
+      "auto": false
+    },
+    "areaAttack": true
+  },
+  "effects": [
+    {
+      "name": "Breath Attack Charging",
+      "img": "icons/magic/acid/projectile-stream-bubbles.webp",
+      "_id": "brthAcidFx9sV3dL",
+      "type": "base",
+      "system": {
+        "changes": []
+      },
+      "disabled": true,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "<p>Switch on when you spend the Action to begin your Breath Attack. On a later Turn in the same Scene, use an Action or skip your Move to exhale, then switch it off.</p>",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent"
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "6.3.1"
+      },
+      "start": null,
+      "showIcon": 2,
+      "folder": null,
+      "_key": "!items.effects!brthAcidd8Pz1Jn4.brthAcidFx9sV3dL"
+    }
+  ],
+  "folder": "BjNJoIvzJXyagnI4",
+  "sort": 100004,
+  "ownership": {
+    "default": 0,
+    "13p65OEadZSZVLRk": 3
+  },
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.368",
+    "systemId": "vagabond",
+    "systemVersion": "6.5.0",
+    "createdTime": 1792095003561,
+    "modifiedTime": 1792095003561,
+    "lastModifiedBy": "F8lCaC2xBa4wgj43"
+  },
+  "_key": "!items!brthAcidd8Pz1Jn4"
+}

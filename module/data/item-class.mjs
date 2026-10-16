@@ -117,6 +117,17 @@ export default class VagabondClass extends VagabondItemBase {
           { initial: [] }
         ),
 
+        // Item choice groups - the player picks `count` items of `pool` (UUIDs), granted like grantedItems
+        // (see helpers/granted-items.mjs choiceGroupsFor)
+        itemChoices: new fields.ArrayField(
+          new fields.SchemaField({
+            count: new fields.NumberField({ initial: 1, integer: true, min: 1 }),
+            pool: new fields.ArrayField(new fields.StringField({ initial: '', blank: true }), { initial: [] }),
+            label: new fields.StringField({ initial: '' })
+          }),
+          { initial: [] }
+        ),
+
         // Perk amount - number of perks granted by this feature
         perkAmount: new fields.NumberField({ initial: 0, integer: true, min: 0, max: 10 }),
 

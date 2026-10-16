@@ -444,9 +444,10 @@
           filter: drop-shadow(0 0 3px $c-dark-yellow);
         }
 
+        // Black title plate in both themes: light grey, not the (dark-theme: blue) dark-yellow
         &.empty {
-          color: $c-dark-yellow;
-          opacity: 0.25;
+          color: var(--vagabond-c-lightgrey);
+          opacity: 0.5;
         }
 
         &.over {
@@ -512,7 +513,7 @@
     padding: 4px 8px;
     font-size: 0.85em;
     font-style: italic;
-    opacity: 0.55;
+    opacity: 0.8;
   }
 
   // Pinned feature / trait / perk action on the Equipped > Belt list
@@ -890,8 +891,8 @@
     }
 
     &.empty {
-      color: $c-dark-yellow;
-      opacity: 0.2;
+      color: var(--vagabond-c-lightgrey);
+      opacity: 0.5;
     }
   }
 }

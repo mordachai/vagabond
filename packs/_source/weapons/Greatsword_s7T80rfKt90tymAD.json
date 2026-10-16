@@ -36,7 +36,8 @@
       "hitFile": "modules/JB2A_DnD5e/Library/Generic/Weapon_Attacks/Melee/Group03/MeleeAttack03_GreatSword*",
       "hitDuration": 1000,
       "hitOffsetX": -100,
-      "enabled": true
+      "enabled": false,
+      "auto": false
     },
     "damageTypeOneHand": "slashing",
     "damageTypeTwoHands": "slashing"

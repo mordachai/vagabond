@@ -94,6 +94,7 @@
     a {
       text-align: center;
       margin: 0 6px;
+      color: $c-text-1;
     }
   }
 
@@ -181,6 +182,7 @@
       font-size: 0.95em;
       line-height: 1.5;
       color: $c-text-1;
+      background: var(--vagabond-c-input-bg);
       resize: none;
       box-sizing: border-box;
       padding: 4px 6px;
@@ -643,7 +645,7 @@
 .pool-input {
   color: $c-dark;
   &::placeholder {
-    color: $c-red;
+    font-style: italic;
   }
 }
 
@@ -651,8 +653,6 @@
 #choice-selected,
 #choice-target-field {
   &::placeholder {
-    color: $c-red;
-    opacity: 0.8;
     font-style: italic;
   }
 }
@@ -662,7 +662,8 @@
   align-items: center;
   gap: 4px;
   padding: 3px 8px;
-  background: #e2e2e255;
+  // Themed surface: the fixed light tint turned the chip mid-grey over dark paper
+  background: $c-surface;
   border: 2px solid var(--vagabond-c-tan);
   border-radius: 3px;
   font-size: 13px;
@@ -815,6 +816,7 @@
   font-family: 'Manofa', serif;
   font-weight: bold;
   font-size: 16px;
+  color: $c-text-1;
 }
 
 // -----------------------------------------
@@ -1014,7 +1016,7 @@
     font-weight: bold;
     text-transform: uppercase;
     font-size: 14px;
-    color: $c-dark;
+    color: $c-text-1;
     display: flex;
     align-items: center;
     gap: 5px;
@@ -1135,7 +1137,7 @@
 
       .delete-btn {
         flex: 0 0 18px;
-        color: #b93636;
+        color: $c-red;
         cursor: pointer;
         text-align: center;
         font-size: 16px;
@@ -1606,7 +1608,7 @@
 .grants-hint {
   flex: 1;
   font-size: 0.75em;
-  color: var(--color-text-light-6, #888);
+  color: $c-muted;
   font-style: italic;
 }
 
@@ -1767,397 +1769,15 @@
   }
 }
 
-// -----------------------------------------
-// Item FX (Sequencer) Section
-// -----------------------------------------
-
-.item-fx-details {
-  margin-top: 8px;
-  border: 1px solid $c-faint;
-  border-radius: 4px;
-  background: var(--vagabond-c-surface);
-  color: $c-text-1;
-
-  // Boxed, theme-aware fields (the raw inputs rendered transparent in the dark theme)
-  input[type='text'],
-  input[type='number'],
-  select {
-    height: auto;
-    line-height: normal;
-    padding: 3px 6px;
-    border: 1px solid $c-faint;
-    border-radius: 3px;
-    background: var(--vagabond-c-input-bg);
-    color: $c-text-1;
-
-    &::placeholder { color: $c-text-1; opacity: 0.45; font-style: italic; }
-    &:focus {
-      outline: none;
-      border-color: var(--vagabond-c-yellow);
-    }
-  }
-
-  .item-fx-summary {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 6px 10px;
-    cursor: pointer;
-    list-style: none;
-    font-weight: 600;
-    font-size: 13px;
-    user-select: none;
-
-    &::-webkit-details-marker { display: none; }
-
-    i { font-size: 11px; transition: transform 0.15s; }
-
-    small { font-weight: 400; opacity: 0.7; }
-
-    .item-fx-active-badge {
-      margin-left: auto;
-      background: #2e7d32;
-      color: #fff;
-      font-size: 10px;
-      padding: 1px 6px;
-      border-radius: 3px;
-      font-weight: 700;
-      letter-spacing: 0.05em;
-    }
-  }
-
-  &[open] .item-fx-summary i { transform: rotate(90deg); }
-}
-
-.item-fx-locked-icons {
+// Spell sheet locked view: animation preview icon
+.spell-fx-locked-icons {
   display: flex;
   gap: 6px;
   align-items: center;
   i { opacity: 0.85; }
-  i[data-action='previewItemFx'],
   i[data-action='previewSpellFx'] {
     cursor: pointer;
     &:hover { opacity: 1; text-shadow: 0 0 6px $c-yellow; }
-  }
-}
-
-.item-fx-section {
-  padding: 8px 10px 10px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.item-fx-group {
-  border: 1px solid rgba(0, 0, 0, 0.12);
-  border-radius: 3px;
-  padding: 6px 8px;
-  margin: 0;
-
-  legend {
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    padding: 0 4px;
-    opacity: 0.8;
-  }
-
-  .item-fx-hint {
-    font-weight: 400;
-    text-transform: none;
-    letter-spacing: 0;
-    opacity: 0.65;
-    font-size: 10px;
-  }
-}
-
-.item-fx-file-row {
-  display: flex;
-  gap: 4px;
-  align-items: center;
-  margin-bottom: 4px;
-
-  input[type='text'] {
-    flex: 1;
-    min-width: 0;
-    font-size: 12px;
-  }
-
-  .item-fx-browse-btn {
-    flex-shrink: 0;
-    width: 26px;
-    height: 26px;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid $c-faint;
-    border-radius: 3px;
-    background: var(--vagabond-c-input-bg);
-    color: $c-text-1;
-    cursor: pointer;
-    font-size: 12px;
-
-    &:hover { border-color: var(--vagabond-c-yellow); }
-  }
-}
-
-.item-fx-scale-row {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  flex-wrap: wrap;
-
-  .resource-label {
-    font-size: 11px;
-    white-space: nowrap;
-    flex-shrink: 0;
-    margin: 0;
-  }
-
-  input[type='number'] {
-    width: 60px;
-    font-size: 12px;
-    flex-shrink: 0;
-  }
-}
-
-// --- FX section v2: summary line, switch, clip slots ---
-
-.item-fx-details {
-  .item-fx-summary {
-    .ifx-title { flex: 0 0 auto; }
-
-    .ifx-summary-line {
-      flex: 1 1 auto;
-      min-width: 0;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      font-weight: 400;
-      font-size: 12px;
-      opacity: 0.75;
-    }
-  }
-
-  // Header switch — mirrors the HUD/effects switch look in the sheet's own colors
-  .ifx-switch {
-    flex: 0 0 auto;
-    margin-left: auto;
-    width: 28px;
-    height: 16px;
-    min-height: 0;
-    padding: 0;
-    line-height: normal;
-    border-radius: 8px;
-    border: 1px solid rgba(0, 0, 0, 0.35);
-    background: rgba(0, 0, 0, 0.18);
-    position: relative;
-    cursor: pointer;
-    transition: background 0.15s, border-color 0.15s;
-
-    .ifx-switch-knob {
-      position: absolute;
-      top: 2px;
-      left: 2px;
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: #fff;
-      transition: transform 0.15s;
-    }
-
-    &.is-on {
-      background: #2e7d32;
-      border-color: #2e7d32;
-      .ifx-switch-knob { transform: translateX(12px); }
-    }
-  }
-
-  // The summary line sits before the switch, so the switch no longer needs auto margin
-  .ifx-summary-line + .ifx-chip + .ifx-switch,
-  .ifx-summary-line + .ifx-switch { margin-left: 4px; }
-}
-
-.ifx-chip {
-  flex: 0 0 auto;
-  font-size: 10px;
-  font-weight: 700;
-  line-height: 1;
-  padding: 2px 5px;
-  border-radius: 3px;
-  border: 1px solid $c-yellow;
-  color: inherit;
-  background: rgba(0, 0, 0, 0.05);
-}
-
-.ifx-warning {
-  display: flex;
-  gap: 6px;
-  align-items: flex-start;
-  margin: 0;
-  padding: 5px 8px;
-  font-size: 11px;
-  border-left: 3px solid $c-yellow;
-  background: var(--vagabond-c-input-bg);
-
-  i { margin-top: 2px; }
-  span { flex: 1; }
-
-  .ifx-warning-btn {
-    flex: 0 0 auto;
-    width: auto;
-    height: auto;
-    line-height: normal;
-    padding: 3px 8px;
-    font-size: 11px;
-    border: 1px solid $c-yellow;
-    border-radius: 3px;
-    background: var(--vagabond-c-surface);
-    color: $c-text-1;
-    cursor: pointer;
-
-    &:hover { background: $c-yellow; color: #1a1a1a; }
-  }
-}
-
-.ifx-slots {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 8px;
-}
-
-.ifx-slot {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  min-width: 0;
-  padding: 6px 8px 8px;
-  border: 1px solid $c-faint;
-  border-radius: 3px;
-  background: var(--vagabond-c-surface);
-
-  .ifx-slot-head {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 2px 6px;
-    min-height: 16px;
-
-    // Long hints get their own line instead of squeezing beside the title
-    .item-fx-hint { flex: 1 1 100%; }
-  }
-
-  .ifx-slot-title {
-    font-weight: 700;
-    font-size: 12px;
-  }
-
-  .ifx-slot-main {
-    display: flex;
-    gap: 8px;
-    align-items: stretch;
-  }
-
-  // Preview button (replaces the old inline mini-player): opens the floating preview
-  .ifx-clip {
-    flex: 0 0 64px;
-    width: 64px;
-    height: auto;
-    min-height: 56px;
-    line-height: normal;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-    border: 1px solid $c-faint;
-    border-radius: 3px;
-    background: var(--vagabond-c-input-bg);
-    color: $c-text-1;
-    font-size: 10px;
-    cursor: pointer;
-    transition: box-shadow 0.15s, border-color 0.15s;
-
-    i { font-size: 18px; }
-
-    &:hover {
-      border-color: $c-yellow;
-      box-shadow: 0 0 8px -1px $c-yellow;
-    }
-
-    &.is-empty {
-      border-style: dashed;
-      opacity: 0.45;
-      cursor: default;
-      box-shadow: none;
-      &:hover { border-color: $c-faint; }
-    }
-  }
-
-  .ifx-slot-info {
-    flex: 1;
-    min-width: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    justify-content: space-between;
-  }
-
-  .ifx-crumbs {
-    font-size: 12px;
-    font-weight: 600;
-    overflow-wrap: anywhere;
-  }
-
-  .ifx-count,
-  .ifx-none {
-    font-size: 11px;
-    opacity: 0.7;
-  }
-
-  .ifx-slot-buttons {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px;
-
-    button {
-      height: auto;
-      line-height: normal;
-      width: auto;
-      padding: 3px 7px;
-      font-size: 11px;
-      border: 1px solid $c-faint;
-      border-radius: 3px;
-      background: var(--vagabond-c-input-bg);
-      color: $c-text-1;
-      cursor: pointer;
-
-      &:hover { border-color: $c-yellow; }
-    }
-  }
-}
-
-.ifx-advanced {
-  border-top: 1px dashed $c-faint;
-  padding-top: 4px;
-
-  > summary {
-    cursor: pointer;
-    font-size: 11px;
-    font-weight: 600;
-    opacity: 0.8;
-  }
-
-  .ifx-advanced-body {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    padding-top: 6px;
-
-    .resource-label { font-size: 11px; margin: 0; }
   }
 }
 
@@ -2167,7 +1787,7 @@
   .macro-help {
     font-size: 0.95em;
     cursor: help;
-    opacity: 0.65;
+    opacity: 0.8;
     &:hover { opacity: 1; }
   }
 }
@@ -2210,8 +1830,9 @@
     }
   }
 
-  &[data-macro-slot="macro"]    .macro-slot-toggle span { color: #1f7e85; }
-  &[data-macro-slot="hitMacro"] .macro-slot-toggle span { color: #8a68c9; }
+  // Accent tints blended with the theme text colour so they hold up on light AND dark paper
+  &[data-macro-slot="macro"]    .macro-slot-toggle span { color: color-mix(in srgb, #1f7e85 60%, var(--vagabond-c-text-primary)); }
+  &[data-macro-slot="hitMacro"] .macro-slot-toggle span { color: color-mix(in srgb, #8a68c9 60%, var(--vagabond-c-text-primary)); }
 
   /* extra breathing room between the linked-macro drop zone and the label field */
   .macro-label-group { margin-top: 10px; }
@@ -2241,7 +1862,7 @@
   }
 
   .macro-drop-hint {
-    opacity: 0.6;
+    opacity: 0.8;
     font-style: italic;
     i { margin-right: 4px; }
   }
@@ -2269,7 +1890,7 @@
   color: $c-text-1;
   font-size: 12px;
 
-  &::placeholder { color: $c-text-1; opacity: 0.45; font-style: italic; }
+  &::placeholder { font-style: italic; }
   &:focus {
     outline: none;
     border-color: #8a68c9;
@@ -2314,7 +1935,7 @@
     font-size: 12px;
     line-height: 1.5;
 
-    &::placeholder { color: $c-text-1; opacity: 0.45; font-style: italic; }
+    &::placeholder { font-style: italic; }
   }
 }
 
@@ -2340,7 +1961,7 @@
     .macro-help {
       font-size: 0.95em;
       cursor: help;
-      opacity: 0.65;
+      opacity: 0.8;
       &:hover { opacity: 1; }
     }
   }
@@ -2403,7 +2024,7 @@
     color: $c-text-1;
     font-size: 12px;
 
-    &::placeholder { color: $c-text-1; opacity: 0.45; font-style: italic; }
+    &::placeholder { font-style: italic; }
     &:focus { outline: none; border-color: #8a68c9; }
   }
 
@@ -2419,7 +2040,7 @@
   textarea.macro-command-input {
     font-family: 'Courier New', Courier, monospace;
     font-weight: normal;
-    &::placeholder { color: $c-text-1; opacity: 0.45; font-style: italic; }
+    &::placeholder { font-style: italic; }
   }
 }
 

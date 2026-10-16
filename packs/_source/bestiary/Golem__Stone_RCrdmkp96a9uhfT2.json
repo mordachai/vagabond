@@ -24,7 +24,6 @@
     "armorDescription": "as (+1) Chain",
     "locked": true,
     "immunities": [
-      "physical",
       "poison"
     ],
     "weaknesses": [

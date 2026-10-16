@@ -523,34 +523,7 @@ export default class VagabondEquipment extends VagabondItemBase {
       useFx:              new fields.BooleanField({ required: false, nullable: true, initial: null }),
     });
 
-    // ===== SEQUENCER FX FIELDS =====
-
-    // Per-item animation config (requires Sequencer module)
-    schema.itemFx = new fields.SchemaField({
-      enabled:        new fields.BooleanField({ initial: false }),
-      // Auto-recognition: with no Hit file set, derive the animation from the item
-      // (see VagabondFXDb.autoSpec). Off = this item stays silent until a file is set.
-      auto:           new fields.BooleanField({ initial: true }),
-      // 'auto' = cone if the Hit file is a cone/breath clip, else from weaponSkill;
-      // 'ranged' = beam to each target; 'chain' = beam hopping target to target;
-      // 'melee' = impact; 'cone' = from the attacker toward the target
-      animType:       new fields.StringField({ initial: 'auto' }),
-      // Cone reach in feet (e.g. Breath Attack 15'); 0 = the clip's own size
-      coneLength:     new fields.NumberField({ initial: 0, min: 0 }),
-      hitFile:        new fields.StringField({ initial: '' }),
-      hitScale:       new fields.NumberField({ initial: 1.0, min: 0.1 }),
-      hitOffsetX:     new fields.NumberField({ initial: 0, integer: true }),
-      hitDuration:    new fields.NumberField({ initial: 800, min: 100, integer: true }),
-      hitSound:       new fields.StringField({ initial: '' }),
-      // Thrown attacks: projectile caster → target. Empty = auto-recognised throw
-      // (VagabondFXDb.autoThrownSpec). Scale/offset/duration/sound reuse the Hit/Miss ones.
-      throwFile:      new fields.StringField({ initial: '' }),
-      missFile:       new fields.StringField({ initial: '' }),
-      missScale:     new fields.NumberField({ initial: 1.0, min: 0.1 }),
-      missDuration:   new fields.NumberField({ initial: 600, min: 100, integer: true }),
-      missSound:      new fields.StringField({ initial: '' }),
-      soundVolume:    new fields.NumberField({ initial: 0.6, min: 0, max: 1 }),
-    });
+    // Weapon / item animations: Automated Animations (no per-item FX schema).
 
     // ===== EXECUTABLE MACROS =====
     // Two slots: `macro` (simple — button always shows on the card) and
