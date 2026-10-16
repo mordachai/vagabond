@@ -342,6 +342,19 @@ Want to place items in the scene for your players to discover, and let them drop
 
 ---
 
+### Automated Animations integration
+
+Weapon, alchemical and relic animations come from the [Automated Animations](https://foundryvtt.com/packages/autoanimations) module (requires Sequencer and JB2A). Vagabond ships a ready-made menu for every compendium weapon. To load it:
+
+**Settings > Automated Animations > Launch Menu > Menu Manager > Overwrite Menu > Import**, then pick the file for your language:
+
+- English: [AutomatedAnimations-en-vagabond.json](https://github.com/mordachai/vagabond/raw/main/assets/config/AutomatedAnimations-en-vagabond.json)
+- Português (Brasil): [AutomatedAnimations-ptBR-vagabond.json](https://github.com/mordachai/vagabond/raw/main/assets/config/AutomatedAnimations-ptBR-vagabond.json)
+
+Both files are also in your install folder: `Data/systems/vagabond/assets/config/`.
+
+---
+
 ### Too Many Tokens Integration
 
 <img width="950" alt="image" src="https://github.com/user-attachments/assets/131fd4ec-5f9f-41b5-9c77-a838de80dd2f" />
