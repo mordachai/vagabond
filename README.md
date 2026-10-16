@@ -29,6 +29,18 @@ All Print Wave 3 / Alpha 3 content is now in the system:
 
 ## Features
 
+### **New feature:** Relic Slots
+
+Turn any weapon, armor, gear or alchemical into a Relic. Give it Relic Slots, drag Relics onto them and the item gains their Powers on the spot.
+
+- **Drag and drop:** set **Relic Slots** in the item's Handling section, then drag any Relic from a compendium or an inventory onto a slot. Click a slot to read the Relic or remove it. A Relic taken from an inventory goes back there when you remove it.
+- **Powers that work:** a **Bonus - Weapon +2** adds +2 damage to attacks with that weapon only, and Merchant **Midas Touch** still boosts it.
+- **Is Relic:** one switch decides if the item counts as a Relic, so it gets through **Physical vs. Non-Relics** Immunity. Attaching a Relic turns it on; the GM can turn it off any time.
+- **Book rules:** Bonuses are not cumulative (the higher one stays), Cursed Relics stay Bound until the GM lifts the curse (red diamond, the tooltip names the curse), Bound requirements carry over, and Consumable Relics are used up when the item is used.
+- **On the HUD:** each item shows a Relic counter; click it to see its slots and drop new Relics right there.
+
+---
+
 ### **New features:** Build Guides and Alchemy Lab [YouTube video below](https://youtu.be/USKwZxF5lJA)
 
 [![Build Guides and Alchemy Lab](https://img.youtube.com/vi/USKwZxF5lJA/0.jpg)](https://youtu.be/USKwZxF5lJA)

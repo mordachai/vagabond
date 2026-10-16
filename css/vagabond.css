@@ -3852,6 +3852,159 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   font-family: "Eskapade", serif;
 }
 
+/* Relic slots - top level: item sheet AND the slots popup outside sheets */
+.relic-slot-row {
+  display: grid;
+  grid-template-columns: repeat(var(--relic-slots, 1), minmax(0, 84px));
+  justify-content: center;
+  gap: 15px;
+  width: 100%;
+  align-items: start;
+}
+.relic-slot-row .relic-slot {
+  position: relative;
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  max-height: none;
+  flex: none;
+  align-self: start;
+  line-height: normal;
+  aspect-ratio: 1/1;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: 2px solid var(--vagabond-dark-yellow);
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.55);
+  color: var(--vagabond-dark-yellow);
+  font-size: 40px;
+  cursor: pointer;
+}
+.relic-slot-row .relic-slot:not(.is-filled)::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--relic-empty-art) center/cover no-repeat;
+  filter: grayscale(1);
+  opacity: 0.18;
+  pointer-events: none;
+}
+.relic-slot-row .relic-slot i {
+  position: relative;
+}
+.relic-slot-row .relic-slot img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+  border: none;
+}
+.relic-slot-row .relic-slot:hover, .relic-slot-row .relic-slot.is-selected {
+  border-color: var(--vagabond-c-chat-yellow);
+  box-shadow: 0 0 8px -1px var(--vagabond-c-chat-yellow);
+}
+.relic-slot-row .relic-slot.is-cursed {
+  border-color: var(--vagabond-c-red);
+}
+.relic-slot-row .relic-slot-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 4px;
+  min-width: 0;
+}
+.relic-slot-row .relic-slot-name {
+  font-size: 12px;
+  line-height: 1.2;
+  text-align: center;
+  overflow-wrap: anywhere;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.relic-slots-section .section-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.inventory-mini-sheet.relic-slots-popup {
+  width: 260px;
+  padding: 8px 10px;
+}
+.inventory-mini-sheet.relic-slots-popup .relic-slot-row {
+  grid-template-columns: repeat(var(--relic-slots, 1), minmax(0, 40px));
+  margin-bottom: 8px;
+  font-size: 16px;
+}
+.inventory-mini-sheet.relic-slots-popup .relic-slot-detail-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.inventory-mini-sheet.relic-slots-popup .relic-slot-detail-head img {
+  width: 40px;
+  height: 40px;
+  flex: 0 0 auto;
+  border-radius: 4px;
+  border: 1px solid var(--vagabond-c-dark);
+  object-fit: cover;
+}
+.inventory-mini-sheet.relic-slots-popup .relic-slot-detail-head .relic-slot-detail-title {
+  flex: 1;
+  min-width: 0;
+}
+.inventory-mini-sheet.relic-slots-popup .relic-slot-detail-head .relic-slot-detail-title strong {
+  display: block;
+  font-size: 15px;
+}
+.inventory-mini-sheet.relic-slots-popup .relic-slot-detail-head .relic-slot-facts {
+  display: flex;
+  gap: 10px;
+  font-size: 12px;
+}
+.inventory-mini-sheet.relic-slots-popup .relic-slot-detail-head .relic-slot-facts b {
+  font-family: "Germania", serif;
+  font-weight: normal;
+}
+.inventory-mini-sheet.relic-slots-popup .relic-slot-detail-head .relic-slot-cursed {
+  flex: 0 0 auto;
+  color: var(--vagabond-c-red);
+  cursor: help;
+}
+.inventory-mini-sheet.relic-slots-popup .relic-slot-detail-head .relic-slot-remove {
+  flex: 0 0 auto;
+  width: auto;
+  height: auto;
+  line-height: normal;
+  margin: 0;
+  padding: 2px 6px;
+  font-size: 12px;
+}
+.inventory-mini-sheet.relic-slots-popup .relic-slot-description {
+  margin-top: 4px;
+  font-size: 13px;
+  line-height: 1.35;
+}
+.inventory-mini-sheet.relic-slots-popup .relic-slot-description p {
+  margin: 0;
+}
+.inventory-mini-sheet.relic-slots-popup .relic-slot-hint {
+  margin: 0;
+  font-size: 12px;
+  font-style: italic;
+  opacity: 0.8;
+}
+
 /* Downtime activities - imported at top level because config dialog is outside sheets */
 .downtime-manager .window-content {
   padding: 8px 10px 10px;
@@ -5066,6 +5219,31 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   font-family: "Germania", serif;
   color: var(--vagabond-c-stat);
   flex: 0 0 auto;
+}
+.vbd-hud .vh-inv-relic {
+  flex: 0 0 auto;
+  width: auto;
+  height: auto;
+  line-height: normal;
+  margin: 0;
+  padding: 0 3px;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  border: none;
+  background: none;
+  font-family: "Germania", serif;
+  font-size: calc(0.75rem * var(--vh-font-scale));
+  color: var(--vagabond-c-white);
+  opacity: 0.6;
+  cursor: pointer;
+}
+.vbd-hud .vh-inv-relic.is-filled {
+  color: var(--vagabond-c-chat-yellow);
+  opacity: 1;
+}
+.vbd-hud .vh-inv-relic:hover {
+  opacity: 1;
 }
 .vbd-hud .vh-inv-range {
   flex: 0 0 auto;
@@ -23448,6 +23626,14 @@ ol#combat-tracker.directory-list {
   -webkit-text-stroke: 1px var(--vagabond-c-dark-bluey);
   opacity: 0.6;
 }
+.vagabond .inventory-card .bound-marker.is-cursed {
+  pointer-events: auto;
+  cursor: help;
+}
+.vagabond .inventory-card .bound-marker .cursed {
+  color: var(--vagabond-c-red);
+  opacity: 1;
+}
 .vagabond .inventory-card .item-uses-pips {
   position: absolute;
   bottom: 2px;
@@ -23567,6 +23753,11 @@ ol#combat-tracker.directory-list {
   color: var(--vagabond-c-chat-yellow);
   -webkit-text-stroke: 1px var(--vagabond-c-dark-bluey);
   opacity: 0.8;
+}
+.vagabond .equipment-locked-view .bound-toggle-row .bound-toggle .bound-icon.cursed, .vagabond .equipment-locked-view .bound-toggle-row .bound-toggle:hover .bound-icon.cursed {
+  color: var(--vagabond-c-red);
+  -webkit-text-stroke: 1px var(--vagabond-c-dark-bluey);
+  opacity: 1;
 }
 .vagabond .inventory-section .wealth-section {
   padding: 3px 6px;

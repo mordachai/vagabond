@@ -28,6 +28,9 @@
 /* Inventory mini-sheet - imported at top level because it renders outside sheets */
 @import 'components/inventory-mini-sheet';
 
+/* Relic slots - top level: item sheet AND the slots popup outside sheets */
+@import 'components/relic-slots';
+
 /* Downtime activities - imported at top level because config dialog is outside sheets */
 @import 'components/downtime';
 

@@ -10,8 +10,8 @@ const AXE_SOURCE_IDS = new Set(['76co3Mfck1ARSH5Z', '7kJxTiu6idu4vrAL', 'cBUd8HG
 
 /**
  * Bonus of a Relic weapon, or `null` when the item is not a Relic weapon (spells, mundane weapons,
- * alchemical items). A Relic weapon is a full Relic (`equipmentType: 'relic'`) or a weapon with at least
- * one crafted Relic Power; its `(+N)` is the `bonusWeapon` power's rank (full Relics: the numeric
+ * alchemical items). A Relic weapon is a full Relic (`equipmentType: 'relic'`) or an item switched to "Is Relic"
+ * (`relic.isRelic` — attached Relics alone don't count); its `(+N)` is the `bonusWeapon` power's rank (else the numeric
  * `universalWeaponDamageBonus` of their own effects).
  * @param {Item|null} item
  * @returns {number|null}
@@ -20,7 +20,8 @@ export function relicWeaponBonus(item) {
   if (item?.type !== 'equipment') return null;
   const sys = item.system ?? {};
   const powers = sys.relic?.powers ?? [];
-  if (sys.equipmentType !== 'relic' && !powers.length) return null;
+  // The "Is Relic" switch decides (attaching a Relic turns it on; the GM can turn it off again)
+  if (sys.equipmentType !== 'relic' && !sys.relic?.isRelic) return null;
   let bonus = 0;
   for (const p of powers) if (p.family === 'bonusWeapon') bonus = Math.max(bonus, Number(p.rank) || 0);
   if (!bonus) {

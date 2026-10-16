@@ -839,6 +839,27 @@
     white-space: nowrap;
   }
   .vh-inv-val { font-family: $font-number; color: $c-stat; flex: 0 0 auto; }
+  // Relic slots counter (RelicSlots popup on click)
+  .vh-inv-relic {
+    flex: 0 0 auto;
+    width: auto;
+    height: auto;
+    line-height: normal;
+    margin: 0;
+    padding: 0 3px;
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    border: none;
+    background: none;
+    font-family: $font-number;
+    font-size: calc(0.75rem * var(--vh-font-scale));
+    color: $c-white;
+    opacity: 0.6;
+    cursor: pointer;
+    &.is-filled { color: $c-yellow; opacity: 1; }
+    &:hover { opacity: 1; }
+  }
   .vh-inv-range {
     flex: 0 0 auto;
     font-family: $font-number;

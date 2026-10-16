@@ -2475,7 +2475,9 @@
           },
           "isTrinket": {"label": "Trinket", "hint": "Permite conjurar magias enquanto equipado"},
           "noImbue": {"label": "Não pode ser Imbuída", "hint": "Nunca é oferecida como Alvo de Imbuir (ataques naturais ou concedidos, como um Ataque de Sopro)"},
-          "noSlotsWhenWorn": {"label": "Sem Espaço quando vestido", "hint": "Não ocupa Espaço de Inventário enquanto vestido (ex.: uma Mochila: 1 Espaço carregada; vestida, aumenta a capacidade)"}
+          "noSlotsWhenWorn": {"label": "Sem Espaço quando vestido", "hint": "Não ocupa Espaço de Inventário enquanto vestido (ex.: uma Mochila: 1 Espaço carregada; vestida, aumenta a capacidade)"},
+          "isRelic": {"label":"É Relíquia","hint":"Este item conta como Relíquia: atravessa Imunidades que só barram não-Relíquias (\"Físico vs. Não-Relíquias\"). Anexar uma Relíquia liga esta opção; desligada, o item deixa de contar como Relíquia."},
+          "relicSlots": {"label":"Espaços de Relíquia","hint":"Quantas Relíquias podem ser anexadas a este item. Arraste uma Relíquia para um espaço na ficha travada."}
         },
         "IsSupply": "Ração",
         "IsBeverage": "Água / bebida",
@@ -2489,6 +2491,7 @@
         "MaxUsesHint": "0 = uso único (Consumível reduz a quantidade diretamente). Acima de 0, este item carrega esse número de usos/doses/cargas independentes — Consumível esgota esses em vez da quantidade, e nunca apaga o item automaticamente quando chega a 0."
       },
       "Relic": {
+        "Slots": {"NotCumulative":"Bônus não são cumulativos: {kept} permanece ({name} não é maior).","CursedLocked":"{name} é Amaldiçoada: só o Mestre (um Ritual) pode removê-la.","CursedBound":"{name} é Amaldiçoado: continua Vinculado até a maldição ser removida (Mestre).","UsedUp":"{name} ({item}) foi consumida.","CurseSelf":"Amaldiçoado: {name}","CurseIn":"Amaldiçoado: {name} (em {item})","Title":"Relíquias","Counter":"Espaços de Relíquia: {used} de {count} usados","Empty":"Espaço de Relíquia vazio","EmptyHint":"Espaço de Relíquia vazio. Arraste uma Relíquia de um compêndio ou inventário para ele.","Remove":"Remover","NotRelic":"Só Relíquias podem ser anexadas a um espaço de Relíquia.","Mismatch":"{name} só pode ser anexada a: {targets}.","Fabled":"Uma Relíquia Lendária não aceita outras Relíquias.","Full":"Todos os espaços de Relíquia de {name} estão ocupados.","NotOwner":"Você não possui {name}."},
         "FIELDS": {
           "lore": {"label": "Info"},
           "description": {"label": "Descrição"},

@@ -302,10 +302,6 @@
                   <span class='stat-value' data-tooltip='{{system.metalEffect}}'>{{system.metalDisplay}}</span>
                 </div>
               {{/unless}}
-              <div class='locked-stat'>
-                <span class='stat-label'>{{localize "VAGABOND.UI.Labels.Slots"}}:</span>
-                <span class='stat-value'>{{system.slots}}</span>
-              </div>
               {{#unless (eq system.equipmentType 'weapon')}}
                 {{#if system.handsRequired}}
                   <div class='locked-stat'>
@@ -326,6 +322,18 @@
                   {{/if}}
                 </div>
               {{/if}}
+              {{#if (and (ne system.equipmentType 'relic') (or system.relic.isRelic @root.owner))}}
+                <div class='locked-stat'>
+                  <span class='stat-label' data-tooltip='{{localize "VAGABOND.Item.Equipment.FIELDS.isRelic.hint"}}'>{{localize "VAGABOND.Item.Equipment.FIELDS.isRelic.label"}}:</span>
+                  {{#if @root.owner}}
+                    <label class='checkbox-label locked-toggle'>
+                      <input type='checkbox' name='system.relic.isRelic' {{#if system.relic.isRelic}}checked{{/if}} data-dtype='Boolean'/>
+                    </label>
+                  {{else}}
+                    <span class='stat-value'>{{localize "VAGABOND.UI.Labels.Yes"}}</span>
+                  {{/if}}
+                </div>
+              {{/if}}
               {{#if (and system.noImbue (eq system.equipmentType 'weapon'))}}
                 <div class='locked-stat'>
                   <span class='stat-label' data-tooltip='{{localize "VAGABOND.Item.Equipment.FIELDS.noImbue.hint"}}'>{{localize "VAGABOND.Item.Equipment.FIELDS.noImbue.label"}}:</span>
@@ -338,10 +346,6 @@
                   <span class='stat-value'>{{system.quantity}}</span>
                 </div>
               {{/if}}
-              <div class='locked-stat'>
-                <span class='stat-label'>{{localize "VAGABOND.UI.Labels.Cost"}}:</span>
-                <span class='stat-value'>{{system.costDisplay}}</span>
-              </div>
               {{#if system.isConsumable}}
                 <div class='locked-stat'>
                   <span class='stat-label'>{{localize "VAGABOND.UI.Labels.Consumable"}}:</span>
@@ -352,12 +356,21 @@
                 <div class='locked-stat bound-toggle-row'>
                   <span class='stat-label'>{{localize "VAGABOND.Item.Equipment.FIELDS.bound.label"}}:</span>
                   <span class='stat-value'>
-                    <label class='bound-toggle clickable' data-action='toggleBound'>
-                      <i class='fa-solid fa-diamond bound-icon {{#if system.bound}}bound{{else}}unbound{{/if}}'></i>
+                    <label class='bound-toggle clickable' data-action='toggleBound' {{#if @root.relicCurse}}data-tooltip='{{@root.relicCurse.tooltip}}'{{/if}}>
+                      <i class='fa-solid fa-diamond bound-icon {{#if system.bound}}bound{{else}}unbound{{/if}} {{#if @root.relicCurse}}cursed{{/if}}'></i>
                     </label>
                   </span>
                 </div>
               {{/if}}
+              {{! Slots + Cost always last }}
+              <div class='locked-stat'>
+                <span class='stat-label'>{{localize "VAGABOND.UI.Labels.Slots"}}:</span>
+                <span class='stat-value'>{{system.slots}}</span>
+              </div>
+              <div class='locked-stat'>
+                <span class='stat-label'>{{localize "VAGABOND.UI.Labels.Cost"}}:</span>
+                <span class='stat-value'>{{system.costDisplay}}</span>
+              </div>
             </div>
           </div>
         </div>
@@ -377,6 +390,8 @@
           </div>
         </div>
       {{/if}}
+
+      {{> "systems/vagabond/templates/item/parts/relic-slots.hbs" relicSlots=relicSlots}}
 
       {{> "systems/vagabond/templates/item/parts/macro-config.hbs" system=system macroNames=macroNames}}
     </div>
@@ -915,6 +930,16 @@
               <span>{{localize "VAGABOND.Item.Equipment.FIELDS.requiresBound.label"}}</span>
             </label>
           {{/unless}}
+          {{#unless (eq system.equipmentType 'relic')}}
+            <label class='checkbox-label'>
+              <input type='checkbox' name='system.relic.isRelic' {{#if system.relic.isRelic}}checked{{/if}} data-dtype='Boolean'/>
+              <span data-tooltip='{{localize "VAGABOND.Item.Equipment.FIELDS.isRelic.hint"}}'>{{localize 'VAGABOND.Item.Equipment.FIELDS.isRelic.label'}}</span>
+            </label>
+          {{/unless}}
+          <div class='relic-slots-field'>
+            <label class='resource-label' data-tooltip='{{localize "VAGABOND.Item.Equipment.FIELDS.relicSlots.hint"}}'>{{localize 'VAGABOND.Item.Equipment.FIELDS.relicSlots.label'}}</label>
+            <input type='number' name='system.relic.slots' value='{{system.relic.slots}}' min='0' max='12' step='1' data-dtype='Number'/>
+          </div>
         </div>
       </div>
 

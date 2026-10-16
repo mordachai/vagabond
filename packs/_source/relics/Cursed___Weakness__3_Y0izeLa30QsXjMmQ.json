@@ -36,7 +36,10 @@
     "damageTypeOneHand": "-",
     "damageTypeTwoHands": "-",
     "isConsumable": false,
-    "linkedConsumable": ""
+    "linkedConsumable": "",
+    "relic": {
+      "cursed": true
+    }
   },
   "effects": [
     {

@@ -18,6 +18,11 @@ export class RelicHelper {
     return 'any';
   }
 
+  /** Effect keys that, on a weapon host, only count for attacks with that weapon (see `syncHostEffects`). */
+  static isWeaponScopedKey(key) {
+    return /^system\.universalWeapon/.test(key ?? '');
+  }
+
   /** Whether `powerItem` (a `relicPower`-enabled item) can attach to `hostItem`. */
   static canAttach(hostItem, powerItem) {
     const power = powerItem?.system?.relicPower;
@@ -76,7 +81,8 @@ export class RelicHelper {
    * when the Project started).
    */
   static async applyPowerSnapshot(hostItem, snapshot) {
-    const powers = (hostItem.system.relic.powers ?? []).filter(p => p.family !== snapshot.family);
+    // Only a real family replaces (a blank family is not a family: those Relics stack side by side)
+    const powers = (hostItem.system.relic.powers ?? []).filter(p => !snapshot.family || p.family !== snapshot.family);
     powers.push(snapshot);
     await hostItem.update({ 'system.relic.powers': powers });
     await this.syncHostEffects(hostItem);
@@ -99,22 +105,30 @@ export class RelicHelper {
     if (stale.length) await hostItem.deleteEmbeddedDocuments('ActiveEffect', stale);
 
     const creates = [];
+    const isWeaponHost = hostItem.system.equipmentType === 'weapon';
+    const build = (power, change, changes, applicationMode) => ({
+      name: change.name || power.name,
+      img: power.img,
+      type: 'base',
+      system: { changes },
+      transfer: true,
+      flags: {
+        vagabond: {
+          applicationMode,
+          ...(change.relicBoost ? { relicBoost: change.relicBoost } : {}),
+          relicSource: { kind: 'power', id: power.id },
+        },
+      },
+    });
     for (const power of hostItem.system.relic.powers ?? []) {
-      for (const change of power.changes) {
-        creates.push({
-          name: change.name || power.name,
-          img: power.img,
-          type: 'base',
-          system: { changes: change.changes },
-          transfer: true,
-          flags: {
-            vagabond: {
-              applicationMode: change.applicationMode,
-              ...(change.relicBoost ? { relicBoost: change.relicBoost } : {}),
-              relicSource: { kind: 'power', id: power.id },
-            },
-          },
-        });
+      for (const change of power.changes ?? []) {
+        // On a weapon, "(+N) Weapon"-style changes (`system.universalWeapon*`) belong to THAT weapon only:
+        // they become On Use Only instead of boosting every weapon the wielder attacks with.
+        const scoped = isWeaponHost && change.applicationMode === 'when-equipped'
+          ? (change.changes ?? []).filter(c => this.isWeaponScopedKey(c.key)) : [];
+        const rest = (change.changes ?? []).filter(c => !scoped.includes(c));
+        if (scoped.length) creates.push(build(power, change, scoped, 'on-use'));
+        if (rest.length || !scoped.length) creates.push(build(power, change, rest, change.applicationMode));
       }
     }
     // Sockets (Mana Crystal variant, Phase 7): each slotted crystal's own effects

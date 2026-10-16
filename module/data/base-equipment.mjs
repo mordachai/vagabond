@@ -106,6 +106,11 @@ export default class VagabondEquipment extends VagabondItemBase {
       cursed: new fields.BooleanField({ initial: false }),
       consumable: new fields.BooleanField({ initial: false }),
       sockets: new fields.ArrayField(new fields.ObjectField(), { initial: [] }),
+      // Handling switches: the item counts as a Relic ("Physical vs. Non-Relics", see weapon-rules
+      // `relicWeaponBonus`) — the switch alone decides, attaching turns it on — and how many Relics can be
+      // attached to it by drag-and-drop (`RelicSlots`, helpers/relic-slots.mjs). Attached = `powers[]`.
+      isRelic: new fields.BooleanField({ initial: false }),
+      slots: new fields.NumberField({ initial: 0, integer: true, min: 0, max: 12 }),
     });
 
     // Relic POWER item (in the `relics` pack, ~100 of its 140 entries — Bonus –

@@ -2461,7 +2461,9 @@
           },
           "isTrinket": {"label": "Trinket", "hint": "Enables spellcasting while equipped"},
           "noImbue": {"label": "Can't be Imbued", "hint": "Never offered as an Imbue Target (natural or granted attacks such as a Breath Attack)"},
-          "noSlotsWhenWorn": {"label": "No Slot while worn", "hint": "Occupies no Inventory Slot while worn (e.g. a Backpack: 1 Slot carried, worn it adds capacity instead)"}
+          "noSlotsWhenWorn": {"label": "No Slot while worn", "hint": "Occupies no Inventory Slot while worn (e.g. a Backpack: 1 Slot carried, worn it adds capacity instead)"},
+          "isRelic": {"label":"Is Relic","hint":"This item counts as a Relic: it gets through Immunities that only stop non-Relics (\"Physical vs. Non-Relics\"). Attaching a Relic turns it on; turn it off and the item stops counting as a Relic."},
+          "relicSlots": {"label":"Relic Slots","hint":"How many Relics can be attached to this item. Drag a Relic onto a slot of the locked sheet."}
         },
         "IsSupply": "Rations",
         "IsBeverage": "Water / beverage",
@@ -2475,6 +2477,7 @@
         "MaxUsesHint": "0 = single-use (Consumable reduces quantity directly). Above 0, this item carries that many independent uses/doses/charges — Consumable drains those instead of quantity, and never auto-deletes the item when it hits 0."
       },
       "Relic": {
+        "Slots": {"NotCumulative":"Bonuses are not cumulative: {kept} stays ({name} is not higher).","CursedLocked":"{name} is Cursed: only the GM (a Ritual) can remove it.","CursedBound":"{name} is Cursed: it stays Bound until the curse is removed (GM).","UsedUp":"{name} ({item}) was used up.","CurseSelf":"Cursed: {name}","CurseIn":"Cursed: {name} (in {item})","Title":"Relics","Counter":"Relic slots: {used} of {count} used","Empty":"Empty Relic slot","EmptyHint":"Empty Relic slot. Drag a Relic from a compendium or an inventory onto it.","Remove":"Remove","NotRelic":"Only Relics can be attached to a Relic slot.","Mismatch":"{name} only attaches to: {targets}.","Fabled":"A Fabled Relic takes no other Relics.","Full":"Every Relic slot of {name} is taken.","NotOwner":"You don't own {name}."},
         "FIELDS": {
           "lore": {"label": "Lore"},
           "description": {"label": "Description"},

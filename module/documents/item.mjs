@@ -282,6 +282,11 @@ export class VagabondItem extends Item {
     else if (this.system.isConsumable) {
       await VagabondItem._consumeCharge(this);
     }
+    // Consumable Relics attached to this item are used up by its use
+    if (this.system.relic?.powers?.some(p => p.consumable)) {
+      const { RelicSlots } = await import('../helpers/relic-slots.mjs');
+      await RelicSlots.spendConsumables(this);
+    }
   }
 
   /**
@@ -636,6 +641,14 @@ export class VagabondItem extends Item {
     // player just unbound.
     if (this.type === 'equipment' && foundry.utils.hasProperty(changed, 'system.relic.boundTo')) {
       const boundTo = foundry.utils.getProperty(changed, 'system.relic.boundTo');
+      // Cursed (its own curse or a Cursed Relic attached): permanently Bound until the curse is removed
+      // (book: a Ritual) — only the GM can unbind. Single choke point for sheet diamond, menus, macros.
+      const relic = this.system.relic ?? {};
+      const cursed = relic.cursed || (relic.powers ?? []).some(p => p.cursed);
+      if (!boundTo && relic.boundTo && cursed && !game.user.isGM) {
+        ui.notifications.warn(game.i18n.format('VAGABOND.Item.Relic.Slots.CursedBound', { name: this.name }));
+        return false;
+      }
       foundry.utils.setProperty(changed, 'system.bound', !!boundTo);
     }
 

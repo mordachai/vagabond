@@ -19,6 +19,7 @@ import { EnrichmentHelper } from '../helpers/enrichment-helper.mjs';
 import { VagabondDamagePipeline } from '../helpers/damage-pipeline.mjs';
 import { AlchemyLab } from '../helpers/alchemy-lab.mjs';
 import { FeatureOrder } from '../helpers/feature-order.mjs';
+import { RelicSlots } from '../helpers/relic-slots.mjs';
 
 /** Inventory tab groupings, in display order, keyed by equipmentType. */
 const INV_GROUPS = [
@@ -193,6 +194,7 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
       toggleSpellFavorite: this._onToggleSpellFavorite,
       toggleEquip: this._onToggleEquip,
       usePip: this._onUsePip,
+      relicSlots: this._onRelicSlots,
       // Alchemy panel (shared lab core; lab UI state lives in `this._alchemyLab`)
       ...AlchemyLab.ACTIONS,
     },
@@ -702,6 +704,8 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
       row.properties = item.system?.properties?.length ? item.system.propertiesDisplay : '';
     }
     row.inert = !!item.flags?.vagabond?.mix?.inert;
+    const relic = RelicSlots.view(item);
+    if (relic) row.relicSlots = { used: relic.used, count: relic.count };
     return row;
   }
 
@@ -1304,6 +1308,12 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
   static async _onUsePip(event, target) {
     event.stopPropagation();
     await ItemSections.onUsePipClick(target, null);
+  }
+
+  /** Inventory row Relic counter: the item's Relic slots popup (RelicSlots). */
+  static _onRelicSlots(event, target) {
+    const item = this.actor.items.get(target.dataset.itemId);
+    if (item) RelicSlots.openPopup(event, item);
   }
 
   /** Open the actor sheet without closing the HUD. */

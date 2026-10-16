@@ -419,6 +419,11 @@ export class RollHandler {
       // A weapon throw already spends quantity in activateHandItem; a thrown
       // Alchemical Item's container breaks, so it spends a charge here.
       if (!thrown || alchemicalThrow) await item.handleConsumption();
+      // A plain weapon throw skips handleConsumption, but its Consumable Relics are still used up
+      else if (item.system.relic?.powers?.some(p => p.consumable)) {
+        const { RelicSlots } = await import('../../helpers/relic-slots.mjs');
+        await RelicSlots.spendConsumables(item);
+      }
       return attackResult.roll;
     } catch (error) {
       console.error(error);

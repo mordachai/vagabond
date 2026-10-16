@@ -225,7 +225,11 @@ export class VagabondActor extends Actor {
         // 'upgrade' | 'downgrade' | 'custom'). CONST.ACTIVE_EFFECT_CHANGE_TYPES maps
         // type → default PRIORITY (lowercase keys), so it is NOT a mode enum.
         // Formula strings ("@attributes.level.value") resolve against the roll data.
-        const num = this._resolveChangeNumber(value, modifiedData);
+        let num = this._resolveChangeNumber(value, modifiedData);
+        // Merchant Midas Touch: an on-use Relic bonus grows like the passive ones (see `_applyRelicBoost`)
+        const boostStep = Number(effect.flags?.vagabond?.relicBoost) || 0;
+        const boost = Number(this.system.relicBoost) || 0;
+        if (boostStep && boost > 0 && type === 'add' && num > 0) num += boostStep * boost;
         switch (type) {
           case 'add':
             target[finalKey] = currentValue + num;

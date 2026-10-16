@@ -1,5 +1,6 @@
 import * as ItemSections from '../../helpers/item-sections.mjs';
 import { buildItemMenuItems } from '../../helpers/item-menu.mjs';
+import { RelicSlots } from '../../helpers/relic-slots.mjs';
 
 /**
  * Handler for inventory-related functionality in the character sheet.
@@ -64,6 +65,7 @@ export class InventoryHandler {
         stackSlots: EquipmentHelper.itemStackCost(item),
         requiresBound: item.system.requiresBound || false,
         bound: item.system.bound || false,
+        curse: RelicSlots.curseInfo(item),
         usesPips: ItemSections.usesPipsArray(item),
       };
 

@@ -11,6 +11,7 @@ import { CoinTransferDialog } from '../applications/coin-transfer-dialog.mjs';
 import { levelTableCap } from '../helpers/homebrew-config.mjs';
 import { CurrencyHelper } from '../helpers/currency-helper.mjs';
 import { ContextMenuHelper } from '../helpers/context-menu-helper.mjs';
+import { RelicSlots } from '../helpers/relic-slots.mjs';
 
 const { api, sheets } = foundry.applications;
 const DragDrop = foundry.applications.ux.DragDrop;
@@ -142,6 +143,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       toggleResistedStatus: this._onToggleResistedStatus,
       applyCoating: this._onApplyCoating,
       usePip: this._onUsePip,
+      relicSlot: this._onRelicSlot,
       clearImbue: this._onClearImbue,
       clearItemMacro: this._onClearItemMacro,
     },
@@ -282,6 +284,8 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       countsAsLabel: (this.item.system.countsAs ?? []).filter(Boolean)
         .map(m => CONFIG.VAGABOND.materialWeaknesses?.[m] ? game.i18n.localize(CONFIG.VAGABOND.materialWeaknesses[m]) : m)
         .join(', '),
+      relicSlots: RelicSlots.view(this.item),
+      relicCurse: RelicSlots.curseInfo(this.item),
     };
 
     // Weapons: the skill attacks roll with (preferred, else default) and every
@@ -2673,6 +2677,13 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
   async _onDropItem(event, data) {
     if (!this.item.isOwner) return false;
 
+    // 0. A Relic onto a Relic slot (or anywhere in the Relic section → first free slot)
+    const relicZone = event.target.closest('.relic-slots-section');
+    if (relicZone) {
+      const slot = event.target.closest('[data-relic-slot]');
+      return RelicSlots.drop(this.item, data, slot ? Number(slot.dataset.relicSlot) : null);
+    }
+
     // 0a. Granted items (weapons, natural attacks…) onto a trait/feature "Items" grant zone
     const itemGrantZone = event.target.closest('.item-grant-drop-zone');
     if (itemGrantZone) return GrantsHandlers.dropGrantItem(this, itemGrantZone, data);
@@ -3310,6 +3321,11 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
    */
   static async _onUsePip(event, target) {
     await ItemSections.onUsePipClick(target, this.document);
+  }
+
+  /** Relic slot click: the slots popup with that slot's details (RelicSlots). */
+  static _onRelicSlot(event, target) {
+    RelicSlots.openPopup(event, this.document, Number(target.dataset.relicSlot));
   }
 
   /**

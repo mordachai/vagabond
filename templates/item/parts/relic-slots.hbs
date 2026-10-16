@@ -1,0 +1,17 @@
+{{! Relic slots (RelicSlots.view): drop a Relic on a slot to attach it, click a slot for its details }}
+{{#if relicSlots}}
+  <div class='locked-section relic-slots-section'>
+    <h3 class='section-header'><i class='fa-solid fa-khanda'></i> {{localize 'VAGABOND.Item.Relic.Slots.Title'}}</h3>
+    <div class='relic-slot-row' style="--relic-slots: {{relicSlots.count}}; --relic-empty-art: url('{{relicSlots.emptyArt}}')">
+      {{#each relicSlots.slots}}
+        <div class='relic-slot-cell'>
+          <button type='button' class='relic-slot {{#if filled}}is-filled{{/if}} {{#if cursed}}is-cursed{{/if}}' data-action='relicSlot' data-relic-slot='{{index}}'
+            data-tooltip='{{#if filled}}{{name}}{{else}}{{localize "VAGABOND.Item.Relic.Slots.Empty"}}{{/if}}'>
+            {{#if filled}}<img src='{{img}}' alt=''>{{else}}<i class='fa-solid fa-khanda'></i>{{/if}}
+          </button>
+          {{#if filled}}<span class='relic-slot-name'>{{name}}</span>{{/if}}
+        </div>
+      {{/each}}
+    </div>
+  </div>
+{{/if}}

@@ -386,6 +386,10 @@
       -webkit-text-stroke: 1px $c-dark-bluey;
       opacity: 0.6;
     }
+
+    // Cursed: red diamond, hover tooltip names the curse
+    &.is-cursed { pointer-events: auto; cursor: help; }
+    .cursed { color: $c-red; opacity: 1; }
   }
 
   .item-uses-pips {
@@ -542,6 +546,14 @@
         color: $c-yellow;
         -webkit-text-stroke: 1px $c-dark-bluey;
         opacity: 0.8;
+      }
+
+      // Cursed: red instead of yellow, hover included
+      .bound-icon.cursed,
+      &:hover .bound-icon.cursed {
+        color: $c-red;
+        -webkit-text-stroke: 1px $c-dark-bluey;
+        opacity: 1;
       }
     }
   }

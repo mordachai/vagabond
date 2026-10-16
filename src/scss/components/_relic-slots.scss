@@ -1,0 +1,144 @@
+// ==========================================
+// Relic slots (RelicSlots, helpers/relic-slots.mjs)
+// Top level: item sheet locked view AND the popup appended to document.body
+// ==========================================
+
+.relic-slot-row {
+  display: grid;
+  grid-template-columns: repeat(var(--relic-slots, 1), minmax(0, 84px));
+  justify-content: center;
+  gap: 15px;
+  width: 100%;
+
+  align-items: start;
+
+  .relic-slot {
+    position: relative;
+    // Always square: width from the grid column, height from the ratio (never stretched by the row/cell)
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    max-height: none;
+    flex: none;
+    align-self: start;
+    line-height: normal;
+    aspect-ratio: 1 / 1;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: 2px solid $c-dark-yellow;
+    border-radius: 6px;
+    background: rgba(0, 0, 0, 0.55);
+    color: $c-dark-yellow;
+    font-size: 40px;
+    cursor: pointer;
+
+    // Empty slot: the rune art, desaturated and faint, behind the khanda
+    &:not(.is-filled)::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--relic-empty-art) center / cover no-repeat;
+      filter: grayscale(1);
+      opacity: 0.18;
+      pointer-events: none;
+    }
+
+    i { position: relative; }
+
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      border: none;
+    }
+
+    &:hover,
+    &.is-selected { border-color: $c-yellow; box-shadow: 0 0 8px -1px $c-yellow; }
+    &.is-cursed { border-color: $c-red; }
+  }
+
+  // Item sheet: slot + the Relic's name under it (2 lines max)
+  .relic-slot-cell {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
+    min-width: 0;
+  }
+
+  .relic-slot-name {
+    font-size: 12px;
+    line-height: 1.2;
+    text-align: center;
+    overflow-wrap: anywhere;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+.relic-slots-section {
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+}
+
+.inventory-mini-sheet.relic-slots-popup {
+  width: 260px;
+  padding: 8px 10px;
+
+  .relic-slot-row { grid-template-columns: repeat(var(--relic-slots, 1), minmax(0, 40px)); margin-bottom: 8px; font-size: 16px; }
+
+  .relic-slot-detail-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    img { width: 40px; height: 40px; flex: 0 0 auto; border-radius: 4px; border: 1px solid $c-dark; object-fit: cover; }
+
+    .relic-slot-detail-title {
+      flex: 1;
+      min-width: 0;
+      strong { display: block; font-size: 15px; }
+    }
+
+    .relic-slot-facts {
+      display: flex;
+      gap: 10px;
+      font-size: 12px;
+      b { font-family: $font-number; font-weight: normal; }
+    }
+
+    .relic-slot-cursed { flex: 0 0 auto; color: $c-red; cursor: help; }
+
+    .relic-slot-remove {
+      flex: 0 0 auto;
+      width: auto;
+      height: auto;
+      line-height: normal;
+      margin: 0;
+      padding: 2px 6px;
+      font-size: 12px;
+    }
+  }
+
+  .relic-slot-description {
+    margin-top: 4px;
+    font-size: 13px;
+    line-height: 1.35;
+    p { margin: 0; }
+  }
+
+  .relic-slot-hint { margin: 0; font-size: 12px; font-style: italic; opacity: 0.8; }
+}

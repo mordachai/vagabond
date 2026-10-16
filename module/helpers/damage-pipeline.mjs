@@ -137,8 +137,11 @@ export class VagabondDamagePipeline {
       const buckets = [];
       if (BONUS_BUCKETS[sourceType]) buckets.push(BONUS_BUCKETS[sourceType]);
       if (sourceType === 'npc' && weaponLinked) buckets.push(BONUS_BUCKETS.weapon);
+      // Read from the roll data when it carries the field: it is the actor's value plus this item's
+      // on-use effects (an attached Relic's "(+1) Weapon" only counts for attacks with that weapon).
+      const fromRollData = (key) => rollData?.[key] ?? actor.system[key];
       for (const bucket of buckets) {
-        formula = this._appendBonusFields(formula, actor.system[bucket.flat], actor.system[bucket.dice]);
+        formula = this._appendBonusFields(formula, fromRollData(bucket.flat), fromRollData(bucket.dice));
       }
       formula = this._appendBonusFields(formula, actor.system.universalDamageBonus, actor.system.universalDamageDice);
 
