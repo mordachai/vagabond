@@ -41,6 +41,16 @@ Turn any weapon, armor, gear or alchemical into a Relic. Give it Relic Slots, dr
 
 ---
 
+### **Changed:** Loot and Animations
+
+Two integrations got simpler and more modern:
+
+- **Canvas Loot replaces Item Piles.** Drop, throw, pick up and hand items over right on the map, with Vagabond chat cards and a Show button that pans to the loot. Easy to set up, see [Canvas Loot integration](#canvas-loot-integration).
+- **Weapons and items animate with Automated Animations.** The old per-item Item FX is gone: weapons, alchemicals and relics now use pure [Automated Animations](#automated-animations-integration), and Vagabond ships a ready-made menu for every compendium weapon (English and Portuguese). Just import it.
+- **Spells keep their own FX.** Spell animations stay where they were, in the game settings: **Vagabond Settings > Visual FX** (see the [Sequencer Animations Panel](#new-feature-sequencer-animations-panel-youtube-video-below)).
+
+---
+
 ### **New features:** Build Guides and Alchemy Lab [YouTube video below](https://youtu.be/USKwZxF5lJA)
 
 [![Build Guides and Alchemy Lab](https://img.youtube.com/vi/USKwZxF5lJA/0.jpg)](https://youtu.be/USKwZxF5lJA)
@@ -193,8 +203,10 @@ New Casting dialog to help the player better understand how magic flows in game,
 
 ---
 
-### **New feature:** Item FX — Per-Item Animations:
-Weapons, alchemicals, and relics can now have their own Sequencer animations configured directly on the item sheet. Set different files and sounds for hits and misses, choose between melee (impact at target) and ranged (beam to target) styles. For weapons the animation type is derived automatically from the weapon skill. Requires the Sequencer module.
+### ~~**New feature:** Item FX — Per-Item Animations:~~
+_Removed: weapons, alchemicals and relics now animate with [Automated Animations](#automated-animations-integration)._
+
+~~Weapons, alchemicals, and relics can now have their own Sequencer animations configured directly on the item sheet. Set different files and sounds for hits and misses, choose between melee (impact at target) and ranged (beam to target) styles. For weapons the animation type is derived automatically from the weapon skill. Requires the Sequencer module.~~
 
 <img width="498" height="905" alt="image" src="https://github.com/user-attachments/assets/15c8ba80-a0d2-4343-b6c3-5221cf7f096d" />
 
