@@ -348,7 +348,7 @@ Weapon, alchemical and relic animations come from the [Automated Animations](htt
 
 <img width="1000" alt="image" src="https://github.com/user-attachments/assets/7dbd3cab-5d27-456a-84c5-b2ee7e2a2a56" />
 
-**Settings > Automated Animations > Launch Menu > Menu Manager > Overwrite Menu > Import**, then pick the file for your language:
+**Settings > Automated Animations > Launch Menu > Menu Manager > Overwrite Menu > Import > Check All**, then pick the file for your language:
 
 - English: [AutomatedAnimations-en-vagabond.json](https://github.com/mordachai/vagabond/raw/main/assets/config/AutomatedAnimations-en-vagabond.json)
 - Português (Brasil): [AutomatedAnimations-ptBR-vagabond.json](https://github.com/mordachai/vagabond/raw/main/assets/config/AutomatedAnimations-ptBR-vagabond.json)
