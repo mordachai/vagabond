@@ -13,7 +13,12 @@
     "targetObjects": false,
     "fxSchool": "arcane",
     "locked": true,
-    "focusOnCast": true
+    "focusOnCast": true,
+    "focusUpkeep": {
+      "mana": 1,
+      "perTarget": false,
+      "onCast": false
+    }
   },
   "effects": [],
   "folder": null,

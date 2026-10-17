@@ -542,32 +542,11 @@ export class SpellHandler {
     // Use the dialog-provided state for this cast
     const state = finalState;
     let _spellObjectsMeta = null;
-
-    // Recompute costs from the explicit state (do not read this.spellStates)
     const { SpellCastDialog } = await import('../../applications/spell-cast-dialog.mjs');
-    const baseCosts = SpellCastDialog.calculateCosts(spell, this.actor, state);
-    const finalTotal = Math.max(0, baseCosts.totalCost + manaOverrideDelta);
-    const costs = { ...baseCosts, totalCost: finalTotal };
 
     // Validation: Must select delivery
     if (!state.deliveryType) {
       ui.notifications.warn('Select a delivery type first!');
-      return;
-    }
-
-    // Validation: Enough mana
-    if (costs.totalCost > this.actor.system.mana.current) {
-      ui.notifications.error(
-        `Not enough mana! Need ${costs.totalCost}, have ${this.actor.system.mana.current}.`
-      );
-      return;
-    }
-
-    // Validation: Within casting max
-    if (costs.totalCost > this.actor.system.mana.castingMax) {
-      ui.notifications.error(
-        `Cost exceeds casting max! Max: ${this.actor.system.mana.castingMax}, Cost: ${costs.totalCost}.`
-      );
       return;
     }
 
@@ -592,6 +571,34 @@ export class SpellHandler {
     const gateMessage = castGateMessage({ actor: this.actor, spell, state, tokens: castTargets });
     if (gateMessage) {
       ui.notifications.warn(gateMessage);
+      return;
+    }
+
+    // Focus switch of this Cast. Dialog-off casts carry no focusOn: a Focus on Cast Spell whose Cast includes
+    // its Effect Focuses, anything else leaves the Focus alone. Needed before the cost (Focus Mana on Cast).
+    let focusOn = typeof state.focusOn === 'boolean' ? state.focusOn : null;
+    if (focusOn === null && spell.system.focusOnCast && SpellCastDialog.castOpensFocus(spell, state)) focusOn = true;
+    // Focus Mana per Target (Ward) is counted on the Cast's resolved Targets
+    state.focusTargetCount = castTargets.length;
+
+    // Recompute costs from the explicit state (do not read this.spellStates)
+    const baseCosts = SpellCastDialog.calculateCosts(spell, this.actor, { ...state, focusOn });
+    const finalTotal = Math.max(0, baseCosts.totalCost + manaOverrideDelta);
+    const costs = { ...baseCosts, totalCost: finalTotal };
+
+    // Validation: Enough mana
+    if (costs.totalCost > this.actor.system.mana.current) {
+      ui.notifications.error(
+        `Not enough mana! Need ${costs.totalCost}, have ${this.actor.system.mana.current}.`
+      );
+      return;
+    }
+
+    // Validation: Within casting max
+    if (costs.totalCost > this.actor.system.mana.castingMax) {
+      ui.notifications.error(
+        `Cost exceeds casting max! Max: ${this.actor.system.mana.castingMax}, Cost: ${costs.totalCost}.`
+      );
       return;
     }
 
@@ -776,13 +783,6 @@ export class SpellHandler {
     }
 
     // Focus from the Cast dialog: committed here, once the Cast is resolved (a failed Cast never Focuses).
-    // Dialog-off casts carry no focusOn: a Focus on Cast Spell whose Cast includes its Effect Focuses,
-    // anything else leaves the Focus alone.
-    let focusOn = typeof state.focusOn === 'boolean' ? state.focusOn : null;
-    if (focusOn === null && spell.system.focusOnCast) {
-      const { SpellCastDialog } = await import('../../applications/spell-cast-dialog.mjs');
-      if (SpellCastDialog.castOpensFocus(spell, state)) focusOn = true;
-    }
     if (focusOn !== null) {
       await SpellHandler.commitCastFocus(this.actor, spell, { focusOn, isSuccess, isCritical });
     }
@@ -792,17 +792,25 @@ export class SpellHandler {
     // Deduct mana. Success (or a bypass cast, which is always "success") always
     // pays full cost; a failed casting check pays per the spellManaOnCastFail
     // world setting (0 / full / half-round-up).
+    // Focus Mana on Cast (FocusUpkeep, Ward) is paid only when the Cast Focuses.
     const failMode = game.settings.get('vagabond', 'spellManaOnCastFail');
-    let manaCost = costs.totalCost;
+    const focusCost = costs.focusCost ?? 0;
+    const castCost = Math.max(0, costs.totalCost - focusCost);
+    let manaCost = castCost;
     if (!isSuccess) {
-      manaCost = failMode === 'fullOnFail' ? costs.totalCost
-        : failMode === 'halfOnFail' ? Math.ceil(costs.totalCost / 2)
+      manaCost = failMode === 'fullOnFail' ? castCost
+        : failMode === 'halfOnFail' ? Math.ceil(castCost / 2)
         : 0; // successOnly
     }
-    if (manaCost > 0) {
-      const newMana = this.actor.system.mana.current - manaCost;
-      await this.actor.update({ 'system.mana.current': newMana });
+    if (state.focusHeld) manaCost += focusCost;
+    const castUpdate = {};
+    if (manaCost > 0) castUpdate['system.mana.current'] = this.actor.system.mana.current - manaCost;
+    // Per-Target Focus Mana each Round falls back to this count (FocusUpkeep.roundCost)
+    const { FocusUpkeep } = await import('../../helpers/focus-upkeep.mjs');
+    if (state.focusHeld && FocusUpkeep.rule(spell)?.perTarget) {
+      castUpdate[`flags.vagabond.focusTargets.${spell.id}`] = Math.max(1, costs.focusTargets ?? castTargets.length);
     }
+    if (Object.keys(castUpdate).length) await this.actor.update(castUpdate);
     // Real amount charged (may differ from costs.totalCost on a partial-fail
     // spend) — threaded into the chat card / macro scope below.
     costs.manaSpent = manaCost;

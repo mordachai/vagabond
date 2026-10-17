@@ -18,7 +18,13 @@
       "runAsGM": true
     },
     "targetBeings": true,
-    "targetObjects": false
+    "targetObjects": false,
+    "focusUpkeep": {
+      "mana": 1,
+      "perTarget": true,
+      "onCast": true
+    },
+    "wardUpcast": true
   },
   "effects": [],
   "folder": null,

@@ -2071,7 +2071,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   background: var(--vagabond-c-bluey);
 }
 
-/* Protector: Protect buttons on a failed Reflex / Defense result (same look as Apply) */
+/* Protector / Ward / Focus Mana buttons on result cards (same look as Apply) */
 .protect-buttons-row {
   display: flex;
   flex-direction: column;
@@ -2084,9 +2084,84 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   text-align: center;
 }
 
+/* Ward upcast: damage card buttons sit under the Defense shields */
+.ward-buttons-row {
+  margin-top: 6px;
+}
+
+/* Ward card: Mana stars (click to pick) + dice count + Ward Off! */
+.ward-prompt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.ward-prompt .ward-incoming {
+  margin: 0;
+  text-align: center;
+}
+.ward-prompt .ward-mana-pips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px;
+}
+.ward-prompt button.ward-mana-pip {
+  width: 30px;
+  height: 30px;
+  line-height: normal;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.35);
+  background: rgba(0, 0, 0, 0.08);
+  color: rgba(0, 0, 0, 0.3);
+  font-size: 15px;
+  cursor: pointer;
+  transition: color 0.15s, box-shadow 0.15s, background 0.15s;
+}
+.ward-prompt button.ward-mana-pip.is-on {
+  color: var(--vagabond-c-chat-yellow);
+  background: var(--vagabond-c-dark);
+  box-shadow: 0 0 6px -1px var(--vagabond-c-chat-yellow);
+}
+.ward-prompt .ward-dice {
+  font-family: "Germania", serif;
+  font-size: 20px;
+}
+.ward-prompt .protect-buttons-row {
+  width: 100%;
+}
+
+/* Ward roll card: Mana spent → dice → reduction */
+.ward-result {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin: 6px 0;
+  font-family: "Germania", serif;
+  font-size: 18px;
+}
+.ward-result .ward-result-mana i {
+  color: var(--vagabond-dark-yellow);
+}
+.ward-result .ward-result-total {
+  font-size: 22px;
+}
+
+.damage-component.ward-component i {
+  color: var(--vagabond-dark-yellow);
+}
+
 /* Apply Save Damage Button (outside card-actions, in save result description) */
 .save-apply-button-container button.vagabond-apply-save-damage-button,
-.protect-buttons-row button.vagabond-protect-button {
+.protect-buttons-row button.vagabond-protect-button,
+.protect-buttons-row button.vagabond-ward-button,
+.protect-buttons-row button.vagabond-ward-off-button,
+.protect-buttons-row button.vagabond-focus-upkeep-button {
   width: 100%;
   background: transparent !important;
   background-image: url("../assets/ui/chat/apply-direct-bg.webp") !important;
@@ -2112,17 +2187,26 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   line-height: 1.2;
 }
 .save-apply-button-container button.vagabond-apply-save-damage-button:hover,
-.protect-buttons-row button.vagabond-protect-button:hover {
+.protect-buttons-row button.vagabond-protect-button:hover,
+.protect-buttons-row button.vagabond-ward-button:hover,
+.protect-buttons-row button.vagabond-ward-off-button:hover,
+.protect-buttons-row button.vagabond-focus-upkeep-button:hover {
   filter: brightness(1.6);
 }
 .save-apply-button-container button.vagabond-apply-save-damage-button:disabled,
-.protect-buttons-row button.vagabond-protect-button:disabled {
+.protect-buttons-row button.vagabond-protect-button:disabled,
+.protect-buttons-row button.vagabond-ward-button:disabled,
+.protect-buttons-row button.vagabond-ward-off-button:disabled,
+.protect-buttons-row button.vagabond-focus-upkeep-button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
   filter: grayscale(1);
 }
 .save-apply-button-container button.vagabond-apply-save-damage-button i,
-.protect-buttons-row button.vagabond-protect-button i {
+.protect-buttons-row button.vagabond-protect-button i,
+.protect-buttons-row button.vagabond-ward-button i,
+.protect-buttons-row button.vagabond-ward-off-button i,
+.protect-buttons-row button.vagabond-focus-upkeep-button i {
   color: var(--c-yellow-text) !important;
   flex-shrink: 0;
 }

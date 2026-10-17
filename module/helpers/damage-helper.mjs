@@ -7,6 +7,7 @@ import { WitchHelper } from './witch-helper.mjs';
 import { DefenseHelper } from './defense-helper.mjs';
 import { NpcRules } from './npc-rules.mjs';
 import { FocusLink } from './focus-link.mjs';
+import { WardHelper } from './ward-helper.mjs';
 
 /**
  * Universal Damage Helper
@@ -1722,6 +1723,10 @@ ${npcOnly ? '' : `
         damageAfterSave = this._removeHighestDie(rollTermsData);
         saveReduction = effectiveDamageAmount - damageAfterSave;
       }
+      // Ward upcast rolled against this damage for this Target (before Armor)
+      const ward = WardHelper.reductionFor(WardHelper.messageIdOf(button), targetActor.uuid);
+      const wardCut = Math.min(ward.amount, damageAfterSave);
+      const damageAfterWard = damageAfterSave - wardCut;
 
       // Apply armor/immune/weak modifiers and track armor reduction.
       // The actual rolled dice count (from the serialized roll terms) feeds the
@@ -1730,7 +1735,7 @@ ${npcOnly ? '' : `
       const rolledDiceCount = rollTermsData.terms.reduce((n, t) =>
         n + (t.type === 'Die' ? (t.results ?? []).filter(r => r.active !== false).length : 0), 0);
       const damageBreakdown = this.calculateFinalDamageDetailed(
-        targetActor, damageAfterSave, damageType, sourceItem, { rolledDiceCount, attackerActor: sourceActor, isCrit: attackWasCrit }
+        targetActor, damageAfterWard, damageType, sourceItem, { rolledDiceCount, attackerActor: sourceActor, isCrit: attackWasCrit }
       );
       const baseAfterFinal = damageBreakdown.final;
       const armorReduction = damageBreakdown.armorReduction;
@@ -1755,7 +1760,7 @@ ${npcOnly ? '' : `
           const currentHP = targetActor.system.health?.value || 0;
           const newHP = Math.max(0, currentHP - _autoFinal);
           await targetActor.update({ 'system.health.value': newHP });
-          Hooks.callAll('vagabond.postDamageApply', { actor: targetActor, amount: _autoFinal, incoming: damageAfterSave, rolledDiceCount, damageType, sourceItem, attackerActor: sourceActor, oldHp: currentHP, newHp: newHP });
+          Hooks.callAll('vagabond.postDamageApply', { actor: targetActor, amount: _autoFinal, incoming: damageAfterWard, rolledDiceCount, damageType, sourceItem, attackerActor: sourceActor, oldHp: currentHP, newHp: newHP });
         }
       }
 
@@ -1800,10 +1805,20 @@ ${npcOnly ? '' : `
         // Protector perk: a failed Reflex Save lets a Close ally use their Defense property
         (saveType === 'reflex' && !isSuccess)
           ? this.createProtectButtons(targetActor, {
-              incoming: damageAfterSave, damageType, actorId, itemId, actionIdx, attackWasCrit,
+              incoming: damageAfterWard, damageType, actorId, itemId, actionIdx, attackWasCrit,
               priorFinal: finalDamage, weakExtra: finalDamage - baseAfterFinal, autoApplied: autoApply,
             })
-          : ''
+          : '',
+        {
+          ward: { amount: wardCut, title: ward.title },
+          // A Ward rolled after this card recomputes from here (WardHelper.wardOff)
+          resultFlags: { damageResult: {
+            damageMessageId: WardHelper.messageIdOf(button), defenderUuid: targetActor.uuid,
+            incoming: damageAfterSave, wardAmount: wardCut, priorFinal: finalDamage,
+            weakExtra: finalDamage - baseAfterFinal, autoApplied: autoApply, damageType,
+            sourceActorId: actorId, sourceItemId: itemId, attackWasCrit,
+          } },
+        }
       );
       // Luck is managed by the save-crit-toggle — do not auto-grant here
 
@@ -1993,9 +2008,13 @@ ${npcOnly ? '' : `
         FighterHelper.onDefended(targetActor);
       }
       const shieldReduction = shieldRoll?.total ?? 0;
+      // Ward upcast rolled against this damage for this Target (before Armor, after the Defense dice)
+      const ward = WardHelper.reductionFor(WardHelper.messageIdOf(button), targetActor.uuid);
+      const afterShield = Math.max(0, damageAmount - shieldReduction);
+      const wardCut = Math.min(ward.amount, afterShield);
 
       const breakdown = this.calculateFinalDamageDetailed(
-        targetActor, Math.max(0, damageAmount - shieldReduction), damageType, sourceItem, { attackerActor: sourceActor, isCrit: attackWasCrit }
+        targetActor, afterShield - wardCut, damageType, sourceItem, { attackerActor: sourceActor, isCrit: attackWasCrit }
       );
       let finalDamage = breakdown.final;
       if (!weaknessPreRolled && this._isWeakTo(targetActor, damageType, sourceItem, sourceActor)) {
@@ -2019,7 +2038,7 @@ ${npcOnly ? '' : `
 
       // A failed Check is a failed Reflex Save → Close Protectors may step in
       const protectHtml = check.isSuccess ? '' : this.createProtectButtons(targetActor, {
-        incoming: damageAmount, damageType, actorId, itemId, actionIdx, attackWasCrit,
+        incoming: Math.max(0, damageAmount - wardCut), damageType, actorId, itemId, actionIdx, attackWasCrit,
         priorFinal: finalDamage, weakExtra, autoApplied: autoApply,
       });
 
@@ -2032,6 +2051,12 @@ ${npcOnly ? '' : `
           ? this.createApplySaveDamageButton(targetActor.uuid, targetActor.name, finalDamage, damageType, statusContext)
           : '',
         extraHtml: protectHtml,
+        ward: { amount: wardCut, title: ward.title },
+        resultFlags: { damageResult: {
+          damageMessageId: WardHelper.messageIdOf(button), defenderUuid: targetActor.uuid,
+          incoming: afterShield, wardAmount: wardCut, priorFinal: finalDamage, weakExtra, autoApplied: autoApply,
+          damageType, sourceActorId: actorId, sourceItemId: itemId, attackWasCrit,
+        } },
       });
       if (check.isCritical) await VagabondChatCard._grantLuckOnCrit(targetActor, message, 'Critical');
 
@@ -2093,6 +2118,15 @@ ${npcOnly ? '' : `
           <i class="fa-solid fa-shield-heart"></i> ${esc(label)}: ${esc(p.name)}
         </button>`).join('');
     return `<div class="protect-buttons-row">${buttons}</div>`;
+  }
+
+  /**
+   * Ward upcast buttons for a damage card (WardHelper.createRow) — never for restorative damage.
+   * @returns {string}
+   */
+  static createWardRow(targetsAtRollTime, damageAmount, damageType) {
+    if (this.isRestorativeDamageType(damageType)) return '';
+    return WardHelper.createRow(targetsAtRollTime, damageAmount, damageType);
   }
 
   /**
@@ -2195,16 +2229,18 @@ ${npcOnly ? '' : `
       .addRoll(o.check.roll, o.check.difficulty)
       .setOutcome(o.check.isSuccess ? 'PASS' : 'FAIL', o.check.isCritical);
 
-    const names = o.shieldWeapons.map(w => w.name).join(' + ');
+    const names = o.shieldName ?? o.shieldWeapons.map(w => w.name).join(' + ');
     const shieldTitle = o.shieldRoll
       ? `${names}: ${o.shieldRoll.formula}${o.shieldRoll._perDieBonusTotal ? ` + ${o.shieldRoll._perDieBonusTotal}` : ''} = ${o.shieldReduction}`
       : '';
     const calc = this._buildDamageCalculation(
       o.incoming, 0, o.armorReduction, o.finalDamage, o.damageType, 'reflex', damageActor,
       o.autoApplied, false, o.path, o.flankedBonus,
-      { title: game.i18n.localize('VAGABOND.Chat.Defense'), shieldReduction: o.shieldReduction, shieldTitle }
+      { title: o.calcTitle ?? game.i18n.localize('VAGABOND.Chat.Defense'), shieldReduction: o.shieldReduction, shieldTitle,
+        ...(o.ward?.amount > 0 ? { wardReduction: o.ward.amount, wardTitle: o.ward.title } : {}) }
     );
     card.setDescription((card.data.description || '') + calc + (o.applyButton || '') + (o.extraHtml || ''));
+    if (o.resultFlags) card.data.extraFlags = o.resultFlags;
     return await card.send();
   }
 
@@ -2378,7 +2414,9 @@ ${npcOnly ? '' : `
    * @returns {Promise<ChatMessage>}
    * @private
    */
-  static async _postSaveResult(actor, saveType, roll, difficulty, isSuccess, isCritical, isHindered, originalDamage, saveReduction, armorReduction, finalDamage, damageType, autoApplied, statusContext = null, defensePath = null, flankedBonus = 0, extraHtml = '') {
+  static async _postSaveResult(actor, saveType, roll, difficulty, isSuccess, isCritical, isHindered, originalDamage, saveReduction, armorReduction, finalDamage, damageType, autoApplied, statusContext = null, defensePath = null, flankedBonus = 0, extraHtml = '', opts = {}) {
+    // opts.ward = {amount, title}: Ward upcast taken off before Armor; opts.resultFlags: extra flags.vagabond
+    const wardExtra = opts.ward?.amount > 0 ? { wardReduction: opts.ward.amount, wardTitle: opts.ward.title } : {};
     const saveLabel = this.getConfiguredSaves().find(s => s.key === saveType)?.label
       || game.i18n.localize(`VAGABOND.Saves.${saveType.charAt(0).toUpperCase() + saveType.slice(1)}.name`);
 
@@ -2405,7 +2443,7 @@ ${npcOnly ? '' : `
       );
       const normalCalcHTML = this._buildDamageCalculation(
         originalDamage, saveReduction, armorReduction, finalDamage,
-        damageType, saveType, actor, false, isHindered, defensePath, flankedBonus
+        damageType, saveType, actor, false, isHindered, defensePath, flankedBonus, wardExtra
       );
 
       cardDescription += `
@@ -2426,7 +2464,7 @@ ${npcOnly ? '' : `
       // Normal (non-crit) path
       const damageCalculationHTML = this._buildDamageCalculation(
         originalDamage, saveReduction, armorReduction, finalDamage,
-        damageType, saveType, actor, autoApplied, isHindered, defensePath, flankedBonus
+        damageType, saveType, actor, autoApplied, isHindered, defensePath, flankedBonus, wardExtra
       );
       cardDescription += damageCalculationHTML;
       if (!autoApplied && finalDamage > 0) {
@@ -2436,6 +2474,7 @@ ${npcOnly ? '' : `
     cardDescription += extraHtml;
 
     card.setDescription(cardDescription);
+    if (opts.resultFlags) card.data.extraFlags = opts.resultFlags;
 
     return await card.send();
   }
@@ -2588,6 +2627,15 @@ ${npcOnly ? '' : `
         <span class="damage-operator">-</span>
         <span class="damage-component" title="${foundry.utils.escapeHTML?.(extra.shieldTitle ?? '') ?? ''}">
           <i class="fa-solid fa-shield-halved"></i> ${extra.shieldReduction}
+        </span>`;
+    }
+
+    // Ward upcast (WardHelper): taken off before Armor
+    if (extra.wardReduction > 0) {
+      calculationHTML += `
+        <span class="damage-operator">-</span>
+        <span class="damage-component ward-component" title="${foundry.utils.escapeHTML?.(extra.wardTitle ?? '') ?? ''}">
+          <i class="fas fa-star-christmas"></i> ${extra.wardReduction}
         </span>`;
     }
 
@@ -2803,9 +2851,12 @@ ${npcOnly ? '' : `
       if (!targetActor) continue;
 
       const effectiveDamage = damageAmount;
+      // Ward upcast rolled against this damage for this Target (before Armor)
+      const ward = WardHelper.reductionFor(WardHelper.messageIdOf(button), targetActor.uuid);
+      const wardCut = Math.min(ward.amount, effectiveDamage);
 
       // Calculate final damage (armor/immune/weak)
-      const directBreakdown = this.calculateFinalDamageDetailed(targetActor, effectiveDamage, damageType, sourceItem, { attackerActor: sourceActor, isCrit: button.dataset.attackWasCrit === 'true' });
+      const directBreakdown = this.calculateFinalDamageDetailed(targetActor, effectiveDamage - wardCut, damageType, sourceItem, { attackerActor: sourceActor, isCrit: button.dataset.attackWasCrit === 'true' });
       const baseAfterFinalDirect = directBreakdown.final;
       // RAW: Weak — bypass Armor/Immune + deal an extra damage die
       let finalDamage = baseAfterFinalDirect;
@@ -2828,7 +2879,7 @@ ${npcOnly ? '' : `
         const { emitSocket } = await import('./socket-helper.mjs');
         emitSocket('applyDamage', { actorUuid: targetActor.uuid, newHp: newHP });
       }
-      Hooks.callAll('vagabond.postDamageApply', { actor: targetActor, amount: _directFinal, incoming: effectiveDamage, damageType, sourceItem, attackerActor: sourceActor, oldHp: currentHP, newHp: newHP });
+      Hooks.callAll('vagabond.postDamageApply', { actor: targetActor, amount: _directFinal, incoming: effectiveDamage - wardCut, damageType, sourceItem, attackerActor: sourceActor, oldHp: currentHP, newHp: newHP });
 
       // Post damage result to chat
       const { VagabondChatCard: VCCDirect } = await import('./chat-card.mjs');
@@ -2843,6 +2894,16 @@ ${npcOnly ? '' : `
         newValue: newHP,
         sourceName: directSourceLabel,
         sourceIcon: directSourceIcon,
+        wardReduction: wardCut,
+        wardTitle: ward.title,
+        // A Ward rolled after this card recomputes from here (WardHelper.wardOff)
+        extraFlags: { damageResult: {
+          damageMessageId: WardHelper.messageIdOf(button), defenderUuid: targetActor.uuid,
+          incoming: effectiveDamage, wardAmount: wardCut, priorFinal: _directFinal,
+          weakExtra: finalDamage - baseAfterFinalDirect, autoApplied: true, damageType,
+          sourceActorId: button.dataset.actorId, sourceItemId: button.dataset.itemId,
+          attackWasCrit: button.dataset.attackWasCrit === 'true',
+        } },
       });
 
       // Process on-hit status effects (single source of truth; crit entries replace same-statusId normals)

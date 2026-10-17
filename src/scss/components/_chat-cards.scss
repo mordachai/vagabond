@@ -1357,7 +1357,7 @@ li.chat-message:has(.vagabond-chat-card-v2) {
     }
 }
 
-/* Protector: Protect buttons on a failed Reflex / Defense result (same look as Apply) */
+/* Protector / Ward / Focus Mana buttons on result cards (same look as Apply) */
 .protect-buttons-row {
     display: flex;
     flex-direction: column;
@@ -1370,9 +1370,92 @@ li.chat-message:has(.vagabond-chat-card-v2) {
     text-align: center;
 }
 
+/* Ward upcast: damage card buttons sit under the Defense shields */
+.ward-buttons-row {
+    margin-top: 6px;
+}
+
+/* Ward card: Mana stars (click to pick) + dice count + Ward Off! */
+.ward-prompt {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+
+    .ward-incoming {
+        margin: 0;
+        text-align: center;
+    }
+
+    .ward-mana-pips {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 4px;
+    }
+
+    button.ward-mana-pip {
+        width: 30px;
+        height: 30px;
+        line-height: normal;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        border: 1px solid rgba(0, 0, 0, 0.35);
+        background: rgba(0, 0, 0, 0.08);
+        color: rgba(0, 0, 0, 0.3);
+        font-size: 15px;
+        cursor: pointer;
+        transition: color 0.15s, box-shadow 0.15s, background 0.15s;
+
+        &.is-on {
+            color: $c-yellow;
+            background: $c-dark;
+            box-shadow: 0 0 6px -1px $c-yellow;
+        }
+    }
+
+    .ward-dice {
+        font-family: $font-title;
+        font-size: 20px;
+    }
+
+    .protect-buttons-row {
+        width: 100%;
+    }
+}
+
+/* Ward roll card: Mana spent → dice → reduction */
+.ward-result {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin: 6px 0;
+    font-family: $font-title;
+    font-size: 18px;
+
+    .ward-result-mana i {
+        color: $c-dark-yellow;
+    }
+
+    .ward-result-total {
+        font-size: 22px;
+    }
+}
+
+.damage-component.ward-component i {
+    color: $c-dark-yellow;
+}
+
 /* Apply Save Damage Button (outside card-actions, in save result description) */
 .save-apply-button-container button.vagabond-apply-save-damage-button,
-.protect-buttons-row button.vagabond-protect-button {
+.protect-buttons-row button.vagabond-protect-button,
+.protect-buttons-row button.vagabond-ward-button,
+.protect-buttons-row button.vagabond-ward-off-button,
+.protect-buttons-row button.vagabond-focus-upkeep-button {
     width: 100%;
     background: transparent !important;
     background-image: url('../assets/ui/chat/apply-direct-bg.webp') !important;

@@ -103,6 +103,34 @@
       "NotYours": "Only the owner of {name} can use this.",
       "NoWeapon": "{name} holds no Defense weapon."
     },
+    "FocusUpkeep": {
+      "Title": "Focus: {spell}",
+      "Cost": "Spend {mana} Mana to keep Focusing on {spell}.",
+      "CostTargets": "Spend {mana} Mana ({targets} Targets) to keep Focusing on {spell}.",
+      "Pay": "Pay {mana} Mana",
+      "Drop": "Drop Focus",
+      "Paid": "{name} spent {mana} Mana to keep Focusing on {spell}.",
+      "Dropped": "{name} stopped Focusing on {spell}.",
+      "NoMana": "{name} has {have} Mana, {mana} needed.",
+      "NotFocused": "{name} is no longer Focusing on {spell}.",
+      "CastLine": "Focus: +{mana} Mana, paid only if the Cast Focuses.",
+      "CastLineTargets": "Focus: +{mana} Mana ({targets} Targets), paid only if the Cast Focuses."
+    },
+    "Ward": {
+      "Button": "Ward {target}",
+      "Hint": "{name} upcasts {spell} to cut the damage {target} takes (Cast Check, 1d6 per Mana, before Armor)",
+      "Title": "Ward: {target}",
+      "Incoming": "{target} takes {amount} {type} damage. Pick the Mana:",
+      "WardOff": "Ward Off!",
+      "Pending": "Taken off before Armor when {target} resolves the damage.",
+      "Failed": "The Cast Check failed: the Mana is spent, the damage stands.",
+      "Restored": "{amount} HP restored to {target} (the damage was already applied).",
+      "ReplacesApply": "Apply this damage instead of the one on the earlier card.",
+      "NoMana": "{name} has no Mana to upcast.",
+      "AlreadyOpen": "A Ward card for {target} is already in the chat.",
+      "AlreadyRolled": "The Ward against this damage was already rolled for {target}.",
+      "Label": "Ward"
+    },
     "DefendMechanics": {
       "DefendingTitle": "Defending options",
       "ReflexTitle": "Reflex",
@@ -567,7 +595,7 @@
       "Marked": "<ul><li>Target of a Hunter's Mark</li><li>Rules: the Hunter's Mark</li></ul>",
       "Blessed": "<ul><li>d4 bonus to Saves</li><li>Ends when the caster stops Focusing</li></ul>",
       "Exalted": "<ul><li>+1 to each damage die it deals (doubled vs Hellspawn or Undead)</li><li>+1 to Will Saves vs Frightened</li><li>Ends when the caster stops Focusing</li><li data-manual>Will Save bonus doubled vs Hellspawn or Undead</li></ul>",
-      "Warded": "<ul><li>+1 Armor</li><li>Ends when the caster stops Focusing</li><li data-manual>Upcast: Cast Check to reduce damage by 1d6 per Mana</li></ul>",
+      "Warded": "<ul><li>+1 Armor</li><li>Upcast: when it takes damage from an attack or Cast, the caster can make a Cast Check to reduce the damage by 1d6 per Mana (Ward button on the attack's damage card)</li><li>Focus costs the caster 1 Mana per Target each Round</li><li>Ends when the caster stops Focusing</li></ul>",
       "Guided": "<ul><li>Favor on attacks and Casts against it from Beings that can see it</li><li>Ends when the caster stops Focusing</li><li data-manual>Favor on other Checks against it that rely on sight</li></ul>",
       "Hastened": "<ul><li>Speed +5'</li><li>+5' per extra Mana</li><li>Ends when the caster stops Focusing</li></ul>",
       "Slowed": "<ul><li>Speed -5'</li><li>-5' per extra Mana</li><li>Ends when the caster stops Focusing</li></ul>",
@@ -2274,7 +2302,14 @@
           "targetBeings": {"label": "Target Beings", "hint": "The Spell can Target Beings: with the player option Pick Targets in the Cast Dialog on, the Cast dialog lists the Beings inside the area to choose who is affected (with Target Objects on, also beside their weapons on any delivery). Area deliveries never pay per Target."},
           "targetObjects": {"label": "Target Objects", "hint": "The Cast dialog lists the equipped weapons of the Beings in the area (else the targets, else you) to pick as Targets. They reach the hit macro as scope.targetObjects."},
           "focusOnCast": {"label": "Focus on Cast", "hint": "Focus turns on by itself when the Cast includes the Spell's Effect (always for Spells with no damage; with FX on for damage Spells). You can still switch it off."},
-          "critNoFocus": {"label": "Crit: No Focus", "hint": "On a Crit the duration needs no Focus (\"Crit: Duration is continual\" or \"1 Minute, no Focus required\"): a critical Cast takes no Focus and ends none."}
+          "critNoFocus": {"label": "Crit: No Focus", "hint": "On a Crit the duration needs no Focus (\"Crit: Duration is continual\" or \"1 Minute, no Focus required\"): a critical Cast takes no Focus and ends none."},
+          "focusUpkeep": {
+            "label": "Focus Mana",
+            "hint": "Mana to keep Focusing on this Spell, asked at the start of the caster's Turn in a started Combat (Pay / Drop Focus). 0 = none.",
+            "perTarget": {"label": "Per Target", "hint": "The Focus Mana is paid for each Target (Ward: \"1 Mana per Target … even for willing Targets\")."},
+            "onCast": {"label": "Also on Cast", "hint": "A Cast with Focus on pays the Focus Mana too (shown in the Cast dialog)."}
+          },
+          "wardUpcast": {"label": "Ward Upcast", "hint": "When a Being this Spell affects takes damage from an attack or Cast, the attack's damage card gets a Ward button: the caster picks the Mana in the chat, makes a Cast Check, and a pass takes 1d6 per Mana off the damage before Armor."}
         },
         "AddSpell": "Add Spell",
         "FxSchool": {

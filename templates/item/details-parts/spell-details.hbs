@@ -206,6 +206,32 @@
           </label>
           <p class='notes'>{{localize "VAGABOND.Item.Spell.FIELDS.critNoFocus.hint"}}</p>
         </div>
+        <div class='form-group'>
+          <label class='resource-label'>{{localize "VAGABOND.Item.Spell.FIELDS.focusUpkeep.label"}}</label>
+          <input type='number' name='system.focusUpkeep.mana' value='{{system.focusUpkeep.mana}}' min='0' step='1' data-dtype='Number' />
+          <p class='notes'>{{localize "VAGABOND.Item.Spell.FIELDS.focusUpkeep.hint"}}</p>
+        </div>
+        <div class='form-group'>
+          <label class='checkbox-label'>
+            <input type='checkbox' name='system.focusUpkeep.perTarget' {{#if system.focusUpkeep.perTarget}}checked{{/if}} data-dtype='Boolean' />
+            <span>{{localize "VAGABOND.Item.Spell.FIELDS.focusUpkeep.perTarget.label"}}</span>
+          </label>
+          <p class='notes'>{{localize "VAGABOND.Item.Spell.FIELDS.focusUpkeep.perTarget.hint"}}</p>
+        </div>
+        <div class='form-group'>
+          <label class='checkbox-label'>
+            <input type='checkbox' name='system.focusUpkeep.onCast' {{#if system.focusUpkeep.onCast}}checked{{/if}} data-dtype='Boolean' />
+            <span>{{localize "VAGABOND.Item.Spell.FIELDS.focusUpkeep.onCast.label"}}</span>
+          </label>
+          <p class='notes'>{{localize "VAGABOND.Item.Spell.FIELDS.focusUpkeep.onCast.hint"}}</p>
+        </div>
+        <div class='form-group'>
+          <label class='checkbox-label'>
+            <input type='checkbox' name='system.wardUpcast' {{#if system.wardUpcast}}checked{{/if}} data-dtype='Boolean' />
+            <span>{{localize "VAGABOND.Item.Spell.FIELDS.wardUpcast.label"}}</span>
+          </label>
+          <p class='notes'>{{localize "VAGABOND.Item.Spell.FIELDS.wardUpcast.hint"}}</p>
+        </div>
 
         {{! Dice Scaling Label (only relevant when scaling is on) }}
         {{#if system.usesDiceScaling}}

@@ -563,7 +563,7 @@
       "Marked": "<ul><li>Alvo da Marca de um Caçador</li><li>Regras: a Marca do Caçador</li></ul>",
       "Blessed": "<ul><li>Bônus de d4 nas Salvaguardas</li><li>Termina quando o conjurador deixa de se Concentrar</li></ul>",
       "Exalted": "<ul><li>+1 em cada dado de dano que causa (dobrado contra Infernais ou Mortos-Vivos)</li><li>+1 nas Salvaguardas de Vontade contra Amedrontado</li><li>Termina quando o conjurador deixa de se Concentrar</li><li data-manual>Bônus na Salvaguarda de Vontade dobrado contra Infernais ou Mortos-Vivos</li></ul>",
-      "Warded": "<ul><li>+1 de Armadura</li><li>Termina quando o conjurador deixa de se Concentrar</li><li data-manual>Aprimorar: Teste de Conjuração para reduzir o dano em 1d6 por Mana</li></ul>",
+      "Warded": "<ul><li>+1 de Armadura</li><li>Aprimorar: ao sofrer dano de um ataque ou Conjuração, o conjurador pode fazer um Teste de Conjuração para reduzir o dano em 1d6 por Mana (botão Proteção no cartão de dano do ataque)</li><li>Concentrar custa ao conjurador 1 Mana por Alvo a cada Rodada</li><li>Termina quando o conjurador deixa de se Concentrar</li></ul>",
       "Guided": "<ul><li>Vantagem em ataques e Conjurações contra ele de Seres que conseguem vê-lo</li><li>Termina quando o conjurador deixa de se Concentrar</li><li data-manual>Vantagem em outros Testes contra ele que dependem de visão</li></ul>",
       "Hastened": "<ul><li>Velocidade +5'</li><li>+5' por Mana extra</li><li>Termina quando o conjurador deixa de se Concentrar</li></ul>",
       "Slowed": "<ul><li>Velocidade -5'</li><li>-5' por Mana extra</li><li>Termina quando o conjurador deixa de se Concentrar</li></ul>",

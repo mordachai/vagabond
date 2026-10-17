@@ -347,7 +347,9 @@ export class VagabondChatCard {
                 ...(snapshot ? { itemSnapshot: snapshot } : {}),
                 ...(this.data.rerollData ? { rerollData: this.data.rerollData } : {}),
                 // Read back by VagabondDamageHelper.spellCastFromButton (Spell Damage / Effect split)
-                ...(this.data.spellCast ? { spellCast: this.data.spellCast } : {})
+                ...(this.data.spellCast ? { spellCast: this.data.spellCast } : {}),
+                // Caller-specific flags (e.g. damageResult, read by WardHelper for a late Ward)
+                ...(this.data.extraFlags ?? {})
             }
         };
       }
@@ -545,12 +547,13 @@ export class VagabondChatCard {
 
           card.addFooterAction(btns);
 
-          // Defense shields render inside the damage section, beside the number
+          // Defense shields render inside the damage section, beside the number;
+          // Ward upcast buttons (warded Targets) right below them, before anyone resolves the damage
           if (!isRestorativeCard) {
             card.data.damage.defenseHtml = VagabondDamageHelper.createDefenseShields(
               damageRoll.total, damageType, actor.uuid, item?.id, targetsAtRollTime, actionIndex,
               rollData?.isCritical ?? false, critStatBonus, effectiveWeaknessPreRolled, attackType
-            );
+            ) + VagabondDamageHelper.createWardRow(targetsAtRollTime, damageRoll.total, damageType);
           }
 
       } else if (rollData?.isHit && item && !damageRoll) {
@@ -2134,6 +2137,10 @@ export class VagabondChatCard {
     newValue = 0,
     sourceIcon = null,
     sourceName = '',
+    extraHtml = '',
+    wardReduction = 0,
+    wardTitle = '',
+    extraFlags = null,
   } = {}) {
     const effective = finalAmount;
     const raw = rawAmount ?? effective;
@@ -2166,6 +2173,12 @@ export class VagabondChatCard {
         calcHTML += `
           <span class="damage-operator">-</span>
           <span class="damage-component" title="${game.i18n.localize('VAGABOND.Chat.Defense')} (${shieldRoll?.formula ?? shieldReduction})"><i class="fas fa-shield-halved"></i> ${shieldReduction}</span>`;
+      }
+
+      if (wardReduction > 0) {
+        calcHTML += `
+          <span class="damage-operator">-</span>
+          <span class="damage-component ward-component" title="${foundry.utils.escapeHTML(wardTitle || '')}"><i class="fas fa-star-christmas"></i> ${wardReduction}</span>`;
       }
 
       if (armorReduction > 0) {
@@ -2236,7 +2249,8 @@ export class VagabondChatCard {
       .setType('apply-result')
       .setActor(actor)
       .setTitle(title)
-      .setDescription(descriptionHTML);
+      .setDescription(descriptionHTML + (extraHtml || ''));
+    if (extraFlags) card.data.extraFlags = extraFlags;
 
     if (sourceIcon) card.data.icon = sourceIcon;
     if (sourceName) card.data.standardTags = [{ label: sourceName, cssClass: 'tag-source' }];

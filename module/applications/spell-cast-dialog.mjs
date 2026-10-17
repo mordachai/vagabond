@@ -1,6 +1,7 @@
 import { VagabondMeasureTemplates } from './measure-templates.mjs';
 import { EquipmentHelper } from '../helpers/equipment-helper.mjs';
 import { SpellTargetPicker } from '../helpers/spell-target-picker.mjs';
+import { FocusUpkeep } from '../helpers/focus-upkeep.mjs';
 
 const { api } = foundry.applications;
 
@@ -333,6 +334,17 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
     } else if (costs.deferredMana > 0) {
       messages.push({
         text: game.i18n.format('VAGABOND.Status.Imbue.DeferredCost', { cost: costs.deferredMana }),
+        type: 'info',
+        blocking: false,
+      });
+    }
+
+    // 3b'. Focus Mana on Cast (Ward: "1 Mana per Target to Focus on this Spell")
+    if (costs.focusCost > 0) {
+      const perTarget = FocusUpkeep.rule(this.#spell)?.perTarget;
+      messages.push({
+        text: game.i18n.format(perTarget ? 'VAGABOND.FocusUpkeep.CastLineTargets' : 'VAGABOND.FocusUpkeep.CastLine',
+          { mana: costs.focusCost, targets: costs.focusTargets }),
         type: 'info',
         blocking: false,
       });
@@ -1000,7 +1012,13 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
 
     const upfrontRaw = deliveryBaseCost + deliveryIncreaseCost + (!isImbue || imbueUpfront ? damageCost + fxCost : 0);
     const upfrontReduction = Math.min(upfrontRaw, spellReduce);
-    const totalCost = upfrontRaw - upfrontReduction;
+    // Focus Mana on Cast (Ward: 1 per Target) — counted on the resolved Targets at Cast time
+    // (state.focusTargetCount), else the dialog's estimate. Charged only if the Cast Focuses.
+    const focusTargets = Number.isFinite(state.focusTargetCount)
+      ? state.focusTargetCount
+      : (FocusUpkeep.rule(spell)?.perTarget ? FocusUpkeep.estimateTargets(actor, spell, state) : 1);
+    const focusCost = FocusUpkeep.castCost(spell, state, focusTargets);
+    const totalCost = upfrontRaw - upfrontReduction + focusCost;
 
     // Deferred (non-upfront) mode has no fixed deferredMana figure — the caster
     // chooses Damage dice + Effect live at delivery time (see imbue-helper.mjs
@@ -1010,7 +1028,7 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
       deferredMana = IMBUE_TRIGGER_FEE;
     }
 
-    return { damageCost, fxCost, deliveryBaseCost, deliveryIncreaseCost, totalCost, deferredMana };
+    return { damageCost, fxCost, deliveryBaseCost, deliveryIncreaseCost, focusCost, focusTargets, totalCost, deferredMana };
   }
 
   // ── Action handlers ──────────────────────────────────────────────────────

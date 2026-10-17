@@ -547,12 +547,12 @@ VAGABOND.statusEffectDefinitions = [
     ]
   },
   {
-    // Ward: "The Target has +1 Armor." (The upcast damage reduction stays manual.)
+    // Ward: "The Target has +1 Armor." Upcast reduction = WardHelper (Ward button), Focus Mana = FocusUpkeep.
     id: 'warded',
     name: 'VAGABOND.StatusConditions.Warded',
     img: '/icons/magic/defensive/shield-barrier-deflect-gold.webp',
     statuses: ['warded'],
-    description: "<ul><li>+1 Armor</li><li>Ends when the caster stops Focusing</li><li data-manual>Upcast: Cast Check to reduce damage by 1d6 per Mana</li></ul>",
+    description: "<ul><li>+1 Armor</li><li>Upcast: when it takes damage from an attack or Cast, the caster can make a Cast Check to reduce the damage by 1d6 per Mana (Ward button on the attack's damage card)</li><li>Focus costs the caster 1 Mana per Target each Round</li><li>Ends when the caster stops Focusing</li></ul>",
     changes: [
       { key: 'system.armorBonus', type: 'add', value: '1' }
     ]

@@ -528,6 +528,38 @@ export class SpellTrackerHelper {
     await game.settings.set('vagabond', 'spellFocusSwitchesMigrated2', true);
   }
 
+  /**
+   * One-time (guard `spellFocusUpkeepMigrated`): world copies of pack Spells take the pack's Focus Mana
+   * (`system.focusUpkeep`: Ward, Polymorph, Beast) and Ward Upcast switch, matched by compendium source id.
+   */
+  static async migrateSpellFocusUpkeep() {
+    if (game.user !== game.users.activeGM) return;
+    if (game.settings.get('vagabond', 'spellFocusUpkeepMigrated')) return;
+    const pack = game.packs.get('vagabond.spells');
+    if (!pack) return;
+    const { isCopyOf } = await import('./source-id.mjs');
+    const index = await pack.getIndex({ fields: ['system.focusUpkeep', 'system.wardUpcast'] });
+    // Pack not rebuilt yet: keep the guard for the next load
+    if (!index.some(e => e.system?.wardUpcast)) return;
+    const sources = index.filter(e => e.system?.wardUpcast || e.system?.focusUpkeep?.mana > 0);
+
+    for (const item of this.#worldSpells()) {
+      try {
+        const src = sources.find(e => isCopyOf(item, e._id, e.name));
+        if (!src) continue;
+        const update = {};
+        if (src.system.focusUpkeep?.mana > 0 && !(item.system.focusUpkeep?.mana > 0)) {
+          update['system.focusUpkeep'] = { ...src.system.focusUpkeep };
+        }
+        if (src.system.wardUpcast && !item.system.wardUpcast) update['system.wardUpcast'] = true;
+        if (Object.keys(update).length) await item.update(update);
+      } catch (err) {
+        console.warn(`vagabond | Spell Focus Mana migration: skipped ${item?.uuid ?? '(unknown)'}`, err);
+      }
+    }
+    await game.settings.set('vagabond', 'spellFocusUpkeepMigrated', true);
+  }
+
   /** Every Spell item: sidebar + embedded in every actor (incl. unlinked token actors). */
   static #worldSpells() {
     return [

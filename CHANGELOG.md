@@ -1,6 +1,10 @@
 # Changelog
 
 ## v6.7.2
+- **[Added]** Ward: the attack's damage card gets a Ward button for each warded Target. It posts a Ward card where the caster picks the Mana (stars) and clicks Ward Off!: a Cast Check, and a pass takes 1d6 per Mana off the damage before Armor. The Target's Save or Apply card then shows the Ward in its calculation. A Ward rolled after the damage was applied gives the HP back.
+- **[Added]** Spells get a "Focus Mana" field (edit mode): the Mana it costs to keep Focusing, optionally per Target and on the Cast too. Ward (1 per Target, Cast and each Round), Polymorph (1, Cast and each Round) and Beast (1 each Round after the Cast) ship with it (compendium needs a rebuild; world copies update on load).
+- **[Added]** Cast dialog: a Cast with Focus on adds its Focus Mana to the cost, paid only if the Cast Focuses.
+- **[Added]** Combat: at the start of the caster's Turn, a card asks to Pay the Focus Mana or Drop the Focus.
 - **[Changed]** Cast dialog: Spells with no damage show 0 on the dice node (locked). Dice-scaling Spells (Hold, Tempo) still change their dice.
 - **[Changed]** Cast dialog: FX is always on for Spells with no damage (the Effect is the Cast), and can't be switched off.
 - **[Added]** Cast dialog: Focus and FX toggles show a running light in the Spell's colour while on, in full and compact mode.

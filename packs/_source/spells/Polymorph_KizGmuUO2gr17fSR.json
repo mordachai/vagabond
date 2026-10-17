@@ -19,7 +19,12 @@
     },
     "targetBeings": true,
     "targetObjects": false,
-    "focusOnCast": true
+    "focusOnCast": true,
+    "focusUpkeep": {
+      "mana": 1,
+      "perTarget": false,
+      "onCast": true
+    }
   },
   "effects": [],
   "folder": null,

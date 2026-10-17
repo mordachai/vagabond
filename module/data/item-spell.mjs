@@ -102,6 +102,17 @@ export default class VagabondSpell extends VagabondItemBase {
     // Crit: no Focus — a Crit makes the duration continual / 1 Minute without Focus ("Crit: Duration is
     // continual."), so a critical Cast takes no Focus and ends none.
     schema.critNoFocus = new fields.BooleanField({ required: true, initial: false });
+    // Focus Mana (FocusUpkeep): "You must spend 1 Mana per Target to Focus on this Spell" (Ward), "1 Mana on
+    // your Turns" (Polymorph), "1 Mana each Turn … after the Casting" (Beast). mana = per Round (start of the
+    // caster's Turn in a started Combat); perTarget = × Targets; onCast = also paid by a Focused Cast.
+    schema.focusUpkeep = new fields.SchemaField({
+      mana: new fields.NumberField({ required: true, integer: true, min: 0, initial: 0 }),
+      perTarget: new fields.BooleanField({ required: true, initial: false }),
+      onCast: new fields.BooleanField({ required: true, initial: false }),
+    });
+    // Ward upcast (WardHelper): when a Being this Spell's Cast affects takes damage from an attack or Cast, the
+    // caster can upcast for a Cast Check; a pass reduces the incoming damage by 1d6 per Mana (before Armor).
+    schema.wardUpcast = new fields.BooleanField({ required: true, initial: false });
 
     // Optional label shown on the dice node when using dice scaling (e.g. "Speed").
     schema.diceScaleLabel = new fields.StringField({

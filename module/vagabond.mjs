@@ -82,6 +82,7 @@ import { SpellTrackerHelper } from './helpers/spell-tracker-helper.mjs';
 import { RaiseHelper } from './helpers/raise-helper.mjs';
 import { PugilistHelper } from './helpers/pugilist-helper.mjs';
 import { DefenseHelper } from './helpers/defense-helper.mjs';
+import { FocusUpkeep } from './helpers/focus-upkeep.mjs';
 import { RevelatorHelper } from './helpers/revelator-helper.mjs';
 import { RogueHelper } from './helpers/rogue-helper.mjs';
 import { SorcererHelper } from './helpers/sorcerer-helper.mjs';
@@ -1002,6 +1003,8 @@ Hooks.once('ready', function () {
   SpellTrackerHelper.migrateSpellTargetSwitches();
   // One-time: Spell copies get the pack's Focus switches (Focus on Cast, Crit: No Focus).
   SpellTrackerHelper.migrateSpellFocusOnCast();
+  // One-time: Spell copies get the pack's Focus Mana (Ward / Polymorph / Beast) and Ward Upcast switch.
+  SpellTrackerHelper.migrateSpellFocusUpkeep();
   // One-time: named Relic copies (Dyrnwyn, Elven Chain…) become their weapon / armor with attached Relics.
   RelicHelper.migrateNamedRelics();
   // One-time: Raise copies get the system:spell.raise hit macro.
@@ -1090,6 +1093,8 @@ RaiseHelper.registerHooks();
 PugilistHelper.registerHooks();
 // Defense property: Patience tracking (inert unless an actor has system.patienceDefense)
 DefenseHelper.registerHooks();
+// Focus Mana (Ward / Polymorph / Beast): Pay / Drop Focus card at the start of the caster's Turn in Combat
+FocusUpkeep.registerHooks();
 RogueHelper.registerHooks();
 // Sorcerer Twinned Spell (inert unless an actor has system.twinnedSpellTrigger)
 SorcererHelper.registerHooks();
@@ -2891,6 +2896,34 @@ Hooks.on('renderChatMessageHTML', (message, html) => {
       import('./helpers/damage-helper.mjs').then(({ VagabondDamageHelper }) => {
         VagabondDamageHelper.handleProtect(button, ev);
       });
+    });
+  });
+
+  // Ward upcast: damage card Ward button → Ward card (Mana stars + Ward Off!) → roll card
+  html.querySelectorAll('.vagabond-ward-button').forEach(button => {
+    button.addEventListener('click', (ev) => {
+      ev.preventDefault();
+      import('./helpers/ward-helper.mjs').then(({ WardHelper }) => WardHelper.openPrompt(button));
+    });
+  });
+  html.querySelectorAll('.ward-mana-pip').forEach(pip => {
+    pip.addEventListener('click', (ev) => {
+      ev.preventDefault();
+      import('./helpers/ward-helper.mjs').then(({ WardHelper }) => WardHelper.pickPip(pip));
+    });
+  });
+  html.querySelectorAll('.vagabond-ward-off-button').forEach(button => {
+    button.addEventListener('click', (ev) => {
+      ev.preventDefault();
+      import('./helpers/ward-helper.mjs').then(({ WardHelper }) => WardHelper.wardOff(button, ev));
+    });
+  });
+
+  // Focus Mana (Ward / Polymorph / Beast): Pay or Drop Focus at the start of the caster's Turn
+  html.querySelectorAll('.vagabond-focus-upkeep-button').forEach(button => {
+    button.addEventListener('click', (ev) => {
+      ev.preventDefault();
+      import('./helpers/focus-upkeep.mjs').then(({ FocusUpkeep }) => FocusUpkeep.handleButton(button));
     });
   });
 
