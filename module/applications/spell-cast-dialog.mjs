@@ -2,6 +2,7 @@ import { VagabondMeasureTemplates } from './measure-templates.mjs';
 import { EquipmentHelper } from '../helpers/equipment-helper.mjs';
 import { SpellTargetPicker } from '../helpers/spell-target-picker.mjs';
 import { FocusUpkeep } from '../helpers/focus-upkeep.mjs';
+import { SpellPlacement } from '../helpers/spell-placement.mjs';
 
 const { api } = foundry.applications;
 
@@ -108,6 +109,8 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
   #focusTouched = false; // the player flipped the Focus switch: stop deriving it from the Cast
   #renderDebounce = foundry.utils.debounce(() => { if (this.rendered) this.render(); }, 50);
   #previewDebounce = foundry.utils.debounce(() => this._refreshPreview(), 80);
+  #retargetDebounce = foundry.utils.debounce(() => this._autoTargetArea(), 80);
+  #markers = null;      // Remote spaces drawn on the canvas (SpellPlacement.drawMarkers)
 
   /** Singleton — at most one spell cast dialog open at a time. */
   static #current = null;
@@ -137,6 +140,8 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
       manaOverrideDelta: 0,
       imbueAssignments: {}, // weaponUuid -> true (multi-select, not one-per-target)
       targetPicks: {},      // Target picker: entry key -> bool (explicit choices; see SpellTargetPicker)
+      areaAnchor: null,     // Cube / Sphere placed by hand: {x, y, tokenId?} (SpellPlacement)
+      targetSpaces: [],     // Remote: Targets that are spaces on the map [{x, y}] (SpellPlacement)
     };
   }
 
@@ -144,7 +149,7 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
     id: 'spell-cast-dialog-{id}',
     classes: ['vagabond', 'spell-cast-dialog'],
     window: { frame: false },
-    position: { width: 375, height: 'auto' },
+    position: { width: 390, height: 'auto' },
     actions: {
       vscClose:          SpellCastDialog._onClose,
       vscCast:           SpellCastDialog._onCast,
@@ -159,6 +164,7 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
       vscModifyMana:     SpellCastDialog._onModifyMana,
       vscPickImbueWeapon: SpellCastDialog._onPickImbueWeapon,
       vscPickTarget:     SpellCastDialog._onPickTarget,
+      vscPlace:          SpellCastDialog._onPlace,
     },
   };
 
@@ -188,9 +194,8 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
     // Target picker (Spells that pick their Beings / Objects): a Remote Increase is the number of picks.
     const pickModes = SpellTargetPicker.modes(spell, state.deliveryType);
     const pickEntries = pickModes ? SpellTargetPicker.candidates(actor, spell, state) : [];
-    if (pickModes && SpellTargetPicker.picksDriveIncrease(state.deliveryType)) {
-      state.deliveryIncrease = Math.max(0, SpellTargetPicker.targetCount(actor, spell, state) - 1);
-    }
+    // Remote: the Increase follows the Targets (picks / targeted tokens + spaces), see _syncTargetIncrease
+    this._syncTargetIncrease();
     const pickRing = SpellTargetPicker.layout(pickEntries);
     this.#pickKey = pickEntries.map(e => e.key).join('|');
 
@@ -247,6 +252,10 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
 
     const messages = this._buildMessages(state, finalMana, costs);
 
+    // Crosshair: aim a Cube / Sphere, or add Remote spaces (SpellPlacement)
+    const placeMode = SpellPlacement.modeFor(state.deliveryType);
+    const placeOn = placeMode === 'area' ? !!state.areaAnchor : (placeMode === 'spaces' && state.targetSpaces.length > 0);
+
     return foundry.utils.mergeObject(ctx, {
       spell: { id: spell.id, name: spell.name, img: spell.img },
       accentRGB: accent,
@@ -280,6 +289,9 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
       picksActive: !!pickModes,
       pickEntries: pickRing.entries,
       pickIconSize: pickRing.iconSize,
+      placeMode,
+      placeOn,
+      placeTitle: placeMode ? game.i18n.localize(placeMode === 'area' ? 'VAGABOND.SpellPlace.AreaButton' : 'VAGABOND.SpellPlace.SpacesButton') : '',
     });
   }
 
@@ -323,6 +335,10 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
     //    proceeds and only the template draw waits for a target.
     const areaError = this._areaRequirementMessage(state);
     if (areaError) messages.push(areaError);
+
+    // 3a. Range check of what was placed by hand (world settings spellPlacement*)
+    const rangeError = this._placementRangeMessage(state);
+    if (rangeError) messages.push(rangeError);
 
     // 3b. Imbue: surface the mana implications of the delivery timing.
     if (state.deliveryType === 'imbue' && !game.settings.get('vagabond', 'imbueUpfrontMana')) {
@@ -437,7 +453,7 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
     if (!el) return pos;
     // Compact mode renders a narrower root (matches .vsc-root.no-rings width)
     const hideRings = game.settings.get('vagabond', 'hideCastRings');
-    const w = hideRings ? 285 : 375;
+    const w = hideRings ? 300 : 390;
     // Measure the inner root (the actual painted dialog) — el is the
     // V2 wrapper and can report 0 or a very large value before layout.
     const inner = el.querySelector('.vsc-root');
@@ -570,6 +586,9 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
     this.element.querySelectorAll('.vsc-side.on circle.vsc-side-run').forEach(c => {
       c.style.animationDelay = `-${elapsedSec % 1.6}s`;
     });
+    this.element.querySelectorAll('.vsc-message--warning').forEach(m => {
+      m.style.animationDelay = `-${elapsedSec % 1.6}s`;
+    });
 
     this.#ctrl?.abort();
     this.#ctrl = new AbortController();
@@ -622,7 +641,13 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
     // the preview redraws only when the caster or a Target moved (shape moved).
     if (this.#tokenHookIds == null) {
       const settled = (doc) => {
-        if (!this.rendered || !SpellTargetPicker.modes(this.#spell, this.#state.deliveryType)) return;
+        if (!this.rendered) return;
+        // Hand-placed area: a token moving in / out (or the one it follows) re-targets and redraws
+        if (this.#state.areaAnchor && SpellPlacement.modeFor(this.#state.deliveryType) === 'area') {
+          this.#previewDebounce();
+          this.#retargetDebounce();
+        }
+        if (!SpellTargetPicker.modes(this.#spell, this.#state.deliveryType)) return;
         const tok = doc?.object;
         if (tok && (tok === SpellTargetPicker.casterToken(this.#actor) || game.user.targets.has(tok))) this.#previewDebounce();
         if (this.#pickListKey() !== this.#pickKey) this.#renderDebounce();
@@ -671,6 +696,10 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
     bindCtx('[data-action="vscBumpRange"]', (ev) => this._bumpRange(-1));
     bindCtx('[data-action="vscBumpMana"]', (ev) => this._bumpMana(-1));
     bindCtx('[data-action="vscModifyMana"]', (ev) => this._bumpActorMana(+1));
+    bindCtx('[data-action="vscPlace"]', (ev) => this._clearPlacement());
+
+    // Remote spaces stay visible on the map while the dialog is open
+    this._syncMarkers();
 
     // Manual click delegation for SVG-group actions — V2 action delegation
     // is unreliable on SVG <g> elements in some setups.
@@ -757,6 +786,9 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
   }
 
   async close(options = {}) {
+    SpellPlacement.cancel();
+    SpellPlacement.clearMarkers(this.#markers);
+    this.#markers = null;
     this.#ctrl?.abort();
     this.#dragCtrl?.abort();
     this.#previewEl?.remove();
@@ -805,6 +837,85 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
     this._emitChange();
     this.render();
     this._refreshPreview();
+    this._autoTargetArea();
+  }
+
+  // ── Hand placement (SpellPlacement) ───────────────────────────────────────
+
+  /** Targets of a Remote Cast: picks / targeted tokens, plus spaces. */
+  _remoteTargetCount() {
+    const state = this.#state;
+    const base = SpellTargetPicker.modes(this.#spell, state.deliveryType)
+      ? SpellTargetPicker.targetCount(this.#actor, this.#spell, state)
+      : game.user.targets.size;
+    return base + (state.targetSpaces?.length ?? 0);
+  }
+
+  /** Remote whose Increase is read from its Targets: always with the Target picker, else once something is targeted. */
+  _targetsDriveIncrease(deliveryType) {
+    if (deliveryType === 'imbue' || !SpellTargetPicker.picksDriveIncrease(deliveryType)) return false;
+    if (SpellTargetPicker.modes(this.#spell, deliveryType)) return true;
+    return this._remoteTargetCount() > 0;
+  }
+
+  /** Remote: Increase = Targets - 1 (book: +1 per additional Target). */
+  _syncTargetIncrease() {
+    if (!this._targetsDriveIncrease(this.#state.deliveryType)) return;
+    this.#state.deliveryIncrease = Math.max(0, this._remoteTargetCount() - 1);
+  }
+
+  /** Area size in feet for the current delivery + Increase. */
+  _areaDistance() {
+    const t = this.#state.deliveryType;
+    const base = CONFIG.VAGABOND.deliveryBaseRanges[t]?.value ?? 0;
+    const inc = CONFIG.VAGABOND.deliveryIncrement[t] ?? 0;
+    return base + inc * this.#state.deliveryIncrease;
+  }
+
+  /** Hand-placed area: the tokens inside become the user's targets (the caster excluded). */
+  _autoTargetArea() {
+    const state = this.#state;
+    if (!this.rendered || !state.areaAnchor || SpellPlacement.modeFor(state.deliveryType) !== 'area' || !canvas?.ready) return;
+    const caster = SpellTargetPicker.casterToken(this.#actor);
+    const ids = SpellTargetPicker.tokensInArea(this.#actor, state).filter(t => t !== caster).map(t => t.id);
+    const current = new Set(Array.from(game.user.targets).map(t => t.id));
+    if (ids.length === current.size && ids.every(id => current.has(id))) return;
+    canvas.tokens.setTargets(ids, { mode: 'replace' });
+  }
+
+  /** Right-click on the crosshair: forget the aim point / spaces. */
+  _clearPlacement() {
+    SpellPlacement.cancel();
+    this.#state.areaAnchor = null;
+    this.#state.targetSpaces = [];
+    this._syncTargetIncrease();
+    this._emitChange();
+    this.render();
+    this._refreshPreview();
+  }
+
+  /** Draw the Remote spaces on the map (redrawn on every render). */
+  _syncMarkers() {
+    SpellPlacement.clearMarkers(this.#markers);
+    this.#markers = SpellPlacement.modeFor(this.#state.deliveryType) === 'spaces'
+      ? SpellPlacement.drawMarkers(this.#state.targetSpaces,
+        SpellPlacement.rgbToNumber(ACCENT_RGB[this.#spell.system.damageType ?? '-'] ?? ACCENT_RGB['-']))
+      : null;
+  }
+
+  /** Placed point(s) the caster can't reach (sight / distance setting), or null. */
+  _placementRangeMessage(state) {
+    const mode = SpellPlacement.modeFor(state.deliveryType);
+    let err = null;
+    if (mode === 'area' && state.areaAnchor) {
+      err = SpellPlacement.rangeError(this.#actor, VagabondMeasureTemplates.anchorPoint(state.areaAnchor));
+    } else if (mode === 'spaces') {
+      const bad = state.targetSpaces.map(p => SpellPlacement.rangeError(this.#actor, p)).filter(Boolean);
+      if (bad.length) err = bad.length > 1 ? game.i18n.format('VAGABOND.SpellPlace.SpacesOutOfRange', { n: bad.length }) : bad[0];
+    }
+    if (!err) return null;
+    const block = SpellPlacement.enforce === 'block';
+    return { text: err, type: block ? 'error' : 'warning', blocking: block };
   }
 
   _bumpMana(delta) {
@@ -882,8 +993,8 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
     if (!deliveryType) return true;
     // Imbue's target count is driven by weapon selection, never bumped manually.
     if (deliveryType === 'imbue') return true;
-    // Same for a Remote Cast whose Targets come from the Target picker.
-    if (SpellTargetPicker.modes(this.#spell, deliveryType) && SpellTargetPicker.picksDriveIncrease(deliveryType)) return true;
+    // Same for a Remote Cast counted from its Targets (picker, targeted tokens, spaces).
+    if (this._targetsDriveIncrease(deliveryType)) return true;
     const inc = CONFIG.VAGABOND.deliveryIncrement[deliveryType] ?? 0;
     const base = CONFIG.VAGABOND.deliveryBaseRanges[deliveryType];
     return inc === 0 || !base || base.value == null;
@@ -896,9 +1007,9 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
       const n = this._imbueCandidates().filter(c => c.selected).length;
       return { value: String(n), unit: n === 1 ? 'target' : 'targets' };
     }
-    // Target picker on a Remote Cast: read-only counter of picks, like Imbue.
-    if (SpellTargetPicker.modes(this.#spell, deliveryType) && SpellTargetPicker.picksDriveIncrease(deliveryType)) {
-      const n = SpellTargetPicker.targetCount(this.#actor, this.#spell, this.#state);
+    // Remote counted from its Targets (picker, targeted tokens, spaces): read-only counter, like Imbue.
+    if (this._targetsDriveIncrease(deliveryType)) {
+      const n = this._remoteTargetCount();
       return { value: String(n), unit: n === 1 ? 'target' : 'targets' };
     }
     const base = CONFIG.VAGABOND.deliveryBaseRanges[deliveryType];
@@ -932,7 +1043,7 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
     if (!state.deliveryType) return null;
     const casterToken = this.#actor.token?.object ?? this.#actor.getActiveTokens(true)[0];
     const err = VagabondMeasureTemplates.areaRequirementError(state.deliveryType, {
-      hasTarget: game.user.targets.size > 0,
+      hasTarget: game.user.targets.size > 0 || !!VagabondMeasureTemplates.anchorPoint(state.areaAnchor),
       hasOrigin: !!casterToken,
     });
     return err ? { text: err, type: 'warning', blocking: false } : null;
@@ -948,14 +1059,13 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
     if (!this.#state.previewActive) return;
     const t = this.#state.deliveryType;
     if (!t) return;
-    const base = CONFIG.VAGABOND.deliveryBaseRanges[t];
-    const inc = CONFIG.VAGABOND.deliveryIncrement[t] ?? 0;
-    const distance = (base?.value ?? 0) + inc * this.#state.deliveryIncrease;
+    const distance = this._areaDistance();
     // notify:false — the dialog already shows any placement issue inline via
     // _areaRequirementMessage; suppress the duplicate toast.
     await globalThis.vagabond?.managers?.templates?.updatePreview(
       this.#actor, this.#spell.id, t, distance,
-      { notify: false, damageType: this.#spell.system.damageType, fxSchool: this.#spell.system.fxSchool }
+      { notify: false, damageType: this.#spell.system.damageType, fxSchool: this.#spell.system.fxSchool,
+        anchor: SpellPlacement.modeFor(t) === 'area' ? this.#state.areaAnchor : null }
     );
   }
 
@@ -1055,6 +1165,7 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
       return this.render();
     }
     // Focus is committed by the Cast itself (SpellHandler._executeCast): only once it succeeds
+    SpellPlacement.cancel();
     // Clear preview before cast (sequencer takes over)
     if (state.previewActive) {
       await globalThis.vagabond?.managers?.templates?.clearPreview(this.#actor.id, this.#spell.id);
@@ -1075,6 +1186,8 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
         focusOn: state.focusOn,
         imbueAssignments,
         targetPicks,
+        areaAnchor: SpellPlacement.modeFor(state.deliveryType) === 'area' ? state.areaAnchor : null,
+        targetSpaces: SpellPlacement.modeFor(state.deliveryType) === 'spaces' ? state.targetSpaces.map(p => ({ x: p.x, y: p.y })) : [],
       }, state.manaOverrideDelta);
     }
     return this.close();
@@ -1101,9 +1214,16 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
     this.#state.deliveryIncrease = 0;
     this.#state.imbueAssignments = {};
     this.#state.targetPicks = {};
+    // The aim point carries over between Cube and Sphere; spaces belong to Remote only
+    const mode = SpellPlacement.modeFor(key);
+    if (mode !== 'area') this.#state.areaAnchor = null;
+    if (mode !== 'spaces') this.#state.targetSpaces = [];
+    SpellPlacement.cancel();
+    this._syncTargetIncrease();
     this._emitChange();
     this.render();
     this._refreshPreview();
+    this._autoTargetArea();
   }
 
   /** @this {SpellCastDialog} */
@@ -1124,12 +1244,43 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
     const key = target.dataset.pickKey;
     if (!key) return;
     this.#state.targetPicks = SpellTargetPicker.toggle(this.#actor, this.#spell, this.#state, key);
-    if (SpellTargetPicker.picksDriveIncrease(this.#state.deliveryType)) {
-      const n = SpellTargetPicker.targetCount(this.#actor, this.#spell, this.#state);
-      this.#state.deliveryIncrease = Math.max(0, n - 1);
-    }
+    this._syncTargetIncrease();
     this._emitChange();
     this.render();
+  }
+
+  /**
+   * Crosshair: Cube / Sphere → aim the area on the map (a token = aim at it, the area follows it), then the tokens
+   * inside become the targets and the preview turns on. Remote → add / remove spaces and (un)target tokens until
+   * right-click / Esc / Enter. Right-click on the button clears (_clearPlacement).
+   * @this {SpellCastDialog}
+   */
+  static async _onPlace(event, target) {
+    const state = this.#state;
+    const mode = SpellPlacement.modeFor(state.deliveryType);
+    if (!mode) return;
+    if (mode === 'area') {
+      const anchor = await SpellPlacement.pickArea({ actor: this.#actor, type: state.deliveryType, distance: this._areaDistance() });
+      if (!anchor || !this.rendered) return;
+      state.areaAnchor = anchor;
+      state.previewActive = true;
+      this._emitChange();
+      await this._refreshPreview();
+      this._autoTargetArea();
+      this.render();
+      return;
+    }
+    await SpellPlacement.pickSpaces({
+      actor: this.#actor,
+      spaces: state.targetSpaces,
+      onChange: (spaces) => {
+        if (!this.rendered) return;
+        state.targetSpaces = spaces;
+        this._syncTargetIncrease();
+        this._emitChange();
+        this.render();
+      },
+    });
   }
 
   /** @this {SpellCastDialog} */

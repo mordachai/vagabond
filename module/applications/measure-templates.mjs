@@ -56,7 +56,7 @@ export class VagabondMeasureTemplates {
     return run;
   }
 
-  async _updatePreview(actor, itemId, deliveryType, distance, { notify = true, damageType = null, fxSchool = null } = {}) {
+  async _updatePreview(actor, itemId, deliveryType, distance, { notify = true, damageType = null, fxSchool = null, anchor = null } = {}) {
     await this.clearPreview(actor.id, itemId);
     await this.cleanupOrphanedSpellRegions();
 
@@ -71,7 +71,7 @@ export class VagabondMeasureTemplates {
     const targetArray = Array.from(game.user.targets);
     const centroid = targetArray.length > 0 ? this._calculateTargetCentroid(targetArray) : null;
 
-    const regionData = this._constructRegionData({ type: deliveryType, distance, token, targets: game.user.targets, centroid, notify });
+    const regionData = this._constructRegionData({ type: deliveryType, distance, token, targets: game.user.targets, centroid, anchor, notify });
     if (!regionData) return;
 
     regionData.flags = { vagabond: { isPreview: true, actorId: actor.id, itemId, texture: this._resolveTexture(damageType, fxSchool) } };
@@ -202,13 +202,17 @@ export class VagabondMeasureTemplates {
     }
 
     const centroid = resolvedTargets.length > 0 ? this._calculateTargetCentroid(resolvedTargets) : null;
+    // Hand-placed Cube / Sphere (SpellPlacement): rebuilt at the Cast's aim point
+    const castArea = message.flags?.vagabond?.rerollData?.castArea;
+    const anchor = (castArea?.anchor && castArea.sceneId === canvas.scene?.id) ? castArea.anchor : null;
 
     const regionData = this._constructRegionData({
       type: deliveryType,
       distance,
       token: casterToken,
       targets: game.user.targets,
-      centroid
+      centroid,
+      anchor
     });
 
     if (regionData) {
@@ -322,9 +326,35 @@ export class VagabondMeasureTemplates {
       return 'Could not determine origin point (caster token) for area.';
     }
     if (this.AREA_NEEDS_TARGET.includes(t) && !hasTarget) {
+      // Cube / Sphere can also be placed by hand (SpellPlacement, Cast dialog crosshair)
+      if (t === 'cube' || t === 'sphere') return game.i18n.format('VAGABOND.SpellPlace.NeedAim', { type: game.i18n.localize(CONFIG.VAGABOND.deliveryTypes?.[t] ?? t) });
       return `Please target a token to place the ${t}.`;
     }
     return null;
+  }
+
+  /**
+   * Live point of a hand-placed aim point (SpellPlacement): the token's center when aimed at a token still on the
+   * canvas, else the stored point. Null without an anchor.
+   * @param {{x:number, y:number, tokenId?:string}|null} anchor
+   * @returns {{x:number, y:number}|null}
+   */
+  static anchorPoint(anchor) {
+    if (!anchor) return null;
+    const tok = anchor.tokenId ? canvas.tokens?.get(anchor.tokenId) : null;
+    if (tok) return { x: tok.center.x, y: tok.center.y };
+    return Number.isFinite(anchor.x) && Number.isFinite(anchor.y) ? { x: anchor.x, y: anchor.y } : null;
+  }
+
+  /**
+   * Cube center on a square grid so the cube covers whole grid spaces: odd sizes on the center of the space under
+   * the point, even sizes on the nearest grid corner (grows evenly around the point). Other grids: the point.
+   */
+  static snapCubeCenter(point, sidePixels) {
+    if (!canvas.grid?.isSquare) return point;
+    const n = Math.round(sidePixels / canvas.grid.size);
+    if (n % 2 === 1) return canvas.grid.getCenterPoint(point);
+    return canvas.grid.getSnappedPoint(point, { mode: CONST.GRID_SNAPPING_MODES.VERTEX });
   }
 
   /**
@@ -336,10 +366,11 @@ export class VagabondMeasureTemplates {
    * @param {Token}  params.token      - The caster token
    * @param {*}      params.targets    - The user's current targets (UserTargets or array)
    * @param {{x,y}}  params.centroid   - Optional precalculated centroid
+   * @param {object} params.anchor     - Hand-placed aim point {x, y, tokenId?} (SpellPlacement); wins over targets
    * @param {boolean} params.notify    - Whether to surface failures via ui.notifications (default true)
    * @returns {object|null}            - Region creation data, or null on failure
    */
-  _constructRegionData({ type, distance, token, targets, centroid = null, notify = true }) {
+  _constructRegionData({ type, distance, token, targets, centroid = null, anchor = null, notify = true }) {
     // Use the system's canonical feet-per-square (from system.json), NOT canvas.scene.grid.distance.
     // Scene grid.distance can be 1 on gridless scenes or misconfigured scenes, which makes all
     // templates 5× too large. The system constant (5ft/sq) is the authoritative reference.
@@ -348,7 +379,8 @@ export class VagabondMeasureTemplates {
     const radiusPixels = distance * distancePixels;
 
     const targetToken = targets?.first?.() ?? null;
-    const destinationPoint = centroid || (targetToken ? targetToken.center : null);
+    const anchorPoint = VagabondMeasureTemplates.anchorPoint(anchor);
+    const destinationPoint = anchorPoint || centroid || (targetToken ? targetToken.center : null);
 
     // Single pre-flight requirement check (origin + target) — same rules the
     // cast dialog uses to show the message inline.
@@ -394,11 +426,12 @@ export class VagabondMeasureTemplates {
 
       case 'cube': {
         const sidePixels = (distance / FEET_PER_SQUARE) * canvas.grid.size;
+        const center = VagabondMeasureTemplates.snapCubeCenter(destinationPoint, sidePixels);
         name = 'Cube';
         shape = {
           type: 'rectangle',
-          x: destinationPoint.x - sidePixels / 2,
-          y: destinationPoint.y - sidePixels / 2,
+          x: center.x - sidePixels / 2,
+          y: center.y - sidePixels / 2,
           width: sidePixels,
           height: sidePixels,
           anchorX: 0,
@@ -409,8 +442,10 @@ export class VagabondMeasureTemplates {
       }
 
       case 'sphere': {
+        // A point placed on open ground sits on its grid space's center
+        const center = (anchorPoint && !anchor.tokenId && !canvas.grid.isGridless) ? canvas.grid.getCenterPoint(anchorPoint) : destinationPoint;
         name = 'Sphere';
-        shape = { type: 'circle', x: destinationPoint.x, y: destinationPoint.y, radius: radiusPixels };
+        shape = { type: 'circle', x: center.x, y: center.y, radius: radiusPixels };
         break;
       }
 
@@ -422,7 +457,10 @@ export class VagabondMeasureTemplates {
     // Resolve token attachment so the region follows the caster (origin types) or
     // the target (target types) when that token moves. Multi-target placements stay static.
     const targetCount = targets?.size ?? targets?.length ?? (centroid ? 1 : 0);
-    const attachTokenId = this._resolveAttachmentTokenId(type, token, targetToken, targetCount);
+    // Hand-placed: follows the token it was aimed at, else stays where it was put
+    const attachTokenId = anchorPoint
+      ? ((anchor.tokenId && canvas.tokens?.get(anchor.tokenId)) ? anchor.tokenId : null)
+      : this._resolveAttachmentTokenId(type, token, targetToken, targetCount);
 
     // True Shape ('shapes') vs Covered Grid Spaces ('coverage') — GM-configurable, default True Shape.
     let highlightMode = 'shapes';

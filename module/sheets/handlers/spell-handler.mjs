@@ -566,6 +566,25 @@ export class SpellHandler {
       };
     }
 
+    // Remote spaces (SpellPlacement): Targets with no token on them — counted, listed on the card, handed to the
+    // hit macro (scope.targetSpaces) and aimed at by the FX
+    const { SpellPlacement } = await import('../../helpers/spell-placement.mjs');
+    const castSceneId = canvas.scene?.id ?? null;
+    state.targetSpaces = SpellPlacement.modeFor(state.deliveryType) === 'spaces'
+      ? (state.targetSpaces ?? []).map(p => ({ x: p.x, y: p.y, sceneId: castSceneId }))
+      : [];
+    if (state.targetSpaces.length) {
+      _spellObjectsMeta = [_spellObjectsMeta, {
+        label: game.i18n.localize('VAGABOND.SpellPlace.SpacesLabel'),
+        value: String(state.targetSpaces.length),
+      }].filter(Boolean);
+    }
+    // Remote: +1 per additional Target, counted from the Targets (the dialog already does; dialog-off casts too)
+    if (SpellPlacement.modeFor(state.deliveryType) === 'spaces' && !state.targetPicks) {
+      const n = castTargets.length + state.targetSpaces.length;
+      if (n > 0) state.deliveryIncrease = n - 1;
+    }
+
     // Spell-specific cast gate (Raise: corpses, Being types, HD) — before any roll or Mana
     const { castGateMessage } = await import('../../helpers/item-macro.mjs');
     const gateMessage = castGateMessage({ actor: this.actor, spell, state, tokens: castTargets });
@@ -576,14 +595,17 @@ export class SpellHandler {
 
     // The Cast's area as it stands now (hit macros place things in it: Conjure), with its scene
     const castShape = SpellTargetPicker.areaShape(this.actor, state);
-    state.castArea = castShape ? { sceneId: canvas.scene?.id ?? null, shape: castShape } : null;
+    // Hand-placed Cube / Sphere keep their aim point (the card's template toggle rebuilds the area there)
+    state.castArea = castShape
+      ? { sceneId: castSceneId, shape: castShape, ...(state.areaAnchor ? { anchor: state.areaAnchor } : {}) }
+      : null;
 
     // Focus switch of this Cast. Dialog-off casts carry no focusOn: a Focus on Cast Spell whose Cast includes
     // its Effect Focuses, anything else leaves the Focus alone. Needed before the cost (Focus Mana on Cast).
     let focusOn = typeof state.focusOn === 'boolean' ? state.focusOn : null;
     if (focusOn === null && spell.system.focusOnCast && SpellCastDialog.castOpensFocus(spell, state)) focusOn = true;
     // Focus Mana per Target (Ward) is counted on the Cast's resolved Targets
-    state.focusTargetCount = castTargets.length;
+    state.focusTargetCount = castTargets.length + state.targetSpaces.length;
 
     // Recompute costs from the explicit state (do not read this.spellStates)
     const baseCosts = SpellCastDialog.calculateCosts(spell, this.actor, { ...state, focusOn });
@@ -829,7 +851,7 @@ export class SpellHandler {
       isSuccess,
       isCritical,
       targetsAtRollTime,
-      _spellObjectsMeta ? [..._spellExtraMetadata, _spellObjectsMeta] : _spellExtraMetadata,
+      _spellObjectsMeta ? [..._spellExtraMetadata, ...[_spellObjectsMeta].flat()] : _spellExtraMetadata,
       _spellExtraTags,
       manaOverrideDelta,
       placedGlyphRegion
@@ -849,13 +871,16 @@ export class SpellHandler {
       // With a manual Roll Damage button on the card, the FX waits for that click
       // (lands with the damage); otherwise it plays right after the cast.
       const { VagabondDamageHelper: FxDamageHelper } = await import('../../helpers/damage-helper.mjs');
+      // Remote spaces + a hand-placed area's center ride the FX (SpellPlacement)
+      const areaCenter = state.areaAnchor ? SpellPlacement.shapeCenter(state.castArea?.shape) : null;
       const fxDeferred = isSuccess && await FxDamageHelper.deferFxToDamageButton(
         castMessage,
-        { kind: 'spell', deliveryType: state.deliveryType, deliveryIncrease: state.deliveryIncrease }
+        { kind: 'spell', deliveryType: state.deliveryType, deliveryIncrease: state.deliveryIncrease,
+          spaces: state.targetSpaces, areaCenter }
       );
       if (!fxDeferred) {
-        const liveTargets = picked.tokens ?? Array.from(game.user.targets);
-        VagabondSpellSequencer.play(spell, state.deliveryType, state.deliveryIncrease, casterToken, liveTargets, { deliveryEnabled: isSuccess });
+        const liveTargets = [...(picked.tokens ?? Array.from(game.user.targets)), ...SpellPlacement.pseudoTargets(state.targetSpaces)];
+        VagabondSpellSequencer.play(spell, state.deliveryType, state.deliveryIncrease, casterToken, liveTargets, { deliveryEnabled: isSuccess, areaCenter });
       }
     }
     // ── End Sequencer FX ──────────────────────────────────────────────────────

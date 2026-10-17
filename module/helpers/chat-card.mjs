@@ -3,6 +3,7 @@ import { VagabondDamagePipeline } from './damage-pipeline.mjs';
 import { VagabondChatHelper } from './chat-helper.mjs';
 import { buildMacroButtonHTML } from './item-macro.mjs';
 import { DruidHelper } from './druid-helper.mjs';
+import { SpellPlacement } from './spell-placement.mjs';
 import { resolveEffectDescription, effectDisplayImg } from './effects.mjs';
 
 /**
@@ -1150,6 +1151,7 @@ export class VagabondChatCard {
             targetObjects: spellState.targetObjects ?? [],
             targetsPicked: !!spellState.targetsPicked,
             castArea: spellState.castArea ?? null,
+            targetSpaces: spellState.targetSpaces ?? [],
           },
           // Expose this cast's chosen dice + total mana to spell macros (scope.spellDamageDice / scope.manaSpent),
           // plus the Target picker's choices (scope.targetObjects as Items, scope.targetsPicked = Targets are final)
@@ -1164,6 +1166,8 @@ export class VagabondChatCard {
             // Delivery + area of the Cast (scope.deliveryType / scope.castArea = {sceneId, shape}): Conjure placement
             deliveryType: spellState.deliveryType ?? null,
             ...(spellState.castArea ? { castArea: spellState.castArea } : {}),
+            // Remote Targets that are spaces on the map ([{x, y, sceneId}], SpellPlacement): Erupt, a drawn cart
+            ...(spellState.targetSpaces?.length ? { targetSpaces: spellState.targetSpaces } : {}),
           }
       });
       // Only auto-grant luck when there's no crit toggle (toggle manages luck itself)
@@ -1222,6 +1226,7 @@ export class VagabondChatCard {
       targetObjects: rerollData.targetObjects ?? [],
       targetsPicked: !!rerollData.targetsPicked,
       castArea: rerollData.castArea ?? null,
+      targetSpaces: rerollData.targetSpaces ?? [],
       // Focus is not re-run: the reroll is held while the caster still Focuses on it (no "Crit: No Focus" Crit)
       focusHeld: isSuccess && (actor.system.focus?.spellIds ?? []).includes(spell.id)
         && !(isCritical && spell.system.critNoFocus),
@@ -1245,7 +1250,9 @@ export class VagabondChatCard {
     if (spellState.deliveryType) {
       await VagabondDamageHelper.playFxOrDefer(
         message,
-        { kind: 'spell', deliveryType: spellState.deliveryType, deliveryIncrease: spellState.deliveryIncrease },
+        { kind: 'spell', deliveryType: spellState.deliveryType, deliveryIncrease: spellState.deliveryIncrease,
+          spaces: spellState.targetSpaces,
+          areaCenter: spellState.castArea?.anchor ? SpellPlacement.shapeCenter(spellState.castArea.shape) : null },
         actor, spell, targetsAtRollTime, isSuccess
       );
     }

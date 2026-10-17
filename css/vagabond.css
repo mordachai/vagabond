@@ -14011,6 +14011,16 @@ ol#combat-tracker.directory-list {
     stroke-dashoffset: -100;
   }
 }
+@keyframes vsc-warn-pulse {
+  0%, 100% {
+    border-color: rgba(255, 196, 90, 0.45);
+    box-shadow: 0 0 3px rgba(255, 196, 90, 0.2);
+  }
+  50% {
+    border-color: rgb(255, 214, 130);
+    box-shadow: 0 0 10px 1px rgba(255, 196, 90, 0.75);
+  }
+}
 @keyframes vsc-pulse {
   0%, 100% {
     stroke-opacity: 0.45;
@@ -14021,7 +14031,7 @@ ol#combat-tracker.directory-list {
 }
 .vsc-root {
   position: relative;
-  width: 375px;
+  width: 390px;
   padding: 0 0.5rem 1rem;
   color: rgb(var(--ac));
   font-family: "Paradigm", serif;
@@ -14039,13 +14049,14 @@ ol#combat-tracker.directory-list {
   margin-bottom: 0;
 }
 .vsc-root.minimized .vsc-circle-wrap,
+.vsc-root.minimized .vsc-mana-info,
 .vsc-root.minimized .vsc-cast,
 .vsc-root.minimized .vsc-messages,
 .vsc-root.minimized .vsc-error {
   display: none !important;
 }
 .vsc-root.no-rings {
-  width: 285px;
+  width: 300px;
 }
 .vsc-root.no-rings .vsc-circle .outer-ring,
 .vsc-root.no-rings .vsc-circle .middle-ring,
@@ -14073,11 +14084,11 @@ ol#combat-tracker.directory-list {
 .vsc-root.no-rings .vsc-eye {
   top: calc(23.4% + 8px);
 }
-.vsc-root.no-rings .vsc-delivery-list {
-  top: calc(81.5% + 10px);
+.vsc-root.no-rings .vsc-place {
+  top: 73%;
 }
-.vsc-root.no-rings .vsc-mana-info {
-  top: calc(89.1% - 4px);
+.vsc-root.no-rings .vsc-delivery-list {
+  top: calc(85.5% + 10px);
 }
 .vsc-root.no-rings .vsc-imbue-ring,
 .vsc-root.no-rings .vsc-pick-ring {
@@ -14379,7 +14390,8 @@ ol#combat-tracker.directory-list {
 .vsc-root .vsc-circle .vsc-side.locked {
   cursor: default;
 }
-.vsc-root .vsc-eye {
+.vsc-root .vsc-eye,
+.vsc-root .vsc-place {
   position: absolute;
   left: 50%;
   top: calc(31.7% + 8px);
@@ -14405,16 +14417,23 @@ ol#combat-tracker.directory-list {
   transition: transform 0.15s, filter 0.15s;
   filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.8));
 }
-.vsc-root .vsc-eye:hover {
+.vsc-root .vsc-eye:hover,
+.vsc-root .vsc-place:hover {
   background: transparent !important;
   transform: translate(-50%, -50%) scale(1.15);
   filter: drop-shadow(0 0 6px rgba(var(--ac), 0.8));
 }
+.vsc-root .vsc-place {
+  top: 68.5%;
+  font-size: 16px;
+}
+.vsc-root .vsc-place.off {
+  opacity: 0.6;
+}
 .vsc-root .vsc-mana-info {
-  position: absolute;
-  left: 50%;
-  top: calc(77% - 8px);
-  transform: translateX(-50%);
+  position: relative;
+  width: fit-content;
+  margin: 10px auto 0;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -14422,15 +14441,15 @@ ol#combat-tracker.directory-list {
   background-color: rgba(0, 0, 0, 0.1764705882);
   border: 1px solid rgb(var(--ac));
   border-radius: 10px;
-  padding: 1px 2px;
+  padding: 2px 6px;
   font-family: "Germania", serif;
-  font-size: 16px;
+  font-size: 21px;
   pointer-events: auto;
   z-index: 5;
 }
 .vsc-root .vsc-mana-info .vsc-mana-icon {
   color: rgb(var(--ac));
-  font-size: 14px;
+  font-size: 18px;
   cursor: help;
 }
 .vsc-root .vsc-mana-info .vsc-mana-numbers {
@@ -14449,7 +14468,7 @@ ol#combat-tracker.directory-list {
 .vsc-root .vsc-delivery-list {
   position: absolute;
   left: 50%;
-  top: calc(71.7% + 10px);
+  top: calc(74.4% + 10px);
   transform: translateX(-50%);
   width: 150px;
   background: rgba(0, 0, 0, 0.92);
@@ -14601,7 +14620,7 @@ ol#combat-tracker.directory-list {
   align-items: center;
   gap: 6px;
   width: 65%;
-  margin: 12px auto 0;
+  margin: 8px auto 0;
   padding: 16px !important;
   background: transparent !important;
   background-image: url("../assets/ui/chat/apply-direct-bg.webp") !important;
@@ -14667,6 +14686,7 @@ ol#combat-tracker.directory-list {
   border-color: rgb(255, 196, 90);
   color: rgb(255, 210, 130);
   box-shadow: 0 0 6px rgba(255, 196, 90, 0.4);
+  animation: vsc-warn-pulse 1.6s ease-in-out infinite;
 }
 .vsc-root .vsc-error.vsc-message--info {
   border-color: rgb(150, 215, 255);

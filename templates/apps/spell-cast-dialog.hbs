@@ -57,7 +57,7 @@
       <text class="vsc-edge-label bottom clickable"
             text-anchor="middle"
             data-action="vscOpenDelivery"
-            x="180" y="258">{{deliveryLabel}}</text>
+            x="180" y="278">{{deliveryLabel}}</text>
       {{#unless (or hideDiceFx picksActive)}}
       <text class="vsc-edge-label right {{#if diceClickable}}clickable{{/if}}"
             text-anchor="middle"
@@ -129,14 +129,13 @@
     </button>
     {{/unless}}
 
-    {{!-- Mana info — below the delivery title --}}
-    <div class="vsc-mana-info">
-      <i class="fas fa-star-christmas vsc-mana-icon"
-         title="{{localize 'VAGABOND.Actor.Character.FIELDS.mana.castingMax.label'}}: {{castingMax}}"></i>
-      <span class="vsc-mana-numbers clickable"
-            data-action="vscModifyMana"
-            title="{{localize 'VAGABOND.UI.Tooltips.SpendMana'}}">{{manaCurrent}}/{{manaMax}}</span>
-    </div>
+    {{#if placeMode}}
+    {{!-- Crosshair (SpellPlacement): aim a Cube / Sphere, or pick Remote spaces on the map; right-click clears --}}
+    <button type="button" class="vsc-place {{#if placeOn}}on{{else}}off{{/if}}"
+            data-action="vscPlace" data-tooltip="{{placeTitle}}">
+      <i class="fa-solid fa-crosshairs"></i>
+    </button>
+    {{/if}}
 
     {{#if imbueActive}}
     {{!-- Imbue weapon picker — replaces the triangle while Imbue is the active
@@ -188,6 +187,15 @@
         </div>
       {{/each}}
     </div>
+  </div>
+
+  {{!-- Mana info — outside the circle, right above the Cast button --}}
+  <div class="vsc-mana-info">
+    <i class="fas fa-star-christmas vsc-mana-icon"
+       title="{{localize 'VAGABOND.Actor.Character.FIELDS.mana.castingMax.label'}}: {{castingMax}}"></i>
+    <span class="vsc-mana-numbers clickable"
+          data-action="vscModifyMana"
+          title="{{localize 'VAGABOND.UI.Tooltips.SpendMana'}}">{{manaCurrent}}/{{manaMax}}</span>
   </div>
 
   <button type="button" class="vsc-cast" data-action="vscCast">

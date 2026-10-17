@@ -1264,6 +1264,21 @@
         "inHand": "Trinket in Hand",
         "handsFree": "Both Hands Free (gestures)"
       },
+      "spellPlacementEnforce": {
+        "name": "Range Check for Placed Spells",
+        "hint": "When a Cube, Sphere or Remote space is placed by hand on the map (Cast dialog crosshair). Off: no check. Warn: notify but allow. Block: refuse the point.",
+        "off": "Off",
+        "warn": "Warn Only",
+        "block": "Block"
+      },
+      "spellPlacementSight": {
+        "name": "Must Be in Sight",
+        "hint": "The caster must see the point: a wall between their token and it blocks it."
+      },
+      "spellPlacementMaxFeet": {
+        "name": "Max Distance (feet)",
+        "hint": "Farthest a point can be from the caster's token. 0 = no limit."
+      },
       "shopChatMode": {
         "name": "Shop Receipts in Chat",
         "hint": "Who sees the chat card posted for each purchase, sale and party transfer.",
@@ -3114,6 +3129,17 @@
       "Focus": "Focus",
       "Fx": "FX"
     },
+    "SpellPlace": {
+      "AreaButton": "Place on the map (right-click: clear)",
+      "SpacesButton": "Target spaces on the map (right-click: clear)",
+      "AreaPrompt": "Click to place the area (on a token: it follows the token). Right-click or Esc to cancel.",
+      "SpacesPrompt": "Click the ground to add or remove a space, a token to target it. Right-click, Esc or Enter to finish.",
+      "NeedAim": "Target a token, or place the {type} with the crosshair.",
+      "OutOfSight": "The caster can't see that point.",
+      "OutOfRange": "That point is {feet}' away (max {max}').",
+      "SpacesOutOfRange": "{n} spaces are out of the caster's reach.",
+      "SpacesLabel": "Spaces"
+    },
     "SpellFx": {
       "ClickToPreview": "Click to preview",
       "Cast": "Cast"
@@ -3531,6 +3557,7 @@
         "equipment": "Equipment",
         "automation": "Class Automation",
         "casting": "Casting Rules",
+        "placement": "Placing Spells",
         "areas": "Spell Areas",
         "artwork": "Area Artwork",
         "castDialog": "Your Cast Dialog",

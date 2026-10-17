@@ -445,7 +445,7 @@ export class VagabondSpellSequencer {
    * @param {Token[]} targetTokens
    * @private
    */
-  static _addAreaAnim(seq, school, deliveryType, distanceFt, casterToken, targetTokens, fileMap) {
+  static _addAreaAnim(seq, school, deliveryType, distanceFt, casterToken, targetTokens, fileMap, areaCenter = null) {
     const schoolAnims = this._getConfig().areaAnims?.[school];
     if (!schoolAnims) return;
     let cfg = schoolAnims[deliveryType];
@@ -459,8 +459,8 @@ export class VagabondSpellSequencer {
       for (let i = 0; i < nodes.length - 1; i++) {
         let fx = chainSeq.effect()
           .file(cfg.file)
-          .attachTo(nodes[i])
-          .stretchTo(nodes[i + 1], { attachTo: true })
+          .attachTo(nodes[i].isSpace ? this._center(nodes[i]) : nodes[i])
+          .stretchTo(nodes[i + 1].isSpace ? this._center(nodes[i + 1]) : nodes[i + 1], { attachTo: !nodes[i + 1].isSpace })
           .duration(this._getDuration(cfg))
           .waitUntilFinished(-100);
         this._applyOpacity(fx, cfg);
@@ -476,7 +476,8 @@ export class VagabondSpellSequencer {
         let fx = beamSeq.effect()
           .file(cfg.file)
           .attachTo(casterToken)
-          .stretchTo(target, { attachTo: true })
+          // A Remote space (SpellPlacement pseudo-target) is a plain point: nothing to attach to
+          .stretchTo(target.isSpace ? this._center(target) : target, { attachTo: !target.isSpace })
           .duration(this._getDuration(cfg));
         this._applyOpacity(fx, cfg);
       }
@@ -514,7 +515,8 @@ export class VagabondSpellSequencer {
       }
 
       case 'sphere': {
-        const centroid = this._centroid(targetTokens) ?? this._center(casterToken);
+        // Hand-placed (SpellPlacement): the area's own center, not its targets'
+        const centroid = areaCenter ?? this._centroid(targetTokens) ?? this._center(casterToken);
         let fx = seq.effect()
           .file(cfg.file)
           .atLocation(centroid)
@@ -541,7 +543,7 @@ export class VagabondSpellSequencer {
       }
 
       case 'cube': {
-        const cubeCentroid = this._centroid(targetTokens) ?? this._center(casterToken);
+        const cubeCentroid = areaCenter ?? this._centroid(targetTokens) ?? this._center(casterToken);
         let fx = seq.effect()
           .file(cfg.file)
           .atLocation(cubeCentroid)
@@ -587,11 +589,11 @@ export class VagabondSpellSequencer {
         break;
 
       case 'remote':
-        // Impact on each target
+        // Impact on each target (spaces are plain points)
         for (const target of targetTokens) {
           let fx = seq.effect()
             .file(cfg.file)
-            .atLocation(target)
+            .atLocation(target.isSpace ? this._center(target) : target)
             .duration(this._getDuration(cfg));
           this._applyAreaSize(fx, distanceFt, cfg);
           this._applyOpacity(fx, cfg);
@@ -627,7 +629,7 @@ export class VagabondSpellSequencer {
     if (!this.isEnabledForWorld() || !this.isAvailable() || !this.isEnabledForUser()) return;
     if (!casterToken) return;
 
-    const { deliveryEnabled = true } = options;
+    const { deliveryEnabled = true, areaCenter = null } = options;
     const school = this._resolveSchool(spellItem);
     const distanceFt = this._getTotalDistanceFt(deliveryType, increaseCount);
 
@@ -675,7 +677,7 @@ export class VagabondSpellSequencer {
 
       // Area animation (only on success).
       if (deliveryType && deliveryEnabled) {
-        this._addAreaAnim(seq, school, deliveryType, distanceFt, casterToken, targetTokens, fileMap);
+        this._addAreaAnim(seq, school, deliveryType, distanceFt, casterToken, targetTokens, fileMap, areaCenter);
       }
 
       seq.play();

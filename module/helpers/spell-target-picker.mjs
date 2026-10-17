@@ -113,8 +113,8 @@ export class SpellTargetPicker {
   }
 
   /**
-   * The Cast's area as a plain v14 Region shape (same placement as the spell template: caster origin, targets
-   * centroid), or null for a non-area delivery / no canvas. Also snapshotted on the Cast for hit macros
+   * The Cast's area as a plain v14 Region shape (same placement as the spell template: caster origin, hand-placed
+   * aim point `state.areaAnchor` (SpellPlacement), else targets centroid), or null for a non-area delivery / no canvas. Also snapshotted on the Cast for hit macros
    * (`scope.castArea`, Conjure placement).
    * @returns {object|null}
    */
@@ -126,7 +126,8 @@ export class SpellTargetPicker {
     const manager = globalThis.vagabond?.managers?.templates ?? new VagabondMeasureTemplates();
     const centroid = targets.length ? manager._calculateTargetCentroid(targets) : null;
     const data = manager._constructRegionData({
-      type, distance: this.#areaDistance(state), token: caster, targets: game.user.targets, centroid, notify: false,
+      type, distance: this.#areaDistance(state), token: caster, targets: game.user.targets, centroid,
+      anchor: state.areaAnchor ?? null, notify: false,
     });
     const shape = data?.shapes?.[0];
     if (!shape) return null;

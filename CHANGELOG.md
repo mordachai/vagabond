@@ -1,6 +1,13 @@
 # Changelog
 
 ## v6.7.2
+- **[Added]** Cast dialog: a crosshair places a Cube or Sphere anywhere on the map without leaving the token layer. Increase grows it from that point; clicking a token aims at it and the area follows the token. Click the crosshair again to move it, right-click to clear.
+- **[Added]** A placed Cube or Sphere targets every token inside it (the caster left out), and updates as it grows or tokens move.
+- **[Added]** Remote: the crosshair targets spaces with no token on them (Erupt, a cart drawn on the map). Click the ground to add or remove a space, a token to target it. Spaces count as Targets, show on the card and get the FX. Placed spaces show in your player color, edged in the Spell's color.
+- **[Added]** Settings (Magic, Placing Spells): range check for placed points. Off, warn or block; must be in sight (walls block); max distance in feet.
+- **[Changed]** Remote: the Increase counts the targeted tokens (and spaces) by itself, also with the Cast dialog off.
+- **[Changed]** Cube areas snap to the grid, so they always cover whole squares.
+- **[Changed]** Cast dialog: 15px bigger (compact too); the Mana counter sits bigger above the Cast button, outside the circle; warning messages pulse their outline; default backdrop 50% dark with a 2px blur.
 - **[Added]** Beast: the Cast card's Beast button opens a picker of Beasts (cumulative HD up to half your Level, min 1). They appear in the area (Aura, Cone…), next to the Target, or spring out of a triggered Glyph. Your players own them; their actions use your Cast Skill.
 - **[Added]** Forge: the Cast card's Forge button opens a picker of Items (1 Slot, 1g) whose new Handling switch "Can be Forged" is on (preset on the compendium gear, weapons and armor: solid copper, iron, glass, stone or wood; no food, drink, cloth, jewelry or trinkets). You get yours in your inventory (Equip into free hands); with Canvas Loot another Target's Item lands on the ground next to it, without it a Character gets it in their inventory. An area Cast drops one per 5' cube with Canvas Loot. A Forge that can't place its Items (an NPC Target, or an area, without Canvas Loot) is refused before any Mana is spent.
 - **[Added]** Conjured Beasts and Items vanish when the Focus ends, or at the caster's next Turn in Combat when the Cast didn't Focus. The card's Dismiss button ends them any time.

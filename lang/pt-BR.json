@@ -1278,6 +1278,21 @@
         "inHand": "Trinket na Mão",
         "handsFree": "Ambas as Mãos Livres (gestos)"
       },
+      "spellPlacementEnforce": {
+        "name": "Checagem de Alcance de Magias Posicionadas",
+        "hint": "Quando um Cubo, Esfera ou espaço Remoto é posicionado à mão no mapa (mira da janela de Conjuração). Desligado: sem checagem. Avisar: notifica mas permite. Bloquear: recusa o ponto.",
+        "off": "Desligado",
+        "warn": "Só Avisar",
+        "block": "Bloquear"
+      },
+      "spellPlacementSight": {
+        "name": "Precisa Estar à Vista",
+        "hint": "O conjurador precisa ver o ponto: uma parede entre o token dele e o ponto o bloqueia."
+      },
+      "spellPlacementMaxFeet": {
+        "name": "Distância Máxima (pés)",
+        "hint": "O mais longe que um ponto pode estar do token do conjurador. 0 = sem limite."
+      },
       "shopChatMode": {
         "name": "Recibos da Loja no Chat",
         "hint": "Quem vê o cartão de chat de cada compra, venda e transferência do grupo.",
@@ -3128,6 +3143,17 @@
       "Focus": "Concentração",
       "Fx": "FX"
     },
+    "SpellPlace": {
+      "AreaButton": "Posicionar no mapa (botão direito: limpar)",
+      "SpacesButton": "Mirar espaços no mapa (botão direito: limpar)",
+      "AreaPrompt": "Clique para posicionar a área (num token: ela segue o token). Botão direito ou Esc cancela.",
+      "SpacesPrompt": "Clique no chão para adicionar ou remover um espaço, num token para mirá-lo. Botão direito, Esc ou Enter termina.",
+      "NeedAim": "Mire um token, ou posicione o {type} com a mira.",
+      "OutOfSight": "O conjurador não vê esse ponto.",
+      "OutOfRange": "Esse ponto está a {feet}' (máx. {max}').",
+      "SpacesOutOfRange": "{n} espaços estão fora do alcance do conjurador.",
+      "SpacesLabel": "Espaços"
+    },
     "SpellFx": {
       "ClickToPreview": "Clique para pré-visualizar",
       "Cast": "Conjuração"
@@ -3545,6 +3571,7 @@
         "equipment": "Equipamento",
         "automation": "Automação de Classes",
         "casting": "Regras de Conjuração",
+        "placement": "Posicionar Magias",
         "areas": "Áreas de Magia",
         "artwork": "Arte das Áreas",
         "castDialog": "Sua Janela de Conjuração",

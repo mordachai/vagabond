@@ -15,6 +15,7 @@
  * action dialog for the caster/GM. The token layer never deactivates.
  */
 import { VagabondGlyphHelper } from '../helpers/glyph-helper.mjs';
+import { SpellPlacement } from '../helpers/spell-placement.mjs';
 
 export class GlyphOverlay {
   /** Per-placeable overlay state. @type {WeakMap<object, {container: PIXI.Container, sprite: PIXI.Sprite, path: string, tick: Function}>} */
@@ -53,13 +54,13 @@ export class GlyphOverlay {
       stage.off('pointerup', up);
     }
     const down = (ev) => {
-      if (ev.button !== 0 || VagabondGlyphHelper.isPlacing) { GlyphOverlay.#downAt = null; return; }
+      if (ev.button !== 0 || VagabondGlyphHelper.isPlacing || SpellPlacement.isPlacing) { GlyphOverlay.#downAt = null; return; }
       GlyphOverlay.#downAt = ev.getLocalPosition(stage);
     };
     const up = (ev) => {
       const start = GlyphOverlay.#downAt;
       GlyphOverlay.#downAt = null;
-      if (!start || ev.button !== 0 || VagabondGlyphHelper.isPlacing) return;
+      if (!start || ev.button !== 0 || VagabondGlyphHelper.isPlacing || SpellPlacement.isPlacing) return;
       const pos = ev.getLocalPosition(stage);
       if (Math.hypot(pos.x - start.x, pos.y - start.y) > 5) return; // drag, not click
 

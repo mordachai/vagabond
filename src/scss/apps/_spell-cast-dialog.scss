@@ -26,6 +26,10 @@
 @keyframes vsc-spin-cw  { from { transform: rotate(0deg);   } to { transform: rotate(360deg);  } }
 @keyframes vsc-spin-ccw { from { transform: rotate(0deg);   } to { transform: rotate(-360deg); } }
 @keyframes vsc-side-run { from { stroke-dashoffset: 0; } to { stroke-dashoffset: -100; } }
+@keyframes vsc-warn-pulse {
+  0%, 100% { border-color: rgba(255, 196, 90, 0.45); box-shadow: 0 0 3px rgba(255, 196, 90, 0.2); }
+  50%      { border-color: rgb(255, 214, 130);      box-shadow: 0 0 10px 1px rgba(255, 196, 90, 0.75); }
+}
 @keyframes vsc-pulse {
   0%, 100% { stroke-opacity: 0.45; }
   50%      { stroke-opacity: 1.0;  }
@@ -33,7 +37,7 @@
 
 .vsc-root {
   position: relative;
-  width: 375px;
+  width: 390px;
   padding: 0 0.5rem 1rem;
 
   // Minimized: hide body, keep header only. Toggled via dblclick on header.
@@ -41,6 +45,7 @@
     padding-bottom: 0;
     .vsc-header { margin-bottom: 0; }
     .vsc-circle-wrap,
+    .vsc-mana-info,
     .vsc-cast,
     .vsc-messages,
     .vsc-error { display: none !important; }
@@ -51,7 +56,7 @@
   // boundary + triangle + nodes stay the SAME pixel size; the dialog
   // container shrinks because the trimmed SVG occupies less width.
   &.no-rings {
-    width: 285px; // narrower footprint; SVG fills 100% of this
+    width: 300px; // narrower footprint; SVG fills 100% of this
     .vsc-circle {
       .outer-ring,
       .middle-ring,
@@ -76,10 +81,10 @@
     // viewBox cropped to 56..304 (248 units), so percentages shift.
     // node y=114 → (114-56)/248 ≈ 23.4%
     .vsc-eye          { top: calc(23.4% + 8px); }
-    // bottom-edge "Delivery" label y=258 → (258-56)/248 ≈ 81.5%
-    .vsc-delivery-list { top: calc(81.5% + 10px); }
-    // mana info y≈277 → (277-56)/248 ≈ 89.1%
-    .vsc-mana-info    { top: calc(89.1% - 4px); }
+    // crosshair y=237 → (237-56)/248 ≈ 73%
+    .vsc-place        { top: 73%; }
+    // bottom-edge "Delivery" label y=268 → (268-56)/248 ≈ 85.5%
+    .vsc-delivery-list { top: calc(85.5% + 10px); }
     // Imbue ring buttons position via viewBox-unit CSS vars — remap them to
     // the cropped viewBox (56..304, span 248).
     .vsc-imbue-ring,
@@ -415,7 +420,8 @@
   }
 
   // ── Eye toggle (absolutely positioned over SVG) ─────────────────────
-  .vsc-eye {
+  .vsc-eye,
+  .vsc-place {
     position: absolute;
     // Node sits at SVG (180, 114). Within 360-wide viewBox at full width:
     // x% = 180/360 = 50%, y% = 114/360 ≈ 31.7% measured from SVG top.
@@ -454,12 +460,17 @@
     // &.on    { box-shadow: 0 0 6px rgba(var(--ac), 0.6); }
   }
 
+  // Dim until something is placed
+  // Crosshair (SpellPlacement): centered right above the Delivery label (SVG y≈237 → 65.8%)
+  .vsc-place { top: 68.5%; font-size: 16px; }
+  .vsc-place.off { opacity: 0.6; }
+
   // ── Mana info row (below delivery title) ────────────────────────────
+  // In the flow between the circle and the Cast button (outside the rings)
   .vsc-mana-info {
-    position: absolute;
-    left: 50%;
-    top: calc(77% - 8px);
-    transform: translateX(-50%);
+    position: relative;
+    width: fit-content;
+    margin: 10px auto 0;
     display: flex;
     align-items: center;
     gap: 6px;
@@ -467,15 +478,15 @@
     background-color: #0000002d;
     border: 1px solid rgb(var(--ac));
     border-radius: 10px;
-    padding: 1px 2px;
+    padding: 2px 6px;
     font-family: $font-number;
-    font-size: 16px;
+    font-size: 21px;
     pointer-events: auto;
     z-index: 5;
 
     .vsc-mana-icon {
       color: rgb(var(--ac));
-      font-size: 14px;
+      font-size: 18px;
       cursor: help;
     }
 
@@ -499,10 +510,10 @@
   // ── Delivery selector overlay ───────────────────────────────────────
   .vsc-delivery-list {
     position: absolute;
-    // Below the bottom edge label "Delivery" — label at SVG (180, 258)
-    // → 180/360 = 50%, 258/360 ≈ 71.7%
+    // Below the bottom edge label "Delivery" — label at SVG (180, 268)
+    // → 180/360 = 50%, 268/360 ≈ 74.4%
     left: 50%;
-    top: calc(71.7% + 10px);
+    top: calc(74.4% + 10px);
     transform: translateX(-50%);
     width: 150px;
     background: rgba(0, 0, 0, 0.92);
@@ -677,7 +688,7 @@
     align-items: center;
     gap: 6px;
     width: 65%;
-    margin: 12px auto 0;
+    margin: 8px auto 0;
     padding: 16px !important;
     background: transparent !important;
     background-image: url('../assets/ui/chat/apply-direct-bg.webp') !important;
@@ -745,11 +756,13 @@
 
     &.hidden { visibility: hidden; }
 
-    // Warning — amber. Used for soft rule reminders.
+    // Warning — amber. Used for soft rule reminders. The outline pulses so it
+    // catches the eye (delay rewound in _onRender, so re-renders don't restart it).
     &.vsc-message--warning {
       border-color: rgb(255, 196, 90);
       color: rgb(255, 210, 130);
       box-shadow: 0 0 6px rgba(255, 196, 90, 0.4);
+      animation: vsc-warn-pulse 1.6s ease-in-out infinite;
     }
 
     // Info — neutral cyan. Used for non-blocking notices.

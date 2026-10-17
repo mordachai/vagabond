@@ -215,6 +215,45 @@ export function registerGameSettings({ refreshClockDependents, applyTokenEffectV
     requiresReload: false,
   });
 
+  // Range check of Casts placed by hand on the map (SpellPlacement: Cube / Sphere aim point, Remote spaces).
+  // Severity here; what is checked in the two settings below (sight, max distance).
+  game.settings.register('vagabond', 'spellPlacementEnforce', {
+    name: 'VAGABOND.Settings.spellPlacementEnforce.name',
+    hint: 'VAGABOND.Settings.spellPlacementEnforce.hint',
+    scope: 'world',
+    config: false,
+    type: String,
+    choices: {
+      off: 'VAGABOND.Settings.spellPlacementEnforce.off',
+      warn: 'VAGABOND.Settings.spellPlacementEnforce.warn',
+      block: 'VAGABOND.Settings.spellPlacementEnforce.block',
+    },
+    default: 'block',
+    requiresReload: false,
+  });
+
+  // Book "you can see" / "in sight": walls between the caster and the point block it
+  game.settings.register('vagabond', 'spellPlacementSight', {
+    name: 'VAGABOND.Settings.spellPlacementSight.name',
+    hint: 'VAGABOND.Settings.spellPlacementSight.hint',
+    scope: 'world',
+    config: false,
+    type: Boolean,
+    default: true,
+    requiresReload: false,
+  });
+
+  // Max feet from the caster to a placed point (0 = no limit; the book gives none)
+  game.settings.register('vagabond', 'spellPlacementMaxFeet', {
+    name: 'VAGABOND.Settings.spellPlacementMaxFeet.name',
+    hint: 'VAGABOND.Settings.spellPlacementMaxFeet.hint',
+    scope: 'world',
+    config: false,
+    type: Number,
+    default: 0,
+    requiresReload: false,
+  });
+
   // Mana on a failed cast: whether a caster still pays (in full or half) when
   // the casting check fails. Imbue's weapon attack roll IS its cast check, so
   // a miss follows the same rule — see VagabondImbueHelper.resolveMissedCast.
@@ -363,7 +402,7 @@ export function registerGameSettings({ refreshClockDependents, applyTokenEffectV
     config: false,
     type: Number,
     range: { min: 0, max: 100, step: 5 },
-    default: 0,
+    default: 50,
     onChange: reRenderAllApps,
   });
 
@@ -375,7 +414,7 @@ export function registerGameSettings({ refreshClockDependents, applyTokenEffectV
     config: false,
     type: Number,
     range: { min: 0, max: 5, step: 0.5 },
-    default: 1.0,
+    default: 2,
     onChange: reRenderAllApps,
   });
 

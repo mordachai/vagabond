@@ -1,5 +1,6 @@
 import { VagabondDamagePipeline } from './damage-pipeline.mjs';
 import { TargetHelper } from './target-helper.mjs';
+import { SpellPlacement } from './spell-placement.mjs';
 import { EquipmentHelper } from './equipment-helper.mjs';
 import { DruidHelper } from './druid-helper.mjs';
 import { HunterHelper } from './hunter-helper.mjs';
@@ -193,9 +194,10 @@ export class VagabondDamageHelper {
   static _playFx(fx, actor, item, storedTargets, isHit) {
     if (fx?.kind !== 'spell' || !item) return;
     const casterToken = actor.token?.object ?? actor.getActiveTokens(true)[0];
-    const targets = TargetHelper.resolveTargets(storedTargets);
+    // Remote spaces + a hand-placed area's center (SpellPlacement) ride the payload
+    const targets = [...TargetHelper.resolveTargets(storedTargets), ...SpellPlacement.pseudoTargets(fx.spaces)];
     import('./spell-sequencer.mjs').then(({ VagabondSpellSequencer }) => {
-      VagabondSpellSequencer.play(item, fx.deliveryType, fx.deliveryIncrease ?? 0, casterToken, targets, { deliveryEnabled: isHit });
+      VagabondSpellSequencer.play(item, fx.deliveryType, fx.deliveryIncrease ?? 0, casterToken, targets, { deliveryEnabled: isHit, areaCenter: fx.areaCenter ?? null });
     });
   }
 

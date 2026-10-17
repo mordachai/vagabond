@@ -60,6 +60,11 @@ export const SETTINGS_SUBJECTS = [
         { key: 'spellManaOnCastFail' },
         { key: 'imbueUpfrontMana' },
       ]},
+      { id: 'placement', scope: 'world', rows: [
+        { key: 'spellPlacementEnforce' },
+        { key: 'spellPlacementSight', dep: 'spellPlacementEnforce', depNot: 'off' },
+        { key: 'spellPlacementMaxFeet', min: 0, max: 1000, step: 5, dep: 'spellPlacementEnforce', depNot: 'off' },
+      ]},
       { id: 'areas', scope: 'world', note: 'VAGABOND.SettingsHub.Notes.areas', rows: [
         { key: 'regionHighlightMode' },
         { key: 'regionBorderMode' },
