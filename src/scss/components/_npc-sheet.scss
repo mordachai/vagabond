@@ -101,6 +101,43 @@
   padding: 0px;
 }
 
+/* Metamorph form (Polymorph): original's portrait + way back */
+.npc-morph-banner {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 6px 0 0;
+  padding: 3px 6px;
+  border: 1px solid $c-faint;
+  border-radius: 4px;
+  background: $c-bg2;
+
+  img {
+    width: 26px;
+    height: 26px;
+    border: none;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .npc-morph-name {
+    flex: 1;
+    font-family: $font-title;
+    color: $c-text-1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  button {
+    flex: 0 0 auto;
+    width: 26px;
+    height: 26px;
+    line-height: normal;
+    padding: 0;
+  }
+}
+
 .npc-header-content {
   display: flex;
   flex-direction: row;

@@ -1243,7 +1243,9 @@
             "damageOnTick": "",
             "damageType": "fire"
           }
-        ]
+        ],
+        "targetBeings": true,
+        "targetObjects": false
       },
       "effects": [],
       "flags": {},
@@ -1290,7 +1292,9 @@
           "command": "const tgts = (typeof targets !== \"undefined\" && targets?.length)\n  ? targets\n  : Array.from(game.user.targets);\nif (!tgts.length) return ui.notifications.warn(\"No token targeted.\");\n\nfor (const t of tgts) {\n  await t.actor.toggleStatusEffect(\"charmed\", { active: true });\n}\n\n//ui.notifications.info(`Charm applied to ${tgts.length} target(s).`);",
           "label": "Charm",
           "runAsGM": true
-        }
+        },
+        "targetBeings": true,
+        "targetObjects": false
       },
       "effects": [],
       "flags": {},
@@ -1337,7 +1341,9 @@
           "command": "const tgts = (typeof targets !== \"undefined\" && targets?.length)\n  ? targets\n  : Array.from(game.user.targets);\nif (!tgts.length) return ui.notifications.warn(\"No token targeted.\");\n\nfor (const t of tgts) {\n  await t.actor.toggleStatusEffect(\"frightened\", { active: true });\n}\n\n//ui.notifications.info(`Fear applied to ${tgts.length} target(s).`);",
           "label": "Fear",
           "runAsGM": true
-        }
+        },
+        "targetBeings": true,
+        "targetObjects": false
       },
       "effects": [],
       "flags": {},
@@ -1386,7 +1392,9 @@
           "runAsGM": true
         },
         "usesDiceScaling": true,
-        "diceScaleLabel": "Level"
+        "diceScaleLabel": "Level",
+        "targetBeings": true,
+        "targetObjects": false
       },
       "effects": [],
       "flags": {},

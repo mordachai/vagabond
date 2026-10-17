@@ -1,5 +1,19 @@
 # Changelog
 
+## v6.7.2
+- **[Changed]** Cast dialog: Spells with no damage show 0 on the dice node (locked). Dice-scaling Spells (Hold, Tempo) still change their dice.
+- **[Changed]** Cast dialog: FX is always on for Spells with no damage (the Effect is the Cast), and can't be switched off.
+- **[Added]** Cast dialog: Focus and FX toggles show a running light in the Spell's colour while on, in full and compact mode.
+- **[Fixed]** Compact Cast dialog with the Target picker: the delivery cost and dice nodes sit clear of the main circle.
+- **[Fixed]** Polymorph: the token now shows the Beast's art after the swap (it kept the original image until a reload). Needs Metamorph 1.5.1.
+- **[Fixed]** Polymorph: a Beast form made before the player was given Owner of the original actor now follows its ownership, so the player can control the token and open its sheet. Needs Metamorph 1.5.1.
+- **[Added]** Spells get a "Focus on Cast" switch (edit mode): the Cast dialog opens with Focus on. Polymorph has it on (compendium needs a rebuild; world copies update on load). A Beast Mode self-Polymorph drops the Focus again, since it is continual.
+- **[Added]** Polymorph: a Beast form's sheet shows "Original: (name)" with Open Original Sheet and Return to Original buttons (also in the sheet's header menu).
+- **[Added]** Polymorph: a Beast form shows its original's Focusing ring, so the player is reminded the Spell is being Focused.
+- **[Fixed]** Polymorph: the Target keeps its HP in Beast form, and damage taken as the Beast carries back when it returns (book). Needs Metamorph 1.5.1.
+- **[Fixed]** Polymorph: a player can Polymorph a Target they don't own (the GM performs the swap); the Target's owners control the form. Needs Metamorph 1.5.1.
+- **[Fixed]** Circle token art: a token with the ring on could snap back to its old circle art after its actor and art were swapped (Polymorph, Metamorph).
+
 ## v6.7.1
 - **[Changed]** Wearable and other Relics (boots, cloaks, rings, scrolls, Spellbook...) get their own icons instead of the shared pink gem (compendium needs a rebuild).
 - **[Changed]** Magistaff Common / Rare / Legendary each get a different staff icon; Skyhowel gets a chain whip icon.

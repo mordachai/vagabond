@@ -1257,7 +1257,10 @@
           "command": "system:druid.polymorph",
           "label": "Polymorph",
           "runAsGM": false
-        }
+        },
+        "targetBeings": true,
+        "targetObjects": false,
+        "focusOnCast": true
       },
       "effects": [],
       "flags": {},
@@ -1275,6 +1278,8 @@
         "crit": "The Target is Restrained.",
         "favorite": true,
         "noRollRequired": false,
+        "targetBeings": true,
+        "targetObjects": false,
         "fxSchool": "nature",
         "locked": true,
         "critCausedStatuses": [

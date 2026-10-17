@@ -4,6 +4,7 @@ import {
   NPCImmunityHandler,
   NPCActionHandler,
 } from './handlers/_module.mjs';
+import { DruidHelper } from '../helpers/druid-helper.mjs';
 
 /**
  * NPC-specific actor sheet
@@ -46,8 +47,45 @@ export class VagabondNPCSheet extends VagabondActorSheet {
     position: {
       width: 380,
       height: 'auto'
+    },
+    actions: {
+      // Metamorph form (Polymorph): back to the original / its sheet (DruidHelper)
+      formRevert: VagabondNPCSheet._onFormRevert,
+      formOpenOriginal: VagabondNPCSheet._onFormOpenOriginal,
     }
   }, { inplace: false });
+
+  /**
+   * @override
+   * A Metamorph form (Polymorph) can't reach its original's sheet from the token: header menu entries
+   * (next to the banner in npc-header.hbs) to change back / open it.
+   */
+  _getHeaderControls() {
+    const controls = super._getHeaderControls();
+    if (DruidHelper.mainActorOf(this.actor)) {
+      controls.unshift(
+        { action: 'formRevert', icon: 'fas fa-person-walking-arrow-loop-left', label: 'VAGABOND.Druid.ReturnForm' },
+        { action: 'formOpenOriginal', icon: 'fas fa-id-card', label: 'VAGABOND.Druid.OpenOriginal' },
+      );
+    }
+    return controls;
+  }
+
+  /** @override */
+  async _prepareContext(options) {
+    const context = await super._prepareContext(options);
+    const original = DruidHelper.mainActorOf(this.actor);
+    context.morphOriginal = original ? { name: original.name, img: original.img } : null;
+    return context;
+  }
+
+  static async _onFormRevert() {
+    await DruidHelper.revertForm(this.actor);
+  }
+
+  static _onFormOpenOriginal() {
+    DruidHelper.openOriginalSheet(this.actor);
+  }
 
   /**
    * @override

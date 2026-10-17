@@ -1285,6 +1285,8 @@
         "crit": "",
         "favorite": true,
         "noRollRequired": true,
+        "targetBeings": true,
+        "targetObjects": false,
         "fxSchool": "arcane",
         "locked": true
       },
@@ -1333,7 +1335,9 @@
           "command": "const tgts = (typeof targets !== \"undefined\" && targets?.length)\n  ? targets\n  : Array.from(game.user.targets);\nif (!tgts.length) return ui.notifications.warn(\"No token targeted.\");\n\nfor (const t of tgts) {\n  await t.actor.toggleStatusEffect(\"frightened\", { active: true });\n}\n\n//ui.notifications.info(`Fear applied to ${tgts.length} target(s).`);",
           "label": "Fear",
           "runAsGM": true
-        }
+        },
+        "targetBeings": true,
+        "targetObjects": false
       },
       "effects": [],
       "flags": {},
@@ -1351,6 +1355,8 @@
         "crit": "Duration is 1 Minute (no Focus required).",
         "favorite": true,
         "noRollRequired": true,
+        "targetBeings": true,
+        "targetObjects": false,
         "fxSchool": "radiant",
         "locked": true,
         "hitMacro": {
@@ -1408,7 +1414,9 @@
           "runAsGM": true
         },
         "usesDiceScaling": true,
-        "diceScaleLabel": "Level"
+        "diceScaleLabel": "Level",
+        "targetBeings": true,
+        "targetObjects": false
       },
       "effects": [],
       "flags": {},

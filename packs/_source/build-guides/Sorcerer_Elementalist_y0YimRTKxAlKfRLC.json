@@ -1117,7 +1117,9 @@
             "damageOnTick": "",
             "damageType": "fire"
           }
-        ]
+        ],
+        "targetBeings": true,
+        "targetObjects": false
       },
       "effects": [],
       "flags": {},
@@ -1135,6 +1137,8 @@
         "crit": "Duration is continual.",
         "favorite": true,
         "noRollRequired": true,
+        "targetBeings": true,
+        "targetObjects": false,
         "locked": true,
         "hitMacro": {
           "enabled": true,
@@ -1159,7 +1163,9 @@
         "duration": "Until your next turn",
         "crit": "",
         "favorite": true,
-        "locked": true
+        "locked": true,
+        "targetBeings": true,
+        "targetObjects": true
       },
       "effects": [],
       "flags": {},
@@ -1184,7 +1190,9 @@
           "command": "system:spell.status.warded",
           "label": "Ward",
           "runAsGM": true
-        }
+        },
+        "targetBeings": true,
+        "targetObjects": false
       },
       "effects": [],
       "flags": {},

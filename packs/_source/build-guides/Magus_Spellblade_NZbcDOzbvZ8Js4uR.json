@@ -1086,6 +1086,8 @@
         "crit": "",
         "favorite": true,
         "noRollRequired": true,
+        "targetBeings": true,
+        "targetObjects": true,
         "fxSchool": "radiant",
         "locked": true,
         "causedStatuses": [],
@@ -1113,6 +1115,8 @@
         "crit": "",
         "favorite": true,
         "noRollRequired": true,
+        "targetBeings": true,
+        "targetObjects": false,
         "noFreeDie": true,
         "fxSchool": "healing",
         "locked": true
@@ -1133,6 +1137,8 @@
         "crit": "Beings of your choice within the Light when you Cast the Spell are Blinded (Cd4).",
         "favorite": true,
         "noRollRequired": false,
+        "targetBeings": true,
+        "targetObjects": false,
         "fxSchool": "radiant",
         "locked": true,
         "critCausedStatuses": [
@@ -1172,7 +1178,9 @@
           "label": "Tempo +",
           "runAsGM": true
         },
-        "locked": true
+        "locked": true,
+        "targetBeings": true,
+        "targetObjects": false
       },
       "effects": [],
       "flags": {},
@@ -1199,7 +1207,9 @@
           "label": "Tempo -",
           "runAsGM": true
         },
-        "locked": true
+        "locked": true,
+        "targetBeings": true,
+        "targetObjects": false
       },
       "effects": [],
       "flags": {},

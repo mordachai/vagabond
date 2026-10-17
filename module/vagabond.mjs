@@ -997,6 +997,8 @@ Hooks.once('ready', function () {
   SpellTrackerHelper.migrateSpellEffectEntries();
   // One-time: Spell copies get the pack's Target Beings / Objects switches (Cast dialog Target picker).
   SpellTrackerHelper.migrateSpellTargetSwitches();
+  // One-time: Spell copies get the pack's Focus on Cast switch (Polymorph opens Focused).
+  SpellTrackerHelper.migrateSpellFocusOnCast();
   // One-time: named Relic copies (Dyrnwyn, Elven Chain…) become their weapon / armor with attached Relics.
   RelicHelper.migrateNamedRelics();
   // One-time: Raise copies get the system:spell.raise hit macro.
@@ -1741,6 +1743,20 @@ Hooks.on('refreshToken', (token) => {
 Hooks.on('updateToken', (doc, changes) => {
   if (!('actorId' in changes) && !foundry.utils.hasProperty(changes, 'flags.vagabond.raiseSpent')) return;
   if (doc.object) _refreshDeadSkull(doc.object);
+});
+
+// Druid / Metamorph: a morphed token shows its form's statuses — mirror the original's Focusing
+// (ring animation) onto its forms, on Focus changes and when a form is taken (DruidHelper.syncFormFocus).
+const _syncFormFocus = (effect) => {
+  const actor = effect.parent;
+  if (!effect.statuses?.has('focusing') || !(actor instanceof Actor) || DruidHelper.mainActorOf(actor)) return;
+  DruidHelper.syncFormFocus(actor).catch(err => console.warn('Vagabond | Form Focusing sync failed', err));
+};
+Hooks.on('createActiveEffect', _syncFormFocus);
+Hooks.on('deleteActiveEffect', _syncFormFocus);
+Hooks.on('metamorph.morph', (tokenDoc, targetActor) => {
+  const main = DruidHelper.mainActorOf(targetActor);
+  if (main) DruidHelper.syncFormFocus(main).catch(err => console.warn('Vagabond | Form Focusing sync failed', err));
 });
 
 // Dead AE created — add skull (HP→0 path or manual HUD toggle)

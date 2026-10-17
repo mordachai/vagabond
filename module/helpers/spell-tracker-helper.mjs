@@ -490,6 +490,31 @@ export class SpellTrackerHelper {
     await game.settings.set('vagabond', 'spellTargetSwitchesMigrated', true);
   }
 
+  /**
+   * One-time (guard `spellFocusOnCastMigrated`): world copies of pack Spells take the pack's Focus on Cast switch
+   * (Polymorph), matched by compendium source id. Only turns it on, never off (a GM may have switched it on).
+   */
+  static async migrateSpellFocusOnCast() {
+    if (game.user !== game.users.activeGM) return;
+    if (game.settings.get('vagabond', 'spellFocusOnCastMigrated')) return;
+    const pack = game.packs.get('vagabond.spells');
+    if (!pack) return;
+    const { isCopyOf } = await import('./source-id.mjs');
+    const index = await pack.getIndex({ fields: ['system.focusOnCast'] });
+    const sources = index.filter(e => e.system?.focusOnCast);
+    if (!sources.length) return; // pack not rebuilt yet: keep the guard for the next load
+
+    for (const item of this.#worldSpells()) {
+      try {
+        if (item.system.focusOnCast || !sources.some(e => isCopyOf(item, e._id, e.name))) continue;
+        await item.update({ 'system.focusOnCast': true });
+      } catch (err) {
+        console.warn(`vagabond | Spell Focus on Cast migration: skipped ${item?.uuid ?? '(unknown)'}`, err);
+      }
+    }
+    await game.settings.set('vagabond', 'spellFocusOnCastMigrated', true);
+  }
+
   /** Every Spell item: sidebar + embedded in every actor (incl. unlinked token actors). */
   static #worldSpells() {
     return [

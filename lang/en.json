@@ -432,7 +432,10 @@
       "ForcePicker": "Force of Nature — Beasts (HD ≤ {level})",
       "ForceUsed": "{name} already used Force of Nature this Shift (a Rest renews it).",
       "ForceNotZero": "Force of Nature triggers when {name} is reduced to 0 HP.",
-      "ForceDone": "<strong>{name}</strong> is reduced to 0 HP, polymorphs into a <strong>{form}</strong> and regains <strong>{hp}</strong> HP."
+      "ForceDone": "<strong>{name}</strong> is reduced to 0 HP, polymorphs into a <strong>{form}</strong> and regains <strong>{hp}</strong> HP.",
+      "ReturnForm": "Return to Original",
+      "OpenOriginal": "Open Original Sheet",
+      "FormOf": "Original: {name}"
     },
     "Rage": {
       "Ended": "{name}'s Rage fades — no attack or damage since their last Turn.",
@@ -2268,7 +2271,8 @@
           },
           "pickTargets": {"label": "Picks Targets"},
           "targetBeings": {"label": "Target Beings", "hint": "The Spell can Target Beings: with the player option Pick Targets in the Cast Dialog on, the Cast dialog lists the Beings inside the area to choose who is affected (with Target Objects on, also beside their weapons on any delivery). Area deliveries never pay per Target."},
-          "targetObjects": {"label": "Target Objects", "hint": "The Cast dialog lists the equipped weapons of the Beings in the area (else the targets, else you) to pick as Targets. They reach the hit macro as scope.targetObjects."}
+          "targetObjects": {"label": "Target Objects", "hint": "The Cast dialog lists the equipped weapons of the Beings in the area (else the targets, else you) to pick as Targets. They reach the hit macro as scope.targetObjects."},
+          "focusOnCast": {"label": "Focus on Cast", "hint": "The Cast dialog opens with Focus on, for Spells you keep up by Focusing (Polymorph). You can still switch it off."}
         },
         "AddSpell": "Add Spell",
         "FxSchool": {

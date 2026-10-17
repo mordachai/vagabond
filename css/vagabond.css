@@ -13919,6 +13919,14 @@ ol#combat-tracker.directory-list {
     transform: rotate(-360deg);
   }
 }
+@keyframes vsc-side-run {
+  from {
+    stroke-dashoffset: 0;
+  }
+  to {
+    stroke-dashoffset: -100;
+  }
+}
 @keyframes vsc-pulse {
   0%, 100% {
     stroke-opacity: 0.45;
@@ -13961,13 +13969,16 @@ ol#combat-tracker.directory-list {
   display: none;
 }
 .vsc-root.no-rings .vsc-side-focus {
-  transform: translate(43px, 34px);
+  transform: translate(46px, 37px);
 }
 .vsc-root.no-rings .vsc-side-fx {
-  transform: translate(-50px, 34px);
+  transform: translate(-53px, 37px);
 }
 .vsc-root.no-rings .vsc-side circle {
   r: 13px;
+}
+.vsc-root.no-rings .vsc-side circle.vsc-side-run {
+  r: 17px;
 }
 .vsc-root.no-rings .vsc-side .vsc-glyph {
   font-size: 20px;
@@ -14001,10 +14012,10 @@ ol#combat-tracker.directory-list {
   transform-origin: center;
 }
 .vsc-root.picks-active.no-rings .vsc-circle .vsc-node.bl {
-  transform: translate(-16px, 50px) scale(0.8);
+  transform: translate(-22px, 58px) scale(0.75);
 }
 .vsc-root.picks-active.no-rings .vsc-circle .vsc-node.br {
-  transform: translate(16px, 50px) scale(0.8);
+  transform: translate(22px, 58px) scale(0.75);
 }
 .vsc-root:active {
   cursor: grabbing;
@@ -14255,9 +14266,33 @@ ol#combat-tracker.directory-list {
 .vsc-root .vsc-circle .vsc-side:hover circle {
   filter: drop-shadow(0 0 5px rgba(var(--ac), 0.7));
 }
+.vsc-root .vsc-circle .vsc-side circle.vsc-side-run {
+  display: none;
+  fill: none;
+  stroke: #fff;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-dasharray: 22 78;
+  pointer-events: none;
+  filter: drop-shadow(0 0 3px rgb(var(--ac))) drop-shadow(0 0 6px rgba(var(--ac), 0.8));
+}
+.vsc-root .vsc-circle .vsc-side.on circle.vsc-side-run {
+  display: inline;
+  fill: none;
+  stroke: #fff;
+  animation: vsc-side-run 1.6s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .vsc-root .vsc-circle .vsc-side.on circle.vsc-side-run {
+    animation: none;
+  }
+}
 .vsc-root .vsc-circle .vsc-side.disabled {
   opacity: 0.35;
   pointer-events: none;
+  cursor: default;
+}
+.vsc-root .vsc-circle .vsc-side.locked {
   cursor: default;
 }
 .vsc-root .vsc-eye {
@@ -19372,6 +19407,7 @@ ol#combat-tracker.directory-list {
   /* =========================================
      NPC HEADER - NEW LAYOUT
      ========================================= */
+  /* Metamorph form (Polymorph): original's portrait + way back */
   /* --- Column 1: Portrait --- */
   /* Status Effects Display - grid overlapping portrait base, grows upward */
   /* TL Display - in name row, position relative to not affect row height */
@@ -25607,6 +25643,38 @@ ol#combat-tracker.directory-list {
 }
 .vagabond .npc-header {
   padding: 0px;
+}
+.vagabond .npc-morph-banner {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 6px 0 0;
+  padding: 3px 6px;
+  border: 1px solid var(--vagabond-c-faint);
+  border-radius: 4px;
+  background: var(--vagabond-c-bg2);
+}
+.vagabond .npc-morph-banner img {
+  width: 26px;
+  height: 26px;
+  border: none;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.vagabond .npc-morph-banner .npc-morph-name {
+  flex: 1;
+  font-family: "Germania", serif;
+  color: var(--vagabond-c-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.vagabond .npc-morph-banner button {
+  flex: 0 0 auto;
+  width: 26px;
+  height: 26px;
+  line-height: normal;
+  padding: 0;
 }
 .vagabond .npc-header-content {
   display: flex;

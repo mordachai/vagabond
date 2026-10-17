@@ -1096,7 +1096,9 @@
             "damageOnTick": "",
             "damageType": "fire"
           }
-        ]
+        ],
+        "targetBeings": true,
+        "targetObjects": false
       },
       "effects": [],
       "flags": {},
@@ -1114,6 +1116,8 @@
         "crit": "Duration is continual.",
         "favorite": true,
         "noRollRequired": true,
+        "targetBeings": true,
+        "targetObjects": false,
         "locked": true,
         "hitMacro": {
           "enabled": true,
@@ -1139,6 +1143,8 @@
         "crit": "The effect lasts 1 Hour unless dispersed.",
         "favorite": true,
         "noRollRequired": true,
+        "targetBeings": true,
+        "targetObjects": false,
         "fxSchool": "poison",
         "locked": true,
         "causedStatuses": [
@@ -1209,7 +1215,9 @@
           "command": "system:spell.zap",
           "label": "Zap",
           "runAsGM": true
-        }
+        },
+        "targetBeings": true,
+        "targetObjects": false
       },
       "effects": [],
       "flags": {},

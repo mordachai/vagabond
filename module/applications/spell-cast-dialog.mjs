@@ -122,12 +122,16 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
     this.#onCast = onCast;
     this.#onChange = onChange ?? null;
     this.#anchorEl = anchorEl ?? null;
+    // No damage type and no dice scaling: the dice node shows 0 and stays locked.
+    const noDice = spell.system.damageType === '-' && !spell.system.usesDiceScaling;
     this.#state = {
-      damageDice: initialState?.damageDice ?? 1,
+      damageDice: noDice ? 0 : (initialState?.damageDice ?? 1),
       deliveryType: initialState?.deliveryType ?? null,
       deliveryIncrease: initialState?.deliveryIncrease ?? 0,
-      useFx: initialState?.useFx ?? (spell.system.damageType === '-'),
-      focusOn: (actor.system.focus?.spellIds ?? []).includes(spell.id),
+      // No damage type: the Effect IS the Cast, so FX is always on (locked).
+      useFx: spell.system.damageType === '-' ? true : (initialState?.useFx ?? false),
+      // Already Focused, or the Spell opens Focused (focusOnCast: Polymorph)
+      focusOn: (actor.system.focus?.spellIds ?? []).includes(spell.id) || !!spell.system.focusOnCast,
       previewActive: false,
       manaOverrideDelta: 0,
       imbueAssignments: {}, // weaponUuid -> true (multi-select, not one-per-target)
@@ -256,6 +260,7 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
       damageTypeLabel,
       focusOn: state.focusOn,
       fxOn: state.useFx,
+      fxLocked: dmgType === '-',
       previewOn: state.previewActive,
       deliveryOptions,
       manaCurrent: mana.current ?? 0,
@@ -542,8 +547,11 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
     const inner = this.element.querySelector('.vsc-runes.inner');
     if (outer) outer.style.animationDelay = `-${elapsedSec % 42}s`;
     if (inner) inner.style.animationDelay = `-${elapsedSec % 24}s`;
-    this.element.querySelectorAll('.vsc-side.on circle').forEach(c => {
+    this.element.querySelectorAll('.vsc-side.on circle:not(.vsc-side-run)').forEach(c => {
       c.style.animationDelay = `-${elapsedSec % 2}s`;
+    });
+    this.element.querySelectorAll('.vsc-side.on circle.vsc-side-run').forEach(c => {
+      c.style.animationDelay = `-${elapsedSec % 1.6}s`;
     });
 
     this.#ctrl?.abort();
@@ -763,8 +771,10 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
     if (this.#state.deliveryType === 'imbue' && !game.settings.get('vagabond', 'imbueUpfrontMana')) return;
     const next = Math.max(0, this.#state.damageDice + delta);
     this.#state.damageDice = next;
-    if (next === 0) this.#state.useFx = true;
-    else if (this.#state.damageDice === 1 && delta > 0) this.#state.useFx = false;
+    if (this.#spell.system.damageType !== '-') {
+      if (next === 0) this.#state.useFx = true;
+      else if (next === 1 && delta > 0) this.#state.useFx = false;
+    }
     this._emitChange();
     this.render();
   }
@@ -1113,6 +1123,7 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
   /** @this {SpellCastDialog} */
   static async _onToggleFx(event, target) {
     if (this.#state.deliveryType === 'imbue' && !game.settings.get('vagabond', 'imbueUpfrontMana')) return;
+    if (this.#spell.system.damageType === '-') return; // Effect-only Spell: FX locked on
     this.#state.useFx = !this.#state.useFx;
     this._emitChange();
     this.render();

@@ -25,6 +25,7 @@
 
 @keyframes vsc-spin-cw  { from { transform: rotate(0deg);   } to { transform: rotate(360deg);  } }
 @keyframes vsc-spin-ccw { from { transform: rotate(0deg);   } to { transform: rotate(-360deg); } }
+@keyframes vsc-side-run { from { stroke-dashoffset: 0; } to { stroke-dashoffset: -100; } }
 @keyframes vsc-pulse {
   0%, 100% { stroke-opacity: 0.45; }
   50%      { stroke-opacity: 1.0;  }
@@ -61,10 +62,12 @@
     // the cropped upper corners (user units) so they stay visible.
     // Shrink them + drop labels (kept as a hover <title> tooltip) so they
     // clear the inner ring boundary in the tighter compact footprint.
-    .vsc-side-focus { transform: translate(43px, 34px); }
-    .vsc-side-fx    { transform: translate(-50px, 34px); }
+    // (+3 inward so the running-light ring clears the cropped viewBox edge)
+    .vsc-side-focus { transform: translate(46px, 37px); }
+    .vsc-side-fx    { transform: translate(-53px, 37px); }
     .vsc-side {
       circle { r: 13px; }
+      circle.vsc-side-run { r: 17px; }
       .vsc-glyph { font-size: 20px; }
       .vsc-side-label { display: none; }
     }
@@ -86,7 +89,7 @@
   // Target picker (SpellTargetPicker): the picks sit on two side arcs, so the
   // bottom nodes move to the lower corners, mirroring the Focus / FX toggles
   // (user units): bl (94,230) → (34,318), br (266,230) → (326,318).
-  // Compact (cropped 56..304): → (78,280) / (282,280), shrunk to fit.
+  // Compact (cropped 56..304): → (72,288) / (288,288), shrunk to fit.
   &.picks-active .vsc-circle {
     .vsc-node.bl { transform: translate(-60px, 88px); }
     .vsc-node.br { transform: translate(60px, 88px); }
@@ -94,8 +97,9 @@
   &.picks-active.no-rings .vsc-circle {
     .vsc-node.bl,
     .vsc-node.br { transform-box: fill-box; transform-origin: center; }
-    .vsc-node.bl { transform: translate(-16px, 50px) scale(0.8); }
-    .vsc-node.br { transform: translate(16px, 50px) scale(0.8); }
+    // → (72,288) / (288,288): clear of the inner ring (r 124) by ~10 units
+    .vsc-node.bl { transform: translate(-22px, 58px) scale(0.75); }
+    .vsc-node.br { transform: translate(22px, 58px) scale(0.75); }
   }
   color: rgb(var(--ac));
   font-family: $font-text;
@@ -379,9 +383,32 @@
       &:hover circle {
         filter: drop-shadow(0 0 5px rgba(var(--ac), 0.7));
       }
+      // Running light around an active toggle (same idea as the HUD's Focused slot)
+      circle.vsc-side-run {
+        display: none;
+        fill: none;
+        stroke: #fff;
+        stroke-width: 2.5;
+        stroke-linecap: round;
+        stroke-dasharray: 22 78;
+        pointer-events: none;
+        filter: drop-shadow(0 0 3px rgb(var(--ac))) drop-shadow(0 0 6px rgba(var(--ac), 0.8));
+      }
+      &.on circle.vsc-side-run {
+        display: inline;
+        fill: none;
+        stroke: #fff;
+        animation: vsc-side-run 1.6s linear infinite;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        &.on circle.vsc-side-run { animation: none; }
+      }
       &.disabled {
         opacity: 0.35;
         pointer-events: none;
+        cursor: default;
+      }
+      &.locked {
         cursor: default;
       }
     }

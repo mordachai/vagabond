@@ -1135,6 +1135,8 @@
         "crit": "Duration is 1 Minute (no Focus required).",
         "favorite": true,
         "noRollRequired": true,
+        "targetBeings": true,
+        "targetObjects": false,
         "fxSchool": "radiant",
         "locked": true,
         "hitMacro": {
@@ -1161,7 +1163,9 @@
         "crit": "",
         "favorite": true,
         "fxSchool": "blunt",
-        "locked": true
+        "locked": true,
+        "targetBeings": true,
+        "targetObjects": false
       },
       "effects": [],
       "flags": {},
@@ -1179,6 +1183,8 @@
         "crit": "",
         "favorite": true,
         "noRollRequired": true,
+        "targetBeings": true,
+        "targetObjects": false,
         "fxSchool": "psychic",
         "locked": true
       },
@@ -1198,7 +1204,9 @@
         "crit": "The Target is compelled to answer any questions when asked.",
         "favorite": true,
         "fxSchool": "psychic",
-        "locked": true
+        "locked": true,
+        "targetBeings": true,
+        "targetObjects": false
       },
       "effects": [],
       "flags": {},

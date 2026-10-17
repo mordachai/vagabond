@@ -1,6 +1,16 @@
 {{! NPC Sheet Header }}
 <header class='npc-header'>
 
+  {{! Metamorph form (Polymorph): the token opened this sheet — way back to the original }}
+  {{#if morphOriginal}}
+  <div class='npc-morph-banner'>
+    <img src='{{morphOriginal.img}}' alt='' />
+    <span class='npc-morph-name'>{{localize "VAGABOND.Druid.FormOf" name=morphOriginal.name}}</span>
+    <button type='button' data-action='formOpenOriginal' data-tooltip='{{localize "VAGABOND.Druid.OpenOriginal"}}'><i class='fas fa-id-card'></i></button>
+    <button type='button' data-action='formRevert' data-tooltip='{{localize "VAGABOND.Druid.ReturnForm"}}'><i class='fas fa-person-walking-arrow-loop-left'></i></button>
+  </div>
+  {{/if}}
+
   {{! Name + Lock }}
   <div class='npc-lock-name-row'>
     {{! TL Display }}

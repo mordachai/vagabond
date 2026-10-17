@@ -1046,6 +1046,8 @@
         "crit": "",
         "favorite": true,
         "noRollRequired": true,
+        "targetBeings": true,
+        "targetObjects": false,
         "fxSchool": "arcane",
         "locked": true
       },
@@ -1065,6 +1067,8 @@
         "crit": "",
         "favorite": true,
         "noRollRequired": true,
+        "targetBeings": true,
+        "targetObjects": false,
         "fxSchool": "arcane",
         "locked": true
       },
@@ -1084,6 +1088,8 @@
         "crit": "",
         "favorite": true,
         "noRollRequired": true,
+        "targetBeings": true,
+        "targetObjects": false,
         "fxSchool": "shadow",
         "locked": true
       },
@@ -1103,6 +1109,8 @@
         "crit": "",
         "favorite": true,
         "noRollRequired": true,
+        "targetBeings": true,
+        "targetObjects": false,
         "fxSchool": "genericlight",
         "locked": true
       },

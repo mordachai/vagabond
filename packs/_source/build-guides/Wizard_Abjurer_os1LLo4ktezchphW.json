@@ -1073,6 +1073,8 @@
         "crit": "",
         "favorite": true,
         "noRollRequired": true,
+        "targetBeings": true,
+        "targetObjects": true,
         "fxSchool": "radiant",
         "locked": true,
         "causedStatuses": [],
@@ -1100,6 +1102,8 @@
         "crit": "Duration is 1 Minute (no Focus required).",
         "favorite": true,
         "noRollRequired": true,
+        "targetBeings": true,
+        "targetObjects": false,
         "fxSchool": "radiant",
         "locked": true,
         "hitMacro": {
@@ -1126,6 +1130,8 @@
         "crit": "",
         "favorite": true,
         "noRollRequired": true,
+        "targetBeings": true,
+        "targetObjects": false,
         "noFreeDie": true,
         "fxSchool": "healing",
         "locked": true
@@ -1153,7 +1159,9 @@
           "command": "system:spell.status.warded",
           "label": "Ward",
           "runAsGM": true
-        }
+        },
+        "targetBeings": true,
+        "targetObjects": false
       },
       "effects": [],
       "flags": {},

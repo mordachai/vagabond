@@ -192,6 +192,13 @@
           </label>
           <p class='notes'>{{localize "VAGABOND.Item.Spell.FIELDS.targetObjects.hint"}}</p>
         </div>
+        <div class='form-group'>
+          <label class='checkbox-label'>
+            <input type='checkbox' name='system.focusOnCast' {{#if system.focusOnCast}}checked{{/if}} data-dtype='Boolean' />
+            <span>{{localize "VAGABOND.Item.Spell.FIELDS.focusOnCast.label"}}</span>
+          </label>
+          <p class='notes'>{{localize "VAGABOND.Item.Spell.FIELDS.focusOnCast.hint"}}</p>
+        </div>
 
         {{! Dice Scaling Label (only relevant when scaling is on) }}
         {{#if system.usesDiceScaling}}

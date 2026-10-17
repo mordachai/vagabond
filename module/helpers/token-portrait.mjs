@@ -232,9 +232,13 @@ export class TokenPortrait {
    * @param {TokenDocument} token
    */
   static async syncTokenRing(token) {
-    if (!this.enabled() || !this.isCrop(token.texture.src)) return;
-    const src = await this.variantFor(token.texture.src, token.ring.enabled);
-    if (src !== token.texture.src) await token.update({ 'texture.src': src });
+    // Read the stored art: the prepared `texture.src` can still hold the previous image right after an
+    // actor swap (Metamorph writes actorId, then the art). Writing only if the art is unchanged after the
+    // await keeps a slow variant bake from putting the old crop back over the new art.
+    const from = token._source.texture.src;
+    if (!this.enabled() || !this.isCrop(from)) return;
+    const src = await this.variantFor(from, token.ring.enabled);
+    if (src !== from && token._source.texture.src === from) await token.update({ 'texture.src': src });
   }
   /**
    * Token art this token should use: our crop variant for its ring state, the circle of its portrait

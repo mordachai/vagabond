@@ -1189,7 +1189,9 @@
           "command": "system:spell.control",
           "label": "Control",
           "runAsGM": true
-        }
+        },
+        "targetBeings": true,
+        "targetObjects": true
       },
       "effects": [],
       "flags": {},
@@ -1207,6 +1209,8 @@
         "crit": "Duration is continual.",
         "favorite": true,
         "noRollRequired": true,
+        "targetBeings": true,
+        "targetObjects": true,
         "fxSchool": "necrotic",
         "locked": true
       },
@@ -1244,7 +1248,9 @@
           "command": "const tgts = (typeof targets !== \"undefined\" && targets?.length)\n  ? targets\n  : Array.from(game.user.targets);\nif (!tgts.length) return ui.notifications.warn(\"No token targeted.\");\n\nfor (const t of tgts) {\n  await t.actor.toggleStatusEffect(\"sickened\", { active: true });\n}\n\n//ui.notifications.info(`Leech applied to ${tgts.length} target(s).`);",
           "label": "Leech",
           "runAsGM": true
-        }
+        },
+        "targetBeings": true,
+        "targetObjects": false
       },
       "effects": [],
       "flags": {},
@@ -1269,7 +1275,9 @@
           "command": "system:spell.status.warded",
           "label": "Ward",
           "runAsGM": true
-        }
+        },
+        "targetBeings": true,
+        "targetObjects": false
       },
       "effects": [],
       "flags": {},

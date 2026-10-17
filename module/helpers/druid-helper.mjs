@@ -96,7 +96,7 @@ export class DruidHelper {
    * pick a Beast with HD ≤ Level (+ Savagery) through Metamorph and swap the token.
    * @param {{actor: Actor, token: Token|null, targets: Token[]}} scope - item-macro scope
    */
-  static async polymorph({ actor, token, targets }) {
+  static async polymorph({ actor, item, token, targets }) {
     const MM = this.metamorph();
     if (!MM) {
       ui.notifications.warn(this.#L('NoMetamorph'));
@@ -116,7 +116,10 @@ export class DruidHelper {
       const choice = await MM.polymorph(t, {
         title: this.#L('PickerTitle', { level }),
         filter: this.beastFilter(level),
+        // The Target keeps its HP (book); the form remembers it, so its revert carries the HP back
         hpMode: 'keep-original',
+        // A Spell: the caster's player may Polymorph a Target they don't own (the GM performs the swap)
+        ignoreOwnership: true,
       });
       if (!choice) continue;
 
@@ -130,9 +133,69 @@ export class DruidHelper {
         if (tokens.length === 1 && actor.system.polymorphContinual === true
           && (doc.actor?.id === actor.id || this.mainActorOf(doc.actor)?.id === actor.id)) {
           description += ` ${this.#L('Continual')}`;
+          // Polymorph opens Focused (focusOnCast); a continual self-Polymorph needs no Focus
+          if (item?.id && (actor.system.focus?.spellIds ?? []).includes(item.id)) {
+            const { SpellHandler } = await import('../sheets/handlers/spell-handler.mjs');
+            await SpellHandler.setFocus(actor, item.id, false);
+          }
         }
       }
       await VagabondChatCard.featureCard(actor, { title: this.#L('PolymorphTitle'), description: `<p>${description}</p>` });
+    }
+  }
+
+  /* -------------------------------------------- */
+  /*  Back to the original form                   */
+  /* -------------------------------------------- */
+
+  /**
+   * A form's token opens the Beast's sheet, so the original's sheet (and its Polymorph button) is out of
+   * reach: the form's sheet header offers these two (`VagabondNPCSheet._getHeaderControls`).
+   * Revert the form's token to the original actor (HP follows the mode the form was made with).
+   * @param {Actor} form  a Metamorph form copy
+   */
+  static async revertForm(form) {
+    const MM = this.metamorph();
+    if (!MM) {
+      ui.notifications.warn(this.#L('NoMetamorph'));
+      return;
+    }
+    const main = this.mainActorOf(form);
+    const token = form?.getActiveTokens?.()?.[0];
+    if (!main || !token) {
+      ui.notifications.warn(this.#L('NoToken'));
+      return;
+    }
+    const res = await MM.revert(token, { ignoreOwnership: true });
+    if (!res?.ok) return;
+    const { VagabondChatCard } = await import('./chat-card.mjs');
+    await VagabondChatCard.featureCard(main, {
+      title: this.#L('PolymorphTitle'),
+      description: `<p>${this.#L('Reverted', { name: token.document?.name ?? main.name })}</p>`,
+    });
+  }
+
+  /** Open the original actor's sheet from its form. */
+  static openOriginalSheet(form) {
+    const main = this.mainActorOf(form);
+    if (!main?.testUserPermission(game.user, 'OBSERVER')) {
+      ui.notifications.warn(this.#L('NotYours'));
+      return;
+    }
+    main.sheet.render({ force: true });
+  }
+
+  /**
+   * The Focusing status (ring animation) lives on the original actor, but a morphed token shows its form's
+   * statuses: mirror it onto the original's forms. Active GM only (called from create/deleteActiveEffect and
+   * the `metamorph.morph` hook in vagabond.mjs).
+   * @param {Actor} main  the original actor
+   */
+  static async syncFormFocus(main) {
+    if (!main || !game.users.activeGM?.isSelf) return;
+    const on = main.statuses.has('focusing');
+    for (const form of game.actors.filter(a => a.flags?.metamorph?.temp?.mainActorId === main.id)) {
+      if (form.statuses.has('focusing') !== on) await form.toggleStatusEffect('focusing', { active: on });
     }
   }
 

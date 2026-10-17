@@ -1072,7 +1072,9 @@
         "duration": "Until your next turn",
         "crit": "",
         "favorite": true,
-        "locked": true
+        "locked": true,
+        "targetBeings": true,
+        "targetObjects": true
       },
       "effects": [],
       "flags": {},
@@ -1090,6 +1092,8 @@
         "crit": "Duration is continual.",
         "favorite": true,
         "noRollRequired": true,
+        "targetBeings": true,
+        "targetObjects": true,
         "fxSchool": "necrotic",
         "locked": true
       },
@@ -1109,6 +1113,8 @@
         "crit": "The effect lasts 1 Hour unless dispersed.",
         "favorite": true,
         "noRollRequired": true,
+        "targetBeings": true,
+        "targetObjects": false,
         "fxSchool": "poison",
         "locked": true,
         "causedStatuses": [
@@ -1150,6 +1156,15 @@
         "crit": "",
         "favorite": true,
         "noRollRequired": true,
+        "targetBeings": true,
+        "targetObjects": false,
+        "hitMacro": {
+          "enabled": true,
+          "uuid": "",
+          "command": "system:spell.raise",
+          "label": "Raise",
+          "runAsGM": true
+        },
         "fxSchool": "necrotic",
         "locked": true
       },

@@ -525,6 +525,8 @@
         "crit": "",
         "favorite": true,
         "noRollRequired": true,
+        "targetBeings": true,
+        "targetObjects": true,
         "fxSchool": "radiant",
         "locked": true,
         "causedStatuses": [],
@@ -552,6 +554,8 @@
         "crit": "",
         "favorite": true,
         "noRollRequired": true,
+        "targetBeings": true,
+        "targetObjects": false,
         "noFreeDie": true,
         "fxSchool": "healing",
         "locked": true

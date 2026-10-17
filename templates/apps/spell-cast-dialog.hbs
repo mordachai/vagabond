@@ -102,15 +102,17 @@
          data-action="vscToggleFocus">
         <title>{{localize "VAGABOND.SpellCast.Focus"}}</title>
         <circle cx="28" cy="40" r="18"/>
+        <circle class="vsc-side-run" cx="28" cy="40" r="21" pathLength="100"/>
         <text class="vsc-glyph" x="28" y="40" text-anchor="middle" dominant-baseline="central">✦</text>
         <text class="vsc-side-label" x="28" y="16" text-anchor="middle">{{localize "VAGABOND.SpellCast.Focus"}}</text>
       </g>
 
       {{!-- Fx side-toggle (top-right, outside circle) --}}
-      <g class="vsc-side vsc-side-fx {{#if hideDiceFx}}disabled{{else}}{{#if fxOn}}on{{else}}off{{/if}}{{/if}}"
+      <g class="vsc-side vsc-side-fx {{#if hideDiceFx}}disabled{{else}}{{#if fxOn}}on{{else}}off{{/if}}{{#if fxLocked}} locked{{/if}}{{/if}}"
          data-action="vscToggleFx">
         <title>{{localize "VAGABOND.SpellCast.Fx"}}</title>
         <circle cx="338" cy="40" r="18"/>
+        <circle class="vsc-side-run" cx="338" cy="40" r="21" pathLength="100"/>
         <text class="vsc-glyph" x="338" y="40" text-anchor="middle" dominant-baseline="central">✸</text>
         <text class="vsc-side-label" x="338" y="16" text-anchor="middle">{{localize "VAGABOND.SpellCast.Fx"}}</text>
       </g>
