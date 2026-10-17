@@ -6,6 +6,7 @@ import { HunterHelper } from './hunter-helper.mjs';
 import { WitchHelper } from './witch-helper.mjs';
 import { DefenseHelper } from './defense-helper.mjs';
 import { NpcRules } from './npc-rules.mjs';
+import { FocusLink } from './focus-link.mjs';
 
 /**
  * Universal Damage Helper
@@ -1374,7 +1375,23 @@ ${npcOnly ? '' : `
       effect: !!state.useFx,
       // Dice-scaling dice (Hold's extra Levels) and typeless Spells are not damage
       damage: spell.system.damageType !== '-' && !spell.system.usesDiceScaling && (state.damageDice ?? 0) > 0,
+      // The Cast is held by the Focus: its Effect statuses end with it (FocusLink)
+      held: !!state.focusHeld,
     };
+  }
+
+  /**
+   * Mark a Spell's own Effect entries of a Focus-held Cast with `focusLink` (the stamp StatusHelper.applyStatus
+   * puts on the status effect, so it ends with the Focus). Coatings / passives are never passed here.
+   * @param {Array} entries - gated Spell entries
+   * @param {Actor|null} caster
+   * @param {Item} spell
+   * @param {{held?: boolean}|null} spellCast
+   */
+  static focusLinkEntries(entries, caster, spell, spellCast) {
+    if (!spellCast?.held || !caster || spell?.type !== 'spell' || !entries?.length) return entries ?? [];
+    const focusLink = FocusLink.stamp(caster, spell, true);
+    return entries.map(e => ({ ...e, focusLink }));
   }
 
   /**
@@ -1386,7 +1403,7 @@ ${npcOnly ? '' : `
   static spellCastFromButton(button) {
     const ds = button?.dataset ?? {};
     if (ds.spellEffect !== undefined && ds.spellEffect !== '') {
-      return { effect: ds.spellEffect === 'true', damage: ds.spellDamage === 'true' };
+      return { effect: ds.spellEffect === 'true', damage: ds.spellDamage === 'true', held: ds.spellHeld === 'true' };
     }
     const msgId = button?.closest?.('[data-message-id]')?.dataset.messageId;
     return game.messages.get(msgId)?.flags?.vagabond?.spellCast ?? null;
@@ -1398,7 +1415,7 @@ ${npcOnly ? '' : `
    * @returns {string}
    */
   static spellCastAttrs(spellCast) {
-    return spellCast ? ` data-spell-effect="${!!spellCast.effect}" data-spell-damage="${!!spellCast.damage}"` : '';
+    return spellCast ? ` data-spell-effect="${!!spellCast.effect}" data-spell-damage="${!!spellCast.damage}" data-spell-held="${!!spellCast.held}"` : '';
   }
 
   /**
@@ -1420,10 +1437,11 @@ ${npcOnly ? '' : `
    * same-statusId normal ones. No coating / passives — those ride hits, not the Effect.
    * @returns {Array}
    */
-  static _spellEffectEntries(spell, spellCast, isCritical = false) {
+  static _spellEffectEntries(spell, spellCast, isCritical = false, caster = null) {
     const own = this.gateSpellEffectEntries(spell?.system?.causedStatuses ?? [], spellCast);
     const crit = isCritical ? this.gateSpellEffectEntries(spell?.system?.critCausedStatuses ?? [], spellCast) : [];
-    return [...crit, ...own.filter(e => !crit.some(c => c.statusId === e.statusId))].filter(e => e.statusId);
+    const entries = [...crit, ...own.filter(e => !crit.some(c => c.statusId === e.statusId))].filter(e => e.statusId);
+    return this.focusLinkEntries(entries, caster, spell, spellCast);
   }
 
   /**
@@ -1482,7 +1500,7 @@ ${npcOnly ? '' : `
     const spell = this._resolveSourceItem(sourceActor, button.dataset.itemId);
     if (!sourceActor || !spell) return;
     const entries = this._spellEffectEntries(spell, this.spellCastFromButton(button) ?? { effect: true, damage: false },
-      button.dataset.isCritical === 'true');
+      button.dataset.isCritical === 'true', sourceActor);
     if (!entries.length) return;
 
     const storedTargets = this._getTargetsFromButton(button);
@@ -1535,9 +1553,10 @@ ${npcOnly ? '' : `
       normalEntries = this.gateSpellEffectEntries(normalEntries, spellCast);
       critEntries = this.gateSpellEffectEntries(critEntries, spellCast);
     }
-    const mergedEntries = attackWasCrit
+    let mergedEntries = attackWasCrit
       ? [...critEntries, ...normalEntries.filter(e => !critEntries.some(c => c.statusId === e.statusId))]
       : normalEntries;
+    if (sourceItem?.type === 'spell') mergedEntries = this.focusLinkEntries(mergedEntries, sourceActor, sourceItem, spellCast);
     const coatingEntries = (includeCoating && sourceItem?.system?.coating?.charges > 0)
       ? (sourceItem.system.coating.causedStatuses ?? [])
       : [];

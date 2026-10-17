@@ -20,7 +20,8 @@
       "command": "system:spell.bless",
       "label": "Bless",
       "runAsGM": false
-    }
+    },
+    "focusOnCast": true
   },
   "effects": [],
   "folder": null,

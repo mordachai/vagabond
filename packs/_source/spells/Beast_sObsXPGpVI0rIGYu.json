@@ -12,7 +12,8 @@
     "targetBeings": true,
     "targetObjects": false,
     "fxSchool": "arcane",
-    "locked": true
+    "locked": true,
+    "focusOnCast": true
   },
   "effects": [],
   "folder": null,

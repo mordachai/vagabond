@@ -12,6 +12,8 @@
  * answer and sees the GM-side warnings (`macroNotify`) and errors.
  */
 
+import { FocusLink } from './focus-link.mjs';
+
 /**
  * Built-in handlers a macro slot can call as `system:<name>` instead of a script. Unlike script
  * macros they need no MACRO_SCRIPT permission and receive the FULL scope (`actor`, `item`,
@@ -130,6 +132,17 @@ export async function executeItemMacro(d) {
 }
 
 async function _executeItemMacro(d) {
+  // A Focus-held Spell Cast (scope `focusHeld`): every effect its hit macro creates ends with the Focus
+  if (d.extraScope?.focusHeld === true && d.slot === 'hitMacro') {
+    const { item, actor } = await _resolveSlot(d);
+    if (item?.type === 'spell' && actor) {
+      return FocusLink.capture(FocusLink.stamp(actor, item, true), () => _runItemMacro(d));
+    }
+  }
+  return _runItemMacro(d);
+}
+
+async function _runItemMacro(d) {
   const { cfg, item, actor } = await _resolveSlot(d);
   if (!cfg) {
     macroNotify('warn', 'Macro configuration not found.');

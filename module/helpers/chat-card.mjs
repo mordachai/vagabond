@@ -1152,6 +1152,8 @@ export class VagabondChatCard {
             spellDamageDice: spellState.damageDice ?? 0,
             manaSpent: costs?.manaSpent ?? costs?.totalCost ?? 0,
             manaOverrideDelta: manaOverrideDelta ?? 0,
+            // Focus-held Cast: what the hit macro applies ends with the Focus (FocusLink)
+            focusHeld: !!spellState.focusHeld,
             ...(spellState.targetObjects?.length ? { targetObjects: spellState.targetObjects } : {}),
             ...(spellState.targetsPicked ? { targetsPicked: true } : {}),
           }
@@ -1211,6 +1213,9 @@ export class VagabondChatCard {
       useFx: !!rerollData.useFx,
       targetObjects: rerollData.targetObjects ?? [],
       targetsPicked: !!rerollData.targetsPicked,
+      // Focus is not re-run: the reroll is held while the caster still Focuses on it (no "Crit: No Focus" Crit)
+      focusHeld: isSuccess && (actor.system.focus?.spellIds ?? []).includes(spell.id)
+        && !(isCritical && spell.system.critNoFocus),
     };
     const manaSkillKey = rerollData.manaSkillKey || null;
     const manaSkill = manaSkillKey ? actor.system.skills?.[manaSkillKey] ?? null : null;

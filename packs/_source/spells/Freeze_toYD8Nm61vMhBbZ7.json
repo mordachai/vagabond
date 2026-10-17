@@ -19,7 +19,8 @@
       "label": "Freeze",
       "runAsGM": true
     },
-    "critNoFocus": true
+    "critNoFocus": true,
+    "focusOnCast": true
   },
   "effects": [],
   "folder": null,

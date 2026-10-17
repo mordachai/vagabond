@@ -62,6 +62,7 @@ import { ConeFx } from './helpers/cone-fx.mjs';
 import { VagabondFXResolver } from './helpers/fx-file-resolver.mjs';
 import { registerSocket, emitSocket, registerSocketAction } from './helpers/socket-helper.mjs';
 import { runMacroFromButton, executeItemMacro, registerMacroHandler, registerCastGate, registerMacroQueries } from './helpers/item-macro.mjs';
+import { FocusLink } from './helpers/focus-link.mjs';
 import { FeatureAction } from './helpers/feature-action.mjs';
 import { RollExpiry } from './helpers/roll-expiry.mjs';
 import { LightSource } from './helpers/light-source.mjs';
@@ -655,11 +656,13 @@ Hooks.once('ready', function () {
     await actor.update({ [field]: value });
   });
 
-  registerSocketAction('applyStatus', async ({ actorUuid, statusId, active, description }) => {
+  registerSocketAction('applyStatus', async ({ actorUuid, statusId, active, description, focusLink }) => {
     const actor = await fromUuid(actorUuid);
     if (!actor) return;
     if (active && !actor.statuses?.has(statusId)) {
       await actor.toggleStatusEffect(statusId, { active: true });
+      // Effect of a Focus-held Spell Cast: ends with that Focus
+      if (focusLink) await FocusLink.stampStatus(actor, statusId, focusLink);
     } else if (!active) {
       await actor.toggleStatusEffect(statusId, { active: false });
       return;
@@ -2481,7 +2484,9 @@ const FORCE_CRIT_ENTRY = {
       // and an effect-only Cast gets its Apply Effect buttons here too
       const { VagabondDamageHelper: VDHCrit } = await import('./helpers/damage-helper.mjs');
       const critSpellCast = (spell && rerollData.damageDice !== undefined)
-        ? VDHCrit.spellCastContext(spell, { damageDice: rerollData.damageDice, useFx: rerollData.useFx })
+        ? VDHCrit.spellCastContext(spell, { damageDice: rerollData.damageDice, useFx: rerollData.useFx,
+            // Forced Crit: held while still Focused, unless the Spell's Crit needs no Focus
+            focusHeld: (actor.system.focus?.spellIds ?? []).includes(spell.id) && !spell.system.critNoFocus })
         : null;
       const critEffectButtons = spell
         ? VDHCrit.createSpellEffectButtons(actor, spell, critSpellCast, { isCritical: true, targetsAtRollTime, attackType: 'cast' })

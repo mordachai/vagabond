@@ -104,6 +104,7 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
   #targetHookId = null; // Foundry 'targetToken' hook — keeps area-requirement message live
   #tokenHookIds = null; // token create/update/delete hooks — keeps the Target picker's area list live
   #pickKey = '';        // Target picker entry keys at the last render (skip renders when nothing changed)
+  #focusTouched = false; // the player flipped the Focus switch: stop deriving it from the Cast
   #renderDebounce = foundry.utils.debounce(() => { if (this.rendered) this.render(); }, 50);
   #previewDebounce = foundry.utils.debounce(() => this._refreshPreview(), 80);
 
@@ -130,8 +131,7 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
       deliveryIncrease: initialState?.deliveryIncrease ?? 0,
       // No damage type: the Effect IS the Cast, so FX is always on (locked).
       useFx: spell.system.damageType === '-' ? true : (initialState?.useFx ?? false),
-      // Already Focused, or the Spell opens Focused (focusOnCast: Polymorph)
-      focusOn: (actor.system.focus?.spellIds ?? []).includes(spell.id) || !!spell.system.focusOnCast,
+      focusOn: false, // derived in _prepareContext until the player flips the switch (#focusTouched)
       previewActive: false,
       manaOverrideDelta: 0,
       imbueAssignments: {}, // weaponUuid -> true (multi-select, not one-per-target)
@@ -192,6 +192,11 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
     }
     const pickRing = SpellTargetPicker.layout(pickEntries);
     this.#pickKey = pickEntries.map(e => e.key).join('|');
+
+    // Focus switch: on when already Focused, or when a Focus on Cast Spell's Cast includes its Effect
+    if (!this.#focusTouched) {
+      state.focusOn = (actor.system.focus?.spellIds ?? []).includes(spell.id) || SpellCastDialog.castOpensFocus(spell, state);
+    }
 
     const costs = SpellCastDialog.calculateCosts(spell, actor, state);
     const finalMana = Math.max(0, costs.totalCost + state.manaOverrideDelta);
@@ -945,6 +950,18 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
   // ── Cost calculation (static, reusable) ──────────────────────────────────
 
   /**
+   * Focus on Cast (`system.focusOnCast`): the Cast opens Focused only when it includes the Spell's Effect —
+   * an Effect-only Spell always, a damage Spell only with FX on (a damage-only Cast has no Effect to sustain).
+   * Deferred Imbue picks Damage / Effect at delivery, so it counts as including it.
+   */
+  static castOpensFocus(spell, state) {
+    if (!spell.system.focusOnCast) return false;
+    if ((spell.system.damageType ?? '-') === '-') return true;
+    if (state.deliveryType === 'imbue' && !game.settings.get('vagabond', 'imbueUpfrontMana')) return true;
+    return !!state.useFx;
+  }
+
+  /**
    * Pure cost computation for an explicit state object.
    * Mirrors SpellHandler._calculateSpellCost but reads from passed state.
    */
@@ -1111,6 +1128,7 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
 
   /** @this {SpellCastDialog} */
   static async _onToggleFocus(event, target) {
+    this.#focusTouched = true;
     this.#state.focusOn = !this.#state.focusOn;
     this.render();
   }

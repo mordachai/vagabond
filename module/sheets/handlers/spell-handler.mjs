@@ -1,4 +1,5 @@
 import { VagabondSpellSequencer } from '../../helpers/spell-sequencer.mjs';
+import { FocusLink } from '../../helpers/focus-link.mjs';
 
 /**
  * Handler for spell-related functionality in the character sheet.
@@ -775,10 +776,18 @@ export class SpellHandler {
     }
 
     // Focus from the Cast dialog: committed here, once the Cast is resolved (a failed Cast never Focuses).
-    // Dialog-off casts carry no focusOn and leave the Focus alone.
-    if (typeof state.focusOn === 'boolean') {
-      await SpellHandler.commitCastFocus(this.actor, spell, { focusOn: state.focusOn, isSuccess, isCritical });
+    // Dialog-off casts carry no focusOn: a Focus on Cast Spell whose Cast includes its Effect Focuses,
+    // anything else leaves the Focus alone.
+    let focusOn = typeof state.focusOn === 'boolean' ? state.focusOn : null;
+    if (focusOn === null && spell.system.focusOnCast) {
+      const { SpellCastDialog } = await import('../../applications/spell-cast-dialog.mjs');
+      if (SpellCastDialog.castOpensFocus(spell, state)) focusOn = true;
     }
+    if (focusOn !== null) {
+      await SpellHandler.commitCastFocus(this.actor, spell, { focusOn, isSuccess, isCritical });
+    }
+    // What this Cast applies ends with the Focus (FocusLink) — rides the card as spellCast.held / macro focusHeld
+    state.focusHeld = FocusLink.held(spell, { focusOn, isSuccess, isCritical });
 
     // Deduct mana. Success (or a bypass cast, which is always "success") always
     // pays full cost; a failed casting check pays per the spellManaOnCastFail

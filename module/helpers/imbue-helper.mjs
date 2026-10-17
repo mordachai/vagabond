@@ -373,9 +373,11 @@ export class VagabondImbueHelper {
     // Spell Damage / Effect split: deferred mode → Fx chosen at delivery; upfront → stored at Cast
     // (null on payloads imbued before the field existed → statuses as authored)
     const deliveredFx = payload.deferredPayment ? !!chosenState?.useFx : payload.useFx;
+    // Still Focused on the Spell at delivery: what it applies ends with that Focus (FocusLink)
+    const focusHeld = (sourceActor.system.focus?.spellIds ?? []).includes(spell.id);
     const spellCast = (deliveredFx === null || deliveredFx === undefined)
       ? null
-      : VagabondDamageHelper.spellCastContext(spell, { damageDice, useFx: deliveredFx });
+      : VagabondDamageHelper.spellCastContext(spell, { damageDice, useFx: deliveredFx, focusHeld });
     const attackType = CONFIG.VAGABOND.spellDeliveryAttackTypes.imbue;
     const effectButtons = VagabondDamageHelper.createSpellEffectButtons(sourceActor, spell, spellCast, {
       isCritical, targetsAtRollTime: hitTargets, attackType,
@@ -396,6 +398,7 @@ export class VagabondImbueHelper {
       targetsAtRollTime: hitTargets,
       footerActions: effectButtons ? [effectButtons] : [],
       spellCast,
+      macroExtraScope: { focusHeld },
     });
 
     if (isCritical && !critStatBonus) {

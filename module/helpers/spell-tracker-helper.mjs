@@ -94,7 +94,10 @@ export class SpellTrackerHelper {
     return tokens.map(t => t?.actor ?? null).filter(Boolean);
   }
 
-  /** The `flags.vagabond.spellTracker` stamp of a Cast. */
+  /**
+   * The `flags.vagabond.spellTracker` stamp of a Cast (FocusLink). `held` = the Cast is held by the Focus
+   * (scope `focusHeld`); buttons from before it existed count as held.
+   */
   static #stamp(scope) {
     const caster = scope?.actor ?? null;
     const spell = scope?.item?.id ? scope.item : null;
@@ -103,6 +106,7 @@ export class SpellTrackerHelper {
       casterName: caster?.name ?? '',
       spellId: spell?.id ?? null,
       spellName: spell?.name ?? scope?.itemName ?? '',
+      held: scope?.focusHeld !== false,
     };
   }
 
@@ -166,7 +170,10 @@ export class SpellTrackerHelper {
       slot: 'hitMacro',
       command: 'system:spell.bless',
       isCritical: !!scope?.isCritical,
-      extraScope: { blessTargets: beings.map(a => a.uuid), blessWeapons: weapons.map(w => w.uuid) },
+      extraScope: {
+        blessTargets: beings.map(a => a.uuid), blessWeapons: weapons.map(w => w.uuid),
+        ...(typeof scope?.focusHeld === 'boolean' ? { focusHeld: scope.focusHeld } : {}),
+      },
       runAsGM: true,
     });
   }
@@ -491,20 +498,20 @@ export class SpellTrackerHelper {
   }
 
   /**
-   * One-time (guard `spellFocusSwitchesMigrated`): world copies of pack Spells take the pack's Focus switches,
-   * Focus on Cast (Polymorph) and Crit: No Focus ("Crit: Duration is continual"), matched by compendium source id.
+   * One-time (guard `spellFocusSwitchesMigrated2`): world copies of pack Spells take the pack's Focus switches,
+   * Focus on Cast (Effect Spells) and Crit: No Focus ("Crit: Duration is continual"), matched by compendium source id.
    * Only turns them on, never off (a GM may have switched one on).
    */
   static async migrateSpellFocusOnCast() {
     if (game.user !== game.users.activeGM) return;
-    if (game.settings.get('vagabond', 'spellFocusSwitchesMigrated')) return;
+    if (game.settings.get('vagabond', 'spellFocusSwitchesMigrated2')) return;
     const pack = game.packs.get('vagabond.spells');
     if (!pack) return;
     const { isCopyOf } = await import('./source-id.mjs');
     const KEYS = ['focusOnCast', 'critNoFocus'];
     const index = await pack.getIndex({ fields: KEYS.map(k => `system.${k}`) });
     // Pack not rebuilt yet: keep the guard for the next load
-    if (!index.some(e => e.system?.critNoFocus)) return;
+    if (!index.some(e => e.system?.critNoFocus && e.system?.focusOnCast)) return;
     const sources = index.filter(e => KEYS.some(k => e.system?.[k]));
 
     for (const item of this.#worldSpells()) {
@@ -518,7 +525,7 @@ export class SpellTrackerHelper {
         console.warn(`vagabond | Spell Focus switches migration: skipped ${item?.uuid ?? '(unknown)'}`, err);
       }
     }
-    await game.settings.set('vagabond', 'spellFocusSwitchesMigrated', true);
+    await game.settings.set('vagabond', 'spellFocusSwitchesMigrated2', true);
   }
 
   /** Every Spell item: sidebar + embedded in every actor (incl. unlinked token actors). */
@@ -537,12 +544,19 @@ export class SpellTrackerHelper {
     ];
   }
 
-  /** The caster stopped Focusing on these Spells: remove the Trackers / immunities / Silvered those Casts applied. */
+  /**
+   * The caster stopped Focusing on these Spells: remove every effect those Casts applied (FocusLink stamps —
+   * Trackers, statuses, immunities, Silvered…). `held: false` = a Crit made it continual / 1 Minute: it stays.
+   */
   static async #onFocusDropped(caster, spellIds) {
-    const fromCast = (src) => src && src.casterUuid === caster.uuid && spellIds.includes(src.spellId);
+    const fromCast = (src) => src && src.held !== false && src.casterUuid === caster.uuid && spellIds.includes(src.spellId);
     for (const actor of this.#actors()) {
-      const ids = actor.effects.filter(e => fromCast(e.flags?.vagabond?.spellTracker)).map(e => e.id);
-      if (ids.length) await actor.deleteEmbeddedDocuments('ActiveEffect', ids);
+      const effects = actor.effects.filter(e => fromCast(e.flags?.vagabond?.spellTracker));
+      if (effects.length) await actor.deleteEmbeddedDocuments('ActiveEffect', effects.map(e => e.id));
+      // Countdown dice linked to a status that ended with the Focus go too
+      for (const statusId of new Set(effects.flatMap(e => [...(e.statuses ?? [])]))) {
+        for (const die of StatusHelper.linkedStatusDice(actor, statusId)) await die.delete();
+      }
       for (const item of actor.items) {
         const itemIds = item.effects.filter(e => fromCast(e.flags?.vagabond?.spellTracker)).map(e => e.id);
         if (itemIds.length) await item.deleteEmbeddedDocuments('ActiveEffect', itemIds);

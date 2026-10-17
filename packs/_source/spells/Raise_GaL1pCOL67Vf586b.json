@@ -19,7 +19,8 @@
       "runAsGM": true
     },
     "fxSchool": "necrotic",
-    "locked": true
+    "locked": true,
+    "focusOnCast": true
   },
   "effects": [],
   "folder": null,

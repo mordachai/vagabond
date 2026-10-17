@@ -2273,7 +2273,7 @@
           "pickTargets": {"label": "Picks Targets"},
           "targetBeings": {"label": "Target Beings", "hint": "The Spell can Target Beings: with the player option Pick Targets in the Cast Dialog on, the Cast dialog lists the Beings inside the area to choose who is affected (with Target Objects on, also beside their weapons on any delivery). Area deliveries never pay per Target."},
           "targetObjects": {"label": "Target Objects", "hint": "The Cast dialog lists the equipped weapons of the Beings in the area (else the targets, else you) to pick as Targets. They reach the hit macro as scope.targetObjects."},
-          "focusOnCast": {"label": "Focus on Cast", "hint": "The Cast dialog opens with Focus on, for Spells you keep up by Focusing (Polymorph). You can still switch it off."},
+          "focusOnCast": {"label": "Focus on Cast", "hint": "Focus turns on by itself when the Cast includes the Spell's Effect (always for Spells with no damage; with FX on for damage Spells). You can still switch it off."},
           "critNoFocus": {"label": "Crit: No Focus", "hint": "On a Crit the duration needs no Focus (\"Crit: Duration is continual\" or \"1 Minute, no Focus required\"): a critical Cast takes no Focus and ends none."}
         },
         "AddSpell": "Add Spell",

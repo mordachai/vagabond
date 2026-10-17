@@ -19,7 +19,8 @@
       "command": "system:spell.status.exalted",
       "label": "Exalt",
       "runAsGM": true
-    }
+    },
+    "focusOnCast": true
   },
   "effects": [],
   "folder": null,

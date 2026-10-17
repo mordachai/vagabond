@@ -23,7 +23,8 @@
         "damageOnTick": "",
         "damageType": "-"
       }
-    ]
+    ],
+    "focusOnCast": true
   },
   "effects": [],
   "folder": null,

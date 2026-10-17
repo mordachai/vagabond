@@ -45,7 +45,8 @@
       "label": "Confuse",
       "runAsGM": true
     },
-    "critNoFocus": true
+    "critNoFocus": true,
+    "focusOnCast": true
   },
   "effects": [],
   "folder": null,

@@ -41,7 +41,8 @@
     },
     "targetBeings": true,
     "targetObjects": false,
-    "critNoFocus": true
+    "critNoFocus": true,
+    "focusOnCast": true
   },
   "effects": [],
   "folder": null,

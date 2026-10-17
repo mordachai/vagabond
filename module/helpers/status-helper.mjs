@@ -1,6 +1,7 @@
 import { emitSocket } from './socket-helper.mjs';
 import { VagabondDamagePipeline } from './damage-pipeline.mjs';
 import { NpcRules } from './npc-rules.mjs';
+import { FocusLink } from './focus-link.mjs';
 
 /**
  * StatusHelper — central logic for on-hit status effect application.
@@ -242,12 +243,14 @@ export class StatusHelper {
     }
 
     // A stack keeps the one status effect already on the actor — only its new die is added
+    // entry.focusLink: the Effect of a Focus-held Spell Cast — the status ends with that Focus (FocusLink)
     if (!stacking) {
       if (actor.isOwner || game.user.isGM) {
         await actor.toggleStatusEffect(entry.statusId, { active: true });
+        if (entry.focusLink) await FocusLink.stampStatus(actor, entry.statusId, entry.focusLink);
       } else {
         const { emitSocket } = await import('./socket-helper.mjs');
-        emitSocket('applyStatus', { actorUuid: actor.uuid, statusId: entry.statusId, active: true });
+        emitSocket('applyStatus', { actorUuid: actor.uuid, statusId: entry.statusId, active: true, focusLink: entry.focusLink ?? null });
       }
     }
     Hooks.callAll('vagabond.postStatusApply', { actor, statusId: entry.statusId, sourceName, saveType: entry.saveType || 'none', damageWasBlocked, stacked: stacking });

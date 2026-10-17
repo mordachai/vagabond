@@ -13,7 +13,8 @@
     "targetObjects": true,
     "fxSchool": "necrotic",
     "locked": true,
-    "critNoFocus": true
+    "critNoFocus": true,
+    "focusOnCast": true
   },
   "effects": [],
   "folder": null,

@@ -11,7 +11,8 @@
     "noRollRequired": true,
     "targetBeings": true,
     "targetObjects": false,
-    "locked": true
+    "locked": true,
+    "focusOnCast": true
   },
   "effects": [],
   "folder": null,

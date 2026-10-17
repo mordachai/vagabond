@@ -11,7 +11,8 @@
     "fxSchool": "nature",
     "locked": true,
     "targetBeings": true,
-    "targetObjects": false
+    "targetObjects": false,
+    "focusOnCast": true
   },
   "effects": [],
   "folder": null,

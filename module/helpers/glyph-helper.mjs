@@ -411,8 +411,10 @@ export class VagabondGlyphHelper {
         : null;
 
     // Spell Damage / Effect split: the Cast snapshot says whether the Effect was included
+    // Still Focused on the Spell at the trigger: what it applies ends with that Focus (FocusLink)
+    const focusHeld = (sourceActor.system.focus?.spellIds ?? []).includes(spell.id);
     const spellCast = payload.useFx === undefined ? null
-      : VagabondDamageHelper.spellCastContext(spell, { damageDice: payload.damageDice, useFx: payload.useFx });
+      : VagabondDamageHelper.spellCastContext(spell, { damageDice: payload.damageDice, useFx: payload.useFx, focusHeld });
     const attackType = CONFIG.VAGABOND.spellDeliveryAttackTypes.glyph;
     const effectButtons = VagabondDamageHelper.createSpellEffectButtons(sourceActor, spell, spellCast, {
       targetsAtRollTime, attackType,
@@ -435,6 +437,7 @@ export class VagabondGlyphHelper {
       targetsAtRollTime,
       footerActions: effectButtons ? [effectButtons] : [],
       spellCast,
+      macroExtraScope: { focusHeld },
     });
 
     // "…then the glyph disappears."
