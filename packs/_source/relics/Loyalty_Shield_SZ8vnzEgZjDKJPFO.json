@@ -1,10 +1,10 @@
 {
   "name": "Loyalty Shield",
   "type": "equipment",
-  "img": "icons/magic/symbols/circled-gem-pink.webp",
+  "img": "icons/equipment/shield/kite-wooden-sigil-purple.webp",
   "system": {
     "description": "<p><span class=\"fontstyle0\">Standard Shield that a Being must Bind themselves to to access its Powers, which are as follows:</span></p><ul><li><span class=\"fontstyle2\">(+1) Shield:</span><span class=\"fontstyle0\"> Grants a +1 bonus to Armor.</span></li><li><span class=\"fontstyle2\">Loyalty:</span><span class=\"fontstyle0\"> Can be thrown to attack. It then magically returns to the Wielder's hand after the attack.</span></li></ul>",
-    "equipmentType": "relic",
+    "equipmentType": "weapon",
     "locked": true,
     "equipped": false,
     "quantity": 1,
@@ -17,30 +17,149 @@
     "metal": "none",
     "damageType": "-",
     "damageAmount": "",
-    "properties": [],
+    "properties": [
+      "Defense"
+    ],
     "weaponSkill": "melee",
     "range": "close",
     "grip": "1H",
-    "damageOneHand": "d6",
-    "damageTwoHands": "d8",
+    "damageOneHand": "d4",
+    "damageTwoHands": "d4",
     "equipmentState": "unequipped",
     "armorType": "light",
     "immunities": [],
     "gearCategory": "",
-    "alchemicalType": "",
+    "alchemicalType": "concoction",
     "lore": "Relic Standard Shield (Bound)",
-    "requiresBound": true
+    "damageTypeOneHand": "blunt",
+    "handsRequired": 0,
+    "isTrinket": false,
+    "requiresBound": false,
+    "bound": false,
+    "gridPosition": 0,
+    "containerId": null,
+    "canExplode": false,
+    "explodeValues": "",
+    "altSkills": [
+      "finesse"
+    ],
+    "damageTypeTwoHands": "-",
+    "isSupply": false,
+    "isBeverage": false,
+    "isConsumable": false,
+    "linkedConsumable": "",
+    "uses": {
+      "max": 0,
+      "value": 0
+    },
+    "passiveCausedStatuses": [],
+    "causedStatuses": [],
+    "critCausedStatuses": [],
+    "critThresholdMod": [],
+    "blockedStatuses": [],
+    "resistedStatuses": [],
+    "coating": {
+      "sourceName": "",
+      "charges": 0,
+      "causedStatuses": []
+    },
+    "imbuedSpell": {
+      "active": false,
+      "sourceActorUuid": "",
+      "sourceActorName": "",
+      "spellUuid": "",
+      "spellName": "",
+      "spellImg": "",
+      "damageTypeKey": "",
+      "dieSize": 0,
+      "damageDice": 0,
+      "deferredMana": 0,
+      "deferredPayment": false,
+      "manaSkillKey": ""
+    },
+    "macro": {
+      "enabled": false,
+      "uuid": "",
+      "command": "",
+      "label": "",
+      "runAsGM": false
+    },
+    "hitMacro": {
+      "enabled": false,
+      "uuid": "",
+      "command": "",
+      "label": "",
+      "runAsGM": false
+    },
+    "relic": {
+      "powers": [],
+      "fabled": false,
+      "requiresBond": true,
+      "boundTo": "",
+      "cursed": false,
+      "consumable": false,
+      "sockets": [],
+      "isRelic": true,
+      "slots": 0,
+      "disguised": false,
+      "disguise": {},
+      "trueIdentity": {}
+    }
   },
-  "effects": [],
+  "effects": [
+    {
+      "name": "(+1) Shield",
+      "img": "icons/magic/control/buff-flight-wings-runes-purple.webp",
+      "_id": "ww3FgmZqiU6gzF17",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.armorBonus",
+            "value": 1,
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "<p>Grants a +1 bonus to Armor.</p>",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "when-equipped",
+          "relicBoost": 1
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "6.7.0"
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!SZ8vnzEgZjDKJPFO.ww3FgmZqiU6gzF17"
+    }
+  ],
   "folder": null,
   "flags": {},
   "_stats": {
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "13.351",
+    "coreVersion": "14.361",
     "systemId": "vagabond",
-    "systemVersion": "3.3.1",
+    "systemVersion": "6.7.0",
     "createdTime": 1764967025119,
     "modifiedTime": 1771087664601,
     "lastModifiedBy": "13p65OEadZSZVLRk"

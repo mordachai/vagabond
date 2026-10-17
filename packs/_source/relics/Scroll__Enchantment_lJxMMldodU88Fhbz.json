@@ -1,7 +1,7 @@
 {
   "name": "Scroll, Enchantment",
   "type": "equipment",
-  "img": "icons/magic/symbols/circled-gem-pink.webp",
+  "img": "icons/sundries/scrolls/scroll-runed-brown-purple.webp",
   "system": {
     "description": "<p><span class=\"fontstyle0\">Can be read to grant one Item of the reader's choice that they are touching the Relic Power on the Scroll. The Scroll then vaporizes.</span></p>",
     "equipmentType": "relic",

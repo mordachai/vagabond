@@ -1,7 +1,7 @@
 {
   "name": "Cloak of Displacement",
   "type": "equipment",
-  "img": "icons/magic/symbols/circled-gem-pink.webp",
+  "img": "icons/equipment/back/cloak-layered-tattered-purple.webp",
   "system": {
     "description": "<p><span class=\"fontstyle0\">Coat made of the fur of an omlarcat. The wearer has the following Power:</span></p><ul><li><span class=\"fontstyle2\">Displacement:</span><span class=\"fontstyle0\"> Attacks against them based on sight are made as if the attacker is Vulnerable.</span></li></ul>",
     "equipmentType": "relic",

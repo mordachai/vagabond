@@ -1,6 +1,12 @@
 # Changelog
 
-## Unreleased
+## v6.7.1
+- **[Changed]** Wearable and other Relics (boots, cloaks, rings, scrolls, Spellbook...) get their own icons instead of the shared pink gem (compendium needs a rebuild).
+- **[Changed]** Magistaff Common / Rare / Legendary each get a different staff icon; Skyhowel gets a chain whip icon.
+- **[Changed]** Potion, Polymorph gets a new icon (its old one now belongs to Alchemist's Beaker).
+- **[Added]** Cursed items obfuscation and reveal
+
+## v6.7.0
 - **[Added]** Relic slots on weapons, armor, gear and alchemicals (edit mode > Handling > Relic Slots). Drag any Relic onto a slot on the locked sheet to attach it; click a slot for its details and Remove. A Relic taken from an inventory goes back there when removed.
 - **[Added]** "Is Relic" switch (Handling, and in the locked sheet's Details under Trinket): the item counts as a Relic and gets through "Physical vs. Non-Relics" Immunity. Attaching a Relic turns it on; the GM can turn it off and the weapon stops counting as a Relic. An attached Bonus - Weapon sets its (+N).
 - **[Added]** HUD inventory rows show a Relic slot counter; click it for the slots popup, which also takes drops.
@@ -12,6 +18,10 @@
 - **[Added]** Consumable Relics attached to an item are used up when the item is used (weapons: after the attack, hit or miss), with a chat line.
 - **[Changed]** Relics compendium: the Cursed and Armor of Vulnerability Relics are flagged Cursed (compendium needs a rebuild).
 - **[Changed]** Locked item sheet Details: Slots and Cost are always the last two rows.
+- **[Changed]** Named Relic weapons and armor (Dyrnwyn, Sunder, Elven Chain, Armor of Vulnerability...) are real weapons / armor now, with new icons. Their Powers are effects on the item itself (no Relic slots): they attack, and their (+N), Silvering, Shock damage, Darksight and Armor bonuses work. World copies convert on load (compendium needs a rebuild).
+- **[Fixed]** Senses - Nightvision grants Darksight; Cursed - Vulnerability also removes the Armor's own Rating, as the book says.
+- **[Added]** Disguised curses: the GM can disguise a cursed item (button on its sheet). Players see a Relic with the opposite plus ("Light Armor (+1)") and no curse marks; the curse still works. The disguise text is generated, and the GM can edit it; edits are kept. Only the GM reveals it, with a chat card.
+- **[Changed]** Armor of Vulnerability ships disguised as Light / Medium / Heavy Armor (+1 / +2 / +3).
 
 ## v6.6.0
 - **[Added]** Canvas Loot integration: its drop, throw, pickup and place messages now use Vagabond chat cards, with a Show button that pans to the loot. README recommends Canvas Loot (Item Piles recommendation struck out).

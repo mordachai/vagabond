@@ -1,7 +1,7 @@
 {
   "name": "Helm of Telepathy",
   "type": "equipment",
-  "img": "icons/magic/symbols/circled-gem-pink.webp",
+  "img": "icons/equipment/head/helm-barbute-rounded-gold.webp",
   "system": {
     "description": "<p><span class=\"fontstyle0\">Gorgeous helmet which grants the wearer the following Power:</span></p><ul><li><span class=\"fontstyle2\">Telepathy:</span><span class=\"fontstyle0\"> Telepathy (Far), which requires Focus.</span></li></ul>",
     "equipmentType": "relic",

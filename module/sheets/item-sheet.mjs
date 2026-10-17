@@ -12,6 +12,7 @@ import { levelTableCap } from '../helpers/homebrew-config.mjs';
 import { CurrencyHelper } from '../helpers/currency-helper.mjs';
 import { ContextMenuHelper } from '../helpers/context-menu-helper.mjs';
 import { RelicSlots } from '../helpers/relic-slots.mjs';
+import { RelicDisguise } from '../helpers/relic-disguise.mjs';
 
 const { api, sheets } = foundry.applications;
 const DragDrop = foundry.applications.ux.DragDrop;
@@ -144,6 +145,8 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       applyCoating: this._onApplyCoating,
       usePip: this._onUsePip,
       relicSlot: this._onRelicSlot,
+      relicDisguise: this._onRelicDisguise,
+      relicReveal: this._onRelicReveal,
       clearImbue: this._onClearImbue,
       clearItemMacro: this._onClearItemMacro,
     },
@@ -286,6 +289,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
         .join(', '),
       relicSlots: RelicSlots.view(this.item),
       relicCurse: RelicSlots.curseInfo(this.item),
+      relicDisguise: RelicDisguise.view(this.item),
     };
 
     // Weapons: the skill attacks roll with (preferred, else default) and every
@@ -3326,6 +3330,16 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
   /** Relic slot click: the slots popup with that slot's details (RelicSlots). */
   static _onRelicSlot(event, target) {
     RelicSlots.openPopup(event, this.document, Number(target.dataset.relicSlot));
+  }
+
+  /** GM: disguise this cursed item (RelicDisguise). */
+  static _onRelicDisguise() {
+    RelicDisguise.disguise(this.document);
+  }
+
+  /** GM: reveal this disguised item's true identity (chat card). */
+  static _onRelicReveal() {
+    RelicDisguise.reveal(this.document);
   }
 
   /**

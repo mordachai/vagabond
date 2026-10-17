@@ -10816,7 +10816,7 @@
     {
       "name": "Potion, Polymorph",
       "type": "equipment",
-      "img": "icons/consumables/potions/round-decorated-snake-green.webp",
+      "img": "icons/consumables/potions/potion-flask-corked-labeled-pink.webp",
       "system": {
         "description": "<p><span class=\"fontstyle0\">The consumer is transformed as per the Polymorph Spell (p. 97) for 1 Hour. If the consumer isn't aware they are drinking the potion or does not choose a form, roll d66:</span></p><table class=\"NormalTable\"><tbody><tr><td>d66</td><td>Beast</td><td>d66</td><td>Beast</td><td>d66</td><td>Beast</td></tr><tr><td>1 1</td><td>Toad</td><td>3 1</td><td>Camel</td><td>5 1</td><td>Dolphin</td></tr><tr><td>2</td><td>Sheep</td><td>2</td><td>Horse</td><td>2</td><td>Pidgeon</td></tr><tr><td>3</td><td>Chicken</td><td>3</td><td>Llama</td><td>3</td><td>Tiger</td></tr><tr><td>4</td><td>Fox</td><td>4</td><td>Cat</td><td>4</td><td>Lion</td></tr><tr><td>5</td><td>Boar</td><td>5</td><td>Crocodile</td><td>5</td><td>Bull</td></tr><tr><td>6</td><td>Hawk</td><td>6</td><td>Cow</td><td>6</td><td>Shark</td></tr><tr><td>2 1</td><td>Goat</td><td>4 1</td><td>Moose</td><td>6 1</td><td>Eagle</td></tr><tr><td>2</td><td>Rat</td><td>2</td><td>Elk</td><td>2</td><td>Bear</td></tr><tr><td>3</td><td>Badger</td><td>3</td><td>Giant Spider</td><td>3</td><td>Elephant</td></tr><tr><td>4</td><td>Octopus</td><td>4</td><td>Viper</td><td>4</td><td>Crab</td></tr><tr><td>5</td><td>Rabbit</td><td>5</td><td>Wolf</td><td>5</td><td>El. Eel</td></tr><tr><td>6</td><td>Owl</td><td>6</td><td>Ape</td><td>6</td><td>T-rex</td></tr></tbody></table>",
         "equipmentType": "alchemical",
@@ -55709,10 +55709,10 @@
     {
       "name": "Skyhowel",
       "type": "equipment",
-      "img": "icons/magic/symbols/circled-gem-pink.webp",
+      "img": "icons/skills/melee/strike-chain-whip-blue.webp",
       "system": {
         "description": "<p><span class=\"fontstyle0\">Chain Whip that crackles with arcs of lightning as it swings. It has the following Powers:</span></p><ul><li><span class=\"fontstyle2\">(+1) Weapon:</span><span class=\"fontstyle0\"> Deals an extra +1 damage.</span></li><li><span class=\"fontstyle2\">Shocktongue:</span><span class=\"fontstyle0\"> Its damage is Shock.</span></li><li><span class=\"fontstyle2\">Crack the Sky:</span><span class=\"fontstyle0\"> (1/Day) Strike the air, causing all Near foes who aren't Immune to Shock to become Dazed (d4 Rounds).</span></li></ul>",
-        "equipmentType": "relic",
+        "equipmentType": "weapon",
         "locked": true,
         "equipped": false,
         "quantity": 1,
@@ -55721,24 +55721,178 @@
           "silver": 0,
           "copper": 0
         },
-        "baseSlots": 1,
+        "baseSlots": 2,
         "metal": "none",
         "damageType": "-",
         "damageAmount": "",
-        "properties": [],
+        "properties": [
+          "Vicious",
+          "Grapple",
+          "Long"
+        ],
         "weaponSkill": "melee",
         "range": "close",
         "grip": "1H",
         "damageOneHand": "d6",
-        "damageTwoHands": "d8",
+        "damageTwoHands": "d6",
         "equipmentState": "unequipped",
         "armorType": "light",
         "immunities": [],
         "gearCategory": "",
-        "alchemicalType": "",
-        "lore": "Relic Chain Whip"
+        "alchemicalType": "concoction",
+        "lore": "Relic Chain Whip",
+        "damageTypeOneHand": "blunt",
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": [],
+          "isRelic": true,
+          "slots": 0,
+          "disguised": false,
+          "disguise": {},
+          "trueIdentity": {}
+        },
+        "containerId": null
       },
-      "effects": [],
+      "effects": [
+        {
+          "name": "Vicious",
+          "img": "icons/svg/aura.svg",
+          "_id": "7UoKCBr8YNyQyOzH",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.critBonusDice",
+                "type": "add",
+                "value": "matchDie"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "Crits with it deal 1 extra damage die.",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "on-use"
+            }
+          },
+          "_stats": {
+            "coreVersion": "14.361",
+            "systemId": "vagabond",
+            "systemVersion": "5.43.4"
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!MAzpXCazU0s8nXgZ.1etpCVVdyzWlDG4Y.7UoKCBr8YNyQyOzH",
+          "origin": "Compendium.vagabond.relics.Item.2AYiSZpv9zgjnxOy"
+        },
+        {
+          "name": "(+1) Weapon",
+          "img": "icons/magic/control/buff-flight-wings-runes-purple.webp",
+          "_id": "ANosLvw4MHTaD9Oj",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.universalWeaponDamageBonus",
+                "value": 1,
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "<p>Deals an extra +1 damage.</p>",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "on-use",
+              "relicBoost": 1
+            }
+          },
+          "_stats": {
+            "coreVersion": "14.361",
+            "systemId": "vagabond",
+            "systemVersion": "6.7.0"
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!MAzpXCazU0s8nXgZ.1etpCVVdyzWlDG4Y.ANosLvw4MHTaD9Oj"
+        },
+        {
+          "name": "Shocktongue",
+          "img": "icons/magic/control/buff-flight-wings-runes-blue-white.webp",
+          "_id": "GIW5ohiWmF5xcRTA",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.damageTypeOneHand",
+                "value": "shock",
+                "priority": null,
+                "type": "override"
+              },
+              {
+                "key": "system.damageTypeTwoHands",
+                "value": "shock",
+                "priority": null,
+                "type": "override"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "<p>Its damage is Shock.</p>",
+          "tint": "#ffffff",
+          "transfer": false,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "self"
+            }
+          },
+          "_stats": {
+            "coreVersion": "14.361",
+            "systemId": "vagabond",
+            "systemVersion": "6.7.0"
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!MAzpXCazU0s8nXgZ.1etpCVVdyzWlDG4Y.GIW5ohiWmF5xcRTA"
+        }
+      ],
       "folder": null,
       "flags": {
         "vagabond": {
@@ -55769,7 +55923,7 @@
     {
       "name": "Cloak of Invisibility",
       "type": "equipment",
-      "img": "icons/magic/symbols/circled-gem-pink.webp",
+      "img": "icons/equipment/back/cloak-layered-white.webp",
       "system": {
         "description": "<p><span class=\"fontstyle0\">A cloak of shimmers that reflects light anomalously. The Bound wearer has the following Power:</span></p><ul><li><span class=\"fontstyle2\">Invisibility I:</span><span class=\"fontstyle0\"> They use their Action or skip their Move to become Invisible until after they take an Action.</span></li></ul>",
         "equipmentType": "relic",
@@ -55830,7 +55984,7 @@
     {
       "name": "Ring of Fire Resistance",
       "type": "equipment",
-      "img": "icons/magic/symbols/circled-gem-pink.webp",
+      "img": "icons/equipment/finger/ring-cabochon-notched-silver-red.webp",
       "system": {
         "description": "<p><span class=\"fontstyle0\">This red ruby ring has the following Powers:</span></p><ul><li><span class=\"fontstyle2\">Innured to Flame:</span><span class=\"fontstyle0\"> The wearer is unharmed by non-magical Fire.</span></li><li><span class=\"fontstyle2\">Fire Resistance:</span><span class=\"fontstyle0\"> The wearer has Favor on Saves against taking Fire-based damage, and reduces the Fire damage they take by 1 per damage die rolled (minimum 1 damage).</span></li></ul>",
         "equipmentType": "relic",
@@ -55890,10 +56044,10 @@
     {
       "name": "Undertow",
       "type": "equipment",
-      "img": "icons/magic/symbols/circled-gem-pink.webp",
+      "img": "icons/weapons/polearms/trident-silver-blue.webp",
       "system": {
         "description": "<p><span class=\"fontstyle0\">Trident that must be Bound to to access its Powers, which are as follows:</span></p><ul><li><span class=\"fontstyle2\">(+3) Weapon:</span><span class=\"fontstyle0\"> Deals an extra +3 damage.</span></li><li><span class=\"fontstyle2\">Aqua Lung:</span><span class=\"fontstyle0\"> They can breathe water.</span></li><li><span class=\"fontstyle2\">Fish Command:</span><span class=\"fontstyle0\"> (3 charges) You can Target a Beast with a Swim Speed and spend 1 charge to attempt to cause it to be Charmed for 1 Minute, giving you control of it.</span></li><li><span class=\"fontstyle2\">Marine Ambassador:</span><span class=\"fontstyle0\"> They can speak with Beasts with a Swim Speed.</span></li><li><span class=\"fontstyle2\">Safe Space:</span><span class=\"fontstyle0\"> Create an impenetrable barrier out to Close. This barrier has 36 HP, which is regained each day. The barrier ignores the results of damage rolls, and instead only takes 1 damage per die used for the damage. While the barrier has HP, the area within is safe, comfortable, nothing can enter or exit the barrier, and nothing within can be affected by any attacks or magic from outside it. Action to activate or deactivate.</span></li><li><span class=\"fontstyle2\">Visceral:</span><span class=\"fontstyle0\"> On a Crit Attack, the Target takes extra damage equal to (2 × its HD).</span></li><li><span class=\"fontstyle2\">Warning:</span><span class=\"fontstyle0\"> You can't be surprised while conscious, and it awakens you if you are asleep if Enemies are within Near.</span></li></ul>",
-        "equipmentType": "relic",
+        "equipmentType": "weapon",
         "locked": true,
         "equipped": false,
         "quantity": 1,
@@ -55906,21 +56060,82 @@
         "metal": "none",
         "damageType": "-",
         "damageAmount": "",
-        "properties": [],
+        "properties": [
+          "Thrown"
+        ],
         "weaponSkill": "melee",
         "range": "close",
-        "grip": "1H",
+        "grip": "V",
         "damageOneHand": "d6",
         "damageTwoHands": "d8",
         "equipmentState": "unequipped",
         "armorType": "light",
         "immunities": [],
         "gearCategory": "",
-        "alchemicalType": "",
+        "alchemicalType": "concoction",
         "lore": "Fabled Relic Trident (Bound)",
-        "requiresBound": true
+        "damageTypeOneHand": "piercing",
+        "relic": {
+          "powers": [],
+          "fabled": true,
+          "requiresBond": true,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": [],
+          "isRelic": true,
+          "slots": 0,
+          "disguised": false,
+          "disguise": {},
+          "trueIdentity": {}
+        },
+        "containerId": null
       },
-      "effects": [],
+      "effects": [
+        {
+          "name": "(+3) Weapon",
+          "img": "icons/magic/control/buff-flight-wings-runes-purple.webp",
+          "_id": "FQKSBGQqtOB1VSus",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.universalWeaponDamageBonus",
+                "value": 3,
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "<p>Deals an extra +3 damage.</p>",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "on-use",
+              "relicBoost": 1
+            }
+          },
+          "_stats": {
+            "coreVersion": "14.361",
+            "systemId": "vagabond",
+            "systemVersion": "6.7.0"
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!MAzpXCazU0s8nXgZ.XLYF4C2KJEjM9H2H.FQKSBGQqtOB1VSus"
+        }
+      ],
       "folder": null,
       "flags": {
         "vagabond": {
@@ -55951,20 +56166,20 @@
     {
       "name": "Elven Chain",
       "type": "equipment",
-      "img": "icons/magic/symbols/circled-gem-pink.webp",
+      "img": "icons/commodities/metal/mail-chain-steel.webp",
       "system": {
         "description": "<p><span class=\"fontstyle0\">Mithral Chain Armor that, while Equipped, grants the wearer the following Power:</span></p><ul><li><span class=\"fontstyle2\">(+1) Armor:</span><span class=\"fontstyle0\"> Grants a +1 bonus to Armor.</span></li></ul>",
-        "equipmentType": "relic",
+        "equipmentType": "armor",
         "locked": true,
         "equipped": false,
         "quantity": 1,
         "baseCost": {
-          "gold": 2100,
+          "gold": 42,
           "silver": 0,
           "copper": 0
         },
-        "baseSlots": 1,
-        "metal": "none",
+        "baseSlots": 2,
+        "metal": "mythral",
         "damageType": "-",
         "damageAmount": "",
         "properties": [],
@@ -55974,13 +56189,74 @@
         "damageOneHand": "d6",
         "damageTwoHands": "d8",
         "equipmentState": "unequipped",
-        "armorType": "light",
         "immunities": [],
         "gearCategory": "",
-        "alchemicalType": "",
-        "lore": "Relic Medium Armor"
+        "alchemicalType": "concoction",
+        "lore": "Relic Medium Armor",
+        "armorRating": 2,
+        "mightRequirement": 4,
+        "reflexPenalty": 2,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": [],
+          "isRelic": true,
+          "slots": 0,
+          "disguised": false,
+          "disguise": {},
+          "trueIdentity": {}
+        },
+        "containerId": null
       },
-      "effects": [],
+      "effects": [
+        {
+          "name": "(+1) Armor",
+          "img": "icons/magic/control/buff-flight-wings-runes-purple.webp",
+          "_id": "pW4wDWyh5fF9IXbo",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.armorBonus",
+                "value": 1,
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "<p>Grants a +1 bonus to Armor.</p>",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "when-equipped",
+              "relicBoost": 1
+            }
+          },
+          "_stats": {
+            "coreVersion": "14.361",
+            "systemId": "vagabond",
+            "systemVersion": "6.7.0"
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!MAzpXCazU0s8nXgZ.QgoTumYrkBjlYXQU.pW4wDWyh5fF9IXbo"
+        }
+      ],
       "folder": null,
       "flags": {
         "vagabond": {
@@ -56011,7 +56287,7 @@
     {
       "name": "Boots of the Spider",
       "type": "equipment",
-      "img": "icons/magic/symbols/circled-gem-pink.webp",
+      "img": "icons/equipment/feet/boots-leather-black.webp",
       "system": {
         "description": "<p><span class=\"fontstyle0\">The boots have the following Powers:</span></p><ul><li><span class=\"fontstyle2\">Clinging:</span><span class=\"fontstyle0\"> The wearer has Cling.</span></li><li><span class=\"fontstyle2\">Webwalking:</span><span class=\"fontstyle0\"> The wearer ignores Difficult Terrain made of webs, and can't be Restrained by webs and filament.</span></li></ul>",
         "equipmentType": "relic",
@@ -56071,7 +56347,7 @@
     {
       "name": "Cloak of Displacement",
       "type": "equipment",
-      "img": "icons/magic/symbols/circled-gem-pink.webp",
+      "img": "icons/equipment/back/cloak-layered-tattered-purple.webp",
       "system": {
         "description": "<p><span class=\"fontstyle0\">Coat made of the fur of an omlarcat. The wearer has the following Power:</span></p><ul><li><span class=\"fontstyle2\">Displacement:</span><span class=\"fontstyle0\"> Attacks against them based on sight are made as if the attacker is Vulnerable.</span></li></ul>",
         "equipmentType": "relic",
@@ -56131,7 +56407,7 @@
     {
       "name": "Broom of Flying",
       "type": "equipment",
-      "img": "icons/magic/symbols/circled-gem-pink.webp",
+      "img": "icons/tools/hand/broom-straw-brown.webp",
       "system": {
         "description": "<p><span class=\"fontstyle0\">An animated broom with a Fly Speed of 30'. Obeys the commands of the Being Bound to it.</span></p>",
         "equipmentType": "relic",
@@ -56190,12 +56466,12 @@
       "_key": "!actors.items!MAzpXCazU0s8nXgZ.nYEe8ODKKow2qT9t"
     },
     {
-      "name": "Armor of Vulnerability (-1)",
+      "name": "Light Armor (+1)",
       "type": "equipment",
-      "img": "icons/magic/symbols/circled-gem-pink.webp",
+      "img": "icons/equipment/chest/breastplate-banded-simple-leather-brown.webp",
       "system": {
-        "description": "<p><span class=\"fontstyle0\">Cursed Armor that can't be unbonded from except by powers that can remove curses. It bears the following Curse:</span></p><ul><li><span class=\"fontstyle2\">Vulnerability (Armor):</span><span class=\"fontstyle0\"> Does not grant its Armor and instead increases Attack damage taken by the number indicated.</span></li></ul><p><span class=\"fontstyle0\">Any attempts to identify it only reveals it to be a Relic Armor with the opposite \"plus.\"</span></p>",
-        "equipmentType": "relic",
+        "description": "<p>Relic Light Armor with the following Power:</p><ul><li><strong>(+1) Armor:</strong> Grants a +1 bonus to Armor.</li></ul>",
+        "equipmentType": "armor",
         "locked": true,
         "equipped": false,
         "quantity": 1,
@@ -56215,14 +56491,151 @@
         "damageOneHand": "d6",
         "damageTwoHands": "d8",
         "equipmentState": "unequipped",
-        "armorType": "light",
         "immunities": [],
         "gearCategory": "",
-        "alchemicalType": "",
-        "lore": "Cursed Relic Armor (Bound)",
-        "requiresBound": true
+        "alchemicalType": "concoction",
+        "lore": "Relic Light Armor",
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 1,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": true,
+          "boundTo": "",
+          "cursed": true,
+          "consumable": false,
+          "sockets": [],
+          "isRelic": true,
+          "slots": 0,
+          "disguised": true,
+          "disguise": {
+            "name": "Light Armor (+1)",
+            "img": "icons/equipment/chest/breastplate-banded-simple-leather-brown.webp",
+            "description": "<p>Relic Light Armor with the following Power:</p><ul><li><strong>(+1) Armor:</strong> Grants a +1 bonus to Armor.</li></ul>",
+            "lore": "Relic Light Armor",
+            "effects": {
+              "78TIoxUlH8ZCJo5Q": {
+                "name": "(+1) Armor",
+                "img": "icons/magic/control/buff-flight-wings-runes-purple.webp",
+                "description": "<p>Grants a +1 bonus to Armor.</p>"
+              },
+              "O9h5yfHv6oc25AmQ": {
+                "name": "(+1) Armor",
+                "img": "icons/magic/control/buff-flight-wings-runes-purple.webp",
+                "description": "<p>Grants a +1 bonus to Armor.</p>"
+              }
+            }
+          },
+          "trueIdentity": {
+            "name": "Armor of Vulnerability (-1)",
+            "img": "icons/equipment/chest/breastplate-banded-simple-leather-brown.webp",
+            "description": "<p><span class=\"fontstyle0\">Cursed Armor that can't be unbonded from except by powers that can remove curses. It bears the following Curse:</span></p><ul><li><span class=\"fontstyle2\">Vulnerability (Armor):</span><span class=\"fontstyle0\"> Does not grant its Armor and instead increases Attack damage taken by the number indicated.</span></li></ul><p><span class=\"fontstyle0\">Any attempts to identify it only reveals it to be a Relic Armor with the opposite \"plus.\"</span></p>",
+            "lore": "Cursed Relic Armor (Bound)",
+            "effects": {
+              "78TIoxUlH8ZCJo5Q": {
+                "name": "Vulnerability: +1 damage taken",
+                "img": "icons/magic/control/buff-flight-wings-runes-red-yellow.webp",
+                "description": "<p>Does not grant its Armor and instead increases Attack damage taken by 1.</p>"
+              },
+              "O9h5yfHv6oc25AmQ": {
+                "name": "Vulnerability: no Armor",
+                "img": "icons/magic/control/buff-flight-wings-runes-red-yellow.webp",
+                "description": "<p>Does not grant its Armor and instead increases Attack damage taken by 1.</p>"
+              }
+            }
+          }
+        },
+        "containerId": null
       },
-      "effects": [],
+      "effects": [
+        {
+          "name": "(+1) Armor",
+          "img": "icons/magic/control/buff-flight-wings-runes-purple.webp",
+          "_id": "78TIoxUlH8ZCJo5Q",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.armorBonus",
+                "value": -1,
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "<p>Grants a +1 bonus to Armor.</p>",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "when-equipped",
+              "curse": true
+            }
+          },
+          "_stats": {
+            "coreVersion": "14.361",
+            "systemId": "vagabond",
+            "systemVersion": "6.7.0"
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!MAzpXCazU0s8nXgZ.NbGoAvxrHjaALHIP.78TIoxUlH8ZCJo5Q"
+        },
+        {
+          "name": "(+1) Armor",
+          "img": "icons/magic/control/buff-flight-wings-runes-purple.webp",
+          "_id": "O9h5yfHv6oc25AmQ",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.armorRating",
+                "value": 0,
+                "priority": null,
+                "type": "override"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "<p>Grants a +1 bonus to Armor.</p>",
+          "tint": "#ffffff",
+          "transfer": false,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "self",
+              "curse": true
+            }
+          },
+          "_stats": {
+            "coreVersion": "14.361",
+            "systemId": "vagabond",
+            "systemVersion": "6.7.0"
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!MAzpXCazU0s8nXgZ.NbGoAvxrHjaALHIP.O9h5yfHv6oc25AmQ"
+        }
+      ],
       "folder": null,
       "flags": {
         "vagabond": {
@@ -56251,12 +56664,12 @@
       "_key": "!actors.items!MAzpXCazU0s8nXgZ.NbGoAvxrHjaALHIP"
     },
     {
-      "name": "Armor of Vulnerability (-2)",
+      "name": "Medium Armor (+2)",
       "type": "equipment",
-      "img": "icons/magic/symbols/circled-gem-pink.webp",
+      "img": "icons/equipment/chest/breastplate-metal-scaled-grey.webp",
       "system": {
-        "description": "<p><span class=\"fontstyle0\">Cursed Armor that can't be unbonded from except by powers that can remove curses. It bears the following Curse:</span></p><ul><li><span class=\"fontstyle2\">Vulnerability (Armor):</span><span class=\"fontstyle0\"> Does not grant its Armor and instead increases Attack damage taken by the number indicated.</span></li></ul><p><span class=\"fontstyle0\">Any attempts to identify it only reveals it to be a Relic Armor with the opposite \"plus.\"</span></p>",
-        "equipmentType": "relic",
+        "description": "<p>Relic Medium Armor with the following Power:</p><ul><li><strong>(+2) Armor:</strong> Grants a +2 bonus to Armor.</li></ul>",
+        "equipmentType": "armor",
         "locked": true,
         "equipped": false,
         "quantity": 1,
@@ -56265,7 +56678,7 @@
           "silver": 0,
           "copper": 0
         },
-        "baseSlots": 1,
+        "baseSlots": 2,
         "metal": "none",
         "damageType": "-",
         "damageAmount": "",
@@ -56276,14 +56689,151 @@
         "damageOneHand": "d6",
         "damageTwoHands": "d8",
         "equipmentState": "unequipped",
-        "armorType": "light",
         "immunities": [],
         "gearCategory": "",
-        "alchemicalType": "",
-        "lore": "Cursed Relic Armor (Bound)",
-        "requiresBound": true
+        "alchemicalType": "concoction",
+        "lore": "Relic Medium Armor",
+        "armorRating": 2,
+        "mightRequirement": 4,
+        "reflexPenalty": 2,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": true,
+          "boundTo": "",
+          "cursed": true,
+          "consumable": false,
+          "sockets": [],
+          "isRelic": true,
+          "slots": 0,
+          "disguised": true,
+          "disguise": {
+            "name": "Medium Armor (+2)",
+            "img": "icons/equipment/chest/breastplate-metal-scaled-grey.webp",
+            "description": "<p>Relic Medium Armor with the following Power:</p><ul><li><strong>(+2) Armor:</strong> Grants a +2 bonus to Armor.</li></ul>",
+            "lore": "Relic Medium Armor",
+            "effects": {
+              "RvZGTfv9nrkPluHd": {
+                "name": "(+2) Armor",
+                "img": "icons/magic/control/buff-flight-wings-runes-purple.webp",
+                "description": "<p>Grants a +2 bonus to Armor.</p>"
+              },
+              "zzecimJGFbfEpnSP": {
+                "name": "(+2) Armor",
+                "img": "icons/magic/control/buff-flight-wings-runes-purple.webp",
+                "description": "<p>Grants a +2 bonus to Armor.</p>"
+              }
+            }
+          },
+          "trueIdentity": {
+            "name": "Armor of Vulnerability (-2)",
+            "img": "icons/equipment/chest/breastplate-metal-scaled-grey.webp",
+            "description": "<p><span class=\"fontstyle0\">Cursed Armor that can't be unbonded from except by powers that can remove curses. It bears the following Curse:</span></p><ul><li><span class=\"fontstyle2\">Vulnerability (Armor):</span><span class=\"fontstyle0\"> Does not grant its Armor and instead increases Attack damage taken by the number indicated.</span></li></ul><p><span class=\"fontstyle0\">Any attempts to identify it only reveals it to be a Relic Armor with the opposite \"plus.\"</span></p>",
+            "lore": "Cursed Relic Armor (Bound)",
+            "effects": {
+              "RvZGTfv9nrkPluHd": {
+                "name": "Vulnerability: +2 damage taken",
+                "img": "icons/magic/control/buff-flight-wings-runes-red-yellow.webp",
+                "description": "<p>Does not grant its Armor and instead increases Attack damage taken by 2.</p>"
+              },
+              "zzecimJGFbfEpnSP": {
+                "name": "Vulnerability: no Armor",
+                "img": "icons/magic/control/buff-flight-wings-runes-red-yellow.webp",
+                "description": "<p>Does not grant its Armor and instead increases Attack damage taken by 2.</p>"
+              }
+            }
+          }
+        },
+        "containerId": null
       },
-      "effects": [],
+      "effects": [
+        {
+          "name": "(+2) Armor",
+          "img": "icons/magic/control/buff-flight-wings-runes-purple.webp",
+          "_id": "RvZGTfv9nrkPluHd",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.armorBonus",
+                "value": -2,
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "<p>Grants a +2 bonus to Armor.</p>",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "when-equipped",
+              "curse": true
+            }
+          },
+          "_stats": {
+            "coreVersion": "14.361",
+            "systemId": "vagabond",
+            "systemVersion": "6.7.0"
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!MAzpXCazU0s8nXgZ.mGNHqHha2GMh5tQi.RvZGTfv9nrkPluHd"
+        },
+        {
+          "name": "(+2) Armor",
+          "img": "icons/magic/control/buff-flight-wings-runes-purple.webp",
+          "_id": "zzecimJGFbfEpnSP",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.armorRating",
+                "value": 0,
+                "priority": null,
+                "type": "override"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "<p>Grants a +2 bonus to Armor.</p>",
+          "tint": "#ffffff",
+          "transfer": false,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "self",
+              "curse": true
+            }
+          },
+          "_stats": {
+            "coreVersion": "14.361",
+            "systemId": "vagabond",
+            "systemVersion": "6.7.0"
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!MAzpXCazU0s8nXgZ.mGNHqHha2GMh5tQi.zzecimJGFbfEpnSP"
+        }
+      ],
       "folder": null,
       "flags": {
         "vagabond": {
@@ -56312,12 +56862,12 @@
       "_key": "!actors.items!MAzpXCazU0s8nXgZ.mGNHqHha2GMh5tQi"
     },
     {
-      "name": "Armor of Vulnerability (-3)",
+      "name": "Heavy Armor (+3)",
       "type": "equipment",
-      "img": "icons/magic/symbols/circled-gem-pink.webp",
+      "img": "icons/equipment/chest/breastplate-layered-grey.webp",
       "system": {
-        "description": "<p><span class=\"fontstyle0\">Cursed Armor that can't be unbonded from except by powers that can remove curses. It bears the following Curse:</span></p><ul><li><span class=\"fontstyle2\">Vulnerability (Armor):</span><span class=\"fontstyle0\"> Does not grant its Armor and instead increases Attack damage taken by the number indicated.</span></li></ul><p><span class=\"fontstyle0\">Any attempts to identify it only reveals it to be a Relic Armor with the opposite \"plus.\"</span></p>",
-        "equipmentType": "relic",
+        "description": "<p>Relic Heavy Armor with the following Power:</p><ul><li><strong>(+3) Armor:</strong> Grants a +3 bonus to Armor.</li></ul>",
+        "equipmentType": "armor",
         "locked": true,
         "equipped": false,
         "quantity": 1,
@@ -56326,7 +56876,7 @@
           "silver": 0,
           "copper": 0
         },
-        "baseSlots": 1,
+        "baseSlots": 3,
         "metal": "none",
         "damageType": "-",
         "damageAmount": "",
@@ -56337,14 +56887,151 @@
         "damageOneHand": "d6",
         "damageTwoHands": "d8",
         "equipmentState": "unequipped",
-        "armorType": "light",
         "immunities": [],
         "gearCategory": "",
-        "alchemicalType": "",
-        "lore": "Cursed Relic Armor (Bound)",
-        "requiresBound": true
+        "alchemicalType": "concoction",
+        "lore": "Relic Heavy Armor",
+        "armorRating": 3,
+        "mightRequirement": 6,
+        "reflexPenalty": 3,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": true,
+          "boundTo": "",
+          "cursed": true,
+          "consumable": false,
+          "sockets": [],
+          "isRelic": true,
+          "slots": 0,
+          "disguised": true,
+          "disguise": {
+            "name": "Heavy Armor (+3)",
+            "img": "icons/equipment/chest/breastplate-layered-grey.webp",
+            "description": "<p>Relic Heavy Armor with the following Power:</p><ul><li><strong>(+3) Armor:</strong> Grants a +3 bonus to Armor.</li></ul>",
+            "lore": "Relic Heavy Armor",
+            "effects": {
+              "BVFO6AcTGK8qKn9T": {
+                "name": "(+3) Armor",
+                "img": "icons/magic/control/buff-flight-wings-runes-purple.webp",
+                "description": "<p>Grants a +3 bonus to Armor.</p>"
+              },
+              "dqBpQdlJ7vIItref": {
+                "name": "(+3) Armor",
+                "img": "icons/magic/control/buff-flight-wings-runes-purple.webp",
+                "description": "<p>Grants a +3 bonus to Armor.</p>"
+              }
+            }
+          },
+          "trueIdentity": {
+            "name": "Armor of Vulnerability (-3)",
+            "img": "icons/equipment/chest/breastplate-layered-grey.webp",
+            "description": "<p><span class=\"fontstyle0\">Cursed Armor that can't be unbonded from except by powers that can remove curses. It bears the following Curse:</span></p><ul><li><span class=\"fontstyle2\">Vulnerability (Armor):</span><span class=\"fontstyle0\"> Does not grant its Armor and instead increases Attack damage taken by the number indicated.</span></li></ul><p><span class=\"fontstyle0\">Any attempts to identify it only reveals it to be a Relic Armor with the opposite \"plus.\"</span></p>",
+            "lore": "Cursed Relic Armor (Bound)",
+            "effects": {
+              "BVFO6AcTGK8qKn9T": {
+                "name": "Vulnerability: +3 damage taken",
+                "img": "icons/magic/control/buff-flight-wings-runes-red-yellow.webp",
+                "description": "<p>Does not grant its Armor and instead increases Attack damage taken by 3.</p>"
+              },
+              "dqBpQdlJ7vIItref": {
+                "name": "Vulnerability: no Armor",
+                "img": "icons/magic/control/buff-flight-wings-runes-red-yellow.webp",
+                "description": "<p>Does not grant its Armor and instead increases Attack damage taken by 3.</p>"
+              }
+            }
+          }
+        },
+        "containerId": null
       },
-      "effects": [],
+      "effects": [
+        {
+          "name": "(+3) Armor",
+          "img": "icons/magic/control/buff-flight-wings-runes-purple.webp",
+          "_id": "BVFO6AcTGK8qKn9T",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.armorBonus",
+                "value": -3,
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "<p>Grants a +3 bonus to Armor.</p>",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "when-equipped",
+              "curse": true
+            }
+          },
+          "_stats": {
+            "coreVersion": "14.361",
+            "systemId": "vagabond",
+            "systemVersion": "6.7.0"
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!MAzpXCazU0s8nXgZ.SpEyCNFbzd5DTVDp.BVFO6AcTGK8qKn9T"
+        },
+        {
+          "name": "(+3) Armor",
+          "img": "icons/magic/control/buff-flight-wings-runes-purple.webp",
+          "_id": "dqBpQdlJ7vIItref",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.armorRating",
+                "value": 0,
+                "priority": null,
+                "type": "override"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "<p>Grants a +3 bonus to Armor.</p>",
+          "tint": "#ffffff",
+          "transfer": false,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "self",
+              "curse": true
+            }
+          },
+          "_stats": {
+            "coreVersion": "14.361",
+            "systemId": "vagabond",
+            "systemVersion": "6.7.0"
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!MAzpXCazU0s8nXgZ.SpEyCNFbzd5DTVDp.dqBpQdlJ7vIItref"
+        }
+      ],
       "folder": null,
       "flags": {
         "vagabond": {
@@ -56375,10 +57062,10 @@
     {
       "name": "Voidedge",
       "type": "equipment",
-      "img": "icons/magic/symbols/circled-gem-pink.webp",
+      "img": "icons/weapons/swords/sword-flanged-lightning.webp",
       "system": {
         "description": "<p><span class=\"fontstyle0\">Greatsword that a Being must Bind themselves to to access its Powers, which are as follows:</span></p><ul><li><span class=\"fontstyle2\">(+3) Weapon:</span><span class=\"fontstyle0\"> Deals an extra +3 damage.</span></li><li><span class=\"fontstyle2\">Haste:</span><span class=\"fontstyle0\"> (1/Day) For 1 Minute, the Wielder's Speed is doubled, they gain Favor on Reflex Saves, and can take a second Action each Round.</span></li><li><span class=\"fontstyle2\">Lifesteal:</span><span class=\"fontstyle0\"> Killing a foe with it heals the Wielder for 4 (d8) HP. If the slain foe is an Artificial or Undead Being, it instead deals 4 (d8) damage to the Wielder.</span></li><li><span class=\"fontstyle2\">Resolve:</span><span class=\"fontstyle0\"> The Wielder is Immune to Charmed and Frightened.</span></li><li><span class=\"fontstyle2\">Sense Life:</span><span class=\"fontstyle0\"> Detects Small and larger living Beings within Far.</span></li><li><span class=\"fontstyle2\">Soul Eater:</span><span class=\"fontstyle0\"> It devours the soul of foes it slays. Those who have their soul eaten can't be resurrected unless a wish is granted to do so.</span></li></ul>",
-        "equipmentType": "relic",
+        "equipmentType": "weapon",
         "locked": true,
         "equipped": false,
         "quantity": 1,
@@ -56387,25 +57074,178 @@
           "silver": 0,
           "copper": 0
         },
-        "baseSlots": 1,
+        "baseSlots": 2,
         "metal": "none",
         "damageType": "-",
         "damageAmount": "",
-        "properties": [],
+        "properties": [
+          "Cleave",
+          "Keen"
+        ],
         "weaponSkill": "melee",
         "range": "close",
-        "grip": "1H",
-        "damageOneHand": "d6",
-        "damageTwoHands": "d8",
+        "grip": "2H",
+        "damageOneHand": "d10",
+        "damageTwoHands": "d10",
         "equipmentState": "unequipped",
         "armorType": "light",
         "immunities": [],
         "gearCategory": "",
-        "alchemicalType": "",
+        "alchemicalType": "concoction",
         "lore": "Fabled Relic Greatsword (Bound)",
-        "requiresBound": true
+        "damageTypeOneHand": "slashing",
+        "damageTypeTwoHands": "slashing",
+        "relic": {
+          "powers": [],
+          "fabled": true,
+          "requiresBond": true,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": [],
+          "isRelic": true,
+          "slots": 0,
+          "disguised": false,
+          "disguise": {},
+          "trueIdentity": {}
+        },
+        "containerId": null
       },
-      "effects": [],
+      "effects": [
+        {
+          "name": "Keen",
+          "img": "icons/svg/aura.svg",
+          "_id": "VbugKGKDbkCJz9hU",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.attackCritBonus",
+                "type": "subtract",
+                "value": "1"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "Crits 1 lower on this weapon's Attack Check.",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "on-use"
+            }
+          },
+          "_stats": {
+            "coreVersion": "14.361",
+            "systemId": "vagabond",
+            "systemVersion": "5.43.4"
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!MAzpXCazU0s8nXgZ.0T8JLZn3reKcBcw9.VbugKGKDbkCJz9hU",
+          "origin": "Compendium.vagabond.relics.Item.GIAEgPK6cZ78NpGj"
+        },
+        {
+          "name": "(+3) Weapon",
+          "img": "icons/magic/control/buff-flight-wings-runes-purple.webp",
+          "_id": "6TXCsoj8a3QA5K4S",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.universalWeaponDamageBonus",
+                "value": 3,
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "<p>Deals an extra +3 damage.</p>",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "on-use",
+              "relicBoost": 1
+            }
+          },
+          "_stats": {
+            "coreVersion": "14.361",
+            "systemId": "vagabond",
+            "systemVersion": "6.7.0"
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!MAzpXCazU0s8nXgZ.0T8JLZn3reKcBcw9.6TXCsoj8a3QA5K4S"
+        },
+        {
+          "name": "Resolve",
+          "img": "icons/magic/control/buff-flight-wings-runes-blue.webp",
+          "_id": "mcbxJ0TQvenG2AEK",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.statusImmunities",
+                "value": "charmed",
+                "priority": null,
+                "type": "add"
+              },
+              {
+                "key": "system.statusImmunities",
+                "value": "frightened",
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "<p>The Wielder is Immune to Charmed and Frightened.</p>",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "when-equipped"
+            }
+          },
+          "_stats": {
+            "coreVersion": "14.361",
+            "systemId": "vagabond",
+            "systemVersion": "6.7.0"
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!MAzpXCazU0s8nXgZ.0T8JLZn3reKcBcw9.mcbxJ0TQvenG2AEK"
+        }
+      ],
       "folder": null,
       "flags": {
         "vagabond": {
@@ -56436,7 +57276,7 @@
     {
       "name": "Phoenix Down",
       "type": "equipment",
-      "img": "icons/magic/symbols/circled-gem-pink.webp",
+      "img": "icons/commodities/materials/feather-orange.webp",
       "system": {
         "description": "<p><span class=\"fontstyle0\">This item can be placed on the corpse of a dead Being to return them to life at full HP. This does not work on Constructs or Undead. The Phoenix Down is consumed in this process.</span></p><ul><li><span class=\"fontstyle2\">Resurrection:</span><span class=\"fontstyle0\"> (one use)</span></li></ul>",
         "equipmentType": "relic",
@@ -56497,7 +57337,7 @@
     {
       "name": "Philosopher's Stone",
       "type": "equipment",
-      "img": "icons/magic/symbols/circled-gem-pink.webp",
+      "img": "icons/commodities/gems/gem-faceted-radiant-red.webp",
       "system": {
         "description": "<p><span class=\"fontstyle0\">The philosopher's stone is a mystical object made from the essence of creation itself. It can form all materials when used by an alchemist.</span></p><p><span class=\"fontstyle0\">While within 1 mile of the stone, the bound Being does not age and can’t be Sickened.</span></p><p><span class=\"fontstyle0\">The stone is an alchemical item that can be used with the Use Action in the following ways, which consumes the Philosopher’s Stone in the process:</span></p><ul><li><span class=\"fontstyle0\">If it touches a corpse, it is revived, and heals, creates, or regenerates their body to its original form if the Fates allow.</span></li><li><span class=\"fontstyle0\">It provides up to 50g of raw materials suitable for making an alchemical item. These raw materials disappear after 1 week of their creation.</span></li></ul>",
         "equipmentType": "relic",
@@ -56558,7 +57398,7 @@
     {
       "name": "Boots of the Hare",
       "type": "equipment",
-      "img": "icons/magic/symbols/circled-gem-pink.webp",
+      "img": "icons/equipment/feet/boots-collared-rounded-brown.webp",
       "system": {
         "description": "<p><span class=\"fontstyle0\">Boots adorned with mithral rabbit filigree. The wearer has the following Powers:</span></p><ul><li><span class=\"fontstyle2\">Lesser Speed:</span><span class=\"fontstyle0\"> Their Speed becomes 30' if it was previously lower.</span></li><li><span class=\"fontstyle2\">Jumping II:</span><span class=\"fontstyle0\"> Their horizontal jump distance is multiplied by 3.</span></li></ul>",
         "equipmentType": "relic",
@@ -56618,10 +57458,10 @@
     {
       "name": "Dyrnwyn",
       "type": "equipment",
-      "img": "icons/magic/symbols/circled-gem-pink.webp",
+      "img": "icons/weapons/swords/sword-runed-glowing.webp",
       "system": {
         "description": "<p><span class=\"fontstyle0\">Longsword with a pure white blade and jewel-studded hilt. It has the following Powers:</span></p><ul><li><span class=\"fontstyle2\">(+2) Weapon:</span><span class=\"fontstyle0\"> Deals an extra +2 damage.</span></li><li><span class=\"fontstyle2\">Evil's Bane:</span><span class=\"fontstyle0\"> Deals an extra damage die to Hellspawn and Undead.</span></li><li><span class=\"fontstyle2\">Silvering:</span><span class=\"fontstyle0\"> Attacks with it count as Silvered.</span></li><li><span class=\"fontstyle2\">Smite I:</span><span class=\"fontstyle0\"> Targets that take damage from it are also Burning (Cd4) with holy flame that ignores Immune.</span></li></ul>",
-        "equipmentType": "relic",
+        "equipmentType": "weapon",
         "locked": true,
         "equipped": false,
         "quantity": 1,
@@ -56630,24 +57470,171 @@
           "silver": 0,
           "copper": 0
         },
-        "baseSlots": 1,
+        "baseSlots": 2,
         "metal": "none",
         "damageType": "-",
         "damageAmount": "",
-        "properties": [],
+        "properties": [
+          "Keen"
+        ],
         "weaponSkill": "melee",
         "range": "close",
-        "grip": "1H",
-        "damageOneHand": "d6",
-        "damageTwoHands": "d8",
+        "grip": "V",
+        "damageOneHand": "d8",
+        "damageTwoHands": "d10",
         "equipmentState": "unequipped",
         "armorType": "light",
         "immunities": [],
         "gearCategory": "",
-        "alchemicalType": "",
-        "lore": "Fabled Relic Longsword"
+        "alchemicalType": "concoction",
+        "lore": "Fabled Relic Longsword",
+        "damageTypeOneHand": "slashing",
+        "damageTypeTwoHands": "slashing",
+        "relic": {
+          "powers": [],
+          "fabled": true,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": [],
+          "isRelic": true,
+          "slots": 0,
+          "disguised": false,
+          "disguise": {},
+          "trueIdentity": {}
+        },
+        "containerId": null
       },
-      "effects": [],
+      "effects": [
+        {
+          "name": "Keen",
+          "img": "icons/svg/aura.svg",
+          "_id": "qoutjj8Zgl0SCZVB",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.attackCritBonus",
+                "type": "subtract",
+                "value": "1"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "Crits 1 lower on this weapon's Attack Check.",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "on-use"
+            }
+          },
+          "_stats": {
+            "coreVersion": "14.361",
+            "systemId": "vagabond",
+            "systemVersion": "5.43.4"
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!MAzpXCazU0s8nXgZ.TbHNWDOINTNRJWtq.qoutjj8Zgl0SCZVB",
+          "origin": "Compendium.vagabond.relics.Item.MgosRX6hC1yuPgk2"
+        },
+        {
+          "name": "(+2) Weapon",
+          "img": "icons/magic/control/buff-flight-wings-runes-purple.webp",
+          "_id": "CY94GIRvl1oTJ24W",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.universalWeaponDamageBonus",
+                "value": 2,
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "<p>Deals an extra +2 damage.</p>",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "on-use",
+              "relicBoost": 1
+            }
+          },
+          "_stats": {
+            "coreVersion": "14.361",
+            "systemId": "vagabond",
+            "systemVersion": "6.7.0"
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!MAzpXCazU0s8nXgZ.TbHNWDOINTNRJWtq.CY94GIRvl1oTJ24W"
+        },
+        {
+          "name": "Silvering",
+          "img": "icons/magic/control/buff-flight-wings-runes-blue-white.webp",
+          "_id": "SO98AgepG4YRgOlP",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.countsAs",
+                "value": "silver",
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "<p>Attacks with it count as Silvered.</p>",
+          "tint": "#ffffff",
+          "transfer": false,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "self"
+            }
+          },
+          "_stats": {
+            "coreVersion": "14.361",
+            "systemId": "vagabond",
+            "systemVersion": "6.7.0"
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!MAzpXCazU0s8nXgZ.TbHNWDOINTNRJWtq.SO98AgepG4YRgOlP"
+        }
+      ],
       "folder": null,
       "flags": {
         "vagabond": {
@@ -56678,7 +57665,7 @@
     {
       "name": "Bag of Devouring",
       "type": "equipment",
-      "img": "icons/magic/symbols/circled-gem-pink.webp",
+      "img": "icons/containers/bags/sack-twisted-skull-purple.webp",
       "system": {
         "description": "<p><span class=\"fontstyle0\">A bag that eats anything put inside it after 1 Hour. Small Beings and 1 Slot Items can fit in the bag. Anything devoured this way vanishes from existence.</span></p>",
         "equipmentType": "relic",
@@ -56738,7 +57725,7 @@
     {
       "name": "Helm of Telepathy",
       "type": "equipment",
-      "img": "icons/magic/symbols/circled-gem-pink.webp",
+      "img": "icons/equipment/head/helm-barbute-rounded-gold.webp",
       "system": {
         "description": "<p><span class=\"fontstyle0\">Gorgeous helmet which grants the wearer the following Power:</span></p><ul><li><span class=\"fontstyle2\">Telepathy:</span><span class=\"fontstyle0\"> Telepathy (Far), which requires Focus.</span></li></ul>",
         "equipmentType": "relic",
@@ -56799,7 +57786,7 @@
     {
       "name": "Scroll, Protection",
       "type": "equipment",
-      "img": "icons/magic/symbols/circled-gem-pink.webp",
+      "img": "icons/sundries/scrolls/scroll-runed-brown-blue.webp",
       "system": {
         "description": "<p><span class=\"fontstyle0\">Can be read to create an Aura out to 10' from the reader for 1 Hour that moves with them. Doing so causes the Scroll to vaporize. Those in the Aura have Favor on Saves forced by Beings designated by the scroll's name:</span></p><ul><li><span class=\"fontstyle2\">Protection from Evil:</span><span class=\"fontstyle0\"> Hellspawn, Undead</span></li><li><span class=\"fontstyle2\">Protection from Good:</span><span class=\"fontstyle0\"> Divines, Fae</span></li></ul>",
         "equipmentType": "relic",
@@ -56860,10 +57847,10 @@
     {
       "name": "Peacemaker",
       "type": "equipment",
-      "img": "icons/magic/symbols/circled-gem-pink.webp",
+      "img": "icons/weapons/guns/pistol-revolver-steel.webp",
       "system": {
         "description": "<p><span class=\"fontstyle0\">Revolver which silvers all bullets fired from it. It has the following Powers:</span></p><ul><li><span class=\"fontstyle2\">(+2) Weapon:</span><span class=\"fontstyle0\"> Deals an extra +2 damage.</span></li><li><span class=\"fontstyle2\">Silvering:</span><span class=\"fontstyle0\"> Attacks with it count as Silvered.</span></li><li><span class=\"fontstyle2\">Personality:</span><span class=\"fontstyle0\"> Will only fire at hostile foes.</span></li></ul>",
-        "equipmentType": "relic",
+        "equipmentType": "weapon",
         "locked": true,
         "equipped": false,
         "quantity": 1,
@@ -56876,20 +57863,166 @@
         "metal": "none",
         "damageType": "-",
         "damageAmount": "",
-        "properties": [],
-        "weaponSkill": "melee",
-        "range": "close",
+        "properties": [
+          "Keen"
+        ],
+        "weaponSkill": "ranged",
+        "range": "far",
         "grip": "1H",
-        "damageOneHand": "d6",
-        "damageTwoHands": "d8",
+        "damageOneHand": "d4",
+        "damageTwoHands": "d4",
         "equipmentState": "unequipped",
         "armorType": "light",
         "immunities": [],
         "gearCategory": "",
-        "alchemicalType": "",
-        "lore": "Fabled Relic Revolver"
+        "alchemicalType": "concoction",
+        "lore": "Fabled Relic Revolver",
+        "damageTypeOneHand": "piercing",
+        "relic": {
+          "powers": [],
+          "fabled": true,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": [],
+          "isRelic": true,
+          "slots": 0,
+          "disguised": false,
+          "disguise": {},
+          "trueIdentity": {}
+        },
+        "containerId": null
       },
-      "effects": [],
+      "effects": [
+        {
+          "name": "Keen",
+          "img": "icons/svg/aura.svg",
+          "_id": "YuB6FpOUDADeR9xX",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.attackCritBonus",
+                "type": "subtract",
+                "value": "1"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "Crits 1 lower on this weapon's Attack Check.",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "on-use"
+            }
+          },
+          "_stats": {
+            "coreVersion": "14.361",
+            "systemId": "vagabond",
+            "systemVersion": "5.43.4"
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!MAzpXCazU0s8nXgZ.OxjCwB5DrfCjkvj6.YuB6FpOUDADeR9xX",
+          "origin": "Compendium.vagabond.relics.Item.PX3TNLD71AFsPMvd"
+        },
+        {
+          "name": "(+2) Weapon",
+          "img": "icons/magic/control/buff-flight-wings-runes-purple.webp",
+          "_id": "m4DYA2GkjweJP5Ep",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.universalWeaponDamageBonus",
+                "value": 2,
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "<p>Deals an extra +2 damage.</p>",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "on-use",
+              "relicBoost": 1
+            }
+          },
+          "_stats": {
+            "coreVersion": "14.361",
+            "systemId": "vagabond",
+            "systemVersion": "6.7.0"
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!MAzpXCazU0s8nXgZ.OxjCwB5DrfCjkvj6.m4DYA2GkjweJP5Ep"
+        },
+        {
+          "name": "Silvering",
+          "img": "icons/magic/control/buff-flight-wings-runes-blue-white.webp",
+          "_id": "yfg1KcdGzwSoGgBC",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.countsAs",
+                "value": "silver",
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "<p>Attacks with it count as Silvered.</p>",
+          "tint": "#ffffff",
+          "transfer": false,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "self"
+            }
+          },
+          "_stats": {
+            "coreVersion": "14.361",
+            "systemId": "vagabond",
+            "systemVersion": "6.7.0"
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!MAzpXCazU0s8nXgZ.OxjCwB5DrfCjkvj6.yfg1KcdGzwSoGgBC"
+        }
+      ],
       "folder": null,
       "flags": {
         "vagabond": {
@@ -56920,7 +58053,7 @@
     {
       "name": "Alchemist's Beaker",
       "type": "equipment",
-      "img": "icons/magic/symbols/circled-gem-pink.webp",
+      "img": "icons/consumables/potions/round-decorated-snake-green.webp",
       "system": {
         "description": "<p><span class=\"fontstyle0\">A beaker with three separate layers, each with the following Power:</span></p><ul><li><span class=\"fontstyle2\">Prima Materia:</span><span class=\"fontstyle0\"> When the Ritual to Bond with it is performed, the Being can provide up to three alchemical items and assign them to a layer. The beaker can be used to provide a use of that alchemical item, which replenishes automatically after 1 Day.</span></li></ul>",
         "equipmentType": "relic",
@@ -56981,10 +58114,10 @@
     {
       "name": "Blink Dagger",
       "type": "equipment",
-      "img": "icons/magic/symbols/circled-gem-pink.webp",
+      "img": "icons/weapons/daggers/dagger-magical-glowing-blue.webp",
       "system": {
         "description": "<p><span class=\"fontstyle0\">Dagger that a Being must Bind themselves to access its Powers, which are as follows:</span></p><ul><li><span class=\"fontstyle2\">Blinking:</span><span class=\"fontstyle0\"> They can use their Action or skip their Move to teleport to the Item if it is within Far.</span></li><li><span class=\"fontstyle2\">Loyalty:</span><span class=\"fontstyle0\"> They can will it to return to their hand (no Action).</span></li></ul>",
-        "equipmentType": "relic",
+        "equipmentType": "weapon",
         "locked": true,
         "equipped": false,
         "quantity": 1,
@@ -56997,21 +58130,85 @@
         "metal": "none",
         "damageType": "-",
         "damageAmount": "",
-        "properties": [],
+        "properties": [
+          "Keen",
+          "Thrown"
+        ],
         "weaponSkill": "melee",
+        "altSkills": [
+          "finesse"
+        ],
         "range": "close",
         "grip": "1H",
-        "damageOneHand": "d6",
-        "damageTwoHands": "d8",
+        "damageOneHand": "d4",
+        "damageTwoHands": "d4",
         "equipmentState": "unequipped",
         "armorType": "light",
         "immunities": [],
         "gearCategory": "",
-        "alchemicalType": "",
+        "alchemicalType": "concoction",
         "lore": "Relic Dagger (Bound)",
-        "requiresBound": true
+        "damageTypeOneHand": "slashing",
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": true,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": [],
+          "isRelic": true,
+          "slots": 0,
+          "disguised": false,
+          "disguise": {},
+          "trueIdentity": {}
+        },
+        "containerId": null
       },
-      "effects": [],
+      "effects": [
+        {
+          "name": "Keen",
+          "img": "icons/svg/aura.svg",
+          "_id": "YPRQ4g9bO44O221J",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.attackCritBonus",
+                "type": "subtract",
+                "value": "1"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "Crits 1 lower on this weapon's Attack Check.",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "on-use"
+            }
+          },
+          "_stats": {
+            "coreVersion": "14.361",
+            "systemId": "vagabond",
+            "systemVersion": "5.43.4"
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!MAzpXCazU0s8nXgZ.2BBnJfhMybbcsX8y.YPRQ4g9bO44O221J",
+          "origin": "Compendium.vagabond.relics.Item.Q0SdZ5xpW08UvYbO"
+        }
+      ],
       "folder": null,
       "flags": {
         "vagabond": {
@@ -57087,10 +58284,10 @@
     {
       "name": "Vorpal Blade",
       "type": "equipment",
-      "img": "icons/magic/symbols/circled-gem-pink.webp",
+      "img": "icons/skills/melee/strike-sword-dagger-runes-yellow.webp",
       "system": {
         "description": "<p><span class=\"fontstyle0\">Dagger with the following Powers:</span></p><ul><li><span class=\"fontstyle2\">(+3) Weapon:</span><span class=\"fontstyle0\"> Deals an extra +3 damage.</span></li><li><span class=\"fontstyle2\">Vorpal:</span><span class=\"fontstyle0\"> Beheads its Target on a Crit if the Target takes the damage.</span></li></ul>",
-        "equipmentType": "relic",
+        "equipmentType": "weapon",
         "locked": true,
         "equipped": false,
         "quantity": 1,
@@ -57103,20 +58300,128 @@
         "metal": "none",
         "damageType": "-",
         "damageAmount": "",
-        "properties": [],
+        "properties": [
+          "Keen",
+          "Thrown"
+        ],
         "weaponSkill": "melee",
+        "altSkills": [
+          "finesse"
+        ],
         "range": "close",
         "grip": "1H",
-        "damageOneHand": "d6",
-        "damageTwoHands": "d8",
+        "damageOneHand": "d4",
+        "damageTwoHands": "d4",
         "equipmentState": "unequipped",
         "armorType": "light",
         "immunities": [],
         "gearCategory": "",
-        "alchemicalType": "",
-        "lore": "Fabled Relic Dagger"
+        "alchemicalType": "concoction",
+        "lore": "Fabled Relic Dagger",
+        "damageTypeOneHand": "slashing",
+        "relic": {
+          "powers": [],
+          "fabled": true,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": [],
+          "isRelic": true,
+          "slots": 0,
+          "disguised": false,
+          "disguise": {},
+          "trueIdentity": {}
+        },
+        "containerId": null
       },
-      "effects": [],
+      "effects": [
+        {
+          "name": "Keen",
+          "img": "icons/svg/aura.svg",
+          "_id": "YPRQ4g9bO44O221J",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.attackCritBonus",
+                "type": "subtract",
+                "value": "1"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "Crits 1 lower on this weapon's Attack Check.",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "on-use"
+            }
+          },
+          "_stats": {
+            "coreVersion": "14.361",
+            "systemId": "vagabond",
+            "systemVersion": "5.43.4"
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!MAzpXCazU0s8nXgZ.LMIeDyvTme1QoeHG.YPRQ4g9bO44O221J",
+          "origin": "Compendium.vagabond.relics.Item.RHXLOdGw4z6eFutu"
+        },
+        {
+          "name": "(+3) Weapon",
+          "img": "icons/magic/control/buff-flight-wings-runes-purple.webp",
+          "_id": "NsP6NkZrXWjcjVNs",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.universalWeaponDamageBonus",
+                "value": 3,
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "<p>Deals an extra +3 damage.</p>",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "on-use",
+              "relicBoost": 1
+            }
+          },
+          "_stats": {
+            "coreVersion": "14.361",
+            "systemId": "vagabond",
+            "systemVersion": "6.7.0"
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!MAzpXCazU0s8nXgZ.LMIeDyvTme1QoeHG.NsP6NkZrXWjcjVNs"
+        }
+      ],
       "folder": null,
       "flags": {
         "vagabond": {
@@ -57147,10 +58452,10 @@
     {
       "name": "Loyalty Shield",
       "type": "equipment",
-      "img": "icons/magic/symbols/circled-gem-pink.webp",
+      "img": "icons/equipment/shield/kite-wooden-sigil-purple.webp",
       "system": {
         "description": "<p><span class=\"fontstyle0\">Standard Shield that a Being must Bind themselves to to access its Powers, which are as follows:</span></p><ul><li><span class=\"fontstyle2\">(+1) Shield:</span><span class=\"fontstyle0\"> Grants a +1 bonus to Armor.</span></li><li><span class=\"fontstyle2\">Loyalty:</span><span class=\"fontstyle0\"> Can be thrown to attack. It then magically returns to the Wielder's hand after the attack.</span></li></ul>",
-        "equipmentType": "relic",
+        "equipmentType": "weapon",
         "locked": true,
         "equipped": false,
         "quantity": 1,
@@ -57163,21 +58468,139 @@
         "metal": "none",
         "damageType": "-",
         "damageAmount": "",
-        "properties": [],
+        "properties": [
+          "Defense"
+        ],
         "weaponSkill": "melee",
         "range": "close",
         "grip": "1H",
-        "damageOneHand": "d6",
-        "damageTwoHands": "d8",
+        "damageOneHand": "d4",
+        "damageTwoHands": "d4",
         "equipmentState": "unequipped",
         "armorType": "light",
         "immunities": [],
         "gearCategory": "",
-        "alchemicalType": "",
+        "alchemicalType": "concoction",
         "lore": "Relic Standard Shield (Bound)",
-        "requiresBound": true
+        "damageTypeOneHand": "blunt",
+        "handsRequired": 0,
+        "isTrinket": false,
+        "requiresBound": false,
+        "bound": false,
+        "containerId": null,
+        "canExplode": false,
+        "explodeValues": "",
+        "altSkills": [
+          "finesse"
+        ],
+        "damageTypeTwoHands": "-",
+        "isSupply": false,
+        "isBeverage": false,
+        "isConsumable": false,
+        "linkedConsumable": "",
+        "uses": {
+          "max": 0,
+          "value": 0
+        },
+        "passiveCausedStatuses": [],
+        "causedStatuses": [],
+        "critCausedStatuses": [],
+        "critThresholdMod": [],
+        "blockedStatuses": [],
+        "resistedStatuses": [],
+        "coating": {
+          "sourceName": "",
+          "charges": 0,
+          "causedStatuses": []
+        },
+        "imbuedSpell": {
+          "active": false,
+          "sourceActorUuid": "",
+          "sourceActorName": "",
+          "spellUuid": "",
+          "spellName": "",
+          "spellImg": "",
+          "damageTypeKey": "",
+          "dieSize": 0,
+          "damageDice": 0,
+          "deferredMana": 0,
+          "deferredPayment": false,
+          "manaSkillKey": ""
+        },
+        "macro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "hitMacro": {
+          "enabled": false,
+          "uuid": "",
+          "command": "",
+          "label": "",
+          "runAsGM": false
+        },
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": true,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": [],
+          "isRelic": true,
+          "slots": 0,
+          "disguised": false,
+          "disguise": {},
+          "trueIdentity": {}
+        }
       },
-      "effects": [],
+      "effects": [
+        {
+          "name": "(+1) Shield",
+          "img": "icons/magic/control/buff-flight-wings-runes-purple.webp",
+          "_id": "ww3FgmZqiU6gzF17",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.armorBonus",
+                "value": 1,
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "<p>Grants a +1 bonus to Armor.</p>",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "when-equipped",
+              "relicBoost": 1
+            }
+          },
+          "_stats": {
+            "coreVersion": "14.361",
+            "systemId": "vagabond",
+            "systemVersion": "6.7.0"
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!MAzpXCazU0s8nXgZ.xdn7ShfhYcyErII8.ww3FgmZqiU6gzF17"
+        }
+      ],
       "folder": null,
       "flags": {
         "vagabond": {
@@ -57208,10 +58631,10 @@
     {
       "name": "Standard of the Herald",
       "type": "equipment",
-      "img": "icons/magic/symbols/circled-gem-pink.webp",
+      "img": "icons/sundries/flags/banner-standard-moon.webp",
       "system": {
         "description": "<p><span class=\"fontstyle0\">Spear with a banneret's standard capable of instilling bravery. It has the following Powers:</span></p><ul><li><span class=\"fontstyle2\">Warlord's Resolve:</span><span class=\"fontstyle0\"> While planted in the ground, Allies within Near have a +1 bonus to Armor, and Favor on Saves against Frightened.</span></li><li><span class=\"fontstyle2\">Loyalty:</span><span class=\"fontstyle0\"> Can be thrown to attack. It then magically returns to the Wielder's hand after the attack.</span></li><li><span class=\"fontstyle2\">Glamour:</span><span class=\"fontstyle0\"> The standard can change to a design of the Bound Being's choice. It never gets dirty.</span></li></ul>",
-        "equipmentType": "relic",
+        "equipmentType": "weapon",
         "locked": true,
         "equipped": false,
         "quantity": 1,
@@ -57224,19 +58647,36 @@
         "metal": "none",
         "damageType": "-",
         "damageAmount": "",
-        "properties": [],
+        "properties": [
+          "Thrown"
+        ],
         "weaponSkill": "melee",
         "range": "close",
-        "grip": "1H",
+        "grip": "V",
         "damageOneHand": "d6",
         "damageTwoHands": "d8",
         "equipmentState": "unequipped",
         "armorType": "light",
         "immunities": [],
         "gearCategory": "",
-        "alchemicalType": "",
+        "alchemicalType": "concoction",
         "lore": "Relic Spear (Bound)",
-        "requiresBound": true
+        "damageTypeOneHand": "piercing",
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": true,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": [],
+          "isRelic": true,
+          "slots": 0,
+          "disguised": false,
+          "disguise": {},
+          "trueIdentity": {}
+        },
+        "containerId": null
       },
       "effects": [],
       "folder": null,
@@ -57269,10 +58709,10 @@
     {
       "name": "Sunder",
       "type": "equipment",
-      "img": "icons/magic/symbols/circled-gem-pink.webp",
+      "img": "icons/weapons/hammers/hammer-double-engraved-ruby.webp",
       "system": {
         "description": "<p><span class=\"fontstyle0\">Warhammer that must be Bound to to access its Powers, which are as follows:</span></p><ul><li><span class=\"fontstyle2\">(+3) Bonus:</span><span class=\"fontstyle0\"> Deals an extra +3 damage.</span></li><li><span class=\"fontstyle2\">Giants Bane:</span><span class=\"fontstyle0\"> Deals an extra damage die to giants.</span></li><li><span class=\"fontstyle2\">Earth Shaker:</span><span class=\"fontstyle0\"> (1/Day) Strike the earth to cause all Near foes to be Dazed (d4 Rounds).</span></li><li><span class=\"fontstyle2\">Loyalty:</span><span class=\"fontstyle0\"> Can be thrown to attack. It then magically returns to the Wielder's hand after the attack.</span></li><li><span class=\"fontstyle2\">Sense Valuables:</span><span class=\"fontstyle0\"> Senses gold and gems within Near.</span></li><li><span class=\"fontstyle2\">High Velocity:</span><span class=\"fontstyle0\"> Deals an extra damage die with thrown attacks.</span></li></ul>",
-        "equipmentType": "relic",
+        "equipmentType": "weapon",
         "locked": true,
         "equipped": false,
         "quantity": 1,
@@ -57281,25 +58721,129 @@
           "silver": 0,
           "copper": 0
         },
-        "baseSlots": 1,
+        "baseSlots": 2,
         "metal": "none",
         "damageType": "-",
         "damageAmount": "",
-        "properties": [],
+        "properties": [
+          "Vicious"
+        ],
         "weaponSkill": "melee",
         "range": "close",
-        "grip": "1H",
-        "damageOneHand": "d6",
-        "damageTwoHands": "d8",
+        "grip": "V",
+        "damageOneHand": "d8",
+        "damageTwoHands": "d10",
         "equipmentState": "unequipped",
         "armorType": "light",
         "immunities": [],
         "gearCategory": "",
-        "alchemicalType": "",
+        "alchemicalType": "concoction",
         "lore": "Fabled Relic Warhammer (Bound)",
-        "requiresBound": true
+        "damageTypeOneHand": "blunt",
+        "damageTypeTwoHands": "blunt",
+        "relic": {
+          "powers": [],
+          "fabled": true,
+          "requiresBond": true,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": [],
+          "isRelic": true,
+          "slots": 0,
+          "disguised": false,
+          "disguise": {},
+          "trueIdentity": {}
+        },
+        "containerId": null
       },
-      "effects": [],
+      "effects": [
+        {
+          "name": "Vicious",
+          "img": "icons/svg/aura.svg",
+          "_id": "Zr2ebOclddz6En89",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.critBonusDice",
+                "type": "add",
+                "value": "matchDie"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "Crits with it deal 1 extra damage die.",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "on-use"
+            }
+          },
+          "_stats": {
+            "coreVersion": "14.361",
+            "systemId": "vagabond",
+            "systemVersion": "5.43.4"
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!MAzpXCazU0s8nXgZ.pJp2Jr8JdHBPIhnP.Zr2ebOclddz6En89",
+          "origin": "Compendium.vagabond.relics.Item.Vr4uoSadN44XJtDC"
+        },
+        {
+          "name": "(+3) Bonus",
+          "img": "icons/magic/control/buff-flight-wings-runes-purple.webp",
+          "_id": "cs3jEVZRihw05rh8",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.universalWeaponDamageBonus",
+                "value": 3,
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "<p>Deals an extra +3 damage.</p>",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "on-use",
+              "relicBoost": 1
+            }
+          },
+          "_stats": {
+            "coreVersion": "14.361",
+            "systemId": "vagabond",
+            "systemVersion": "6.7.0"
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!MAzpXCazU0s8nXgZ.pJp2Jr8JdHBPIhnP.cs3jEVZRihw05rh8"
+        }
+      ],
       "folder": null,
       "flags": {
         "vagabond": {
@@ -57330,7 +58874,7 @@
     {
       "name": "Necklace of Adaptation",
       "type": "equipment",
-      "img": "icons/magic/symbols/circled-gem-pink.webp",
+      "img": "icons/equipment/neck/necklace-simple-carved-wood-green.webp",
       "system": {
         "description": "<p><span class=\"fontstyle0\">Necklace of heavy chain which grants the wearer the following Powers:</span></p><ul><li><span class=\"fontstyle2\">Eternal Breath:</span><span class=\"fontstyle0\"> They don't need to breathe.</span></li><li><span class=\"fontstyle2\">Extremes Innured:</span><span class=\"fontstyle0\"> They are not affected by extreme pressure or vacuums.</span></li></ul>",
         "equipmentType": "relic",
@@ -57390,10 +58934,10 @@
     {
       "name": "Magistaff (Common)",
       "type": "equipment",
-      "img": "icons/magic/symbols/circled-gem-pink.webp",
+      "img": "icons/weapons/staves/staff-simple-spiral-brown.webp",
       "system": {
         "description": "<p><span class=\"fontstyle0\">A 10 Minute Ritual can be conducted while it is held by a willing Being that knows a Spell. During the Ritual, that Being chooses a Spell and chooses how they would Cast it. Their Maximum Mana is reduced by the cost it would take to Cast it, which is only restored if the Bond to the magistaff ends.</span></p><p><span class=\"fontstyle0\">After the Ritual, the Bound wielder can spend a charge from the staff to Cast that Spell as it was Cast during the Ritual, using a Skill of their choice. The number of Charges corresponds to the rarity of the magistaff, as shown below, and its Countdown die resets at dawn.</span></p><ul><li><span class=\"fontstyle2\">Common:</span><span class=\"fontstyle0\"> Cd4 Charges</span></li><li><span class=\"fontstyle2\">Rare:</span><span class=\"fontstyle0\"> Cd6 Charges</span></li><li><span class=\"fontstyle2\">Legendary:</span><span class=\"fontstyle0\"> Cd8 Charges</span></li></ul>",
-        "equipmentType": "relic",
+        "equipmentType": "weapon",
         "locked": true,
         "equipped": false,
         "quantity": 1,
@@ -57406,19 +58950,40 @@
         "metal": "none",
         "damageType": "-",
         "damageAmount": "",
-        "properties": [],
-        "weaponSkill": "melee",
+        "properties": [
+          "Cleave"
+        ],
+        "weaponSkill": "finesse",
         "range": "close",
-        "grip": "1H",
-        "damageOneHand": "d6",
-        "damageTwoHands": "d8",
+        "grip": "V",
+        "damageOneHand": "d4",
+        "damageTwoHands": "d6",
         "equipmentState": "unequipped",
         "armorType": "light",
         "immunities": [],
         "gearCategory": "",
-        "alchemicalType": "",
+        "alchemicalType": "concoction",
         "lore": "Relic Staff (Bound)",
-        "requiresBound": true
+        "damageTypeOneHand": "blunt",
+        "damageTypeTwoHands": "blunt",
+        "altSkills": [
+          "melee"
+        ],
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": true,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": [],
+          "isRelic": true,
+          "slots": 0,
+          "disguised": false,
+          "disguise": {},
+          "trueIdentity": {}
+        },
+        "containerId": null
       },
       "effects": [],
       "folder": null,
@@ -57451,10 +59016,10 @@
     {
       "name": "Magistaff (Rare)",
       "type": "equipment",
-      "img": "icons/magic/symbols/circled-gem-pink.webp",
+      "img": "icons/weapons/staves/staff-ornate-jeweled-blue.webp",
       "system": {
         "description": "<p><span class=\"fontstyle0\">A 10 Minute Ritual can be conducted while it is held by a willing Being that knows a Spell. During the Ritual, that Being chooses a Spell and chooses how they would Cast it. Their Maximum Mana is reduced by the cost it would take to Cast it, which is only restored if the Bond to the magistaff ends.</span></p><p><span class=\"fontstyle0\">After the Ritual, the Bound wielder can spend a charge from the staff to Cast that Spell as it was Cast during the Ritual, using a Skill of their choice. The number of Charges corresponds to the rarity of the magistaff, as shown below, and its Countdown die resets at dawn.</span></p><ul><li><span class=\"fontstyle2\">Common:</span><span class=\"fontstyle0\"> Cd4 Charges</span></li><li><span class=\"fontstyle2\">Rare:</span><span class=\"fontstyle0\"> Cd6 Charges</span></li><li><span class=\"fontstyle2\">Legendary:</span><span class=\"fontstyle0\"> Cd8 Charges</span></li></ul>",
-        "equipmentType": "relic",
+        "equipmentType": "weapon",
         "locked": true,
         "equipped": false,
         "quantity": 1,
@@ -57467,19 +59032,40 @@
         "metal": "none",
         "damageType": "-",
         "damageAmount": "",
-        "properties": [],
-        "weaponSkill": "melee",
+        "properties": [
+          "Cleave"
+        ],
+        "weaponSkill": "finesse",
         "range": "close",
-        "grip": "1H",
-        "damageOneHand": "d6",
-        "damageTwoHands": "d8",
+        "grip": "V",
+        "damageOneHand": "d4",
+        "damageTwoHands": "d6",
         "equipmentState": "unequipped",
         "armorType": "light",
         "immunities": [],
         "gearCategory": "",
-        "alchemicalType": "",
+        "alchemicalType": "concoction",
         "lore": "Relic Staff (Bound)",
-        "requiresBound": true
+        "damageTypeOneHand": "blunt",
+        "damageTypeTwoHands": "blunt",
+        "altSkills": [
+          "melee"
+        ],
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": true,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": [],
+          "isRelic": true,
+          "slots": 0,
+          "disguised": false,
+          "disguise": {},
+          "trueIdentity": {}
+        },
+        "containerId": null
       },
       "effects": [],
       "folder": null,
@@ -57512,10 +59098,10 @@
     {
       "name": "Magistaff (Legendary)",
       "type": "equipment",
-      "img": "icons/magic/symbols/circled-gem-pink.webp",
+      "img": "icons/weapons/staves/staff-ornate-banded-purple.webp",
       "system": {
         "description": "<p><span class=\"fontstyle0\">A 10 Minute Ritual can be conducted while it is held by a willing Being that knows a Spell. During the Ritual, that Being chooses a Spell and chooses how they would Cast it. Their Maximum Mana is reduced by the cost it would take to Cast it, which is only restored if the Bond to the magistaff ends.</span></p><p><span class=\"fontstyle0\">After the Ritual, the Bound wielder can spend a charge from the staff to Cast that Spell as it was Cast during the Ritual, using a Skill of their choice. The number of Charges corresponds to the rarity of the magistaff, as shown below, and its Countdown die resets at dawn.</span></p><ul><li><span class=\"fontstyle2\">Common:</span><span class=\"fontstyle0\"> Cd4 Charges</span></li><li><span class=\"fontstyle2\">Rare:</span><span class=\"fontstyle0\"> Cd6 Charges</span></li><li><span class=\"fontstyle2\">Legendary:</span><span class=\"fontstyle0\"> Cd8 Charges</span></li></ul>",
-        "equipmentType": "relic",
+        "equipmentType": "weapon",
         "locked": true,
         "equipped": false,
         "quantity": 1,
@@ -57528,19 +59114,40 @@
         "metal": "none",
         "damageType": "-",
         "damageAmount": "",
-        "properties": [],
-        "weaponSkill": "melee",
+        "properties": [
+          "Cleave"
+        ],
+        "weaponSkill": "finesse",
         "range": "close",
-        "grip": "1H",
-        "damageOneHand": "d6",
-        "damageTwoHands": "d8",
+        "grip": "V",
+        "damageOneHand": "d4",
+        "damageTwoHands": "d6",
         "equipmentState": "unequipped",
         "armorType": "light",
         "immunities": [],
         "gearCategory": "",
-        "alchemicalType": "",
+        "alchemicalType": "concoction",
         "lore": "Relic Staff (Bound)",
-        "requiresBound": true
+        "damageTypeOneHand": "blunt",
+        "damageTypeTwoHands": "blunt",
+        "altSkills": [
+          "melee"
+        ],
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": true,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": [],
+          "isRelic": true,
+          "slots": 0,
+          "disguised": false,
+          "disguise": {},
+          "trueIdentity": {}
+        },
+        "containerId": null
       },
       "effects": [],
       "folder": null,
@@ -57573,7 +59180,7 @@
     {
       "name": "Spellbook",
       "type": "equipment",
-      "img": "icons/magic/symbols/circled-gem-pink.webp",
+      "img": "icons/sundries/books/book-embossed-jewel-gold-purple.webp",
       "system": {
         "description": "<p><span class=\"fontstyle0\">The reader can Cast a Spell within as if they knew it. Crafting a Spell Book requires that the crafter knows the Spell(s) when crafting it, and can be done with the Study activity.</span></p>",
         "equipmentType": "relic",
@@ -57633,7 +59240,7 @@
     {
       "name": "Decanter of Endless Water",
       "type": "equipment",
-      "img": "icons/magic/symbols/circled-gem-pink.webp",
+      "img": "icons/containers/kitchenware/vase-clay-painted-blue-gold.webp",
       "system": {
         "description": "<p><span class=\"fontstyle0\">A flask that provides an endless supply of water in a manner of the wielder's choice. This can be fresh or salt water, and a command word must be spoken to detail the rate of flow:</span></p><ul><li><span class=\"fontstyle2\">Fountain:</span><span class=\"fontstyle0\"> Medium-sized fountain at 5 gallons per Round.</span></li><li><span class=\"fontstyle2\">Geyser:</span><span class=\"fontstyle0\"> Line out to Near of 30 gallons per Round. Wielder must pass an Endure Save against being Shoved or be knocked Prone.</span></li><li><span class=\"fontstyle2\">Stream:</span><span class=\"fontstyle0\"> Trickle of 1 gallon per Round.</span></li></ul>",
         "equipmentType": "relic",
@@ -57693,7 +59300,7 @@
     {
       "name": "Orb of Many Energies",
       "type": "equipment",
-      "img": "icons/magic/symbols/circled-gem-pink.webp",
+      "img": "icons/commodities/treasure/crystal-ball-blue-purple.webp",
       "system": {
         "description": "<p><span class=\"fontstyle0\">Roll a d8 to determine its starting color. Each color corresponds to a Spell, which the Bound Being can Cast as long as the orb is that color by spending a Charge.</span></p><p><span class=\"fontstyle0\">Whenever you Cast a Spell that corresponds to the orb's current color, roll a d8 to determine its new color.</span></p><table class=\"NormalTable\"><tbody><tr><td><p><span class=\"fontstyle2\">d8</span></p></td><td><p><span class=\"fontstyle2\">Color</span></p></td><td><p><span class=\"fontstyle2\">Spell</span></p></td></tr><tr><td><p><span class=\"fontstyle3\">1</span></p></td><td><p><span class=\"fontstyle3\">Red</span></p></td><td><p><span class=\"fontstyle3\">Burn</span></p></td></tr><tr><td><p><span class=\"fontstyle3\">2</span></p></td><td><p><span class=\"fontstyle3\">Orange</span></p></td><td><p><span class=\"fontstyle3\">Amplify</span></p></td></tr><tr><td><p><span class=\"fontstyle3\">3</span></p></td><td><p><span class=\"fontstyle3\">Yellow</span></p></td><td><p><span class=\"fontstyle3\">Zap</span></p></td></tr><tr><td><p><span class=\"fontstyle3\">4</span></p></td><td><p><span class=\"fontstyle3\">Green</span></p></td><td><p><span class=\"fontstyle3\">Sprout</span></p></td></tr><tr><td><p><span class=\"fontstyle3\">5</span></p></td><td><p><span class=\"fontstyle3\">Blue</span></p></td><td><p><span class=\"fontstyle3\">Freeze</span></p></td></tr><tr><td><p><span class=\"fontstyle3\">6</span></p></td><td><p><span class=\"fontstyle3\">Indigo</span></p></td><td><p><span class=\"fontstyle3\">Ward</span></p></td></tr><tr><td><p><span class=\"fontstyle3\">7</span></p></td><td><p><span class=\"fontstyle3\">Violet</span></p></td><td><p><span class=\"fontstyle3\">Color</span></p></td></tr><tr><td><p><span class=\"fontstyle3\">8</span></p></td><td><p><span class=\"fontstyle3\">Special</span></p></td><td><p><span class=\"fontstyle3\">The orb becomes two colors at once. Roll twice, rerolling 8s. When you Cast a Spell corresponding to either of these colors, you may Cast the Spell corresponding to the other color as a part of the same Action.</span></p></td></tr></tbody></table><p><span class=\"fontstyle0\">The orb has Cd6 Charges. When it runs out of Charges, it dims to a grayish color and can't be used until the next dawn.</span></p>",
         "equipmentType": "relic",
@@ -57754,7 +59361,7 @@
     {
       "name": "Deck of Many Things",
       "type": "equipment",
-      "img": "icons/magic/symbols/circled-gem-pink.webp",
+      "img": "icons/sundries/gaming/rune-card.webp",
       "system": {
         "description": "<p><span class=\"fontstyle0\">Deck of 22 cards in a box. Each card depicts an esoteric image and is decorated with filigree of magical glyphs. A Being can draw up to 4 cards from the deck, and is affected by the magic effects of the card. Afterward, those cards return to the deck.</span></p><p><span class=\"fontstyle0\">You can use a deck of Tarot cards to represent the Deck, using only the Major Arcana to represent it. Those cards are indicated in parenthesis.</span></p><ul><li><span class=\"fontstyle2\">Balance (Justice):</span><span class=\"fontstyle0\"> Any three Relics of their choice with a bonus increase the bonus by 1.</span></li><li><span class=\"fontstyle2\">Comet (The World):</span><span class=\"fontstyle0\"> By themselves, they must defeat the next Enemy they encounter to gain a Level.</span></li><li><span class=\"fontstyle2\">Donjon (The Empress):</span><span class=\"fontstyle0\"> They drop their inventory, forget how to Cast any Spells, and are teleported to a prison. The deck then disappears and no cards can be drawn.</span></li><li><span class=\"fontstyle2\">Fates (The Lovers):</span><span class=\"fontstyle0\"> They can choose to avoid one situation or the outcome of a situation at one point in the future.</span></li><li><span class=\"fontstyle2\">Flames (The Devil):</span><span class=\"fontstyle0\"> A powerful Hellspawn takes a dedicated interest in them. It is now their Enemy, and will seek to ruin their life.</span></li><li><span class=\"fontstyle2\">Fool (The Fool):</span><span class=\"fontstyle0\"> They lose 1 Level and draw another card. The Fool disappears forever.</span></li><li><span class=\"fontstyle2\">Gem (The Wheel of Fortune):</span><span class=\"fontstyle0\"> (d66) gems worth 100g each and (d66) pieces of jewelry worth 200g each appear around them.</span></li><li><span class=\"fontstyle2\">Idiot (Temperance):</span><span class=\"fontstyle0\"> Their Reason decreases by d6. If reduced to 0, they die. They can draw another card.</span></li><li><span class=\"fontstyle2\">Jester (The Hierophant):</span><span class=\"fontstyle0\"> They gain 1 Level or draw two cards. The Jester disappears from the deck forever.</span></li><li><span class=\"fontstyle2\">Key (The High Priestess):</span><span class=\"fontstyle0\"> A Fabled Relic of their choice that isn't the Deck of Many Things appears in their hand.</span></li><li><span class=\"fontstyle2\">Knight (Strength):</span><span class=\"fontstyle0\"> You gain the service of an Ally champion, which obeys your commands as a companion.</span></li><li><span class=\"fontstyle2\">Medusa (The Magician):</span><span class=\"fontstyle0\"> They are cursed, causing a -2 penalty to all Saves.</span></li><li><span class=\"fontstyle2\">Moon (The Moon):</span><span class=\"fontstyle0\"> They gain three wishes, which must be made within 10 Minutes.</span></li><li><span class=\"fontstyle2\">Rogue (The Hanged Man):</span><span class=\"fontstyle0\"> A friend to them now permanently hates them. This hatred is only revealed at the worst possible time.</span></li><li><span class=\"fontstyle2\">Ruin (The Tower):</span><span class=\"fontstyle0\"> They lose all of their land, possessions, and wealth.</span></li><li><span class=\"fontstyle2\">Skull (Death):</span><span class=\"fontstyle0\"> A grim reaper appears and attacks them. If any other Being attempts to help them, another grim reaper appears and attacks that Being.</span> @UUID[Compendium.world.special.Actor.r8vxaZFzJzbTKJmf]{Grim Reaper}</li><li><span class=\"fontstyle2\">Star (The Star):</span><span class=\"fontstyle0\"> A Stat of their choice increases by 1.</span></li><li><span class=\"fontstyle2\">Sun (The Sun):</span><span class=\"fontstyle0\"> They gain 1 Level and one Relic of their choice that isn't a Fabled Relic.</span></li><li><span class=\"fontstyle2\">Talons (Judgement):</span><span class=\"fontstyle0\"> Any Relics owned by them disappear instantly and permanently.</span></li><li><span class=\"fontstyle2\">Throne (The Emperor):</span><span class=\"fontstyle0\"> Their Presence increases to 7 and they become the owner of a keep.</span></li><li><span class=\"fontstyle2\">Vizier (The Hermit):</span><span class=\"fontstyle0\"> They can ask one question of their choice either now or in the future, and are given the most true and thorough answer to that question by the GM.</span></li><li><span class=\"fontstyle2\">Void (The Chariot):</span><span class=\"fontstyle0\"> Their soul is ripped from their body, leaving behind a husk. The soul is trapped in a prison of the GM's choice, and may be saved by questing for it. The deck of many things then disappears and no other cards may be drawn from it.</span></li></ul>",
         "equipmentType": "relic",
@@ -57814,7 +59421,7 @@
     {
       "name": "Scroll, Enchantment",
       "type": "equipment",
-      "img": "icons/magic/symbols/circled-gem-pink.webp",
+      "img": "icons/sundries/scrolls/scroll-runed-brown-purple.webp",
       "system": {
         "description": "<p><span class=\"fontstyle0\">Can be read to grant one Item of the reader's choice that they are touching the Relic Power on the Scroll. The Scroll then vaporizes.</span></p>",
         "equipmentType": "relic",
@@ -57875,7 +59482,7 @@
     {
       "name": "Pixie Dust",
       "type": "equipment",
-      "img": "icons/magic/symbols/circled-gem-pink.webp",
+      "img": "icons/commodities/materials/bowl-powder-pink.webp",
       "system": {
         "description": "<p><span class=\"fontstyle0\">You can Use a single use of pixie dust to sprinkle on a Being, giving it a Fly Speed equal to its Walk Speed for 1 Minute.</span></p>",
         "equipmentType": "relic",
@@ -57936,7 +59543,7 @@
     {
       "name": "Sylph Scope",
       "type": "equipment",
-      "img": "icons/magic/symbols/circled-gem-pink.webp",
+      "img": "icons/equipment/head/glasses-spectacles.webp",
       "system": {
         "description": "<p><span class=\"fontstyle0\">A set of glasses that grant the following Powers to those who wear them:</span></p><ul><li><span class=\"fontstyle2\">Allsight:</span><span class=\"fontstyle0\"> Can see Invisible Beings.</span></li></ul>",
         "equipmentType": "relic",
@@ -57996,10 +59603,10 @@
     {
       "name": "Moonlit Blade",
       "type": "equipment",
-      "img": "icons/magic/symbols/circled-gem-pink.webp",
+      "img": "icons/skills/melee/sword-engraved-glow-purple.webp",
       "system": {
         "description": "<p><span class=\"fontstyle0\">Greatsword that a Being must Bind themselves to to access its Powers, which are as follows:</span></p><ul><li><span class=\"fontstyle2\">(+3) Weapon:</span><span class=\"fontstyle0\"> Deals an extra +3 damage.</span></li><li><span class=\"fontstyle2\">Blasting:</span><span class=\"fontstyle0\"> Can make a Melee attack as an arc of moonlight energy at a Near Target. The Target is then illuminated with moonlight for the Round, can't benefit from being Invisible, and turns to its normal form if it was shapeshifted.</span></li><li><span class=\"fontstyle2\">Moonlit:</span><span class=\"fontstyle0\"> Sheds Moonlight out to Near.</span></li></ul>",
-        "equipmentType": "relic",
+        "equipmentType": "weapon",
         "locked": true,
         "equipped": false,
         "quantity": 1,
@@ -58008,25 +59615,130 @@
           "silver": 0,
           "copper": 0
         },
-        "baseSlots": 1,
+        "baseSlots": 2,
         "metal": "none",
         "damageType": "-",
         "damageAmount": "",
-        "properties": [],
+        "properties": [
+          "Cleave",
+          "Keen"
+        ],
         "weaponSkill": "melee",
         "range": "close",
-        "grip": "1H",
-        "damageOneHand": "d6",
-        "damageTwoHands": "d8",
+        "grip": "2H",
+        "damageOneHand": "d10",
+        "damageTwoHands": "d10",
         "equipmentState": "unequipped",
         "armorType": "light",
         "immunities": [],
         "gearCategory": "",
-        "alchemicalType": "",
+        "alchemicalType": "concoction",
         "lore": "Fabled Relic Greatsword (Bound)",
-        "requiresBound": true
+        "damageTypeOneHand": "slashing",
+        "damageTypeTwoHands": "slashing",
+        "relic": {
+          "powers": [],
+          "fabled": true,
+          "requiresBond": true,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": [],
+          "isRelic": true,
+          "slots": 0,
+          "disguised": false,
+          "disguise": {},
+          "trueIdentity": {}
+        },
+        "containerId": null
       },
-      "effects": [],
+      "effects": [
+        {
+          "name": "Keen",
+          "img": "icons/svg/aura.svg",
+          "_id": "VbugKGKDbkCJz9hU",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.attackCritBonus",
+                "type": "subtract",
+                "value": "1"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "Crits 1 lower on this weapon's Attack Check.",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "on-use"
+            }
+          },
+          "_stats": {
+            "coreVersion": "14.361",
+            "systemId": "vagabond",
+            "systemVersion": "5.43.4"
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!MAzpXCazU0s8nXgZ.n4eu9ZrsE8wsRaLe.VbugKGKDbkCJz9hU",
+          "origin": "Compendium.vagabond.relics.Item.qhUZvjK6L4600nPC"
+        },
+        {
+          "name": "(+3) Weapon",
+          "img": "icons/magic/control/buff-flight-wings-runes-purple.webp",
+          "_id": "bPjEB9IdFxDPyFEJ",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.universalWeaponDamageBonus",
+                "value": 3,
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "<p>Deals an extra +3 damage.</p>",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "on-use",
+              "relicBoost": 1
+            }
+          },
+          "_stats": {
+            "coreVersion": "14.361",
+            "systemId": "vagabond",
+            "systemVersion": "6.7.0"
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!MAzpXCazU0s8nXgZ.n4eu9ZrsE8wsRaLe.bPjEB9IdFxDPyFEJ"
+        }
+      ],
       "folder": null,
       "flags": {
         "vagabond": {
@@ -58057,7 +59769,7 @@
     {
       "name": "Boots of Levitation",
       "type": "equipment",
-      "img": "icons/magic/symbols/circled-gem-pink.webp",
+      "img": "icons/equipment/feet/boots-collared-blue-gold.webp",
       "system": {
         "description": "<p><span class=\"fontstyle0\">The wearer has the following Power:</span></p><ul><li><span class=\"fontstyle2\">Levitation:</span><span class=\"fontstyle0\"> They can Fly up or down, but not laterally, using their Speed.</span></li></ul>",
         "equipmentType": "relic",
@@ -58117,10 +59829,10 @@
     {
       "name": "Black Wing",
       "type": "equipment",
-      "img": "icons/magic/symbols/circled-gem-pink.webp",
+      "img": "icons/weapons/crossbows/handcrossbow-green.webp",
       "system": {
         "description": "<p><span class=\"fontstyle0\">Crossbow of dark-stained wood, adorned in pitch black feathers. The crossbow grants the user the following powers while equipped:</span></p><ul><li><span class=\"fontstyle2\">Nightvision:</span><span class=\"fontstyle0\"> They have Darksight.</span></li></ul><p><span class=\"fontstyle0\">Further, the crossbow can also be activated to grant the following Power for 1 Minute:</span></p><ul><li><span class=\"fontstyle2\">Darkness II:</span><span class=\"fontstyle0\"> Darkens non-magical light within Near while Equipped.</span></li></ul>",
-        "equipmentType": "relic",
+        "equipmentType": "weapon",
         "locked": true,
         "equipped": false,
         "quantity": 1,
@@ -58134,20 +59846,78 @@
         "damageType": "-",
         "damageAmount": "",
         "properties": [],
-        "weaponSkill": "melee",
-        "range": "close",
+        "weaponSkill": "ranged",
+        "range": "far",
         "grip": "1H",
-        "damageOneHand": "d6",
-        "damageTwoHands": "d8",
+        "damageOneHand": "d4",
+        "damageTwoHands": "d4",
         "equipmentState": "unequipped",
         "armorType": "light",
         "immunities": [],
         "gearCategory": "",
-        "alchemicalType": "",
+        "alchemicalType": "concoction",
         "lore": "Relic Light Crossbow (Bound)",
-        "requiresBound": true
+        "damageTypeOneHand": "piercing",
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": true,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": [],
+          "isRelic": true,
+          "slots": 0,
+          "disguised": false,
+          "disguise": {},
+          "trueIdentity": {}
+        },
+        "containerId": null
       },
-      "effects": [],
+      "effects": [
+        {
+          "name": "Nightvision",
+          "img": "icons/magic/control/buff-flight-wings-purple.webp",
+          "_id": "gXC477NNtVYMEe1F",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.senses",
+                "value": "darksight",
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "<p>They have Darksight.</p>",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "when-equipped"
+            }
+          },
+          "_stats": {
+            "coreVersion": "14.361",
+            "systemId": "vagabond",
+            "systemVersion": "6.7.0"
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!MAzpXCazU0s8nXgZ.FbDLuyk6umWqHFRi.gXC477NNtVYMEe1F"
+        }
+      ],
       "folder": null,
       "flags": {
         "vagabond": {
@@ -58178,10 +59948,10 @@
     {
       "name": "Harpy’s Cloak",
       "type": "equipment",
-      "img": "icons/magic/symbols/circled-gem-pink.webp",
+      "img": "icons/commodities/leather/fur-white.webp",
       "system": {
         "description": "<p><span class=\"fontstyle0\">A cloak of harpy's feathers. It acts as Light Armor and the feathers can be used as Daggers. It has the following Powers:</span></p><ul><li><span class=\"fontstyle2\">(+1) Armor:</span><span class=\"fontstyle0\"> Grants a +1 bonus to Armor.</span></li><li><span class=\"fontstyle2\">Infinite ((+1) Dagger):</span><span class=\"fontstyle0\"> The feathers it creates attack as (+1) Daggers. They become mundane feathers after the attack is made, and the feather grows back instantly.</span></li></ul>",
-        "equipmentType": "relic",
+        "equipmentType": "armor",
         "locked": true,
         "equipped": false,
         "quantity": 1,
@@ -58201,13 +59971,74 @@
         "damageOneHand": "d6",
         "damageTwoHands": "d8",
         "equipmentState": "unequipped",
-        "armorType": "light",
         "immunities": [],
         "gearCategory": "",
-        "alchemicalType": "",
-        "lore": "Relic Light Armor"
+        "alchemicalType": "concoction",
+        "lore": "Relic Light Armor",
+        "armorRating": 1,
+        "mightRequirement": 2,
+        "reflexPenalty": 1,
+        "relic": {
+          "powers": [],
+          "fabled": false,
+          "requiresBond": false,
+          "boundTo": "",
+          "cursed": false,
+          "consumable": false,
+          "sockets": [],
+          "isRelic": true,
+          "slots": 0,
+          "disguised": false,
+          "disguise": {},
+          "trueIdentity": {}
+        },
+        "containerId": null
       },
-      "effects": [],
+      "effects": [
+        {
+          "name": "(+1) Armor",
+          "img": "icons/magic/control/buff-flight-wings-runes-purple.webp",
+          "_id": "7FETxg5uH1QJC3Al",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.armorBonus",
+                "value": 1,
+                "priority": null,
+                "type": "add"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "<p>Grants a +1 bonus to Armor.</p>",
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "vagabond": {
+              "applicationMode": "when-equipped",
+              "relicBoost": 1
+            }
+          },
+          "_stats": {
+            "coreVersion": "14.361",
+            "systemId": "vagabond",
+            "systemVersion": "6.7.0"
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!MAzpXCazU0s8nXgZ.6mRlL42zwPhLdWKV.7FETxg5uH1QJC3Al"
+        }
+      ],
       "folder": null,
       "flags": {
         "vagabond": {
@@ -58238,7 +60069,7 @@
     {
       "name": "Cube of Force",
       "type": "equipment",
-      "img": "icons/magic/symbols/circled-gem-pink.webp",
+      "img": "icons/commodities/treasure/glass-cube-teal.webp",
       "system": {
         "description": "<p><span class=\"fontstyle0\">Handheld cube of various magical materials. The cube has 36 Charges, which are refreshed each Day.</span></p><p><span class=\"fontstyle0\">Each of the sides can be pressed to activate or deactivate a barrier out to Close from the holder, which has a function that moves with them. When activated, it spends a number of charges based on the side, as shown on the following table, which are also spent each Round while the barrier is active:</span></p><table class=\"NormalTable\"><tbody><tr><td><p><span class=\"fontstyle2\">Side</span></p></td><td><p><span class=\"fontstyle2\">Charges</span></p></td><td><p><span class=\"fontstyle2\">Barrier Function</span></p></td></tr><tr><td><p><span class=\"fontstyle3\">1</span></p></td><td><p><span class=\"fontstyle3\">1</span></p></td><td><p><span class=\"fontstyle3\">Blocks gases and wind.</span></p></td></tr><tr><td><p><span class=\"fontstyle3\">2</span></p></td><td><p><span class=\"fontstyle3\">2</span></p></td><td><p><span class=\"fontstyle3\">Blocks nonliving matter.</span></p></td></tr><tr><td><p><span class=\"fontstyle3\">3</span></p></td><td><p><span class=\"fontstyle3\">3</span></p></td><td><p><span class=\"fontstyle3\">Blocks Beings.</span></p></td></tr><tr><td><p><span class=\"fontstyle3\">4</span></p></td><td><p><span class=\"fontstyle3\">4</span></p></td><td><p><span class=\"fontstyle3\">Blocks magic effects.</span></p></td></tr><tr><td><p><span class=\"fontstyle3\">5</span></p></td><td><p><span class=\"fontstyle3\">6</span></p></td><td><p><span class=\"fontstyle3\">Blocks everything.</span></p></td></tr><tr><td><p><span class=\"fontstyle3\">6</span></p></td><td><p><span class=\"fontstyle3\">0</span></p></td><td><p><span class=\"fontstyle3\">Deactivates the barrier.</span></p></td></tr></tbody></table><p><span class=\"fontstyle0\">The barrier can block other effects by spending 1 Charge per damage die of the effect.</span></p>",
         "equipmentType": "relic",
@@ -58298,7 +60129,7 @@
     {
       "name": "Golden Needle",
       "type": "equipment",
-      "img": "icons/magic/symbols/circled-gem-pink.webp",
+      "img": "icons/tools/hand/sewing-needle-thread.webp",
       "system": {
         "description": "<p><span class=\"fontstyle0\">If the tip of the needle is pressed into a petrified Being, the needle melts into the stone and the curse of petrification ends. The needle is irretrievable after use.</span></p>",
         "equipmentType": "relic",

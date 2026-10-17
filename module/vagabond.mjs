@@ -100,6 +100,7 @@ import { CoinTransferDialog } from './applications/coin-transfer-dialog.mjs';
 import { ShopApp } from './applications/shop-app.mjs';
 import { CraftingHelper } from './helpers/crafting-helper.mjs';
 import { RelicHelper } from './helpers/relic-helper.mjs';
+import { RelicDisguise } from './helpers/relic-disguise.mjs';
 import { CrystalHelper } from './helpers/crystal-helper.mjs';
 import { WorkbenchApp } from './applications/workbench-app.mjs';
 import { AlchemyLab } from './helpers/alchemy-lab.mjs';
@@ -179,6 +180,7 @@ async function preloadHandlebarsTemplates() {
     'systems/vagabond/templates/item/parts/grants-config.hbs',
     'systems/vagabond/templates/item/parts/macro-config.hbs',
     'systems/vagabond/templates/item/parts/relic-slots.hbs',
+    'systems/vagabond/templates/item/parts/relic-disguise.hbs',
     'systems/vagabond/templates/item/parts/container-treasure.hbs',
     'systems/vagabond/templates/actor/parts/npc-macro-config.hbs',
     // Actor partials
@@ -885,6 +887,9 @@ Hooks.once('ready', function () {
       // Combine (GM ritual, decision — docs/crafting-plan.md §4.11): not a
       // craftModes entry (no Shift/Materials, GM judgement only) — call directly.
       combine: (baseHost, otherHost, opts) => RelicHelper.combine(baseHost, otherHost, opts),
+      // Disguised curses (GM): the item shows a Relic with the opposite plus until revealed.
+      disguiseRelic: (item) => RelicDisguise.disguise(item),
+      revealRelic: (item) => RelicDisguise.reveal(item),
       // Mana Crystals (variant, off by default): socket mechanics only — see
       // CrystalHelper's own doc comment for what's deferred.
       socketCrystal: (hostItem, crystalItem, slotIndex) => CrystalHelper.socket(hostItem, crystalItem, slotIndex),
@@ -992,6 +997,8 @@ Hooks.once('ready', function () {
   SpellTrackerHelper.migrateSpellEffectEntries();
   // One-time: Spell copies get the pack's Target Beings / Objects switches (Cast dialog Target picker).
   SpellTrackerHelper.migrateSpellTargetSwitches();
+  // One-time: named Relic copies (Dyrnwyn, Elven Chain…) become their weapon / armor with attached Relics.
+  RelicHelper.migrateNamedRelics();
   // One-time: Raise copies get the system:spell.raise hit macro.
   RaiseHelper.migrateWorldSpells();
   // One-time: class items get the Alpha 3 deltas (runs after every earlier class migration settled).

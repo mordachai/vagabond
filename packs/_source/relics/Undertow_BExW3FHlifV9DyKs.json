@@ -1,10 +1,10 @@
 {
   "name": "Undertow",
   "type": "equipment",
-  "img": "icons/magic/symbols/circled-gem-pink.webp",
+  "img": "icons/weapons/polearms/trident-silver-blue.webp",
   "system": {
     "description": "<p><span class=\"fontstyle0\">Trident that must be Bound to to access its Powers, which are as follows:</span></p><ul><li><span class=\"fontstyle2\">(+3) Weapon:</span><span class=\"fontstyle0\"> Deals an extra +3 damage.</span></li><li><span class=\"fontstyle2\">Aqua Lung:</span><span class=\"fontstyle0\"> They can breathe water.</span></li><li><span class=\"fontstyle2\">Fish Command:</span><span class=\"fontstyle0\"> (3 charges) You can Target a Beast with a Swim Speed and spend 1 charge to attempt to cause it to be Charmed for 1 Minute, giving you control of it.</span></li><li><span class=\"fontstyle2\">Marine Ambassador:</span><span class=\"fontstyle0\"> They can speak with Beasts with a Swim Speed.</span></li><li><span class=\"fontstyle2\">Safe Space:</span><span class=\"fontstyle0\"> Create an impenetrable barrier out to Close. This barrier has 36 HP, which is regained each day. The barrier ignores the results of damage rolls, and instead only takes 1 damage per die used for the damage. While the barrier has HP, the area within is safe, comfortable, nothing can enter or exit the barrier, and nothing within can be affected by any attacks or magic from outside it. Action to activate or deactivate.</span></li><li><span class=\"fontstyle2\">Visceral:</span><span class=\"fontstyle0\"> On a Crit Attack, the Target takes extra damage equal to (2 × its HD).</span></li><li><span class=\"fontstyle2\">Warning:</span><span class=\"fontstyle0\"> You can't be surprised while conscious, and it awakens you if you are asleep if Enemies are within Near.</span></li></ul>",
-    "equipmentType": "relic",
+    "equipmentType": "weapon",
     "locked": true,
     "equipped": false,
     "quantity": 1,
@@ -17,30 +17,90 @@
     "metal": "none",
     "damageType": "-",
     "damageAmount": "",
-    "properties": [],
+    "properties": [
+      "Thrown"
+    ],
     "weaponSkill": "melee",
     "range": "close",
-    "grip": "1H",
+    "grip": "V",
     "damageOneHand": "d6",
     "damageTwoHands": "d8",
     "equipmentState": "unequipped",
     "armorType": "light",
     "immunities": [],
     "gearCategory": "",
-    "alchemicalType": "",
+    "alchemicalType": "concoction",
     "lore": "Fabled Relic Trident (Bound)",
-    "requiresBound": true
+    "damageTypeOneHand": "piercing",
+    "relic": {
+      "powers": [],
+      "fabled": true,
+      "requiresBond": true,
+      "boundTo": "",
+      "cursed": false,
+      "consumable": false,
+      "sockets": [],
+      "isRelic": true,
+      "slots": 0,
+      "disguised": false,
+      "disguise": {},
+      "trueIdentity": {}
+    }
   },
-  "effects": [],
+  "effects": [
+    {
+      "name": "(+3) Weapon",
+      "img": "icons/magic/control/buff-flight-wings-runes-purple.webp",
+      "_id": "FQKSBGQqtOB1VSus",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.universalWeaponDamageBonus",
+            "value": 3,
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "<p>Deals an extra +3 damage.</p>",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "on-use",
+          "relicBoost": 1
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "6.7.0"
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!BExW3FHlifV9DyKs.FQKSBGQqtOB1VSus"
+    }
+  ],
   "folder": null,
   "flags": {},
   "_stats": {
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "13.351",
+    "coreVersion": "14.361",
     "systemId": "vagabond",
-    "systemVersion": "3.3.1",
+    "systemVersion": "6.7.0",
     "createdTime": 1764967025119,
     "modifiedTime": 1771087611924,
     "lastModifiedBy": "13p65OEadZSZVLRk"

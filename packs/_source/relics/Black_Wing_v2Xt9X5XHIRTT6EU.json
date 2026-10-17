@@ -1,10 +1,10 @@
 {
   "name": "Black Wing",
   "type": "equipment",
-  "img": "icons/magic/symbols/circled-gem-pink.webp",
+  "img": "icons/weapons/crossbows/handcrossbow-green.webp",
   "system": {
     "description": "<p><span class=\"fontstyle0\">Crossbow of dark-stained wood, adorned in pitch black feathers. The crossbow grants the user the following powers while equipped:</span></p><ul><li><span class=\"fontstyle2\">Nightvision:</span><span class=\"fontstyle0\"> They have Darksight.</span></li></ul><p><span class=\"fontstyle0\">Further, the crossbow can also be activated to grant the following Power for 1 Minute:</span></p><ul><li><span class=\"fontstyle2\">Darkness II:</span><span class=\"fontstyle0\"> Darkens non-magical light within Near while Equipped.</span></li></ul>",
-    "equipmentType": "relic",
+    "equipmentType": "weapon",
     "locked": true,
     "equipped": false,
     "quantity": 1,
@@ -18,29 +18,86 @@
     "damageType": "-",
     "damageAmount": "",
     "properties": [],
-    "weaponSkill": "melee",
-    "range": "close",
+    "weaponSkill": "ranged",
+    "range": "far",
     "grip": "1H",
-    "damageOneHand": "d6",
-    "damageTwoHands": "d8",
+    "damageOneHand": "d4",
+    "damageTwoHands": "d4",
     "equipmentState": "unequipped",
     "armorType": "light",
     "immunities": [],
     "gearCategory": "",
-    "alchemicalType": "",
+    "alchemicalType": "concoction",
     "lore": "Relic Light Crossbow (Bound)",
-    "requiresBound": true
+    "damageTypeOneHand": "piercing",
+    "relic": {
+      "powers": [],
+      "fabled": false,
+      "requiresBond": true,
+      "boundTo": "",
+      "cursed": false,
+      "consumable": false,
+      "sockets": [],
+      "isRelic": true,
+      "slots": 0,
+      "disguised": false,
+      "disguise": {},
+      "trueIdentity": {}
+    }
   },
-  "effects": [],
+  "effects": [
+    {
+      "name": "Nightvision",
+      "img": "icons/magic/control/buff-flight-wings-purple.webp",
+      "_id": "gXC477NNtVYMEe1F",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.senses",
+            "value": "darksight",
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "<p>They have Darksight.</p>",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "when-equipped"
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "6.7.0"
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!v2Xt9X5XHIRTT6EU.gXC477NNtVYMEe1F"
+    }
+  ],
   "folder": null,
   "flags": {},
   "_stats": {
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "13.351",
+    "coreVersion": "14.361",
     "systemId": "vagabond",
-    "systemVersion": "3.3.1",
+    "systemVersion": "6.7.0",
     "createdTime": 1764967025119,
     "modifiedTime": 1771087697855,
     "lastModifiedBy": "13p65OEadZSZVLRk"

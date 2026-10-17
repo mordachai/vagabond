@@ -1,7 +1,7 @@
 {
   "name": "Necklace of Adaptation",
   "type": "equipment",
-  "img": "icons/magic/symbols/circled-gem-pink.webp",
+  "img": "icons/equipment/neck/necklace-simple-carved-wood-green.webp",
   "system": {
     "description": "<p><span class=\"fontstyle0\">Necklace of heavy chain which grants the wearer the following Powers:</span></p><ul><li><span class=\"fontstyle2\">Eternal Breath:</span><span class=\"fontstyle0\"> They don't need to breathe.</span></li><li><span class=\"fontstyle2\">Extremes Innured:</span><span class=\"fontstyle0\"> They are not affected by extreme pressure or vacuums.</span></li></ul>",
     "equipmentType": "relic",

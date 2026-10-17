@@ -1,20 +1,20 @@
 {
   "name": "Elven Chain",
   "type": "equipment",
-  "img": "icons/magic/symbols/circled-gem-pink.webp",
+  "img": "icons/commodities/metal/mail-chain-steel.webp",
   "system": {
     "description": "<p><span class=\"fontstyle0\">Mithral Chain Armor that, while Equipped, grants the wearer the following Power:</span></p><ul><li><span class=\"fontstyle2\">(+1) Armor:</span><span class=\"fontstyle0\"> Grants a +1 bonus to Armor.</span></li></ul>",
-    "equipmentType": "relic",
+    "equipmentType": "armor",
     "locked": true,
     "equipped": false,
     "quantity": 1,
     "baseCost": {
-      "gold": 2100,
+      "gold": 42,
       "silver": 0,
       "copper": 0
     },
-    "baseSlots": 1,
-    "metal": "none",
+    "baseSlots": 2,
+    "metal": "mythral",
     "damageType": "-",
     "damageAmount": "",
     "properties": [],
@@ -24,22 +24,82 @@
     "damageOneHand": "d6",
     "damageTwoHands": "d8",
     "equipmentState": "unequipped",
-    "armorType": "light",
     "immunities": [],
     "gearCategory": "",
-    "alchemicalType": "",
-    "lore": "Relic Medium Armor"
+    "alchemicalType": "concoction",
+    "lore": "Relic Medium Armor",
+    "armorRating": 2,
+    "mightRequirement": 4,
+    "reflexPenalty": 2,
+    "relic": {
+      "powers": [],
+      "fabled": false,
+      "requiresBond": false,
+      "boundTo": "",
+      "cursed": false,
+      "consumable": false,
+      "sockets": [],
+      "isRelic": true,
+      "slots": 0,
+      "disguised": false,
+      "disguise": {},
+      "trueIdentity": {}
+    }
   },
-  "effects": [],
+  "effects": [
+    {
+      "name": "(+1) Armor",
+      "img": "icons/magic/control/buff-flight-wings-runes-purple.webp",
+      "_id": "pW4wDWyh5fF9IXbo",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.armorBonus",
+            "value": 1,
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "<p>Grants a +1 bonus to Armor.</p>",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "when-equipped",
+          "relicBoost": 1
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "6.7.0"
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!BVY2dIGUFzOSEC7z.pW4wDWyh5fF9IXbo"
+    }
+  ],
   "folder": null,
   "flags": {},
   "_stats": {
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "13.351",
+    "coreVersion": "14.361",
     "systemId": "vagabond",
-    "systemVersion": "3.0.0",
+    "systemVersion": "6.7.0",
     "createdTime": 1764967025119,
     "modifiedTime": 1766160276298,
     "lastModifiedBy": "13p65OEadZSZVLRk"

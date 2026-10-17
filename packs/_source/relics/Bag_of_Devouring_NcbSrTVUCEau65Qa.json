@@ -1,7 +1,7 @@
 {
   "name": "Bag of Devouring",
   "type": "equipment",
-  "img": "icons/magic/symbols/circled-gem-pink.webp",
+  "img": "icons/containers/bags/sack-twisted-skull-purple.webp",
   "system": {
     "description": "<p><span class=\"fontstyle0\">A bag that eats anything put inside it after 1 Hour. Small Beings and 1 Slot Items can fit in the bag. Anything devoured this way vanishes from existence.</span></p>",
     "equipmentType": "relic",

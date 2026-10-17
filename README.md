@@ -55,6 +55,17 @@ Two integrations got simpler and more modern:
 
 ---
 
+### **New feature:** Disguised Curses
+
+The book says a cursed item looks like a good one until it is revealed (Armor of Vulnerability shows up as Armor with the opposite plus). Now the GM can hide that from the players.
+
+- **Disguise:** open a cursed item and click **Disguise** on its sheet (GM only). Players now see a normal Relic, like "Light Armor (+1)", with no curse marks. The curse still works.
+- **Edit the disguise:** the name and description are filled in for you; change them as you like, and your edits are kept for next time.
+- **Reveal:** only the GM reveals it, with the **Reveal** button on the sheet. A chat card tells the table what the item really is.
+- **Ready to use:** the Armor of Vulnerability Relics already come disguised as Light / Medium / Heavy Armor (+1 / +2 / +3).
+
+---
+
 ### **New features:** Build Guides and Alchemy Lab [YouTube video below](https://youtu.be/USKwZxF5lJA)
 
 [![Build Guides and Alchemy Lab](https://img.youtube.com/vi/USKwZxF5lJA/0.jpg)](https://youtu.be/USKwZxF5lJA)

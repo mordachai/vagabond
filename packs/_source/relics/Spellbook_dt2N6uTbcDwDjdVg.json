@@ -1,7 +1,7 @@
 {
   "name": "Spellbook",
   "type": "equipment",
-  "img": "icons/magic/symbols/circled-gem-pink.webp",
+  "img": "icons/sundries/books/book-embossed-jewel-gold-purple.webp",
   "system": {
     "description": "<p><span class=\"fontstyle0\">The reader can Cast a Spell within as if they knew it. Crafting a Spell Book requires that the crafter knows the Spell(s) when crafting it, and can be done with the Study activity.</span></p>",
     "equipmentType": "relic",

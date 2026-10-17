@@ -38,7 +38,50 @@
     "isConsumable": false,
     "linkedConsumable": ""
   },
-  "effects": [],
+  "effects": [
+    {
+      "name": "Darksight",
+      "img": "icons/svg/aura.svg",
+      "_id": "r7GpZrMPhzViWyyP",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.senses",
+            "value": "darksight",
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "when-equipped"
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "6.7.0"
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!EjqAM5XwdbHsHEM8.r7GpZrMPhzViWyyP"
+    }
+  ],
   "folder": "pfHZHqr3aKhBFeON",
   "flags": {},
   "_stats": {

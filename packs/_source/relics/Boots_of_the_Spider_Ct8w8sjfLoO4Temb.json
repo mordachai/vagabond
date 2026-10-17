@@ -1,7 +1,7 @@
 {
   "name": "Boots of the Spider",
   "type": "equipment",
-  "img": "icons/magic/symbols/circled-gem-pink.webp",
+  "img": "icons/equipment/feet/boots-leather-black.webp",
   "system": {
     "description": "<p><span class=\"fontstyle0\">The boots have the following Powers:</span></p><ul><li><span class=\"fontstyle2\">Clinging:</span><span class=\"fontstyle0\"> The wearer has Cling.</span></li><li><span class=\"fontstyle2\">Webwalking:</span><span class=\"fontstyle0\"> The wearer ignores Difficult Terrain made of webs, and can't be Restrained by webs and filament.</span></li></ul>",
     "equipmentType": "relic",

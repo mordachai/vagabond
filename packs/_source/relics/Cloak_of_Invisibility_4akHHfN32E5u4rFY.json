@@ -1,7 +1,7 @@
 {
   "name": "Cloak of Invisibility",
   "type": "equipment",
-  "img": "icons/magic/symbols/circled-gem-pink.webp",
+  "img": "icons/equipment/back/cloak-layered-white.webp",
   "system": {
     "description": "<p><span class=\"fontstyle0\">A cloak of shimmers that reflects light anomalously. The Bound wearer has the following Power:</span></p><ul><li><span class=\"fontstyle2\">Invisibility I:</span><span class=\"fontstyle0\"> They use their Action or skip their Move to become Invisible until after they take an Action.</span></li></ul>",
     "equipmentType": "relic",

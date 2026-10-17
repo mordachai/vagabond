@@ -1,7 +1,7 @@
 {
   "name": "Sylph Scope",
   "type": "equipment",
-  "img": "icons/magic/symbols/circled-gem-pink.webp",
+  "img": "icons/equipment/head/glasses-spectacles.webp",
   "system": {
     "description": "<p><span class=\"fontstyle0\">A set of glasses that grant the following Powers to those who wear them:</span></p><ul><li><span class=\"fontstyle2\">Allsight:</span><span class=\"fontstyle0\"> Can see Invisible Beings.</span></li></ul>",
     "equipmentType": "relic",

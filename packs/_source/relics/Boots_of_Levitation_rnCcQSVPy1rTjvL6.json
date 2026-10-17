@@ -1,7 +1,7 @@
 {
   "name": "Boots of Levitation",
   "type": "equipment",
-  "img": "icons/magic/symbols/circled-gem-pink.webp",
+  "img": "icons/equipment/feet/boots-collared-blue-gold.webp",
   "system": {
     "description": "<p><span class=\"fontstyle0\">The wearer has the following Power:</span></p><ul><li><span class=\"fontstyle2\">Levitation:</span><span class=\"fontstyle0\"> They can Fly up or down, but not laterally, using their Speed.</span></li></ul>",
     "equipmentType": "relic",

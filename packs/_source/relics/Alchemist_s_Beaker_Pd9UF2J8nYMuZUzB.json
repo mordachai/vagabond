@@ -1,7 +1,7 @@
 {
   "name": "Alchemist's Beaker",
   "type": "equipment",
-  "img": "icons/magic/symbols/circled-gem-pink.webp",
+  "img": "icons/consumables/potions/round-decorated-snake-green.webp",
   "system": {
     "description": "<p><span class=\"fontstyle0\">A beaker with three separate layers, each with the following Power:</span></p><ul><li><span class=\"fontstyle2\">Prima Materia:</span><span class=\"fontstyle0\"> When the Ritual to Bond with it is performed, the Being can provide up to three alchemical items and assign them to a layer. The beaker can be used to provide a use of that alchemical item, which replenishes automatically after 1 Day.</span></li></ul>",
     "equipmentType": "relic",

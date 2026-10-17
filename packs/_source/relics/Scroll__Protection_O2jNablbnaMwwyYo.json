@@ -1,7 +1,7 @@
 {
   "name": "Scroll, Protection",
   "type": "equipment",
-  "img": "icons/magic/symbols/circled-gem-pink.webp",
+  "img": "icons/sundries/scrolls/scroll-runed-brown-blue.webp",
   "system": {
     "description": "<p><span class=\"fontstyle0\">Can be read to create an Aura out to 10' from the reader for 1 Hour that moves with them. Doing so causes the Scroll to vaporize. Those in the Aura have Favor on Saves forced by Beings designated by the scroll's name:</span></p><ul><li><span class=\"fontstyle2\">Protection from Evil:</span><span class=\"fontstyle0\"> Hellspawn, Undead</span></li><li><span class=\"fontstyle2\">Protection from Good:</span><span class=\"fontstyle0\"> Divines, Fae</span></li></ul>",
     "equipmentType": "relic",

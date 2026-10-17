@@ -1,7 +1,7 @@
 {
   "name": "Golden Needle",
   "type": "equipment",
-  "img": "icons/magic/symbols/circled-gem-pink.webp",
+  "img": "icons/tools/hand/sewing-needle-thread.webp",
   "system": {
     "description": "<p><span class=\"fontstyle0\">If the tip of the needle is pressed into a petrified Being, the needle melts into the stone and the curse of petrification ends. The needle is irretrievable after use.</span></p>",
     "equipmentType": "relic",

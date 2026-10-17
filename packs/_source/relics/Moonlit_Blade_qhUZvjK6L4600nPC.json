@@ -1,10 +1,10 @@
 {
   "name": "Moonlit Blade",
   "type": "equipment",
-  "img": "icons/magic/symbols/circled-gem-pink.webp",
+  "img": "icons/skills/melee/sword-engraved-glow-purple.webp",
   "system": {
     "description": "<p><span class=\"fontstyle0\">Greatsword that a Being must Bind themselves to to access its Powers, which are as follows:</span></p><ul><li><span class=\"fontstyle2\">(+3) Weapon:</span><span class=\"fontstyle0\"> Deals an extra +3 damage.</span></li><li><span class=\"fontstyle2\">Blasting:</span><span class=\"fontstyle0\"> Can make a Melee attack as an arc of moonlight energy at a Near Target. The Target is then illuminated with moonlight for the Round, can't benefit from being Invisible, and turns to its normal form if it was shapeshifted.</span></li><li><span class=\"fontstyle2\">Moonlit:</span><span class=\"fontstyle0\"> Sheds Moonlight out to Near.</span></li></ul>",
-    "equipmentType": "relic",
+    "equipmentType": "weapon",
     "locked": true,
     "equipped": false,
     "quantity": 1,
@@ -13,34 +13,138 @@
       "silver": 0,
       "copper": 0
     },
-    "baseSlots": 1,
+    "baseSlots": 2,
     "metal": "none",
     "damageType": "-",
     "damageAmount": "",
-    "properties": [],
+    "properties": [
+      "Cleave",
+      "Keen"
+    ],
     "weaponSkill": "melee",
     "range": "close",
-    "grip": "1H",
-    "damageOneHand": "d6",
-    "damageTwoHands": "d8",
+    "grip": "2H",
+    "damageOneHand": "d10",
+    "damageTwoHands": "d10",
     "equipmentState": "unequipped",
     "armorType": "light",
     "immunities": [],
     "gearCategory": "",
-    "alchemicalType": "",
+    "alchemicalType": "concoction",
     "lore": "Fabled Relic Greatsword (Bound)",
-    "requiresBound": true
+    "damageTypeOneHand": "slashing",
+    "damageTypeTwoHands": "slashing",
+    "relic": {
+      "powers": [],
+      "fabled": true,
+      "requiresBond": true,
+      "boundTo": "",
+      "cursed": false,
+      "consumable": false,
+      "sockets": [],
+      "isRelic": true,
+      "slots": 0,
+      "disguised": false,
+      "disguise": {},
+      "trueIdentity": {}
+    }
   },
-  "effects": [],
+  "effects": [
+    {
+      "name": "Keen",
+      "img": "icons/svg/aura.svg",
+      "_id": "VbugKGKDbkCJz9hU",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.attackCritBonus",
+            "type": "subtract",
+            "value": "1"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "Crits 1 lower on this weapon's Attack Check.",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "on-use"
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.4"
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!qhUZvjK6L4600nPC.VbugKGKDbkCJz9hU",
+      "origin": "Compendium.vagabond.relics.Item.qhUZvjK6L4600nPC"
+    },
+    {
+      "name": "(+3) Weapon",
+      "img": "icons/magic/control/buff-flight-wings-runes-purple.webp",
+      "_id": "bPjEB9IdFxDPyFEJ",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.universalWeaponDamageBonus",
+            "value": 3,
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "<p>Deals an extra +3 damage.</p>",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "on-use",
+          "relicBoost": 1
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "6.7.0"
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!qhUZvjK6L4600nPC.bPjEB9IdFxDPyFEJ"
+    }
+  ],
   "folder": null,
   "flags": {},
   "_stats": {
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "13.351",
+    "coreVersion": "14.361",
     "systemId": "vagabond",
-    "systemVersion": "3.3.1",
+    "systemVersion": "6.7.0",
     "createdTime": 1764967025119,
     "modifiedTime": 1771087652480,
     "lastModifiedBy": "13p65OEadZSZVLRk"

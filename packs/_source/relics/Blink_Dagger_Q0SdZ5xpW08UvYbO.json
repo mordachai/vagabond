@@ -1,10 +1,10 @@
 {
   "name": "Blink Dagger",
   "type": "equipment",
-  "img": "icons/magic/symbols/circled-gem-pink.webp",
+  "img": "icons/weapons/daggers/dagger-magical-glowing-blue.webp",
   "system": {
     "description": "<p><span class=\"fontstyle0\">Dagger that a Being must Bind themselves to access its Powers, which are as follows:</span></p><ul><li><span class=\"fontstyle2\">Blinking:</span><span class=\"fontstyle0\"> They can use their Action or skip their Move to teleport to the Item if it is within Far.</span></li><li><span class=\"fontstyle2\">Loyalty:</span><span class=\"fontstyle0\"> They can will it to return to their hand (no Action).</span></li></ul>",
-    "equipmentType": "relic",
+    "equipmentType": "weapon",
     "locked": true,
     "equipped": false,
     "quantity": 1,
@@ -17,30 +17,93 @@
     "metal": "none",
     "damageType": "-",
     "damageAmount": "",
-    "properties": [],
+    "properties": [
+      "Keen",
+      "Thrown"
+    ],
     "weaponSkill": "melee",
+    "altSkills": [
+      "finesse"
+    ],
     "range": "close",
     "grip": "1H",
-    "damageOneHand": "d6",
-    "damageTwoHands": "d8",
+    "damageOneHand": "d4",
+    "damageTwoHands": "d4",
     "equipmentState": "unequipped",
     "armorType": "light",
     "immunities": [],
     "gearCategory": "",
-    "alchemicalType": "",
+    "alchemicalType": "concoction",
     "lore": "Relic Dagger (Bound)",
-    "requiresBound": true
+    "damageTypeOneHand": "slashing",
+    "relic": {
+      "powers": [],
+      "fabled": false,
+      "requiresBond": true,
+      "boundTo": "",
+      "cursed": false,
+      "consumable": false,
+      "sockets": [],
+      "isRelic": true,
+      "slots": 0,
+      "disguised": false,
+      "disguise": {},
+      "trueIdentity": {}
+    }
   },
-  "effects": [],
+  "effects": [
+    {
+      "name": "Keen",
+      "img": "icons/svg/aura.svg",
+      "_id": "YPRQ4g9bO44O221J",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.attackCritBonus",
+            "type": "subtract",
+            "value": "1"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "Crits 1 lower on this weapon's Attack Check.",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "on-use"
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.4"
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!Q0SdZ5xpW08UvYbO.YPRQ4g9bO44O221J",
+      "origin": "Compendium.vagabond.relics.Item.Q0SdZ5xpW08UvYbO"
+    }
+  ],
   "folder": null,
   "flags": {},
   "_stats": {
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "13.351",
+    "coreVersion": "14.361",
     "systemId": "vagabond",
-    "systemVersion": "3.3.1",
+    "systemVersion": "6.7.0",
     "createdTime": 1764967025119,
     "modifiedTime": 1771087693039,
     "lastModifiedBy": "13p65OEadZSZVLRk"

@@ -111,6 +111,12 @@ export default class VagabondEquipment extends VagabondItemBase {
       // attached to it by drag-and-drop (`RelicSlots`, helpers/relic-slots.mjs). Attached = `powers[]`.
       isRelic: new fields.BooleanField({ initial: false }),
       slots: new fields.NumberField({ initial: 0, integer: true, min: 0, max: 12 }),
+      // Disguised curse (`RelicDisguise`, helpers/relic-disguise.mjs): while `disguised`, the item's name / img /
+      // description / lore ARE the disguise and `trueIdentity` holds the real ones; `disguise` keeps the last
+      // disguise (with the GM's edits) for the next time. All three are {name, img, description, lore}.
+      disguised: new fields.BooleanField({ initial: false }),
+      disguise: new fields.ObjectField({ initial: {} }),
+      trueIdentity: new fields.ObjectField({ initial: {} }),
     });
 
     // Relic POWER item (in the `relics` pack, ~100 of its 140 entries — Bonus –

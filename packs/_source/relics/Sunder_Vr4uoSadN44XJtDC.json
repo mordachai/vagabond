@@ -1,10 +1,10 @@
 {
   "name": "Sunder",
   "type": "equipment",
-  "img": "icons/magic/symbols/circled-gem-pink.webp",
+  "img": "icons/weapons/hammers/hammer-double-engraved-ruby.webp",
   "system": {
     "description": "<p><span class=\"fontstyle0\">Warhammer that must be Bound to to access its Powers, which are as follows:</span></p><ul><li><span class=\"fontstyle2\">(+3) Bonus:</span><span class=\"fontstyle0\"> Deals an extra +3 damage.</span></li><li><span class=\"fontstyle2\">Giants Bane:</span><span class=\"fontstyle0\"> Deals an extra damage die to giants.</span></li><li><span class=\"fontstyle2\">Earth Shaker:</span><span class=\"fontstyle0\"> (1/Day) Strike the earth to cause all Near foes to be Dazed (d4 Rounds).</span></li><li><span class=\"fontstyle2\">Loyalty:</span><span class=\"fontstyle0\"> Can be thrown to attack. It then magically returns to the Wielder's hand after the attack.</span></li><li><span class=\"fontstyle2\">Sense Valuables:</span><span class=\"fontstyle0\"> Senses gold and gems within Near.</span></li><li><span class=\"fontstyle2\">High Velocity:</span><span class=\"fontstyle0\"> Deals an extra damage die with thrown attacks.</span></li></ul>",
-    "equipmentType": "relic",
+    "equipmentType": "weapon",
     "locked": true,
     "equipped": false,
     "quantity": 1,
@@ -13,34 +13,137 @@
       "silver": 0,
       "copper": 0
     },
-    "baseSlots": 1,
+    "baseSlots": 2,
     "metal": "none",
     "damageType": "-",
     "damageAmount": "",
-    "properties": [],
+    "properties": [
+      "Vicious"
+    ],
     "weaponSkill": "melee",
     "range": "close",
-    "grip": "1H",
-    "damageOneHand": "d6",
-    "damageTwoHands": "d8",
+    "grip": "V",
+    "damageOneHand": "d8",
+    "damageTwoHands": "d10",
     "equipmentState": "unequipped",
     "armorType": "light",
     "immunities": [],
     "gearCategory": "",
-    "alchemicalType": "",
+    "alchemicalType": "concoction",
     "lore": "Fabled Relic Warhammer (Bound)",
-    "requiresBound": true
+    "damageTypeOneHand": "blunt",
+    "damageTypeTwoHands": "blunt",
+    "relic": {
+      "powers": [],
+      "fabled": true,
+      "requiresBond": true,
+      "boundTo": "",
+      "cursed": false,
+      "consumable": false,
+      "sockets": [],
+      "isRelic": true,
+      "slots": 0,
+      "disguised": false,
+      "disguise": {},
+      "trueIdentity": {}
+    }
   },
-  "effects": [],
+  "effects": [
+    {
+      "name": "Vicious",
+      "img": "icons/svg/aura.svg",
+      "_id": "Zr2ebOclddz6En89",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.critBonusDice",
+            "type": "add",
+            "value": "matchDie"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "Crits with it deal 1 extra damage die.",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "on-use"
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.4"
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!Vr4uoSadN44XJtDC.Zr2ebOclddz6En89",
+      "origin": "Compendium.vagabond.relics.Item.Vr4uoSadN44XJtDC"
+    },
+    {
+      "name": "(+3) Bonus",
+      "img": "icons/magic/control/buff-flight-wings-runes-purple.webp",
+      "_id": "cs3jEVZRihw05rh8",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.universalWeaponDamageBonus",
+            "value": 3,
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "<p>Deals an extra +3 damage.</p>",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "on-use",
+          "relicBoost": 1
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "6.7.0"
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!Vr4uoSadN44XJtDC.cs3jEVZRihw05rh8"
+    }
+  ],
   "folder": null,
   "flags": {},
   "_stats": {
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "13.351",
+    "coreVersion": "14.361",
     "systemId": "vagabond",
-    "systemVersion": "3.3.1",
+    "systemVersion": "6.7.0",
     "createdTime": 1764967025119,
     "modifiedTime": 1771087622039,
     "lastModifiedBy": "13p65OEadZSZVLRk"

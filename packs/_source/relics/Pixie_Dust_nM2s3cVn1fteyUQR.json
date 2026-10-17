@@ -1,7 +1,7 @@
 {
   "name": "Pixie Dust",
   "type": "equipment",
-  "img": "icons/magic/symbols/circled-gem-pink.webp",
+  "img": "icons/commodities/materials/bowl-powder-pink.webp",
   "system": {
     "description": "<p><span class=\"fontstyle0\">You can Use a single use of pixie dust to sprinkle on a Being, giving it a Fly Speed equal to its Walk Speed for 1 Minute.</span></p>",
     "equipmentType": "relic",

@@ -1,0 +1,13 @@
+{{! Disguised curse, GM only (RelicDisguise.view): true identity + Reveal, or Disguise for a cursed item }}
+{{#if relicDisguise}}
+  <div class='locked-section relic-disguise-section'>
+    <i class='fa-solid fa-mask'></i>
+    {{#if relicDisguise.disguised}}
+      <span class='relic-disguise-text'>{{{localize 'VAGABOND.Item.Relic.Disguise.Banner' name=relicDisguise.trueName}}}</span>
+      <button type='button' class='relic-disguise-btn' data-action='relicReveal' data-tooltip='{{localize "VAGABOND.Item.Relic.Disguise.RevealHint"}}'><i class='fa-solid fa-eye'></i> {{localize 'VAGABOND.Item.Relic.Disguise.Reveal'}}</button>
+    {{else}}
+      <span class='relic-disguise-text'>{{localize 'VAGABOND.Item.Relic.Disguise.Undisguised'}}</span>
+      <button type='button' class='relic-disguise-btn' data-action='relicDisguise' data-tooltip='{{localize "VAGABOND.Item.Relic.Disguise.DisguiseHint"}}'><i class='fa-solid fa-mask'></i> {{localize 'VAGABOND.Item.Relic.Disguise.Disguise'}}</button>
+    {{/if}}
+  </div>
+{{/if}}

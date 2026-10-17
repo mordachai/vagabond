@@ -4005,6 +4005,26 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   opacity: 0.8;
 }
 
+.relic-disguise-section {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+}
+.relic-disguise-section .relic-disguise-text {
+  flex: 1;
+  font-size: 12px;
+}
+.relic-disguise-section .relic-disguise-btn {
+  flex: 0 0 auto;
+  width: auto;
+  height: auto;
+  line-height: normal;
+  margin: 0;
+  padding: 2px 8px;
+  font-size: 12px;
+}
+
 /* Downtime activities - imported at top level because config dialog is outside sheets */
 .downtime-manager .window-content {
   padding: 8px 10px 10px;

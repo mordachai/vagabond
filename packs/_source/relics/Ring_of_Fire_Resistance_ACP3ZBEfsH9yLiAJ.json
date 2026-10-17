@@ -1,7 +1,7 @@
 {
   "name": "Ring of Fire Resistance",
   "type": "equipment",
-  "img": "icons/magic/symbols/circled-gem-pink.webp",
+  "img": "icons/equipment/finger/ring-cabochon-notched-silver-red.webp",
   "system": {
     "description": "<p><span class=\"fontstyle0\">This red ruby ring has the following Powers:</span></p><ul><li><span class=\"fontstyle2\">Innured to Flame:</span><span class=\"fontstyle0\"> The wearer is unharmed by non-magical Fire.</span></li><li><span class=\"fontstyle2\">Fire Resistance:</span><span class=\"fontstyle0\"> The wearer has Favor on Saves against taking Fire-based damage, and reduces the Fire damage they take by 1 per damage die rolled (minimum 1 damage).</span></li></ul>",
     "equipmentType": "relic",

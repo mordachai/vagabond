@@ -1,10 +1,10 @@
 {
   "name": "Peacemaker",
   "type": "equipment",
-  "img": "icons/magic/symbols/circled-gem-pink.webp",
+  "img": "icons/weapons/guns/pistol-revolver-steel.webp",
   "system": {
     "description": "<p><span class=\"fontstyle0\">Revolver which silvers all bullets fired from it. It has the following Powers:</span></p><ul><li><span class=\"fontstyle2\">(+2) Weapon:</span><span class=\"fontstyle0\"> Deals an extra +2 damage.</span></li><li><span class=\"fontstyle2\">Silvering:</span><span class=\"fontstyle0\"> Attacks with it count as Silvered.</span></li><li><span class=\"fontstyle2\">Personality:</span><span class=\"fontstyle0\"> Will only fire at hostile foes.</span></li></ul>",
-    "equipmentType": "relic",
+    "equipmentType": "weapon",
     "locked": true,
     "equipped": false,
     "quantity": 1,
@@ -17,29 +17,174 @@
     "metal": "none",
     "damageType": "-",
     "damageAmount": "",
-    "properties": [],
-    "weaponSkill": "melee",
-    "range": "close",
+    "properties": [
+      "Keen"
+    ],
+    "weaponSkill": "ranged",
+    "range": "far",
     "grip": "1H",
-    "damageOneHand": "d6",
-    "damageTwoHands": "d8",
+    "damageOneHand": "d4",
+    "damageTwoHands": "d4",
     "equipmentState": "unequipped",
     "armorType": "light",
     "immunities": [],
     "gearCategory": "",
-    "alchemicalType": "",
-    "lore": "Fabled Relic Revolver"
+    "alchemicalType": "concoction",
+    "lore": "Fabled Relic Revolver",
+    "damageTypeOneHand": "piercing",
+    "relic": {
+      "powers": [],
+      "fabled": true,
+      "requiresBond": false,
+      "boundTo": "",
+      "cursed": false,
+      "consumable": false,
+      "sockets": [],
+      "isRelic": true,
+      "slots": 0,
+      "disguised": false,
+      "disguise": {},
+      "trueIdentity": {}
+    }
   },
-  "effects": [],
+  "effects": [
+    {
+      "name": "Keen",
+      "img": "icons/svg/aura.svg",
+      "_id": "YuB6FpOUDADeR9xX",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.attackCritBonus",
+            "type": "subtract",
+            "value": "1"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "Crits 1 lower on this weapon's Attack Check.",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "on-use"
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.43.4"
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!PX3TNLD71AFsPMvd.YuB6FpOUDADeR9xX",
+      "origin": "Compendium.vagabond.relics.Item.PX3TNLD71AFsPMvd"
+    },
+    {
+      "name": "(+2) Weapon",
+      "img": "icons/magic/control/buff-flight-wings-runes-purple.webp",
+      "_id": "m4DYA2GkjweJP5Ep",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.universalWeaponDamageBonus",
+            "value": 2,
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "<p>Deals an extra +2 damage.</p>",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "on-use",
+          "relicBoost": 1
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "6.7.0"
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!PX3TNLD71AFsPMvd.m4DYA2GkjweJP5Ep"
+    },
+    {
+      "name": "Silvering",
+      "img": "icons/magic/control/buff-flight-wings-runes-blue-white.webp",
+      "_id": "yfg1KcdGzwSoGgBC",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.countsAs",
+            "value": "silver",
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "<p>Attacks with it count as Silvered.</p>",
+      "tint": "#ffffff",
+      "transfer": false,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "self"
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "6.7.0"
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!PX3TNLD71AFsPMvd.yfg1KcdGzwSoGgBC"
+    }
+  ],
   "folder": null,
   "flags": {},
   "_stats": {
     "compendiumSource": null,
     "duplicateSource": null,
     "exportSource": null,
-    "coreVersion": "13.351",
+    "coreVersion": "14.361",
     "systemId": "vagabond",
-    "systemVersion": "3.0.0",
+    "systemVersion": "6.7.0",
     "createdTime": 1764967025119,
     "modifiedTime": 1766160276298,
     "lastModifiedBy": "13p65OEadZSZVLRk"

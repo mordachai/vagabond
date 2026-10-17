@@ -1,7 +1,7 @@
 {
   "name": "Phoenix Down",
   "type": "equipment",
-  "img": "icons/magic/symbols/circled-gem-pink.webp",
+  "img": "icons/commodities/materials/feather-orange.webp",
   "system": {
     "description": "<p><span class=\"fontstyle0\">This item can be placed on the corpse of a dead Being to return them to life at full HP. This does not work on Constructs or Undead. The Phoenix Down is consumed in this process.</span></p><ul><li><span class=\"fontstyle2\">Resurrection:</span><span class=\"fontstyle0\"> (one use)</span></li></ul>",
     "equipmentType": "relic",
