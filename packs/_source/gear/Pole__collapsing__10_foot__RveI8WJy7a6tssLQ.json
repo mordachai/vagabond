@@ -30,7 +30,8 @@
     "immunities": [],
     "gearCategory": "Hardware",
     "alchemicalType": "concoction",
-    "lore": ""
+    "lore": "",
+    "forgeable": true
   },
   "effects": [],
   "flags": {

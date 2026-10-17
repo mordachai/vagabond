@@ -33,7 +33,8 @@
     "canExplode": false,
     "explodeValues": "",
     "noSlotsWhenWorn": true,
-    "handsRequired": 0
+    "handsRequired": 0,
+    "forgeable": false
   },
   "effects": [
     {

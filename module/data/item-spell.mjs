@@ -113,6 +113,23 @@ export default class VagabondSpell extends VagabondItemBase {
     // Ward upcast (WardHelper): when a Being this Spell's Cast affects takes damage from an attack or Cast, the
     // caster can upcast for a Cast Check; a pass reduces the incoming damage by 1d6 per Mana (before Armor).
     schema.wardUpcast = new fields.BooleanField({ required: true, initial: false });
+    // Conjure (ConjureHelper, hit macro `system:spell.conjure`): the Cast calls forth Beings (Beast) or Items
+    // (Forge) picked in the Conjure picker; they last while the Cast does (Focus, else the caster's next Turn).
+    // beings: `beingType` ('' = any) with a cumulative HD within the `budget` formula (caster roll data).
+    // items: one per Target Being / per 5' cube of the area, Slots <= maxSlots, cost <= maxCost, and with
+    // `forgeableOnly` only Items whose "Can be Forged" switch is on (`system.forgeable`). No `choices:` — Being types are homebrew-driven.
+    schema.conjure = new fields.SchemaField({
+      kind: new fields.StringField({ required: true, blank: true, initial: '' }),
+      beingType: new fields.StringField({ required: true, blank: true, initial: '' }),
+      budget: new fields.StringField({ required: true, blank: true, initial: '' }),
+      maxSlots: new fields.NumberField({ required: true, nullable: false, min: 0, initial: 1 }),
+      maxCost: new fields.SchemaField({
+        gold: new fields.NumberField({ required: true, nullable: false, integer: true, min: 0, initial: 0 }),
+        silver: new fields.NumberField({ required: true, nullable: false, integer: true, min: 0, initial: 0 }),
+        copper: new fields.NumberField({ required: true, nullable: false, integer: true, min: 0, initial: 0 }),
+      }),
+      forgeableOnly: new fields.BooleanField({ required: true, initial: false }),
+    });
 
     // Optional label shown on the dice node when using dice scaling (e.g. "Speed").
     schema.diceScaleLabel = new fields.StringField({

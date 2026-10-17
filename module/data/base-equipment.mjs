@@ -57,6 +57,13 @@ export default class VagabondEquipment extends VagabondItemBase {
       initial: false
     });
 
+    // Can be Forged: the Forge Spell (and any Conjure Spell with `forgeableOnly`) may materialize this Item — "a solid
+    // Item made of either copper, iron, glass, stone, or wood". GM-controlled switch, preset on the compendiums.
+    schema.forgeable = new fields.BooleanField({
+      required: true,
+      initial: false
+    });
+
     // Weapons only: never offered as an Imbue Target (Breath Attack and other natural / granted attacks)
     schema.noImbue = new fields.BooleanField({
       required: true,

@@ -424,6 +424,46 @@
       "CleanupTool": "Clean Up Undead Army (dead raised Undead back to their corpses)",
       "CleanedUp": "Raise: {restored} corpse(s) put back, {removed} Undead Army sheet(s) deleted."
     },
+    "Conjure": {
+      "Title": "Conjure",
+      "FolderName": "Conjured",
+      "Search": "Search…",
+      "Confirm": "Conjure",
+      "PickerHelp": "Click to add one, right-click to take one back.",
+      "HD": "HD {hd}",
+      "BudgetHD": "HD",
+      "BudgetItems": "Items",
+      "BeingsHint": "Call forth Beings with a cumulative HD of {budget} or less.",
+      "ItemsTargetHint": "Materialize one Item per Target ({n}).",
+      "ItemsAreaHint": "Materialize one Item per 5' cube of the area (up to {n}).",
+      "EquipSelf": "Equip on yourself (only into free hands)",
+      "NoneFit": "Conjure: nothing to call forth within HD {budget}.",
+      "NoItems": "Conjure: no Item fits this Spell's limits.",
+      "NoToken": "Conjure: no Target or caster token on this scene to place them by.",
+      "NoScene": "Conjure: open the scene of the Cast first.",
+      "WrongScene": "Conjure: the Cast happened on another scene — view that scene first.",
+      "NoRoom": "Conjure: no open space for {n} of them.",
+      "AreaNeedsLoot": "Conjure: Items in an area (or a Glyph) are dropped on the ground, which needs the Canvas Loot module. Target Beings instead.",
+      "NpcNoItems": "Conjure: {names} can't receive Items (not a Character). Without Canvas Loot, Target yourself or a Character.",
+      "NoRoomNear": "Conjure: no free space next to {name} for the Item.",
+      "OnGroundNear": "{item} on the ground next to {name}.",
+      "NoGM": "Conjure needs an active GM to create them.",
+      "RelayFailed": "Conjure: the GM ({gm}) did not answer.",
+      "NotYours": "Only the owner of {name} can do that.",
+      "SpellGone": "Conjure: the Spell or its caster is gone.",
+      "OverBudget": "Conjure: {name} left out, it would go above HD {budget}.",
+      "Appears": "{n}× {name} appears.",
+      "Given": "{item} for {name}.",
+      "OnGround": "{item} on the ground.",
+      "Equipped": "(Equipped)",
+      "NoFreeHands": "(not Equipped: no free hands)",
+      "UntilFocus": "They last while the caster Focuses on this Spell.",
+      "UntilTurn": "They last until the caster's next Turn.",
+      "Dismiss": "Dismiss",
+      "Dismissed": "{name} dismisses what the Spell called forth.",
+      "FocusEnded": "{name} stops Focusing: what the Spell called forth disappears.",
+      "TurnEnded": "{name}'s next Turn: what the Spell called forth disappears."
+    },
     "Haymaker": {
       "Title": "Haymaker",
       "Landed": "<strong>{name}</strong> lands a Haymaker — <strong>{target}</strong> is Dazed until the start of {name}’s Turn.",
@@ -2309,7 +2349,15 @@
             "perTarget": {"label": "Per Target", "hint": "The Focus Mana is paid for each Target (Ward: \"1 Mana per Target … even for willing Targets\")."},
             "onCast": {"label": "Also on Cast", "hint": "A Cast with Focus on pays the Focus Mana too (shown in the Cast dialog)."}
           },
-          "wardUpcast": {"label": "Ward Upcast", "hint": "When a Being this Spell affects takes damage from an attack or Cast, the attack's damage card gets a Ward button: the caster picks the Mana in the chat, makes a Cast Check, and a pass takes 1d6 per Mana off the damage before Armor."}
+          "wardUpcast": {"label": "Ward Upcast", "hint": "When a Being this Spell affects takes damage from an attack or Cast, the attack's damage card gets a Ward button: the caster picks the Mana in the chat, makes a Cast Check, and a pass takes 1d6 per Mana off the damage before Armor."},
+          "conjure": {
+            "kind": {"label": "Conjure", "hint": "The hit macro system:spell.conjure calls forth Beings or Items picked in the Conjure picker; they last while the Cast does (Focus, else the caster's next Turn).", "beings": "Beings", "items": "Items"},
+            "beingType": {"label": "Being Type"},
+            "budget": {"label": "Cumulative HD", "hint": "Formula on the caster's roll data (@lvl = Level). Beast: max(1, floor(@lvl / 2))."},
+            "maxSlots": {"label": "Max Slots"},
+            "forgeableOnly": {"label": "Only \"Can be Forged\" Items", "hint": "List only Items whose Handling switch \"Can be Forged\" is on (Forge)."},
+            "maxCost": {"label": "Max Cost", "hint": "0 = no limit. One Item per Target, or per 5' cube of an area."}
+          }
         },
         "AddSpell": "Add Spell",
         "FxSchool": {
@@ -2501,6 +2549,7 @@
             "hands2": "Two Hands"
           },
           "isTrinket": {"label": "Trinket", "hint": "Enables spellcasting while equipped"},
+          "forgeable": {"label": "Can be Forged", "hint": "The Forge Spell can materialize this Item (a solid Item of copper, iron, glass, stone or wood). Forge still needs 1 Slot or less and 1g or less."},
           "noImbue": {"label": "Can't be Imbued", "hint": "Never offered as an Imbue Target (natural or granted attacks such as a Breath Attack)"},
           "noSlotsWhenWorn": {"label": "No Slot while worn", "hint": "Occupies no Inventory Slot while worn (e.g. a Backpack: 1 Slot carried, worn it adds capacity instead)"},
           "isRelic": {"label":"Is Relic","hint":"This item counts as a Relic: it gets through Immunities that only stop non-Relics (\"Physical vs. Non-Relics\"). Attaching a Relic turns it on; turn it off and the item stops counting as a Relic."},

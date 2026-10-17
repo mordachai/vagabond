@@ -30,7 +30,8 @@
     "immunities": [],
     "gearCategory": "Games & Toys",
     "alchemicalType": "concoction",
-    "lore": ""
+    "lore": "",
+    "forgeable": true
   },
   "effects": [],
   "flags": {

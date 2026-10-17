@@ -31,7 +31,8 @@
     "gearCategory": "Cooking & Food",
     "alchemicalType": "concoction",
     "lore": "",
-    "isSupply": true
+    "isSupply": true,
+    "forgeable": false
   },
   "effects": [],
   "flags": {

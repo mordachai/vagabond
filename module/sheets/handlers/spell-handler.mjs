@@ -574,6 +574,10 @@ export class SpellHandler {
       return;
     }
 
+    // The Cast's area as it stands now (hit macros place things in it: Conjure), with its scene
+    const castShape = SpellTargetPicker.areaShape(this.actor, state);
+    state.castArea = castShape ? { sceneId: canvas.scene?.id ?? null, shape: castShape } : null;
+
     // Focus switch of this Cast. Dialog-off casts carry no focusOn: a Focus on Cast Spell whose Cast includes
     // its Effect Focuses, anything else leaves the Focus alone. Needed before the cost (Focus Mana on Cast).
     let focusOn = typeof state.focusOn === 'boolean' ? state.focusOn : null;

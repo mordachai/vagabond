@@ -31,7 +31,8 @@
     "gearCategory": "Liquor & Spirits",
     "alchemicalType": "concoction",
     "lore": "",
-    "isBeverage": true
+    "isBeverage": true,
+    "forgeable": false
   },
   "effects": [],
   "flags": {

@@ -42,7 +42,8 @@
     "damageTypeTwoHands": "blunt",
     "altSkills": [
       "melee"
-    ]
+    ],
+    "forgeable": true
   },
   "effects": [],
   "folder": "BFCXg3g6RQNzpLsE",

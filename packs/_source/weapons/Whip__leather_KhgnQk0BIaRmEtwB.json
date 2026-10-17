@@ -43,7 +43,8 @@
     "damageTypeOneHand": "slashing",
     "altSkills": [
       "finesse"
-    ]
+    ],
+    "forgeable": false
   },
   "effects": [],
   "folder": "bpyQRJjtGW4vNitc",

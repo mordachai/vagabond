@@ -30,7 +30,8 @@
     "immunities": [],
     "gearCategory": "Clothing, Hygiene, & Textiles",
     "alchemicalType": "concoction",
-    "lore": ""
+    "lore": "",
+    "forgeable": false
   },
   "effects": [],
   "flags": {

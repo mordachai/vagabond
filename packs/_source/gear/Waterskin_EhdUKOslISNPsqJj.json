@@ -31,7 +31,8 @@
     "gearCategory": "Cooking & Food",
     "alchemicalType": "concoction",
     "lore": "",
-    "isBeverage": true
+    "isBeverage": true,
+    "forgeable": false
   },
   "effects": [],
   "flags": {

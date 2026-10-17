@@ -30,7 +30,8 @@
     "immunities": [],
     "gearCategory": "Beasts & Husbandry",
     "alchemicalType": "concoction",
-    "lore": ""
+    "lore": "",
+    "forgeable": false
   },
   "effects": [],
   "flags": {

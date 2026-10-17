@@ -48,7 +48,8 @@
       "animType": "cone",
       "auto": false
     },
-    "areaAttack": true
+    "areaAttack": true,
+    "forgeable": false
   },
   "effects": [
     {

@@ -1,6 +1,12 @@
 # Changelog
 
 ## v6.7.2
+- **[Added]** Beast: the Cast card's Beast button opens a picker of Beasts (cumulative HD up to half your Level, min 1). They appear in the area (Aura, Cone…), next to the Target, or spring out of a triggered Glyph. Your players own them; their actions use your Cast Skill.
+- **[Added]** Forge: the Cast card's Forge button opens a picker of Items (1 Slot, 1g) whose new Handling switch "Can be Forged" is on (preset on the compendium gear, weapons and armor: solid copper, iron, glass, stone or wood; no food, drink, cloth, jewelry or trinkets). You get yours in your inventory (Equip into free hands); with Canvas Loot another Target's Item lands on the ground next to it, without it a Character gets it in their inventory. An area Cast drops one per 5' cube with Canvas Loot. A Forge that can't place its Items (an NPC Target, or an area, without Canvas Loot) is refused before any Mana is spent.
+- **[Added]** Conjured Beasts and Items vanish when the Focus ends, or at the caster's next Turn in Combat when the Cast didn't Focus. The card's Dismiss button ends them any time.
+- **[Added]** Spells get a "Conjure" setting (edit mode: Beings with a Being type and HD formula, or Items with Slot and cost limits), so new summoning Spells need no code (compendium needs a rebuild; world copies update on load).
+- **[Added]** pt-BR: Focus Mana, Ward, Polymorph form, Conjure and the new Spell / Item fields translated.
+- **[Added]** Glyph: a triggered Glyph's card now has the Spell's hit macro button.
 - **[Added]** Ward: the attack's damage card gets a Ward button for each warded Target. It posts a Ward card where the caster picks the Mana (stars) and clicks Ward Off!: a Cast Check, and a pass takes 1d6 per Mana off the damage before Armor. The Target's Save or Apply card then shows the Ward in its calculation. A Ward rolled after the damage was applied gives the HP back.
 - **[Added]** Spells get a "Focus Mana" field (edit mode): the Mana it costs to keep Focusing, optionally per Target and on the Cast too. Ward (1 per Target, Cast and each Round), Polymorph (1, Cast and each Round) and Beast (1 each Round after the Cast) ship with it (compendium needs a rebuild; world copies update on load).
 - **[Added]** Cast dialog: a Cast with Focus on adds its Focus Mana to the cost, paid only if the Cast Focuses.

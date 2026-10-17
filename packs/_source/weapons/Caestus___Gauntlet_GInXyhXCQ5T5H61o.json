@@ -39,7 +39,8 @@
       "auto": false
     },
     "damageTypeOneHand": "blunt",
-    "altSkills": []
+    "altSkills": [],
+    "forgeable": true
   },
   "effects": [],
   "folder": "BjNJoIvzJXyagnI4",

@@ -36,7 +36,8 @@
       "enabled": false,
       "auto": false
     },
-    "damageTypeOneHand": "piercing"
+    "damageTypeOneHand": "piercing",
+    "forgeable": true
   },
   "effects": [
     {

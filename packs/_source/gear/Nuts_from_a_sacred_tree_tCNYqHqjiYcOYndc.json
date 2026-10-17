@@ -94,7 +94,8 @@
       "runAsGM": false
     },
     "description": "<p><span class=\"fontstyle0\">Used by Casters to channel Primal magic.</span></p>",
-    "gearCategory": "Trinket - Primal"
+    "gearCategory": "Trinket - Primal",
+    "forgeable": false
   },
   "effects": [],
   "folder": "SVfHyRgdCkjzwRex",

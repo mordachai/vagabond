@@ -18,6 +18,25 @@
       "mana": 1,
       "perTarget": false,
       "onCast": false
+    },
+    "conjure": {
+      "kind": "beings",
+      "beingType": "Beasts",
+      "budget": "max(1, floor(@lvl / 2))",
+      "maxSlots": 1,
+      "maxCost": {
+        "gold": 0,
+        "silver": 0,
+        "copper": 0
+      },
+      "forgeableOnly": false
+    },
+    "hitMacro": {
+      "enabled": true,
+      "uuid": "",
+      "command": "system:spell.conjure",
+      "label": "Beast",
+      "runAsGM": false
     }
   },
   "effects": [],

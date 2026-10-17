@@ -31,7 +31,8 @@
     "gearCategory": "Outdoors",
     "alchemicalType": "concoction",
     "lore": "",
-    "handsRequired": 0
+    "handsRequired": 0,
+    "forgeable": true
   },
   "effects": [],
   "flags": {

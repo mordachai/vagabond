@@ -31,7 +31,8 @@
     "gearCategory": "Personal Items",
     "alchemicalType": "concoction",
     "lore": "",
-    "isBeverage": true
+    "isBeverage": true,
+    "forgeable": false
   },
   "effects": [],
   "flags": {

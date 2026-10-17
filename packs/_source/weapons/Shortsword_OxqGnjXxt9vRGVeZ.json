@@ -41,7 +41,8 @@
     "damageTypeOneHand": "slashing",
     "altSkills": [
       "finesse"
-    ]
+    ],
+    "forgeable": true
   },
   "effects": [
     {

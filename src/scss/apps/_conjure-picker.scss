@@ -1,0 +1,173 @@
+// Conjure picker (Beast / Forge): tile grid + budget meter
+
+.conjure-picker {
+  .window-content { padding: 8px 10px; }
+
+  .cjp-root {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    height: 100%;
+  }
+
+  .cjp-hint {
+    margin: 0;
+    text-align: center;
+    color: $c-text-1;
+    font-size: 0.85rem;
+  }
+
+  .cjp-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    .cjp-search { flex: 1; }
+  }
+
+  .cjp-budget {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    white-space: nowrap;
+
+    .cjp-budget-label {
+      font-size: 0.8rem;
+      color: $c-text-1;
+      text-transform: uppercase;
+    }
+
+    .cjp-budget-value {
+      font-family: $font-title;
+      font-size: 1.3rem;
+      color: $c-title-2;
+    }
+  }
+
+  .cjp-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+    gap: 6px;
+    max-height: 420px;
+    overflow-y: auto;
+    padding: 2px;
+  }
+
+  .cjp-tile {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: 6px 4px;
+    height: auto;
+    line-height: normal;
+    background: rgba(0, 0, 0, 0.18);
+    border: 1px solid rgba(0, 0, 0, 0.4);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: filter 0.15s ease, border-color 0.15s ease, opacity 0.15s ease;
+
+    &[hidden] { display: none; }
+
+    img {
+      width: 56px;
+      height: 56px;
+      object-fit: contain;
+      border: none;
+    }
+
+    .cjp-name {
+      width: 100%;
+      font-size: 0.78rem;
+      font-weight: bold;
+      color: $c-title-2;
+      text-align: center;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .cjp-badge {
+      font-size: 0.72rem;
+      color: $c-text-1;
+    }
+
+    .cjp-count {
+      position: absolute;
+      top: 3px;
+      right: 3px;
+      min-width: 20px;
+      padding: 1px 5px;
+      border-radius: 10px;
+      background: $c-yellow;
+      color: $c-dark;
+      font-family: $font-title;
+      font-size: 0.9rem;
+    }
+
+    &:hover { border-color: $c-title-2; filter: brightness(1.15); }
+
+    &.is-picked {
+      border-color: $c-yellow;
+      box-shadow: 0 0 8px -1px $c-yellow, inset 0 0 0 1px $c-yellow;
+    }
+
+    &.is-over:not(.is-picked) {
+      opacity: 0.35;
+      cursor: not-allowed;
+      &:hover { filter: none; border-color: rgba(0, 0, 0, 0.4); }
+    }
+  }
+
+  .cjp-help {
+    margin: 0;
+    font-size: 0.75rem;
+    color: $c-text-1;
+    opacity: 0.75;
+    text-align: center;
+  }
+
+  .cjp-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(0, 0, 0, 0.4);
+
+    .cjp-equip {
+      margin-right: auto;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: $c-text-1;
+    }
+
+    button {
+      flex: 0 1 160px;
+      height: auto;
+      line-height: normal;
+      padding: 8px 12px;
+      font-weight: bold;
+      text-transform: uppercase;
+      border-radius: 2px;
+    }
+
+    .cjp-confirm {
+      background: url('../assets/ui/chat/yellow-button.webp') no-repeat center / 100% 100%;
+      border: 1px solid transparent;
+      color: $c-dark;
+      &:disabled { opacity: 0.5; cursor: not-allowed; }
+      &.is-ready { border-color: $c-green; }
+      &:hover:not(:disabled) { filter: brightness(1.1); }
+    }
+
+    .cjp-cancel {
+      background: rgba(0, 0, 0, 0.3);
+      color: $c-text-1;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      &:hover { border-color: $c-yellow; color: $c-yellow; }
+    }
+  }
+}

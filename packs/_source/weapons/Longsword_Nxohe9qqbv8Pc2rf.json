@@ -39,7 +39,8 @@
       "auto": false
     },
     "damageTypeOneHand": "slashing",
-    "damageTypeTwoHands": "slashing"
+    "damageTypeTwoHands": "slashing",
+    "forgeable": true
   },
   "effects": [
     {

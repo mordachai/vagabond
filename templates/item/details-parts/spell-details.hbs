@@ -233,6 +233,52 @@
           <p class='notes'>{{localize "VAGABOND.Item.Spell.FIELDS.wardUpcast.hint"}}</p>
         </div>
 
+        {{! Conjure (ConjureHelper): what the hit macro system:spell.conjure calls forth }}
+        <div class='form-group'>
+          <label class='resource-label'>{{localize "VAGABOND.Item.Spell.FIELDS.conjure.kind.label"}}</label>
+          <select name='system.conjure.kind'>
+            <option value='' {{#unless system.conjure.kind}}selected{{/unless}}>-</option>
+            <option value='beings' {{#if (eq system.conjure.kind 'beings')}}selected{{/if}}>{{localize "VAGABOND.Item.Spell.FIELDS.conjure.kind.beings"}}</option>
+            <option value='items' {{#if (eq system.conjure.kind 'items')}}selected{{/if}}>{{localize "VAGABOND.Item.Spell.FIELDS.conjure.kind.items"}}</option>
+          </select>
+          <p class='notes'>{{localize "VAGABOND.Item.Spell.FIELDS.conjure.kind.hint"}}</p>
+        </div>
+        {{#if (eq system.conjure.kind 'beings')}}
+        <div class='form-group'>
+          <label class='resource-label'>{{localize "VAGABOND.Item.Spell.FIELDS.conjure.beingType.label"}}</label>
+          <select name='system.conjure.beingType'>
+            {{selectOptions config.beingTypes selected=system.conjure.beingType localize=true blank="-"}}
+          </select>
+        </div>
+        <div class='form-group'>
+          <label class='resource-label'>{{localize "VAGABOND.Item.Spell.FIELDS.conjure.budget.label"}}</label>
+          <input type='text' name='system.conjure.budget' value='{{system.conjure.budget}}' placeholder='max(1, floor(@lvl / 2))' />
+          <p class='notes'>{{localize "VAGABOND.Item.Spell.FIELDS.conjure.budget.hint"}}</p>
+        </div>
+        {{/if}}
+        {{#if (eq system.conjure.kind 'items')}}
+        <div class='form-group'>
+          <label class='checkbox-label'>
+            <input type='checkbox' name='system.conjure.forgeableOnly' {{#if system.conjure.forgeableOnly}}checked{{/if}} data-dtype='Boolean' />
+            <span>{{localize "VAGABOND.Item.Spell.FIELDS.conjure.forgeableOnly.label"}}</span>
+          </label>
+          <p class='notes'>{{localize "VAGABOND.Item.Spell.FIELDS.conjure.forgeableOnly.hint"}}</p>
+        </div>
+        <div class='form-group'>
+          <label class='resource-label'>{{localize "VAGABOND.Item.Spell.FIELDS.conjure.maxSlots.label"}}</label>
+          <input type='number' name='system.conjure.maxSlots' value='{{system.conjure.maxSlots}}' min='0' step='1' data-dtype='Number' />
+        </div>
+        <div class='form-group'>
+          <label class='resource-label'>{{localize "VAGABOND.Item.Spell.FIELDS.conjure.maxCost.label"}}</label>
+          <div class='flexrow'>
+            <input type='number' name='system.conjure.maxCost.gold' value='{{system.conjure.maxCost.gold}}' min='0' step='1' data-dtype='Number' data-tooltip='{{localize "VAGABOND.Currency.Gold.abbr"}}' />
+            <input type='number' name='system.conjure.maxCost.silver' value='{{system.conjure.maxCost.silver}}' min='0' step='1' data-dtype='Number' data-tooltip='{{localize "VAGABOND.Currency.Silver.abbr"}}' />
+            <input type='number' name='system.conjure.maxCost.copper' value='{{system.conjure.maxCost.copper}}' min='0' step='1' data-dtype='Number' data-tooltip='{{localize "VAGABOND.Currency.Copper.abbr"}}' />
+          </div>
+          <p class='notes'>{{localize "VAGABOND.Item.Spell.FIELDS.conjure.maxCost.hint"}}</p>
+        </div>
+        {{/if}}
+
         {{! Dice Scaling Label (only relevant when scaling is on) }}
         {{#if system.usesDiceScaling}}
         <div class='form-group'>

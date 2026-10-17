@@ -42,7 +42,8 @@
       "hitOffsetX": 100,
       "auto": false
     },
-    "damageTypeOneHand": "slashing"
+    "damageTypeOneHand": "slashing",
+    "forgeable": true
   },
   "effects": [
     {

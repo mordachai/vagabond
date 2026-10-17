@@ -604,7 +604,8 @@ export class VagabondChatCard {
       }
 
       // Executable macro buttons (simple always; hit macro only on a hit/success)
-      const isHitForMacro = rollData?.isHit ?? rollData?.isSuccess ?? false;
+      // `macroHit` overrides it where the card delivers the Spell without a hit of its own (Glyph trigger)
+      const isHitForMacro = rollData?.macroHit ?? rollData?.isHit ?? rollData?.isSuccess ?? false;
       VagabondChatCard._buildMacroButtons(item, actor, isHitForMacro, rollData?.isCritical ?? false, macroExtraScope).forEach(b => card.addFooterAction(b));
 
       // Add defend options if requested (independent of damage; never for restoratives)
@@ -1148,6 +1149,7 @@ export class VagabondChatCard {
             deliveryText: deliveryText || null,
             targetObjects: spellState.targetObjects ?? [],
             targetsPicked: !!spellState.targetsPicked,
+            castArea: spellState.castArea ?? null,
           },
           // Expose this cast's chosen dice + total mana to spell macros (scope.spellDamageDice / scope.manaSpent),
           // plus the Target picker's choices (scope.targetObjects as Items, scope.targetsPicked = Targets are final)
@@ -1159,6 +1161,9 @@ export class VagabondChatCard {
             focusHeld: !!spellState.focusHeld,
             ...(spellState.targetObjects?.length ? { targetObjects: spellState.targetObjects } : {}),
             ...(spellState.targetsPicked ? { targetsPicked: true } : {}),
+            // Delivery + area of the Cast (scope.deliveryType / scope.castArea = {sceneId, shape}): Conjure placement
+            deliveryType: spellState.deliveryType ?? null,
+            ...(spellState.castArea ? { castArea: spellState.castArea } : {}),
           }
       });
       // Only auto-grant luck when there's no crit toggle (toggle manages luck itself)
@@ -1216,6 +1221,7 @@ export class VagabondChatCard {
       useFx: !!rerollData.useFx,
       targetObjects: rerollData.targetObjects ?? [],
       targetsPicked: !!rerollData.targetsPicked,
+      castArea: rerollData.castArea ?? null,
       // Focus is not re-run: the reroll is held while the caster still Focuses on it (no "Crit: No Focus" Crit)
       focusHeld: isSuccess && (actor.system.focus?.spellIds ?? []).includes(spell.id)
         && !(isCritical && spell.system.critNoFocus),

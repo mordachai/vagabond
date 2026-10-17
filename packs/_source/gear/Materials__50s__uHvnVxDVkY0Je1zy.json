@@ -36,7 +36,8 @@
       "key": "",
       "value": 5000
     },
-    "toolKind": ""
+    "toolKind": "",
+    "forgeable": false
   },
   "effects": [],
   "flags": {

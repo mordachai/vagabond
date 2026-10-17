@@ -99,17 +99,10 @@ export class SpellTargetPicker {
    */
   static tokensInArea(actor, state) {
     const type = String(state.deliveryType ?? '').toLowerCase();
-    if (!this.AREA_DELIVERIES.includes(type) || !canvas?.ready) return [];
-    const caster = this.casterToken(actor);
-    const targets = Array.from(game.user.targets);
-    const manager = globalThis.vagabond?.managers?.templates ?? new VagabondMeasureTemplates();
-    const centroid = targets.length ? manager._calculateTargetCentroid(targets) : null;
-    const data = manager._constructRegionData({
-      type, distance: this.#areaDistance(state), token: caster, targets: game.user.targets, centroid, notify: false,
-    });
-    const shape = data?.shapes?.[0];
+    const shape = this.areaShape(actor, state);
     if (!shape) return [];
-    const inside = this.#shapeTest(shape);
+    const caster = this.casterToken(actor);
+    const inside = this.shapeTest(shape);
     const skipCaster = this.#EMANATES.includes(type);
     return canvas.tokens.placeables.filter(t => {
       if (!t.actor || !t.visible) return false;
@@ -119,8 +112,29 @@ export class SpellTargetPicker {
     });
   }
 
+  /**
+   * The Cast's area as a plain v14 Region shape (same placement as the spell template: caster origin, targets
+   * centroid), or null for a non-area delivery / no canvas. Also snapshotted on the Cast for hit macros
+   * (`scope.castArea`, Conjure placement).
+   * @returns {object|null}
+   */
+  static areaShape(actor, state) {
+    const type = String(state.deliveryType ?? '').toLowerCase();
+    if (!this.AREA_DELIVERIES.includes(type) || !canvas?.ready) return null;
+    const caster = this.casterToken(actor);
+    const targets = Array.from(game.user.targets);
+    const manager = globalThis.vagabond?.managers?.templates ?? new VagabondMeasureTemplates();
+    const centroid = targets.length ? manager._calculateTargetCentroid(targets) : null;
+    const data = manager._constructRegionData({
+      type, distance: this.#areaDistance(state), token: caster, targets: game.user.targets, centroid, notify: false,
+    });
+    const shape = data?.shapes?.[0];
+    if (!shape) return null;
+    return foundry.utils.deepClone(shape.toObject?.() ?? shape);
+  }
+
   /** Point test for a v14 Region shape (circle, cone, line, rectangle). */
-  static #shapeTest(s) {
+  static shapeTest(s) {
     switch (s.type) {
       case 'circle':
         return (p) => Math.hypot(p.x - s.x, p.y - s.y) <= s.radius;

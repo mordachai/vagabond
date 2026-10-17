@@ -30,7 +30,8 @@
     "immunities": [],
     "gearCategory": "Outdoors",
     "alchemicalType": "concoction",
-    "lore": ""
+    "lore": "",
+    "forgeable": true
   },
   "effects": [],
   "flags": {

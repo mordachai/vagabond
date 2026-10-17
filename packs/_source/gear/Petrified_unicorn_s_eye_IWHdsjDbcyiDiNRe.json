@@ -94,7 +94,8 @@
       "runAsGM": false
     },
     "description": "<p><span class=\"fontstyle0\">Used by Casters to channel Divine magic.</span></p>",
-    "gearCategory": "Trinket - Divine"
+    "gearCategory": "Trinket - Divine",
+    "forgeable": false
   },
   "effects": [],
   "folder": "EAjaF5RayHWPss3M",

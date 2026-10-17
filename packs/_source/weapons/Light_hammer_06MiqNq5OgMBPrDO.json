@@ -39,7 +39,8 @@
       "hitOffsetX": -100,
       "auto": false
     },
-    "damageTypeOneHand": "blunt"
+    "damageTypeOneHand": "blunt",
+    "forgeable": true
   },
   "effects": [
     {

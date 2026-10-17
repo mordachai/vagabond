@@ -30,7 +30,8 @@
     "immunities": [],
     "gearCategory": "Liquor & Spirits",
     "alchemicalType": "concoction",
-    "lore": ""
+    "lore": "",
+    "forgeable": false
   },
   "effects": [],
   "flags": {

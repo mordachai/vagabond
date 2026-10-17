@@ -107,7 +107,8 @@
       "command": "",
       "label": "",
       "runAsGM": false
-    }
+    },
+    "forgeable": true
   },
   "effects": [
     {

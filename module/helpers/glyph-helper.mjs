@@ -428,7 +428,9 @@ export class VagabondGlyphHelper {
       // isHit: false — damage is already rolled above (or intentionally absent
       // for an effect-only glyph); Trigger IS the roll, never a second "Roll
       // Damage" button prompting a further click.
-      rollData: { isCritical: false, isHit: false, manaSkill },
+      // macroHit: the glyph delivered the Spell — its hit macro runs from this card (Conjure: Beasts spring
+      // out of the glyph square, the card's castArea)
+      rollData: { isCritical: false, isHit: false, macroHit: true, manaSkill },
       damageRoll,
       damageType: spell.system.damageType,
       description: spell.system.formatDescription(spell.system.description),
@@ -437,7 +439,11 @@ export class VagabondGlyphHelper {
       targetsAtRollTime,
       footerActions: effectButtons ? [effectButtons] : [],
       spellCast,
-      macroExtraScope: { focusHeld },
+      macroExtraScope: {
+        focusHeld,
+        deliveryType: 'glyph',
+        castArea: { sceneId: region.parent?.id ?? null, shape: { type: 'rectangle', ...rect } },
+      },
     });
 
     // "…then the glyph disappears."

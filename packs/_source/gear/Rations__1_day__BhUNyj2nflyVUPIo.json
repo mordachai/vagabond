@@ -32,7 +32,8 @@
     "alchemicalType": "concoction",
     "lore": "",
     "isConsumable": true,
-    "isSupply": true
+    "isSupply": true,
+    "forgeable": false
   },
   "effects": [],
   "flags": {

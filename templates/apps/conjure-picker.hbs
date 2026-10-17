@@ -1,0 +1,28 @@
+<div class="cjp-root">
+  <p class="cjp-hint">{{hint}}</p>
+  <div class="cjp-toolbar">
+    <input type="search" class="cjp-search" placeholder="{{localize 'VAGABOND.Conjure.Search'}}" />
+    <div class="cjp-budget">
+      <span class="cjp-budget-label">{{budgetLabel}}</span>
+      <span class="cjp-budget-value"><span class="cjp-spent">0</span> / {{budget}}</span>
+    </div>
+  </div>
+  <div class="cjp-grid">
+    {{#each candidates}}
+    <button type="button" class="cjp-tile" data-index="{{index}}" data-search="{{search}}" data-tooltip="{{name}}">
+      <img src="{{img}}" alt="" loading="lazy" />
+      <span class="cjp-name">{{name}}</span>
+      <span class="cjp-badge">{{badge}}</span>
+      <span class="cjp-count" hidden>0</span>
+    </button>
+    {{/each}}
+  </div>
+  <p class="cjp-help">{{localize 'VAGABOND.Conjure.PickerHelp'}}</p>
+  <footer class="cjp-footer">
+    {{#if equipToggle}}
+    <label class="cjp-equip"><input type="checkbox" class="cjp-equip-input" checked /> {{equipToggle}}</label>
+    {{/if}}
+    <button type="button" class="cjp-cancel">{{localize 'Cancel'}}</button>
+    <button type="button" class="cjp-confirm" disabled><i class="fa-solid fa-wand-sparkles"></i> {{localize 'VAGABOND.Conjure.Confirm'}}</button>
+  </footer>
+</div>

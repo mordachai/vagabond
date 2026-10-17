@@ -37,7 +37,8 @@
       "enabled": false,
       "auto": false
     },
-    "damageTypeOneHand": "slashing"
+    "damageTypeOneHand": "slashing",
+    "forgeable": true
   },
   "effects": [],
   "folder": "Iw7Sw7FF4uY4DeAL",

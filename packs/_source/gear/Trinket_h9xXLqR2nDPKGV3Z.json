@@ -32,7 +32,8 @@
     "alchemicalType": "concoction",
     "lore": "",
     "handsRequired": 1,
-    "isTrinket": true
+    "isTrinket": true,
+    "forgeable": true
   },
   "effects": [],
   "flags": {

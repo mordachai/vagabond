@@ -41,7 +41,8 @@
       "hitFile": "modules/JB2A_DnD5e/Library/Generic/Unarmed_Attacks/Unarmed_Strike/UnarmedStrike_01_Regular_Blue_Physical*",
       "auto": false
     },
-    "damageTypeOneHand": "blunt"
+    "damageTypeOneHand": "blunt",
+    "forgeable": false
   },
   "effects": [],
   "folder": "BjNJoIvzJXyagnI4",

@@ -30,7 +30,8 @@
     "lore": "",
     "armorRating": 2,
     "mightRequirement": 4,
-    "reflexPenalty": 2
+    "reflexPenalty": 2,
+    "forgeable": true
   },
   "effects": [],
   "folder": null,

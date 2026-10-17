@@ -39,7 +39,8 @@
       "label": "Ignite",
       "runAsGM": false
     },
-    "handsRequired": 1
+    "handsRequired": 1,
+    "forgeable": true
   },
   "effects": [],
   "flags": {

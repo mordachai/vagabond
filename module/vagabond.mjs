@@ -80,6 +80,7 @@ import { GunslingerHelper } from './helpers/gunslinger-helper.mjs';
 import { HunterHelper } from './helpers/hunter-helper.mjs';
 import { SpellTrackerHelper } from './helpers/spell-tracker-helper.mjs';
 import { RaiseHelper } from './helpers/raise-helper.mjs';
+import { ConjureHelper } from './helpers/conjure-helper.mjs';
 import { PugilistHelper } from './helpers/pugilist-helper.mjs';
 import { DefenseHelper } from './helpers/defense-helper.mjs';
 import { FocusUpkeep } from './helpers/focus-upkeep.mjs';
@@ -450,6 +451,8 @@ Hooks.once('init', function () {
   TokenPortrait.registerQueries();
   // runAsGM macro / hit-macro buttons: players relay to the active GM and get its warnings back
   registerMacroQueries();
+  // Conjure (Beast / Forge): the caster's client picks + places, the active GM creates / removes
+  ConjureHelper.registerQueries();
   CraftingHelper.registerModes();
   CONFIG.Item.dataModels = {
     equipment: models.VagabondEquipment,
@@ -728,6 +731,8 @@ Hooks.once('ready', function () {
   SpellTrackerHelper.registerMacroHandlers(registerMacroHandler);
   // Raise: system:spell.raise + its cast gate (corpses, Being types, HD)
   RaiseHelper.registerMacroHandlers(registerMacroHandler, registerCastGate);
+  // Conjure Spells (Beast, Forge): system:spell.conjure opens the Conjure picker
+  ConjureHelper.registerMacroHandlers(registerMacroHandler, registerCastGate);
 
   // Live state of feature buttons: glow while the effect is on, end it from the sheet / HUD
   // (right-click; Momentum is a pure toggle so a left click ends it too).
@@ -877,6 +882,10 @@ Hooks.once('ready', function () {
     raise: {
       cleanup: () => RaiseHelper.cleanup(),
     },
+    // Conjure: game.vagabond.conjure.helper = ConjureHelper (rules / candidates / place)
+    conjure: {
+      helper: ConjureHelper,
+    },
     // Crafting: game.vagabond.craft.config(), .valuePerShift(actor),
     // .evaluate/.execute/.request(actor, modeKey, recipe, opts), .workShift(actor,
     // allocations), .open(actor) opens the Workbench.
@@ -1009,6 +1018,8 @@ Hooks.once('ready', function () {
   RelicHelper.migrateNamedRelics();
   // One-time: Raise copies get the system:spell.raise hit macro.
   RaiseHelper.migrateWorldSpells();
+  // One-time: Beast / Forge copies get their Conjure rules + the system:spell.conjure hit macro.
+  ConjureHelper.migrateWorldSpells();
   // One-time: class items get the Alpha 3 deltas (runs after every earlier class migration settled).
   // Then: class items get the scaling-chain ids (scaleKey) the sheet / HUD collapse features on.
   // Then: feature buttons added to the pack later (Alchemist Mix) reach existing class copies.
@@ -1090,6 +1101,8 @@ SpellTrackerHelper.registerHooks();
 DruidHelper.registerHooks();
 // Raise: raised Undead die for good when "Raise: Undead" ends or they are Dead again
 RaiseHelper.registerHooks();
+// Conjure: conjured Beings / Items end with the Focus, or at the caster's next Turn without one
+ConjureHelper.registerHooks();
 PugilistHelper.registerHooks();
 // Defense property: Patience tracking (inert unless an actor has system.patienceDefense)
 DefenseHelper.registerHooks();
@@ -2916,6 +2929,14 @@ Hooks.on('renderChatMessageHTML', (message, html) => {
     button.addEventListener('click', (ev) => {
       ev.preventDefault();
       import('./helpers/ward-helper.mjs').then(({ WardHelper }) => WardHelper.wardOff(button, ev));
+    });
+  });
+
+  // Conjure result card: Dismiss what the Cast called forth
+  html.querySelectorAll('.vagabond-conjure-dismiss').forEach(button => {
+    button.addEventListener('click', (ev) => {
+      ev.preventDefault();
+      ConjureHelper.handleDismissButton(button);
     });
   });
 

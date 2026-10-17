@@ -35,7 +35,8 @@
       "hitDuration": 1000,
       "auto": false
     },
-    "damageTypeOneHand": "piercing"
+    "damageTypeOneHand": "piercing",
+    "forgeable": true
   },
   "effects": [],
   "folder": "bpZbzcLEJ9bwCpA6",

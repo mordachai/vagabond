@@ -94,7 +94,8 @@
       "runAsGM": false
     },
     "description": "<p><span class=\"fontstyle0\">Used by Casters to channel Occult magic.</span></p>",
-    "gearCategory": "Trinket - Occult"
+    "gearCategory": "Trinket - Occult",
+    "forgeable": false
   },
   "effects": [],
   "folder": "gE8NleKdgnjP9tTV",

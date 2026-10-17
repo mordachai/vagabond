@@ -31,7 +31,8 @@
     "gearCategory": "Alchemy & Medicine",
     "alchemicalType": "concoction",
     "lore": "",
-    "toolKind": "herbalism"
+    "toolKind": "herbalism",
+    "forgeable": true
   },
   "effects": [],
   "flags": {

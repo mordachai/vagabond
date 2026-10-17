@@ -104,7 +104,8 @@
       "command": "",
       "label": "",
       "runAsGM": false
-    }
+    },
+    "forgeable": true
   },
   "effects": [],
   "folder": "YE85NOM1ME0rsZS1",

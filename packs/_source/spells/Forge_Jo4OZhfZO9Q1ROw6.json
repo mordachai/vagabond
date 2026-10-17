@@ -13,7 +13,26 @@
     "targetObjects": false,
     "fxSchool": "shadow",
     "locked": true,
-    "focusOnCast": true
+    "focusOnCast": true,
+    "conjure": {
+      "kind": "items",
+      "beingType": "",
+      "budget": "",
+      "maxSlots": 1,
+      "maxCost": {
+        "gold": 1,
+        "silver": 0,
+        "copper": 0
+      },
+      "forgeableOnly": true
+    },
+    "hitMacro": {
+      "enabled": true,
+      "uuid": "",
+      "command": "system:spell.conjure",
+      "label": "Forge",
+      "runAsGM": false
+    }
   },
   "effects": [],
   "folder": null,

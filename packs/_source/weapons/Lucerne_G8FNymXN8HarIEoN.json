@@ -40,7 +40,8 @@
       "auto": false
     },
     "damageTypeOneHand": "blunt",
-    "damageTypeTwoHands": "blunt"
+    "damageTypeTwoHands": "blunt",
+    "forgeable": true
   },
   "effects": [
     {

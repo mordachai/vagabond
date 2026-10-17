@@ -30,7 +30,8 @@
     "immunities": [],
     "gearCategory": "Smithy",
     "alchemicalType": "concoction",
-    "lore": ""
+    "lore": "",
+    "forgeable": false
   },
   "effects": [],
   "flags": {

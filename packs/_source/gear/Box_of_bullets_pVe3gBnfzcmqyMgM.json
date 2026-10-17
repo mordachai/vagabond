@@ -31,7 +31,8 @@
     "immunities": [],
     "gearCategory": "Ammo",
     "alchemicalType": "concoction",
-    "lore": ""
+    "lore": "",
+    "forgeable": true
   },
   "effects": [],
   "folder": "6JPogAYRpEgXnEuJ",

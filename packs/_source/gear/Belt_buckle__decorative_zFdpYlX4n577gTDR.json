@@ -30,7 +30,8 @@
     "immunities": [],
     "gearCategory": "Gems, Jewelry, & Smithing",
     "alchemicalType": "concoction",
-    "lore": ""
+    "lore": "",
+    "forgeable": false
   },
   "effects": [],
   "flags": {

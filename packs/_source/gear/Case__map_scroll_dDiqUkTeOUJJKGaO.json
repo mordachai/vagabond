@@ -30,7 +30,8 @@
     "immunities": [],
     "gearCategory": "Astronomy & Navigation",
     "alchemicalType": "concoction",
-    "lore": ""
+    "lore": "",
+    "forgeable": true
   },
   "effects": [],
   "flags": {
