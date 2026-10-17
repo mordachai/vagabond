@@ -19,7 +19,8 @@
       "command": "system:spell.status.guided",
       "label": "Guide",
       "runAsGM": true
-    }
+    },
+    "critNoFocus": true
   },
   "effects": [],
   "folder": null,

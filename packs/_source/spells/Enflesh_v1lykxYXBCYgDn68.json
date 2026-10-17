@@ -12,7 +12,8 @@
     "targetBeings": true,
     "targetObjects": true,
     "fxSchool": "necrotic",
-    "locked": true
+    "locked": true,
+    "critNoFocus": true
   },
   "effects": [],
   "folder": null,

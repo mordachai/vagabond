@@ -42,7 +42,8 @@
     "usesDiceScaling": true,
     "diceScaleLabel": "Level",
     "targetBeings": true,
-    "targetObjects": false
+    "targetObjects": false,
+    "critNoFocus": true
   },
   "effects": [],
   "folder": null,

@@ -6,12 +6,20 @@
 - **[Added]** Cast dialog: Focus and FX toggles show a running light in the Spell's colour while on, in full and compact mode.
 - **[Fixed]** Compact Cast dialog with the Target picker: the delivery cost and dice nodes sit clear of the main circle.
 - **[Fixed]** Polymorph: the token now shows the Beast's art after the swap (it kept the original image until a reload). Needs Metamorph 1.5.1.
-- **[Fixed]** Polymorph: a Beast form made before the player was given Owner of the original actor now follows its ownership, so the player can control the token and open its sheet. Needs Metamorph 1.5.1.
+- **[Fixed]** Polymorph: a Beast form made before the player was given Owner of the original actor now follows its ownership, so the player can control the token and open its sheet. Needs Metamorph 1.5.2.
 - **[Added]** Spells get a "Focus on Cast" switch (edit mode): the Cast dialog opens with Focus on. Polymorph has it on (compendium needs a rebuild; world copies update on load). A Beast Mode self-Polymorph drops the Focus again, since it is continual.
 - **[Added]** Polymorph: a Beast form's sheet shows "Original: (name)" with Open Original Sheet and Return to Original buttons (also in the sheet's header menu).
 - **[Added]** Polymorph: a Beast form shows its original's Focusing ring, so the player is reminded the Spell is being Focused.
-- **[Fixed]** Polymorph: the Target keeps its HP in Beast form, and damage taken as the Beast carries back when it returns (book). Needs Metamorph 1.5.1.
-- **[Fixed]** Polymorph: a player can Polymorph a Target they don't own (the GM performs the swap); the Target's owners control the form. Needs Metamorph 1.5.1.
+- **[Fixed]** Polymorph: the Target keeps its HP in Beast form, and damage taken as the Beast carries back when it returns (book). Needs Metamorph 1.5.2.
+- **[Fixed]** Polymorph: a player can Polymorph a Target they don't own (the GM performs the swap); the Target's owners control the form. Needs Metamorph 1.5.2.
+- **[Fixed]** Focus starts only when the Cast succeeds; a failed Cast no longer Focuses.
+- **[Changed]** One Focus at a time (book): Focusing on another Spell, or Casting the same one again, ends the earlier Focus. Manifold Mind still adds more.
+- **[Changed]** Removing the Focusing status (token HUD, effects list) ends the Focus, like dropping it from the Spell menu.
+- **[Added]** Spells get a "Crit: No Focus" switch (edit mode): a Crit Cast needs no Focus and ends none. On for the Spells whose Crit makes them continual or 1 Minute (compendium needs a rebuild; world copies update on load).
+- **[Added]** Polymorph: when the Focus on it ends, the Targets it morphed return to their own form. No new Cast or roll needed.
+- **[Changed]** Polymorph: pick the Beast once and every Target takes that form. The picker's "own form" cell returns every morphed Target.
+- **[Fixed]** Polymorph on several Targets: they no longer share one Beast form copy (all of them came back as the last Target). The picker no longer lists other characters' form copies. Needs Metamorph 1.5.2.
+- **[Changed]** Polymorph: one chat card per Cast for all its Targets (and one for the Targets that return when the Focus ends).
 - **[Fixed]** Circle token art: a token with the ring on could snap back to its old circle art after its actor and art were swapped (Polymorph, Metamorph).
 
 ## v6.7.1

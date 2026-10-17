@@ -427,6 +427,7 @@
       "PickerTitle": "Polymorph — Beasts (HD ≤ {level})",
       "Polymorphed": "<strong>{caster}</strong> polymorphs <strong>{name}</strong> into a <strong>{form}</strong>.",
       "Reverted": "<strong>{name}</strong> returns to their own form.",
+      "FocusEnded": "The Focus on Polymorph ends.",
       "Continual": "The duration is continual (Beast Mode): no Focus needed.",
       "ForceTitle": "Force of Nature",
       "ForcePicker": "Force of Nature — Beasts (HD ≤ {level})",
@@ -2272,7 +2273,8 @@
           "pickTargets": {"label": "Picks Targets"},
           "targetBeings": {"label": "Target Beings", "hint": "The Spell can Target Beings: with the player option Pick Targets in the Cast Dialog on, the Cast dialog lists the Beings inside the area to choose who is affected (with Target Objects on, also beside their weapons on any delivery). Area deliveries never pay per Target."},
           "targetObjects": {"label": "Target Objects", "hint": "The Cast dialog lists the equipped weapons of the Beings in the area (else the targets, else you) to pick as Targets. They reach the hit macro as scope.targetObjects."},
-          "focusOnCast": {"label": "Focus on Cast", "hint": "The Cast dialog opens with Focus on, for Spells you keep up by Focusing (Polymorph). You can still switch it off."}
+          "focusOnCast": {"label": "Focus on Cast", "hint": "The Cast dialog opens with Focus on, for Spells you keep up by Focusing (Polymorph). You can still switch it off."},
+          "critNoFocus": {"label": "Crit: No Focus", "hint": "On a Crit the duration needs no Focus (\"Crit: Duration is continual\" or \"1 Minute, no Focus required\"): a critical Cast takes no Focus and ends none."}
         },
         "AddSpell": "Add Spell",
         "FxSchool": {

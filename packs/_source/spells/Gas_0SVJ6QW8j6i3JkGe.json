@@ -34,7 +34,8 @@
         "damageOnTick": "",
         "damageType": "-"
       }
-    ]
+    ],
+    "critNoFocus": true
   },
   "effects": [],
   "folder": null,

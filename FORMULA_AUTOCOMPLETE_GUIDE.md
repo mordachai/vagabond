@@ -474,7 +474,7 @@ The Hex itself is an actor effect (`flags.vagabond.hex = { key, name }`) set by 
 | Effect | Key | Mode | Value |
 | --- | --- | --- | --- |
 | Spellcaster | `system.mana.castingMaxBonus` | Add | `2 + floor(@lvl / 2) - @stats.reason.total` (Cast Max is 2 + Level; the engine adds Reason + half Level, so both are cancelled) |
-| Manifold Mind (Lv 2+) | `system.focus.maxBonus` | Add | `1 + floor((@lvl - 2) / 4)` (Spells you can Focus on at once: 5 + this) |
+| Manifold Mind (Lv 2+) | `system.focus.maxBonus` | Add | `1 + floor((@lvl - 2) / 4)` (Spells you can Focus on at once: 1 + this) |
 | Sculpt Spell (Lv 4+) | `system.bonuses.spellManaCostReduction` | Add | `1 + floor((@lvl - 4) / 4)` (Mana off the total cost of a Cast — Delivery, extra Damage dice, Delivery increase, Effect; Focus is not part of it; never below 0) |
 
 ### Merchant — Midas Touch

@@ -18,7 +18,8 @@
       "command": "system:spell.status.frozen",
       "label": "Freeze",
       "runAsGM": true
-    }
+    },
+    "critNoFocus": true
   },
   "effects": [],
   "folder": null,

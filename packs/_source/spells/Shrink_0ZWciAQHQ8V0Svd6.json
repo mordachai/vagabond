@@ -18,7 +18,8 @@
       "runAsGM": true
     },
     "targetBeings": true,
-    "targetObjects": false
+    "targetObjects": false,
+    "critNoFocus": true
   },
   "effects": [],
   "folder": null,

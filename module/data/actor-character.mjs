@@ -1775,7 +1775,8 @@ export default class VagabondCharacter extends VagabondActorBase {
 
     // Focus system — always derived regardless of spellcaster status
     const focusBonus = this._evaluateFormulaField(this.focus.maxBonus, rollData);
-    this.focus.max = 5 + focusBonus;
+    // Book: one Focus at a time (Focusing on another effect ends it); Manifold Mind etc. add to it
+    this.focus.max = 1 + focusBonus;
     this.focus.current = (this.focus.spellIds || []).length;
   }
 

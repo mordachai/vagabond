@@ -12,6 +12,9 @@
  *   - `system.polymorphLevelBonus` (Savagery) added to Level for the Polymorph Spell's HD limit
  *   - `system.polymorphContinual` (Beast Mode) self-cast Polymorph needs no Focus
  * All four are set by Active Effects on the class item.
+ *
+ * A Focused Polymorph lasts while the caster Focuses: the morphed tokens are kept on the caster
+ * (`flags.vagabond.polymorphFocus.<spellId>` = token uuids) and revert when that Focus ends.
  */
 export class DruidHelper {
 
@@ -92,8 +95,8 @@ export class DruidHelper {
   /* -------------------------------------------- */
 
   /**
-   * Polymorph spell button (`system:druid.polymorph`): for each Target (or the caster when none)
-   * pick a Beast with HD ≤ Level (+ Savagery) through Metamorph and swap the token.
+   * Polymorph spell button (`system:druid.polymorph`): pick one Beast with HD ≤ Level (+ Savagery) through
+   * Metamorph and swap every Target's token to it (the caster's when there are none).
    * @param {{actor: Actor, token: Token|null, targets: Token[]}} scope - item-macro scope
    */
   static async polymorph({ actor, item, token, targets }) {
@@ -111,26 +114,30 @@ export class DruidHelper {
 
     const level = this.effectiveLevel(actor);
     const { VagabondChatCard } = await import('./chat-card.mjs');
-    for (const t of tokens) {
-      const doc = t.document ?? t;
-      const choice = await MM.polymorph(t, {
-        title: this.#L('PickerTitle', { level }),
-        filter: this.beastFilter(level),
-        // The Target keeps its HP (book); the form remembers it, so its revert carries the HP back
-        hpMode: 'keep-original',
-        // A Spell: the caster's player may Polymorph a Target they don't own (the GM performs the swap)
-        ignoreOwnership: true,
-      });
-      if (!choice) continue;
-
-      const targetName = doc.name;
+    const kept = [];   // tokens this Focused Cast keeps morphed (revert when the Focus ends)
+    const lines = [];  // one chat card for the whole Cast: a line per Target
+    // "The Target becomes a Beast of your choice": one pick for the whole Cast, every Target takes that form
+    const docs = tokens.map(t => t.document ?? t);
+    const choice = await MM.promptForm(docs[0], {
+      title: this.#L('PickerTitle', { level }),
+      filter: this.beastFilter(level),
+    });
+    if (!choice) return;
+    // The Target keeps its HP (book); the form remembers it, so its revert carries the HP back. A Spell: the
+    // caster's player may Polymorph a Target they don't own (the GM performs the swap).
+    const swapOpts = { hpMode: 'keep-original', ignoreOwnership: true };
+    for (const doc of docs) {
       let description;
       if (choice.revert) {
-        description = this.#L('Reverted', { name: targetName });
+        // The picker's "own form" cell: every morphed Target returns, the others are already themselves
+        if (!this.mainActorOf(doc.actor)) continue;
+        if (!(await MM.revert(doc, swapOpts))?.ok) continue;
+        description = this.#L('Reverted', { name: doc.name });
       } else {
-        description = this.#L('Polymorphed', { caster: actor.name, name: targetName, form: this.formName(choice) });
+        if (!(await MM.morph(doc, choice, swapOpts))?.ok) continue;
+        description = this.#L('Polymorphed', { caster: actor.name, name: doc.name, form: this.formName(choice) });
         // Beast Mode: sole Target of your own Polymorph → continual, no Focus
-        if (tokens.length === 1 && actor.system.polymorphContinual === true
+        if (docs.length === 1 && actor.system.polymorphContinual === true
           && (doc.actor?.id === actor.id || this.mainActorOf(doc.actor)?.id === actor.id)) {
           description += ` ${this.#L('Continual')}`;
           // Polymorph opens Focused (focusOnCast); a continual self-Polymorph needs no Focus
@@ -138,10 +145,63 @@ export class DruidHelper {
             const { SpellHandler } = await import('../sheets/handlers/spell-handler.mjs');
             await SpellHandler.setFocus(actor, item.id, false);
           }
+        } else {
+          kept.push(doc.uuid);
         }
       }
-      await VagabondChatCard.featureCard(actor, { title: this.#L('PolymorphTitle'), description: `<p>${description}</p>` });
+      lines.push(description);
     }
+    if (lines.length) {
+      await VagabondChatCard.featureCard(actor, { title: this.#L('PolymorphTitle'), description: this.#lines(lines) });
+    }
+    // Book: the Spell lasts while you Focus on it. Remember the forms of a Focused Cast on the caster, so
+    // ending the Focus (drop, Focusing removed, another Cast taking it) reverts them (#onFocusDropped).
+    if (kept.length && item?.id && (actor.system.focus?.spellIds ?? []).includes(item.id)) {
+      const path = `flags.vagabond.polymorphFocus.${item.id}`;
+      const list = foundry.utils.getProperty(actor, path) ?? [];
+      await actor.update({ [path]: [...new Set([...list, ...kept])] });
+    }
+  }
+
+  /** Register the hooks. Synchronous, called once at module load. */
+  static registerHooks() {
+    // Active GM (SpellTrackerHelper fires it): the caster stopped Focusing on these Spells
+    Hooks.on('vagabond.focusDropped', (caster, spellIds) => {
+      this.#onFocusDropped(caster, spellIds).catch(err => console.error('vagabond | Polymorph: could not revert', err));
+    });
+  }
+
+  /**
+   * The Focus on a Polymorph ended: every token that Cast morphed goes back to its original (HP per the form's
+   * mode). Tokens already back (picker, sheet menu) or deleted are skipped. Active GM.
+   * @param {Actor} caster
+   * @param {string[]} spellIds
+   */
+  static async #onFocusDropped(caster, spellIds) {
+    const kept = caster.flags?.vagabond?.polymorphFocus ?? {};
+    const ids = spellIds.filter(id => kept[id]?.length);
+    if (!ids.length) return;
+    await caster.update(Object.fromEntries(ids.map(id => [`flags.vagabond.polymorphFocus.${id}`, []])));
+    const MM = this.metamorph();
+    if (!MM) return;
+    const lines = [];
+    for (const uuid of ids.flatMap(id => kept[id])) {
+      const doc = await fromUuid(uuid);
+      if (!doc || !this.mainActorOf(doc.actor)) continue;
+      const res = await MM.revert(doc, { ignoreOwnership: true });
+      if (res?.ok) lines.push(this.#L('Reverted', { name: doc.name }));
+    }
+    if (!lines.length) return;
+    const { VagabondChatCard } = await import('./chat-card.mjs');
+    await VagabondChatCard.featureCard(caster, {
+      title: this.#L('PolymorphTitle'),
+      description: `<p>${this.#L('FocusEnded')}</p>${this.#lines(lines)}`,
+    });
+  }
+
+  /** Chat card body: the sentences in one paragraph, joined by commas. */
+  static #lines(lines) {
+    return `<p>${lines.map(l => l.trim().replace(/\.$/, '')).join(', ')}.</p>`;
   }
 
   /* -------------------------------------------- */

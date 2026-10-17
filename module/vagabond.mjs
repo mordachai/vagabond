@@ -997,7 +997,7 @@ Hooks.once('ready', function () {
   SpellTrackerHelper.migrateSpellEffectEntries();
   // One-time: Spell copies get the pack's Target Beings / Objects switches (Cast dialog Target picker).
   SpellTrackerHelper.migrateSpellTargetSwitches();
-  // One-time: Spell copies get the pack's Focus on Cast switch (Polymorph opens Focused).
+  // One-time: Spell copies get the pack's Focus switches (Focus on Cast, Crit: No Focus).
   SpellTrackerHelper.migrateSpellFocusOnCast();
   // One-time: named Relic copies (Dyrnwyn, Elven Chain…) become their weapon / armor with attached Relics.
   RelicHelper.migrateNamedRelics();
@@ -1081,6 +1081,7 @@ GunslingerHelper.registerHooks();
 // Hunter's Mark: Lethal Precision damage (inert unless an actor has a Mark and system.markDamageBonus)
 HunterHelper.registerHooks();
 SpellTrackerHelper.registerHooks();
+DruidHelper.registerHooks();
 // Raise: raised Undead die for good when "Raise: Undead" ends or they are Dead again
 RaiseHelper.registerHooks();
 PugilistHelper.registerHooks();
@@ -1754,6 +1755,19 @@ const _syncFormFocus = (effect) => {
 };
 Hooks.on('createActiveEffect', _syncFormFocus);
 Hooks.on('deleteActiveEffect', _syncFormFocus);
+
+// Focusing status removed by hand (token HUD, effects list; on a form it is the original's): the Focus ends,
+// so what the Focused Casts applied goes too (SpellHandler.clearFocus → Focus-dropped hooks).
+Hooks.on('deleteActiveEffect', (effect, options, userId) => {
+  if (userId !== game.user.id || !effect.statuses?.has('focusing')) return;
+  const actor = effect.parent;
+  if (!(actor instanceof Actor)) return;
+  const main = DruidHelper.mainActorOf(actor) ?? actor;
+  if (!main.isOwner || !main.system.focus?.spellIds?.length) return;
+  import('./sheets/handlers/spell-handler.mjs')
+    .then(({ SpellHandler }) => SpellHandler.clearFocus(main))
+    .catch(err => console.warn('Vagabond | Ending Focus failed', err));
+});
 Hooks.on('metamorph.morph', (tokenDoc, targetActor) => {
   const main = DruidHelper.mainActorOf(targetActor);
   if (main) DruidHelper.syncFormFocus(main).catch(err => console.warn('Vagabond | Form Focusing sync failed', err));

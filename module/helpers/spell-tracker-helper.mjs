@@ -491,28 +491,34 @@ export class SpellTrackerHelper {
   }
 
   /**
-   * One-time (guard `spellFocusOnCastMigrated`): world copies of pack Spells take the pack's Focus on Cast switch
-   * (Polymorph), matched by compendium source id. Only turns it on, never off (a GM may have switched it on).
+   * One-time (guard `spellFocusSwitchesMigrated`): world copies of pack Spells take the pack's Focus switches,
+   * Focus on Cast (Polymorph) and Crit: No Focus ("Crit: Duration is continual"), matched by compendium source id.
+   * Only turns them on, never off (a GM may have switched one on).
    */
   static async migrateSpellFocusOnCast() {
     if (game.user !== game.users.activeGM) return;
-    if (game.settings.get('vagabond', 'spellFocusOnCastMigrated')) return;
+    if (game.settings.get('vagabond', 'spellFocusSwitchesMigrated')) return;
     const pack = game.packs.get('vagabond.spells');
     if (!pack) return;
     const { isCopyOf } = await import('./source-id.mjs');
-    const index = await pack.getIndex({ fields: ['system.focusOnCast'] });
-    const sources = index.filter(e => e.system?.focusOnCast);
-    if (!sources.length) return; // pack not rebuilt yet: keep the guard for the next load
+    const KEYS = ['focusOnCast', 'critNoFocus'];
+    const index = await pack.getIndex({ fields: KEYS.map(k => `system.${k}`) });
+    // Pack not rebuilt yet: keep the guard for the next load
+    if (!index.some(e => e.system?.critNoFocus)) return;
+    const sources = index.filter(e => KEYS.some(k => e.system?.[k]));
 
     for (const item of this.#worldSpells()) {
       try {
-        if (item.system.focusOnCast || !sources.some(e => isCopyOf(item, e._id, e.name))) continue;
-        await item.update({ 'system.focusOnCast': true });
+        const src = sources.find(e => isCopyOf(item, e._id, e.name));
+        if (!src) continue;
+        const update = {};
+        for (const k of KEYS) if (src.system[k] && !item.system[k]) update[`system.${k}`] = true;
+        if (Object.keys(update).length) await item.update(update);
       } catch (err) {
-        console.warn(`vagabond | Spell Focus on Cast migration: skipped ${item?.uuid ?? '(unknown)'}`, err);
+        console.warn(`vagabond | Spell Focus switches migration: skipped ${item?.uuid ?? '(unknown)'}`, err);
       }
     }
-    await game.settings.set('vagabond', 'spellFocusOnCastMigrated', true);
+    await game.settings.set('vagabond', 'spellFocusSwitchesMigrated', true);
   }
 
   /** Every Spell item: sidebar + embedded in every actor (incl. unlinked token actors). */
@@ -557,6 +563,8 @@ export class SpellTrackerHelper {
       const dropped = before.filter(id => !now.includes(id));
       if (!dropped.length) return;
       this.#onFocusDropped(actor, dropped).catch(err => console.error('vagabond | Spell Trackers: could not clear', err));
+      // Other things a Focused Cast keeps up (Polymorph forms: DruidHelper), active GM only
+      Hooks.callAll('vagabond.focusDropped', actor, dropped);
     });
   }
 }

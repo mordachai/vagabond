@@ -774,6 +774,12 @@ export class SpellHandler {
       if (!placedGlyphRegion) return;
     }
 
+    // Focus from the Cast dialog: committed here, once the Cast is resolved (a failed Cast never Focuses).
+    // Dialog-off casts carry no focusOn and leave the Focus alone.
+    if (typeof state.focusOn === 'boolean') {
+      await SpellHandler.commitCastFocus(this.actor, spell, { focusOn: state.focusOn, isSuccess, isCritical });
+    }
+
     // Deduct mana. Success (or a bypass cast, which is always "success") always
     // pays full cost; a failed casting check pays per the spellManaOnCastFail
     // world setting (0 / full / half-round-up).
@@ -979,30 +985,60 @@ export class SpellHandler {
   /**
    * Start or stop Focusing on a Spell — the ONE writer of `system.focus.spellIds` (sheet star, spell context
    * menu on sheet + HUD, Cast dialog). Keeps the `focusing` status in step. Dropping a Spell clears what its
-   * Casts applied (SpellTrackerHelper hook).
+   * Casts applied (SpellTrackerHelper hook → `vagabond.focusDropped`: Trackers, Polymorph forms…).
+   * Book: "Focusing lets an effect stay active until you drop it … or Focus on another effect": with every
+   * Focus taken (`focus.max`, 1 + Manifold Mind etc.), starting a new one drops the oldest.
    * @param {Actor} actor
    * @param {string} spellId
    * @param {boolean} on
-   * @returns {Promise<boolean>} false when the Focus limit is reached
+   * @param {{restart?: boolean}} [options]  restart: already Focused on it → end that Focus first (a new Cast)
+   * @returns {Promise<boolean>}
    */
-  static async setFocus(actor, spellId, on) {
+  static async setFocus(actor, spellId, on, { restart = false } = {}) {
     const current = actor.system.focus?.spellIds || [];
-    if (on === current.includes(spellId)) return true;
-    const focusMax = actor.system.focus?.max ?? 5;
-    if (on && current.length >= focusMax) {
-      ui.notifications.warn(game.i18n.format('VAGABOND.ContextMenu.FocusLimit', { max: focusMax }));
-      return false;
+    const was = current.includes(spellId);
+    if (on === was && !(on && restart)) return true;
+    let next = current.filter(id => id !== spellId);
+    if (on) {
+      const focusMax = Math.max(1, actor.system.focus?.max ?? 1);
+      if (next.length >= focusMax) next = next.slice(next.length - focusMax + 1);
+      // Ends the earlier Cast (and any dropped Focus) before the new one starts
+      if (next.length !== current.length) await actor.update({ 'system.focus.spellIds': next });
+      next = [...next, spellId];
     }
-    const next = on ? [...current, spellId] : current.filter(id => id !== spellId);
     await actor.update({ 'system.focus.spellIds': next });
 
     // Sync the "focusing" status effect with focus state
     const isFocusing = next.length > 0;
-    if (isFocusing !== (current.length > 0)) {
+    if (isFocusing !== actor.statuses.has('focusing')) {
       await actor.toggleStatusEffect('focusing', { active: isFocusing });
     }
     ui.combat?.render(false);
     return true;
+  }
+
+  /**
+   * Stop every Focus (the Focusing status was removed by hand: token HUD, effects list).
+   * @param {Actor} actor
+   */
+  static async clearFocus(actor) {
+    if (actor.system.focus?.spellIds?.length) await actor.update({ 'system.focus.spellIds': [] });
+    if (actor.statuses.has('focusing')) await actor.toggleStatusEffect('focusing', { active: false });
+    ui.combat?.render(false);
+  }
+
+  /**
+   * The Cast dialog's Focus switch, applied when the Cast resolves (`_executeCast`). Off → the Focus on it ends.
+   * On → only a successful Cast Focuses; Focusing on it again ends the earlier Cast first (another Polymorph
+   * reverts the last one); a Crit of a "Crit: No Focus" Spell (`critNoFocus`) needs no Focus and ends none.
+   * @param {Actor} actor
+   * @param {Item} spell
+   * @param {{focusOn: boolean, isSuccess: boolean, isCritical: boolean}} cast
+   */
+  static async commitCastFocus(actor, spell, { focusOn, isSuccess, isCritical }) {
+    if (!focusOn) return this.setFocus(actor, spell.id, false);
+    if (!isSuccess || (isCritical && spell.system.critNoFocus)) return;
+    return this.setFocus(actor, spell.id, true, { restart: true });
   }
 
   /**

@@ -1019,13 +1019,7 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
       // Re-render so the message panel shows. Don't notify.
       return this.render();
     }
-    // Commit focus state to actor if changed
-    const focusIds = this.#actor.system.focus?.spellIds ?? [];
-    const currentlyFocused = focusIds.includes(this.#spell.id);
-    if (state.focusOn !== currentlyFocused) {
-      const { SpellHandler } = await import('../sheets/handlers/spell-handler.mjs');
-      await SpellHandler.setFocus(this.#actor, this.#spell.id, state.focusOn);
-    }
+    // Focus is committed by the Cast itself (SpellHandler._executeCast): only once it succeeds
     // Clear preview before cast (sequencer takes over)
     if (state.previewActive) {
       await globalThis.vagabond?.managers?.templates?.clearPreview(this.#actor.id, this.#spell.id);
@@ -1043,6 +1037,7 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
         deliveryType: state.deliveryType,
         deliveryIncrease: state.deliveryIncrease,
         useFx: state.useFx,
+        focusOn: state.focusOn,
         imbueAssignments,
         targetPicks,
       }, state.manaOverrideDelta);

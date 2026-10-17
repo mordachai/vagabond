@@ -99,6 +99,9 @@ export default class VagabondSpell extends VagabondItemBase {
 
     // Focus on Cast: the Cast dialog opens with Focus on (Spells kept up by Focusing, e.g. Polymorph).
     schema.focusOnCast = new fields.BooleanField({ required: true, initial: false });
+    // Crit: no Focus — a Crit makes the duration continual / 1 Minute without Focus ("Crit: Duration is
+    // continual."), so a critical Cast takes no Focus and ends none.
+    schema.critNoFocus = new fields.BooleanField({ required: true, initial: false });
 
     // Optional label shown on the dice node when using dice scaling (e.g. "Speed").
     schema.diceScaleLabel = new fields.StringField({

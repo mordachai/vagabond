@@ -258,7 +258,7 @@ Book p. 63. Spellcaster (Arcana casting, 4 × Level Mana, Cast Max 2 + Level), P
 
 **Doubts / course taken**
 - **Sculpt Spell "pay 1 less Mana for Delivery upcasting" (settled by the book forum):** it discounts **any** Spell cost (Delivery, extra Damage dice, Delivery increase, Effect), not just the upcasting; Focus is not part of it. It now uses the existing `bonuses.spellManaCostReduction` (total Cast cost, never below 0). The upcasting-only field `deliveryUpcastCostReduction` is removed; worlds that took the first migration are re-keyed once (`wizardSculptSpellMigrated`). Not applied to the deferred Damage/Effect Mana paid at an Imbue delivery (same open Imbue-discount question as Magus / Revelator).
-- Manifold Mind raises `focus.maxBonus` (the Focus pool is 5 + bonus) by 1 / 2 / 3 at Levels 2 / 6 / 10 — the book says "the number of Spells you can Focus on at the same time", which this system tracks as the Focus maximum.
+- Manifold Mind raises `focus.maxBonus` (the Focus pool is 1 + bonus, book: one Focus at a time) by 1 / 2 / 3 at Levels 2 / 6 / 10 — the book says "the number of Spells you can Focus on at the same time", which this system tracks as the Focus maximum.
 - Page Master’s "spend a Studied die to learn a Spell for the Shift" is text only (the Studied die pool exists; the temporary Spell does not).
 
 **Text-only / deferred**
