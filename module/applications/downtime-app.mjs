@@ -180,6 +180,9 @@ export class DowntimeApp extends api.HandlebarsApplicationMixin(api.ApplicationV
         used,
         left,
         clocks,
+        // Member of the active party: its Shifts are the party's (GM plans them here or on the party sheet)
+        party: state.party?.name ?? null,
+        canPlan: !state.party || game.user.isGM,
         canAdd: state.shifts < DowntimeHelper.MAX_SHIFTS,
         canRemove: state.shifts > Math.max(1, used),
         canReset: used > 0 || state.breatherAt >= 0,
@@ -209,8 +212,13 @@ export class DowntimeApp extends api.HandlebarsApplicationMixin(api.ApplicationV
     if (this.#hookIds.length) return;
     const actorId = this.#actor.id;
     const onItem = (item) => { if (item.parent?.id === actorId) this.#renderDebounce(); };
+    // The active party's Shifts (and membership) drive the planned Shifts: follow any party change.
+    const onActor = (a) => { if (a.id === actorId || a.type === 'party') this.#renderDebounce(); };
     this.#hookIds = [
-      ['updateActor', Hooks.on('updateActor', (a) => { if (a.id === actorId) this.#renderDebounce(); })],
+      ['updateActor', Hooks.on('updateActor', onActor)],
+      ['createActor', Hooks.on('createActor', onActor)],
+      ['deleteActor', Hooks.on('deleteActor', onActor)],
+      ['vagabond.activePartyChanged', Hooks.on('vagabond.activePartyChanged', () => this.#renderDebounce())],
       ['createItem', Hooks.on('createItem', onItem)],
       ['updateItem', Hooks.on('updateItem', onItem)],
       ['deleteItem', Hooks.on('deleteItem', onItem)],
@@ -270,7 +278,10 @@ export class DowntimeApp extends api.HandlebarsApplicationMixin(api.ApplicationV
   /** A Shift activity can't start once the planned Shifts are spent (add one with +). */
   #requireShift() {
     if (DowntimeHelper.shiftsLeft(this.#actor) > 0) return true;
-    ui.notifications.warn(L('VAGABOND.Downtime.Tracker.NoShiftsLeft'));
+    const party = DowntimeHelper.partyOf(this.#actor);
+    ui.notifications.warn(party
+      ? L('VAGABOND.Downtime.Tracker.NoShiftsLeftParty', { party: party.name })
+      : L('VAGABOND.Downtime.Tracker.NoShiftsLeft'));
     return false;
   }
 

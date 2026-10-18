@@ -48,6 +48,9 @@
   {{!-- ============ BODY ============ --}}
   <div class="vh-body">
 
+    {{!-- Top-left corner tab: swap to the full sheet (closes the HUD) --}}
+    <button type="button" class="vh-sheet-tab" data-action="expandSheet" data-hud-tip="{{localize 'VAGABOND.Hud.ExpandSheet'}}"><i class="fa-solid fa-up-right-and-down-left-from-center"></i></button>
+
     {{!-- Ongoing status icons — floating vertical strip in the left gutter.
          Same .status-icon markup + menu as the sheet: left-click = chat,
          right-click = Send to Chat / Remove. --}}

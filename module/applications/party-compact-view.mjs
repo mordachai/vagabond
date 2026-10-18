@@ -5,6 +5,7 @@ import { PartyStatusHelper } from '../helpers/party-status-helper.mjs';
 /**
  * Floating compact party overview — frameless, draggable.
  * Open via PartyCompactView.open(actor). One singleton per party actor.
+ * Top-left corner tab → swap back to the party sheet (like the Character HUD).
  * Right-click anywhere → context menu (open sheet / remove viewer).
  * Right-click HP icon → +1 HP. Left-click HP icon → -1 HP.
  * Left-click Fatigue → +1. Right-click Fatigue → -1.
@@ -41,12 +42,21 @@ export class PartyCompactView extends api.HandlebarsApplicationMixin(api.Applica
     id: 'party-compact-view-{id}',
     classes: ['vagabond', 'party-compact-view'],
     window: { frame: false },
-    actions: {},
+    actions: {
+      expandSheet: PartyCompactView._onExpandSheet,
+    },
   };
 
   static PARTS = {
     view: { template: 'systems/vagabond/templates/party/party-compact-view.hbs' },
   };
+
+  /** Corner tab: swap this view for the full party sheet (inverse of the sheet's Compact view). */
+  static _onExpandSheet() {
+    const actor = this.#actor;
+    this.close();
+    actor.sheet.render(true);
+  }
 
   // ── Context ─────────────────────────────────────────────────────────────────
 
@@ -151,7 +161,7 @@ export class PartyCompactView extends api.HandlebarsApplicationMixin(api.Applica
 
     el.addEventListener('mousedown', (e) => {
       if (e.button !== 0) return;                                // left-button only
-      if (e.target.closest('.compact-hp, .compact-fatigue')) return; // let stat clicks through
+      if (e.target.closest('.compact-hp, .compact-fatigue, .compact-sheet-tab')) return; // let clicks through
       const rect = el.getBoundingClientRect();
       startX = e.clientX; startY = e.clientY;
       startLeft = rect.left; startTop = rect.top;

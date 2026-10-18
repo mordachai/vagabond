@@ -1,6 +1,8 @@
 {{! Compact Party View — floating frameless overlay.
-    Right-click anywhere for options. Left/right-click HP and Fatigue icons to adjust. }}
+    Corner tab (top-left) swaps back to the full sheet. Right-click anywhere for options. Left/right-click HP and Fatigue icons to adjust. }}
 <div class="compact-members">
+  {{! Top-left corner tab: swap to the full party sheet (closes this view) }}
+  <button type="button" class="compact-sheet-tab" data-action="expandSheet" data-tooltip="{{localize 'VAGABOND.Hud.ExpandSheet'}}"><i class="fa-solid fa-up-right-and-down-left-from-center"></i></button>
   {{#each members}}
   <div class="compact-member" data-actor-uuid="{{uuid}}">
 

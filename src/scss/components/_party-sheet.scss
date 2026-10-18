@@ -586,6 +586,31 @@ $inv-soft: color-mix(in srgb, #{$c-text-1} 78%, transparent);
     &:hover { opacity: 1; }
   }
 
+  // Several parties: star = the active one (its Shifts reach its members' Downtime); GM clicks a hollow star to switch
+  .pdt-active {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    height: auto;
+    min-height: 0;
+    line-height: 1;
+    margin: 0;
+    padding: 0;
+    background: none;
+    border: none;
+    box-shadow: none;
+    color: $c-yellow;
+    font-size: 0.85em;
+    opacity: 0.5;
+
+    &.is-active { opacity: 1; }
+  }
+  button.pdt-active {
+    cursor: pointer;
+    &:hover { opacity: 1; }
+  }
+
   .pdt-open {
     align-self: stretch;
     height: auto;
@@ -1752,10 +1777,43 @@ $inv-soft: color-mix(in srgb, #{$c-text-1} 78%, transparent);
 
   // Horizontal strip of member columns
   .compact-members {
+    position: relative;
     display: flex;
     flex-direction: row;
     align-items: stretch;
     padding: 8px;
+  }
+
+  // Top-left corner tab → full party sheet (same look as the HUD's .vh-sheet-tab).
+  .compact-sheet-tab {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 4;
+    width: 22px;
+    height: 22px;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+    line-height: normal;
+    border: none;
+    border-top-left-radius: 6px;
+    background: $c-yellow;
+    clip-path: polygon(0 0, 100% 0, 0 100%);
+    color: $c-black;
+    cursor: pointer;
+    opacity: 0.75;
+    transition: opacity 0.15s ease;
+
+    i {
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      font-size: 9px;
+    }
+
+    &:hover,
+    &:focus-visible { opacity: 1; }
   }
 
   // One column per member

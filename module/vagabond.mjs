@@ -85,6 +85,7 @@ import { SpellTrackerHelper } from './helpers/spell-tracker-helper.mjs';
 import { RaiseHelper } from './helpers/raise-helper.mjs';
 import { ConjureHelper } from './helpers/conjure-helper.mjs';
 import { SystemFolders } from './helpers/system-folders.mjs';
+import { PartyNotes } from './helpers/party-notes.mjs';
 import { SpellSurface } from './helpers/spell-surface.mjs';
 import { PugilistHelper } from './helpers/pugilist-helper.mjs';
 import { DefenseHelper } from './helpers/defense-helper.mjs';
@@ -1138,6 +1139,8 @@ RaiseHelper.registerHooks();
 ConjureHelper.registerHooks();
 // System folders: Conjured / Undead Army / Clocks & Dice (+ Metamorph's) under one root
 SystemFolders.registerHooks();
+// Party Notes: one journal per Character / per party GM notes; duplicates merged on GM load
+PartyNotes.registerHooks();
 // Spell Surfaces: loop visuals, end with the Focus / at the caster's next Turn, statuses end with the Region
 SpellSurface.registerHooks();
 PugilistHelper.registerHooks();

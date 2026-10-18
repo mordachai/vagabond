@@ -1653,17 +1653,51 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
   }
 
   /**
-   * Close this sheet and open the floating Character HUD for the same actor.
-   * Uses the global registry (not a static import) to avoid a circular import
-   * between the sheet and the HUD.
+   * Whether this sheet offers a Compact view (header button `becomeHud`).
+   * Character → Character HUD, NPC → NPC HUD, party → Party compact view.
+   * Each compact view has a top-left corner tab that swaps back to the sheet.
+   * @returns {boolean}
+   * @protected
+   */
+  _hasCompactView() { return false; }
+
+  /**
+   * @override
+   * Compact view: a visible header button (left of the controls kebab) that
+   * swaps this sheet for its compact view (`becomeHud`).
+   */
+  async _renderFrame(options) {
+    const frame = await super._renderFrame(options);
+    const header = frame.querySelector('.window-header');
+    if (this._hasCompactView() && header && !header.querySelector('[data-action="becomeHud"]')) {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'header-control icon fa-solid fa-down-left-and-up-right-to-center';
+      btn.dataset.action = 'becomeHud';
+      btn.dataset.tooltip = game.i18n.localize('VAGABOND.Hud.BecomeTooltip');
+      btn.setAttribute('aria-label', game.i18n.localize('VAGABOND.Hud.Become'));
+      const anchor = header.querySelector('[data-action="toggleControls"]')
+        ?? header.querySelector('[data-action="close"]');
+      header.insertBefore(btn, anchor);
+    }
+    return frame;
+  }
+
+  /**
+   * Close this sheet and open the compact view for the same actor (Character
+   * HUD / NPC HUD / Party compact view). Uses the global registry (not static
+   * imports) to avoid circular imports between the sheets and the HUDs.
    * @param {PointerEvent} event
    * @param {HTMLElement} target
    * @protected
    */
   static async _onBecomeHud(event, target) {
     const actor = this.actor;
+    const apps = globalThis.vagabond.applications;
+    const view = { character: apps.VagabondCharacterHud, npc: apps.VagabondNPCHud, party: apps.PartyCompactView }[actor.type];
+    if (!view) return;
     await this.close();
-    globalThis.vagabond.applications.VagabondCharacterHud?.open(actor);
+    view.open(actor);
   }
 
   /**

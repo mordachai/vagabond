@@ -44,21 +44,21 @@
           Navigator · Pace · Hazardous Lands. Every cell = small label over its value / control. }}
       <div class="party-move">
         <div class="pm-cell party-speed-stat">
-          <span class="pm-label">{{localize 'VAGABOND.Actor.Character.FIELDS.combat.speed.base.label'}}</span>
+          <span class="pm-label" data-tooltip="{{localize 'VAGABOND.Actor.Character.FIELDS.combat.speed.base.label'}}">{{localize 'VAGABOND.Actor.Party.Card.Short.Speed'}}</span>
           <span class="pm-value">
             <input type="number" name="system.speed" value="{{speeds.speed.value}}" class="speed-input{{#if speeds.speed.auto}} is-auto{{/if}}" min="0"{{#if speeds.speed.auto}} data-tooltip="{{speeds.autoTooltip}}"{{/if}}>
             <span class="speed-unit">{{localize 'VAGABOND.UI.Units.Feet'}}</span>
           </span>
         </div>
         <div class="pm-cell party-speed-stat">
-          <span class="pm-label">{{localize 'VAGABOND.Actor.Character.FIELDS.combat.speed.crawl.label'}}</span>
+          <span class="pm-label" data-tooltip="{{localize 'VAGABOND.Actor.Character.FIELDS.combat.speed.crawl.label'}}">{{localize 'VAGABOND.Actor.Party.Card.Short.Crawl'}}</span>
           <span class="pm-value">
             <input type="number" name="system.crawl" value="{{speeds.crawl.value}}" class="speed-input{{#if speeds.crawl.auto}} is-auto{{/if}}" min="0"{{#if speeds.crawl.auto}} data-tooltip="{{speeds.autoTooltip}}"{{/if}}>
             <span class="speed-unit">{{localize 'VAGABOND.UI.Units.Feet'}}</span>
           </span>
         </div>
         <div class="pm-cell party-speed-stat">
-          <span class="pm-label">{{localize 'VAGABOND.Actor.Character.FIELDS.combat.speed.travel.label'}}</span>
+          <span class="pm-label" data-tooltip="{{localize 'VAGABOND.Actor.Character.FIELDS.combat.speed.travel.label'}}">{{localize 'VAGABOND.Actor.Party.Card.Short.Travel'}}</span>
           <span class="pm-value">
             {{! Shows the miles this Shift (Pace / Hazardous Lands applied, red outline when altered); focusing it edits the base Travel Speed }}
             {{#if speeds.trip.modified}}
@@ -132,7 +132,18 @@
             <img class="pdt-handle pdt-handle-right" src="systems/vagabond/assets/ui/clocks/clock_right_bt.svg" alt="" data-action="partyShiftsStep" data-step="1" data-tooltip="{{localize 'VAGABOND.Actor.Party.Controls.ShiftsAdd'}}">
             {{/if}}
           </div>
-          <span class="pdt-count" data-tooltip="{{localize 'VAGABOND.Actor.Party.Controls.ShiftsTooltip'}}">{{localize 'VAGABOND.Actor.Party.Controls.ShiftsCount' n=system.shifts}}</span>
+          <span class="pdt-count-row">
+            {{#if activeParty.multiple}}
+              {{#if activeParty.isActive}}
+              <span class="pdt-active is-active" data-tooltip="{{localize 'VAGABOND.Actor.Party.Controls.ActiveParty'}}"><i class="fa-solid fa-star"></i></span>
+              {{else if isGM}}
+              <button type="button" class="pdt-active" data-action="setActiveParty" data-tooltip="{{localize 'VAGABOND.Actor.Party.Controls.InactiveParty'}}"><i class="fa-regular fa-star"></i></button>
+              {{else}}
+              <span class="pdt-active" data-tooltip="{{localize 'VAGABOND.Actor.Party.Controls.InactivePartyPlayer'}}"><i class="fa-regular fa-star"></i></span>
+              {{/if}}
+            {{/if}}
+            <span class="pdt-count" data-tooltip="{{localize 'VAGABOND.Actor.Party.Controls.ShiftsTooltip'}}">{{localize 'VAGABOND.Actor.Party.Controls.ShiftsCount' n=system.shifts}}</span>
+          </span>
           <button
             type="button"
             class="pdt-open"
@@ -195,11 +206,6 @@
       <span class="ps-ownership" data-tooltip="{{partyOwnershipNote}}">
         <i class="fa-solid fa-triangle-exclamation"></i>
       </span>
-      {{/if}}
-      {{#if isGM}}
-      <button type="button" class="ps-btn" data-action="openCompactView" data-tooltip="{{localize 'VAGABOND.Actor.Party.CompactView.Open'}}">
-        <i class="fas fa-table-columns"></i>
-      </button>
       {{/if}}
       <button type="button" class="ps-btn" data-action="openMemberPicker" data-tooltip="{{localize 'VAGABOND.Actor.Party.Card.AddMember'}}">
         <i class="fas fa-user-plus"></i>

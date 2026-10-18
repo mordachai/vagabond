@@ -17,6 +17,8 @@ export const SHIFTS_PER_DAY = 4;
  *
  * State lives on the actor flag `flags.vagabond.downtime`:
  *   { shifts: number planned, log: [{ key }] one entry per Shift spent, breatherAt: log length when the last Breather was taken }
+ * The planned Shifts of a member of the ACTIVE party are that party's `system.shifts` (the party
+ * sheet's Downtime box), read live; the flag's `shifts` only counts for Characters outside it.
  * The panel (DowntimeApp) is only a view over it; the Workbench spends a Shift through
  * {@link DowntimeHelper.spendShift} too. Nothing is forced: the planned Shift count is the
  * table's call (a whole Day = 4 Shifts, or more if the GM allows).
@@ -24,14 +26,45 @@ export const SHIFTS_PER_DAY = 4;
 export class DowntimeHelper {
   static MAX_SHIFTS = MAX_SHIFTS;
 
-  /** @returns {{shifts: number, log: Array<{key: string}>, breatherAt: number}} */
+  /**
+   * The active party: world setting `activeParty` (actor id), else the first party actor.
+   * With several parties only this one counts.
+   * @returns {Actor|null}
+   */
+  static activeParty() {
+    const parties = game.actors?.filter((a) => a.type === 'party') ?? [];
+    const id = game.settings.get('vagabond', 'activeParty');
+    return parties.find((p) => p.id === id) ?? parties[0] ?? null;
+  }
+
+  /** GM: make `party` the active one. */
+  static async setActiveParty(party) {
+    if (!game.user.isGM || party?.type !== 'party') return;
+    await game.settings.set('vagabond', 'activeParty', party.id);
+  }
+
+  /** The active party when `actor` is one of its members, else null. */
+  static partyOf(actor) {
+    const party = this.activeParty();
+    return actor && party && (party.system.members ?? []).includes(actor.uuid) ? party : null;
+  }
+
+  /** @returns {{shifts: number, log: Array<{key: string}>, breatherAt: number, party: Actor|null}} */
   static state(actor) {
     const raw = actor?.getFlag('vagabond', 'downtime') ?? {};
+    const party = this.partyOf(actor);
     return {
-      shifts: Math.clamp(Number(raw.shifts) || 1, 1, MAX_SHIFTS),
+      shifts: Math.clamp(Number(party ? party.system.shifts : raw.shifts) || 1, 1, MAX_SHIFTS),
       log: Array.isArray(raw.log) ? raw.log : [],
       breatherAt: Number.isInteger(raw.breatherAt) ? raw.breatherAt : -1,
+      party,
     };
+  }
+
+  /** The flag as stored (state() minus the derived `party`). */
+  static #write(actor, s) {
+    const { party, ...data } = s;
+    return actor.setFlag('vagabond', 'downtime', data);
   }
 
   /** Shifts still unspent in the planned downtime. */
@@ -40,18 +73,25 @@ export class DowntimeHelper {
     return Math.max(0, s.shifts - s.log.length);
   }
 
-  /** Plan `n` Shifts (never below the Shifts already spent). */
+  /**
+   * Plan `n` Shifts (never below the Shifts already spent). A member of the active party plans
+   * through the party (GM only): its Shifts are the party's.
+   */
   static async setShifts(actor, n) {
     const s = this.state(actor);
     const shifts = Math.clamp(Math.round(n), Math.max(1, s.log.length), MAX_SHIFTS);
-    await actor.setFlag('vagabond', 'downtime', { ...s, shifts });
+    if (s.party) {
+      if (game.user.isGM) await s.party.update({ 'system.shifts': shifts });
+      return;
+    }
+    await this.#write(actor, { ...s, shifts });
   }
 
   /** Log one spent Shift. No-op (returns false) when the planned Shifts are all spent. */
   static async spendShift(actor, key) {
     const s = this.state(actor);
     if (s.log.length >= s.shifts) return false;
-    await actor.setFlag('vagabond', 'downtime', { ...s, log: [...s.log, { key }] });
+    await this.#write(actor, { ...s, log: [...s.log, { key }] });
     return true;
   }
 
@@ -74,7 +114,7 @@ export class DowntimeHelper {
 
   static async markBreather(actor) {
     const s = this.state(actor);
-    await actor.setFlag('vagabond', 'downtime', { ...s, breatherAt: s.log.length });
+    await this.#write(actor, { ...s, breatherAt: s.log.length });
   }
 
   /* -------------------------------------------- */

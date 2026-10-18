@@ -2010,10 +2010,13 @@
         },
         "Card": {
           "Short": {
+            "Speed": "Vel.",
+            "Crawl": "Explor.",
+            "Travel": "Viagem",
             "Armor": "Armadura",
             "Luck": "Sorte",
             "Studied": "Estudo",
-            "Slots": "Espaços",
+            "Slots": "Esp.",
             "Mana": "Mana",
             "Cast": "Conj."
           },
@@ -2099,6 +2102,9 @@
         },
         "Controls": {
           "ShiftsCount": "Turnos: {n}",
+          "ActiveParty": "Grupo ativo: os Turnos deste grupo são os Turnos de Tempo Livre dos seus membros",
+          "InactiveParty": "Grupo inativo: seus Turnos não valem. Clique para tornar este o grupo ativo",
+          "InactivePartyPlayer": "Grupo inativo: seus Turnos não valem para o Tempo Livre",
           "ShiftsTooltip": "Turnos que o Mestre concede ao grupo para o próximo período de descanso",
           "ShiftsAdd": "Conceder mais um Turno",
           "ShiftsRemove": "Conceder um Turno a menos",
@@ -3119,6 +3125,8 @@
         "Coins": "Moedas que você tem"
       },
       "Tracker": {
+        "FromParty": "Quartos concedidos por {party} (caixa Tempo Livre da ficha do grupo)",
+        "NoShiftsLeftParty": "Sem Quartos restantes neste tempo livre. O Mestre concede mais na ficha de {party}.",
         "Intro": "Seu tempo livre permite que você se prepare, se estabeleça na sociedade, colete informações ou simplesmente encha a cara e acabe numa briga de taverna.",
         "Left": "{left} / {shifts} Quartos restantes",
         "Add": "Adicionar um Quarto de dia",

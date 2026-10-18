@@ -1,6 +1,15 @@
 # Changelog
 
-## Unreleased
+## v6.8.1
+- **[Added]** NPC sheet Compact view: header button swaps the sheet for the NPC HUD.
+- **[Changed]** Compact views work the same everywhere: header button on the Character, NPC and party sheets swaps to the HUD / party compact view; the corner tab (top-left) swaps back. Double-clicking the NPC HUD portrait now swaps too.
+- **[Changed]** Downtime Shifts come from the party sheet: members of the active party see its Shifts live in their Downtime panel (only the GM changes them).
+- **[Added]** Several parties: a star in the party sheet's Downtime box marks the active one; the GM clicks it to switch. Starting a Downtime also makes that party active.
+- **[Changed]** Party Notes: one journal per Character and one GM journal per party; duplicates merge on the GM's load.
+- **[Changed]** Folders the system creates (Conjured, Undead Army, Clocks & Dice, Metamorph) sit under one "Vagabond System" folder.
+- **[Fixed]** Party sheet labels shortened so they fit in Portuguese (Speed / Crawl / Travel, member Speed and Slots).
+
+## v6.8.0
 - **[Changed]** Workbench Scrap redone: click items to add them to a "To scrap" list (stacks get a counter and All), then one Scrap button. Before you click, it shows the Materials you'll gain, your Materials and inventory Slots before → after, and warns about equipped items (In hand / Both hands / Worn tags on the list). Search box, hover highlight; one chat card per batch. Bigger text and item pictures on the Craft and Scrap tabs.
 - **[Fixed]** Scrap no longer fills the inventory with one Materials item per 1g: a character keeps one Materials item and Scrap adds to it. It still takes 1 Slot per 1g (book), but its inventory card stops growing at 2 cells; the rest only uses up empty Slots. Materials bought, traded or dropped merge into it, and old worlds merge theirs on load.
 - **[Added]** Live item names: `{value}`, `{cost}`, `{qty}`, `{slots}` or `{uses}` in an item's name shows the current value everywhere (sheet, inventory, HUD, chat). The locked sheet shows the value, unlocked edits the placeholder. Materials always show their worth (Materials (35g)).

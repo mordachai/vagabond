@@ -871,6 +871,13 @@ export function registerGameSettings({ refreshClockDependents, applyTokenEffectV
     scope: 'world', config: false, type: Object, default: {},
   });
 
+  // The active party (actor id, '' = the first party): with several parties only this one counts —
+  // its Shifts are the Downtime Shifts of its members (DowntimeHelper.partyOf).
+  game.settings.register('vagabond', 'activeParty', {
+    scope: 'world', config: false, type: String, default: '',
+    onChange: () => Hooks.callAll('vagabond.activePartyChanged'),
+  });
+
   // A successful Cast's hit macro runs by itself when the Spell's target animation lands
   game.settings.register('vagabond', 'spellHitMacroAutoRun', {
     name: 'VAGABOND.Settings.spellHitMacroAutoRun.name',

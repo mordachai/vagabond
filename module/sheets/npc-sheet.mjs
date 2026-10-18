@@ -5,6 +5,7 @@ import {
   NPCActionHandler,
 } from './handlers/_module.mjs';
 import { DruidHelper } from '../helpers/druid-helper.mjs';
+import { isItemPile } from '../helpers/hud-display.mjs';
 
 /**
  * NPC-specific actor sheet
@@ -54,6 +55,9 @@ export class VagabondNPCSheet extends VagabondActorSheet {
       formOpenOriginal: VagabondNPCSheet._onFormOpenOriginal,
     }
   }, { inplace: false });
+
+  /** @override Compact view = the floating NPC HUD (not for Item Piles). */
+  _hasCompactView() { return !isItemPile(this.actor); }
 
   /**
    * @override

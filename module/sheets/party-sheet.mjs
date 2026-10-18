@@ -1,7 +1,6 @@
 import { VagabondActorSheet } from './actor-sheet.mjs';
 import { prepareEffectsView } from '../helpers/effects.mjs';
 import { TargetHelper } from '../helpers/target-helper.mjs';
-import { PartyCompactView } from '../applications/party-compact-view.mjs';
 import { PartyStatusHelper } from '../helpers/party-status-helper.mjs';
 import { DowntimeHelper, SHIFTS_PER_DAY } from '../helpers/downtime-helper.mjs';
 import { ProgressClock } from '../documents/progress-clock.mjs';
@@ -11,6 +10,7 @@ import { TradeHelper } from '../helpers/trade-helper.mjs';
 import { CoinTransferDialog } from '../applications/coin-transfer-dialog.mjs';
 import { VagabondTextParser } from '../helpers/text-parser.mjs';
 import { buildStatsSection, buildSlotsRow, buildWeaponProperties } from '../helpers/item-sections.mjs';
+import { PartyNotes } from '../helpers/party-notes.mjs';
 
 /** Inventory tab sections, in display order (containers and unknown types fall under `gear`). */
 const INVENTORY_GROUPS = ['weapon', 'armor', 'alchemical', 'relic', 'gear'];
@@ -19,7 +19,7 @@ const INVENTORY_GROUPS = ['weapon', 'armor', 'alchemical', 'relic', 'gear'];
  * Party actor sheet.
  * Tabs: Party (member cards for characters + NPCs), Inventory (items per Character), Notes, Effects.
  * All users with party permission see both tabs.
- * The compact-view button is GM-only (enforced in the template via isGM).
+ * The Compact view header button (`becomeHud` → PartyCompactView) is GM-only.
  */
 export class VagabondPartySheet extends VagabondActorSheet {
   constructor(object, options) {
@@ -28,6 +28,7 @@ export class VagabondPartySheet extends VagabondActorSheet {
     this._actorUpdateHookId = null;
     this._effectHookIds = null;
     this._notesHookId = null;
+    this._activePartyHookId = null;
     this._itemHookIds = null;
     /** UUIDs of the inventory items whose detail accordion is open (survives re-renders). */
     this._invOpen = new Set();
@@ -51,6 +52,9 @@ export class VagabondPartySheet extends VagabondActorSheet {
       emitSocket('updateActorField', { actorUuid: actor.uuid, field, value });
     }
   }
+
+  /** @override Compact view = the floating PartyCompactView (GM only). */
+  _hasCompactView() { return game.user.isGM; }
 
   /** @override */
   static DEFAULT_OPTIONS = foundry.utils.mergeObject(super.DEFAULT_OPTIONS, {
@@ -116,6 +120,12 @@ export class VagabondPartySheet extends VagabondActorSheet {
 
     // Shift clock: one 4-segment clock per Day of the Shifts the GM grants (same art as the Downtime panel)
     context.shiftClocks = this._shiftClocks();
+    // Several parties: only the active one's Shifts reach its members' Downtime panels
+    const active = DowntimeHelper.activeParty();
+    context.activeParty = {
+      multiple: game.actors.filter((a) => a.type === 'party').length > 1,
+      isActive: active?.id === this.actor.id,
+    };
     context.travelClocks = this._travelClocks();
 
     // Speed / Crawl / Travel: manual override or automatic (slowest member)
@@ -484,131 +494,14 @@ export class VagabondPartySheet extends VagabondActorSheet {
   }
 
   /**
-   * Build the ownership object for a note journal / page.
-   * Personal notes: OWNER for every user who owns the character + NONE default.
-   * GM notes:       NONE default (GMs are implicit owners).
-   * @param {'gm'|'personal'} noteType
-   * @param {string|null} characterId
-   * @returns {Object}
-   * @private
-   */
-  _buildNoteOwnership(noteType, characterId) {
-    const ownership = { default: CONST.DOCUMENT_OWNERSHIP_LEVELS.NONE };
-    if (noteType === 'personal') {
-      const actor = game.actors.get(characterId);
-      if (actor) {
-        for (const user of game.users) {
-          if (actor.getUserLevel(user) >= CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER) {
-            ownership[user.id] = CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER;
-          }
-        }
-      }
-    }
-    return ownership;
-  }
-
-  /**
-   * Resolve an existing note journal from flags, or create one (GM only).
-   * Both the JournalEntry AND its first JournalEntryPage receive the same
-   * ownership object — Foundry checks the PAGE's own ownership when deciding
-   * whether a player may update it; inheriting from the parent is not enough.
+   * The note journal (one per Character, one GM journal per party) — see `PartyNotes`.
    * @param {'gm'|'personal'} noteType
    * @param {string|null} characterId  Actor id for personal notes.
    * @returns {Promise<JournalEntry|null>}
    * @private
    */
-  async _resolveNoteJournal(noteType, characterId = null) {
-    const flagKey = noteType === 'gm' ? 'notes.gm' : `notes.personal.${characterId}`;
-
-    // Return existing journal if the UUID is still valid
-    const existingUuid = this.document.getFlag('vagabond', flagKey);
-    if (existingUuid) {
-      try {
-        const journal = await fromUuid(existingUuid);
-        if (journal) {
-          // Auto-repair: journals created before page ownership was stamped.
-          // The GM client runs this check once; the early-out makes repeat renders
-          // cheap (no network call when ownership is already correct).
-          if (game.user.isGM && noteType === 'personal') {
-            await this._repairPageOwnership(journal, characterId);
-          }
-          return journal;
-        }
-      } catch { /* stale UUID — fall through to recreate */ }
-    }
-
-    // Only GMs can create journal documents
-    if (!game.user.isGM) return null;
-
-    const ownership = this._buildNoteOwnership(noteType, characterId);
-    const folder = await this._ensureNotesFolder();
-
-    const name = noteType === 'gm'
-      ? `[GM] ${this.document.name} — Notes`
-      : `[Personal] ${game.actors.get(characterId)?.name ?? characterId} — Notes`;
-
-    const journal = await JournalEntry.create({
-      name,
-      ownership,
-      folder: folder?.id ?? null,
-      flags: {
-        vagabond: {
-          isPartyNote: true,
-          partyId: this.document.id,
-          noteType,
-          characterId: characterId ?? null,
-        },
-      },
-      pages: [{
-        name: 'Notes',
-        type: 'text',
-        // Mirror journal ownership onto the page — the server permission check
-        // uses the page's own ownership, not the parent journal's.
-        ownership: { ...ownership },
-        text: { content: '', format: CONST.JOURNAL_ENTRY_PAGE_FORMATS.HTML },
-      }],
-    });
-
-    await this.document.setFlag('vagabond', flagKey, journal.uuid);
-    return journal;
-  }
-
-  /**
-   * Ensure the first page of a personal-note journal has the correct ownership.
-   * Called by the GM only. No-ops immediately when ownership is already correct.
-   * @param {JournalEntry} journal
-   * @param {string} characterId
-   * @returns {Promise<void>}
-   * @private
-   */
-  async _repairPageOwnership(journal, characterId) {
-    const page = journal.pages.contents[0];
-    if (!page) return;
-    const required = this._buildNoteOwnership('personal', characterId);
-    const needsFix = Object.entries(required).some(
-      ([uid, level]) => (page.ownership?.[uid] ?? page.ownership?.default ?? 0) < level
-    );
-    if (!needsFix) return;
-    await page.update({ ownership: { ...(page.ownership ?? {}), ...required } });
-  }
-
-  /**
-   * Get or create the hidden Party Notes folder.
-   * @returns {Promise<Folder|null>}
-   * @private
-   */
-  async _ensureNotesFolder() {
-    const existing = game.folders.find(
-      f => f.type === 'JournalEntry' && f.flags?.vagabond?.isPartyNotesFolder
-    );
-    if (existing) return existing;
-
-    return Folder.create({
-      name: 'Party Notes',
-      type: 'JournalEntry',
-      ownership: { default: CONST.DOCUMENT_OWNERSHIP_LEVELS.NONE },
-      flags: { vagabond: { isPartyNotesFolder: true } },
-    });
+  _resolveNoteJournal(noteType, characterId = null) {
+    return PartyNotes.resolve(noteType, this.document, characterId);
   }
 
   /** @override */
@@ -741,6 +634,9 @@ export class VagabondPartySheet extends VagabondActorSheet {
     this._bindNotesActions(signal);
 
     // Re-render the right notes column whenever any note for this party is saved
+    // The active party changed (another party sheet / setting): refresh the Downtime box marker
+    this._activePartyHookId ??= Hooks.on('vagabond.activePartyChanged', () => this.render(false, { parts: ['party'] }));
+
     if (this._notesHookId) Hooks.off('updateJournalEntryPage', this._notesHookId);
     this._notesHookId = Hooks.on('updateJournalEntryPage', (page) => {
       if (page.parent?.flags?.vagabond?.partyId !== this.document.id) return;
@@ -884,13 +780,6 @@ export class VagabondPartySheet extends VagabondActorSheet {
         }, { signal });
       });
 
-    // Compact view button (GM only — enforced in template, but safe to bind here)
-    this.element
-      .querySelectorAll('[data-action="openCompactView"]')
-      .forEach(btn => {
-        btn.addEventListener('click', () => PartyCompactView.open(this.actor), { signal });
-      });
-
     // "+" button → open actor picker
     this.element
       .querySelectorAll('[data-action="openMemberPicker"]')
@@ -965,6 +854,7 @@ export class VagabondPartySheet extends VagabondActorSheet {
     };
 
     on('partyShiftsStep', (el) => this._stepPartyShifts(Number(el.dataset.step)));
+    on('setActiveParty', () => DowntimeHelper.setActiveParty(this.actor));
     on('toggleNavigator', (el) => this._toggleNavigator(el.closest('[data-actor-uuid]')?.dataset.actorUuid));
     on('setTravelPace', (el) => {
       if (this.isEditable && el.dataset.pace) this.actor.update({ 'system.pace': el.dataset.pace });
@@ -1828,6 +1718,8 @@ export class VagabondPartySheet extends VagabondActorSheet {
       if (!confirmed) return;
     }
 
+    // Starting a downtime makes this the active party: its Shifts are its members' Shifts
+    await DowntimeHelper.setActiveParty(this.actor);
     const shifts = this.actor.system.shifts || 1;
     await Promise.all(characters.map((a) => DowntimeHelper.begin(a, shifts)));
     await ChatMessage.create({
@@ -2013,7 +1905,7 @@ export class VagabondPartySheet extends VagabondActorSheet {
 
   /**
    * Remove an actor UUID from the party member list, with a confirmation dialog.
-   * When removing a character, moves their personal note journal out of the hidden folder.
+   * The Character's personal note journal stays (it belongs to the Character, not the party).
    * @param {string} uuid
    * @private
    */
@@ -2025,18 +1917,6 @@ export class VagabondPartySheet extends VagabondActorSheet {
       content: `<p>${game.i18n.format('VAGABOND.Actor.Party.Card.RemoveConfirm', { name })}</p>`,
     });
     if (!confirmed) return;
-
-    // Orphan the character's personal note journal so the GM can find it in the sidebar
-    if (actor?.type === 'character') {
-      const noteUuid = this.document.getFlag('vagabond', `notes.personal.${actor.id}`);
-      if (noteUuid) {
-        try {
-          const journal = await fromUuid(noteUuid);
-          if (journal) await journal.update({ folder: null });
-        } catch { /* journal may have been deleted already */ }
-        await this.document.unsetFlag('vagabond', `notes.personal.${actor.id}`);
-      }
-    }
 
     const members = (this.actor.system.members ?? []).filter(u => u !== uuid);
     await this.actor.update({ 'system.members': members });
@@ -2129,6 +2009,10 @@ export class VagabondPartySheet extends VagabondActorSheet {
       Hooks.off('updateActiveEffect', this._effectHookIds.update);
       Hooks.off('deleteActiveEffect', this._effectHookIds.delete);
       this._effectHookIds = null;
+    }
+    if (this._activePartyHookId) {
+      Hooks.off('vagabond.activePartyChanged', this._activePartyHookId);
+      this._activePartyHookId = null;
     }
     if (this._notesHookId) {
       Hooks.off('updateJournalEntryPage', this._notesHookId);

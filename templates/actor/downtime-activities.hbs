@@ -17,11 +17,15 @@
     </div>
     <div class="dt-tracker-body">
       <div class="dt-tracker-count">
+        {{#if tracker.canPlan}}
         <button type="button" class="dt-step" data-action="shiftRemove" {{#unless tracker.canRemove}}disabled{{/unless}}
                 data-tooltip="{{localize 'VAGABOND.Downtime.Tracker.Remove'}}"><i class="fas fa-minus"></i></button>
-        <span class="dt-left {{#if noShifts}}is-zero{{/if}}">{{localize "VAGABOND.Downtime.Tracker.Left" left=tracker.left shifts=tracker.shifts}}</span>
+        {{/if}}
+        <span class="dt-left {{#if noShifts}}is-zero{{/if}}" {{#if tracker.party}}data-tooltip="{{localize 'VAGABOND.Downtime.Tracker.FromParty' party=tracker.party}}"{{/if}}>{{#if tracker.party}}<i class="fas fa-users"></i> {{/if}}{{localize "VAGABOND.Downtime.Tracker.Left" left=tracker.left shifts=tracker.shifts}}</span>
+        {{#if tracker.canPlan}}
         <button type="button" class="dt-step" data-action="shiftAdd" {{#unless tracker.canAdd}}disabled{{/unless}}
                 data-tooltip="{{localize 'VAGABOND.Downtime.Tracker.Add'}}"><i class="fas fa-plus"></i></button>
+        {{/if}}
         <button type="button" class="dt-step dt-reset" data-action="shiftReset" {{#unless tracker.canReset}}disabled{{/unless}}
                 data-tooltip="{{localize 'VAGABOND.Downtime.Tracker.Reset'}}"><i class="fas fa-rotate-left"></i></button>
       </div>

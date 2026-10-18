@@ -1996,6 +1996,9 @@
         },
         "Card": {
           "Short": {
+            "Speed": "Speed",
+            "Crawl": "Crawl",
+            "Travel": "Travel",
             "Armor": "Armor",
             "Luck": "Luck",
             "Studied": "Studied",
@@ -2085,7 +2088,10 @@
         },
         "Controls": {
           "ShiftsCount": "Shifts: {n}",
-          "ShiftsTooltip": "Shifts the GM grants the party for its next downtime",
+          "ActiveParty": "Active party: its Shifts are the Downtime Shifts of its members",
+          "InactiveParty": "Inactive party: its Shifts don't count. Click to make this the active party",
+          "InactivePartyPlayer": "Inactive party: its Shifts don't count for Downtime",
+          "ShiftsTooltip": "Shifts the GM grants the party for its downtime; members of the active party see them live in their Downtime panel",
           "ShiftsAdd": "Grant one more Shift",
           "ShiftsRemove": "Grant one fewer Shift",
           "Downtime": "Downtime",
@@ -3105,6 +3111,8 @@
         "Coins": "Coins you have"
       },
       "Tracker": {
+        "FromParty": "Shifts granted by {party} (party sheet Downtime box)",
+        "NoShiftsLeftParty": "No Shifts left in this downtime. The GM grants more on the {party} sheet.",
         "Intro": "Your downtime lets you prepare, establish a foothold in society, gather intel, or just get wasted and wind up in a tavern brawl.",
         "Left": "{left} / {shifts} Shifts left",
         "Add": "Add a Shift",

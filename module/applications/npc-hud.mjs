@@ -115,6 +115,7 @@ export class VagabondNPCHud extends api.HandlebarsApplicationMixin(api.Applicati
       openDetail: this._onOpenDetail,
       closeDetail: this._onCloseDetail,
       openSheet: this._onOpenSheet,
+      expandSheet: this._onExpandSheet,
     },
   };
 
@@ -408,9 +409,9 @@ export class VagabondNPCHud extends api.HandlebarsApplicationMixin(api.Applicati
     // …and so does any free area of the body (interactive parts excluded).
     bindHudBodyDrag(this.element, (e) => this._onDragStart(e), signal);
 
-    // Double-click portrait → open the actor sheet (HUD stays open).
+    // Double-click portrait → swap to the full sheet (same as the corner tab).
     const portrait = this.element.querySelector('.vh-npc-portrait');
-    if (portrait) portrait.addEventListener('dblclick', () => this.actor.sheet.render(true), { signal });
+    if (portrait) portrait.addEventListener('dblclick', () => VagabondNPCHud._onExpandSheet.call(this), { signal });
 
     // Right-click portrait → HUD context menu (sheet / ping / close).
     if (handle) handle.addEventListener('contextmenu', (e) => this._openHudMenu(e), { signal });
@@ -617,6 +618,13 @@ export class VagabondNPCHud extends api.HandlebarsApplicationMixin(api.Applicati
 
   /** Open the actor sheet without closing the HUD. */
   static _onOpenSheet() { this.actor.sheet.render(true); }
+
+  /** Corner tab: swap the HUD for the full sheet (inverse of the sheet's Compact view). */
+  static _onExpandSheet() {
+    const actor = this.actor;
+    this.close();
+    actor.sheet.render(true);
+  }
 
   /**
    * Right-click an action/ability chip → context menu mirroring the PC HUD's
