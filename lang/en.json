@@ -412,6 +412,9 @@
       "RelayFailed": "The GM ({gm}) did not answer. Ask them to reload, then try again.",
       "RelayError": "Failed on the GM's side: {error}"
     },
+    "SystemFolders": {
+      "Root": "Vagabond System"
+    },
     "Raise": {
       "FolderName": "Undead Army",
       "NoCorpse": "Raise: no corpse that can rise among the Targets (a Dead token, not Artificial or Undead, never raised before, not a player's Character).",

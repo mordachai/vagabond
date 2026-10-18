@@ -1,6 +1,7 @@
 import { VagabondRollBuilder } from './roll-builder.mjs';
 import { NpcSenses } from './npc-senses.mjs';
 import { macroNotify } from './item-macro.mjs';
+import { SystemFolders } from './system-folders.mjs';
 
 /**
  * Raise Spell — "Corpses in the area of non-Artificial or Undead Beings with cumulative HD no higher than your
@@ -233,6 +234,7 @@ export class RaiseHelper {
     let root = actorFolders.find(f => f.getFlag('vagabond', 'undeadArmy') && !f.getFlag('vagabond', 'undeadArmyCaster'));
     root ??= await Folder.implementation.create({
       name: game.i18n.localize('VAGABOND.Raise.FolderName'), type: 'Actor', color: '#2b2233',
+      folder: await SystemFolders.rootId('Actor'),
       flags: { vagabond: { undeadArmy: true } },
     });
     let sub = actorFolders.find(f => f.getFlag('vagabond', 'undeadArmyCaster') === caster.uuid);

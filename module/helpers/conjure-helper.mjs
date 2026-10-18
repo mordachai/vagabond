@@ -1,5 +1,6 @@
 import { SpellTargetPicker } from './spell-target-picker.mjs';
 import { CurrencyHelper } from './currency-helper.mjs';
+import { SystemFolders } from './system-folders.mjs';
 
 /**
  * Conjure — Spells that call things forth, driven by the Spell's `system.conjure` rules (no per-Spell code):
@@ -731,7 +732,7 @@ export class ConjureHelper {
     const actorFolders = game.folders.filter(f => f.type === 'Actor');
     let root = actorFolders.find(f => f.getFlag('vagabond', 'conjureFolder') && !f.getFlag('vagabond', 'conjureCaster'));
     root ??= await Folder.implementation.create({
-      name: this.#L('FolderName'), type: 'Actor', color: '#2b3a2f',
+      name: this.#L('FolderName'), type: 'Actor', color: '#2b3a2f', folder: await SystemFolders.rootId('Actor'),
       flags: { vagabond: { conjureFolder: true } },
     });
     let sub = actorFolders.find(f => f.getFlag('vagabond', 'conjureCaster') === caster.uuid);

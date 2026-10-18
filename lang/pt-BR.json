@@ -402,6 +402,9 @@
       "AlreadyRolled": "A Proteção contra este dano já foi rolada para {target}.",
       "Label": "Proteção"
     },
+    "SystemFolders": {
+      "Root": "Sistema Vagabond"
+    },
     "Raise": {
       "FolderName": "Exército Morto-Vivo",
       "NoCorpse": "Reerguer: nenhum cadáver entre os alvos pode se erguer (um token Morto, não Artificial nem Morto-Vivo, nunca reerguido antes, não um Personagem de jogador).",

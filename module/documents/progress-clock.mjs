@@ -1,3 +1,4 @@
+import { SystemFolders } from '../helpers/system-folders.mjs';
 /**
  * Progress Clock helper class for managing clock journals
  * Clocks are stored as JournalEntry documents with custom flags
@@ -8,22 +9,7 @@ export class ProgressClock {
    * @returns {Promise<Folder>} The folder for clocks and countdown dice
    */
   static async getOrCreateFolder() {
-    const folderName = "Vagabond Clocks & Dice";
-
-    // Check if folder already exists
-    let folder = game.folders.find(f => f.name === folderName && f.type === "JournalEntry");
-
-    // Create folder if it doesn't exist
-    if (!folder) {
-      folder = await Folder.create({
-        name: folderName,
-        type: "JournalEntry",
-        color: "#8b0000",
-        sorting: "a"
-      });
-    }
-
-    return folder;
+    return SystemFolders.clocks();
   }
 
   /**
