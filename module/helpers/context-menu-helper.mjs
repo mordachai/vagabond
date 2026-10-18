@@ -58,6 +58,10 @@ export class ContextMenuHelper {
       if (itemConfig.dim) {
         item.classList.add('is-dim');
       }
+      // Accent class for this row (`cssClass`, e.g. 'is-focus' / 'is-dismiss')
+      if (itemConfig.cssClass) {
+        item.classList.add(...String(itemConfig.cssClass).split(/\s+/).filter(Boolean));
+      }
 
       // Build item content — supports FA class string (`icon`) or image URL (`img`)
       const iconHtml = itemConfig.img

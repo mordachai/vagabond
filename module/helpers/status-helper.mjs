@@ -24,12 +24,19 @@ export class StatusHelper {
    * @returns {boolean}
    */
   static isStatusImmune(actor, statusId) {
-    if (actor.system.statusImmunities?.includes(statusId)) return true;
+    const ids = this.#countsAs(statusId);
+    if (ids.some(id => actor.system.statusImmunities?.includes(id))) return true;
     if (actor.type === 'character') {
       const armor = this._getEquippedArmor(actor);
-      if (armor?.system.blockedStatuses?.includes(statusId)) return true;
+      if (ids.some(id => armor?.system.blockedStatuses?.includes(id))) return true;
     }
     return false;
+  }
+
+  /** The status plus the Status it counts as (`CONFIG.VAGABOND.statusCountsAs`: Frostburning is Burning). */
+  static #countsAs(statusId) {
+    const base = CONFIG.VAGABOND?.statusCountsAs?.[statusId];
+    return base ? [statusId, base] : [statusId];
   }
 
   /**
@@ -42,10 +49,11 @@ export class StatusHelper {
    * @returns {boolean}
    */
   static isStatusResisted(actor, statusId) {
-    if (actor.system.statusResistances?.includes(statusId)) return true;
+    const ids = this.#countsAs(statusId);
+    if (ids.some(id => actor.system.statusResistances?.includes(id))) return true;
     if (actor.type === 'character') {
       const armor = this._getEquippedArmor(actor);
-      if (armor?.system.resistedStatuses?.includes(statusId)) return true;
+      if (ids.some(id => armor?.system.resistedStatuses?.includes(id))) return true;
     }
     return false;
   }

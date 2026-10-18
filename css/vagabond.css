@@ -2161,7 +2161,9 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .protect-buttons-row button.vagabond-protect-button,
 .protect-buttons-row button.vagabond-ward-button,
 .protect-buttons-row button.vagabond-ward-off-button,
-.protect-buttons-row button.vagabond-focus-upkeep-button {
+.protect-buttons-row button.vagabond-focus-upkeep-button,
+.protect-buttons-row button.vagabond-conjure-dismiss,
+.protect-buttons-row button.vagabond-surface-dismiss {
   width: 100%;
   background: transparent !important;
   background-image: url("../assets/ui/chat/apply-direct-bg.webp") !important;
@@ -2190,14 +2192,18 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .protect-buttons-row button.vagabond-protect-button:hover,
 .protect-buttons-row button.vagabond-ward-button:hover,
 .protect-buttons-row button.vagabond-ward-off-button:hover,
-.protect-buttons-row button.vagabond-focus-upkeep-button:hover {
+.protect-buttons-row button.vagabond-focus-upkeep-button:hover,
+.protect-buttons-row button.vagabond-conjure-dismiss:hover,
+.protect-buttons-row button.vagabond-surface-dismiss:hover {
   filter: brightness(1.6);
 }
 .save-apply-button-container button.vagabond-apply-save-damage-button:disabled,
 .protect-buttons-row button.vagabond-protect-button:disabled,
 .protect-buttons-row button.vagabond-ward-button:disabled,
 .protect-buttons-row button.vagabond-ward-off-button:disabled,
-.protect-buttons-row button.vagabond-focus-upkeep-button:disabled {
+.protect-buttons-row button.vagabond-focus-upkeep-button:disabled,
+.protect-buttons-row button.vagabond-conjure-dismiss:disabled,
+.protect-buttons-row button.vagabond-surface-dismiss:disabled {
   opacity: 0.6;
   cursor: not-allowed;
   filter: grayscale(1);
@@ -2206,9 +2212,30 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .protect-buttons-row button.vagabond-protect-button i,
 .protect-buttons-row button.vagabond-ward-button i,
 .protect-buttons-row button.vagabond-ward-off-button i,
-.protect-buttons-row button.vagabond-focus-upkeep-button i {
+.protect-buttons-row button.vagabond-focus-upkeep-button i,
+.protect-buttons-row button.vagabond-conjure-dismiss i,
+.protect-buttons-row button.vagabond-surface-dismiss i {
   color: var(--c-yellow-text) !important;
   flex-shrink: 0;
+}
+
+/* Dismiss / Drop: the Apply Direct frame in dark red (ends something on the map or a Focus) */
+.protect-buttons-row button.vagabond-conjure-dismiss,
+.protect-buttons-row button.vagabond-surface-dismiss,
+.protect-buttons-row button.vagabond-focus-upkeep-button[data-upkeep=drop],
+.glyph-card-buttons button.vagabond-glyph-dismiss-button {
+  background: transparent !important;
+  background-image: url("../assets/ui/chat/dismiss-bg.webp") !important;
+  background-size: 100% 100% !important;
+  background-repeat: no-repeat !important;
+  background-position: center center !important;
+  color: #fff !important;
+}
+.protect-buttons-row button.vagabond-conjure-dismiss i,
+.protect-buttons-row button.vagabond-surface-dismiss i,
+.protect-buttons-row button.vagabond-focus-upkeep-button[data-upkeep=drop] i,
+.glyph-card-buttons button.vagabond-glyph-dismiss-button i {
+  color: var(--c-yellow-text, #DED656) !important;
 }
 
 /* ========================================
@@ -2809,7 +2836,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   width: 100%;
   margin-top: 4px;
   /* Trigger: same art as the Roll Damage / Apply Damage buttons */
-  /* Dismiss: same art as the save buttons (e.g. Reflex) */
+  /* Dismiss: dismiss-bg art, see the Dismiss / Drop block */
 }
 .glyph-card-buttons button {
   flex: 1;
@@ -2841,13 +2868,6 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 }
 .glyph-card-buttons .vagabond-glyph-trigger-button i {
   color: var(--c-yellow-text, #DED656);
-}
-.glyph-card-buttons .vagabond-glyph-dismiss-button {
-  background: url("../assets/ui/chat/yellow-button.webp");
-  color: var(--c-dark-blue, #0b1a23);
-}
-.glyph-card-buttons .vagabond-glyph-dismiss-button i {
-  color: #b03030;
 }
 
 /* --------------------------------------------------------- */
@@ -13607,6 +13627,19 @@ ol#combat-tracker.directory-list {
   font-size: 0.78rem;
   white-space: nowrap;
 }
+#sequencer-fx-config.sequencer-fx-config-form .sfx-hold {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-left: 0.6rem;
+  font-size: 0.78rem;
+  white-space: nowrap;
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-hold .sfx-hold-input {
+  width: 4rem;
+  height: 22px;
+  flex: 0 0 auto;
+}
 #sequencer-fx-config.sequencer-fx-config-form .sfx-scale-select {
   font-size: 0.78rem;
   height: 22px;
@@ -13750,6 +13783,38 @@ ol#combat-tracker.directory-list {
   border-color: var(--vagabond-c-chat-yellow);
   box-shadow: inset 0 0 0 1px var(--vagabond-c-chat-yellow);
   font-weight: bold;
+}
+.vagabond-video-preview .vpd-frame {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.5rem;
+  border-top: 1px solid var(--vagabond-c-faint);
+  font-size: 0.82rem;
+}
+.vagabond-video-preview .vpd-frame .vpd-frame-label {
+  white-space: nowrap;
+}
+.vagabond-video-preview .vpd-frame .vpd-frame-range {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.vagabond-video-preview .vpd-frame .vpd-frame-num {
+  width: 3.6rem;
+  flex: 0 0 auto;
+  height: auto;
+}
+.vagabond-video-preview .vpd-frame .vpd-frame-pct {
+  opacity: 0.7;
+}
+.vagabond-video-preview .vpd-frame .vpd-use-frame {
+  flex: 0 0 auto;
+  width: auto;
+  height: auto;
+  line-height: normal;
+  padding: 0.2rem 0.6rem;
+  white-space: nowrap;
+  gap: 0.3rem;
 }
 .vagabond-video-preview .vpd-footer {
   display: flex;
@@ -14085,7 +14150,7 @@ ol#combat-tracker.directory-list {
   top: calc(23.4% + 8px);
 }
 .vsc-root.no-rings .vsc-place {
-  top: 73%;
+  top: 76%;
 }
 .vsc-root.no-rings .vsc-delivery-list {
   top: calc(85.5% + 10px);
@@ -18847,6 +18912,14 @@ ol#combat-tracker.directory-list {
   text-align: center;
   color: inherit;
 }
+.vagabond .inventory-context-menu .context-menu-item.is-focus,
+.vagabond-context-menu.inventory-context-menu .context-menu-item.is-focus {
+  color: #4febff;
+}
+.vagabond .inventory-context-menu .context-menu-item.is-dismiss,
+.vagabond-context-menu.inventory-context-menu .context-menu-item.is-dismiss {
+  color: var(--vagabond-c-chat-yellow);
+}
 .vagabond .inventory-context-menu .context-menu-item.is-dim,
 .vagabond-context-menu.inventory-context-menu .context-menu-item.is-dim {
   opacity: 0.4;
@@ -18998,6 +19071,14 @@ ol#combat-tracker.directory-list {
   width: 16px;
   text-align: center;
   color: inherit;
+}
+.vagabond .status-context-menu .context-menu-item.is-focus,
+.vagabond-context-menu.status-context-menu .context-menu-item.is-focus {
+  color: #4febff;
+}
+.vagabond .status-context-menu .context-menu-item.is-dismiss,
+.vagabond-context-menu.status-context-menu .context-menu-item.is-dismiss {
+  color: var(--vagabond-c-chat-yellow);
 }
 .vagabond .status-context-menu .context-menu-item.is-dim,
 .vagabond-context-menu.status-context-menu .context-menu-item.is-dim {
@@ -19151,6 +19232,14 @@ ol#combat-tracker.directory-list {
   text-align: center;
   color: inherit;
 }
+.vagabond .party-compact-context-menu .context-menu-item.is-focus,
+.vagabond-context-menu.party-compact-context-menu .context-menu-item.is-focus {
+  color: #4febff;
+}
+.vagabond .party-compact-context-menu .context-menu-item.is-dismiss,
+.vagabond-context-menu.party-compact-context-menu .context-menu-item.is-dismiss {
+  color: var(--vagabond-c-chat-yellow);
+}
 .vagabond .party-compact-context-menu .context-menu-item.is-dim,
 .vagabond-context-menu.party-compact-context-menu .context-menu-item.is-dim {
   opacity: 0.4;
@@ -19302,6 +19391,14 @@ ol#combat-tracker.directory-list {
   width: 16px;
   text-align: center;
   color: inherit;
+}
+.vagabond .party-status-context-menu .context-menu-item.is-focus,
+.vagabond-context-menu.party-status-context-menu .context-menu-item.is-focus {
+  color: #4febff;
+}
+.vagabond .party-status-context-menu .context-menu-item.is-dismiss,
+.vagabond-context-menu.party-status-context-menu .context-menu-item.is-dismiss {
+  color: var(--vagabond-c-chat-yellow);
 }
 .vagabond .party-status-context-menu .context-menu-item.is-dim,
 .vagabond-context-menu.party-status-context-menu .context-menu-item.is-dim {
@@ -19459,6 +19556,14 @@ ol#combat-tracker.directory-list {
   width: 16px;
   text-align: center;
   color: inherit;
+}
+.vagabond .party-status-submenu .context-menu-item.is-focus,
+.vagabond-context-menu.party-status-submenu .context-menu-item.is-focus {
+  color: #4febff;
+}
+.vagabond .party-status-submenu .context-menu-item.is-dismiss,
+.vagabond-context-menu.party-status-submenu .context-menu-item.is-dismiss {
+  color: var(--vagabond-c-chat-yellow);
 }
 .vagabond .party-status-submenu .context-menu-item.is-dim,
 .vagabond-context-menu.party-status-submenu .context-menu-item.is-dim {

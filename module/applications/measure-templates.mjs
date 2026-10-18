@@ -1,4 +1,5 @@
 import { RegionTextureOverlay } from '../ui/region-texture-overlay.mjs';
+import { tokenEdgePoint, tokenHalfSize } from '../helpers/token-edge.mjs';
 
 /**
  * Manages creation and previewing of spell area regions for Vagabond.
@@ -74,7 +75,7 @@ export class VagabondMeasureTemplates {
     const regionData = this._constructRegionData({ type: deliveryType, distance, token, targets: game.user.targets, centroid, anchor, notify });
     if (!regionData) return;
 
-    regionData.flags = { vagabond: { isPreview: true, actorId: actor.id, itemId, texture: this._resolveTexture(damageType, fxSchool) } };
+    regionData.flags = foundry.utils.mergeObject(regionData.flags ?? {}, { vagabond: { isPreview: true, actorId: actor.id, itemId, texture: this._resolveTexture(damageType, fxSchool) } });
 
     const docs = await canvas.scene.createEmbeddedDocuments('Region', [regionData]);
     if (docs?.[0]) {
@@ -216,14 +217,14 @@ export class VagabondMeasureTemplates {
     });
 
     if (regionData) {
-      regionData.flags = {
+      regionData.flags = foundry.utils.mergeObject(regionData.flags ?? {}, {
         vagabond: {
           deliveryType,
           deliveryText,
           targetsAtRollTime: storedTargets,
           texture: this._resolveTexture(damageType, fxSchool)
         }
-      };
+      });
       const docs = await canvas.scene.createEmbeddedDocuments('Region', [regionData]);
       if (docs?.[0]) this.chatRegions.set(messageId, docs[0].id);
       return true;
@@ -326,8 +327,8 @@ export class VagabondMeasureTemplates {
       return 'Could not determine origin point (caster token) for area.';
     }
     if (this.AREA_NEEDS_TARGET.includes(t) && !hasTarget) {
-      // Cube / Sphere can also be placed by hand (SpellPlacement, Cast dialog crosshair)
-      if (t === 'cube' || t === 'sphere') return game.i18n.format('VAGABOND.SpellPlace.NeedAim', { type: game.i18n.localize(CONFIG.VAGABOND.deliveryTypes?.[t] ?? t) });
+      // Cube / Sphere / Line can also be placed by hand (SpellPlacement, Cast dialog crosshair)
+      if (t === 'cube' || t === 'sphere' || t === 'line') return game.i18n.format('VAGABOND.SpellPlace.NeedAim', { type: game.i18n.localize(CONFIG.VAGABOND.deliveryTypes?.[t] ?? t) });
       return `Please target a token to place the ${t}.`;
     }
     return null;
@@ -395,11 +396,15 @@ export class VagabondMeasureTemplates {
 
     let shape;
     let name;
+    // Grid spaces of the shape inside the caster's token, left out of the measurement label (installMeasureLabels)
+    let measureOffset = 0;
 
     switch (type.toLowerCase()) {
       case 'aura':
         name = 'Aura';
-        shape = { type: 'circle', x: token.center.x, y: token.center.y, radius: (distance + FEET_PER_SQUARE / 2) * distancePixels };
+        // Measured from the token's edge (any token size)
+        shape = { type: 'circle', x: token.center.x, y: token.center.y, radius: radiusPixels + tokenHalfSize(token) };
+        measureOffset = tokenHalfSize(token) / canvas.grid.size;
         break;
 
       case 'cone': {
@@ -409,7 +414,9 @@ export class VagabondMeasureTemplates {
           rotation = Math.toDegrees(ray.angle);
         }
         name = 'Cone';
-        shape = { type: 'cone', x: token.center.x, y: token.center.y, radius: radiusPixels, angle: 90, rotation, curvature: 'round' };
+        // Starts at the caster's edge (Vagabond counts from the edge), so the caster's own space stays out
+        const origin = tokenEdgePoint(token, Math.toRadians(rotation));
+        shape = { type: 'cone', x: origin.x, y: origin.y, radius: radiusPixels, angle: 90, rotation, curvature: 'round' };
         break;
       }
 
@@ -419,8 +426,10 @@ export class VagabondMeasureTemplates {
         const rotation = Math.toDegrees(ray.angle);
         const widthPixels = FEET_PER_SQUARE * distancePixels;
         name = 'Line';
-        // v14 Region shape type for rays is "line" (not "ray")
-        shape = { type: 'line', x: token.center.x, y: token.center.y, length: radiusPixels, width: widthPixels, rotation };
+        // Starts at the caster's edge (Vagabond counts from the edge): a 15' Line = the 3 spaces beyond the token,
+        // never the caster's own space. v14 Region shape type for rays is "line" (not "ray")
+        const origin = tokenEdgePoint(token, ray.angle);
+        shape = { type: 'line', x: origin.x, y: origin.y, length: radiusPixels, width: widthPixels, rotation };
         break;
       }
 
@@ -442,8 +451,10 @@ export class VagabondMeasureTemplates {
       }
 
       case 'sphere': {
-        // A point placed on open ground sits on its grid space's center
-        const center = (anchorPoint && !anchor.tokenId && !canvas.grid.isGridless) ? canvas.grid.getCenterPoint(anchorPoint) : destinationPoint;
+        // A Sphere is centered on a grid intersection (vertex): a point placed on open ground snaps to the nearest one
+        const center = (anchorPoint && !anchor.tokenId && !canvas.grid.isGridless)
+          ? canvas.grid.getSnappedPoint(anchorPoint, { mode: CONST.GRID_SNAPPING_MODES.VERTEX })
+          : destinationPoint;
         name = 'Sphere';
         shape = { type: 'circle', x: center.x, y: center.y, radius: radiusPixels };
         break;
@@ -457,9 +468,10 @@ export class VagabondMeasureTemplates {
     // Resolve token attachment so the region follows the caster (origin types) or
     // the target (target types) when that token moves. Multi-target placements stay static.
     const targetCount = targets?.size ?? targets?.length ?? (centroid ? 1 : 0);
-    // Hand-placed: follows the token it was aimed at, else stays where it was put
+    // Hand-placed: follows the token it was aimed at, else stays where it was put (a Line always stays: it starts
+    // at the caster, so following the aimed token would drag its origin away)
     const attachTokenId = anchorPoint
-      ? ((anchor.tokenId && canvas.tokens?.get(anchor.tokenId)) ? anchor.tokenId : null)
+      ? ((anchor.tokenId && type.toLowerCase() !== 'line' && canvas.tokens?.get(anchor.tokenId)) ? anchor.tokenId : null)
       : this._resolveAttachmentTokenId(type, token, targetToken, targetCount);
 
     // True Shape ('shapes') vs Covered Grid Spaces ('coverage') — GM-configurable, default True Shape.
@@ -481,6 +493,23 @@ export class VagabondMeasureTemplates {
       displayMeasurements: true,
       hidden: false,
       locked: false,
+      ...(measureOffset ? { flags: { vagabond: { measureOffset } } } : {}),
+    };
+  }
+
+  /**
+   * Region measurement labels count from the caster's edge: an Aura's radius includes half the token, so its label
+   * would read 17.5 ft for a 15' Aura. Regions flagged `measureOffset` (grid spaces) subtract it from every label.
+   */
+  static installMeasureLabels() {
+    const proto = CONFIG.Region?.objectClass?.prototype;
+    if (!proto || proto._vagabondMeasureOffset) return;
+    const original = proto._formatMeasuredDistance;
+    if (typeof original !== 'function') return;
+    proto._vagabondMeasureOffset = true;
+    proto._formatMeasuredDistance = function (distance) {
+      const offset = (Number(this.document?.flags?.vagabond?.measureOffset) || 0) * (canvas.dimensions?.distance ?? 5);
+      return original.call(this, offset ? Math.max(0, distance - offset) : distance);
     };
   }
 }

@@ -40,8 +40,9 @@ export class FocusLink {
   }
 
   /**
-   * Stamp effects created by a held Cast. Skips the Focusing status, effects another Cast already stamped and
-   * effects this user can't update. An effect stamped by the same Cast's handler keeps its fields.
+   * Stamp effects created by a held Cast. Skips the Focusing status, a Spell Surface's while-inside statuses (they
+   * end with the area, which ends with the Focus), effects another Cast already stamped and effects this user
+   * can't update. An effect stamped by the same Cast's handler keeps its fields.
    * @param {ActiveEffect[]} effects
    * @param {object} stamp
    */
@@ -50,6 +51,7 @@ export class FocusLink {
       try {
         if (!effect?.id || !effect.parent?.effects?.has(effect.id) || !effect.isOwner) continue;
         if (effect.statuses?.has('focusing')) continue;
+        if (effect.flags?.vagabond?.surfaceRegion) continue;
         const prev = effect.flags?.vagabond?.spellTracker;
         if (prev && (prev.casterUuid !== stamp.casterUuid || prev.spellId !== stamp.spellId)) continue;
         if (prev?.held === stamp.held) continue;

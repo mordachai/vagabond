@@ -1,5 +1,6 @@
 import { VagabondSpellSequencer } from '../../helpers/spell-sequencer.mjs';
 import { FocusLink } from '../../helpers/focus-link.mjs';
+import { MacroAutoRun } from '../../helpers/macro-autorun.mjs';
 
 /**
  * Handler for spell-related functionality in the character sheet.
@@ -48,7 +49,7 @@ export class SpellHandler {
   _getSpellState(spellId) {
     if (!this.spellStates[spellId]) {
       const spell = this.actor.items.get(spellId);
-      const defaultUseFx = spell?.system?.damageType === '-';
+      const defaultUseFx = !!spell?.system?.effectByDefault;
 
       this.spellStates[spellId] = {
         damageDice: 1,
@@ -880,13 +881,15 @@ export class SpellHandler {
       );
       if (!fxDeferred) {
         const liveTargets = [...(picked.tokens ?? Array.from(game.user.targets)), ...SpellPlacement.pseudoTargets(state.targetSpaces)];
-        VagabondSpellSequencer.play(spell, state.deliveryType, state.deliveryIncrease, casterToken, liveTargets, { deliveryEnabled: isSuccess, areaCenter });
+        const played = VagabondSpellSequencer.play(spell, state.deliveryType, state.deliveryIncrease, casterToken, liveTargets, { deliveryEnabled: isSuccess, areaCenter });
+        // The hit macro presses itself when the target animation lands (deferred FX: at Roll Damage)
+        if (isSuccess) MacroAutoRun.afterFx(castMessage, played);
       }
     }
     // ── End Sequencer FX ──────────────────────────────────────────────────────
 
     // Reset spell state (keep deliveryType, reset useFx to default)
-    const defaultUseFx = spell?.system?.damageType === '-';
+    const defaultUseFx = !!spell?.system?.effectByDefault;
     this.spellStates[spellId] = {
       damageDice: 1,
       deliveryType: state.deliveryType, // Keep last selected delivery
@@ -1180,8 +1183,8 @@ export class SpellHandler {
 
           const state = this._getSpellState(spellId);
 
-          // When increasing from 0, turn off auto-Fx (damage is back)
-          if (state.damageDice === 0) {
+          // When increasing from 0, turn off auto-Fx (damage is back) — unless the Spell starts with its Effect on
+          if (state.damageDice === 0 && !this.actor.items.get(spellId)?.system?.effectByDefault) {
             state.useFx = false;
           }
 

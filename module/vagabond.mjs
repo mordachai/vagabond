@@ -61,7 +61,9 @@ import { VagabondSpellSequencer } from './helpers/spell-sequencer.mjs';
 import { ConeFx } from './helpers/cone-fx.mjs';
 import { VagabondFXResolver } from './helpers/fx-file-resolver.mjs';
 import { registerSocket, emitSocket, registerSocketAction } from './helpers/socket-helper.mjs';
-import { runMacroFromButton, executeItemMacro, registerMacroHandler, registerCastGate, registerMacroQueries } from './helpers/item-macro.mjs';
+import { runMacroFromButton, executeItemMacro, registerMacroHandler, registerCastGate, registerMacroQueries, macroDescriptorFromButton } from './helpers/item-macro.mjs';
+import { MacroAutoRun } from './helpers/macro-autorun.mjs';
+import { AnimationBridge } from './helpers/animation-bridge.mjs';
 import { FocusLink } from './helpers/focus-link.mjs';
 import { FeatureAction } from './helpers/feature-action.mjs';
 import { RollExpiry } from './helpers/roll-expiry.mjs';
@@ -81,6 +83,7 @@ import { HunterHelper } from './helpers/hunter-helper.mjs';
 import { SpellTrackerHelper } from './helpers/spell-tracker-helper.mjs';
 import { RaiseHelper } from './helpers/raise-helper.mjs';
 import { ConjureHelper } from './helpers/conjure-helper.mjs';
+import { SpellSurface } from './helpers/spell-surface.mjs';
 import { PugilistHelper } from './helpers/pugilist-helper.mjs';
 import { DefenseHelper } from './helpers/defense-helper.mjs';
 import { FocusUpkeep } from './helpers/focus-upkeep.mjs';
@@ -451,6 +454,8 @@ Hooks.once('init', function () {
   TokenPortrait.registerQueries();
   // runAsGM macro / hit-macro buttons: players relay to the active GM and get its warnings back
   registerMacroQueries();
+  // Automated Animations: attack / NPC action animations play with the damage roll (not the check)
+  AnimationBridge.registerHooks();
   // Conjure (Beast / Forge): the caster's client picks + places, the active GM creates / removes
   ConjureHelper.registerQueries();
   CraftingHelper.registerModes();
@@ -468,6 +473,7 @@ Hooks.once('init', function () {
   globalThis.vagabond.managers = {
     templates: new VagabondMeasureTemplates()
   };
+  VagabondMeasureTemplates.installMeasureLabels();
 
   // Register custom ActiveEffect document class
   CONFIG.ActiveEffect.documentClass = VagabondActiveEffect;
@@ -733,6 +739,8 @@ Hooks.once('ready', function () {
   RaiseHelper.registerMacroHandlers(registerMacroHandler, registerCastGate);
   // Conjure Spells (Beast, Forge): system:spell.conjure opens the Conjure picker
   ConjureHelper.registerMacroHandlers(registerMacroHandler, registerCastGate);
+  // Spell Surfaces (Goop, Erupt, Sprout, Adhere, Terraform, Fog, Gas): system:spell.surface leaves the area on the map
+  SpellSurface.register(registerMacroHandler);
 
   // Live state of feature buttons: glow while the effect is on, end it from the sheet / HUD
   // (right-click; Momentum is a pure toggle so a left click ends it too).
@@ -941,6 +949,8 @@ Hooks.once('ready', function () {
     loadJB2ADefaults();
   }
   VagabondSpellSequencer.warmConfigFiles();
+  // This device's FX toggle on the User, so other casters' FX reach (or skip) this client
+  VagabondSpellSequencer.syncViewerFlag();
   // GM pre-expands every configured wildcard FX path into the shared world-setting cache
   // so player clients can play those animations without FILES_BROWSE permission.
   VagabondFXResolver.resolveAllConfigured();
@@ -1014,12 +1024,16 @@ Hooks.once('ready', function () {
   SpellTrackerHelper.migrateSpellFocusOnCast();
   // One-time: Spell copies get the pack's Focus Mana (Ward / Polymorph / Beast) and Ward Upcast switch.
   SpellTrackerHelper.migrateSpellFocusUpkeep();
+  // One-time: Adhere / Apoplex / Goop / Frostburn / Gas copies get the book-checked status entries (Frostburning).
+  SpellTrackerHelper.migrateSpellStatusEntries();
   // One-time: named Relic copies (Dyrnwyn, Elven Chain…) become their weapon / armor with attached Relics.
   RelicHelper.migrateNamedRelics();
   // One-time: Raise copies get the system:spell.raise hit macro.
   RaiseHelper.migrateWorldSpells();
   // One-time: Beast / Forge copies get their Conjure rules + the system:spell.conjure hit macro.
   ConjureHelper.migrateWorldSpells();
+  // One-time: Surface Spell copies get their surface rules + the system:spell.surface hit macro.
+  SpellSurface.migrateWorldSpells();
   // One-time: class items get the Alpha 3 deltas (runs after every earlier class migration settled).
   // Then: class items get the scaling-chain ids (scaleKey) the sheet / HUD collapse features on.
   // Then: feature buttons added to the pack later (Alchemist Mix) reach existing class copies.
@@ -1103,6 +1117,8 @@ DruidHelper.registerHooks();
 RaiseHelper.registerHooks();
 // Conjure: conjured Beings / Items end with the Focus, or at the caster's next Turn without one
 ConjureHelper.registerHooks();
+// Spell Surfaces: loop visuals, end with the Focus / at the caster's next Turn, statuses end with the Region
+SpellSurface.registerHooks();
 PugilistHelper.registerHooks();
 // Defense property: Patience tracking (inert unless an actor has system.patienceDefense)
 DefenseHelper.registerHooks();
@@ -2375,7 +2391,7 @@ const FLUKE_REROLL_ENTRY = {
       const spell = actor.items.get(rerollData.itemId);
       const delivery = String(rerollData.deliveryType ?? '').toUpperCase();
       if (spell && rerollData.damageDice !== undefined && delivery !== 'IMBUE' && delivery !== 'GLYPH') {
-        await VagabondChatCard.rerollSpellCast(actor, spell, rerollData, roll, flags.targetsAtRollTime || []);
+        await VagabondChatCard.rerollSpellCast(actor, spell, rerollData, roll, flags.targetsAtRollTime || [], message);
       } else {
         const key = rerollData.manaSkillKey || 'magic';
         await VagabondChatCard._checkRoll(actor, 'cast', key, roll, rerollData.difficulty, isSuccess);
@@ -2525,6 +2541,7 @@ const FORCE_CRIT_ENTRY = {
         footerActions: critEffectButtons ? [critEffectButtons] : [],
         spellCast: critSpellCast,
       });
+      await MacroAutoRun.inherit(message, critCastMessage);
       if (spell && rerollData.deliveryType) {
         const { VagabondDamageHelper } = await import('./helpers/damage-helper.mjs');
         await VagabondDamageHelper.playFxOrDefer(
@@ -2929,6 +2946,14 @@ Hooks.on('renderChatMessageHTML', (message, html) => {
     button.addEventListener('click', (ev) => {
       ev.preventDefault();
       import('./helpers/ward-helper.mjs').then(({ WardHelper }) => WardHelper.wardOff(button, ev));
+    });
+  });
+
+  // Spell Surface result card: Dismiss the area
+  html.querySelectorAll('.vagabond-surface-dismiss').forEach(button => {
+    button.addEventListener('click', (ev) => {
+      ev.preventDefault();
+      SpellSurface.handleDismissButton(button);
     });
   });
 
@@ -3371,37 +3396,9 @@ Hooks.on('renderChatMessageHTML', (message, html) => {
     button.addEventListener('click', async (ev) => {
       ev.preventDefault();
       try {
-        const snapshot = message?.flags?.vagabond?.targetsAtRollTime;
-        const targetTokenIds = Array.isArray(snapshot) ? snapshot.map(t => t.tokenId).filter(Boolean) : [];
-        const sceneId = (Array.isArray(snapshot) && snapshot[0]?.sceneId) || canvas.scene?.id || null;
-        const actionIndexRaw = button.dataset.actionIndex;
-
-        // Embedded inline command (base64) — fallback so the button still works
-        // after the source item is consumed/deleted.
-        const cmdB64 = button.dataset.commandB64;
-        const command = cmdB64 ? decodeURIComponent(escape(atob(cmdB64))) : null;
-
-        // Per-cast extra scope data (e.g. spell damageDice / manaSpent)
-        const scopeB64 = button.dataset.extraScopeB64;
-        let extraScope = null;
-        if (scopeB64) {
-          try { extraScope = JSON.parse(decodeURIComponent(escape(atob(scopeB64)))); }
-          catch (e) { console.warn('VAGABOND | Bad macro extra-scope payload:', e); }
-        }
-
-        await runMacroFromButton({
-          itemUuid: button.dataset.itemUuid || null,
-          itemName: button.dataset.itemName || null,
-          actorUuid: button.dataset.actorUuid || null,
-          actionIndex: actionIndexRaw != null ? parseInt(actionIndexRaw) : null,
-          slot: button.dataset.macroSlot === 'hitMacro' ? 'hitMacro' : 'macro',
-          command,
-          runAsGM: button.dataset.runAsGm === 'true',
-          isCritical: button.dataset.isCritical === 'true',
-          extraScope,
-          targetTokenIds,
-          sceneId,
-        });
+        // A hand-clicked hit macro is never auto-run afterwards (MacroAutoRun)
+        if (button.dataset.macroSlot === 'hitMacro') MacroAutoRun.markRan(message);
+        await runMacroFromButton(macroDescriptorFromButton(button, message));
       } catch (err) {
         console.error('VAGABOND | Item macro execution failed:', err);
         ui.notifications.error('Macro execution failed — see console (F12).');

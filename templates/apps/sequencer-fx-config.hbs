@@ -145,6 +145,13 @@
                   </option>
                   {{/each}}
                 </select>
+                <label class="sfx-hold" data-tooltip="{{localize 'VAGABOND.SequencerFX.HoldFrameHint'}}">
+                  <span>{{localize "VAGABOND.SequencerFX.HoldFrame"}}</span>
+                  <input type="number" class="sfx-hold-input"
+                    name="areaAnims.{{../key}}.{{deliveryKey}}.hold"
+                    value="{{hold}}" step="1" min="0" max="100"
+                    placeholder="{{localize 'VAGABOND.VideoPreview.Loop'}}"/>
+                </label>
               </div>
 
             </div>

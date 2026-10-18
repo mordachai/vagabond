@@ -59,6 +59,7 @@ export const SETTINGS_SUBJECTS = [
         { key: 'trinketCastMode', dep: 'trinketCastRequirement', depNot: 'off' },
         { key: 'spellManaOnCastFail' },
         { key: 'imbueUpfrontMana' },
+        { key: 'spellHitMacroAutoRun' },
       ]},
       { id: 'placement', scope: 'world', rows: [
         { key: 'spellPlacementEnforce' },
@@ -68,6 +69,7 @@ export const SETTINGS_SUBJECTS = [
       { id: 'areas', scope: 'world', note: 'VAGABOND.SettingsHub.Notes.areas', rows: [
         { key: 'regionHighlightMode' },
         { key: 'regionBorderMode' },
+        { key: 'spellAreaDisplay' },
         { key: 'regionUseTextures' },
         { key: 'regionTextureAlpha', format: 'pct', dep: 'regionUseTextures' },
         { kind: 'action', action: 'forcePush', icon: 'fa-users-gear',
@@ -88,6 +90,7 @@ export const SETTINGS_SUBJECTS = [
       ]},
       { id: 'areaDisplay', scope: 'client', rows: [
         { kind: 'override', key: 'regionBorderModeUser', of: 'regionBorderMode' },
+        { kind: 'override', key: 'spellAreaDisplayUser', of: 'spellAreaDisplay' },
         { kind: 'override', key: 'regionTextureAlphaUser', of: 'regionTextureAlpha', flag: 'regionTextureAlphaUseGM', format: 'pct' },
       ]},
     ],
@@ -142,6 +145,7 @@ export const SETTINGS_SUBJECTS = [
     sections: [
       { id: 'fxWorld', scope: 'world', rows: [
         { key: 'useAnimations' },
+        { key: 'fxOnMiss' },
         { kind: 'launcher', app: 'sequencerFx', icon: 'fa-folder-open',
           label: 'VAGABOND.Settings.sequencerFxConfig.name', hint: 'VAGABOND.Settings.sequencerFxConfig.hint' },
         { kind: 'launcher', app: 'dsnDamage', icon: 'fa-dice-d20',

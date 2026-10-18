@@ -6,6 +6,7 @@
 import { SPELL_FX, getJB2ADefaults } from './sequencer-config.mjs';
 import { VagabondFXResolver } from './fx-file-resolver.mjs';
 import { emitSocket } from './socket-helper.mjs';
+import { tokenEdgePoint } from './token-edge.mjs';
 
 // Video metadata cache — keyed by file path. Populated in play() before building the sequence.
 const _metaCache = new Map();
@@ -13,6 +14,11 @@ const _metaCache = new Map();
 // Per-wall volume multiplier for positional spell sounds — compounds with each wall crossed
 // between source and listener (see VagabondSpellSequencer._listenerAudibility).
 const SOUND_WALL_MUFFLE = 0.35;
+
+// Fraction of the target animation after which a Spell "lands" (hit macro auto-run).
+const LANDS_AT = 0.9;
+// Clip length assumed when a file's real duration can't be read.
+const FALLBACK_CLIP_MS = 1500;
 
 // Maps damage types (from CONFIG) to FX schools.
 // Unmapped types fall back to 'arcane'.
@@ -76,7 +82,8 @@ export class VagabondSpellSequencer {
   }
 
   /**
-   * Whether the current user has FX enabled in their client settings.
+   * Whether the current user has FX enabled in their client settings (what THIS device shows;
+   * the caster's client still sends its FX to everyone else who has them on).
    * @returns {boolean}
    */
   static isEnabledForUser() {
@@ -96,6 +103,172 @@ export class VagabondSpellSequencer {
     const dmg = spellItem.system?.damageType;
     if (dmg && dmg !== '-') return AUTO_SCHOOL[dmg] ?? 'arcane';
     return 'arcane';
+  }
+
+  /**
+   * The area animation configured for a school + delivery (its `file` may be a wildcard: resolve it with
+   * `VagabondFXResolver`). Used by Spell Surfaces to loop a Line's cast beam.
+   * @param {string} school
+   * @param {string} deliveryType
+   * @returns {object|null}
+   */
+  static areaAnimFor(school, deliveryType) {
+    const cfg = this._getConfig().areaAnims?.[school]?.[deliveryType];
+    return cfg?.file ? cfg : null;
+  }
+
+  /**
+   * Clips that build up and then break apart (the ice line): a Spell Surface plays them once and holds this frame
+   * (% of the clip) instead of looping. The GM sets an FX config entry's own `hold` (%) from the preview; it wins
+   * (0 = keep looping). Keyed by file name.
+   */
+  static SURFACE_HOLD = [
+    { match: /TemplateLineIce01/i, at: 50 },
+  ];
+
+  /** The built-in hold point (%) of a clip, or null. */
+  static defaultHoldFor(file) {
+    const name = String(Array.isArray(file) ? file[0] : file ?? '');
+    return this.SURFACE_HOLD.find(h => h.match.test(name))?.at ?? null;
+  }
+
+  /** Hold point (fraction 0-1] of a clip for a Spell Surface, or null to loop it. */
+  static surfaceHoldFor(cfg, file = cfg?.file) {
+    const raw = cfg?.hold;
+    const pct = (raw === undefined || raw === null || raw === '') ? this.defaultHoldFor(file) : Number(raw);
+    return (pct > 0 && pct <= 100) ? pct / 100 : null;
+  }
+
+  /**
+   * Fit a Line clip to a Line area: the JB2A version closest to its length (`_15ft_`, `_30ft_`... siblings in the
+   * Sequencer database) and the clip's margins (JB2A `_template` [gridSize, startPoint, endPoint], e.g. line200 =
+   * 200 px per square, 200 px before and after the content). Sequencer only reads that for database paths, never
+   * for a plain file, and `stretchTo` grows the thickness with the length.
+   * @param {string|string[]} file  resolved file (or database path)
+   * @param {number} lengthPx  Line length on the canvas
+   * @returns {{file: string, w: number, h: number, grid: number|null, start: number, end: number}|null}
+   */
+  static lineBeam(file, lengthPx) {
+    let f = Array.isArray(file) ? file[0] : file;
+    if (!f) return null;
+    let template = null;
+    const db = globalThis.Sequencer?.Database;
+    try {
+      const isDb = !/\.\w{2,5}$/.test(f);
+      const key = isDb ? f : db?.inverseFlattenedEntries?.get(f);
+      if (key && db) {
+        const parent = String(key).replace(/\.\d+ft$/i, '');
+        const entry = db.getEntry(parent, { softFail: true }) ?? db.getEntry(key, { softFail: true });
+        template = Array.isArray(entry?.template) ? entry.template : null;
+        const variants = (entry?.file && typeof entry.file === 'object' && !Array.isArray(entry.file))
+          ? Object.entries(entry.file).filter(([k, v]) => /^\d+ft$/i.test(k) && typeof v === 'string') : [];
+        if (variants.length) {
+          const lengthFt = lengthPx / canvas.grid.size * canvas.dimensions.distance;
+          f = variants.reduce((best, [k, v]) => Math.abs(parseInt(k) - lengthFt) < Math.abs(parseInt(best[0]) - lengthFt) ? [k, v] : best)[1];
+        } else if (isDb) {
+          const one = Array.isArray(entry?.file) ? entry.file[0] : entry?.file;
+          if (typeof one === 'string') f = one;
+        }
+      }
+    } catch { /* not in the database: the plain file */ }
+    const dims = String(f).match(/_(\d+)x(\d+)\.\w+$/);
+    const meta = dims ? { w: Number(dims[1]), h: Number(dims[2]) } : this._getMeta(f);
+    if (!meta?.w || !meta?.h) return null;
+    const [grid = null, start = 0, end = 0] = template ?? [];
+    return { file: f, w: meta.w, h: meta.h, grid, start, end };
+  }
+
+  /** Visible content box per `file|pct` (see contentBox). */
+  static #boxCache = new Map();
+
+  /**
+   * The visible (non-transparent) part of one frame of a clip, in the clip's own pixels, so an area can fit what
+   * the eye sees instead of the whole frame (JB2A frames carry wide transparent margins). Cached per file + frame.
+   * @param {string} file  plain file path
+   * @param {number} [pct=50]  frame to measure (% of the clip)
+   * @returns {Promise<{x: number, y: number, w: number, h: number, W: number, H: number}|null>}
+   */
+  static contentBox(file, pct = 50) {
+    if (!file || !/\.\w{2,5}$/.test(file)) return Promise.resolve(null);
+    const key = `${file}|${Math.round(pct)}`;
+    if (this.#boxCache.has(key)) return this.#boxCache.get(key);
+    const job = new Promise(resolve => {
+      const v = document.createElement('video');
+      let finished = false;
+      const done = (box) => {
+        if (finished) return;
+        finished = true;
+        v.removeAttribute('src');
+        v.load();
+        resolve(box);
+      };
+      const timer = setTimeout(() => done(null), 8000);
+      v.muted = true;
+      v.preload = 'auto';
+      v.addEventListener('loadedmetadata', () => {
+        v.currentTime = Math.clamp(v.duration * pct / 100, 0, Math.max(0, v.duration - 0.05));
+      }, { once: true });
+      v.addEventListener('seeked', () => {
+        clearTimeout(timer);
+        try {
+          const W = v.videoWidth, H = v.videoHeight;
+          const s = Math.min(1, 480 / Math.max(W, H));
+          const cw = Math.max(1, Math.round(W * s)), ch = Math.max(1, Math.round(H * s));
+          const c = document.createElement('canvas');
+          c.width = cw; c.height = ch;
+          const ctx = c.getContext('2d', { willReadFrequently: true });
+          ctx.drawImage(v, 0, 0, cw, ch);
+          const px = ctx.getImageData(0, 0, cw, ch).data;
+          let x0 = cw, y0 = ch, x1 = -1, y1 = -1;
+          for (let y = 0; y < ch; y++) {
+            for (let x = 0; x < cw; x++) {
+              if (px[(y * cw + x) * 4 + 3] < 48) continue; // faint glow doesn't count
+              if (x < x0) x0 = x; if (x > x1) x1 = x;
+              if (y < y0) y0 = y; if (y > y1) y1 = y;
+            }
+          }
+          if (x1 < 0) return done(null);
+          done({ x: x0 / s, y: y0 / s, w: (x1 - x0 + 1) / s, h: (y1 - y0 + 1) / s, W, H });
+        } catch { done(null); }
+      }, { once: true });
+      v.addEventListener('error', () => { clearTimeout(timer); done(null); }, { once: true });
+      v.src = file;
+    });
+    this.#boxCache.set(key, job);
+    return job;
+  }
+
+  /**
+   * How to draw a Line clip so what the eye sees spans the Line (length × width): its visible content box (frame
+   * `pct`), else the JB2A margins. Shared by the Line cast beam and a Line Surface's loop.
+   * @param {string|string[]} file  resolved file (or database path)
+   * @param {number} lengthPx
+   * @param {number} widthPx
+   * @param {number} [pct=50]  frame the box is measured on
+   * @returns {Promise<{file: string, anchor: {x: number, y: number}, size: {width: number, height: number}}|null>}
+   */
+  static async lineFit(file, lengthPx, widthPx, pct = 50) {
+    const beam = this.lineBeam(file, lengthPx);
+    if (!beam || !(lengthPx > 0) || !(widthPx > 0)) return null;
+    const box = await this.contentBox(beam.file, pct);
+    if (box?.w && box?.h) {
+      return {
+        file: beam.file,
+        anchor: { x: box.x / box.W, y: (box.y + box.h / 2) / box.H },
+        size: { width: box.W * lengthPx / box.w, height: box.H * widthPx / box.h },
+      };
+    }
+    if (beam.w > beam.start + beam.end) {
+      const sx = lengthPx / (beam.w - beam.start - beam.end);
+      const sy = beam.grid ? widthPx / beam.grid : widthPx / beam.h;
+      return { file: beam.file, anchor: { x: beam.start / beam.w, y: 0.5 }, size: { width: beam.w * sx, height: beam.h * sy } };
+    }
+    return null;
+  }
+
+  /** The FX school of a Spell (explicit `fxSchool`, else from its damage type). */
+  static schoolOf(spellItem) {
+    return this._resolveSchool(spellItem);
   }
 
   /**
@@ -349,6 +522,8 @@ export class VagabondSpellSequencer {
    * @param {object} data - { file, volume, x, y, elevation, radius }
    */
   static async _renderLocalPositionalSound(data) {
+    // Each device's own FX toggle (the caster sends to everyone)
+    if (!this.isEnabledForUser()) return;
     try {
       const heard = this._listenerAudibility({ x: data.x, y: data.y }, data.elevation, data.radius);
       if (!heard) return;
@@ -445,17 +620,25 @@ export class VagabondSpellSequencer {
    * @param {Token[]} targetTokens
    * @private
    */
-  static _addAreaAnim(seq, school, deliveryType, distanceFt, casterToken, targetTokens, fileMap, areaCenter = null) {
+  static _addAreaAnim(seq, school, deliveryType, distanceFt, casterToken, targetTokens, fileMap, areaCenter = null, { missed = false, lineFit = null } = {}) {
     const schoolAnims = this._getConfig().areaAnims?.[school];
-    if (!schoolAnims) return;
+    if (!schoolAnims) return null;
     let cfg = schoolAnims[deliveryType];
-    if (!cfg?.file) return;
+    if (!cfg?.file) return null;
     cfg = { ...cfg, file: fileMap?.get(cfg.file) ?? cfg.file };
 
     // ── Beam-mode patterns: fixed Y-scale, X scales with distance ────────────
+    // Returned (not played) so play() can limit them to the viewers before playing.
     if (cfg.scaleMode === 'chain') {
-      const nodes = [casterToken, ...targetTokens];
       const chainSeq = new Sequence();
+      if (missed) {
+        // A missed chain never jumps: one bolt flies past the first Target
+        const src = this._center(casterToken);
+        const first = targetTokens[0];
+        if (first) this._beamEffect(chainSeq, cfg, src, this._missPoint(src, this._center(first)));
+        return chainSeq;
+      }
+      const nodes = [casterToken, ...targetTokens];
       for (let i = 0; i < nodes.length - 1; i++) {
         let fx = chainSeq.effect()
           .file(cfg.file)
@@ -465,14 +648,18 @@ export class VagabondSpellSequencer {
           .waitUntilFinished(-100);
         this._applyOpacity(fx, cfg);
       }
-      chainSeq.play();
-      return;
+      return chainSeq;
     }
     if (cfg.scaleMode === 'multiray') {
       // Fresh sequence per the working Sequencer macro pattern — attachTo + stretchTo
       // misbehaves when added to a sequence that already has waitUntilFinished effects.
       const beamSeq = new Sequence();
       for (const target of targetTokens) {
+        if (missed) {
+          const src = this._center(casterToken);
+          this._beamEffect(beamSeq, cfg, src, this._missPoint(src, this._center(target)));
+          continue;
+        }
         let fx = beamSeq.effect()
           .file(cfg.file)
           .attachTo(casterToken)
@@ -481,8 +668,16 @@ export class VagabondSpellSequencer {
           .duration(this._getDuration(cfg));
         this._applyOpacity(fx, cfg);
       }
-      beamSeq.play();
-      return;
+      return beamSeq;
+    }
+
+    // Touch beams miss past their Targets; the other deliveries have no miss variant (play() never asks)
+    if (missed) {
+      if (deliveryType === 'touch') {
+        const src = this._center(casterToken);
+        for (const target of targetTokens) this._beamEffect(seq, cfg, src, this._missPoint(src, this._center(target)));
+      }
+      return null;
     }
 
     switch (deliveryType) {
@@ -503,10 +698,12 @@ export class VagabondSpellSequencer {
       }
 
       case 'cone': {
+        // From the caster's edge, like the Cone template
+        const coneDeg = this._getConeDirection(casterToken, targetTokens);
         let fx = seq.effect()
           .file(cfg.file)
-          .atLocation(casterToken)
-          .rotate(-this._getConeDirection(casterToken, targetTokens))
+          .atLocation(tokenEdgePoint(casterToken, Math.toRadians(coneDeg)))
+          .rotate(-coneDeg)
           .anchor({ x: 0, y: 0.5 })
           .duration(this._getDuration(cfg));
         this._applyAreaSize(fx, distanceFt, cfg);
@@ -527,13 +724,28 @@ export class VagabondSpellSequencer {
       }
 
       case 'line': {
-        const srcCenter = this._center(casterToken);
+        const casterCenter = this._center(casterToken);
         let lineAngle = 0;
-        const lineCentroid = this._centroid(targetTokens);
+        // Hand-aimed (SpellPlacement): toward the line's own middle, not its targets'
+        const lineCentroid = areaCenter ?? this._centroid(targetTokens);
         if (lineCentroid) {
-          lineAngle = Math.atan2(lineCentroid.y - srcCenter.y, lineCentroid.x - srcCenter.x);
+          lineAngle = Math.atan2(lineCentroid.y - casterCenter.y, lineCentroid.x - casterCenter.x);
         }
+        // From the caster's edge, like the Line template
+        const srcCenter = tokenEdgePoint(casterToken, lineAngle);
         const pxPerFt = canvas.grid.size / (game.system.grid?.distance ?? 5);
+        // Fitted (see lineFit): the visible clip spans the Line, 5' thick
+        if (lineFit) {
+          const fx = seq.effect()
+            .file(lineFit.file)
+            .atLocation(srcCenter)
+            .anchor(lineFit.anchor)
+            .rotate(-Math.toDegrees(lineAngle))
+            .size(lineFit.size)
+            .duration(this._getDuration(cfg));
+          this._applyOpacity(fx, cfg);
+          break;
+        }
         const endpoint = {
           x: srcCenter.x + Math.cos(lineAngle) * distanceFt * pxPerFt,
           y: srcCenter.y + Math.sin(lineAngle) * distanceFt * pxPerFt,
@@ -611,35 +823,158 @@ export class VagabondSpellSequencer {
         break;
       }
     }
+    return null;
+  }
+
+  /**
+   * A point beside and a bit past `dst`, seen from `src` — where a missed beam ends.
+   * @param {{x:number, y:number}} src
+   * @param {{x:number, y:number}} dst
+   * @returns {{x:number, y:number}}
+   * @private
+   */
+  static _missPoint(src, dst) {
+    const gs = canvas.dimensions?.size ?? canvas.grid?.size ?? 100;
+    const side = Math.random() < 0.5 ? -1 : 1;
+    const angle = Math.atan2(dst.y - src.y, dst.x - src.x) + side * (0.25 + Math.random() * 0.2);
+    const dist = Math.hypot(dst.x - src.x, dst.y - src.y) + gs;
+    return { x: src.x + Math.cos(angle) * dist, y: src.y + Math.sin(angle) * dist };
+  }
+
+  /**
+   * Whether a delivery's target animation has a miss variant (a beam that can fly past):
+   * Touch beams and chain / multi-ray beams. Everything else plays nothing on a miss.
+   * @param {string} deliveryType
+   * @param {object|undefined} areaCfg
+   * @returns {boolean}
+   * @private
+   */
+  static _hasMissVariant(deliveryType, areaCfg) {
+    if (!areaCfg?.file) return false;
+    return deliveryType === 'touch' || areaCfg.scaleMode === 'chain' || areaCfg.scaleMode === 'multiray';
+  }
+
+  /**
+   * Ids of the active users who see spell FX (each user's "Spell Visual Effects" device
+   * toggle, mirrored on their User as `flags.vagabond.spellFxOff` by {@link syncViewerFlag}).
+   * @returns {string[]}
+   * @private
+   */
+  static _viewerIds() {
+    return game.users
+      .filter(u => u.active && (u.isSelf ? this.isEnabledForUser() : !u.getFlag('vagabond', 'spellFxOff')))
+      .map(u => u.id);
+  }
+
+  /**
+   * Mirror this device's FX toggle onto the current User, so the caster's client knows
+   * whom to send its FX to. Called at ready and when the setting changes.
+   */
+  static syncViewerFlag() {
+    const off = !this.isEnabledForUser();
+    if (!!game.user.getFlag('vagabond', 'spellFxOff') === off) return;
+    game.user.setFlag('vagabond', 'spellFxOff', off).catch(err => console.warn('Vagabond | FX viewer flag:', err));
+  }
+
+  /**
+   * Limit every section of a Sequence to the given users (no-op when everyone watches —
+   * Sequencer broadcasts to all clients by default).
+   * @param {Sequence} seq
+   * @param {string[]} viewers
+   * @private
+   */
+  static _forViewers(seq, viewers) {
+    if (viewers.length >= game.users.filter(u => u.active).length) return;
+    for (const section of seq.sections ?? []) section.forUsers?.(viewers);
+  }
+
+  /**
+   * Real duration (ms) of a configured clip, loading its metadata when needed.
+   * Sequencer database paths resolve to their file first. 0 when unknown.
+   * @param {object|undefined} cfg  { file, duration } with the file already resolved
+   * @returns {Promise<number>}
+   * @private
+   */
+  static async _clipMs(cfg) {
+    if (!cfg?.file) return 0;
+    let file = cfg.file;
+    if (!/\.\w{2,5}$/.test(file)) {
+      try {
+        const entry = Sequencer.Database.getEntry(file, { softFail: true });
+        const first = Array.isArray(entry) ? entry[0] : entry;
+        file = typeof first?.file === 'string' ? first.file : null;
+      } catch { file = null; }
+    }
+    if (file) await this._warmMeta(file);
+    return (file ? this._getMeta(file)?.duration : 0) || cfg.duration || 0;
+  }
+
+  /**
+   * When the target animation is ~90% done, in ms from its start — the moment a hit macro
+   * (or anything else that should "land" with the Spell) runs. Mirrors the sequence built
+   * by play(): the area clip starts 200 ms before the cast clip ends; chain / multi-ray
+   * beams run in their own sequence from the start; no target animation → end of the cast clip.
+   * @private
+   */
+  static async _landsAtMs({ castCfg, areaCfg, targetCount, missed }) {
+    const castMs = await this._clipMs(castCfg) || (castCfg?.file ? FALLBACK_CLIP_MS : 0);
+    if (!areaCfg?.file) return castMs;
+    const areaMs = await this._clipMs(areaCfg) || FALLBACK_CLIP_MS;
+    const lead = areaMs * (1 - LANDS_AT);
+    if (areaCfg.scaleMode === 'chain') {
+      const links = missed ? 1 : Math.max(1, targetCount);
+      return Math.max(castMs, links * areaMs - (links - 1) * 100 - lead);
+    }
+    if (areaCfg.scaleMode === 'multiray') return Math.max(castMs, areaMs - lead);
+    const start = castCfg?.file ? Math.max(0, castMs - 200) : 0;
+    return start + areaMs - lead;
   }
 
   /**
    * Play spell FX for a cast event.
    * Silent no-op if Sequencer is unavailable, disabled, or no animations are configured.
+   * The caster's client builds the sequence and Sequencer sends it to every user who has
+   * spell FX on (each device's own toggle, see {@link _viewerIds}).
    * @param {Item} spellItem - The spell being cast
    * @param {string} deliveryType - The selected delivery type key
    * @param {number} increaseCount - Number of delivery increases
    * @param {Token|null} casterToken - The caster's token on the canvas
    * @param {Token[]} targetTokens - Array of targeted Token objects
    * @param {object} [options]
-   * @param {boolean} [options.deliveryEnabled=true] - Whether to play the area anim and delivery
-   *   sound. Pass false on a failed spell roll; cast anim and cast sound always play regardless.
+   * @param {boolean} [options.deliveryEnabled=true] - false = the Cast missed: the delivery's miss
+   *   variant plays (cast clip + beams flying past) when it has one and the world setting
+   *   `fxOnMiss` allows it; otherwise nothing plays.
+   * @returns {Promise<{landsAt: number}|null>} when the target animation is ~90% done
+   *   (a `performance.now()` timestamp), or null when nothing played
    */
   static async play(spellItem, deliveryType, increaseCount, casterToken, targetTokens, options = {}) {
-    if (!this.isEnabledForWorld() || !this.isAvailable() || !this.isEnabledForUser()) return;
-    if (!casterToken) return;
+    if (!this.isEnabledForWorld() || !this.isAvailable()) return null;
+    if (!casterToken) return null;
+    const viewers = this._viewerIds();
+    if (!viewers.length) return null;
 
     const { deliveryEnabled = true, areaCenter = null } = options;
+    const missed = !deliveryEnabled;
     const school = this._resolveSchool(spellItem);
     const distanceFt = this._getTotalDistanceFt(deliveryType, increaseCount);
 
     try {
       const cfg     = this._getConfig();
       const castCfg = cfg.castAnims?.[school];
-      const areaCfg = cfg.areaAnims?.[school]?.[deliveryType];
+      const areaCfg = deliveryType ? cfg.areaAnims?.[school]?.[deliveryType] : null;
+
+      // Miss: the miss variant or nothing — never the normal target animation
+      if (missed && (game.settings.get('vagabond', 'fxOnMiss') === 'none' || !this._hasMissVariant(deliveryType, areaCfg))) return null;
 
       // Pre-expand any wildcard file paths so player clients never browse the filesystem.
       const fileMap = await VagabondFXResolver.resolveMap([castCfg?.file, areaCfg?.file]);
+
+      // A Line beam is fitted to the Line (measured once per clip, then cached)
+      let lineFit = null;
+      if (deliveryType === 'line' && !missed && areaCfg?.file && !['chain', 'multiray'].includes(areaCfg.scaleMode)) {
+        const pxPerFt = canvas.grid.size / (game.system.grid?.distance ?? 5);
+        lineFit = await this.lineFit(fileMap.get(areaCfg.file) ?? areaCfg.file, distanceFt * pxPerFt, 5 * pxPerFt);
+      }
 
       const seq = new Sequence();
       const radiusFt = this._fullSceneRadiusFt();
@@ -656,7 +991,7 @@ export class VagabondSpellSequencer {
 
       // Delivery sound: positional, centered on the target(s); fires after the
       // cast animation finishes.
-      if (deliveryType && deliveryEnabled && areaCfg?.sound) {
+      if (deliveryType && !missed && areaCfg?.sound) {
         const targetPos = this._centroid(targetTokens) ?? this._center(casterToken);
         const targetElevation = targetTokens?.length
           ? this._elevationCentroid(targetTokens)
@@ -675,15 +1010,26 @@ export class VagabondSpellSequencer {
       // Cast animation (always plays; blocks next section via .waitUntilFinished(-200)).
       this._addCastAnim(seq, school, casterToken, fileMap);
 
-      // Area animation (only on success).
-      if (deliveryType && deliveryEnabled) {
-        this._addAreaAnim(seq, school, deliveryType, distanceFt, casterToken, targetTokens, fileMap, areaCenter);
+      // Target animation (its miss variant on a miss).
+      const beams = deliveryType
+        ? this._addAreaAnim(seq, school, deliveryType, distanceFt, casterToken, targetTokens, fileMap, areaCenter, { missed, lineFit })
+        : null;
+
+      const startedAt = performance.now();
+      for (const s of [seq, beams].filter(Boolean)) {
+        this._forViewers(s, viewers);
+        s.play();
       }
 
-      seq.play();
+      const resolve = (c) => (c?.file ? { ...c, file: fileMap?.get(c.file) ?? c.file } : null);
+      const landsAt = await this._landsAtMs({
+        castCfg: resolve(castCfg), areaCfg: resolve(areaCfg), targetCount: targetTokens?.length ?? 0, missed,
+      });
+      return { landsAt: startedAt + landsAt };
     } catch (err) {
       // Never crash the spell cast due to FX errors
       console.warn('Vagabond | SpellSequencer error (non-fatal):', err);
+      return null;
     }
   }
 }

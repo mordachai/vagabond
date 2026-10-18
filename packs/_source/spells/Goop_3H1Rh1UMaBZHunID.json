@@ -17,7 +17,7 @@
         "duration": "d6",
         "tickDamageEnabled": true,
         "damageOnTick": "",
-        "damageType": "-"
+        "damageType": "acid"
       }
     ],
     "critCausedStatuses": [
@@ -28,11 +28,11 @@
         "duration": "d6",
         "tickDamageEnabled": true,
         "damageOnTick": "",
-        "damageType": "-"
+        "damageType": "acid"
       },
       {
         "statusId": "restrained",
-        "requiresDamage": true,
+        "requiresDamage": false,
         "saveType": "reflex",
         "duration": "",
         "tickDamageEnabled": false,
@@ -41,7 +41,26 @@
       }
     ],
     "targetBeings": true,
-    "targetObjects": false
+    "targetObjects": false,
+    "surface": {
+      "enabled": true,
+      "around": 0,
+      "difficult": true,
+      "enterDamage": "",
+      "turnEndDamage": "",
+      "whileIn": "",
+      "obscure": false,
+      "clip": "jb2a.grease.dark_brown.loop",
+      "tint": "#9fd05a"
+    },
+    "hitMacro": {
+      "enabled": true,
+      "uuid": "",
+      "command": "system:spell.surface",
+      "label": "Goop",
+      "runAsGM": false
+    },
+    "focusOnCast": true
   },
   "effects": [],
   "folder": null,

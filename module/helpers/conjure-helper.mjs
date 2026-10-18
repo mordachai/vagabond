@@ -221,6 +221,10 @@ export class ConjureHelper {
     const area = castArea?.shape ?? null;
     const targets = (scope.targets ?? []).map(t => t?.object ?? t)
       .filter(t => t?.document && t.document.parent?.id === canvas.scene.id);
+    // Remote Targets that are spaces on the map (SpellPlacement, grid-space centers)
+    const spaces = (scope.targetSpaces ?? [])
+      .filter(p => Number.isFinite(p?.x) && Number.isFinite(p?.y) && (!p.sceneId || p.sceneId === canvas.scene.id))
+      .map(p => ({ x: p.x, y: p.y }));
     const casterToken = SpellTargetPicker.casterToken(caster);
     const base = {
       casterUuid: caster.uuid,
@@ -229,11 +233,11 @@ export class ConjureHelper {
       sceneId: canvas.scene.id,
       levelId: casterToken?.document?.level ?? canvas.level?.id ?? null,
     };
-    if (rules.kind === 'beings') return this.#conjureBeings(caster, spell, rules, { area, targets, casterToken, base });
-    return this.#conjureItems(caster, spell, rules, { area, targets, casterToken, base });
+    if (rules.kind === 'beings') return this.#conjureBeings(caster, spell, rules, { area, targets, spaces, casterToken, base });
+    return this.#conjureItems(caster, spell, rules, { area, targets, spaces, casterToken, base });
   }
 
-  static async #conjureBeings(caster, spell, rules, { area, targets, casterToken, base }) {
+  static async #conjureBeings(caster, spell, rules, { area, targets, spaces, casterToken, base }) {
     const budget = this.beingBudget(caster, rules);
     const candidates = await this.#candidatesFor(caster, spell, budget);
     if (!candidates.length) {
@@ -250,7 +254,8 @@ export class ConjureHelper {
     }) ?? {};
     if (!picks?.length) return;
     const list = picks.flatMap(p => Array(p.count).fill(p.entry));
-    const anchors = targets.length ? targets : [casterToken].filter(Boolean);
+    const spaceAnchors = spaces.map(p => ({ center: p }));
+    const anchors = (targets.length || spaceAnchors.length) ? [...spaceAnchors, ...targets] : [casterToken].filter(Boolean);
     if (!area && !anchors.length) {
       ui.notifications.warn(this.#L('NoToken'));
       return;
@@ -262,7 +267,7 @@ export class ConjureHelper {
     return this.#report(await this.#request(this.QUERIES.spawn, { ...base, kind: 'beings', beings }));
   }
 
-  static async #conjureItems(caster, spell, rules, { area, targets, casterToken, base }) {
+  static async #conjureItems(caster, spell, rules, { area, targets, spaces, casterToken, base }) {
     const loot = this.#canvasLoot();
     // Where each Item goes (one per Target, or per 5' cube of the area), worked out before the picker opens
     let slots;
@@ -273,7 +278,7 @@ export class ConjureHelper {
       }
       slots = this.cellsIn(area).map(point => ({ point }));
     } else {
-      slots = this.#targetSlots(caster, targets, casterToken, base.levelId, loot);
+      slots = this.#targetSlots(caster, targets, spaces, casterToken, base.levelId, loot);
       if (!slots) return;
     }
     const budget = slots.length;
@@ -310,13 +315,18 @@ export class ConjureHelper {
    * One Item per Target ("in an unoccupied space near the Target, worn by the Target"): the caster gets it in their
    * inventory (may Equip it); another Target gets it on the ground in a free space next to it with Canvas Loot, else
    * in a Character's inventory. An NPC can't receive Items: without Canvas Loot the Cast warns and stops (the cast
-   * gate already blocks such a Cast before any Mana is spent). No Target → the caster.
+   * gate already blocks such a Cast before any Mana is spent). A Targeted space (Remote) gets its Item on the ground
+   * in that space (Canvas Loot only). No Target → the caster.
    * @returns {Array<{actorUuid?: string, point?: {x, y}, near?: string}>|null}  null = stopped
    */
-  static #targetSlots(caster, targets, casterToken, levelId, loot) {
+  static #targetSlots(caster, targets, spaces, casterToken, levelId, loot) {
     const seen = new Set();
     const tokens = targets.filter(t => t.actor && !seen.has(t.actor.uuid) && seen.add(t.actor.uuid));
-    if (!tokens.length) return [{ actorUuid: caster.uuid }];
+    if (!tokens.length && !spaces.length) return [{ actorUuid: caster.uuid }];
+    if (spaces.length && !loot) {
+      ui.notifications.warn(this.#L('SpacesNeedLoot'));
+      return null;
+    }
     const blocked = tokens.filter(t => t.actor.uuid !== caster.uuid && !loot && t.actor.type !== 'character');
     if (blocked.length) {
       ui.notifications.warn(this.#L('NpcNoItems', { names: blocked.map(t => t.name).join(', ') }));
@@ -325,6 +335,12 @@ export class ConjureHelper {
     const size = canvas.grid.size;
     const avoid = [];
     const slots = [];
+    // Targeted spaces first, so the Items dropped next to Target tokens keep off them
+    for (const p of spaces) {
+      const point = canvas.grid.getCenterPoint(p);
+      avoid.push({ x: point.x - size / 2, y: point.y - size / 2, width: size, height: size });
+      slots.push({ point });
+    }
     for (const t of tokens) {
       if (t.actor.uuid === caster.uuid) { slots.push({ actorUuid: caster.uuid }); continue; }
       if (loot) {
@@ -363,6 +379,7 @@ export class ConjureHelper {
     if (rules?.kind !== 'items' || this.#canvasLoot()) return null;
     const t = String(state?.deliveryType ?? '').toLowerCase();
     if (t === 'glyph' || SpellTargetPicker.AREA_DELIVERIES.includes(t)) return this.#L('AreaNeedsLoot');
+    if (state?.targetSpaces?.length) return this.#L('SpacesNeedLoot');
     const npcs = (tokens ?? []).filter(tk => tk.actor && tk.actor.uuid !== actor.uuid && tk.actor.type !== 'character');
     return npcs.length ? this.#L('NpcNoItems', { names: npcs.map(tk => tk.name).join(', ') }) : null;
   }
@@ -756,8 +773,9 @@ export class ConjureHelper {
 
   /**
    * Remove what matching Casts conjured: tokens, ground tiles, Items in any inventory; then the caster's world
-   * copies no token uses any more, and empty folders. Active GM (query `vagabond.conjure.dismiss`).
-   * @param {object} q  {casterUuid, castId?, spellIds?, held?: boolean, notIn?: {combatId, round, turn}, announce?}
+   * copies no token uses any more, and empty folders — silently (what vanishes is the message). Active GM
+   * (query `vagabond.conjure.dismiss`).
+   * @param {object} q  {casterUuid, castId?, spellIds?, exceptSpellIds?, held?: boolean, notIn?: {combatId, round, turn}}
    * @param {User} user
    * @returns {Promise<{removed: number}|{error: string}>}
    */
@@ -768,17 +786,16 @@ export class ConjureHelper {
     const match = (st) => !!st && st.casterUuid === q.casterUuid
       && (!q.castId || st.castId === q.castId)
       && (!q.spellIds || q.spellIds.includes(st.spellId))
+      && (!q.exceptSpellIds || !q.exceptSpellIds.includes(st.spellId))
       && (q.held === undefined || q.held === null || !!st.held === q.held)
       && !sameTurn(st.createdIn);
     const conj = (doc) => doc.flags?.vagabond?.conjured;
     let removed = 0;
-    const spells = new Set();
 
     for (const scene of game.scenes) {
       for (const coll of ['Token', 'Tile']) {
         const docs = scene.getEmbeddedCollection(coll).filter(d => match(conj(d)));
         if (!docs.length) continue;
-        docs.forEach(d => spells.add(conj(d).spellName));
         await scene.deleteEmbeddedDocuments(coll, docs.map(d => d.id)).catch(err => console.warn('vagabond | Conjure: delete failed', err));
         removed += docs.length;
       }
@@ -786,7 +803,6 @@ export class ConjureHelper {
     for (const actor of this.#actors()) {
       const ids = actor.items.filter(i => match(conj(i))).map(i => i.id);
       if (!ids.length) continue;
-      actor.items.filter(i => ids.includes(i.id)).forEach(i => spells.add(conj(i).spellName));
       await actor.deleteEmbeddedDocuments('Item', ids).catch(err => console.warn('vagabond | Conjure: delete failed', err));
       removed += ids.length;
     }
@@ -798,14 +814,35 @@ export class ConjureHelper {
     for (const f of game.folders.filter(f => f.type === 'Actor' && f.getFlag('vagabond', 'conjureCaster'))) {
       if (!f.contents.length && !f.children.length) await f.delete().catch(() => {});
     }
-    if (removed && q.announce && caster) {
-      const { VagabondChatCard } = await import('./chat-card.mjs');
-      await VagabondChatCard.featureCard(caster, {
-        title: [...spells].filter(Boolean).join(', ') || this.#L('Title'),
-        description: `<p>${this.#L(q.announce, { name: this.#esc(caster.name) })}</p>`,
-      });
-    }
     return { removed };
+  }
+
+  /** Does `caster`'s Spell have Conjured Beings / Items out (any scene, any inventory)? Spell context menu Dismiss. */
+  static hasActive(caster, spellId) {
+    if (!caster) return false;
+    const mine = (doc) => {
+      const c = doc.flags?.vagabond?.conjured;
+      return c?.casterUuid === caster.uuid && c.spellId === spellId;
+    };
+    if (game.scenes.some(s => s.tokens.some(mine) || s.tiles.some(mine))) return true;
+    return this.#actors().some(a => a.items.some(mine));
+  }
+
+  /** Does `caster` have non-Focused conjurings out (other than `exceptSpellId`'s)? */
+  static #hasLoose(caster, exceptSpellId) {
+    const loose = (doc) => {
+      const c = doc.flags?.vagabond?.conjured;
+      return c?.casterUuid === caster.uuid && !c.held && c.spellId !== exceptSpellId;
+    };
+    if (game.scenes.some(s => s.tokens.some(loose) || s.tiles.some(loose))) return true;
+    return this.#actors().some(a => a.items.some(loose));
+  }
+
+  /** Spell context menu Dismiss: end everything this Spell conjured (caster's owner or GM). */
+  static async dismissSpell(caster, spellId) {
+    if (!this.hasActive(caster, spellId)) return;
+    const res = await this.#request(this.QUERIES.dismiss, { casterUuid: caster.uuid, spellIds: [spellId] });
+    if (res?.error) ui.notifications.error(res.error);
   }
 
   /** Result card Dismiss button (caster's owner or GM). */
@@ -816,7 +853,7 @@ export class ConjureHelper {
       ui.notifications.warn(this.#L('NotYours', { name: caster?.name ?? '' }));
       return;
     }
-    const res = await this.#request(this.QUERIES.dismiss, { casterUuid, castId: button.dataset.castId, announce: 'Dismissed' });
+    const res = await this.#request(this.QUERIES.dismiss, { casterUuid, castId: button.dataset.castId });
     if (res?.error) ui.notifications.error(res.error);
     else button.disabled = true;
   }
@@ -825,7 +862,7 @@ export class ConjureHelper {
   static registerHooks() {
     // A Focused Cast ends with the Focus (SpellTrackerHelper fires this on the active GM)
     Hooks.on('vagabond.focusDropped', (caster, spellIds) => {
-      this.#serialize(() => this._dismiss({ casterUuid: caster.uuid, spellIds, held: true, announce: 'FocusEnded' }, game.user))
+      this.#serialize(() => this._dismiss({ casterUuid: caster.uuid, spellIds, held: true }, game.user))
         .catch(err => console.error('vagabond | Conjure: Focus end failed', err));
     });
     // Any other Cast lasts "Until your next Turn": gone at the start of the caster's next Turn in a started Combat
@@ -836,8 +873,17 @@ export class ConjureHelper {
       const actor = combat.combatant?.actor;
       if (!actor) return;
       const notIn = { combatId: combat.id, round: combat.round, turn: combat.turn };
-      this.#serialize(() => this._dismiss({ casterUuid: actor.uuid, held: false, notIn, announce: 'TurnEnded' }, game.user))
+      this.#serialize(() => this._dismiss({ casterUuid: actor.uuid, held: false, notIn }, game.user))
         .catch(err => console.error('vagabond | Conjure: Turn end failed', err));
+    });
+    // ...or until the caster does anything else (attack, Check, Cast, Item use; Saves don't count), so it also ends
+    // with no Combat running. Fires on the acting client; a Cast's own Luck reroll (same Spell) is skipped.
+    Hooks.on('vagabond.actorActed', (actor, { source, itemId } = {}) => {
+      if (!actor || (!actor.isOwner && !game.user.isGM)) return;
+      const except = source === 'cast' ? itemId : null;
+      if (!this.#hasLoose(actor, except)) return;
+      this.#request(this.QUERIES.dismiss, { casterUuid: actor.uuid, held: false, exceptSpellIds: except ? [except] : null })
+        .catch(err => console.error('vagabond | Conjure: next action end failed', err));
     });
   }
 

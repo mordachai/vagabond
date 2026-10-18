@@ -13399,7 +13399,7 @@
                     "isMasked": false,
                     "isRadius": false,
                     "isWait": false,
-                    "opacity": 0.9,
+                    "opacity": 0.75,
                     "persistent": true,
                     "playbackRate": 1,
                     "playOn": "source",
@@ -13409,6 +13409,150 @@
                     "unbindAlpha": false,
                     "unbindVisibility": false,
                     "zIndex": 1
+                },
+                "sound": {
+                    "enable": false,
+                    "delay": 0,
+                    "repeat": 1,
+                    "repeatDelay": 250,
+                    "startTime": 0,
+                    "volume": 0.75
+                }
+            },
+            "secondary": {
+                "enable": false,
+                "video": {
+                    "dbSection": "static",
+                    "menuType": "spell",
+                    "animation": "curewounds",
+                    "variant": "01",
+                    "color": "blue",
+                    "enableCustom": false,
+                    "customPath": ""
+                },
+                "sound": {
+                    "enable": false,
+                    "delay": 0,
+                    "repeat": 1,
+                    "repeatDelay": 250,
+                    "startTime": 0,
+                    "volume": 0.75
+                },
+                "options": {
+                    "addTokenWidth": false,
+                    "anchor": "0.5",
+                    "contrast": 0,
+                    "delay": 0,
+                    "elevation": 1000,
+                    "fadeIn": 250,
+                    "fadeOut": 500,
+                    "isMasked": false,
+                    "isRadius": true,
+                    "isWait": false,
+                    "opacity": 1,
+                    "repeat": 1,
+                    "repeatDelay": 250,
+                    "saturate": 0,
+                    "size": 1.5,
+                    "tint": false,
+                    "tintColor": "#FFFFFF",
+                    "zIndex": 1
+                }
+            },
+            "soundOnly": {
+                "sound": {
+                    "enable": false,
+                    "delay": 0,
+                    "repeat": 1,
+                    "repeatDelay": 250,
+                    "startTime": 0,
+                    "volume": 0.75
+                }
+            },
+            "source": {
+                "enable": false,
+                "video": {
+                    "dbSection": "static",
+                    "menuType": "spell",
+                    "animation": "curewounds",
+                    "variant": "01",
+                    "color": "blue",
+                    "enableCustom": false,
+                    "customPath": ""
+                },
+                "sound": {
+                    "enable": false,
+                    "delay": 0,
+                    "repeat": 1,
+                    "repeatDelay": 250,
+                    "startTime": 0,
+                    "volume": 0.75
+                },
+                "options": {
+                    "addTokenWidth": false,
+                    "anchor": "0.5",
+                    "contrast": 0,
+                    "delay": 0,
+                    "elevation": 1000,
+                    "fadeIn": 250,
+                    "fadeOut": 500,
+                    "isMasked": false,
+                    "isRadius": false,
+                    "isWait": true,
+                    "opacity": 1,
+                    "repeat": 1,
+                    "repeatDelay": 250,
+                    "saturate": 0,
+                    "size": 1,
+                    "tint": false,
+                    "tintColor": "#FFFFFF",
+                    "zIndex": 1
+                }
+            }
+        },
+        {
+            "id": "aec3a681-eb77-430f-be35-e92f1a36be52",
+            "label": "Queimando de Frio",
+            "activeEffectType": "ontoken",
+            "menu": "aefx",
+            "macro": {
+                "enable": false,
+                "playWhen": "0"
+            },
+            "primary": {
+                "video": {
+                    "dbSection": "static",
+                    "menuType": "generic",
+                    "animation": "indicator",
+                    "variant": "01",
+                    "color": "yellow",
+                    "enableCustom": true,
+                    "customPath": "modules/JB2A_DnD5e/Library/Generic/Fire/Flame/Flames_01_Regular_Orange_200x200.webm"
+                },
+                "options": {
+                    "addTokenWidth": true,
+                    "anchor": "0.5",
+                    "delay": 0,
+                    "elevation": 1000,
+                    "fadeIn": 250,
+                    "fadeOut": 500,
+                    "isMasked": false,
+                    "isRadius": false,
+                    "isWait": false,
+                    "opacity": 0.75,
+                    "persistent": true,
+                    "playbackRate": 1,
+                    "playOn": "source",
+                    "repeat": 1,
+                    "repeatDelay": 250,
+                    "size": 1.6,
+                    "unbindAlpha": false,
+                    "unbindVisibility": false,
+                    "zIndex": 1,
+                    "tint": true,
+                    "contrast": 1,
+                    "tintColor": "#2cb9dd",
+                    "saturation": -1
                 },
                 "sound": {
                     "enable": false,

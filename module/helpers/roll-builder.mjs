@@ -244,6 +244,11 @@ export class VagabondRollBuilder {
     // attacker who can see it (not Blinded, target not Invisible to it).
     if (targetActor.statuses?.has('guided') && !attacker?.statuses?.has('blinded')
       && !t.defenderStatusModifiers?.attackersAreBlinded) votes.push('favor');
+    // Fog (Spell Surface `obscure`): "Hinders Checks relying on sight of a Target within the fog and Checks made by
+    // Beings within the fog relying on sight" — one vote either way
+    const inFog = (a) => (a?.getActiveTokens?.(false, true) ?? [])
+      .some(td => Array.from(td.regions ?? []).some(r => r.flags?.vagabond?.surface?.obscure));
+    if (inFog(attacker) || inFog(targetActor)) votes.push('hinder');
     return votes;
   }
 

@@ -149,6 +149,21 @@
     white-space: nowrap;
   }
 
+  .sfx-hold {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    margin-left: 0.6rem;
+    font-size: 0.78rem;
+    white-space: nowrap;
+
+    .sfx-hold-input {
+      width: 4rem;
+      height: 22px;
+      flex: 0 0 auto;
+    }
+  }
+
   .sfx-scale-select {
     font-size: 0.78rem;
     height: 22px;

@@ -1455,7 +1455,9 @@ li.chat-message:has(.vagabond-chat-card-v2) {
 .protect-buttons-row button.vagabond-protect-button,
 .protect-buttons-row button.vagabond-ward-button,
 .protect-buttons-row button.vagabond-ward-off-button,
-.protect-buttons-row button.vagabond-focus-upkeep-button {
+.protect-buttons-row button.vagabond-focus-upkeep-button,
+.protect-buttons-row button.vagabond-conjure-dismiss,
+.protect-buttons-row button.vagabond-surface-dismiss {
     width: 100%;
     background: transparent !important;
     background-image: url('../assets/ui/chat/apply-direct-bg.webp') !important;
@@ -1494,6 +1496,20 @@ li.chat-message:has(.vagabond-chat-card-v2) {
         color: var(--c-yellow-text) !important;
         flex-shrink: 0;
     }
+}
+
+/* Dismiss / Drop: the Apply Direct frame in dark red (ends something on the map or a Focus) */
+.protect-buttons-row button.vagabond-conjure-dismiss,
+.protect-buttons-row button.vagabond-surface-dismiss,
+.protect-buttons-row button.vagabond-focus-upkeep-button[data-upkeep="drop"],
+.glyph-card-buttons button.vagabond-glyph-dismiss-button {
+    background: transparent !important;
+    background-image: url('../assets/ui/chat/dismiss-bg.webp') !important;
+    background-size: 100% 100% !important;
+    background-repeat: no-repeat !important;
+    background-position: center center !important;
+    color: #fff !important;
+    i { color: var(--c-yellow-text, #DED656) !important; }
 }
 
 /* ========================================
@@ -2185,12 +2201,7 @@ li.chat-message:has(.vagabond-chat-card-v2) {
         i { color: var(--c-yellow-text, #DED656); }
     }
 
-    /* Dismiss: same art as the save buttons (e.g. Reflex) */
-    .vagabond-glyph-dismiss-button {
-        background: url('../assets/ui/chat/yellow-button.webp');
-        color: var(--c-dark-blue, #0b1a23);
-        i { color: #b03030; }
-    }
+    /* Dismiss: dismiss-bg art, see the Dismiss / Drop block */
 }
 
 /* --------------------------------------------------------- */

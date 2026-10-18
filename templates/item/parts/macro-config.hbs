@@ -2,7 +2,7 @@
     Renders two slots: `macro` (simple, always shown on card) and
     `hitMacro` (shown only on a hit/success card). Self-contained: branches on
     system.locked so it can be included in both the locked and edit views.
-    Params: system=system macroNames=macroNames }}
+    Params: system=system macroNames=macroNames [autoRun=true: Spells' "Run automatically" hit macro switch] }}
 
 {{#if system.locked}}
   {{! ===== LOCKED VIEW ===== }}
@@ -79,6 +79,12 @@
           <input type='checkbox' name='system.hitMacro.runAsGM' {{#if system.hitMacro.runAsGM}}checked{{/if}} data-dtype='Boolean'>
           <span>{{localize "VAGABOND.Item.Macro.RunAsGM"}}</span>
         </label>
+        {{#if autoRun}}
+        <label class='checkbox-label macro-runasgm' title='{{localize "VAGABOND.Item.Macro.AutoRunHint"}}'>
+          <input type='checkbox' name='system.hitMacro.autoRun' {{#if system.hitMacro.autoRun}}checked{{/if}} data-dtype='Boolean'>
+          <span>{{localize "VAGABOND.Item.Macro.AutoRun"}}</span>
+        </label>
+        {{/if}}
       </div>
       <div class='form-group'>
         <label class='resource-label'>{{localize "VAGABOND.Item.Macro.LinkedMacro"}}</label>

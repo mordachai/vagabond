@@ -78,7 +78,7 @@
         </div>
       {{/if}}
 
-{{> "systems/vagabond/templates/item/parts/macro-config.hbs" system=system macroNames=macroNames}}
+{{> "systems/vagabond/templates/item/parts/macro-config.hbs" system=system macroNames=macroNames autoRun=true}}
     </div>
   {{else}}
     {{! ===== UNLOCKED VIEW (EDITABLE) ===== }}
@@ -279,6 +279,66 @@
         </div>
         {{/if}}
 
+        {{! Spell Surface (SpellSurface): what the hit macro system:spell.surface leaves on the map }}
+        <div class='form-group'>
+          <label class='checkbox-label'>
+            <input type='checkbox' name='system.surface.enabled' {{#if system.surface.enabled}}checked{{/if}} data-dtype='Boolean' />
+            <span>{{localize "VAGABOND.Item.Spell.FIELDS.surface.enabled.label"}}</span>
+          </label>
+          <p class='notes'>{{localize "VAGABOND.Item.Spell.FIELDS.surface.enabled.hint"}}</p>
+        </div>
+        {{#if system.surface.enabled}}
+        <div class='form-group'>
+          <label class='resource-label'>{{localize "VAGABOND.Item.Spell.FIELDS.surface.around.label"}}</label>
+          <input type='number' name='system.surface.around' value='{{system.surface.around}}' min='0' max='3' step='1' data-dtype='Number' />
+          <p class='notes'>{{localize "VAGABOND.Item.Spell.FIELDS.surface.around.hint"}}</p>
+        </div>
+        <div class='form-group'>
+          <label class='checkbox-label'>
+            <input type='checkbox' name='system.surface.difficult' {{#if system.surface.difficult}}checked{{/if}} data-dtype='Boolean' />
+            <span>{{localize "VAGABOND.Item.Spell.FIELDS.surface.difficult.label"}}</span>
+          </label>
+          <p class='notes'>{{localize "VAGABOND.Item.Spell.FIELDS.surface.difficult.hint"}}</p>
+        </div>
+        <div class='form-group'>
+          <label class='resource-label'>{{localize "VAGABOND.Item.Spell.FIELDS.surface.enterDamage.label"}}</label>
+          <input type='text' name='system.surface.enterDamage' value='{{system.surface.enterDamage}}' placeholder='d6' />
+          <p class='notes'>{{localize "VAGABOND.Item.Spell.FIELDS.surface.enterDamage.hint"}}</p>
+        </div>
+        <div class='form-group'>
+          <label class='resource-label'>{{localize "VAGABOND.Item.Spell.FIELDS.surface.turnEndDamage.label"}}</label>
+          <input type='text' name='system.surface.turnEndDamage' value='{{system.surface.turnEndDamage}}' placeholder='d6' />
+          <p class='notes'>{{localize "VAGABOND.Item.Spell.FIELDS.surface.turnEndDamage.hint"}}</p>
+        </div>
+        <div class='form-group'>
+          <label class='resource-label'>{{localize "VAGABOND.Item.Spell.FIELDS.surface.whileIn.label"}}</label>
+          <select name='system.surface.whileIn'>
+            <option value='' {{#unless system.surface.whileIn}}selected{{/unless}}>-</option>
+            {{#each config.statusConditions as |label key|}}
+              <option value='{{key}}' {{#if (eq ../system.surface.whileIn key)}}selected{{/if}}>{{localize label}}</option>
+            {{/each}}
+          </select>
+          <p class='notes'>{{localize "VAGABOND.Item.Spell.FIELDS.surface.whileIn.hint"}}</p>
+        </div>
+        <div class='form-group'>
+          <label class='checkbox-label'>
+            <input type='checkbox' name='system.surface.obscure' {{#if system.surface.obscure}}checked{{/if}} data-dtype='Boolean' />
+            <span>{{localize "VAGABOND.Item.Spell.FIELDS.surface.obscure.label"}}</span>
+          </label>
+          <p class='notes'>{{localize "VAGABOND.Item.Spell.FIELDS.surface.obscure.hint"}}</p>
+        </div>
+        <div class='form-group'>
+          <label class='resource-label'>{{localize "VAGABOND.Item.Spell.FIELDS.surface.clip.label"}}</label>
+          <input type='text' name='system.surface.clip' value='{{system.surface.clip}}' placeholder='jb2a.grease.dark_brown.loop' />
+          <p class='notes'>{{localize "VAGABOND.Item.Spell.FIELDS.surface.clip.hint"}}</p>
+        </div>
+        <div class='form-group'>
+          <label class='resource-label'>{{localize "VAGABOND.Item.Spell.FIELDS.surface.tint.label"}}</label>
+          <input type='text' name='system.surface.tint' value='{{system.surface.tint}}' placeholder='#7fbf3f' />
+          <p class='notes'>{{localize "VAGABOND.Item.Spell.FIELDS.surface.tint.hint"}}</p>
+        </div>
+        {{/if}}
+
         {{! Dice Scaling Label (only relevant when scaling is on) }}
         {{#if system.usesDiceScaling}}
         <div class='form-group'>
@@ -446,7 +506,7 @@
       </details>
       </div>{{! /item-section-box Status & Effects }}
 
-      {{> "systems/vagabond/templates/item/parts/macro-config.hbs" system=system macroNames=macroNames}}
+      {{> "systems/vagabond/templates/item/parts/macro-config.hbs" system=system macroNames=macroNames autoRun=true}}
     </div>
   {{/if}}
 </section>

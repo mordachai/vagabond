@@ -15,8 +15,10 @@ import focusing from './focusing.mjs';
 import burning from './burning.mjs';
 import sickened from './sickened.mjs';
 import charmed from './charmed.mjs';
+import frostburning from './frostburning.mjs';
 
-const EFFECTS = [focusing, burning, sickened, charmed];
+// frostburning after burning: it reuses burning's helpers
+const EFFECTS = [focusing, burning, sickened, charmed, frostburning];
 
 /** The custom shader class assigned to ring configs (grit-metal + patched core rings). */
 export const VagabondTokenRingShader = buildRingShaderClass(EFFECTS);

@@ -95,6 +95,15 @@ export class SpellTrackerHelper {
   }
 
   /**
+   * No Being to affect. A Cast aimed at spaces or an area (Freeze on water, an ice Object; a Cube with nobody
+   * inside) is still a Cast: nothing to do, no warning (the hit macro runs by itself after every Cast).
+   */
+  static #noTarget(scope) {
+    if (scope?.targetSpaces?.length || scope?.castArea?.shape) return;
+    return macroNotify('warn', game.i18n.localize('VAGABOND.SpellTracker.NoTarget'));
+  }
+
+  /**
    * The `flags.vagabond.spellTracker` stamp of a Cast (FocusLink). `held` = the Cast is held by the Focus
    * (scope `focusHeld`); buttons from before it existed count as held.
    */
@@ -124,7 +133,7 @@ export class SpellTrackerHelper {
   static async apply(scope, statusId, targets = this.#targetActors(scope)) {
     const def = CONFIG.statusEffects?.find(s => s.id === statusId);
     if (!def) return macroNotify('warn', game.i18n.format('VAGABOND.SpellTracker.Unavailable', { status: statusId }));
-    if (!targets.length) return macroNotify('warn', game.i18n.localize('VAGABOND.SpellTracker.NoTarget'));
+    if (!targets.length) return this.#noTarget(scope);
 
     const stamp = this.#stamp(scope);
 
@@ -161,7 +170,7 @@ export class SpellTrackerHelper {
     if (Array.isArray(scope?.blessTargets)) return this.#blessApply(scope);
     const beings = this.#targetActors(scope);
     const weapons = (scope?.targetObjects ?? []).filter(i => i?.uuid);
-    if (!beings.length && !weapons.length) return macroNotify('warn', game.i18n.localize('VAGABOND.SpellTracker.NoTarget'));
+    if (!beings.length && !weapons.length) return this.#noTarget(scope);
     const { runMacroFromButton } = await import('./item-macro.mjs');
     return runMacroFromButton({
       itemUuid: scope?.item?.uuid ?? null,
@@ -239,7 +248,7 @@ export class SpellTrackerHelper {
   /** Give `statusId` to every Target whose HD / Level is at most `need`. */
   static async #giveByRank(scope, statusId, need) {
     const targets = this.#targetActors(scope);
-    if (!targets.length) return macroNotify('warn', game.i18n.localize('VAGABOND.SpellTracker.NoTarget'));
+    if (!targets.length) return this.#noTarget(scope);
     const lines = [];
     for (const actor of targets) {
       const { kind, value } = this.#rank(actor);
@@ -280,7 +289,7 @@ export class SpellTrackerHelper {
    */
   static async zap(scope) {
     const targets = this.#targetActors(scope);
-    if (!targets.length) return macroNotify('warn', game.i18n.localize('VAGABOND.SpellTracker.NoTarget'));
+    if (!targets.length) return this.#noTarget(scope);
     const statusId = scope?.isCritical ? 'paralyzed' : 'dazed';
     const lines = [];
     for (const actor of targets) {
@@ -305,7 +314,7 @@ export class SpellTrackerHelper {
    */
   static async cure(scope, key) {
     const targets = this.#targetActors(scope);
-    if (!targets.length) return macroNotify('warn', game.i18n.localize('VAGABOND.SpellTracker.NoTarget'));
+    if (!targets.length) return this.#noTarget(scope);
     const statuses = this.CURES[key];
     const all = statuses.map(id => this.#statusLabel(id)).join(', ');
     const stamp = this.#stamp(scope);
@@ -560,6 +569,45 @@ export class SpellTrackerHelper {
     await game.settings.set('vagabond', 'spellFocusUpkeepMigrated', true);
   }
 
+  /** Pack Spells whose status entries were corrected against the book text (2026-10-18), by source id. */
+  static #STATUS_ENTRY_FIXES = {
+    TeYGLxvayzVi3j9X: 'Adhere',     // no Restrained (only "Vulnerable for ending Restrained")
+    x2wHc3r9nD8Ubo1S: 'Apoplex',    // continual Berserk is the Crit, not every Cast
+    '3H1Rh1UMaBZHunID': 'Goop',     // Burning ticks Acid; Crit Restrained needs no damage
+    kBgikH1zuMoqe4qj: 'Frostburn',  // Frostburning (Cold, Speed -10')
+    '0SVJ6QW8j6i3JkGe': 'Gas',      // Sickened only while in the area (Spell Surface)
+  };
+
+  /**
+   * One-time (guard `spellStatusEntriesFixed`): world copies of {@link #STATUS_ENTRY_FIXES} take the pack's
+   * `causedStatuses` / `critCausedStatuses`, matched by compendium source id. Waits for a rebuilt pack.
+   */
+  static async migrateSpellStatusEntries() {
+    if (game.user !== game.users.activeGM) return;
+    if (game.settings.get('vagabond', 'spellStatusEntriesFixed')) return;
+    const pack = game.packs.get('vagabond.spells');
+    if (!pack) return;
+    const { isCopyOf } = await import('./source-id.mjs');
+    const ids = Object.keys(this.#STATUS_ENTRY_FIXES);
+    const docs = (await Promise.all(ids.map(id => pack.getDocument(id).catch(() => null)))).filter(Boolean);
+    // Pack not rebuilt yet: keep the guard for the next load
+    if (!docs.some(d => d.system.causedStatuses?.some(e => e.statusId === 'frostburning'))) return;
+
+    for (const item of this.#worldSpells()) {
+      try {
+        const src = docs.find(d => isCopyOf(item, d.id, this.#STATUS_ENTRY_FIXES[d.id]));
+        if (!src) continue;
+        await item.update({
+          'system.causedStatuses': foundry.utils.deepClone(src.system.causedStatuses ?? []),
+          'system.critCausedStatuses': foundry.utils.deepClone(src.system.critCausedStatuses ?? []),
+        });
+      } catch (err) {
+        console.warn(`vagabond | Spell status entries migration: skipped ${item?.uuid ?? '(unknown)'}`, err);
+      }
+    }
+    await game.settings.set('vagabond', 'spellStatusEntriesFixed', true);
+  }
+
   /** Every Spell item: sidebar + embedded in every actor (incl. unlinked token actors). */
   static #worldSpells() {
     return [
@@ -584,7 +632,9 @@ export class SpellTrackerHelper {
     const fromCast = (src) => src && src.held !== false && src.casterUuid === caster.uuid && spellIds.includes(src.spellId);
     for (const actor of this.#actors()) {
       const effects = actor.effects.filter(e => fromCast(e.flags?.vagabond?.spellTracker));
-      if (effects.length) await actor.deleteEmbeddedDocuments('ActiveEffect', effects.map(e => e.id));
+      // Another cleanup may remove the same effect meanwhile (a Spell area's statuses go with the area)
+      if (effects.length) await actor.deleteEmbeddedDocuments('ActiveEffect', effects.map(e => e.id).filter(id => actor.effects.has(id)))
+        .catch(err => console.warn('vagabond | Focus drop: effect already gone', err));
       // Countdown dice linked to a status that ended with the Focus go too
       for (const statusId of new Set(effects.flatMap(e => [...(e.statuses ?? [])]))) {
         for (const die of StatusHelper.linkedStatusDice(actor, statusId)) await die.delete();

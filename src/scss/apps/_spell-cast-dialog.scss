@@ -82,7 +82,7 @@
     // node y=114 → (114-56)/248 ≈ 23.4%
     .vsc-eye          { top: calc(23.4% + 8px); }
     // crosshair y=237 → (237-56)/248 ≈ 73%
-    .vsc-place        { top: 73%; }
+    .vsc-place        { top: 76%; }
     // bottom-edge "Delivery" label y=268 → (268-56)/248 ≈ 85.5%
     .vsc-delivery-list { top: calc(85.5% + 10px); }
     // Imbue ring buttons position via viewBox-unit CSS vars — remap them to

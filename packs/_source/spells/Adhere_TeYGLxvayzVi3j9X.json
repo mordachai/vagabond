@@ -8,20 +8,29 @@
     "duration": "Until your next turn",
     "crit": "",
     "favorite": false,
-    "causedStatuses": [
-      {
-        "statusId": "restrained",
-        "requiresDamage": false,
-        "saveType": "none",
-        "duration": "",
-        "tickDamageEnabled": false,
-        "damageOnTick": "",
-        "damageType": "-"
-      }
-    ],
+    "causedStatuses": [],
     "locked": true,
     "targetBeings": true,
-    "targetObjects": false
+    "targetObjects": false,
+    "surface": {
+      "enabled": true,
+      "around": 1,
+      "difficult": true,
+      "enterDamage": "",
+      "turnEndDamage": "",
+      "whileIn": "",
+      "obscure": false,
+      "clip": "jb2a.grease.dark_brown.loop",
+      "tint": "#c8e06a"
+    },
+    "hitMacro": {
+      "enabled": true,
+      "uuid": "",
+      "command": "system:spell.surface",
+      "label": "Adhere",
+      "runAsGM": false
+    },
+    "focusOnCast": true
   },
   "effects": [],
   "folder": null,

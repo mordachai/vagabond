@@ -12,7 +12,26 @@
     "targetBeings": true,
     "targetObjects": false,
     "fxSchool": "wind",
-    "locked": true
+    "locked": true,
+    "surface": {
+      "enabled": true,
+      "around": 0,
+      "difficult": false,
+      "enterDamage": "",
+      "turnEndDamage": "",
+      "whileIn": "",
+      "obscure": true,
+      "clip": "jb2a.fog_cloud.01.white",
+      "tint": ""
+    },
+    "hitMacro": {
+      "enabled": true,
+      "uuid": "",
+      "command": "system:spell.surface",
+      "label": "Fog",
+      "runAsGM": false
+    },
+    "focusOnCast": true
   },
   "effects": [],
   "folder": null,

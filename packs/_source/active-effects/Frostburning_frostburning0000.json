@@ -1,0 +1,54 @@
+{
+  "name": "Frostburning",
+  "_id": "frostburning0000",
+  "img": "icons/magic/fire/explosion-flame-blue.webp",
+  "type": "base",
+  "system": {
+    "changes": [
+      {
+        "key": "system.speedModifier",
+        "type": "add",
+        "value": "-10",
+        "phase": "initial",
+        "priority": null
+      }
+    ]
+  },
+  "disabled": false,
+  "start": null,
+  "duration": {
+    "value": null,
+    "units": "seconds",
+    "expiry": null,
+    "expired": false
+  },
+  "description": "<ul><li>Speed -10'</li><li data-manual>Takes the damage in parentheses (Cold) at the start of its Turns</li><li data-manual>Ends early in extreme heat</li><li data-manual>Stacks from different sources, never from the same source</li></ul>",
+  "origin": null,
+  "tint": "#ffffff",
+  "transfer": false,
+  "statuses": [
+    "frostburning"
+  ],
+  "showIcon": 2,
+  "folder": "vacatconditifold",
+  "flags": {
+    "vagabond": {
+      "applicationMode": "permanent",
+      "canonicalId": "frostburning",
+      "automation": "partial"
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "vagabond",
+    "systemVersion": "6.7.2",
+    "createdTime": 1792325974538,
+    "modifiedTime": 1792325974538,
+    "lastModifiedBy": null,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "sort": 0,
+  "_key": "!effects!frostburning0000"
+}

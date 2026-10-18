@@ -7,6 +7,8 @@ import { VagabondMeasureTemplates } from '../applications/measure-templates.mjs'
  * - **Area** (Cube, Sphere): one aim point (`state.areaAnchor = {x, y, tokenId?}`) the area is built around, so an
  *   Increase grows it from that point. Clicking a token aims at it and attaches the area to it (it follows the token).
  *   The tokens inside become the user's targets (the dialog re-targets whenever the area changes).
+ *   **Line** uses the same aim point as its direction: it still starts at the caster, points at the aim, and stays
+ *   where it was put (a wall of fire, an ice bridge) — no token needed. Its aim gets no range check (it starts at you).
  * - **Spaces** (Remote): "a Target" can be a space with nothing on it (Erupt, a cart drawn on the map). Each click on
  *   empty ground adds / removes a space (`state.targetSpaces = [{x, y}]`), a click on a token targets / untargets it;
  *   right-click, Esc or Enter ends. Spaces count as Targets of the Cast.
@@ -17,8 +19,14 @@ import { VagabondMeasureTemplates } from '../applications/measure-templates.mjs'
  */
 export class SpellPlacement {
 
-  static AREA = ['cube', 'sphere'];
+  static AREA = ['cube', 'sphere', 'line'];
   static SPACES = ['remote'];
+  /** Area deliveries whose aim is only a direction from the caster (no range check on the aim point). */
+  static DIRECTION = ['line'];
+
+  static aimsDirection(deliveryType) {
+    return this.DIRECTION.includes(String(deliveryType ?? '').toLowerCase());
+  }
 
   static #session = null;          // { finish } of the running session
   static #cooldownUntil = 0;
@@ -129,7 +137,23 @@ export class SpellPlacement {
     if (!shape) return null;
     if (shape.type === 'rectangle') return { x: shape.x + shape.width / 2, y: shape.y + shape.height / 2 };
     if (shape.type === 'circle') return { x: shape.x, y: shape.y };
+    if (shape.type === 'line') {
+      const a = Math.toRadians(shape.rotation ?? 0);
+      return { x: shape.x + Math.cos(a) * shape.length / 2, y: shape.y + Math.sin(a) * shape.length / 2 };
+    }
     return null;
+  }
+
+  /** Corners of a v14 'line' Region shape (origin at one end, `width` across). */
+  static lineCorners(shape) {
+    const a = Math.toRadians(shape.rotation ?? 0);
+    const dx = Math.cos(a), dy = Math.sin(a);
+    const nx = -dy * shape.width / 2, ny = dx * shape.width / 2;
+    const ex = shape.x + dx * shape.length, ey = shape.y + dy * shape.length;
+    return [
+      { x: shape.x + nx, y: shape.y + ny }, { x: ex + nx, y: ey + ny },
+      { x: ex - nx, y: ey - ny }, { x: shape.x - nx, y: shape.y - ny },
+    ];
   }
 
   /** Spaces of the current scene as pseudo-tokens for the spell FX (point + center, flagged `isSpace`). */
@@ -253,41 +277,52 @@ export class SpellPlacement {
     return this.enforce !== 'block';
   }
 
+  /** Range error of an area's aim point, or null (a Line's aim is only its direction from the caster). */
+  static aimRangeError(actor, type, anchor) {
+    if (this.aimsDirection(type)) return null;
+    return this.rangeError(actor, VagabondMeasureTemplates.anchorPoint(anchor));
+  }
+
   /**
-   * Aim a Cube / Sphere: a ghost of the area at its current size follows the cursor (snapped like the real area);
-   * over a token it aims at the token. Resolves the anchor `{x, y, tokenId}` or null (cancelled).
+   * Aim a Cube / Sphere / Line: a ghost of the area at its current size follows the cursor (snapped like the real
+   * area); over a token it aims at the token. A Line points from the caster at the aim (space centers on a grid).
+   * Resolves the anchor `{x, y, tokenId}` or null (cancelled).
    * @param {{actor: Actor, type: string, distance: number}} opts
    */
   static pickArea({ actor, type, distance }) {
     const manager = globalThis.vagabond?.managers?.templates ?? new VagabondMeasureTemplates();
     const caster = this.#casterToken(actor);
     const color = this.#color();
+    const direction = this.aimsDirection(type);
     const ghost = new PIXI.Graphics();
     ghost.eventMode = 'none';
     const anchorAt = (world) => {
       const tok = this.tokenAt(world);
-      return tok ? { x: tok.center.x, y: tok.center.y, tokenId: tok.id } : { x: world.x, y: world.y, tokenId: null };
+      if (tok && !(direction && tok === caster)) return { x: tok.center.x, y: tok.center.y, tokenId: tok.id };
+      const p = direction ? this.snapToSpace(world) : world;
+      return { x: p.x, y: p.y, tokenId: null };
     };
     const draw = (anchor) => {
       ghost.clear();
       const shape = manager._constructRegionData({ type, distance, token: caster, targets: null, anchor, notify: false })?.shapes?.[0];
       if (!shape) return;
-      const out = this.rangeError(actor, VagabondMeasureTemplates.anchorPoint(anchor));
+      const out = this.aimRangeError(actor, type, anchor);
       const c = out ? 0xD04040 : color;
       ghost.lineStyle(2, c, 0.95).beginFill(c, 0.18);
       if (shape.type === 'rectangle') ghost.drawRect(shape.x, shape.y, shape.width, shape.height);
       else if (shape.type === 'circle') ghost.drawCircle(shape.x, shape.y, shape.radius);
+      else if (shape.type === 'line') ghost.drawPolygon(this.lineCorners(shape).flatMap(p => [p.x, p.y]));
       ghost.endFill();
       const p = VagabondMeasureTemplates.anchorPoint(anchor);
       ghost.lineStyle(0).beginFill(c, 0.9).drawCircle(p.x, p.y, Math.max(3, canvas.grid.size * 0.06)).endFill();
     };
     return this.#run({
       ghost,
-      prompt: game.i18n.localize('VAGABOND.SpellPlace.AreaPrompt'),
+      prompt: game.i18n.localize(direction ? 'VAGABOND.SpellPlace.LinePrompt' : 'VAGABOND.SpellPlace.AreaPrompt'),
       onMove: (world) => draw(anchorAt(world)),
       onClick: (world) => {
         const anchor = anchorAt(world);
-        if (!this.#clickInRange(actor, VagabondMeasureTemplates.anchorPoint(anchor))) return undefined;
+        if (!direction && !this.#clickInRange(actor, VagabondMeasureTemplates.anchorPoint(anchor))) return undefined;
         return anchor;
       },
     });

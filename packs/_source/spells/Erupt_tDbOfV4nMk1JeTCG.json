@@ -23,7 +23,26 @@
         "damageOnTick": "",
         "damageType": "fire"
       }
-    ]
+    ],
+    "surface": {
+      "enabled": true,
+      "around": 0,
+      "difficult": true,
+      "enterDamage": "d6",
+      "turnEndDamage": "d6",
+      "whileIn": "",
+      "obscure": false,
+      "clip": "jb2a.flames.orange.03.2x2",
+      "tint": ""
+    },
+    "hitMacro": {
+      "enabled": true,
+      "uuid": "",
+      "command": "system:spell.surface",
+      "label": "Erupt",
+      "runAsGM": false
+    },
+    "focusOnCast": true
   },
   "effects": [],
   "folder": null,

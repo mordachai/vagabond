@@ -327,6 +327,21 @@ export function registerGameSettings({ refreshClockDependents, applyTokenEffectV
     requiresReload: false,
     onChange: () => RegionTextureOverlay.applyPreferences(),
   });
+  // Spell areas left on the map (Surfaces): the animated loop (Sequencer) or the area art. Players may override.
+  game.settings.register('vagabond', 'spellAreaDisplay', {
+    name: 'VAGABOND.SpellSettings.AreaDisplay.name',
+    hint: 'VAGABOND.SpellSettings.AreaDisplay.hint',
+    scope: 'world',
+    config: false,
+    type: String,
+    choices: {
+      loop: 'VAGABOND.SpellSettings.AreaDisplay.loop',
+      art: 'VAGABOND.SpellSettings.AreaDisplay.art',
+    },
+    default: 'loop',
+    requiresReload: false,
+    onChange: () => Hooks.callAll('vagabond.spellAreaDisplay'),
+  });
 
   // Opacity — GM table DEFAULT (players inherit unless they opt out).
   game.settings.register('vagabond', 'regionTextureAlpha', {
@@ -375,6 +390,7 @@ export function registerGameSettings({ refreshClockDependents, applyTokenEffectV
     scope: 'world', config: false, type: Number, default: 0, requiresReload: false,
     onChange: () => {
       game.settings.set('vagabond', 'regionBorderModeUser', 'inherit');
+      game.settings.set('vagabond', 'spellAreaDisplayUser', 'inherit');
       game.settings.set('vagabond', 'regionTextureAlphaUseGM', true);
       RegionTextureOverlay.applyPreferences();
       ui.notifications?.info(game.i18n.localize('VAGABOND.SpellSettings.ForceApplied'));
@@ -458,6 +474,22 @@ export function registerGameSettings({ refreshClockDependents, applyTokenEffectV
     default: 'inherit',
     requiresReload: false,
     onChange: () => RegionTextureOverlay.applyPreferences(),
+  });
+  // 'inherit' = use the GM table default (spellAreaDisplay).
+  game.settings.register('vagabond', 'spellAreaDisplayUser', {
+    name: 'VAGABOND.Settings.spellAreaDisplay.name',
+    hint: 'VAGABOND.Settings.spellAreaDisplay.hint',
+    scope: 'client',
+    config: false,
+    type: String,
+    choices: {
+      inherit: 'VAGABOND.SpellSettings.BorderMode.inherit',
+      loop: 'VAGABOND.SpellSettings.AreaDisplay.loop',
+      art: 'VAGABOND.SpellSettings.AreaDisplay.art',
+    },
+    default: 'inherit',
+    requiresReload: false,
+    onChange: () => Hooks.callAll('vagabond.spellAreaDisplay'),
   });
   // When true, use the GM table opacity (regionTextureAlpha); else regionTextureAlphaUser.
   game.settings.register('vagabond', 'regionTextureAlphaUseGM', {
@@ -787,11 +819,38 @@ export function registerGameSettings({ refreshClockDependents, applyTokenEffectV
     requiresReload: false,
   });
 
-  // Per-device toggle for spell FX
+  // Per-device toggle for spell FX (mirrored on the User so casters know whom to send FX to)
   game.settings.register('vagabond', 'useSequencerFX', {
     name: 'VAGABOND.Settings.useSequencerFX.name',
     hint: 'VAGABOND.Settings.useSequencerFX.hint',
     scope: 'client',
+    config: false,
+    type: Boolean,
+    default: true,
+    requiresReload: false,
+    onChange: () => VagabondSpellSequencer.syncViewerFlag(),
+  });
+
+  // What a miss shows: the animation's miss variant (beam / projectile flying past) or nothing
+  game.settings.register('vagabond', 'fxOnMiss', {
+    name: 'VAGABOND.Settings.fxOnMiss.name',
+    hint: 'VAGABOND.Settings.fxOnMiss.hint',
+    scope: 'world',
+    config: false,
+    type: String,
+    choices: {
+      miss: 'VAGABOND.Settings.fxOnMiss.miss',
+      none: 'VAGABOND.Settings.fxOnMiss.none',
+    },
+    default: 'miss',
+    requiresReload: false,
+  });
+
+  // A successful Cast's hit macro runs by itself when the Spell's target animation lands
+  game.settings.register('vagabond', 'spellHitMacroAutoRun', {
+    name: 'VAGABOND.Settings.spellHitMacroAutoRun.name',
+    hint: 'VAGABOND.Settings.spellHitMacroAutoRun.hint',
+    scope: 'world',
     config: false,
     type: Boolean,
     default: true,
@@ -1050,7 +1109,7 @@ export function registerGameSettings({ refreshClockDependents, applyTokenEffectV
     'classFeatureScaleKeysMigrated', 'classFeatureActionsMigrated', 'spellTrackerMacrosMigrated', 'classFeatureEffectsMigrated',
     'lifeNoFreeDieMigrated', 'vehementMagicMigrated', 'partyStashPurged', 'spellStatusRulesMigrated3',
     'spellEffectEntriesMigrated', 'spellTargetSwitchesMigrated', 'raiseSpellMigrated', 'namedRelicsMigrated2',
-    'spellFocusSwitchesMigrated2', 'spellFocusUpkeepMigrated', 'conjureSpellsMigrated2',
+    'spellFocusSwitchesMigrated2', 'spellFocusUpkeepMigrated', 'conjureSpellsMigrated2', 'spellSurfaceMigrated3', 'spellStatusEntriesFixed',
   ];
   for (const key of MIGRATION_GUARDS) {
     game.settings.register('vagabond', key, {

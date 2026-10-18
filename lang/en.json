@@ -199,6 +199,7 @@
       "Effects": {
         "Focusing": "Focusing (Electric Arc)",
         "Burning": "Burning (Flames)",
+        "Frostburning": "Frostburning (Blue Flames)",
         "Sickened": "Sickened (Green Bubbles)",
         "Charmed": "Charmed (Pink Hearts)"
       }
@@ -424,8 +425,16 @@
       "CleanupTool": "Clean Up Undead Army (dead raised Undead back to their corpses)",
       "CleanedUp": "Raise: {restored} corpse(s) put back, {removed} Undead Army sheet(s) deleted."
     },
+    "Surface": {
+      "NoArea": "{spell}: no area to cover. Target a Being or a space, or Cast it over an area.",
+      "NoGM": "{spell}: a GM must be connected to place the area.",
+      "RelayFailed": "{spell}: the GM ({gm}) could not place the area.",
+      "NotYours": "You don't own {name}.",
+      "EnteredTitle": "{spell}: {name} enters",
+      "TurnEndTitle": "{spell}: {name} ends its Turn inside",
+      "DifficultBehavior": "Difficult Terrain"
+    },
     "Conjure": {
-      "Title": "Conjure",
       "FolderName": "Conjured",
       "Search": "Search…",
       "Confirm": "Conjure",
@@ -445,6 +454,7 @@
       "NoRoom": "Conjure: no open space for {n} of them.",
       "AreaNeedsLoot": "Conjure: Items in an area (or a Glyph) are dropped on the ground, which needs the Canvas Loot module. Target Beings instead.",
       "NpcNoItems": "Conjure: {names} can't receive Items (not a Character). Without Canvas Loot, Target yourself or a Character.",
+      "SpacesNeedLoot": "Conjure: Items on a Targeted space are dropped on the ground, which needs the Canvas Loot module. Target yourself or a Character instead.",
       "NoRoomNear": "Conjure: no free space next to {name} for the Item.",
       "OnGroundNear": "{item} on the ground next to {name}.",
       "NoGM": "Conjure needs an active GM to create them.",
@@ -458,11 +468,8 @@
       "Equipped": "(Equipped)",
       "NoFreeHands": "(not Equipped: no free hands)",
       "UntilFocus": "They last while the caster Focuses on this Spell.",
-      "UntilTurn": "They last until the caster's next Turn.",
-      "Dismiss": "Dismiss",
-      "Dismissed": "{name} dismisses what the Spell called forth.",
-      "FocusEnded": "{name} stops Focusing: what the Spell called forth disappears.",
-      "TurnEnded": "{name}'s next Turn: what the Spell called forth disappears."
+      "UntilTurn": "They last until the caster does anything else (Saves don't count) or starts their next Turn.",
+      "Dismiss": "Dismiss"
     },
     "Haymaker": {
       "Title": "Haymaker",
@@ -584,6 +591,7 @@
       "Berserk": "Berserk",
       "Blinded": "Blinded",
       "Burning": "Burning",
+      "Frostburning": "Frostburning",
       "Charmed": "Charmed",
       "Confused": "Confused",
       "Dazed": "Dazed",
@@ -651,6 +659,7 @@
       "Invisible": "<ul><li>Can't be seen by normal senses</li><li>Attacks, Casts and their Saves: those that can't see it act as Blinded</li><li data-manual>Other Checks and Saves involving it: those that can't see it act as Blinded</li></ul>",
       "Berserk": "<ul><li data-manual>Can't Cast or Focus</li><li data-manual>Can't be Frightened</li><li data-manual>Doesn't make Morale Checks</li></ul>",
       "Burning": "<ul><li data-manual>Takes the damage in parentheses at the start of its Turns</li><li data-manual>Ends when an action ends it (such as dousing fire)</li><li data-manual>Stacks from different sources, never from the same source</li></ul>",
+      "Frostburning": "<ul><li>Speed -10'</li><li data-manual>Takes the damage in parentheses (Cold) at the start of its Turns</li><li data-manual>Ends early in extreme heat</li><li data-manual>Stacks from different sources, never from the same source</li></ul>",
       "Charmed": "<ul><li data-manual>Can't willingly attack the charmer</li></ul>",
       "Suffocating": "<ul><li data-manual>Begins after 1 Minute without breathing</li><li data-manual>Heroes: each Round, roll d8; Might or higher = +1 Fatigue</li><li data-manual>Enemies: +1 Fatigue each Round</li></ul>"
     },
@@ -1202,6 +1211,10 @@
         "name": "Spell Area Artwork",
         "hint": "Paint seamless artwork over spell area regions based on the spell's damage type (e.g. fire, cold). When disabled, areas use a plain color fill."
       },
+      "spellAreaDisplay": {
+        "name": "Spell Areas on the Map",
+        "hint": "How Spell areas that stay on the map are shown for you: the animated loop or the area art. Cast animations play either way."
+      },
       "regionBorderMode": {
         "name": "Spell Area Outline",
         "hint": "How the outline around a spell area is drawn for you: your player color, hidden, or Foundry's default."
@@ -1379,7 +1392,17 @@
       },
       "useSequencerFX": {
         "name": "Spell Visual Effects (my device)",
-        "hint": "Enable Sequencer animations on this device. Disable for better performance on weaker hardware. The world-level 'Use Spell Animations' setting must also be enabled."
+        "hint": "Show spell animations on this device. Turning it off hides them only for you (better performance on weaker hardware); everyone else still sees your Casts. The world-level 'Use Spell Animations' setting must also be enabled."
+      },
+      "fxOnMiss": {
+        "name": "Animation on a Miss",
+        "hint": "What a missed attack or failed Cast shows. Animations that can miss (beams, projectiles, melee swings) fly past the Target; animations without a miss version play nothing. Hits always animate with the damage roll.",
+        "miss": "Miss animation",
+        "none": "Nothing"
+      },
+      "spellHitMacroAutoRun": {
+        "name": "Run Spell Hit Macros Automatically",
+        "hint": "A successful Cast's hit macro button presses itself when the Spell's target animation lands (right away without animations). Turn it off per Spell with its \"Run automatically\" switch."
       },
       "sequencerFxConfig": {
         "name": "Spell FX Animations",
@@ -1437,7 +1460,12 @@
       "Title": "Animation Preview",
       "NoFile": "No playable animation file found.",
       "PrevVariant": "Previous variant",
-      "NextVariant": "Next variant"
+      "NextVariant": "Next variant",
+      "Frame": "Frame to use",
+      "FrameTooltip": "Drag to see a frame. Play stops on it, like the Spell area will.",
+      "UseFrame": "Use this frame",
+      "FrameSet": "Frame to use: {pct}%. Save the Spell FX settings to keep it.",
+      "UseFrameTooltip": "Write this frame into the Spell FX setting (Save to keep it)"
     },
     "CompendiumSettings": {
       "Description": "Control which Item compendiums are available in the Character Builder. This determines what content (ancestries, classes, equipment, etc.) players can choose from during character creation.",
@@ -1494,6 +1522,8 @@
       "PreviewSoundTooltip": "Preview sound",
       "Scale": "Scale",
       "Volume": "Volume",
+      "HoldFrame": "Frame to use (%)",
+      "HoldFrameHint": "Spell areas left on the map play this clip once and stay on this frame (% of the clip). Empty = the system default, 0 = keep looping. Set it from the preview.",
       "AreaAnimations": "Area Animations",
       "VideoPlaceholder": "video…",
       "BrowseVideoTooltip": "Browse video",
@@ -2284,6 +2314,8 @@
         "RunDefault": "Run Macro",
         "RunAsGM": "Allow Players",
         "RunAsGMHint": "When players click this button, the GM client executes the macro with GM permissions. Use for macros that mutate the world (e.g. transforming a token).",
+        "AutoRun": "Run automatically",
+        "AutoRunHint": "The button presses itself when the Cast's target animation lands (world setting Run Spell Hit Macros Automatically). Turn off for macros that need a decision first.",
         "Notes": "Adds a button to this item's chat card. The macro runs with actor, item, token, targets, and speaker in scope. The On Success button only appears when the attack/cast hits."
       },
       "base": {
@@ -2372,6 +2404,17 @@
             "maxSlots": {"label": "Max Slots"},
             "forgeableOnly": {"label": "Only \"Can be Forged\" Items", "hint": "List only Items whose Handling switch \"Can be Forged\" is on (Forge)."},
             "maxCost": {"label": "Max Cost", "hint": "0 = no limit. One Item per Target, or per 5' cube of an area."}
+          },
+          "surface": {
+            "enabled": {"label": "Spell Surface", "hint": "The hit macro system:spell.surface leaves the Cast's area on the map (the area, each Targeted space, or each Target's space): a Region that lasts while the Cast does (Focus, else the caster's next Turn)."},
+            "around": {"label": "Close Around Target", "hint": "Spaces added around each Target (1 = \"the Target and surrounding Close spaces\"). Area deliveries use their area as is."},
+            "difficult": {"label": "Difficult Terrain", "hint": "Walking costs 2' per 1', and Beings in it are Vulnerable (book p. 17; Vulnerable follows the automation setting)."},
+            "enterDamage": {"label": "Damage on Entering", "hint": "Formula dealt the first time a Being enters the area on a Turn (Erupt: d6). Posts a damage card with the Save buttons."},
+            "turnEndDamage": {"label": "Damage at Turn End", "hint": "Formula dealt when a Being ends its Turn in the area (Erupt: d6)."},
+            "whileIn": {"label": "Status While Inside", "hint": "Status a Being has while it is in the area (Gas: Sickened)."},
+            "obscure": {"label": "Obscures Sight", "hint": "Checks relying on sight of a Target in the area, or made by a Being in it, are Hindered (Fog)."},
+            "clip": {"label": "Loop Animation", "hint": "Sequencer database path or file played in a loop on the area (jb2a.grease.dark_brown.loop). Without Sequencer, the clip or the device FX toggle, the area shows the template art."},
+            "tint": {"label": "Loop Tint", "hint": "Optional color for the loop (#7fbf3f)."}
           }
         },
         "AddSpell": "Add Spell",
@@ -2903,6 +2946,7 @@
       "Unfavorite": "Unfavorite",
       "Focus": "Focus",
       "StopFocusing": "Stop Focusing",
+      "Dismiss": "Dismiss",
       "FocusLimit": "You can Focus on at most {max} Spells.",
       "RemoveStatus": "Remove Status",
       "DeleteItemTitle": "Delete {name}?",
@@ -3133,6 +3177,7 @@
       "AreaButton": "Place on the map (right-click: clear)",
       "SpacesButton": "Target spaces on the map (right-click: clear)",
       "AreaPrompt": "Click to place the area (on a token: it follows the token). Right-click or Esc to cancel.",
+      "LinePrompt": "Click where the Line points (it starts at the caster and stays where you put it). Right-click or Esc to cancel.",
       "SpacesPrompt": "Click the ground to add or remove a space, a token to target it. Right-click, Esc or Enter to finish.",
       "NeedAim": "Target a token, or place the {type} with the crosshair.",
       "OutOfSight": "The caster can't see that point.",
@@ -3581,7 +3626,7 @@
         "builder": "Character Builder"
       },
       "Notes": {
-        "areas": "Outline and opacity are defaults. Players can override them."
+        "areas": "Outline, opacity and how areas on the map are shown are defaults. Players can override them."
       },
       "Rows": {
         "hudAutoOpenOnSelect": {
@@ -3620,6 +3665,12 @@
       },
       "PlayerDefaults": {
         "Description": "These are the table defaults each player gets unless they change their own outline/opacity in the main settings. Use the button to reset every player back to these."
+      },
+      "AreaDisplay": {
+        "name": "Spell Areas on the Map",
+        "hint": "How Spell areas that stay on the map (Goop, Erupt, Fog, Freeze...) are shown by default: the animated loop (Sequencer + JB2A) or the area art. Cast animations play either way. Players can override it.",
+        "loop": "Animated Loop",
+        "art": "Area Art"
       },
       "DefaultBorder": {
         "name": "Default Area Outline",
@@ -4202,6 +4253,9 @@
       "starterPack": "Starter Pack",
       "container": "Container",
       "vehiclePart": "Construct Part"
+    },
+    "RegionBehavior": {
+      "spellSurface": "Spell Surface"
     },
     "CountdownDice": {
       "SceneControls": {

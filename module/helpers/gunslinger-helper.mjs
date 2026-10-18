@@ -28,7 +28,7 @@ const MAX_STACKS = 3;
  */
 const GRACE_TURNS = 1;
 /** Statuses Grit can remove. */
-const GRIT_STATUSES = ['blinded', 'burning', 'confused', 'dazed', 'frightened'];
+const GRIT_STATUSES = ['blinded', 'burning', 'frostburning', 'confused', 'dazed', 'frightened'];
 
 export class GunslingerHelper {
 

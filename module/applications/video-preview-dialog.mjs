@@ -29,6 +29,7 @@ export class VideoPreviewDialog extends api.HandlebarsApplicationMixin(api.Appli
       toggleLoop: VideoPreviewDialog.#onToggleLoop,
       selectGroup: VideoPreviewDialog.#onSelectGroup,
       stepVariant: VideoPreviewDialog.#onStepVariant,
+      useFrame: VideoPreviewDialog.#onUseFrame,
     },
   };
 
@@ -47,13 +48,18 @@ export class VideoPreviewDialog extends api.HandlebarsApplicationMixin(api.Appli
   #title = '';
   /** Media elements of the current cycle still playing (video and/or audio). */
   #pending = 0;
+  /** Frame picker `{value: % | null, onPick(pct)}`: Play stops on the frame, "Use this frame" hands it back. */
+  #frame = null;
+  /** Restarts a held cycle when Loop is on. */
+  #holdTimer = null;
 
   /**
    * Open the singleton preview window, or swap the source if already open.
    * @param {string|{label: string, spec: string, sound?: string, volume?: number}[]} spec
-   * @param {{title?: string}} [options]
+   * @param {{title?: string, frame?: {value: number|null, onPick: (pct: number) => void}}} [options]
+   *   `frame`: show the "Frame to use" picker (Spell areas left on the map stay on that frame of the clip).
    */
-  static async open(spec, { title = '' } = {}) {
+  static async open(spec, { title = '', frame = null } = {}) {
     const raw = Array.isArray(spec) ? spec : [{ label: '', spec }];
     const groups = [];
     for (const g of raw) {
@@ -72,6 +78,7 @@ export class VideoPreviewDialog extends api.HandlebarsApplicationMixin(api.Appli
     inst.#groupIdx = 0;
     inst.#fileIdx = 0;
     inst.#title = title;
+    inst.#frame = frame ? { value: frame.value ?? null, onPick: frame.onPick } : null;
     await inst.render({ force: true });
     inst.bringToTop?.();
   }
@@ -144,6 +151,7 @@ export class VideoPreviewDialog extends api.HandlebarsApplicationMixin(api.Appli
       variantCount: group.files.length,
       // Ranged clips ship one file per distance: label which range this one covers
       variantFt: file.match(/_(\d+)ft_/i)?.[1] ?? '',
+      frame: this.#frame ? { value: this.#frame.value ?? '', range: this.#frame.value ?? 100 } : null,
     };
   }
 
@@ -168,7 +176,45 @@ export class VideoPreviewDialog extends api.HandlebarsApplicationMixin(api.Appli
     };
     video?.addEventListener('ended', onDone);
     audio?.addEventListener('ended', onDone);
+    this.#wireFrame(video, onDone);
     this.#playCycle();
+  }
+
+  /** "Frame to use": dragging shows that frame; a played cycle stops on it (how a Spell area stays on the map). */
+  #wireFrame(video, onDone) {
+    const range = this.element.querySelector('.vpd-frame-range');
+    const num = this.element.querySelector('.vpd-frame-num');
+    if (!video || !range || !num) return;
+    const show = (pct) => {
+      this.#stopMedia();
+      clearTimeout(this.#holdTimer);
+      this.#pending = 0;
+      if (Number.isFinite(video.duration)) video.currentTime = video.duration * pct / 100;
+    };
+    range.addEventListener('input', () => {
+      this.#frame.value = Number(range.value);
+      num.value = range.value;
+      show(this.#frame.value);
+    });
+    num.addEventListener('change', () => {
+      const v = num.value === '' ? null : Math.clamp(Number(num.value), 0, 100);
+      this.#frame.value = Number.isFinite(v) ? v : null;
+      num.value = this.#frame.value ?? '';
+      range.value = this.#frame.value ?? 100;
+      if (this.#frame.value != null) show(this.#frame.value);
+    });
+    // Stop on the frame while playing (0 / empty = plays through, like a looping area)
+    video.addEventListener('timeupdate', () => {
+      const pct = this.#frame?.value;
+      if (!(pct > 0 && pct < 100) || video.paused || !Number.isFinite(video.duration)) return;
+      const at = video.duration * pct / 100;
+      if (video.currentTime < at) return;
+      video.pause();
+      video.currentTime = at;
+      // The held frame ends the cycle; with Loop on, show it a moment and build it again
+      if (this.#loop) this.#holdTimer = setTimeout(() => onDone(), 1200);
+      else onDone();
+    });
   }
 
   async _preRender(context, options) {
@@ -189,7 +235,15 @@ export class VideoPreviewDialog extends api.HandlebarsApplicationMixin(api.Appli
     }
   }
 
+  static #onUseFrame(event, target) {
+    const pct = this.#frame?.value;
+    if (!Number.isFinite(pct)) return;
+    this.#frame.onPick?.(Math.round(pct));
+    ui.notifications.info(game.i18n.format('VAGABOND.VideoPreview.FrameSet', { pct: Math.round(pct) }));
+  }
+
   #stopMedia() {
+    clearTimeout(this.#holdTimer);
     for (const el of this.element?.querySelectorAll('.vpd-video, .vpd-audio') ?? []) el.pause();
   }
 

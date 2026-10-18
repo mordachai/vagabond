@@ -390,7 +390,7 @@ export class VagabondGlyphHelper {
     const { VagabondSpellSequencer } = await import('./spell-sequencer.mjs');
     const pseudo = { center, x: center.x, y: center.y, document: { width: 1, height: 1 } };
     const casterToken = sourceActor.token?.object ?? sourceActor.getActiveTokens(true)[0] ?? pseudo;
-    VagabondSpellSequencer.play(spell, 'glyph', 0, casterToken, [pseudo], { deliveryEnabled: true });
+    const fxPlayed = VagabondSpellSequencer.play(spell, 'glyph', 0, casterToken, [pseudo], { deliveryEnabled: true });
 
     const { VagabondDamageHelper } = await import('./damage-helper.mjs');
     const { VagabondChatCard } = await import('./chat-card.mjs');
@@ -420,7 +420,7 @@ export class VagabondGlyphHelper {
       targetsAtRollTime, attackType,
     });
 
-    await VagabondChatCard.createActionCard({
+    const triggerMessage = await VagabondChatCard.createActionCard({
       actor: sourceActor,
       item: spell,
       title: game.i18n.format('VAGABOND.Glyph.DeliveryTitle', { spell: spell.name }),
@@ -441,10 +441,14 @@ export class VagabondGlyphHelper {
       spellCast,
       macroExtraScope: {
         focusHeld,
+        ...(payload.useFx === undefined ? {} : { spellEffect: !!payload.useFx }),
         deliveryType: 'glyph',
         castArea: { sceneId: region.parent?.id ?? null, shape: { type: 'rectangle', ...rect } },
       },
     });
+    // The hit macro presses itself when the glyph FX lands
+    const { MacroAutoRun } = await import('./macro-autorun.mjs');
+    MacroAutoRun.afterFx(triggerMessage, fxPlayed);
 
     // "…then the glyph disappears."
     await this._deleteRegion(region);

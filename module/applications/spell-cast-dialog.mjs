@@ -133,14 +133,14 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
       damageDice: noDice ? 0 : (initialState?.damageDice ?? 1),
       deliveryType: initialState?.deliveryType ?? null,
       deliveryIncrease: initialState?.deliveryIncrease ?? 0,
-      // No damage type: the Effect IS the Cast, so FX is always on (locked).
-      useFx: spell.system.damageType === '-' ? true : (initialState?.useFx ?? false),
+      // No damage type: the Effect IS the Cast, so FX is always on (locked). Surface Spells start with it on.
+      useFx: spell.system.damageType === '-' ? true : (initialState?.useFx ?? spell.system.effectByDefault),
       focusOn: false, // derived in _prepareContext until the player flips the switch (#focusTouched)
       previewActive: false,
       manaOverrideDelta: 0,
       imbueAssignments: {}, // weaponUuid -> true (multi-select, not one-per-target)
       targetPicks: {},      // Target picker: entry key -> bool (explicit choices; see SpellTargetPicker)
-      areaAnchor: null,     // Cube / Sphere placed by hand: {x, y, tokenId?} (SpellPlacement)
+      areaAnchor: null,     // Cube / Sphere / Line placed by hand: {x, y, tokenId?} (SpellPlacement)
       targetSpaces: [],     // Remote: Targets that are spaces on the map [{x, y}] (SpellPlacement)
     };
   }
@@ -822,7 +822,7 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
     this.#state.damageDice = next;
     if (this.#spell.system.damageType !== '-') {
       if (next === 0) this.#state.useFx = true;
-      else if (next === 1 && delta > 0) this.#state.useFx = false;
+      else if (next === 1 && delta > 0 && !this.#spell.system.effectByDefault) this.#state.useFx = false;
     }
     this._emitChange();
     this.render();
@@ -908,7 +908,7 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
     const mode = SpellPlacement.modeFor(state.deliveryType);
     let err = null;
     if (mode === 'area' && state.areaAnchor) {
-      err = SpellPlacement.rangeError(this.#actor, VagabondMeasureTemplates.anchorPoint(state.areaAnchor));
+      err = SpellPlacement.aimRangeError(this.#actor, state.deliveryType, state.areaAnchor);
     } else if (mode === 'spaces') {
       const bad = state.targetSpaces.map(p => SpellPlacement.rangeError(this.#actor, p)).filter(Boolean);
       if (bad.length) err = bad.length > 1 ? game.i18n.format('VAGABOND.SpellPlace.SpacesOutOfRange', { n: bad.length }) : bad[0];
@@ -1214,7 +1214,7 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
     this.#state.deliveryIncrease = 0;
     this.#state.imbueAssignments = {};
     this.#state.targetPicks = {};
-    // The aim point carries over between Cube and Sphere; spaces belong to Remote only
+    // The aim point carries over between Cube, Sphere and Line; spaces belong to Remote only
     const mode = SpellPlacement.modeFor(key);
     if (mode !== 'area') this.#state.areaAnchor = null;
     if (mode !== 'spaces') this.#state.targetSpaces = [];

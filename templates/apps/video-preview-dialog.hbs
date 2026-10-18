@@ -10,6 +10,17 @@
     <video class="vpd-video" src="{{file}}" playsinline muted></video>
     {{#if sound}}<audio class="vpd-audio" src="{{sound}}" preload="auto"></audio>{{/if}}
   </div>
+  {{#if frame}}
+    <div class="vpd-frame" data-tooltip="{{localize 'VAGABOND.VideoPreview.FrameTooltip'}}">
+      <span class="vpd-frame-label">{{localize "VAGABOND.VideoPreview.Frame"}}</span>
+      <input type="range" class="vpd-frame-range" min="0" max="100" step="1" value="{{frame.range}}">
+      <input type="number" class="vpd-frame-num" min="0" max="100" step="1" value="{{frame.value}}" placeholder="{{localize 'VAGABOND.VideoPreview.Loop'}}">
+      <span class="vpd-frame-pct">%</span>
+      <button type="button" class="vpd-use-frame" data-action="useFrame" data-tooltip="{{localize 'VAGABOND.VideoPreview.UseFrameTooltip'}}">
+        <i class="fas fa-thumbtack"></i> {{localize "VAGABOND.VideoPreview.UseFrame"}}
+      </button>
+    </div>
+  {{/if}}
   <footer class="vpd-footer">
     {{#if hasVariants}}
       <button type="button" class="vpd-step-btn" data-action="stepVariant" data-dir="-1" data-tooltip="{{localize 'VAGABOND.VideoPreview.PrevVariant'}}">

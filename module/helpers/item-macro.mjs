@@ -167,6 +167,18 @@ async function _runItemMacro(d) {
     scope.targetObjects = (await Promise.all(extraScope.targetObjects.map(u => (typeof u === 'string' ? fromUuid(u) : u)))).filter(Boolean);
   }
 
+  const result = await _runConfigured(cfg, d, item, actor, scope);
+  // A Spell that leaves its area on the map (`system.surface`) places it whatever its own hit macro is
+  // (Freeze: the Speed Tracker + an ice area, visual only)
+  if (d.slot === 'hitMacro' && item?.type === 'spell' && item.system?.surface?.enabled
+      && String(cfg.command ?? '').trim() !== 'system:spell.surface') {
+    await _handlers.get('spell.surface')?.(scope);
+  }
+  return result;
+}
+
+/** Run one macro slot: built-in handler, linked Macro or inline command. */
+async function _runConfigured(cfg, d, item, actor, scope) {
   // `system:<name>` → built-in handler (no script permission needed, full scope as one object)
   if (!cfg.uuid && typeof cfg.command === 'string' && cfg.command.trim().startsWith('system:')) {
     const name = cfg.command.trim().slice('system:'.length).trim();
@@ -281,6 +293,47 @@ export async function runMacroFromButton(d) {
     return;
   }
   return executeItemMacro(d);
+}
+
+/**
+ * Read a chat-card macro button (see {@link buildMacroButtonHTML}) into a
+ * {@link runMacroFromButton} descriptor. Shared by the button click and MacroAutoRun.
+ * @param {HTMLElement} button
+ * @param {ChatMessage|null} message  the card the button sits on (Targets at roll time)
+ * @returns {object}
+ */
+export function macroDescriptorFromButton(button, message) {
+  const snapshot = message?.flags?.vagabond?.targetsAtRollTime;
+  const targetTokenIds = Array.isArray(snapshot) ? snapshot.map(t => t.tokenId).filter(Boolean) : [];
+  const sceneId = (Array.isArray(snapshot) && snapshot[0]?.sceneId) || canvas.scene?.id || null;
+  const actionIndexRaw = button.dataset.actionIndex;
+
+  // Embedded inline command (base64) — fallback so the button still works
+  // after the source item is consumed/deleted.
+  const cmdB64 = button.dataset.commandB64;
+  const command = cmdB64 ? decodeURIComponent(escape(atob(cmdB64))) : null;
+
+  // Per-cast extra scope data (e.g. spell damageDice / manaSpent)
+  const scopeB64 = button.dataset.extraScopeB64;
+  let extraScope = null;
+  if (scopeB64) {
+    try { extraScope = JSON.parse(decodeURIComponent(escape(atob(scopeB64)))); }
+    catch (e) { console.warn('VAGABOND | Bad macro extra-scope payload:', e); }
+  }
+
+  return {
+    itemUuid: button.dataset.itemUuid || null,
+    itemName: button.dataset.itemName || null,
+    actorUuid: button.dataset.actorUuid || null,
+    actionIndex: actionIndexRaw != null ? parseInt(actionIndexRaw) : null,
+    slot: button.dataset.macroSlot === 'hitMacro' ? 'hitMacro' : 'macro',
+    command,
+    runAsGM: button.dataset.runAsGm === 'true',
+    isCritical: button.dataset.isCritical === 'true',
+    extraScope,
+    targetTokenIds,
+    sceneId,
+  };
 }
 
 /**

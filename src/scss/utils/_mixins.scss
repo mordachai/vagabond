@@ -74,6 +74,10 @@
       color: inherit;
     }
 
+    // Accent entries (ContextMenuHelper `cssClass`): Stop Focusing in the Focus blue, Dismiss in yellow
+    &.is-focus { color: $c-electric-blue; }
+    &.is-dismiss { color: $c-yellow; }
+
     // Unavailable entry (ContextMenuHelper `dim: true`)
     &.is-dim {
       opacity: 0.4;

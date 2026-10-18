@@ -28,6 +28,21 @@ export class RegionTextureOverlay {
   /** Discovered art basenames (lowercased, no extension), or null until scanned. @type {Set<string>|null} */
   static #available = null;
 
+  /** Predicates (RegionDocument → boolean) that hide the art on this client (a Spell Surface loop plays instead). */
+  static #suppressors = [];
+
+  /**
+   * Hide the texture of regions matching `fn` on this client (the core fill/hatch styling still applies).
+   * @param {(doc: RegionDocument) => boolean} fn
+   */
+  static suppressWhen(fn) {
+    RegionTextureOverlay.#suppressors.push(fn);
+  }
+
+  static #suppressed(region) {
+    return RegionTextureOverlay.#suppressors.some(fn => { try { return !!fn(region.document); } catch { return false; } });
+  }
+
   /* -------------------------------------------- */
 
   /**
@@ -240,9 +255,13 @@ export class RegionTextureOverlay {
   /* -------------------------------------------- */
 
   static #onDraw(region) {
+    // A redraw destroys the placeable's children, our overlay too: forget it so it is built again
+    const stale = RegionTextureOverlay.#overlays.get(region);
+    if (stale && (stale.container.destroyed || stale.container.parent !== region)) RegionTextureOverlay.#teardown(region);
     const path = region?.document?.flags?.vagabond?.texture;
     if (!path) return;
     RegionTextureOverlay.#styleCore(region);
+    if (RegionTextureOverlay.#suppressed(region)) return;
     RegionTextureOverlay.#build(region, path);
   }
 
@@ -254,6 +273,10 @@ export class RegionTextureOverlay {
       return;
     }
     RegionTextureOverlay.#styleCore(region);
+    if (RegionTextureOverlay.#suppressed(region)) {
+      if (state) RegionTextureOverlay.#teardown(region);
+      return;
+    }
     if (!state) {
       RegionTextureOverlay.#build(region, path);
       return;
@@ -365,7 +388,8 @@ export class RegionTextureOverlay {
     RegionTextureOverlay.#overlays.delete(region);
     RegionTextureOverlay.#active.delete(region);
     if (state.tick) canvas.app?.ticker?.remove(state.tick);
-    if (!region.destroyed && state.container.parent) region.removeChild(state.container);
+    if (state.container.destroyed) return;
+    if (!region.destroyed && state.container.parent) state.container.parent.removeChild(state.container);
     state.container.destroy({ children: true });
   }
 }

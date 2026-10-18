@@ -20,7 +20,18 @@
       "runAsGM": true
     },
     "critNoFocus": true,
-    "focusOnCast": true
+    "focusOnCast": true,
+    "surface": {
+      "enabled": true,
+      "around": 0,
+      "difficult": false,
+      "enterDamage": "",
+      "turnEndDamage": "",
+      "whileIn": "",
+      "obscure": false,
+      "clip": "jb2a.ice_spikes.radial.loop.white",
+      "tint": "#bde9ff"
+    }
   },
   "effects": [],
   "folder": null,

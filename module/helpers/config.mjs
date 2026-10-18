@@ -238,6 +238,7 @@ VAGABOND.statusConditions = {
   'berserk': 'VAGABOND.StatusConditions.Berserk',
   'blinded': 'VAGABOND.StatusConditions.Blinded',
   'burning': 'VAGABOND.StatusConditions.Burning',
+  'frostburning': 'VAGABOND.StatusConditions.Frostburning',
   'charmed': 'VAGABOND.StatusConditions.Charmed',
   'confused': 'VAGABOND.StatusConditions.Confused',
   'dazed': 'VAGABOND.StatusConditions.Dazed',
@@ -276,7 +277,7 @@ VAGABOND.statusConditions = {
  * @type {Set<string>}
  */
 VAGABOND.bookStatusIds = new Set([
-  'berserk', 'blinded', 'burning', 'charmed', 'confused', 'dazed', 'fatigued', 'frightened', 'incapacitated',
+  'berserk', 'blinded', 'burning', 'frostburning', 'charmed', 'confused', 'dazed', 'fatigued', 'frightened', 'incapacitated',
   'invisible', 'paralyzed', 'prone', 'restrained', 'sickened', 'suffocating', 'unconscious', 'vulnerable',
 ]);
 
@@ -286,7 +287,14 @@ VAGABOND.bookStatusIds = new Set([
  * `StatusHelper.applyStatus` / `sourceKeyFor`. Only Burning carries that text in the book.
  * @type {string[]}
  */
-VAGABOND.stackingStatuses = ['burning'];
+VAGABOND.stackingStatuses = ['burning', 'frostburning'];
+
+/**
+ * Statuses that ARE another Status with something extra (Frostburn: "Burning (d4, Speed reduced by 10')").
+ * Immunity / resistance to the base Status covers them (`StatusHelper.isStatusImmune` / `isStatusResisted`).
+ * @type {Record<string, string>}
+ */
+VAGABOND.statusCountsAs = { frostburning: 'burning' };
 
 VAGABOND.statusEffectDefinitions = [
   // AUTO-MANAGED (applied/removed by system code)
@@ -312,6 +320,18 @@ VAGABOND.statusEffectDefinitions = [
     img: '/icons/magic/fire/flame-burning-creature-skeleton.webp',
     statuses: ['burning'],
     description: "<ul><li data-manual>Takes the damage in parentheses at the start of its Turns</li><li data-manual>Ends when an action ends it (such as dousing fire)</li><li data-manual>Stacks from different sources, never from the same source</li></ul>"
+  },
+  {
+    // Frostburn's Burning: "Burning (d4, Speed reduced by 10') for the duration, ending early in extreme heat".
+    // A Burning Status (immunity / resistance to Burning covers it, statusCountsAs) with its Speed change.
+    id: 'frostburning',
+    name: 'VAGABOND.StatusConditions.Frostburning',
+    img: '/icons/magic/fire/explosion-flame-blue.webp',
+    statuses: ['frostburning'],
+    description: "<ul><li>Speed -10'</li><li data-manual>Takes the damage in parentheses (Cold) at the start of its Turns</li><li data-manual>Ends early in extreme heat</li><li data-manual>Stacks from different sources, never from the same source</li></ul>",
+    changes: [
+      { key: 'system.speedModifier', type: 'add', value: '-10' }
+    ]
   },
   {
     id: 'charmed',

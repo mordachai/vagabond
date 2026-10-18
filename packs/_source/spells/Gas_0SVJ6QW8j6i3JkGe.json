@@ -13,29 +13,28 @@
     "targetObjects": false,
     "fxSchool": "poison",
     "locked": true,
-    "causedStatuses": [
-      {
-        "statusId": "sickened",
-        "requiresDamage": false,
-        "saveType": "endure",
-        "duration": "focusing",
-        "tickDamageEnabled": false,
-        "damageOnTick": "",
-        "damageType": "-"
-      }
-    ],
-    "critCausedStatuses": [
-      {
-        "statusId": "sickened",
-        "requiresDamage": false,
-        "saveType": "endure",
-        "duration": "",
-        "tickDamageEnabled": false,
-        "damageOnTick": "",
-        "damageType": "-"
-      }
-    ],
-    "critNoFocus": true
+    "causedStatuses": [],
+    "critCausedStatuses": [],
+    "critNoFocus": true,
+    "surface": {
+      "enabled": true,
+      "around": 0,
+      "difficult": false,
+      "enterDamage": "",
+      "turnEndDamage": "",
+      "whileIn": "sickened",
+      "obscure": false,
+      "clip": "jb2a.fog_cloud.01.white",
+      "tint": "#8fd14f"
+    },
+    "hitMacro": {
+      "enabled": true,
+      "uuid": "",
+      "command": "system:spell.surface",
+      "label": "Gas",
+      "runAsGM": false
+    },
+    "focusOnCast": true
   },
   "effects": [],
   "folder": null,

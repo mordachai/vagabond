@@ -2,6 +2,7 @@ import { VagabondTextParser } from './text-parser.mjs';
 import { VagabondDamagePipeline } from './damage-pipeline.mjs';
 import { VagabondChatHelper } from './chat-helper.mjs';
 import { buildMacroButtonHTML } from './item-macro.mjs';
+import { AnimationBridge } from './animation-bridge.mjs';
 import { DruidHelper } from './druid-helper.mjs';
 import { SpellPlacement } from './spell-placement.mjs';
 import { resolveEffectDescription, effectDisplayImg } from './effects.mjs';
@@ -377,9 +378,12 @@ export class VagabondChatCard {
     // Spell Damage / Effect split: { effect, damage } of the Cast behind this card
     // (VagabondDamageHelper.spellCastContext). Stored as flags.vagabond.spellCast.
     spellCast = null,
+    // Extra flags.vagabond entries (e.g. AnimationBridge.FLAGS)
+    extraFlags = null,
   }) {
       const card = new VagabondChatCard();
       if (spellCast) card.data.spellCast = spellCast;
+      if (extraFlags) card.data.extraFlags = { ...(card.data.extraFlags ?? {}), ...extraFlags };
       const iconStyle = game.settings.get('vagabond', 'chatCardIconStyle');
 
       // LOGIC: The "First Set Wins" Rule
@@ -1028,8 +1032,16 @@ export class VagabondChatCard {
             thrown: isThrow,
             formula: attackResult.roll.formula,
             difficulty: attackResult.difficulty
-          }
+          },
+          extraFlags: AnimationBridge.FLAGS,
       });
+      // Automated Animations: a hit animates with its damage (now if rolled or nothing to roll,
+      // else on the Roll Damage button); a miss plays the miss variant (or nothing)
+      const awaitsDamageButton = attackResult.isHit && !damageRoll
+        && !!result?.content?.includes('vagabond-damage-button');
+      if (!awaitsDamageButton) {
+        AnimationBridge.play({ actor, item: weapon, targets: targetsAtRollTime, hit: !!attackResult.isHit });
+      }
       // Only auto-grant luck when there's no crit toggle (toggle manages luck itself)
       if (isCritical && !attackResult.critStatBonus) await VagabondChatCard._grantLuckOnCrit(actor, result, 'Critical Hit');
       return result;
@@ -1161,6 +1173,8 @@ export class VagabondChatCard {
             manaOverrideDelta: manaOverrideDelta ?? 0,
             // Focus-held Cast: what the hit macro applies ends with the Focus (FocusLink)
             focusHeld: !!spellState.focusHeld,
+            // The Cast includes the Spell's Effect (Damage / Effect split): Surface Spells leave their area only then
+            spellEffect: !!spellState.useFx,
             ...(spellState.targetObjects?.length ? { targetObjects: spellState.targetObjects } : {}),
             ...(spellState.targetsPicked ? { targetsPicked: true } : {}),
             // Delivery + area of the Cast (scope.deliveryType / scope.castArea = {sceneId, shape}): Conjure placement
@@ -1192,9 +1206,10 @@ export class VagabondChatCard {
    * @param {Object} rerollData - flags.vagabond.rerollData of the original Cast card
    * @param {Roll} roll - the new casting Check
    * @param {Array} targetsAtRollTime
+   * @param {ChatMessage|null} [originMessage]  the card being rerolled (its hit macro never auto-runs twice)
    * @returns {Promise<ChatMessage>}
    */
-  static async rerollSpellCast(actor, spell, rerollData, roll, targetsAtRollTime = []) {
+  static async rerollSpellCast(actor, spell, rerollData, roll, targetsAtRollTime = [], originMessage = null) {
     const { VagabondRollBuilder } = await import('./roll-builder.mjs');
     const { VagabondDamageHelper } = await import('./damage-helper.mjs');
 
@@ -1247,6 +1262,8 @@ export class VagabondChatCard {
       spellState, costs: { totalCost, manaSpent: owed }, deliveryText, manaOverrideDelta: 0,
     }, damageRoll, targetsAtRollTime);
 
+    const { MacroAutoRun } = await import('./macro-autorun.mjs');
+    await MacroAutoRun.inherit(originMessage, message);
     if (spellState.deliveryType) {
       await VagabondDamageHelper.playFxOrDefer(
         message,
@@ -1439,7 +1456,14 @@ export class VagabondChatCard {
             roll: commandCheck.roll, difficulty: commandCheck.difficulty,
             isHit: commandCheck.isHit, isCritical: commandCheck.isCritical,
         } : undefined,
+        extraFlags: AnimationBridge.FLAGS,
     });
+    // Automated Animations: NPCs auto-hit, so the animation plays with the damage — here when it was
+    // rolled with the card (or there is none), else from the damage button (postNPCActionDamage).
+    // A missed command Check (Raise) plays the miss variant.
+    if (!(hasDamage && !rollWithCheck)) {
+        AnimationBridge.play({ actor, item: AnimationBridge.npcActionItem(actor, action), targets: targetsAtRollTime, hit: !commandMissed });
+    }
   }
 
   static async _onClickAbilityName(event, target) {

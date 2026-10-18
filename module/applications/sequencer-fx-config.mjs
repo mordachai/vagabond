@@ -88,6 +88,8 @@ export class SequencerFxConfig extends api.HandlebarsApplicationMixin(api.Applic
               : dtLabel,
             ...animCfg,
             volume: animCfg.volume ?? 0.6,
+            // Frame a Spell area left on the map stays on (%); empty shows the built-in one
+            hold: animCfg.hold ?? VagabondSpellSequencer.defaultHoldFor(animCfg.file) ?? '',
           };
         }),
       }));
@@ -160,7 +162,15 @@ export class SequencerFxConfig extends api.HandlebarsApplicationMixin(api.Applic
     const delivery = target.dataset.delivery;
     const file     = this.element.querySelector(`input[name="areaAnims.${school}.${delivery}.file"]`)?.value;
     if (!file) { ui.notifications.warn(game.i18n.localize('VAGABOND.SequencerFX.NoFile')); return; }
-    VideoPreviewDialog.open([this.#previewGroup(`areaAnims.${school}.${delivery}`, file, 0.6)]);
+    // The row's "Frame to use": the preview scrubs to it and its "Use this frame" button writes it back
+    const holdInput = this.element.querySelector(`input[name="areaAnims.${school}.${delivery}.hold"]`);
+    const held = holdInput?.value === '' ? null : Number(holdInput?.value);
+    VideoPreviewDialog.open([this.#previewGroup(`areaAnims.${school}.${delivery}`, file, 0.6)], {
+      frame: holdInput ? {
+        value: Number.isFinite(held) ? held : null,
+        onPick: (pct) => { holdInput.value = String(pct); holdInput.dispatchEvent(new Event('change', { bubbles: true })); },
+      } : null,
+    });
   }
 
   /** Preview group for a row: its video plus the row's (unsaved) sound + volume inputs. */

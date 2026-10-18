@@ -171,6 +171,7 @@
       "Effects": {
         "Focusing": "Concentrando (Arco Elétrico)",
         "Burning": "Queimando (Chamas)",
+        "Frostburning": "Queimando de Frio (Chamas Azuis)",
         "Sickened": "Doente (Bolhas Verdes)",
         "Charmed": "Enfeitiçado (Corações Rosa)"
       }
@@ -414,8 +415,16 @@
       "CleanupTool": "Limpar Exército Morto-Vivo (Mortos-Vivos reerguidos mortos voltam a ser cadáveres)",
       "CleanedUp": "Reerguer: {restored} cadáver(es) devolvido(s), {removed} ficha(s) do Exército Morto-Vivo excluída(s)."
     },
+    "Surface": {
+      "NoArea": "{spell}: nenhuma área para cobrir. Mire num Ser ou num espaço, ou Conjure sobre uma área.",
+      "NoGM": "{spell}: um Mestre precisa estar conectado para colocar a área.",
+      "RelayFailed": "{spell}: o Mestre ({gm}) não conseguiu colocar a área.",
+      "NotYours": "Você não é dono de {name}.",
+      "EnteredTitle": "{spell}: {name} entra",
+      "TurnEndTitle": "{spell}: {name} termina o Turno dentro",
+      "DifficultBehavior": "Terreno Difícil"
+    },
     "Conjure": {
-      "Title": "Conjurar",
       "FolderName": "Conjurados",
       "Search": "Buscar…",
       "Confirm": "Conjurar",
@@ -435,6 +444,7 @@
       "NoRoom": "Conjurar: sem espaço livre para {n} deles.",
       "AreaNeedsLoot": "Conjurar: Itens numa área (ou num Glifo) caem no chão, o que precisa do módulo Canvas Loot. Mire em Seres.",
       "NpcNoItems": "Conjurar: {names} não pode receber Itens (não é um Personagem). Sem o Canvas Loot, mire em você ou num Personagem.",
+      "SpacesNeedLoot": "Conjurar: Itens num espaço Alvo caem no chão, o que precisa do módulo Canvas Loot. Mire em você ou num Personagem.",
       "NoRoomNear": "Conjurar: sem espaço livre ao lado de {name} para o Item.",
       "OnGroundNear": "{item} no chão ao lado de {name}.",
       "NoGM": "Conjurar precisa de um Mestre ativo para criá-los.",
@@ -448,11 +458,8 @@
       "Equipped": "(Equipado)",
       "NoFreeHands": "(não Equipado: sem mãos livres)",
       "UntilFocus": "Duram enquanto o conjurador se Concentrar nesta Magia.",
-      "UntilTurn": "Duram até o próximo Turno do conjurador.",
-      "Dismiss": "Dispensar",
-      "Dismissed": "{name} dispensa o que a Magia invocou.",
-      "FocusEnded": "{name} para de se Concentrar: o que a Magia invocou desaparece.",
-      "TurnEnded": "Próximo Turno de {name}: o que a Magia invocou desaparece."
+      "UntilTurn": "Duram até o conjurador fazer qualquer outra coisa (Salvaguardas não contam) ou começar o próximo Turno.",
+      "Dismiss": "Dispensar"
     },
     "HuntersMark": {
       "Title": "Marca do Caçador",
@@ -584,6 +591,7 @@
       "Berserk": "Furioso",
       "Blinded": "Cego",
       "Burning": "Queimando",
+      "Frostburning": "Queimando de Frio",
       "Charmed": "Enfeitiçado",
       "Confused": "Confuso",
       "Dazed": "Atordoado",
@@ -651,6 +659,7 @@
       "Invisible": "<ul><li>Não pode ser visto por sentidos normais</li><li>Ataques, Conjurações e suas Salvaguardas: quem não consegue vê-lo age como Cego</li><li data-manual>Outros Testes e Salvaguardas que o envolvem: quem não consegue vê-lo age como Cego</li></ul>",
       "Berserk": "<ul><li data-manual>Não pode Conjurar nem se Concentrar</li><li data-manual>Não pode ficar Amedrontado</li><li data-manual>Não faz Testes de Moral</li></ul>",
       "Burning": "<ul><li data-manual>Sofre o dano entre parênteses no início de seus Turnos</li><li data-manual>Termina quando uma ação o encerra (como apagar o fogo)</li><li data-manual>Acumula de fontes diferentes, nunca da mesma fonte</li></ul>",
+      "Frostburning": "<ul><li>Velocidade -10'</li><li data-manual>Sofre o dano entre parênteses (Frio) no início de seus Turnos</li><li data-manual>Termina antes em calor extremo</li><li data-manual>Acumula de fontes diferentes, nunca da mesma fonte</li></ul>",
       "Charmed": "<ul><li data-manual>Não pode atacar voluntariamente quem o encantou</li></ul>",
       "Suffocating": "<ul><li data-manual>Começa após 1 Minuto sem respirar</li><li data-manual>Heróis: a cada Rodada, role d8; Força ou mais = +1 Fadiga</li><li data-manual>Inimigos: +1 Fadiga a cada Rodada</li></ul>"
     },
@@ -1216,6 +1225,10 @@
         "name": "Arte da Área de Magia",
         "hint": "Pinta arte contínua sobre regiões de área de magia com base no tipo de dano da magia (ex: fogo, frio). Quando desativado, áreas usam um preenchimento de cor simples."
       },
+      "spellAreaDisplay": {
+        "name": "Áreas de Magia no Mapa",
+        "hint": "Como as áreas de Magia que ficam no mapa aparecem para você: a animação em loop ou a arte da área. As animações de conjuração tocam de qualquer forma."
+      },
       "regionBorderMode": {
         "name": "Contorno da Área de Magia",
         "hint": "Como o contorno ao redor de uma área de magia é desenhado para você: sua cor de jogador, oculto, ou padrão do Foundry."
@@ -1393,7 +1406,17 @@
       },
       "useSequencerFX": {
         "name": "Efeitos Visuais de Magia (meu dispositivo)",
-        "hint": "Ativa animações do Sequencer neste dispositivo. Desative para melhor desempenho em hardware mais fraco. A configuração de nível de mundo 'Usar Animações de Magia' também deve estar ativada."
+        "hint": "Mostra animações de magia neste dispositivo. Desativar esconde só para você (melhor desempenho em hardware mais fraco); os demais continuam vendo suas Conjurações. A configuração de nível de mundo 'Usar Animações de Magia' também deve estar ativada."
+      },
+      "fxOnMiss": {
+        "name": "Animação ao Errar",
+        "hint": "O que um ataque errado ou uma Conjuração falha mostra. Animações que podem errar (raios, projéteis, golpes corpo a corpo) passam ao lado do Alvo; animações sem versão de erro não mostram nada. Acertos sempre animam junto com a rolagem de dano.",
+        "miss": "Animação de erro",
+        "none": "Nada"
+      },
+      "spellHitMacroAutoRun": {
+        "name": "Executar Macros de Acerto de Magia Automaticamente",
+        "hint": "O botão de macro de acerto de uma Conjuração bem-sucedida se aperta sozinho quando a animação no alvo chega ao fim (na hora, sem animações). Desligue por Magia com a chave \"Executar automaticamente\"."
       },
       "sequencerFxConfig": {
         "name": "Animações de FX de Magia",
@@ -1451,7 +1474,12 @@
       "Title": "Pré-visualização da Animação",
       "NoFile": "Nenhum arquivo de animação reproduzível encontrado.",
       "PrevVariant": "Variante anterior",
-      "NextVariant": "Próxima variante"
+      "NextVariant": "Próxima variante",
+      "Frame": "Quadro a usar",
+      "FrameTooltip": "Arraste para ver um quadro. Reproduzir para nele, como a área da Magia fará.",
+      "UseFrame": "Usar este quadro",
+      "FrameSet": "Quadro a usar: {pct}%. Salve a configuração de FX de Magia para manter.",
+      "UseFrameTooltip": "Grava este quadro na configuração de FX de Magia (Salve para manter)"
     },
     "CompendiumSettings": {
       "Description": "Controle quais compêndios de Item estão disponíveis no Criador de Personagem. Isso determina qual conteúdo (ancestralidades, classes, equipamentos, etc.) os jogadores podem escolher durante a criação do personagem.",
@@ -1508,6 +1536,8 @@
       "PreviewSoundTooltip": "Pré-visualizar som",
       "Scale": "Escala",
       "Volume": "Volume",
+      "HoldFrame": "Quadro a usar (%)",
+      "HoldFrameHint": "Áreas de Magia deixadas no mapa tocam este clipe uma vez e ficam neste quadro (% do clipe). Vazio = padrão do sistema, 0 = continua repetindo. Defina pela pré-visualização.",
       "AreaAnimations": "Animações de Área",
       "VideoPlaceholder": "vídeo…",
       "BrowseVideoTooltip": "Procurar vídeo",
@@ -2298,6 +2328,8 @@
         "RunDefault": "Rodar Macro",
         "RunAsGM": "Permitir Jogadores",
         "RunAsGMHint": "Quando jogadores clicam neste botão, o cliente do Mestre executa a macro com permissões de Mestre. Use para macros que alteram o mundo (ex: transformar um token).",
+        "AutoRun": "Executar automaticamente",
+        "AutoRunHint": "O botão se aperta sozinho quando a animação no alvo da Conjuração chega ao fim (configuração de mundo Executar Macros de Acerto de Magia Automaticamente). Desligue para macros que precisam de uma decisão antes.",
         "Notes": "Adiciona um botão ao card de chat deste item. A macro roda com actor, item, token, targets e speaker no escopo. O botão Ao Acertar só aparece quando o ataque/conjuração acerta."
       },
       "base": {
@@ -2386,6 +2418,17 @@
             "maxSlots": {"label": "Espaços Máx."},
             "forgeableOnly": {"label": "Só Itens \"Pode ser Forjado\"", "hint": "Lista só Itens com o interruptor de Manuseio \"Pode ser Forjado\" ligado (Forjar)."},
             "maxCost": {"label": "Custo Máx.", "hint": "0 = sem limite. Um Item por Alvo, ou por cubo de 1,5 m de uma área."}
+          },
+          "surface": {
+            "enabled": {"label": "Superfície de Magia", "hint": "O macro de acerto system:spell.surface deixa a área da Conjuração no mapa (a área, cada espaço Alvo ou o espaço de cada Alvo): uma Região que dura enquanto a Conjuração durar (Concentração, senão até o próximo Turno do conjurador)."},
+            "around": {"label": "Em Volta do Alvo", "hint": "Espaços somados em volta de cada Alvo (1 = \"o Alvo e os espaços Próximos em volta\"). Entregas de área usam a própria área."},
+            "difficult": {"label": "Terreno Difícil", "hint": "Andar custa o dobro, e os Seres nele ficam Vulneráveis (livro p. 17; Vulnerável segue a configuração de automação)."},
+            "enterDamage": {"label": "Dano ao Entrar", "hint": "Fórmula aplicada na primeira vez que um Ser entra na área num Turno (Erupção: d6). Posta um cartão de dano com os botões de Salvaguarda."},
+            "turnEndDamage": {"label": "Dano no Fim do Turno", "hint": "Fórmula aplicada quando um Ser termina o Turno na área (Erupção: d6)."},
+            "whileIn": {"label": "Condição Enquanto Dentro", "hint": "Condição que um Ser tem enquanto está na área (Gás: Doente)."},
+            "obscure": {"label": "Bloqueia a Visão", "hint": "Testes que dependem da visão de um Alvo na área, ou feitos por um Ser nela, têm Desvantagem (Névoa)."},
+            "clip": {"label": "Animação em Loop", "hint": "Caminho do banco do Sequencer ou arquivo tocado em loop na área (jb2a.grease.dark_brown.loop). Sem Sequencer, sem o clipe ou com o FX do dispositivo desligado, a área mostra a arte do modelo."},
+            "tint": {"label": "Cor do Loop", "hint": "Cor opcional do loop (#7fbf3f)."}
           }
         },
         "AddSpell": "Adicionar Magia",
@@ -2917,6 +2960,7 @@
       "Unfavorite": "Remover dos Favoritos",
       "Focus": "Concentrar",
       "StopFocusing": "Parar de Concentrar",
+      "Dismiss": "Dispensar",
       "FocusLimit": "Você pode se Concentrar em no máximo {max} Magias.",
       "RemoveStatus": "Remover Status",
       "DeleteItemTitle": "Excluir {name}?",
@@ -3147,6 +3191,7 @@
       "AreaButton": "Posicionar no mapa (botão direito: limpar)",
       "SpacesButton": "Mirar espaços no mapa (botão direito: limpar)",
       "AreaPrompt": "Clique para posicionar a área (num token: ela segue o token). Botão direito ou Esc cancela.",
+      "LinePrompt": "Clique para onde a Linha aponta (ela parte do conjurador e fica onde você a colocar). Botão direito ou Esc cancela.",
       "SpacesPrompt": "Clique no chão para adicionar ou remover um espaço, num token para mirá-lo. Botão direito, Esc ou Enter termina.",
       "NeedAim": "Mire um token, ou posicione o {type} com a mira.",
       "OutOfSight": "O conjurador não vê esse ponto.",
@@ -3595,7 +3640,7 @@
         "builder": "Criador de Personagens"
       },
       "Notes": {
-        "areas": "Contorno e opacidade são padrões. Jogadores podem mudá-los."
+        "areas": "Contorno, opacidade e como as áreas aparecem no mapa são padrões. Jogadores podem mudá-los."
       },
       "Rows": {
         "hudAutoOpenOnSelect": {
@@ -3634,6 +3679,12 @@
       },
       "PlayerDefaults": {
         "Description": "Estes são os padrões de mesa que cada jogador recebe a menos que mude seu próprio contorno/opacidade nas configurações principais. Use o botão para redefinir todos os jogadores de volta a estes."
+      },
+      "AreaDisplay": {
+        "name": "Áreas de Magia no Mapa",
+        "hint": "Como as áreas de Magia que ficam no mapa (gosma, lava, névoa, gelo...) aparecem por padrão: a animação em loop (Sequencer + JB2A) ou a arte da área. As animações de conjuração tocam de qualquer forma. Jogadores podem mudar.",
+        "loop": "Animação em Loop",
+        "art": "Arte da Área"
       },
       "DefaultBorder": {
         "name": "Contorno de Área Padrão",
@@ -4216,6 +4267,9 @@
       "starterPack": "Pacote Inicial",
       "container": "Contêiner",
       "vehiclePart": "Parte de Construto"
+    },
+    "RegionBehavior": {
+      "spellSurface": "Superfície de Magia"
     },
     "CountdownDice": {
       "SceneControls": {

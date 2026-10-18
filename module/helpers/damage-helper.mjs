@@ -9,6 +9,7 @@ import { DefenseHelper } from './defense-helper.mjs';
 import { NpcRules } from './npc-rules.mjs';
 import { FocusLink } from './focus-link.mjs';
 import { WardHelper } from './ward-helper.mjs';
+import { AnimationBridge } from './animation-bridge.mjs';
 
 /**
  * Universal Damage Helper
@@ -180,25 +181,27 @@ export class VagabondDamageHelper {
     const fx = message?.flags?.vagabond?.pendingFx;
     // Cards from before item FX were removed may still hold a `kind: 'item'` payload
     if (fx?.kind !== 'spell') return;
-    this._playFx(fx, actor, item, storedTargets, true);
+    this._playFx(fx, actor, item, storedTargets, true, message);
   }
 
   /**
-   * Play spell FX now. Fire-and-forget.
+   * Play spell FX now. Fire-and-forget. With the Cast card, its hit macro auto-runs when the
+   * FX lands (MacroAutoRun).
    * @param {{kind: 'spell', deliveryType?: string, deliveryIncrease?: number}} fx
    * @param {Actor} actor
    * @param {Item|null} item  the spell
    * @param {Array} storedTargets - Target data captured at roll time
    * @param {boolean} isHit
+   * @param {ChatMessage|null} [message]  the Cast card
    */
-  static _playFx(fx, actor, item, storedTargets, isHit) {
+  static _playFx(fx, actor, item, storedTargets, isHit, message = null) {
     if (fx?.kind !== 'spell' || !item) return;
     const casterToken = actor.token?.object ?? actor.getActiveTokens(true)[0];
     // Remote spaces + a hand-placed area's center (SpellPlacement) ride the payload
     const targets = [...TargetHelper.resolveTargets(storedTargets), ...SpellPlacement.pseudoTargets(fx.spaces)];
-    import('./spell-sequencer.mjs').then(({ VagabondSpellSequencer }) => {
-      VagabondSpellSequencer.play(item, fx.deliveryType, fx.deliveryIncrease ?? 0, casterToken, targets, { deliveryEnabled: isHit, areaCenter: fx.areaCenter ?? null });
-    });
+    const played = import('./spell-sequencer.mjs').then(({ VagabondSpellSequencer }) =>
+      VagabondSpellSequencer.play(item, fx.deliveryType, fx.deliveryIncrease ?? 0, casterToken, targets, { deliveryEnabled: isHit, areaCenter: fx.areaCenter ?? null }));
+    if (message && isHit) import('./macro-autorun.mjs').then(({ MacroAutoRun }) => MacroAutoRun.afterFx(message, played));
   }
 
   /**
@@ -207,7 +210,7 @@ export class VagabondDamageHelper {
    */
   static async playFxOrDefer(message, fx, actor, item, storedTargets, isHit) {
     if (isHit && await this.deferFxToDamageButton(message, fx)) return;
-    this._playFx(fx, actor, item, storedTargets, isHit);
+    this._playFx(fx, actor, item, storedTargets, isHit, message);
   }
 
   /**
@@ -318,20 +321,27 @@ export class VagabondDamageHelper {
     const critStatBonus = context.critStatBonus
       || (context.isCritical && context.statKey ? rollData.stats?.[context.statKey]?.value || 0 : 0);
 
+    // Attack card animated by the system (AnimationBridge): its Automated Animations play now,
+    // with the damage — and AA's own detection must skip the damage card too
+    const aaManaged = !!game.messages.get(messageId)?.flags?.vagabond?.aaManaged && item?.type !== 'spell';
+
     // Post a SEPARATE damage message instead of updating the attack card
     // This prevents double-rolling issues and matches the save result flow
     // The Cast card's Damage / Effect context carries over to the damage card it spawns
-    await this.postDamageResult(damageRoll, damageTypeLabel, context.isCritical, actor, item, finalDamageTypeKey, attackType, critStatBonus, damageRoll._weaknessPreRolled ?? false, storedTargetsForWeak, hasCritToggle, !critBenefitOn, this.spellCastFromButton(button));
+    await this.postDamageResult(damageRoll, damageTypeLabel, context.isCritical, actor, item, finalDamageTypeKey, attackType, critStatBonus, damageRoll._weaknessPreRolled ?? false, storedTargetsForWeak, hasCritToggle, !critBenefitOn, this.spellCastFromButton(button), aaManaged ? AnimationBridge.FLAGS : null);
+    // A thrown last Alchemical is gone by now — its card snapshot still names the animation
+    if (aaManaged) AnimationBridge.play({ actor, item: item ?? this._resolveSourceItem(actor, itemId), targets: storedTargetsForWeak, hit: true });
   }
 
   /**
    * Post a separate damage result message with save buttons
    * Uses existing createActionCard() to avoid code duplication
    */
-  static async postDamageResult(damageRoll, damageType, isCritical, actor, item, damageTypeKey = null, attackType = 'melee', critStatBonus = 0, weaknessPreRolled = false, targetsAtRollTime = [], critLocked = false, critBenefitOff = false, spellCast = null) {
+  static async postDamageResult(damageRoll, damageType, isCritical, actor, item, damageTypeKey = null, attackType = 'melee', critStatBonus = 0, weaknessPreRolled = false, targetsAtRollTime = [], critLocked = false, critBenefitOff = false, spellCast = null, extraFlags = null) {
     const { VagabondChatCard } = await import('./chat-card.mjs');
 
     return await VagabondChatCard.createActionCard({
+      extraFlags,
       actor,
       item,
       title: `${game.i18n.localize('VAGABOND.Roll.DamageRoll')}: ${item?.name || 'Attack'}`,
@@ -743,7 +753,10 @@ export class VagabondDamageHelper {
           hasDefenses: !this.isRestorativeDamageType(damageTypeKey || 'physical'),
           targetsAtRollTime,
           actionIndex,
+          extraFlags: AnimationBridge.FLAGS,
       });
+      // NPCs auto-hit: the action's Automated Animation plays with its damage
+      AnimationBridge.play({ actor, item: AnimationBridge.npcActionItem(actor, action), targets: targetsAtRollTime, hit: true });
     }
 
   /**

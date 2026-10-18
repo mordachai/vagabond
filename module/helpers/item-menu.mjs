@@ -1,6 +1,8 @@
 import { activateHandItem } from './hand-item-activation.mjs';
 import { isStackableZeroSlot } from './stack-helper.mjs';
 import { SpellHandler } from '../sheets/handlers/spell-handler.mjs';
+import { SpellSurface } from './spell-surface.mjs';
+import { ConjureHelper } from './conjure-helper.mjs';
 
 /**
  * Whether an item has a meaningful "Use" action. Weapons always do (Use
@@ -46,8 +48,19 @@ export function buildSpellMenuItems({ actor, spell, event, spellHandler }) {
     {
       label: L(isFocused ? 'VAGABOND.ContextMenu.StopFocusing' : 'VAGABOND.ContextMenu.Focus'),
       icon: 'fas fa-star-christmas',
+      ...(isFocused ? { cssClass: 'is-focus' } : {}),
       action: () => SpellHandler.setFocus(actor, spell.id, !isFocused),
     },
+    // Dismiss: only while this Spell has something on the map (Surface areas, Conjured Beings / Items)
+    ...((SpellSurface.hasActive(actor, spell.id) || ConjureHelper.hasActive(actor, spell.id)) ? [{
+      label: L('VAGABOND.ContextMenu.Dismiss'),
+      icon: 'fas fa-ban',
+      cssClass: 'is-dismiss',
+      action: async () => {
+        await SpellSurface.dismissSpell(actor, spell.id);
+        await ConjureHelper.dismissSpell(actor, spell.id);
+      },
+    }] : []),
     {
       label: L('VAGABOND.Hud.Menu.Open'),
       icon: 'fas fa-up-right-from-square',

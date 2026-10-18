@@ -130,6 +130,22 @@ export default class VagabondSpell extends VagabondItemBase {
       }),
       forgeableOnly: new fields.BooleanField({ required: true, initial: false }),
     });
+    // Spell Surface (SpellSurface, hit macro `system:spell.surface`): the Cast leaves its area on the map as a Region
+    // (Goop, Erupt, Sprout, Adhere, Terraform, Fog, Gas) lasting while the Cast does. `around` = Close spaces added
+    // around each Target; `difficult` = Difficult Terrain (2' per 1' + Vulnerable inside); damage formulas on entering /
+    // at Turn end; `whileIn` = status id while inside (no `choices:` — statuses are homebrew-driven); `obscure` = sight
+    // Hinder (Fog); `clip` / `tint` = looping Sequencer clip (template art when it can't play).
+    schema.surface = new fields.SchemaField({
+      enabled: new fields.BooleanField({ required: true, initial: false }),
+      around: new fields.NumberField({ required: true, nullable: false, integer: true, min: 0, max: 3, initial: 0 }),
+      difficult: new fields.BooleanField({ required: true, initial: false }),
+      enterDamage: new fields.StringField({ required: true, blank: true, initial: '' }),
+      turnEndDamage: new fields.StringField({ required: true, blank: true, initial: '' }),
+      whileIn: new fields.StringField({ required: true, blank: true, initial: '' }),
+      obscure: new fields.BooleanField({ required: true, initial: false }),
+      clip: new fields.StringField({ required: true, blank: true, initial: '' }),
+      tint: new fields.StringField({ required: true, blank: true, initial: '' }),
+    });
 
     // Optional label shown on the dice node when using dice scaling (e.g. "Speed").
     schema.diceScaleLabel = new fields.StringField({
@@ -196,6 +212,8 @@ export default class VagabondSpell extends VagabondItemBase {
       command:  new fields.StringField({ blank: true, initial: '' }),
       label:    new fields.StringField({ blank: true, initial: '' }),
       runAsGM:  new fields.BooleanField({ initial: false }),
+      // hitMacro only: presses itself when the Cast's target animation lands (MacroAutoRun)
+      autoRun:  new fields.BooleanField({ initial: true }),
     });
     schema.macro = macroSchema();
     schema.hitMacro = macroSchema();
@@ -214,5 +232,14 @@ export default class VagabondSpell extends VagabondItemBase {
 
     // Use centralized text parser
     return VagabondTextParser.parseCountdownDice(description);
+  }
+
+  /**
+   * Does a Cast of this Spell start with its Effect (FX) on? Always without a damage type (the Effect IS the
+   * Cast); a Spell that leaves its area on the map (Surface) too — it does nothing without the Effect, and
+   * players forget to switch it on.
+   */
+  get effectByDefault() {
+    return (this.damageType ?? '-') === '-' || !!this.surface?.enabled;
   }
 }

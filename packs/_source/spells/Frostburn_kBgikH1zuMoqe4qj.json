@@ -11,24 +11,24 @@
     "locked": true,
     "causedStatuses": [
       {
-        "statusId": "burning",
+        "statusId": "frostburning",
         "requiresDamage": false,
         "saveType": "none",
         "duration": "d4",
         "tickDamageEnabled": true,
         "damageOnTick": "",
-        "damageType": "-"
+        "damageType": "cold"
       }
     ],
     "critCausedStatuses": [
       {
-        "statusId": "burning",
+        "statusId": "frostburning",
         "requiresDamage": false,
         "saveType": "none",
         "duration": "d6",
         "tickDamageEnabled": true,
         "damageOnTick": "",
-        "damageType": "-"
+        "damageType": "cold"
       }
     ],
     "targetBeings": true,
