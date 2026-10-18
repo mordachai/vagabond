@@ -208,6 +208,13 @@ export class VagabondActiveEffect extends ActiveEffect {
     if ((await super._preUpdate(changes, options, user)) === false) return false;
     const mode = foundry.utils.getProperty(changes, 'flags.vagabond.applicationMode') ?? this.flags?.vagabond?.applicationMode;
     if (mode === 'self') changes.transfer = false;
+    // Bound cursed item: players can't switch its effects off (sheet row, actor list, HUD switch)
+    const item = this.parent?.documentName === 'Item' ? this.parent : null;
+    const EquipmentHelper = globalThis.vagabond?.utils?.EquipmentHelper;
+    if (changes.disabled === true && item && EquipmentHelper?.isCurseLocked(item, game.user)) {
+      EquipmentHelper.warnCurseLocked(item);
+      return false;
+    }
   }
 
   /**

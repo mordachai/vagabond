@@ -4,6 +4,8 @@ import { CurrencyHelper } from '../helpers/currency-helper.mjs';
 import { MaterialsHelper } from '../helpers/materials-helper.mjs';
 import { CraftCatalog } from '../helpers/crafting/catalog-helper.mjs';
 import { equipmentStats, markStatsForActor } from '../helpers/equipment-stats.mjs';
+import { EquipmentHelper } from '../helpers/equipment-helper.mjs';
+import { ScrapMode } from '../helpers/crafting/scrap-mode.mjs';
 
 const { api } = foundry.applications;
 
@@ -72,7 +74,12 @@ export class WorkbenchApp extends api.HandlebarsApplicationMixin(api.Application
     actions: {
       switchTab: WorkbenchApp.#onSwitchTab,
       workShift: WorkbenchApp.#onWorkShift,
-      scrapItem: WorkbenchApp.#onScrapItem,
+      scrapPick: WorkbenchApp.#onScrapPick,
+      scrapStep: WorkbenchApp.#onScrapStep,
+      scrapAll: WorkbenchApp.#onScrapAll,
+      scrapRemove: WorkbenchApp.#onScrapRemove,
+      scrapClear: WorkbenchApp.#onScrapClear,
+      scrapConfirm: WorkbenchApp.#onScrapConfirm,
       removeProject: WorkbenchApp.#onRemoveProject,
       selectCatalogItem: WorkbenchApp.#onSelectCatalogItem,
       craftFilter: WorkbenchApp.#onCraftFilter,
@@ -103,6 +110,9 @@ export class WorkbenchApp extends api.HandlebarsApplicationMixin(api.Application
   #lastCatalogClick = { uuid: null, time: 0 };
   #craftSearch = '';
   #savedScroll = new Map();
+  /** Scrap tab state: picked item id → how many of that stack to scrap. */
+  #scrapPicks = new Map();
+  #scrapSearch = '';
 
   /**
    * Every render replaces the DOM wholesale, so scroll positions would otherwise
@@ -113,7 +123,7 @@ export class WorkbenchApp extends api.HandlebarsApplicationMixin(api.Application
     await super._preRender(context, options);
     if (!this.element) return;
     this.#savedScroll.clear();
-    for (const selector of ['.wb-main', '.wb-catalog-list', '.wb-proj-list']) {
+    for (const selector of ['.wb-main', '.wb-catalog-list', '.wb-proj-list', '.wb-scrap-list', '.wb-tray-list']) {
       const el = this.element.querySelector(selector);
       if (el) this.#savedScroll.set(selector, el.scrollTop);
     }
@@ -127,29 +137,7 @@ export class WorkbenchApp extends api.HandlebarsApplicationMixin(api.Application
     this.#budget = budget;
     const craft = this.#tab === 'craft' ? await this.#prepareCraftContext(budget) : null;
 
-    const scrapItems = this.actor.items
-      .filter(i => i.type === 'equipment' && !i.flags?.vagabond?.craftProject && !i.system?.craftMaterial?.enabled)
-      .map(i => {
-        const quantity = i.system.quantity ?? 1;
-        return {
-          id: i.id, name: i.name, img: i.img, qtySuffix: quantity > 1 ? ` ×${quantity}` : '',
-          value: CurrencyHelper.format(i.system.cost), yieldLabel: CurrencyHelper.format(Math.floor(CurrencyHelper.toCopper(i.system.cost) / 2)),
-          equipmentType: i.system.equipmentType,
-        };
-      });
-
-    const scrapGroupsByType = new Map();
-    for (const item of scrapItems) {
-      if (!scrapGroupsByType.has(item.equipmentType)) scrapGroupsByType.set(item.equipmentType, []);
-      scrapGroupsByType.get(item.equipmentType).push(item);
-    }
-    const scrapGroups = Object.keys(CONFIG.VAGABOND.equipmentTypes ?? {})
-      .filter(key => scrapGroupsByType.has(key))
-      .map(key => ({
-        key,
-        label: game.i18n.localize(CONFIG.VAGABOND.equipmentTypes[key]),
-        items: scrapGroupsByType.get(key).sort((a, b) => a.name.localeCompare(b.name)),
-      }));
+    const scrap = this.#tab === 'scrap' ? this.#prepareScrapContext(materials) : null;
 
     return {
       actor: this.actor,
@@ -160,8 +148,97 @@ export class WorkbenchApp extends api.HandlebarsApplicationMixin(api.Application
       isGM: game.user.isGM,
       budget, budgetLabel: CurrencyHelper.format(budget),
       materials, materialsLabel: CurrencyHelper.format(materials),
-      craft, scrapItems, scrapGroups,
+      craft, scrap,
       hasCraftSkill: budget > 0,
+    };
+  }
+
+  /**
+   * Scrap tab: inventory list (grouped by equipment type) + the tray of picked
+   * stacks with the totals the Scrap button will produce — Materials gained, the
+   * Materials bundle before/after and the inventory Slots before/after.
+   */
+  #prepareScrapContext(materials) {
+    const fmt = (copper) => CurrencyHelper.format(copper);
+    const equipKeys = { oneHand: 'OneHand', twoHands: 'TwoHands', worn: 'Worn' };
+    const candidates = this.actor.items.filter(i => i.type === 'equipment'
+      && !i.flags?.vagabond?.craftProject && !i.system?.craftMaterial?.enabled);
+
+    const picks = new Map();
+    const rows = candidates.map(item => {
+      const quantity = Math.max(1, item.system.quantity ?? 1);
+      const locked = !ScrapMode.scrappable(item);
+      const picked = locked ? 0 : Math.min(quantity, this.#scrapPicks.get(item.id) ?? 0);
+      if (picked > 0) picks.set(item.id, picked);
+      const state = item.system.equipmentState;
+      const equipKey = EquipmentHelper.isEquipped(item) ? equipKeys[state] : null;
+      return {
+        id: item.id, item, name: item.name, img: item.img, nameLower: item.name.toLowerCase(),
+        quantity, multi: quantity > 1, picked, isPicked: picked > 0, isFull: picked >= quantity, locked,
+        equipKey,
+        equipLabel: equipKey ? game.i18n.localize(`VAGABOND.Craft.Workbench.ScrapEquip.${equipKey}`) : '',
+        equipIcon: { OneHand: 'fa-hand', TwoHands: 'fa-hands', Worn: 'fa-shirt' }[equipKey] ?? '',
+        valueLabel: fmt(CurrencyHelper.toCopper(item.system.cost)),
+        yieldEach: fmt(ScrapMode.yieldFor(item, 1)),
+        slotsLabel: this.#slotsLabel(EquipmentHelper.itemSlotCost(item)),
+        equipmentType: item.system.equipmentType,
+      };
+    });
+    this.#scrapPicks = picks;
+
+    const byType = new Map();
+    for (const row of rows) {
+      if (!byType.has(row.equipmentType)) byType.set(row.equipmentType, []);
+      byType.get(row.equipmentType).push(row);
+    }
+    const groups = Object.keys(CONFIG.VAGABOND.equipmentTypes ?? {})
+      .filter(key => byType.has(key))
+      .map(key => ({
+        key,
+        label: game.i18n.localize(CONFIG.VAGABOND.equipmentTypes[key]),
+        items: byType.get(key).sort((a, b) => a.name.localeCompare(b.name)),
+      }));
+
+    const tray = rows.filter(r => r.isPicked).map(r => ({
+      ...r, yieldLabel: fmt(ScrapMode.yieldFor(r.item, r.picked)), partial: r.picked < r.quantity,
+    }));
+    const gain = tray.reduce((sum, r) => sum + ScrapMode.yieldFor(r.item, r.picked), 0);
+    const count = tray.reduce((sum, r) => sum + r.picked, 0);
+    const equipped = tray.filter(r => r.equipKey);
+
+    // Slots before / after: the same Slot math the sheet uses, run on stand-ins
+    const bundleSlots = (value) => (value > 0 ? MaterialsHelper.bundleSlots({ craftMaterial: { enabled: true, key: '', value } }) : 0);
+    const inventory = this.actor.system.inventory ?? {};
+    const maxSlots = inventory.maxSlots ?? 0;
+    const slotsBefore = inventory.occupiedSlots ?? 0;
+    const top = this.actor.items.filter(i => ['equipment', 'container'].includes(i.type) && !i.system.containerId);
+    const after = top
+      .filter(i => !(i.type === 'equipment' && i.system.craftMaterial?.enabled && (i.system.craftMaterial.key ?? '') === ''))
+      .map(i => ({ system: { slots: EquipmentHelper.itemSlotCost(i), quantity: Math.max(0, (i.system.quantity ?? 1) - (picks.get(i.id) ?? 0)) } }))
+      .filter(i => i.system.quantity > 0);
+    const materialsAfter = materials + gain;
+    if (materialsAfter > 0) after.push({ system: { slots: bundleSlots(materialsAfter), quantity: 1 } });
+    const slotsAfter = EquipmentHelper.occupiedSlotsFor(after);
+
+    return {
+      groups,
+      tray,
+      hasPicks: tray.length > 0,
+      count,
+      buttonLabel: count
+        ? game.i18n.format(count === 1 ? 'VAGABOND.Craft.Workbench.ScrapButtonOne' : 'VAGABOND.Craft.Workbench.ScrapButtonMany', { count })
+        : game.i18n.localize('VAGABOND.Craft.Modes.Scrap.Label'),
+      gainLabel: fmt(gain),
+      materialsBefore: fmt(materials),
+      materialsAfter: fmt(materialsAfter),
+      bundleBefore: bundleSlots(materials),
+      bundleAfter: bundleSlots(materialsAfter),
+      slotsBefore, slotsAfter, maxSlots,
+      slotsDelta: slotsAfter - slotsBefore,
+      slotsDeltaLabel: `${slotsAfter > slotsBefore ? '+' : ''}${slotsAfter - slotsBefore}`,
+      overCapacity: maxSlots > 0 && slotsAfter > maxSlots,
+      equipped,
+      hasEquipped: equipped.length > 0,
     };
   }
 
@@ -384,17 +461,61 @@ export class WorkbenchApp extends api.HandlebarsApplicationMixin(api.Application
     this.#refreshShiftUI();
   }
 
-  static async #onScrapItem(event, target) {
-    const itemId = target.closest('[data-item-id]')?.dataset.itemId;
-    const item = this.actor.items.get(itemId);
-    if (!item) return;
-    const confirmed = await foundry.applications.api.DialogV2.confirm({
-      window: { title: game.i18n.localize('VAGABOND.Craft.Modes.Scrap.Label') },
-      content: `<p>${game.i18n.format('VAGABOND.Craft.Workbench.ScrapConfirm', { name: item.name })}</p>`,
-    });
-    if (!confirmed) return;
-    const result = await CraftingHelper.request(this.actor, 'scrap', { itemId });
-    if (!result.ok) ui.notifications.warn(CraftingHelper.failureMessage(result));
+  /** Row click: a single item toggles in / out of the tray; a stack adds one more (until all of it is picked). */
+  static #onScrapPick(event, target) {
+    const row = target.closest('[data-item-id]');
+    if (!row || row.classList.contains('is-locked')) return;
+    const id = row.dataset.itemId;
+    const quantity = Number(row.dataset.quantity) || 1;
+    const picked = this.#scrapPicks.get(id) ?? 0;
+    if (quantity === 1) this.#setScrapPick(id, picked ? 0 : 1, quantity);
+    else this.#setScrapPick(id, picked + 1, quantity);
+  }
+
+  static #onScrapStep(event, target) {
+    const row = target.closest('[data-item-id]');
+    if (!row) return;
+    const id = row.dataset.itemId;
+    const quantity = Number(row.dataset.quantity) || 1;
+    const step = (Number(target.dataset.delta) || 0) * (event.shiftKey ? 10 : 1);
+    this.#setScrapPick(id, (this.#scrapPicks.get(id) ?? 0) + step, quantity);
+  }
+
+  /** "All" toggles between the whole stack and none of it. */
+  static #onScrapAll(event, target) {
+    const row = target.closest('[data-item-id]');
+    if (!row) return;
+    const id = row.dataset.itemId;
+    const quantity = Number(row.dataset.quantity) || 1;
+    this.#setScrapPick(id, (this.#scrapPicks.get(id) ?? 0) >= quantity ? 0 : quantity, quantity);
+  }
+
+  static #onScrapRemove(event, target) {
+    const id = target.closest('[data-item-id]')?.dataset.itemId;
+    if (!id) return;
+    this.#scrapPicks.delete(id);
+    this.render();
+  }
+
+  static #onScrapClear() {
+    this.#scrapPicks.clear();
+    this.render();
+  }
+
+  static async #onScrapConfirm(event, target) {
+    const entries = [...this.#scrapPicks].map(([itemId, quantity]) => ({ itemId, quantity }));
+    if (!entries.length) return;
+    target.disabled = true;
+    const result = await CraftingHelper.request(this.actor, 'scrap', { entries });
+    if (result && result.ok === false) ui.notifications.warn(CraftingHelper.failureMessage(result));
+    else this.#scrapPicks.clear();
+    this.render();
+  }
+
+  #setScrapPick(id, value, quantity) {
+    const next = Math.max(0, Math.min(quantity, Math.floor(Number(value) || 0)));
+    if (next > 0) this.#scrapPicks.set(id, next);
+    else this.#scrapPicks.delete(id);
     this.render();
   }
 
@@ -470,6 +591,8 @@ export class WorkbenchApp extends api.HandlebarsApplicationMixin(api.Application
       this.#applyCatalogFilter();
     }
 
+    this.#wireScrapInputs(signal);
+
     for (const [selector, top] of this.#savedScroll) {
       const el = this.element.querySelector(selector);
       if (el) el.scrollTop = top;
@@ -479,6 +602,34 @@ export class WorkbenchApp extends api.HandlebarsApplicationMixin(api.Application
     this.#refreshShiftUI();
 
     if (!this._hookIds) this.#registerHooks();
+  }
+
+  /** Scrap tab: search filter (DOM only) + typed stack counts. */
+  #wireScrapInputs(signal) {
+    const search = this.element.querySelector('.wb-scrap-search');
+    if (search) {
+      const apply = () => {
+        const q = this.#scrapSearch.trim().toLowerCase();
+        this.element.querySelectorAll('.wb-scrap-row').forEach(row => {
+          row.classList.toggle('is-hidden', !!q && !(row.dataset.name ?? '').includes(q));
+        });
+        this.element.querySelectorAll('.wb-scrap-group').forEach(group => {
+          group.classList.toggle('is-hidden', !group.querySelector('.wb-scrap-row:not(.is-hidden)'));
+        });
+      };
+      search.value = this.#scrapSearch;
+      search.addEventListener('input', () => { this.#scrapSearch = search.value; apply(); }, { signal });
+      apply();
+    }
+    this.element.querySelectorAll('.wb-scrap-count').forEach(input => {
+      const row = input.closest('[data-item-id]');
+      input.addEventListener('click', (ev) => ev.stopPropagation(), { signal });
+      input.addEventListener('focus', () => input.select(), { signal });
+      input.addEventListener('keydown', (ev) => { if (ev.key === 'Enter') input.blur(); }, { signal });
+      input.addEventListener('change', () => {
+        this.#setScrapPick(row.dataset.itemId, input.value, Number(row.dataset.quantity) || 1);
+      }, { signal });
+    });
   }
 
   /** Hide catalog rows not matching the category chip + search text (DOM only, no re-render). */

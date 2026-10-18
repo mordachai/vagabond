@@ -791,6 +791,7 @@
       "Errors": {
         "noSource": "That item is no longer there.",
         "notYours": "You can only take from your own inventory or the party's.",
+        "cursed": "Bound cursed items can't leave their bearer.",
         "notTradable": "Only equipment and containers can change hands.",
         "noDest": "There is nowhere to put it.",
         "cantGive": "You can't put things there.",
@@ -1097,9 +1098,23 @@
         "MatsNeeded": "{needed} needed / {onHand} on hand",
         "AutoFill": "Auto-fill",
         "AutoFillHint": "Spread this Shift's budget over your Projects, top to bottom, within the Materials you have.",
-        "ScrapHint": "Scrap an item for Materials worth half its value. Doesn't use your Shift budget.",
+        "ScrapHint": "Pick what to break down, check the totals, then Scrap. Materials are worth half the item's value. Doesn't use your Shift budget.",
         "NoScrapItems": "Nothing in your inventory can be scrapped.",
-        "ScrapConfirm": "Scrap {name} for Materials worth half its value?"
+        "ScrapSearch": "Search your items…",
+        "ScrapTray": "To scrap",
+        "ScrapTrayEmpty": "Click items on the left to add them here.",
+        "ScrapClear": "Clear",
+        "ScrapAll": "All",
+        "ScrapEach": "each",
+        "ScrapStepHint": "Shift-click: 10 at a time",
+        "ScrapGain": "Materials gained",
+        "ScrapBundleSlots": "Materials Slots",
+        "ScrapInventory": "Inventory Slots",
+        "ScrapEquippedWarn": "Equipped items in this batch:",
+        "ScrapLocked": "Cursed and Bound: only the GM can scrap it.",
+        "ScrapButtonOne": "Scrap {count} item",
+        "ScrapButtonMany": "Scrap {count} items",
+        "ScrapEquip": {"OneHand": "In hand", "TwoHands": "Both hands", "Worn": "Worn"}
       },
       "Project": {
         "WipDescription": "A project in progress. It will become a {name} once finished."
@@ -1400,7 +1415,6 @@
         "miss": "Miss animation",
         "none": "Nothing"
       },
-      "spellHitMacroAutoRun": {
       "aaMenuAutoLoad": {
         "name": "Load Automated Animations Menu",
         "hint": "When Automated Animations and JB2A are active, the system loads its weapon, item and status animation menu into Automated Animations, in the GM's language. Ask me shows a choice when the menu is new or changed (existing worlds keep their menu until you agree). It loads again only when the language or the system's menu changes, so your own edits stay until then. Replace saves your previous menu first (Restore puts it back).",
@@ -1426,6 +1440,7 @@
         "noBackup": "No saved Automated Animations menu to restore.",
         "missing": "Automated Animations and JB2A must both be active."
       },
+      "spellHitMacroAutoRun": {
         "name": "Run Spell Hit Macros Automatically",
         "hint": "A successful Cast's hit macro button presses itself when the Spell's target animation lands (right away without animations). Turn it off per Spell with its \"Run automatically\" switch."
       },
@@ -2624,6 +2639,7 @@
       "Equipment": {
         "FIELDS": {
           "requiresBound": {"label": "Requires Bound"},
+          "cursed": {"label": "Cursed", "hint": "GM only. Requires Bound turns on; once Bound, only the GM can unbind it (book: a Ritual removes the curse). Players never see this switch."},
           "bound": {"label": "Bound"},
           "handsRequired": {
             "label": "Hands Required",
@@ -2649,9 +2665,9 @@
         "MaxUses": "Max Uses",
         "MaxUsesHint": "0 = single-use (Consumable reduces quantity directly). Above 0, this item carries that many independent uses/doses/charges — Consumable drains those instead of quantity, and never auto-deletes the item when it hits 0."
       },
+      "Disguise": {"ToggleReveal":"Reveal the true identity (chat card; Shift-click: no card)","ToggleHide":"Disguise again (last disguise)","Disguise":"Disguise","Reveal":"Reveal","RevealHint":"Bring back the true identity for everyone.","RevealTitle":"Item Revealed","RevealResult":"{disguise} is really {name}.","NamePlus":"{base} (+{plus})","Lore":"Lore","Intro":"Relic {base} with the following Power:","Plain":"Relic {base}.","ArmorLight":"Light Armor","ArmorMedium":"Medium Armor","ArmorHeavy":"Heavy Armor","Armor":"Armor","Weapon":"Weapon","Item":"Item","PowerArmor":"(+{plus}) Armor","PowerWeapon":"(+{plus}) Weapon","HintArmor":"Grants a +{plus} bonus to Armor.","HintWeapon":"Deals an extra +{plus} damage.","PowerPlain":"Relic Power","PowerPlainHint":"A magical Power.","WindowTitle":"Disguise: {name}","OpenHint":"Disguise (GM): what players see instead of the real item","StatusOn":"Disguised: players see the left column","StatusOff":"Not disguised: everyone sees the true identity","PlayersSee":"Players See","TrueIdentity":"True Identity","PickImage":"Pick the image players see","UseTrueImage":"Use the real image","Name":"Name","Description":"Description","Effects":"Effects","Note":"Players see the disguised names and descriptions, effects included (reading an effect never shows its changes). Stats and damage still work and are not hidden.","Generate":"Generate","GenerateHint":"Cursed item: a Relic with the opposite plus (book).","Announce":"Announce in chat","Save":"Save Disguise","NeedName":"The disguise needs a name.","Banner":"Disguised. True identity: <strong>{name}</strong>","EffectDescription":"What players read about this effect"},
       "Relic": {
-        "Disguise": {"Banner":"Disguised curse. True identity: <strong>{name}</strong>. Players see only the disguise; edit the name and description to change it.","Undisguised":"Cursed item, shown as it is.","Disguise":"Disguise","DisguiseHint":"Players see a Relic with the opposite plus instead (book). Your edits to the disguise are kept.","Reveal":"Reveal","RevealHint":"Show the true identity to everyone (chat card).","RevealTitle":"Relic Revealed","RevealResult":"{disguise} is really {name}.","NamePlus":"{base} (+{plus})","Lore":"Relic {base}","Intro":"Relic {base} with the following Power:","Plain":"Relic {base}.","ArmorLight":"Light Armor","ArmorMedium":"Medium Armor","ArmorHeavy":"Heavy Armor","Armor":"Armor","Weapon":"Weapon","Item":"Item","PowerArmor":"(+{plus}) Armor","PowerWeapon":"(+{plus}) Weapon","HintArmor":"Grants a +{plus} bonus to Armor.","HintWeapon":"Deals an extra +{plus} damage.","PowerPlain":"Relic Power","PowerPlainHint":"A magical Power."},
-        "Slots": {"NotCumulative":"Bonuses are not cumulative: {kept} stays ({name} is not higher).","CursedLocked":"{name} is Cursed: only the GM (a Ritual) can remove it.","CursedBound":"{name} is Cursed: it stays Bound until the curse is removed (GM).","UsedUp":"{name} ({item}) was used up.","CurseSelf":"Cursed: {name}","CurseIn":"Cursed: {name} (in {item})","Title":"Relics","Counter":"Relic slots: {used} of {count} used","Empty":"Empty Relic slot","EmptyHint":"Empty Relic slot. Drag a Relic from a compendium or an inventory onto it.","Remove":"Remove","NotRelic":"Only Relics can be attached to a Relic slot.","Mismatch":"{name} only attaches to: {targets}.","Fabled":"A Fabled Relic takes no other Relics.","Full":"Every Relic slot of {name} is taken.","NotOwner":"You don't own {name}."},
+        "Slots": {"CursedStuck":"{name} is Cursed and Bound: it can't be removed until the GM lifts the curse.","NotCumulative":"Bonuses are not cumulative: {kept} stays ({name} is not higher).","CursedLocked":"{name} is Cursed: only the GM (a Ritual) can remove it.","CursedBound":"{name} is Cursed: it stays Bound until the curse is removed (GM).","UsedUp":"{name} ({item}) was used up.","CurseSelf":"Cursed: {name}","CurseIn":"Cursed: {name} (in {item})","Title":"Relics","Counter":"Relic slots: {used} of {count} used","Empty":"Empty Relic slot","EmptyHint":"Empty Relic slot. Drag a Relic from a compendium or an inventory onto it.","Remove":"Remove","NotRelic":"Only Relics can be attached to a Relic slot.","Mismatch":"{name} only attaches to: {targets}.","Fabled":"A Fabled Relic takes no other Relics.","Full":"Every Relic slot of {name} is taken.","NotOwner":"You don't own {name}."},
         "FIELDS": {
           "lore": {"label": "Lore"},
           "description": {"label": "Description"},
@@ -2987,8 +3003,9 @@
       "ConsolidateWealth": "Trade up: exchange copper for silver and silver for gold",
       "WealthAlreadyTrimmed": "Coins are already in their largest denominations.",
       "PortraitTooltip": "Drag to move · Double-click to open sheet",
-      "Become":          "Become the HUD",
-      "BecomeTooltip":   "Close this sheet and open the floating HUD",
+      "Become":          "Compact view (HUD)",
+      "BecomeTooltip":   "Swap this sheet for the floating HUD",
+      "ExpandSheet":     "Full sheet (closes the HUD)",
       "NoActor":         "No character assigned and no token selected.",
       "NotCharacter":    "The Character HUD only supports player characters.",
       "NotForItemPile":  "HUDs are not available for Item Piles.",

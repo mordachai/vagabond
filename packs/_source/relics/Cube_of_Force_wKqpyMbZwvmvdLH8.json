@@ -1,5 +1,5 @@
 {
-  "name": "Cube of Force",
+  "name": "Cube of Force ({uses})",
   "type": "equipment",
   "img": "icons/commodities/treasure/glass-cube-teal.webp",
   "system": {
@@ -28,7 +28,11 @@
     "immunities": [],
     "gearCategory": "",
     "alchemicalType": "",
-    "lore": "Relic Trinket (Cube)"
+    "lore": "Relic Trinket (Cube)",
+    "uses": {
+      "max": 36,
+      "value": 36
+    }
   },
   "effects": [],
   "folder": null,

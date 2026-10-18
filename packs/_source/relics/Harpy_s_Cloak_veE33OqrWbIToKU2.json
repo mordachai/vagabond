@@ -31,6 +31,7 @@
     "armorRating": 1,
     "mightRequirement": 2,
     "reflexPenalty": 1,
+    "forgeable": false,
     "relic": {
       "powers": [],
       "fabled": false,
@@ -40,10 +41,12 @@
       "consumable": false,
       "sockets": [],
       "isRelic": true,
-      "slots": 0,
-      "disguised": false,
-      "disguise": {},
-      "trueIdentity": {}
+      "slots": 0
+    },
+    "disguise": {
+      "active": false,
+      "shown": {},
+      "truth": {}
     }
   },
   "effects": [

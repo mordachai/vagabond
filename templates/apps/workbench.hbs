@@ -178,33 +178,118 @@
 
     {{#if showScrap}}
     <div class="wb-scrap-tab">
-      <div class="wb-scrap-top">
-        <div class="wb-scrap-header"><i class="fa-solid fa-recycle"></i> {{localize "VAGABOND.Craft.Workbench.ScrapHint"}}</div>
-        <div class="wb-scrap-stock" data-tooltip="{{localize 'VAGABOND.Craft.Workbench.MaterialsOnHand'}}">
-          <img src="icons/commodities/materials/powder-red-green-yellow.webp" alt="">
-          <span class="wb-scrap-stock-value">{{materialsLabel}}</span>
-        </div>
-      </div>
-      {{#each scrapGroups}}
-      <div class="wb-scrap-group">
-        <div class="wb-scrap-group-label">{{label}}</div>
-        <div class="wb-scrap-grid">
-          {{#each items}}
-          <div class="wb-scrap-card" data-item-id="{{id}}">
-            <img src="{{img}}" alt="">
-            <div class="wb-scrap-name">{{name}}{{qtySuffix}}</div>
-            <div class="wb-scrap-out">
-              <div class="wb-scrap-arrow">→</div>
-              <div class="wb-scrap-yield">{{yieldLabel}}</div>
+
+      <section class="wb-scrap-pick">
+        <div class="wb-scrap-hint"><i class="fa-solid fa-recycle"></i> {{localize "VAGABOND.Craft.Workbench.ScrapHint"}}</div>
+        <label class="wb-catalog-search">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" class="wb-scrap-search" placeholder="{{localize 'VAGABOND.Craft.Workbench.ScrapSearch'}}">
+        </label>
+
+        <div class="wb-scrap-list">
+          {{#each scrap.groups}}
+          <div class="wb-scrap-group">
+            <div class="wb-scrap-group-label">{{label}}</div>
+            {{#each items}}
+            <div class="wb-scrap-row {{#if isPicked}}is-picked{{/if}} {{#if locked}}is-locked{{/if}}" data-item-id="{{id}}" data-quantity="{{quantity}}" data-name="{{nameLower}}"
+              {{#if locked}}data-tooltip="{{localize 'VAGABOND.Craft.Workbench.ScrapLocked'}}"{{else}}data-action="scrapPick"{{/if}}>
+              <div class="wb-scrap-thumb">
+                <img src="{{img}}" alt="">
+                <span class="wb-scrap-check"><i class="fa-solid fa-check"></i></span>
+              </div>
+              <div class="wb-scrap-info">
+                <div class="wb-scrap-name">
+                  <span class="wb-scrap-name-text">{{name}}</span>
+                  {{#if multi}}<span class="wb-scrap-qty">×{{quantity}}</span>{{/if}}
+                  {{#if equipKey}}<span class="wb-scrap-equip"><i class="fa-solid {{equipIcon}}"></i> {{equipLabel}}</span>{{/if}}
+                  {{#if locked}}<i class="fa-solid fa-lock wb-scrap-lock"></i>{{/if}}
+                </div>
+                <div class="wb-scrap-meta">
+                  <span>{{valueLabel}}</span>
+                  <i class="fa-solid fa-arrow-right"></i>
+                  <span class="wb-scrap-yield"><img class="wb-mat-icon" src="icons/commodities/materials/powder-red-green-yellow.webp" alt=""> {{yieldEach}}</span>
+                  {{#if multi}}<span>{{localize "VAGABOND.Craft.Workbench.ScrapEach"}}</span>{{/if}}
+                  <span class="wb-scrap-slots">{{slotsLabel}}</span>
+                </div>
+              </div>
+              {{#if multi}}{{#unless locked}}
+              <div class="wb-scrap-stepper">
+                <div class="wb-stepper">
+                  <button type="button" data-action="scrapStep" data-delta="-1" data-tooltip="{{localize 'VAGABOND.Craft.Workbench.ScrapStepHint'}}"><i class="fa-solid fa-minus"></i></button>
+                  <input type="text" class="wb-scrap-count" value="{{picked}}" inputmode="numeric">
+                  <button type="button" data-action="scrapStep" data-delta="1" data-tooltip="{{localize 'VAGABOND.Craft.Workbench.ScrapStepHint'}}"><i class="fa-solid fa-plus"></i></button>
+                </div>
+                <button type="button" class="wb-scrap-all {{#if isFull}}active{{/if}}" data-action="scrapAll">{{localize "VAGABOND.Craft.Workbench.ScrapAll"}}</button>
+              </div>
+              {{/unless}}{{/if}}
             </div>
-            <button type="button" class="wb-icon-btn" data-action="scrapItem" title="{{localize 'VAGABOND.Craft.Modes.Scrap.Label'}}"><i class="fa-solid fa-recycle"></i></button>
+            {{/each}}
           </div>
+          {{else}}
+          <p class="wb-empty">{{localize "VAGABOND.Craft.Workbench.NoScrapItems"}}</p>
           {{/each}}
         </div>
-      </div>
-      {{else}}
-      <p class="wb-empty">{{localize "VAGABOND.Craft.Workbench.NoScrapItems"}}</p>
-      {{/each}}
+      </section>
+
+      <aside class="wb-side wb-scrap-side">
+        <div class="wb-tray">
+          <div class="wb-tray-head">
+            <span><i class="fa-solid fa-recycle"></i> {{localize "VAGABOND.Craft.Workbench.ScrapTray"}}</span>
+            {{#if scrap.hasPicks}}<button type="button" class="wb-tray-clear" data-action="scrapClear">{{localize "VAGABOND.Craft.Workbench.ScrapClear"}}</button>{{/if}}
+          </div>
+          <div class="wb-tray-list">
+            {{#each scrap.tray}}
+            <div class="wb-tray-row" data-item-id="{{id}}">
+              <img src="{{img}}" alt="">
+              <div class="wb-tray-name">
+                <span class="wb-scrap-name-text">{{name}}</span>
+                {{#if multi}}<span class="wb-scrap-qty">×{{picked}}{{#if partial}}<span class="wb-tray-of"> / {{quantity}}</span>{{/if}}</span>{{/if}}
+                {{#if equipKey}}<i class="fa-solid {{equipIcon}} wb-tray-equip" data-tooltip="{{equipLabel}}"></i>{{/if}}
+              </div>
+              <span class="wb-tray-yield">+{{yieldLabel}}</span>
+              <button type="button" class="wb-icon-btn wb-icon-btn-danger" data-action="scrapRemove" data-tooltip="{{localize 'VAGABOND.Craft.Workbench.RemoveStaged'}}"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            {{else}}
+            <p class="wb-empty">{{localize "VAGABOND.Craft.Workbench.ScrapTrayEmpty"}}</p>
+            {{/each}}
+          </div>
+        </div>
+
+        <div class="wb-scrap-summary">
+          <div class="wb-scrap-gain">
+            <img src="icons/commodities/materials/powder-red-green-yellow.webp" alt="">
+            <div>
+              <span class="wb-scrap-gain-label">{{localize "VAGABOND.Craft.Workbench.ScrapGain"}}</span>
+              <strong class="wb-scrap-gain-value">+{{scrap.gainLabel}}</strong>
+            </div>
+          </div>
+          <div class="wb-scrap-line">
+            <span class="wb-scrap-line-label">{{localize "VAGABOND.Craft.Workbench.Materials"}}</span>
+            <span>{{scrap.materialsBefore}}{{#if scrap.hasPicks}} <i class="fa-solid fa-arrow-right"></i> <strong>{{scrap.materialsAfter}}</strong>{{/if}}</span>
+          </div>
+          <div class="wb-scrap-line">
+            <span class="wb-scrap-line-label">{{localize "VAGABOND.Craft.Workbench.ScrapBundleSlots"}}</span>
+            <span>{{scrap.bundleBefore}}{{#if scrap.hasPicks}} <i class="fa-solid fa-arrow-right"></i> <strong>{{scrap.bundleAfter}}</strong>{{/if}}</span>
+          </div>
+          <div class="wb-scrap-line {{#if scrap.overCapacity}}is-over{{/if}}">
+            <span class="wb-scrap-line-label">{{localize "VAGABOND.Craft.Workbench.ScrapInventory"}}</span>
+            <span>{{scrap.slotsBefore}} / {{scrap.maxSlots}}{{#if scrap.hasPicks}} <i class="fa-solid fa-arrow-right"></i> <strong>{{scrap.slotsAfter}} / {{scrap.maxSlots}}</strong> <span class="wb-scrap-delta">({{scrap.slotsDeltaLabel}})</span>{{/if}}</span>
+          </div>
+          {{#if scrap.hasEquipped}}
+          <div class="wb-scrap-warn">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <div>
+              {{localize "VAGABOND.Craft.Workbench.ScrapEquippedWarn"}}
+              <ul>{{#each scrap.equipped}}<li><strong>{{name}}</strong> ({{equipLabel}})</li>{{/each}}</ul>
+            </div>
+          </div>
+          {{/if}}
+          <button type="button" class="wb-shift-btn wb-scrap-btn" data-action="scrapConfirm" {{#unless scrap.hasPicks}}disabled{{/unless}}>
+            <i class="fa-solid fa-recycle"></i> {{scrap.buttonLabel}}
+          </button>
+        </div>
+      </aside>
+
     </div>
     {{/if}}
 

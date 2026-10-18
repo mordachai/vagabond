@@ -20,6 +20,7 @@ import { VagabondDamagePipeline } from '../helpers/damage-pipeline.mjs';
 import { AlchemyLab } from '../helpers/alchemy-lab.mjs';
 import { FeatureOrder } from '../helpers/feature-order.mjs';
 import { RelicSlots } from '../helpers/relic-slots.mjs';
+import { ItemDisguise } from '../helpers/item-disguise.mjs';
 
 /** Inventory tab groupings, in display order, keyed by equipmentType. */
 const INV_GROUPS = [
@@ -186,6 +187,7 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
       featureAction: { handler: this._onFeatureAction, buttons: [0, 2] },
       togglePerk: this._onToggleAccordion,
       openSheet: this._onOpenSheet,
+      expandSheet: this._onExpandSheet,
       consolidateWealth: this._onConsolidateWealth,
       slotUse: { handler: this._onSlotUse, buttons: [0, 2] },
       toggleWeaponGrip: this._onToggleWeaponGrip,
@@ -195,6 +197,7 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
       toggleEquip: this._onToggleEquip,
       usePip: this._onUsePip,
       relicSlots: this._onRelicSlots,
+      toggleDisguise: this._onToggleDisguise,
       // Alchemy panel (shared lab core; lab UI state lives in `this._alchemyLab`)
       ...AlchemyLab.ACTIONS,
     },
@@ -706,6 +709,8 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
     row.inert = !!item.flags?.vagabond?.mix?.inert;
     const relic = RelicSlots.view(item);
     if (relic) row.relicSlots = { used: relic.used, count: relic.count };
+    // GM-only disguise eye (ItemDisguise.toggle)
+    row.disguiseEye = ItemDisguise.hasEyeToggle(item) ? { on: ItemDisguise.isDisguised(item) } : null;
     return row;
   }
 
@@ -755,9 +760,9 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
     // …and so does any free area of the body (interactive parts excluded).
     bindHudBodyDrag(this.element, (e) => this._onDragStart(e), signal);
 
-    // Double-click portrait → open the actor sheet (HUD stays open).
+    // Double-click portrait → swap to the full sheet (same as the corner tab).
     const portrait = this.element.querySelector('.vh-portrait');
-    if (portrait) portrait.addEventListener('dblclick', () => this.actor.sheet.render(true), { signal });
+    if (portrait) portrait.addEventListener('dblclick', () => VagabondCharacterHud._onExpandSheet.call(this), { signal });
 
     // Right-click the portrait region → HUD context menu (sheet / ping / close).
     if (handle) handle.addEventListener('contextmenu', (e) => this._openHudMenu(e), { signal });
@@ -1316,8 +1321,21 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
     if (item) RelicSlots.openPopup(event, item);
   }
 
+  /** GM eye: reveal / disguise again (ItemDisguise.toggle; Shift = reveal without a chat card). */
+  static _onToggleDisguise(event, target) {
+    const item = this.actor.items.get(target.dataset.itemId);
+    if (item) ItemDisguise.toggle(item, { announce: !event.shiftKey });
+  }
+
   /** Open the actor sheet without closing the HUD. */
   static _onOpenSheet() { this.actor.sheet.render(true); }
+
+  /** Corner tab: swap the HUD for the full sheet (inverse of the sheet's Compact view). */
+  static _onExpandSheet() {
+    const actor = this.actor;
+    this.close();
+    actor.sheet.render(true);
+  }
 
   /** Wealth trade icon: exchange copper→silver→gold into the largest coins. */
   static _onConsolidateWealth(event, target) { return VagabondActorSheet._onConsolidateWealth.call(this, event, target); }

@@ -12,7 +12,8 @@ import { levelTableCap } from '../helpers/homebrew-config.mjs';
 import { CurrencyHelper } from '../helpers/currency-helper.mjs';
 import { ContextMenuHelper } from '../helpers/context-menu-helper.mjs';
 import { RelicSlots } from '../helpers/relic-slots.mjs';
-import { RelicDisguise } from '../helpers/relic-disguise.mjs';
+import { ItemDisguise } from '../helpers/item-disguise.mjs';
+import { ItemDisguiseApp } from '../applications/item-disguise-app.mjs';
 
 const { api, sheets } = foundry.applications;
 const DragDrop = foundry.applications.ux.DragDrop;
@@ -145,8 +146,8 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       applyCoating: this._onApplyCoating,
       usePip: this._onUsePip,
       relicSlot: this._onRelicSlot,
-      relicDisguise: this._onRelicDisguise,
-      relicReveal: this._onRelicReveal,
+      openDisguise: this._onOpenDisguise,
+      toggleDisguise: this._onToggleDisguise,
       clearImbue: this._onClearImbue,
       clearItemMacro: this._onClearItemMacro,
     },
@@ -236,30 +237,31 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     switch (this.document.type) {
       case 'equipment':
         // Equipment template now handles both locked and unlocked states internally
-        options.parts.push('equipmentDetails', 'effects');
+        options.parts.push('equipmentDetails');
         break;
       case 'spell':
-        options.parts.push('spellDetails', 'effects');
+        options.parts.push('spellDetails');
         break;
       case 'ancestry':
-        options.parts.push('ancestryDetails', 'effects');
+        options.parts.push('ancestryDetails');
         break;
       case 'class':
-        options.parts.push('classDetails', 'effects');
+        options.parts.push('classDetails');
         break;
       case 'perk':
-        options.parts.push('perkDetails', 'effects');
+        options.parts.push('perkDetails');
         break;
       case 'starterPack':
-        options.parts.push('starterPackDetails', 'effects');
+        options.parts.push('starterPackDetails');
         break;
       case 'container':
-        options.parts.push('containerDetails', 'effects');
+        options.parts.push('containerDetails');
         break;
       case 'vehiclePart':
-        options.parts.push('vehiclePartDetails', 'effects');
+        options.parts.push('vehiclePartDetails');
         break;
     }
+    options.parts.push('effects');
   }
 
   /* -------------------------------------------- */
@@ -289,7 +291,10 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
         .join(', '),
       relicSlots: RelicSlots.view(this.item),
       relicCurse: RelicSlots.curseInfo(this.item),
-      relicDisguise: RelicDisguise.view(this.item),
+      itemDisguise: ItemDisguise.view(this.item),
+      // Players never unlock a disguised item (edit mode shows Cursed, effects, relic config)
+      disguiseLocked: ItemDisguise.hidesFromUser(this.item),
+      isGM: game.user.isGM,
     };
 
     // Weapons: the skill attacks roll with (preferred, else default) and every
@@ -327,7 +332,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
 
     // View-only viewers (e.g. players reading a shop's stock item) always get the
     // locked view — the templates switch on `system.locked`, so shadow it.
-    if (!this.isEditable && this.item.system.locked === false) {
+    if ((!this.isEditable || context.disguiseLocked) && this.item.system.locked === false) {
       context.system = Object.create(this.item.system, { locked: { value: true } });
     }
 
@@ -2277,7 +2282,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
    */
   static async _onToggleLock(event, target) {
     if (this.item.type !== 'equipment' && this.item.type !== 'container' && this.item.type !== 'spell') return;
-    if (!this.isEditable) return;
+    if (!this.isEditable || ItemDisguise.hidesFromUser(this.item)) return;
 
     // Submit the form BEFORE toggling to save any pending changes
     if (this.element && this.element.tagName === 'FORM') {
@@ -2411,6 +2416,9 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
    */
   static async _viewEffect(event, target) {
     const effect = this._getEffect(target);
+    // Disguised item (ItemDisguise): players read the effect's disguise (name / art / description), never its
+    // config sheet — the real change values would give it away
+    if (ItemDisguise.hidesFromUser(this.item)) return ItemDisguise.showEffect(effect);
     effect.sheet.render(true);
   }
 
@@ -2424,6 +2432,9 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
    */
   static async _deleteEffect(event, target) {
     const effect = this._getEffect(target);
+    // Bound cursed item: players can't strip its effects (same rule as unequip / delete)
+    const { EquipmentHelper } = globalThis.vagabond.utils;
+    if (EquipmentHelper.isCurseLocked(this.item)) return EquipmentHelper.warnCurseLocked(this.item);
     await effect.delete();
   }
 
@@ -3332,15 +3343,16 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     RelicSlots.openPopup(event, this.document, Number(target.dataset.relicSlot));
   }
 
-  /** GM: disguise this cursed item (RelicDisguise). */
-  static _onRelicDisguise() {
-    RelicDisguise.disguise(this.document);
+  /** GM: the disguise editor (ItemDisguiseApp). */
+  static _onOpenDisguise() {
+    ItemDisguiseApp.open(this.document);
   }
 
-  /** GM: reveal this disguised item's true identity (chat card). */
-  static _onRelicReveal() {
-    RelicDisguise.reveal(this.document);
+  /** GM eye: disguised → reveal (chat card, Shift = silent); revealed → disguise again with the last disguise. */
+  static _onToggleDisguise(event) {
+    ItemDisguise.toggle(this.document, { announce: !event.shiftKey });
   }
+
 
   /**
    * Clear an active Imbue payload from this weapon (manual cancel, GM or owner).

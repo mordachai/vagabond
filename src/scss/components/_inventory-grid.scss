@@ -367,6 +367,30 @@
     &.empty { color: $c-red; }
   }
 
+  // GM disguise eye (ItemDisguise), top-left corner
+  .disguise-marker {
+    position: absolute;
+    top: 2px;
+    left: 3px;
+    z-index: 10;
+    width: auto;
+    height: auto;
+    min-height: 0;
+    line-height: 1;
+    margin: 0;
+    padding: 1px;
+    border: none;
+    background: none;
+    font-size: 10px;
+    color: $c-white;
+    opacity: 0.55;
+    filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.7));
+    cursor: pointer;
+
+    &.is-on { color: $c-yellow; opacity: 1; }
+    &:hover { opacity: 1; box-shadow: none; }
+  }
+
   .bound-marker {
     position: absolute;
     top: 2px;
@@ -534,26 +558,34 @@
           filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.4));
         }
 
+        // Not Bound: hollow outline (theme-aware muted stroke)
         &.unbound {
-          // Theme-aware (dark-bluey at 50% vanished on dark paper)
-          color: $c-muted;
-          -webkit-text-stroke: 0;
-          opacity: 0.85;
+          color: transparent;
+          -webkit-text-stroke: 1.5px $c-muted;
+          opacity: 1;
         }
       }
 
-      &:hover .bound-icon {
+      // Hover previews the click: fill an unbound one
+      &:hover .bound-icon.unbound {
         color: $c-yellow;
         -webkit-text-stroke: 1px $c-dark-bluey;
-        opacity: 0.8;
+        opacity: 0.6;
       }
 
-      // Cursed: red instead of yellow, hover included
-      .bound-icon.cursed,
-      &:hover .bound-icon.cursed {
+      // Cursed: red instead of yellow — filled when Bound, red outline when not
+      .bound-icon.cursed.bound {
         color: $c-red;
         -webkit-text-stroke: 1px $c-dark-bluey;
-        opacity: 1;
+      }
+      .bound-icon.cursed.unbound {
+        color: transparent;
+        -webkit-text-stroke: 1.5px $c-red;
+      }
+      &:hover .bound-icon.cursed.unbound {
+        color: $c-red;
+        -webkit-text-stroke: 1px $c-dark-bluey;
+        opacity: 0.6;
       }
     }
   }

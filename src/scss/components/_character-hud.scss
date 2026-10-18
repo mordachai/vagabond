@@ -165,6 +165,45 @@
   // Whole body is a drag handle; interactive children set their own cursor.
   .vh-body { cursor: grab; }
 
+  // Top-left corner tab → full sheet (swaps the HUD for the sheet).
+  // Triangle fills the body's rounded corner; the icon sits in its thick half.
+  .vh-sheet-tab {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 4;
+    width: 22px;
+    height: 22px;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+    line-height: normal;
+    border: none;
+    border-top-left-radius: var(--vh-radius);
+    border-bottom-right-radius: 0;
+    background: $c-yellow;
+    clip-path: polygon(0 0, 100% 0, 0 100%);
+    color: $c-black;
+    cursor: pointer;
+    opacity: 0.75;
+    transition: opacity 0.15s ease, filter 0.15s ease;
+
+    i {
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      font-size: calc(9px * var(--vh-font-scale));
+    }
+
+    &:hover,
+    &:focus-visible {
+      opacity: 1;
+      filter: brightness(1.15);
+      box-shadow: none;
+      outline: none;
+    }
+  }
+
   .vh-portrait {
     position: relative;
     width: var(--vh-portrait-w);
@@ -858,6 +897,23 @@
     opacity: 0.6;
     cursor: pointer;
     &.is-filled { color: $c-yellow; opacity: 1; }
+    &:hover { opacity: 1; }
+  }
+  // GM-only Reveal on a disguised item
+  .vh-inv-reveal {
+    flex: 0 0 auto;
+    width: auto;
+    height: auto;
+    line-height: normal;
+    margin: 0;
+    padding: 0 3px;
+    border: none;
+    background: none;
+    font-size: calc(0.75rem * var(--vh-font-scale));
+    color: $c-white;
+    opacity: 0.6;
+    cursor: pointer;
+    &.is-on { color: $c-yellow; opacity: 1; }
     &:hover { opacity: 1; }
   }
   .vh-inv-range {

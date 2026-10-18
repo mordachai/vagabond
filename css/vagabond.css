@@ -60,7 +60,8 @@
   --vagabond-bg-size: 200px 200px;
   --vagabond-c-stat: #f1f1f1;
   --vagabond-c-chat-yellow: #DED656;
-  --vagabond-c-green: #278e17;
+  --vagabond-c-green: #1f6b14;
+  --vagabond-c-green-bright: #278e17;
   --vagabond-c-bluey: #62686a;
   --vagabond-dark-yellow: #94913c;
   --vagabond-c-inset-1: rgba(36, 36, 36, 0.65);
@@ -115,7 +116,8 @@ body[data-theme=dark] #sidebar {
   --vagabond-c-muted: #999999;
   --vagabond-c-white: #ffffff;
   --vagabond-c-black: #000000;
-  --vagabond-c-green: #26cb0c;
+  --vagabond-c-green: #1a660d;
+  --vagabond-c-green-bright: #26cb0c;
   --vagabond-c-darkgray: #999999;
   --vagabond-c-lightgrey: #d0d0d0;
   --vagabond-c-red: #ff8b9f;
@@ -516,7 +518,7 @@ body[data-theme=dark] #sidebar {
 }
 
 .rollable:hover, .rollable:focus {
-  text-shadow: 0 0 3px var(--vagabond-c-green);
+  text-shadow: 0 0 3px var(--vagabond-c-green-bright);
   cursor: pointer;
 }
 
@@ -4109,26 +4111,6 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   opacity: 0.8;
 }
 
-.relic-disguise-section {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 10px;
-}
-.relic-disguise-section .relic-disguise-text {
-  flex: 1;
-  font-size: 12px;
-}
-.relic-disguise-section .relic-disguise-btn {
-  flex: 0 0 auto;
-  width: auto;
-  height: auto;
-  line-height: normal;
-  margin: 0;
-  padding: 2px 8px;
-  font-size: 12px;
-}
-
 /* Downtime activities - imported at top level because config dialog is outside sheets */
 .downtime-manager .window-content {
   padding: 8px 10px 10px;
@@ -4579,6 +4561,39 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 .vbd-hud .vh-body {
   cursor: grab;
 }
+.vbd-hud .vh-sheet-tab {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 4;
+  width: 22px;
+  height: 22px;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  line-height: normal;
+  border: none;
+  border-top-left-radius: var(--vh-radius);
+  border-bottom-right-radius: 0;
+  background: var(--vagabond-c-chat-yellow);
+  clip-path: polygon(0 0, 100% 0, 0 100%);
+  color: var(--vagabond-c-black);
+  cursor: pointer;
+  opacity: 0.75;
+  transition: opacity 0.15s ease, filter 0.15s ease;
+}
+.vbd-hud .vh-sheet-tab i {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  font-size: calc(9px * var(--vh-font-scale));
+}
+.vbd-hud .vh-sheet-tab:hover, .vbd-hud .vh-sheet-tab:focus-visible {
+  opacity: 1;
+  filter: brightness(1.15);
+  box-shadow: none;
+  outline: none;
+}
 .vbd-hud .vh-portrait {
   position: relative;
   width: var(--vh-portrait-w);
@@ -4709,7 +4724,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   cursor: pointer;
 }
 .vbd-hud .vh-controls .vh-fh.favor {
-  color: var(--vagabond-c-green);
+  color: var(--vagabond-c-green-bright);
 }
 .vbd-hud .vh-controls .vh-fh.hinder {
   color: var(--vagabond-c-red);
@@ -5367,6 +5382,27 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   opacity: 1;
 }
 .vbd-hud .vh-inv-relic:hover {
+  opacity: 1;
+}
+.vbd-hud .vh-inv-reveal {
+  flex: 0 0 auto;
+  width: auto;
+  height: auto;
+  line-height: normal;
+  margin: 0;
+  padding: 0 3px;
+  border: none;
+  background: none;
+  font-size: calc(0.75rem * var(--vh-font-scale));
+  color: var(--vagabond-c-white);
+  opacity: 0.6;
+  cursor: pointer;
+}
+.vbd-hud .vh-inv-reveal.is-on {
+  color: var(--vagabond-c-chat-yellow);
+  opacity: 1;
+}
+.vbd-hud .vh-inv-reveal:hover {
   opacity: 1;
 }
 .vbd-hud .vh-inv-range {
@@ -7597,7 +7633,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
 }
 
 .vcc-bar-hp .vcc-bar-fill {
-  background: linear-gradient(102deg, rgba(0, 0, 0, 0.5) 0%, var(--vagabond-c-green) 80%, rgba(255, 255, 255, 0.95) 100%);
+  background: linear-gradient(102deg, rgba(0, 0, 0, 0.5) 0%, var(--vagabond-c-green-bright) 80%, rgba(255, 255, 255, 0.95) 100%);
 }
 
 .vcc-bar-fatigue .vcc-bar-fill {
@@ -8355,7 +8391,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   font-family: "Germania", serif;
   font-size: 1.6rem;
   line-height: 1;
-  color: var(--vagabond-c-green);
+  color: var(--vagabond-c-green-bright);
 }
 .vagabond-builder .builder-body .selection-list-column .stat-distribute .bonus-stats-container .bonus-source-label {
   font-size: 0.9rem;
@@ -9363,7 +9399,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   color: #e6e6e6;
 }
 .tray-zone .tray-sidebar .tray-counter.done {
-  border-left-color: #26cb0c;
+  border-left-color: var(--vagabond-c-green);
 }
 .tray-zone .tray-sidebar .tray-counter.done .tray-counter-value,
 .tray-zone .tray-sidebar .tray-counter.done .tray-counter-note i {
@@ -9810,7 +9846,7 @@ li.chat-message:has(.vagabond-chat-card-v2) .message-header .message-metadata {
   opacity: 0.85;
 }
 .vagabond-builder .training-panel .training-pool.full .pool-count {
-  color: var(--vagabond-c-green);
+  color: var(--vagabond-c-green-bright);
 }
 .vagabond-builder .training-panel .training-pool .pool-lines {
   display: flex;
@@ -11608,7 +11644,7 @@ ol#combat-tracker.directory-list {
   align-items: center;
 }
 .level-up-dialog .lu-awarded-badge {
-  color: var(--vagabond-c-green);
+  color: var(--vagabond-c-green-bright);
   font-weight: 600;
   font-size: 0.85rem;
 }
@@ -11652,7 +11688,7 @@ ol#combat-tracker.directory-list {
   text-align: center;
 }
 .level-up-dialog .lu-question.checked .lu-checkbox {
-  color: var(--vagabond-c-green);
+  color: var(--vagabond-c-green-bright);
 }
 .level-up-dialog .lu-question .lu-question-text {
   font-size: 0.9rem;
@@ -11714,7 +11750,7 @@ ol#combat-tracker.directory-list {
   color: var(--vagabond-c-text-secondary);
 }
 .level-up-dialog .lu-xp-current.lu-ready {
-  color: var(--vagabond-c-green);
+  color: var(--vagabond-c-green-bright);
 }
 .level-up-dialog .lu-xp-separator {
   font-size: 1rem;
@@ -11739,12 +11775,12 @@ ol#combat-tracker.directory-list {
   transition: width 0.3s ease;
 }
 .level-up-dialog .lu-xp-bar-fill.lu-ready {
-  background: var(--vagabond-c-green);
+  background: var(--vagabond-c-green-bright);
 }
 .level-up-dialog .lu-stats-gain {
   font-size: 1.4rem;
   font-weight: 700;
-  color: var(--vagabond-c-green);
+  color: var(--vagabond-c-green-bright);
   display: block;
   text-align: center;
 }
@@ -11793,7 +11829,7 @@ ol#combat-tracker.directory-list {
   color: var(--vagabond-c-tan);
 }
 .level-up-dialog .lu-checklist-item.done .lu-check-icon {
-  color: var(--vagabond-c-green);
+  color: var(--vagabond-c-green-bright);
 }
 .level-up-dialog .lu-checklist-item .lu-check-label {
   font-size: 0.85rem;
@@ -11884,10 +11920,10 @@ ol#combat-tracker.directory-list {
 }
 .level-up-dialog .lu-stat-card .lu-stat-arrow {
   font-size: 0.75rem;
-  color: var(--vagabond-c-green);
+  color: var(--vagabond-c-green-bright);
 }
 .level-up-dialog .lu-stat-card .lu-stat-to {
-  color: var(--vagabond-c-green);
+  color: var(--vagabond-c-green-bright);
 }
 .level-up-dialog .lu-stat-card .lu-stat-max {
   position: absolute;
@@ -11934,7 +11970,7 @@ ol#combat-tracker.directory-list {
   padding: 1px 0;
 }
 .level-up-dialog .lu-derived-item.lu-changed .lu-derived-value {
-  color: var(--vagabond-c-green);
+  color: var(--vagabond-c-green-bright);
 }
 .level-up-dialog .lu-derived-stats h4.lu-skills-head {
   display: flex;
@@ -11946,7 +11982,7 @@ ol#combat-tracker.directory-list {
   margin: 0;
   font-size: 0.9rem;
   font-weight: 400;
-  color: var(--vagabond-c-green);
+  color: var(--vagabond-c-green-bright);
   text-align: right;
 }
 .level-up-dialog .lu-skill-row {
@@ -11987,7 +12023,7 @@ ol#combat-tracker.directory-list {
   outline: 2px solid var(--vagabond-c-chat-yellow);
 }
 .level-up-dialog .lu-skill-row.lu-picked .lu-derived-label {
-  color: var(--vagabond-c-green);
+  color: var(--vagabond-c-green-bright);
 }
 .level-up-dialog .lu-derived-label {
   flex: 0 0 auto;
@@ -12259,10 +12295,10 @@ ol#combat-tracker.directory-list {
   font-size: 0.8rem;
 }
 .level-up-dialog .lu-preview .lu-prereq-list li.prereq-met {
-  color: var(--vagabond-c-green);
+  color: var(--vagabond-c-green-bright);
 }
 .level-up-dialog .lu-preview .lu-prereq-list li.prereq-met i {
-  color: var(--vagabond-c-green);
+  color: var(--vagabond-c-green-bright);
 }
 .level-up-dialog .lu-preview .lu-prereq-list li.prereq-unmet {
   color: var(--vagabond-c-red);
@@ -12386,14 +12422,14 @@ ol#combat-tracker.directory-list {
   color: var(--vagabond-c-text-secondary);
 }
 .level-up-dialog .lu-xpbox-text.lu-ready i {
-  color: var(--vagabond-c-green);
+  color: var(--vagabond-c-green-bright);
 }
 .level-up-dialog .lu-xpbox-label {
   font-size: 0.8rem;
   color: var(--vagabond-c-muted);
 }
 .level-up-dialog .lu-xpbox-label.lu-pending {
-  color: var(--vagabond-c-green);
+  color: var(--vagabond-c-green-bright);
   font-weight: 600;
 }
 .level-up-dialog .lu-tab-dot {
@@ -12407,7 +12443,7 @@ ol#combat-tracker.directory-list {
 .level-up-dialog .lu-tab-ok {
   margin-left: 6px;
   font-size: 0.8rem;
-  color: var(--vagabond-c-green);
+  color: var(--vagabond-c-green-bright);
 }
 .level-up-dialog .lu-dim {
   color: var(--vagabond-c-muted);
@@ -12510,7 +12546,7 @@ ol#combat-tracker.directory-list {
   font-weight: 600;
 }
 .level-up-dialog .lu-gain.done .lu-mark {
-  color: var(--vagabond-c-green);
+  color: var(--vagabond-c-green-bright);
 }
 .level-up-dialog .lu-gain.pending .lu-mark {
   color: var(--vagabond-c-chat-yellow);
@@ -12564,7 +12600,7 @@ ol#combat-tracker.directory-list {
   color: var(--vagabond-c-text-primary);
 }
 .level-up-dialog .lu-road-pk.taken {
-  color: var(--vagabond-c-green);
+  color: var(--vagabond-c-green-bright);
 }
 .level-up-dialog .lu-road-pk.now {
   font-weight: 700;
@@ -15221,6 +15257,43 @@ ol#combat-tracker.directory-list {
   color: var(--vagabond-c-text-primary);
 }
 
+.aa-menu-dialog .dialog-content p {
+  margin: 0;
+  font-size: var(--font-size-13);
+}
+.aa-menu-dialog .form-footer {
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.aa-menu-dialog .form-footer button {
+  flex: 1 1 auto;
+  height: auto;
+  min-height: 30px;
+  line-height: normal;
+  padding: 4px 8px;
+  gap: 6px;
+  white-space: normal;
+  font-size: var(--font-size-12);
+}
+.aa-menu-dialog .form-footer button i {
+  flex: none;
+  margin: 0;
+}
+.aa-menu-dialog .form-footer button[data-action=overwrite] {
+  flex-basis: 100%;
+  min-height: 42px;
+  font-size: var(--font-size-14);
+  font-weight: bold;
+  color: #f2f2e8;
+  background: var(--vagabond-c-green);
+  border: 1px solid color-mix(in srgb, var(--vagabond-c-green) 80%, #fff);
+  box-shadow: 0 0 6px -3px var(--vagabond-c-green);
+}
+.aa-menu-dialog .form-footer button[data-action=overwrite]:hover, .aa-menu-dialog .form-footer button[data-action=overwrite]:focus-visible {
+  background: color-mix(in srgb, var(--vagabond-c-green) 88%, #fff);
+  box-shadow: 0 0 8px -3px var(--vagabond-c-green);
+}
+
 .catalyze-dialog {
   --cz-accent: #7a6a00;
   --cz-glow: var(--vagabond-c-chat-yellow);
@@ -15402,7 +15475,7 @@ ol#combat-tracker.directory-list {
   font-family: "Eskapade", serif;
   font-weight: bold;
   font-size: 0.9rem;
-  color: var(--vagabond-c-green);
+  color: var(--vagabond-c-green-bright);
 }
 #tooltip.catalyze-tip .cz-tip-dtype {
   display: inline-flex;
@@ -17210,7 +17283,7 @@ ol#combat-tracker.directory-list {
   color: var(--vagabond-c-red);
 }
 .vagabond.shop-app .shop-cart-receipt .shop-cart-receipt-head span.received {
-  color: var(--vagabond-c-green);
+  color: var(--vagabond-c-green-bright);
 }
 .vagabond.shop-app .shop-cart-receipt ul {
   margin: 3px 0 0;
@@ -17534,7 +17607,10 @@ ol#combat-tracker.directory-list {
 
 /* Crafting Workbench (docs/crafting-plan.md §5) */
 .workbench-app {
-  /* Row card: [img] [name] [arrow over yield] [scrap btn at end] */
+  /* ------------------------------------------------------------------ */
+  /* Scrap tab: pick list | tray + totals + Scrap button                 */
+  /* ------------------------------------------------------------------ */
+  /* Right column: tray over the totals */
   /* ------------------------------------------------------------------ */
   /* Craft tab: catalog | (selected detail / ongoing Projects / Shift footer) */
   /* ------------------------------------------------------------------ */
@@ -17667,10 +17743,6 @@ ol#combat-tracker.directory-list {
   color: var(--vagabond-c-red);
   border-color: var(--vagabond-c-red);
 }
-.workbench-app .wb-scrap-actions {
-  display: flex;
-  gap: 0.3rem;
-}
 .workbench-app .wb-shift-btn {
   font-family: "Manofa", serif;
   width: 100%;
@@ -17688,38 +17760,21 @@ ol#combat-tracker.directory-list {
   opacity: 0.5;
   cursor: not-allowed;
 }
-.workbench-app .wb-scrap-top {
-  display: flex;
-  align-items: stretch;
-  gap: 0.6rem;
-  margin-bottom: 0.7rem;
+.workbench-app .wb-scrap-tab {
+  height: 100%;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 370px;
+  gap: 0.85rem;
 }
-.workbench-app .wb-scrap-stock {
+.workbench-app .wb-scrap-pick {
   display: flex;
-  align-items: center;
+  flex-direction: column;
   gap: 0.5rem;
-  flex: 0 0 auto;
-  padding: 0.35rem 0.8rem 0.35rem 0.4rem;
-  border: 1px solid var(--vagabond-c-faint);
-  border-radius: 4px;
-}
-.workbench-app .wb-scrap-stock img {
-  width: 44px;
-  height: 44px;
-  object-fit: cover;
-  border-radius: 4px;
-  border: none;
-}
-.workbench-app .wb-scrap-stock-value {
-  font-family: "Germania", serif;
-  font-size: 1.5rem;
-  font-weight: 700;
-  line-height: 1;
-  white-space: nowrap;
-}
-.workbench-app .wb-scrap-header {
-  flex: 1;
   min-width: 0;
+  min-height: 0;
+}
+.workbench-app .wb-scrap-hint {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -17727,72 +17782,397 @@ ol#combat-tracker.directory-list {
   border: 1px solid var(--vagabond-c-faint);
   border-radius: 4px;
   background: var(--vagabond-c-surface);
-  font-size: 1rem;
+  font-size: 0.98rem;
 }
-.workbench-app .wb-scrap-header i {
+.workbench-app .wb-scrap-hint i {
   color: var(--vagabond-c-chat-yellow);
 }
+.workbench-app .wb-scrap-list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding-right: 2px;
+}
 .workbench-app .wb-scrap-group {
-  margin-bottom: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 0.75rem;
 }
 .workbench-app .wb-scrap-group:last-child {
   margin-bottom: 0;
 }
+.workbench-app .wb-scrap-group.is-hidden {
+  display: none;
+}
 .workbench-app .wb-scrap-group-label {
   font-family: "Manofa", serif;
-  font-size: 0.68rem;
+  font-size: 0.8rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.03em;
   opacity: 0.6;
-  margin-bottom: 0.35rem;
   padding-bottom: 0.2rem;
   border-bottom: 1px solid var(--vagabond-c-faint);
 }
-.workbench-app .wb-scrap-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 0.6rem;
-}
-.workbench-app .wb-scrap-card {
-  display: grid;
-  grid-template-columns: auto 1fr auto auto;
+.workbench-app .wb-scrap-row {
+  display: flex;
   align-items: center;
-  column-gap: 0.45rem;
-  padding: 0.6rem;
+  gap: 0.6rem;
+  padding: 0.3rem 0.5rem;
   border: 1px solid var(--vagabond-c-faint);
   border-radius: 4px;
-  text-align: left;
+  cursor: pointer;
+  user-select: none;
+  transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
 }
-.workbench-app .wb-scrap-card img {
-  width: 50px;
-  height: 50px;
-  object-fit: cover;
+.workbench-app .wb-scrap-row:hover {
+  background: var(--vagabond-c-inset-2);
+  border-color: color-mix(in srgb, var(--vagabond-c-chat-yellow) 55%, transparent);
+}
+.workbench-app .wb-scrap-row:hover .wb-scrap-thumb img {
+  transform: scale(1.06);
+}
+.workbench-app .wb-scrap-row:hover .wb-scrap-check {
+  opacity: 0.45;
+}
+.workbench-app .wb-scrap-row.is-picked {
+  border-color: var(--vagabond-c-chat-yellow);
+  background: color-mix(in srgb, var(--vagabond-c-chat-yellow) 12%, transparent);
+  box-shadow: inset 0 0 0 1px var(--vagabond-c-chat-yellow);
+}
+.workbench-app .wb-scrap-row.is-picked .wb-scrap-check {
+  opacity: 1;
+}
+.workbench-app .wb-scrap-row.is-locked {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+.workbench-app .wb-scrap-row.is-locked:hover {
+  background: transparent;
+  border-color: var(--vagabond-c-faint);
+}
+.workbench-app .wb-scrap-row.is-locked:hover .wb-scrap-thumb img {
+  transform: none;
+}
+.workbench-app .wb-scrap-row.is-locked:hover .wb-scrap-check {
+  opacity: 0;
+}
+.workbench-app .wb-scrap-row.is-hidden {
+  display: none;
+}
+.workbench-app .wb-scrap-thumb {
+  position: relative;
+  width: 52px;
+  height: 52px;
+  flex: 0 0 52px;
+  border: 1px solid var(--vagabond-c-tan-lite);
   border-radius: 4px;
+  background: var(--vagabond-c-black);
+  overflow: hidden;
 }
-.workbench-app .wb-scrap-card .wb-icon-btn {
-  justify-self: end;
+.workbench-app .wb-scrap-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: none;
+  transition: transform 0.15s;
+}
+.workbench-app .wb-scrap-check {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, var(--vagabond-c-black) 45%, transparent);
+  color: var(--vagabond-c-chat-yellow);
+  font-size: 1.25rem;
+  opacity: 0;
+  transition: opacity 0.15s;
+  pointer-events: none;
+}
+.workbench-app .wb-scrap-info {
+  flex: 1;
+  min-width: 0;
 }
 .workbench-app .wb-scrap-name {
   font-family: "Germania", serif;
-  font-size: 0.95rem;
-  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 1.1rem;
   min-width: 0;
 }
-.workbench-app .wb-scrap-out {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  line-height: 1.1;
+.workbench-app .wb-scrap-name-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
-.workbench-app .wb-scrap-arrow {
-  font-size: 0.9rem;
-  opacity: 0.6;
+.workbench-app .wb-scrap-qty {
+  flex-shrink: 0;
+  font-family: "Eskapade", serif;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--vagabond-c-muted);
+}
+.workbench-app .wb-scrap-equip {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0 0.35rem;
+  border: 1px solid var(--vagabond-c-chat-yellow);
+  border-radius: 3px;
+  color: var(--vagabond-c-chat-yellow);
+  font-family: "Germania", serif;
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+.workbench-app .wb-scrap-equip i {
+  font-size: 0.85em;
+}
+.workbench-app .wb-scrap-lock {
+  color: var(--vagabond-c-red);
+  font-size: 0.92rem;
+}
+.workbench-app .wb-scrap-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.92rem;
+  color: var(--vagabond-c-muted);
+}
+.workbench-app .wb-scrap-meta > i {
+  font-size: 0.82rem;
+  opacity: 0.7;
+}
+.workbench-app .wb-scrap-meta .wb-mat-icon {
+  width: 13px;
+  height: 13px;
 }
 .workbench-app .wb-scrap-yield {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  color: var(--vagabond-c-text-primary);
+  font-weight: 600;
+}
+.workbench-app .wb-scrap-slots::before {
+  content: "·";
+  margin-right: 0.4rem;
+}
+.workbench-app .wb-scrap-stepper {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  flex-shrink: 0;
+}
+.workbench-app .wb-scrap-stepper .wb-scrap-count {
+  width: 40px;
+  height: 22px;
+  padding: 0 0.2rem;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  text-align: center;
+  font-size: 0.92rem;
+}
+.workbench-app .wb-scrap-all {
+  font-family: "Manofa", serif;
+  height: 24px;
+  line-height: normal;
+  padding: 0 0.5rem;
+  border: 1px solid var(--vagabond-c-faint);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--vagabond-c-muted);
   font-size: 0.85rem;
-  opacity: 0.75;
+  cursor: pointer;
+}
+.workbench-app .wb-scrap-all:hover {
+  color: var(--vagabond-c-text-primary);
+  border-color: var(--vagabond-c-text-primary);
+}
+.workbench-app .wb-scrap-all.active {
+  color: var(--vagabond-c-chat-yellow);
+  border-color: var(--vagabond-c-chat-yellow);
+}
+.workbench-app .wb-scrap-side {
+  min-width: 0;
+}
+.workbench-app .wb-tray {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--vagabond-c-faint);
+  border-radius: 4px;
+  background: var(--vagabond-c-surface);
+  padding: 0.55rem 0.6rem;
+}
+.workbench-app .wb-tray-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.4rem;
+  font-family: "Germania", serif;
+  font-size: 1.15rem;
+}
+.workbench-app .wb-tray-head i {
+  color: var(--vagabond-c-chat-yellow);
+}
+.workbench-app .wb-tray-clear {
+  font-family: "Manofa", serif;
+  height: auto;
+  line-height: normal;
+  padding: 0.15rem 0.5rem;
+  border: 1px solid var(--vagabond-c-faint);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--vagabond-c-muted);
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+.workbench-app .wb-tray-clear:hover {
+  color: var(--vagabond-c-red);
+  border-color: var(--vagabond-c-red);
+}
+.workbench-app .wb-tray-list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.workbench-app .wb-tray-row {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.2rem 0.3rem;
+  border-radius: 4px;
+  transition: background 0.15s;
+}
+.workbench-app .wb-tray-row:hover {
+  background: var(--vagabond-c-inset-2);
+}
+.workbench-app .wb-tray-row > img {
+  width: 36px;
+  height: 36px;
+  flex: 0 0 36px;
+  object-fit: cover;
+  border: 1px solid var(--vagabond-c-tan-lite);
+  border-radius: 3px;
+}
+.workbench-app .wb-tray-row .wb-icon-btn {
+  width: 22px;
+  height: 22px;
+  font-size: 0.75rem;
+}
+.workbench-app .wb-tray-name {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-family: "Germania", serif;
+  font-size: 0.98rem;
+}
+.workbench-app .wb-tray-of {
+  font-weight: 400;
+  opacity: 0.7;
+}
+.workbench-app .wb-tray-equip {
+  color: var(--vagabond-c-chat-yellow);
+  font-size: 0.75rem;
+  cursor: help;
+}
+.workbench-app .wb-tray-yield {
+  flex-shrink: 0;
+  font-size: 0.92rem;
+  font-weight: 600;
   white-space: nowrap;
+}
+.workbench-app .wb-scrap-summary {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  border: 1px solid var(--vagabond-c-faint);
+  border-radius: 4px;
+  background: var(--vagabond-c-surface);
+  padding: 0.55rem 0.6rem;
+}
+.workbench-app .wb-scrap-gain {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding-bottom: 0.4rem;
+  margin-bottom: 0.1rem;
+  border-bottom: 1px solid var(--vagabond-c-faint);
+}
+.workbench-app .wb-scrap-gain img {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border: none;
+  border-radius: 4px;
+}
+.workbench-app .wb-scrap-gain > div {
+  display: flex;
+  flex-direction: column;
+}
+.workbench-app .wb-scrap-gain-label {
+  font-size: 0.85rem;
+  color: var(--vagabond-c-muted);
+}
+.workbench-app .wb-scrap-gain-value {
+  font-family: "Germania", serif;
+  font-size: 1.75rem;
+  line-height: 1.1;
+  color: var(--vagabond-c-chat-yellow);
+}
+.workbench-app .wb-scrap-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-size: 0.92rem;
+}
+.workbench-app .wb-scrap-line i {
+  font-size: 0.75rem;
+  opacity: 0.7;
+  margin: 0 0.15rem;
+}
+.workbench-app .wb-scrap-line.is-over strong {
+  color: var(--vagabond-c-red);
+}
+.workbench-app .wb-scrap-line-label {
+  color: var(--vagabond-c-muted);
+}
+.workbench-app .wb-scrap-delta {
+  color: var(--vagabond-c-muted);
+}
+.workbench-app .wb-scrap-warn {
+  display: flex;
+  gap: 0.45rem;
+  padding: 0.4rem 0.5rem;
+  border: 1px solid var(--vagabond-c-red);
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--vagabond-c-red) 10%, transparent);
+  font-size: 0.9rem;
+}
+.workbench-app .wb-scrap-warn > i {
+  color: var(--vagabond-c-red);
+  margin-top: 0.15rem;
+}
+.workbench-app .wb-scrap-warn ul {
+  margin: 0.15rem 0 0;
+  padding-left: 1rem;
+}
+.workbench-app .wb-scrap-btn {
+  margin-top: 0.15rem;
 }
 .workbench-app .wb-craft-tab {
   height: 100%;
@@ -17919,9 +18299,9 @@ ol#combat-tracker.directory-list {
   display: none;
 }
 .workbench-app .wb-cat-img {
-  width: 36px;
-  height: 36px;
-  flex: 0 0 36px;
+  width: 50px;
+  height: 50px;
+  flex: 0 0 50px;
   object-fit: cover;
   border: 1px solid var(--vagabond-c-tan-lite);
   border-radius: 4px;
@@ -18807,6 +19187,252 @@ ol#combat-tracker.directory-list {
 .conjure-picker .cjp-footer .cjp-cancel:hover {
   border-color: var(--vagabond-c-chat-yellow);
   color: var(--vagabond-c-chat-yellow);
+}
+
+.item-disguise-app .window-content {
+  padding: 8px 10px;
+}
+.item-disguise-app .idg-root {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: 100%;
+}
+.item-disguise-app .idg-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px;
+  border-radius: 3px;
+  background: var(--vagabond-c-inset-1);
+  color: var(--vagabond-c-text-primary);
+  font-size: 0.85rem;
+}
+.item-disguise-app .idg-status.is-on {
+  border-left: 3px solid var(--vagabond-c-chat-yellow);
+}
+.item-disguise-app .idg-status.is-on i {
+  color: var(--vagabond-dark-yellow);
+}
+.item-disguise-app .idg-status .idg-owner {
+  margin-left: auto;
+  font-style: italic;
+  opacity: 0.8;
+}
+.item-disguise-app .idg-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  flex: 1;
+  min-height: 0;
+}
+.item-disguise-app .idg-col {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  padding: 8px;
+  border: 1px solid var(--vagabond-c-faint);
+  border-radius: 4px;
+}
+.item-disguise-app .idg-truth {
+  background: var(--vagabond-c-inset-1);
+}
+.item-disguise-app .idg-col-title {
+  margin: 0 0 4px;
+  padding: 0;
+  border: none;
+  font-family: "Germania", serif;
+  font-size: 1.05rem;
+  color: var(--vagabond-c-title2);
+}
+.item-disguise-app .idg-col-title i {
+  font-size: 0.85rem;
+  margin-right: 4px;
+}
+.item-disguise-app .idg-identity {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+.item-disguise-app .idg-img {
+  position: relative;
+  flex: 0 0 80px;
+  width: 80px;
+  height: 80px;
+  line-height: normal;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--vagabond-c-faint);
+  border-radius: 4px;
+  background: var(--vagabond-c-transparent);
+  overflow: hidden;
+  cursor: pointer;
+}
+.item-disguise-app .idg-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: none;
+}
+.item-disguise-app .idg-img .idg-img-badge {
+  position: absolute;
+  right: 3px;
+  bottom: 3px;
+  padding: 3px;
+  border-radius: 3px;
+  background: var(--vagabond-c-dark);
+  color: var(--vagabond-c-lite);
+  font-size: 10px;
+}
+.item-disguise-app .idg-img:hover:not(.is-static) {
+  border-color: var(--vagabond-c-chat-yellow);
+}
+.item-disguise-app .idg-img:hover:not(.is-static) .idg-img-badge {
+  color: var(--vagabond-c-chat-yellow);
+}
+.item-disguise-app .idg-img.is-static {
+  cursor: default;
+}
+.item-disguise-app .idg-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+.item-disguise-app .idg-label {
+  margin-top: 4px;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: var(--vagabond-c-text-secondary);
+}
+.item-disguise-app .idg-link {
+  align-self: flex-start;
+  width: auto;
+  height: auto;
+  line-height: normal;
+  margin: 2px 0 0;
+  padding: 0;
+  border: none;
+  background: none;
+  font-size: 0.75rem;
+  color: var(--vagabond-c-text-secondary);
+}
+.item-disguise-app .idg-link:hover {
+  color: var(--vagabond-c-text-primary);
+  text-decoration: underline;
+  box-shadow: none;
+}
+.item-disguise-app .idg-editor {
+  min-height: 160px;
+  max-height: 260px;
+  overflow-y: auto;
+  border: 1px solid var(--vagabond-c-faint);
+  border-radius: 3px;
+}
+.item-disguise-app .idg-true-name {
+  font-family: "Germania", serif;
+  font-size: 1.1rem;
+  color: var(--vagabond-c-text-primary);
+}
+.item-disguise-app .idg-true-lore {
+  font-style: italic;
+  font-size: 0.85rem;
+  color: var(--vagabond-c-text-secondary);
+}
+.item-disguise-app .idg-true-desc {
+  flex: 1;
+  min-height: 60px;
+  max-height: 260px;
+  overflow-y: auto;
+  font-size: 0.85rem;
+}
+.item-disguise-app .idg-true-desc p {
+  margin: 0 0 4px;
+}
+.item-disguise-app .idg-effects {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.item-disguise-app .idg-effect {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 26px;
+}
+.item-disguise-app .idg-effect img {
+  flex: 0 0 22px;
+  width: 22px;
+  height: 22px;
+  border: none;
+}
+.item-disguise-app .idg-effect input {
+  flex: 1;
+}
+.item-disguise-app .idg-effect span {
+  font-size: 0.85rem;
+}
+.item-disguise-app .idg-effect.is-edit {
+  align-items: flex-start;
+}
+.item-disguise-app .idg-effect.is-edit img {
+  margin-top: 3px;
+}
+.item-disguise-app .idg-effect .idg-effect-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+.item-disguise-app .idg-effect .idg-effect-fields textarea {
+  resize: vertical;
+  min-height: 36px;
+  font-size: 0.8rem;
+}
+.item-disguise-app .idg-note {
+  margin: auto 0 0;
+  padding-top: 6px;
+  font-size: 0.75rem;
+  font-style: italic;
+  color: var(--vagabond-c-text-secondary);
+}
+.item-disguise-app .idg-note i {
+  margin-right: 3px;
+}
+.item-disguise-app .idg-footer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.item-disguise-app .idg-footer .idg-spacer {
+  flex: 1;
+}
+.item-disguise-app .idg-announce {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+.item-disguise-app .idg-announce input {
+  margin: 0;
+}
+.item-disguise-app .idg-btn {
+  flex: 0 0 auto;
+  width: auto;
+  height: auto;
+  line-height: normal;
+  padding: 4px 12px;
+}
+.item-disguise-app .idg-btn.is-primary {
+  border-color: var(--vagabond-c-green);
+  font-weight: bold;
 }
 
 /* Party supplies breakdown - renders inside Foundry's #tooltip, outside sheets */
@@ -20655,7 +21281,7 @@ ol#combat-tracker.directory-list {
 }
 .vagabond .right-column .equipped-item .eq-grip i.clickable:hover {
   color: var(--vagabond-c-red);
-  text-shadow: 0 0 3px var(--vagabond-c-green);
+  text-shadow: 0 0 3px var(--vagabond-c-green-bright);
 }
 .vagabond .right-column .equipped-item .eq-row2 {
   grid-column: 1/-1;
@@ -24042,6 +24668,33 @@ ol#combat-tracker.directory-list {
 .vagabond .inventory-card .item-qty-badge.empty {
   color: var(--vagabond-c-red);
 }
+.vagabond .inventory-card .disguise-marker {
+  position: absolute;
+  top: 2px;
+  left: 3px;
+  z-index: 10;
+  width: auto;
+  height: auto;
+  min-height: 0;
+  line-height: 1;
+  margin: 0;
+  padding: 1px;
+  border: none;
+  background: none;
+  font-size: 10px;
+  color: var(--vagabond-c-white);
+  opacity: 0.55;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.7));
+  cursor: pointer;
+}
+.vagabond .inventory-card .disguise-marker.is-on {
+  color: var(--vagabond-c-chat-yellow);
+  opacity: 1;
+}
+.vagabond .inventory-card .disguise-marker:hover {
+  opacity: 1;
+  box-shadow: none;
+}
 .vagabond .inventory-card .bound-marker {
   position: absolute;
   top: 2px;
@@ -24179,19 +24832,27 @@ ol#combat-tracker.directory-list {
   filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.4));
 }
 .vagabond .equipment-locked-view .bound-toggle-row .bound-toggle .bound-icon.unbound {
-  color: var(--vagabond-c-muted);
-  -webkit-text-stroke: 0;
-  opacity: 0.85;
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--vagabond-c-muted);
+  opacity: 1;
 }
-.vagabond .equipment-locked-view .bound-toggle-row .bound-toggle:hover .bound-icon {
+.vagabond .equipment-locked-view .bound-toggle-row .bound-toggle:hover .bound-icon.unbound {
   color: var(--vagabond-c-chat-yellow);
   -webkit-text-stroke: 1px var(--vagabond-c-dark-bluey);
-  opacity: 0.8;
+  opacity: 0.6;
 }
-.vagabond .equipment-locked-view .bound-toggle-row .bound-toggle .bound-icon.cursed, .vagabond .equipment-locked-view .bound-toggle-row .bound-toggle:hover .bound-icon.cursed {
+.vagabond .equipment-locked-view .bound-toggle-row .bound-toggle .bound-icon.cursed.bound {
   color: var(--vagabond-c-red);
   -webkit-text-stroke: 1px var(--vagabond-c-dark-bluey);
-  opacity: 1;
+}
+.vagabond .equipment-locked-view .bound-toggle-row .bound-toggle .bound-icon.cursed.unbound {
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--vagabond-c-red);
+}
+.vagabond .equipment-locked-view .bound-toggle-row .bound-toggle:hover .bound-icon.cursed.unbound {
+  color: var(--vagabond-c-red);
+  -webkit-text-stroke: 1px var(--vagabond-c-dark-bluey);
+  opacity: 0.6;
 }
 .vagabond .inventory-section .wealth-section {
   padding: 3px 6px;
@@ -30781,6 +31442,61 @@ details[open] .vagabond .npc-immunity-toggle i {
     text-align: center;
   }
 }
+.vagabond .item-image-column .item-disguise-icon {
+  position: absolute;
+  top: 0;
+  z-index: 1;
+  box-sizing: border-box;
+  width: 20px;
+  height: 20px;
+  min-height: 0;
+  line-height: normal;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--vagabond-c-dark);
+  border: 1px solid var(--vagabond-c-lite);
+  border-radius: 50%;
+  cursor: pointer;
+  opacity: 0.85;
+  transition: all 0.15s ease;
+}
+.vagabond .item-image-column .item-disguise-icon.is-left {
+  left: -2px;
+}
+.vagabond .item-image-column .item-disguise-icon.is-right {
+  right: -2px;
+}
+.vagabond .item-image-column .item-disguise-icon i {
+  font-size: 10px;
+  color: var(--vagabond-c-lite);
+}
+.vagabond .item-image-column .item-disguise-icon:hover {
+  opacity: 1;
+  border-color: var(--vagabond-c-chat-yellow);
+  transform: scale(1.1);
+}
+.vagabond .item-image-column .item-disguise-icon:hover i {
+  color: var(--vagabond-c-chat-yellow);
+}
+.vagabond .item-image-column .item-disguise-icon.is-on {
+  opacity: 1;
+  border-color: var(--vagabond-c-chat-yellow);
+  box-shadow: 0 0 6px -1px var(--vagabond-c-chat-yellow);
+}
+.vagabond .item-image-column .item-disguise-icon.is-on i {
+  color: var(--vagabond-c-chat-yellow);
+}
+.vagabond .item-disguise-banner {
+  margin: 2px 0 4px;
+  padding-left: 6px;
+  border-left: 3px solid var(--vagabond-c-chat-yellow);
+  font-size: 12px;
+  font-style: italic;
+  color: var(--vagabond-c-text-secondary);
+}
 .vagabond .weapon-skills h4 {
   display: flex;
   align-items: center;
@@ -30887,7 +31603,7 @@ details[open] .vagabond .npc-immunity-toggle i {
   transition: padding-left 0.3s ease;
 }
 .vagabond .favorited-spell .spell-trigger .spell-name-container:hover .spell-name {
-  text-shadow: 0 0 3px var(--vagabond-c-green);
+  text-shadow: 0 0 3px var(--vagabond-c-green-bright);
 }
 .vagabond .favorited-spell .spell-trigger .spell-name-container .spell-name {
   overflow: hidden;

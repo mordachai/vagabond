@@ -470,9 +470,30 @@ export class EquipmentHelper {
    * @param {string} itemId
    * @param {'unequipped'|'oneHand'|'twoHands'|'worn'} newState
    */
+  /** Cursed (own curse or an attached Cursed Relic) AND Bound: stuck to its bearer until the GM lifts it. */
+  static isCurseBound(item) {
+    const relic = item?.type === 'equipment' ? item.system.relic : null;
+    return !!relic?.boundTo && (!!relic.cursed || (relic.powers ?? []).some((p) => p.cursed));
+  }
+
+  /**
+   * User ruling: a Bound cursed item can't be removed by players (unequipped, dropped, traded, deleted) - only the
+   * GM. Not Bound = the player may still take it off. Enforced here, in `VagabondItem._preUpdate` / `_preDelete`
+   * and `TradeHelper`.
+   */
+  static isCurseLocked(item, user = game.user) {
+    return !user?.isGM && this.isCurseBound(item);
+  }
+
+  static warnCurseLocked(item) {
+    ui.notifications.warn(game.i18n.format('VAGABOND.Item.Relic.Slots.CursedStuck', { name: item?.name ?? '' }));
+  }
+
   static async equipWithHandLimit(actor, itemId, newState) {
     const item = actor.items.get(itemId);
     if (!item || item.type !== 'equipment') return;
+    // A Bound cursed item stays on (user ruling): players can't take it off; nothing bumps it
+    if (newState === 'unequipped' && this.isCurseLocked(item)) return this.warnCurseLocked(item);
 
     const HANDS = { oneHand: 1, twoHands: 2 };
     const need = HANDS[newState] ?? 0;
@@ -483,9 +504,14 @@ export class EquipmentHelper {
         (i) => i.type === 'equipment' && i.id !== itemId && (HANDS[i.system.equipmentState] ?? 0) > 0
       );
       let over = holders.reduce((n, i) => n + HANDS[i.system.equipmentState], 0) + need - 2;
+      // Hands held by Bound cursed items can't be freed
+      const stuck = holders.filter((h) => this.isCurseBound(h));
+      if (stuck.length && stuck.reduce((n, i) => n + HANDS[i.system.equipmentState], 0) + need > 2) {
+        return this.warnCurseLocked(stuck[0]);
+      }
 
       if (over > 0) {
-        const oldestFirst = [...holders].sort(
+        const oldestFirst = holders.filter((h) => !this.isCurseBound(h)).sort(
           (a, b) => (a.getFlag('vagabond', 'equippedAt') || 0) - (b.getFlag('vagabond', 'equippedAt') || 0)
         );
         const conflicts = [];
@@ -524,12 +550,17 @@ export class EquipmentHelper {
           this.handsFor(i) > 0 &&
           !bumped.has(i.id)
       );
+      // Bound cursed weapons count toward the cap but are never bumped
+      const stuckCost = otherWeapons.filter((w) => this.isCurseBound(w)).reduce((n, w) => n + this.itemSlotCost(w), 0);
       let wOver = targetCost > 0
         ? otherWeapons.reduce((n, w) => n + this.itemSlotCost(w), 0) + targetCost - cap
         : 0;
 
       if (wOver > 0) {
-        const oldestFirst = [...otherWeapons].sort(
+        if (stuckCost > 0 && stuckCost + targetCost > cap) {
+          return this.warnCurseLocked(otherWeapons.find((w) => this.isCurseBound(w)));
+        }
+        const oldestFirst = otherWeapons.filter((w) => !this.isCurseBound(w)).sort(
           (a, b) => (a.getFlag('vagabond', 'equippedAt') || 0) - (b.getFlag('vagabond', 'equippedAt') || 0)
         );
         const wConflicts = [];
@@ -557,6 +588,8 @@ export class EquipmentHelper {
     // RAW: only one set of worn Armor — putting one on takes the other off.
     if (newState !== 'unequipped' && this.isArmor(item)) {
       const worn = actor.items.filter((i) => this.isArmor(i) && i.id !== itemId && i.system.equipped);
+      const stuckArmor = worn.find((a) => this.isCurseBound(a));
+      if (stuckArmor) return this.warnCurseLocked(stuckArmor);
       for (const a of worn) updates.push({ _id: a.id, 'system.equipmentState': 'unequipped' });
       if (worn.length) {
         ui.notifications.info(`Unequipped ${worn.map((a) => a.name).join(', ')} (only one set of Armor).`);
@@ -771,8 +804,10 @@ export class EquipmentHelper {
     }
 
     // 2) Bump hand-holders oldest-first until total ≤ 2 (keep newest that fit)
+    // Bound cursed items are always kept (they can't come off), then newest first
     const newestFirst = (a, b) =>
-      (b.getFlag('vagabond', 'equippedAt') || 0) - (a.getFlag('vagabond', 'equippedAt') || 0);
+      (this.isCurseBound(b) - this.isCurseBound(a))
+      || (b.getFlag('vagabond', 'equippedAt') || 0) - (a.getFlag('vagabond', 'equippedAt') || 0);
     const holders = equipped
       .filter((i) => (HANDS[effectiveState.get(i.id)] ?? 0) > 0)
       .sort(newestFirst);

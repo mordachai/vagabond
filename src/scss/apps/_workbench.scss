@@ -130,11 +130,6 @@
     border-color: $c-red;
   }
 
-  .wb-scrap-actions {
-    display: flex;
-    gap: 0.3rem;
-  }
-
   .wb-shift-btn {
     font-family: $font-secondary;
     width: 100%;
@@ -151,36 +146,27 @@
     &:disabled { opacity: 0.5; cursor: not-allowed; }
   }
 
-  .wb-scrap-top {
-    display: flex;
-    align-items: stretch;
-    gap: 0.6rem;
-    margin-bottom: 0.7rem;
+  /* ------------------------------------------------------------------ */
+  /* Scrap tab: pick list | tray + totals + Scrap button                 */
+  /* ------------------------------------------------------------------ */
+
+  .wb-scrap-tab {
+    height: 100%;
+    min-height: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 370px;
+    gap: 0.85rem;
   }
 
-  .wb-scrap-stock {
+  .wb-scrap-pick {
     display: flex;
-    align-items: center;
+    flex-direction: column;
     gap: 0.5rem;
-    flex: 0 0 auto;
-    padding: 0.35rem 0.8rem 0.35rem 0.4rem;
-    border: 1px solid $c-faint;
-    border-radius: 4px;
-
-    img { width: 44px; height: 44px; object-fit: cover; border-radius: 4px; border: none; }
-  }
-
-  .wb-scrap-stock-value {
-    font-family: $font-title;
-    font-size: 1.5rem;
-    font-weight: 700;
-    line-height: 1;
-    white-space: nowrap;
-  }
-
-  .wb-scrap-header {
-    flex: 1;
     min-width: 0;
+    min-height: 0;
+  }
+
+  .wb-scrap-hint {
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -188,59 +174,343 @@
     border: 1px solid $c-faint;
     border-radius: 4px;
     background: $c-surface;
-    font-size: 1rem;
+    font-size: 0.98rem;
 
     i { color: $c-yellow; }
   }
 
+  .wb-scrap-list {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding-right: 2px;
+  }
+
   .wb-scrap-group {
-    margin-bottom: 0.85rem;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 0.75rem;
 
     &:last-child { margin-bottom: 0; }
+    &.is-hidden { display: none; }
   }
 
   .wb-scrap-group-label {
     font-family: $font-secondary;
-    font-size: 0.68rem;
+    font-size: 0.8rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.03em;
     opacity: 0.6;
-    margin-bottom: 0.35rem;
     padding-bottom: 0.2rem;
     border-bottom: 1px solid $c-faint;
   }
 
-  .wb-scrap-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    gap: 0.6rem;
-  }
-
-  /* Row card: [img] [name] [arrow over yield] [scrap btn at end] */
-  .wb-scrap-card {
-    display: grid;
-    grid-template-columns: auto 1fr auto auto;
+  .wb-scrap-row {
+    display: flex;
     align-items: center;
-    column-gap: 0.45rem;
-    padding: 0.6rem;
+    gap: 0.6rem;
+    padding: 0.3rem 0.5rem;
     border: 1px solid $c-faint;
     border-radius: 4px;
-    text-align: left;
+    cursor: pointer;
+    user-select: none;
+    transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
 
-    img { width: 50px; height: 50px; object-fit: cover; border-radius: 4px; }
-    .wb-icon-btn { justify-self: end; }
+    &:hover {
+      background: $c-inset-2;
+      border-color: color-mix(in srgb, #{$c-yellow} 55%, transparent);
+
+      .wb-scrap-thumb img { transform: scale(1.06); }
+      .wb-scrap-check { opacity: 0.45; }
+    }
+
+    &.is-picked {
+      border-color: $c-yellow;
+      background: color-mix(in srgb, #{$c-yellow} 12%, transparent);
+      box-shadow: inset 0 0 0 1px $c-yellow;
+
+      .wb-scrap-check { opacity: 1; }
+    }
+
+    &.is-locked {
+      cursor: not-allowed;
+      opacity: 0.5;
+
+      &:hover { background: transparent; border-color: $c-faint; }
+      &:hover .wb-scrap-thumb img { transform: none; }
+      &:hover .wb-scrap-check { opacity: 0; }
+    }
+
+    &.is-hidden { display: none; }
   }
 
-  .wb-scrap-name { font-family: $font-title; font-size: 0.95rem; font-weight: 600; min-width: 0; }
-  .wb-scrap-out {
+  .wb-scrap-thumb {
+    position: relative;
+    width: 52px;
+    height: 52px;
+    flex: 0 0 52px;
+    border: 1px solid $c-tan-lite;
+    border-radius: 4px;
+    background: $c-black;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border: none;
+      transition: transform 0.15s;
+    }
+  }
+
+  .wb-scrap-check {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: color-mix(in srgb, #{$c-black} 45%, transparent);
+    color: $c-yellow;
+    font-size: 1.25rem;
+    opacity: 0;
+    transition: opacity 0.15s;
+    pointer-events: none;
+  }
+
+  .wb-scrap-info { flex: 1; min-width: 0; }
+
+  .wb-scrap-name {
+    font-family: $font-title;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 1.1rem;
+    min-width: 0;
+  }
+
+  .wb-scrap-name-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  .wb-scrap-qty {
+    flex-shrink: 0;
+    font-family: $font-primary;
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: $c-muted;
+  }
+
+  .wb-scrap-equip {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0 0.35rem;
+    border: 1px solid $c-yellow;
+    border-radius: 3px;
+    color: $c-yellow;
+    font-family: $font-title;
+    font-size: 0.8rem;
+    line-height: 1.5;
+
+    i { font-size: 0.85em; }
+  }
+
+  .wb-scrap-lock { color: $c-red; font-size: 0.92rem; }
+
+  .wb-scrap-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.92rem;
+    color: $c-muted;
+
+    > i { font-size: 0.82rem; opacity: 0.7; }
+    .wb-mat-icon { width: 13px; height: 13px; }
+  }
+
+  .wb-scrap-yield {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2rem;
+    color: $c-text-1;
+    font-weight: 600;
+  }
+
+  .wb-scrap-slots::before { content: '·'; margin-right: 0.4rem; }
+
+  .wb-scrap-stepper {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    flex-shrink: 0;
+
+    .wb-scrap-count {
+      width: 40px;
+      height: 22px;
+      padding: 0 0.2rem;
+      border: none;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+      text-align: center;
+      font-size: 0.92rem;
+    }
+  }
+
+  .wb-scrap-all {
+    font-family: $font-secondary;
+    height: 24px;
+    line-height: normal;
+    padding: 0 0.5rem;
+    border: 1px solid $c-faint;
+    border-radius: 4px;
+    background: transparent;
+    color: $c-muted;
+    font-size: 0.85rem;
+    cursor: pointer;
+
+    &:hover { color: $c-text-1; border-color: $c-text-1; }
+    &.active { color: $c-yellow; border-color: $c-yellow; }
+  }
+
+  /* Right column: tray over the totals */
+  .wb-scrap-side { min-width: 0; }
+
+  .wb-tray {
+    flex: 1;
+    min-height: 0;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    line-height: 1.1;
+    border: 1px solid $c-faint;
+    border-radius: 4px;
+    background: $c-surface;
+    padding: 0.55rem 0.6rem;
   }
-  .wb-scrap-arrow { font-size: 0.9rem; opacity: 0.6; }
-  .wb-scrap-yield { font-size: 0.85rem; opacity: 0.75; white-space: nowrap; }
+
+  .wb-tray-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.4rem;
+    font-family: $font-title;
+    font-size: 1.15rem;
+
+    i { color: $c-yellow; }
+  }
+
+  .wb-tray-clear {
+    font-family: $font-secondary;
+    height: auto;
+    line-height: normal;
+    padding: 0.15rem 0.5rem;
+    border: 1px solid $c-faint;
+    border-radius: 4px;
+    background: transparent;
+    color: $c-muted;
+    font-size: 0.82rem;
+    cursor: pointer;
+
+    &:hover { color: $c-red; border-color: $c-red; }
+  }
+
+  .wb-tray-list {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .wb-tray-row {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.2rem 0.3rem;
+    border-radius: 4px;
+    transition: background 0.15s;
+
+    &:hover { background: $c-inset-2; }
+
+    > img { width: 36px; height: 36px; flex: 0 0 36px; object-fit: cover; border: 1px solid $c-tan-lite; border-radius: 3px; }
+    .wb-icon-btn { width: 22px; height: 22px; font-size: 0.75rem; }
+  }
+
+  .wb-tray-name {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-family: $font-title;
+    font-size: 0.98rem;
+  }
+
+  .wb-tray-of { font-weight: 400; opacity: 0.7; }
+  .wb-tray-equip { color: $c-yellow; font-size: 0.75rem; cursor: help; }
+  .wb-tray-yield { flex-shrink: 0; font-size: 0.92rem; font-weight: 600; white-space: nowrap; }
+
+  .wb-scrap-summary {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    border: 1px solid $c-faint;
+    border-radius: 4px;
+    background: $c-surface;
+    padding: 0.55rem 0.6rem;
+  }
+
+  .wb-scrap-gain {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding-bottom: 0.4rem;
+    margin-bottom: 0.1rem;
+    border-bottom: 1px solid $c-faint;
+
+    img { width: 40px; height: 40px; object-fit: cover; border: none; border-radius: 4px; }
+    > div { display: flex; flex-direction: column; }
+  }
+
+  .wb-scrap-gain-label { font-size: 0.85rem; color: $c-muted; }
+
+  .wb-scrap-gain-value {
+    font-family: $font-title;
+    font-size: 1.75rem;
+    line-height: 1.1;
+    color: $c-yellow;
+  }
+
+  .wb-scrap-line {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    font-size: 0.92rem;
+
+    i { font-size: 0.75rem; opacity: 0.7; margin: 0 0.15rem; }
+    &.is-over strong { color: $c-red; }
+  }
+
+  .wb-scrap-line-label { color: $c-muted; }
+  .wb-scrap-delta { color: $c-muted; }
+
+  .wb-scrap-warn {
+    display: flex;
+    gap: 0.45rem;
+    padding: 0.4rem 0.5rem;
+    border: 1px solid $c-red;
+    border-radius: 4px;
+    background: color-mix(in srgb, #{$c-red} 10%, transparent);
+    font-size: 0.9rem;
+
+    > i { color: $c-red; margin-top: 0.15rem; }
+    ul { margin: 0.15rem 0 0; padding-left: 1rem; }
+  }
+
+  .wb-scrap-btn { margin-top: 0.15rem; }
 
   /* ------------------------------------------------------------------ */
   /* Craft tab: catalog | (selected detail / ongoing Projects / Shift footer) */
@@ -368,9 +638,9 @@
   }
 
   .wb-cat-img {
-    width: 36px;
-    height: 36px;
-    flex: 0 0 36px;
+    width: 50px;
+    height: 50px;
+    flex: 0 0 50px;
     object-fit: cover;
     border: 1px solid $c-tan-lite;
     border-radius: 4px;

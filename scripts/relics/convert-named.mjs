@@ -234,7 +234,7 @@ function powerEffects(host, index, keyPath, isWeapon, { name, text, power, extra
 
 /**
  * Book (Armor of Vulnerability): identifying it "only reveals it to be a Relic Armor with the opposite 'plus.'"
- * Same shape and English text as `RelicDisguise.disguise` / `generate` (helpers/relic-disguise.mjs).
+ * Same shape and English text as `ItemDisguise.disguise` / `generate` (helpers/item-disguise.mjs).
  */
 const BONUS_ART = 'icons/magic/control/buff-flight-wings-runes-purple.webp';
 function disguise(doc, { base, plus }) {
@@ -247,12 +247,14 @@ function disguise(doc, { base, plus }) {
   };
   const fxShown = { name: `(+${plus}) Armor`, img: BONUS_ART, description: `<p>Grants a +${plus} bonus to Armor.</p>` };
   const curseFx = doc.effects.filter(e => e.flags?.vagabond?.curse);
-  sys.relic.trueIdentity = {
-    name: doc.name, img: doc.img, description: sys.description, lore: sys.lore,
-    effects: Object.fromEntries(curseFx.map(e => [e._id, { name: e.name, img: e.img, description: e.description }])),
+  sys.disguise = {
+    active: true,
+    truth: {
+      name: doc.name, img: doc.img, description: sys.description, lore: sys.lore,
+      effects: Object.fromEntries(curseFx.map(e => [e._id, { name: e.name, img: e.img, description: e.description }])),
+    },
+    shown: { ...shown, effects: Object.fromEntries(curseFx.map(e => [e._id, fxShown])) }, // also what a reveal would store
   };
-  sys.relic.disguised = true;
-  sys.relic.disguise = { ...shown, effects: Object.fromEntries(curseFx.map(e => [e._id, fxShown])) }; // also what a reveal would store
   for (const e of curseFx) Object.assign(e, fxShown);
   sys.description = shown.description;
   sys.lore = shown.lore;
@@ -266,8 +268,9 @@ for (const spec of NAMED) {
   const base = spec.base.pack.get(spec.base.id)?.doc;
   if (!base) throw new Error(`Missing base ${spec.base.id} for ${doc.name}`);
   const old = doc.system;
-  if (old.relic?.disguised) { // re-run on a disguised item: start from its true identity
-    const truth = old.relic.trueIdentity;
+  const wasDisguised = old.disguise?.active || old.relic?.disguised;
+  if (wasDisguised) { // re-run on a disguised item: start from its true identity
+    const truth = old.disguise?.active ? old.disguise.truth : old.relic.trueIdentity;
     doc.name = truth.name;
     old.description = truth.description;
     old.lore = truth.lore;
@@ -313,10 +316,8 @@ for (const spec of NAMED) {
     sockets: [],
     isRelic: true,
     slots: 0,
-    disguised: false,
-    disguise: {},
-    trueIdentity: {},
   };
+  system.disguise = { active: false, shown: {}, truth: {} };
   doc.system = system;
   doc.img = spec.img;
 
@@ -327,7 +328,7 @@ for (const spec of NAMED) {
   doc.effects = [...own, ...powerFx];
   if (spec.disguise) {
     disguise(doc, spec.disguise);
-    doc.name = doc.system.relic.disguise.name;
+    doc.name = doc.system.disguise.shown.name;
   }
   doc._stats = { ...doc._stats, ...FX_STATS };
   save(entry);

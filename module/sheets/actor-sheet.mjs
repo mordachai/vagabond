@@ -20,6 +20,7 @@ import { setupDragReorder } from '../helpers/drag-reorder.mjs';
 import { NpcRules } from '../helpers/npc-rules.mjs';
 import { AlchemyLab } from '../helpers/alchemy-lab.mjs';
 import { FeatureOrder } from '../helpers/feature-order.mjs';
+import { ItemDisguise } from '../helpers/item-disguise.mjs';
 
 const { api, sheets } = foundry.applications;
 
@@ -48,6 +49,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       deleteDoc: this._deleteDoc,
       // Effects list (Active / Inactive switch rows)
       toggleEffect: this._onToggleEffect,
+      toggleItemDisguise: this._onToggleItemDisguise,
       toggleEffectDetails: this._onToggleEffectDetails,
       createEffect: this._onCreateEffect,
       editEffect: this._onEditEffect,
@@ -1785,6 +1787,13 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
    * @param {HTMLElement} target
    * @protected
    */
+  /** GM eye on an inventory card (ItemDisguise.toggle; Shift = reveal without a chat card). */
+  static _onToggleItemDisguise(event, target) {
+    event.stopPropagation();
+    const item = this.actor.items.get(target.dataset.itemId);
+    if (item) ItemDisguise.toggle(item, { announce: !event.shiftKey });
+  }
+
   static async _onToggleEffect(event, target) {
     if (!this.isEditable) return;
     const effect = this._getEmbeddedDocument(target, this.actor);

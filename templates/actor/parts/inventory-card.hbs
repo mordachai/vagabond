@@ -40,6 +40,16 @@
       data-tooltip='{{localize "VAGABOND.ContextMenu.QuantityHint"}}: L +1 · R −1'
     >×{{item.system.quantity}}</div>
   {{/if}}
+  {{#if disguiseEye}}
+    {{! GM only (ItemDisguise.toggle): open eye = disguised (click reveals), slashed = revealed (click disguises) }}
+    <button
+      type='button'
+      class='disguise-marker {{#if disguiseEye.on}}is-on{{/if}}'
+      data-action='toggleItemDisguise'
+      data-item-id='{{item._id}}'
+      data-tooltip='{{#if disguiseEye.on}}{{localize "VAGABOND.Item.Disguise.ToggleReveal"}}{{else}}{{localize "VAGABOND.Item.Disguise.ToggleHide"}}{{/if}}'
+    ><i class='fa-solid {{#if disguiseEye.on}}fa-eye{{else}}fa-eye-slash{{/if}}'></i></button>
+  {{/if}}
   {{#if requiresBound}}
     {{! Curse tip rides the card's own hud-tip controller (a native data-tooltip fought the card tip for game.tooltip) }}
     <div class='bound-marker {{#if curse}}is-cursed{{/if}}' {{#if curse}}data-hud-tip-html='{{curse.tooltip}}' data-hud-tip-duration='3000'{{/if}}>

@@ -3,6 +3,7 @@ import { isStackableZeroSlot } from './stack-helper.mjs';
 import { SpellHandler } from '../sheets/handlers/spell-handler.mjs';
 import { SpellSurface } from './spell-surface.mjs';
 import { ConjureHelper } from './conjure-helper.mjs';
+import { ItemDisguise } from './item-disguise.mjs';
 
 /**
  * Whether an item has a meaningful "Use" action. Weapons always do (Use
@@ -237,6 +238,16 @@ export function buildItemMenuItems({ actor, item, event, rollHandler, equipmentH
         }
         await item.update({ 'system.relic.boundTo': isBound ? '' : actor.uuid });
       },
+    });
+  }
+
+  // Disguise (GM only): reveal / disguise again
+  if (ItemDisguise.hasEyeToggle(item)) {
+    const on = ItemDisguise.isDisguised(item);
+    items.push({
+      label: L(on ? 'VAGABOND.Item.Disguise.Reveal' : 'VAGABOND.Item.Disguise.Disguise'),
+      icon: `fa-solid ${on ? 'fa-eye' : 'fa-eye-slash'}`,
+      action: () => ItemDisguise.toggle(item),
     });
   }
 

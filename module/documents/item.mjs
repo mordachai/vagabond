@@ -5,6 +5,8 @@ import { isStackableZeroSlot } from '../helpers/stack-helper.mjs';
 import { CurrencyHelper } from '../helpers/currency-helper.mjs';
 import { HunterHelper } from '../helpers/hunter-helper.mjs';
 import { GrantedItems } from '../helpers/granted-items.mjs';
+import { MaterialsHelper } from '../helpers/materials-helper.mjs';
+import { ItemNameTokens } from '../helpers/item-name-tokens.mjs';
 
 /**
  * Extend the basic Item with some very simple modifications.
@@ -18,6 +20,9 @@ export class VagabondItem extends Item {
     // As with the actor class, items are documents that can have their data
     // preparation methods overridden (such as prepareBaseData()).
     super.prepareData();
+    // `{token}` in the stored name → live value; generic Materials show their worth (ItemNameTokens)
+    const shown = ItemNameTokens.display(this);
+    if (shown !== this._source.name) this.name = shown;
   }
 
   /**
@@ -318,6 +323,12 @@ export class VagabondItem extends Item {
     await super._onCreate(data, options, userId);
 
     console.log(`Vagabond | _onCreate fired for item "${this.name}" (type: ${this.type})`);
+
+    // A Materials bundle arriving beside another (bought, traded, dropped) merges into one
+    if (this.type === 'equipment' && this.system.craftMaterial?.enabled && this.parent
+        && userId === game.user.id) {
+      MaterialsHelper.queueConsolidate(this.parent);
+    }
 
     // An Ancestry / Class grants its items (Draken Breath Attack…) however it was added
     if ((this.type === 'ancestry' || this.type === 'class') && userId === game.user.id) {
@@ -625,6 +636,33 @@ export class VagabondItem extends Item {
       }
     }
 
+    // Curse (Handling "Cursed", GM only): a Cursed item always Requires Bound (its diamond is how it gets
+    // stuck); players can neither lift the curse nor drop the Bond requirement of a cursed item.
+    if (this.type === 'equipment') {
+      const relic = this.system.relic ?? {};
+      if (!game.user.isGM) {
+        if (foundry.utils.hasProperty(changed, 'system.relic.cursed')) foundry.utils.setProperty(changed, 'system.relic.cursed', relic.cursed);
+        const cursedNow = relic.cursed || (relic.powers ?? []).some(p => p.cursed);
+        if (cursedNow && foundry.utils.getProperty(changed, 'system.relic.requiresBond') === false) {
+          foundry.utils.setProperty(changed, 'system.relic.requiresBond', true);
+        }
+      }
+      if (foundry.utils.getProperty(changed, 'system.relic.cursed') === true) {
+        foundry.utils.setProperty(changed, 'system.relic.requiresBond', true);
+      }
+      // Legacy `requiresBound` mirrors the source too, or migrateData would turn an unticked Bond back on
+      if (foundry.utils.hasProperty(changed, 'system.relic.requiresBond')) {
+        foundry.utils.setProperty(changed, 'system.requiresBound', !!foundry.utils.getProperty(changed, 'system.relic.requiresBond'));
+      }
+    }
+
+    // Bound cursed item: players can't take it off (single choke point under equipWithHandLimit)
+    if (this.type === 'equipment' && foundry.utils.getProperty(changed, 'system.equipmentState') === 'unequipped'
+        && this.system.equipmentState !== 'unequipped' && EquipmentHelper.isCurseLocked(this, game.user)) {
+      EquipmentHelper.warnCurseLocked(this);
+      return false;
+    }
+
     // Keep the stored `equipped` boolean in lockstep with equipmentState (it
     // is a derived mirror at runtime; syncing the SOURCE prevents migrateData
     // from re-converting a deliberately-unequipped legacy item back to 'worn'
@@ -720,6 +758,12 @@ export class VagabondItem extends Item {
    */
   async _preDelete(options, user) {
     await super._preDelete(options, user);
+
+    // Bound cursed item: only the GM can get rid of it
+    if (this.parent?.documentName === 'Actor' && EquipmentHelper.isCurseLocked(this, game.user)) {
+      EquipmentHelper.warnCurseLocked(this);
+      return false;
+    }
 
     // Check if this is a container with items
     if (this.type === 'container' && this.system.items && this.system.items.length > 0) {

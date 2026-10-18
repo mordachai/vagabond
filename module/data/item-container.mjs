@@ -53,6 +53,8 @@ export default class VagabondContainerData extends VagabondItemBase {
     schema.crawl = new fields.NumberField({ required: true, nullable: false, integer: true, initial: 0, min: 0 });
     schema.travel = new fields.NumberField({ required: true, nullable: false, integer: true, initial: 0, min: 0 });
 
+    schema.disguise = VagabondItemBase.disguiseField();
+
     // Array of items stored in this container
     // Store the full item data, not just UUID references
     schema.items = new fields.ArrayField(

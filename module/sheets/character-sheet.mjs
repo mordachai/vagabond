@@ -45,17 +45,25 @@ export class VagabondCharacterSheet extends VagabondActorSheet {
 
   /**
    * @override
-   * Add the "Become the HUD" entry to the window header controls menu
-   * (moved here from the sliding panel). Uses the existing `becomeHud` action.
+   * Compact view: a visible header button (left of the controls kebab) that
+   * swaps this sheet for the floating HUD (`becomeHud`). The HUD's top-left
+   * corner tab swaps back (`VagabondCharacterHud._onExpandSheet`).
    */
-  _getHeaderControls() {
-    const controls = super._getHeaderControls();
-    controls.unshift({
-      action: 'becomeHud',
-      icon: 'fas fa-id-badge',
-      label: 'VAGABOND.Hud.Become',
-    });
-    return controls;
+  async _renderFrame(options) {
+    const frame = await super._renderFrame(options);
+    const header = frame.querySelector('.window-header');
+    if (header && !header.querySelector('[data-action="becomeHud"]')) {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'header-control icon fa-solid fa-down-left-and-up-right-to-center';
+      btn.dataset.action = 'becomeHud';
+      btn.dataset.tooltip = game.i18n.localize('VAGABOND.Hud.BecomeTooltip');
+      btn.setAttribute('aria-label', game.i18n.localize('VAGABOND.Hud.Become'));
+      const anchor = header.querySelector('[data-action="toggleControls"]')
+        ?? header.querySelector('[data-action="close"]');
+      header.insertBefore(btn, anchor);
+    }
+    return frame;
   }
 
   // ===========================

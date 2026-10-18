@@ -1,0 +1,260 @@
+// Disguise editor (ItemDisguiseApp, GM only): Players See | True Identity
+
+.item-disguise-app {
+  .window-content { padding: 8px 10px; }
+
+  .idg-root {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    height: 100%;
+  }
+
+  .idg-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 10px;
+    border-radius: 3px;
+    background: $c-inset-1;
+    color: $c-text-1;
+    font-size: 0.85rem;
+
+    &.is-on {
+      border-left: 3px solid $c-yellow;
+      i { color: $c-dark-yellow; }
+    }
+
+    .idg-owner {
+      margin-left: auto;
+      font-style: italic;
+      opacity: 0.8;
+    }
+  }
+
+  .idg-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    flex: 1;
+    min-height: 0;
+  }
+
+  .idg-col {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+    padding: 8px;
+    border: 1px solid $c-faint;
+    border-radius: 4px;
+  }
+
+  .idg-truth {
+    background: $c-inset-1;
+  }
+
+  .idg-col-title {
+    margin: 0 0 4px;
+    padding: 0;
+    border: none;
+    font-family: $font-title;
+    font-size: 1.05rem;
+    color: $c-title-2;
+
+    i { font-size: 0.85rem; margin-right: 4px; }
+  }
+
+  .idg-identity {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+  }
+
+  .idg-img {
+    position: relative;
+    flex: 0 0 80px;
+    width: 80px;
+    height: 80px;
+    line-height: normal;
+    margin: 0;
+    padding: 0;
+    border: 1px solid $c-faint;
+    border-radius: 4px;
+    background: $c-transparent;
+    overflow: hidden;
+    cursor: pointer;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border: none;
+    }
+
+    .idg-img-badge {
+      position: absolute;
+      right: 3px;
+      bottom: 3px;
+      padding: 3px;
+      border-radius: 3px;
+      background: $c-dark;
+      color: $c-lite;
+      font-size: 10px;
+    }
+
+    &:hover:not(.is-static) {
+      border-color: $c-yellow;
+      .idg-img-badge { color: $c-yellow; }
+    }
+
+    &.is-static { cursor: default; }
+  }
+
+  .idg-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .idg-label {
+    margin-top: 4px;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: $c-text-2;
+  }
+
+  .idg-link {
+    align-self: flex-start;
+    width: auto;
+    height: auto;
+    line-height: normal;
+    margin: 2px 0 0;
+    padding: 0;
+    border: none;
+    background: none;
+    font-size: 0.75rem;
+    color: $c-text-2;
+
+    &:hover { color: $c-text-1; text-decoration: underline; box-shadow: none; }
+  }
+
+  .idg-editor {
+    min-height: 160px;
+    max-height: 260px;
+    overflow-y: auto;
+    border: 1px solid $c-faint;
+    border-radius: 3px;
+  }
+
+  .idg-true-name {
+    font-family: $font-title;
+    font-size: 1.1rem;
+    color: $c-text-1;
+  }
+
+  .idg-true-lore {
+    font-style: italic;
+    font-size: 0.85rem;
+    color: $c-text-2;
+  }
+
+  .idg-true-desc {
+    flex: 1;
+    min-height: 60px;
+    max-height: 260px;
+    overflow-y: auto;
+    font-size: 0.85rem;
+
+    p { margin: 0 0 4px; }
+  }
+
+  .idg-effects {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .idg-effect {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 26px;
+
+    img {
+      flex: 0 0 22px;
+      width: 22px;
+      height: 22px;
+      border: none;
+    }
+
+    input { flex: 1; }
+    span { font-size: 0.85rem; }
+
+    &.is-edit {
+      align-items: flex-start;
+
+      img { margin-top: 3px; }
+    }
+
+    .idg-effect-fields {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      flex: 1;
+      min-width: 0;
+
+      textarea {
+        resize: vertical;
+        min-height: 36px;
+        font-size: 0.8rem;
+      }
+    }
+  }
+
+  .idg-note {
+    margin: auto 0 0;
+    padding-top: 6px;
+    font-size: 0.75rem;
+    font-style: italic;
+    color: $c-text-2;
+
+    i { margin-right: 3px; }
+  }
+
+  .idg-footer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    .idg-spacer { flex: 1; }
+  }
+
+  .idg-announce {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.85rem;
+    white-space: nowrap;
+
+    input { margin: 0; }
+  }
+
+  .idg-btn {
+    flex: 0 0 auto;
+    width: auto;
+    height: auto;
+    line-height: normal;
+    padding: 4px 12px;
+
+    &.is-primary {
+      border-color: $c-green;
+      font-weight: bold;
+    }
+  }
+}

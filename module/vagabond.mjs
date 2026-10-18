@@ -102,12 +102,15 @@ import { CurrencyHelper } from './helpers/currency-helper.mjs';
 import { ShopPricing } from './helpers/shop-pricing.mjs';
 import { ShopTransactions } from './helpers/shop-transactions.mjs';
 import { TradeHelper } from './helpers/trade-helper.mjs';
+import { MaterialsHelper } from './helpers/materials-helper.mjs';
+import { ItemNameTokens } from './helpers/item-name-tokens.mjs';
 import { TokenPortrait } from './helpers/token-portrait.mjs';
 import { CoinTransferDialog } from './applications/coin-transfer-dialog.mjs';
 import { ShopApp } from './applications/shop-app.mjs';
 import { CraftingHelper } from './helpers/crafting-helper.mjs';
 import { RelicHelper } from './helpers/relic-helper.mjs';
-import { RelicDisguise } from './helpers/relic-disguise.mjs';
+import { ItemDisguise } from './helpers/item-disguise.mjs';
+import { ItemDisguiseApp } from './applications/item-disguise-app.mjs';
 import { CrystalHelper } from './helpers/crystal-helper.mjs';
 import { WorkbenchApp } from './applications/workbench-app.mjs';
 import { AlchemyLab } from './helpers/alchemy-lab.mjs';
@@ -187,7 +190,6 @@ async function preloadHandlebarsTemplates() {
     'systems/vagabond/templates/item/parts/grants-config.hbs',
     'systems/vagabond/templates/item/parts/macro-config.hbs',
     'systems/vagabond/templates/item/parts/relic-slots.hbs',
-    'systems/vagabond/templates/item/parts/relic-disguise.hbs',
     'systems/vagabond/templates/item/parts/container-treasure.hbs',
     'systems/vagabond/templates/actor/parts/npc-macro-config.hbs',
     // Actor partials
@@ -850,6 +852,17 @@ Hooks.once('ready', function () {
     clocks: ProgressClock,
     // Circle token art: game.vagabond.tokenPortrait.convertAll() (GM) re-bakes / converts every token
     tokenPortrait: TokenPortrait,
+    // Live item names: `{value}` / `{cost}` / `{qty}` / `{slots}` / `{uses}` in a stored name;
+    // game.vagabond.itemNameTokens.register('key', item => text) adds a token
+    itemNameTokens: ItemNameTokens,
+    // Disguised items (GM): game.vagabond.disguise.open(item) editor, .disguise(item, {name, img, description,
+    // lore, effects}), .reveal(item, {announce}), .isDisguised(item)
+    disguise: {
+      open: (item) => ItemDisguiseApp.open(item),
+      disguise: (item, shown) => ItemDisguise.disguise(item, shown),
+      reveal: (item, opts) => ItemDisguise.reveal(item, opts),
+      isDisguised: (item) => ItemDisguise.isDisguised(item),
+    },
     // Light-source automation: game.vagabond.lightSource.use({...}) (item macros),
     // .douse(token) (hotbar "Douse Light" macro).
     lightSource: LightSource,
@@ -911,9 +924,9 @@ Hooks.once('ready', function () {
       // Combine (GM ritual, decision — docs/crafting-plan.md §4.11): not a
       // craftModes entry (no Shift/Materials, GM judgement only) — call directly.
       combine: (baseHost, otherHost, opts) => RelicHelper.combine(baseHost, otherHost, opts),
-      // Disguised curses (GM): the item shows a Relic with the opposite plus until revealed.
-      disguiseRelic: (item) => RelicDisguise.disguise(item),
-      revealRelic: (item) => RelicDisguise.reveal(item),
+      // Disguised items (GM, ItemDisguise): kept names for macros; see game.vagabond.disguise
+      disguiseRelic: (item, shown) => ItemDisguise.disguise(item, shown),
+      revealRelic: (item, opts) => ItemDisguise.reveal(item, opts),
       // Mana Crystals (variant, off by default): socket mechanics only — see
       // CrystalHelper's own doc comment for what's deferred.
       socketCrystal: (hostItem, crystalItem, slotIndex) => CrystalHelper.socket(hostItem, crystalItem, slotIndex),
@@ -997,6 +1010,8 @@ Hooks.once('ready', function () {
   CurrencyHelper.migrateCopperScale();
   // One-time: party actors hold no items any more (old party containers / Stash) — delete leftovers.
   TradeHelper.purgePartyItems().catch((err) => console.error('Vagabond | Party item purge failed', err));
+  // One-time: the old 1g-per-item Materials split → one bundle per actor.
+  MaterialsHelper.migrateBundles().catch((err) => console.error('Vagabond | Materials merge failed', err));
   // One-time: status effects already on actors get the Alpha 3 changes.
   migrateAlpha3Statuses();
   // One-time: Backpacks become 1 Slot held / +3 Slots worn.

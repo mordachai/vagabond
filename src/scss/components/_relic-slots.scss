@@ -142,23 +142,3 @@
 
   .relic-slot-hint { margin: 0; font-size: 12px; font-style: italic; opacity: 0.8; }
 }
-
-// Disguised curse banner (GM only, RelicDisguise)
-.relic-disguise-section {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 10px;
-
-  .relic-disguise-text { flex: 1; font-size: 12px; }
-
-  .relic-disguise-btn {
-    flex: 0 0 auto;
-    width: auto;
-    height: auto;
-    line-height: normal;
-    margin: 0;
-    padding: 2px 8px;
-    font-size: 12px;
-  }
-}

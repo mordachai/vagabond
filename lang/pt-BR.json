@@ -791,6 +791,7 @@
       "Errors": {
         "noSource": "Esse item não está mais lá.",
         "notYours": "Você só pode pegar do seu próprio inventário ou do grupo.",
+        "cursed": "Itens amaldiçoados vinculados não podem deixar o portador.",
         "notTradable": "Só equipamentos e recipientes podem trocar de mãos.",
         "noDest": "Não há onde colocar isso.",
         "cantGive": "Você não pode colocar coisas aí.",
@@ -1111,9 +1112,23 @@
         "MatsNeeded": "{needed} necessários / {onHand} disponíveis",
         "AutoFill": "Preencher",
         "AutoFillHint": "Distribui o orçamento deste Quarto de dia pelos seus Projetos, de cima para baixo, dentro dos Materiais que você tem.",
-        "ScrapHint": "Desmonte um item em Materiais no valor da metade do valor dele. Não usa o orçamento do Quarto de dia.",
+        "ScrapHint": "Escolha o que desmontar, confira os totais e clique em Desmontar. Os Materiais valem metade do valor do item. Não usa o orçamento do Quarto de dia.",
         "NoScrapItems": "Nada no seu inventário pode ser desmontado.",
-        "ScrapConfirm": "Desmontar {name} em Materiais no valor da metade do valor dele?"
+        "ScrapSearch": "Buscar nos seus itens…",
+        "ScrapTray": "A desmontar",
+        "ScrapTrayEmpty": "Clique nos itens à esquerda para adicioná-los aqui.",
+        "ScrapClear": "Limpar",
+        "ScrapAll": "Todos",
+        "ScrapEach": "cada",
+        "ScrapStepHint": "Shift-clique: 10 de cada vez",
+        "ScrapGain": "Materiais obtidos",
+        "ScrapBundleSlots": "Espaços dos Materiais",
+        "ScrapInventory": "Espaços do Inventário",
+        "ScrapEquippedWarn": "Itens equipados neste lote:",
+        "ScrapLocked": "Amaldiçoado e Vinculado: só o Mestre pode desmontá-lo.",
+        "ScrapButtonOne": "Desmontar {count} item",
+        "ScrapButtonMany": "Desmontar {count} itens",
+        "ScrapEquip": {"OneHand": "Na mão", "TwoHands": "Duas mãos", "Worn": "Equipado"}
       },
       "Project": {
         "WipDescription": "Um projeto em andamento. Vai se tornar {name} quando concluído."
@@ -1414,7 +1429,6 @@
         "miss": "Animação de erro",
         "none": "Nada"
       },
-      "spellHitMacroAutoRun": {
       "aaMenuAutoLoad": {
         "name": "Carregar Menu do Automated Animations",
         "hint": "Com Automated Animations e JB2A ativos, o sistema carrega seu menu de animações de armas, itens e status no Automated Animations, no idioma do Mestre. Perguntar mostra uma escolha quando o menu é novo ou mudou (mundos existentes mantêm o menu até você aceitar). Só carrega de novo quando o idioma ou o menu do sistema muda, então suas edições ficam até lá. Substituir guarda o menu anterior antes (Restaurar o devolve).",
@@ -1440,6 +1454,7 @@
         "noBackup": "Nenhum menu do Automated Animations guardado para restaurar.",
         "missing": "Automated Animations e JB2A precisam estar ativos."
       },
+      "spellHitMacroAutoRun": {
         "name": "Executar Macros de Acerto de Magia Automaticamente",
         "hint": "O botão de macro de acerto de uma Conjuração bem-sucedida se aperta sozinho quando a animação no alvo chega ao fim (na hora, sem animações). Desligue por Magia com a chave \"Executar automaticamente\"."
       },
@@ -2638,6 +2653,7 @@
       "Equipment": {
         "FIELDS": {
           "requiresBound": {"label": "Requer Vinculação"},
+          "cursed": {"label": "Amaldiçoado", "hint": "Só o Mestre. Liga Requer Vinculação; depois de Vinculado, só o Mestre desvincula (livro: um Ritual remove a maldição). Jogadores nunca veem esta opção."},
           "bound": {"label": "Vinculado"},
           "handsRequired": {
             "label": "Mãos Necessárias",
@@ -2663,9 +2679,9 @@
         "MaxUses": "Usos Máximos",
         "MaxUsesHint": "0 = uso único (Consumível reduz a quantidade diretamente). Acima de 0, este item carrega esse número de usos/doses/cargas independentes — Consumível esgota esses em vez da quantidade, e nunca apaga o item automaticamente quando chega a 0."
       },
+      "Disguise": {"ToggleReveal":"Revelar a identidade real (cartão no chat; Shift-clique: sem cartão)","ToggleHide":"Disfarçar de novo (último disfarce)","Disguise":"Disfarçar","Reveal":"Revelar","RevealHint":"Traz de volta a identidade real para todos.","RevealTitle":"Item Revelado","RevealResult":"{disguise} é na verdade {name}.","NamePlus":"{base} (+{plus})","Lore":"Tradição","Intro":"Relíquia {base} com o seguinte Poder:","Plain":"Relíquia {base}.","ArmorLight":"Armadura Leve","ArmorMedium":"Armadura Média","ArmorHeavy":"Armadura Pesada","Armor":"Armadura","Weapon":"Arma","Item":"Item","PowerArmor":"(+{plus}) Armadura","PowerWeapon":"(+{plus}) Arma","HintArmor":"Concede +{plus} de bônus em Armadura.","HintWeapon":"Causa +{plus} de dano extra.","PowerPlain":"Poder de Relíquia","PowerPlainHint":"Um Poder mágico.","WindowTitle":"Disfarce: {name}","OpenHint":"Disfarce (Mestre): o que os jogadores veem no lugar do item real","StatusOn":"Disfarçado: jogadores veem a coluna da esquerda","StatusOff":"Sem disfarce: todos veem a identidade real","PlayersSee":"Jogadores Veem","TrueIdentity":"Identidade Real","PickImage":"Escolha a imagem que os jogadores veem","UseTrueImage":"Usar a imagem real","Name":"Nome","Description":"Descrição","Effects":"Efeitos","Note":"Jogadores veem os nomes e descrições do disfarce, efeitos incluídos (ler um efeito nunca mostra suas mudanças). Atributos e dano continuam funcionando e não são ocultados.","Generate":"Gerar","GenerateHint":"Item amaldiçoado: uma Relíquia com o bônus oposto (livro).","Announce":"Anunciar no chat","Save":"Salvar Disfarce","NeedName":"O disfarce precisa de um nome.","Banner":"Disfarçado. Identidade real: <strong>{name}</strong>","EffectDescription":"O que os jogadores leem sobre este efeito"},
       "Relic": {
-        "Disguise": {"Banner":"Maldição disfarçada. Identidade real: <strong>{name}</strong>. Jogadores veem só o disfarce; edite nome e descrição para mudá-lo.","Undisguised":"Item amaldiçoado, mostrado como é.","Disguise":"Disfarçar","DisguiseHint":"Jogadores veem uma Relíquia com o bônus oposto (livro). Suas edições do disfarce são mantidas.","Reveal":"Revelar","RevealHint":"Mostra a identidade real para todos (cartão no chat).","RevealTitle":"Relíquia Revelada","RevealResult":"{disguise} é na verdade {name}.","NamePlus":"{base} (+{plus})","Lore":"Relíquia {base}","Intro":"Relíquia {base} com o seguinte Poder:","Plain":"Relíquia {base}.","ArmorLight":"Armadura Leve","ArmorMedium":"Armadura Média","ArmorHeavy":"Armadura Pesada","Armor":"Armadura","Weapon":"Arma","Item":"Item","PowerArmor":"(+{plus}) Armadura","PowerWeapon":"(+{plus}) Arma","HintArmor":"Concede +{plus} de bônus em Armadura.","HintWeapon":"Causa +{plus} de dano extra.","PowerPlain":"Poder de Relíquia","PowerPlainHint":"Um Poder mágico."},
-        "Slots": {"NotCumulative":"Bônus não são cumulativos: {kept} permanece ({name} não é maior).","CursedLocked":"{name} é Amaldiçoada: só o Mestre (um Ritual) pode removê-la.","CursedBound":"{name} é Amaldiçoado: continua Vinculado até a maldição ser removida (Mestre).","UsedUp":"{name} ({item}) foi consumida.","CurseSelf":"Amaldiçoado: {name}","CurseIn":"Amaldiçoado: {name} (em {item})","Title":"Relíquias","Counter":"Espaços de Relíquia: {used} de {count} usados","Empty":"Espaço de Relíquia vazio","EmptyHint":"Espaço de Relíquia vazio. Arraste uma Relíquia de um compêndio ou inventário para ele.","Remove":"Remover","NotRelic":"Só Relíquias podem ser anexadas a um espaço de Relíquia.","Mismatch":"{name} só pode ser anexada a: {targets}.","Fabled":"Uma Relíquia Lendária não aceita outras Relíquias.","Full":"Todos os espaços de Relíquia de {name} estão ocupados.","NotOwner":"Você não possui {name}."},
+        "Slots": {"CursedStuck":"{name} está Amaldiçoado e Vinculado: não pode ser removido até o Mestre retirar a maldição.","NotCumulative":"Bônus não são cumulativos: {kept} permanece ({name} não é maior).","CursedLocked":"{name} é Amaldiçoada: só o Mestre (um Ritual) pode removê-la.","CursedBound":"{name} é Amaldiçoado: continua Vinculado até a maldição ser removida (Mestre).","UsedUp":"{name} ({item}) foi consumida.","CurseSelf":"Amaldiçoado: {name}","CurseIn":"Amaldiçoado: {name} (em {item})","Title":"Relíquias","Counter":"Espaços de Relíquia: {used} de {count} usados","Empty":"Espaço de Relíquia vazio","EmptyHint":"Espaço de Relíquia vazio. Arraste uma Relíquia de um compêndio ou inventário para ele.","Remove":"Remover","NotRelic":"Só Relíquias podem ser anexadas a um espaço de Relíquia.","Mismatch":"{name} só pode ser anexada a: {targets}.","Fabled":"Uma Relíquia Lendária não aceita outras Relíquias.","Full":"Todos os espaços de Relíquia de {name} estão ocupados.","NotOwner":"Você não possui {name}."},
         "FIELDS": {
           "lore": {"label": "Info"},
           "description": {"label": "Descrição"},
@@ -3001,8 +3017,9 @@
       "ConsolidateWealth": "Trocar: converter cobre em prata e prata em ouro",
       "WealthAlreadyTrimmed": "As moedas já estão nas maiores denominações.",
       "PortraitTooltip": "Arraste para mover · Clique duplo para abrir a ficha",
-      "Become":          "Tornar-se o HUD",
-      "BecomeTooltip":   "Fechar esta ficha e abrir o HUD flutuante",
+      "Become":          "Visão compacta (HUD)",
+      "BecomeTooltip":   "Trocar esta ficha pelo HUD flutuante",
+      "ExpandSheet":     "Ficha completa (fecha o HUD)",
       "NoActor":         "Nenhum personagem designado e nenhum token selecionado.",
       "NotCharacter":    "O HUD de Personagem só suporta personagens de jogador.",
       "NotForItemPile":  "HUDs não estão disponíveis para Item Piles.",

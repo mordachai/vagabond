@@ -1,18 +1,22 @@
 import { CurrencyHelper } from './currency-helper.mjs';
 
 /**
- * Crafting Materials as an ingredient pool. An actor can hold several `craftMaterial`
- * equipment items (see `module/data/base-equipment.mjs`); this is the single choke
- * point for spending from and adding to that pool. See docs/crafting-plan.md §4.4.
+ * Crafting Materials as an ingredient pool. An actor holds ONE `craftMaterial`
+ * equipment item (bundle) per material key (see `module/data/base-equipment.mjs`);
+ * this is the single choke point for spending from and adding to it. See
+ * docs/crafting-plan.md §4.4.
  *
- * Generic Materials (`key === ''`) are capped at {@link MaterialsHelper.CAP} copper
- * (1g) per item — 1 Slot = 1g worth, matching the price list row ("Materials 1g / 1
- * Slot"). A specific Material (`key !== ''`, e.g. "dragon scale") is uncapped: one
- * item can hold any amount.
+ * A bundle holds any amount. Generic Materials (`key === ''`) weigh 1 Slot per 1g
+ * held (price list "Materials 1g / 1 Slot", derived in `VagabondEquipment`; the
+ * inventory card stops widening at 2). A specific Material (`key !== ''`, e.g.
+ * "dragon scale") weighs its own Slots.
  */
 export class MaterialsHelper {
-  /** Copper cap for one generic Materials item (1g). Specific materials are uncapped. */
-  static CAP = CurrencyHelper.RATES.gold;
+  /** Copper worth of generic Materials per Slot (1g). */
+  static SLOT_VALUE = CurrencyHelper.RATES.gold;
+
+  /** Per-actor debounced {@link consolidate}, keyed by actor uuid. */
+  static #pending = new Map();
 
   /**
    * Matching `craftMaterial`-enabled equipment items on `actor`, cheapest first.
@@ -27,7 +31,7 @@ export class MaterialsHelper {
 
   /** Total copper held across all of an actor's matching Materials items. */
   static totalValue(actor, key = '') {
-    return this.itemsOf(actor, key).reduce((sum, i) => sum + i.system.craftMaterial.value, 0);
+    return this.itemsOf(actor, key).reduce((sum, i) => sum + this.#worth(i), 0);
   }
 
   /** "need 5s, have 3s" text for a failed Materials check. */
@@ -66,6 +70,7 @@ export class MaterialsHelper {
    * @returns {Promise<{ok: boolean, reason?: string}>}
    */
   static async spend(actor, copper, { key = '' } = {}) {
+    await this.consolidate(actor, key);
     const items = this.itemsOf(actor, key).map(i => ({ id: i.id, value: i.system.craftMaterial.value }));
     const plan = this.planSpend(items, copper);
     if (!plan.ok) return { ok: false, reason: 'materials' };
@@ -80,67 +85,95 @@ export class MaterialsHelper {
   }
 
   /**
-   * Pure planner: distribute `copper` onto a cheapest-first list of existing partial
-   * items (topped up to `cap`) plus however many new items are needed — full `cap`
-   * chunks, then one remainder item. `cap = null` (specific materials) never splits:
-   * everything lands on the first existing item, or one new item.
-   * @returns {{updates: Array<{id: string, value: number}>, creates: number[]}} `creates` = new item values
-   */
-  static planGrant(items, copper, cap) {
-    let remaining = Math.max(0, Math.floor(Number(copper) || 0));
-    const updates = [];
-    const creates = [];
-    if (remaining <= 0) return { updates, creates };
-
-    if (cap === null) {
-      if (items.length) {
-        updates.push({ id: items[0].id, value: items[0].value + remaining });
-      } else {
-        creates.push(remaining);
-      }
-      return { updates, creates };
-    }
-
-    for (const item of items) {
-      if (remaining <= 0) break;
-      const room = cap - item.value;
-      if (room <= 0) continue;
-      const add = Math.min(room, remaining);
-      remaining -= add;
-      updates.push({ id: item.id, value: item.value + add });
-    }
-    while (remaining > 0) {
-      const chunk = Math.min(cap, remaining);
-      creates.push(chunk);
-      remaining -= chunk;
-    }
-    return { updates, creates };
-  }
-
-  /**
-   * Add `copper` worth of Materials to `actor`'s pool: tops up existing partial
-   * items first, then creates new items — capped at 1g/item for generic Materials,
-   * a single uncapped item for a specific Material.
+   * Add `copper` worth of Materials to `actor`'s pool: everything lands on the one
+   * bundle of that key (created if missing). Leftover extra bundles are merged first.
    * @returns {Promise<void>}
    */
   static async grant(actor, copper, { key = '' } = {}) {
-    const existing = this.itemsOf(actor, key).map(i => ({ id: i.id, value: i.system.craftMaterial.value }));
-    const cap = key === '' ? this.CAP : null;
-    const plan = this.planGrant(existing, copper, cap);
+    const amount = Math.max(0, Math.floor(Number(copper) || 0));
+    if (amount <= 0) return;
+    await this.consolidate(actor, key);
+    const bundle = this.itemsOf(actor, key)[0];
+    if (bundle) {
+      await this.#setValue(actor, bundle, bundle.system.craftMaterial.value + amount);
+    } else {
+      await actor.createEmbeddedDocuments('Item', [this.#buildItemData(amount, key)]);
+    }
+  }
 
-    if (plan.updates.length) {
-      await actor.updateEmbeddedDocuments('Item', plan.updates.map(u => ({
-        _id: u.id, 'system.craftMaterial.value': u.value, 'system.baseCost': CurrencyHelper.fromCopper(u.value),
-      })));
+  /** Worth of one bundle: its value per unit × quantity (a bought stack of 3 bundles = 3×). */
+  static #worth(item) {
+    return (item.system.craftMaterial.value ?? 0) * Math.max(1, item.system.quantity ?? 1);
+  }
+
+  static #setValue(actor, item, value) {
+    return actor.updateEmbeddedDocuments('Item', [{
+      _id: item.id, 'system.quantity': 1,
+      'system.craftMaterial.value': value, 'system.baseCost': CurrencyHelper.fromCopper(value),
+    }]);
+  }
+
+  /**
+   * Merge every Materials bundle of `key` on `actor` into one (the oldest-sorted
+   * first one keeps its id and grid spot). Stacks (quantity > 1) fold into the value.
+   * Keys `null` = every key present. No-op when already one bundle of quantity 1.
+   * @returns {Promise<void>}
+   */
+  static async consolidate(actor, key = null) {
+    if (!actor?.isOwner) return;
+    const keys = key === null
+      ? [...new Set(actor.items.filter(i => i.type === 'equipment' && i.system.craftMaterial?.enabled)
+        .map(i => i.system.craftMaterial.key ?? ''))]
+      : [key];
+    for (const k of keys) {
+      const items = this.itemsOf(actor, k);
+      if (!items.length) continue;
+      const [keep, ...rest] = [...items].sort((a, b) => (a.sort ?? 0) - (b.sort ?? 0));
+      if (!rest.length && Math.max(1, keep.system.quantity ?? 1) === 1) continue;
+      const total = items.reduce((sum, i) => sum + this.#worth(i), 0);
+      await this.#setValue(actor, keep, total);
+      if (rest.length) await actor.deleteEmbeddedDocuments('Item', rest.map(i => i.id));
     }
-    if (plan.creates.length) {
-      await actor.createEmbeddedDocuments('Item', plan.creates.map(value => this.#buildItemData(value, key)));
-    }
+  }
+
+  /**
+   * Debounced {@link consolidate} for a bundle that just arrived any other way
+   * (bought, traded, dropped from a compendium) — runs once the current batch settles.
+   */
+  static queueConsolidate(actor) {
+    if (!actor?.uuid) return;
+    clearTimeout(this.#pending.get(actor.uuid));
+    this.#pending.set(actor.uuid, setTimeout(() => {
+      this.#pending.delete(actor.uuid);
+      this.consolidate(actor).catch(err => console.error('Vagabond | Materials merge failed', err));
+    }, 250));
+  }
+
+  /**
+   * One-time (active GM, guard `materialsBundlesMerged`): actors holding several
+   * Materials bundles from the old 1g-per-item split get them merged into one.
+   */
+  static async migrateBundles() {
+    if (game.user !== game.users.activeGM || game.settings.get('vagabond', 'materialsBundlesMerged')) return;
+    for (const actor of game.actors) await this.consolidate(actor);
+    await game.settings.set('vagabond', 'materialsBundlesMerged', true);
+  }
+
+  /**
+   * Slots one generic Materials bundle weighs (1 per 1g, min 1), or null when its
+   * own `baseSlots` apply (a specific Material).
+   * @param {object} system  the bundle's equipment system data
+   * @returns {number|null}
+   */
+  static bundleSlots(system) {
+    const cm = system?.craftMaterial;
+    if (!cm?.enabled || (cm.key ?? '') !== '') return null;
+    return Math.max(1, Math.ceil((cm.value ?? 0) / this.SLOT_VALUE));
   }
 
   static #buildItemData(value, key) {
     return {
-      name: key ? `Materials (${key})` : 'Materials',
+      name: key ? `Materials (${key})` : game.i18n.localize('VAGABOND.Craft.Workbench.Materials'),
       type: 'equipment',
       img: 'icons/commodities/materials/powder-red-green-yellow.webp',
       system: {

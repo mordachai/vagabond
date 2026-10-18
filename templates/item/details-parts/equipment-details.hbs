@@ -391,8 +391,6 @@
         </div>
       {{/if}}
 
-      {{> "systems/vagabond/templates/item/parts/relic-disguise.hbs" relicDisguise=relicDisguise}}
-
       {{> "systems/vagabond/templates/item/parts/relic-slots.hbs" relicSlots=relicSlots}}
 
       {{> "systems/vagabond/templates/item/parts/macro-config.hbs" system=system macroNames=macroNames}}
@@ -934,10 +932,16 @@
           {{/unless}}
           {{#unless (eq system.equipmentType 'alchemical')}}
             <label class='checkbox-label'>
-              <input type='checkbox' name='system.requiresBound' {{#if system.requiresBound}}checked{{/if}} data-dtype='Boolean'/>
+              <input type='checkbox' name='system.relic.requiresBond' {{#if system.relic.requiresBond}}checked{{/if}} data-dtype='Boolean'/>
               <span>{{localize "VAGABOND.Item.Equipment.FIELDS.requiresBound.label"}}</span>
             </label>
           {{/unless}}
+          {{#if @root.isGM}}
+            <label class='checkbox-label'>
+              <input type='checkbox' name='system.relic.cursed' {{#if system.relic.cursed}}checked{{/if}} data-dtype='Boolean'/>
+              <span data-tooltip='{{localize "VAGABOND.Item.Equipment.FIELDS.cursed.hint"}}'>{{localize 'VAGABOND.Item.Equipment.FIELDS.cursed.label'}}</span>
+            </label>
+          {{/if}}
           {{#unless (eq system.equipmentType 'relic')}}
             <label class='checkbox-label'>
               <input type='checkbox' name='system.relic.isRelic' {{#if system.relic.isRelic}}checked{{/if}} data-dtype='Boolean'/>

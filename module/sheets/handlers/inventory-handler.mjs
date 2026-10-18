@@ -1,5 +1,6 @@
 import * as ItemSections from '../../helpers/item-sections.mjs';
 import { buildItemMenuItems } from '../../helpers/item-menu.mjs';
+import { ItemDisguise } from '../../helpers/item-disguise.mjs';
 import { RelicSlots } from '../../helpers/relic-slots.mjs';
 
 /**
@@ -59,14 +60,16 @@ export class InventoryHandler {
         // claws) never stacks (stack-helper isStackableZeroSlot), unless someone set a real stack on it
         showQty: !!item.system.isThrowable
           || (isSlotZero && (!['weapon', 'armor'].includes(item.system.equipmentType) || qty > 1)),
-        // Card width: per-unit Slots, capped to the 4-column grid (stacks don't widen the card)
-        totalSlots: Math.min(EquipmentHelper.itemSlotCost(item), 4),
+        // Card width: per-unit Slots, capped to the 4-column grid (stacks don't widen the card);
+        // a Materials bundle stops at 2 — past that its Slots only eat the empty cells
+        totalSlots: Math.min(EquipmentHelper.itemSlotCost(item), item.system.craftMaterial?.enabled ? 2 : 4),
         // Capacity consumed by the whole stack (cost × quantity) — drives numbering only
         stackSlots: EquipmentHelper.itemStackCost(item),
         requiresBound: item.system.requiresBound || false,
         bound: item.system.bound || false,
         curse: RelicSlots.curseInfo(item),
         usesPips: ItemSections.usesPipsArray(item),
+        disguiseEye: ItemDisguise.hasEyeToggle(item) ? { on: ItemDisguise.isDisguised(item) } : null,
       };
 
       // Add range abbreviation for weapons

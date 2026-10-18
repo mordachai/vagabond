@@ -1,6 +1,6 @@
 import { RelicHelper } from './relic-helper.mjs';
 import { CurrencyHelper } from './currency-helper.mjs';
-import { RelicDisguise } from './relic-disguise.mjs';
+import { ItemDisguise } from './item-disguise.mjs';
 
 /**
  * Relic slots: an equipment item with `system.relic.slots > 0` takes Relics (any `equipmentType: 'relic'`
@@ -31,9 +31,9 @@ export class RelicSlots {
     const count = this.count(item);
     if (!count) return null;
     const powers = item.system.relic.powers ?? [];
-    const hide = RelicDisguise.hidesCurse(item);
+    const hide = ItemDisguise.hidesFromUser(item);
     const slots = Array.from({ length: count }, (_, index) => {
-      const power = hide ? RelicDisguise.powerView(item, powers[index]) : powers[index];
+      const power = hide ? ItemDisguise.powerView(item, powers[index]) : powers[index];
       return { index, filled: !!power, img: power?.img ?? '', name: power?.name ?? '', cursed: !!power?.cursed && !hide };
     });
     return { count, used: powers.length, slots, emptyArt: this.EMPTY_ART };
@@ -92,7 +92,7 @@ export class RelicSlots {
       }
       at = familyAt;
     }
-    if (at >= 0 && powers[at].cursed && !game.user.isGM) return warn('CursedLocked', { name: RelicDisguise.powerView(host, powers[at]).name });
+    if (at >= 0 && powers[at].cursed && !game.user.isGM) return warn('CursedLocked', { name: ItemDisguise.powerView(host, powers[at]).name });
     const displaced = at >= 0 ? powers[at] : null;
     if (at >= 0) powers[at] = snapshot;
     else if (powers.length < count) powers.push(snapshot);
@@ -119,7 +119,7 @@ export class RelicSlots {
     if (!host?.isOwner) return;
     const powers = foundry.utils.deepClone(host.system.relic.powers ?? []);
     if (powers[index]?.cursed && !game.user.isGM) {
-      ui.notifications.warn(game.i18n.format('VAGABOND.Item.Relic.Slots.CursedLocked', { name: RelicDisguise.powerView(host, powers[index]).name }));
+      ui.notifications.warn(game.i18n.format('VAGABOND.Item.Relic.Slots.CursedLocked', { name: ItemDisguise.powerView(host, powers[index]).name }));
       return;
     }
     const [removed] = powers.splice(index, 1);
@@ -155,7 +155,7 @@ export class RelicSlots {
   /** The curses on `item`: its own (`relic.cursed`) and every Cursed Relic attached to it. None shown to players while disguised. */
   static curseSources(item) {
     const relic = item?.system?.relic;
-    if (!relic || RelicDisguise.hidesCurse(item)) return [];
+    if (!relic || ItemDisguise.hidesFromUser(item)) return [];
     return [
       ...(relic.cursed ? [{ name: item.name, attached: false }] : []),
       ...(relic.powers ?? []).filter(p => p.cursed).map(p => ({ name: p.name, attached: true })),
@@ -201,8 +201,8 @@ export class RelicSlots {
     const esc = (s) => foundry.utils.escapeHTML(String(s ?? ''));
     const L = (k) => game.i18n.localize(`VAGABOND.Item.Relic.Slots.${k}`);
     const real = item.system.relic.powers?.[selected];
-    const hide = RelicDisguise.hidesCurse(item);
-    const power = hide ? RelicDisguise.powerView(item, real) : real;
+    const hide = ItemDisguise.hidesFromUser(item);
+    const power = hide ? ItemDisguise.powerView(item, real) : real;
     let detail;
     if (power) {
       const description = power.description

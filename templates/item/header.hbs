@@ -11,6 +11,25 @@
       width='150'
       height='150'
     />
+    {{! Disguise (GM only): icons in the frame's two top notches — mask (left) = editor, eye (right) = quick Reveal }}
+    {{#if (and itemDisguise editable)}}
+        <button
+          type='button'
+          class='item-disguise-icon is-left {{#if itemDisguise.disguised}}is-on{{/if}}'
+          data-action='openDisguise'
+          data-tooltip='{{localize "VAGABOND.Item.Disguise.OpenHint"}}'
+        >
+          <i class='fa-solid fa-mask'></i>
+        </button>
+        <button
+          type='button'
+          class='item-disguise-icon is-right'
+          data-action='toggleDisguise'
+          data-tooltip='{{#if itemDisguise.disguised}}{{localize "VAGABOND.Item.Disguise.ToggleReveal"}}{{else}}{{localize "VAGABOND.Item.Disguise.ToggleHide"}}{{/if}}'
+        >
+          <i class='fa-solid {{#if itemDisguise.disguised}}fa-eye{{else}}fa-eye-slash{{/if}}'></i>
+        </button>
+    {{/if}}
   </div>
 
   {{! Right Column: Name + Two-Column Content }}
@@ -18,9 +37,15 @@
     {{! Item Name and Lock (for equipment) }}
     <div class='item-name-row'>
       <div class='item-document-name'>
-        <input name='name' type='text' value='{{item.name}}' placeholder='{{localize "VAGABOND.UI.Labels.NamePlaceholder"}}' />
+        {{! Live name (ItemNameTokens): locked shows the value, unlocked edits the stored token }}
+        {{#if (and system.locked (not (eq item.name item._source.name)))}}
+        <input type='text' value='{{item.name}}' readonly data-tooltip='{{item._source.name}}' />
+        {{else}}
+        <input name='name' type='text' value='{{item._source.name}}' placeholder='{{localize "VAGABOND.UI.Labels.NamePlaceholder"}}' />
+        {{/if}}
       </div>
       {{#if (and editable (or (eq item.type 'equipment') (eq item.type 'container') (eq item.type 'spell')))}}
+        {{#unless disguiseLocked}}
         <button
           type='button'
           class='equipment-lock-toggle'
@@ -29,8 +54,14 @@
         >
           <i class='fas {{#if system.locked}}fa-lock{{else}}fa-lock-open{{/if}}'></i>
         </button>
+        {{/unless}}
       {{/if}}
     </div>
+
+    {{! Disguised item, GM only (ItemDisguise.view): the true name; edit / reveal through the mask button }}
+    {{#if itemDisguise.disguised}}
+      <div class='item-disguise-banner'>{{{localize 'VAGABOND.Item.Disguise.Banner' name=itemDisguise.trueName}}}</div>
+    {{/if}}
 
     {{! Two-Column Content for Item-Specific Fields }}
     {{#if (eq item.type 'equipment')}}

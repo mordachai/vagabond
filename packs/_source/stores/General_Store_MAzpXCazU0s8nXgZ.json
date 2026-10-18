@@ -55742,6 +55742,7 @@
         "alchemicalType": "concoction",
         "lore": "Relic Chain Whip",
         "damageTypeOneHand": "blunt",
+        "forgeable": true,
         "relic": {
           "powers": [],
           "fabled": false,
@@ -55751,10 +55752,12 @@
           "consumable": false,
           "sockets": [],
           "isRelic": true,
-          "slots": 0,
-          "disguised": false,
-          "disguise": {},
-          "trueIdentity": {}
+          "slots": 0
+        },
+        "disguise": {
+          "active": false,
+          "shown": {},
+          "truth": {}
         },
         "containerId": null
       },
@@ -56075,6 +56078,7 @@
         "alchemicalType": "concoction",
         "lore": "Fabled Relic Trident (Bound)",
         "damageTypeOneHand": "piercing",
+        "forgeable": true,
         "relic": {
           "powers": [],
           "fabled": true,
@@ -56084,10 +56088,12 @@
           "consumable": false,
           "sockets": [],
           "isRelic": true,
-          "slots": 0,
-          "disguised": false,
-          "disguise": {},
-          "trueIdentity": {}
+          "slots": 0
+        },
+        "disguise": {
+          "active": false,
+          "shown": {},
+          "truth": {}
         },
         "containerId": null
       },
@@ -56196,6 +56202,7 @@
         "armorRating": 2,
         "mightRequirement": 4,
         "reflexPenalty": 2,
+        "forgeable": true,
         "relic": {
           "powers": [],
           "fabled": false,
@@ -56205,10 +56212,12 @@
           "consumable": false,
           "sockets": [],
           "isRelic": true,
-          "slots": 0,
-          "disguised": false,
-          "disguise": {},
-          "trueIdentity": {}
+          "slots": 0
+        },
+        "disguise": {
+          "active": false,
+          "shown": {},
+          "truth": {}
         },
         "containerId": null
       },
@@ -56498,6 +56507,7 @@
         "armorRating": 1,
         "mightRequirement": 2,
         "reflexPenalty": 1,
+        "forgeable": false,
         "relic": {
           "powers": [],
           "fabled": false,
@@ -56507,27 +56517,11 @@
           "consumable": false,
           "sockets": [],
           "isRelic": true,
-          "slots": 0,
-          "disguised": true,
-          "disguise": {
-            "name": "Light Armor (+1)",
-            "img": "icons/equipment/chest/breastplate-banded-simple-leather-brown.webp",
-            "description": "<p>Relic Light Armor with the following Power:</p><ul><li><strong>(+1) Armor:</strong> Grants a +1 bonus to Armor.</li></ul>",
-            "lore": "Relic Light Armor",
-            "effects": {
-              "78TIoxUlH8ZCJo5Q": {
-                "name": "(+1) Armor",
-                "img": "icons/magic/control/buff-flight-wings-runes-purple.webp",
-                "description": "<p>Grants a +1 bonus to Armor.</p>"
-              },
-              "O9h5yfHv6oc25AmQ": {
-                "name": "(+1) Armor",
-                "img": "icons/magic/control/buff-flight-wings-runes-purple.webp",
-                "description": "<p>Grants a +1 bonus to Armor.</p>"
-              }
-            }
-          },
-          "trueIdentity": {
+          "slots": 0
+        },
+        "disguise": {
+          "active": true,
+          "truth": {
             "name": "Armor of Vulnerability (-1)",
             "img": "icons/equipment/chest/breastplate-banded-simple-leather-brown.webp",
             "description": "<p><span class=\"fontstyle0\">Cursed Armor that can't be unbonded from except by powers that can remove curses. It bears the following Curse:</span></p><ul><li><span class=\"fontstyle2\">Vulnerability (Armor):</span><span class=\"fontstyle0\"> Does not grant its Armor and instead increases Attack damage taken by the number indicated.</span></li></ul><p><span class=\"fontstyle0\">Any attempts to identify it only reveals it to be a Relic Armor with the opposite \"plus.\"</span></p>",
@@ -56542,6 +56536,24 @@
                 "name": "Vulnerability: no Armor",
                 "img": "icons/magic/control/buff-flight-wings-runes-red-yellow.webp",
                 "description": "<p>Does not grant its Armor and instead increases Attack damage taken by 1.</p>"
+              }
+            }
+          },
+          "shown": {
+            "name": "Light Armor (+1)",
+            "img": "icons/equipment/chest/breastplate-banded-simple-leather-brown.webp",
+            "description": "<p>Relic Light Armor with the following Power:</p><ul><li><strong>(+1) Armor:</strong> Grants a +1 bonus to Armor.</li></ul>",
+            "lore": "Relic Light Armor",
+            "effects": {
+              "78TIoxUlH8ZCJo5Q": {
+                "name": "(+1) Armor",
+                "img": "icons/magic/control/buff-flight-wings-runes-purple.webp",
+                "description": "<p>Grants a +1 bonus to Armor.</p>"
+              },
+              "O9h5yfHv6oc25AmQ": {
+                "name": "(+1) Armor",
+                "img": "icons/magic/control/buff-flight-wings-runes-purple.webp",
+                "description": "<p>Grants a +1 bonus to Armor.</p>"
               }
             }
           }
@@ -56696,6 +56708,7 @@
         "armorRating": 2,
         "mightRequirement": 4,
         "reflexPenalty": 2,
+        "forgeable": true,
         "relic": {
           "powers": [],
           "fabled": false,
@@ -56705,27 +56718,11 @@
           "consumable": false,
           "sockets": [],
           "isRelic": true,
-          "slots": 0,
-          "disguised": true,
-          "disguise": {
-            "name": "Medium Armor (+2)",
-            "img": "icons/equipment/chest/breastplate-metal-scaled-grey.webp",
-            "description": "<p>Relic Medium Armor with the following Power:</p><ul><li><strong>(+2) Armor:</strong> Grants a +2 bonus to Armor.</li></ul>",
-            "lore": "Relic Medium Armor",
-            "effects": {
-              "RvZGTfv9nrkPluHd": {
-                "name": "(+2) Armor",
-                "img": "icons/magic/control/buff-flight-wings-runes-purple.webp",
-                "description": "<p>Grants a +2 bonus to Armor.</p>"
-              },
-              "zzecimJGFbfEpnSP": {
-                "name": "(+2) Armor",
-                "img": "icons/magic/control/buff-flight-wings-runes-purple.webp",
-                "description": "<p>Grants a +2 bonus to Armor.</p>"
-              }
-            }
-          },
-          "trueIdentity": {
+          "slots": 0
+        },
+        "disguise": {
+          "active": true,
+          "truth": {
             "name": "Armor of Vulnerability (-2)",
             "img": "icons/equipment/chest/breastplate-metal-scaled-grey.webp",
             "description": "<p><span class=\"fontstyle0\">Cursed Armor that can't be unbonded from except by powers that can remove curses. It bears the following Curse:</span></p><ul><li><span class=\"fontstyle2\">Vulnerability (Armor):</span><span class=\"fontstyle0\"> Does not grant its Armor and instead increases Attack damage taken by the number indicated.</span></li></ul><p><span class=\"fontstyle0\">Any attempts to identify it only reveals it to be a Relic Armor with the opposite \"plus.\"</span></p>",
@@ -56740,6 +56737,24 @@
                 "name": "Vulnerability: no Armor",
                 "img": "icons/magic/control/buff-flight-wings-runes-red-yellow.webp",
                 "description": "<p>Does not grant its Armor and instead increases Attack damage taken by 2.</p>"
+              }
+            }
+          },
+          "shown": {
+            "name": "Medium Armor (+2)",
+            "img": "icons/equipment/chest/breastplate-metal-scaled-grey.webp",
+            "description": "<p>Relic Medium Armor with the following Power:</p><ul><li><strong>(+2) Armor:</strong> Grants a +2 bonus to Armor.</li></ul>",
+            "lore": "Relic Medium Armor",
+            "effects": {
+              "RvZGTfv9nrkPluHd": {
+                "name": "(+2) Armor",
+                "img": "icons/magic/control/buff-flight-wings-runes-purple.webp",
+                "description": "<p>Grants a +2 bonus to Armor.</p>"
+              },
+              "zzecimJGFbfEpnSP": {
+                "name": "(+2) Armor",
+                "img": "icons/magic/control/buff-flight-wings-runes-purple.webp",
+                "description": "<p>Grants a +2 bonus to Armor.</p>"
               }
             }
           }
@@ -56894,6 +56909,7 @@
         "armorRating": 3,
         "mightRequirement": 6,
         "reflexPenalty": 3,
+        "forgeable": true,
         "relic": {
           "powers": [],
           "fabled": false,
@@ -56903,27 +56919,11 @@
           "consumable": false,
           "sockets": [],
           "isRelic": true,
-          "slots": 0,
-          "disguised": true,
-          "disguise": {
-            "name": "Heavy Armor (+3)",
-            "img": "icons/equipment/chest/breastplate-layered-grey.webp",
-            "description": "<p>Relic Heavy Armor with the following Power:</p><ul><li><strong>(+3) Armor:</strong> Grants a +3 bonus to Armor.</li></ul>",
-            "lore": "Relic Heavy Armor",
-            "effects": {
-              "BVFO6AcTGK8qKn9T": {
-                "name": "(+3) Armor",
-                "img": "icons/magic/control/buff-flight-wings-runes-purple.webp",
-                "description": "<p>Grants a +3 bonus to Armor.</p>"
-              },
-              "dqBpQdlJ7vIItref": {
-                "name": "(+3) Armor",
-                "img": "icons/magic/control/buff-flight-wings-runes-purple.webp",
-                "description": "<p>Grants a +3 bonus to Armor.</p>"
-              }
-            }
-          },
-          "trueIdentity": {
+          "slots": 0
+        },
+        "disguise": {
+          "active": true,
+          "truth": {
             "name": "Armor of Vulnerability (-3)",
             "img": "icons/equipment/chest/breastplate-layered-grey.webp",
             "description": "<p><span class=\"fontstyle0\">Cursed Armor that can't be unbonded from except by powers that can remove curses. It bears the following Curse:</span></p><ul><li><span class=\"fontstyle2\">Vulnerability (Armor):</span><span class=\"fontstyle0\"> Does not grant its Armor and instead increases Attack damage taken by the number indicated.</span></li></ul><p><span class=\"fontstyle0\">Any attempts to identify it only reveals it to be a Relic Armor with the opposite \"plus.\"</span></p>",
@@ -56938,6 +56938,24 @@
                 "name": "Vulnerability: no Armor",
                 "img": "icons/magic/control/buff-flight-wings-runes-red-yellow.webp",
                 "description": "<p>Does not grant its Armor and instead increases Attack damage taken by 3.</p>"
+              }
+            }
+          },
+          "shown": {
+            "name": "Heavy Armor (+3)",
+            "img": "icons/equipment/chest/breastplate-layered-grey.webp",
+            "description": "<p>Relic Heavy Armor with the following Power:</p><ul><li><strong>(+3) Armor:</strong> Grants a +3 bonus to Armor.</li></ul>",
+            "lore": "Relic Heavy Armor",
+            "effects": {
+              "BVFO6AcTGK8qKn9T": {
+                "name": "(+3) Armor",
+                "img": "icons/magic/control/buff-flight-wings-runes-purple.webp",
+                "description": "<p>Grants a +3 bonus to Armor.</p>"
+              },
+              "dqBpQdlJ7vIItref": {
+                "name": "(+3) Armor",
+                "img": "icons/magic/control/buff-flight-wings-runes-purple.webp",
+                "description": "<p>Grants a +3 bonus to Armor.</p>"
               }
             }
           }
@@ -57095,6 +57113,7 @@
         "lore": "Fabled Relic Greatsword (Bound)",
         "damageTypeOneHand": "slashing",
         "damageTypeTwoHands": "slashing",
+        "forgeable": true,
         "relic": {
           "powers": [],
           "fabled": true,
@@ -57104,10 +57123,12 @@
           "consumable": false,
           "sockets": [],
           "isRelic": true,
-          "slots": 0,
-          "disguised": false,
-          "disguise": {},
-          "trueIdentity": {}
+          "slots": 0
+        },
+        "disguise": {
+          "active": false,
+          "shown": {},
+          "truth": {}
         },
         "containerId": null
       },
@@ -57490,6 +57511,7 @@
         "lore": "Fabled Relic Longsword",
         "damageTypeOneHand": "slashing",
         "damageTypeTwoHands": "slashing",
+        "forgeable": true,
         "relic": {
           "powers": [],
           "fabled": true,
@@ -57499,10 +57521,12 @@
           "consumable": false,
           "sockets": [],
           "isRelic": true,
-          "slots": 0,
-          "disguised": false,
-          "disguise": {},
-          "trueIdentity": {}
+          "slots": 0
+        },
+        "disguise": {
+          "active": false,
+          "shown": {},
+          "truth": {}
         },
         "containerId": null
       },
@@ -57878,6 +57902,7 @@
         "alchemicalType": "concoction",
         "lore": "Fabled Relic Revolver",
         "damageTypeOneHand": "piercing",
+        "forgeable": true,
         "relic": {
           "powers": [],
           "fabled": true,
@@ -57887,10 +57912,12 @@
           "consumable": false,
           "sockets": [],
           "isRelic": true,
-          "slots": 0,
-          "disguised": false,
-          "disguise": {},
-          "trueIdentity": {}
+          "slots": 0
+        },
+        "disguise": {
+          "active": false,
+          "shown": {},
+          "truth": {}
         },
         "containerId": null
       },
@@ -58149,6 +58176,7 @@
         "alchemicalType": "concoction",
         "lore": "Relic Dagger (Bound)",
         "damageTypeOneHand": "slashing",
+        "forgeable": true,
         "relic": {
           "powers": [],
           "fabled": false,
@@ -58158,10 +58186,12 @@
           "consumable": false,
           "sockets": [],
           "isRelic": true,
-          "slots": 0,
-          "disguised": false,
-          "disguise": {},
-          "trueIdentity": {}
+          "slots": 0
+        },
+        "disguise": {
+          "active": false,
+          "shown": {},
+          "truth": {}
         },
         "containerId": null
       },
@@ -58319,6 +58349,7 @@
         "alchemicalType": "concoction",
         "lore": "Fabled Relic Dagger",
         "damageTypeOneHand": "slashing",
+        "forgeable": true,
         "relic": {
           "powers": [],
           "fabled": true,
@@ -58328,10 +58359,12 @@
           "consumable": false,
           "sockets": [],
           "isRelic": true,
-          "slots": 0,
-          "disguised": false,
-          "disguise": {},
-          "trueIdentity": {}
+          "slots": 0
+        },
+        "disguise": {
+          "active": false,
+          "shown": {},
+          "truth": {}
         },
         "containerId": null
       },
@@ -58541,6 +58574,7 @@
           "label": "",
           "runAsGM": false
         },
+        "forgeable": true,
         "relic": {
           "powers": [],
           "fabled": false,
@@ -58550,10 +58584,12 @@
           "consumable": false,
           "sockets": [],
           "isRelic": true,
-          "slots": 0,
-          "disguised": false,
-          "disguise": {},
-          "trueIdentity": {}
+          "slots": 0
+        },
+        "disguise": {
+          "active": false,
+          "shown": {},
+          "truth": {}
         }
       },
       "effects": [
@@ -58662,6 +58698,7 @@
         "alchemicalType": "concoction",
         "lore": "Relic Spear (Bound)",
         "damageTypeOneHand": "piercing",
+        "forgeable": true,
         "relic": {
           "powers": [],
           "fabled": false,
@@ -58671,10 +58708,12 @@
           "consumable": false,
           "sockets": [],
           "isRelic": true,
-          "slots": 0,
-          "disguised": false,
-          "disguise": {},
-          "trueIdentity": {}
+          "slots": 0
+        },
+        "disguise": {
+          "active": false,
+          "shown": {},
+          "truth": {}
         },
         "containerId": null
       },
@@ -58741,6 +58780,7 @@
         "lore": "Fabled Relic Warhammer (Bound)",
         "damageTypeOneHand": "blunt",
         "damageTypeTwoHands": "blunt",
+        "forgeable": true,
         "relic": {
           "powers": [],
           "fabled": true,
@@ -58750,10 +58790,12 @@
           "consumable": false,
           "sockets": [],
           "isRelic": true,
-          "slots": 0,
-          "disguised": false,
-          "disguise": {},
-          "trueIdentity": {}
+          "slots": 0
+        },
+        "disguise": {
+          "active": false,
+          "shown": {},
+          "truth": {}
         },
         "containerId": null
       },
@@ -58969,6 +59011,7 @@
         "altSkills": [
           "melee"
         ],
+        "forgeable": true,
         "relic": {
           "powers": [],
           "fabled": false,
@@ -58978,10 +59021,12 @@
           "consumable": false,
           "sockets": [],
           "isRelic": true,
-          "slots": 0,
-          "disguised": false,
-          "disguise": {},
-          "trueIdentity": {}
+          "slots": 0
+        },
+        "disguise": {
+          "active": false,
+          "shown": {},
+          "truth": {}
         },
         "containerId": null
       },
@@ -59051,6 +59096,7 @@
         "altSkills": [
           "melee"
         ],
+        "forgeable": true,
         "relic": {
           "powers": [],
           "fabled": false,
@@ -59060,10 +59106,12 @@
           "consumable": false,
           "sockets": [],
           "isRelic": true,
-          "slots": 0,
-          "disguised": false,
-          "disguise": {},
-          "trueIdentity": {}
+          "slots": 0
+        },
+        "disguise": {
+          "active": false,
+          "shown": {},
+          "truth": {}
         },
         "containerId": null
       },
@@ -59133,6 +59181,7 @@
         "altSkills": [
           "melee"
         ],
+        "forgeable": true,
         "relic": {
           "powers": [],
           "fabled": false,
@@ -59142,10 +59191,12 @@
           "consumable": false,
           "sockets": [],
           "isRelic": true,
-          "slots": 0,
-          "disguised": false,
-          "disguise": {},
-          "trueIdentity": {}
+          "slots": 0
+        },
+        "disguise": {
+          "active": false,
+          "shown": {},
+          "truth": {}
         },
         "containerId": null
       },
@@ -59636,6 +59687,7 @@
         "lore": "Fabled Relic Greatsword (Bound)",
         "damageTypeOneHand": "slashing",
         "damageTypeTwoHands": "slashing",
+        "forgeable": true,
         "relic": {
           "powers": [],
           "fabled": true,
@@ -59645,10 +59697,12 @@
           "consumable": false,
           "sockets": [],
           "isRelic": true,
-          "slots": 0,
-          "disguised": false,
-          "disguise": {},
-          "trueIdentity": {}
+          "slots": 0
+        },
+        "disguise": {
+          "active": false,
+          "shown": {},
+          "truth": {}
         },
         "containerId": null
       },
@@ -59858,6 +59912,7 @@
         "alchemicalType": "concoction",
         "lore": "Relic Light Crossbow (Bound)",
         "damageTypeOneHand": "piercing",
+        "forgeable": true,
         "relic": {
           "powers": [],
           "fabled": false,
@@ -59867,10 +59922,12 @@
           "consumable": false,
           "sockets": [],
           "isRelic": true,
-          "slots": 0,
-          "disguised": false,
-          "disguise": {},
-          "trueIdentity": {}
+          "slots": 0
+        },
+        "disguise": {
+          "active": false,
+          "shown": {},
+          "truth": {}
         },
         "containerId": null
       },
@@ -59978,6 +60035,7 @@
         "armorRating": 1,
         "mightRequirement": 2,
         "reflexPenalty": 1,
+        "forgeable": false,
         "relic": {
           "powers": [],
           "fabled": false,
@@ -59987,10 +60045,12 @@
           "consumable": false,
           "sockets": [],
           "isRelic": true,
-          "slots": 0,
-          "disguised": false,
-          "disguise": {},
-          "trueIdentity": {}
+          "slots": 0
+        },
+        "disguise": {
+          "active": false,
+          "shown": {},
+          "truth": {}
         },
         "containerId": null
       },
@@ -60067,7 +60127,7 @@
       "_key": "!actors.items!MAzpXCazU0s8nXgZ.6mRlL42zwPhLdWKV"
     },
     {
-      "name": "Cube of Force",
+      "name": "Cube of Force ({uses})",
       "type": "equipment",
       "img": "icons/commodities/treasure/glass-cube-teal.webp",
       "system": {
@@ -60096,7 +60156,11 @@
         "immunities": [],
         "gearCategory": "",
         "alchemicalType": "",
-        "lore": "Relic Trinket (Cube)"
+        "lore": "Relic Trinket (Cube)",
+        "uses": {
+          "max": 36,
+          "value": 36
+        }
       },
       "effects": [],
       "folder": null,

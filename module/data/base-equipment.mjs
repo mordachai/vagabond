@@ -1,6 +1,7 @@
 import VagabondItemBase from './base-item.mjs';
 import { VagabondTextParser } from '../helpers/text-parser.mjs';
 import { CurrencyHelper } from '../helpers/currency-helper.mjs';
+import { MaterialsHelper } from '../helpers/materials-helper.mjs';
 
 /**
  * Base Equipment class for all equippable items (weapons, armor, gear, alchemicals, relics)
@@ -118,13 +119,9 @@ export default class VagabondEquipment extends VagabondItemBase {
       // attached to it by drag-and-drop (`RelicSlots`, helpers/relic-slots.mjs). Attached = `powers[]`.
       isRelic: new fields.BooleanField({ initial: false }),
       slots: new fields.NumberField({ initial: 0, integer: true, min: 0, max: 12 }),
-      // Disguised curse (`RelicDisguise`, helpers/relic-disguise.mjs): while `disguised`, the item's name / img /
-      // description / lore ARE the disguise and `trueIdentity` holds the real ones; `disguise` keeps the last
-      // disguise (with the GM's edits) for the next time. All three are {name, img, description, lore}.
-      disguised: new fields.BooleanField({ initial: false }),
-      disguise: new fields.ObjectField({ initial: {} }),
-      trueIdentity: new fields.ObjectField({ initial: {} }),
     });
+
+    schema.disguise = VagabondItemBase.disguiseField();
 
     // Relic POWER item (in the `relics` pack, ~100 of its 140 entries — Bonus –
     // Weapon +2, Ace – Keen, etc; full relics like Bag of Holding leave `enabled`
@@ -366,12 +363,11 @@ export default class VagabondEquipment extends VagabondItemBase {
     });
 
     // Crafting materials bundle (the "Materials (1g)" gear item). `value` is
-    // remaining spendable copper — drawn down as it pays for Crafting/Scrap, deleted
-    // at 0; `key` blank = generic Materials (capped at 1g per item — see
-    // MaterialsHelper.CAP; an item's `slots` = its `baseSlots`, so 1 Slot = 1g of raw
-    // material, matching the price list), non-blank = a specific Material (dragon
-    // scale…) matched against a relic power's requiredMaterials — uncapped, one item
-    // can hold any amount. See docs/crafting-plan.md §4.4 and
+    // remaining spendable copper — drawn down as it pays for Crafting, grown by Scrap,
+    // deleted at 0; one bundle per key per actor, any amount. `key` blank = generic
+    // Materials (1 Slot per 1g held, MaterialsHelper.bundleSlots), non-blank = a specific Material (dragon
+    // scale…) matched against a relic power's requiredMaterials, own Slots. See
+    // docs/crafting-plan.md §4.4 and
     // module/helpers/materials-helper.mjs. `value` is initialized from cost in
     // VagabondItem._preCreate.
     schema.craftMaterial = new fields.SchemaField({
@@ -638,6 +634,17 @@ export default class VagabondEquipment extends VagabondItemBase {
       source.relic ??= {};
       source.relic.requiresBond = true;
     }
+    // Disguise moved from `relic.disguised / disguise / trueIdentity` (cursed Relics only) to `disguise`
+    // (`ItemDisguise`, any equipment / container). Never overwrite an already-written `disguise`.
+    if (source.relic && source.disguise === undefined
+        && (source.relic.disguised !== undefined || source.relic.trueIdentity !== undefined)) {
+      source.disguise = {
+        active: !!source.relic.disguised,
+        shown: source.relic.disguise ?? {},
+        truth: source.relic.trueIdentity ?? {},
+      };
+    }
+    if (source.relic) for (const k of ['disguised', 'disguise', 'trueIdentity']) delete source.relic[k];
     return super.migrateData(source);
   }
 
@@ -694,7 +701,9 @@ export default class VagabondEquipment extends VagabondItemBase {
 
     // Calculate final slots (with material modifier for non-relics). A
     // reduction never takes an item below 1 Slot (or below its own base if 0/negative).
-    let finalSlots = this.baseSlots;
+    // A generic Materials bundle weighs by its value (MaterialsHelper.bundleSlots).
+    const unitSlots = MaterialsHelper.bundleSlots(this) ?? this.baseSlots;
+    let finalSlots = unitSlots;
     const slotDelta = isRelic ? 0 : (this._materialRules().slotDelta ?? 0);
     if (slotDelta > 0) finalSlots += slotDelta;
     else if (slotDelta < 0) finalSlots = Math.max(Math.min(1, finalSlots), finalSlots + slotDelta);
@@ -702,7 +711,7 @@ export default class VagabondEquipment extends VagabondItemBase {
     this.slots = (this.noSlotsWhenWorn && this.equipmentState === 'worn') ? 0 : finalSlots;
     // Net slot change from metal — armor's Reflex penalty follows it (RAW ties
     // the penalty to Slots occupied)
-    this.metalSlotDelta = finalSlots - this.baseSlots;
+    this.metalSlotDelta = finalSlots - unitSlots;
 
     // Format properties as comma-separated string for display
     this.propertiesDisplay = this.properties.length > 0
