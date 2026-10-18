@@ -146,6 +146,11 @@ export const SETTINGS_SUBJECTS = [
       { id: 'fxWorld', scope: 'world', rows: [
         { key: 'useAnimations' },
         { key: 'fxOnMiss' },
+        { key: 'aaMenuAutoLoad' },
+        { kind: 'action', action: 'aaMenuLoad', icon: 'fa-file-import',
+          label: 'VAGABOND.Settings.aaMenuAutoLoad.loadTitle', hint: 'VAGABOND.Settings.aaMenuAutoLoad.loadHint', button: 'VAGABOND.Settings.aaMenuAutoLoad.loadButton' },
+        { kind: 'action', action: 'aaMenuRestore', icon: 'fa-rotate-left',
+          label: 'VAGABOND.Settings.aaMenuAutoLoad.restoreTitle', hint: 'VAGABOND.Settings.aaMenuAutoLoad.restoreHint', button: 'VAGABOND.Settings.aaMenuAutoLoad.restoreButton' },
         { kind: 'launcher', app: 'sequencerFx', icon: 'fa-folder-open',
           label: 'VAGABOND.Settings.sequencerFxConfig.name', hint: 'VAGABOND.Settings.sequencerFxConfig.hint' },
         { kind: 'launcher', app: 'dsnDamage', icon: 'fa-dice-d20',

@@ -846,6 +846,31 @@ export function registerGameSettings({ refreshClockDependents, applyTokenEffectV
     requiresReload: false,
   });
 
+  // Automated Animations menu: the system's file in the GM's language, loaded by AAMenuLoader
+  game.settings.register('vagabond', 'aaMenuAutoLoad', {
+    name: 'VAGABOND.Settings.aaMenuAutoLoad.name',
+    hint: 'VAGABOND.Settings.aaMenuAutoLoad.hint',
+    scope: 'world',
+    config: false,
+    type: String,
+    choices: {
+      ask: 'VAGABOND.Settings.aaMenuAutoLoad.ask',
+      overwrite: 'VAGABOND.Settings.aaMenuAutoLoad.overwrite',
+      merge: 'VAGABOND.Settings.aaMenuAutoLoad.merge',
+      off: 'VAGABOND.Settings.aaMenuAutoLoad.off',
+    },
+    default: 'ask',
+    requiresReload: false,
+  });
+  // { lang, hash, mode } of the last file loaded into AA
+  game.settings.register('vagabond', 'aaMenuLoaded', {
+    scope: 'world', config: false, type: Object, default: {},
+  });
+  // AA's menus as they were before the last overwrite
+  game.settings.register('vagabond', 'aaMenuBackup', {
+    scope: 'world', config: false, type: Object, default: {},
+  });
+
   // A successful Cast's hit macro runs by itself when the Spell's target animation lands
   game.settings.register('vagabond', 'spellHitMacroAutoRun', {
     name: 'VAGABOND.Settings.spellHitMacroAutoRun.name',

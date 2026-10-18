@@ -807,7 +807,7 @@
               font-family: $font-title;
               font-size: 1.6rem;
               line-height: 1;
-              color: $c-green;
+              color: $c-green-bright;
             }
           }
 
@@ -2028,7 +2028,7 @@
       }
 
       &.done {
-        border-left-color: #26cb0c;
+        border-left-color: $c-green;
 
         .tray-counter-value,
         .tray-counter-note i {
@@ -2559,7 +2559,7 @@
       }
 
       &.full .pool-count {
-        color: $c-green;
+        color: $c-green-bright;
       }
 
       .pool-lines {

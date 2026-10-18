@@ -1401,6 +1401,31 @@
         "none": "Nothing"
       },
       "spellHitMacroAutoRun": {
+      "aaMenuAutoLoad": {
+        "name": "Load Automated Animations Menu",
+        "hint": "When Automated Animations and JB2A are active, the system loads its weapon, item and status animation menu into Automated Animations, in the GM's language. Ask me shows a choice when the menu is new or changed (existing worlds keep their menu until you agree). It loads again only when the language or the system's menu changes, so your own edits stay until then. Replace saves your previous menu first (Restore puts it back).",
+        "ask": "Ask me",
+        "overwrite": "Replace the menu",
+        "merge": "Add missing entries only",
+        "off": "Don't load",
+        "later": "Not now",
+        "never": "Never",
+        "askTitle": "Vagabond Animation Menu",
+        "askContent": "Load the Vagabond animation menu ({lang}) into Automated Animations? Replace keeps a copy of your current menu (Visual FX > Restore).",
+        "askReplace": "Replace (recommended)",
+        "askMerge": "Add missing",
+        "loadTitle": "Load the Animation Menu Now",
+        "loadHint": "Load the system's Automated Animations menu in your language right away, even if it was already loaded.",
+        "loadButton": "Load",
+        "restoreTitle": "Restore the Previous Animation Menu",
+        "restoreHint": "Put back the Automated Animations menu as it was before the system last replaced it, and stop loading the system's menu.",
+        "restoreButton": "Restore",
+        "restoreConfirm": "Put back the Automated Animations menu saved before the last replace? The system stops loading its own menu (you can turn it back on here).",
+        "loaded": "Vagabond animation menu loaded into Automated Animations ({lang}).",
+        "restored": "Previous Automated Animations menu restored. Automatic loading is now off.",
+        "noBackup": "No saved Automated Animations menu to restore.",
+        "missing": "Automated Animations and JB2A must both be active."
+      },
         "name": "Run Spell Hit Macros Automatically",
         "hint": "A successful Cast's hit macro button presses itself when the Spell's target animation lands (right away without animations). Turn it off per Spell with its \"Run automatically\" switch."
       },

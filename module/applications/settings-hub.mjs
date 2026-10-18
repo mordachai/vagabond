@@ -4,6 +4,7 @@ import { CraftingSettingsApp } from './crafting-settings-app.mjs';
 import { SequencerFxConfig } from './sequencer-fx-config.mjs';
 import { DsnDamageAppearanceConfig } from './dsn-damage-appearance-config.mjs';
 import { CompendiumSettings } from './compendium-settings.mjs';
+import { AAMenuLoader } from '../helpers/aa-menu-loader.mjs';
 
 const { api } = foundry.applications;
 const NS = 'vagabond';
@@ -46,6 +47,8 @@ export class VagabondSettingsHub extends api.HandlebarsApplicationMixin(api.Appl
       resetSubject: VagabondSettingsHub.#onResetSubject,
       launch: VagabondSettingsHub.#onLaunch,
       forcePush: VagabondSettingsHub.#onForcePush,
+      aaMenuLoad: VagabondSettingsHub.#onAAMenuLoad,
+      aaMenuRestore: VagabondSettingsHub.#onAAMenuRestore,
       reloadNow: VagabondSettingsHub.#onReloadNow,
     },
   };
@@ -484,6 +487,31 @@ export class VagabondSettingsHub extends api.HandlebarsApplicationMixin(api.Appl
     });
     if (!ok) return;
     await game.settings.set(NS, 'regionForcePush', (game.settings.get(NS, 'regionForcePush') || 0) + 1);
+  }
+
+  /** Load the system's Automated Animations menu now (GM's language). */
+  static async #onAAMenuLoad() {
+    if (!AAMenuLoader.manager) {
+      ui.notifications.warn(game.i18n.localize('VAGABOND.Settings.aaMenuAutoLoad.missing'));
+      return;
+    }
+    // The choice dialog (Replace / Add missing / Not now / Never) is the confirmation
+    await AAMenuLoader.sync({ force: true, mode: 'ask' });
+    this.render();
+  }
+
+  /** Put AA's menus back as they were before the last overwrite. */
+  static async #onAAMenuRestore() {
+    if (!AAMenuLoader.manager) {
+      ui.notifications.warn(game.i18n.localize('VAGABOND.Settings.aaMenuAutoLoad.missing'));
+      return;
+    }
+    const ok = await api.DialogV2.confirm({
+      window: { title: game.i18n.localize('VAGABOND.Settings.aaMenuAutoLoad.restoreTitle') },
+      content: `<p>${game.i18n.localize('VAGABOND.Settings.aaMenuAutoLoad.restoreConfirm')}</p>`,
+    });
+    if (!ok) return;
+    if (await AAMenuLoader.restoreBackup()) this.render();
   }
 
   static async #onReloadNow() {

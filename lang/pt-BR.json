@@ -1415,6 +1415,31 @@
         "none": "Nada"
       },
       "spellHitMacroAutoRun": {
+      "aaMenuAutoLoad": {
+        "name": "Carregar Menu do Automated Animations",
+        "hint": "Com Automated Animations e JB2A ativos, o sistema carrega seu menu de animações de armas, itens e status no Automated Animations, no idioma do Mestre. Perguntar mostra uma escolha quando o menu é novo ou mudou (mundos existentes mantêm o menu até você aceitar). Só carrega de novo quando o idioma ou o menu do sistema muda, então suas edições ficam até lá. Substituir guarda o menu anterior antes (Restaurar o devolve).",
+        "ask": "Perguntar",
+        "overwrite": "Substituir o menu",
+        "merge": "Só adicionar entradas que faltam",
+        "off": "Não carregar",
+        "later": "Agora não",
+        "never": "Nunca",
+        "askTitle": "Menu de Animações do Vagabond",
+        "askContent": "Carregar o menu de animações do Vagabond ({lang}) no Automated Animations? Substituir guarda uma cópia do seu menu atual (Efeitos Visuais > Restaurar).",
+        "askReplace": "Substituir (recomendado)",
+        "askMerge": "Adicionar faltantes",
+        "loadTitle": "Carregar o Menu de Animações Agora",
+        "loadHint": "Carrega o menu do Automated Animations do sistema no seu idioma agora, mesmo que já tenha sido carregado.",
+        "loadButton": "Carregar",
+        "restoreTitle": "Restaurar o Menu de Animações Anterior",
+        "restoreHint": "Devolve o menu do Automated Animations como estava antes da última substituição pelo sistema, e para de carregar o menu do sistema.",
+        "restoreButton": "Restaurar",
+        "restoreConfirm": "Devolver o menu do Automated Animations guardado antes da última substituição? O sistema para de carregar o próprio menu (dá para religar aqui).",
+        "loaded": "Menu de animações do Vagabond carregado no Automated Animations ({lang}).",
+        "restored": "Menu anterior do Automated Animations restaurado. O carregamento automático foi desligado.",
+        "noBackup": "Nenhum menu do Automated Animations guardado para restaurar.",
+        "missing": "Automated Animations e JB2A precisam estar ativos."
+      },
         "name": "Executar Macros de Acerto de Magia Automaticamente",
         "hint": "O botão de macro de acerto de uma Conjuração bem-sucedida se aperta sozinho quando a animação no alvo chega ao fim (na hora, sem animações). Desligue por Magia com a chave \"Executar automaticamente\"."
       },

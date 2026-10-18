@@ -1,0 +1,49 @@
+// Automated Animations menu prompt (AAMenuLoader) — compact: Replace (recommended)
+// spans the first row, the other three choices share the row below.
+
+.aa-menu-dialog {
+  .dialog-content p {
+    margin: 0;
+    font-size: var(--font-size-13);
+  }
+
+  .form-footer {
+    flex-wrap: wrap;
+    gap: 4px;
+
+    // Foundry buttons carry a fixed height / line-height: let them grow with their label
+    button {
+      flex: 1 1 auto;
+      height: auto;
+      min-height: 30px;
+      line-height: normal;
+      padding: 4px 8px;
+      gap: 6px;
+      white-space: normal;
+      font-size: var(--font-size-12);
+
+      i {
+        flex: none;
+        margin: 0;
+      }
+    }
+
+    // Hero: the recommended choice
+    button[data-action="overwrite"] {
+      flex-basis: 100%;
+      min-height: 42px;
+      font-size: var(--font-size-14);
+      font-weight: bold;
+      color: #f2f2e8;
+      background: $c-green;
+      border: 1px solid color-mix(in srgb, $c-green 80%, #fff);
+      box-shadow: 0 0 6px -3px $c-green;
+
+      &:hover,
+      &:focus-visible {
+        background: color-mix(in srgb, $c-green 88%, #fff);
+        box-shadow: 0 0 8px -3px $c-green;
+      }
+    }
+  }
+}

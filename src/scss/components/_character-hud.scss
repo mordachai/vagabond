@@ -300,7 +300,7 @@
       font-size: calc(0.95rem * var(--vh-font-scale));
       letter-spacing: 0.5px;
       cursor: pointer;
-      &.favor  { color: $c-green; }
+      &.favor  { color: $c-green-bright; }
       &.hinder { color: $c-red; }
       &.none   { color: $c-yellow; }
     }

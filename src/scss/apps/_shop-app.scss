@@ -994,7 +994,7 @@
         font-family: $shop-font-number;
         font-size: 1.15em;
         &.paid { color: $c-red; }
-        &.received { color: $c-green; }
+        &.received { color: $c-green-bright; }
       }
     }
 

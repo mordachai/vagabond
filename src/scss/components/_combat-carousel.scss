@@ -590,7 +590,7 @@ $vcc-target-color: #ffe185;
 .vcc-bar-hp .vcc-bar-fill {
   background: linear-gradient(102deg,
     rgba(0, 0, 0, 0.5) 0%,
-    $c-green 80%,
+    $c-green-bright 80%,
     rgba(255, 255, 255, 0.95) 100%);
 }
 

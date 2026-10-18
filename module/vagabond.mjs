@@ -64,6 +64,7 @@ import { registerSocket, emitSocket, registerSocketAction } from './helpers/sock
 import { runMacroFromButton, executeItemMacro, registerMacroHandler, registerCastGate, registerMacroQueries, macroDescriptorFromButton } from './helpers/item-macro.mjs';
 import { MacroAutoRun } from './helpers/macro-autorun.mjs';
 import { AnimationBridge } from './helpers/animation-bridge.mjs';
+import { AAMenuLoader } from './helpers/aa-menu-loader.mjs';
 import { FocusLink } from './helpers/focus-link.mjs';
 import { FeatureAction } from './helpers/feature-action.mjs';
 import { RollExpiry } from './helpers/roll-expiry.mjs';
@@ -642,6 +643,8 @@ Hooks.once('i18nInit', function () {
 Hooks.once('ready', function () {
   // Wait to register hotbar drop hook on ready so that modules could register earlier if they want to
   Hooks.on('hotbarDrop', (bar, data, slot) => createDocMacro(data, slot));
+  // Automated Animations menu in the GM's language (active GM, only when the file changed)
+  AAMenuLoader.onReady();
 });
 
 /* -------------------------------------------- */

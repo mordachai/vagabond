@@ -10,7 +10,8 @@
   --vagabond-bg-size: 200px 200px;
   --vagabond-c-stat: #f1f1f1;
   --vagabond-c-chat-yellow: #DED656;
-  --vagabond-c-green: #278e17;
+  --vagabond-c-green: #1f6b14;
+  --vagabond-c-green-bright: #278e17;
   --vagabond-c-bluey: #62686a;
   --vagabond-dark-yellow: #94913c;
   --vagabond-c-inset-1: rgba(36, 36, 36, 0.65);
@@ -70,7 +71,8 @@ body[data-theme="dark"] #sidebar {
   --vagabond-c-muted: #999999;
   --vagabond-c-white: #ffffff;
   --vagabond-c-black: #000000;
-  --vagabond-c-green: #26cb0c;
+  --vagabond-c-green: #1a660d;
+  --vagabond-c-green-bright: #26cb0c;
   --vagabond-c-darkgray: #999999;
   --vagabond-c-lightgrey: #d0d0d0;
   --vagabond-c-red: #ff8b9f;
@@ -119,7 +121,8 @@ $c-red: var(--vagabond-c-red);
 $c-red-flat: var(--vagabond-c-red-flat);
 $c-yellow: var(--vagabond-c-chat-yellow);
 $c-yellow-2: var(--vagabond-c-yellow-2);
-$c-green: var(--vagabond-c-green);
+$c-green: var(--vagabond-c-green); // fills, borders, buttons, switches
+$c-green-bright: var(--vagabond-c-green-bright); // bars, text, icons, glows
 $c-electric-blue: #4febff; // Focus: focused Spells (sheet stripes + name, HUD slot glow)
 $c-bg1: var(--vagabond-c-bg1);
 $c-bg2: var(--vagabond-c-bg2);

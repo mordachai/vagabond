@@ -184,7 +184,7 @@
   }
 
   .lu-awarded-badge {
-    color: $c-green;
+    color: $c-green-bright;
     font-weight: 600;
     font-size: 0.85rem;
     i { margin-right: 4px; }
@@ -228,7 +228,7 @@
       width: 22px;
       text-align: center;
     }
-    &.checked .lu-checkbox { color: $c-green; }
+    &.checked .lu-checkbox { color: $c-green-bright; }
 
     .lu-question-text {
       font-size: 0.9rem;
@@ -301,7 +301,7 @@
     font-weight: 700;
     color: $c-text-2;
 
-    &.lu-ready { color: $c-green; }
+    &.lu-ready { color: $c-green-bright; }
   }
 
   .lu-xp-separator {
@@ -330,14 +330,14 @@
     transition: width 0.3s ease;
 
     &.lu-ready {
-      background: $c-green;
+      background: $c-green-bright;
     }
   }
 
   .lu-stats-gain {
     font-size: 1.4rem;
     font-weight: 700;
-    color: $c-green;
+    color: $c-green-bright;
     display: block;
     text-align: center;
   }
@@ -392,7 +392,7 @@
       color: $c-tan;
     }
 
-    &.done .lu-check-icon { color: $c-green; }
+    &.done .lu-check-icon { color: $c-green-bright; }
 
     .lu-check-label {
       font-size: 0.85rem;
@@ -500,11 +500,11 @@
 
     .lu-stat-arrow {
       font-size: 0.75rem;
-      color: $c-green;
+      color: $c-green-bright;
     }
 
     .lu-stat-to {
-      color: $c-green;
+      color: $c-green-bright;
     }
 
 
@@ -564,7 +564,7 @@
 
     &.lu-changed {
       .lu-derived-value {
-        color: $c-green;
+        color: $c-green-bright;
       }
     }
   }
@@ -580,7 +580,7 @@
       margin: 0;
       font-size: 0.9rem;
       font-weight: 400;
-      color: $c-green;
+      color: $c-green-bright;
       text-align: right;
     }
   }
@@ -623,7 +623,7 @@
 
     &:has(input:focus-visible) { outline: 2px solid $c-yellow; }
 
-    &.lu-picked .lu-derived-label { color: $c-green; }
+    &.lu-picked .lu-derived-label { color: $c-green-bright; }
   }
 
   .lu-derived-label {
@@ -927,8 +927,8 @@
         i { font-size: 0.8rem; }
 
         &.prereq-met {
-          color: $c-green;
-          i { color: $c-green; }
+          color: $c-green-bright;
+          i { color: $c-green-bright; }
         }
 
         &.prereq-unmet {
@@ -1077,7 +1077,7 @@
     line-height: 1.1;
     color: $c-text-2;
 
-    &.lu-ready i { color: $c-green; }
+    &.lu-ready i { color: $c-green-bright; }
   }
 
   .lu-xpbox-label {
@@ -1085,7 +1085,7 @@
     color: $c-muted;
 
     &.lu-pending {
-      color: $c-green;
+      color: $c-green-bright;
       font-weight: 600;
     }
   }
@@ -1102,7 +1102,7 @@
   .lu-tab-ok {
     margin-left: 6px;
     font-size: 0.8rem;
-    color: $c-green;
+    color: $c-green-bright;
   }
 
   .lu-dim { color: $c-muted; font-weight: 400; }
@@ -1218,7 +1218,7 @@
 
     .lu-gain-label { font-weight: 600; }
 
-    &.done .lu-mark { color: $c-green; }
+    &.done .lu-mark { color: $c-green-bright; }
     &.pending .lu-mark { color: $c-yellow; }
     &.info .lu-mark { color: $c-text-2; }
 
@@ -1272,7 +1272,7 @@
   .lu-road-pk {
     color: $c-text-1;
 
-    &.taken { color: $c-green; }
+    &.taken { color: $c-green-bright; }
     &.now { font-weight: 700; }
   }
 
