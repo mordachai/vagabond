@@ -1,5 +1,32 @@
 # Changelog
 
+## Unreleased
+- **[Added]** Disguise window: Unknown Item button. The item shows as Unknown Weapon / Armor / Gear / Alchemical / Relic / Container with a mystery text, keeps its image, and its effects and attached Relics read as Unknown until revealed.
+- **[Added]** Disguise window: switch "Can't be equipped until identified". While hidden, players can't equip, use or attack with the item; the GM can.
+- **[Changed]** Disguise window restyled like the item sheet (yellow frame, portrait frame, title banner, tab strip). Generate is now Disguise Item and works on any item; Save Disguise is Save; Reveal is yellow. Image pick and reset sit in the portrait corners, Lore is one line, effect descriptions follow their names, editable fields highlight on hover.
+- **[Fixed]** Disguise window: a cursed item's generated Lore was the word "Lore"; it now reads "Relic <Armor/Weapon>".
+- **[Changed]** Workbench restyled like the sheets, inspired by KeyInk's awesome character sheets: yellow frame, Craft / Scrap rail on the sheet tab band, bigger text and section titles, shorter hints, list wider than the side panel. Shift limit and Materials show a big icon with the label over the value. Work a Shift and Scrap use the Apply Direct button look. Gold icons get a dark outline in light mode.
+- **[Changed]** Workbench Scrap: compact quantity picker (+ / - stacked in front of the number).
+- **[Added]** Workbench: drag a catalog item onto the detail panel to see it, or onto Ongoing Projects to start it.
+- **[Added]** Item switch "Can't be Scrapped" (edit mode, any equipment): the item never shows on the Scrap tab. Breath Attacks ship with it on; world copies get it after a compendium rebuild.
+- **[Changed]** Item and Spell sheets shrink to fit their content; the old size is now the maximum.
+- **[Changed]** Locked item sheets: type and category under the name ("Armor · Chain, scale", "Alchemical · Acid", "Spell · Fire"). Weapon, Armor and Gear show their description there too.
+- **[Added]** Category field for every equipment type (edit mode, header). Light / Medium / Heavy Armor moved their "Leather, hide, padded" line there.
+- **[Changed]** Alchemicals: Throw row (best of Melee / Finesse / Craft), Uses pips, On-Hit Effects; no repeated Cost / Damage.
+- **[Changed]** Spells: one compact list for Duration / Targets / Anim, and the statuses their Effect applies now show.
+- **[Fixed]** On-hit status rows read "Burning (Cd6) · d6 per tick" instead of "Burning Cd6 die roll - tick"; no stray bullets.
+- **[Fixed]** Alchemicals had no Slots or Quantity fields in edit mode.
+- **[Fixed]** Headings inside item descriptions ("Equipping Armor") no longer render as big titles.
+- **[Added]** Spell FX presets: the Presets tab lists the System config files and your External ones (any folder under Data, shown with their path). One file is active; its Video and Sound ticks switch those parts on or off; broken files show in red. Import uses Foundry's file picker (upload where you want), Save as preset asks for a folder, the trash takes a file off the list.
+- **[Added]** PSFX is a recommended module (Spell FX sounds); the Spell FX window shows whether it is active.
+- **[Fixed]** Cone animation macro no longer throws "args is not defined" when run by hand.
+- **[Fixed]** Spell FX window: the loop video play button and unknown sounds say what is missing instead of "No file path set".
+- **[Fixed]** Cast dialog: "No Target picked" no longer shows when the caster is the only one in the area.
+- **[Fixed]** Cone, Line, Cube and Sphere Spell FX play exactly on the Cast's template. Cones could point the wrong way (they followed another area of the caster on the map).
+- **[Added]** Cones can be aimed with the Cast dialog crosshair, like Lines.
+- **[Changed]** Spell Surfaces cast as a Cone show the school's cone clip, shaped like the Cone (its loop version, or held on a frame).
+- **[Changed]** Default Spell FX config updated: new area animations, "Frame to use" and loop videos set, every field filled.
+
 ## v6.8.1
 - **[Added]** NPC sheet Compact view: header button swaps the sheet for the NPC HUD.
 - **[Changed]** Compact views work the same everywhere: header button on the Character, NPC and party sheets swaps to the HUD / party compact view; the corner tab (top-left) swaps back. Double-clicking the NPC HUD portrait now swaps too.

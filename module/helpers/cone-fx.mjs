@@ -19,6 +19,9 @@ export class ConeFx {
    * @param {number|string} [opts.color]  recolor: a number = hue shift in degrees (e.g. 255 turns
    *   the orange fire breath purple), a "#rrggbb" string = tint
    * @param {boolean} [opts.belowTokens=false]
+   * @param {{file?: string, volume?: number, delay?: number, enable?: boolean}} [opts.sound]
+   *   played with the cone (the AA entry's Primary sound: "Run macro only" skips AA's own sound).
+   *   A Sequencer DB key that is not registered (its module inactive) is skipped.
    * @returns {Promise<void>}
    */
   /**
@@ -47,7 +50,7 @@ export class ConeFx {
     return Array.isArray(path) ? path[0] : path;
   }
 
-  static async cone({ source, targets = [], file, length = 15, width, color, belowTokens = false } = {}) {
+  static async cone({ source, targets = [], file, length = 15, width, color, belowTokens = false, sound } = {}) {
     if (typeof Sequence === 'undefined' || !game.modules.get('sequencer')?.active) return;
     const token = source?.object ?? source;
     if (!token || !file) return;
@@ -75,7 +78,13 @@ export class ConeFx {
     if (Number(width) > 0) size.height = Number(width) / unit;
 
     try {
-      const eff = new Sequence()
+      const seq = new Sequence();
+      const soundFile = sound?.enable === false ? '' : String(sound?.file ?? '').trim();
+      const db = globalThis.Sequencer?.Database;
+      if (soundFile && (/[/\\]/.test(soundFile) || db?.entryExists(soundFile))) {
+        seq.sound().file(soundFile).volume(Number(sound.volume ?? 0.75)).delay(Number(sound.delay) || 0);
+      }
+      const eff = seq
         .effect()
         .file(this._fileFor(String(file).trim(), Number(length) || 15))
         .atLocation(start)
@@ -86,7 +95,7 @@ export class ConeFx {
       const recolor = String(color ?? '').trim();
       if (/^#[0-9a-f]{6}$/i.test(recolor)) eff.tint(recolor);
       else if (recolor && Number.isFinite(Number(recolor))) eff.filter('ColorMatrix', { hue: Number(recolor) });
-      eff.play();
+      seq.play();
     } catch (err) {
       console.warn('Vagabond | ConeFx error (non-fatal):', err);
     }

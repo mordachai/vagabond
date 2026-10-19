@@ -408,7 +408,8 @@ export class VagabondMeasureTemplates {
         break;
 
       case 'cone': {
-        let rotation = token.document.rotation || 0;
+        // No aim: where the token faces (token rotation 0 = facing down)
+        let rotation = (token.document.rotation || 0) + 90;
         if (destinationPoint) {
           const ray = new foundry.canvas.geometry.Ray(token.center, destinationPoint);
           rotation = Math.toDegrees(ray.angle);
@@ -471,7 +472,7 @@ export class VagabondMeasureTemplates {
     // Hand-placed: follows the token it was aimed at, else stays where it was put (a Line always stays: it starts
     // at the caster, so following the aimed token would drag its origin away)
     const attachTokenId = anchorPoint
-      ? ((anchor.tokenId && type.toLowerCase() !== 'line' && canvas.tokens?.get(anchor.tokenId)) ? anchor.tokenId : null)
+      ? ((anchor.tokenId && !['line', 'cone'].includes(type.toLowerCase()) && canvas.tokens?.get(anchor.tokenId)) ? anchor.tokenId : null)
       : this._resolveAttachmentTokenId(type, token, targetToken, targetCount);
 
     // True Shape ('shapes') vs Covered Grid Spaces ('coverage') — GM-configurable, default True Shape.

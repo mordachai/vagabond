@@ -118,6 +118,16 @@
     "minimum": "14",
     "verified": "14"
   },
+  "relationships": {
+    "recommends": [
+      {
+        "id": "psfx",
+        "type": "module",
+        "manifest": "https://github.com/JimHPerry/psfx/releases/latest/download/module.json",
+        "reason": "Sound effects for Spell FX and weapon animations (the default Spell FX sounds are psfx.* keys)."
+      }
+    ]
+  },
   "esmodules": [
     "module/vagabond.mjs"
   ],
@@ -453,4 +463,4 @@
   },
   "socket": true,
   "primaryTokenAttribute": "health"
-}
+}

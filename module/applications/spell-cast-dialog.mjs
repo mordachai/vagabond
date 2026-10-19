@@ -380,10 +380,12 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
       }
     }
 
-    // 3d. Target picker: Targets listed but none picked.
+    // 3d. Target picker: other Beings listed but none picked (the caster alone starts unpicked on purpose).
     if (SpellTargetPicker.modes(this.#spell, state.deliveryType)?.beings) {
       const entries = SpellTargetPicker.candidates(this.#actor, this.#spell, state);
-      if (entries.length && !entries.some(c => c.selected)) {
+      const casterUuid = SpellTargetPicker.casterToken(this.#actor)?.document.uuid;
+      const others = entries.some(c => c.kind === 'being' && c.uuid !== casterUuid);
+      if (others && !entries.some(c => c.selected)) {
         messages.push({ text: game.i18n.localize('VAGABOND.SpellCast.NoTargetPicked'), type: 'warning', blocking: false });
       }
     }

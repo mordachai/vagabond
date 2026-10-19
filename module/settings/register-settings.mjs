@@ -899,6 +899,29 @@ export function registerGameSettings({ refreshClockDependents, applyTokenEffectV
     onChange: () => { VagabondSpellSequencer.warmConfigFiles(); VagabondFXResolver.resolveAllConfigured(); },
   });
 
+  // The GM's own Spell FX preset files ("External" in the Presets tab): paths under Data, added by Import /
+  // Save as preset, removed with the row's trash button (the file itself stays on disk)
+  game.settings.register('vagabond', 'spellFxPresetFiles', {
+    scope: 'world',
+    config: false,
+    type: Array,
+    default: [],
+  });
+  // Set once the files of the old fixed folder (assets/vagabond/spell-fx) were put in that list
+  game.settings.register('vagabond', 'spellFxPresetFilesSeeded', {
+    scope: 'world',
+    config: false,
+    type: Boolean,
+    default: false,
+  });
+  // Last folder a preset was saved to / picked from (where the pickers open)
+  game.settings.register('vagabond', 'spellFxPresetDir', {
+    scope: 'world',
+    config: false,
+    type: String,
+    default: 'assets/vagabond/spell-fx',
+  });
+
   // Resolved wildcard FX file cache (hidden) — GM pre-expands wildcard
   // file paths so player clients never need FILES_BROWSE permission.
   game.settings.register('vagabond', 'fxResolvedCache', {

@@ -56,8 +56,12 @@ export class AAMenuLoader {
     const lang = AAMenuLoader.langKey();
     const response = await fetch(AAMenuLoader.fileFor());
     if (!response.ok) throw new Error(`${response.status} ${response.url}`);
-    const text = await response.text();
-    const hash = AAMenuLoader.#hash(text);
+    let text = await response.text();
+    // Sounds are PSFX Sequencer keys: without PSFX they are switched off (no missing-file
+    // errors); the state is part of the hash, so turning PSFX on later loads them again.
+    const psfx = !!game.modules.get('psfx')?.active;
+    const hash = AAMenuLoader.#hash(text) + (psfx ? '' : ':nopsfx');
+    if (!psfx) text = AAMenuLoader.#withoutSounds(text, 'psfx.');
 
     const last = game.settings.get(NS, 'aaMenuLoaded') ?? {};
     if (!force && last.lang === lang && last.hash === hash) return false;
@@ -118,6 +122,18 @@ export class AAMenuLoader {
       ],
     });
     return choice ?? 'later';
+  }
+
+  /** Menu JSON with every sound whose file starts with `prefix` switched off. */
+  static #withoutSounds(text, prefix) {
+    const menus = JSON.parse(text);
+    const walk = node => {
+      if (!node || typeof node !== 'object') return;
+      if (typeof node.file === 'string' && node.file.startsWith(prefix)) node.enable = false;
+      for (const v of Object.values(node)) walk(v);
+    };
+    walk(menus);
+    return JSON.stringify(menus);
   }
 
   static #langName(lang) {

@@ -4,6 +4,7 @@
  * This file never needs editing when adding new animations — edit sequencer-config.mjs instead.
  */
 import { SPELL_FX, getJB2ADefaults } from './sequencer-config.mjs';
+import { SpellFxPresets } from './spell-fx-presets.mjs';
 import { VagabondFXResolver } from './fx-file-resolver.mjs';
 import { emitSocket } from './socket-helper.mjs';
 import { tokenEdgePoint } from './token-edge.mjs';
@@ -46,7 +47,7 @@ export class VagabondSpellSequencer {
     try {
       const stored = game.settings.get('vagabond', 'sequencerFxConfig');
       if (stored && typeof stored === 'object' && Object.keys(stored).length) {
-        return foundry.utils.expandObject(stored);
+        return SpellFxPresets.withParts(foundry.utils.expandObject(stored));
       }
     } catch { /* setting not ready yet */ }
     // Fall back to JB2A defaults when both modules are present
@@ -138,19 +139,52 @@ export class VagabondSpellSequencer {
   /**
    * What a Spell Surface shows for a school + delivery (not Line, see lineFit): the entry's `loop` video when set
    * (looped), a clip whose name says Loop (looped), else the clip played once and held on its `hold` frame (% of the
-   * clip, default SURFACE_AREA_HOLD; 0 = loop it anyway). Beams / cones (chain, multiray, length) don't fit a patch.
-   * @returns {{cfg: object, file: string, hold: number|null}|null}  hold = fraction (0-1], null = loop
+   * clip, default SURFACE_AREA_HOLD; 0 = loop it anyway). A Cone uses its own cone clip (`cone: true`, laid out
+   * like the Cast FX by coneLayout); other beams (chain, multiray, length) don't fit a patch.
+   * @returns {{cfg: object, file: string, hold: number|null, cone?: boolean}|null}  hold = fraction (0-1], null = loop
    */
   static surfaceAnimFor(school, deliveryType) {
     const cfg = this.areaAnimFor(school, deliveryType);
-    if (!cfg || !['radius', 'diameter', 'fixed'].includes(cfg.scaleMode)) return null;
+    if (!cfg) return null;
+    const cone = deliveryType === 'cone' && !['chain', 'multiray'].includes(cfg.scaleMode);
+    if (!cone && !['radius', 'diameter', 'fixed'].includes(cfg.scaleMode)) return null;
     const loop = String(cfg.loop ?? '').trim();
-    if (loop) return { cfg, file: loop, hold: null };
+    if (loop) return { cfg, file: loop, hold: null, cone };
     const file = Array.isArray(cfg.file) ? cfg.file[0] : cfg.file;
-    if (/loop/i.test(String(file).split('/').pop())) return { cfg, file, hold: null };
+    if (/loop/i.test(String(file).split('/').pop())) return { cfg, file, hold: null, cone };
     const raw = cfg.hold;
     const pct = (raw === undefined || raw === null || raw === '') ? this.SURFACE_AREA_HOLD : Number(raw);
-    return { cfg, file, hold: (pct > 0 && pct <= 100) ? pct / 100 : null };
+    return { cfg, file, hold: (pct > 0 && pct <= 100) ? pct / 100 : null, cone };
+  }
+
+  /**
+   * Where a cone clip goes for a Cone area shape (v14 Region 'cone': x/y = tip at the caster's edge, rotation in
+   * degrees, radius = length): the clip's left middle on the tip, turned along the Cone, as long as the Cone.
+   * Same layout as the Cast FX. Size in canvas px (height keeps the clip's aspect).
+   * @returns {{at: {x, y}, rotate: number, anchor: {x, y}, size: {width, height}}|null}
+   */
+  static coneLayout(shape, file) {
+    if (shape?.type !== 'cone' || !(shape.radius > 0)) return null;
+    const f = String(Array.isArray(file) ? file[0] : file ?? '');
+    const dims = f.match(/_(\d+)x(\d+)\.\w+$/);
+    const meta = dims ? { w: Number(dims[1]), h: Number(dims[2]) } : this._getMeta(f);
+    const ratio = (meta?.w && meta?.h) ? meta.h / meta.w : 1;
+    return {
+      at: { x: shape.x, y: shape.y },
+      rotate: -(shape.rotation ?? 0),
+      anchor: { x: 0, y: 0.5 },
+      size: { width: shape.radius, height: shape.radius * ratio },
+    };
+  }
+
+  /**
+   * The Cast's area shape, when it lies on the scene shown here (`castArea` = {sceneId, shape}, snapshotted at
+   * the Cast). Aims Cone / Line / Cube / Sphere FX exactly where the template went.
+   */
+  static _sceneShape(castArea) {
+    const shape = castArea?.shape;
+    if (!shape) return null;
+    return (!castArea.sceneId || castArea.sceneId === canvas.scene?.id) ? shape : null;
   }
 
   /** Hold point (fraction 0-1] of a clip for a Spell Surface, or null to loop it. */
@@ -595,25 +629,36 @@ export class VagabondSpellSequencer {
     }
   }
 
+  /** Middle of an area shape (circle / rectangle / line, cone = halfway along it), or null. */
+  static _shapeCenter(shape) {
+    if (!shape) return null;
+    switch (shape.type) {
+      case 'circle': return { x: shape.x, y: shape.y };
+      case 'rectangle': return { x: shape.x + shape.width / 2, y: shape.y + shape.height / 2 };
+      case 'line':
+      case 'cone': {
+        const a = Math.toRadians(shape.rotation ?? 0);
+        const len = (shape.type === 'line' ? shape.length : shape.radius) / 2;
+        return { x: shape.x + Math.cos(a) * len, y: shape.y + Math.sin(a) * len };
+      }
+      default: return null;
+    }
+  }
+
   /**
-   * Get the cone direction angle (radians).
-   * Reads from the active Region preview if present, otherwise angles toward target centroid.
+   * Cone direction (degrees, Sequencer uses degrees): the Cast's Cone shape when known (same as its template),
+   * else toward the Targets' centroid, else where the token faces (like the template with no Target).
+   * Never read Regions lying on the canvas: the caster's Spell Surfaces and older templates carry its actor id too.
    * @param {Token} casterToken
    * @param {Token[]} targetTokens
-   * @returns {number} angle in degrees (Sequencer uses degrees)
+   * @param {object|null} areaShape  the Cast's area shape (see _sceneShape)
+   * @returns {number}
    * @private
    */
-  static _getConeDirection(casterToken, targetTokens) {
-    // Try to read rotation from active preview Region (cone shape stores direction as shape.rotation)
-    const region = canvas.regions?.placeables?.find(r =>
-      r.document.getFlag?.('vagabond', 'actorId') === casterToken.actor?.id
-    );
-    const regionRotation = region?.document?.shapes?.[0]?.rotation;
-    if (regionRotation != null) return regionRotation;
-
-    // Fall back: angle toward target centroid
+  static _getConeDirection(casterToken, targetTokens, areaShape = null) {
+    if (areaShape?.type === 'cone' && Number.isFinite(areaShape.rotation)) return areaShape.rotation;
     const centroid = this._centroid(targetTokens);
-    if (!centroid) return 0;
+    if (!centroid) return (casterToken.document?.rotation ?? 0) + 90;
     const casterCenter = this._center(casterToken);
     return Math.toDegrees(Math.atan2(centroid.y - casterCenter.y, centroid.x - casterCenter.x));
   }
@@ -690,7 +735,7 @@ export class VagabondSpellSequencer {
    * @param {Token[]} targetTokens
    * @private
    */
-  static _addAreaAnim(seq, school, deliveryType, distanceFt, casterToken, targetTokens, fileMap, areaCenter = null, { missed = false, lineFit = null } = {}) {
+  static _addAreaAnim(seq, school, deliveryType, distanceFt, casterToken, targetTokens, fileMap, areaCenter = null, { missed = false, lineFit = null, areaShape = null } = {}) {
     const schoolAnims = this._getConfig().areaAnims?.[school];
     if (!schoolAnims) return null;
     let cfg = schoolAnims[deliveryType];
@@ -768,11 +813,12 @@ export class VagabondSpellSequencer {
       }
 
       case 'cone': {
-        // From the caster's edge, like the Cone template
-        const coneDeg = this._getConeDirection(casterToken, targetTokens);
+        // From the caster's edge, like the Cone template (its own tip and direction when the Cast kept it)
+        const coneDeg = this._getConeDirection(casterToken, targetTokens, areaShape);
+        const tip = areaShape?.type === 'cone' ? { x: areaShape.x, y: areaShape.y } : tokenEdgePoint(casterToken, Math.toRadians(coneDeg));
         let fx = seq.effect()
           .file(cfg.file)
-          .atLocation(tokenEdgePoint(casterToken, Math.toRadians(coneDeg)))
+          .atLocation(tip)
           .rotate(-coneDeg)
           .anchor({ x: 0, y: 0.5 })
           .duration(this._getDuration(cfg));
@@ -782,8 +828,8 @@ export class VagabondSpellSequencer {
       }
 
       case 'sphere': {
-        // Hand-placed (SpellPlacement): the area's own center, not its targets'
-        const centroid = areaCenter ?? this._centroid(targetTokens) ?? this._center(casterToken);
+        // The area's own center (hand-placed or the Cast's template), not its targets'
+        const centroid = areaCenter ?? this._shapeCenter(areaShape) ?? this._centroid(targetTokens) ?? this._center(casterToken);
         let fx = seq.effect()
           .file(cfg.file)
           .atLocation(centroid)
@@ -796,13 +842,20 @@ export class VagabondSpellSequencer {
       case 'line': {
         const casterCenter = this._center(casterToken);
         let lineAngle = 0;
-        // Hand-aimed (SpellPlacement): toward the line's own middle, not its targets'
-        const lineCentroid = areaCenter ?? this._centroid(targetTokens);
-        if (lineCentroid) {
-          lineAngle = Math.atan2(lineCentroid.y - casterCenter.y, lineCentroid.x - casterCenter.x);
+        let srcCenter;
+        if (areaShape?.type === 'line') {
+          // The Cast's Line as placed (hand-aimed or toward the Targets): its own start and direction
+          lineAngle = Math.toRadians(areaShape.rotation ?? 0);
+          srcCenter = { x: areaShape.x, y: areaShape.y };
+        } else {
+          // Hand-aimed (SpellPlacement): toward the line's own middle, not its targets'
+          const lineCentroid = areaCenter ?? this._centroid(targetTokens);
+          if (lineCentroid) {
+            lineAngle = Math.atan2(lineCentroid.y - casterCenter.y, lineCentroid.x - casterCenter.x);
+          }
+          // From the caster's edge, like the Line template
+          srcCenter = tokenEdgePoint(casterToken, lineAngle);
         }
-        // From the caster's edge, like the Line template
-        const srcCenter = tokenEdgePoint(casterToken, lineAngle);
         const pxPerFt = canvas.grid.size / (game.system.grid?.distance ?? 5);
         // Fitted (see lineFit): the visible clip spans the Line, 5' thick
         if (lineFit) {
@@ -825,7 +878,7 @@ export class VagabondSpellSequencer {
       }
 
       case 'cube': {
-        const cubeCentroid = areaCenter ?? this._centroid(targetTokens) ?? this._center(casterToken);
+        const cubeCentroid = areaCenter ?? this._shapeCenter(areaShape) ?? this._centroid(targetTokens) ?? this._center(casterToken);
         let fx = seq.effect()
           .file(cfg.file)
           .atLocation(cubeCentroid)
@@ -1024,6 +1077,8 @@ export class VagabondSpellSequencer {
     if (!viewers.length) return null;
 
     const { deliveryEnabled = true, areaCenter = null } = options;
+    // The Cast's area as placed (template shape): Cone / Line / Cube / Sphere FX go exactly there
+    const areaShape = this._sceneShape(options.castArea);
     const missed = !deliveryEnabled;
     const school = this._resolveSchool(spellItem);
     const distanceFt = this._getTotalDistanceFt(deliveryType, increaseCount);
@@ -1049,10 +1104,16 @@ export class VagabondSpellSequencer {
       const seq = new Sequence();
       const radiusFt = this._fullSceneRadiusFt();
 
+      // Sounds: DB keys / wildcards picked to one file here, so every client hears the same one
+      const [castSound, areaSound] = await Promise.all([
+        VagabondFXResolver.soundFile(castCfg?.sound),
+        VagabondFXResolver.soundFile(areaCfg?.sound),
+      ]);
+
       // Cast sound: positional, centered on the caster.
-      if (castCfg?.sound) {
+      if (castSound) {
         this._spawnPositionalSound(
-          { file: castCfg.sound, volume: castCfg.volume ?? 0.45 },
+          { file: castSound, volume: castCfg.volume ?? 0.45 },
           this._center(casterToken),
           casterToken.document?.elevation ?? 0,
           radiusFt,
@@ -1061,13 +1122,13 @@ export class VagabondSpellSequencer {
 
       // Delivery sound: positional, centered on the target(s); fires after the
       // cast animation finishes.
-      if (deliveryType && !missed && areaCfg?.sound) {
-        const targetPos = this._centroid(targetTokens) ?? this._center(casterToken);
+      if (deliveryType && !missed && areaSound) {
+        const targetPos = areaCenter ?? this._shapeCenter(areaShape) ?? this._centroid(targetTokens) ?? this._center(casterToken);
         const targetElevation = targetTokens?.length
           ? this._elevationCentroid(targetTokens)
           : (casterToken.document?.elevation ?? 0);
         const fireAreaSound = () => this._spawnPositionalSound(
-          { file: areaCfg.sound, volume: areaCfg.volume ?? 0.6 },
+          { file: areaSound, volume: areaCfg.volume ?? 0.6 },
           targetPos,
           targetElevation,
           radiusFt,
@@ -1082,7 +1143,7 @@ export class VagabondSpellSequencer {
 
       // Target animation (its miss variant on a miss).
       const beams = deliveryType
-        ? this._addAreaAnim(seq, school, deliveryType, distanceFt, casterToken, targetTokens, fileMap, areaCenter, { missed, lineFit })
+        ? this._addAreaAnim(seq, school, deliveryType, distanceFt, casterToken, targetTokens, fileMap, areaCenter, { missed, lineFit, areaShape })
         : null;
 
       const startedAt = performance.now();

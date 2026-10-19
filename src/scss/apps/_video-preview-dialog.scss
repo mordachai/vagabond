@@ -48,6 +48,34 @@
     }
   }
 
+  .vpd-sound-only { font-size: 2rem; opacity: 0.5; padding: 1.5rem; }
+
+  // Area tabs: does the area loop (clip / loop video / one found in the folder) or hold a frame
+  .vpd-loopinfo {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.35rem 0.5rem;
+    border-top: 1px solid var(--vagabond-c-faint);
+    font-size: 0.82rem;
+
+    .vpd-loop-text { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    &.is-clip, &.is-set { > i { color: #16a34a; } }
+    &.is-found > i { color: #b45309; }
+    &.is-none { opacity: 0.75; }
+
+    .vpd-loop-act {
+      flex: 0 0 auto;
+      width: auto;
+      height: auto;
+      line-height: normal;
+      padding: 0.2rem 0.5rem;
+      white-space: nowrap;
+      gap: 0.3rem;
+      &.active { background: rgba(34, 197, 94, 0.15); color: #166534; border-color: rgba(34, 197, 94, 0.4); }
+    }
+  }
+
   .vpd-frame {
     display: flex;
     align-items: center;

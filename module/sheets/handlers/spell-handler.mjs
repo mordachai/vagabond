@@ -877,11 +877,11 @@ export class SpellHandler {
       const fxDeferred = isSuccess && await FxDamageHelper.deferFxToDamageButton(
         castMessage,
         { kind: 'spell', deliveryType: state.deliveryType, deliveryIncrease: state.deliveryIncrease,
-          spaces: state.targetSpaces, areaCenter }
+          spaces: state.targetSpaces, areaCenter, castArea: state.castArea ?? null }
       );
       if (!fxDeferred) {
         const liveTargets = [...(picked.tokens ?? Array.from(game.user.targets)), ...SpellPlacement.pseudoTargets(state.targetSpaces)];
-        const played = VagabondSpellSequencer.play(spell, state.deliveryType, state.deliveryIncrease, casterToken, liveTargets, { deliveryEnabled: isSuccess, areaCenter });
+        const played = VagabondSpellSequencer.play(spell, state.deliveryType, state.deliveryIncrease, casterToken, liveTargets, { deliveryEnabled: isSuccess, areaCenter, castArea: state.castArea ?? null });
         // The hit macro presses itself when the target animation lands (deferred FX: at Roll Damage)
         if (isSuccess) MacroAutoRun.afterFx(castMessage, played);
       }

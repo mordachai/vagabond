@@ -12,6 +12,10 @@ const { api } = foundry.applications;
  * Subsequent calls swap the source. Groups with several files get prev/next variant
  * buttons. A group's sound plays together with its video as one clip: Play restarts
  * both, and a loop cycle lasts as long as the longer of the two.
+ *
+ * Spell FX config: one window per school, each animation a tab. A group may carry `frame` ("Frame to use" picker,
+ * Spell areas left on the map stay on it) and `loop` ({file, onPick}: the row's loop video; when empty the window
+ * looks for a Loop version of the clip in its folder and offers it in one click).
  */
 export class VideoPreviewDialog extends api.HandlebarsApplicationMixin(api.ApplicationV2) {
   static #instance = null;
@@ -30,6 +34,9 @@ export class VideoPreviewDialog extends api.HandlebarsApplicationMixin(api.Appli
       selectGroup: VideoPreviewDialog.#onSelectGroup,
       stepVariant: VideoPreviewDialog.#onStepVariant,
       useFrame: VideoPreviewDialog.#onUseFrame,
+      viewLoop: VideoPreviewDialog.#onViewLoop,
+      useLoop: VideoPreviewDialog.#onUseLoop,
+      clearLoop: VideoPreviewDialog.#onClearLoop,
     },
   };
 
@@ -48,23 +55,35 @@ export class VideoPreviewDialog extends api.HandlebarsApplicationMixin(api.Appli
   #title = '';
   /** Media elements of the current cycle still playing (video and/or audio). */
   #pending = 0;
-  /** Frame picker `{value: % | null, onPick(pct)}`: Play stops on the frame, "Use this frame" hands it back. */
-  #frame = null;
+  /** Showing the loop version of the current group instead of its clip. */
+  #showLoop = false;
+  /** Frame picker of the current group `{value: % | null, onPick(pct)}`: Play stops on it, "Use this frame" hands it back. */
+  get #frame() { return this.#groups[this.#groupIdx]?.frame ?? null; }
   /** Restarts a held cycle when Loop is on. */
   #holdTimer = null;
 
   /**
    * Open the singleton preview window, or swap the source if already open.
-   * @param {string|{label: string, spec: string, sound?: string, volume?: number}[]} spec
-   * @param {{title?: string, frame?: {value: number|null, onPick: (pct: number) => void}}} [options]
-   *   `frame`: show the "Frame to use" picker (Spell areas left on the map stay on that frame of the clip).
+   * @param {string|{label: string, spec: string, sound?: string, volume?: number, frame?: object,
+   *   loop?: {file: string, onPick: (file: string) => void}}[]} spec
+   * @param {{title?: string, start?: number, frame?: {value: number|null, onPick: (pct: number) => void}}} [options]
+   *   `frame`: "Frame to use" picker for every group without its own; `start`: index of the group shown first.
    */
-  static async open(spec, { title = '', frame = null } = {}) {
+  static async open(spec, { title = '', frame = null, start = 0 } = {}) {
     const raw = Array.isArray(spec) ? spec : [{ label: '', spec }];
     const groups = [];
-    for (const g of raw) {
+    let first = 0;
+    for (const [i, g] of raw.entries()) {
       const files = await VideoPreviewDialog.resolveFiles(g.spec);
-      if (files.length) groups.push({ label: g.label ?? '', files, sound: g.sound || '', volume: g.volume ?? 0.6 });
+      const sound = await VagabondFXResolver.soundFile(g.sound);
+      if (!files.length && !sound) continue;
+      if (i <= start) first = groups.length;
+      const f = g.frame ?? frame;
+      groups.push({
+        label: g.label ?? '', files, sound, volume: g.volume ?? 0.6,
+        frame: f ? { value: f.value ?? null, onPick: f.onPick } : null,
+        loop: g.loop ? { file: g.loop.file ?? '', onPick: g.loop.onPick, found: undefined } : null,
+      });
     }
     if (!groups.length) {
       ui.notifications.warn(game.i18n.localize('VAGABOND.VideoPreview.NoFile'));
@@ -75,10 +94,10 @@ export class VideoPreviewDialog extends api.HandlebarsApplicationMixin(api.Appli
       ? VideoPreviewDialog.#instance
       : (VideoPreviewDialog.#instance = new VideoPreviewDialog());
     inst.#groups = groups;
-    inst.#groupIdx = 0;
+    inst.#groupIdx = first;
     inst.#fileIdx = 0;
+    inst.#showLoop = false;
     inst.#title = title;
-    inst.#frame = frame ? { value: frame.value ?? null, onPick: frame.onPick } : null;
     await inst.render({ force: true });
     inst.bringToTop?.();
   }
@@ -103,6 +122,34 @@ export class VideoPreviewDialog extends api.HandlebarsApplicationMixin(api.Appli
       else if (resolved) out.push(resolved);
     }
     return [...new Set(out)];
+  }
+
+  /**
+   * A Loop version of a clip: a video in the same folder whose name says Loop, the closest name wins (same
+   * animation name, then most shared parts: color, size…). File paths only; null when none.
+   * @param {string} file
+   * @returns {Promise<string|null>}
+   */
+  static async findLoopVersion(file) {
+    if (typeof file !== 'string' || !file.includes('/')) return null;
+    const FP = foundry.applications.apps.FilePicker.implementation ?? foundry.applications.apps.FilePicker;
+    const dir = file.split('/').slice(0, -1).join('/');
+    const nameOf = (f) => { const n = f.split('/').pop(); try { return decodeURIComponent(n); } catch { return n; } };
+    const parts = (n) => n.replace(/\.[^.]+$/, '').replace(/loop/ig, '_').toLowerCase().split(/[_\-\s]+/).filter(Boolean);
+    let files = [];
+    try { files = (await FP.browse('data', decodeURI(dir)))?.files ?? []; } catch { return null; }
+    const base = nameOf(file);
+    const mine = parts(base);
+    let best = null, bestScore = 0;
+    for (const f of files) {
+      const n = nameOf(f);
+      if (n === base || !/loop/i.test(n) || !/\.(webm|mp4|m4v)$/i.test(n)) continue;
+      const theirs = parts(n);
+      const shared = theirs.filter(t => mine.includes(t)).length;
+      const score = (theirs[0] === mine[0] ? 10 : 0) + shared;
+      if (score > bestScore) { bestScore = score; best = f; }
+    }
+    return bestScore >= 3 ? best : null;
   }
 
   /** Sequencer DB paths are dotted with no slash and no file extension. */
@@ -132,10 +179,28 @@ export class VideoPreviewDialog extends api.HandlebarsApplicationMixin(api.Appli
     return this.#title || game.i18n.localize('VAGABOND.VideoPreview.Title');
   }
 
+  /** Loop state of a group: 'clip' (its clip loops), 'set' (loop video given), 'found' (one in its folder), 'none'. */
+  async #loopInfo(group) {
+    if (!group?.loop) return null;
+    const clip = group.files[0] ?? '';
+    const short = (f) => { const n = String(f).split('/').pop(); try { return decodeURIComponent(n); } catch { return n; } };
+    if (group.loop.file) return { state: 'set', file: group.loop.file, name: short(group.loop.file) };
+    if (!clip) return { state: 'none' };
+    if (/loop/i.test(short(clip))) return { state: 'clip' };
+    if (group.loop.found === undefined) group.loop.found = await VideoPreviewDialog.findLoopVersion(clip) ?? '';
+    return group.loop.found ? { state: 'found', file: group.loop.found, name: short(group.loop.found) } : { state: 'none' };
+  }
+
   async _prepareContext(options) {
     const group = this.#groups[this.#groupIdx] ?? { files: [] };
-    const file = group.files[this.#fileIdx] ?? '';
+    const loopInfo = await this.#loopInfo(group);
+    if (!loopInfo?.file) this.#showLoop = false;
+    const loopFile = this.#showLoop ? (await VideoPreviewDialog.resolveFiles(loopInfo.file))[0] ?? '' : '';
+    const file = loopFile || (group.files[this.#fileIdx] ?? '');
+    // The frame only matters when the area has no loop to play
+    const frameOn = this.#frame && !this.#showLoop && !['set', 'clip'].includes(loopInfo?.state);
     return {
+      loopInfo: loopInfo ? { ...loopInfo, viewing: this.#showLoop } : null,
       file,
       sound: group.sound ?? '',
       muted: this.#muted,
@@ -146,12 +211,12 @@ export class VideoPreviewDialog extends api.HandlebarsApplicationMixin(api.Appli
         : [],
       // Up to 3 groups share one row; more split evenly across two rows.
       groupCols: this.#groups.length > 3 ? Math.ceil(this.#groups.length / 2) : this.#groups.length,
-      hasVariants: group.files.length > 1,
+      hasVariants: !this.#showLoop && group.files.length > 1,
       variantIndex: this.#fileIdx + 1,
       variantCount: group.files.length,
       // Ranged clips ship one file per distance: label which range this one covers
       variantFt: file.match(/_(\d+)ft_/i)?.[1] ?? '',
-      frame: this.#frame ? { value: this.#frame.value ?? '', range: this.#frame.value ?? 100 } : null,
+      frame: frameOn ? { value: this.#frame.value ?? '', range: this.#frame.value ?? 100 } : null,
     };
   }
 
@@ -242,6 +307,32 @@ export class VideoPreviewDialog extends api.HandlebarsApplicationMixin(api.Appli
     ui.notifications.info(game.i18n.format('VAGABOND.VideoPreview.FrameSet', { pct: Math.round(pct) }));
   }
 
+  /** Show the loop version / the clip. */
+  static #onViewLoop() {
+    this.#showLoop = !this.#showLoop;
+    this.render();
+  }
+
+  /** The Loop version found becomes the row's loop video. */
+  static #onUseLoop() {
+    const loop = this.#groups[this.#groupIdx]?.loop;
+    if (!loop?.found) return;
+    loop.file = loop.found;
+    loop.onPick?.(loop.found);
+    ui.notifications.info(game.i18n.localize('VAGABOND.VideoPreview.LoopUsed'));
+    this.render();
+  }
+
+  /** Clear the row's loop video (the area holds a frame again). */
+  static #onClearLoop() {
+    const loop = this.#groups[this.#groupIdx]?.loop;
+    if (!loop) return;
+    loop.file = '';
+    loop.onPick?.('');
+    this.#showLoop = false;
+    this.render();
+  }
+
   #stopMedia() {
     clearTimeout(this.#holdTimer);
     for (const el of this.element?.querySelectorAll('.vpd-video, .vpd-audio') ?? []) el.pause();
@@ -263,6 +354,7 @@ export class VideoPreviewDialog extends api.HandlebarsApplicationMixin(api.Appli
     if (!Number.isInteger(idx) || idx === this.#groupIdx) return;
     this.#groupIdx = idx;
     this.#fileIdx = 0;
+    this.#showLoop = false;
     this.render();
   }
 

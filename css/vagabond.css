@@ -13571,141 +13571,165 @@ ol#combat-tracker.directory-list {
   overflow-y: auto;
   padding: 0.75rem 1rem;
 }
-#sequencer-fx-config.sequencer-fx-config-form .sfx-section {
-  margin-bottom: 1rem;
-}
-#sequencer-fx-config.sequencer-fx-config-form .sfx-section h3 {
-  font-size: 0.85rem;
-  font-weight: bold;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--vagabond-c-text-dim);
-  border-bottom: 1px solid var(--vagabond-c-faint);
-  margin-bottom: 0.5rem;
-  padding-bottom: 0.2rem;
-}
-#sequencer-fx-config.sequencer-fx-config-form .sfx-cast-row, #sequencer-fx-config.sequencer-fx-config-form .sfx-sound-row {
-  display: flex;
-  gap: 0.5rem;
-  align-items: flex-end;
-  flex-wrap: wrap;
-}
-#sequencer-fx-config.sequencer-fx-config-form .sfx-file-group {
-  flex: 1 1 200px;
-}
-#sequencer-fx-config.sequencer-fx-config-form .sfx-num-group {
-  flex: 0 0 100px;
-}
-#sequencer-fx-config.sequencer-fx-config-form .sfx-file-input {
-  display: flex;
-  gap: 0.25rem;
-}
-#sequencer-fx-config.sequencer-fx-config-form .sfx-file-input input {
-  flex: 1;
-  min-width: 0;
-}
-#sequencer-fx-config.sequencer-fx-config-form .sfx-browse-btn {
-  padding: 0.2rem 0.5rem;
-  flex-shrink: 0;
-}
-#sequencer-fx-config.sequencer-fx-config-form .sfx-delivery-list {
-  display: flex;
-  flex-direction: column;
-}
-#sequencer-fx-config.sequencer-fx-config-form .sfx-delivery-block {
-  padding: 0.35rem 0;
-  border-bottom: 1px solid var(--vagabond-c-faint);
-}
-#sequencer-fx-config.sequencer-fx-config-form .sfx-delivery-block:last-child {
-  border-bottom: none;
-}
-#sequencer-fx-config.sequencer-fx-config-form .sfx-delivery-files {
-  display: flex;
+#sequencer-fx-config.sequencer-fx-config-form .sfx-anim-row {
+  display: grid;
+  grid-template-columns: 4.2rem minmax(0, 1.5fr) minmax(0, 1fr) 3.6rem minmax(0, 1fr) 3.4rem 1.6rem;
   align-items: center;
-  gap: 0.3rem;
+  column-gap: 0.35rem;
+  padding: 0.3rem 0;
+  border-bottom: 1px solid var(--vagabond-c-faint);
 }
-#sequencer-fx-config.sequencer-fx-config-form .sfx-delivery-name {
-  width: 52px;
-  flex-shrink: 0;
+#sequencer-fx-config.sequencer-fx-config-form .sfx-anim-row.is-cast {
+  border-bottom-width: 2px;
+  margin-bottom: 0.15rem;
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-anim-head {
+  padding-top: 0;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--vagabond-c-text-dim);
+  white-space: nowrap;
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-anim-name {
+  width: auto;
+  height: auto;
+  line-height: normal;
+  padding: 0.15rem 0.1rem;
+  background: none;
+  border: none;
+  text-align: left;
+  justify-content: flex-start;
+  gap: 0.3rem;
   font-weight: 600;
   font-size: 0.8rem;
   color: var(--vagabond-c-text-dim);
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-#sequencer-fx-config.sequencer-fx-config-form .sfx-delivery-video {
-  flex: 3 1 0;
-  min-width: 0;
+#sequencer-fx-config.sequencer-fx-config-form .sfx-anim-name i {
+  font-size: 0.6rem;
+  opacity: 0.6;
 }
-#sequencer-fx-config.sequencer-fx-config-form .sfx-delivery-audio {
-  flex: 2 1 0;
-  min-width: 0;
+#sequencer-fx-config.sequencer-fx-config-form .sfx-anim-name:hover {
+  color: var(--color-text-light-highlight);
 }
-#sequencer-fx-config.sequencer-fx-config-form .sfx-delivery-loop {
-  flex: 1 1 12rem;
-  min-width: 0;
+#sequencer-fx-config.sequencer-fx-config-form .sfx-anim-name:hover i {
+  opacity: 1;
 }
-#sequencer-fx-config.sequencer-fx-config-form .sfx-delivery-divider {
-  width: 1px;
-  height: 20px;
-  background: var(--vagabond-c-faint);
-  flex-shrink: 0;
-  margin: 0 0.15rem;
+#sequencer-fx-config.sequencer-fx-config-form .sfx-preview-all {
+  font-size: 0.7rem;
+  text-transform: uppercase;
 }
-#sequencer-fx-config.sequencer-fx-config-form .sfx-delivery-params {
+#sequencer-fx-config.sequencer-fx-config-form .sfx-num {
+  width: 100%;
+  height: 26px;
+  text-align: center;
+  padding: 0 0.2rem;
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-inline {
   display: flex;
-  flex-direction: row;
   align-items: center;
   gap: 0.35rem;
-  flex-wrap: wrap;
-  padding-left: calc(52px + 0.3rem);
-  margin-top: 0.2rem;
-  font-size: 0.78rem;
-}
-#sequencer-fx-config.sequencer-fx-config-form .sfx-param {
-  display: inline-flex;
-  align-items: center;
-  gap: 3px;
+  font-size: 0.75rem;
   color: var(--vagabond-c-text-dim);
-  font-size: 0.78rem;
   white-space: nowrap;
 }
-#sequencer-fx-config.sequencer-fx-config-form .sfx-hold {
-  display: flex;
-  align-items: center;
-  gap: 0.3rem;
-  margin-left: 0.6rem;
-  font-size: 0.78rem;
-  white-space: nowrap;
-}
-#sequencer-fx-config.sequencer-fx-config-form .sfx-hold .sfx-hold-input {
-  width: 4rem;
-  height: 22px;
+#sequencer-fx-config.sequencer-fx-config-form .sfx-inline .sfx-num {
+  width: 3.6rem;
   flex: 0 0 auto;
 }
-#sequencer-fx-config.sequencer-fx-config-form .sfx-scale-select {
-  font-size: 0.78rem;
-  height: 22px;
-  padding: 0 0.25rem;
-  width: 160px;
-  flex-shrink: 0;
-}
-#sequencer-fx-config.sequencer-fx-config-form .sfx-tiny-input {
-  width: 52px;
-  font-size: 0.78rem;
-  padding: 1px 3px;
-  flex-shrink: 0;
-}
-#sequencer-fx-config.sequencer-fx-config-form .sfx-dur-input {
-  width: 64px;
-}
-#sequencer-fx-config.sequencer-fx-config-form .sfx-beam-trim {
-  display: inline-flex;
+#sequencer-fx-config.sequencer-fx-config-form .sfx-chip {
+  display: flex;
   align-items: center;
-  gap: 0.35rem;
+  min-width: 0;
+  height: 26px;
+  border: 1px solid var(--vagabond-c-faint);
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.05);
+  overflow: hidden;
 }
-#sequencer-fx-config.sequencer-fx-config-form .sfx-beam-trim .sfx-trim-sep {
-  color: var(--vagabond-c-faint);
-  margin: 0 0.1rem;
+#sequencer-fx-config.sequencer-fx-config-form .sfx-chip .sfx-chip-name {
+  flex: 1;
+  min-width: 0;
+  padding: 0 0.4rem;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: text;
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-chip input {
+  display: none;
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  border: none;
+  border-radius: 0;
+  background: none;
+  font-size: 0.78rem;
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-chip.is-editing .sfx-chip-name {
+  display: none;
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-chip.is-editing input {
+  display: block;
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-chip.is-empty .sfx-chip-name {
+  color: var(--vagabond-c-text-dim);
+  font-style: italic;
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-chip .sfx-chip-btn {
+  flex: 0 0 auto;
+  width: auto;
+  height: 100%;
+  line-height: normal;
+  padding: 0 0.4rem;
+  border: none;
+  border-left: 1px solid var(--vagabond-c-faint);
+  border-radius: 0;
+  background: none;
+  font-size: 0.75rem;
+  color: var(--vagabond-c-text-dim);
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-chip .sfx-chip-btn:hover {
+  color: var(--color-text-light-highlight);
+  background: rgba(0, 0, 0, 0.06);
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-more-btn {
+  width: auto;
+  height: 24px;
+  line-height: normal;
+  padding: 0 0.3rem;
+  background: none;
+  border: none;
+  color: var(--vagabond-c-text-dim);
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-more-btn:hover {
+  color: var(--color-text-light-highlight);
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-anim-more {
+  grid-column: 1/-1;
+  display: none;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0 0 4.55rem;
+  font-size: 0.78rem;
+  color: var(--vagabond-c-text-dim);
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-anim-more select {
+  width: 13rem;
+  height: 24px;
+  font-size: 0.78rem;
+  flex: 0 0 auto;
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-anim-row.is-open .sfx-anim-more {
+  display: flex;
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-anim-row.is-open .sfx-more-btn {
+  color: var(--color-text-light-highlight);
 }
 #sequencer-fx-config.sequencer-fx-config-form .sfx-hidden {
   display: none !important;
@@ -13780,7 +13804,180 @@ ol#combat-tracker.directory-list {
   font-size: 0.78rem;
   color: var(--vagabond-c-text-dim);
   font-style: italic;
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-loaded-chip {
   margin-left: auto;
+  flex: 0 1 auto;
+  width: auto;
+  height: auto;
+  line-height: normal;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+  padding: 0.15em 0.6em;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  max-width: 22rem;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-loaded-chip em {
+  font-weight: normal;
+  color: var(--vagabond-c-text-dim);
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-loaded-chip.is-unsaved {
+  color: var(--vagabond-c-red);
+  border-color: var(--vagabond-c-red);
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-loaded-chip.is-unsaved em {
+  color: inherit;
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-preset-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.6rem;
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-preset-actions .sfx-io-btn {
+  flex: 0 0 auto;
+  width: auto;
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-refresh-btn {
+  margin-left: auto;
+  flex: 0 0 auto;
+  width: auto;
+  height: auto;
+  line-height: normal;
+  padding: 0.2rem 0.45rem;
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-preset-badge {
+  display: inline-block;
+  padding: 0 0.45em;
+  border-radius: 3px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+  background: rgba(100, 116, 139, 0.18);
+  color: var(--vagabond-c-text-dim);
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-preset-badge.is-external {
+  background: rgba(59, 130, 246, 0.15);
+  color: #1d4ed8;
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-preset-path {
+  font-size: 0.72rem;
+  color: var(--vagabond-c-text-dim);
+  background: none;
+  border: none;
+  padding: 0;
+  word-break: break-all;
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-preset-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-preset-head,
+#sequencer-fx-config.sequencer-fx-config-form .sfx-preset-row {
+  display: grid;
+  grid-template-columns: 1fr 3.5rem 3.5rem 3.5rem 2rem;
+  align-items: center;
+  column-gap: 0.4rem;
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-preset-head {
+  padding: 0 0.6rem 0.2rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--vagabond-c-text-dim);
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-preset-col {
+  text-align: center;
+  justify-self: center;
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-preset-check {
+  justify-self: center;
+  width: auto;
+  height: auto;
+  line-height: normal;
+  padding: 0.15rem 0.35rem;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: var(--vagabond-c-text-dim);
+  cursor: pointer;
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-preset-check:hover {
+  color: var(--color-text-light-highlight);
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-preset-check.is-on {
+  color: #16a34a;
+  cursor: default;
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-preset-check.sfx-preset-part {
+  cursor: pointer;
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-preset-check.sfx-preset-part:not(.is-on) {
+  color: var(--vagabond-c-text-dim);
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-preset-warn {
+  color: #b91c1c;
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-preset-remove {
+  font-size: 0.9rem;
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-preset-remove:hover {
+  color: #b91c1c;
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-preset-row {
+  padding: 0.35rem 0.6rem;
+  margin-bottom: 0.3rem;
+  border: 1px solid var(--vagabond-c-faint);
+  border-radius: 4px;
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-preset-row.is-active {
+  border-color: #16a34a;
+  background: rgba(34, 197, 94, 0.08);
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-preset-row.is-invalid {
+  border-color: rgba(220, 38, 38, 0.6);
+  background: rgba(239, 68, 68, 0.08);
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-preset-row.is-invalid .sfx-preset-name, #sequencer-fx-config.sequencer-fx-config-form .sfx-preset-row.is-invalid .sfx-preset-desc {
+  color: #b91c1c;
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-preset-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: 0.5rem;
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-preset-name {
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-preset-text .sfx-preset-path {
+  flex-basis: 100%;
+}
+#sequencer-fx-config.sequencer-fx-config-form .sfx-preset-desc {
+  flex-basis: 100%;
+  font-size: 0.8rem;
+  color: var(--vagabond-c-text-dim);
+  white-space: pre-line;
+}
+
+#tooltip.sfx-preset-tooltip {
+  white-space: pre-line;
+  max-width: 28rem;
+  text-align: left;
 }
 
 .vagabond-video-preview .window-content {
@@ -13825,6 +14022,49 @@ ol#combat-tracker.directory-list {
   border-color: var(--vagabond-c-chat-yellow);
   box-shadow: inset 0 0 0 1px var(--vagabond-c-chat-yellow);
   font-weight: bold;
+}
+.vagabond-video-preview .vpd-sound-only {
+  font-size: 2rem;
+  opacity: 0.5;
+  padding: 1.5rem;
+}
+.vagabond-video-preview .vpd-loopinfo {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.5rem;
+  border-top: 1px solid var(--vagabond-c-faint);
+  font-size: 0.82rem;
+}
+.vagabond-video-preview .vpd-loopinfo .vpd-loop-text {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.vagabond-video-preview .vpd-loopinfo.is-clip > i, .vagabond-video-preview .vpd-loopinfo.is-set > i {
+  color: #16a34a;
+}
+.vagabond-video-preview .vpd-loopinfo.is-found > i {
+  color: #b45309;
+}
+.vagabond-video-preview .vpd-loopinfo.is-none {
+  opacity: 0.75;
+}
+.vagabond-video-preview .vpd-loopinfo .vpd-loop-act {
+  flex: 0 0 auto;
+  width: auto;
+  height: auto;
+  line-height: normal;
+  padding: 0.2rem 0.5rem;
+  white-space: nowrap;
+  gap: 0.3rem;
+}
+.vagabond-video-preview .vpd-loopinfo .vpd-loop-act.active {
+  background: rgba(34, 197, 94, 0.15);
+  color: #166534;
+  border-color: rgba(34, 197, 94, 0.4);
 }
 .vagabond-video-preview .vpd-frame {
   display: flex;

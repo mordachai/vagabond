@@ -7,9 +7,33 @@
     </nav>
   {{/if}}
   <div class="vpd-video-container">
-    <video class="vpd-video" src="{{file}}" playsinline muted></video>
+    {{#if file}}<video class="vpd-video" src="{{file}}" playsinline muted></video>
+    {{else}}<i class="fas fa-volume-high vpd-sound-only"></i>{{/if}}
     {{#if sound}}<audio class="vpd-audio" src="{{sound}}" preload="auto"></audio>{{/if}}
   </div>
+  {{#if loopInfo}}
+    <div class="vpd-loopinfo is-{{loopInfo.state}}">
+      {{#if (eq loopInfo.state "clip")}}
+        <i class="fas fa-repeat"></i><span class="vpd-loop-text">{{localize "VAGABOND.VideoPreview.ClipLoops"}}</span>
+      {{else if (eq loopInfo.state "set")}}
+        <i class="fas fa-repeat"></i>
+        <span class="vpd-loop-text" data-tooltip="{{loopInfo.file}}">{{localize "VAGABOND.VideoPreview.LoopSet"}}: {{loopInfo.name}}</span>
+        <button type="button" class="vpd-loop-act {{#if loopInfo.viewing}}active{{/if}}" data-action="viewLoop"
+          data-tooltip="{{localize 'VAGABOND.VideoPreview.ViewLoop'}}"><i class="fas fa-eye"></i></button>
+        <button type="button" class="vpd-loop-act" data-action="clearLoop"
+          data-tooltip="{{localize 'VAGABOND.VideoPreview.ClearLoop'}}"><i class="fas fa-xmark"></i></button>
+      {{else if (eq loopInfo.state "found")}}
+        <i class="fas fa-magnifying-glass"></i>
+        <span class="vpd-loop-text" data-tooltip="{{loopInfo.file}}">{{localize "VAGABOND.VideoPreview.LoopFound"}}: {{loopInfo.name}}</span>
+        <button type="button" class="vpd-loop-act {{#if loopInfo.viewing}}active{{/if}}" data-action="viewLoop"
+          data-tooltip="{{localize 'VAGABOND.VideoPreview.ViewLoop'}}"><i class="fas fa-eye"></i></button>
+        <button type="button" class="vpd-loop-act vpd-loop-use" data-action="useLoop"
+          data-tooltip="{{localize 'VAGABOND.VideoPreview.UseLoopTooltip'}}"><i class="fas fa-thumbtack"></i> {{localize "VAGABOND.VideoPreview.UseLoop"}}</button>
+      {{else}}
+        <i class="fas fa-image"></i><span class="vpd-loop-text">{{localize "VAGABOND.VideoPreview.NoLoop"}}</span>
+      {{/if}}
+    </div>
+  {{/if}}
   {{#if frame}}
     <div class="vpd-frame" data-tooltip="{{localize 'VAGABOND.VideoPreview.FrameTooltip'}}">
       <span class="vpd-frame-label">{{localize "VAGABOND.VideoPreview.Frame"}}</span>

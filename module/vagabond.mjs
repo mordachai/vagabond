@@ -2573,7 +2573,8 @@ const FORCE_CRIT_ENTRY = {
         const { VagabondDamageHelper } = await import('./helpers/damage-helper.mjs');
         await VagabondDamageHelper.playFxOrDefer(
           critCastMessage,
-          { kind: 'spell', deliveryType: rerollData.deliveryType, deliveryIncrease: rerollData.deliveryIncrease ?? 0 },
+          { kind: 'spell', deliveryType: rerollData.deliveryType, deliveryIncrease: rerollData.deliveryIncrease ?? 0,
+            spaces: rerollData.targetSpaces ?? [], castArea: rerollData.castArea ?? null },
           actor, spell, targetsAtRollTime, true
         );
       }

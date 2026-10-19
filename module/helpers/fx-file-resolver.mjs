@@ -164,6 +164,43 @@ export class VagabondFXResolver {
   }
 
   /**
+   * Resolve a sound spec to ONE playable file for `AudioHelper.play` / `<audio src>`
+   * (they take a plain path). Accepts a file path, a filesystem wildcard (resolved as
+   * above) or a Sequencer DB key (`psfx.weapon-attacks.sword.v1`, a parent key picks
+   * among every file under it). Several matches → one at random.
+   * Returns '' when nothing can play here: the DB key is not registered (its module,
+   * e.g. PSFX, is not active) or the path points into an inactive module.
+   * @param {string} spec
+   * @returns {Promise<string>}
+   */
+  static async soundFile(spec) {
+    if (typeof spec !== 'string' || !spec.trim()) return '';
+    spec = spec.trim();
+    let files;
+    // No folder = Sequencer DB key (keys may end in `.001` / `.v1`, so no extension test)
+    if (!/[/\\]/.test(spec)) {
+      const db = globalThis.Sequencer?.Database;
+      if (!db?.entryExists(spec)) return '';
+      files = [];
+      const collect = v => {
+        if (!v) return;
+        if (typeof v === 'string') files.push(v);
+        else if (Array.isArray(v)) v.forEach(collect);
+        else if ('file' in v) collect(v.file);
+        else if (typeof v === 'object') Object.values(v).forEach(collect);
+      };
+      collect(db.getEntry(spec, { softFail: true }));
+    } else {
+      const moduleId = spec.match(/^modules\/([^/]+)\//)?.[1];
+      if (moduleId && !game.modules.get(moduleId)?.active) return '';
+      const resolved = await this.resolve(spec);
+      files = Array.isArray(resolved) ? resolved : [resolved];
+    }
+    files = files.filter(f => typeof f === 'string' && f);
+    return files.length ? files[Math.floor(Math.random() * files.length)] : '';
+  }
+
+  /**
    * GM, at ready / on FX-config change: pre-resolve every wildcard path referenced by
    * the saved spell FX config.
    * Reads the raw `sequencerFxConfig` setting directly to avoid importing the sequencer
@@ -177,9 +214,10 @@ export class VagabondFXResolver {
     try {
       const stored = game.settings.get('vagabond', 'sequencerFxConfig') ?? {};
       const cfg = foundry.utils.expandObject(stored);
-      for (const e of Object.values(cfg.castAnims ?? {})) if (this._isFsWildcard(e?.file)) paths.add(e.file);
+      const add = e => { for (const p of [e?.file, e?.sound]) if (this._isFsWildcard(p)) paths.add(p); };
+      for (const e of Object.values(cfg.castAnims ?? {})) add(e);
       for (const school of Object.values(cfg.areaAnims ?? {}))
-        for (const e of Object.values(school ?? {})) if (this._isFsWildcard(e?.file)) paths.add(e.file);
+        for (const e of Object.values(school ?? {})) add(e);
     } catch { /* setting not ready */ }
 
     for (const p of paths) await this._gmResolve(p);

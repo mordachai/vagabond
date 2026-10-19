@@ -19,10 +19,10 @@ import { VagabondMeasureTemplates } from '../applications/measure-templates.mjs'
  */
 export class SpellPlacement {
 
-  static AREA = ['cube', 'sphere', 'line'];
+  static AREA = ['cube', 'sphere', 'line', 'cone'];
   static SPACES = ['remote'];
   /** Area deliveries whose aim is only a direction from the caster (no range check on the aim point). */
-  static DIRECTION = ['line'];
+  static DIRECTION = ['line', 'cone'];
 
   static aimsDirection(deliveryType) {
     return this.DIRECTION.includes(String(deliveryType ?? '').toLowerCase());
@@ -137,11 +137,24 @@ export class SpellPlacement {
     if (!shape) return null;
     if (shape.type === 'rectangle') return { x: shape.x + shape.width / 2, y: shape.y + shape.height / 2 };
     if (shape.type === 'circle') return { x: shape.x, y: shape.y };
-    if (shape.type === 'line') {
+    if (shape.type === 'line' || shape.type === 'cone') {
       const a = Math.toRadians(shape.rotation ?? 0);
-      return { x: shape.x + Math.cos(a) * shape.length / 2, y: shape.y + Math.sin(a) * shape.length / 2 };
+      const len = (shape.type === 'line' ? shape.length : shape.radius) / 2;
+      return { x: shape.x + Math.cos(a) * len, y: shape.y + Math.sin(a) * len };
     }
     return null;
+  }
+
+  /** Outline of a v14 'cone' Region shape (tip, then its round end), for the aim ghost. */
+  static conePoints(shape) {
+    const rot = Math.toRadians(shape.rotation ?? 0);
+    const half = Math.toRadians((shape.angle ?? 90) / 2);
+    const pts = [{ x: shape.x, y: shape.y }];
+    for (let i = 0; i <= 16; i++) {
+      const a = rot - half + (2 * half * i) / 16;
+      pts.push({ x: shape.x + Math.cos(a) * shape.radius, y: shape.y + Math.sin(a) * shape.radius });
+    }
+    return pts;
   }
 
   /** Corners of a v14 'line' Region shape (origin at one end, `width` across). */
@@ -312,13 +325,15 @@ export class SpellPlacement {
       if (shape.type === 'rectangle') ghost.drawRect(shape.x, shape.y, shape.width, shape.height);
       else if (shape.type === 'circle') ghost.drawCircle(shape.x, shape.y, shape.radius);
       else if (shape.type === 'line') ghost.drawPolygon(this.lineCorners(shape).flatMap(p => [p.x, p.y]));
+      else if (shape.type === 'cone') ghost.drawPolygon(this.conePoints(shape).flatMap(p => [p.x, p.y]));
       ghost.endFill();
       const p = VagabondMeasureTemplates.anchorPoint(anchor);
       ghost.lineStyle(0).beginFill(c, 0.9).drawCircle(p.x, p.y, Math.max(3, canvas.grid.size * 0.06)).endFill();
     };
     return this.#run({
       ghost,
-      prompt: game.i18n.localize(direction ? 'VAGABOND.SpellPlace.LinePrompt' : 'VAGABOND.SpellPlace.AreaPrompt'),
+      prompt: game.i18n.localize(!direction ? 'VAGABOND.SpellPlace.AreaPrompt'
+        : (String(type).toLowerCase() === 'cone' ? 'VAGABOND.SpellPlace.ConePrompt' : 'VAGABOND.SpellPlace.LinePrompt')),
       onMove: (world) => draw(anchorAt(world)),
       onClick: (world) => {
         const anchor = anchorAt(world);

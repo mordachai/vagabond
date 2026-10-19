@@ -200,7 +200,7 @@ export class VagabondDamageHelper {
     // Remote spaces + a hand-placed area's center (SpellPlacement) ride the payload
     const targets = [...TargetHelper.resolveTargets(storedTargets), ...SpellPlacement.pseudoTargets(fx.spaces)];
     const played = import('./spell-sequencer.mjs').then(({ VagabondSpellSequencer }) =>
-      VagabondSpellSequencer.play(item, fx.deliveryType, fx.deliveryIncrease ?? 0, casterToken, targets, { deliveryEnabled: isHit, areaCenter: fx.areaCenter ?? null }));
+      VagabondSpellSequencer.play(item, fx.deliveryType, fx.deliveryIncrease ?? 0, casterToken, targets, { deliveryEnabled: isHit, areaCenter: fx.areaCenter ?? null, castArea: fx.castArea ?? null }));
     if (message && isHit) import('./macro-autorun.mjs').then(({ MacroAutoRun }) => MacroAutoRun.afterFx(message, played));
   }
 

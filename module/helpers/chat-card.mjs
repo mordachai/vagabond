@@ -1269,7 +1269,8 @@ export class VagabondChatCard {
         message,
         { kind: 'spell', deliveryType: spellState.deliveryType, deliveryIncrease: spellState.deliveryIncrease,
           spaces: spellState.targetSpaces,
-          areaCenter: spellState.castArea?.anchor ? SpellPlacement.shapeCenter(spellState.castArea.shape) : null },
+          areaCenter: spellState.castArea?.anchor ? SpellPlacement.shapeCenter(spellState.castArea.shape) : null,
+          castArea: spellState.castArea ?? null },
         actor, spell, targetsAtRollTime, isSuccess
       );
     }

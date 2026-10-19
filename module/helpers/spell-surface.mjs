@@ -539,6 +539,7 @@ export class SpellSurface {
       if (Array.isArray(areaFile)) areaFile = areaFile[0];
       // Its size, when the file name doesn't carry it (`_1000x400`)
       if (lineFile) await VagabondSpellSequencer._warmMeta(Array.isArray(lineFile) ? lineFile[0] : lineFile);
+      if (area?.cone && areaFile) await VagabondSpellSequencer._warmMeta(areaFile);
       if (placeable.destroyed || !this.#seqReady) return;
       const b = placeable.bounds;
       const fallback = { x: b.x, y: b.y, width: b.width, height: b.height };
@@ -596,6 +597,29 @@ export class SpellSurface {
               .tieToDocuments(doc);
             if (s.tint) fx.tint(s.tint);
           }
+          continue;
+        }
+        // A Cone: its own cone clip, laid out like the Cast FX (tip at the caster's edge, turned with the Cone),
+        // the loop version when there is one, else held on a frame
+        const cone = (area?.cone && areaFile) ? VagabondSpellSequencer.coneLayout(shape, areaFile) : null;
+        if (cone) {
+          const fx = seq.effect()
+            .file(areaFile)
+            .atLocation(cone.at)
+            .anchor(cone.anchor)
+            .rotate(cone.rotate)
+            .size(cone.size)
+            .belowTokens()
+            .opacity(0.9)
+            .fadeIn(400)
+            .persist()
+            .locally()
+            .name(name)
+            .tieToDocuments(doc)
+            .mask(doc);
+          VagabondSpellSequencer._applyOpacity(fx, area.cfg);
+          if (area.hold && area.hold < 1) fx.endTimePerc(1 - area.hold).loopOptions({ loops: 1 });
+          else if (area.hold) fx.loopOptions({ loops: 1 });
           continue;
         }
         if (!areaFile && !clipOk) continue;

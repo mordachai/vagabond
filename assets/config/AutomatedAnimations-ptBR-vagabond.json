@@ -26,12 +26,13 @@
                     "customPath": ""
                 },
                 "sound": {
-                    "enable": false,
+                    "enable": true,
                     "delay": 0,
                     "repeat": 1,
                     "repeatDelay": 250,
                     "startTime": 0,
-                    "volume": 0.75
+                    "volume": 0.6,
+                    "file": "psfx.weapon-attacks.sword.v1"
                 },
                 "options": {
                     "contrast": 0,
@@ -261,12 +262,13 @@
                     "customPath": ""
                 },
                 "sound": {
-                    "enable": false,
+                    "enable": true,
                     "delay": 0,
                     "repeat": 1,
                     "repeatDelay": 250,
                     "startTime": 0,
-                    "volume": 0.75
+                    "volume": 0.6,
+                    "file": "psfx.weapon-attacks.spear.v1"
                 },
                 "options": {
                     "contrast": 0,
@@ -498,12 +500,13 @@
                     "customPath": ""
                 },
                 "sound": {
-                    "enable": false,
-                    "delay": 0,
+                    "enable": true,
+                    "delay": 400,
                     "repeat": 1,
                     "repeatDelay": 250,
                     "startTime": 0,
-                    "volume": 0.75
+                    "volume": 0.6,
+                    "file": "psfx.impacts.bludgeoning.v1"
                 },
                 "options": {
                     "contrast": 0,
@@ -742,12 +745,13 @@
                     "customPath": ""
                 },
                 "sound": {
-                    "enable": false,
-                    "delay": 0,
+                    "enable": true,
+                    "delay": 400,
                     "repeat": 1,
                     "repeatDelay": 250,
                     "startTime": 0,
-                    "volume": 0.75
+                    "volume": 0.6,
+                    "file": "psfx.impacts.bludgeoning.v1"
                 },
                 "options": {
                     "contrast": 0,
@@ -986,12 +990,13 @@
                     "customPath": ""
                 },
                 "sound": {
-                    "enable": false,
-                    "delay": 0,
+                    "enable": true,
+                    "delay": 400,
                     "repeat": 1,
                     "repeatDelay": 250,
                     "startTime": 0,
-                    "volume": 0.75
+                    "volume": 0.6,
+                    "file": "psfx.impacts.bludgeoning.v1"
                 },
                 "options": {
                     "contrast": 0,
@@ -1221,12 +1226,13 @@
                     "customPath": ""
                 },
                 "sound": {
-                    "enable": false,
+                    "enable": true,
                     "delay": 0,
                     "repeat": 1,
                     "repeatDelay": 250,
                     "startTime": 0,
-                    "volume": 0.75
+                    "volume": 0.6,
+                    "file": "psfx.weapon-swooshes.light.v1.group01"
                 },
                 "options": {
                     "contrast": 0,
@@ -1456,12 +1462,13 @@
                     "customPath": ""
                 },
                 "sound": {
-                    "enable": false,
-                    "delay": 0,
+                    "enable": true,
+                    "delay": 400,
                     "repeat": 1,
                     "repeatDelay": 250,
                     "startTime": 0,
-                    "volume": 0.75
+                    "volume": 0.6,
+                    "file": "psfx.impacts.bludgeoning.v1"
                 },
                 "options": {
                     "contrast": 0,
@@ -1683,12 +1690,13 @@
                     "customPath": ""
                 },
                 "sound": {
-                    "enable": false,
-                    "delay": 0,
+                    "enable": true,
+                    "delay": 400,
                     "repeat": 1,
                     "repeatDelay": 250,
                     "startTime": 0,
-                    "volume": 0.75
+                    "volume": 0.6,
+                    "file": "psfx.impacts.bludgeoning.v1"
                 },
                 "options": {
                     "contrast": 0,
@@ -1918,12 +1926,13 @@
                     "customPath": ""
                 },
                 "sound": {
-                    "enable": false,
+                    "enable": true,
                     "delay": 0,
                     "repeat": 1,
                     "repeatDelay": 250,
                     "startTime": 0,
-                    "volume": 0.75
+                    "volume": 0.6,
+                    "file": "psfx.weapon-attacks.sword.v1"
                 },
                 "options": {
                     "contrast": 0,
@@ -2147,12 +2156,13 @@
                     "customPath": ""
                 },
                 "sound": {
-                    "enable": false,
+                    "enable": true,
                     "delay": 0,
                     "repeat": 1,
                     "repeatDelay": 250,
                     "startTime": 0,
-                    "volume": 0.75
+                    "volume": 0.6,
+                    "file": "psfx.weapon-attacks.sword.v1"
                 },
                 "options": {
                     "contrast": 0,
@@ -2382,12 +2392,13 @@
                     "customPath": ""
                 },
                 "sound": {
-                    "enable": false,
+                    "enable": true,
                     "delay": 0,
                     "repeat": 1,
                     "repeatDelay": 250,
                     "startTime": 0,
-                    "volume": 0.75
+                    "volume": 0.6,
+                    "file": "psfx.weapon-attacks.sword.v1"
                 },
                 "options": {
                     "contrast": 0,
@@ -2611,12 +2622,13 @@
                     "customPath": ""
                 },
                 "sound": {
-                    "enable": false,
+                    "enable": true,
                     "delay": 0,
                     "repeat": 1,
                     "repeatDelay": 250,
                     "startTime": 0,
-                    "volume": 0.75
+                    "volume": 0.6,
+                    "file": "psfx.weapon-attacks.sword.v1"
                 },
                 "options": {
                     "contrast": 0,
@@ -2846,12 +2858,13 @@
                     "customPath": ""
                 },
                 "sound": {
-                    "enable": false,
-                    "delay": 0,
+                    "enable": true,
+                    "delay": 400,
                     "repeat": 1,
                     "repeatDelay": 250,
                     "startTime": 0,
-                    "volume": 0.75
+                    "volume": 0.6,
+                    "file": "psfx.impacts.bludgeoning.v1"
                 },
                 "options": {
                     "contrast": 0,
@@ -3090,12 +3103,13 @@
                     "customPath": ""
                 },
                 "sound": {
-                    "enable": false,
-                    "delay": 0,
+                    "enable": true,
+                    "delay": 400,
                     "repeat": 1,
                     "repeatDelay": 250,
                     "startTime": 0,
-                    "volume": 0.75
+                    "volume": 0.6,
+                    "file": "psfx.impacts.bludgeoning.v1"
                 },
                 "options": {
                     "contrast": 0,
@@ -3334,12 +3348,13 @@
                     "customPath": ""
                 },
                 "sound": {
-                    "enable": false,
+                    "enable": true,
                     "delay": 0,
                     "repeat": 1,
                     "repeatDelay": 250,
                     "startTime": 0,
-                    "volume": 0.75
+                    "volume": 0.6,
+                    "file": "psfx.weapon-attacks.sword.v1"
                 },
                 "options": {
                     "contrast": 0,
@@ -3569,12 +3584,13 @@
                     "customPath": ""
                 },
                 "sound": {
-                    "enable": false,
+                    "enable": true,
                     "delay": 0,
                     "repeat": 1,
                     "repeatDelay": 250,
                     "startTime": 0,
-                    "volume": 0.75
+                    "volume": 0.6,
+                    "file": "psfx.weapon-attacks.spear.v1"
                 },
                 "options": {
                     "contrast": 0,
@@ -3808,12 +3824,13 @@
                     "customPath": ""
                 },
                 "sound": {
-                    "enable": false,
+                    "enable": true,
                     "delay": 0,
                     "repeat": 1,
                     "repeatDelay": 250,
                     "startTime": 0,
-                    "volume": 0.75
+                    "volume": 0.6,
+                    "file": "psfx.weapon-attacks.spear.v1"
                 },
                 "options": {
                     "contrast": 0,
@@ -4052,12 +4069,13 @@
                     "customPath": ""
                 },
                 "sound": {
-                    "enable": false,
+                    "enable": true,
                     "delay": 0,
                     "repeat": 1,
                     "repeatDelay": 250,
                     "startTime": 0,
-                    "volume": 0.75
+                    "volume": 0.6,
+                    "file": "psfx.weapon-attacks.sword.v1"
                 },
                 "options": {
                     "contrast": 0,
@@ -4287,12 +4305,13 @@
                     "customPath": ""
                 },
                 "sound": {
-                    "enable": false,
+                    "enable": true,
                     "delay": 0,
                     "repeat": 1,
                     "repeatDelay": 250,
                     "startTime": 0,
-                    "volume": 0.75
+                    "volume": 0.6,
+                    "file": "psfx.weapon-attacks.sword.v1"
                 },
                 "options": {
                     "contrast": 0,
@@ -4522,12 +4541,13 @@
                     "customPath": ""
                 },
                 "sound": {
-                    "enable": false,
+                    "enable": true,
                     "delay": 0,
                     "repeat": 1,
                     "repeatDelay": 250,
                     "startTime": 0,
-                    "volume": 0.75
+                    "volume": 0.6,
+                    "file": "psfx.weapon-attacks.sword.v1"
                 },
                 "options": {
                     "contrast": 0,
@@ -4754,12 +4774,13 @@
                     "customPath": ""
                 },
                 "sound": {
-                    "enable": false,
+                    "enable": true,
                     "delay": 0,
                     "repeat": 1,
                     "repeatDelay": 250,
                     "startTime": 0,
-                    "volume": 0.75
+                    "volume": 0.6,
+                    "file": "psfx.weapon-attacks.sword.v1"
                 },
                 "options": {
                     "contrast": 0,
@@ -4982,12 +5003,13 @@
                     "customPath": ""
                 },
                 "sound": {
-                    "enable": false,
+                    "enable": true,
                     "delay": 0,
                     "repeat": 1,
                     "repeatDelay": 250,
                     "startTime": 0,
-                    "volume": 0.75
+                    "volume": 0.6,
+                    "file": "psfx.weapon-attacks.sword.v1"
                 },
                 "options": {
                     "contrast": 0,
@@ -5217,12 +5239,13 @@
                     "customPath": ""
                 },
                 "sound": {
-                    "enable": false,
-                    "delay": 0,
+                    "enable": true,
+                    "delay": 400,
                     "repeat": 1,
                     "repeatDelay": 250,
                     "startTime": 0,
-                    "volume": 0.75
+                    "volume": 0.6,
+                    "file": "psfx.impacts.bludgeoning.v1"
                 },
                 "options": {
                     "contrast": 0,
@@ -5452,12 +5475,13 @@
                     "customPath": ""
                 },
                 "sound": {
-                    "enable": false,
-                    "delay": 0,
+                    "enable": true,
+                    "delay": 400,
                     "repeat": 1,
                     "repeatDelay": 250,
                     "startTime": 0,
-                    "volume": 0.75
+                    "volume": 0.6,
+                    "file": "psfx.impacts.bludgeoning.v1"
                 },
                 "options": {
                     "contrast": 0,
@@ -5681,12 +5705,13 @@
                     "customPath": ""
                 },
                 "sound": {
-                    "enable": false,
-                    "delay": 0,
+                    "enable": true,
+                    "delay": 400,
                     "repeat": 1,
                     "repeatDelay": 250,
                     "startTime": 0,
-                    "volume": 0.75
+                    "volume": 0.6,
+                    "file": "psfx.impacts.bludgeoning.v1"
                 },
                 "options": {
                     "contrast": 0,
@@ -5918,12 +5943,13 @@
                     "customPath": ""
                 },
                 "sound": {
-                    "enable": false,
-                    "delay": 0,
+                    "enable": true,
+                    "delay": 400,
                     "repeat": 1,
                     "repeatDelay": 250,
                     "startTime": 0,
-                    "volume": 0.75
+                    "volume": 0.6,
+                    "file": "psfx.impacts.bludgeoning.v1"
                 },
                 "options": {
                     "contrast": 0,
@@ -6153,12 +6179,13 @@
                     "customPath": ""
                 },
                 "sound": {
-                    "enable": false,
-                    "delay": 0,
+                    "enable": true,
+                    "delay": 400,
                     "repeat": 1,
                     "repeatDelay": 250,
                     "startTime": 0,
-                    "volume": 0.75
+                    "volume": 0.6,
+                    "file": "psfx.impacts.bludgeoning.v1"
                 },
                 "options": {
                     "contrast": 0,
@@ -6391,12 +6418,13 @@
                     "customPath": ""
                 },
                 "sound": {
-                    "enable": false,
-                    "delay": 0,
+                    "enable": true,
+                    "delay": 400,
                     "repeat": 1,
                     "repeatDelay": 250,
                     "startTime": 0,
-                    "volume": 0.75
+                    "volume": 0.6,
+                    "file": "psfx.impacts.bludgeoning.v1"
                 },
                 "options": {
                     "contrast": 0,
@@ -6626,12 +6654,13 @@
                     "customPath": ""
                 },
                 "sound": {
-                    "enable": false,
+                    "enable": true,
                     "delay": 0,
                     "repeat": 1,
                     "repeatDelay": 250,
                     "startTime": 0,
-                    "volume": 0.75
+                    "volume": 0.6,
+                    "file": "psfx.weapon-attacks.spear.v1"
                 },
                 "options": {
                     "contrast": 0,
@@ -6870,12 +6899,13 @@
                     "customPath": ""
                 },
                 "sound": {
-                    "enable": false,
-                    "delay": 0,
+                    "enable": true,
+                    "delay": 400,
                     "repeat": 1,
                     "repeatDelay": 250,
                     "startTime": 0,
-                    "volume": 0.75
+                    "volume": 0.6,
+                    "file": "psfx.impacts.bludgeoning.v1"
                 },
                 "options": {
                     "contrast": 0,
@@ -7105,12 +7135,13 @@
                     "customPath": ""
                 },
                 "sound": {
-                    "enable": false,
-                    "delay": 0,
+                    "enable": true,
+                    "delay": 400,
                     "repeat": 1,
                     "repeatDelay": 250,
                     "startTime": 0,
-                    "volume": 0.75
+                    "volume": 0.6,
+                    "file": "psfx.impacts.bludgeoning.v1"
                 },
                 "options": {
                     "contrast": 0,
@@ -7334,12 +7365,13 @@
                     "customPath": ""
                 },
                 "sound": {
-                    "enable": false,
+                    "enable": true,
                     "delay": 0,
                     "repeat": 1,
                     "repeatDelay": 250,
                     "startTime": 0,
-                    "volume": 0.75
+                    "volume": 0.6,
+                    "file": "psfx.weapon-attacks.sword.v1"
                 },
                 "options": {
                     "contrast": 0,
@@ -7564,12 +7596,13 @@
                     "customPath": ""
                 },
                 "sound": {
-                    "enable": false,
+                    "enable": true,
                     "delay": 0,
                     "repeat": 1,
                     "repeatDelay": 250,
                     "startTime": 0,
-                    "volume": 0.75
+                    "volume": 0.6,
+                    "file": "psfx.ranged-weapons.longbow.v1.30ft"
                 },
                 "options": {
                     "contrast": 0,
@@ -7770,12 +7803,13 @@
                     "customPath": ""
                 },
                 "sound": {
-                    "enable": false,
+                    "enable": true,
                     "delay": 0,
                     "repeat": 1,
                     "repeatDelay": 250,
                     "startTime": 0,
-                    "volume": 0.75
+                    "volume": 0.6,
+                    "file": "psfx.ranged-weapons.longbow.v1.30ft"
                 },
                 "options": {
                     "contrast": 0,
@@ -7976,12 +8010,13 @@
                     "customPath": "jb2a.breath_weapons.fire.cone.orange.01"
                 },
                 "sound": {
-                    "enable": false,
+                    "enable": true,
                     "delay": 0,
                     "repeat": 1,
                     "repeatDelay": 250,
                     "startTime": 0,
-                    "volume": 0.75
+                    "volume": 0.6,
+                    "file": "psfx.creature.dragons.attacks.breath.small.fire"
                 },
                 "options": {
                     "contrast": 0,
@@ -8185,12 +8220,13 @@
                     "customPath": "jb2a.template_cone_5e.lightning.01.loop.bluepurple.30ft"
                 },
                 "sound": {
-                    "enable": false,
+                    "enable": true,
                     "delay": 0,
                     "repeat": 1,
                     "repeatDelay": 250,
                     "startTime": 0,
-                    "volume": 0.75
+                    "volume": 0.6,
+                    "file": "psfx.3rd-level-spells.call-lightning.v1.secondary"
                 },
                 "options": {
                     "contrast": 0,
@@ -8394,12 +8430,13 @@
                     "customPath": "jb2a.breath_weapons.fire.cone.orange.01"
                 },
                 "sound": {
-                    "enable": false,
+                    "enable": true,
                     "delay": 0,
                     "repeat": 1,
                     "repeatDelay": 250,
                     "startTime": 0,
-                    "volume": 0.75
+                    "volume": 0.6,
+                    "file": "psfx.creature.dragons.attacks.breath.small.fire"
                 },
                 "options": {
                     "contrast": 0,
@@ -8603,12 +8640,13 @@
                     "customPath": "jb2a.breath_weapons.cold.cone.blue"
                 },
                 "sound": {
-                    "enable": false,
+                    "enable": true,
                     "delay": 0,
                     "repeat": 1,
                     "repeatDelay": 250,
                     "startTime": 0,
-                    "volume": 0.75
+                    "volume": 0.6,
+                    "file": "psfx.creature.dragons.attacks.breath.small.cold"
                 },
                 "options": {
                     "contrast": 0,
@@ -8812,12 +8850,13 @@
                     "customPath": "jb2a.breath_weapons.fire.cone.orange.01"
                 },
                 "sound": {
-                    "enable": false,
+                    "enable": true,
                     "delay": 0,
                     "repeat": 1,
                     "repeatDelay": 250,
                     "startTime": 0,
-                    "volume": 0.75
+                    "volume": 0.6,
+                    "file": "psfx.creature.dragons.attacks.breath.small.fire"
                 },
                 "options": {
                     "contrast": 0,
@@ -9021,12 +9060,13 @@
                     "customPath": "jb2a.breath_weapons.poison.cone.green"
                 },
                 "sound": {
-                    "enable": false,
+                    "enable": true,
                     "delay": 0,
                     "repeat": 1,
                     "repeatDelay": 250,
                     "startTime": 0,
-                    "volume": 0.75
+                    "volume": 0.6,
+                    "file": "psfx.cantrips.acid-splash.v1.15ft"
                 },
                 "options": {
                     "contrast": 0,
@@ -9230,12 +9270,13 @@
                     "customPath": "jb2a.breath_weapons.poison.cone.green"
                 },
                 "sound": {
-                    "enable": false,
+                    "enable": true,
                     "delay": 0,
                     "repeat": 1,
                     "repeatDelay": 250,
                     "startTime": 0,
-                    "volume": 0.75
+                    "volume": 0.6,
+                    "file": "psfx.cantrips.acid-splash.v1.15ft"
                 },
                 "options": {
                     "contrast": 0,
@@ -9439,12 +9480,13 @@
                     "customPath": ""
                 },
                 "sound": {
-                    "enable": false,
-                    "delay": 0,
+                    "enable": true,
+                    "delay": 700,
                     "repeat": 1,
                     "repeatDelay": 250,
                     "startTime": 0,
-                    "volume": 0.75
+                    "volume": 0.6,
+                    "file": "psfx.impacts.magicaleffects.cold"
                 },
                 "options": {
                     "contrast": 0,
@@ -9654,12 +9696,13 @@
                     "customPath": ""
                 },
                 "sound": {
-                    "enable": false,
+                    "enable": true,
                     "delay": 0,
                     "repeat": 1,
                     "repeatDelay": 250,
                     "startTime": 0,
-                    "volume": 0.75
+                    "volume": 0.6,
+                    "file": "psfx.ranged-weapons.longbow.v1.30ft"
                 },
                 "options": {
                     "contrast": 0,
@@ -9860,12 +9903,13 @@
                     "customPath": ""
                 },
                 "sound": {
-                    "enable": false,
+                    "enable": true,
                     "delay": 0,
                     "repeat": 1,
                     "repeatDelay": 250,
                     "startTime": 0,
-                    "volume": 0.75
+                    "volume": 0.6,
+                    "file": "psfx.ranged-weapons.longbow.v1.30ft"
                 },
                 "options": {
                     "contrast": 0,
@@ -10067,12 +10111,13 @@
                     "customPath": "jb2a.throwable.throw.bomb.01.black"
                 },
                 "sound": {
-                    "enable": false,
-                    "delay": 0,
+                    "enable": true,
+                    "delay": 700,
                     "repeat": 1,
                     "repeatDelay": 250,
                     "startTime": 0,
-                    "volume": 0.75
+                    "volume": 0.6,
+                    "file": "psfx.impacts.magicaleffects.lightning"
                 },
                 "options": {
                     "contrast": 0,
@@ -10282,12 +10327,13 @@
                     "customPath": ""
                 },
                 "sound": {
-                    "enable": false,
+                    "enable": true,
                     "delay": 0,
                     "repeat": 1,
                     "repeatDelay": 250,
                     "startTime": 0,
-                    "volume": 0.75
+                    "volume": 0.6,
+                    "file": "psfx.ranged-weapons.guns.single-fire.revolver"
                 },
                 "options": {
                     "contrast": 0,
@@ -10488,12 +10534,13 @@
                     "customPath": ""
                 },
                 "sound": {
-                    "enable": false,
-                    "delay": 0,
+                    "enable": true,
+                    "delay": 700,
                     "repeat": 1,
                     "repeatDelay": 250,
                     "startTime": 0,
-                    "volume": 0.75
+                    "volume": 0.6,
+                    "file": "psfx.impacts.magicaleffects.fire"
                 },
                 "options": {
                     "contrast": 0,
@@ -10703,12 +10750,13 @@
                     "customPath": "jb2a.snowball_toss.white.01"
                 },
                 "sound": {
-                    "enable": false,
+                    "enable": true,
                     "delay": 0,
                     "repeat": 1,
                     "repeatDelay": 250,
                     "startTime": 0,
-                    "volume": 0.75
+                    "volume": 0.6,
+                    "file": "psfx.weapon-swooshes.light.v1.group01"
                 },
                 "options": {
                     "contrast": 0,
@@ -10918,12 +10966,13 @@
                     "customPath": ""
                 },
                 "sound": {
-                    "enable": false,
+                    "enable": true,
                     "delay": 0,
                     "repeat": 1,
                     "repeatDelay": 250,
                     "startTime": 0,
-                    "volume": 0.75
+                    "volume": 0.6,
+                    "file": "psfx.ranged-weapons.guns.single-fire.revolver"
                 },
                 "options": {
                     "contrast": 0,
@@ -11124,12 +11173,13 @@
                     "customPath": ""
                 },
                 "sound": {
-                    "enable": false,
+                    "enable": true,
                     "delay": 0,
                     "repeat": 1,
                     "repeatDelay": 250,
                     "startTime": 0,
-                    "volume": 0.75
+                    "volume": 0.6,
+                    "file": "psfx.ranged-weapons.guns.single-fire.revolver"
                 },
                 "options": {
                     "contrast": 0,
@@ -11330,12 +11380,13 @@
                     "customPath": ""
                 },
                 "sound": {
-                    "enable": false,
+                    "enable": true,
                     "delay": 0,
                     "repeat": 1,
                     "repeatDelay": 250,
                     "startTime": 0,
-                    "volume": 0.75
+                    "volume": 0.6,
+                    "file": "psfx.cantrips.acid-splash.v1.30ft"
                 },
                 "options": {
                     "contrast": 0,
@@ -11545,12 +11596,13 @@
                     "customPath": ""
                 },
                 "sound": {
-                    "enable": false,
-                    "delay": 0,
+                    "enable": true,
+                    "delay": 700,
                     "repeat": 1,
                     "repeatDelay": 250,
                     "startTime": 0,
-                    "volume": 0.75
+                    "volume": 0.6,
+                    "file": "psfx.class-features.divine-smite.v1.001.target"
                 },
                 "options": {
                     "contrast": 0,
@@ -11762,12 +11814,13 @@
                     "customPath": ""
                 },
                 "sound": {
-                    "enable": false,
+                    "enable": true,
                     "delay": 0,
                     "repeat": 1,
                     "repeatDelay": 250,
                     "startTime": 0,
-                    "volume": 0.75
+                    "volume": 0.6,
+                    "file": "psfx.cantrips.acid-splash.v1.30ft"
                 },
                 "options": {
                     "contrast": 0,
