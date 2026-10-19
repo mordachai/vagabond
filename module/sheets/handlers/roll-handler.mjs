@@ -197,6 +197,9 @@ export class RollHandler {
     const { EquipmentHelper } = globalThis.vagabond.utils;
     const { VagabondChatCard } = globalThis.vagabond.utils;
 
+    // Unidentified item (disguise lock): no attack / use until the GM reveals it
+    if (EquipmentHelper.isUseLocked(item)) return EquipmentHelper.warnUseLocked(item);
+
     // 2. Define Item Types
     const isWeapon = EquipmentHelper.isWeapon(item);
     const isAlchemical = EquipmentHelper.isAlchemical(item);

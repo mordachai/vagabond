@@ -96,6 +96,9 @@ export class VagabondItem extends Item {
     const item = this;
     const label = `[${item.type}] ${item.name}`;
 
+    // Unidentified item (disguise lock): players can't use it until revealed
+    if (EquipmentHelper.isUseLocked(item)) return EquipmentHelper.warnUseLocked(item);
+
     // Check consumable requirements before using
     if (item.type === 'equipment') {
       const canUse = await this.checkConsumableRequirements();
@@ -656,6 +659,14 @@ export class VagabondItem extends Item {
       }
     }
 
+    // Unidentified item (disguise lock): players can't equip it until revealed
+    if (this.type === 'equipment' && foundry.utils.hasProperty(changed, 'system.equipmentState')
+        && foundry.utils.getProperty(changed, 'system.equipmentState') !== 'unequipped'
+        && this.system.equipmentState === 'unequipped' && EquipmentHelper.isUseLocked(this, game.user)) {
+      EquipmentHelper.warnUseLocked(this);
+      return false;
+    }
+
     // Bound cursed item: players can't take it off (single choke point under equipWithHandLimit)
     if (this.type === 'equipment' && foundry.utils.getProperty(changed, 'system.equipmentState') === 'unequipped'
         && this.system.equipmentState !== 'unequipped' && EquipmentHelper.isCurseLocked(this, game.user)) {
@@ -820,6 +831,10 @@ export class VagabondItem extends Item {
    * @returns {Promise<Object>} Attack result with roll, difficulty, isHit, isCritical, weaponSkill, thrown
    */
   async rollAttack(actor, favorHinder = 'none', difficultyOverride = null, { allowUnequipped = false, skillKey = null, thrown = false } = {}) {
+    if (EquipmentHelper.isUseLocked(this)) {
+      EquipmentHelper.warnUseLocked(this);
+      return null;
+    }
     this.validateCanAttack({ allowUnequipped });
 
     // Get roll data WITH this item's "on-use" effects applied

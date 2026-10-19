@@ -45,12 +45,13 @@ export class ItemDisguiseApp extends api.HandlebarsApplicationMixin(api.Applicat
     tag: 'form',
     classes: ['vagabond', 'item-disguise-app'],
     window: { icon: 'fa-solid fa-mask', resizable: true },
-    position: { width: 760, height: 'auto' },
+    position: { width: 820, height: 'auto' },
     form: { submitOnChange: false, closeOnSubmit: false },
     actions: {
       pickImage: ItemDisguiseApp.#onPickImage,
       useTrueImage: ItemDisguiseApp.#onUseTrueImage,
       generate: ItemDisguiseApp.#onGenerate,
+      unknown: ItemDisguiseApp.#onUnknown,
       apply: ItemDisguiseApp.#onApply,
       reveal: ItemDisguiseApp.#onReveal,
     },
@@ -89,6 +90,7 @@ export class ItemDisguiseApp extends api.HandlebarsApplicationMixin(api.Applicat
       truth: { ...truth, enriched: await enrich(truth.description) },
       effects,
       announce: this._announce ?? true,
+      lockUse: this._lockUse ?? !!item.system.disguise?.lockUse,
     };
   }
 
@@ -113,6 +115,7 @@ export class ItemDisguiseApp extends api.HandlebarsApplicationMixin(api.Applicat
       effects,
     };
     this._announce = data.announce ?? this._announce;
+    this._lockUse = !!data.lockUse;
   }
 
   /** The look to apply: effect rows left blank show the disguise name / art. */
@@ -124,7 +127,7 @@ export class ItemDisguiseApp extends api.HandlebarsApplicationMixin(api.Applicat
       const f = d.effects?.[e.id] ?? {};
       effects[e.id] = { name: f.name || d.name, img: f.img || d.img, description: f.description ?? '' };
     }
-    return { name: d.name, img: d.img, description: d.description ?? '', lore: d.lore ?? '', effects };
+    return { name: d.name, img: d.img, description: d.description ?? '', lore: d.lore ?? '', effects, powers: d.powers ?? {}, lockUse: !!this._lockUse };
   }
 
   static async #onPickImage() {
@@ -149,6 +152,13 @@ export class ItemDisguiseApp extends api.HandlebarsApplicationMixin(api.Applicat
   static #onGenerate() {
     this.#capture();
     this.#draft = ItemDisguise.generate(this.#item);
+    this.render();
+  }
+
+  /** Unidentified look ("Unknown Weapon", mystery text, Unknown Effects); the GM can still edit it before applying. */
+  static #onUnknown() {
+    this.#capture();
+    this.#draft = ItemDisguise.unknown(this.#item);
     this.render();
   }
 

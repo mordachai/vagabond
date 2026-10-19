@@ -6,38 +6,52 @@
     {{#if owner}}<span class='idg-owner'>{{owner}}</span>{{/if}}
   </div>
 
+  {{! Column titles on the sheet's tab strip (labels, not tabs) }}
+  <nav class='idg-strip'>
+    <span class='idg-tab'><i class='fa-solid fa-users'></i> {{localize 'VAGABOND.Item.Disguise.PlayersSee'}}</span>
+    <span class='idg-tab'><i class='fa-solid fa-eye'></i> {{localize 'VAGABOND.Item.Disguise.TrueIdentity'}}</span>
+  </nav>
+
   <div class='idg-columns'>
     {{! Players see }}
     <section class='idg-col idg-shown'>
-      <h3 class='idg-col-title'><i class='fa-solid fa-users'></i> {{localize 'VAGABOND.Item.Disguise.PlayersSee'}}</h3>
-      <div class='idg-identity'>
-        <button type='button' class='idg-img' data-action='pickImage' data-tooltip='{{localize "VAGABOND.Item.Disguise.PickImage"}}'>
-          <img src='{{shown.img}}' alt='' />
-          <i class='fa-solid fa-image idg-img-badge'></i>
-        </button>
+      <div class='idg-head'>
+        {{! Portrait: click = pick art; frame notches: pick (left), back to the real image (right) }}
+        <div class='idg-portrait'>
+          <img src='{{shown.img}}' alt='' data-action='pickImage' data-tooltip='{{localize "VAGABOND.Item.Disguise.PickImage"}}' />
+          <button type='button' class='idg-notch is-left' data-action='pickImage' data-tooltip='{{localize "VAGABOND.Item.Disguise.PickImage"}}'><i class='fa-solid fa-image'></i></button>
+          <button type='button' class='idg-notch is-right' data-action='useTrueImage' data-tooltip='{{localize "VAGABOND.Item.Disguise.UseTrueImage"}}'><i class='fa-solid fa-rotate-left'></i></button>
+        </div>
         <input type='hidden' name='img' value='{{shown.img}}' />
-        <div class='idg-fields'>
-          <label class='idg-label'>{{localize 'VAGABOND.Item.Disguise.Name'}}</label>
-          <input type='text' name='name' value='{{shown.name}}' />
+        <div class='idg-head-fields'>
+          <div class='idg-name-row'>
+            <input type='text' name='name' value='{{shown.name}}' placeholder='{{localize "VAGABOND.Item.Disguise.Name"}}' />
+          </div>
           {{#if hasLore}}
-            <label class='idg-label'>{{localize 'VAGABOND.Item.Disguise.Lore'}}</label>
-            <input type='text' name='lore' value='{{shown.lore}}' />
+            <label class='idg-lore'>
+              <span class='idg-lore-label'>{{localize 'VAGABOND.Item.Disguise.Lore'}}:</span>
+              <input type='text' name='lore' value='{{shown.lore}}' />
+            </label>
           {{/if}}
-          <button type='button' class='idg-link' data-action='useTrueImage'><i class='fa-solid fa-rotate-left'></i> {{localize 'VAGABOND.Item.Disguise.UseTrueImage'}}</button>
+          <label class='idg-lock' data-tooltip='{{localize "VAGABOND.Item.Disguise.LockUseHint"}}'>
+            <input type='checkbox' name='lockUse' {{#if lockUse}}checked{{/if}} />
+            <span>{{localize 'VAGABOND.Item.Disguise.LockUse'}}</span>
+          </label>
         </div>
       </div>
-      <label class='idg-label'>{{localize 'VAGABOND.Item.Disguise.Description'}}</label>
+
+      <h3 class='idg-section'>{{localize 'VAGABOND.Item.Disguise.Description'}}</h3>
       <prose-mirror class='idg-editor' name='description' value='{{shown.description}}'></prose-mirror>
 
       {{#if effects.length}}
-        <label class='idg-label'>{{localize 'VAGABOND.Item.Disguise.Effects'}}</label>
+        <h3 class='idg-section'>{{localize 'VAGABOND.Item.Disguise.Effects'}}</h3>
         <ul class='idg-effects'>
           {{#each effects}}
             <li class='idg-effect is-edit'>
               <img src='{{shownImg}}' alt='' />
               <div class='idg-effect-fields'>
-                <input type='text' name='effects.{{id}}.name' value='{{shownName}}' placeholder='{{@root.shown.name}}' data-tooltip='{{trueName}}' />
-                <textarea name='effects.{{id}}.description' rows='2' placeholder='{{localize "VAGABOND.Item.Disguise.EffectDescription"}}'>{{shownDescription}}</textarea>
+                <input type='text' class='idg-effect-name' name='effects.{{id}}.name' value='{{shownName}}' placeholder='{{@root.shown.name}}' data-tooltip='{{trueName}}' />
+                <textarea class='idg-effect-desc' name='effects.{{id}}.description' rows='1' placeholder='{{localize "VAGABOND.Item.Disguise.EffectDescription"}}'>{{shownDescription}}</textarea>
               </div>
             </li>
           {{/each}}
@@ -47,17 +61,19 @@
 
     {{! True identity (read-only) }}
     <section class='idg-col idg-truth'>
-      <h3 class='idg-col-title'><i class='fa-solid fa-eye'></i> {{localize 'VAGABOND.Item.Disguise.TrueIdentity'}}</h3>
-      <div class='idg-identity'>
-        <div class='idg-img is-static'><img src='{{truth.img}}' alt='' /></div>
-        <div class='idg-fields'>
-          <div class='idg-true-name'>{{truth.name}}</div>
-          {{#if truth.lore}}<div class='idg-true-lore'>{{truth.lore}}</div>{{/if}}
+      <div class='idg-head'>
+        <div class='idg-portrait is-static'><img src='{{truth.img}}' alt='' /></div>
+        <div class='idg-head-fields'>
+          <div class='idg-name-row'><span class='idg-true-name'>{{truth.name}}</span></div>
+          {{#if truth.lore}}<div class='idg-lore'><span class='idg-lore-label'>{{localize 'VAGABOND.Item.Disguise.Lore'}}:</span> <span>{{truth.lore}}</span></div>{{/if}}
         </div>
       </div>
+
+      <h3 class='idg-section'>{{localize 'VAGABOND.Item.Disguise.Description'}}</h3>
       <div class='idg-true-desc'>{{{truth.enriched}}}</div>
+
       {{#if effects.length}}
-        <label class='idg-label'>{{localize 'VAGABOND.Item.Disguise.Effects'}}</label>
+        <h3 class='idg-section'>{{localize 'VAGABOND.Item.Disguise.Effects'}}</h3>
         <ul class='idg-effects is-static'>
           {{#each effects}}
             <li class='idg-effect'><img src='{{trueImg}}' alt='' /><span>{{trueName}}</span></li>
@@ -69,17 +85,18 @@
   </div>
 
   <footer class='idg-footer'>
-    {{#if cursed}}
-      <button type='button' class='idg-btn' data-action='generate' data-tooltip='{{localize "VAGABOND.Item.Disguise.GenerateHint"}}'>
-        <i class='fa-solid fa-wand-sparkles'></i> {{localize 'VAGABOND.Item.Disguise.Generate'}}
-      </button>
-    {{/if}}
+    <button type='button' class='idg-btn' data-action='generate' data-tooltip='{{#if cursed}}{{localize "VAGABOND.Item.Disguise.GenerateHint"}}{{else}}{{localize "VAGABOND.Item.Disguise.GeneratePlainHint"}}{{/if}}'>
+      <i class='fa-solid fa-wand-sparkles'></i> {{localize 'VAGABOND.Item.Disguise.Generate'}}
+    </button>
+    <button type='button' class='idg-btn' data-action='unknown' data-tooltip='{{localize "VAGABOND.Item.Disguise.UnknownHint"}}'>
+      <i class='fa-solid fa-question'></i> {{localize 'VAGABOND.Item.Disguise.UnknownButton'}}
+    </button>
     {{#if disguised}}
       <label class='idg-announce'>
         <input type='checkbox' name='announce' {{#if announce}}checked{{/if}} />
         {{localize 'VAGABOND.Item.Disguise.Announce'}}
       </label>
-      <button type='button' class='idg-btn' data-action='reveal' data-tooltip='{{localize "VAGABOND.Item.Disguise.RevealHint"}}'>
+      <button type='button' class='idg-btn is-reveal' data-action='reveal' data-tooltip='{{localize "VAGABOND.Item.Disguise.RevealHint"}}'>
         <i class='fa-solid fa-eye'></i> {{localize 'VAGABOND.Item.Disguise.Reveal'}}
       </button>
     {{/if}}

@@ -19,6 +19,8 @@ export default class VagabondItemBase extends foundry.abstract
     const fields = foundry.data.fields;
     return new fields.SchemaField({
       active: new fields.BooleanField({ initial: false }),
+      // While disguised, players can't equip or use it (GM switch "Can't be equipped until identified")
+      lockUse: new fields.BooleanField({ initial: false }),
       shown: new fields.ObjectField({ initial: {} }),
       truth: new fields.ObjectField({ initial: {} }),
     });

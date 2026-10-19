@@ -19189,8 +19189,25 @@ ol#combat-tracker.directory-list {
   color: var(--vagabond-c-chat-yellow);
 }
 
+.item-disguise-app {
+  /* ---- Status line (same look as the sheet's disguise banner) ---- */
+  /* ---- Tab strip: column titles (labels, not tabs) ---- */
+  /* ---- Columns ---- */
+  /* ---- Head: portrait frame + title banner ---- */
+  /* ---- Sections (locked sheet section headers) ---- */
+  /* ---- Effects ---- */
+  /* ---- Footer ---- */
+  /* ---- Editable fields (Players See): plain until hovered, outlined while editing ---- */
+}
 .item-disguise-app .window-content {
-  padding: 8px 10px;
+  padding: 10px 16px 12px;
+  border-radius: 1.5em;
+  corner-shape: round round scoop scoop;
+  border: 8px solid var(--vagabond-c-chat-yellow);
+}
+.item-disguise-app button {
+  height: auto;
+  line-height: normal;
 }
 .item-disguise-app .idg-root {
   display: flex;
@@ -19202,27 +19219,54 @@ ol#combat-tracker.directory-list {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 4px 10px;
-  border-radius: 3px;
-  background: var(--vagabond-c-inset-1);
-  color: var(--vagabond-c-text-primary);
-  font-size: 0.85rem;
+  padding-left: 8px;
+  border-left: 3px solid var(--vagabond-c-lite);
+  font-size: 12px;
+  font-style: italic;
+  color: var(--vagabond-c-text-secondary);
 }
 .item-disguise-app .idg-status.is-on {
-  border-left: 3px solid var(--vagabond-c-chat-yellow);
+  border-left-color: var(--vagabond-c-chat-yellow);
 }
 .item-disguise-app .idg-status.is-on i {
   color: var(--vagabond-dark-yellow);
 }
 .item-disguise-app .idg-status .idg-owner {
   margin-left: auto;
-  font-style: italic;
-  opacity: 0.8;
+  font-family: "Germania", serif;
+  font-style: normal;
+}
+.item-disguise-app .idg-strip {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin: 0 -16px;
+  padding: 10px 40px;
+  background-image: url(../assets/images/sheets/tabNavBG.webp);
+  background-size: 100% 100%;
+  background-position: center;
+  box-shadow: 2px 2px 2px var(--vagabond-c-inset-2);
+}
+.item-disguise-app .idg-tab {
+  padding: 5px 12px;
+  background-image: url("../assets/images/sheets/navTabBG.svg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100% 100%;
+  font-family: "Germania", serif;
+  font-size: 1.15rem;
+  font-weight: 600;
+  text-align: center;
+  color: var(--vagabond-c-dark-bluey);
+  filter: drop-shadow(1px 1px 2px black);
+}
+.item-disguise-app .idg-tab i {
+  font-size: 0.85rem;
+  margin-right: 4px;
 }
 .item-disguise-app .idg-columns {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   flex: 1;
   min-height: 0;
 }
@@ -19231,122 +19275,236 @@ ol#combat-tracker.directory-list {
   flex-direction: column;
   gap: 4px;
   min-width: 0;
-  padding: 8px;
-  border: 1px solid var(--vagabond-c-faint);
-  border-radius: 4px;
+  padding: 4px 12px 0 0;
 }
 .item-disguise-app .idg-truth {
-  background: var(--vagabond-c-inset-1);
+  padding: 4px 0 0 12px;
+  border-left: 2px solid var(--vagabond-c-lite);
 }
-.item-disguise-app .idg-col-title {
-  margin: 0 0 4px;
-  padding: 0;
-  border: none;
-  font-family: "Germania", serif;
-  font-size: 1.05rem;
-  color: var(--vagabond-c-title2);
-}
-.item-disguise-app .idg-col-title i {
-  font-size: 0.85rem;
-  margin-right: 4px;
-}
-.item-disguise-app .idg-identity {
+.item-disguise-app .idg-head {
   display: flex;
-  gap: 8px;
+  gap: 10px;
   align-items: flex-start;
+  margin-bottom: 4px;
 }
-.item-disguise-app .idg-img {
+.item-disguise-app .idg-portrait {
   position: relative;
-  flex: 0 0 80px;
-  width: 80px;
-  height: 80px;
-  line-height: normal;
-  margin: 0;
-  padding: 0;
-  border: 1px solid var(--vagabond-c-faint);
-  border-radius: 4px;
-  background: var(--vagabond-c-transparent);
-  overflow: hidden;
-  cursor: pointer;
+  flex: 0 0 104px;
+  width: 104px;
+  height: 104px;
+  background: url("../assets/images/sheets/portraitFrame.webp") center/contain no-repeat;
+  filter: drop-shadow(1px 1px 2px var(--vagabond-c-inset-1));
 }
-.item-disguise-app .idg-img img {
+.item-disguise-app .idg-portrait img {
+  display: block;
   width: 100%;
   height: 100%;
-  object-fit: cover;
   border: none;
-}
-.item-disguise-app .idg-img .idg-img-badge {
-  position: absolute;
-  right: 3px;
-  bottom: 3px;
-  padding: 3px;
-  border-radius: 3px;
+  object-fit: cover;
+  object-position: top center;
   background: var(--vagabond-c-dark);
-  color: var(--vagabond-c-lite);
-  font-size: 10px;
+  cursor: pointer;
+  -webkit-mask-image: url("../assets/images/sheets/portraitMask.webp");
+  mask-image: url("../assets/images/sheets/portraitMask.webp");
+  -webkit-mask-size: cover;
+  mask-size: cover;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  mask-mode: luminance;
 }
-.item-disguise-app .idg-img:hover:not(.is-static) {
-  border-color: var(--vagabond-c-chat-yellow);
+.item-disguise-app .idg-portrait img:hover {
+  opacity: 0.9;
 }
-.item-disguise-app .idg-img:hover:not(.is-static) .idg-img-badge {
-  color: var(--vagabond-c-chat-yellow);
-}
-.item-disguise-app .idg-img.is-static {
+.item-disguise-app .idg-portrait.is-static img {
   cursor: default;
 }
-.item-disguise-app .idg-fields {
+.item-disguise-app .idg-portrait.is-static img:hover {
+  opacity: 1;
+}
+.item-disguise-app .idg-portrait .idg-notch {
+  position: absolute;
+  top: 0;
+  z-index: 1;
+  box-sizing: border-box;
+  width: 18px;
+  height: 18px;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--vagabond-c-dark);
+  border: 1px solid var(--vagabond-c-lite);
+  border-radius: 50%;
+  cursor: pointer;
+  opacity: 0.85;
+  transition: all 0.15s ease;
+}
+.item-disguise-app .idg-portrait .idg-notch.is-left {
+  left: -2px;
+}
+.item-disguise-app .idg-portrait .idg-notch.is-right {
+  right: -2px;
+}
+.item-disguise-app .idg-portrait .idg-notch i {
+  font-size: 9px;
+  color: var(--vagabond-c-lite);
+}
+.item-disguise-app .idg-portrait .idg-notch:hover {
+  opacity: 1;
+  border-color: var(--vagabond-c-chat-yellow);
+  box-shadow: none;
+  transform: scale(1.1);
+}
+.item-disguise-app .idg-portrait .idg-notch:hover i {
+  color: var(--vagabond-c-chat-yellow);
+}
+.item-disguise-app .idg-head-fields {
   display: flex;
   flex-direction: column;
   gap: 2px;
   flex: 1;
   min-width: 0;
 }
-.item-disguise-app .idg-label {
-  margin-top: 4px;
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  color: var(--vagabond-c-text-secondary);
+.item-disguise-app .idg-name-row {
+  display: flex;
+  align-items: center;
+  min-height: 34px;
+  padding: 2px 4px 0;
+  background-image: url(../assets/images/sheets/titleBG.webp);
+  background-repeat: repeat-x;
+  background-size: 100% 100%;
+  color: var(--vagabond-c-white);
 }
-.item-disguise-app .idg-link {
-  align-self: flex-start;
-  width: auto;
-  height: auto;
-  line-height: normal;
-  margin: 2px 0 0;
-  padding: 0;
+.item-disguise-app .idg-name-row input {
+  width: 100%;
   border: none;
-  background: none;
-  font-size: 0.75rem;
-  color: var(--vagabond-c-text-secondary);
-}
-.item-disguise-app .idg-link:hover {
-  color: var(--vagabond-c-text-primary);
-  text-decoration: underline;
-  box-shadow: none;
-}
-.item-disguise-app .idg-editor {
-  min-height: 160px;
-  max-height: 260px;
-  overflow-y: auto;
-  border: 1px solid var(--vagabond-c-faint);
-  border-radius: 3px;
+  background: transparent;
+  padding: 2px 6px;
+  font-family: "Germania", serif;
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--vagabond-c-white);
 }
 .item-disguise-app .idg-true-name {
+  padding: 2px 6px;
   font-family: "Germania", serif;
-  font-size: 1.1rem;
-  color: var(--vagabond-c-text-primary);
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--vagabond-c-white);
 }
-.item-disguise-app .idg-true-lore {
+.item-disguise-app .idg-lore {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+  padding-left: 6px;
+  border-left: 3px solid var(--vagabond-c-chat-yellow);
+  font-size: 13px;
   font-style: italic;
-  font-size: 0.85rem;
   color: var(--vagabond-c-text-secondary);
 }
-.item-disguise-app .idg-true-desc {
+.item-disguise-app .idg-lore .idg-lore-label {
+  flex: 0 0 auto;
+  font-family: "Germania", serif;
+  font-style: normal;
+  color: var(--vagabond-c-text-primary);
+}
+.item-disguise-app .idg-lore input {
   flex: 1;
+  min-width: 0;
+  height: auto;
+  padding: 1px 4px;
+  font-size: 13px;
+  font-style: italic;
+  color: var(--vagabond-c-text-secondary);
+}
+.item-disguise-app .idg-lock {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--vagabond-c-text-primary);
+  cursor: pointer;
+}
+.item-disguise-app .idg-lock > input[type=checkbox] {
+  appearance: none;
+  -webkit-appearance: none;
+  flex: 0 0 auto;
+  position: relative;
+  width: 30px;
+  height: 16px;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  border-radius: 8px;
+  border: 1px solid var(--vagabond-c-text-secondary);
+  background: rgba(128, 128, 128, 0.28);
+  box-shadow: none;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+.item-disguise-app .idg-lock > input[type=checkbox]::before {
+  content: none;
+  display: none;
+}
+.item-disguise-app .idg-lock > input[type=checkbox]::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--vagabond-c-text-secondary);
+  transition: transform 0.15s, background 0.15s;
+}
+.item-disguise-app .idg-lock > input[type=checkbox]:checked {
+  background: var(--vagabond-c-green);
+  border-color: var(--vagabond-c-green);
+}
+.item-disguise-app .idg-lock > input[type=checkbox]:checked::after {
+  background: #fff;
+  transform: translateX(14px);
+}
+.item-disguise-app .idg-lock > input[type=checkbox]:focus-visible {
+  outline: 2px solid var(--vagabond-c-chat-yellow);
+  outline-offset: 2px;
+}
+.item-disguise-app .idg-lock > input[type=checkbox]:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.item-disguise-app .idg-section {
+  margin: 8px 0 4px;
+  padding: 0 0 3px;
+  border: none;
+  border-bottom: 1px solid var(--vagabond-c-lite);
+  font-family: "Germania", serif;
+  font-size: 0.95em;
+  font-weight: bold;
+  color: var(--vagabond-c-text-primary);
+}
+.item-disguise-app .idg-editor {
+  min-height: 150px;
+  max-height: 260px;
+  overflow-y: auto;
+  border: 1px solid var(--vagabond-c-lite);
+  border-radius: 4px;
+}
+.item-disguise-app .idg-true-desc {
   min-height: 60px;
   max-height: 260px;
   overflow-y: auto;
-  font-size: 0.85rem;
+  padding: 8px 10px;
+  border-radius: 4px;
+  background: rgba(var(--vagabond-c-lite), 0.3);
+  font-size: 0.9rem;
+  line-height: 1.45;
 }
 .item-disguise-app .idg-true-desc p {
   margin: 0 0 4px;
@@ -19354,7 +19512,7 @@ ol#combat-tracker.directory-list {
 .item-disguise-app .idg-effects {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 4px;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -19362,42 +19520,65 @@ ol#combat-tracker.directory-list {
 .item-disguise-app .idg-effect {
   display: flex;
   align-items: center;
-  gap: 6px;
-  min-height: 26px;
+  gap: 8px;
+  min-height: 28px;
 }
 .item-disguise-app .idg-effect img {
-  flex: 0 0 22px;
-  width: 22px;
-  height: 22px;
-  border: none;
+  flex: 0 0 26px;
+  width: 26px;
+  height: 26px;
+  border: 1px solid var(--vagabond-c-lite);
+  border-radius: 3px;
 }
 .item-disguise-app .idg-effect input {
   flex: 1;
 }
 .item-disguise-app .idg-effect span {
-  font-size: 0.85rem;
+  font-size: 0.9rem;
 }
 .item-disguise-app .idg-effect.is-edit {
   align-items: flex-start;
+  padding-bottom: 4px;
+  border-bottom: 1px dashed rgba(var(--vagabond-c-lite), 0.6);
+}
+.item-disguise-app .idg-effect.is-edit:last-child {
+  border-bottom: none;
 }
 .item-disguise-app .idg-effect.is-edit img {
-  margin-top: 3px;
+  margin-top: 2px;
 }
 .item-disguise-app .idg-effect .idg-effect-fields {
   display: flex;
-  flex-direction: column;
-  gap: 2px;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 4px 6px;
   flex: 1;
   min-width: 0;
 }
-.item-disguise-app .idg-effect .idg-effect-fields textarea {
-  resize: vertical;
-  min-height: 36px;
-  font-size: 0.8rem;
+.item-disguise-app .idg-effect .idg-effect-name {
+  flex: 0 1 auto;
+  width: auto;
+  field-sizing: content;
+  min-width: 8ch;
+  max-width: 100%;
+  font-weight: bold;
+}
+.item-disguise-app .idg-effect .idg-effect-desc {
+  flex: 1 1 140px;
+  width: auto;
+  height: auto;
+  min-width: 140px;
+  min-height: 0;
+  field-sizing: content;
+  resize: none;
+  padding: 3px 6px;
+  font-family: inherit;
+  font-size: 0.85rem;
+  line-height: 1.35;
 }
 .item-disguise-app .idg-note {
   margin: auto 0 0;
-  padding-top: 6px;
+  padding-top: 8px;
   font-size: 0.75rem;
   font-style: italic;
   color: var(--vagabond-c-text-secondary);
@@ -19409,6 +19590,9 @@ ol#combat-tracker.directory-list {
   display: flex;
   align-items: center;
   gap: 8px;
+  margin-top: 4px;
+  padding-top: 10px;
+  border-top: 2px solid var(--vagabond-c-lite);
 }
 .item-disguise-app .idg-footer .idg-spacer {
   flex: 1;
@@ -19426,13 +19610,76 @@ ol#combat-tracker.directory-list {
 .item-disguise-app .idg-btn {
   flex: 0 0 auto;
   width: auto;
-  height: auto;
-  line-height: normal;
   padding: 4px 12px;
+  font-family: "Germania", serif;
+  font-weight: normal;
 }
 .item-disguise-app .idg-btn.is-primary {
   border-color: var(--vagabond-c-green);
-  font-weight: bold;
+}
+.item-disguise-app .idg-btn.is-reveal {
+  background: var(--vagabond-c-chat-yellow);
+  border-color: var(--vagabond-dark-yellow);
+  color: var(--vagabond-c-dark);
+}
+.item-disguise-app .idg-btn.is-reveal i {
+  color: var(--vagabond-c-dark);
+}
+.item-disguise-app .idg-btn.is-reveal:hover {
+  filter: brightness(1.08);
+  box-shadow: 0 0 6px -1px var(--vagabond-c-chat-yellow);
+}
+.item-disguise-app .idg-shown input[type=text],
+.item-disguise-app .idg-shown textarea {
+  border: 1px solid transparent;
+  border-radius: 3px;
+  background: transparent;
+  box-shadow: none;
+  color: var(--vagabond-c-text-primary);
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.item-disguise-app .idg-shown input[type=text]::placeholder,
+.item-disguise-app .idg-shown textarea::placeholder {
+  color: var(--vagabond-c-text-secondary);
+  opacity: 0.7;
+}
+.item-disguise-app .idg-shown input[type=text]:hover,
+.item-disguise-app .idg-shown textarea:hover {
+  background: var(--vagabond-c-inset-2);
+  border-color: var(--vagabond-c-faint);
+}
+.item-disguise-app .idg-shown input[type=text]:focus,
+.item-disguise-app .idg-shown textarea:focus {
+  background: var(--vagabond-c-inset-2);
+  border-color: var(--vagabond-c-chat-yellow);
+  outline: none;
+  box-shadow: none;
+}
+.item-disguise-app .idg-shown .idg-lore input[type=text] {
+  color: var(--vagabond-c-text-secondary);
+}
+.item-disguise-app .idg-shown .idg-name-row input[type=text] {
+  color: var(--vagabond-c-white);
+}
+.item-disguise-app .idg-shown .idg-name-row input[type=text]::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+.item-disguise-app .idg-shown .idg-name-row input[type=text]:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.35);
+}
+.item-disguise-app .idg-shown .idg-name-row input[type=text]:focus {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: var(--vagabond-c-chat-yellow);
+}
+.item-disguise-app .idg-shown .idg-editor {
+  transition: border-color 0.15s ease;
+}
+.item-disguise-app .idg-shown .idg-editor:hover {
+  border-color: var(--vagabond-c-faint);
+}
+.item-disguise-app .idg-shown .idg-editor:focus-within {
+  border-color: var(--vagabond-c-chat-yellow);
 }
 
 /* Party supplies breakdown - renders inside Foundry's #tooltip, outside sheets */
@@ -32398,3 +32645,5 @@ details[open] .vagabond .npc-immunity-toggle i {
 .vagabond.ongoing-panel .osp-resource-fatigue i {
   color: var(--vagabond-c-muted);
 }
+
+/*# sourceMappingURL=vagabond.css.map */

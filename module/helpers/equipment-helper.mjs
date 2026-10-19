@@ -485,6 +485,20 @@ export class EquipmentHelper {
     return !user?.isGM && this.isCurseBound(item);
   }
 
+  /**
+   * Disguised item with "Can't be equipped until identified" on (`system.disguise.lockUse`): players can't equip or
+   * use it until the GM reveals it. Enforced here (`equipWithHandLimit`), in `VagabondItem._preUpdate`, `roll()`,
+   * `rollAttack()` and the sheet roll handler.
+   */
+  static isUseLocked(item, user = game.user) {
+    const disguise = item?.system?.disguise;
+    return !user?.isGM && !!disguise?.active && !!disguise.lockUse;
+  }
+
+  static warnUseLocked(item) {
+    ui.notifications.warn(game.i18n.format('VAGABOND.Item.Disguise.UseLocked', { name: item?.name ?? '' }));
+  }
+
   static warnCurseLocked(item) {
     ui.notifications.warn(game.i18n.format('VAGABOND.Item.Relic.Slots.CursedStuck', { name: item?.name ?? '' }));
   }
@@ -494,6 +508,8 @@ export class EquipmentHelper {
     if (!item || item.type !== 'equipment') return;
     // A Bound cursed item stays on (user ruling): players can't take it off; nothing bumps it
     if (newState === 'unequipped' && this.isCurseLocked(item)) return this.warnCurseLocked(item);
+    // Unidentified (disguise lock): players can't equip it until the GM reveals it
+    if (newState !== 'unequipped' && this.isUseLocked(item)) return this.warnUseLocked(item);
 
     const HANDS = { oneHand: 1, twoHands: 2 };
     const need = HANDS[newState] ?? 0;

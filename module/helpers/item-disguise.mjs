@@ -21,6 +21,7 @@ import { VagabondChatCard } from './chat-card.mjs';
 export class ItemDisguise {
   static TYPES = new Set(['equipment', 'container']);
   static BONUS_ART = 'icons/magic/control/buff-flight-wings-runes-purple.webp';
+  static UNKNOWN_ART = 'icons/magic/symbols/question-stone-yellow.webp';
 
   static canDisguise(item) {
     return this.TYPES.has(item?.type);
@@ -67,7 +68,7 @@ export class ItemDisguise {
 
   /** The slot / effect view of an attached Relic: its disguise while the host is disguised. */
   static powerView(host, power) {
-    return this.isDisguised(host) && power?.cursed && power.disguise ? { ...power, ...power.disguise } : power;
+    return this.isDisguised(host) && power?.disguise ? { ...power, ...power.disguise } : power;
   }
 
   /** The item's own effects (Relic slot effects are named through `power.disguise` instead). */
@@ -165,10 +166,28 @@ export class ItemDisguise {
       name = L('NamePlus', { base, plus: best.plus });
       description = `<p>${L('Intro', { base })}</p><ul><li><strong>${power.name}:</strong> ${L(`Hint${best.kind === 'armor' ? 'Armor' : 'Weapon'}`, { plus: best.plus })}</li></ul>`;
     }
-    const shown = { name, img: truth.img, description, lore: L('Lore', { base }), curseFx: this.#powerDisguise(own.plus, own.kind) };
+    const shown = { name, img: truth.img, description, lore: L('LoreRelic', { base }), curseFx: this.#powerDisguise(own.plus, own.kind) };
     const effects = Object.fromEntries(this.ownEffects(item).map(effectFor(shown)));
     delete shown.curseFx;
     return { ...shown, effects, powers };
+  }
+
+  /**
+   * Unidentified item: "Unknown <type>" (Weapon / Armor / Gear / Alchemical / Relic / Container), a mystery text, the
+   * real art; every own effect and attached Relic reads as an unknown one until the GM reveals it.
+   */
+  static unknown(item) {
+    const L = (k) => game.i18n.localize(`VAGABOND.Item.Disguise.Unknown.${k}`);
+    const truth = this.truthOf(item);
+    const type = item.type === 'container' ? 'container' : item.system.equipmentType;
+    const key = { weapon: 'Weapon', armor: 'Armor', gear: 'Gear', alchemical: 'Alchemical', relic: 'Relic', container: 'Container' }[type] ?? 'Item';
+    const effect = { name: L('Effect'), img: this.UNKNOWN_ART, description: `<p>${L('EffectHint')}</p>` };
+    const power = { name: L('Power'), img: this.UNKNOWN_ART, description: `<p>${L('EffectHint')}</p>` };
+    return {
+      name: L(key), img: truth.img, description: `<p>${L('Description')}</p>`, lore: '',
+      effects: Object.fromEntries(this.ownEffects(item).map(e => [e.id, { ...effect }])),
+      powers: Object.fromEntries((item.system.relic?.powers ?? []).map(p => [p.id, { ...power }])),
+    };
   }
 
   /** What the disguise editor starts with: the live disguise, else the last one (GM edits), else a generated one. */
@@ -180,11 +199,16 @@ export class ItemDisguise {
         // Only effects renamed by the disguise — ones created since still carry their real name
         effects: Object.fromEntries(this.ownEffects(item).filter(e => item.system.disguise.truth?.effects?.[e.id])
           .map(e => [e.id, { name: e.name, img: e.img, description: e.description ?? '' }])),
+        powers: Object.fromEntries((item.system.relic?.powers ?? []).filter(p => p.disguise).map(p => [p.id, p.disguise])),
       }
       : item.system.disguise?.shown;
     if (!last?.name) return generated;
-    // Effects added since the last disguise get a generated entry
-    return { ...last, effects: { ...generated.effects, ...(last.effects ?? {}) }, powers: generated.powers };
+    // Effects / Relics added since the last disguise get a generated entry
+    return {
+      ...last,
+      effects: { ...generated.effects, ...(last.effects ?? {}) },
+      powers: { ...generated.powers, ...(last.powers ?? {}) },
+    };
   }
 
   /* -------------------------------------------- */
@@ -192,13 +216,17 @@ export class ItemDisguise {
   /* -------------------------------------------- */
 
   /**
-   * Disguise `item` as `shown` (`{name, img, description, lore, effects}`), or update a live disguise.
-   * Missing fields fall back to `draft(item)`.
+   * Disguise `item` as `shown` (`{name, img, description, lore, effects, powers}`), or update a live disguise.
+   * Missing fields fall back to `draft(item)`. Attached Relics in `powers` get that disguise; others none.
    */
   static async disguise(item, shown = {}) {
     if (!game.user.isGM || !this.canDisguise(item)) return false;
     const draft = this.draft(item);
-    const look = { ...draft, ...shown, effects: { ...draft.effects, ...(shown.effects ?? {}) } };
+    const look = {
+      ...draft, ...shown,
+      effects: { ...draft.effects, ...(shown.effects ?? {}) },
+      powers: { ...draft.powers, ...(shown.powers ?? {}) },
+    };
     const truth = this.truthOf(item);
     const fx = this.ownEffects(item);
     const update = {
@@ -207,12 +235,18 @@ export class ItemDisguise {
       'system.description': look.description ?? '',
       'system.disguise.active': true,
       'system.disguise.truth': truth,
-      'system.disguise.shown': { name: look.name, img: look.img, description: look.description ?? '', lore: look.lore ?? '', effects: look.effects },
+      ...(shown.lockUse !== undefined ? { 'system.disguise.lockUse': !!shown.lockUse } : {}),
+      'system.disguise.shown': {
+        name: look.name, img: look.img, description: look.description ?? '', lore: look.lore ?? '', effects: look.effects, powers: look.powers,
+      },
     };
     if (item.type === 'equipment') {
       update['system.lore'] = look.lore ?? '';
-      update['system.relic.powers'] = (item.system.relic.powers ?? []).map(p => (p.cursed && !p.disguise && draft.powers?.[p.id]
-        ? { ...p, disguise: draft.powers[p.id] } : p));
+      update['system.relic.powers'] = (item.system.relic.powers ?? []).map(p => {
+        if (look.powers[p.id]) return { ...p, disguise: look.powers[p.id] };
+        const { disguise, ...rest } = p;
+        return rest;
+      });
     }
     await item.update(update);
     if (fx.length) {

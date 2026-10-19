@@ -121,8 +121,8 @@ export class RelicHelper {
       },
     });
     for (const real of hostItem.system.relic.powers ?? []) {
-      // Disguised host (ItemDisguise): a Cursed Relic's effects carry its disguise name / art
-      const disguised = hostItem.system.disguise?.active && real.cursed && real.disguise;
+      // Disguised host (ItemDisguise): a disguised Relic's effects (Cursed, or Unknown Item) carry its disguise name / art
+      const disguised = hostItem.system.disguise?.active && real.disguise;
       const power = disguised ? { ...real, name: real.disguise.name, img: real.disguise.img || real.img } : real;
       for (const change of (power.changes ?? []).map(c => (disguised ? { ...c, name: '' } : c))) {
         // On a weapon, "(+N) Weapon"-style changes (`system.universalWeapon*`) belong to THAT weapon only:
