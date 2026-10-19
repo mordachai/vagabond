@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## v6.8.2
 - **[Added]** Disguise window: Unknown Item button. The item shows as Unknown Weapon / Armor / Gear / Alchemical / Relic / Container with a mystery text, keeps its image, and its effects and attached Relics read as Unknown until revealed.
 - **[Added]** Disguise window: switch "Can't be equipped until identified". While hidden, players can't equip, use or attack with the item; the GM can.
 - **[Changed]** Disguise window restyled like the item sheet (yellow frame, portrait frame, title banner, tab strip). Generate is now Disguise Item and works on any item; Save Disguise is Save; Reveal is yellow. Image pick and reset sit in the portrait corners, Lore is one line, effect descriptions follow their names, editable fields highlight on hover.
