@@ -132,6 +132,27 @@ export class VagabondSpellSequencer {
     return this.SURFACE_HOLD.find(h => h.match.test(name))?.at ?? null;
   }
 
+  /** Default hold point (%) of an area clip with no loop version, left on the map by a Spell Surface. */
+  static SURFACE_AREA_HOLD = 50;
+
+  /**
+   * What a Spell Surface shows for a school + delivery (not Line, see lineFit): the entry's `loop` video when set
+   * (looped), a clip whose name says Loop (looped), else the clip played once and held on its `hold` frame (% of the
+   * clip, default SURFACE_AREA_HOLD; 0 = loop it anyway). Beams / cones (chain, multiray, length) don't fit a patch.
+   * @returns {{cfg: object, file: string, hold: number|null}|null}  hold = fraction (0-1], null = loop
+   */
+  static surfaceAnimFor(school, deliveryType) {
+    const cfg = this.areaAnimFor(school, deliveryType);
+    if (!cfg || !['radius', 'diameter', 'fixed'].includes(cfg.scaleMode)) return null;
+    const loop = String(cfg.loop ?? '').trim();
+    if (loop) return { cfg, file: loop, hold: null };
+    const file = Array.isArray(cfg.file) ? cfg.file[0] : cfg.file;
+    if (/loop/i.test(String(file).split('/').pop())) return { cfg, file, hold: null };
+    const raw = cfg.hold;
+    const pct = (raw === undefined || raw === null || raw === '') ? this.SURFACE_AREA_HOLD : Number(raw);
+    return { cfg, file, hold: (pct > 0 && pct <= 100) ? pct / 100 : null };
+  }
+
   /** Hold point (fraction 0-1] of a clip for a Spell Surface, or null to loop it. */
   static surfaceHoldFor(cfg, file = cfg?.file) {
     const raw = cfg?.hold;
@@ -153,6 +174,9 @@ export class VagabondSpellSequencer {
     if (!f) return null;
     let template = null;
     const db = globalThis.Sequencer?.Database;
+    const lengthFt = lengthPx / canvas.grid.size * canvas.dimensions.distance;
+    const sizes = this.lineVariants(f);
+    if (sizes.length > 1) f = sizes.reduce((best, v) => Math.abs(v.ft - lengthFt) < Math.abs(best.ft - lengthFt) ? v : best).file;
     try {
       const isDb = !/\.\w{2,5}$/.test(f);
       const key = isDb ? f : db?.inverseFlattenedEntries?.get(f);
@@ -163,7 +187,6 @@ export class VagabondSpellSequencer {
         const variants = (entry?.file && typeof entry.file === 'object' && !Array.isArray(entry.file))
           ? Object.entries(entry.file).filter(([k, v]) => /^\d+ft$/i.test(k) && typeof v === 'string') : [];
         if (variants.length) {
-          const lengthFt = lengthPx / canvas.grid.size * canvas.dimensions.distance;
           f = variants.reduce((best, [k, v]) => Math.abs(parseInt(k) - lengthFt) < Math.abs(parseInt(best[0]) - lengthFt) ? [k, v] : best)[1];
         } else if (isDb) {
           const one = Array.isArray(entry?.file) ? entry.file[0] : entry?.file;
@@ -176,6 +199,36 @@ export class VagabondSpellSequencer {
     if (!meta?.w || !meta?.h) return null;
     const [grid = null, start = 0, end = 0] = template ?? [];
     return { file: f, w: meta.w, h: meta.h, grid, start, end };
+  }
+
+  static #lineVariantCache = new Map();
+
+  /**
+   * Every length version of a Line clip file: files registered in the Sequencer database whose name differs only by
+   * the size segment (`_15ft_`, `_30ft_`, `_10x05ft_`...) and the pixel size. Lets a config name ONE file of a set.
+   * @param {string} file  plain file path
+   * @returns {{ft: number, file: string}[]}  empty when the name has no size segment
+   */
+  static lineVariants(file) {
+    const f = String(file ?? '');
+    if (this.#lineVariantCache.has(f)) return this.#lineVariantCache.get(f);
+    let out = [];
+    const sizeRe = /_(\d+)(?:x(\d+))?ft_/gi;
+    const hits = [...f.matchAll(sizeRe)];
+    const files = globalThis.Sequencer?.Database?.inverseFlattenedEntries;
+    if (hits.length && files?.keys) {
+      const hit = hits.at(-1);
+      const esc = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const head = f.slice(0, hit.index);
+      const tail = f.slice(hit.index + hit[0].length);
+      const re = new RegExp(`^${esc(head)}_(\\d+)(?:x(\\d+))?ft_${esc(tail).replace(/\d+x\d+(?=\\\.\w+$)/, '\\d+x\\d+')}$`, 'i');
+      for (const path of files.keys()) {
+        const m = re.exec(path);
+        if (m) out.push({ ft: Math.max(Number(m[1]), Number(m[2] ?? 0)), file: path });
+      }
+    }
+    this.#lineVariantCache.set(f, out);
+    return out;
   }
 
   /** Visible content box per `file|pct` (see contentBox). */
@@ -586,6 +639,23 @@ export class VagabondSpellSequencer {
   }
 
   /**
+   * The length version of a beam clip (see lineVariants) closest to the distance between two points.
+   * @param {string} file
+   * @param {{x,y}|Token} src
+   * @param {{x,y}|Token} dst
+   * @returns {string}
+   * @private
+   */
+  static _beamFile(file, src, dst) {
+    const sizes = this.lineVariants(file);
+    if (sizes.length < 2) return file;
+    const a = src?.center ?? src;
+    const b = dst?.center ?? dst;
+    const ft = Math.hypot(b.x - a.x, b.y - a.y) / canvas.grid.size * canvas.dimensions.distance;
+    return sizes.reduce((best, v) => Math.abs(v.ft - ft) < Math.abs(best.ft - ft) ? v : best).file;
+  }
+
+  /**
    * Draw a beam from srcPos to dstPos using Sequencer's native stretchTo.
    * stretchTo handles rotation, positioning, and aspect-ratio-correct scaling
    * (scaleX = scaleY = dist / texture.width) without any manual intervention.
@@ -601,7 +671,7 @@ export class VagabondSpellSequencer {
     if (!dist) return seq.effect().file(cfg.file).atLocation(srcPos).duration(this._getDuration(cfg));
 
     const fx = seq.effect()
-      .file(cfg.file)
+      .file(this._beamFile(cfg.file, srcPos, dstPos))
       .atLocation(srcPos)
       .stretchTo(dstPos)
       .duration(this._getDuration(cfg));
@@ -641,7 +711,7 @@ export class VagabondSpellSequencer {
       const nodes = [casterToken, ...targetTokens];
       for (let i = 0; i < nodes.length - 1; i++) {
         let fx = chainSeq.effect()
-          .file(cfg.file)
+          .file(this._beamFile(cfg.file, nodes[i], nodes[i + 1]))
           .attachTo(nodes[i].isSpace ? this._center(nodes[i]) : nodes[i])
           .stretchTo(nodes[i + 1].isSpace ? this._center(nodes[i + 1]) : nodes[i + 1], { attachTo: !nodes[i + 1].isSpace })
           .duration(this._getDuration(cfg))
@@ -661,7 +731,7 @@ export class VagabondSpellSequencer {
           continue;
         }
         let fx = beamSeq.effect()
-          .file(cfg.file)
+          .file(this._beamFile(cfg.file, casterToken, target))
           .attachTo(casterToken)
           // A Remote space (SpellPlacement pseudo-target) is a plain point: nothing to attach to
           .stretchTo(target.isSpace ? this._center(target) : target, { attachTo: !target.isSpace })

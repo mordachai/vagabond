@@ -27,6 +27,7 @@ export class SequencerFxConfig extends api.HandlebarsApplicationMixin(api.Applic
       browseAudio:   SequencerFxConfig.#onBrowseAudio,
       previewCast:   SequencerFxConfig.#onPreviewCast,
       previewArea:   SequencerFxConfig.#onPreviewArea,
+      previewAreaLoop: SequencerFxConfig.#onPreviewAreaLoop,
       previewSound:  SequencerFxConfig.#onPreviewSound,
       exportConfig:    SequencerFxConfig.#onExportConfig,
       importConfig:    SequencerFxConfig.#onImportConfig,
@@ -88,6 +89,8 @@ export class SequencerFxConfig extends api.HandlebarsApplicationMixin(api.Applic
               : dtLabel,
             ...animCfg,
             volume: animCfg.volume ?? 0.6,
+            // Loop version of the clip for a Spell area left on the map (else the clip stays on its frame)
+            loop: animCfg.loop ?? '',
             // Frame a Spell area left on the map stays on (%); empty shows the built-in one
             hold: animCfg.hold ?? VagabondSpellSequencer.defaultHoldFor(animCfg.file) ?? '',
           };
@@ -171,6 +174,13 @@ export class SequencerFxConfig extends api.HandlebarsApplicationMixin(api.Applic
         onPick: (pct) => { holdInput.value = String(pct); holdInput.dispatchEvent(new Event('change', { bubbles: true })); },
       } : null,
     });
+  }
+
+  static #onPreviewAreaLoop(event, target) {
+    const prefix = `areaAnims.${target.dataset.school}.${target.dataset.delivery}`;
+    const file = this.element.querySelector(`input[name="${prefix}.loop"]`)?.value;
+    if (!file) { ui.notifications.warn(game.i18n.localize('VAGABOND.SequencerFX.NoFile')); return; }
+    VideoPreviewDialog.open([{ label: '', spec: file }]);
   }
 
   /** Preview group for a row: its video plus the row's (unsaved) sound + volume inputs. */

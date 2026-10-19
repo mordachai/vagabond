@@ -127,6 +127,7 @@ export class SpellSurface {
       casterUuid: caster.uuid,
       spellUuid: spell.uuid,
       held: scope.focusHeld === true,
+      deliveryType: scope.deliveryType ?? null,
       sceneId: where.sceneId,
       shapes: where.shapes,
     }, spell.name);
@@ -204,6 +205,7 @@ export class SpellSurface {
         createdIn: this.#combatOf(caster),
         damageType: spell.system.damageType ?? '-',
         fxSchool: VagabondSpellSequencer.schoolOf(spell),
+        deliveryType: data.deliveryType ?? null,
         difficult: !!rules.difficult,
         enterDamage: String(rules.enterDamage ?? '').trim(),
         turnEndDamage: String(rules.turnEndDamage ?? '').trim(),
@@ -456,7 +458,19 @@ export class SpellSurface {
     if (!s || this.#displayMode() === 'art') return false;
     if (!VagabondSpellSequencer.isAvailable() || !VagabondSpellSequencer.isEnabledForWorld()) return false;
     try { if (!VagabondSpellSequencer.isEnabledForUser()) return false; } catch { return false; }
-    return (!!s.clip && this.#clipExists(s.clip)) || !!this.#lineCfg(regionDoc);
+    return !!this.#areaAnim(regionDoc) || (!!s.clip && this.#clipExists(s.clip)) || !!this.#lineCfg(regionDoc);
+  }
+
+  /**
+   * The school's area animation for the Cast's delivery (Spell FX config), which wins over the Spell's own `clip`:
+   * its loop video, else the clip held on a frame (VagabondSpellSequencer.surfaceAnimFor). Older areas without a
+   * stored delivery keep the Spell's clip.
+   */
+  static #areaAnim(regionDoc) {
+    const s = this.of(regionDoc);
+    if (!s?.deliveryType || !s.fxSchool) return null;
+    const anim = VagabondSpellSequencer.surfaceAnimFor(s.fxSchool, s.deliveryType);
+    return (anim && this.#clipExists(String(anim.file))) ? anim : null;
   }
 
   /** World setting `spellAreaDisplay` (loop | art), unless this player overrides it. */
@@ -520,6 +534,9 @@ export class SpellSurface {
       const clipOk = !!s.clip && this.#clipExists(s.clip);
       const lineCfg = this.#lineCfg(doc);
       const lineFile = lineCfg ? await VagabondFXResolver.resolve(lineCfg.file) : null;
+      const area = this.#areaAnim(doc);
+      let areaFile = area ? await VagabondFXResolver.resolve(area.file) : null;
+      if (Array.isArray(areaFile)) areaFile = areaFile[0];
       // Its size, when the file name doesn't carry it (`_1000x400`)
       if (lineFile) await VagabondSpellSequencer._warmMeta(Array.isArray(lineFile) ? lineFile[0] : lineFile);
       if (placeable.destroyed || !this.#seqReady) return;
@@ -581,11 +598,11 @@ export class SpellSurface {
           }
           continue;
         }
-        if (!clipOk) continue;
+        if (!areaFile && !clipOk) continue;
         const box = this.#shapeBounds(shape, fallback);
         if (!box?.width || !box?.height) continue;
         const fx = seq.effect()
-          .file(s.clip)
+          .file(areaFile ?? s.clip)
           .atLocation({ x: box.x + box.width / 2, y: box.y + box.height / 2 })
           .size({ width: box.width, height: box.height })
           .belowTokens()
@@ -596,7 +613,11 @@ export class SpellSurface {
           .name(name)
           .tieToDocuments(doc);
         if (!box.rect) fx.mask(doc);
-        if (s.tint) fx.tint(s.tint);
+        if (areaFile) {
+          // No loop version: play it once and stay on its frame
+          if (area.hold && area.hold < 1) fx.endTimePerc(1 - area.hold).loopOptions({ loops: 1 });
+          else if (area.hold) fx.loopOptions({ loops: 1 });
+        } else if (s.tint) fx.tint(s.tint);
       }
       this.#looping.add(doc.id);
       await seq.play();

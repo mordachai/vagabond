@@ -13640,6 +13640,10 @@ ol#combat-tracker.directory-list {
   flex: 2 1 0;
   min-width: 0;
 }
+#sequencer-fx-config.sequencer-fx-config-form .sfx-delivery-loop {
+  flex: 1 1 12rem;
+  min-width: 0;
+}
 #sequencer-fx-config.sequencer-fx-config-form .sfx-delivery-divider {
   width: 1px;
   height: 20px;

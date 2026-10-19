@@ -145,6 +145,20 @@
                   </option>
                   {{/each}}
                 </select>
+                <div class="sfx-file-input sfx-delivery-loop" data-tooltip="{{localize 'VAGABOND.SequencerFX.LoopVideoHint'}}">
+                  <input type="text"
+                    name="areaAnims.{{../key}}.{{deliveryKey}}.loop"
+                    value="{{loop}}" placeholder="{{localize 'VAGABOND.SequencerFX.LoopVideoPlaceholder'}}"/>
+                  <button type="button" class="sfx-browse-btn"
+                    data-action="browseVideo"
+                    data-field="areaAnims.{{../key}}.{{deliveryKey}}.loop"
+                    title="{{localize 'VAGABOND.SequencerFX.BrowseVideoTooltip'}}"><i class="fas fa-film"></i></button>
+                  <button type="button" class="sfx-preview-btn"
+                    data-action="previewAreaLoop"
+                    data-school="{{../key}}"
+                    data-delivery="{{deliveryKey}}"
+                    title="{{localize 'VAGABOND.SequencerFX.PreviewInWindowTooltip'}}"><i class="fas fa-play"></i></button>
+                </div>
                 <label class="sfx-hold" data-tooltip="{{localize 'VAGABOND.SequencerFX.HoldFrameHint'}}">
                   <span>{{localize "VAGABOND.SequencerFX.HoldFrame"}}</span>
                   <input type="number" class="sfx-hold-input"
