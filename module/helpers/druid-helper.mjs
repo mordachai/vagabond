@@ -79,6 +79,43 @@ export class DruidHelper {
     };
   }
 
+  /**
+   * Pick one Beast with HD ≤ `level` in the system's picker (Metamorph's filter query, not its dialog).
+   * `revertDoc` = token offered its own form as a first tile while it wears a form (null = never).
+   * @returns {Promise<{actorId, packId}|{revert: true}|null>}
+   */
+  static async #pickBeast(MM, level, { title, hint, revertDoc = null }) {
+    const getProperty = foundry.utils.getProperty;
+    const hdOf = a => getProperty(a.packId
+      ? game.packs.get(a.packId)?.index.get(a.actorId)
+      : game.actors.get(a.actorId), 'system.hd');
+    const found = (await MM.queryFilter(this.beastFilter(level))) ?? [];
+    const candidates = found
+      .map(a => {
+        const hd = hdOf(a);
+        return {
+          actorId: a.actorId,
+          packId: a.packId ?? null,
+          name: a.name,
+          img: a.img || 'icons/svg/mystery-man.svg',
+          cost: 1,
+          hd: Number(hd) || 0,
+          badge: hd != null ? game.i18n.format('VAGABOND.Conjure.HD', { hd }) : '',
+        };
+      })
+      .sort((x, y) => x.hd - y.hd || x.name.localeCompare(y.name));
+    const main = revertDoc ? this.mainActorOf(revertDoc.actor) : null;
+    if (main) candidates.unshift({ revert: true, name: main.name, img: main.img || 'icons/svg/mystery-man.svg', cost: 0 });
+    if (!candidates.length) {
+      ui.notifications.warn(this.#L('NoBeasts', { level }));
+      return null;
+    }
+    const { ConjurePicker } = await import('../applications/conjure-picker.mjs');
+    const entry = (await ConjurePicker.prompt({ title, hint, budget: 1, candidates, single: true }))?.picks?.[0]?.entry;
+    if (!entry) return null;
+    return entry.revert ? { revert: true } : { actorId: entry.actorId, packId: entry.packId };
+  }
+
   /** Name of a picker result ({actorId, packId}) for chat. */
   static formName(choice) {
     if (!choice) return '';
@@ -95,8 +132,8 @@ export class DruidHelper {
   /* -------------------------------------------- */
 
   /**
-   * Polymorph spell button (`system:druid.polymorph`): pick one Beast with HD ≤ Level (+ Savagery) through
-   * Metamorph and swap every Target's token to it (the caster's when there are none).
+   * Polymorph spell button (`system:druid.polymorph`): pick one Beast with HD ≤ Level (+ Savagery) in the
+   * system's picker and swap every Target's token to it through Metamorph (the caster's when there are none).
    * @param {{actor: Actor, token: Token|null, targets: Token[]}} scope - item-macro scope
    */
   static async polymorph({ actor, item, token, targets }) {
@@ -118,9 +155,10 @@ export class DruidHelper {
     const lines = [];  // one chat card for the whole Cast: a line per Target
     // "The Target becomes a Beast of your choice": one pick for the whole Cast, every Target takes that form
     const docs = tokens.map(t => t.document ?? t);
-    const choice = await MM.promptForm(docs[0], {
+    const choice = await this.#pickBeast(MM, level, {
       title: this.#L('PickerTitle', { level }),
-      filter: this.beastFilter(level),
+      hint: this.#L('PickerHint', { level }),
+      revertDoc: docs[0],
     });
     if (!choice) return;
     // The Target keeps its HP (book); the form remembers it, so its revert carries the HP back. A Spell: the
@@ -293,10 +331,9 @@ export class DruidHelper {
     }
 
     const level = this.effectiveLevel(actor);
-    const choice = await MM.promptForm(token, {
+    const choice = await this.#pickBeast(MM, level, {
       title: this.#L('ForcePicker', { level }),
-      filter: this.beastFilter(level),
-      revert: false,
+      hint: this.#L('ForceHint', { level }),
     });
     if (!choice || choice.revert) return;
 

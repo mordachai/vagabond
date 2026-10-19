@@ -5,6 +5,7 @@ const { api } = foundry.applications;
  * (Forge, one per Target / 5' cube). Click a tile = one more, right-click = one less; the meter shows what is
  * spent of the budget and tiles that no longer fit dim. Search filters in place (no re-render).
  * `prompt()` resolves `{picks: [{entry, count}], equip}` or null (cancelled / closed).
+ * `single: true` (Polymorph, Force of Nature): no budget, a click picks that one tile and closes → `{picks: [{entry, count: 1}]}`.
  */
 export class ConjurePicker extends api.HandlebarsApplicationMixin(api.ApplicationV2) {
 
@@ -39,6 +40,7 @@ export class ConjurePicker extends api.HandlebarsApplicationMixin(api.Applicatio
    * @param {string} opts.budgetLabel
    * @param {Array<{uuid, name, img, cost, badge}>} opts.candidates
    * @param {string|null} [opts.equipToggle]  label of the "Equip" switch (Forge on yourself), or null
+   * @param {boolean} [opts.single]  pick exactly one tile (no budget meter, no Confirm)
    * @returns {Promise<{picks: Array<{entry: object, count: number}>, equip: boolean}|null>}
    */
   static prompt(opts) {
@@ -56,6 +58,7 @@ export class ConjurePicker extends api.HandlebarsApplicationMixin(api.Applicatio
       budget: o.budget,
       budgetLabel: o.budgetLabel,
       equipToggle: o.equipToggle ?? null,
+      single: !!o.single,
       candidates: o.candidates.map((c, index) => ({ ...c, index, search: c.name.toLowerCase() })),
     };
   }
@@ -67,6 +70,7 @@ export class ConjurePicker extends api.HandlebarsApplicationMixin(api.Applicatio
   }
 
   #refresh() {
+    if (this.#opts.single) return;
     const root = this.element;
     const spent = this.#spent();
     const left = this.#opts.budget - spent;
@@ -93,13 +97,18 @@ export class ConjurePicker extends api.HandlebarsApplicationMixin(api.Applicatio
       const tile = ev.target.closest('.cjp-tile');
       if (!tile) return;
       const i = Number(tile.dataset.index);
+      if (this.#opts.single) {
+        this.#counts = new Map([[i, 1]]);
+        this.#confirm();
+        return;
+      }
       if (this.#opts.candidates[i].cost > this.#opts.budget - this.#spent()) return;
       this.#counts.set(i, (this.#counts.get(i) ?? 0) + 1);
       this.#refresh();
     });
     grid.addEventListener('contextmenu', (ev) => {
       const tile = ev.target.closest('.cjp-tile');
-      if (!tile) return;
+      if (!tile || this.#opts.single) return;
       ev.preventDefault();
       const i = Number(tile.dataset.index);
       const n = (this.#counts.get(i) ?? 0) - 1;
@@ -115,6 +124,12 @@ export class ConjurePicker extends api.HandlebarsApplicationMixin(api.Applicatio
     root.querySelector('.cjp-cancel')?.addEventListener('click', () => this.close());
     this.#refresh();
     root.querySelector('.cjp-search')?.focus();
+  }
+
+  /** Resized by hand → the grid fills the window instead of keeping its natural cap (`.is-sized`). */
+  _onPosition(position) {
+    super._onPosition(position);
+    this.element?.classList.toggle('is-sized', position.height !== 'auto');
   }
 
   #confirm() {

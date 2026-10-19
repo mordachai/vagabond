@@ -1,28 +1,37 @@
-<div class="cjp-root">
+{{! Conjure picker (Beast / Forge / Polymorph): the item sheet's face — yellow frame, nav band, relic-slot tiles }}
+<div class="cjp-root {{#if single}}is-single{{/if}}">
   <p class="cjp-hint">{{hint}}</p>
-  <div class="cjp-toolbar">
+  <nav class="cjp-strip">
     <input type="search" class="cjp-search" placeholder="{{localize 'VAGABOND.Conjure.Search'}}" />
-    <div class="cjp-budget">
+    {{#unless single}}
+    <span class="cjp-budget">
       <span class="cjp-budget-label">{{budgetLabel}}</span>
       <span class="cjp-budget-value"><span class="cjp-spent">0</span> / {{budget}}</span>
-    </div>
-  </div>
+    </span>
+    {{/unless}}
+  </nav>
   <div class="cjp-grid">
     {{#each candidates}}
-    <button type="button" class="cjp-tile" data-index="{{index}}" data-search="{{search}}" data-tooltip="{{name}}">
-      <img src="{{img}}" alt="" loading="lazy" />
+    <button type="button" class="cjp-tile {{#if revert}}is-revert{{/if}}" data-index="{{index}}" data-search="{{search}}" data-tooltip="{{name}}">
+      <span class="cjp-art">
+        <img src="{{img}}" alt="" loading="lazy" />
+        {{#if revert}}<i class="cjp-revert-icon fa-solid fa-rotate-left"></i>{{/if}}
+        <span class="cjp-count" hidden>0</span>
+      </span>
       <span class="cjp-name">{{name}}</span>
-      <span class="cjp-badge">{{badge}}</span>
-      <span class="cjp-count" hidden>0</span>
+      {{#if badge}}<span class="cjp-badge">{{badge}}</span>{{/if}}
     </button>
     {{/each}}
   </div>
-  <p class="cjp-help">{{localize 'VAGABOND.Conjure.PickerHelp'}}</p>
+  <p class="cjp-help">{{#if single}}{{localize 'VAGABOND.Conjure.PickOneHelp'}}{{else}}{{localize 'VAGABOND.Conjure.PickerHelp'}}{{/if}}</p>
   <footer class="cjp-footer">
     {{#if equipToggle}}
     <label class="cjp-equip"><input type="checkbox" class="cjp-equip-input" checked /> {{equipToggle}}</label>
     {{/if}}
-    <button type="button" class="cjp-cancel">{{localize 'Cancel'}}</button>
-    <button type="button" class="cjp-confirm" disabled><i class="fa-solid fa-wand-sparkles"></i> {{localize 'VAGABOND.Conjure.Confirm'}}</button>
+    <span class="cjp-spacer"></span>
+    <button type="button" class="cjp-btn cjp-cancel"><i class="fa-solid fa-xmark"></i> {{localize 'Cancel'}}</button>
+    {{#unless single}}
+    <button type="button" class="cjp-btn cjp-confirm" disabled><i class="fa-solid fa-wand-sparkles"></i> {{localize 'VAGABOND.Conjure.Confirm'}}</button>
+    {{/unless}}
   </footer>
 </div>
