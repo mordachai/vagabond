@@ -1628,7 +1628,11 @@
         "SaveFailed": "Não foi possível salvar a predefinição",
         "ImportedTo": "Adicionada à lista: {file}",
         "OverwriteTitle": "Substituir arquivo",
-        "OverwriteConfirm": "Substituir {file}?"
+        "OverwriteConfirm": "Substituir {file}?",
+        "ActiveMissing": "Spell FX: o arquivo ativo {file} sumiu. Agora ativo: {name}.",
+        "CopyName": "{name} (cópia)",
+        "DuplicateTitle": "Salvar uma cópia",
+        "SystemReadOnly": "Arquivos do sistema não podem ser alterados: as atualizações do sistema os substituem. Suas mudanças são salvas numa cópia sua, que passa a ser o arquivo ativo."
       },
       "NoToken": "Nenhum token no cenário para pré-visualizar.",
       "Unavailable": "O módulo Sequencer não está ativo.",

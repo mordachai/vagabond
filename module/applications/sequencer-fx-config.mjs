@@ -95,7 +95,7 @@ export class SequencerFxConfig extends api.HandlebarsApplicationMixin(api.Applic
       ],
       rejectClose: false,
     });
-    if (choice === 'save') await SequencerFxConfig.#performSave.call(this);
+    if (choice === 'save') { if (!await SequencerFxConfig.#performSave.call(this)) return this; }
     else if (choice !== 'discard') return this;
     return super.close(options);
   }
@@ -121,6 +121,8 @@ export class SequencerFxConfig extends api.HandlebarsApplicationMixin(api.Applic
   }
 
   async _prepareContext(options) {
+    // One file is always active, and the stored config is its copy
+    await SpellFxPresets.ensureActive();
     // Merge stored config over SPELL_FX defaults
     const raw = game.settings.get('vagabond', 'sequencerFxConfig') ?? {};
     const stored = foundry.utils.expandObject(raw);
@@ -449,16 +451,19 @@ export class SequencerFxConfig extends api.HandlebarsApplicationMixin(api.Applic
     this.render();
   }
 
+  /** Reset = the System default file becomes the active one. */
   static async #onResetDefaults() {
-    await game.settings.set('vagabond', 'sequencerFxConfig', {});
+    const { system } = await SpellFxPresets.list();
+    const def = system.find(p => !p.invalid && p.file === SpellFxPresets.DEFAULT_FILE);
+    if (def) await SpellFxPresets.apply(def);
+    else await game.settings.set('vagabond', 'sequencerFxConfig', {});
     this.#dropDraft = true;
     ui.notifications.info(game.i18n.localize('VAGABOND.SequencerFX.Reset'));
     this.render();
   }
 
   static async #onSaveAndClose() {
-    await SequencerFxConfig.#performSave.call(this);
-    this.close({ force: true });
+    if (await SequencerFxConfig.#performSave.call(this)) this.close({ force: true });
   }
 
   static async #onSubmit(event, form, formData) {
@@ -466,26 +471,51 @@ export class SequencerFxConfig extends api.HandlebarsApplicationMixin(api.Applic
     this.render();
   }
 
-  static async #performSave(formData, { quiet = false } = {}) {
-    // If formData not passed (from saveAndClose), read the live form
-    const raw = formData
-      ? formData.object
-      : new foundry.applications.ux.FormDataExtended(this.element).object;
-    const data = foundry.utils.expandObject(raw);
-    // The Presets tab has no school fields: nothing to save from it
-    if (!data.castAnims && !data.areaAnims) return;
-    // Merge over what is stored (every school's fields are in the form, unsaved draft included)
+  /**
+   * The form's school fields (else the unsaved draft, e.g. from the Presets tab) merged over the stored config:
+   * `{stored, next}`, or null when there is nothing to save.
+   */
+  #formConfig(formData) {
+    const raw = formData ? formData.object : new foundry.applications.ux.FormDataExtended(this.element).object;
+    let data = foundry.utils.expandObject(raw);
+    if (!data.castAnims && !data.areaAnims) data = this.#draft;
+    if (!data) return null;
     const stored = foundry.utils.expandObject(game.settings.get('vagabond', 'sequencerFxConfig') ?? {});
-    const next = foundry.utils.mergeObject(stored, data, { inplace: false });
-    // Still "based on" the loaded preset, now changed by hand
-    if (stored._meta && !foundry.utils.isEmpty(foundry.utils.diffObject(stored, next))) next._meta = { ...stored._meta, modified: true };
+    return { stored, next: foundry.utils.mergeObject(stored, data, { inplace: false }) };
+  }
 
-    await game.settings.set('vagabond', 'sequencerFxConfig', next);
-    // Saved: the next render starts from the stored config (new baseline)
+  /** The new baseline after a save: the next render starts from the stored config. */
+  #afterSave() {
     this.#dropDraft = true;
     this.#baseline = SequencerFxConfig.#formAnims(this.element);
     this.#markUnsaved();
+  }
+
+  /**
+   * Save into the active file. System files are read-only (replaced on update): the GM is told and saves a copy of
+   * their own, which becomes the active file. @returns {Promise<boolean>} false = not saved (cancelled / failed)
+   */
+  static async #performSave(formData, { quiet = false } = {}) {
+    const form = this.#formConfig(formData);
+    if (!form) return true;
+    const { stored, next } = form;
+    if (foundry.utils.isEmpty(foundry.utils.diffObject(stored, next))) { this.#afterSave(); return true; }
+    const active = SpellFxPresets.loadedMeta();
+    if (!active || !SpellFxPresets.isUserFile(active.source)) {
+      const saved = await SequencerFxConfig.#saveAsFile.call(this, next, { duplicateOf: active });
+      if (saved) this.#afterSave();
+      return saved;
+    }
+    try {
+      await SpellFxPresets.writeActive(next);
+    } catch (err) {
+      console.error('Vagabond | Spell FX save failed', err);
+      ui.notifications.error(`${game.i18n.localize('VAGABOND.SequencerFX.Presets.SaveFailed')}: ${err.message}`);
+      return false;
+    }
+    this.#afterSave();
     if (!quiet) ui.notifications.info(game.i18n.localize('VAGABOND.SequencerFX.Saved'));
+    return true;
   }
 
   /** Make a file the active one (Video and Sound on). */
@@ -510,21 +540,38 @@ export class SequencerFxConfig extends api.HandlebarsApplicationMixin(api.Applic
     this.render();
   }
 
+  /** Save as preset: the current config (unsaved edits included) into a file of your own, which becomes active. */
   static async #onSavePreset() {
+    const config = this.#formConfig(null)?.next ?? SequencerFxConfig.#effectiveConfig();
+    if (await SequencerFxConfig.#saveAsFile.call(this, config)) this.#afterSave();
+    this.render();
+  }
+
+  /**
+   * Ask name / description / folder and write `config` there; the file becomes the active one.
+   * `duplicateOf` (the active System file): the GM is told System files can't be changed, and the dialog offers a copy.
+   * @returns {Promise<boolean>} saved
+   */
+  static async #saveAsFile(config, { duplicateOf = null } = {}) {
     const loaded = SpellFxPresets.loadedMeta();
     // Re-saving a preset of your own updates it; anything else starts a new file
     const src = loaded?.source ? loaded : null;
-    const own = !!src && SpellFxPresets.userFiles().includes(src.source);
+    const own = !duplicateOf && !!src && SpellFxPresets.isUserFile(src.source);
     const esc = foundry.utils.escapeHTML;
     const L = k => game.i18n.localize(`VAGABOND.SequencerFX.Presets.${k}`);
+    const srcMeta = src ? (await SpellFxPresets.read(src.source, own ? 'user' : 'system')).meta : null;
+    const name = own ? (src.name ?? '')
+      : duplicateOf ? game.i18n.format('VAGABOND.SequencerFX.Presets.CopyName', { name: duplicateOf.name || L('Unnamed') }) : '';
+    const description = (own || duplicateOf) ? (srcMeta?.description ?? '') : '';
     const data = await foundry.applications.api.DialogV2.prompt({
-      window: { title: L('SaveTitle') },
+      window: { title: L(duplicateOf ? 'DuplicateTitle' : 'SaveTitle') },
       position: { width: 520 },
       content: `
+        ${duplicateOf ? `<p class="notification warning">${esc(L('SystemReadOnly'))}</p>` : ''}
         <div class="form-group"><label>${L('Name')}</label>
-          <input type="text" name="name" value="${esc(own ? (src.name ?? '') : '')}" required autofocus></div>
+          <input type="text" name="name" value="${esc(name)}" required autofocus></div>
         <div class="form-group stacked"><label>${L('Description')}</label>
-          <textarea name="description" rows="3" placeholder="${esc(L('DescriptionHint'))}">${esc(own ? (await SpellFxPresets.read(src.source)).meta.description : '')}</textarea></div>
+          <textarea name="description" rows="3" placeholder="${esc(L('DescriptionHint'))}">${esc(description)}</textarea></div>
         <div class="form-group"><label>${L('Folder')}</label>
           <file-picker name="dir" type="folder" value="${esc(own ? src.source.split('/').slice(0, -1).join('/') : SpellFxPresets.userDir())}"></file-picker></div>`,
       ok: {
@@ -533,24 +580,23 @@ export class SequencerFxConfig extends api.HandlebarsApplicationMixin(api.Applic
       },
       rejectClose: false,
     });
-    if (!data?.name?.trim()) return;
+    if (!data?.name?.trim()) return false;
     const fileName = SpellFxPresets.slug(data.name);
     const dir = String(data.dir ?? '').trim() || SpellFxPresets.userDir();
     const sameFile = own && src.source === `${dir.replace(/^\/+|\/+$/g, '')}/${fileName}`;
-    if (!sameFile && await SpellFxPresets.fileExists(dir, fileName) && !await SequencerFxConfig.#confirmOverwrite(fileName)) return;
+    if (!sameFile && await SpellFxPresets.fileExists(dir, fileName) && !await SequencerFxConfig.#confirmOverwrite(fileName)) return false;
     try {
-      // Unsaved edits in the open form count: save them first
-      await SequencerFxConfig.#performSave.call(this, null, { quiet: true });
-      await SpellFxPresets.saveCurrent(SequencerFxConfig.#effectiveConfig(), {
+      await SpellFxPresets.saveCurrent(config, {
         name: data.name.trim(),
         description: String(data.description ?? '').trim(),
       }, dir, fileName);
       ui.notifications.info(game.i18n.format('VAGABOND.SequencerFX.Presets.SavedTo', { file: fileName, dir }));
+      return true;
     } catch (err) {
       console.error('Vagabond | Spell FX preset save failed', err);
       ui.notifications.error(`${L('SaveFailed')}: ${err.message}`);
+      return false;
     }
-    this.render();
   }
 
   static async #onRefreshPresets() {

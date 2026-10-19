@@ -25,6 +25,7 @@
 - **[Fixed]** Cone, Line, Cube and Sphere Spell FX play exactly on the Cast's template. Cones could point the wrong way (they followed another area of the caster on the map).
 - **[Added]** Cones can be aimed with the Cast dialog crosshair, like Lines.
 - **[Changed]** Spell Surfaces cast as a Cone show the school's cone clip, shaped like the Cone (its loop version, or held on a frame).
+- **[Changed]** Spell FX: one file is always active and Save writes into it. System files can't be changed: saving offers a copy of your own, which becomes active. The active file can't be taken off the list; if it goes missing, the System default takes over.
 - **[Changed]** Default Spell FX config updated: new area animations, "Frame to use" and loop videos set, every field filled.
 
 ## v6.8.1

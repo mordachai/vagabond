@@ -183,10 +183,10 @@
             <span class="sfx-preset-col"></span>
             {{/if}}
             {{/if}}
-            {{#if external}}
+            {{#if external}}{{#if active}}<span></span>{{else}}
             <button type="button" class="sfx-preset-check sfx-preset-remove" data-action="removePreset" data-path="{{path}}"
               data-tooltip="{{localize 'VAGABOND.SequencerFX.Presets.Remove'}}"><i class="fas fa-trash"></i></button>
-            {{else}}<span></span>{{/if}}
+            {{/if}}{{else}}<span></span>{{/if}}
           </li>
           {{else}}
           <li class="sfx-io-hint"><em>{{localize "VAGABOND.SequencerFX.Presets.NoneYet"}}</em></li>

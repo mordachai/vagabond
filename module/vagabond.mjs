@@ -65,6 +65,7 @@ import { runMacroFromButton, executeItemMacro, registerMacroHandler, registerCas
 import { MacroAutoRun } from './helpers/macro-autorun.mjs';
 import { AnimationBridge } from './helpers/animation-bridge.mjs';
 import { AAMenuLoader } from './helpers/aa-menu-loader.mjs';
+import { SpellFxPresets } from './helpers/spell-fx-presets.mjs';
 import { FocusLink } from './helpers/focus-link.mjs';
 import { FeatureAction } from './helpers/feature-action.mjs';
 import { RollExpiry } from './helpers/roll-expiry.mjs';
@@ -650,6 +651,10 @@ Hooks.once('ready', function () {
   Hooks.on('hotbarDrop', (bar, data, slot) => createDocMacro(data, slot));
   // Automated Animations menu in the GM's language (active GM, only when the file changed)
   AAMenuLoader.onReady();
+  // Spell FX: one file is always active, and the world config follows it (active GM)
+  if (game.users.activeGM?.isSelf) {
+    SpellFxPresets.ensureActive({ fresh: true }).catch(err => console.error('Vagabond | Spell FX active file check failed', err));
+  }
 });
 
 /* -------------------------------------------- */

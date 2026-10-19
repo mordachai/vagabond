@@ -1614,7 +1614,11 @@
         "SaveFailed": "Could not save the preset",
         "ImportedTo": "Added to the list: {file}",
         "OverwriteTitle": "Replace file",
-        "OverwriteConfirm": "Replace {file}?"
+        "OverwriteConfirm": "Replace {file}?",
+        "ActiveMissing": "Spell FX: the active file {file} is gone. Now active: {name}.",
+        "CopyName": "{name} (copy)",
+        "DuplicateTitle": "Save a copy",
+        "SystemReadOnly": "System files can't be changed: system updates replace them. Your changes are saved in a copy of your own, which becomes the active file."
       },
       "NoToken": "No token on the canvas to preview on.",
       "Unavailable": "Sequencer module is not active.",

@@ -11,16 +11,20 @@
  * A preset file is the config itself (`castAnims`, `areaAnims`) plus an optional `_meta` block shown when listed:
  *   "_meta": { "name": "…", "description": "plain text, line breaks kept" }
  *
- * ONE file is active at a time: the stored setting's `_meta = {name, source, video, sound, modified}`. `video` /
+ * ONE file is ALWAYS active: the stored setting's `_meta = {name, source, video, sound, modified}`. The setting is
+ * that file's copy (playback reads it); the file is the truth: saves write into it (`writeActive`), and
+ * `ensureActive` (GM ready + config window) re-reads it, or falls back to the System default when it is gone. System
+ * files are read-only (replaced on update): saving while one is active makes a copy of your own first. `video` /
  * `sound` (booleans) switch that part of the active file on or off without touching the stored config;
  * `withParts(config)` blanks the off part (video = each entry's `file` / `loop`, sound = its `sound`) for playback.
  */
 export class SpellFxPresets {
 
   static SYSTEM_DIR = 'systems/vagabond/assets/config';
+  static DEFAULT_FILE = 'vagabond-default-spell-fx-config.json';
   static DEFAULT_USER_DIR = 'assets/vagabond/spell-fx';
   /** Listed when the system folder can't be browsed (e.g. a host that hides it). */
-  static #SYSTEM_FALLBACK = ['vagabond-default-spell-fx-config.json'];
+  static #SYSTEM_FALLBACK = [SpellFxPresets.DEFAULT_FILE];
   /** Other configs living in the same folder (Automated Animations menus) — big, never Spell FX. */
   static #SKIP = /^AutomatedAnimations-/i;
   /** path → preset, for this session. */
@@ -60,9 +64,15 @@ export class SpellFxPresets {
     await this.setUserDir(p.split('/').slice(0, -1).join('/'));
   }
 
-  /** Take a file off the External list (the file stays where it is). */
+  /** Is `path` one of the GM's own files (writable), not a System one? */
+  static isUserFile(path) {
+    return this.userFiles().includes(this.#clean(path));
+  }
+
+  /** Take a file off the External list (the file stays where it is). The active file can't be taken off. */
   static async removeUserFile(path) {
     const p = this.#clean(path);
+    if (p === this.#clean(this.loadedMeta()?.source)) return;
     this.#cache.delete(p);
     await game.settings.set('vagabond', 'spellFxPresetFiles', this.userFiles().filter(f => f !== p));
   }
@@ -152,6 +162,56 @@ export class SpellFxPresets {
     const next = foundry.utils.deepClone(preset.data);
     next._meta = { name: preset.label, source: preset.path, video, sound, modified: false };
     await game.settings.set('vagabond', 'sequencerFxConfig', next);
+  }
+
+  /** Config without `_meta`, expanded. */
+  static #body(config) {
+    const body = foundry.utils.expandObject(foundry.utils.deepClone(config ?? {}));
+    delete body._meta;
+    return body;
+  }
+
+  static #same(a, b) {
+    const d = foundry.utils.diffObject;
+    return foundry.utils.isEmpty(d(a, b)) && foundry.utils.isEmpty(d(b, a));
+  }
+
+  /**
+   * There is always one active file. Its file is re-read (changes made on disk are picked up); a missing or broken
+   * active file — or none at all — gives way to the System default. GM only.
+   */
+  static async ensureActive({ fresh = false } = {}) {
+    if (!game.user.isGM) return;
+    const m = this.loadedMeta();
+    const { system, user } = await this.list({ fresh });
+    const all = [...user, ...system];
+    const current = m && all.find(p => !p.invalid && p.path === m.source);
+    if (current) {
+      const stored = this.#body(game.settings.get('vagabond', 'sequencerFxConfig'));
+      if (!this.#same(stored, this.#body(current.data))) await this.apply(current, { video: m.video, sound: m.sound });
+      return;
+    }
+    const fallback = system.find(p => !p.invalid && p.file === this.DEFAULT_FILE) ?? all.find(p => !p.invalid);
+    if (!fallback) return;
+    await this.apply(fallback, { video: m?.video ?? true, sound: m?.sound ?? true });
+    if (m?.source) {
+      ui.notifications.warn(game.i18n.format('VAGABOND.SequencerFX.Presets.ActiveMissing', {
+        file: this.fileName(m.source), name: fallback.label,
+      }));
+    }
+  }
+
+  /** Write `config` into the active file (a file of your own) and the world setting. */
+  static async writeActive(config) {
+    const m = this.loadedMeta();
+    if (!m || !this.isUserFile(m.source)) throw new Error('the active file is not one of your own');
+    const body = this.#body(config);
+    const { meta } = await this.read(m.source, 'user');
+    const dir = m.source.split('/').slice(0, -1).join('/');
+    await this.writeUserFile(dir, this.fileName(m.source), {
+      _meta: { name: meta.name || m.name, description: meta.description }, ...body,
+    });
+    await game.settings.set('vagabond', 'sequencerFxConfig', { ...body, _meta: { ...m, modified: false } });
   }
 
   /** Turn the video or the sound of the active file on / off (the stored config itself is untouched). */
