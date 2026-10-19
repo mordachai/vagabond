@@ -7,8 +7,8 @@
   {{#if system.locked}}
     {{! ===== LOCKED VIEW ===== }}
     <div class='equipment-locked-content'>
-      {{! Description - Always show if present }}
-      {{#if system.description}}
+      {{! Description (Weapon / Armor / Gear show it in the header instead) }}
+      {{#if (and system.description (not descInHeader))}}
         <div class='locked-section'>
           <div class='locked-description'>
             {{{enriched.description}}}
@@ -152,27 +152,18 @@
         {{/if}}
       {{/if}}
 
-      {{! ===== GEAR-SPECIFIC DISPLAY ===== }}
-      {{#if (eq system.equipmentType 'gear')}}
-        {{#if system.gearCategory}}
-          <div class='locked-section'>
-            <div class='locked-stat'>
-              <span class='stat-label'>{{localize "VAGABOND.UI.Labels.Category"}}:</span>
-              <span class='stat-value'>{{system.gearCategory}}</span>
-            </div>
-          </div>
-        {{/if}}
-      {{/if}}
 
       {{! ===== ALCHEMICAL-SPECIFIC DISPLAY ===== }}
       {{#if (eq system.equipmentType 'alchemical')}}
         <div class='locked-section'>
           <h3 class='section-header'>{{localize "VAGABOND.UI.Sections.Alchemical"}}</h3>
           <div class='locked-stats-grid'>
-            <div class='locked-stat'>
-              <span class='stat-label'>{{localize "VAGABOND.UI.Labels.TypeLabel"}}:</span>
-              <span class='stat-value'>{{localize (concat "VAGABOND.Item.Alchemical.Types." (capitalize system.alchemicalType))}}</span>
-            </div>
+            {{#if alchemicalThrow}}
+              <div class='locked-stat'>
+                <span class='stat-label' data-tooltip='{{localize "VAGABOND.UI.Labels.ThrownAlchemicalHint"}}'>{{localize "VAGABOND.UI.Labels.ThrowSkillColon"}}</span>
+                <span class='stat-value' data-tooltip='{{alchemicalThrow.options}}'>{{alchemicalThrow.label}}</span>
+              </div>
+            {{/if}}
             {{#unless (eq system.damageType '-')}}
               <div class='locked-stat'>
                 <span class='stat-label'>{{localize "VAGABOND.UI.Labels.Damage"}}:</span>
@@ -185,10 +176,16 @@
                 </div>
               {{/if}}
             {{/unless}}
-            <div class='locked-stat'>
-              <span class='stat-label'>{{localize "VAGABOND.UI.Labels.Cost"}}:</span>
-              <span class='stat-value'>{{system.costDisplay}}</span>
-            </div>
+            {{#if usesPips.length}}
+              <div class='locked-stat'>
+                <span class='stat-label'>{{localize "VAGABOND.UI.Labels.Uses"}}:</span>
+                <span class='stat-value uses-pips'>
+                  {{#each usesPips as |pip|}}
+                    <i class='fa-solid fa-circle uses-pip {{#if pip.filled}}filled{{else}}empty{{/if}}' data-action='usePip' data-pip-index='{{pip.index}}'></i>
+                  {{/each}}
+                </span>
+              </div>
+            {{/if}}
           </div>
         </div>
       {{/if}}
@@ -216,16 +213,11 @@
       {{#if (or (eq system.equipmentType 'weapon') (eq system.equipmentType 'relic') (eq system.equipmentType 'alchemical'))}}
         {{#if (or system.causedStatuses.length system.critCausedStatuses.length)}}
           <div class='locked-section'>
-            <h3 class='section-header'>{{localize "VAGABOND.UI.Sections.WeaponEffects"}}</h3>
+            <h3 class='section-header'>{{#if (eq system.equipmentType 'alchemical')}}{{localize "VAGABOND.Status.OnHitEffects"}}{{else}}{{localize "VAGABOND.UI.Sections.WeaponEffects"}}{{/if}}</h3>
             {{#if system.causedStatuses.length}}
               <ul class='locked-effects-list'>
                 {{#each system.causedStatuses as |entry|}}
-                  <li class='locked-effect-entry'>
-                    <span class='locked-effect-name'>{{localize (lookup @root.config.statusConditions entry.statusId)}}</span>
-                    {{#unless (eq entry.saveType 'none')}}<span class='locked-effect-detail'>{{#if (lookup @root.config.saves entry.saveType)}}{{lookup @root.config.saves entry.saveType}}{{else}}{{localize 'VAGABOND.Status.Save.Any'}}{{/if}} {{localize "VAGABOND.UI.Labels.Save"}}</span>{{/unless}}
-                    {{#if entry.duration}}<span class='locked-effect-detail'>C{{entry.duration}}</span>{{/if}}
-                    {{#if entry.tickDamageEnabled}}<span class='locked-effect-detail'>{{#if entry.damageOnTick}}{{entry.damageOnTick}}{{else}}{{localize "VAGABOND.UI.Labels.DieRoll"}}{{/if}} {{localize (lookup @root.config.damageTypes entry.damageType)}} {{localize "VAGABOND.UI.Labels.Tick"}}</span>{{/if}}
-                  </li>
+                  {{> "systems/vagabond/templates/item/parts/locked-fx-entry.hbs" entry=entry}}
                 {{/each}}
               </ul>
             {{/if}}
@@ -233,12 +225,7 @@
               <p class='locked-effects-sublabel'>{{localize 'VAGABOND.Status.CritOnHitEffects'}}:</p>
               <ul class='locked-effects-list'>
                 {{#each system.critCausedStatuses as |entry|}}
-                  <li class='locked-effect-entry'>
-                    <span class='locked-effect-name'>{{localize (lookup @root.config.statusConditions entry.statusId)}}</span>
-                    {{#unless (eq entry.saveType 'none')}}<span class='locked-effect-detail'>{{#if (lookup @root.config.saves entry.saveType)}}{{lookup @root.config.saves entry.saveType}}{{else}}{{localize 'VAGABOND.Status.Save.Any'}}{{/if}} {{localize "VAGABOND.UI.Labels.Save"}}</span>{{/unless}}
-                    {{#if entry.duration}}<span class='locked-effect-detail'>C{{entry.duration}}</span>{{/if}}
-                    {{#if entry.tickDamageEnabled}}<span class='locked-effect-detail'>{{#if entry.damageOnTick}}{{entry.damageOnTick}}{{else}}{{localize "VAGABOND.UI.Labels.DieRoll"}}{{/if}} {{localize (lookup @root.config.damageTypes entry.damageType)}} {{localize "VAGABOND.UI.Labels.Tick"}}</span>{{/if}}
-                  </li>
+                  {{> "systems/vagabond/templates/item/parts/locked-fx-entry.hbs" entry=entry}}
                 {{/each}}
               </ul>
             {{/if}}
@@ -252,21 +239,16 @@
           <h3 class='section-header'>{{localize "VAGABOND.Status.PassiveOnHitEffects"}}</h3>
           <ul class='locked-effects-list'>
             {{#each system.passiveCausedStatuses as |entry|}}
-              <li class='locked-effect-entry'>
-                <span class='locked-effect-name'>{{localize (lookup @root.config.statusConditions entry.statusId)}}</span>
-                {{#unless (eq entry.saveType 'none')}}<span class='locked-effect-detail'>{{#if (lookup @root.config.saves entry.saveType)}}{{lookup @root.config.saves entry.saveType}}{{else}}{{localize 'VAGABOND.Status.Save.Any'}}{{/if}} {{localize "VAGABOND.UI.Labels.Save"}}</span>{{/unless}}
-                {{#if entry.duration}}<span class='locked-effect-detail'>C{{entry.duration}}</span>{{/if}}
-                {{#if entry.tickDamageEnabled}}<span class='locked-effect-detail'>{{#if entry.damageOnTick}}{{entry.damageOnTick}}{{else}}{{localize "VAGABOND.UI.Labels.DieRoll"}}{{/if}} {{localize (lookup @root.config.damageTypes entry.damageType)}} {{localize "VAGABOND.UI.Labels.Tick"}}</span>{{/if}}
-              </li>
-            {{/each}}
+                  {{> "systems/vagabond/templates/item/parts/locked-fx-entry.hbs" entry=entry}}
+                {{/each}}
           </ul>
         </div>
       {{/if}}
 
       {{! ===== UNIVERSAL FIELDS ===== }}
 
-          {{! Damage/Healing if present }}
-          {{#unless (eq system.damageType '-')}}
+          {{! Damage/Healing if present (Alchemicals show it in their own block) }}
+          {{#unless (or (eq system.damageType '-') (eq system.equipmentType 'alchemical'))}}
             <div class='locked-section'>
               <h3 class='section-header'>{{#if (eq system.damageType 'healing')}}{{localize "VAGABOND.UI.Sections.Healing"}}{{else}}{{localize "VAGABOND.UI.Sections.Damage"}}{{/if}}</h3>
               <div class='locked-stats-grid'>
@@ -690,24 +672,6 @@
         </details>
       {{/if}}
 
-      {{! ===== GEAR-SPECIFIC FIELDS ===== }}
-      {{#if (eq system.equipmentType 'gear')}}
-        <div class="item-section-box">
-          <div class="item-section-label">{{localize "VAGABOND.UI.Labels.Gear"}}</div>
-          {{! Gear Category }}
-          <div class='form-group'>
-            <label class='resource-label'>{{localize "VAGABOND.UI.Labels.GearCategory"}}</label>
-            <input
-              type='text'
-              name='system.gearCategory'
-              value='{{system.gearCategory}}'
-              data-dtype='String'
-              placeholder='{{localize "VAGABOND.UI.Labels.GearCategoryPlaceholder"}}'
-            />
-          </div>
-
-        </div>{{! /item-section-box Gear }}
-      {{/if}}
 
       {{! ===== ALCHEMICAL-SPECIFIC FIELDS ===== }}
       {{#if (eq system.equipmentType 'alchemical')}}
@@ -821,6 +785,20 @@
                   min='0'
                   data-dtype='Number'
                 />
+              </div>
+            </div>
+          </div>
+
+          {{! Slots and Quantity (the shared Details box is skipped for Alchemicals) }}
+          <div class='form-group'>
+            <div class='grid grid-2col gap-8'>
+              <div class='slots-field'>
+                <label class='resource-label'>{{localize "VAGABOND.Item.Weapon.FIELDS.baseSlots.label"}}</label>
+                <input type='number' name='system.baseSlots' value='{{system.baseSlots}}' data-dtype='Number'/>
+              </div>
+              <div class='quantity-field'>
+                <label class='resource-label'>{{localize "VAGABOND.UI.Labels.Quantity"}}</label>
+                <input type='number' name='system.quantity' value='{{system.quantity}}' min='0' data-dtype='Number'/>
               </div>
             </div>
           </div>

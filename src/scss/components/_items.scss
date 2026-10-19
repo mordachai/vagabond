@@ -594,7 +594,7 @@
 // Unified item content containers
 // Tab content styling for ancestry and class details
 .tab.details {
-  min-height: 400px;
+  min-height: 0; // shrink to content (max-height below is the cap)
   max-height: calc(100vh - 300px);
   overflow-y: auto;
   padding: 10px;
@@ -906,9 +906,16 @@
   margin-top: 6px;
 }
 
+// Nothing type-specific on the left (plain Gear): Details takes the full width
+.locked-two-column:not(:has(.locked-column-left > *)) {
+  grid-template-columns: 1fr;
+  .locked-column-left { display: none; }
+}
+
 // Compact key/value rows (the dedicated _equipment-locked partial is disabled,
 // so these otherwise render as loose unstyled blocks).
-.equipment-locked-view {
+.equipment-locked-view,
+.spell-locked-view {
   .locked-stats-grid {
     display: flex;
     flex-direction: column;
@@ -974,6 +981,75 @@
       display: flex;
       flex-direction: column;
       gap: 3px;
+    }
+  }
+}
+
+// Locked descriptions (equipment body, spell header): book rule headings
+// ("Equipping Armor") read as a run-in label, not a page title
+.equipment-locked-view .locked-description,
+.spell-description-in-header.locked-description,
+.item-description-in-header.locked-description {
+  h1, h2, h3, h4, h5, h6 {
+    font-family: inherit;
+    font-size: 1em;
+    font-weight: bold;
+    margin: 8px 0 2px;
+    padding: 0;
+    border: none;
+  }
+  > :first-child { margin-top: 0; }
+  > :last-child { margin-bottom: 0; }
+}
+
+// Locked on-hit status rows: "Burning (Cd6) · Reflex Save · d6 per tick"
+.equipment-locked-view,
+.spell-locked-view {
+  .locked-effects-list {
+    list-style: none;
+    margin: 2px 0 6px;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .locked-effect-entry {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px;
+
+    .locked-effect-name { font-weight: bold; }
+
+    .locked-effect-detail {
+      color: $c-text-2;
+      font-size: 0.9em;
+      &::before { content: '·'; margin-right: 4px; }
+    }
+  }
+
+  .locked-effects-sublabel {
+    font-size: 0.8em;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: $c-text-2;
+    margin: 4px 0 2px;
+  }
+
+  // Multi-use pips in a stat row (click = spend / set, usePip action)
+  .uses-pips {
+    display: inline-flex;
+    gap: 3px;
+
+    .uses-pip {
+      font-size: 10px;
+      cursor: pointer;
+
+      &.filled { color: $c-yellow; -webkit-text-stroke: 0.5px $c-dark-bluey; }
+      &.empty { color: $c-text-2; opacity: 0.4; }
+      &:hover { transform: scale(1.2); }
     }
   }
 }

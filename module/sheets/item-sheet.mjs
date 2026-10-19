@@ -330,6 +330,39 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       }
     }
 
+    // Locked header line under the name: "Armor · Chain, scale", "Alchemical · Acid",
+    // "Gear · Outdoors" (equipment type, Alchemical type, then the Category field)
+    if (this.item.type === 'equipment') {
+      const sys = this.item.system;
+      const typeKey = { weapon: 'Weapon', armor: 'Armor', gear: 'Gear', alchemical: 'Alchemical', relic: 'Relic' }[sys.equipmentType];
+      const alchemical = sys.equipmentType === 'alchemical' && CONFIG.VAGABOND.alchemicalTypes?.[sys.alchemicalType];
+      context.itemSubtitle = [
+        typeKey && game.i18n.localize(`VAGABOND.UI.Labels.${typeKey}`),
+        alchemical && game.i18n.localize(alchemical),
+        sys.gearCategory?.trim(),
+      ].filter(Boolean).join(' · ');
+      // Locked Weapon / Armor / Gear: description sits in the header under that line
+      // (Alchemicals and Relics keep it in the body)
+      context.descInHeader = ['weapon', 'armor', 'gear'].includes(sys.equipmentType);
+    } else if (this.item.type === 'spell') {
+      // "Spell · Fire" (the damage type the locked body no longer repeats)
+      const dmg = this.item.system.damageType;
+      const dmgLabel = dmg && dmg !== '-' && CONFIG.VAGABOND.damageTypes?.[dmg];
+      context.itemSubtitle = [game.i18n.localize('VAGABOND.UI.Labels.Spell'), dmgLabel && game.i18n.localize(dmgLabel)]
+        .filter(Boolean).join(' · ');
+    }
+
+    // Thrown Alchemical Items: owned → the skill a throw rolls with right now
+    // (best of Melee / Finesse / Craft); unowned → the three choices.
+    if (EquipmentHelper.isThrownAlchemical(this.item)) {
+      const skillLabel = (k) => game.i18n.localize(CONFIG.VAGABOND.weaponSkills?.[k] ?? k);
+      const options = EquipmentHelper.THROWN_ALCHEMICAL_SKILLS.map(skillLabel).join(' / ');
+      context.alchemicalThrow = {
+        label: this.item.actor ? skillLabel(EquipmentHelper.attackSkillFor(this.item)) : options,
+        options,
+      };
+    }
+
     // View-only viewers (e.g. players reading a shop's stock item) always get the
     // locked view — the templates switch on `system.locked`, so shadow it.
     if ((!this.isEditable || context.disguiseLocked) && this.item.system.locked === false) {
@@ -348,8 +381,8 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
           context.containerCoins = this._containerCoins();
           context.containerCanShare = this._containerCanShare();
         }
-        // Enrich description for perks and spells in header
-        if (this.item.type === 'perk' || this.item.type === 'spell') {
+        // Enrich description for perks, spells and locked Weapon / Armor / Gear in header
+        if (this.item.type === 'perk' || this.item.type === 'spell' || context.descInHeader) {
           context.enriched = {
             description: await foundry.applications.ux.TextEditor.enrichHTML(
               this.item.system.description,

@@ -65,8 +65,15 @@
 
     {{! Two-Column Content for Item-Specific Fields }}
     {{#if (eq item.type 'equipment')}}
-      {{#unless system.locked}}
-        <div class='grid grid-1col'>
+      {{#if system.locked}}
+        {{#if itemSubtitle}}<div class='item-subtitle'>{{itemSubtitle}}</div>{{/if}}
+        {{#if (and descInHeader system.description)}}
+          <div class='item-description-in-header locked-description'>
+            {{{enriched.description}}}
+          </div>
+        {{/if}}
+      {{else}}
+        <div class='grid grid-2col'>
           <div class='resource'>
             <label class='resource-label'>{{localize "VAGABOND.UI.Labels.EquipmentType"}}</label>
             <select name='system.equipmentType' data-dtype='String'>
@@ -77,8 +84,12 @@
               <option value='relic' {{#if (eq system.equipmentType 'relic')}}selected{{/if}}>{{localize "VAGABOND.UI.Labels.Relic"}}</option>
             </select>
           </div>
+          <div class='resource'>
+            <label class='resource-label' data-tooltip='{{localize "VAGABOND.UI.Labels.CategoryHint"}}'>{{localize "VAGABOND.UI.Labels.Category"}}</label>
+            <input type='text' name='system.gearCategory' value='{{system.gearCategory}}' placeholder='{{localize "VAGABOND.UI.Labels.GearCategoryPlaceholder"}}' data-dtype='String'/>
+          </div>
         </div>
-      {{/unless}}
+      {{/if}}
     {{/if}}
 
     {{#if (eq item.type 'gear')}}
@@ -232,6 +243,7 @@
 
     {{#if (eq item.type 'spell')}}
       {{#if system.locked}}
+        {{#if itemSubtitle}}<div class='item-subtitle'>{{itemSubtitle}}</div>{{/if}}
         {{! Locked: read-only description }}
         {{#if system.description}}
           <div class='spell-description-in-header locked-description'>

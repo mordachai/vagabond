@@ -1,0 +1,6 @@
+{{! Locked view: one on-hit status row — "Burning (Cd6) · Reflex Save · d6 per tick" (equipment + spell sheets) }}
+<li class='locked-effect-entry'>
+  <span class='locked-effect-name'>{{localize (lookup @root.config.statusConditions entry.statusId)}}{{#if (eq entry.duration 'focusing')}} ({{localize 'VAGABOND.Status.Duration.Focusing'}}){{else if entry.duration}} (C{{entry.duration}}){{/if}}</span>
+  {{#unless (eq entry.saveType 'none')}}<span class='locked-effect-detail'>{{#if (lookup @root.config.saves entry.saveType)}}{{lookup @root.config.saves entry.saveType}}{{else}}{{localize 'VAGABOND.Status.Save.Any'}}{{/if}} {{localize "VAGABOND.UI.Labels.Save"}}</span>{{/unless}}
+  {{#if entry.tickDamageEnabled}}<span class='locked-effect-detail'>{{#if entry.damageOnTick}}{{entry.damageOnTick}}{{else if (and entry.duration (ne entry.duration 'focusing'))}}{{entry.duration}}{{else}}{{localize "VAGABOND.UI.Labels.DieRoll"}}{{/if}}{{#if (and entry.damageType (ne entry.damageType '-'))}} {{localize (lookup @root.config.damageTypes entry.damageType)}}{{/if}} {{localize "VAGABOND.UI.Labels.PerTick"}}</span>{{/if}}
+</li>

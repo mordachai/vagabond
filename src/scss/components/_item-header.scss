@@ -110,6 +110,25 @@
   }
 }
 
+// Locked equipment: "Armor · Chain, scale" under the name
+.item-subtitle {
+  padding: 0 8px;
+  font-family: $font-title;
+  font-size: 17px;
+  font-style: italic;
+  line-height: 1.1;
+  color: $c-text-2;
+}
+
+// Locked Weapon / Armor / Gear: description under the name + subtitle
+.item-description-in-header {
+  padding: 0 8px;
+  font-size: 0.95em;
+  line-height: 1.4;
+
+  p { margin: 0 0 4px; }
+}
+
 // Item-specific: Class spellcaster fields
 .class-spellcaster-fields {
   width: 100%;

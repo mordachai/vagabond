@@ -192,6 +192,7 @@ async function preloadHandlebarsTemplates() {
     'systems/vagabond/templates/item/parts/grants-config.hbs',
     'systems/vagabond/templates/item/parts/macro-config.hbs',
     'systems/vagabond/templates/item/parts/relic-slots.hbs',
+    'systems/vagabond/templates/item/parts/locked-fx-entry.hbs',
     'systems/vagabond/templates/item/parts/container-treasure.hbs',
     'systems/vagabond/templates/actor/parts/npc-macro-config.hbs',
     // Actor partials
@@ -4017,4 +4018,4 @@ async function promptRandomChallenge() {
   } else {
     ui.notifications.error("Access Denied.");
   }
-}
+}

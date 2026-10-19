@@ -406,7 +406,7 @@ body[data-theme=dark] #sidebar {
 
 .vagabond.item.application {
   height: auto !important;
-  min-height: 400px;
+  min-height: 0;
   max-height: none;
   overflow: hidden !important;
 }
@@ -450,7 +450,7 @@ body[data-theme=dark] #sidebar {
 
 .vagabond.item .window-content {
   height: auto;
-  min-height: 300px;
+  min-height: 0;
   max-height: calc(100vh - 150px);
   overflow-y: auto !important;
   border-radius: 1.5em;
@@ -22780,7 +22780,7 @@ ol#combat-tracker.directory-list {
   white-space: nowrap;
 }
 .vagabond .tab.details {
-  min-height: 400px;
+  min-height: 0;
   max-height: calc(100vh - 300px);
   overflow-y: auto;
   padding: 10px;
@@ -23014,12 +23014,20 @@ ol#combat-tracker.directory-list {
   gap: 14px;
   margin-top: 6px;
 }
-.vagabond .equipment-locked-view .locked-stats-grid {
+.vagabond .locked-two-column:not(:has(.locked-column-left > *)) {
+  grid-template-columns: 1fr;
+}
+.vagabond .locked-two-column:not(:has(.locked-column-left > *)) .locked-column-left {
+  display: none;
+}
+.vagabond .equipment-locked-view .locked-stats-grid,
+.vagabond .spell-locked-view .locked-stats-grid {
   display: flex;
   flex-direction: column;
   gap: 1px;
 }
-.vagabond .equipment-locked-view .locked-stat {
+.vagabond .equipment-locked-view .locked-stat,
+.vagabond .spell-locked-view .locked-stat {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
@@ -23027,47 +23035,149 @@ ol#combat-tracker.directory-list {
   padding: 2px 0;
   border-bottom: 1px dotted rgba(128, 128, 128, 0.25);
 }
-.vagabond .equipment-locked-view .locked-stat .stat-label {
+.vagabond .equipment-locked-view .locked-stat .stat-label,
+.vagabond .spell-locked-view .locked-stat .stat-label {
   flex: 0 0 auto;
   color: var(--vagabond-c-text-secondary);
 }
-.vagabond .equipment-locked-view .locked-stat .stat-value {
+.vagabond .equipment-locked-view .locked-stat .stat-value,
+.vagabond .spell-locked-view .locked-stat .stat-value {
   min-width: 0;
   text-align: right;
   font-weight: bold;
 }
-.vagabond .equipment-locked-view .locked-skill-select {
+.vagabond .equipment-locked-view .locked-skill-select,
+.vagabond .spell-locked-view .locked-skill-select {
   width: auto;
   height: auto;
   line-height: normal;
   padding: 0 4px;
   font-weight: bold;
 }
-.vagabond .equipment-locked-view .locked-damage {
+.vagabond .equipment-locked-view .locked-damage,
+.vagabond .spell-locked-view .locked-damage {
   display: inline-flex;
   align-items: center;
   gap: 4px;
 }
-.vagabond .equipment-locked-view .locked-damage .locked-dmg-base {
+.vagabond .equipment-locked-view .locked-damage .locked-dmg-base,
+.vagabond .spell-locked-view .locked-damage .locked-dmg-base {
   opacity: 0.55;
   text-decoration: line-through;
   font-weight: normal;
 }
-.vagabond .equipment-locked-view .locked-damage .locked-dmg-arrow {
+.vagabond .equipment-locked-view .locked-damage .locked-dmg-arrow,
+.vagabond .spell-locked-view .locked-damage .locked-dmg-arrow {
   font-size: 0.7em;
   opacity: 0.6;
 }
-.vagabond .equipment-locked-view .locked-damage .locked-dmg-icon {
+.vagabond .equipment-locked-view .locked-damage .locked-dmg-icon,
+.vagabond .spell-locked-view .locked-damage .locked-dmg-icon {
   margin-left: 2px;
   cursor: help;
 }
-.vagabond .equipment-locked-view .locked-properties-footer {
+.vagabond .equipment-locked-view .locked-properties-footer,
+.vagabond .spell-locked-view .locked-properties-footer {
   margin-top: 4px;
 }
-.vagabond .equipment-locked-view .locked-properties-footer .property-list-locked {
+.vagabond .equipment-locked-view .locked-properties-footer .property-list-locked,
+.vagabond .spell-locked-view .locked-properties-footer .property-list-locked {
   display: flex;
   flex-direction: column;
   gap: 3px;
+}
+.vagabond .equipment-locked-view .locked-description h1, .vagabond .equipment-locked-view .locked-description h2, .vagabond .equipment-locked-view .locked-description h3, .vagabond .equipment-locked-view .locked-description h4, .vagabond .equipment-locked-view .locked-description h5, .vagabond .equipment-locked-view .locked-description h6,
+.vagabond .spell-description-in-header.locked-description h1,
+.vagabond .spell-description-in-header.locked-description h2,
+.vagabond .spell-description-in-header.locked-description h3,
+.vagabond .spell-description-in-header.locked-description h4,
+.vagabond .spell-description-in-header.locked-description h5,
+.vagabond .spell-description-in-header.locked-description h6,
+.vagabond .item-description-in-header.locked-description h1,
+.vagabond .item-description-in-header.locked-description h2,
+.vagabond .item-description-in-header.locked-description h3,
+.vagabond .item-description-in-header.locked-description h4,
+.vagabond .item-description-in-header.locked-description h5,
+.vagabond .item-description-in-header.locked-description h6 {
+  font-family: inherit;
+  font-size: 1em;
+  font-weight: bold;
+  margin: 8px 0 2px;
+  padding: 0;
+  border: none;
+}
+.vagabond .equipment-locked-view .locked-description > :first-child,
+.vagabond .spell-description-in-header.locked-description > :first-child,
+.vagabond .item-description-in-header.locked-description > :first-child {
+  margin-top: 0;
+}
+.vagabond .equipment-locked-view .locked-description > :last-child,
+.vagabond .spell-description-in-header.locked-description > :last-child,
+.vagabond .item-description-in-header.locked-description > :last-child {
+  margin-bottom: 0;
+}
+.vagabond .equipment-locked-view .locked-effects-list,
+.vagabond .spell-locked-view .locked-effects-list {
+  list-style: none;
+  margin: 2px 0 6px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.vagabond .equipment-locked-view .locked-effect-entry,
+.vagabond .spell-locked-view .locked-effect-entry {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px;
+}
+.vagabond .equipment-locked-view .locked-effect-entry .locked-effect-name,
+.vagabond .spell-locked-view .locked-effect-entry .locked-effect-name {
+  font-weight: bold;
+}
+.vagabond .equipment-locked-view .locked-effect-entry .locked-effect-detail,
+.vagabond .spell-locked-view .locked-effect-entry .locked-effect-detail {
+  color: var(--vagabond-c-text-secondary);
+  font-size: 0.9em;
+}
+.vagabond .equipment-locked-view .locked-effect-entry .locked-effect-detail::before,
+.vagabond .spell-locked-view .locked-effect-entry .locked-effect-detail::before {
+  content: "·";
+  margin-right: 4px;
+}
+.vagabond .equipment-locked-view .locked-effects-sublabel,
+.vagabond .spell-locked-view .locked-effects-sublabel {
+  font-size: 0.8em;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--vagabond-c-text-secondary);
+  margin: 4px 0 2px;
+}
+.vagabond .equipment-locked-view .uses-pips,
+.vagabond .spell-locked-view .uses-pips {
+  display: inline-flex;
+  gap: 3px;
+}
+.vagabond .equipment-locked-view .uses-pips .uses-pip,
+.vagabond .spell-locked-view .uses-pips .uses-pip {
+  font-size: 10px;
+  cursor: pointer;
+}
+.vagabond .equipment-locked-view .uses-pips .uses-pip.filled,
+.vagabond .spell-locked-view .uses-pips .uses-pip.filled {
+  color: var(--vagabond-c-chat-yellow);
+  -webkit-text-stroke: 0.5px var(--vagabond-c-dark-bluey);
+}
+.vagabond .equipment-locked-view .uses-pips .uses-pip.empty,
+.vagabond .spell-locked-view .uses-pips .uses-pip.empty {
+  color: var(--vagabond-c-text-secondary);
+  opacity: 0.4;
+}
+.vagabond .equipment-locked-view .uses-pips .uses-pip:hover,
+.vagabond .spell-locked-view .uses-pips .uses-pip:hover {
+  transform: scale(1.2);
 }
 .vagabond .damage-amount-row {
   display: flex;
@@ -31832,6 +31942,22 @@ details[open] .vagabond .npc-immunity-toggle i {
 .vagabond .item-document-name input::placeholder {
   color: var(--vagabond-c-faint);
   font-style: italic;
+}
+.vagabond .item-subtitle {
+  padding: 0 8px;
+  font-family: "Germania", serif;
+  font-size: 17px;
+  font-style: italic;
+  line-height: 1.1;
+  color: var(--vagabond-c-text-secondary);
+}
+.vagabond .item-description-in-header {
+  padding: 0 8px;
+  font-size: 0.95em;
+  line-height: 1.4;
+}
+.vagabond .item-description-in-header p {
+  margin: 0 0 4px;
 }
 .vagabond .class-spellcaster-fields {
   width: 100%;

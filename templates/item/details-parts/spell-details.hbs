@@ -7,74 +7,71 @@
   {{#if system.locked}}
     {{! ===== LOCKED VIEW ===== }}
     <div class='equipment-locked-content'>
-      {{! Damage Type }}
-      {{#unless (eq system.damageType '-')}}
+      {{! Damage type lives in the header line ("Spell · Fire"); the rest = one compact list }}
+      {{#if (or system.duration system.canExplode system.noRollRequired system.targetBeings system.targetObjects spellFx)}}
         <div class='locked-section'>
-          <h3 class='section-header'>{{localize "VAGABOND.UI.Labels.DamageBase"}}</h3>
           <div class='locked-stats-grid'>
-            <div class='locked-stat'>
-              <span class='stat-label'>{{localize "VAGABOND.UI.Labels.DamageBase"}}:</span>
-              <span class='stat-value'>{{localize (lookup config.damageTypes system.damageType)}}</span>
-            </div>
-          </div>
-        </div>
-      {{/unless}}
-
-      {{! Duration }}
-      {{#if system.duration}}
-        <div class='locked-section'>
-          <div class='locked-stat'>
-            <span class='stat-label'>{{localize 'VAGABOND.Item.Spell.FIELDS.duration.label'}}:</span>
-            <span class='stat-value'>{{system.duration}}</span>
-          </div>
-        </div>
-      {{/if}}
-
-      {{! Exploding Dice }}
-      {{#if system.canExplode}}
-        <div class='locked-section'>
-          <div class='locked-stat'>
-            <span class='stat-label'>{{localize "VAGABOND.UI.Labels.ExplodingDice"}}:</span>
-            <span class='stat-value'>{{system.explodeValues}}</span>
-          </div>
-        </div>
-      {{/if}}
-
-      {{! No Roll Required }}
-      {{#if system.noRollRequired}}
-        <div class='locked-section'>
-          <div class='locked-stat'>
-            <span class='stat-label'>{{localize "VAGABOND.UI.Labels.NoRollRequired"}}:</span>
-            <span class='stat-value'>{{localize "VAGABOND.UI.Labels.Yes"}}</span>
-          </div>
-        </div>
-      {{/if}}
-
-      {{! Target picker }}
-      {{#if (or system.targetBeings system.targetObjects)}}
-        <div class='locked-section'>
-          <div class='locked-stat'>
-            <span class='stat-label'>{{localize "VAGABOND.Item.Spell.FIELDS.pickTargets.label"}}:</span>
-            <span class='stat-value'>
-              {{#if system.targetBeings}}{{localize "VAGABOND.Item.Spell.FIELDS.targetBeings.label"}}{{/if}}
-              {{#if (and system.targetBeings system.targetObjects)}}·{{/if}}
-              {{#if system.targetObjects}}{{localize "VAGABOND.Item.Spell.FIELDS.targetObjects.label"}}{{/if}}
-            </span>
+            {{#if system.duration}}
+              <div class='locked-stat'>
+                <span class='stat-label'>{{localize 'VAGABOND.Item.Spell.FIELDS.duration.label'}}:</span>
+                <span class='stat-value'>{{system.duration}}</span>
+              </div>
+            {{/if}}
+            {{#if system.canExplode}}
+              <div class='locked-stat'>
+                <span class='stat-label'>{{localize "VAGABOND.UI.Labels.ExplodingDice"}}:</span>
+                <span class='stat-value'>{{system.explodeValues}}</span>
+              </div>
+            {{/if}}
+            {{#if system.noRollRequired}}
+              <div class='locked-stat'>
+                <span class='stat-label'>{{localize "VAGABOND.UI.Labels.NoRollRequired"}}:</span>
+                <span class='stat-value'>{{localize "VAGABOND.UI.Labels.Yes"}}</span>
+              </div>
+            {{/if}}
+            {{#if (or system.targetBeings system.targetObjects)}}
+              <div class='locked-stat'>
+                <span class='stat-label'>{{localize "VAGABOND.Item.Spell.FIELDS.pickTargets.label"}}:</span>
+                <span class='stat-value'>
+                  {{#if system.targetBeings}}{{localize "VAGABOND.Item.Spell.FIELDS.targetBeings.label"}}{{/if}}
+                  {{#if (and system.targetBeings system.targetObjects)}}·{{/if}}
+                  {{#if system.targetObjects}}{{localize "VAGABOND.Item.Spell.FIELDS.targetObjects.label"}}{{/if}}
+                </span>
+              </div>
+            {{/if}}
+            {{#if spellFx}}
+              <div class='locked-stat'>
+                <span class='stat-label'>{{localize "VAGABOND.UI.Labels.Anim"}}:</span>
+                <span class='stat-value spell-fx-locked-icons'>
+                  <i class='fas fa-film' data-action='previewSpellFx'
+                     data-tooltip='{{spellFx.schoolLabel}} — {{localize "VAGABOND.SpellFx.ClickToPreview"}}'></i>
+                  <span>{{spellFx.schoolLabel}}</span>
+                </span>
+              </div>
+            {{/if}}
           </div>
         </div>
       {{/if}}
 
-      {{! Animation preview (Sequencer) }}
-      {{#if spellFx}}
+      {{! Statuses the Spell's Effect applies (Damage-only Casts apply none) }}
+      {{#if (or system.causedStatuses.length system.critCausedStatuses.length)}}
         <div class='locked-section'>
-          <div class='locked-stat locked-stat--row'>
-            <span class='stat-label'>{{localize "VAGABOND.UI.Labels.Anim"}}:</span>
-            <span class='stat-value spell-fx-locked-icons'>
-              <i class='fas fa-film' data-action='previewSpellFx'
-                 data-tooltip='{{spellFx.schoolLabel}} — {{localize "VAGABOND.SpellFx.ClickToPreview"}}'></i>
-              <span>{{spellFx.schoolLabel}}</span>
-            </span>
-          </div>
+          <h3 class='section-header'>{{localize "VAGABOND.UI.Labels.SpellEffects"}}</h3>
+          {{#if system.causedStatuses.length}}
+            <ul class='locked-effects-list'>
+              {{#each system.causedStatuses as |entry|}}
+                {{> "systems/vagabond/templates/item/parts/locked-fx-entry.hbs" entry=entry}}
+              {{/each}}
+            </ul>
+          {{/if}}
+          {{#if system.critCausedStatuses.length}}
+            <p class='locked-effects-sublabel'>{{localize 'VAGABOND.Status.CritOnHitEffects'}}:</p>
+            <ul class='locked-effects-list'>
+              {{#each system.critCausedStatuses as |entry|}}
+                {{> "systems/vagabond/templates/item/parts/locked-fx-entry.hbs" entry=entry}}
+              {{/each}}
+            </ul>
+          {{/if}}
         </div>
       {{/if}}
 
