@@ -27,6 +27,7 @@
 - **[Changed]** Spell Surfaces cast as a Cone show the school's cone clip, shaped like the Cone (its loop version, or held on a frame).
 - **[Changed]** Spell FX: one file is always active and Save writes into it. System files can't be changed: saving offers a copy of your own, which becomes active. The active file can't be taken off the list; if it goes missing, the System default takes over.
 - **[Changed]** Default Spell FX config updated: new area animations, "Frame to use" and loop videos set, every field filled.
+- **[Fixed]** Container windows no longer flicker while an item is dragged over them.
 
 ## v6.8.1
 - **[Added]** NPC sheet Compact view: header button swaps the sheet for the NPC HUD.
