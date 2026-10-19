@@ -1,9 +1,11 @@
 /* Container Item Styles */
 
-// Drag over visual feedback for container window
+// Drag over visual feedback for container window. Outline drawn inside the box (negative offset) so it
+// never changes layout — a border here grew the content by 2px and made the window flicker while dragging.
 .window-content.drag-over {
   background-color: rgba(76, 175, 80, 0.1);
-  border: 2px dashed #4caf50;
+  outline: 2px dashed #4caf50;
+  outline-offset: -2px;
 }
 
 .container-search-header {

@@ -1043,13 +1043,14 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
           e.preventDefault();
           e.stopPropagation();
           windowContent.classList.add('drag-over');
-        });
+        }, { signal });
+        // dragleave also fires when crossing into a child row: only clear on a real exit.
         windowContent.addEventListener('dragleave', (e) => {
-          windowContent.classList.remove('drag-over');
-        });
+          if (!windowContent.contains(e.relatedTarget)) windowContent.classList.remove('drag-over');
+        }, { signal });
         windowContent.addEventListener('drop', (e) => {
           windowContent.classList.remove('drag-over');
-        });
+        }, { signal });
       }
 
       // --- SEARCH FILTER LOGIC --- (type sections with no match are hidden too)
