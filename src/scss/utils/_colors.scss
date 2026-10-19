@@ -10,6 +10,8 @@
   --vagabond-bg-size: 200px 200px;
   --vagabond-c-stat: #f1f1f1;
   --vagabond-c-chat-yellow: #DED656;
+  // Gold icons / text on the light paper wash out: a thin dark outline keeps the colour readable.
+  --vagabond-yellow-outline: -1px -1px 0 #0000008c, 1px -1px 0 #0000008c, -1px 1px 0 #0000008c, 1px 1px 0 #0000008c;
   --vagabond-c-green: #1f6b14;
   --vagabond-c-green-bright: #278e17;
   --vagabond-c-bluey: #62686a;
@@ -87,6 +89,7 @@ body[data-theme="dark"] #sidebar {
   --vagabond-c-stat: #ffd07d;
   --vagabond-c-chat-yellow: #DED656;
   --vagabond-c-yellow-2: #d5bc2f;
+  --vagabond-yellow-outline: none;
   --vagabond-tracker-col1: #3db5ff; // Brighter blue for visibility in dark mode
   --vagabond-inventory-hover: #61abce71;
   --vagabond-inventory-lines: #ffffff55;

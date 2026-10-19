@@ -761,6 +761,41 @@ export class EquipmentHelper {
   }
 
   /**
+   * One-time (guard `noScrapMigrated`): world / actor-owned copies of pack equipment take the pack's
+   * Can't be Scrapped switch (Breath Attacks), matched by compendium source id. Waits for a rebuilt pack.
+   */
+  static async migrateNoScrap() {
+    if (game.user !== game.users.activeGM) return;
+    if (game.settings.get('vagabond', 'noScrapMigrated')) return;
+    const { sourceDocId } = await import('./source-id.mjs');
+    const ids = new Set();
+    for (const key of ['vagabond.weapons', 'vagabond.armor', 'vagabond.gear', 'vagabond.relics', 'vagabond.alchemical-items']) {
+      const pack = game.packs.get(key);
+      if (!pack) continue;
+      const index = await pack.getIndex({ fields: ['system.noScrap'] });
+      for (const e of index) if (e.system?.noScrap) ids.add(e._id);
+    }
+    if (!ids.size) return; // pack not rebuilt yet: try again next load
+
+    const safeItems = (doc) => { try { return Array.from(doc?.items ?? []); } catch { return []; } };
+    const candidates = [
+      ...game.items,
+      ...game.actors.contents.flatMap(safeItems),
+      ...game.scenes.contents.flatMap((s) => s.tokens.contents.filter((t) => !t.actorLink && t.actor)
+        .flatMap((t) => safeItems(t.actor))),
+    ];
+    for (const item of candidates) {
+      try {
+        if (item.type !== 'equipment' || item.system.noScrap || !ids.has(sourceDocId(item))) continue;
+        await item.update({ 'system.noScrap': true });
+      } catch (err) {
+        console.warn(`vagabond | migrateNoScrap: skipped ${item?.uuid ?? '(unknown)'}`, err);
+      }
+    }
+    await game.settings.set('vagabond', 'noScrapMigrated', true);
+  }
+
+  /**
    * @deprecated Thin alias kept for legacy call sites — use equipWithHandLimit.
    * @param {Actor} actor
    * @param {string} weaponId

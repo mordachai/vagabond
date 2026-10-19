@@ -27,6 +27,7 @@ export const ScrapMode = {
     return !!item && item.type === 'equipment'
       && !item.flags?.vagabond?.craftProject
       && !item.system?.craftMaterial?.enabled
+      && !item.system?.noScrap
       && !EquipmentHelper.isCurseLocked(item);
   },
 

@@ -292,3 +292,9 @@
     &::before { animation: none; }
   }
 }
+
+// Gold icon / text on the sheet paper: outlined in light mode (no outline in dark mode).
+@mixin yellow-ink {
+  color: $c-yellow;
+  text-shadow: var(--vagabond-yellow-outline);
+}

@@ -978,6 +978,8 @@ Hooks.once('ready', function () {
   LightSource.migrateRunAsGM();
   // One-time: Keen/Vicious tags → On Use Only effects on the weapon.
   EquipmentHelper.migrateWeaponPropertyEffects();
+  // One-time: copies of Breath Attacks (and other pack items) take the Can't be Scrapped switch.
+  EquipmentHelper.migrateNoScrap();
   // One-time: Barbarian class items get the book-revision effect set (per-behavior switches).
   const classRuns = [RageHelper.migrateBarbarianClass()];
   // Idempotent: hand-switch helper effects stay switchable now that other class effects are locked features.

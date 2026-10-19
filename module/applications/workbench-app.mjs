@@ -70,7 +70,7 @@ export class WorkbenchApp extends api.HandlebarsApplicationMixin(api.Application
     classes: ['vagabond', 'workbench-app'],
     tag: 'div',
     window: { title: 'VAGABOND.Craft.Workbench.Title', icon: 'fa-solid fa-hammer', resizable: true },
-    position: { width: 1060, height: 700 },
+    position: { width: 850, height: 700 },
     actions: {
       switchTab: WorkbenchApp.#onSwitchTab,
       workShift: WorkbenchApp.#onWorkShift,
@@ -162,7 +162,7 @@ export class WorkbenchApp extends api.HandlebarsApplicationMixin(api.Application
     const fmt = (copper) => CurrencyHelper.format(copper);
     const equipKeys = { oneHand: 'OneHand', twoHands: 'TwoHands', worn: 'Worn' };
     const candidates = this.actor.items.filter(i => i.type === 'equipment'
-      && !i.flags?.vagabond?.craftProject && !i.system?.craftMaterial?.enabled);
+      && !i.flags?.vagabond?.craftProject && !i.system?.craftMaterial?.enabled && !i.system?.noScrap);
 
     const picks = new Map();
     const rows = candidates.map(item => {
@@ -561,13 +561,22 @@ export class WorkbenchApp extends api.HandlebarsApplicationMixin(api.Application
     this.#abort = new AbortController();
     const { signal } = this.#abort;
 
-    // Dropping an item anywhere on the Craft tab selects it (any compendium, the
-    // sidebar, an actor sheet). A GM dropping a world item also registers it as a
-    // custom recipe so it stays in the catalog for everyone.
-    this.#wireDropZone('.wb-craft-tab', signal, async (source, uuid) => {
+    // Catalog rows drag like any Item. Dropped on the detail panel an item is selected, on
+    // Ongoing Projects it is staged as a new Project (any compendium, the sidebar, an actor
+    // sheet too). A GM dropping a world item also registers it as a custom recipe so it stays
+    // in the catalog for everyone.
+    for (const row of this.element.querySelectorAll('.wb-cat-row[draggable="true"]')) {
+      row.addEventListener('dragstart', (ev) => {
+        ev.dataTransfer.setData('text/plain', JSON.stringify({ type: 'Item', uuid: row.dataset.uuid }));
+        ev.dataTransfer.effectAllowed = 'copy';
+        row.classList.add('is-dragging');
+      }, { signal });
+      row.addEventListener('dragend', () => row.classList.remove('is-dragging'), { signal });
+    }
+    const accept = async (source) => {
       if (source.type !== 'equipment') {
         ui.notifications.warn(game.i18n.localize('VAGABOND.Craft.Workbench.OnlyEquipment'));
-        return;
+        return false;
       }
       if (game.user.isGM && !source.pack && !source.parent && !CraftCatalog.isRecipe(source)) {
         const result = await CraftCatalog.register(source);
@@ -577,8 +586,17 @@ export class WorkbenchApp extends api.HandlebarsApplicationMixin(api.Application
           this.#catalog = null;
         }
       }
+      return true;
+    };
+    this.#wireDropZone('.wb-detail', signal, async (source, uuid) => {
+      if (!(await accept(source))) return;
       this.#selectedUuid = uuid;
       this.render();
+    });
+    this.#wireDropZone('.wb-projects', signal, async (source, uuid) => {
+      if (!(await accept(source))) return;
+      this.#selectedUuid = uuid;
+      await this.#stage(uuid);
     });
 
     const craftSearch = this.element.querySelector('.wb-craft-search');

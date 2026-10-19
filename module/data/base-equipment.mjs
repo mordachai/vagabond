@@ -71,6 +71,13 @@ export default class VagabondEquipment extends VagabondItemBase {
       initial: false
     });
 
+    // Can't be scrapped: never listed on the Workbench Scrap tab (Breath Attack and other natural / granted
+    // attacks, Relics the GM keeps out of the economy)
+    schema.noScrap = new fields.BooleanField({
+      required: true,
+      initial: false
+    });
+
     // Quantity (for stackable items)
     schema.quantity = new fields.NumberField({
       ...requiredInteger,

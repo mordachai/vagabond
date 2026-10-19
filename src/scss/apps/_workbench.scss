@@ -2,7 +2,12 @@
 
 .workbench-app {
 
-  .window-content { padding: 0.5rem; overflow: hidden; }
+  // Same thick yellow frame as the item / party sheets; the rail is the sheets' nav band turned on its side.
+  .window-content {
+    padding: 0;
+    overflow: hidden;
+    @include vagabond-window-frame;
+  }
 
   .wb-root { display: flex; height: 100%; overflow: hidden; font-family: $font-text; }
 
@@ -11,38 +16,40 @@
     flex-direction: column;
     width: 95px;
     min-width: 95px;
-    border-right: 1px solid $c-faint;
-    background: $c-inset-2;
-    padding: 0.5rem 3px;
-    gap: 2px;
+    background-image: url(../assets/images/sheets/tabNavBG.webp);
+    background-size: 100% 100%;
+    box-shadow: 2px 0 2px $c-inset-2;
+    padding: 0.75rem 6px;
+    gap: 6px;
   }
 
   .wb-rail-btn {
-    font-family: $font-secondary;
+    font-family: $font-title;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 0.25rem;
     width: 100%;
     padding: 0.5rem 0.3rem;
-    border: none;
-    border-left: 4px solid transparent;
+    border: 1px solid transparent;
+    border-radius: 6px;
     background: transparent;
-    color: $c-muted;
+    color: $c-white;
+    text-shadow: 1px 1px 2px #000;
     cursor: pointer;
-    font-size: 0.72rem;
+    font-size: 1rem;
     height: auto;
     line-height: normal;
     transition: background 0.15s, border-color 0.15s, color 0.15s;
 
-    i { font-size: 1.1rem; }
+    i { font-size: 1.3rem; filter: drop-shadow(1px 1px 1px #000); }
 
-    &:hover { background: $c-inset-2; color: $c-text-1; }
+    &:hover { background: rgba(0, 0, 0, 0.2); }
 
     &.active {
-      border-left-color: $c-yellow;
-      color: $c-text-1;
-      background: $c-inset-2;
+      color: $c-yellow;
+      border-color: $c-yellow;
+      background: rgba(0, 0, 0, 0.3);
     }
   }
 
@@ -52,8 +59,11 @@
     align-items: center;
     gap: 0.25rem;
     padding: 0.5rem 0.3rem;
-    font-size: 0.68rem;
-    opacity: 0.35;
+    font-family: $font-title;
+    font-size: 1rem;
+    color: $c-white;
+    text-align: center;
+    opacity: 0.45;
     cursor: help;
   }
 
@@ -66,7 +76,7 @@
 
   .wb-hint {
     margin: 0 0 0.6rem;
-    font-size: 0.78rem;
+    font-size: 0.94rem;
     opacity: 0.75;
   }
 
@@ -84,13 +94,13 @@
     padding: 0.4rem 0.6rem;
     border: 1px solid $c-faint;
     border-radius: 4px;
-    font-size: 0.82rem;
+    font-size: 0.98rem;
     background: $c-surface;
   }
 
   .wb-empty {
     margin: 0.3rem 0;
-    font-size: 0.8rem;
+    font-size: 0.96rem;
     opacity: 0.6;
     font-style: italic;
   }
@@ -154,7 +164,7 @@
     height: 100%;
     min-height: 0;
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 370px;
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); // list wider than the side panel
     gap: 0.85rem;
   }
 
@@ -174,9 +184,9 @@
     border: 1px solid $c-faint;
     border-radius: 4px;
     background: $c-surface;
-    font-size: 0.98rem;
+    font-size: 1rem;
 
-    i { color: $c-yellow; }
+    i { @include yellow-ink; }
   }
 
   .wb-scrap-list {
@@ -198,7 +208,7 @@
 
   .wb-scrap-group-label {
     font-family: $font-secondary;
-    font-size: 0.8rem;
+    font-size: 0.96rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.03em;
@@ -295,7 +305,7 @@
   .wb-scrap-qty {
     flex-shrink: 0;
     font-family: $font-primary;
-    font-size: 0.92rem;
+    font-size: 1rem;
     font-weight: 600;
     color: $c-muted;
   }
@@ -308,24 +318,24 @@
     padding: 0 0.35rem;
     border: 1px solid $c-yellow;
     border-radius: 3px;
-    color: $c-yellow;
+    @include yellow-ink;
     font-family: $font-title;
-    font-size: 0.8rem;
+    font-size: 0.96rem;
     line-height: 1.5;
 
     i { font-size: 0.85em; }
   }
 
-  .wb-scrap-lock { color: $c-red; font-size: 0.92rem; }
+  .wb-scrap-lock { color: $c-red; font-size: 1rem; }
 
   .wb-scrap-meta {
     display: flex;
     align-items: center;
     gap: 0.4rem;
-    font-size: 0.92rem;
+    font-size: 1rem;
     color: $c-muted;
 
-    > i { font-size: 0.82rem; opacity: 0.7; }
+    > i { font-size: 0.98rem; opacity: 0.7; }
     .wb-mat-icon { width: 13px; height: 13px; }
   }
 
@@ -345,16 +355,35 @@
     gap: 0.3rem;
     flex-shrink: 0;
 
+    // +/- stacked in a narrow column in front of the count
+    .wb-stepper.is-vertical {
+      align-items: stretch;
+
+      .wb-stepper-col {
+        display: flex;
+        flex-direction: column;
+        border-right: 1px solid $c-faint;
+
+        button {
+          width: 18px;
+          height: 15px;
+          font-size: 0.6rem;
+
+          & + button { border-top: 1px solid $c-faint; }
+        }
+      }
+    }
+
     .wb-scrap-count {
-      width: 40px;
-      height: 22px;
+      width: 34px;
+      height: 31px;
       padding: 0 0.2rem;
       border: none;
       border-radius: 0;
       background: transparent;
       box-shadow: none;
       text-align: center;
-      font-size: 0.92rem;
+      font-size: 1rem;
     }
   }
 
@@ -367,11 +396,11 @@
     border-radius: 4px;
     background: transparent;
     color: $c-muted;
-    font-size: 0.85rem;
+    font-size: 1rem;
     cursor: pointer;
 
     &:hover { color: $c-text-1; border-color: $c-text-1; }
-    &.active { color: $c-yellow; border-color: $c-yellow; }
+    &.active { @include yellow-ink; border-color: $c-yellow; }
   }
 
   /* Right column: tray over the totals */
@@ -396,7 +425,7 @@
     font-family: $font-title;
     font-size: 1.15rem;
 
-    i { color: $c-yellow; }
+    i { @include yellow-ink; }
   }
 
   .wb-tray-clear {
@@ -408,7 +437,7 @@
     border-radius: 4px;
     background: transparent;
     color: $c-muted;
-    font-size: 0.82rem;
+    font-size: 0.98rem;
     cursor: pointer;
 
     &:hover { color: $c-red; border-color: $c-red; }
@@ -434,7 +463,7 @@
     &:hover { background: $c-inset-2; }
 
     > img { width: 36px; height: 36px; flex: 0 0 36px; object-fit: cover; border: 1px solid $c-tan-lite; border-radius: 3px; }
-    .wb-icon-btn { width: 22px; height: 22px; font-size: 0.75rem; }
+    .wb-icon-btn { width: 22px; height: 22px; font-size: 0.9rem; }
   }
 
   .wb-tray-name {
@@ -444,12 +473,12 @@
     align-items: center;
     gap: 0.3rem;
     font-family: $font-title;
-    font-size: 0.98rem;
+    font-size: 1rem;
   }
 
   .wb-tray-of { font-weight: 400; opacity: 0.7; }
-  .wb-tray-equip { color: $c-yellow; font-size: 0.75rem; cursor: help; }
-  .wb-tray-yield { flex-shrink: 0; font-size: 0.92rem; font-weight: 600; white-space: nowrap; }
+  .wb-tray-equip { @include yellow-ink; font-size: 0.9rem; cursor: help; }
+  .wb-tray-yield { flex-shrink: 0; font-size: 1rem; font-weight: 600; white-space: nowrap; }
 
   .wb-scrap-summary {
     flex: 0 0 auto;
@@ -474,13 +503,13 @@
     > div { display: flex; flex-direction: column; }
   }
 
-  .wb-scrap-gain-label { font-size: 0.85rem; color: $c-muted; }
+  .wb-scrap-gain-label { font-size: 1rem; color: $c-muted; }
 
   .wb-scrap-gain-value {
     font-family: $font-title;
     font-size: 1.75rem;
     line-height: 1.1;
-    color: $c-yellow;
+    @include yellow-ink;
   }
 
   .wb-scrap-line {
@@ -488,9 +517,9 @@
     align-items: center;
     justify-content: space-between;
     gap: 0.5rem;
-    font-size: 0.92rem;
+    font-size: 1rem;
 
-    i { font-size: 0.75rem; opacity: 0.7; margin: 0 0.15rem; }
+    i { font-size: 0.9rem; opacity: 0.7; margin: 0 0.15rem; }
     &.is-over strong { color: $c-red; }
   }
 
@@ -504,7 +533,7 @@
     border: 1px solid $c-red;
     border-radius: 4px;
     background: color-mix(in srgb, #{$c-red} 10%, transparent);
-    font-size: 0.9rem;
+    font-size: 1rem;
 
     > i { color: $c-red; margin-top: 0.15rem; }
     ul { margin: 0.15rem 0 0; padding-left: 1rem; }
@@ -520,11 +549,20 @@
     height: 100%;
     min-height: 0;
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 360px;
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); // list wider than the side panel
     gap: 0.85rem;
     border-radius: 6px;
+  }
 
-    &.drag-over { outline: 2px dashed $c-yellow; outline-offset: 2px; }
+  // Drop targets: catalog rows (or any Item) dragged onto the detail panel select it, onto Projects stage it.
+  .wb-detail,
+  .wb-projects {
+    transition: border-color 0.15s, box-shadow 0.15s;
+
+    &.drag-over {
+      border-color: $c-yellow;
+      box-shadow: 0 0 8px -1px $c-yellow, inset 0 0 0 1px $c-yellow;
+    }
   }
 
   .wb-mat-icon {
@@ -537,12 +575,44 @@
     flex-shrink: 0;
   }
 
+  // Shift limit | Materials: full-height icon, label on top, value below
   .wb-budget-bar {
-    align-items: center;
+    align-items: stretch;
     margin-bottom: 0;
+  }
 
-    span { display: flex; align-items: center; gap: 0.35rem; }
-    i { color: $c-yellow; }
+  .wb-budget-item {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .wb-budget-icon {
+    flex: 0 0 auto;
+    width: 2.4rem;
+    height: 2.4rem;
+    object-fit: cover;
+    border-radius: 4px;
+  }
+
+  i.wb-budget-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    @include yellow-ink;
+  }
+
+  .wb-budget-text {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    line-height: 1.15;
+
+    span { font-size: 0.9rem; color: $c-muted; }
+    strong { font-family: $font-title; font-size: 1.2rem; font-weight: normal; }
   }
 
   .wb-catalog {
@@ -589,7 +659,7 @@
     height: auto;
     line-height: normal;
     padding: 0.35rem 0.4rem;
-    font-size: 0.74rem;
+    font-size: 0.89rem;
     border: 1px solid $c-faint;
     border-radius: 4px;
     background: transparent;
@@ -635,6 +705,7 @@
     }
 
     &.is-hidden { display: none; }
+    &.is-dragging { opacity: 0.45; }
   }
 
   .wb-cat-img {
@@ -654,7 +725,7 @@
     display: flex;
     align-items: center;
     gap: 0.35rem;
-    font-size: 0.95rem;
+    font-size: 1rem;
     font-weight: 400;
 
     > span:first-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -662,9 +733,10 @@
 
   .wb-cat-meta {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    gap: 0.6rem;
-    font-size: 0.85rem;
+    column-gap: 0.6rem;
+    font-size: 0.95rem;
     color: $c-muted;
   }
 
@@ -674,7 +746,7 @@
     align-items: center;
     gap: 0.25rem;
     font-weight: 600;
-    color: $c-yellow;
+    @include yellow-ink;
     cursor: help;
 
     i { font-size: 0.9em; }
@@ -686,9 +758,9 @@
     align-items: flex-end;
     gap: 2px;
     flex-shrink: 0;
-    font-size: 0.85rem;
+    font-size: 0.95rem;
 
-    i { color: $c-yellow; font-size: 0.85em; }
+    i { @include yellow-ink; font-size: 0.85em; }
   }
 
   .wb-cat-cost { font-family: $font-primary; font-weight: 600; }
@@ -707,8 +779,8 @@
     padding: 0 0.3rem;
     border: 1px solid $c-yellow;
     border-radius: 3px;
-    color: $c-yellow;
-    font-size: 0.6rem;
+    @include yellow-ink;
+    font-size: 0.72rem;
     font-weight: 700;
     line-height: 1.4;
     cursor: help;
@@ -763,7 +835,7 @@
   }
 
   .wb-detail-meta {
-    font-size: 0.75rem;
+    font-size: 0.9rem;
     color: $c-muted;
   }
 
@@ -772,9 +844,9 @@
     align-items: center;
     gap: 0.3rem;
     margin-top: 0.15rem;
-    font-size: 0.8rem;
+    font-size: 0.96rem;
     font-weight: 600;
-    color: $c-yellow;
+    @include yellow-ink;
 
     > span { cursor: help; }
     .wb-sep { color: $c-muted; cursor: default; }
@@ -784,7 +856,7 @@
     margin: 0.45rem 0 0;
     padding-top: 0.4rem;
     border-top: 1px solid $c-faint;
-    font-size: 0.75rem;
+    font-size: 0.9rem;
     max-height: 72px;
     overflow-y: auto;
     opacity: 0.85;
@@ -809,12 +881,11 @@
       border-radius: 4px;
     }
 
-    span { font-family: $font-secondary; font-size: 0.65rem; color: $c-muted; text-transform: uppercase; letter-spacing: 0.03em; }
-    strong { font-family: $font-title; font-size: 0.85rem; }
+    span { font-family: $font-secondary; font-size: 0.78rem; color: $c-muted; text-transform: uppercase; letter-spacing: 0.03em; }
+    strong { font-family: $font-title; font-size: 1rem; }
   }
 
-  .wb-stage-btn,
-  .wb-shift-actions .wb-shift-btn {
+  .wb-stage-btn {
     background: $c-bg2;
     color: $c-white;
     border: 1px solid $c-yellow;
@@ -823,20 +894,45 @@
     &:not(:disabled):hover { box-shadow: 0 0 8px -1px $c-yellow, inset 0 0 0 1px $c-yellow; }
   }
 
+  // Work a Shift / Scrap: the chat "Apply Direct" banner button (important actions).
+  .wb-shift-actions .wb-shift-btn,
+  .wb-scrap-btn {
+    background: transparent;
+    background-image: url('../assets/ui/chat/apply-direct-bg.webp');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-position: center center;
+    color: #fff;
+    padding: 6px;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-family: $font-primary;
+    border: none;
+    border-radius: 2px;
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+    line-height: 1.2;
+
+    i { color: $c-yellow; flex-shrink: 0; }
+
+    &:not(:disabled):hover { filter: brightness(1.6); }
+    &:disabled { opacity: 0.6; filter: grayscale(1); }
+  }
+
   .wb-detail-empty {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 0.35rem;
-    padding: 0.8rem 0.4rem;
+    padding: 1rem 0.4rem;
     text-align: center;
-    font-size: 0.78rem;
+    font-family: $font-title;
+    font-size: 1.1rem;
     color: $c-muted;
 
-    i { font-size: 1.3rem; opacity: 0.6; }
+    i { font-size: 1.6rem; opacity: 0.6; }
   }
 
-  .wb-detail-empty-gm { font-size: 0.7rem; font-style: italic; }
+  .wb-detail-empty-gm { font-family: $font-text; font-size: 1rem; font-style: italic; }
 
   .wb-projects {
     flex: 1;
@@ -847,14 +943,13 @@
   }
 
   .wb-projects-head {
-    font-family: $font-secondary;
+    font-family: $font-title;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 0.72rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
+    padding-bottom: 0.2rem;
+    border-bottom: 1px solid $c-faint;
+    font-size: 1.15rem;
   }
 
   .wb-count {
@@ -864,7 +959,7 @@
     background: $c-inset-2;
     border: 1px solid $c-tan-lite;
     text-align: center;
-    font-size: 0.7rem;
+    font-size: 0.84rem;
   }
 
   .wb-proj-list {
@@ -892,14 +987,14 @@
     gap: 0.45rem;
 
     img { width: 28px; height: 28px; flex: 0 0 28px; object-fit: cover; border-radius: 3px; border: 1px solid $c-tan-lite; }
-    .wb-icon-btn { width: 22px; height: 22px; font-size: 0.75rem; }
+    .wb-icon-btn { width: 22px; height: 22px; font-size: 0.9rem; }
   }
 
   .wb-proj-name {
     font-family: $font-title;
     flex: 1;
     min-width: 0;
-    font-size: 0.82rem;
+    font-size: 0.98rem;
     font-weight: 600;
     white-space: nowrap;
     overflow: hidden;
@@ -911,7 +1006,7 @@
     border-radius: 3px;
     background: $c-yellow;
     color: $c-black;
-    font-size: 0.6rem;
+    font-size: 0.72rem;
     font-weight: 700;
     text-transform: uppercase;
     cursor: help;
@@ -928,7 +1023,7 @@
 
   .wb-proj-progress-label {
     flex-shrink: 0;
-    font-size: 0.68rem;
+    font-size: 0.82rem;
     color: $c-muted;
   }
 
@@ -936,14 +1031,14 @@
     display: flex;
     align-items: center;
     gap: 0.45rem;
-    font-size: 0.72rem;
+    font-size: 0.86rem;
   }
 
   .wb-proj-alloc-label {
     flex: 1;
     color: $c-muted;
 
-    i { color: $c-yellow; }
+    i { @include yellow-ink; }
   }
 
   .wb-stepper {
@@ -962,10 +1057,10 @@
       border-radius: 0;
       background: $c-inset-2;
       color: $c-muted;
-      font-size: 0.6rem;
+      font-size: 0.72rem;
       cursor: pointer;
 
-      &:hover { color: $c-yellow; }
+      &:hover { @include yellow-ink; }
     }
 
     .wb-alloc-input {
@@ -977,7 +1072,7 @@
       background: transparent;
       box-shadow: none;
       text-align: center;
-      font-size: 0.75rem;
+      font-size: 0.9rem;
     }
   }
 
@@ -1006,7 +1101,7 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    font-size: 0.75rem;
+    font-size: 0.9rem;
   }
 
   .wb-shift-line-label {
@@ -1017,7 +1112,7 @@
     flex-shrink: 0;
     color: $c-muted;
 
-    i { color: $c-yellow; }
+    i { @include yellow-ink; }
   }
 
   .wb-meter {
@@ -1055,7 +1150,7 @@
     height: auto;
     line-height: normal;
     padding: 0.5rem 0.7rem;
-    font-size: 0.75rem;
+    font-size: 0.9rem;
     border: 1px solid $c-faint;
     border-radius: 4px;
     background: transparent;

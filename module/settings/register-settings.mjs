@@ -1142,7 +1142,7 @@ export function registerGameSettings({ refreshClockDependents, applyTokenEffectV
     'lifeNoFreeDieMigrated', 'vehementMagicMigrated', 'partyStashPurged', 'spellStatusRulesMigrated3',
     'spellEffectEntriesMigrated', 'spellTargetSwitchesMigrated', 'raiseSpellMigrated', 'namedRelicsMigrated2',
     'spellFocusSwitchesMigrated2', 'spellFocusUpkeepMigrated', 'conjureSpellsMigrated2', 'spellSurfaceMigrated3', 'spellStatusEntriesFixed',
-    'materialsBundlesMerged',
+    'materialsBundlesMerged', 'noScrapMigrated',
   ];
   for (const key of MIGRATION_GUARDS) {
     game.settings.register('vagabond', key, {

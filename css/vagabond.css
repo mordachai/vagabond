@@ -60,6 +60,7 @@
   --vagabond-bg-size: 200px 200px;
   --vagabond-c-stat: #f1f1f1;
   --vagabond-c-chat-yellow: #DED656;
+  --vagabond-yellow-outline: -1px -1px 0 #0000008c, 1px -1px 0 #0000008c, -1px 1px 0 #0000008c, 1px 1px 0 #0000008c;
   --vagabond-c-green: #1f6b14;
   --vagabond-c-green-bright: #278e17;
   --vagabond-c-bluey: #62686a;
@@ -132,6 +133,7 @@ body[data-theme=dark] #sidebar {
   --vagabond-c-stat: #ffd07d;
   --vagabond-c-chat-yellow: #DED656;
   --vagabond-c-yellow-2: #d5bc2f;
+  --vagabond-yellow-outline: none;
   --vagabond-tracker-col1: #3db5ff;
   --vagabond-inventory-hover: #61abce71;
   --vagabond-inventory-lines: #ffffff55;
@@ -17617,8 +17619,11 @@ ol#combat-tracker.directory-list {
   /* Right column */
 }
 .workbench-app .window-content {
-  padding: 0.5rem;
+  padding: 0;
   overflow: hidden;
+  border-radius: 1.5em;
+  corner-shape: round round scoop scoop;
+  border: 8px solid var(--vagabond-c-chat-yellow);
 }
 .workbench-app .wb-root {
   display: flex;
@@ -17631,40 +17636,42 @@ ol#combat-tracker.directory-list {
   flex-direction: column;
   width: 95px;
   min-width: 95px;
-  border-right: 1px solid var(--vagabond-c-faint);
-  background: var(--vagabond-c-inset-2);
-  padding: 0.5rem 3px;
-  gap: 2px;
+  background-image: url(../assets/images/sheets/tabNavBG.webp);
+  background-size: 100% 100%;
+  box-shadow: 2px 0 2px var(--vagabond-c-inset-2);
+  padding: 0.75rem 6px;
+  gap: 6px;
 }
 .workbench-app .wb-rail-btn {
-  font-family: "Manofa", serif;
+  font-family: "Germania", serif;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 0.25rem;
   width: 100%;
   padding: 0.5rem 0.3rem;
-  border: none;
-  border-left: 4px solid transparent;
+  border: 1px solid transparent;
+  border-radius: 6px;
   background: transparent;
-  color: var(--vagabond-c-muted);
+  color: var(--vagabond-c-white);
+  text-shadow: 1px 1px 2px #000;
   cursor: pointer;
-  font-size: 0.72rem;
+  font-size: 1rem;
   height: auto;
   line-height: normal;
   transition: background 0.15s, border-color 0.15s, color 0.15s;
 }
 .workbench-app .wb-rail-btn i {
-  font-size: 1.1rem;
+  font-size: 1.3rem;
+  filter: drop-shadow(1px 1px 1px #000);
 }
 .workbench-app .wb-rail-btn:hover {
-  background: var(--vagabond-c-inset-2);
-  color: var(--vagabond-c-text-primary);
+  background: rgba(0, 0, 0, 0.2);
 }
 .workbench-app .wb-rail-btn.active {
-  border-left-color: var(--vagabond-c-chat-yellow);
-  color: var(--vagabond-c-text-primary);
-  background: var(--vagabond-c-inset-2);
+  color: var(--vagabond-c-chat-yellow);
+  border-color: var(--vagabond-c-chat-yellow);
+  background: rgba(0, 0, 0, 0.3);
 }
 .workbench-app .wb-rail-soon {
   display: flex;
@@ -17672,8 +17679,11 @@ ol#combat-tracker.directory-list {
   align-items: center;
   gap: 0.25rem;
   padding: 0.5rem 0.3rem;
-  font-size: 0.68rem;
-  opacity: 0.35;
+  font-family: "Germania", serif;
+  font-size: 1rem;
+  color: var(--vagabond-c-white);
+  text-align: center;
+  opacity: 0.45;
   cursor: help;
 }
 .workbench-app .wb-main {
@@ -17684,7 +17694,7 @@ ol#combat-tracker.directory-list {
 }
 .workbench-app .wb-hint {
   margin: 0 0 0.6rem;
-  font-size: 0.78rem;
+  font-size: 0.94rem;
   opacity: 0.75;
 }
 .workbench-app .wb-disabled-hint,
@@ -17700,12 +17710,12 @@ ol#combat-tracker.directory-list {
   padding: 0.4rem 0.6rem;
   border: 1px solid var(--vagabond-c-faint);
   border-radius: 4px;
-  font-size: 0.82rem;
+  font-size: 0.98rem;
   background: var(--vagabond-c-surface);
 }
 .workbench-app .wb-empty {
   margin: 0.3rem 0;
-  font-size: 0.8rem;
+  font-size: 0.96rem;
   opacity: 0.6;
   font-style: italic;
 }
@@ -17764,7 +17774,7 @@ ol#combat-tracker.directory-list {
   height: 100%;
   min-height: 0;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 370px;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
   gap: 0.85rem;
 }
 .workbench-app .wb-scrap-pick {
@@ -17782,10 +17792,11 @@ ol#combat-tracker.directory-list {
   border: 1px solid var(--vagabond-c-faint);
   border-radius: 4px;
   background: var(--vagabond-c-surface);
-  font-size: 0.98rem;
+  font-size: 1rem;
 }
 .workbench-app .wb-scrap-hint i {
   color: var(--vagabond-c-chat-yellow);
+  text-shadow: var(--vagabond-yellow-outline);
 }
 .workbench-app .wb-scrap-list {
   flex: 1;
@@ -17807,7 +17818,7 @@ ol#combat-tracker.directory-list {
 }
 .workbench-app .wb-scrap-group-label {
   font-family: "Manofa", serif;
-  font-size: 0.8rem;
+  font-size: 0.96rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.03em;
@@ -17911,7 +17922,7 @@ ol#combat-tracker.directory-list {
 .workbench-app .wb-scrap-qty {
   flex-shrink: 0;
   font-family: "Eskapade", serif;
-  font-size: 0.92rem;
+  font-size: 1rem;
   font-weight: 600;
   color: var(--vagabond-c-muted);
 }
@@ -17924,8 +17935,9 @@ ol#combat-tracker.directory-list {
   border: 1px solid var(--vagabond-c-chat-yellow);
   border-radius: 3px;
   color: var(--vagabond-c-chat-yellow);
+  text-shadow: var(--vagabond-yellow-outline);
   font-family: "Germania", serif;
-  font-size: 0.8rem;
+  font-size: 0.96rem;
   line-height: 1.5;
 }
 .workbench-app .wb-scrap-equip i {
@@ -17933,17 +17945,17 @@ ol#combat-tracker.directory-list {
 }
 .workbench-app .wb-scrap-lock {
   color: var(--vagabond-c-red);
-  font-size: 0.92rem;
+  font-size: 1rem;
 }
 .workbench-app .wb-scrap-meta {
   display: flex;
   align-items: center;
   gap: 0.4rem;
-  font-size: 0.92rem;
+  font-size: 1rem;
   color: var(--vagabond-c-muted);
 }
 .workbench-app .wb-scrap-meta > i {
-  font-size: 0.82rem;
+  font-size: 0.98rem;
   opacity: 0.7;
 }
 .workbench-app .wb-scrap-meta .wb-mat-icon {
@@ -17967,16 +17979,32 @@ ol#combat-tracker.directory-list {
   gap: 0.3rem;
   flex-shrink: 0;
 }
+.workbench-app .wb-scrap-stepper .wb-stepper.is-vertical {
+  align-items: stretch;
+}
+.workbench-app .wb-scrap-stepper .wb-stepper.is-vertical .wb-stepper-col {
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--vagabond-c-faint);
+}
+.workbench-app .wb-scrap-stepper .wb-stepper.is-vertical .wb-stepper-col button {
+  width: 18px;
+  height: 15px;
+  font-size: 0.6rem;
+}
+.workbench-app .wb-scrap-stepper .wb-stepper.is-vertical .wb-stepper-col button + button {
+  border-top: 1px solid var(--vagabond-c-faint);
+}
 .workbench-app .wb-scrap-stepper .wb-scrap-count {
-  width: 40px;
-  height: 22px;
+  width: 34px;
+  height: 31px;
   padding: 0 0.2rem;
   border: none;
   border-radius: 0;
   background: transparent;
   box-shadow: none;
   text-align: center;
-  font-size: 0.92rem;
+  font-size: 1rem;
 }
 .workbench-app .wb-scrap-all {
   font-family: "Manofa", serif;
@@ -17987,7 +18015,7 @@ ol#combat-tracker.directory-list {
   border-radius: 4px;
   background: transparent;
   color: var(--vagabond-c-muted);
-  font-size: 0.85rem;
+  font-size: 1rem;
   cursor: pointer;
 }
 .workbench-app .wb-scrap-all:hover {
@@ -17996,6 +18024,7 @@ ol#combat-tracker.directory-list {
 }
 .workbench-app .wb-scrap-all.active {
   color: var(--vagabond-c-chat-yellow);
+  text-shadow: var(--vagabond-yellow-outline);
   border-color: var(--vagabond-c-chat-yellow);
 }
 .workbench-app .wb-scrap-side {
@@ -18021,6 +18050,7 @@ ol#combat-tracker.directory-list {
 }
 .workbench-app .wb-tray-head i {
   color: var(--vagabond-c-chat-yellow);
+  text-shadow: var(--vagabond-yellow-outline);
 }
 .workbench-app .wb-tray-clear {
   font-family: "Manofa", serif;
@@ -18031,7 +18061,7 @@ ol#combat-tracker.directory-list {
   border-radius: 4px;
   background: transparent;
   color: var(--vagabond-c-muted);
-  font-size: 0.82rem;
+  font-size: 0.98rem;
   cursor: pointer;
 }
 .workbench-app .wb-tray-clear:hover {
@@ -18068,7 +18098,7 @@ ol#combat-tracker.directory-list {
 .workbench-app .wb-tray-row .wb-icon-btn {
   width: 22px;
   height: 22px;
-  font-size: 0.75rem;
+  font-size: 0.9rem;
 }
 .workbench-app .wb-tray-name {
   flex: 1;
@@ -18077,7 +18107,7 @@ ol#combat-tracker.directory-list {
   align-items: center;
   gap: 0.3rem;
   font-family: "Germania", serif;
-  font-size: 0.98rem;
+  font-size: 1rem;
 }
 .workbench-app .wb-tray-of {
   font-weight: 400;
@@ -18085,12 +18115,13 @@ ol#combat-tracker.directory-list {
 }
 .workbench-app .wb-tray-equip {
   color: var(--vagabond-c-chat-yellow);
-  font-size: 0.75rem;
+  text-shadow: var(--vagabond-yellow-outline);
+  font-size: 0.9rem;
   cursor: help;
 }
 .workbench-app .wb-tray-yield {
   flex-shrink: 0;
-  font-size: 0.92rem;
+  font-size: 1rem;
   font-weight: 600;
   white-space: nowrap;
 }
@@ -18124,7 +18155,7 @@ ol#combat-tracker.directory-list {
   flex-direction: column;
 }
 .workbench-app .wb-scrap-gain-label {
-  font-size: 0.85rem;
+  font-size: 1rem;
   color: var(--vagabond-c-muted);
 }
 .workbench-app .wb-scrap-gain-value {
@@ -18132,16 +18163,17 @@ ol#combat-tracker.directory-list {
   font-size: 1.75rem;
   line-height: 1.1;
   color: var(--vagabond-c-chat-yellow);
+  text-shadow: var(--vagabond-yellow-outline);
 }
 .workbench-app .wb-scrap-line {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 0.5rem;
-  font-size: 0.92rem;
+  font-size: 1rem;
 }
 .workbench-app .wb-scrap-line i {
-  font-size: 0.75rem;
+  font-size: 0.9rem;
   opacity: 0.7;
   margin: 0 0.15rem;
 }
@@ -18161,7 +18193,7 @@ ol#combat-tracker.directory-list {
   border: 1px solid var(--vagabond-c-red);
   border-radius: 4px;
   background: color-mix(in srgb, var(--vagabond-c-red) 10%, transparent);
-  font-size: 0.9rem;
+  font-size: 1rem;
 }
 .workbench-app .wb-scrap-warn > i {
   color: var(--vagabond-c-red);
@@ -18178,13 +18210,18 @@ ol#combat-tracker.directory-list {
   height: 100%;
   min-height: 0;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 360px;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
   gap: 0.85rem;
   border-radius: 6px;
 }
-.workbench-app .wb-craft-tab.drag-over {
-  outline: 2px dashed var(--vagabond-c-chat-yellow);
-  outline-offset: 2px;
+.workbench-app .wb-detail,
+.workbench-app .wb-projects {
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.workbench-app .wb-detail.drag-over,
+.workbench-app .wb-projects.drag-over {
+  border-color: var(--vagabond-c-chat-yellow);
+  box-shadow: 0 0 8px -1px var(--vagabond-c-chat-yellow), inset 0 0 0 1px var(--vagabond-c-chat-yellow);
 }
 .workbench-app .wb-mat-icon {
   width: 16px;
@@ -18196,16 +18233,45 @@ ol#combat-tracker.directory-list {
   flex-shrink: 0;
 }
 .workbench-app .wb-budget-bar {
-  align-items: center;
+  align-items: stretch;
   margin-bottom: 0;
 }
-.workbench-app .wb-budget-bar span {
+.workbench-app .wb-budget-item {
+  flex: 1;
+  min-width: 0;
   display: flex;
   align-items: center;
-  gap: 0.35rem;
+  gap: 0.5rem;
 }
-.workbench-app .wb-budget-bar i {
+.workbench-app .wb-budget-icon {
+  flex: 0 0 auto;
+  width: 2.4rem;
+  height: 2.4rem;
+  object-fit: cover;
+  border-radius: 4px;
+}
+.workbench-app i.wb-budget-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
   color: var(--vagabond-c-chat-yellow);
+  text-shadow: var(--vagabond-yellow-outline);
+}
+.workbench-app .wb-budget-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.15;
+}
+.workbench-app .wb-budget-text span {
+  font-size: 0.9rem;
+  color: var(--vagabond-c-muted);
+}
+.workbench-app .wb-budget-text strong {
+  font-family: "Germania", serif;
+  font-size: 1.2rem;
+  font-weight: normal;
 }
 .workbench-app .wb-catalog {
   display: flex;
@@ -18248,7 +18314,7 @@ ol#combat-tracker.directory-list {
   height: auto;
   line-height: normal;
   padding: 0.35rem 0.4rem;
-  font-size: 0.74rem;
+  font-size: 0.89rem;
   border: 1px solid var(--vagabond-c-faint);
   border-radius: 4px;
   background: transparent;
@@ -18298,6 +18364,9 @@ ol#combat-tracker.directory-list {
 .workbench-app .wb-cat-row.is-hidden {
   display: none;
 }
+.workbench-app .wb-cat-row.is-dragging {
+  opacity: 0.45;
+}
 .workbench-app .wb-cat-img {
   width: 50px;
   height: 50px;
@@ -18316,7 +18385,7 @@ ol#combat-tracker.directory-list {
   display: flex;
   align-items: center;
   gap: 0.35rem;
-  font-size: 0.95rem;
+  font-size: 1rem;
   font-weight: 400;
 }
 .workbench-app .wb-cat-name > span:first-child {
@@ -18326,9 +18395,10 @@ ol#combat-tracker.directory-list {
 }
 .workbench-app .wb-cat-meta {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 0.6rem;
-  font-size: 0.85rem;
+  column-gap: 0.6rem;
+  font-size: 0.95rem;
   color: var(--vagabond-c-muted);
 }
 .workbench-app .wb-stat {
@@ -18337,6 +18407,7 @@ ol#combat-tracker.directory-list {
   gap: 0.25rem;
   font-weight: 600;
   color: var(--vagabond-c-chat-yellow);
+  text-shadow: var(--vagabond-yellow-outline);
   cursor: help;
 }
 .workbench-app .wb-stat i {
@@ -18348,10 +18419,11 @@ ol#combat-tracker.directory-list {
   align-items: flex-end;
   gap: 2px;
   flex-shrink: 0;
-  font-size: 0.85rem;
+  font-size: 0.95rem;
 }
 .workbench-app .wb-cat-stats i {
   color: var(--vagabond-c-chat-yellow);
+  text-shadow: var(--vagabond-yellow-outline);
   font-size: 0.85em;
 }
 .workbench-app .wb-cat-cost {
@@ -18378,7 +18450,8 @@ ol#combat-tracker.directory-list {
   border: 1px solid var(--vagabond-c-chat-yellow);
   border-radius: 3px;
   color: var(--vagabond-c-chat-yellow);
-  font-size: 0.6rem;
+  text-shadow: var(--vagabond-yellow-outline);
+  font-size: 0.72rem;
   font-weight: 700;
   line-height: 1.4;
   cursor: help;
@@ -18430,7 +18503,7 @@ ol#combat-tracker.directory-list {
   line-height: 1.2;
 }
 .workbench-app .wb-detail-meta {
-  font-size: 0.75rem;
+  font-size: 0.9rem;
   color: var(--vagabond-c-muted);
 }
 .workbench-app .wb-detail-damage {
@@ -18438,9 +18511,10 @@ ol#combat-tracker.directory-list {
   align-items: center;
   gap: 0.3rem;
   margin-top: 0.15rem;
-  font-size: 0.8rem;
+  font-size: 0.96rem;
   font-weight: 600;
   color: var(--vagabond-c-chat-yellow);
+  text-shadow: var(--vagabond-yellow-outline);
 }
 .workbench-app .wb-detail-damage > span {
   cursor: help;
@@ -18453,7 +18527,7 @@ ol#combat-tracker.directory-list {
   margin: 0.45rem 0 0;
   padding-top: 0.4rem;
   border-top: 1px solid var(--vagabond-c-faint);
-  font-size: 0.75rem;
+  font-size: 0.9rem;
   max-height: 72px;
   overflow-y: auto;
   opacity: 0.85;
@@ -18481,42 +18555,73 @@ ol#combat-tracker.directory-list {
 }
 .workbench-app .wb-detail-stats span {
   font-family: "Manofa", serif;
-  font-size: 0.65rem;
+  font-size: 0.78rem;
   color: var(--vagabond-c-muted);
   text-transform: uppercase;
   letter-spacing: 0.03em;
 }
 .workbench-app .wb-detail-stats strong {
   font-family: "Germania", serif;
-  font-size: 0.85rem;
+  font-size: 1rem;
 }
-.workbench-app .wb-stage-btn,
-.workbench-app .wb-shift-actions .wb-shift-btn {
+.workbench-app .wb-stage-btn {
   background: var(--vagabond-c-bg2);
   color: var(--vagabond-c-white);
   border: 1px solid var(--vagabond-c-chat-yellow);
   border-radius: 4px;
 }
-.workbench-app .wb-stage-btn:not(:disabled):hover,
-.workbench-app .wb-shift-actions .wb-shift-btn:not(:disabled):hover {
+.workbench-app .wb-stage-btn:not(:disabled):hover {
   box-shadow: 0 0 8px -1px var(--vagabond-c-chat-yellow), inset 0 0 0 1px var(--vagabond-c-chat-yellow);
+}
+.workbench-app .wb-shift-actions .wb-shift-btn,
+.workbench-app .wb-scrap-btn {
+  background: transparent;
+  background-image: url("../assets/ui/chat/apply-direct-bg.webp");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center center;
+  color: #fff;
+  padding: 6px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-family: "Eskapade", serif;
+  border: none;
+  border-radius: 2px;
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+  line-height: 1.2;
+}
+.workbench-app .wb-shift-actions .wb-shift-btn i,
+.workbench-app .wb-scrap-btn i {
+  color: var(--vagabond-c-chat-yellow);
+  flex-shrink: 0;
+}
+.workbench-app .wb-shift-actions .wb-shift-btn:not(:disabled):hover,
+.workbench-app .wb-scrap-btn:not(:disabled):hover {
+  filter: brightness(1.6);
+}
+.workbench-app .wb-shift-actions .wb-shift-btn:disabled,
+.workbench-app .wb-scrap-btn:disabled {
+  opacity: 0.6;
+  filter: grayscale(1);
 }
 .workbench-app .wb-detail-empty {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 0.35rem;
-  padding: 0.8rem 0.4rem;
+  padding: 1rem 0.4rem;
   text-align: center;
-  font-size: 0.78rem;
+  font-family: "Germania", serif;
+  font-size: 1.1rem;
   color: var(--vagabond-c-muted);
 }
 .workbench-app .wb-detail-empty i {
-  font-size: 1.3rem;
+  font-size: 1.6rem;
   opacity: 0.6;
 }
 .workbench-app .wb-detail-empty-gm {
-  font-size: 0.7rem;
+  font-family: "Paradigm", serif;
+  font-size: 1rem;
   font-style: italic;
 }
 .workbench-app .wb-projects {
@@ -18527,14 +18632,13 @@ ol#combat-tracker.directory-list {
   gap: 0.35rem;
 }
 .workbench-app .wb-projects-head {
-  font-family: "Manofa", serif;
+  font-family: "Germania", serif;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 0.72rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
+  padding-bottom: 0.2rem;
+  border-bottom: 1px solid var(--vagabond-c-faint);
+  font-size: 1.15rem;
 }
 .workbench-app .wb-count {
   min-width: 20px;
@@ -18543,7 +18647,7 @@ ol#combat-tracker.directory-list {
   background: var(--vagabond-c-inset-2);
   border: 1px solid var(--vagabond-c-tan-lite);
   text-align: center;
-  font-size: 0.7rem;
+  font-size: 0.84rem;
 }
 .workbench-app .wb-proj-list {
   flex: 1;
@@ -18581,13 +18685,13 @@ ol#combat-tracker.directory-list {
 .workbench-app .wb-proj-top .wb-icon-btn {
   width: 22px;
   height: 22px;
-  font-size: 0.75rem;
+  font-size: 0.9rem;
 }
 .workbench-app .wb-proj-name {
   font-family: "Germania", serif;
   flex: 1;
   min-width: 0;
-  font-size: 0.82rem;
+  font-size: 0.98rem;
   font-weight: 600;
   white-space: nowrap;
   overflow: hidden;
@@ -18598,7 +18702,7 @@ ol#combat-tracker.directory-list {
   border-radius: 3px;
   background: var(--vagabond-c-chat-yellow);
   color: var(--vagabond-c-black);
-  font-size: 0.6rem;
+  font-size: 0.72rem;
   font-weight: 700;
   text-transform: uppercase;
   cursor: help;
@@ -18615,14 +18719,14 @@ ol#combat-tracker.directory-list {
 }
 .workbench-app .wb-proj-progress-label {
   flex-shrink: 0;
-  font-size: 0.68rem;
+  font-size: 0.82rem;
   color: var(--vagabond-c-muted);
 }
 .workbench-app .wb-proj-alloc {
   display: flex;
   align-items: center;
   gap: 0.45rem;
-  font-size: 0.72rem;
+  font-size: 0.86rem;
 }
 .workbench-app .wb-proj-alloc-label {
   flex: 1;
@@ -18630,6 +18734,7 @@ ol#combat-tracker.directory-list {
 }
 .workbench-app .wb-proj-alloc-label i {
   color: var(--vagabond-c-chat-yellow);
+  text-shadow: var(--vagabond-yellow-outline);
 }
 .workbench-app .wb-stepper {
   display: flex;
@@ -18647,11 +18752,12 @@ ol#combat-tracker.directory-list {
   border-radius: 0;
   background: var(--vagabond-c-inset-2);
   color: var(--vagabond-c-muted);
-  font-size: 0.6rem;
+  font-size: 0.72rem;
   cursor: pointer;
 }
 .workbench-app .wb-stepper button:hover {
   color: var(--vagabond-c-chat-yellow);
+  text-shadow: var(--vagabond-yellow-outline);
 }
 .workbench-app .wb-stepper .wb-alloc-input {
   width: 64px;
@@ -18662,7 +18768,7 @@ ol#combat-tracker.directory-list {
   background: transparent;
   box-shadow: none;
   text-align: center;
-  font-size: 0.75rem;
+  font-size: 0.9rem;
 }
 .workbench-app .wb-alloc-materials {
   display: flex;
@@ -18693,7 +18799,7 @@ ol#combat-tracker.directory-list {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 0.75rem;
+  font-size: 0.9rem;
 }
 .workbench-app .wb-shift-line-label {
   display: flex;
@@ -18705,6 +18811,7 @@ ol#combat-tracker.directory-list {
 }
 .workbench-app .wb-shift-line-label i {
   color: var(--vagabond-c-chat-yellow);
+  text-shadow: var(--vagabond-yellow-outline);
 }
 .workbench-app .wb-meter {
   flex: 1;
@@ -18744,7 +18851,7 @@ ol#combat-tracker.directory-list {
   height: auto;
   line-height: normal;
   padding: 0.5rem 0.7rem;
-  font-size: 0.75rem;
+  font-size: 0.9rem;
   border: 1px solid var(--vagabond-c-faint);
   border-radius: 4px;
   background: transparent;

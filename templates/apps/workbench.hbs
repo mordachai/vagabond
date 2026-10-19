@@ -25,8 +25,14 @@
 
       <section class="wb-catalog">
         <div class="wb-budget-bar">
-          <span><i class="fa-solid fa-hourglass-half"></i> {{localize "VAGABOND.Craft.Workbench.ShiftBudget"}}: <strong>{{budgetLabel}}</strong></span>
-          <span><img class="wb-mat-icon" src="icons/commodities/materials/powder-red-green-yellow.webp" alt=""> {{localize "VAGABOND.Craft.Workbench.MaterialsOnHand"}}: <strong>{{materialsLabel}}</strong></span>
+          <div class="wb-budget-item">
+            <i class="wb-budget-icon fa-solid fa-hourglass-half"></i>
+            <div class="wb-budget-text"><span>{{localize "VAGABOND.Craft.Workbench.ShiftBudget"}}</span><strong>{{budgetLabel}}</strong></div>
+          </div>
+          <div class="wb-budget-item">
+            <img class="wb-budget-icon" src="icons/commodities/materials/powder-red-green-yellow.webp" alt="">
+            <div class="wb-budget-text"><span>{{localize "VAGABOND.Craft.Workbench.MaterialsOnHand"}}</span><strong>{{materialsLabel}}</strong></div>
+          </div>
         </div>
         {{#unless hasCraftSkill}}
         <p class="wb-hint">{{localize "VAGABOND.Craft.Workbench.NoCraftSkill"}}</p>
@@ -47,8 +53,8 @@
 
         <div class="wb-catalog-list">
           {{#each craft.catalog}}
-          <div class="wb-cat-row{{#if selected}} is-selected{{/if}}" data-action="selectCatalogItem" data-uuid="{{uuid}}" data-name="{{nameLower}}" data-category="{{category}}">
-            <img class="wb-cat-img" src="{{img}}" alt="">
+          <div class="wb-cat-row{{#if selected}} is-selected{{/if}}" data-action="selectCatalogItem" data-uuid="{{uuid}}" data-name="{{nameLower}}" data-category="{{category}}" draggable="true">
+            <img class="wb-cat-img" src="{{img}}" alt="" draggable="false">
             <div class="wb-cat-info">
               <div class="wb-cat-name">
                 <span>{{name}}</span>
@@ -145,7 +151,7 @@
               </div>
             </div>
             {{else}}
-            <p class="wb-empty">{{localize "VAGABOND.Craft.Workbench.NoProjects"}}</p>
+            <p class="wb-empty">{{localize "VAGABOND.Craft.Workbench.NoProjects"}} {{localize "VAGABOND.Craft.Workbench.DropToStage"}}</p>
             {{/each}}
           </div>
         </div>
@@ -214,10 +220,12 @@
               </div>
               {{#if multi}}{{#unless locked}}
               <div class="wb-scrap-stepper">
-                <div class="wb-stepper">
-                  <button type="button" data-action="scrapStep" data-delta="-1" data-tooltip="{{localize 'VAGABOND.Craft.Workbench.ScrapStepHint'}}"><i class="fa-solid fa-minus"></i></button>
+                <div class="wb-stepper is-vertical">
+                  <div class="wb-stepper-col">
+                    <button type="button" data-action="scrapStep" data-delta="1" data-tooltip="{{localize 'VAGABOND.Craft.Workbench.ScrapStepHint'}}"><i class="fa-solid fa-plus"></i></button>
+                    <button type="button" data-action="scrapStep" data-delta="-1" data-tooltip="{{localize 'VAGABOND.Craft.Workbench.ScrapStepHint'}}"><i class="fa-solid fa-minus"></i></button>
+                  </div>
                   <input type="text" class="wb-scrap-count" value="{{picked}}" inputmode="numeric">
-                  <button type="button" data-action="scrapStep" data-delta="1" data-tooltip="{{localize 'VAGABOND.Craft.Workbench.ScrapStepHint'}}"><i class="fa-solid fa-plus"></i></button>
                 </div>
                 <button type="button" class="wb-scrap-all {{#if isFull}}active{{/if}}" data-action="scrapAll">{{localize "VAGABOND.Craft.Workbench.ScrapAll"}}</button>
               </div>
