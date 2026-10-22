@@ -1,5 +1,23 @@
 # Changelog
 
+## v6.9.0
+- **[Added]** Compendium update: after a system update, items, ancestries, classes, perks, spells and statblocks copied into your world follow the new compendiums. Only fields you never edited change; your edits, renamed copies, quantities, equipped state, uses and effect switches stay.
+- **[Added]** Compendium Update Report: everything the update touched, by actor and by section (Weapons, Spells, Perks...), with before / now values, your kept edits next to the compendium's, and a link to each item. Mark each group as checked. Settings > Content & Homebrew > Compendium Update: Update now, Open report.
+- **[Removed]** Sync Items From Compendium macro (it reset edited names and values).
+- **[Changed]** Worlds older than 6.8.2: the GM is asked to open the world once with 6.8.2 first (or mark it up to date). Old one-time migrations were removed.
+- **[Added]** Ancestry sheet locked view: each trait as a card with its text and what it grants (Stats, Training, Spells, Perks, Items, choices, action button); linked items open on click. Lock button in the header, like Spells.
+- **[Fixed]** Ancestry trait text showed raw HTML in edit mode; it is now a rich text editor.
+- **[Added]** Effect Choices on Ancestry traits: the player picks from the Ancestry's own effects (Character Builder, a prompt when the Ancestry is dragged on, or Choose on the locked sheet); the others are removed from the character.
+- **[Added]** Damage resistance: effect key `system.damageResistances` (add a damage type). That damage is halved (round down) before Armor, shown in the damage line.
+- **[Changed]** Draken Draconic Resilience: pick Acid, Cold, Fire or Shock, that damage is halved. Existing Draken characters get the choice after the update (the report points to it).
+- **[Added]** Effect editor suggests damage types for Immunities, Weaknesses and Damage Resistances.
+- **[Fixed]** Items added by the Character Builder keep their compendium link, so updates reach them.
+- **[Fixed]** Container Take out: goes to the selected token's character, else the character carrying it, else the ground next to the container (Canvas Loot). It used to vanish onto a Mount or Vehicle.
+- **[Fixed]** Ancestry / Class editor: Spell and Perk dropdowns fill right away.
+- **[Fixed]** Clicks after closing a sheet no longer throw errors in the console.
+- **[Changed]** NPC sheet Special Rules: tidier layout (Regeneration and its sunlight switch on one row).
+- **[Changed]** Code reorganized under the hood (no import cycles, one GM relay for player requests, one migration gate). Removed macro aliases: `craft.disguiseRelic/revealRelic` (use `game.vagabond.disguise`), `shop.show` (use `openShop`), `CurrencyHelper.receive` (use `add`), armor `system.rating/might` (use `armorRating/mightRequirement`).
+
 ## v6.8.2
 - **[Added]** Disguise window: Unknown Item button. The item shows as Unknown Weapon / Armor / Gear / Alchemical / Relic / Container with a mystery text, keeps its image, and its effects and attached Relics read as Unknown until revealed.
 - **[Added]** Disguise window: switch "Can't be equipped until identified". While hidden, players can't equip, use or attack with the item; the GM can.
