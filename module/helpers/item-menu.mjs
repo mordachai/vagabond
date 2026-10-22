@@ -6,7 +6,7 @@ import { ConjureHelper } from './conjure-helper.mjs';
 import { ItemDisguise } from './item-disguise.mjs';
 import { ItemDisguiseApp } from '../applications/item-disguise-app.mjs';
 import { EquipmentHelper } from './equipment-helper.mjs';
-import { VagabondChatCard } from './chat-card.mjs';
+import { ItemChatCards } from './item-chat-cards.mjs';
 
 /**
  * Whether an item has a meaningful "Use" action. Weapons always do (Use
@@ -71,7 +71,7 @@ export function buildSpellMenuItems({ actor, spell, event, spellHandler }) {
     {
       label: L('VAGABOND.ContextMenu.SendToChat'),
       icon: 'fas fa-comment',
-      action: () => VagabondChatCard.itemUse(actor, spell),
+      action: () => ItemChatCards.itemUse(actor, spell),
     },
     {
       label: L(isFavorite ? 'VAGABOND.ContextMenu.Unfavorite' : 'VAGABOND.ContextMenu.Favorite'),
@@ -188,7 +188,7 @@ export function buildItemMenuItems({ actor, item, event, rollHandler, equipmentH
   items.push({
     label: L('VAGABOND.ContextMenu.SendToChat'),
     icon: 'fas fa-comment',
-    action: () => VagabondChatCard.gearUse(actor, item),
+    action: () => ItemChatCards.gearUse(actor, item),
   });
 
   const isEquipped = EquipmentHelper.isEquipped(item);

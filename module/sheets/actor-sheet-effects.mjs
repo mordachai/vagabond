@@ -1,6 +1,6 @@
 import { toggleActorEffect, isStatusEffect, toggleBlockerOf } from '../helpers/effects.mjs';
 import { StatusHelper } from '../helpers/status-helper.mjs';
-import { VagabondChatCard } from '../helpers/chat-card.mjs';
+import { NoticeChatCards } from '../helpers/notice-chat-cards.mjs';
 import { ContextMenuHelper } from '../helpers/context-menu-helper.mjs';
 
 /**
@@ -104,7 +104,7 @@ export class ActorSheetEffects {
    */
   static async _onEffectToChat(event, target) {
     const effect = this._getEmbeddedDocument(target, this.actor);
-    if (effect) await VagabondChatCard.statusEffect(this.actor, effect);
+    if (effect) await NoticeChatCards.statusEffect(this.actor, effect);
   }
 
   /**
@@ -151,7 +151,7 @@ export class ActorSheetEffects {
     items.push({
       label: game.i18n.localize('VAGABOND.ContextMenu.SendToChat'),
       icon: 'fas fa-comment',
-      action: () => VagabondChatCard.statusEffect(sheet.actor, effect),
+      action: () => NoticeChatCards.statusEffect(sheet.actor, effect),
     });
     items.push({ divider: true });
     // Item-owned effects: Delete is greyed out and names the owner (disable still works)

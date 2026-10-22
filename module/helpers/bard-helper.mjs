@@ -2,6 +2,7 @@ import { combatRollData } from './rule-rolldata.mjs';
 import { GMRelay } from './gm-relay.mjs';
 import { FeatureRules } from './feature-rules.mjs';
 import { VagabondChatCard } from './chat-card.mjs';
+import { NoticeChatCards } from './notice-chat-cards.mjs';
 import { buildMacroButtonHTML } from './item-macro.mjs';
 import { RollHandler } from '../sheets/handlers/roll-handler.mjs';
 
@@ -127,13 +128,13 @@ export class BardHelper {
     const boonName = template.name.replace(/^Virtuoso:\s*/, '');
     const title = `${game.i18n.localize('VAGABOND.Virtuoso.Title')}: ${boonName}`;
     if (roll.total < difficulty) {
-      await VagabondChatCard.featureCard(bard, { title, description: `<p>${L('Failed', { name: bard.name })}</p>` });
+      await NoticeChatCards.featureCard(bard, { title, description: `<p>${L('Failed', { name: bard.name })}</p>` });
       return;
     }
     const group = this.group(bard);
     await this.#relay(bard.uuid, boon, group.map(a => a.uuid));
     // The benefit's book text (Inspiration / Resolve / Valor) is the effect's description
-    await VagabondChatCard.featureCard(bard, {
+    await NoticeChatCards.featureCard(bard, {
       title,
       description: `<p>${L('Passed', { name: bard.name, boon: boonName })}</p>${template.description ?? ''}`
         + `<p><strong>${L('Recipients')}:</strong> ${group.map(a => foundry.utils.escapeHTML(a.name)).join(', ')}</p>`,

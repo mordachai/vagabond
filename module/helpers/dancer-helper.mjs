@@ -1,6 +1,6 @@
 import { classFeatureText } from './feature-text.mjs';
 import { RollHandler } from '../sheets/handlers/roll-handler.mjs';
-import { VagabondChatCard } from './chat-card.mjs';
+import { NoticeChatCards } from './notice-chat-cards.mjs';
 
 /**
  * Dancer — Step Up (feature action button), plus the one-time class migration.
@@ -34,13 +34,13 @@ export class DancerHelper {
     const title = game.i18n.localize('VAGABOND.StepUp.Title');
     const difficulty = actor.system.skills?.finesse?.difficulty ?? 10;
     if (roll.total < difficulty) {
-      await VagabondChatCard.featureCard(actor, { title, description: `<p>${L('Failed', { name: actor.name })}</p>` });
+      await NoticeChatCards.featureCard(actor, { title, description: `<p>${L('Failed', { name: actor.name })}</p>` });
       return;
     }
 
     const level = actor.system.attributes?.level?.value ?? 1;
     const text = (key) => classFeatureText(actor, key);
-    await VagabondChatCard.featureCard(actor, {
+    await NoticeChatCards.featureCard(actor, {
       title,
       description: text({ command: 'dancer.stepUp', name: 'Step Up' }) + (level >= 10 ? text({ name: 'Double Time', lastAtLevel: 10 }) : ''),
     });

@@ -1,6 +1,7 @@
 import { CombatTrackerHelper, DEFAULT_FACTION_ORDER } from '../helpers/combat-tracker-helper.mjs';
 import { ContextMenuHelper } from '../helpers/context-menu-helper.mjs';
 import { VagabondChatCard } from '../helpers/chat-card.mjs';
+import { NoticeChatCards } from '../helpers/notice-chat-cards.mjs';
 import { GMRelay } from '../helpers/gm-relay.mjs';
 import { VagabondSettingsHub } from './settings-hub.mjs';
 
@@ -454,7 +455,7 @@ export class CombatCarousel extends api.HandlebarsApplicationMixin(api.Applicati
     await actor.update({ 'system.currentLuck': val });
     // Same chat feedback as the actor sheet's luck pool click (_onSpendLuck).
     if (delta > 0) await VagabondChatCard.luckGain(actor, val);
-    else await VagabondChatCard.luckSpend(actor, val);
+    else await NoticeChatCards.luckSpend(actor, val);
   }
 
   /* -------------------------------------------- */
@@ -473,7 +474,7 @@ export class CombatCarousel extends api.HandlebarsApplicationMixin(api.Applicati
     const effectId = target.dataset.effectId;
     const effect = actor?.effects.get(effectId);
     if (!actor || !effect) return;
-    await VagabondChatCard.statusEffect(actor, effect);
+    await NoticeChatCards.statusEffect(actor, effect);
   }
 
   /** Right-click a status icon: same two-item menu as the sheet's `_setupStatusIconListeners`. */
@@ -492,7 +493,7 @@ export class CombatCarousel extends api.HandlebarsApplicationMixin(api.Applicati
             label: game.i18n.localize('VAGABOND.ContextMenu.SendToChat'),
             icon: 'fas fa-comment',
             enabled: true,
-            action: async () => { await VagabondChatCard.statusEffect(actor, effect); },
+            action: async () => { await NoticeChatCards.statusEffect(actor, effect); },
           },
           {
             label: game.i18n.localize('VAGABOND.ContextMenu.RemoveStatus'),

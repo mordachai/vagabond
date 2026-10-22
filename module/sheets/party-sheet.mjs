@@ -6,6 +6,8 @@ import { DowntimeHelper, SHIFTS_PER_DAY } from '../helpers/downtime-helper.mjs';
 import { ProgressClock } from '../documents/progress-clock.mjs';
 import { EquipmentHelper } from '../helpers/equipment-helper.mjs';
 import { VagabondChatCard } from '../helpers/chat-card.mjs';
+import { ItemChatCards } from '../helpers/item-chat-cards.mjs';
+import { NoticeChatCards } from '../helpers/notice-chat-cards.mjs';
 import { CurrencyHelper } from '../helpers/currency-helper.mjs';
 import { TradeHelper } from '../helpers/trade-helper.mjs';
 import { CoinTransferDialog } from '../applications/coin-transfer-dialog.mjs';
@@ -778,7 +780,7 @@ export class VagabondPartySheet extends VagabondActorSheet {
           if (!actor) return;
           const effect = actor.effects.get(effectId);
           if (!effect) return;
-          await VagabondChatCard.statusEffect(actor, effect);
+          await NoticeChatCards.statusEffect(actor, effect);
         }, { signal });
       });
 
@@ -814,7 +816,7 @@ export class VagabondPartySheet extends VagabondActorSheet {
           const action = actor.system.actions?.[actionIndex];
           if (!action) return;
           const targetsAtRollTime = TargetHelper.captureCurrentTargets();
-          await VagabondChatCard.npcAction(actor, action, actionIndex, targetsAtRollTime);
+          await ItemChatCards.npcAction(actor, action, actionIndex, targetsAtRollTime);
         }, { signal });
       });
 
@@ -832,8 +834,8 @@ export class VagabondPartySheet extends VagabondActorSheet {
           const ability = actor.system.abilities?.[actionIndex];
           if (!ability) return;
           const targetsAtRollTime = TargetHelper.captureCurrentTargets();
-          // VagabondChatCard.npcAction handles abilities too (same card format)
-          await VagabondChatCard.npcAction(actor, ability, actionIndex, targetsAtRollTime);
+          // ItemChatCards.npcAction handles abilities too (same card format)
+          await ItemChatCards.npcAction(actor, ability, actionIndex, targetsAtRollTime);
         }, { signal });
       });
   }

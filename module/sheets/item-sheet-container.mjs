@@ -5,7 +5,7 @@ import { EquipmentHelper } from '../helpers/equipment-helper.mjs';
 import { VagabondDamagePipeline } from '../helpers/damage-pipeline.mjs';
 import * as ItemSections from '../helpers/item-sections.mjs';
 import { ContextMenuHelper } from '../helpers/context-menu-helper.mjs';
-import { VagabondChatCard } from '../helpers/chat-card.mjs';
+import { ItemChatCards } from '../helpers/item-chat-cards.mjs';
 
 /**
  * Container item sheet: the contents list (type sections, open item details, row menu), take / delete
@@ -187,7 +187,7 @@ export class ItemSheetContainer {
           icon: 'fas fa-comment',
           enabled: !!actor,
           action: async () => {
-            await VagabondChatCard.gearUse(actor, doc);
+            await ItemChatCards.gearUse(actor, doc);
           },
         },
         {

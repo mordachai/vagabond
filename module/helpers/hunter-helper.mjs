@@ -1,7 +1,7 @@
 import { classFeatureText } from './feature-text.mjs';
 import { GMRelay, isActiveGM } from './gm-relay.mjs';
 import { FeatureRules } from './feature-rules.mjs';
-import { VagabondChatCard } from './chat-card.mjs';
+import { NoticeChatCards } from './notice-chat-cards.mjs';
 
 /**
  * Hunter — Hunter’s Mark, Lethal Precision, Apex Predator (optional automation + feature button).
@@ -132,7 +132,7 @@ export class HunterHelper {
     await this.#setMarkedStatus(target, true, this.#L('MarkedBy', { name: hunter.name }));
 
     const text = classFeatureText(hunter, { command: 'hunter.mark', name: title });
-    await VagabondChatCard.featureCard(hunter, {
+    await NoticeChatCards.featureCard(hunter, {
       title,
       description: `<p>${this.#L('Marked', { name: hunter.name, target: foundry.utils.escapeHTML(name) })}</p>${text}`,
     });
@@ -149,7 +149,7 @@ export class HunterHelper {
     }
     const name = eff.flags?.vagabond?.huntersMark?.name ?? '';
     if (hunter.effects.get(eff.id)) await eff.delete();
-    await VagabondChatCard.featureCard(hunter, {
+    await NoticeChatCards.featureCard(hunter, {
       title: this.#L('Title'),
       description: `<p>${this.#L('Dropped', { name: hunter.name, target: foundry.utils.escapeHTML(name) })}</p>`,
     });

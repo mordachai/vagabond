@@ -8,6 +8,7 @@ import { GrantedItems } from '../helpers/granted-items.mjs';
 import { MaterialsHelper } from '../helpers/materials-helper.mjs';
 import { ItemNameTokens } from '../helpers/item-name-tokens.mjs';
 import { VagabondChatCard } from '../helpers/chat-card.mjs';
+import { ItemChatCards } from '../helpers/item-chat-cards.mjs';
 import { RelicSlots } from '../helpers/relic-slots.mjs';
 import { default as PerkChoiceDialog } from '../applications/perk-choice-dialog.mjs';
 import { VagabondRollBuilder } from '../helpers/roll-builder.mjs';
@@ -116,7 +117,7 @@ export class VagabondItem extends Item {
     if (!this.system.formula) {
       // Use VagabondChatCard for equipment items (gear, alchemicals, relics) and spells
       if (item.type === 'equipment' || item.type === 'spell') {
-        await VagabondChatCard.itemUse(this.actor, item, targetsAtRollTime);
+        await ItemChatCards.itemUse(this.actor, item, targetsAtRollTime);
         // Handle consumption after successful use (equipment only). Light-source
         // items are exempt — they are consumed on burn-out (clock expiry) by the
         // deleteJournalEntry hook, never on Use/Ignite.

@@ -2,7 +2,7 @@ import { classFeatureText } from './feature-text.mjs';
 import { combatRollData } from './rule-rolldata.mjs';
 import { RollExpiry } from './roll-expiry.mjs';
 import { FeatureRules } from './feature-rules.mjs';
-import { VagabondChatCard } from './chat-card.mjs';
+import { NoticeChatCards } from './notice-chat-cards.mjs';
 
 /**
  * Fighter — Momentum (optional automation + feature button).
@@ -90,7 +90,7 @@ export class FighterHelper {
     }
 
     const text = classFeatureText(actor, { command: 'fighter.momentum', name: 'Momentum' });
-    await VagabondChatCard.featureCard(actor, {
+    await NoticeChatCards.featureCard(actor, {
       title,
       description: `<p>${game.i18n.format('VAGABOND.Momentum.Gained', { name: actor.name })}</p>${text}`,
     });
@@ -106,7 +106,7 @@ export class FighterHelper {
       return;
     }
     if (actor.effects.get(eff.id)) await eff.delete();
-    await VagabondChatCard.featureCard(actor, {
+    await NoticeChatCards.featureCard(actor, {
       title: game.i18n.localize('VAGABOND.Momentum.Title'),
       description: `<p>${game.i18n.format('VAGABOND.Momentum.Ended', { name: actor.name })}${reason ? ` ${RollExpiry.reasonText(reason)}` : ''}</p>`,
     });

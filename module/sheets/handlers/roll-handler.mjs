@@ -11,6 +11,7 @@ import { FlankingHelper } from '../../helpers/flanking-helper.mjs';
 import { RelicSlots } from '../../helpers/relic-slots.mjs';
 import { EquipmentHelper } from '../../helpers/equipment-helper.mjs';
 import { VagabondChatCard } from '../../helpers/chat-card.mjs';
+import { ItemChatCards } from '../../helpers/item-chat-cards.mjs';
 
 /**
  * Handler for roll-related functionality.
@@ -236,7 +237,7 @@ export class RollHandler {
 
         if (!hasDamage) {
           // Redirect to the simple Gear Use card
-          await VagabondChatCard.gearUse(this.actor, item, targetsAtRollTime);
+          await ItemChatCards.gearUse(this.actor, item, targetsAtRollTime);
           // Handle consumption after successful use
           await item.handleConsumption();
           return;

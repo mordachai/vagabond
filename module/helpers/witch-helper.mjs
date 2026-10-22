@@ -2,7 +2,7 @@ import { classFeatureText } from './feature-text.mjs';
 import { combatRollData } from './rule-rolldata.mjs';
 import { GMRelay, isActiveGM } from './gm-relay.mjs';
 import { FeatureRules } from './feature-rules.mjs';
-import { VagabondChatCard } from './chat-card.mjs';
+import { NoticeChatCards } from './notice-chat-cards.mjs';
 import { VagabondDamageHelper } from './damage-helper.mjs';
 
 /**
@@ -193,7 +193,7 @@ export class WitchHelper {
     await this.#setHexedStatus(target, true, this.#L('HexedBy', { name: witch.name }));
 
     const text = classFeatureText(witch, { command: 'witch.hex', name: title });
-    await VagabondChatCard.featureCard(witch, {
+    await NoticeChatCards.featureCard(witch, {
       title,
       description: `<p>${this.#L('Hexed', { name: witch.name, target: foundry.utils.escapeHTML(name) })}</p>${text}`,
     });
@@ -210,7 +210,7 @@ export class WitchHelper {
     }
     const name = eff.flags?.vagabond?.hex?.name ?? '';
     if (witch.effects.get(eff.id)) await eff.delete();
-    await VagabondChatCard.featureCard(witch, {
+    await NoticeChatCards.featureCard(witch, {
       title: this.#L('Title'),
       description: `<p>${this.#L('Dropped', { name: witch.name, target: foundry.utils.escapeHTML(name) })}</p>`,
     });
@@ -271,7 +271,7 @@ export class WitchHelper {
     const dealt = await VagabondDamageHelper._applyDamageToActor(hexActor, final, ctx.damageType, ctx.sourceItem, witch);
     if (!(dealt > 0)) return;
 
-    await VagabondChatCard.featureCard(witch, {
+    await NoticeChatCards.featureCard(witch, {
       title: game.i18n.localize('VAGABOND.Hex.SoulLinkTitle'),
       description: `<p>${this.#L('SoulLinked', {
         name: witch.name,

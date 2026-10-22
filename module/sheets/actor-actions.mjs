@@ -1,5 +1,7 @@
 import { CountdownDice } from '../documents/countdown-dice.mjs';
 import { VagabondChatCard } from '../helpers/chat-card.mjs';
+import { ItemChatCards } from '../helpers/item-chat-cards.mjs';
+import { NoticeChatCards } from '../helpers/notice-chat-cards.mjs';
 import { VagabondDiceAppearance } from '../helpers/dice-appearance.mjs';
 import { VagabondChatHelper } from '../helpers/chat-helper.mjs';
 import { CurrencyHelper } from '../helpers/currency-helper.mjs';
@@ -121,7 +123,7 @@ export class ActorActions {
     }));
 
     // Use the unified chat card system
-    await VagabondChatCard.npcAction(this.actor, action, index, targetsAtRollTime);
+    await ItemChatCards.npcAction(this.actor, action, index, targetsAtRollTime);
   }
 
   /**
@@ -162,7 +164,7 @@ export class ActorActions {
     if (!ability || !ability.name) return;
 
     // Use the unified chat card system (handles text-only abilities)
-    await VagabondChatCard.npcAction(this.actor, ability, index);
+    await ItemChatCards.npcAction(this.actor, ability, index);
   }
 
   /**
@@ -223,7 +225,7 @@ export class ActorActions {
     const effect = this.actor.effects.get(effectId);
     if (!effect) return;
 
-    await VagabondChatCard.statusEffect(this.actor, effect);
+    await NoticeChatCards.statusEffect(this.actor, effect);
   }
 
   /**
@@ -262,7 +264,7 @@ export class ActorActions {
       if (currentLuck > 0) {
         const newLuck = currentLuck - 1;
         await this.actor.update({ 'system.currentLuck': newLuck });
-        await VagabondChatCard.luckSpend(this.actor, newLuck);
+        await NoticeChatCards.luckSpend(this.actor, newLuck);
       }
     }
   }
@@ -281,7 +283,7 @@ export class ActorActions {
       // Shift+Click: Add a studied die
       const newCount = currentDice + 1;
       await this.actor.update({ 'system.studiedDice': newCount });
-      await VagabondChatCard.studiedDieGain(this.actor, newCount);
+      await NoticeChatCards.studiedDieGain(this.actor, newCount);
     } else {
       // Regular Click: Spend (roll d6 and decrement)
       if (currentDice > 0) {
@@ -291,7 +293,7 @@ export class ActorActions {
 
         const remainingDice = currentDice - 1;
         await this.actor.update({ 'system.studiedDice': remainingDice });
-        await VagabondChatCard.studiedDieSpend(this.actor, roll, remainingDice);
+        await NoticeChatCards.studiedDieSpend(this.actor, roll, remainingDice);
       }
     }
   }
@@ -366,7 +368,7 @@ export class ActorActions {
             icon: 'fas fa-comment',
             enabled: true,
             action: async () => {
-              await VagabondChatCard.statusEffect(sheet.actor, effect);
+              await NoticeChatCards.statusEffect(sheet.actor, effect);
             }
           },
           {

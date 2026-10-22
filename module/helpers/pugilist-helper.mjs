@@ -1,5 +1,5 @@
 import { StatusHelper } from './status-helper.mjs';
-import { VagabondChatCard } from './chat-card.mjs';
+import { NoticeChatCards } from './notice-chat-cards.mjs';
 
 /**
  * Pugilist — Haymaker (optional automation).
@@ -58,7 +58,7 @@ export class PugilistHelper {
       return;
     }
 
-    await VagabondChatCard.featureCard(attacker, {
+    await NoticeChatCards.featureCard(attacker, {
       title: game.i18n.localize('VAGABOND.Haymaker.Title'),
       description: `<p>${this.#L(result.outcome === 'immune' ? 'Immune' : 'Landed', { name: attacker.name, target: target.name })}</p>`,
     });

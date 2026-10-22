@@ -4,7 +4,7 @@ import { ItemDisguise } from '../../helpers/item-disguise.mjs';
 import { RelicSlots } from '../../helpers/relic-slots.mjs';
 import { EquipmentHelper } from '../../helpers/equipment-helper.mjs';
 import { ContextMenuHelper } from '../../helpers/context-menu-helper.mjs';
-import { VagabondChatCard } from '../../helpers/chat-card.mjs';
+import { ItemChatCards } from '../../helpers/item-chat-cards.mjs';
 
 /**
  * Handler for inventory-related functionality in the character sheet.
@@ -300,10 +300,10 @@ export class InventoryHandler {
         action: async () => {
           if (item) {
             // Perk
-            await VagabondChatCard.itemUse(this.actor, item);
+            await ItemChatCards.itemUse(this.actor, item);
           } else if (featureData) {
             // Trait or Feature
-            await VagabondChatCard.featureDataUse(
+            await ItemChatCards.featureDataUse(
               this.actor,
               featureData,
               sourceItem,

@@ -2,6 +2,7 @@ import { classFeatureText } from './feature-text.mjs';
 import { StatusHelper } from './status-helper.mjs';
 import { RollExpiry } from './roll-expiry.mjs';
 import { VagabondChatCard } from './chat-card.mjs';
+import { NoticeChatCards } from './notice-chat-cards.mjs';
 import { buildMacroButtonHTML } from './item-macro.mjs';
 
 /**
@@ -66,7 +67,7 @@ export class GunslingerHelper {
     const eff = this.effect(actor);
     if (!eff) return;
     if (actor.effects.get(eff.id)) await eff.delete();
-    await VagabondChatCard.featureCard(actor, {
+    await NoticeChatCards.featureCard(actor, {
       title: this.#L('Title'),
       description: `<p>${this.#L('Ended', { name: actor.name })}${reason ? ` ${RollExpiry.reasonText(reason)}` : ''}</p>`,
     });
@@ -175,7 +176,7 @@ export class GunslingerHelper {
       return;
     }
     await eff.delete();
-    await VagabondChatCard.featureCard(actor, {
+    await NoticeChatCards.featureCard(actor, {
       title: this.#L('Title'),
       description: `<p>${this.#L('Reset', { name: actor.name })}</p>`,
     });
@@ -222,7 +223,7 @@ export class GunslingerHelper {
       return;
     }
     const n = await this.setStacks(actor, this.stacks(actor) + 1);
-    await VagabondChatCard.featureCard(actor, {
+    await NoticeChatCards.featureCard(actor, {
       title: this.#L('Title'),
       description: `<p>${this.#L('Raised', { name: actor.name, n })}</p>${this.#featureText(actor, 'Deadeye')}`,
     });
@@ -235,7 +236,7 @@ export class GunslingerHelper {
       return;
     }
     await this.setStacks(actor, MAX_STACKS);
-    await VagabondChatCard.featureCard(actor, {
+    await NoticeChatCards.featureCard(actor, {
       title: this.#L('HighNoonTitle'),
       description: `<p>${this.#L('HighNoonDone', { name: actor.name })}</p>${auto ? '' : this.#featureText(actor, 'High Noon')}`,
     });
@@ -308,7 +309,7 @@ export class GunslingerHelper {
     const n = cost > 0 ? await this.setStacks(actor, this.stacks(actor) - cost) : this.stacks(actor);
 
     const def = CONFIG.statusEffects.find(e => e.id === statusId);
-    await VagabondChatCard.featureCard(actor, {
+    await NoticeChatCards.featureCard(actor, {
       title: this.#L('GritTitle'),
       description: `<p>${this.#L('GritDone', { name: actor.name, status: game.i18n.localize(def?.name ?? statusId), spent: cost, n })}</p>`
         + this.#featureText(actor, 'Grit'),

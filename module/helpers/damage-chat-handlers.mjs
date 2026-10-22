@@ -10,6 +10,7 @@ import { GMRelay } from './gm-relay.mjs';
 import { consumeUsedEffects } from './use-effects.mjs';
 import { EquipmentHelper } from './equipment-helper.mjs';
 import { VagabondChatCard } from './chat-card.mjs';
+import { NoticeChatCards } from './notice-chat-cards.mjs';
 
 /**
  * Damage chat-card button handlers: Roll Damage, Saves, Defense / Protect, Apply buttons,
@@ -448,7 +449,7 @@ export class VagabondDamageChatHandlers {
       const results = await StatusHelper.processCausedStatuses(
         targetActor, entries, false, spell.name, { skipSaveRoll: true, sourceActorName, sourceKey }
       );
-      await VagabondChatCard.statusResults(results, targetActor, spell.name, spell.img ?? null);
+      await NoticeChatCards.statusResults(results, targetActor, spell.name, spell.img ?? null);
     }
   }
 
@@ -725,7 +726,7 @@ export class VagabondDamageChatHandlers {
             'system.coating.causedStatuses': [],
           });
         }
-        await VagabondChatCard.statusResults(statusResults, targetActor, sourceItem?.name ?? '', sourceItem?.img ?? null);
+        await NoticeChatCards.statusResults(statusResults, targetActor, sourceItem?.name ?? '', sourceItem?.img ?? null);
       }
     }
 
@@ -816,7 +817,7 @@ export class VagabondDamageChatHandlers {
             'system.coating.causedStatuses': [],
           });
         }
-        await VagabondChatCard.statusResults(statusResults, targetActor, sourceName, sourceItem?.img ?? null);
+        await NoticeChatCards.statusResults(statusResults, targetActor, sourceName, sourceItem?.img ?? null);
       }
     }
 
@@ -947,7 +948,7 @@ export class VagabondDamageChatHandlers {
         if (coatingEntries.length > 0 && sourceActor?.items.has(sourceItem?.id)) {
           await sourceItem.update({ 'system.coating.charges': 0, 'system.coating.causedStatuses': [] });
         }
-        await VagabondChatCard.statusResults(statusResults, targetActor, sourceName, sourceItem?.img ?? null);
+        await NoticeChatCards.statusResults(statusResults, targetActor, sourceName, sourceItem?.img ?? null);
       }
     }
   }
@@ -1749,7 +1750,7 @@ export class VagabondDamageChatHandlers {
             'system.coating.causedStatuses': [],
           });
         }
-        await VagabondChatCard.statusResults(statusResults, targetActor, sourceName, sourceItem?.img ?? null);
+        await NoticeChatCards.statusResults(statusResults, targetActor, sourceName, sourceItem?.img ?? null);
       }
     }
 
@@ -1851,7 +1852,7 @@ export class VagabondDamageChatHandlers {
             'system.coating.causedStatuses': [],
           });
         }
-        await VagabondChatCard.statusResults(statusResults, actor, sourceName, sourceItem?.img ?? null);
+        await NoticeChatCards.statusResults(statusResults, actor, sourceName, sourceItem?.img ?? null);
       }
     }
   }

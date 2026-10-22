@@ -2,7 +2,7 @@ import { isActiveGM } from './gm-relay.mjs';
 import { FeatureRules } from './feature-rules.mjs';
 import { FocusLink } from './focus-link.mjs';
 import { ConjurePicker } from '../applications/conjure-picker.mjs';
-import { VagabondChatCard } from './chat-card.mjs';
+import { NoticeChatCards } from './notice-chat-cards.mjs';
 
 /**
  * Druid — Polymorph, Savagery, Beast Mode, Force of Nature, on top of the Metamorph module
@@ -193,7 +193,7 @@ export class DruidHelper {
       lines.push(description);
     }
     if (lines.length) {
-      await VagabondChatCard.featureCard(actor, { title: this.#L('PolymorphTitle'), description: this.#lines(lines) });
+      await NoticeChatCards.featureCard(actor, { title: this.#L('PolymorphTitle'), description: this.#lines(lines) });
     }
     // Book: the Spell lasts while you Focus on it. Remember the forms of a Focused Cast on the caster, so
     // ending the Focus (drop, Focusing removed, another Cast taking it) reverts them (#onFocusDropped).
@@ -236,7 +236,7 @@ export class DruidHelper {
       if (res?.ok) lines.push(this.#L('Reverted', { name: doc.name }));
     }
     if (!lines.length) return;
-    await VagabondChatCard.featureCard(caster, {
+    await NoticeChatCards.featureCard(caster, {
       title: this.#L('PolymorphTitle'),
       description: `<p>${this.#L('FocusEnded')}</p>${this.#lines(lines)}`,
     });
@@ -271,7 +271,7 @@ export class DruidHelper {
     }
     const res = await MM.revert(token, { ignoreOwnership: true });
     if (!res?.ok) return;
-    await VagabondChatCard.featureCard(main, {
+    await NoticeChatCards.featureCard(main, {
       title: this.#L('PolymorphTitle'),
       description: `<p>${this.#L('Reverted', { name: token.document?.name ?? main.name })}</p>`,
     });
@@ -357,7 +357,7 @@ export class DruidHelper {
     }
     await actor.setFlag('vagabond', 'forceOfNatureUsed', true);
 
-    await VagabondChatCard.featureCard(actor, {
+    await NoticeChatCards.featureCard(actor, {
       title: game.i18n.localize('VAGABOND.Druid.ForceTitle'),
       description: `<p>${this.#L('ForceDone', { name: actor.name, form: this.formName(choice), hp: regained })}</p>`,
     });

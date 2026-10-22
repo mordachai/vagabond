@@ -1,6 +1,6 @@
 import { GMRelay } from '../helpers/gm-relay.mjs';
 import { ContextMenuHelper } from '../helpers/context-menu-helper.mjs';
-import { VagabondChatCard } from '../helpers/chat-card.mjs';
+import { NoticeChatCards } from '../helpers/notice-chat-cards.mjs';
 /**
  * Screen-corner panel that displays the selected token's status conditions.
  *
@@ -227,7 +227,7 @@ export class TokenStatusPanel {
             icon: 'fas fa-comment',
             enabled: true,
             action: async () => {
-              await VagabondChatCard.statusEffect(actor, effect);
+              await NoticeChatCards.statusEffect(actor, effect);
             }
           },
           {

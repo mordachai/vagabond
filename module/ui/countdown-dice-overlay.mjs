@@ -3,6 +3,7 @@ import { CountdownDiceConfig } from '../applications/countdown-dice-config.mjs';
 import { GMRelay } from '../helpers/gm-relay.mjs';
 import { StatusHelper } from '../helpers/status-helper.mjs';
 import { VagabondChatCard } from '../helpers/chat-card.mjs';
+import { NoticeChatCards } from '../helpers/notice-chat-cards.mjs';
 
 /**
  * UI Overlay for rendering countdown dice on the canvas
@@ -572,7 +573,7 @@ export class CountdownDiceOverlay {
     const currentDiceType = flags.diceType;
 
     // Use unified chat card system
-    await VagabondChatCard.countdownDiceRoll(
+    await NoticeChatCards.countdownDiceRoll(
       dice,
       roll,
       rollResult,

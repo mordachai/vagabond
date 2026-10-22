@@ -22,6 +22,7 @@ import { VAGABOND } from './helpers/config.mjs';
 import { loadHomebrewConfig, applyRuntimeHomebrewOverrides, applyTermOverrides } from './helpers/homebrew-config.mjs';
 import { loadJB2ADefaults } from './helpers/sequencer-config.mjs';
 import { VagabondChatCard } from './helpers/chat-card.mjs';
+import { NoticeChatCards } from './helpers/notice-chat-cards.mjs';
 import { VagabondDiceAppearance } from './helpers/dice-appearance.mjs';
 import { EquipmentHelper } from './helpers/equipment-helper.mjs';
 import { NpcSenses } from './helpers/npc-senses.mjs';
@@ -985,7 +986,7 @@ Hooks.on('vagabond.postD20Roll', (ctx) => {
   if ((ctx.roll?.total ?? 0) - (ctx.difficulty ?? 0) < margin) return;
   const newCount = (actor.system.studiedDice || 0) + 1;
   actor.update({ 'system.studiedDice': newCount }).then(() => {
-    VagabondChatCard.studiedDieGain(actor, newCount);
+    NoticeChatCards.studiedDieGain(actor, newCount);
   });
 });
 

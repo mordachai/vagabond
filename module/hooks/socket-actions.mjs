@@ -8,6 +8,8 @@ import { ProgressClock } from '../documents/progress-clock.mjs';
 import { AlchemyLab } from '../helpers/alchemy-lab.mjs';
 import { BardHelper } from '../helpers/bard-helper.mjs';
 import { VagabondChatCard } from '../helpers/chat-card.mjs';
+import { ItemChatCards } from '../helpers/item-chat-cards.mjs';
+import { NoticeChatCards } from '../helpers/notice-chat-cards.mjs';
 import { ConeFx } from '../helpers/cone-fx.mjs';
 import { ConjureHelper } from '../helpers/conjure-helper.mjs';
 import { CraftingHelper } from '../helpers/crafting-helper.mjs';
@@ -324,6 +326,8 @@ export function registerSocketActions() {
       },
       api: {
         VagabondChatCard,
+        ItemChatCards,
+        NoticeChatCards,
         VagabondDamageHelper,
         StatusHelper,
         BardHelper,

@@ -3,7 +3,7 @@ import { StatusHelper } from './status-helper.mjs';
 import { combatRollData } from './rule-rolldata.mjs';
 import { RollExpiry } from './roll-expiry.mjs';
 import { isActiveGM } from './gm-relay.mjs';
-import { VagabondChatCard } from './chat-card.mjs';
+import { NoticeChatCards } from './notice-chat-cards.mjs';
 
 const BERSERK = 'berserk';
 
@@ -57,7 +57,7 @@ export class RageHelper {
   static async endBerserk(actor) {
     if (!this.autoEffect(actor)) return;
     await StatusHelper.removeStatus(actor, BERSERK);
-    await VagabondChatCard.featureCard(actor, {
+    await NoticeChatCards.featureCard(actor, {
       title: game.i18n.localize('VAGABOND.StatusConditions.Berserk'),
       description: `<p>${game.i18n.format('VAGABOND.Rage.EndedRoll', { name: actor.name })}</p>`,
     });

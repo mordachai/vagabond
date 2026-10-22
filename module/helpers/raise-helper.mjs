@@ -5,6 +5,7 @@ import { SystemFolders } from './system-folders.mjs';
 import { isActiveGM } from './gm-relay.mjs';
 import { FeatureRules } from './feature-rules.mjs';
 import { VagabondChatCard } from './chat-card.mjs';
+import { ItemChatCards } from './item-chat-cards.mjs';
 
 /**
  * Raise Spell — "Corpses in the area of non-Artificial or Undead Beings with cumulative HD no higher than your
@@ -29,7 +30,7 @@ import { VagabondChatCard } from './chat-card.mjs';
  * Tools scene button / API) later puts its tokens back on the original actor and deletes the copy.
  *
  * Command: an action of a commanded Being (`flags.vagabond.commandedBy`) is a Check with the caster's Cast Skill
- * while the caster Focuses on the Cast (`rollCommandCheck`, used by VagabondChatCard.npcAction).
+ * while the caster Focuses on the Cast (`rollCommandCheck`, used by ItemChatCards.npcAction).
  */
 export class RaiseHelper {
 
