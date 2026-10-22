@@ -21,6 +21,7 @@ import { NpcRules } from '../helpers/npc-rules.mjs';
 import { AlchemyLab } from '../helpers/alchemy-lab.mjs';
 import { FeatureOrder } from '../helpers/feature-order.mjs';
 import { ItemDisguise } from '../helpers/item-disguise.mjs';
+import { GMRelay } from '../helpers/gm-relay.mjs';
 
 const { api, sheets } = foundry.applications;
 
@@ -2460,8 +2461,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
                 await effect.delete();
               } else {
                 const statusId = effect.statuses?.first() || effect.flags?.core?.statusId;
-                const { emitSocket } = await import('../helpers/socket-helper.mjs');
-                emitSocket('applyStatus', { actorUuid: this.actor.uuid, statusId, active: false });
+                GMRelay.send('vagabond.applyStatus', { actorUuid: this.actor.uuid, statusId, active: false });
               }
             }
           }

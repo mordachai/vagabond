@@ -1,3 +1,4 @@
+import { GMRelay } from './gm-relay.mjs';
 /**
  * Flanking/Flanked detection. RAW: "If at least two Allies are Close to a Foe that
  * is no more than one size larger than the Allies, the Foe is Vulnerable and takes
@@ -139,8 +140,7 @@ export class FlankingHelper {
     if (actor.isOwner || game.user.isGM) {
       await actor.toggleStatusEffect(statusId, { active });
     } else {
-      const { emitSocket } = await import('./socket-helper.mjs');
-      emitSocket('applyStatus', { actorUuid: actor.uuid, statusId, active });
+      GMRelay.send('vagabond.applyStatus', { actorUuid: actor.uuid, statusId, active });
     }
   }
 
@@ -159,8 +159,7 @@ export class FlankingHelper {
     if (actor.isOwner || game.user.isGM) {
       await actor.deleteEmbeddedDocuments('ActiveEffect', ids);
     } else {
-      const { emitSocket } = await import('./socket-helper.mjs');
-      emitSocket('applyStatus', { actorUuid: actor.uuid, statusId, active: false });
+      GMRelay.send('vagabond.applyStatus', { actorUuid: actor.uuid, statusId, active: false });
     }
     return true;
   }
@@ -244,8 +243,7 @@ export class FlankingHelper {
         await eff.update({ description, 'flags.vagabond.flankInfo': true });
       }
     } else {
-      const { emitSocket } = await import('./socket-helper.mjs');
-      emitSocket('applyStatus', { actorUuid: actor.uuid, statusId, active: true, description });
+      GMRelay.send('vagabond.applyStatus', { actorUuid: actor.uuid, statusId, active: true, description });
     }
   }
 

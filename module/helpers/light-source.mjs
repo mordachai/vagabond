@@ -1,5 +1,6 @@
 import { ProgressClock } from '../documents/progress-clock.mjs';
 import { EquipmentHelper } from './equipment-helper.mjs';
+import { GMRelay, isActiveGM } from './gm-relay.mjs';
 
 /**
  * Light Source automation for light-emitting items (torches, candles, lanterns,
@@ -24,9 +25,8 @@ import { EquipmentHelper } from './equipment-helper.mjs';
  * directly.
  *
  * Privileged writes (JournalEntry create/delete, non-owned token.update) are
- * relayed to the active GM via the system socket (see socket-helper.mjs and the
- * `lightApply` / `lightDouse` / `lightSpawnClock` / `lightDeleteClock` actions
- * registered in vagabond.mjs).
+ * relayed to the active GM through GMRelay (`vagabond.lightApply` / `lightDouse` /
+ * `lightSpawnClock` / `lightDeleteClock`, registered in hooks/socket-actions.mjs).
  */
 export class LightSource {
   /** Real-time driver handle (set by {@link LightSource.startDriver}). */
@@ -226,7 +226,7 @@ export class LightSource {
    * gated by the hidden `lightSourceRunAsGMFixed` setting.
    */
   static async migrateRunAsGM() {
-    if (game.user !== game.users.activeGM) return;
+    if (!isActiveGM()) return;
     if (game.settings.get('vagabond', 'lightSourceRunAsGMFixed')) return;
 
     const safeItems = (doc) => {
@@ -269,7 +269,7 @@ export class LightSource {
    * Only the active GM writes, to avoid duplicate updates with multiple GMs.
    */
   static async tickRealtime() {
-    if (game.user !== game.users.activeGM) return;
+    if (!isActiveGM()) return;
     for (const j of ProgressClock.getAll()) {
       const ls = j.getFlag('vagabond', 'lightSource');
       if (ls?.mode !== 'realtime') continue;
@@ -405,8 +405,7 @@ export class LightSource {
       }
       await tdoc.update(update);
     } else {
-      const { emitSocket } = await import('./socket-helper.mjs');
-      emitSocket('lightApply', { tokenUuid: tdoc.uuid, light });
+      GMRelay.send('vagabond.lightApply', { tokenUuid: tdoc.uuid, light });
     }
   }
 
@@ -421,8 +420,7 @@ export class LightSource {
       await tdoc.unsetFlag('vagabond', 'prevLight');
       if (tdoc.getFlag('vagabond', 'prevSight') !== undefined) await tdoc.unsetFlag('vagabond', 'prevSight');
     } else {
-      const { emitSocket } = await import('./socket-helper.mjs');
-      emitSocket('lightDouse', { tokenUuid: tdoc.uuid });
+      GMRelay.send('vagabond.lightDouse', { tokenUuid: tdoc.uuid });
     }
   }
 
@@ -431,8 +429,7 @@ export class LightSource {
     if (game.user.isGM) {
       await this._createClockGM(meta);
     } else {
-      const { emitSocket } = await import('./socket-helper.mjs');
-      emitSocket('lightSpawnClock', meta);
+      GMRelay.send('vagabond.lightSpawnClock', meta);
     }
   }
 
@@ -459,8 +456,7 @@ export class LightSource {
     if (game.user.isGM) {
       await game.journal.get(id)?.delete();
     } else {
-      const { emitSocket } = await import('./socket-helper.mjs');
-      emitSocket('lightDeleteClock', { id });
+      GMRelay.send('vagabond.lightDeleteClock', { id });
     }
   }
 }

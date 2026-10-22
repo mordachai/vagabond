@@ -1,3 +1,4 @@
+import { GMRelay } from './gm-relay.mjs';
 /**
  * Shared faction/turn-preparation logic for the sidebar Combat Tracker and the
  * Combat Carousel overlay. Both consumers must agree on faction bucketing,
@@ -272,8 +273,7 @@ export class CombatTrackerHelper {
 
     // Players reordering their own faction rarely own every combatant in it —
     // relay the write through the GM client.
-    const { emitSocket } = await import('./socket-helper.mjs');
-    emitSocket('reorderCombatants', { combatId: combat.id, updates });
+    GMRelay.send('vagabond.reorderCombatants', { combatId: combat.id, updates });
   }
 
   /**

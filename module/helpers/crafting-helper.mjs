@@ -8,6 +8,7 @@ import { MixMode } from './crafting/mix-mode.mjs';
 import { ProjectHelper } from './crafting/project-helper.mjs';
 import { CRAFTING_DEFAULTS, craftingConfig } from './crafting/config.mjs';
 import { DowntimeHelper } from './downtime-helper.mjs';
+import { GMRelay } from './gm-relay.mjs';
 
 export { CRAFTING_DEFAULTS };
 
@@ -34,8 +35,7 @@ export class CraftingHelper {
 
   /** Register query handlers. Call once in `init` (all clients). */
   static registerQueries() {
-    CONFIG.queries[this.QUERIES.execute] = (data, { user }) =>
-      this.#serialize(() => this.#handleExecuteQuery(data, user));
+    GMRelay.register(this.QUERIES.execute, (data, user) => this.#handleExecuteQuery(data, user), { queue: 'craft' });
   }
 
   /** Merged `craftingConfig` world setting over {@link CRAFTING_DEFAULTS}. Never read the raw setting elsewhere. */
@@ -286,14 +286,5 @@ export class CraftingHelper {
         ${wasted > 0 ? `<p><em>${game.i18n.format('VAGABOND.Craft.Shift.Wasted', { value: CurrencyHelper.format(wasted) })}</em></p>` : ''}
       `);
     await card.send();
-  }
-
-  static #queue = Promise.resolve();
-
-  /** Run GM-relayed handlers one at a time (mirrors ShopTransactions). */
-  static #serialize(fn) {
-    const run = this.#queue.then(() => fn());
-    this.#queue = run.catch(() => {});
-    return run;
   }
 }

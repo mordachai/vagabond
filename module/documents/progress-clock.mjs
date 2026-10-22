@@ -1,3 +1,4 @@
+import { GMRelay, isActiveGM } from '../helpers/gm-relay.mjs';
 import { SystemFolders } from '../helpers/system-folders.mjs';
 /**
  * Progress Clock helper class for managing clock journals
@@ -25,9 +26,8 @@ export class ProgressClock {
   static async create(data = {}) {
     // Non-GM lacks permission to create JournalEntry/Folder — relay to GM.
     if (!game.user.isGM) {
-      const { emitSocket } = await import('../helpers/socket-helper.mjs');
-      emitSocket('createProgressClock', data);
-      return null;
+      const id = await GMRelay.run('vagabond.createProgressClock', data).catch(err => GMRelay.reportFailure('vagabond.createProgressClock', err));
+      return (id && game.journal.get(id)) || null;
     }
 
     const defaultPosition = game.settings.get('vagabond', 'defaultClockPosition') || 'top-right';
@@ -468,7 +468,7 @@ export class ProgressClock {
   static async syncBound() {
     if (!game?.ready) return;
     // Only the primary active GM performs writes; others just redraw from the update.
-    if (game.user !== game.users?.activeGM) return;
+    if (!isActiveGM()) return;
 
     for (const journal of this.getAll()) {
       const resolved = this.resolveSource(journal);

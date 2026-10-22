@@ -1,3 +1,5 @@
+import { isActiveGM } from './gm-relay.mjs';
+
 /**
  * NPC senses → Foundry token vision / detection modes.
  *
@@ -96,7 +98,7 @@ export class NpcSenses {
    * @param {Actor} actor
    */
   static queueCharacterSync(actor) {
-    if (actor?.type !== 'character' || !game.users.activeGM?.isSelf) return;
+    if (actor?.type !== 'character' || !isActiveGM()) return;
     clearTimeout(this.#characterTimers.get(actor.uuid));
     this.#characterTimers.set(actor.uuid, setTimeout(() => {
       this.#characterTimers.delete(actor.uuid);

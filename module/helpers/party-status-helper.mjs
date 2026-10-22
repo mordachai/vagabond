@@ -1,4 +1,5 @@
 import { ContextMenuHelper } from './context-menu-helper.mjs';
+import { GMRelay } from './gm-relay.mjs';
 
 /**
  * Shared helper for applying/removing status effects from the party sheet
@@ -170,8 +171,7 @@ export class PartyStatusHelper {
     if (actor.isOwner || game.user.isGM) {
       await actor.toggleStatusEffect(def.id, { active: !isActive });
     } else {
-      const { emitSocket } = await import('./socket-helper.mjs');
-      emitSocket('applyStatus', { actorUuid: actor.uuid, statusId: def.id, active: !isActive });
+      GMRelay.send('vagabond.applyStatus', { actorUuid: actor.uuid, statusId: def.id, active: !isActive });
     }
   }
 

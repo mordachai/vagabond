@@ -1,6 +1,7 @@
 import { CurrencyHelper } from './currency-helper.mjs';
 import { EquipmentHelper } from './equipment-helper.mjs';
 import { ShopTransactions } from './shop-transactions.mjs';
+import { GMRelay, isActiveGM } from './gm-relay.mjs';
 
 /**
  * Free trade — moving items and coins between inventories (Characters, transport Holds,
@@ -22,7 +23,7 @@ import { ShopTransactions } from './shop-transactions.mjs';
  *   `{ containerUuid, entryId, index }` (an entry of a container's `system.items`)
  * - item / coin holder: `{ actorUuid }` or `{ containerUuid }`
  *
- * Writes the user can't make run on the active GM (`CONFIG.queries`, serialized); a user who
+ * Writes the user can't make run on the active GM (`GMRelay`, queue `trade`); a user who
  * owns every document involved runs them locally (no GM needed).
  * Post-hook (executing client): `vagabond.trade({ type: 'item'|'coins', user, ... })`.
  */
@@ -37,8 +38,8 @@ export class TradeHelper {
 
   /** Register the query handlers. Call once in `init` (all clients). */
   static registerQueries() {
-    CONFIG.queries[this.QUERIES.moveItem] = (data, { user }) => this.#serialize(() => this._handleMoveItem(data, user));
-    CONFIG.queries[this.QUERIES.moveCoins] = (data, { user }) => this.#serialize(() => this._handleMoveCoins(data, user));
+    GMRelay.register(this.QUERIES.moveItem, (data, user) => this._handleMoveItem(data, user), { queue: 'trade' });
+    GMRelay.register(this.QUERIES.moveCoins, (data, user) => this._handleMoveCoins(data, user), { queue: 'trade' });
   }
 
   /* -------------------------------------------- */
@@ -138,7 +139,7 @@ export class TradeHelper {
    * (leftovers of the old party containers / group buys); embedded items left on them are deleted.
    */
   static async purgePartyItems() {
-    if (game.user !== game.users.activeGM || game.settings.get('vagabond', 'partyStashPurged')) return;
+    if (!isActiveGM() || game.settings.get('vagabond', 'partyStashPurged')) return;
     for (const party of game.actors.filter((a) => a.type === 'party' && a.items.size)) {
       console.log(`Vagabond | Purging ${party.items.size} leftover item(s) from party "${party.name}":`,
         party.items.map((i) => i.name).join(', '));
@@ -370,15 +371,6 @@ export class TradeHelper {
   /*  Internals                                   */
   /* -------------------------------------------- */
 
-  static #queue = Promise.resolve();
-
-  /** Run handlers one at a time (live-data checks stay valid until the writes land). */
-  static #serialize(fn) {
-    const run = this.#queue.then(() => fn());
-    this.#queue = run.catch(() => {});
-    return run;
-  }
-
   /** Whether the current user owns every document involved (then no GM round trip is needed). */
   static async #ownsAll(uuids, { freeSource = false } = {}) {
     for (const [i, uuid] of uuids.entries()) {
@@ -391,22 +383,13 @@ export class TradeHelper {
     return true;
   }
 
+  /** Run here when this user may (owns everything, or is a GM), else on the active GM; handlers run one at a time. */
   static async #request(name, data, local) {
-    if (local || game.user.isGM) {
-      const handler = name === this.QUERIES.moveItem ? this._handleMoveItem : this._handleMoveCoins;
-      try {
-        return await this.#serialize(() => handler.call(this, data, game.user));
-      } catch (err) {
-        console.error(`Vagabond | Trade "${name}" failed`, err);
-        return fail('error');
-      }
-    }
-    const gm = game.users.activeGM;
-    if (!gm) return fail('noGM');
     try {
-      return await gm.query(name, data, { timeout: 30 * 1000 });
+      return await GMRelay.run(name, data, { timeout: 30 * 1000, local: local || game.user.isGM });
     } catch (err) {
-      console.error(`Vagabond | Trade query "${name}" failed`, err);
+      if (GMRelay.isNoGM(err)) return fail('noGM');
+      console.error(`Vagabond | Trade "${name}" failed`, err);
       return fail('error');
     }
   }

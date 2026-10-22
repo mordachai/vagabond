@@ -1,4 +1,5 @@
 import { isCopyOf, sourceDocId } from './source-id.mjs';
+import { isActiveGM } from './gm-relay.mjs';
 /**
  * One-time migrations that bring existing class items in a world up to the compendium's book
  * revision. Class items on actors are copies — editing the pack never reaches them.
@@ -35,7 +36,7 @@ function worldItems() {
  * @param {() => Promise<void>} [cfg.afterAll]                      follow-up once, after every item
  */
 async function migrateClass({ setting, classId, className, probeEffect, probeFeature, isOld, extraUpdate, afterItem, afterAll }) {
-  if (game.user !== game.users.activeGM) return;
+  if (!isActiveGM()) return;
   if (game.settings.get('vagabond', setting)) return;
 
   const source = await game.packs.get('vagabond.classes')?.getDocument(classId);
@@ -424,7 +425,7 @@ const ANCESTRY_MIGRATIONS = {
 };
 
 export async function migrateAncestries() {
-  if (game.user !== game.users.activeGM) return;
+  if (!isActiveGM()) return;
   if (game.settings.get('vagabond', 'ancestriesMigrated')) return;
 
   const pack = game.packs.get('vagabond.ancestries');

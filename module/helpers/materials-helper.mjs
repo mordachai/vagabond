@@ -1,4 +1,5 @@
 import { CurrencyHelper } from './currency-helper.mjs';
+import { isActiveGM } from './gm-relay.mjs';
 
 /**
  * Crafting Materials as an ingredient pool. An actor holds ONE `craftMaterial`
@@ -154,7 +155,7 @@ export class MaterialsHelper {
    * Materials bundles from the old 1g-per-item split get them merged into one.
    */
   static async migrateBundles() {
-    if (game.user !== game.users.activeGM || game.settings.get('vagabond', 'materialsBundlesMerged')) return;
+    if (!isActiveGM() || game.settings.get('vagabond', 'materialsBundlesMerged')) return;
     for (const actor of game.actors) await this.consolidate(actor);
     await game.settings.set('vagabond', 'materialsBundlesMerged', true);
   }

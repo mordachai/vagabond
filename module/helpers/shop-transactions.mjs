@@ -2,12 +2,13 @@ import { CurrencyHelper } from './currency-helper.mjs';
 import { ShopPricing } from './shop-pricing.mjs';
 import { EquipmentHelper } from './equipment-helper.mjs';
 import { ShopChat } from './shop-chat.mjs';
+import { GMRelay } from './gm-relay.mjs';
 
 /**
  * Shop transactions — every money/stock write runs on the active GM.
  *
  * Clients call the public statics (`buy`, `buyCart`, `sell`, `partyTransfer`); those route to the
- * active GM through `CONFIG.queries` (`User#query`) and resolve to `{ ok, reason?, ... }`.
+ * active GM through `GMRelay` (queue `shop`) and resolve to `{ ok, reason?, ... }`.
  * The GM runs the handler locally. Handlers re-validate everything against live data
  * (the sender is verified from the query context, never trusted from the payload) and
  * run one at a time, so two players buying the last item can't both get it.
@@ -39,11 +40,11 @@ export class ShopTransactions {
 
   /** Register query handlers. Call once in `init` (all clients). */
   static registerQueries() {
-    CONFIG.queries[this.QUERIES.buy] = (data, { user }) => this.#serialize(() => this._handleBuy(data, user));
-    CONFIG.queries[this.QUERIES.buyCart] = (data, { user }) => this.#serialize(() => this._handleBuyCart(data, user));
-    CONFIG.queries[this.QUERIES.sell] = (data, { user }) => this.#serialize(() => this._handleSell(data, user));
-    CONFIG.queries[this.QUERIES.partyTransfer] = (data, { user }) =>
-      this.#serialize(() => this._handlePartyTransfer(data, user));
+    const queue = 'shop';
+    GMRelay.register(this.QUERIES.buy, (data, user) => this._handleBuy(data, user), { queue });
+    GMRelay.register(this.QUERIES.buyCart, (data, user) => this._handleBuyCart(data, user), { queue });
+    GMRelay.register(this.QUERIES.sell, (data, user) => this._handleSell(data, user), { queue });
+    GMRelay.register(this.QUERIES.partyTransfer, (data, user) => this._handlePartyTransfer(data, user), { queue });
   }
 
   /* -------------------------------------------- */
@@ -410,26 +411,14 @@ export class ShopTransactions {
   /*  Internals                                   */
   /* -------------------------------------------- */
 
-  static #queue = Promise.resolve();
-
-  /** Run GM handlers one at a time (live-data checks stay valid until the writes land). */
-  static #serialize(fn) {
-    const run = this.#queue.then(() => fn());
-    this.#queue = run.catch(() => {});
-    return run;
-  }
-
+  /** Run on the active GM (here when this user is it); handlers run one at a time. */
   static async #request(name, data, notify) {
-    const gm = game.users.activeGM;
     let result;
-    if (!gm) {
-      result = fail('noGM');
-    } else {
-      try {
-        result = gm.isSelf
-          ? await CONFIG.queries[name](data, { user: game.user })
-          : await gm.query(name, data, { timeout: 30 * 1000 });
-      } catch (err) {
+    try {
+      result = await GMRelay.run(name, data, { timeout: 30 * 1000 });
+    } catch (err) {
+      if (GMRelay.isNoGM(err)) result = fail('noGM');
+      else {
         console.error(`Vagabond | Shop query "${name}" failed`, err);
         result = fail('error');
       }

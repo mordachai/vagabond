@@ -1,3 +1,5 @@
+import { GMRelay } from './gm-relay.mjs';
+
 /**
  * Circle-cropped token art derived from the actor portrait.
  *
@@ -28,7 +30,7 @@ export class TokenPortrait {
 
   /** Register the GM upload relay. Call once in `init` (all clients). */
   static registerQueries() {
-    CONFIG.queries[this.QUERY] = (data, { user }) => this.#handleUploadQuery(data, user);
+    GMRelay.register(this.QUERY, (data, user) => this.#handleUploadQuery(data, user));
   }
 
   static enabled() {
@@ -104,15 +106,14 @@ export class TokenPortrait {
       if (!blob) return null;
       const name = path.split('/').pop();
       if (game.user.can('FILES_UPLOAD')) return await this.#upload(name, blob);
-      const gm = game.users.activeGM;
-      if (!gm) return null;
+      if (!game.users.activeGM) return null;
       const dataUrl = await new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.onload = () => resolve(reader.result);
         reader.onerror = () => reject(reader.error);
         reader.readAsDataURL(blob);
       });
-      return (await gm.query(this.QUERY, { name, dataUrl }, { timeout: 30 * 1000 })) ?? null;
+      return (await GMRelay.run(this.QUERY, { name, dataUrl }, { timeout: 30 * 1000 })) ?? null;
     } catch (err) {
       console.warn(`Vagabond | Circle token crop failed for "${path}"`, err);
       return null;

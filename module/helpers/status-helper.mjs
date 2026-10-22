@@ -1,7 +1,7 @@
-import { emitSocket } from './socket-helper.mjs';
 import { VagabondDamagePipeline } from './damage-pipeline.mjs';
 import { NpcRules } from './npc-rules.mjs';
 import { FocusLink } from './focus-link.mjs';
+import { GMRelay } from './gm-relay.mjs';
 
 /**
  * StatusHelper — central logic for on-hit status effect application.
@@ -135,7 +135,7 @@ export class StatusHelper {
     if (actor.isOwner || game.user.isGM) {
       await actor.toggleStatusEffect(statusId, { active: false });
     } else {
-      emitSocket('applyStatus', { actorUuid: actor.uuid, statusId, active: false });
+      GMRelay.send('vagabond.applyStatus', { actorUuid: actor.uuid, statusId, active: false });
     }
 
     const linkedDice = game.journal.filter((j) => {
@@ -146,7 +146,7 @@ export class StatusHelper {
     });
     for (const die of linkedDice) {
       if (die.isOwner || game.user.isGM) await die.delete();
-      else emitSocket('deleteCountdownDie', { id: die.id });
+      else GMRelay.send('vagabond.deleteCountdownDie', { id: die.id });
     }
   }
 
@@ -257,8 +257,7 @@ export class StatusHelper {
         await actor.toggleStatusEffect(entry.statusId, { active: true });
         if (entry.focusLink) await FocusLink.stampStatus(actor, entry.statusId, entry.focusLink);
       } else {
-        const { emitSocket } = await import('./socket-helper.mjs');
-        emitSocket('applyStatus', { actorUuid: actor.uuid, statusId: entry.statusId, active: true, focusLink: entry.focusLink ?? null });
+        GMRelay.send('vagabond.applyStatus', { actorUuid: actor.uuid, statusId: entry.statusId, active: true, focusLink: entry.focusLink ?? null });
       }
     }
     Hooks.callAll('vagabond.postStatusApply', { actor, statusId: entry.statusId, sourceName, saveType: entry.saveType || 'none', damageWasBlocked, stacked: stacking });
@@ -374,8 +373,7 @@ export class StatusHelper {
     if (game.user.isGM) {
       await CountdownDice.create(countdownData);
     } else {
-      const { emitSocket } = await import('./socket-helper.mjs');
-      emitSocket('createCountdownDie', countdownData);
+      GMRelay.send('vagabond.createCountdownDie', countdownData);
     }
   }
 

@@ -407,6 +407,10 @@
       "Level": "Level",
       "HD": "HD"
     },
+    "GMRelay": {
+      "NoGM": "A GM must be connected for this.",
+      "Failed": "The GM could not do this. Ask them to reload, then try again."
+    },
     "Macro": {
       "NoGM": "No GM is connected to run this.",
       "RelayFailed": "The GM ({gm}) did not answer. Ask them to reload, then try again.",

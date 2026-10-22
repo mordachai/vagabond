@@ -1,3 +1,5 @@
+import { isActiveGM } from './gm-relay.mjs';
+
 /**
  * AAMenuLoader — loads the system's Automated Animations Global Automatic Recognition menu
  * (`assets/config/AutomatedAnimations-<lang>-vagabond.json`) into AA by itself, in the
@@ -35,7 +37,7 @@ export class AAMenuLoader {
 
   /** Called from `ready` (fire-and-forget). */
   static onReady() {
-    if (game.user !== game.users.activeGM) return;
+    if (!isActiveGM()) return;
     if (game.settings.get(NS, 'aaMenuAutoLoad') === 'off') return;
     AAMenuLoader.sync().catch(err => console.error('Vagabond | AA menu auto-load failed', err));
   }

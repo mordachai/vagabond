@@ -6,9 +6,9 @@ import { VagabondDamageHelper } from '../helpers/damage-helper.mjs';
 import { FocusUpkeep } from '../helpers/focus-upkeep.mjs';
 import { runMacroFromButton, macroDescriptorFromButton } from '../helpers/item-macro.mjs';
 import { MacroAutoRun } from '../helpers/macro-autorun.mjs';
-import { emitSocket } from '../helpers/socket-helper.mjs';
 import { SpellSurface } from '../helpers/spell-surface.mjs';
 import { TargetHelper } from '../helpers/target-helper.mjs';
+import { GMRelay } from '../helpers/gm-relay.mjs';
 
 /**
  * Chat card button wiring: the renderChatMessageHTML hook.
@@ -343,8 +343,7 @@ export function registerChatMessageHooks() {
           if (actor.isOwner || game.user.isGM) {
             await actor.update({ 'system.health.value': newHP });
           } else {
-            const { emitSocket } = await import('../helpers/socket-helper.mjs');
-            emitSocket('updateActorField', { actorUuid: actor.uuid, field: 'system.health.value', value: newHP });
+            GMRelay.send('vagabond.updateActorField', { actorUuid: actor.uuid, field: 'system.health.value', value: newHP });
           }
           const { VagabondChatCard } = await import('../helpers/chat-card.mjs');
           await VagabondChatCard.applyResult(actor, {

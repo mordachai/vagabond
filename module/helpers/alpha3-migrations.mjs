@@ -7,6 +7,7 @@
  */
 
 import { isCopyOf, sourceDocId } from './source-id.mjs';
+import { isActiveGM } from './gm-relay.mjs';
 
 const safeEffects = (doc) => { try { return Array.from(doc?.effects ?? []); } catch { return []; } };
 
@@ -35,7 +36,7 @@ const ALPHA3_STATUSES = ['frightened', 'sickened', 'prone', 'incapacitated', 'pa
  * `CONFIG.VAGABOND.statusEffectDefinitions` entry.
  */
 export async function migrateAlpha3Statuses() {
-  if (game.user !== game.users.activeGM) return;
+  if (!isActiveGM()) return;
   if (game.settings.get('vagabond', 'alpha3StatusesMigrated')) return;
 
   const defs = new Map((CONFIG.VAGABOND.statusEffectDefinitions ?? [])
@@ -86,7 +87,7 @@ const BACKPACK_DESC = '<p>1 Slot while held. Worn, it occupies no Slot and adds 
  * put on (worn) so the character keeps the capacity it had.
  */
 export async function migrateAlpha3Backpacks() {
-  if (game.user !== game.users.activeGM) return;
+  if (!isActiveGM()) return;
   if (game.settings.get('vagabond', 'alpha3BackpackMigrated')) return;
 
   const wornOn = new Set();
@@ -135,7 +136,7 @@ const RATION_OLD_NAME = 'Rations (1 day)';
  * WITHOUT setting the guard while the gear pack can't be read.
  */
 export async function migrateAlpha3Rations() {
-  if (game.user !== game.users.activeGM) return;
+  if (!isActiveGM()) return;
   if (game.settings.get('vagabond', 'alpha3RationsMigrated')) return;
 
   const source = await game.packs.get('vagabond.gear')?.getDocument(RATION_ID);
@@ -173,7 +174,7 @@ const DEFENSE_PERKS = [
  * been rebuilt (compendium copy missing the effect). Copies that already carry the key are skipped.
  */
 export async function migrateAlpha3DefensePerks() {
-  if (game.user !== game.users.activeGM) return;
+  if (!isActiveGM()) return;
   if (game.settings.get('vagabond', 'alpha3DefensePerksMigrated')) return;
 
   const pack = game.packs.get('vagabond.perks');
@@ -244,7 +245,7 @@ const ALPHA3_CLASSES = {
  * been rebuilt (probe: the Sorcerer doc must carry Twinned Spell). Runs after the earlier class migrations.
  */
 export async function migrateAlpha3Classes() {
-  if (game.user !== game.users.activeGM) return;
+  if (!isActiveGM()) return;
   if (game.settings.get('vagabond', 'alpha3ClassesMigrated')) return;
 
   const pack = game.packs.get('vagabond.classes');
@@ -296,7 +297,7 @@ export async function migrateAlpha3Classes() {
  * setting the guard while the classes pack hasn't been rebuilt. Runs after migrateAlpha3Classes.
  */
 export async function migrateClassFeatureScaleKeys() {
-  if (game.user !== game.users.activeGM) return;
+  if (!isActiveGM()) return;
   if (game.settings.get('vagabond', 'classFeatureScaleKeysMigrated')) return;
 
   const pack = game.packs.get('vagabond.classes');
@@ -335,7 +336,7 @@ export async function migrateClassFeatureScaleKeys() {
  * setting the guard while the classes pack hasn't been rebuilt. Runs after migrateClassFeatureScaleKeys.
  */
 export async function migrateClassFeatureActions() {
-  if (game.user !== game.users.activeGM) return;
+  if (!isActiveGM()) return;
   if (game.settings.get('vagabond', 'classFeatureActionsMigrated')) return;
 
   const pack = game.packs.get('vagabond.classes');
@@ -373,7 +374,7 @@ export async function migrateClassFeatureActions() {
  * WITHOUT setting the guard while the classes pack hasn't been rebuilt. Runs after migrateClassFeatureActions.
  */
 export async function migrateClassFeatureEffects() {
-  if (game.user !== game.users.activeGM) return;
+  if (!isActiveGM()) return;
   if (game.settings.get('vagabond', 'classFeatureEffectsMigrated')) return;
 
   const pack = game.packs.get('vagabond.classes');
@@ -417,7 +418,7 @@ const CLASS_PERKS = [
  * its Explode effect). A copy already holding the compendium text is skipped.
  */
 export async function migrateAlpha3ClassPerks() {
-  if (game.user !== game.users.activeGM) return;
+  if (!isActiveGM()) return;
   if (game.settings.get('vagabond', 'alpha3ClassPerksMigrated')) return;
 
   const pack = game.packs.get('vagabond.perks');
@@ -463,7 +464,7 @@ const ALPHA3_PERKS = ['Animal Companion', 'Archaeologist', 'Bully', 'Cardistry',
  * the compendium text is skipped.
  */
 export async function migrateAlpha3Perks() {
-  if (game.user !== game.users.activeGM) return;
+  if (!isActiveGM()) return;
   if (game.settings.get('vagabond', 'alpha3PerksMigrated')) return;
 
   const pack = game.packs.get('vagabond.perks');
@@ -506,7 +507,7 @@ export async function migrateAlpha3Perks() {
  * rebuilt. Items whose Human trait list has no "Knack" (already current / homebrew) are skipped.
  */
 export async function migrateAlpha3Ancestries() {
-  if (game.user !== game.users.activeGM) return;
+  if (!isActiveGM()) return;
   if (game.settings.get('vagabond', 'alpha3AncestriesMigrated')) return;
 
   const source = await game.packs.get('vagabond.ancestries')?.getDocument('kYLA215krVXIgmnd');
@@ -531,7 +532,7 @@ export async function migrateAlpha3Ancestries() {
  * `system.noFreeDie` (the pack ships it). Only the field is written; nothing else on the copy changes.
  */
 export async function migrateLifeNoFreeDie() {
-  if (game.user !== game.users.activeGM) return;
+  if (!isActiveGM()) return;
   if (game.settings.get('vagabond', 'lifeNoFreeDieMigrated')) return;
 
   for (const item of worldItems()) {
@@ -552,7 +553,7 @@ export async function migrateLifeNoFreeDie() {
  * Aborts WITHOUT setting the guard while the perks pack hasn't been rebuilt.
  */
 export async function migrateVehementMagic() {
-  if (game.user !== game.users.activeGM) return;
+  if (!isActiveGM()) return;
   if (game.settings.get('vagabond', 'vehementMagicMigrated')) return;
 
   const source = await game.packs.get('vagabond.perks')?.getDocument('UhI94xpNrdCln9jR');

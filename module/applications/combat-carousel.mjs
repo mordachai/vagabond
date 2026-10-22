@@ -1,6 +1,7 @@
 import { CombatTrackerHelper, DEFAULT_FACTION_ORDER } from '../helpers/combat-tracker-helper.mjs';
 import { ContextMenuHelper } from '../helpers/context-menu-helper.mjs';
 import { VagabondChatCard } from '../helpers/chat-card.mjs';
+import { GMRelay } from '../helpers/gm-relay.mjs';
 
 const { api } = foundry.applications;
 
@@ -501,8 +502,7 @@ export class CombatCarousel extends api.HandlebarsApplicationMixin(api.Applicati
                 await effect.delete();
               } else {
                 const statusId = effect.statuses?.first() || effect.flags?.core?.statusId;
-                const { emitSocket } = await import('../helpers/socket-helper.mjs');
-                emitSocket('applyStatus', { actorUuid: actor.uuid, statusId, active: false });
+                GMRelay.send('vagabond.applyStatus', { actorUuid: actor.uuid, statusId, active: false });
               }
             },
           },

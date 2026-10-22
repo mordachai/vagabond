@@ -1,3 +1,5 @@
+import { isActiveGM } from './gm-relay.mjs';
+
 /**
  * Druid — Polymorph, Savagery, Beast Mode, Force of Nature, on top of the Metamorph module
  * (https://github.com/mordachai/metamorph). Metamorph is a SOFT dependency: nothing here runs
@@ -290,7 +292,7 @@ export class DruidHelper {
    * @param {Actor} main  the original actor
    */
   static async syncFormFocus(main) {
-    if (!main || !game.users.activeGM?.isSelf) return;
+    if (!main || !isActiveGM()) return;
     const on = main.statuses.has('focusing');
     for (const form of game.actors.filter(a => a.flags?.metamorph?.temp?.mainActorId === main.id)) {
       if (form.statuses.has('focusing') !== on) await form.toggleStatusEffect('focusing', { active: on });

@@ -1,3 +1,5 @@
+import { isActiveGM } from './gm-relay.mjs';
+
 /**
  * Party Notes journals. ONE journal per Character (whatever party it is in) and ONE GM journal per party,
  * found by the journal's own flags (`flags.vagabond.isPartyNote / noteType / characterId / partyId`) — never by
@@ -112,7 +114,7 @@ export class PartyNotes {
    * Old per-party `flags.vagabond.notes` pointers are dropped (lookup is by journal flag now).
    */
   static async cleanup() {
-    if (game.user !== game.users.activeGM) return;
+    if (!isActiveGM()) return;
     const groups = new Map();
     for (const j of game.journal) {
       const v = j.flags?.vagabond;
@@ -165,7 +167,7 @@ export class PartyNotes {
     Hooks.once('ready', () => { this.cleanup(); });
     // Title follows the actor's name (lookup is by id, the title is display only)
     Hooks.on('updateActor', (actor, changes) => {
-      if (!('name' in changes) || game.user !== game.users.activeGM) return;
+      if (!('name' in changes) || !isActiveGM()) return;
       const journal = actor.type === 'party' ? this.find('gm', actor.id)
         : actor.type === 'character' ? this.find('personal', actor.id) : null;
       if (!journal) return;

@@ -1,3 +1,5 @@
+import { isActiveGM } from '../helpers/gm-relay.mjs';
+
 
 /**
  * Flanking detection: debounced sweep on token refresh, cleanup on combat end.
@@ -24,7 +26,7 @@ export function registerFlankingHooks() {
       // evaluateScene() races toggleStatusEffect (duplicate creates, "ActiveEffect
       // does not exist" on clears), and the caught error aborts the rest of that
       // client's scene loop, leaving statuses stale until tokens move again.
-      if (game.user !== game.users.activeGM) return;
+      if (!isActiveGM()) return;
       _flankingSweep();
     });
   }
@@ -34,7 +36,7 @@ export function registerFlankingHooks() {
   // Cheap position-delta guard keeps this off the per-frame animation spam — the
   // 200ms debounce collapses whatever survives into a single sweep.
   Hooks.on('refreshToken', (token) => {
-    if (game.user !== game.users.activeGM) return;
+    if (!isActiveGM()) return;
     const p = token.document;
     if (!p) return;
     const key = `${p.x},${p.y},${p.width},${p.height}`;
@@ -49,7 +51,7 @@ export function registerFlankingHooks() {
   for (const hookName of ['createActiveEffect', 'deleteActiveEffect']) {
     Hooks.on(hookName, (effect) => {
       if (!effect.statuses?.has('dead')) return;
-      if (game.user !== game.users.activeGM) return;
+      if (!isActiveGM()) return;
       _flankingSweep();
     });
   }
@@ -59,7 +61,7 @@ export function registerFlankingHooks() {
   // necessarily moving a token on THIS client.
   for (const h of ['combatStart', 'updateCombat', 'createCombatant', 'deleteCombatant', 'updateCombatant']) {
     Hooks.on(h, () => {
-      if (game.user !== game.users.activeGM) return;
+      if (!isActiveGM()) return;
       _flankingSweep();
     });
   }
@@ -69,7 +71,7 @@ export function registerFlankingHooks() {
   // genuinely-still-adjacent tokens keep the correct positional state. Order
   // matters: cleanup before sweep, or the sweep's fresh 'flanked' gets wiped.
   Hooks.on('deleteCombat', () => {
-    if (game.user !== game.users.activeGM) return;
+    if (!isActiveGM()) return;
     import('../helpers/flanking-helper.mjs')
       .then(async ({ FlankingHelper }) => {
         await FlankingHelper.cleanupOrphans();

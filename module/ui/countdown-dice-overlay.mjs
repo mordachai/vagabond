@@ -1,5 +1,6 @@
 import { CountdownDice } from '../documents/countdown-dice.mjs';
 import { CountdownDiceConfig } from '../applications/countdown-dice-config.mjs';
+import { GMRelay } from '../helpers/gm-relay.mjs';
 
 /**
  * UI Overlay for rendering countdown dice on the canvas
@@ -642,8 +643,7 @@ export class CountdownDiceOverlay {
         if (dice.isOwner || game.user.isGM) {
           await dice.delete();
         } else {
-          const { emitSocket } = await import('../helpers/socket-helper.mjs');
-          emitSocket('deleteCountdownDie', { id: diceId });
+          GMRelay.send('vagabond.deleteCountdownDie', { id: diceId });
         }
       }
       menu.remove();

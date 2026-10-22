@@ -1,4 +1,5 @@
 import { TargetHelper } from './target-helper.mjs';
+import { GMRelay } from './gm-relay.mjs';
 
 /**
  * Ward upcast (`system.wardUpcast`) — Ward: "When the Target takes damage from an attack or Cast, you can upcast
@@ -265,8 +266,7 @@ export class WardHelper {
         if (defender.isOwner || game.user.isGM) {
           await defender.update({ 'system.health.value': newHp });
         } else {
-          const { emitSocket } = await import('./socket-helper.mjs');
-          emitSocket('applyDamage', { actorUuid: defender.uuid, newHp });
+          GMRelay.send('vagabond.applyDamage', { actorUuid: defender.uuid, newHp });
         }
       }
       calcHtml = VagabondDamageHelper._buildDamageCalculation(

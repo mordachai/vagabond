@@ -2,6 +2,7 @@ import { isCopyOf } from './source-id.mjs';
 import { StatusHelper } from './status-helper.mjs';
 import { combatRollData } from './rule-rolldata.mjs';
 import { RollExpiry } from './roll-expiry.mjs';
+import { isActiveGM } from './gm-relay.mjs';
 
 const BERSERK = 'berserk';
 
@@ -112,7 +113,7 @@ export class RageHelper {
    * setting the guard, so it retries on the next load.
    */
   static async migrateBarbarianClass() {
-    if (game.user !== game.users.activeGM) return;
+    if (!isActiveGM()) return;
     if (game.settings.get('vagabond', 'barbarianClassMigrated')) return;
 
     const source = await game.packs.get('vagabond.classes')?.getDocument('qONUTXY8GwqSEoDw');
@@ -162,7 +163,7 @@ export class RageHelper {
    * have no switch. Flags those three by name. Active GM only; touches only unflagged ones.
    */
   static async flagSwitchableEffects() {
-    if (game.user !== game.users.activeGM) return;
+    if (!isActiveGM()) return;
     const names = new Set(['Rage: Auto-Berserk', 'Aggressor: First Round (auto)', 'Aggressor: First Round (manual)']);
     const safeItems = (doc) => { try { return Array.from(doc?.items ?? []); } catch { return []; } };
     const candidates = [
@@ -189,7 +190,7 @@ export class RageHelper {
    * items whose manual twin lacks the marker. The player's on/off choice is left alone.
    */
   static async syncAggressorTwins() {
-    if (game.user !== game.users.activeGM) return;
+    if (!isActiveGM()) return;
     const source = await game.packs.get('vagabond.classes')?.getDocument('qONUTXY8GwqSEoDw');
     const names = ['Aggressor: First Round (auto)', 'Aggressor: First Round (manual)'];
     const fresh = names.map(n => source?.effects.find(e => e.name === n));

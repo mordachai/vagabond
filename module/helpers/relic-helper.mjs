@@ -1,6 +1,7 @@
 import { CurrencyHelper } from './currency-helper.mjs';
 import { craftingConfig } from './crafting/config.mjs';
 import { VagabondChatCard } from './chat-card.mjs';
+import { isActiveGM } from './gm-relay.mjs';
 
 /**
  * Relic model (docs/crafting-plan.md §4.4/§4.5). Every equipment item carries
@@ -230,7 +231,7 @@ export class RelicHelper {
    * effects, matched by compendium source id. Keeps quantity, Bond and inventory position.
    */
   static async migrateNamedRelics() {
-    if (game.user !== game.users.activeGM) return;
+    if (!isActiveGM()) return;
     if (game.settings.get('vagabond', 'namedRelicsMigrated2')) return;
     const pack = game.packs.get('vagabond.relics');
     if (!pack) return;

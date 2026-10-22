@@ -1,3 +1,5 @@
+import { isActiveGM } from './gm-relay.mjs';
+
 /**
  * "Vagabond System" root folders: every folder the system makes for itself (Conjured, Undead Army,
  * Clocks & Dice) sits under ONE root per document type, so the GM's sidebar stays tidy. Party Notes stays
@@ -76,7 +78,7 @@ export class SystemFolders {
 
   /** Active GM: move stray system folders (made before the root existed, or by Metamorph) under the root. */
   static async sweep() {
-    if (game.user !== game.users.activeGM) return;
+    if (!isActiveGM()) return;
     const legacy = game.folders.find(f => f.type === 'JournalEntry' && f.name === this.#CLOCKS_LEGACY_NAME
       && !f.getFlag('vagabond', 'clocksFolder'));
     if (legacy) await legacy.setFlag('vagabond', 'clocksFolder', true);
@@ -90,11 +92,11 @@ export class SystemFolders {
   static registerHooks() {
     Hooks.once('ready', () => { this.sweep(); });
     Hooks.on('createFolder', (folder) => {
-      if (game.user === game.users.activeGM && this.#belongs(folder)) this.#adopt(folder);
+      if (isActiveGM() && this.#belongs(folder)) this.#adopt(folder);
     });
     // Metamorph stamps its pre-flag root on first use
     Hooks.on('updateFolder', (folder, changes) => {
-      if (changes.flags?.metamorph?.root && game.user === game.users.activeGM && this.#belongs(folder)) this.#adopt(folder);
+      if (changes.flags?.metamorph?.root && isActiveGM() && this.#belongs(folder)) this.#adopt(folder);
     });
   }
 }

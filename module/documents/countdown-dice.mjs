@@ -1,3 +1,4 @@
+import { GMRelay } from '../helpers/gm-relay.mjs';
 import { SystemFolders } from '../helpers/system-folders.mjs';
 /**
  * Countdown Dice - Static helper class for managing countdown dice
@@ -29,9 +30,8 @@ export class CountdownDice {
   static async create(data = {}) {
     // Non-GM lacks permission to create JournalEntry/Folder — relay to GM.
     if (!game.user.isGM) {
-      const { emitSocket } = await import('../helpers/socket-helper.mjs');
-      emitSocket('createCountdownDie', data);
-      return null;
+      const id = await GMRelay.run('vagabond.createCountdownDie', data).catch(err => GMRelay.reportFailure('vagabond.createCountdownDie', err));
+      return (id && game.journal.get(id)) || null;
     }
 
     const order = this.getNextOrder();

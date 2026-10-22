@@ -1,5 +1,6 @@
 import { isCopyOf } from './source-id.mjs';
 import { classFeatureText } from './feature-text.mjs';
+import { isActiveGM } from './gm-relay.mjs';
 
 const DANCER_CLASS_ID = '8LqHA6iqYBgFmVfJ';
 
@@ -63,7 +64,7 @@ export class DancerHelper {
    * guard, so it retries next load.
    */
   static async migrateDancerClass() {
-    if (game.user !== game.users.activeGM) return;
+    if (!isActiveGM()) return;
     if (game.settings.get('vagabond', 'dancerClassMigrated')) return;
 
     const source = await game.packs.get('vagabond.classes')?.getDocument(DANCER_CLASS_ID);

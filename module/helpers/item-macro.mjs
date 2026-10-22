@@ -13,6 +13,7 @@
  */
 
 import { FocusLink } from './focus-link.mjs';
+import { GMRelay } from './gm-relay.mjs';
 
 /**
  * Built-in handlers a macro slot can call as `system:<name>` instead of a script. Unlike script
@@ -219,8 +220,6 @@ const MACRO_QUERY = 'vagabond.runItemMacro';
 
 /** Notes collected while the GM runs a relayed macro (sent back to the requester), else null. */
 let _relayNotes = null;
-/** Relayed macros run one at a time, so their notes never mix. */
-let _relayChain = Promise.resolve();
 
 /**
  * Warn / inform from inside a macro or built-in handler. Toasts locally and, while the GM runs a
@@ -234,25 +233,21 @@ export function macroNotify(level, message) {
   _relayNotes?.push({ level, message });
 }
 
-/** GM side of the relay. Called once from init. */
+/** GM side of the relay. Called once from init. Relayed macros run one at a time, so their notes never mix. */
 export function registerMacroQueries() {
-  CONFIG.queries[MACRO_QUERY] = (data) => {
-    const run = _relayChain.then(async () => {
-      const notes = [];
-      _relayNotes = notes;
-      try {
-        await executeItemMacro(data);
-        return { notes };
-      } catch (err) {
-        console.error('VAGABOND | GM-relayed macro execution failed:', err);
-        return { notes, error: err?.message ?? String(err) };
-      } finally {
-        _relayNotes = null;
-      }
-    });
-    _relayChain = run.catch(() => {});
-    return run;
-  };
+  GMRelay.register(MACRO_QUERY, async (data) => {
+    const notes = [];
+    _relayNotes = notes;
+    try {
+      await executeItemMacro(data);
+      return { notes };
+    } catch (err) {
+      console.error('VAGABOND | GM-relayed macro execution failed:', err);
+      return { notes, error: err?.message ?? String(err) };
+    } finally {
+      _relayNotes = null;
+    }
+  }, { queue: 'macro' });
 }
 
 /**
@@ -263,11 +258,6 @@ export function registerMacroQueries() {
  */
 export async function runMacroFromButton(d) {
   if (d.runAsGM && !game.user.isGM) {
-    const gm = game.users.activeGM;
-    if (!gm) {
-      ui.notifications.warn(game.i18n.localize('VAGABOND.Macro.NoGM'));
-      return;
-    }
     const payload = {
       itemUuid: d.itemUuid ?? null,
       itemName: d.itemName ?? null,
@@ -282,10 +272,15 @@ export async function runMacroFromButton(d) {
     };
     let result;
     try {
-      result = await gm.query(MACRO_QUERY, payload, { timeout: 60 * 1000 });
+      result = await GMRelay.run(MACRO_QUERY, payload, { timeout: 60 * 1000 });
     } catch (err) {
-      console.error(`VAGABOND | GM relay to ${gm.name} failed:`, err);
-      ui.notifications.error(game.i18n.format('VAGABOND.Macro.RelayFailed', { gm: gm.name }));
+      if (GMRelay.isNoGM(err)) {
+        ui.notifications.warn(game.i18n.localize('VAGABOND.Macro.NoGM'));
+        return;
+      }
+      const gm = game.users.activeGM?.name ?? '';
+      console.error(`VAGABOND | GM relay to ${gm} failed:`, err);
+      ui.notifications.error(game.i18n.format('VAGABOND.Macro.RelayFailed', { gm }));
       return;
     }
     for (const n of result?.notes ?? []) ui.notifications[n.level]?.(n.message);

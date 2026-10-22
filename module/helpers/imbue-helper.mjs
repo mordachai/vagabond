@@ -1,5 +1,6 @@
 import { EquipmentHelper } from './equipment-helper.mjs';
 import { TargetHelper } from './target-helper.mjs';
+import { GMRelay } from './gm-relay.mjs';
 
 /**
  * Automation for the "Imbue" spell delivery: a spell is attached to a willing
@@ -70,8 +71,7 @@ export class VagabondImbueHelper {
       await weapon.update({ 'system.imbuedSpell': data });
       return;
     }
-    const { emitSocket } = await import('./socket-helper.mjs');
-    emitSocket('imbueUpdateWeapon', { weaponUuid: weapon.uuid, data });
+    GMRelay.send('vagabond.imbueUpdateWeapon', { weaponUuid: weapon.uuid, data });
   }
 
   /**
@@ -129,8 +129,7 @@ export class VagabondImbueHelper {
         if (sourceActor.isOwner || game.user.isGM) {
           await sourceActor.update({ 'system.mana.current': newMana });
         } else {
-          const { emitSocket } = await import('./socket-helper.mjs');
-          emitSocket('updateActorField', {
+          GMRelay.send('vagabond.updateActorField', {
             actorUuid: sourceActor.uuid,
             field: 'system.mana.current',
             value: newMana,

@@ -6,6 +6,7 @@ import { GlyphOverlay } from '../ui/glyph-overlay.mjs';
 import { ProgressClockOverlay } from '../ui/progress-clock-overlay.mjs';
 import { RegionTextureOverlay } from '../ui/region-texture-overlay.mjs';
 import { TokenStatusPanel } from '../ui/token-status-panel.mjs';
+import { isActiveGM } from '../helpers/gm-relay.mjs';
 
 /**
  * Progress clock + countdown dice HTML overlays: create on ready/canvasReady, redraw on journal create/update, die expiry -> status removal, clock restore by canvas drop.
@@ -135,7 +136,7 @@ export function registerOverlayHooks() {
     // it (the deleteJournalEntry hook then restores the token's previous light and,
     // because this is a true burn-out, consumes the item).
     const ls = journal.flags?.vagabond?.lightSource;
-    if (ls?.mode === 'clock' && game.user === game.users.activeGM) {
+    if (ls?.mode === 'clock' && isActiveGM()) {
       const filled = foundry.utils.getProperty(changes, 'flags.vagabond.progressClock.filled');
       if (filled === 0) { await journal.delete({ vagabondLightExpired: true }); return; }
     }
@@ -174,7 +175,7 @@ export function registerOverlayHooks() {
 
     // Light source: a deleted burn-down clock douses its token (restore prevLight)
     // and, when hand coupling is on, unequips the lit item.
-    if (game.user === game.users.activeGM) {
+    if (isActiveGM()) {
       const lsFlags = journal.flags?.vagabond?.lightSource;
       if (lsFlags?.tokenUuid) {
         try {

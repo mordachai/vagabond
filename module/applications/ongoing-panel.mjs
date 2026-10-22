@@ -1,5 +1,6 @@
 import { CountdownDice } from '../documents/countdown-dice.mjs';
 import { StatusHelper } from '../helpers/status-helper.mjs';
+import { GMRelay } from '../helpers/gm-relay.mjs';
 
 const { api } = foundry.applications;
 
@@ -185,8 +186,7 @@ export class OngoingPanel extends api.HandlebarsApplicationMixin(api.Application
         if (dice.isOwner || game.user.isGM) {
           await dice.delete();
         } else {
-          const { emitSocket } = await import('../helpers/socket-helper.mjs');
-          emitSocket('deleteCountdownDie', { id: dice.id });
+          GMRelay.send('vagabond.deleteCountdownDie', { id: dice.id });
         }
       }, { signal });
     }

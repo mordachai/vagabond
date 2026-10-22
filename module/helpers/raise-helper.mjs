@@ -2,6 +2,7 @@ import { VagabondRollBuilder } from './roll-builder.mjs';
 import { NpcSenses } from './npc-senses.mjs';
 import { macroNotify } from './item-macro.mjs';
 import { SystemFolders } from './system-folders.mjs';
+import { isActiveGM } from './gm-relay.mjs';
 
 /**
  * Raise Spell — "Corpses in the area of non-Artificial or Undead Beings with cumulative HD no higher than your
@@ -266,7 +267,7 @@ export class RaiseHelper {
    * @param {Actor} undead
    */
   static async release(undead) {
-    if (!game.users.activeGM?.isSelf) return;
+    if (!isActiveGM()) return;
     if (!undead?.getFlag('vagabond', 'raised') || undead.getFlag('vagabond', 'raiseSpent')) return;
     if (this.#releasing.has(undead.id)) return;
     this.#releasing.add(undead.id);
@@ -415,7 +416,7 @@ export class RaiseHelper {
    * `system:spell.raise`. Active GM only.
    */
   static async migrateWorldSpells() {
-    if (game.user !== game.users.activeGM) return;
+    if (!isActiveGM()) return;
     if (game.settings.get('vagabond', 'raiseSpellMigrated')) return;
     const { isCopyOf } = await import('./source-id.mjs');
     const actors = [

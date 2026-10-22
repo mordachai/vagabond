@@ -10,6 +10,7 @@ import { NpcRules } from './npc-rules.mjs';
 import { FocusLink } from './focus-link.mjs';
 import { WardHelper } from './ward-helper.mjs';
 import { AnimationBridge } from './animation-bridge.mjs';
+import { GMRelay } from './gm-relay.mjs';
 
 /**
  * Universal Damage Helper
@@ -2103,8 +2104,7 @@ ${npcOnly ? '' : `
     if (actor.isOwner || game.user.isGM) {
       await actor.update({ 'system.health.value': newHP });
     } else {
-      const { emitSocket } = await import('./socket-helper.mjs');
-      emitSocket('applyDamage', { actorUuid: actor.uuid, newHp: newHP });
+      GMRelay.send('vagabond.applyDamage', { actorUuid: actor.uuid, newHp: newHP });
     }
     Hooks.callAll('vagabond.postDamageApply', { actor, amount: final, damageType, sourceItem, attackerActor, oldHp: currentHP, newHp: newHP });
     return final;
@@ -2198,8 +2198,7 @@ ${npcOnly ? '' : `
       if (defender.isOwner || game.user.isGM) {
         await defender.update({ 'system.health.value': newHp });
       } else {
-        const { emitSocket } = await import('./socket-helper.mjs');
-        emitSocket('applyDamage', { actorUuid: defender.uuid, newHp });
+        GMRelay.send('vagabond.applyDamage', { actorUuid: defender.uuid, newHp });
       }
     }
 
@@ -2733,8 +2732,7 @@ ${npcOnly ? '' : `
         if (targetActor.isOwner || game.user.isGM) {
           await targetActor.update({ [field]: value });
         } else {
-          const { emitSocket } = await import('./socket-helper.mjs');
-          emitSocket('updateActorField', { actorUuid: targetActor.uuid, field, value });
+          GMRelay.send('vagabond.updateActorField', { actorUuid: targetActor.uuid, field, value });
         }
       };
 
@@ -2891,8 +2889,7 @@ ${npcOnly ? '' : `
       if (targetActor.isOwner || game.user.isGM) {
         await targetActor.update({ 'system.health.value': newHP });
       } else {
-        const { emitSocket } = await import('./socket-helper.mjs');
-        emitSocket('applyDamage', { actorUuid: targetActor.uuid, newHp: newHP });
+        GMRelay.send('vagabond.applyDamage', { actorUuid: targetActor.uuid, newHp: newHP });
       }
       Hooks.callAll('vagabond.postDamageApply', { actor: targetActor, amount: _directFinal, incoming: effectiveDamage - wardCut, damageType, sourceItem, attackerActor: sourceActor, oldHp: currentHP, newHp: newHP });
 
@@ -2980,8 +2977,7 @@ ${npcOnly ? '' : `
     if (actor.isOwner || game.user.isGM) {
       await actor.update({ 'system.health.value': newHP });
     } else {
-      const { emitSocket } = await import('./socket-helper.mjs');
-      emitSocket('applyDamage', { actorUuid: actor.uuid, newHp: newHP });
+      GMRelay.send('vagabond.applyDamage', { actorUuid: actor.uuid, newHp: newHP });
     }
     Hooks.callAll('vagabond.postDamageApply', { actor, amount: _saveFinal, damageType, sourceItem: null, oldHp: currentHP, newHp: newHP });
 

@@ -1,6 +1,7 @@
 import { StatusHelper } from './status-helper.mjs';
 import { VagabondDamagePipeline } from './damage-pipeline.mjs';
 import { macroNotify } from './item-macro.mjs';
+import { GMRelay, isActiveGM } from './gm-relay.mjs';
 
 /**
  * Spell Trackers — buff Spells put a Tracker status on their Targets (Bless, Exalt, Ward, Guide, Tempo, Freeze,
@@ -145,8 +146,7 @@ export class SpellTrackerHelper {
     for (const actor of targets) {
       if (!actor.isOwner && !game.user.isGM) {
         // runAsGM relays to the GM; without one, a player can only reach their own Beings
-        const { emitSocket } = await import('./socket-helper.mjs');
-        emitSocket('applyStatus', { actorUuid: actor.uuid, statusId, active: true });
+        GMRelay.send('vagabond.applyStatus', { actorUuid: actor.uuid, statusId, active: true });
         continue;
       }
       if (!actor.statuses?.has(statusId)) await actor.toggleStatusEffect(statusId, { active: true });
@@ -369,7 +369,7 @@ export class SpellTrackerHelper {
    * is left alone. Active GM only, guarded by `spellTrackerMacrosMigrated`.
    */
   static async migrateWorldSpells() {
-    if (game.user !== game.users.activeGM) return;
+    if (!isActiveGM()) return;
     if (game.settings.get('vagabond', 'spellTrackerMacrosMigrated')) return;
     const { isCopyOf } = await import('./source-id.mjs');
 
@@ -396,7 +396,7 @@ export class SpellTrackerHelper {
    * blanket Favor change (now the sight-only vote in `targetingVotes`).
    */
   static async migrateStatusSpells() {
-    if (game.user !== game.users.activeGM) return;
+    if (!isActiveGM()) return;
     if (game.settings.get('vagabond', 'spellStatusRulesMigrated3')) return;
     const { isCopyOf } = await import('./source-id.mjs');
 
@@ -458,7 +458,7 @@ export class SpellTrackerHelper {
    * of Burn would read "needs damage in the Cast" and never apply Burning. Active GM only.
    */
   static async migrateSpellEffectEntries() {
-    if (game.user !== game.users.activeGM) return;
+    if (!isActiveGM()) return;
     if (game.settings.get('vagabond', 'spellEffectEntriesMigrated')) return;
     const { isCopyOf } = await import('./source-id.mjs');
     const ids = Object.keys(this.#EFFECT_STANDALONE_SPELLS);
@@ -485,7 +485,7 @@ export class SpellTrackerHelper {
    * Target Objects switches (Cast dialog Target picker), matched by compendium source id.
    */
   static async migrateSpellTargetSwitches() {
-    if (game.user !== game.users.activeGM) return;
+    if (!isActiveGM()) return;
     if (game.settings.get('vagabond', 'spellTargetSwitchesMigrated')) return;
     const pack = game.packs.get('vagabond.spells');
     if (!pack) return;
@@ -512,7 +512,7 @@ export class SpellTrackerHelper {
    * Only turns them on, never off (a GM may have switched one on).
    */
   static async migrateSpellFocusOnCast() {
-    if (game.user !== game.users.activeGM) return;
+    if (!isActiveGM()) return;
     if (game.settings.get('vagabond', 'spellFocusSwitchesMigrated2')) return;
     const pack = game.packs.get('vagabond.spells');
     if (!pack) return;
@@ -542,7 +542,7 @@ export class SpellTrackerHelper {
    * (`system.focusUpkeep`: Ward, Polymorph, Beast) and Ward Upcast switch, matched by compendium source id.
    */
   static async migrateSpellFocusUpkeep() {
-    if (game.user !== game.users.activeGM) return;
+    if (!isActiveGM()) return;
     if (game.settings.get('vagabond', 'spellFocusUpkeepMigrated')) return;
     const pack = game.packs.get('vagabond.spells');
     if (!pack) return;
@@ -583,7 +583,7 @@ export class SpellTrackerHelper {
    * `causedStatuses` / `critCausedStatuses`, matched by compendium source id. Waits for a rebuilt pack.
    */
   static async migrateSpellStatusEntries() {
-    if (game.user !== game.users.activeGM) return;
+    if (!isActiveGM()) return;
     if (game.settings.get('vagabond', 'spellStatusEntriesFixed')) return;
     const pack = game.packs.get('vagabond.spells');
     if (!pack) return;
@@ -654,7 +654,7 @@ export class SpellTrackerHelper {
     });
     Hooks.on('updateActor', (actor, changes, options) => {
       const before = options.vagabondFocusBefore;
-      if (!before || game.users.activeGM !== game.user) return;
+      if (!before || !isActiveGM()) return;
       const now = actor.system.focus?.spellIds ?? [];
       const dropped = before.filter(id => !now.includes(id));
       if (!dropped.length) return;

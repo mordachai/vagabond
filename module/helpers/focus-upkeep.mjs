@@ -1,4 +1,5 @@
 import { SpellTargetPicker } from './spell-target-picker.mjs';
+import { isActiveGM } from './gm-relay.mjs';
 
 /**
  * Focus Mana — Spells whose Focus costs Mana (`system.focusUpkeep`, book wording):
@@ -148,7 +149,7 @@ export class FocusUpkeep {
   /** Register the hooks. Synchronous, called once at module load. */
   static registerHooks() {
     Hooks.on('updateCombat', (combat, changed) => {
-      if (game.user !== game.users.activeGM) return;
+      if (!isActiveGM()) return;
       if (changed.turn === undefined && changed.round === undefined) return;
       if (!combat.started) return;
       const actor = combat.combatant?.actor;

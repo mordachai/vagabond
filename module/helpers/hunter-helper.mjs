@@ -1,4 +1,5 @@
 import { classFeatureText } from './feature-text.mjs';
+import { GMRelay, isActiveGM } from './gm-relay.mjs';
 
 /**
  * Hunter — Hunter’s Mark, Lethal Precision, Apex Predator (optional automation + feature button).
@@ -190,8 +191,7 @@ export class HunterHelper {
         if (ids.length) await actor.deleteEmbeddedDocuments('ActiveEffect', ids);
       }
     } else {
-      const { emitSocket } = await import('./socket-helper.mjs');
-      emitSocket('applyStatus', { actorUuid: actor.uuid, statusId: 'marked', active, description });
+      GMRelay.send('vagabond.applyStatus', { actorUuid: actor.uuid, statusId: 'marked', active, description });
     }
   }
 
@@ -261,7 +261,7 @@ export class HunterHelper {
     Hooks.on('vagabond.calculateFinalDamage', (ctx) => this.#onFinalDamage(ctx));
     // Mark effect gone (drop / move / deleted by hand) → the Target is no longer Marked. Active GM only.
     Hooks.on('deleteActiveEffect', (effect) => {
-      if (!effect?.flags?.vagabond?.huntersMark || game.users.activeGM !== game.user) return;
+      if (!effect?.flags?.vagabond?.huntersMark || !isActiveGM()) return;
       this.#onMarkEffectDeleted(effect).catch(err => console.error('vagabond | Hunter’s Mark: could not clear Marked', err));
     });
   }

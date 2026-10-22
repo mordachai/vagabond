@@ -6,6 +6,7 @@ import { RegionTextureOverlay } from '../ui/region-texture-overlay.mjs';
 import { TokenStatusPanel } from '../ui/token-status-panel.mjs';
 import { VagabondSpellSequencer } from '../helpers/spell-sequencer.mjs';
 import { VagabondFXResolver } from '../helpers/fx-file-resolver.mjs';
+import { isActiveGM } from '../helpers/gm-relay.mjs';
 
 /**
  * Register every Vagabond game setting and the Settings Hub menu buttons.
@@ -49,7 +50,7 @@ export function registerGameSettings({ refreshClockDependents, applyTokenEffectV
   // maximum. World setting onChange fires on every client — only the active GM writes.
   const syncActivationPoints = async () => {
     refreshCombatDisplays();
-    if (!game.users.activeGM?.isSelf) return;
+    if (!isActiveGM()) return;
     const newMax = game.settings.get('vagabond', 'useActivationPoints')
       ? (game.settings.get('vagabond', 'defaultActivationPoints') || 2)
       : 1;

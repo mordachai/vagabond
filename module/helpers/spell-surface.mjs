@@ -2,6 +2,7 @@ import { AutomationMode } from './automation-mode.mjs';
 import { VagabondSpellSequencer } from './spell-sequencer.mjs';
 import { VagabondFXResolver } from './fx-file-resolver.mjs';
 import { RegionTextureOverlay } from '../ui/region-texture-overlay.mjs';
+import { GMRelay, isActiveGM } from './gm-relay.mjs';
 
 /**
  * Spell Surface — Spells that leave their area on the map, driven by the Spell's `system.surface` rules (no per-Spell
@@ -44,7 +45,6 @@ export class SpellSurface {
     '0SVJ6QW8j6i3JkGe': { name: 'Gas', surface: { whileIn: 'sickened', clip: 'jb2a.fog_cloud.01.white', tint: '#8fd14f' } },
   };
 
-  static #queue = Promise.resolve();
   /** Region ids whose loop this client plays. */
   static #looping = new Set();
   /** Sequencer has set up this scene's effects (it tears down every effect while it does, ours too). */
@@ -58,10 +58,9 @@ export class SpellSurface {
 
   static #esc(s) { return foundry.utils.escapeHTML(String(s ?? '')); }
 
+  /** One at a time on the GM (the relay handlers share this queue). */
   static #serialize(fn) {
-    const run = this.#queue.then(fn, fn);
-    this.#queue = run.catch(() => {});
-    return run;
+    return GMRelay.serialize('surface', fn);
   }
 
   /** The Spell's Surface rules, or null. */
@@ -85,23 +84,20 @@ export class SpellSurface {
     CONFIG.RegionBehavior.typeIcons ??= {};
     CONFIG.RegionBehavior.typeIcons[this.BEHAVIOR] = 'fa-solid fa-wand-magic-sparkles';
     registerMacroHandler('spell.surface', (scope) => this.cast(scope));
-    CONFIG.queries[this.QUERIES.create] = (data, { user }) => this.#serialize(() => this._create(data, user));
-    CONFIG.queries[this.QUERIES.dismiss] = (data, { user }) => this.#serialize(() => this._dismiss(data, user));
+    GMRelay.register(this.QUERIES.create, (data, user) => this._create(data, user), { queue: 'surface' });
+    GMRelay.register(this.QUERIES.dismiss, (data, user) => this._dismiss(data, user), { queue: 'surface' });
   }
 
-  /** Run a query on the active GM (locally when this user is it). */
+  /** Run a handler on the active GM (here when this user is it). */
   static async #request(name, data, spellName) {
-    const gm = game.users.activeGM;
-    if (!gm) {
-      ui.notifications.warn(this.#L('NoGM', { spell: spellName }));
-      return null;
-    }
-    if (gm.isSelf) return this.#serialize(() => (name === this.QUERIES.create ? this._create(data, game.user) : this._dismiss(data, game.user)));
     try {
-      return await gm.query(name, data, { timeout: 60 * 1000 });
+      return await GMRelay.run(name, data, { timeout: 60 * 1000 });
     } catch (err) {
-      console.error(`vagabond | Spell Surface: GM query ${name} failed`, err);
-      ui.notifications.error(this.#L('RelayFailed', { spell: spellName, gm: gm.name }));
+      if (GMRelay.isNoGM(err)) ui.notifications.warn(this.#L('NoGM', { spell: spellName }));
+      else {
+        console.error(`vagabond | Spell Surface: GM query ${name} failed`, err);
+        ui.notifications.error(this.#L('RelayFailed', { spell: spellName, gm: game.users.activeGM?.name ?? '' }));
+      }
       return null;
     }
   }
@@ -707,7 +703,7 @@ export class SpellSurface {
     });
     // Any other Cast lasts "Until your next Turn"
     Hooks.on('updateCombat', (combat, changed) => {
-      if (game.user !== game.users.activeGM) return;
+      if (!isActiveGM()) return;
       if (changed.turn === undefined && changed.round === undefined) return;
       if (!combat.started) return;
       const actor = combat.combatant?.actor;
@@ -728,7 +724,7 @@ export class SpellSurface {
     });
     // The Surface is gone (any way): its while-inside statuses end
     Hooks.on('deleteRegion', (region) => {
-      if (game.user !== game.users.activeGM || !this.of(region)) return;
+      if (!isActiveGM() || !this.of(region)) return;
       const actors = new Set([...region.parent.tokens.map(t => t.actor), ...game.actors].filter(Boolean));
       // Queued with the TOKEN_EXIT removals the deletion also fires, so one effect is never deleted twice
       this.#serialize(async () => { for (const actor of actors) await this.#removeWhileIn(actor, region.uuid); });
@@ -744,7 +740,7 @@ export class SpellSurface {
    * the `system:spell.surface` hit macro (when they have no hit macro of their own) and Focus on Cast. Active GM only.
    */
   static async migrateWorldSpells() {
-    if (game.user !== game.users.activeGM) return;
+    if (!isActiveGM()) return;
     if (game.settings.get('vagabond', 'spellSurfaceMigrated3')) return;
     const { isCopyOf } = await import('./source-id.mjs');
     const actors = [...game.actors.contents, ...game.scenes.contents.flatMap(s => s.tokens.contents.filter(t => !t.actorLink && t.actor).map(t => t.actor))];
@@ -779,7 +775,7 @@ export class SpellSurfaceBehavior extends foundry.data.regionBehaviors.RegionBeh
   }
 
   static #gm() {
-    return !!game.users.activeGM?.isSelf;
+    return isActiveGM();
   }
 
   static async #onEnter(event) {

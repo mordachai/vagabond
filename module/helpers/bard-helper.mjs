@@ -1,6 +1,6 @@
 import { isCopyOf } from './source-id.mjs';
 import { combatRollData } from './rule-rolldata.mjs';
-import { emitSocket } from './socket-helper.mjs';
+import { GMRelay, isActiveGM } from './gm-relay.mjs';
 
 const BARD_CLASS_ID = '3BTEyMIzoyGVTuxz';
 
@@ -150,7 +150,7 @@ export class BardHelper {
       ui.notifications.warn(game.i18n.localize('VAGABOND.Virtuoso.NoGM'));
       return;
     }
-    emitSocket('virtuosoApply', { bardUuid, boon, recipientUuids });
+    GMRelay.send('vagabond.virtuosoApply', { bardUuid, boon, recipientUuids });
   }
 
   /**
@@ -226,7 +226,7 @@ export class BardHelper {
     const current = bard.system.currentLuck ?? 0;
     const next = current + 1;
     if (bard.isOwner) await bard.update({ 'system.currentLuck': next });
-    else emitSocket('grantLuck', { actorUuid: bard.uuid, amount: 1 });
+    else GMRelay.send('vagabond.grantLuck', { actorUuid: bard.uuid, amount: 1 });
     const { VagabondChatCard } = await import('./chat-card.mjs');
     await VagabondChatCard.luckGain(bard, next, game.i18n.localize('VAGABOND.Virtuoso.Overtuned'));
   }
@@ -246,7 +246,7 @@ export class BardHelper {
    * retries next load.
    */
   static async migrateBardClass() {
-    if (game.user !== game.users.activeGM) return;
+    if (!isActiveGM()) return;
     if (game.settings.get('vagabond', 'bardClassMigrated')) return;
 
     const source = await game.packs.get('vagabond.classes')?.getDocument(BARD_CLASS_ID);

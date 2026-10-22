@@ -1,5 +1,6 @@
 import { VagabondDamageHelper } from './damage-helper.mjs';
 import { isStackableZeroSlot } from './stack-helper.mjs';
+import { isActiveGM } from './gm-relay.mjs';
 
 /**
  * Helper utilities for equipment type checking, state management, and visual enrichment.
@@ -669,7 +670,7 @@ export class EquipmentHelper {
    * @param {Actor} actor
    */
   static queueArmorRestrainedSync(actor) {
-    if (actor?.type !== 'character' || !game.users.activeGM?.isSelf) return;
+    if (actor?.type !== 'character' || !isActiveGM()) return;
     const key = actor.uuid;
     clearTimeout(this.#armorSyncTimers.get(key));
     this.#armorSyncTimers.set(key, setTimeout(() => {
@@ -718,7 +719,7 @@ export class EquipmentHelper {
    * Active GM only; guarded by the hidden `weaponPropertyEffectsMigrated` setting.
    */
   static async migrateWeaponPropertyEffects() {
-    if (game.user !== game.users.activeGM) return;
+    if (!isActiveGM()) return;
     if (game.settings.get('vagabond', 'weaponPropertyEffectsMigrated')) return;
 
     const defs = {
@@ -765,7 +766,7 @@ export class EquipmentHelper {
    * Can't be Scrapped switch (Breath Attacks), matched by compendium source id. Waits for a rebuilt pack.
    */
   static async migrateNoScrap() {
-    if (game.user !== game.users.activeGM) return;
+    if (!isActiveGM()) return;
     if (game.settings.get('vagabond', 'noScrapMigrated')) return;
     const { sourceDocId } = await import('./source-id.mjs');
     const ids = new Set();

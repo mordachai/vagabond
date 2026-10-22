@@ -369,6 +369,10 @@
       "Level": "Nível",
       "HD": "DV"
     },
+    "GMRelay": {
+      "NoGM": "É preciso um Mestre conectado para isto.",
+      "Failed": "O Mestre não conseguiu fazer isto. Peça para ele recarregar e tente de novo."
+    },
     "Macro": {
       "NoGM": "Nenhum Mestre conectado para executar isto.",
       "RelayFailed": "O Mestre ({gm}) não respondeu. Peça para ele recarregar e tente de novo.",

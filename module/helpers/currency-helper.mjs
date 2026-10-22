@@ -1,3 +1,5 @@
+import { isActiveGM } from './gm-relay.mjs';
+
 /**
  * Currency math — the single choke point for all g/s/c arithmetic (shop, party
  * treasury transfers, rest lodging, char builder budgets, crafting). The ONLY place
@@ -159,7 +161,7 @@ export class CurrencyHelper {
    * world setting. Idempotent via the hidden `copperScaleMigrated` world setting.
    */
   static async migrateCopperScale() {
-    if (game.user !== game.users.activeGM) return;
+    if (!isActiveGM()) return;
     if (game.settings.get('vagabond', 'copperScaleMigrated')) return;
 
     const F = 10;

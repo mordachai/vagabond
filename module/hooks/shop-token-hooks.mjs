@@ -3,6 +3,7 @@ import { VAGABOND } from '../helpers/config.mjs';
 import { NpcFlying } from '../helpers/npc-flying.mjs';
 import { NpcSenses } from '../helpers/npc-senses.mjs';
 import { TokenPortrait } from '../helpers/token-portrait.mjs';
+import { isActiveGM } from '../helpers/gm-relay.mjs';
 
 /**
  * New-actor token defaults (party/construct/shop) + shop token rules, ready sweep, padlock marker, Token HUD buttons.
@@ -61,7 +62,7 @@ export function registerShopTokenHooks() {
 
   // Existing shops: heal ownership + token settings once the GM is ready (idempotent, active GM only)
   Hooks.once('ready', async () => {
-    if (game.user !== game.users.activeGM) return;
+    if (!isActiveGM()) return;
     try {
       const OBSERVER = CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER;
       const rules = shopTokenRules();
@@ -139,7 +140,7 @@ export function registerShopTokenHooks() {
   // NPC senses → token vision / detection modes (prototype token + placed linked tokens).
   // Single active GM only, so multi-GM sessions don't double-write.
   Hooks.on('updateActor', (actor, changes) => {
-    if (actor.type !== 'npc' || !game.users.activeGM?.isSelf) return;
+    if (actor.type !== 'npc' || !isActiveGM()) return;
     if (!foundry.utils.hasProperty(changes, 'system.senses')
       && !foundry.utils.hasProperty(changes, 'system.sensesNote')) return;
     NpcSenses.syncActorTokens(actor);
@@ -149,17 +150,17 @@ export function registerShopTokenHooks() {
   // Single active GM only; sync() is idempotent, so the canvasReady sweep also catches
   // NPCs placed/edited before this existed.
   Hooks.on('createToken', (token) => {
-    if (!game.users.activeGM?.isSelf || token.actor?.type !== 'npc') return;
+    if (!isActiveGM() || token.actor?.type !== 'npc') return;
     NpcFlying.sync(token.actor);
   });
   Hooks.on('updateActor', (actor, changes) => {
-    if (actor.type !== 'npc' || !game.users.activeGM?.isSelf) return;
+    if (actor.type !== 'npc' || !isActiveGM()) return;
     if (!['system.speed', 'system.speedTypes', 'system.flyingByDefault']
       .some((path) => foundry.utils.hasProperty(changes, path))) return;
     NpcFlying.sync(actor);
   });
   Hooks.on('canvasReady', () => {
-    if (game.users.activeGM?.isSelf) NpcFlying.sweep();
+    if (isActiveGM()) NpcFlying.sweep();
   });
 
   // Token HUD status palette: book Statuses and Trackers under their own headings

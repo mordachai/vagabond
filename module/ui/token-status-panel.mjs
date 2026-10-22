@@ -1,3 +1,4 @@
+import { GMRelay } from '../helpers/gm-relay.mjs';
 /**
  * Screen-corner panel that displays the selected token's status conditions.
  *
@@ -238,8 +239,7 @@ export class TokenStatusPanel {
                 await effect.delete();
               } else {
                 const removeStatusId = effect.statuses?.first() || effect.flags?.core?.statusId;
-                const { emitSocket } = await import('../helpers/socket-helper.mjs');
-                emitSocket('applyStatus', { actorUuid: actor.uuid, statusId: removeStatusId, active: false });
+                GMRelay.send('vagabond.applyStatus', { actorUuid: actor.uuid, statusId: removeStatusId, active: false });
               }
             }
           }

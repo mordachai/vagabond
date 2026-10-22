@@ -1,5 +1,6 @@
 import { isCopyOf } from '../source-id.mjs';
 import { CurrencyHelper } from '../currency-helper.mjs';
+import { isActiveGM } from '../gm-relay.mjs';
 
 /**
  * Formula-grant math for the Alchemist's Alchemy feature (RAW §1, docs/crafting-plan.md
@@ -178,7 +179,7 @@ export class AlchemyHelper {
    * effect) it aborts WITHOUT setting the guard, so it retries on the next load.
    */
   static async migrateAlchemistClass() {
-    if (game.user !== game.users.activeGM) return;
+    if (!isActiveGM()) return;
     if (game.settings.get('vagabond', 'alchemistClassMigrated')) return;
 
     const source = await game.packs.get('vagabond.classes')?.getDocument('4kXK5bZHEb3PMzLy');

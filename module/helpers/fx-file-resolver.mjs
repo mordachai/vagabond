@@ -19,16 +19,14 @@
  * and never browse — those are intentionally left untouched.
  */
 
-import { emitSocket, registerSocketAction } from './socket-helper.mjs';
+import { GMRelay } from './gm-relay.mjs';
 
 const SETTING = 'fxResolvedCache';
+const RESOLVE_QUERY = 'vagabond.fx.resolve';
 
 export class VagabondFXResolver {
   /** path → string[] resolved files (in-memory cache, all clients) */
   static _mem = new Map();
-  /** requestId → { resolve, timer } for pending GM resolution requests (players) */
-  static _pending = new Map();
-  static _reqSeq = 0;
 
   /**
    * True only for raw filesystem wildcard paths that would trigger FilePicker.browse.
@@ -107,22 +105,17 @@ export class VagabondFXResolver {
   }
 
   /**
-   * Player: ask the GM to resolve a wildcard, await the broadcast reply.
-   * Resolves to the file array, or null on timeout.
+   * Player: ask the GM (relay query) to resolve a wildcard.
+   * Resolves to the file array, or null (no GM, timeout, nothing found).
    * @param {string} p
    * @returns {Promise<string[]|null>}
    * @private
    */
-  static _requestFromGM(p) {
-    return new Promise(resolve => {
-      const id = `${game.user.id}-${++this._reqSeq}-${Date.now()}`;
-      const timer = setTimeout(() => {
-        this._pending.delete(id);
-        resolve(null);
-      }, 4000);
-      this._pending.set(id, { resolve, timer });
-      emitSocket('fxResolveRequest', { requestId: id, path: p });
-    });
+  static async _requestFromGM(p) {
+    const files = await GMRelay.run(RESOLVE_QUERY, { path: p }, { timeout: 4000 }).catch(() => null);
+    if (!Array.isArray(files) || !files.length) return null;
+    this._mem.set(p, files);
+    return files;
   }
 
   /**
@@ -224,23 +217,9 @@ export class VagabondFXResolver {
   }
 
   /**
-   * Register socket request/reply handlers. Call once in the ready hook on all clients.
+   * Register the GM relay handler (the GM resolves a player's wildcard). Call once in the ready hook on all clients.
    */
-  static registerSocket() {
-    // GM resolves a requested wildcard and broadcasts the reply.
-    registerSocketAction('fxResolveRequest', async ({ requestId, path }) => {
-      const files = await this._gmResolve(path);
-      emitSocket('fxResolveReply', { requestId, path, files });
-    });
-    // All clients receive the reply; settle the pending promise + warm the cache.
-    registerSocketAction('fxResolveReply', ({ requestId, path, files }) => {
-      if (Array.isArray(files) && files.length) this._mem.set(path, files);
-      const pend = this._pending.get(requestId);
-      if (pend) {
-        clearTimeout(pend.timer);
-        this._pending.delete(requestId);
-        pend.resolve(files?.length ? files : null);
-      }
-    }, { gmOnly: false });
+  static registerRelay() {
+    GMRelay.register(RESOLVE_QUERY, ({ path }) => this._gmResolve(path));
   }
 }

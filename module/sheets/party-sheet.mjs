@@ -11,6 +11,7 @@ import { CoinTransferDialog } from '../applications/coin-transfer-dialog.mjs';
 import { VagabondTextParser } from '../helpers/text-parser.mjs';
 import { buildStatsSection, buildSlotsRow, buildWeaponProperties } from '../helpers/item-sections.mjs';
 import { PartyNotes } from '../helpers/party-notes.mjs';
+import { GMRelay } from '../helpers/gm-relay.mjs';
 
 /** Inventory tab sections, in display order (containers and unknown types fall under `gear`). */
 const INVENTORY_GROUPS = ['weapon', 'armor', 'alchemical', 'relic', 'gear'];
@@ -48,8 +49,7 @@ export class VagabondPartySheet extends VagabondActorSheet {
     if (actor.isOwner || game.user.isGM) {
       await actor.update({ [field]: value });
     } else {
-      const { emitSocket } = await import('../helpers/socket-helper.mjs');
-      emitSocket('updateActorField', { actorUuid: actor.uuid, field, value });
+      GMRelay.send('vagabond.updateActorField', { actorUuid: actor.uuid, field, value });
     }
   }
 

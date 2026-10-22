@@ -1,4 +1,5 @@
 import { relicWeaponBonus } from './weapon-rules.mjs';
+import { isActiveGM } from './gm-relay.mjs';
 
 /**
  * Statblock rules the book prints as ability text, automated from NPC fields (`actor-npc.mjs`):
@@ -162,7 +163,7 @@ export class NpcRules {
 
   /** Debounced, active-GM-only entry point for syncSunlight. Safe to call from any hook on every client. */
   static queueSunlightSync(actor) {
-    if (actor?.type !== 'npc' || !game.users.activeGM?.isSelf) return;
+    if (actor?.type !== 'npc' || !isActiveGM()) return;
     const key = actor.uuid;
     clearTimeout(this.#sunlightTimers.get(key));
     this.#sunlightTimers.set(key, setTimeout(() => {

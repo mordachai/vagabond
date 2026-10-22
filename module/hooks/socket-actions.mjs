@@ -23,7 +23,7 @@ import { VagabondFXResolver } from '../helpers/fx-file-resolver.mjs';
 import { GunslingerHelper } from '../helpers/gunslinger-helper.mjs';
 import { HunterHelper } from '../helpers/hunter-helper.mjs';
 import { ItemDisguise } from '../helpers/item-disguise.mjs';
-import { registerMacroHandler, registerCastGate, executeItemMacro } from '../helpers/item-macro.mjs';
+import { registerMacroHandler, registerCastGate } from '../helpers/item-macro.mjs';
 import { ItemNameTokens } from '../helpers/item-name-tokens.mjs';
 import { LightSource } from '../helpers/light-source.mjs';
 import { RaiseHelper } from '../helpers/raise-helper.mjs';
@@ -32,7 +32,8 @@ import { RevelatorHelper } from '../helpers/revelator-helper.mjs';
 import { VagabondRollBuilder } from '../helpers/roll-builder.mjs';
 import { ShopPricing } from '../helpers/shop-pricing.mjs';
 import { ShopTransactions } from '../helpers/shop-transactions.mjs';
-import { registerSocket, registerSocketAction, emitSocket } from '../helpers/socket-helper.mjs';
+import { GMRelay } from '../helpers/gm-relay.mjs';
+import { registerSocket, registerSocketAction } from '../helpers/socket-helper.mjs';
 import { SorcererHelper } from '../helpers/sorcerer-helper.mjs';
 import { VagabondSpellSequencer } from '../helpers/spell-sequencer.mjs';
 import { SpellSurface } from '../helpers/spell-surface.mjs';
@@ -44,7 +45,7 @@ import { WitchHelper } from '../helpers/witch-helper.mjs';
 import { WizardHelper } from '../helpers/wizard-helper.mjs';
 
 /**
- * Socket relay: built-in GM-side socket actions (registered on ready).
+ * Built-in GM relay handlers + broadcast socket actions + the `game.vagabond` API (registered on ready).
  * Moved out of vagabond.mjs; called once at module load, in the original order.
  */
 export function registerSocketActions() {
@@ -54,8 +55,8 @@ export function registerSocketActions() {
   Hooks.once('ready', function () {
     registerSocket();
 
-    // Built-in socket actions — executed on GM client only
-    registerSocketAction('applyDamage', async ({ actorUuid, newHp }) => {
+    // Built-in GM relay handlers: GMRelay.send('vagabond.<action>', …) from any client
+    GMRelay.register('vagabond.applyDamage', async ({ actorUuid, newHp }) => {
       const actor = await fromUuid(actorUuid);
       if (!actor) return;
       await actor.update({ 'system.health.value': newHp });
@@ -63,13 +64,13 @@ export function registerSocketActions() {
 
     // Generic relay for cross-actor field writes (heal/recover/recharge targeting
     // an actor the clicking user doesn't own, party-sheet HP/fatigue bars, etc).
-    registerSocketAction('updateActorField', async ({ actorUuid, field, value }) => {
+    GMRelay.register('vagabond.updateActorField', async ({ actorUuid, field, value }) => {
       const actor = await fromUuid(actorUuid);
       if (!actor) return;
       await actor.update({ [field]: value });
     });
 
-    registerSocketAction('applyStatus', async ({ actorUuid, statusId, active, description, focusLink }) => {
+    GMRelay.register('vagabond.applyStatus', async ({ actorUuid, statusId, active, description, focusLink }) => {
       const actor = await fromUuid(actorUuid);
       if (!actor) return;
       if (active && !actor.statuses?.has(statusId)) {
@@ -89,30 +90,26 @@ export function registerSocketActions() {
       }
     });
 
-    registerSocketAction('createCountdownDie', async (data) => {
-      await CountdownDice.create(data);
-    });
+    GMRelay.register('vagabond.createCountdownDie', async (data) => (await CountdownDice.create(data))?.id ?? null);
 
-    registerSocketAction('deleteCountdownDie', async ({ id }) => {
+    GMRelay.register('vagabond.deleteCountdownDie', async ({ id }) => {
       const dice = game.journal.get(id);
       if (dice) await dice.delete();
     });
 
-    registerSocketAction('createProgressClock', async (data) => {
-      await ProgressClock.create(data);
-    });
+    GMRelay.register('vagabond.createProgressClock', async (data) => (await ProgressClock.create(data))?.id ?? null);
 
     // Combat Carousel / sidebar Combat Tracker — players may drag-reorder cards or
     // rows within their own (friendly) faction group; Combatant writes route
     // through the GM since a player rarely owns every actor in that group.
-    registerSocketAction('reorderCombatants', async ({ combatId, updates }) => {
+    GMRelay.register('vagabond.reorderCombatants', async ({ combatId, updates }) => {
       const combat = game.combats.get(combatId);
       if (!combat) return;
       await combat.updateEmbeddedDocuments('Combatant', updates);
     });
 
     // Bard Virtuoso — players route the benefit copy onto Group members through the GM.
-    registerSocketAction('virtuosoApply', (payload) => BardHelper.apply(payload));
+    GMRelay.register('vagabond.virtuosoApply', (payload) => BardHelper.apply(payload));
     // Catalyze / Mix open the Alchemy lab (sheet tab) at that station; no lab (no Formula grants) = warning.
     const openLab = (scope, station) => (AlchemyLab.hasLab(scope.actor)
       ? AlchemyLab.openSheet(scope.actor, station)
@@ -171,7 +168,7 @@ export function registerSocketActions() {
       end: (actor) => WitchHelper.dropHex(actor),
     });
 
-    registerSocketAction('grantLuck', async ({ actorUuid, amount }) => {
+    GMRelay.register('vagabond.grantLuck', async ({ actorUuid, amount }) => {
       const actor = await fromUuid(actorUuid);
       if (!actor) return;
       // Luck Pool has no cap (maxLuck = Rest reset value only).
@@ -182,23 +179,14 @@ export function registerSocketActions() {
 
     // Imbue relay — caster writes/clears the imbue payload on a weapon they don't own
     // (another player's equipped weapon, or the wielder's weapon at delivery time).
-    registerSocketAction('imbueUpdateWeapon', async ({ weaponUuid, data }) => {
+    GMRelay.register('vagabond.imbueUpdateWeapon', async ({ weaponUuid, data }) => {
       const weapon = await fromUuid(weaponUuid);
       if (!weapon) return;
       await weapon.update({ 'system.imbuedSpell': data });
     });
 
-    // Legacy socket relay (clients on older code); current clients use the `vagabond.runItemMacro` query.
-    registerSocketAction('runItemMacro', async (payload) => {
-      try {
-        await executeItemMacro(payload);
-      } catch (err) {
-        console.error('VAGABOND | GM-relayed macro execution failed:', err);
-      }
-    });
-
     // Light source relays — non-owners route privileged token/clock writes to the GM.
-    registerSocketAction('lightApply', async ({ tokenUuid, light }) => {
+    GMRelay.register('vagabond.lightApply', async ({ tokenUuid, light }) => {
       const tdoc = await fromUuid(tokenUuid);
       if (!tdoc) return;
       const wanted = LightSource._sightForLight(light);
@@ -212,7 +200,7 @@ export function registerSocketActions() {
       }
       await tdoc.update(update);
     });
-    registerSocketAction('lightDouse', async ({ tokenUuid }) => {
+    GMRelay.register('vagabond.lightDouse', async ({ tokenUuid }) => {
       const tdoc = await fromUuid(tokenUuid);
       if (!tdoc || tdoc.getFlag('vagabond', 'prevLight') === undefined) return;
       await tdoc.update({
@@ -222,10 +210,10 @@ export function registerSocketActions() {
       await tdoc.unsetFlag('vagabond', 'prevLight');
       if (tdoc.getFlag('vagabond', 'prevSight') !== undefined) await tdoc.unsetFlag('vagabond', 'prevSight');
     });
-    registerSocketAction('lightSpawnClock', async (meta) => {
+    GMRelay.register('vagabond.lightSpawnClock', async (meta) => {
       await LightSource._createClockGM(meta);
     });
-    registerSocketAction('lightDeleteClock', async ({ id }) => {
+    GMRelay.register('vagabond.lightDeleteClock', async ({ id }) => {
       await game.journal.get(id)?.delete();
     });
 
@@ -233,14 +221,14 @@ export function registerSocketActions() {
     // its own distance/wall-based volume from its own listener tokens and plays a plain
     // one-shot sound locally. Keeps audio timing in line with the locally-rendered FX.
     // GM "Show to Players": every targeted client opens the store window.
-    registerSocketAction('shopShow', (data) => ShopApp.onShowSocket(data), { gmOnly: false });
+    registerSocketAction('shopShow', (data) => ShopApp.onShowSocket(data));
 
     registerSocketAction('spellSoundPlay', (data) => {
       VagabondSpellSequencer._renderLocalPositionalSound(data);
-    }, { gmOnly: false });
+    });
 
-    // Sequencer FX wildcard resolution (GM resolves, players request via socket).
-    VagabondFXResolver.registerSocket();
+    // Sequencer FX wildcard resolution (GM resolves, players ask through the GM relay).
+    VagabondFXResolver.registerRelay();
 
     // Public API for external modules
     game.vagabond = {
@@ -349,9 +337,12 @@ export function registerSocketActions() {
         // game.vagabond.api.readActor(actorOrTokenOrUuidOrId)
         readActor: VagabondActor.read,
       },
+      // GM relay: game.vagabond.gmRelay.run(name, data) awaits the GM handler's answer
+      gmRelay: GMRelay,
+      // Older module API: emit = fire-and-forget GM relay (built-in actions by bare name), register = GM handler
       socket: {
-        emit: emitSocket,
-        register: registerSocketAction,
+        emit: (action, payload) => GMRelay.send(GMRelay.has(`vagabond.${action}`) ? `vagabond.${action}` : action, payload),
+        register: (action, handler) => GMRelay.register(action, (data) => handler(data)),
       },
     };
   });

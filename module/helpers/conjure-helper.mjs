@@ -1,6 +1,7 @@
 import { SpellTargetPicker } from './spell-target-picker.mjs';
 import { CurrencyHelper } from './currency-helper.mjs';
 import { SystemFolders } from './system-folders.mjs';
+import { GMRelay, isActiveGM } from './gm-relay.mjs';
 
 /**
  * Conjure — Spells that call things forth, driven by the Spell's `system.conjure` rules (no per-Spell code):
@@ -45,8 +46,6 @@ export class ConjureHelper {
     },
   };
 
-  static #queue = Promise.resolve();
-
   static #L(key, data = {}) {
     return game.i18n.format(`VAGABOND.Conjure.${key}`, data);
   }
@@ -59,35 +58,23 @@ export class ConjureHelper {
     registerCastGate('spell.conjure', (ctx) => this.castGate(ctx));
   }
 
-  /** GM queries. Synchronous, called from init. */
+  /** GM relay handlers. Synchronous, called from init. */
   static registerQueries() {
-    CONFIG.queries[this.QUERIES.spawn] = (data, { user }) => this.#serialize(() => this._spawn(data, user));
-    CONFIG.queries[this.QUERIES.dismiss] = (data, { user }) => this.#serialize(() => this._dismiss(data, user));
-    CONFIG.queries[this.QUERIES.candidates] = (data, { user }) => this._candidates(data, user);
+    GMRelay.register(this.QUERIES.spawn, (data, user) => this._spawn(data, user), { queue: 'conjure' });
+    GMRelay.register(this.QUERIES.dismiss, (data, user) => this._dismiss(data, user), { queue: 'conjure' });
+    GMRelay.register(this.QUERIES.candidates, (data, user) => this._candidates(data, user));
   }
 
-  static #serialize(fn) {
-    const run = this.#queue.then(fn, fn);
-    this.#queue = run.catch(() => {});
-    return run;
-  }
-
-  /** Run a query on the active GM (locally when this user is it). */
+  /** Run a handler on the active GM (here when this user is it). */
   static async #request(name, data) {
-    const gm = game.users.activeGM;
-    if (!gm) {
-      ui.notifications.warn(this.#L('NoGM'));
-      return null;
-    }
-    if (gm.isSelf) {
-      if (name === this.QUERIES.candidates) return this._candidates(data, game.user);
-      return this.#serialize(() => (name === this.QUERIES.spawn ? this._spawn(data, game.user) : this._dismiss(data, game.user)));
-    }
     try {
-      return await gm.query(name, data, { timeout: 60 * 1000 });
+      return await GMRelay.run(name, data, { timeout: 60 * 1000 });
     } catch (err) {
-      console.error(`vagabond | Conjure: GM query ${name} failed`, err);
-      ui.notifications.error(this.#L('RelayFailed', { gm: gm.name }));
+      if (GMRelay.isNoGM(err)) ui.notifications.warn(this.#L('NoGM'));
+      else {
+        console.error(`vagabond | Conjure: GM query ${name} failed`, err);
+        ui.notifications.error(this.#L('RelayFailed', { gm: game.users.activeGM?.name ?? '' }));
+      }
       return null;
     }
   }
@@ -863,18 +850,18 @@ export class ConjureHelper {
   static registerHooks() {
     // A Focused Cast ends with the Focus (SpellTrackerHelper fires this on the active GM)
     Hooks.on('vagabond.focusDropped', (caster, spellIds) => {
-      this.#serialize(() => this._dismiss({ casterUuid: caster.uuid, spellIds, held: true }, game.user))
+      GMRelay.serialize('conjure', () => this._dismiss({ casterUuid: caster.uuid, spellIds, held: true }, game.user))
         .catch(err => console.error('vagabond | Conjure: Focus end failed', err));
     });
     // Any other Cast lasts "Until your next Turn": gone at the start of the caster's next Turn in a started Combat
     Hooks.on('updateCombat', (combat, changed) => {
-      if (game.user !== game.users.activeGM) return;
+      if (!isActiveGM()) return;
       if (changed.turn === undefined && changed.round === undefined) return;
       if (!combat.started) return;
       const actor = combat.combatant?.actor;
       if (!actor) return;
       const notIn = { combatId: combat.id, round: combat.round, turn: combat.turn };
-      this.#serialize(() => this._dismiss({ casterUuid: actor.uuid, held: false, notIn }, game.user))
+      GMRelay.serialize('conjure', () => this._dismiss({ casterUuid: actor.uuid, held: false, notIn }, game.user))
         .catch(err => console.error('vagabond | Conjure: Turn end failed', err));
     });
     // ...or until the caster does anything else (attack, Check, Cast, Item use; Saves don't count), so it also ends
@@ -899,7 +886,7 @@ export class ConjureHelper {
    * rebuilt compendium (no gear Item has the switch yet).
    */
   static async migrateWorldSpells() {
-    if (game.user !== game.users.activeGM) return;
+    if (!isActiveGM()) return;
     if (game.settings.get('vagabond', 'conjureSpellsMigrated2')) return;
     const gear = game.packs.get('vagabond.gear');
     const gearIndex = gear ? await gear.getIndex({ fields: ['system.forgeable'] }) : null;

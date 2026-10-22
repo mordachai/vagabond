@@ -134,6 +134,7 @@ import { registerUiPanelHooks } from './hooks/ui-panel-hooks.mjs';
 import { registerSceneControls } from './hooks/scene-controls.mjs';
 import { registerSocketActions } from './hooks/socket-actions.mjs';
 import { registerReadyStartup } from './hooks/ready-startup.mjs';
+import { isActiveGM } from './helpers/gm-relay.mjs';
 
 const collections = foundry.documents.collections;
 const sheets = foundry.applications.sheets;
@@ -668,7 +669,7 @@ Hooks.once('ready', function () {
   // Automated Animations menu in the GM's language (active GM, only when the file changed)
   AAMenuLoader.onReady();
   // Spell FX: one file is always active, and the world config follows it (active GM)
-  if (game.users.activeGM?.isSelf) {
+  if (isActiveGM()) {
     SpellFxPresets.ensureActive({ fresh: true }).catch(err => console.error('Vagabond | Spell FX active file check failed', err));
   }
 });
@@ -839,7 +840,7 @@ Hooks.on('updateActor', (actor, changes) => {
   if (foundry.utils.hasProperty(changes, 'system.sunlightHarm')) NpcRules.queueSunlightSync(actor);
 });
 Hooks.on('updateCombat', (combat, changed) => {
-  if (game.user !== game.users.activeGM) return;
+  if (!isActiveGM()) return;
   if (changed.turn === undefined && changed.round === undefined) return;
   const actor = combat.combatant?.actor;
   if (actor) NpcRules.onTurnStart(actor).catch((err) => console.warn('Vagabond | NPC turn-start rules failed:', err));
@@ -988,7 +989,7 @@ Hooks.on('vagabond.postD20Roll', (ctx) => {
 // almost always the actor's own owner, so no extra guard is needed there (same
 // reasoning as the Eureka listener above).
 Hooks.on('updateCombat', (combat, changed) => {
-  if (game.user !== game.users.activeGM) return;
+  if (!isActiveGM()) return;
   if (changed.turn === undefined && changed.round === undefined) return;
   const actor = combat.combatant?.actor;
   if (!actor) return;

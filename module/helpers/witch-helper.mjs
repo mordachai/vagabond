@@ -1,5 +1,6 @@
 import { classFeatureText } from './feature-text.mjs';
 import { combatRollData } from './rule-rolldata.mjs';
+import { GMRelay, isActiveGM } from './gm-relay.mjs';
 
 /**
  * Witch — Hex target tracking, Soul Link, Misery Business (optional automation + feature button).
@@ -99,8 +100,7 @@ export class WitchHelper {
         if (ids.length) await actor.deleteEmbeddedDocuments('ActiveEffect', ids);
       }
     } else {
-      const { emitSocket } = await import('./socket-helper.mjs');
-      emitSocket('applyStatus', { actorUuid: actor.uuid, statusId: 'hexed', active, description });
+      GMRelay.send('vagabond.applyStatus', { actorUuid: actor.uuid, statusId: 'hexed', active, description });
     }
   }
 
@@ -288,7 +288,7 @@ export class WitchHelper {
   static registerHooks() {
     // Hex effect gone (drop / replace / deleted by hand) → the Target is no longer Hexed. Active GM only.
     Hooks.on('deleteActiveEffect', (effect) => {
-      if (!effect?.flags?.vagabond?.hex || game.users.activeGM !== game.user) return;
+      if (!effect?.flags?.vagabond?.hex || !isActiveGM()) return;
       this.#onHexEffectDeleted(effect).catch(err => console.error('vagabond | Hex: could not clear Hexed', err));
     });
     Hooks.on('vagabond.postDamageApply', (ctx) => {
