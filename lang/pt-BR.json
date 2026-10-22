@@ -801,6 +801,9 @@
     },
     "Trade": {
       "Moved": "{qty} × {name} movido(s) para {dest}.",
+      "Dropped": "{name} largado no chão ao lado de {dest}.",
+      "TakeSelect": "Selecione o token que pega {name}.",
+      "TakeSelectNoLoot": "Selecione o token que pega {name} (com o módulo Canvas Loot ativo, ele cairia ao lado do token do recipiente).",
       "CoinsMoved": "{count} receberam {share} cada.",
       "Hint": "Arraste itens para outro Personagem, um transporte ou um Compartimento para movê-los (segure Shift para escolher quantos). Clique em um Compartimento para abri-lo e arrastar de lá.",
       "DropOnCard": "Solte em um Personagem, um transporte ou um Compartimento.",
@@ -810,6 +813,8 @@
       "Move": "Mover",
       "Errors": {
         "noSource": "Esse item não está mais lá.",
+        "noCanvasLoot": "Largar itens no mapa precisa do módulo Canvas Loot.",
+        "noRoom": "Não há espaço livre no mapa ao lado desse token.",
         "notYours": "Você só pode pegar do seu próprio inventário ou do grupo.",
         "cursed": "Itens amaldiçoados vinculados não podem deixar o portador.",
         "notTradable": "Só equipamentos e recipientes podem trocar de mãos.",

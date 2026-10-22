@@ -801,6 +801,9 @@
     },
     "Trade": {
       "Moved": "Moved {qty} × {name} to {dest}.",
+      "Dropped": "{name} dropped on the ground next to {dest}.",
+      "TakeSelect": "Select the token that takes {name}.",
+      "TakeSelectNoLoot": "Select the token that takes {name} (with the Canvas Loot module on, it would drop next to the container's token).",
       "CoinsMoved": "{count} received {share} each.",
       "Hint": "Drag items onto another Character, a transport or a Hold to move them (hold Shift to choose how many). Click a Hold to open it and drag from there.",
       "DropOnCard": "Drop it on a Character, a transport or a Hold.",
@@ -810,6 +813,8 @@
       "Move": "Move",
       "Errors": {
         "noSource": "That item is no longer there.",
+        "noCanvasLoot": "Dropping items on the map needs the Canvas Loot module.",
+        "noRoom": "No free space on the map next to that token.",
         "notYours": "You can only take from your own inventory or the party's.",
         "cursed": "Bound cursed items can't leave their bearer.",
         "notTradable": "Only equipment and containers can change hands.",

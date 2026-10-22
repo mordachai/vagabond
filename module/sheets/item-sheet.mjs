@@ -3,20 +3,18 @@ import { GrantsHandlers } from './item-sheet-grants.mjs';
 import { EnrichmentHelper } from '../helpers/enrichment-helper.mjs';
 import * as ItemSections from '../helpers/item-sections.mjs';
 import { VideoPreviewDialog } from '../applications/video-preview-dialog.mjs';
-import { VagabondDamagePipeline } from '../helpers/damage-pipeline.mjs';
 import { VagabondSpellSequencer } from '../helpers/spell-sequencer.mjs';
 import { EquipmentHelper } from '../helpers/equipment-helper.mjs';
 import { TradeHelper } from '../helpers/trade-helper.mjs';
-import { CoinTransferDialog } from '../applications/coin-transfer-dialog.mjs';
-import { levelTableCap } from '../helpers/homebrew-config.mjs';
-import { CurrencyHelper } from '../helpers/currency-helper.mjs';
-import { ContextMenuHelper } from '../helpers/context-menu-helper.mjs';
 import { RelicSlots } from '../helpers/relic-slots.mjs';
 import { ItemDisguise } from '../helpers/item-disguise.mjs';
 import { ItemDisguiseApp } from '../applications/item-disguise-app.mjs';
-import { VagabondImbueHelper } from '../helpers/imbue-helper.mjs';
-import { VagabondChatCard } from '../helpers/chat-card.mjs';
 import { CountdownDice } from '../documents/countdown-dice.mjs';
+import { ItemSheetPrerequisites } from './item-sheet-prerequisites.mjs';
+import { ItemSheetContainer } from './item-sheet-container.mjs';
+import { ItemSheetContext } from './item-sheet-context.mjs';
+import { ItemSheetClassEditor } from './item-sheet-class.mjs';
+import { ItemSheetEquipment } from './item-sheet-equipment.mjs';
 
 const { api, sheets } = foundry.applications;
 const DragDrop = foundry.applications.ux.DragDrop;
@@ -56,102 +54,99 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     actions: {
       onEditImage: this._onEditImage,
       deployConstruct: this._onDeployConstruct,
-      shareContainerCoins: this._onShareContainerCoins,
+      shareContainerCoins: ItemSheetContainer._onShareContainerCoins,
       previewSpellFx: this._onPreviewSpellFx,
       viewDoc: this._viewEffect,
       createDoc: this._createEffect,
       deleteDoc: this._deleteEffect,
       toggleEffect: this._toggleEffect,
-      addTrait: this._onAddTrait,
-      removeTrait: this._onRemoveTrait,
-      addLevelFeature: this._onAddLevelFeature,
-      removeLevelFeature: this._onRemoveLevelFeature,
-      addPrerequisiteType: this._onAddPrerequisiteType,
-      addStatPrerequisite: this._onAddStatPrerequisite,
-      removeStatPrerequisite: this._onRemoveStatPrerequisite,
-      clearAllStats: this._onClearAllStats,
-      addStatOrGroup: this._onAddStatOrGroup,
-      removeStatOrGroup: this._onRemoveStatOrGroup,
-      addStatToOrGroup: this._onAddStatToOrGroup,
-      removeStatFromOrGroup: this._onRemoveStatFromOrGroup,
-      clearAllStatOrGroups: this._onClearAllStatOrGroups,
-      addTrainedSkillPrerequisite: this._onAddTrainedSkillPrerequisite,
-      removeTrainedSkillPrerequisite: this._onRemoveTrainedSkillPrerequisite,
-      clearAllTrainedSkills: this._onClearAllTrainedSkills,
-      addTrainedSkillOrGroup: this._onAddTrainedSkillOrGroup,
-      removeTrainedSkillOrGroup: this._onRemoveTrainedSkillOrGroup,
-      addSkillToOrGroup: this._onAddSkillToOrGroup,
-      removeSkillFromOrGroup: this._onRemoveSkillFromOrGroup,
-      clearAllTrainedSkillOrGroups: this._onClearAllTrainedSkillOrGroups,
-      addSpellPrerequisite: this._onAddSpellPrerequisite,
-      removeSpellPrerequisite: this._onRemoveSpellPrerequisite,
-      toggleHasAnySpell: this._onToggleHasAnySpell,
-      clearAllSpells: this._onClearAllSpells,
-      addSpellOrGroup: this._onAddSpellOrGroup,
-      removeSpellOrGroup: this._onRemoveSpellOrGroup,
-      addSpellToOrGroup: this._onAddSpellToOrGroup,
-      removeSpellFromOrGroup: this._onRemoveSpellFromOrGroup,
-      clearAllSpellOrGroups: this._onClearAllSpellOrGroups,
-      addResourcePrerequisite: this._onAddResourcePrerequisite,
-      removeResourcePrerequisite: this._onRemoveResourcePrerequisite,
-      clearAllResources: this._onClearAllResources,
-      addResourceOrGroup: this._onAddResourceOrGroup,
-      removeResourceOrGroup: this._onRemoveResourceOrGroup,
-      addResourceToOrGroup: this._onAddResourceToOrGroup,
-      removeResourceFromOrGroup: this._onRemoveResourceFromOrGroup,
-      clearAllResourceOrGroups: this._onClearAllResourceOrGroups,
-      toggleWeaponProperty: this._onToggleWeaponProperty,
-      removeWeaponProperty: this._onRemoveWeaponProperty,
-      toggleWeaponAltSkill: this._onToggleWeaponAltSkill,
-      removeWeaponAltSkill: this._onRemoveWeaponAltSkill,
-      toggleImmunity: this._onToggleImmunity,
-      removeImmunity: this._onRemoveImmunity,
+      addTrait: ItemSheetClassEditor._onAddTrait,
+      removeTrait: ItemSheetClassEditor._onRemoveTrait,
+      addLevelFeature: ItemSheetClassEditor._onAddLevelFeature,
+      removeLevelFeature: ItemSheetClassEditor._onRemoveLevelFeature,
+      addPrerequisiteType: ItemSheetPrerequisites._onAddPrerequisiteType,
+      addStatPrerequisite: ItemSheetPrerequisites._onAddStatPrerequisite,
+      removeStatPrerequisite: ItemSheetPrerequisites._onRemoveStatPrerequisite,
+      clearAllStats: ItemSheetPrerequisites._onClearAllStats,
+      addStatOrGroup: ItemSheetPrerequisites._onAddStatOrGroup,
+      removeStatOrGroup: ItemSheetPrerequisites._onRemoveStatOrGroup,
+      addStatToOrGroup: ItemSheetPrerequisites._onAddStatToOrGroup,
+      removeStatFromOrGroup: ItemSheetPrerequisites._onRemoveStatFromOrGroup,
+      clearAllStatOrGroups: ItemSheetPrerequisites._onClearAllStatOrGroups,
+      addTrainedSkillPrerequisite: ItemSheetPrerequisites._onAddTrainedSkillPrerequisite,
+      removeTrainedSkillPrerequisite: ItemSheetPrerequisites._onRemoveTrainedSkillPrerequisite,
+      clearAllTrainedSkills: ItemSheetPrerequisites._onClearAllTrainedSkills,
+      addTrainedSkillOrGroup: ItemSheetPrerequisites._onAddTrainedSkillOrGroup,
+      removeTrainedSkillOrGroup: ItemSheetPrerequisites._onRemoveTrainedSkillOrGroup,
+      addSkillToOrGroup: ItemSheetPrerequisites._onAddSkillToOrGroup,
+      removeSkillFromOrGroup: ItemSheetPrerequisites._onRemoveSkillFromOrGroup,
+      clearAllTrainedSkillOrGroups: ItemSheetPrerequisites._onClearAllTrainedSkillOrGroups,
+      addSpellPrerequisite: ItemSheetPrerequisites._onAddSpellPrerequisite,
+      removeSpellPrerequisite: ItemSheetPrerequisites._onRemoveSpellPrerequisite,
+      toggleHasAnySpell: ItemSheetPrerequisites._onToggleHasAnySpell,
+      clearAllSpells: ItemSheetPrerequisites._onClearAllSpells,
+      addSpellOrGroup: ItemSheetPrerequisites._onAddSpellOrGroup,
+      removeSpellOrGroup: ItemSheetPrerequisites._onRemoveSpellOrGroup,
+      addSpellToOrGroup: ItemSheetPrerequisites._onAddSpellToOrGroup,
+      removeSpellFromOrGroup: ItemSheetPrerequisites._onRemoveSpellFromOrGroup,
+      clearAllSpellOrGroups: ItemSheetPrerequisites._onClearAllSpellOrGroups,
+      addResourcePrerequisite: ItemSheetPrerequisites._onAddResourcePrerequisite,
+      removeResourcePrerequisite: ItemSheetPrerequisites._onRemoveResourcePrerequisite,
+      clearAllResources: ItemSheetPrerequisites._onClearAllResources,
+      addResourceOrGroup: ItemSheetPrerequisites._onAddResourceOrGroup,
+      removeResourceOrGroup: ItemSheetPrerequisites._onRemoveResourceOrGroup,
+      addResourceToOrGroup: ItemSheetPrerequisites._onAddResourceToOrGroup,
+      removeResourceFromOrGroup: ItemSheetPrerequisites._onRemoveResourceFromOrGroup,
+      clearAllResourceOrGroups: ItemSheetPrerequisites._onClearAllResourceOrGroups,
+      toggleWeaponProperty: ItemSheetEquipment._onToggleWeaponProperty,
+      removeWeaponProperty: ItemSheetEquipment._onRemoveWeaponProperty,
+      toggleWeaponAltSkill: ItemSheetEquipment._onToggleWeaponAltSkill,
+      removeWeaponAltSkill: ItemSheetEquipment._onRemoveWeaponAltSkill,
+      toggleImmunity: ItemSheetEquipment._onToggleImmunity,
+      removeImmunity: ItemSheetEquipment._onRemoveImmunity,
       toggleLock: this._onToggleLock,
       removePackItem: this._onRemovePackItem,
-      equipFromContainer: this._onEquipFromContainer,
-      deleteFromContainer: this._onDeleteFromContainer,
-      toggleContainerGroup: this._onToggleContainerGroup,
-      toggleContainerItem: this._onToggleContainerItem,
-      openContainerItem: this._onOpenContainerItem,
-      containerItemMenu: this._onContainerItemMenu,
-      addGuaranteedSkill: this._onAddGuaranteedSkill,
-      removeGuaranteedSkill: this._onRemoveGuaranteedSkill,
-      removeSuggestedStartingPack: this._onRemoveSuggestedStartingPack,
-      addKeyStat: this._onAddKeyStat,
-      removeKeyStat: this._onRemoveKeyStat,
-      addSkillChoiceGroup: this._onAddSkillChoiceGroup,
-      removeSkillChoiceGroup: this._onRemoveSkillChoiceGroup,
-      addPoolSkill: this._onAddPoolSkill,
-      removePoolSkill: this._onRemovePoolSkill,
-      updateChoicePool: this._onUpdatePool,
-      updateChoiceCount: this._onUpdateCount,
-      saveChoices: this._onSaveChoices,
+      equipFromContainer: ItemSheetContainer._onEquipFromContainer,
+      deleteFromContainer: ItemSheetContainer._onDeleteFromContainer,
+      toggleContainerGroup: ItemSheetContainer._onToggleContainerGroup,
+      toggleContainerItem: ItemSheetContainer._onToggleContainerItem,
+      openContainerItem: ItemSheetContainer._onOpenContainerItem,
+      containerItemMenu: ItemSheetContainer._onContainerItemMenu,
+      addGuaranteedSkill: ItemSheetClassEditor._onAddGuaranteedSkill,
+      removeGuaranteedSkill: ItemSheetClassEditor._onRemoveGuaranteedSkill,
+      removeSuggestedStartingPack: ItemSheetClassEditor._onRemoveSuggestedStartingPack,
+      addKeyStat: ItemSheetClassEditor._onAddKeyStat,
+      removeKeyStat: ItemSheetClassEditor._onRemoveKeyStat,
+      addSkillChoiceGroup: ItemSheetClassEditor._onAddSkillChoiceGroup,
+      removeSkillChoiceGroup: ItemSheetClassEditor._onRemoveSkillChoiceGroup,
+      addPoolSkill: ItemSheetClassEditor._onAddPoolSkill,
+      removePoolSkill: ItemSheetClassEditor._onRemovePoolSkill,
       createCountdownFromRecharge: this._onCreateCountdownFromRecharge,  // Create countdown dice from spell description
-      addGrantSpell: this._onAddGrantSpell,
-      removeGrantSpell: this._onRemoveGrantSpell,
-      addGrantPerk: this._onAddGrantPerk,
-      removeGrantPerk: this._onRemoveGrantPerk,
-      removeGrantItem: this._onRemoveGrantItem,
-      addGrantItemChoiceGroup: this._onAddGrantItemChoiceGroup,
-      removeGrantItemChoiceGroup: this._onRemoveGrantItemChoiceGroup,
-      addGrantSkillChoiceGroup: this._onAddGrantSkillChoiceGroup,
-      removeGrantSkillChoiceGroup: this._onRemoveGrantSkillChoiceGroup,
-      toggleBound: this._onToggleBound,
+      addGrantSpell: ItemSheetClassEditor._onAddGrantSpell,
+      removeGrantSpell: ItemSheetClassEditor._onRemoveGrantSpell,
+      addGrantPerk: ItemSheetClassEditor._onAddGrantPerk,
+      removeGrantPerk: ItemSheetClassEditor._onRemoveGrantPerk,
+      removeGrantItem: ItemSheetClassEditor._onRemoveGrantItem,
+      addGrantItemChoiceGroup: ItemSheetClassEditor._onAddGrantItemChoiceGroup,
+      removeGrantItemChoiceGroup: ItemSheetClassEditor._onRemoveGrantItemChoiceGroup,
+      addGrantSkillChoiceGroup: ItemSheetClassEditor._onAddGrantSkillChoiceGroup,
+      removeGrantSkillChoiceGroup: ItemSheetClassEditor._onRemoveGrantSkillChoiceGroup,
+      toggleBound: ItemSheetEquipment._onToggleBound,
       toggleAccordion: this._onToggleAccordion,
-      addCausedStatus: this._onAddCausedStatus,
-      removeCausedStatus: this._onRemoveCausedStatus,
-      addPassiveCausedStatus: this._onAddPassiveCausedStatus,
-      removePassiveCausedStatus: this._onRemovePassiveCausedStatus,
-      addCritCausedStatus: this._onAddCritCausedStatus,
-      removeCritCausedStatus: this._onRemoveCritCausedStatus,
-      toggleBlockedStatus: this._onToggleBlockedStatus,
-      toggleResistedStatus: this._onToggleResistedStatus,
-      applyCoating: this._onApplyCoating,
+      addCausedStatus: ItemSheetEquipment._onAddCausedStatus,
+      removeCausedStatus: ItemSheetEquipment._onRemoveCausedStatus,
+      addPassiveCausedStatus: ItemSheetEquipment._onAddPassiveCausedStatus,
+      removePassiveCausedStatus: ItemSheetEquipment._onRemovePassiveCausedStatus,
+      addCritCausedStatus: ItemSheetEquipment._onAddCritCausedStatus,
+      removeCritCausedStatus: ItemSheetEquipment._onRemoveCritCausedStatus,
+      toggleBlockedStatus: ItemSheetEquipment._onToggleBlockedStatus,
+      toggleResistedStatus: ItemSheetEquipment._onToggleResistedStatus,
+      applyCoating: ItemSheetEquipment._onApplyCoating,
       usePip: this._onUsePip,
       relicSlot: this._onRelicSlot,
       openDisguise: this._onOpenDisguise,
       toggleDisguise: this._onToggleDisguise,
-      clearImbue: this._onClearImbue,
+      clearImbue: ItemSheetEquipment._onClearImbue,
       clearItemMacro: this._onClearItemMacro,
     },
     form: {
@@ -160,16 +155,6 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     // Custom property that's merged into `this.options`
     dragDrop: [{ dragSelector: '.draggable', dropSelector: null }],
   };
-
-  /** * V13 Standard: Define Event Listeners here.
-   * This maps the "change" event on elements with data-action="update-grip"
-   * to the _onUpdateGrip function.
-   */
-  static EVENTS = {
-    'change [data-action="update-grip"]': "_onUpdateGrip",
-    'change select[name^="system.prerequisites.spells"]': "_onSpellPrerequisiteChange",
-    'change select[name^="system.prerequisites.resources"]': "_onResourcePrerequisiteChange",
-  }
 
   /* -------------------------------------------- */
 
@@ -376,41 +361,23 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
 
   /** @override */
   async _preparePartContext(partId, context) {
+    const enrich = (text) => ItemSheetContext.enrich(this, text);
     switch (partId) {
       case 'header':
         // Container coins sit in the header while locked
         if (this.item.type === 'container') {
-          context.containerCoins = this._containerCoins();
-          context.containerCanShare = this._containerCanShare();
+          context.containerCoins = ItemSheetContainer._containerCoins(this);
+          context.containerCanShare = ItemSheetContainer._containerCanShare(this);
         }
         // Enrich description for perks, spells and locked Weapon / Armor / Gear in header
         if (this.item.type === 'perk' || this.item.type === 'spell' || context.descInHeader) {
-          context.enriched = {
-            description: await foundry.applications.ux.TextEditor.enrichHTML(
-              this.item.system.description,
-              {
-                secrets: this.document.isOwner,
-                rollData: this.item.getRollData(),
-                relativeTo: this.item,
-              }
-            )
-          };
+          context.enriched = { description: await enrich(this.item.system.description) };
         }
         break;
 
       case 'equipmentDetails':
-        // Equipment gets enriched description like the details tab
         context.tab = context.tabs[partId];
-        context.enriched = {
-          description: await foundry.applications.ux.TextEditor.enrichHTML(
-            this.item.system.description,
-            {
-              secrets: this.document.isOwner,
-              rollData: this.item.getRollData(),
-              relativeTo: this.item,
-            }
-          )
-        };
+        context.enriched = { description: await enrich(this.item.system.description) };
         // Prepare list of consumable items from the actor (if item is owned)
         context.actorConsumableItems = [];
         if (this.item.actor) {
@@ -428,18 +395,8 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
         break;
 
       case 'spellDetails':
-        // Spell gets enriched description like the details tab
         context.tab = context.tabs[partId];
-        context.enriched = {
-          description: await foundry.applications.ux.TextEditor.enrichHTML(
-            this.item.system.description,
-            {
-              secrets: this.document.isOwner,
-              rollData: this.item.getRollData(),
-              relativeTo: this.item,
-            }
-          )
-        };
+        context.enriched = { description: await enrich(this.item.system.description) };
         context.macroNames = VagabondItemSheet._resolveMacroNames(this.item);
         // Locked-view Anim row: school label + whether the school has any configured anim
         if (this.item.system.locked && VagabondSpellSequencer.isAvailable()) {
@@ -449,415 +406,52 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
         break;
 
       case 'ancestryDetails':
-        // Ancestry gets enriched description like the description tab
         context.tab = context.tabs[partId];
-        context.enrichedDescription = await foundry.applications.ux.TextEditor.enrichHTML(
-          this.item.system.description,
-          {
-            secrets: this.document.isOwner,
-            rollData: this.item.getRollData(),
-            relativeTo: this.item,
-          }
-        );
-
-        // Enrich traits with resolved spell and perk names
-        context.enrichedTraits = [];
-        for (const trait of this.item.system.traits || []) {
-          const enrichedTrait = { ...trait };
-
-          // Enrich each trait's description for proper display (like class features)
-          enrichedTrait.enrichedDescription = await foundry.applications.ux.TextEditor.enrichHTML(
-            trait.description || '',
-            {
-              secrets: this.document.isOwner,
-              rollData: this.item.getRollData(),
-              relativeTo: this.item,
-            }
-          );
-
-          // Resolve spell UUIDs to names
-          enrichedTrait.enrichedSpells = [];
-          for (const uuid of trait.requiredSpells || []) {
-            if (uuid) {
-              try {
-                const spell = await fromUuid(uuid);
-                enrichedTrait.enrichedSpells.push({
-                  uuid: uuid,
-                  name: spell?.name || uuid,
-                  img: spell?.img || 'icons/svg/item-bag.svg'
-                });
-              } catch (e) {
-                enrichedTrait.enrichedSpells.push({ uuid: uuid, name: uuid, img: 'icons/svg/item-bag.svg' });
-              }
-            }
-          }
-
-          // Resolve perk UUIDs to names
-          enrichedTrait.enrichedPerks = [];
-          for (const uuid of trait.allowedPerks || []) {
-            if (uuid) {
-              try {
-                const perk = await fromUuid(uuid);
-                enrichedTrait.enrichedPerks.push({
-                  uuid: uuid,
-                  name: perk?.name || uuid,
-                  img: perk?.img || 'icons/svg/item-bag.svg'
-                });
-              } catch (e) {
-                enrichedTrait.enrichedPerks.push({ uuid: uuid, name: uuid, img: 'icons/svg/item-bag.svg' });
-              }
-            }
-          }
-
-          enrichedTrait.enrichedItems = await GrantsHandlers.enrichGrantedItems(trait.grantedItems);
-          enrichedTrait.enrichedItemChoices = await GrantsHandlers.enrichItemChoices(trait.itemChoices);
-
-          context.enrichedTraits.push(enrichedTrait);
-        }
+        await ItemSheetContext.ancestry(this, context);
         break;
 
       case 'classDetails':
-        // Class gets enriched description like the description tab
         context.tab = context.tabs[partId];
-        context.enrichedDescription = await foundry.applications.ux.TextEditor.enrichHTML(
-          this.item.system.description,
-          {
-            secrets: this.document.isOwner,
-            rollData: this.item.getRollData(),
-            relativeTo: this.item,
-          }
-        );
-        // Prepare level groups (1–maxLevel) with their features
-        context.levelGroups = [];
-        const maxLevel = levelTableCap();
-        const manaMultiplier = this.item.system.manaMultiplier || 2;
-        // Create a working copy with all levels initialized
-        const levelSpellsMap = new Map();
-        (this.item.system.levelSpells || []).forEach(ls => {
-          levelSpellsMap.set(ls.level, ls.spells || 0);
-        });
-
-        const workingLevelSpells = [];
-        for (let lvl = 1; lvl <= maxLevel; lvl++) {
-          workingLevelSpells.push({
-            level: lvl,
-            spells: levelSpellsMap.get(lvl) || 0
-          });
-        }
-
-        for (let level = 1; level <= maxLevel; level++) {
-          const features = this.item.system.levelFeatures
-            .map((f, index) => ({ ...f, index }))
-            .filter(f => f.level === level);
-
-          // Enrich each feature's description for proper display
-          for (let feature of features) {
-            feature.enrichedDescription = await foundry.applications.ux.TextEditor.enrichHTML(
-              feature.description || '',
-              {
-                secrets: this.document.isOwner,
-                rollData: this.item.getRollData(),
-                relativeTo: this.item,
-              }
-            );
-
-            // Resolve spell UUIDs to names
-            feature.enrichedSpells = [];
-            for (const uuid of feature.requiredSpells || []) {
-              if (uuid) {
-                try {
-                  const spell = await fromUuid(uuid);
-                  feature.enrichedSpells.push({
-                    uuid: uuid,
-                    name: spell?.name || uuid,
-                    img: spell?.img || 'icons/svg/item-bag.svg'
-                  });
-                } catch (e) {
-                  feature.enrichedSpells.push({ uuid: uuid, name: uuid, img: 'icons/svg/item-bag.svg' });
-                }
-              }
-            }
-
-            // Resolve perk UUIDs to names
-            feature.enrichedPerks = [];
-            for (const uuid of feature.allowedPerks || []) {
-              if (uuid) {
-                try {
-                  const perk = await fromUuid(uuid);
-                  feature.enrichedPerks.push({
-                    uuid: uuid,
-                    name: perk?.name || uuid,
-                    img: perk?.img || 'icons/svg/item-bag.svg'
-                  });
-                } catch (e) {
-                  feature.enrichedPerks.push({ uuid: uuid, name: uuid, img: 'icons/svg/item-bag.svg' });
-                }
-              }
-            }
-
-            feature.enrichedItems = await GrantsHandlers.enrichGrantedItems(feature.grantedItems);
-            feature.enrichedItemChoices = await GrantsHandlers.enrichItemChoices(feature.itemChoices);
-          }
-
-          // Get spells for this level (level - 1 because array is 0-indexed but levels start at 1)
-          const spellsIndex = level - 1;
-          const spells = workingLevelSpells[spellsIndex].spells;
-
-          // Calculate maxMana for this level
-          const maxMana = manaMultiplier * level;
-
-          context.levelGroups.push({
-            level,
-            features,
-            spells,
-            spellsIndex,
-            maxMana
-          });
-        }
-
-        // Resolve suggested starting pack UUIDs to display data
-        context.enrichedSuggestedPacks = [];
-        for (const uuid of (this.item.system.suggestedStartingPacks || [])) {
-          if (!uuid) continue;
-          try {
-            const pack = await fromUuid(uuid);
-            context.enrichedSuggestedPacks.push({
-              uuid,
-              name: pack?.name || uuid,
-              img: pack?.img || 'icons/svg/item-bag.svg'
-            });
-          } catch (e) {
-            context.enrichedSuggestedPacks.push({ uuid, name: uuid, img: 'icons/svg/item-bag.svg' });
-          }
-        }
+        await ItemSheetContext.classDetails(this, context);
         break;
 
       case 'perkDetails':
-        // Perk gets enriched description like the description tab
         context.tab = context.tabs[partId];
-        context.enriched = {
-          description: await foundry.applications.ux.TextEditor.enrichHTML(
-            this.item.system.description,
-            {
-              secrets: this.document.isOwner,
-              rollData: this.item.getRollData(),
-              relativeTo: this.item,
-            }
-          )
-        };
-
-        // Load all spells from compendiums for spell prerequisite dropdown
-        context.availableSpells = [];
-        for (const pack of game.packs) {
-          // Only include Item compendiums
-          if (pack.metadata.type !== 'Item') continue;
-
-          // Check if this compendium contains spell items
-          const index = await pack.getIndex({ fields: ["type"] });
-          const spells = index.filter(i => i.type === 'spell');
-
-          if (spells.length > 0) {
-            // Add spells from this compendium
-            for (const spell of spells) {
-              context.availableSpells.push({
-                uuid: spell.uuid,
-                name: spell.name,
-                packLabel: pack.metadata.label
-              });
-            }
-          }
-        }
-
-        // Sort spells alphabetically by name
-        context.availableSpells.sort((a, b) => a.name.localeCompare(b.name));
-
-        // Preprocess spell prerequisites to include spell details for easier template rendering
-        const storedSpellUuids = this.item.system.prerequisites?.spells || [];
-        context.spellPrerequisites = [];
-        for (let i = 0; i < storedSpellUuids.length; i++) {
-          const storedUuid = storedSpellUuids[i];
-          context.spellPrerequisites.push({
-            index: i,
-            selectedUuid: storedUuid,
-            availableSpells: context.availableSpells.map(spell => ({
-              ...spell,
-              isSelected: spell.uuid === storedUuid
-            }))
-          });
-        }
-
+        await ItemSheetContext.perk(this, context);
         break;
 
       case 'starterPackDetails':
-        // Starter Pack gets enriched description and loaded items
         context.tab = context.tabs[partId];
-        context.enriched = {
-          description: await foundry.applications.ux.TextEditor.enrichHTML(
-            this.item.system.description,
-            {
-              secrets: this.document.isOwner,
-              rollData: this.item.getRollData(),
-              relativeTo: this.item,
-            }
-          )
-        };
-
-        // Load items from UUIDs
-        context.packItems = [];
-        for (let i = 0; i < this.item.system.items.length; i++) {
-          const packItem = this.item.system.items[i];
-          try {
-            const item = await fromUuid(packItem.uuid);
-            if (item) {
-              // Build stats string based on item type
-              let stats = '';
-              let description = '';
-
-              if (item.type === 'equipment') {
-                const sys = item.system;
-
-                // Determine equipment subtype and build stats
-                if (sys.equipmentType === 'weapon') {
-                  // Weapon: damage, damage type, grip, cost, slots
-                  const damageDisplay = sys.grip === 'V'
-                    ? `${sys.damage1H || '—'} / ${sys.damage2H || '—'}`
-                    : (VagabondDamagePipeline.markExplode(sys.currentDamage, item) || '—');
-                  const damageType = sys.damageType && sys.damageType !== '-'
-                    ? game.i18n.localize(CONFIG.VAGABOND.damageTypes[sys.damageType])
-                    : '';
-                  const grip = sys.grip ? (sys.grip === 'V' ? '1H/2H' : sys.grip) : '—';
-                  const costDisplay = sys.costDisplay || `0${game.i18n.localize('VAGABOND.Currency.Gold.abbr')}`;
-                  const slots = sys.slots ?? 0;
-
-                  stats = `${damageDisplay} ${damageType} • ${grip} • ${costDisplay} • ${slots} slot${slots !== 1 ? 's' : ''}`;
-
-                  // Get localized weapon skill name
-                  let weaponSkillName = '';
-                  if (sys.weaponSkill) {
-                    const skillKey = CONFIG.VAGABOND.weaponSkills[sys.weaponSkill];
-                    weaponSkillName = skillKey ? game.i18n.localize(skillKey) : '';
-                  }
-                  description = weaponSkillName ? `${weaponSkillName} Weapon` : 'Weapon';
-
-                } else if (sys.equipmentType === 'armor') {
-                  // Armor: armor rating, might requirement, cost
-                  const rating = sys.finalRating ?? sys.armorRating ?? 0;
-                  const might = sys.mightRequirement ?? 0;
-                  const costDisplay = sys.costDisplay || `0${game.i18n.localize('VAGABOND.Currency.Gold.abbr')}`;
-                  stats = `Armor: ${rating} • Might: ${might} • ${costDisplay}`;
-                  description = 'Armor';
-
-                } else if (sys.equipmentType === 'alchemical') {
-                  // Alchemical: damage, type, cost
-                  const damage = VagabondDamagePipeline.markExplode(sys.damageAmount, item) || '—';
-                  const damageType = sys.damageType && sys.damageType !== '-'
-                    ? game.i18n.localize(CONFIG.VAGABOND.damageTypes[sys.damageType])
-                    : '';
-                  const costDisplay = sys.costDisplay || `0${game.i18n.localize('VAGABOND.Currency.Gold.abbr')}`;
-                  stats = `${damage} ${damageType} • ${costDisplay}`;
-                  description = sys.alchemicalType ? sys.alchemicalType.titleCase() : 'Alchemical';
-
-                } else if (sys.equipmentType === 'relic') {
-                  // Relic: cost, slots
-                  const costDisplay = sys.costDisplay || `0${game.i18n.localize('VAGABOND.Currency.Gold.abbr')}`;
-                  const slots = sys.slots ?? 0;
-                  stats = `${costDisplay} • Slots: ${slots}`;
-                  description = 'Relic';
-
-                } else {
-                  // Gear: cost, slots
-                  const costDisplay = sys.costDisplay || `0${game.i18n.localize('VAGABOND.Currency.Gold.abbr')}`;
-                  const slots = sys.slots ?? 0;
-                  stats = `${costDisplay} • Slots: ${slots}`;
-                  description = sys.gearType || 'Gear';
-                }
-
-              } else if (item.type === 'spell') {
-                // Spell: mana cost, delivery
-                const manaCost = item.system.delivery?.cost || 0;
-                const deliveryType = item.system.delivery?.type || '';
-                stats = `Mana: ${manaCost} • ${deliveryType}`;
-                description = 'Spell';
-
-              } else {
-                // Other item types
-                description = game.i18n.localize(`TYPES.Item.${item.type}`);
-              }
-
-              context.packItems.push({
-                name: item.name,
-                img: item.img,
-                type: item.type,
-                typeName: game.i18n.localize(`TYPES.Item.${item.type}`),
-                quantity: packItem.quantity,
-                uuid: packItem.uuid,
-                stats: stats,
-                description: description,
-              });
-            }
-          } catch (error) {
-            console.warn(`Failed to load item with UUID ${packItem.uuid}:`, error);
-          }
-        }
-
-        // Add currency string
-        context.currencyString = this.item.system.getCurrencyString();
+        await ItemSheetContext.starterPack(this, context);
         break;
 
       case 'containerDetails':
-        // Container gets enriched description and loaded items
         context.tab = context.tabs[partId];
         // Transport gear: button that creates its Mount / Vehicle / Structure actor
         context.canDeployConstruct = !!this.item.flags?.vagabond?.constructId
           && Actor.implementation.canUserCreate(game.user);
-        context.enriched = {
-          description: await foundry.applications.ux.TextEditor.enrichHTML(
-            this.item.system.description,
-            {
-              secrets: this.document.isOwner,
-              rollData: this.item.getRollData(),
-              relativeTo: this.item,
-            }
-          )
-        };
-
+        context.enriched = { description: await enrich(this.item.system.description) };
         // Stored items, grouped like the party Inventory (accordion sections, all open by default)
-        context.containerGroups = this._containerGroups();
+        context.containerGroups = ItemSheetContainer._containerGroups(this);
         context.containerCount = this.item.system.items.length;
-        context.containerCoins = this._containerCoins();
-        context.containerCanShare = this._containerCanShare();
+        context.containerCoins = ItemSheetContainer._containerCoins(this);
+        context.containerCanShare = ItemSheetContainer._containerCanShare(this);
         break;
 
-      case 'description':
+      case 'description': {
         context.tab = context.tabs[partId];
         // Format description for countdown dice (spells and equipment)
         let descriptionToEnrich = this.item.system.description;
         if (this.item.system.formatDescription) {
           descriptionToEnrich = this.item.system.formatDescription(descriptionToEnrich);
         }
-        // Enrich description info for display
-        context.enrichedDescription = await foundry.applications.ux.TextEditor.enrichHTML(
-          descriptionToEnrich,
-          {
-            secrets: this.document.isOwner,
-            rollData: this.item.getRollData(),
-            relativeTo: this.item,
-          }
-        );
+        context.enrichedDescription = await enrich(descriptionToEnrich);
         break;
+      }
 
       case 'vehiclePartDetails':
         context.tab = context.tabs[partId];
-        context.enriched = {
-          description: await foundry.applications.ux.TextEditor.enrichHTML(
-            this.item.system.description,
-            {
-              secrets: this.document.isOwner,
-              rollData: this.item.getRollData(),
-              relativeTo: this.item,
-            }
-          )
-        };
+        context.enriched = { description: await enrich(this.item.system.description) };
         break;
 
       case 'effects':
@@ -1089,10 +683,10 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       });
 
       // Open item details stay open across re-renders; right-click a row = its kebab menu
-      this.element.querySelectorAll('.ci-item.open').forEach((row) => this._fillContainerDetail(row));
+      this.element.querySelectorAll('.ci-item.open').forEach((row) => ItemSheetContainer._fillContainerDetail(this, row));
       this.element.querySelectorAll('.ci-item .ci-row').forEach((row) => {
         row.addEventListener('contextmenu', (event) => {
-          VagabondItemSheet._onContainerItemMenu.call(this, event, row);
+          ItemSheetContainer._onContainerItemMenu.call(this, event, row);
         }, { signal });
       });
     }
@@ -1128,10 +722,6 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
         }
       });
     });
-
-    // --- REMOVED THE OLD EQUIPMENT GRIP LISTENER BLOCK HERE ---
-    // The previous listener code was manual and buggy.
-    // We now use static EVENTS and _onUpdateGrip below.
 
     // Populate spell/perk dropdowns for grants system
     if (this.item.type === 'ancestry' || this.item.type === 'class') {
@@ -1236,227 +826,9 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
    *
    **************/
 
-  /**
-   * Handle updating the grip.
-   * We do this explicitly to ensure the update commits and the sheet re-renders
-   * to update the "disabled" state of the 2H input.
-   * * @param {Event} event 
-   * @param {HTMLElement} target 
-   */
-  async _onUpdateGrip(event, target) {
-    event.preventDefault();
-    const newGrip = target.value;
-
-    // Explicitly update the document
-    await this.document.update({ "system.grip": newGrip });
-
-    // This await ensures the data is saved before the UI refreshes
-  }
-
-  /**
-   * Handle adding a new trait to an ancestry item
-   *
-   * @this VagabondItemSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @private
-   */
-  static async _onAddTrait(event, target) {
-    const traits = this._collectArrayFromDOM('system.traits', 'traits');
-    traits.push({ name: 'New Trait', description: '' });
-    await this._safeUpdate({ 'system.traits': traits });
-  }
-
-  /**
-   * Handle removing a trait from an ancestry item
-   *
-   * @this VagabondItemSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @private
-   */
-  static async _onRemoveTrait(event, target) {
-    const index = parseInt(target.dataset.traitIndex);
-    if (isNaN(index)) return;
-
-    const traits = this._collectArrayFromDOM('system.traits', 'traits');
-    const newTraits = traits.filter((_, i) => i !== index);
-    await this._safeUpdate({ 'system.traits': newTraits });
-  }
-
-  /**
-   * Handle adding a new level feature to a class item
-   *
-   * @this VagabondItemSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @private
-   */
-  static async _onAddLevelFeature(event, target) {
-    const level = parseInt(target.dataset.level);
-    if (isNaN(level)) return;
-
-    const features = this._collectArrayFromDOM('system.levelFeatures', 'levelFeatures');
-    features.push({ level, name: 'New Feature', description: '' });
-    await this._safeUpdate({ 'system.levelFeatures': features });
-  }
-
-  /**
-   * Handle removing a level feature from a class item
-   *
-   * @this VagabondItemSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @private
-   */
-  static async _onRemoveLevelFeature(event, target) {
-    const index = parseInt(target.dataset.featureIndex);
-    if (isNaN(index)) return;
-
-    const features = this._collectArrayFromDOM('system.levelFeatures', 'levelFeatures');
-    const newFeatures = features.filter((_, i) => i !== index);
-    await this._safeUpdate({ 'system.levelFeatures': newFeatures });
-  }
-
   /* -------------------------------------------- */
   /* Skill Grant Handlers                         */
   /* -------------------------------------------- */
-
-  /**
-   * Add a skill to the guaranteed list.
-   */
-  static async _onAddGuaranteedSkill(event, target) {
-    const select = this.element.querySelector('#guaranteed-skill-select');
-    if (!select) {
-      console.error("VAGABOND | Selector #guaranteed-skill-select not found");
-      return;
-    }
-    
-    const skill = select.value.toLowerCase().trim();
-    const current = this.item.system.skillGrant.guaranteed || [];
-    
-    if (current.includes(skill)) {
-      console.warn(`VAGABOND | Skill ${skill} is already in the list.`);
-      return;
-    }
-
-    const updateData = { "system.skillGrant.guaranteed": [...current, skill] };
-    await this.item.update(updateData);
-  }
-
-  static async _onRemoveGuaranteedSkill(event, target) {
-    const index = parseInt(target.dataset.index);
-
-    const current = this.item.system.skillGrant.guaranteed || [];
-    const newGuaranteed = current.filter((_, i) => i !== index);
-
-    await this.item.update({ "system.skillGrant.guaranteed": newGuaranteed });
-  }
-
-  static async _onAddPoolSkill(event, target) {
-    const choiceIndex = parseInt(target.dataset.choiceIndex);
-    const select = this.element.querySelector(`.pool-skill-select[data-choice-index="${choiceIndex}"]`);
-    if (!select || !select.value) return;
-
-    const skill = select.value;
-    const choices = foundry.utils.deepClone(this.item.system.skillGrant.choices || []);
-    const choice = choices[choiceIndex];
-    if (!choice) return;
-
-    choice.pool = choice.pool || [];
-    if (choice.pool.includes(skill)) return;
-    choice.pool.push(skill);
-
-    await this.item.update({ "system.skillGrant.choices": choices });
-  }
-
-  static async _onRemovePoolSkill(event, target) {
-    const choiceIndex = parseInt(target.dataset.choiceIndex);
-    const poolIndex = parseInt(target.dataset.poolIndex);
-
-    const choices = foundry.utils.deepClone(this.item.system.skillGrant.choices || []);
-    const choice = choices[choiceIndex];
-    if (!choice?.pool) return;
-
-    choice.pool.splice(poolIndex, 1);
-    await this.item.update({ "system.skillGrant.choices": choices });
-  }
-
-  /**
-   * Add a stat to the key stats list.
-   */
-  static async _onAddKeyStat(event, target) {
-    const select = this.element.querySelector('#key-stat-select');
-    if (!select) {
-      console.error("VAGABOND | Selector #key-stat-select not found");
-      return;
-    }
-
-    const stat = select.value.toLowerCase().trim();
-    if (!stat) {
-      console.warn("VAGABOND | No stat selected");
-      return;
-    }
-
-    const current = this.item.system.keyStats || [];
-
-    if (current.includes(stat)) {
-      console.warn(`VAGABOND | Stat ${stat} is already in the key stats list.`);
-      return;
-    }
-
-    const updateData = { "system.keyStats": [...current, stat] };
-    await this.item.update(updateData);
-  }
-
-  static async _onRemoveKeyStat(event, target) {
-    const index = parseInt(target.dataset.index);
-
-    const current = this.item.system.keyStats || [];
-    const newKeyStats = current.filter((_, i) => i !== index);
-
-    await this.item.update({ "system.keyStats": newKeyStats });
-  }
-
-  static async _onAddSkillChoiceGroup(event, target) {
-    const choices = [...(this.item.system.skillGrant.choices || []), { count: 1, pool: [], label: "" }];
-    
-    await this.item.update({ "system.skillGrant.choices": choices });
-  }
-
-  static async _onRemoveSkillChoiceGroup(event, target) {
-    const index = parseInt(target.dataset.index);
-    
-    const choices = (this.item.system.skillGrant.choices || []).filter((_, i) => i !== index);
-    await this.item.update({ "system.skillGrant.choices": choices });
-  }
-
-  static async _onUpdatePool(event, target) {
-    const index = parseInt(target.dataset.index);
-    const rawValue = target.value;
-    
-    const poolArray = rawValue.split(',')
-      .map(s => s.trim().toLowerCase())
-      .filter(s => s !== ""); 
-
-    // IMPORTANT: Deep clone the entire array for Compendium persistence
-    const choices = foundry.utils.deepClone(this.item.system.skillGrant.choices);
-    if (!choices[index]) return;
-
-    choices[index].pool = poolArray;
-
-    await this.item.update({ "system.skillGrant.choices": choices });
-  }
-
-  /**
-   * Action: Manual update for skill choices.
-   * This simply triggers the built-in submit logic of ApplicationV2.
-   */
-  static async _onSaveChoices(event, target) {
-    // Calling submit() collects all 'name' attributes from the form and updates the document.
-    await this.submit();
-    ui.notifications.info("Skill choices updated successfully.");
-  }
 
   /**
    * Refined data processing for skill pools.
@@ -1520,794 +892,6 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     return this._safeUpdate(submitData, options);
   }
 
-    /**
-     * Manual update for the Skill Choice Count using Actions.
-     */
-    static async _onUpdateCount(event, target) {
-      const index = parseInt(target.dataset.index);
-      const value = parseInt(target.value) || 0;
-
-      const choices = foundry.utils.deepClone(this.item.system.skillGrant.choices);
-      if (!choices[index]) return;
-
-      choices[index].count = value;
-
-      await this.item.update({ "system.skillGrant.choices": choices });
-    }
-
-  /**
-   * Handle adding a prerequisite type from the dropdown
-   *
-   * @this VagabondItemSheet
-   * @param {Event} event   The change event
-   * @param {HTMLElement} target   The select element
-   * @private
-   */
-  static async _onAddPrerequisiteType(event, target) {
-    const type = target.value;
-    if (!type) return; // No selection
-
-    // Reset the dropdown
-    target.value = '';
-
-    // Add the first prerequisite of the selected type
-    switch (type) {
-      case 'stat': {
-        const stats = this.item.system.prerequisites?.stats || [];
-        await this.item.update({ 'system.prerequisites.stats': [...stats, { stat: 'might', value: 1 }] });
-        break;
-      }
-      case 'statOrGroup': {
-        const orGroups = this.item.system.prerequisites?.statOrGroups || [];
-        await this.item.update({ 'system.prerequisites.statOrGroups': [...orGroups, [{ stat: 'might', value: 1 }]] });
-        break;
-      }
-      case 'trainedSkill': {
-        const skills = this.item.system.prerequisites?.trainedSkills || [];
-        await this.item.update({ 'system.prerequisites.trainedSkills': [...skills, 'arcana'] });
-        break;
-      }
-      case 'trainedSkillOrGroup': {
-        const orGroups = this.item.system.prerequisites?.trainedSkillOrGroups || [];
-        await this.item.update({ 'system.prerequisites.trainedSkillOrGroups': [...orGroups, ['arcana']] });
-        break;
-      }
-      case 'spell': {
-        const spells = this.item.system.prerequisites?.spells || [];
-        await this.item.update({ 'system.prerequisites.spells': [...spells, ''] });
-        break;
-      }
-      case 'spellOrGroup': {
-        const orGroups = this.item.system.prerequisites?.spellOrGroups || [];
-        await this.item.update({ 'system.prerequisites.spellOrGroups': [...orGroups, ['']] });
-        break;
-      }
-      case 'resource': {
-        const resources = this.item.system.prerequisites?.resources || [];
-        await this.item.update({ 'system.prerequisites.resources': [...resources, { resourceType: 'maxMana', minimum: 1 }] });
-        break;
-      }
-      case 'resourceOrGroup': {
-        const orGroups = this.item.system.prerequisites?.resourceOrGroups || [];
-        await this.item.update({ 'system.prerequisites.resourceOrGroups': [...orGroups, [{ resourceType: 'maxMana', minimum: 1 }]] });
-        break;
-      }
-    }
-  }
-
-  /**
-   * Handle adding a new stat prerequisite to a perk item
-   *
-   * @this VagabondItemSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @private
-   */
-  static async _onAddStatPrerequisite(event, target) {
-    const stats = this.item.system.prerequisites?.stats || [];
-    const newStats = [...stats, { stat: 'might', value: 1 }];
-    await this.item.update({ 'system.prerequisites.stats': newStats });
-  }
-
-  /**
-   * Handle removing a stat prerequisite from a perk item
-   *
-   * @this VagabondItemSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @private
-   */
-  static async _onRemoveStatPrerequisite(event, target) {
-    const index = parseInt(target.dataset.index);
-    if (isNaN(index)) return;
-
-    const stats = this.item.system.prerequisites?.stats || [];
-    const newStats = stats.filter((_, i) => i !== index);
-    await this.item.update({ 'system.prerequisites.stats': newStats });
-  }
-
-  /**
-   * Handle adding a new trained skill prerequisite to a perk item
-   *
-   * @this VagabondItemSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @private
-   */
-  static async _onAddTrainedSkillPrerequisite(event, target) {
-    const skills = this.item.system.prerequisites?.trainedSkills || [];
-    const newSkills = [...skills, 'arcana'];
-    await this.item.update({ 'system.prerequisites.trainedSkills': newSkills });
-  }
-
-  /**
-   * Handle removing a trained skill prerequisite from a perk item
-   *
-   * @this VagabondItemSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @private
-   */
-  static async _onRemoveTrainedSkillPrerequisite(event, target) {
-    const index = parseInt(target.dataset.index);
-    if (isNaN(index)) return;
-
-    const skills = this.item.system.prerequisites?.trainedSkills || [];
-    const newSkills = skills.filter((_, i) => i !== index);
-    await this.item.update({ 'system.prerequisites.trainedSkills': newSkills });
-  }
-
-  /**
-   * Handle adding a new stat OR group
-   *
-   * @this VagabondItemSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @private
-   */
-  static async _onAddStatOrGroup(event, target) {
-    const orGroups = this.item.system.prerequisites?.statOrGroups || [];
-    const newGroups = [...orGroups, [{ stat: 'might', value: 1 }]]; // Start with one stat as placeholder
-    await this.item.update({ 'system.prerequisites.statOrGroups': newGroups });
-  }
-
-  /**
-   * Handle removing an entire stat OR group
-   *
-   * @this VagabondItemSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @private
-   */
-  static async _onRemoveStatOrGroup(event, target) {
-    const groupIndex = parseInt(target.dataset.index);
-    if (isNaN(groupIndex)) return;
-
-    const orGroups = this.item.system.prerequisites?.statOrGroups || [];
-    const newGroups = orGroups.filter((_, i) => i !== groupIndex);
-    await this.item.update({ 'system.prerequisites.statOrGroups': newGroups });
-  }
-
-  /**
-   * Handle adding a stat to an existing OR group
-   *
-   * @this VagabondItemSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @private
-   */
-  static async _onAddStatToOrGroup(event, target) {
-    const groupIndex = parseInt(target.dataset.index);
-    if (isNaN(groupIndex)) return;
-
-    const orGroups = this.item.system.prerequisites?.statOrGroups || [];
-    const newGroups = foundry.utils.deepClone(orGroups);
-    newGroups[groupIndex] = [...newGroups[groupIndex], { stat: 'might', value: 1 }]; // Add placeholder
-
-    await this.item.update({ 'system.prerequisites.statOrGroups': newGroups });
-  }
-
-  /**
-   * Handle removing a stat from an OR group
-   *
-   * @this VagabondItemSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @private
-   */
-  static async _onRemoveStatFromOrGroup(event, target) {
-    const groupIndex = parseInt(target.dataset.group);
-    const statIndex = parseInt(target.dataset.stat);
-    if (isNaN(groupIndex) || isNaN(statIndex)) return;
-
-    const orGroups = this.item.system.prerequisites?.statOrGroups || [];
-    const newGroups = foundry.utils.deepClone(orGroups);
-    newGroups[groupIndex] = newGroups[groupIndex].filter((_, i) => i !== statIndex);
-
-    // Remove empty groups
-    const filteredGroups = newGroups.filter(group => group.length > 0);
-
-    await this.item.update({ 'system.prerequisites.statOrGroups': filteredGroups });
-  }
-
-  /**
-   * Handle adding a new trained skill OR group
-   *
-   * @this VagabondItemSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @private
-   */
-  static async _onAddTrainedSkillOrGroup(event, target) {
-    const orGroups = this.item.system.prerequisites?.trainedSkillOrGroups || [];
-    const newGroups = [...orGroups, ['arcana']]; // Start with one skill as placeholder
-    await this.item.update({ 'system.prerequisites.trainedSkillOrGroups': newGroups });
-  }
-
-  /**
-   * Handle removing an entire trained skill OR group
-   *
-   * @this VagabondItemSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @private
-   */
-  static async _onRemoveTrainedSkillOrGroup(event, target) {
-    const groupIndex = parseInt(target.dataset.index);
-    if (isNaN(groupIndex)) return;
-
-    const orGroups = this.item.system.prerequisites?.trainedSkillOrGroups || [];
-    const newGroups = orGroups.filter((_, i) => i !== groupIndex);
-    await this.item.update({ 'system.prerequisites.trainedSkillOrGroups': newGroups });
-  }
-
-  /**
-   * Handle adding a skill to an existing OR group
-   *
-   * @this VagabondItemSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @private
-   */
-  static async _onAddSkillToOrGroup(event, target) {
-    const groupIndex = parseInt(target.dataset.index);
-    if (isNaN(groupIndex)) return;
-
-    const orGroups = this.item.system.prerequisites?.trainedSkillOrGroups || [];
-    const newGroups = foundry.utils.deepClone(orGroups);
-    newGroups[groupIndex] = [...newGroups[groupIndex], 'arcana']; // Add placeholder
-
-    await this.item.update({ 'system.prerequisites.trainedSkillOrGroups': newGroups });
-  }
-
-  /**
-   * Handle removing a skill from an OR group
-   *
-   * @this VagabondItemSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @private
-   */
-  static async _onRemoveSkillFromOrGroup(event, target) {
-    const groupIndex = parseInt(target.dataset.group);
-    const skillIndex = parseInt(target.dataset.skill);
-    if (isNaN(groupIndex) || isNaN(skillIndex)) return;
-
-    const orGroups = this.item.system.prerequisites?.trainedSkillOrGroups || [];
-    const newGroups = foundry.utils.deepClone(orGroups);
-    newGroups[groupIndex] = newGroups[groupIndex].filter((_, i) => i !== skillIndex);
-
-    // Remove empty groups
-    const filteredGroups = newGroups.filter(group => group.length > 0);
-
-    await this.item.update({ 'system.prerequisites.trainedSkillOrGroups': filteredGroups });
-  }
-
-  /**
-   * Handle adding a new spell prerequisite to a perk item
-   *
-   * @this VagabondItemSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @private
-   */
-  static async _onAddSpellPrerequisite(event, target) {
-    const spells = this.item.system.prerequisites?.spells || [];
-    const newSpells = [...spells, ''];
-    await this.item.update({ 'system.prerequisites.spells': newSpells });
-  }
-
-  /**
-   * Handle removing a spell prerequisite from a perk item
-   *
-   * @this VagabondItemSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @private
-   */
-  static async _onRemoveSpellPrerequisite(event, target) {
-    const index = parseInt(target.dataset.index);
-    if (isNaN(index)) return;
-
-    const spells = this.item.system.prerequisites?.spells || [];
-    const newSpells = spells.filter((_, i) => i !== index);
-    await this.item.update({ 'system.prerequisites.spells': newSpells });
-  }
-
-  /**
-   * Handle toggling the "Has Any Spell" checkbox and hide/show specific spell selectors
-   *
-   * @this VagabondItemSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @private
-   */
-  static async _onToggleHasAnySpell(event, target) {
-    const checkbox = target;
-    const isChecked = checkbox.checked;
-
-    // Find the specific spell prerequisites container and toggle visibility
-    const prereqList = checkbox.closest('.prereq-list');
-    if (prereqList) {
-      const specificSpellsContainer = prereqList.querySelector('.specific-spell-prerequisites');
-      if (specificSpellsContainer) {
-        specificSpellsContainer.style.display = isChecked ? 'none' : '';
-      }
-    }
-  }
-
-  /**
-   * Handle change event on spell prerequisite dropdown
-   * @this VagabondItemSheet
-   * @param {Event} event - The change event
-   * @private
-   */
-  static async _onSpellPrerequisiteChange(event) {
-    const select = event.currentTarget;
-    const name = select.name;
-    const value = select.value;
-
-    // Extract index from name like "system.prerequisites.spells.0"
-    const match = name.match(/system\.prerequisites\.spells\.(\d+)/);
-    if (!match) return;
-
-    const index = parseInt(match[1]);
-    const spells = [...(this.item.system.prerequisites?.spells || [])];
-    spells[index] = value;
-
-    await this.item.update({ 'system.prerequisites.spells': spells }, { render: false });
-  }
-
-  /**
-   * Handle adding a new spell OR group
-   *
-   * @this VagabondItemSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @private
-   */
-  static async _onAddSpellOrGroup(event, target) {
-    const orGroups = this.item.system.prerequisites?.spellOrGroups || [];
-    const newGroups = [...orGroups, ['']]; // Start with one empty spell as placeholder
-    await this.item.update({ 'system.prerequisites.spellOrGroups': newGroups });
-  }
-
-  /**
-   * Handle removing an entire spell OR group
-   *
-   * @this VagabondItemSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @private
-   */
-  static async _onRemoveSpellOrGroup(event, target) {
-    const groupIndex = parseInt(target.dataset.index);
-    if (isNaN(groupIndex)) return;
-
-    const orGroups = this.item.system.prerequisites?.spellOrGroups || [];
-    const newGroups = orGroups.filter((_, i) => i !== groupIndex);
-    await this.item.update({ 'system.prerequisites.spellOrGroups': newGroups });
-  }
-
-  /**
-   * Handle adding a spell to an existing OR group
-   *
-   * @this VagabondItemSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @private
-   */
-  static async _onAddSpellToOrGroup(event, target) {
-    const groupIndex = parseInt(target.dataset.index);
-    if (isNaN(groupIndex)) return;
-
-    const orGroups = this.item.system.prerequisites?.spellOrGroups || [];
-    const newGroups = foundry.utils.deepClone(orGroups);
-    newGroups[groupIndex] = [...newGroups[groupIndex], '']; // Add empty placeholder
-
-    await this.item.update({ 'system.prerequisites.spellOrGroups': newGroups });
-  }
-
-  /**
-   * Handle removing a spell from an OR group
-   *
-   * @this VagabondItemSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @private
-   */
-  static async _onRemoveSpellFromOrGroup(event, target) {
-    const groupIndex = parseInt(target.dataset.group);
-    const spellIndex = parseInt(target.dataset.spell);
-    if (isNaN(groupIndex) || isNaN(spellIndex)) return;
-
-    const orGroups = this.item.system.prerequisites?.spellOrGroups || [];
-    const newGroups = foundry.utils.deepClone(orGroups);
-    newGroups[groupIndex] = newGroups[groupIndex].filter((_, i) => i !== spellIndex);
-
-    // Remove empty groups
-    const filteredGroups = newGroups.filter(group => group.length > 0);
-
-    await this.item.update({ 'system.prerequisites.spellOrGroups': filteredGroups });
-  }
-
-  /**
-   * Handle change event on resource prerequisite dropdown
-   * @this VagabondItemSheet
-   * @param {Event} event - The change event
-   * @private
-   */
-  static async _onResourcePrerequisiteChange(event) {
-    const select = event.currentTarget;
-    const name = select.name;
-    const value = select.value;
-
-    // Extract index and field from name like "system.prerequisites.resources.0.resourceType"
-    const match = name.match(/system\.prerequisites\.resources\.(\d+)\.(\w+)/);
-    if (!match) return;
-
-    const index = parseInt(match[1]);
-    const field = match[2];
-    const resources = foundry.utils.deepClone(this.item.system.prerequisites?.resources || []);
-
-    if (resources[index]) {
-      resources[index][field] = value;
-      await this.item.update({ 'system.prerequisites.resources': resources }, { render: false });
-    }
-  }
-
-  /**
-   * Handle adding a new resource prerequisite to a perk item
-   *
-   * @this VagabondItemSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @private
-   */
-  static async _onAddResourcePrerequisite(event, target) {
-    const resources = this.item.system.prerequisites?.resources || [];
-    const newResources = [...resources, { resourceType: 'maxMana', minimum: 1 }];
-    await this.item.update({ 'system.prerequisites.resources': newResources });
-  }
-
-  /**
-   * Handle removing a resource prerequisite from a perk item
-   *
-   * @this VagabondItemSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @private
-   */
-  static async _onRemoveResourcePrerequisite(event, target) {
-    const index = parseInt(target.dataset.index);
-    if (isNaN(index)) return;
-
-    const resources = this.item.system.prerequisites?.resources || [];
-    const newResources = resources.filter((_, i) => i !== index);
-    await this.item.update({ 'system.prerequisites.resources': newResources });
-  }
-
-  /**
-   * Handle adding a new resource OR group
-   *
-   * @this VagabondItemSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @private
-   */
-  static async _onAddResourceOrGroup(event, target) {
-    const orGroups = this.item.system.prerequisites?.resourceOrGroups || [];
-    const newGroups = [...orGroups, [{ resourceType: 'maxMana', minimum: 1 }]]; // Start with one resource as placeholder
-    await this.item.update({ 'system.prerequisites.resourceOrGroups': newGroups });
-  }
-
-  /**
-   * Handle removing an entire resource OR group
-   *
-   * @this VagabondItemSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @private
-   */
-  static async _onRemoveResourceOrGroup(event, target) {
-    const groupIndex = parseInt(target.dataset.index);
-    if (isNaN(groupIndex)) return;
-
-    const orGroups = this.item.system.prerequisites?.resourceOrGroups || [];
-    const newGroups = orGroups.filter((_, i) => i !== groupIndex);
-    await this.item.update({ 'system.prerequisites.resourceOrGroups': newGroups });
-  }
-
-  /**
-   * Handle adding a resource to an existing OR group
-   *
-   * @this VagabondItemSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @private
-   */
-  static async _onAddResourceToOrGroup(event, target) {
-    const groupIndex = parseInt(target.dataset.index);
-    if (isNaN(groupIndex)) return;
-
-    const orGroups = this.item.system.prerequisites?.resourceOrGroups || [];
-    const newGroups = foundry.utils.deepClone(orGroups);
-    newGroups[groupIndex] = [...newGroups[groupIndex], { resourceType: 'maxMana', minimum: 1 }]; // Add placeholder
-
-    await this.item.update({ 'system.prerequisites.resourceOrGroups': newGroups });
-  }
-
-  /**
-   * Handle removing a resource from an OR group
-   *
-   * @this VagabondItemSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @private
-   */
-  static async _onRemoveResourceFromOrGroup(event, target) {
-    const groupIndex = parseInt(target.dataset.group);
-    const resourceIndex = parseInt(target.dataset.resource);
-    if (isNaN(groupIndex) || isNaN(resourceIndex)) return;
-
-    const orGroups = this.item.system.prerequisites?.resourceOrGroups || [];
-    const newGroups = foundry.utils.deepClone(orGroups);
-    newGroups[groupIndex] = newGroups[groupIndex].filter((_, i) => i !== resourceIndex);
-
-    // Remove empty groups
-    const filteredGroups = newGroups.filter(group => group.length > 0);
-
-    await this.item.update({ 'system.prerequisites.resourceOrGroups': filteredGroups });
-  }
-
-  /**
-   * Handle clearing all stat prerequisites
-   *
-   * @this VagabondItemSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @private
-   */
-  static async _onClearAllStats(event, target) {
-    await this.item.update({ 'system.prerequisites.stats': [] });
-  }
-
-  /**
-   * Handle clearing all stat OR groups
-   *
-   * @this VagabondItemSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @private
-   */
-  static async _onClearAllStatOrGroups(event, target) {
-    await this.item.update({ 'system.prerequisites.statOrGroups': [] });
-  }
-
-  /**
-   * Handle clearing all trained skill prerequisites
-   *
-   * @this VagabondItemSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @private
-   */
-  static async _onClearAllTrainedSkills(event, target) {
-    await this.item.update({ 'system.prerequisites.trainedSkills': [] });
-  }
-
-  /**
-   * Handle clearing all trained skill OR groups
-   *
-   * @this VagabondItemSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @private
-   */
-  static async _onClearAllTrainedSkillOrGroups(event, target) {
-    await this.item.update({ 'system.prerequisites.trainedSkillOrGroups': [] });
-  }
-
-  /**
-   * Handle clearing all spell prerequisites
-   *
-   * @this VagabondItemSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @private
-   */
-  static async _onClearAllSpells(event, target) {
-    await this.item.update({ 'system.prerequisites.spells': [] });
-  }
-
-  /**
-   * Handle clearing all spell OR groups
-   *
-   * @this VagabondItemSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @private
-   */
-  static async _onClearAllSpellOrGroups(event, target) {
-    await this.item.update({ 'system.prerequisites.spellOrGroups': [] });
-  }
-
-  /**
-   * Handle clearing all resource prerequisites
-   *
-   * @this VagabondItemSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @private
-   */
-  static async _onClearAllResources(event, target) {
-    await this.item.update({ 'system.prerequisites.resources': [] });
-  }
-
-  /**
-   * Handle clearing all resource OR groups
-   *
-   * @this VagabondItemSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @private
-   */
-  static async _onClearAllResourceOrGroups(event, target) {
-    await this.item.update({ 'system.prerequisites.resourceOrGroups': [] });
-  }
-
-  /**
-   * Handle adding a new weapon property to a weapon item
-   *
-   * @this VagabondItemSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @private
-   */
-  static async _onToggleWeaponProperty(event, target) {
-    const property = target.dataset.property;
-    const isChecked = target.checked;
-    const properties = this.item.system.properties || [];
-
-    let newProperties;
-    if (isChecked) {
-      // Add property if not already present
-      if (!properties.includes(property)) {
-        newProperties = [...properties, property];
-      } else {
-        return; // Already exists
-      }
-    } else {
-      // Remove property
-      newProperties = properties.filter(p => p !== property);
-    }
-
-    await this.item.update({ 'system.properties': newProperties });
-  }
-
-  /**
-   * Handle removing a weapon property from a weapon item (via tag x button)
-   *
-   * @this VagabondItemSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @private
-   */
-  static async _onRemoveWeaponProperty(event, target) {
-    const property = target.dataset.property;
-    if (!property) return;
-
-    const properties = this.item.system.properties || [];
-    const newProperties = properties.filter(p => p !== property);
-    await this.item.update({ 'system.properties': newProperties });
-
-    // Uncheck the corresponding checkbox
-    const checkbox = this.element.querySelector(`input[type="checkbox"][data-property="${property}"]`);
-    if (checkbox) checkbox.checked = false;
-  }
-
-  /**
-   * Add/remove an alternate attack skill on a weapon (via checkbox)
-   *
-   * @this VagabondItemSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @private
-   */
-  static async _onToggleWeaponAltSkill(event, target) {
-    const skill = target.dataset.skill;
-    const altSkills = this.item.system.altSkills || [];
-    const next = target.checked
-      ? [...new Set([...altSkills, skill])]
-      : altSkills.filter(s => s !== skill);
-    await this.item.update({ 'system.altSkills': next });
-  }
-
-  /**
-   * Remove an alternate attack skill from a weapon (via tag x button)
-   *
-   * @this VagabondItemSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @private
-   */
-  static async _onRemoveWeaponAltSkill(event, target) {
-    const skill = target.dataset.skill;
-    if (!skill) return;
-    const altSkills = this.item.system.altSkills || [];
-    await this.item.update({ 'system.altSkills': altSkills.filter(s => s !== skill) });
-  }
-
-  /**
-   * Handle adding/removing immunity from armor (via checkbox)
-   *
-   * @this VagabondItemSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @private
-   */
-  static async _onToggleImmunity(event, target) {
-    const immunity = target.dataset.immunity;
-    const isChecked = target.checked;
-    const immunities = this.item.system.immunities || [];
-
-    let newImmunities;
-    if (isChecked) {
-      // Add immunity if not already present
-      if (!immunities.includes(immunity)) {
-        newImmunities = [...immunities, immunity];
-      } else {
-        return; // Already exists
-      }
-    } else {
-      // Remove immunity
-      newImmunities = immunities.filter(i => i !== immunity);
-    }
-
-    await this.item.update({ 'system.immunities': newImmunities });
-  }
-
-  /**
-   * Handle removing an immunity from armor (via tag x button)
-   *
-   * @this VagabondItemSheet
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @private
-   */
-  static async _onRemoveImmunity(event, target) {
-    const immunity = target.dataset.immunity;
-    if (!immunity) return;
-
-    const immunities = this.item.system.immunities || [];
-    const newImmunities = immunities.filter(i => i !== immunity);
-    await this.item.update({ 'system.immunities': newImmunities });
-
-    // Uncheck the corresponding checkbox
-    const checkbox = this.element.querySelector(`input[type="checkbox"][data-immunity="${immunity}"]`);
-    if (checkbox) checkbox.checked = false;
-  }
-
   /**
    * Handle toggling lock state for equipment items
    *
@@ -2332,34 +916,6 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     const currentLocked = this.item.system.locked || false;
     await this.item.update({ 'system.locked': !currentLocked });
     // No need to close/reopen - template handles both states with conditionals
-  }
-
-  /**
-   * Toggle the bound state of an equipment item.
-   * @this VagabondItemSheet
-   * @param {PointerEvent} event
-   * @param {HTMLElement} target
-   */
-  static async _onToggleBound(event, target) {
-    const currentBound = this.item.system.bound || false;
-
-    // If trying to bind, check the actor's bounds limit
-    if (!currentBound && this.item.parent) {
-      const actor = this.item.parent;
-      const currentBounds = actor.system.inventory?.currentBounds ?? 0;
-      const maxBounds = actor.system.inventory?.maxBounds ?? 3;
-      if (currentBounds >= maxBounds) {
-        ui.notifications.warn(game.i18n.format('VAGABOND.UI.Labels.BoundsLimitReached', {
-          name: this.item.name,
-          current: currentBounds,
-          max: maxBounds,
-        }));
-        return;
-      }
-    }
-
-    const actorUuid = this.item.parent?.uuid ?? '';
-    await this.item.update({ 'system.relic.boundTo': currentBound ? '' : actorUuid });
   }
 
   /**
@@ -2935,19 +1491,6 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
   }
 
   /**
-   * Handle removing a suggested starting pack from a class item
-   * @param {PointerEvent} event
-   * @param {HTMLElement} target
-   * @private
-   */
-  static async _onRemoveSuggestedStartingPack(event, target) {
-    const uuid = target.dataset.uuid;
-    if (!uuid) return;
-    const current = this.item.system.suggestedStartingPacks || [];
-    await this.item.update({ 'system.suggestedStartingPacks': current.filter(u => u !== uuid) });
-  }
-
-  /**
    * Handle removing an item from a starter pack
    * @param {PointerEvent} event   The originating click event
    * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
@@ -2999,64 +1542,6 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     });
   }
 
-  /**
-   * Generic grant handlers — delegate to GrantsHandlers using data-array-path / data-item-index.
-   */
-  static async _onAddGrantSpell(event, target) {
-    return GrantsHandlers.addGrantSpell(this, event, target);
-  }
-  static async _onRemoveGrantSpell(event, target) {
-    return GrantsHandlers.removeGrantSpell(this, event, target);
-  }
-  static async _onAddGrantPerk(event, target) {
-    return GrantsHandlers.addGrantPerk(this, event, target);
-  }
-  static async _onRemoveGrantPerk(event, target) {
-    return GrantsHandlers.removeGrantPerk(this, event, target);
-  }
-  static async _onRemoveGrantItem(event, target) {
-    return GrantsHandlers.removeGrantItem(this, event, target);
-  }
-  static async _onAddGrantItemChoiceGroup(event, target) {
-    return GrantsHandlers.addGrantItemChoiceGroup(this, event, target);
-  }
-  static async _onRemoveGrantItemChoiceGroup(event, target) {
-    return GrantsHandlers.removeGrantItemChoiceGroup(this, event, target);
-  }
-
-  /**
-   * Add a new skill choice group to a trait or feature.
-   */
-  static async _onAddGrantSkillChoiceGroup(event, target) {
-    const arrayPath = target.dataset.arrayPath;
-    const itemIndex = parseInt(target.dataset.itemIndex);
-    if (!arrayPath || isNaN(itemIndex)) return;
-
-    const prop = arrayPath.replace(/^system\./, '');
-    // Start from DOM state so unsaved text values aren't lost on re-render
-    const items = this._collectArrayFromDOM(arrayPath, prop);
-    if (!items[itemIndex]) return;
-    items[itemIndex].skillChoices = items[itemIndex].skillChoices || [];
-    items[itemIndex].skillChoices.push({ count: 1, pool: [], label: '' });
-    await this._safeUpdate({ [arrayPath]: items });
-  }
-
-  /**
-   * Remove a skill choice group from a trait or feature.
-   */
-  static async _onRemoveGrantSkillChoiceGroup(event, target) {
-    const arrayPath = target.dataset.arrayPath;
-    const itemIndex = parseInt(target.dataset.itemIndex);
-    const choiceIndex = parseInt(target.dataset.choiceIndex);
-    if (!arrayPath || isNaN(itemIndex) || isNaN(choiceIndex)) return;
-
-    const prop = arrayPath.replace(/^system\./, '');
-    // Start from DOM state so unsaved text values aren't lost on re-render
-    const items = this._collectArrayFromDOM(arrayPath, prop);
-    if (!items[itemIndex]?.skillChoices) return;
-    items[itemIndex].skillChoices.splice(choiceIndex, 1);
-    await this._safeUpdate({ [arrayPath]: items });
-  }
 
   /**
    * Toggle accordion item open/closed state.
@@ -3166,204 +1651,6 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
   // ---------------------------------------------------------------------------
 
   /**
-   * Add a blank caused-status entry to the item's causedStatuses array.
-   */
-  static async _onAddCausedStatus(event, target) {
-    const current = foundry.utils.deepClone(this.document.system.causedStatuses ?? []);
-    current.push({
-      statusId: '',
-      // Spells: the flag means "only if also Cast to deal damage" — off by default (Effect stands alone)
-      requiresDamage: this.document.type !== 'spell',
-      saveType: 'none',
-      duration: '',
-      tickDamageEnabled: false,
-      damageOnTick: '',
-      damageType: '-',
-      // TODO: fatigueOnTick: 0, — restore when re-enabling the fatigueOnTick feature
-    });
-    await this._safeUpdate({ 'system.causedStatuses': current });
-  }
-
-  /**
-   * Remove a caused-status entry by index.
-   */
-  static async _onRemoveCausedStatus(event, target) {
-    const idx = parseInt(target.dataset.index);
-    if (isNaN(idx)) return;
-    const current = foundry.utils.deepClone(this.document.system.causedStatuses ?? []);
-    current.splice(idx, 1);
-    await this._safeUpdate({ 'system.causedStatuses': current });
-  }
-
-  /**
-   * Add a blank passiveCausedStatuses entry.
-   */
-  static async _onAddPassiveCausedStatus(event, target) {
-    const current = foundry.utils.deepClone(this.document.system.passiveCausedStatuses ?? []);
-    current.push({
-      statusId: '',
-      requiresDamage: true,
-      saveType: 'none',
-      duration: '',
-      tickDamageEnabled: false,
-      damageOnTick: '',
-      damageType: '-',
-    });
-    await this._safeUpdate({ 'system.passiveCausedStatuses': current });
-  }
-
-  /**
-   * Remove a passiveCausedStatuses entry by index.
-   */
-  static async _onRemovePassiveCausedStatus(event, target) {
-    const idx = parseInt(target.dataset.index);
-    if (isNaN(idx)) return;
-    const current = foundry.utils.deepClone(this.document.system.passiveCausedStatuses ?? []);
-    current.splice(idx, 1);
-    await this._safeUpdate({ 'system.passiveCausedStatuses': current });
-  }
-
-  /**
-   * Add a blank critCausedStatuses entry.
-   */
-  static async _onAddCritCausedStatus(event, target) {
-    const current = foundry.utils.deepClone(this.document.system.critCausedStatuses ?? []);
-    current.push({
-      statusId: '',
-      // Spells: the flag means "only if also Cast to deal damage" — off by default (Effect stands alone)
-      requiresDamage: this.document.type !== 'spell',
-      saveType: 'none',
-      duration: '',
-      tickDamageEnabled: false,
-      damageOnTick: '',
-      damageType: '-',
-      // TODO: fatigueOnTick: 0, — restore when re-enabling the fatigueOnTick feature
-    });
-    await this._safeUpdate({ 'system.critCausedStatuses': current });
-  }
-
-  /**
-   * Remove a critCausedStatuses entry by index.
-   */
-  static async _onRemoveCritCausedStatus(event, target) {
-    const idx = parseInt(target.dataset.index);
-    if (isNaN(idx)) return;
-    const current = foundry.utils.deepClone(this.document.system.critCausedStatuses ?? []);
-    current.splice(idx, 1);
-    await this._safeUpdate({ 'system.critCausedStatuses': current });
-  }
-
-  /**
-   * Toggle a status in the armor's blockedStatuses array (full immunity).
-   */
-  static async _onToggleBlockedStatus(event, target) {
-    const statusId = target.dataset.statusId;
-    if (!statusId) return;
-    const current = foundry.utils.deepClone(this.document.system.blockedStatuses ?? []);
-    const idx = current.indexOf(statusId);
-    if (idx >= 0) current.splice(idx, 1);
-    else current.push(statusId);
-    await this._safeUpdate({ 'system.blockedStatuses': current }, { render: false });
-  }
-
-  /**
-   * Toggle a status in the armor's resistedStatuses array (favored save).
-   */
-  static async _onToggleResistedStatus(event, target) {
-    const statusId = target.dataset.statusId;
-    if (!statusId) return;
-    const current = foundry.utils.deepClone(this.document.system.resistedStatuses ?? []);
-    const idx = current.indexOf(statusId);
-    if (idx >= 0) current.splice(idx, 1);
-    else current.push(statusId);
-    await this._safeUpdate({ 'system.resistedStatuses': current }, { render: false });
-  }
-
-  /**
-   * Apply this alchemical item as a coating to a weapon in the actor's inventory.
-   * Opens a dialog listing owned weapons, then writes system.coating to the chosen weapon.
-   */
-  static async _onApplyCoating(event, target) {
-    const actor = this.document.parent;
-    if (!actor) {
-      ui.notifications.warn(game.i18n.localize('VAGABOND.Status.Coating.NoActor'));
-      return;
-    }
-
-    // Gather weapons in inventory
-    const weapons = actor.items.filter(i =>
-      i.type === 'equipment' && i.system.equipmentType === 'weapon'
-    );
-    if (!weapons.length) {
-      ui.notifications.warn(game.i18n.localize('VAGABOND.Status.Coating.NoWeapons'));
-      return;
-    }
-
-    // Build dialog content
-    const options = weapons.map(w =>
-      `<option value="${w.id}">${w.name}</option>`
-    ).join('');
-
-    const content = `
-      <form>
-        <div class="form-group">
-          <label>${game.i18n.localize('VAGABOND.Status.Coating.SelectWeapon')}</label>
-          <select name="weaponId">${options}</select>
-        </div>
-      </form>`;
-
-    new Dialog({
-      title: game.i18n.format('VAGABOND.Status.Coating.DialogTitle', { item: this.document.name }),
-      content,
-      buttons: {
-        apply: {
-          icon: '<i class="fas fa-flask"></i>',
-          label: game.i18n.localize('VAGABOND.Status.Coating.Apply'),
-          callback: async (html) => {
-            const weaponId = html.find('[name="weaponId"]').val();
-            const weapon = actor.items.get(weaponId);
-            if (!weapon) return;
-
-            const ItemClass = this.document.constructor;
-            if (this.document.system.isConsumable && ItemClass._chargesRemaining(this.document) <= 0) {
-              ui.notifications.warn(`Cannot apply ${this.document.name}: no charges remaining.`);
-              return;
-            }
-
-            const causedStatuses = foundry.utils.deepClone(
-              this.document.system.causedStatuses ?? []
-            );
-
-            await weapon.update({
-              'system.coating': {
-                sourceName: this.document.name,
-                charges: 1,
-                causedStatuses,
-              },
-            });
-
-            // Applying a coating IS using the item — spend a charge same as any other use.
-            if (this.document.system.isConsumable) {
-              await ItemClass._consumeCharge(this.document);
-            }
-
-            ui.notifications.info(
-              game.i18n.format('VAGABOND.Status.Coating.Applied', {
-                item: this.document.name,
-                weapon: weapon.name,
-              })
-            );
-          },
-        },
-        cancel: {
-          label: game.i18n.localize('Cancel'),
-        },
-      },
-      default: 'apply',
-    }).render(true);
-  }
-
-  /**
    * Spend/restore a use pip on this item (or on the multi-use item targeted
    * by `data-item-uuid`, when this pip row is rendered somewhere other than
    * the item's own sheet — see item-sections.mjs buildUsesPipsRow).
@@ -3388,317 +1675,4 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
   }
 
 
-  /**
-   * Clear an active Imbue payload from this weapon (manual cancel, GM or owner).
-   */
-  static async _onClearImbue(event, target) {
-    const payload = this.document.system.imbuedSpell;
-    const confirmed = await foundry.applications.api.DialogV2.confirm({
-      window: { title: game.i18n.localize('VAGABOND.Status.Imbue.ClearTitle') },
-      content: `<p>${game.i18n.format('VAGABOND.Status.Imbue.ClearConfirm', { spellName: payload.spellName, weaponName: this.document.name })}</p>`,
-      rejectClose: false,
-      modal: true,
-    });
-    if (!confirmed) return;
-    await VagabondImbueHelper.clearImbue(this.document);
-  }
-
-  // ── Container list ─────────────────────────────────────────────────────────
-
-  /**
-   * A live, unsaved Item built from one stored container entry, so derived data
-   * (material damage, Slots, Value) reads exactly like an owned item.
-   * @param {number} index
-   * @returns {Item|null}
-   */
-  _containerEntryDoc(index) {
-    const data = this.item.system.items?.[index];
-    if (!data) return null;
-    try {
-      return new Item.implementation(foundry.utils.deepClone(data), { parent: this.item.actor ?? null });
-    } catch (error) {
-      console.warn(`Vagabond | Container entry ${index} could not be read:`, error);
-      return null;
-    }
-  }
-
-  /**
-   * Whether the treasure bar offers the coin split button: the user may take from the container
-   * (the dialog finds its party — the transport's / owner's, else the user's own).
-   */
-  _containerCanShare() {
-    return this.item.type === 'container' && !this.item.pack && TradeHelper.canTake(game.user, this.item);
-  }
-
-  /** Treasure bar button: give / split the stored coins between party members. */
-  static _onShareContainerCoins() {
-    CoinTransferDialog.open(this.item);
-  }
-
-  /** Coins stored in the container, one entry per denomination (treasure bar). */
-  _containerCoins() {
-    return CurrencyHelper.DENOMINATIONS.map((key) => {
-      const name = key.charAt(0).toUpperCase() + key.slice(1);
-      return {
-        key,
-        value: this.item.system.currency?.[key] ?? 0,
-        label: game.i18n.localize(`VAGABOND.Wealth.${name}`),
-        abbr: game.i18n.localize(`VAGABOND.Currency.${name}.abbr`),
-      };
-    });
-  }
-
-  /**
-   * Container list rows grouped by type (Weapon, Armor, Alchemical, Relic, Gear), each sorted by
-   * name. Slots and Value are for the whole stack; a zero-Slot stack shows its share of a Slot
-   * (RAW: every 10 zero-Slot items take 1 Slot).
-   * @returns {Object[]}
-   */
-  _containerGroups() {
-    const keys = ['weapon', 'armor', 'alchemical', 'relic', 'gear'];
-    const buckets = Object.fromEntries(keys.map((key) => [key, []]));
-    const stack = CONFIG.VAGABOND?.zeroSlotStackSize || 10;
-
-    (this.item.system.items ?? []).forEach((data, index) => {
-      const doc = this._containerEntryDoc(index);
-      if (!doc) return;
-      const quantity = Math.max(0, Number(doc.system.quantity ?? 1));
-      const unitSlots = EquipmentHelper.itemSlotCost(doc);
-      const unitCost = doc.type === 'container' ? doc.system.baseCost : doc.system.cost;
-      const copper = CurrencyHelper.toCopper(unitCost ?? {}) * quantity;
-      const entryKey = data._id ?? `entry-${index}`;
-      const type = doc.system.equipmentType;
-
-      buckets[keys.includes(type) ? type : 'gear'].push({
-        index,
-        key: entryKey,
-        name: doc.name,
-        img: doc.img,
-        quantity,
-        damage: this._containerEntryDamage(doc),
-        slots: unitSlots > 0 ? unitSlots * quantity : Number((quantity / stack).toFixed(1)),
-        slotsHint: unitSlots > 0 ? '' : game.i18n.localize('VAGABOND.UI.Labels.ContainerList.ZeroSlotHint'),
-        value: copper > 0 ? CurrencyHelper.format(copper) : '—',
-        open: this._containerOpenItems.has(entryKey),
-      });
-    });
-
-    return keys
-      .filter((key) => buckets[key].length)
-      .map((key) => ({
-        key,
-        label: game.i18n.localize(`VAGABOND.Actor.Party.Inventory.Groups.${key}`),
-        closed: this._containerClosedGroups.has(key),
-        items: buckets[key].sort((a, b) => a.name.localeCompare(b.name)),
-      }));
-  }
-
-  /** Damage shown in the container list: weapon (material-adjusted) or alchemical damage. */
-  _containerEntryDamage(doc) {
-    const sys = doc.system;
-    if (EquipmentHelper.isWeapon(doc)) {
-      if (sys.grip === 'V') return `${sys.finalDamageOneHand || '—'} / ${sys.finalDamageTwoHands || '—'}`;
-      return sys.currentDamage && sys.currentDamage !== '-' ? sys.currentDamage : '—';
-    }
-    if (EquipmentHelper.isAlchemical(doc) && sys.damageAmount) {
-      return VagabondDamagePipeline.markExplode(sys.damageAmount, doc) || '—';
-    }
-    return '—';
-  }
-
-  /** Fill an open container row with the shared item detail body (description, stats, properties). */
-  async _fillContainerDetail(row) {
-    const host = row?.querySelector('.ci-detail-inner');
-    if (!host || host.dataset.loaded) return;
-    const doc = this._containerEntryDoc(Number(row.dataset.itemIndex));
-    if (!doc) return;
-    host.dataset.loaded = '1';
-
-    const TE = foundry.applications.ux.TextEditor.implementation;
-    const description = doc.system.description
-      ? await TE.enrichHTML(doc.system.description, { relativeTo: doc })
-      : '';
-    let html = description ? `<div class="mini-sheet-description">${description}</div>` : '';
-    html += doc.type === 'container'
-      ? `<div class="mini-sheet-stats">${ItemSections.buildSlotsRow(doc)}</div>`
-      : ItemSections.buildStatsSection(doc, { compact: true });
-    if (EquipmentHelper.isWeapon(doc) && doc.system.properties?.length) {
-      html += ItemSections.buildWeaponProperties(doc, { tooltips: true });
-    }
-    host.innerHTML = html;
-  }
-
-  /** Type section header: open / close the section (no re-render). */
-  static _onToggleContainerGroup(event, target) {
-    const group = target.closest('.ci-group');
-    const key = group?.dataset.groupKey;
-    if (!key) return;
-    if (group.classList.toggle('closed')) this._containerClosedGroups.add(key);
-    else this._containerClosedGroups.delete(key);
-  }
-
-  /** Item name: open / close its details (no re-render). */
-  static _onToggleContainerItem(event, target) {
-    const row = target.closest('.ci-item');
-    const key = row?.dataset.entryKey;
-    if (!key) return;
-    if (row.classList.toggle('open')) {
-      this._containerOpenItems.add(key);
-      this._fillContainerDetail(row);
-    } else {
-      this._containerOpenItems.delete(key);
-    }
-  }
-
-  /** Item image: open the stored item's sheet (an unsaved snapshot). */
-  static _onOpenContainerItem(event, target) {
-    const index = Number(target.closest('.ci-item')?.dataset.itemIndex);
-    this._containerEntryDoc(index)?.sheet.render(true);
-  }
-
-  /** Kebab (or right-click on a row): Open, Send to Chat, Take to Inventory, Delete. */
-  static _onContainerItemMenu(event, target) {
-    event.preventDefault();
-    event.stopPropagation();
-    const index = Number(target.closest('.ci-item')?.dataset.itemIndex);
-    // One menu at a time (the click is stopped, so the menu's click-outside close never sees it);
-    // clicking the same row's kebab again just closes it.
-    const reopen = document.querySelector('.vagabond-context-menu')?.dataset.containerEntry !== String(index);
-    ContextMenuHelper.closeAll();
-    if (!reopen && event.type === 'click') return;
-    const doc = this._containerEntryDoc(index);
-    if (!doc) return;
-    const actor = this.item.actor;
-    const L = (key) => game.i18n.localize(`VAGABOND.UI.Labels.ContainerList.${key}`);
-    const menu = ContextMenuHelper.create({
-      position: { x: event.clientX, y: event.clientY },
-      className: 'inventory-context-menu',
-      items: [
-        { label: L('Open'), icon: 'fas fa-up-right-from-square', action: () => doc.sheet.render(true) },
-        {
-          label: game.i18n.localize('VAGABOND.ContextMenu.SendToChat'),
-          icon: 'fas fa-comment',
-          enabled: !!actor,
-          action: async () => {
-            await VagabondChatCard.gearUse(actor, doc);
-          },
-        },
-        {
-          label: L('Take'),
-          icon: 'fas fa-hand-paper',
-          enabled: !!actor?.isOwner && this.isEditable,
-          action: () => this._takeFromContainer(index),
-        },
-        { divider: true },
-        {
-          label: L('Delete'),
-          icon: 'fas fa-trash',
-          enabled: this.isEditable,
-          action: () => this._deleteFromContainer(index),
-        },
-      ],
-    });
-    if (menu) menu.dataset.containerEntry = String(index);
-  }
-
-  /**
-   * Handle equipping an item from container to character inventory
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @private
-   */
-  static async _onEquipFromContainer(event, target) {
-    return this._takeFromContainer(parseInt(target.dataset.itemIndex));
-  }
-
-  /**
-   * Move a stored item into the owning actor's inventory (Weapons and Armor get equipped on a
-   * Character, through the hand limit).
-   * @param {number} index
-   */
-  async _takeFromContainer(index) {
-    if (this.item.type !== 'container' || isNaN(index)) return;
-    const actor = this.item.actor;
-    if (!actor) {
-      ui.notifications.warn('Container must be owned by a character to equip items.');
-      return;
-    }
-
-    const itemData = foundry.utils.deepClone(this.item.system.items[index]);
-    if (!itemData) return;
-
-    try {
-      // RAW carry limit is warn-only — flag an overload but never block the move.
-      const itemSlots = itemData.system?.baseSlots || 0;
-      const inv = actor.system.inventory ?? {};
-      const availableSlots = (inv.maxSlots ?? 0) - (inv.occupiedSlots ?? 0);
-      if (itemSlots > 0 && availableSlots < itemSlots) {
-        ui.notifications.warn(`${itemData.name} pushes you over your Inventory Slots (${inv.occupiedSlots ?? 0}/${inv.maxSlots ?? 0}).`);
-      }
-
-      // Clear containerId when moving item back to inventory; equipping goes through the hand limit below
-      itemData.system.containerId = null;
-      if (itemData.type === 'equipment') itemData.system.equipmentState = 'unequipped';
-
-      const [created] = await actor.createEmbeddedDocuments('Item', [itemData]);
-      const newItems = this.item.system.items.filter((_, i) => i !== index);
-      await this.item.update({ 'system.items': newItems });
-
-      const equips = created && (EquipmentHelper.isWeapon(created) || EquipmentHelper.isArmor(created));
-      if (equips && actor.type === 'character') {
-        await EquipmentHelper.equipWithHandLimit(actor, created.id, EquipmentHelper.defaultEquipState(created));
-      }
-
-      ui.notifications.info(`${itemData.name} equipped to character inventory.`);
-      this.render();
-    } catch (error) {
-      console.error('Error equipping item from container:', error);
-      ui.notifications.error('Failed to equip item.');
-    }
-  }
-
-  /**
-   * Handle deleting an item from container
-   * @param {PointerEvent} event   The originating click event
-   * @param {HTMLElement} target   The capturing HTML element which defined a [data-action]
-   * @private
-   */
-  static async _onDeleteFromContainer(event, target) {
-    return this._deleteFromContainer(parseInt(target.dataset.itemIndex));
-  }
-
-  /**
-   * Delete a stored item (after confirmation).
-   * @param {number} index
-   */
-  async _deleteFromContainer(index) {
-    if (this.item.type !== 'container' || isNaN(index)) return;
-    const itemData = this.item.system.items[index];
-    if (!itemData) return;
-
-    try {
-      const itemName = itemData.name || 'Unknown Item';
-
-      const confirmed = await foundry.applications.api.DialogV2.confirm({
-        window: { title: 'Delete Item' },
-        content: `<p>Are you sure you want to delete <strong>${itemName}</strong> from this container?</p><p>This action cannot be undone.</p>`,
-        rejectClose: false,
-        modal: true
-      });
-
-      if (!confirmed) return;
-
-      // Remove from container
-      const newItems = this.item.system.items.filter((_, i) => i !== index);
-      await this.item.update({ 'system.items': newItems });
-
-      ui.notifications.info(`${itemName} deleted from container.`);
-
-      // Force re-render to show updated items list
-      this.render();
-    } catch (error) {
-      console.error('Error deleting item from container:', error);
-      ui.notifications.error('Failed to delete item.');
-    }
-  }
 }

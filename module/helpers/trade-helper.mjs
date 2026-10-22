@@ -1,7 +1,7 @@
 import { CurrencyHelper } from './currency-helper.mjs';
 import { EquipmentHelper } from './equipment-helper.mjs';
 import { ShopTransactions } from './shop-transactions.mjs';
-import { GMRelay } from './gm-relay.mjs';
+import { GMRelay, isActiveGM } from './gm-relay.mjs';
 
 /**
  * Free trade — moving items and coins between inventories (Characters, transport Holds,
@@ -22,6 +22,7 @@ import { GMRelay } from './gm-relay.mjs';
  * - item source: `{ itemUuid }` (embedded or world/compendium item) or
  *   `{ containerUuid, entryId, index }` (an entry of a container's `system.items`)
  * - item / coin holder: `{ actorUuid }` or `{ containerUuid }`
+ * - the ground: `dropToCanvas` puts a container entry next to a token as a Canvas Loot tile
  *
  * Writes the user can't make run on the active GM (`GMRelay`, queue `trade`); a user who
  * owns every document involved runs them locally (no GM needed).
@@ -31,6 +32,7 @@ export class TradeHelper {
   static QUERIES = Object.freeze({
     moveItem: 'vagabond.trade.moveItem',
     moveCoins: 'vagabond.trade.moveCoins',
+    dropToCanvas: 'vagabond.trade.dropToCanvas',
   });
 
   /** Item types that live in inventories and can change hands. */
@@ -40,6 +42,7 @@ export class TradeHelper {
   static registerQueries() {
     GMRelay.register(this.QUERIES.moveItem, (data, user) => this._handleMoveItem(data, user), { queue: 'trade' });
     GMRelay.register(this.QUERIES.moveCoins, (data, user) => this._handleMoveCoins(data, user), { queue: 'trade' });
+    GMRelay.register(this.QUERIES.dropToCanvas, (data, user) => this._handleDropToCanvas(data, user), { queue: 'trade' });
   }
 
   /* -------------------------------------------- */
@@ -53,7 +56,8 @@ export class TradeHelper {
    * @param {{actorUuid?: string, containerUuid?: string}} args.dest
    * @param {number|null} [args.qty]
    * @param {boolean} [args.notify]  toast the outcome
-   * @returns {Promise<{ok: boolean, reason?: string, name?: string, qty?: number}>}
+   * @returns {Promise<{ok: boolean, reason?: string, name?: string, qty?: number, itemId?: string}>}
+   *   `itemId` = the destination actor's item that holds it now
    */
   static async moveItem({ source, dest, qty = null, notify = true }) {
     const data = { source, dest, qty };
@@ -132,6 +136,36 @@ export class TradeHelper {
     });
     const n = Math.floor(Number(value));
     return Number.isFinite(n) && n >= 1 ? Math.min(n, total) : null;
+  }
+
+  /**
+   * Put a container entry (whole stack) on the ground next to a token, as a Canvas Loot tile.
+   * Canvas Loot spawns on the active GM only, so this always runs there.
+   * @param {object} args
+   * @param {{containerUuid: string, entryId?: string, index?: number}} args.source
+   * @param {string} args.tokenUuid  the token it drops next to
+   * @param {boolean} [args.notify]  toast the outcome
+   * @returns {Promise<{ok: boolean, reason?: string, name?: string, qty?: number}>}
+   */
+  static async dropToCanvas({ source, tokenUuid, notify = true }) {
+    let result;
+    try {
+      result = await GMRelay.run(this.QUERIES.dropToCanvas, { source, tokenUuid }, { timeout: 30 * 1000, local: isActiveGM() });
+    } catch (err) {
+      if (GMRelay.isNoGM(err)) result = fail('noGM');
+      else { console.error('Vagabond | Trade drop to canvas failed', err); result = fail('error'); }
+    }
+    if (notify) {
+      if (result?.ok) ui.notifications.info(game.i18n.format('VAGABOND.Trade.Dropped', { name: result.name, dest: result.destName }));
+      else this.warn(result?.reason);
+    }
+    return result;
+  }
+
+  /** Canvas Loot API (optional module), or null. */
+  static canvasLoot() {
+    const mod = game.modules.get('canvas-loot');
+    return mod?.active ? (mod.api ?? null) : null;
   }
 
   /** Toast a failure reason. */
@@ -254,6 +288,7 @@ export class TradeHelper {
     if (data.type === 'equipment') data.system.quantity = n;
 
     let undo;
+    let itemId = null; // the actor item that holds it now (actor destination)
     if (toContainer) {
       const items = foundry.utils.deepClone(toContainer.system.items ?? []);
       const added = [...items, data];
@@ -274,11 +309,13 @@ export class TradeHelper {
         const was = stack.system.quantity;
         await stack.update({ 'system.quantity': was + n });
         undo = () => stack.update({ 'system.quantity': was });
+        itemId = stack.id;
       } else {
         if (EquipmentHelper.GRID_ITEM_TYPES.includes(data.type)) data.system.gridPosition = EquipmentHelper.nextGridPosition(target);
         const [created] = await target.createEmbeddedDocuments('Item', [data]);
         if (!created) return fail('error');
         undo = () => created.delete();
+        itemId = created.id;
       }
     }
 
@@ -309,7 +346,7 @@ export class TradeHelper {
       type: 'item', user, name: sourceData.name, qty: n, copy: copyOnly,
       from: fromActor ?? sourceContainer, to: target,
     });
-    return { ok: true, name: sourceData.name, qty: n, destName };
+    return { ok: true, name: sourceData.name, qty: n, destName, itemId };
   }
 
   static async _handleMoveCoins({ from, to, copper }, user) {
@@ -367,6 +404,53 @@ export class TradeHelper {
       if (!doc.isOwner) return false;
     }
     return true;
+  }
+
+  static async _handleDropToCanvas({ source, tokenUuid }, user) {
+    const loot = this.canvasLoot();
+    if (!loot) return fail('noCanvasLoot');
+    const container = await fromUuid(source?.containerUuid ?? '');
+    if (container?.type !== 'container') return fail('noSource');
+    if (!this.canTake(user, container)) return fail('notYours');
+    const items = foundry.utils.deepClone(container.system.items ?? []);
+    const at = findEntryIndex(items, source);
+    if (at < 0) return fail('noSource');
+    const sourceData = items[at];
+    if (!this.TRADE_TYPES.includes(sourceData?.type)) return fail('notTradable');
+
+    const token = await fromUuid(tokenUuid ?? '');
+    const scene = token?.parent;
+    if (token?.documentName !== 'Token' || !scene) return fail('noDest');
+    const size = scene.grid.size;
+    const around = { x: token.x, y: token.y, width: token.width * size, height: token.height * size };
+    const origin = { x: around.x + around.width / 2, y: around.y + around.height / 2 };
+    const levelId = token.level ?? scene.firstLevel?.id ?? scene.levels?.contents?.[0]?.id ?? null;
+    let point = null;
+    try {
+      [point] = loot.findLootSpaces({ scene, levelId, origin, around, count: 1 });
+    } catch (err) {
+      console.warn('Vagabond | Trade: no Canvas Loot space next to', token.name, err);
+    }
+    if (!point) return fail('noRoom');
+
+    // Ground first, then the container (a failed container write takes the tile back)
+    const data = cleanData(sourceData, null);
+    const tile = await loot.spawnLoot({ scene, levelId, point, itemData: data, from: origin, chat: false }).catch((err) => {
+      console.warn('Vagabond | Trade: Canvas Loot spawn failed', err);
+      return null;
+    });
+    if (!tile) return fail('noRoom');
+    try {
+      items.splice(at, 1);
+      await container.update({ 'system.items': items });
+    } catch (err) {
+      console.error('Vagabond | Trade: container update failed, removing the dropped tile', err);
+      try { await tile.delete(); } catch (rollbackErr) { console.error('Vagabond | Trade rollback failed', rollbackErr); }
+      return fail('error');
+    }
+    const qty = this.quantityOf(sourceData);
+    Hooks.callAll('vagabond.trade', { type: 'item', user, name: sourceData.name, qty, copy: false, from: container, to: scene });
+    return { ok: true, name: sourceData.name, qty, destName: token.name };
   }
 
   /** Run here when this user may (owns everything, or is a GM), else on the active GM; handlers run one at a time. */
