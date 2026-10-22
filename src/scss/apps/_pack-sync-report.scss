@@ -1,0 +1,233 @@
+// Compendium update report (PackSyncReport): summary, collapsible groups (actor → section → item rows), footer.
+// Kind colors: change = text, added = green, kept (your edit) = yellow, choice needed = red.
+
+.pack-sync-report {
+  .window-content { padding: 0; }
+
+  button {
+    height: auto;
+    line-height: normal;
+  }
+
+  .psr-root {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    font-family: $font-text;
+    color: $c-text-1;
+  }
+
+  .psr-summary {
+    flex: 0 0 auto;
+    padding: 10px 12px 8px;
+    border-bottom: 1px solid $c-faint;
+
+    p { margin: 0 0 6px; }
+  }
+
+  .psr-hint {
+    font-size: 0.9em;
+    color: $c-text-2;
+  }
+
+  .psr-totals {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 14px;
+    margin-bottom: 6px;
+    font-family: $font-title;
+  }
+
+  .psr-total i { margin-right: 3px; }
+
+  .is-added > i, .psr-total.is-added { color: $c-green; }
+  .is-kept > i, .psr-total.is-kept { color: $c-yellow; }
+  .is-choice > i, .psr-total.is-choice { color: $c-red; }
+
+  .psr-groups {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    padding: 8px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .psr-group {
+    border: 1px solid $c-tan;
+    border-radius: 4px;
+    background: $c-surface;
+
+    &[open] > .psr-group-head { border-bottom: 1px solid $c-faint; }
+  }
+
+  .psr-group-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 6px;
+    cursor: pointer;
+    list-style: none;
+    font-family: $font-title;
+
+    &::-webkit-details-marker { display: none; }
+
+    > img { flex: 0 0 32px; width: 32px; height: 32px; border: none; border-radius: 3px; object-fit: cover; }
+  }
+
+  .psr-group-icon {
+    flex: 0 0 32px;
+    text-align: center;
+    font-size: 1.3em;
+    color: $c-text-2;
+  }
+
+  .psr-group-name {
+    flex: 1 1 auto;
+    min-width: 0;
+    font-size: 1.05em;
+
+    small {
+      display: block;
+      font-family: $font-text;
+      font-size: 0.8em;
+      color: $c-text-2;
+    }
+  }
+
+  .psr-group-count {
+    min-width: 24px;
+    padding: 1px 6px;
+    border: 1px solid $c-faint;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 0.85em;
+
+    &.has-kept { border-color: $c-yellow; }
+  }
+
+  .psr-dismiss {
+    flex: 0 0 auto;
+    width: 28px;
+    padding: 3px 0;
+    font-size: 0.9em;
+  }
+
+  .psr-group-body {
+    padding: 6px 10px 8px;
+  }
+
+  .psr-section {
+    & + .psr-section { margin-top: 8px; }
+
+    h4 {
+      margin: 0 0 4px;
+      font-family: $font-title;
+      font-size: 0.95em;
+      color: $c-text-2;
+      border-bottom: 1px dashed $c-faint;
+    }
+  }
+
+  .psr-entry + .psr-entry { margin-top: 6px; }
+
+  .psr-entry-name {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: $font-title;
+    cursor: pointer;
+
+    img { width: 22px; height: 22px; border: none; border-radius: 2px; object-fit: cover; }
+    &:hover span { text-decoration: underline; }
+  }
+
+  .psr-lines {
+    list-style: none;
+    margin: 2px 0 0 28px;
+    padding: 0;
+    font-size: 0.9em;
+  }
+
+  .psr-line {
+    display: flex;
+    gap: 6px;
+    margin: 1px 0;
+
+    > i { flex: 0 0 14px; margin-top: 3px; text-align: center; font-size: 0.85em; color: $c-text-2; }
+    > span { min-width: 0; overflow-wrap: anywhere; }
+  }
+
+  .psr-line-body {
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  .psr-line-label { overflow-wrap: anywhere; }
+
+  // "d6 → d8": old value struck through, new one in the title font
+  .psr-inline {
+    margin-left: 6px;
+    white-space: nowrap;
+
+    > i { margin: 0 4px; font-size: 0.8em; color: $c-text-2; }
+  }
+
+  .psr-from {
+    color: $c-text-2;
+    text-decoration: line-through;
+  }
+
+  .psr-to { font-family: $font-title; }
+
+  // Kept edits: nothing was replaced, so the GM's value is not struck through
+  .is-kept {
+    .psr-from { text-decoration: none; font-family: $font-title; color: $c-text-1; }
+    .psr-to { font-family: $font-text; color: $c-text-2; }
+  }
+
+  .psr-diff {
+    margin-top: 2px;
+
+    > summary {
+      cursor: pointer;
+      font-size: 0.9em;
+      color: $c-text-2;
+    }
+  }
+
+  .psr-diff-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 6px;
+    margin-top: 4px;
+  }
+
+  .psr-diff-col {
+    padding: 4px 6px;
+    border: 1px solid $c-faint;
+    border-radius: 3px;
+    background: var(--vagabond-c-input-bg);
+
+    strong { display: block; margin-bottom: 2px; font-family: $font-title; font-size: 0.9em; color: $c-text-2; }
+    p { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+
+    &.is-to { border-color: $c-tan; }
+  }
+
+  .psr-empty {
+    margin: 20px 0;
+    text-align: center;
+    color: $c-text-2;
+  }
+
+  .psr-footer {
+    flex: 0 0 auto;
+    display: flex;
+    justify-content: flex-end;
+    padding: 8px 12px;
+    border-top: 1px solid $c-faint;
+
+    button { width: auto; padding: 4px 14px; }
+  }
+}

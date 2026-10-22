@@ -1,4 +1,5 @@
 import { isActiveGM } from './gm-relay.mjs';
+import { PackSync } from './pack-sync.mjs';
 
 /**
  * World migrations behind ONE world setting, `systemMigrationVersion` = the system version whose
@@ -38,13 +39,19 @@ async function store(version) {
   await game.settings.set('vagabond', MIGRATION_SETTING, version);
 }
 
-/** Bring the world's data up to this system version. Called once from the `ready` hook. */
+/**
+ * Bring the world's data up to this system version. Called once from the `ready` hook.
+ * After a system update the compendium copies follow the new packs (`PackSync`): updating = migrating, no opt-out
+ * (keep the old version to keep the old data).
+ * @returns {Promise<object|null>} the pack sync report when one ran
+ */
 export async function runSystemMigrations() {
-  if (!isActiveGM()) return;
+  if (!isActiveGM()) return null;
   const current = game.system.version;
   let stored = game.settings.get('vagabond', MIGRATION_SETTING) || legacyVersion();
-  if (stored === null) return store(current);
-  if (foundry.utils.isNewerVersion(MIGRATION_FLOOR, stored)) return warnTooOld(stored, current);
+  if (stored === null) { await store(current); return null; }
+  if (foundry.utils.isNewerVersion(MIGRATION_FLOOR, stored)) { await warnTooOld(stored, current); return null; }
+  const updated = foundry.utils.isNewerVersion(current, stored);
 
   for (const m of MIGRATIONS) {
     if (!foundry.utils.isNewerVersion(m.version, stored)) continue;
@@ -54,12 +61,25 @@ export async function runSystemMigrations() {
     } catch (err) {
       console.error(`Vagabond | Migration ${m.version} (${m.label}) failed`, err);
       ui.notifications.error(game.i18n.format('VAGABOND.Migration.Failed', { label: m.label }));
-      return;
+      return null;
     }
     stored = m.version;
     await store(stored);
   }
+  // Compendium copies -> the new packs, edits kept (a failure leaves the version behind so it retries next load)
+  let report = null;
+  if (updated) {
+    try {
+      ui.notifications.info(game.i18n.localize('VAGABOND.PackSync.Running'));
+      report = await PackSync.runAndStore();
+    } catch (err) {
+      console.error('Vagabond | Compendium update failed', err);
+      ui.notifications.error(game.i18n.localize('VAGABOND.PackSync.Failed'));
+      return null;
+    }
+  }
   if (foundry.utils.isNewerVersion(current, stored) || !game.settings.get('vagabond', MIGRATION_SETTING)) await store(current);
+  return report;
 }
 
 /** The world predates the floor: explain the upgrade path; the GM may mark it current. */

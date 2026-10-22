@@ -24,6 +24,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # full history: the pack history (step 4b) reads every past pack version
 
       # 1. Extract the version from system.json using jq
       - name: Get Version
@@ -78,6 +80,11 @@ jobs:
       - name: Build packs from source
         if: steps.check_tag.outputs.exists == 'false'
         run: node src/packs.mjs pack
+
+      # 4b. Pack history for the world compendium update (module/helpers/pack-sync.mjs)
+      - name: Build pack history
+        if: steps.check_tag.outputs.exists == 'false'
+        run: node scripts/pack-history/build.mjs
 
       # 5. Create the Zip file (Only if tag doesn't exist)
       # ------------------------------------------------------------------

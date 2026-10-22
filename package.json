@@ -7,7 +7,8 @@
     "watch": "sass src/scss/vagabond.scss css/vagabond.css --style=expanded --source-map --watch",
     "createSymlinks": "node src/create-symlinks.mjs",
     "pack": "node src/packs.mjs pack",
-    "unpack": "node src/packs.mjs unpack"
+    "unpack": "node src/packs.mjs unpack",
+    "pack-history": "node scripts/pack-history/build.mjs"
   },
   "browserslist": [
     "last 3 versions"

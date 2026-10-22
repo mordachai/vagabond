@@ -1,0 +1,81 @@
+{{!-- Compendium update report (PackSyncReport): group (actor / Items directory / token) → section → item rows --}}
+<div class='psr-root'>
+  <header class='psr-summary'>
+    <p>{{localize 'VAGABOND.PackSync.Intro' version=version}}</p>
+    <div class='psr-totals'>
+      <span class='psr-total is-change'><i class='fa-solid fa-arrow-right-arrow-left'></i> {{localize 'VAGABOND.PackSync.Totals.updated' n=totals.updated}}</span>
+      {{#if totals.added}}<span class='psr-total is-added'><i class='fa-solid fa-plus'></i> {{localize 'VAGABOND.PackSync.Totals.added' n=totals.added}}</span>{{/if}}
+      {{#if totals.kept}}<span class='psr-total is-kept'><i class='fa-solid fa-user-pen'></i> {{localize 'VAGABOND.PackSync.Totals.kept' n=totals.kept}}</span>{{/if}}
+      {{#if totals.choices}}<span class='psr-total is-choice'><i class='fa-solid fa-hand-pointer'></i> {{localize 'VAGABOND.PackSync.Totals.choices' n=totals.choices}}</span>{{/if}}
+    </div>
+    {{#if totals.kept}}<p class='psr-hint'>{{localize 'VAGABOND.PackSync.KeptHint'}}</p>{{/if}}
+  </header>
+
+  <div class='psr-groups'>
+    {{#each groups as |group|}}
+      <details class='psr-group' {{#if @first}}open{{/if}}>
+        <summary class='psr-group-head'>
+          {{#if group.img}}<img src='{{group.img}}' alt='' />{{else}}<i class='psr-group-icon {{group.icon}}'></i>{{/if}}
+          <span class='psr-group-name'>
+            {{group.label}}
+            {{#if group.sub}}<small>{{group.sub}}</small>{{/if}}
+          </span>
+          <span class='psr-group-count {{#if group.kept}}has-kept{{/if}}'>{{group.count}}</span>
+          <button type='button' class='psr-dismiss' data-action='dismissGroup' data-group-id='{{group.id}}'
+            data-tooltip='{{localize "VAGABOND.PackSync.DismissHint"}}'>
+            <i class='fa-solid fa-check'></i>
+          </button>
+        </summary>
+        <div class='psr-group-body'>
+          {{#each group.sections as |section|}}
+            <section class='psr-section'>
+              <h4>{{section.label}}</h4>
+              {{#each section.entries as |entry|}}
+                <div class='psr-entry'>
+                  <a class='psr-entry-name' data-action='openDoc' data-uuid='{{entry.uuid}}'>
+                    <img src='{{entry.img}}' alt='' /><span>{{entry.name}}</span>
+                  </a>
+                  <ul class='psr-lines'>
+                    {{#each entry.lines as |line|}}
+                      <li class='psr-line is-{{line.kind}}'>
+                        <i class='{{line.icon}}'></i>
+                        <div class='psr-line-body'>
+                          <span class='psr-line-label'>{{line.text}}</span>
+                          {{#if line.inline}}
+                            <span class='psr-inline'>
+                              <span class='psr-from' data-tooltip='{{line.fromLabel}}'>{{line.fromText}}</span>
+                              <i class='fa-solid fa-arrow-right'></i>
+                              <span class='psr-to' data-tooltip='{{line.toLabel}}'>{{line.toText}}</span>
+                            </span>
+                          {{/if}}
+                          {{#if line.expand}}
+                            <details class='psr-diff'>
+                              <summary>{{localize 'VAGABOND.PackSync.ShowValues'}}</summary>
+                              <div class='psr-diff-grid'>
+                                <div class='psr-diff-col is-from'><strong>{{line.fromLabel}}</strong><p>{{line.fromText}}</p></div>
+                                <div class='psr-diff-col is-to'><strong>{{line.toLabel}}</strong><p>{{line.toText}}</p></div>
+                              </div>
+                            </details>
+                          {{/if}}
+                        </div>
+                      </li>
+                    {{/each}}
+                  </ul>
+                </div>
+              {{/each}}
+            </section>
+          {{/each}}
+        </div>
+      </details>
+    {{else}}
+      <p class='psr-empty'>{{localize 'VAGABOND.PackSync.Empty'}}</p>
+    {{/each}}
+  </div>
+
+  <footer class='psr-footer'>
+    <button type='button' data-action='dismissAll'>
+      <i class='fa-solid fa-check-double'></i>
+      {{localize 'VAGABOND.PackSync.DismissAll'}}
+    </button>
+  </footer>
+</div>

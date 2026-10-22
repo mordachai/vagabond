@@ -5,6 +5,8 @@ import { SequencerFxConfig } from './sequencer-fx-config.mjs';
 import { DsnDamageAppearanceConfig } from './dsn-damage-appearance-config.mjs';
 import { CompendiumSettings } from './compendium-settings.mjs';
 import { AAMenuLoader } from '../helpers/aa-menu-loader.mjs';
+import { PackSync } from '../helpers/pack-sync.mjs';
+import { PackSyncReport } from './pack-sync-report.mjs';
 
 const { api } = foundry.applications;
 const NS = 'vagabond';
@@ -49,6 +51,8 @@ export class VagabondSettingsHub extends api.HandlebarsApplicationMixin(api.Appl
       forcePush: VagabondSettingsHub.#onForcePush,
       aaMenuLoad: VagabondSettingsHub.#onAAMenuLoad,
       aaMenuRestore: VagabondSettingsHub.#onAAMenuRestore,
+      packSyncRun: VagabondSettingsHub.#onPackSyncRun,
+      packSyncReport: VagabondSettingsHub.#onPackSyncReport,
       reloadNow: VagabondSettingsHub.#onReloadNow,
     },
   };
@@ -512,6 +516,24 @@ export class VagabondSettingsHub extends api.HandlebarsApplicationMixin(api.Appl
     });
     if (!ok) return;
     if (await AAMenuLoader.restoreBackup()) this.render();
+  }
+
+  /** Compendium update now (same as after a system update). */
+  static async #onPackSyncRun() {
+    const ok = await api.DialogV2.confirm({
+      window: { title: game.i18n.localize('VAGABOND.Settings.packSync.runTitle') },
+      content: '<p>' + game.i18n.localize('VAGABOND.Settings.packSync.runConfirm') + '</p>',
+    });
+    if (!ok) return;
+    ui.notifications.info(game.i18n.localize('VAGABOND.PackSync.Running'));
+    const report = await PackSync.runAndStore();
+    if (report.groups.length) PackSyncReport.open();
+    else ui.notifications.info(game.i18n.localize('VAGABOND.PackSync.NothingToDo'));
+  }
+
+  static #onPackSyncReport() {
+    if (PackSyncReport.stored()) PackSyncReport.open();
+    else ui.notifications.info(game.i18n.localize('VAGABOND.PackSync.Empty'));
   }
 
   static async #onReloadNow() {

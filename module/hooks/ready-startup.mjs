@@ -4,6 +4,7 @@ import { RageHelper } from '../helpers/rage-helper.mjs';
 import { loadJB2ADefaults } from '../helpers/sequencer-config.mjs';
 import { VagabondSpellSequencer } from '../helpers/spell-sequencer.mjs';
 import { runSystemMigrations } from '../helpers/system-migration.mjs';
+import { PackSyncReport } from '../applications/pack-sync-report.mjs';
 
 /**
  * Ready-time startup: FX defaults, light-source driver, world migrations (active GM), sweeps.
@@ -27,6 +28,13 @@ export function registerReadyStartup() {
     // Idempotent: Aggressor auto/manual twins stop double-counting when both are on.
     RageHelper.syncAggressorTwins();
     // World data → this system version (one version gate, see system-migration.mjs).
-    runSystemMigrations().catch((err) => console.error('Vagabond | World migration failed', err));
+    // A compendium update that changed something opens its report; one still not dismissed is a reminder.
+    runSystemMigrations()
+      .then((report) => {
+        if (!game.user.isGM) return;
+        if (report?.groups?.length) PackSyncReport.open();
+        else if (PackSyncReport.stored()) ui.notifications.info(game.i18n.localize('VAGABOND.PackSync.Reminder'));
+      })
+      .catch((err) => console.error('Vagabond | World migration failed', err));
   });
 }

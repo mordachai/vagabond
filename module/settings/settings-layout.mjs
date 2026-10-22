@@ -214,6 +214,12 @@ export const SETTINGS_SUBJECTS = [
         { kind: 'launcher', app: 'compendiums', icon: 'fa-book-open',
           label: 'VAGABOND.Settings.compendiumSettings.name', hint: 'VAGABOND.Settings.compendiumSettings.hint' },
       ]},
+      { id: 'packSync', scope: 'world', rows: [
+        { kind: 'action', action: 'packSyncRun', icon: 'fa-arrows-rotate',
+          label: 'VAGABOND.Settings.packSync.runTitle', hint: 'VAGABOND.Settings.packSync.runHint', button: 'VAGABOND.Settings.packSync.runButton' },
+        { kind: 'action', action: 'packSyncReport', icon: 'fa-list-check',
+          label: 'VAGABOND.Settings.packSync.reportTitle', hint: 'VAGABOND.Settings.packSync.reportHint', button: 'VAGABOND.Settings.packSync.reportButton' },
+      ]},
     ],
   },
 ];

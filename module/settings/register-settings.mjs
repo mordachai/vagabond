@@ -1143,6 +1143,14 @@ export function registerGameSettings({ refreshClockDependents, applyTokenEffectV
     default: []
   });
 
+  // Last compendium update report, until the GM dismisses it (applications/pack-sync-report.mjs)
+  game.settings.register('vagabond', 'packSyncReport', {
+    scope: 'world',
+    config: false,
+    type: Object,
+    default: {},
+  });
+
   // World migrations: the system version whose migrations this world ran (helpers/system-migration.mjs).
   game.settings.register('vagabond', 'systemMigrationVersion', {
     scope: 'world',
