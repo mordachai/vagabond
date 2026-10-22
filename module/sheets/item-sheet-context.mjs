@@ -1,6 +1,7 @@
 import { GrantsHandlers } from './item-sheet-grants.mjs';
 import { VagabondDamagePipeline } from '../helpers/damage-pipeline.mjs';
 import { levelTableCap } from '../helpers/homebrew-config.mjs';
+import { FeatureAction } from '../helpers/feature-action.mjs';
 
 /**
  * Render context of VagabondItemSheet parts: text enrichment and the per-type details tabs
@@ -38,12 +39,83 @@ export class ItemSheetContext {
     entry.enrichedPerks = await ItemSheetContext.refs(entry.allowedPerks);
     entry.enrichedItems = await GrantsHandlers.enrichGrantedItems(entry.grantedItems);
     entry.enrichedItemChoices = await GrantsHandlers.enrichItemChoices(entry.itemChoices);
+    entry.grantRows = ItemSheetContext.grantRows(entry, sheet.item);
     return entry;
+  }
+
+  /**
+   * Read-view rows of what a grant entry gives (locked sheet): `[{icon, label, text?, note?, refs?, choose?}]`.
+   * Call after `enrichGrants` filled the `enriched*` refs. `owner` = the Ancestry / Class (effect choices).
+   */
+  static grantRows(entry, owner) {
+    const t = (key, data) => game.i18n.format(`VAGABOND.Grants.Summary.${key}`, data);
+    const skill = (k) => game.i18n.localize(CONFIG.VAGABOND.skills?.[k] ?? k);
+    const choose = (n, refs) => t(refs?.length ? 'Choose' : 'ChooseAny', { n });
+    const prereqNote = { all: 'PrereqsAll', stats: 'PrereqsStats' }[entry.ignorePerkPrereqs];
+    const rows = [];
+
+    if (entry.statBonusPoints > 0) {
+      rows.push({ icon: 'fa-solid fa-dumbbell', label: t('Stats'), text: t('StatPoints', { n: entry.statBonusPoints }) });
+    }
+    if (entry.extraTraining > 0) {
+      rows.push({ icon: 'fa-solid fa-graduation-cap', label: t('Training'), text: t('ExtraTraining', { n: entry.extraTraining }) });
+    }
+    for (const group of entry.skillChoices || []) {
+      const pool = (group.pool || []).map(skill).join(', ');
+      rows.push({
+        icon: 'fa-solid fa-graduation-cap',
+        label: group.label || t('Training'),
+        text: pool ? `${t('ChooseOf', { n: group.count })} ${pool}` : t('ChooseAny', { n: group.count }),
+      });
+    }
+    if (entry.spellAmount > 0 || entry.enrichedSpells?.length) {
+      rows.push({
+        icon: 'fa-solid fa-wand-sparkles',
+        label: t('Spells'),
+        text: entry.spellAmount > 0 ? choose(entry.spellAmount, entry.enrichedSpells) : '',
+        refs: entry.enrichedSpells,
+      });
+    }
+    if (entry.perkAmount > 0 || entry.enrichedPerks?.length) {
+      rows.push({
+        icon: 'fa-solid fa-star',
+        label: t('Perks'),
+        text: entry.perkAmount > 0 ? choose(entry.perkAmount, entry.enrichedPerks) : '',
+        note: prereqNote && t(prereqNote),
+        refs: entry.enrichedPerks,
+      });
+    }
+    if (entry.enrichedItems?.length) {
+      rows.push({ icon: 'fa-solid fa-gift', label: t('Items'), refs: entry.enrichedItems });
+    }
+    for (const group of entry.enrichedItemChoices || []) {
+      rows.push({ icon: 'fa-solid fa-gift', label: group.label || t('Items'), text: choose(group.count, group.items), refs: group.items });
+    }
+    // Effect choices: the owner's own effects; on a character's copy a made pick left only the chosen ones
+    for (const choice of entry.effectChoices || []) {
+      const effects = (choice.pool || []).map((id) => owner?.effects?.get(id)).filter(Boolean);
+      if (!effects.length) continue;
+      const count = Math.max(1, Math.min(choice.count || 1, effects.length));
+      const open = effects.length > count;
+      rows.push({
+        icon: 'fa-solid fa-sparkles',
+        label: choice.label || t('Effects'),
+        text: open ? t('Choose', { n: count }) : '',
+        refs: effects.map((e) => ({ uuid: e.uuid, name: e.name, img: e.img })),
+        choose: open && owner.parent?.type === 'character' && owner.isOwner,
+      });
+    }
+    if (entry.action?.enabled) {
+      rows.push({ icon: FeatureAction.icon(entry.action), label: t('Action'), text: entry.action.label || entry.name });
+    }
+    return rows;
   }
 
   /** Ancestry details: description + traits with their grants. */
   static async ancestry(sheet, context) {
     context.enrichedDescription = await ItemSheetContext.enrich(sheet, sheet.item.system.description);
+    // Effect choice pools (grants editor checkboxes): the Ancestry's own effects
+    context.itemEffects = sheet.item.effects.map((e) => ({ id: e.id, name: e.name, img: e.img }));
     context.enrichedTraits = [];
     for (const trait of sheet.item.system.traits || []) {
       context.enrichedTraits.push(await ItemSheetContext.enrichGrants(sheet, { ...trait }));

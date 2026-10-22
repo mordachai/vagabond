@@ -334,6 +334,78 @@
     </div>
   </div>
 
+  {{! ── EFFECT CHOICES (ancestry traits only): pick N of the item's own effects ── }}
+  {{#unless isClassFeature}}
+  <div class='accordion-item collapsed' data-accordion-id='grant-{{itemIndex}}-effects'>
+    <div class='accordion-header' data-action='toggleAccordion'>
+      <i class='accordion-icon fas fa-chevron-right'></i>
+      <strong>{{localize "VAGABOND.Grants.EffectChoices.Title"}}</strong>
+    </div>
+    <div class='accordion-content'>
+      <div class='grants-accordion-body'>
+        <div class='grants-choice-groups'>
+          <div class='grants-choice-header'>
+            <label>{{localize "VAGABOND.ItemChoice.Groups"}}</label>
+            {{#if editable}}
+              <button type='button' class='btn-sm'
+                data-action='addGrantEffectChoiceGroup'
+                data-array-path='{{arrayPath}}'
+                data-item-index='{{itemIndex}}'>
+                <i class='fas fa-plus'></i> {{localize "VAGABOND.UI.Buttons.AddChoiceGroup"}}
+              </button>
+            {{/if}}
+          </div>
+          <span class='grants-hint'>{{localize "VAGABOND.Grants.EffectChoices.Hint"}}</span>
+
+          {{#each grant.effectChoices as |choice choiceIndex|}}
+            <div class='choice-group-card'>
+              <div class='choice-group-header'>
+                <strong>{{localize "VAGABOND.UI.Labels.Group"}} {{add choiceIndex 1}}</strong>
+                {{#if ../editable}}
+                  <a data-action='removeGrantEffectChoiceGroup'
+                    data-array-path='{{../arrayPath}}'
+                    data-item-index='{{../itemIndex}}'
+                    data-choice-index='{{choiceIndex}}'
+                    class='text-danger'>
+                    <i class='fas fa-trash'></i>
+                  </a>
+                {{/if}}
+              </div>
+              <div class='grants-row'>
+                <label>{{localize "VAGABOND.UI.Labels.Count"}}</label>
+                <input type='number'
+                  name='{{../arrayPath}}.{{../itemIndex}}.effectChoices.{{choiceIndex}}.count'
+                  value='{{choice.count}}'
+                  min='1' max='10'
+                  class='grants-num-input' />
+                <input type='text'
+                  name='{{../arrayPath}}.{{../itemIndex}}.effectChoices.{{choiceIndex}}.label'
+                  value='{{choice.label}}'
+                  placeholder='{{localize "VAGABOND.ItemChoice.LabelPlaceholder"}}'
+                  class='grants-label-input' />
+              </div>
+              <div class='skill-pool-checkboxes'>
+                {{#each @root.itemEffects as |fx|}}
+                  <label class='skill-checkbox-label'>
+                    <input type='checkbox'
+                      name='{{../../arrayPath}}.{{../../itemIndex}}.effectChoices.{{choiceIndex}}.pool'
+                      value='{{fx.id}}'
+                      {{#if (contains choice.pool fx.id)}}checked{{/if}}
+                      {{#unless ../../editable}}disabled{{/unless}} />
+                    <span>{{fx.name}}</span>
+                  </label>
+                {{else}}
+                  <small class='text-muted'>{{localize "VAGABOND.Grants.EffectChoices.NoEffects"}}</small>
+                {{/each}}
+              </div>
+            </div>
+          {{/each}}
+        </div>
+      </div>
+    </div>
+  </div>
+  {{/unless}}
+
   {{! ── ALCHEMY FORMULAS (class features only) ─────────────────────────── }}
   {{#if isClassFeature}}
   <div class='accordion-item collapsed' data-accordion-id='grant-{{itemIndex}}-formulas'>

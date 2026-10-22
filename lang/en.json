@@ -90,6 +90,7 @@
       "DamageRoll": "Damage"
     },
     "Damage": {
+      "Resisted": "Resisted (half damage)",
       "Total": "Total Damage",
       "Final": "Final Damage"
     },
@@ -214,6 +215,72 @@
       "Groups": "Item Choices",
       "LabelPlaceholder": "Label (default: trait name)",
       "DropHint": "Drop the items the player chooses from"
+    },
+    "PackSync": {
+      "Title": "Compendium Update Report",
+      "Intro": "Vagabond {version} updated the compendium copies in this world (items, ancestries, classes, statblocks). Fields you edited were kept. Check each group, then mark it as checked.",
+        "Totals": {
+        "updated": "{n} updated",
+        "added": "{n} added",
+        "kept": "{n} edits kept",
+        "choices": "{n} choices to make"
+      },
+      "KeptHint": "Kept: you changed this field, so your version stays, even though the compendium has a newer one. Open the item to compare.",
+      "DismissHint": "Checked, remove from the report",
+      "DismissAll": "All checked",
+      "Empty": "No compendium update to review.",
+      "Missing": "That document no longer exists.",
+      "Running": "Updating compendium copies…",
+      "Failed": "The compendium update failed (see the console). It will try again on the next load.",
+      "Reminder": "The compendium update report still has groups to check: Settings › Content & Homebrew › Compendium Update.",
+      "NothingToDo": "Every compendium copy is already up to date.",
+      "ItemsDirectory": "Items Directory",
+      "NewInPack": "New in the compendium: added",
+      "ChoiceNeeded": "{name}: a choice is needed (open the Ancestry and press Choose)",
+      "EffectAdded": "Effect added: {name}",
+      "Effect": "Effect",
+      "EntryAdded": "added",
+      "EntryRemoved": "removed",
+      "Before": "Before",
+      "After": "Now",
+      "Yours": "Yours (kept)",
+      "Compendium": "Compendium",
+      "None": "(none)",
+      "ShowValues": "Show before / after",
+      "Field": {
+        "Name": "Name",
+        "Image": "Image",
+        "Description": "Description"
+      },
+      "Section": {
+        "statblock": "Statblock",
+        "other": "Other"
+      }
+    },
+    "Grants": {
+      "EffectChoices": {
+        "Title": "Effect Choices",
+        "Hint": "Pick from this Ancestry's own effects (Effects tab). Leave them disabled: the picked ones are switched on, the others are removed from the character.",
+        "NoEffects": "This Ancestry has no effects yet (Effects tab)."
+      },
+      "Summary": {
+        "Stats": "Stats",
+        "StatPoints": "+{n} to Stats of your choice",
+        "Training": "Training",
+        "ExtraTraining": "+{n} Skills of your choice",
+        "Choose": "Choose {n}",
+        "ChooseOf": "Choose {n}:",
+        "ChooseButton": "Choose",
+        "ChooseAny": "Choose {n} (any)",
+        "Spells": "Spells",
+        "Perks": "Perks",
+        "Items": "Items",
+        "Action": "Button",
+        "PrereqsAll": "ignores prerequisites",
+        "PrereqsStats": "ignores Stat minimums",
+        "Effects": "Effects",
+        "NoTraits": "No traits defined."
+      }
     },
     "FeatureAction": {
       "Section": "Action Button",
@@ -1226,6 +1293,15 @@
       }
     },
     "Settings": {
+      "packSync": {
+        "runTitle": "Update Compendium Copies Now",
+        "runHint": "Runs the same update as after a system update.",
+        "runButton": "Update now",
+        "runConfirm": "Update every compendium copy in this world to the installed compendiums? Fields you edited are kept, and a report lists every change.",
+        "reportTitle": "Compendium Update Report",
+        "reportHint": "Opens the last report (until every group is marked as checked).",
+        "reportButton": "Open report"
+      },
       "spellCastDialogBlur": {
         "name": "Spell Cast Dialog Blur",
         "hint": "Backdrop blur radius (in pixels) behind the spell cast dialog. 0 disables the effect."
@@ -3762,6 +3838,7 @@
         }
       },
       "Sections": {
+        "packSync": "Compendium Update",
         "rolls": "Rolls & Damage",
         "defense": "Defense",
         "equipment": "Equipment",

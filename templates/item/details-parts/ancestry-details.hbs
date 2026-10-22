@@ -4,6 +4,54 @@
   data-group='primary'
   data-tab='details'
 >
+  {{#if system.locked}}
+    {{! Locked: read view — description, then each Trait with what it grants }}
+    <div class='ancestry-read'>
+      {{#if system.description}}
+        <div class='ancestry-read-desc'>{{{enrichedDescription}}}</div>
+      {{/if}}
+
+      <h3 class='ancestry-read-title'>{{localize "VAGABOND.UI.Sections.Traits"}}</h3>
+      {{#each enrichedTraits as |trait|}}
+        <article class='ancestry-trait-card'>
+          <header class='trait-title'>{{trait.name}}</header>
+          {{#if trait.description}}
+            <div class='ancestry-trait-text'>{{{trait.enrichedDescription}}}</div>
+          {{/if}}
+          {{#if trait.grantRows.length}}
+            <ul class='grant-summary'>
+              {{#each trait.grantRows as |row|}}
+                <li class='grant-summary-row'>
+                  <div class='grant-summary-head'>
+                    <i class='{{row.icon}}'></i>
+                    <span class='grant-summary-label'>{{row.label}}</span>
+                    {{#if row.text}}<span class='grant-summary-text'>{{row.text}}</span>{{/if}}
+                    {{#if row.note}}<em class='grant-summary-note'>{{row.note}}</em>{{/if}}
+                    {{#if row.choose}}
+                      <button type='button' class='grant-summary-choose' data-action='chooseTraitEffects'>
+                        {{localize "VAGABOND.Grants.Summary.ChooseButton"}}
+                      </button>
+                    {{/if}}
+                  </div>
+                  {{#if row.refs.length}}
+                    <div class='grant-refs'>
+                      {{#each row.refs as |ref|}}
+                        <a class='content-link grant-ref' draggable='true' data-link data-uuid='{{ref.uuid}}' data-tooltip='{{ref.name}}'>
+                          <img src='{{ref.img}}' alt='' /><span>{{ref.name}}</span>
+                        </a>
+                      {{/each}}
+                    </div>
+                  {{/if}}
+                </li>
+              {{/each}}
+            </ul>
+          {{/if}}
+        </article>
+      {{else}}
+        <p class='text-muted'>{{localize "VAGABOND.Grants.Summary.NoTraits"}}</p>
+      {{/each}}
+    </div>
+  {{else}}
     {{! Description Section }}
     <div>
       <label class='resource-label'>{{localize 'VAGABOND.Item.Tabs.Description'}}</label>
@@ -67,15 +115,17 @@
                 {{/if}}
               </div>
 
-              {{! Second row: Description }}
+              {{! Second row: Description (rich text, like Class features) }}
               <div class='trait-description'>
                 {{#if @root.editable}}
-                  <textarea
-                    name="system.traits.{{index}}.description"
-                    class="trait-desc-textarea"
-                    rows="3"
-                    placeholder="{{localize 'VAGABOND.UI.Labels.TraitDescriptionPlaceholder'}}"
-                  >{{trait.description}}</textarea>
+                  <prose-mirror
+                    name='system.traits.{{index}}.description'
+                    data-document-uuid='{{@root.item.uuid}}'
+                    value='{{trait.description}}'
+                    toggled='true'
+                  >
+                    {{{enrichedTrait.enrichedDescription}}}
+                  </prose-mirror>
                 {{else}}
                   {{#if enrichedTrait.enrichedDescription}}
                     <div>{{{enrichedTrait.enrichedDescription}}}</div>
@@ -104,4 +154,5 @@
           {{/if}}
       </ol>
     </div>
+  {{/if}}
 </section>

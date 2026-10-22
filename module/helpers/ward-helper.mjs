@@ -274,7 +274,8 @@ export class WardHelper {
       calcHtml = VagabondDamageChatHandlers._buildDamageCalculation(
         r.incoming, 0, breakdown.armorReduction, finalDamage, r.damageType, 'reflex', defender,
         false, false, breakdown.path, 0,
-        { title: this.#L('Label'), wardReduction: Math.min(wardTotal, r.incoming), wardTitle: `${spell.name}: ${formula} = ${amount}` }
+        { title: this.#L('Label'), wardReduction: Math.min(wardTotal, r.incoming), wardTitle: `${spell.name}: ${formula} = ${amount}`,
+          resistReduction: breakdown.resistReduction }
       );
       if (r.autoApplied) lines.push(this.#L('Restored', { target: defender.name, amount: saved }));
       else {

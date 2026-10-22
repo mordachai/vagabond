@@ -5,6 +5,7 @@ import { isStackableZeroSlot } from '../helpers/stack-helper.mjs';
 import { CurrencyHelper } from '../helpers/currency-helper.mjs';
 import { HunterHelper } from '../helpers/hunter-helper.mjs';
 import { GrantedItems } from '../helpers/granted-items.mjs';
+import { EffectChoices } from '../helpers/effect-choices.mjs';
 import { MaterialsHelper } from '../helpers/materials-helper.mjs';
 import { ItemNameTokens } from '../helpers/item-name-tokens.mjs';
 import { VagabondChatCard } from '../helpers/chat-card.mjs';
@@ -339,6 +340,7 @@ export class VagabondItem extends Item {
     // An Ancestry / Class grants its items (Draken Breath Attack…) however it was added
     if ((this.type === 'ancestry' || this.type === 'class') && userId === game.user.id) {
       await GrantedItems.grantOnAdd(this);
+      if (this.type === 'ancestry') await EffectChoices.onAdd(this);
       return;
     }
 

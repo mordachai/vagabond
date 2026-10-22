@@ -44,7 +44,7 @@
         <input name='name' type='text' value='{{item._source.name}}' placeholder='{{localize "VAGABOND.UI.Labels.NamePlaceholder"}}' />
         {{/if}}
       </div>
-      {{#if (and editable (or (eq item.type 'equipment') (eq item.type 'container') (eq item.type 'spell')))}}
+      {{#if (and editable (or (eq item.type 'equipment') (eq item.type 'container') (eq item.type 'spell') (eq item.type 'ancestry')))}}
         {{#unless disguiseLocked}}
         <button
           type='button'
@@ -106,6 +106,9 @@
     {{/if}}
 
     {{#if (eq item.type 'ancestry')}}
+      {{#if system.locked}}
+        {{#if itemSubtitle}}<div class='item-subtitle'>{{itemSubtitle}}</div>{{/if}}
+      {{else}}
       <div class='grid grid-2col'>
         <div class='resource'>
           <label class='resource-label'>{{localize 'VAGABOND.Item.Ancestry.FIELDS.size.label'}}</label>
@@ -116,6 +119,7 @@
           {{> "systems/vagabond/templates/shared/being-type-select.hbs" name="system.ancestryType" selected=system.ancestryType}}
         </div>
       </div>
+      {{/if}}
     {{/if}}
 
     {{#if (eq item.type 'weapon')}}

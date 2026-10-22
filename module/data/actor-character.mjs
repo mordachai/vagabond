@@ -801,6 +801,13 @@ export default class VagabondCharacter extends VagabondActorBase {
       { required: true, initial: [] }
     );
 
+    // Resistant damage types: half damage (round down), taken before Armor. AE ADD a damage type key
+    // (Draken Draconic Resilience). Family keys cover their members (typeListCovers).
+    schema.damageResistances = new fields.ArrayField(
+      new fields.StringField({ required: true }),
+      { required: true, initial: [] }
+    );
+
     // Status condition immunities — managed via Active Effects (ADD mode appends to array)
     schema.statusImmunities = new fields.ArrayField(
       new fields.StringField({ required: true }),

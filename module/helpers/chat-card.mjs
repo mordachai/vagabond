@@ -1337,6 +1337,7 @@ export class VagabondChatCard {
     extraHtml = '',
     wardReduction = 0,
     wardTitle = '',
+    resistReduction = 0,
     extraFlags = null,
   } = {}) {
     const effective = finalAmount;
@@ -1376,6 +1377,12 @@ export class VagabondChatCard {
         calcHTML += `
           <span class="damage-operator">-</span>
           <span class="damage-component ward-component" title="${foundry.utils.escapeHTML(wardTitle || '')}"><i class="fas fa-star-christmas"></i> ${wardReduction}</span>`;
+      }
+
+      if (resistReduction > 0) {
+        calcHTML += `
+          <span class="damage-operator">-</span>
+          <span class="damage-component" title="${game.i18n.localize('VAGABOND.Damage.Resisted')}"><i class="fa-solid fa-circle-half-stroke"></i> ${resistReduction}</span>`;
       }
 
       if (armorReduction > 0) {

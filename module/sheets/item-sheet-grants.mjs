@@ -4,6 +4,7 @@
  * Click handlers are AppV2 actions of VagabondItemSheet (`this` = the sheet).
  */
 import { GrantedItems } from '../helpers/granted-items.mjs';
+import { EffectChoices } from '../helpers/effect-choices.mjs';
 
 export class GrantsHandlers {
   /**
@@ -163,6 +164,37 @@ export class GrantsHandlers {
     if (!items[itemIndex]?.itemChoices) return;
     items[itemIndex].itemChoices = items[itemIndex].itemChoices.filter((_, i) => i !== choiceIndex);
     await sheet.item.update({ [arrayPath]: items });
+  }
+
+  /** Add an empty effect choice group (pick N of the item's own effects) to an Ancestry trait. */
+  static async addGrantEffectChoiceGroup(event, target) {
+    const sheet = this;
+    const { arrayPath, itemIndex } = GrantsHandlers.#attrs(target, ['arrayPath', 'itemIndex']);
+    if (!arrayPath || itemIndex === null) return;
+    const prop = arrayPath.replace(/^system\./, '');
+    const items = sheet._collectArrayFromDOM(arrayPath, prop);
+    if (!items[itemIndex]) return;
+    items[itemIndex].effectChoices = [...(items[itemIndex].effectChoices || []), { count: 1, pool: [], label: '' }];
+    await sheet.item.update({ [arrayPath]: items });
+  }
+
+  /** Remove an effect choice group from an Ancestry trait. */
+  static async removeGrantEffectChoiceGroup(event, target) {
+    const sheet = this;
+    const { arrayPath, itemIndex, choiceIndex } = GrantsHandlers.#attrs(target, ['arrayPath', 'itemIndex', 'choiceIndex']);
+    if (!arrayPath || itemIndex === null || choiceIndex === null) return;
+    const prop = arrayPath.replace(/^system\./, '');
+    const items = sheet._collectArrayFromDOM(arrayPath, prop);
+    if (!items[itemIndex]?.effectChoices) return;
+    items[itemIndex].effectChoices = items[itemIndex].effectChoices.filter((_, i) => i !== choiceIndex);
+    await sheet.item.update({ [arrayPath]: items });
+  }
+
+  /** Locked Ancestry on a character: make the effect picks still open (Draconic Resilience element). */
+  static async chooseTraitEffects() {
+    const item = this.item;
+    const picks = await EffectChoices.prompt(item);
+    if (picks) await EffectChoices.apply(item, EffectChoices.groupsFor(item), picks);
   }
 
   /** `itemChoices` → `[{count, label, items: [{uuid, name, img}]}]` for the grants editor. */

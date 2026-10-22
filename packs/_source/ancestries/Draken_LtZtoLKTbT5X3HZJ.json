@@ -56,7 +56,19 @@
         "perkAmount": 0,
         "ignorePerkPrereqs": "none",
         "spellAmount": 0,
-        "skillChoices": []
+        "skillChoices": [],
+        "effectChoices": [
+          {
+            "count": 1,
+            "label": "",
+            "pool": [
+              "DrknResAcid00010",
+              "DrknResCold00010",
+              "DrknResFire00010",
+              "DrknResShck00010"
+            ]
+          }
+        ]
       }
     ]
   },
@@ -109,6 +121,206 @@
         "lastModifiedBy": "13p65OEadZSZVLRk"
       },
       "_key": "!items.effects!LtZtoLKTbT5X3HZJ.1Ismbz8nwoNAFkNj"
+    },
+    {
+      "name": "Draconic Resilience: Acid",
+      "origin": "Compendium.vagabond.ancestries.Item.LtZtoLKTbT5X3HZJ",
+      "img": "icons/magic/acid/projectile-stream-bubbles.webp",
+      "_id": "DrknResAcid00010",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.damageResistances",
+            "value": "acid",
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": true,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "<p>You take half damage from Acid.</p>",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent",
+          "effectKey": "draken-resilience-acid"
+        }
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.42.0",
+        "createdTime": 1792692944182,
+        "modifiedTime": 1792692944182,
+        "lastModifiedBy": "13p65OEadZSZVLRk"
+      },
+      "_key": "!items.effects!LtZtoLKTbT5X3HZJ.DrknResAcid00010"
+    },
+    {
+      "name": "Draconic Resilience: Cold",
+      "origin": "Compendium.vagabond.ancestries.Item.LtZtoLKTbT5X3HZJ",
+      "img": "icons/magic/water/beam-ice-impact.webp",
+      "_id": "DrknResCold00010",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.damageResistances",
+            "value": "cold",
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": true,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "<p>You take half damage from Cold.</p>",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent",
+          "effectKey": "draken-resilience-cold"
+        }
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.42.0",
+        "createdTime": 1792692944182,
+        "modifiedTime": 1792692944182,
+        "lastModifiedBy": "13p65OEadZSZVLRk"
+      },
+      "_key": "!items.effects!LtZtoLKTbT5X3HZJ.DrknResCold00010"
+    },
+    {
+      "name": "Draconic Resilience: Fire",
+      "origin": "Compendium.vagabond.ancestries.Item.LtZtoLKTbT5X3HZJ",
+      "img": "icons/magic/fire/beam-jet-stream-trails-orange.webp",
+      "_id": "DrknResFire00010",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.damageResistances",
+            "value": "fire",
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": true,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "<p>You take half damage from Fire.</p>",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent",
+          "effectKey": "draken-resilience-fire"
+        }
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.42.0",
+        "createdTime": 1792692944182,
+        "modifiedTime": 1792692944182,
+        "lastModifiedBy": "13p65OEadZSZVLRk"
+      },
+      "_key": "!items.effects!LtZtoLKTbT5X3HZJ.DrknResFire00010"
+    },
+    {
+      "name": "Draconic Resilience: Shock",
+      "origin": "Compendium.vagabond.ancestries.Item.LtZtoLKTbT5X3HZJ",
+      "img": "icons/magic/lightning/bolt-beam-strike-blue.webp",
+      "_id": "DrknResShck00010",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.damageResistances",
+            "value": "shock",
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": true,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "<p>You take half damage from Shock.</p>",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent",
+          "effectKey": "draken-resilience-shock"
+        }
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.42.0",
+        "createdTime": 1792692944182,
+        "modifiedTime": 1792692944182,
+        "lastModifiedBy": "13p65OEadZSZVLRk"
+      },
+      "_key": "!items.effects!LtZtoLKTbT5X3HZJ.DrknResShck00010"
     }
   ],
   "folder": null,

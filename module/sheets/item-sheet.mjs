@@ -129,6 +129,9 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       removeGrantItem: GrantsHandlers.removeGrantItem,
       addGrantItemChoiceGroup: GrantsHandlers.addGrantItemChoiceGroup,
       removeGrantItemChoiceGroup: GrantsHandlers.removeGrantItemChoiceGroup,
+      addGrantEffectChoiceGroup: GrantsHandlers.addGrantEffectChoiceGroup,
+      removeGrantEffectChoiceGroup: GrantsHandlers.removeGrantEffectChoiceGroup,
+      chooseTraitEffects: GrantsHandlers.chooseTraitEffects,
       addGrantSkillChoiceGroup: ItemSheetClassEditor._onAddGrantSkillChoiceGroup,
       removeGrantSkillChoiceGroup: ItemSheetClassEditor._onRemoveGrantSkillChoiceGroup,
       toggleBound: ItemSheetEquipment._onToggleBound,
@@ -337,6 +340,16 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       const dmgLabel = dmg && dmg !== '-' && CONFIG.VAGABOND.damageTypes?.[dmg];
       context.itemSubtitle = [game.i18n.localize('VAGABOND.UI.Labels.Spell'), dmgLabel && game.i18n.localize(dmgLabel)]
         .filter(Boolean).join(' · ');
+    } else if (this.item.type === 'ancestry') {
+      // "Ancestry · Medium · Cryptid"
+      const { size, ancestryType } = this.item.system;
+      const sizeLabel = CONFIG.VAGABOND.sizes?.[size];
+      const typeLabel = CONFIG.VAGABOND.beingTypes?.[ancestryType];
+      context.itemSubtitle = [
+        game.i18n.localize('TYPES.Item.ancestry'),
+        sizeLabel && game.i18n.localize(sizeLabel),
+        typeLabel ? game.i18n.localize(typeLabel) : ancestryType,
+      ].filter(Boolean).join(' · ');
     }
 
     // Thrown Alchemical Items: owned → the skill a throw rolls with right now
@@ -604,16 +617,6 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
         }
       });
     }
-
-    // Auto-resize trait description textareas to fit their content
-    this.element.querySelectorAll('textarea.trait-desc-textarea').forEach(ta => {
-      ta.style.height = 'auto';
-      ta.style.height = ta.scrollHeight + 'px';
-      ta.addEventListener('input', () => {
-        ta.style.height = 'auto';
-        ta.style.height = ta.scrollHeight + 'px';
-      });
-    });
 
     // Set up drag and drop for the entire sheet
     const dragDrop = new DragDrop.implementation({
@@ -901,7 +904,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
    * @private
    */
   static async _onToggleLock(event, target) {
-    if (this.item.type !== 'equipment' && this.item.type !== 'container' && this.item.type !== 'spell') return;
+    if (!['equipment', 'container', 'spell', 'ancestry'].includes(this.item.type)) return;
     if (!this.isEditable || ItemDisguise.hidesFromUser(this.item)) return;
 
     // Submit the form BEFORE toggling to save any pending changes

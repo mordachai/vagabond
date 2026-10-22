@@ -90,6 +90,7 @@
       "DamageRoll": "Dano"
     },
     "Damage": {
+      "Resisted": "Resistente (metade do dano)",
       "Total": "Dano Total",
       "Final": "Dano Final"
     },
@@ -186,6 +187,72 @@
       "Groups": "Escolhas de Itens",
       "LabelPlaceholder": "Rótulo (padrão: nome do traço)",
       "DropHint": "Solte os itens entre os quais o jogador escolhe"
+    },
+    "PackSync": {
+      "Title": "Relatório de Atualização dos Compêndios",
+      "Intro": "Vagabond {version} atualizou as cópias dos compêndios neste mundo (itens, ancestralidades, classes, fichas). Os campos que você editou foram mantidos. Confira cada grupo e marque como conferido.",
+        "Totals": {
+        "updated": "{n} atualizados",
+        "added": "{n} adicionados",
+        "kept": "{n} edições mantidas",
+        "choices": "{n} escolhas pendentes"
+      },
+      "KeptHint": "Mantido: você alterou este campo, então sua versão fica, mesmo que o compêndio tenha uma mais nova. Abra o item para comparar.",
+      "DismissHint": "Conferido, remover do relatório",
+      "DismissAll": "Tudo conferido",
+      "Empty": "Nenhuma atualização de compêndio para conferir.",
+      "Missing": "Esse documento não existe mais.",
+      "Running": "Atualizando as cópias dos compêndios…",
+      "Failed": "A atualização dos compêndios falhou (veja o console). Ela tentará de novo no próximo carregamento.",
+      "Reminder": "O relatório de atualização dos compêndios ainda tem grupos para conferir: Configurações › Conteúdo & Homebrew › Atualização dos Compêndios.",
+      "NothingToDo": "Todas as cópias dos compêndios já estão atualizadas.",
+      "ItemsDirectory": "Diretório de Itens",
+      "NewInPack": "Novo no compêndio: adicionado",
+      "ChoiceNeeded": "{name}: uma escolha é necessária (abra a Ancestralidade e use Escolher)",
+      "EffectAdded": "Efeito adicionado: {name}",
+      "Effect": "Efeito",
+      "EntryAdded": "adicionado",
+      "EntryRemoved": "removido",
+      "Before": "Antes",
+      "After": "Agora",
+      "Yours": "Seu (mantido)",
+      "Compendium": "Compêndio",
+      "None": "(nenhum)",
+      "ShowValues": "Mostrar antes / depois",
+      "Field": {
+        "Name": "Nome",
+        "Image": "Imagem",
+        "Description": "Descrição"
+      },
+      "Section": {
+        "statblock": "Ficha",
+        "other": "Outros"
+      }
+    },
+    "Grants": {
+      "EffectChoices": {
+        "Title": "Escolha de Efeitos",
+        "Hint": "Escolha entre os efeitos desta Ancestralidade (aba Efeitos). Deixe-os desativados: os escolhidos são ativados, os demais são removidos do personagem.",
+        "NoEffects": "Esta Ancestralidade ainda não tem efeitos (aba Efeitos)."
+      },
+      "Summary": {
+        "Stats": "Atributos",
+        "StatPoints": "+{n} em Atributos à escolha",
+        "Training": "Treinamento",
+        "ExtraTraining": "+{n} Perícias à escolha",
+        "Choose": "Escolha {n}",
+        "ChooseOf": "Escolha {n}:",
+        "ChooseButton": "Escolher",
+        "ChooseAny": "Escolha {n} (qualquer)",
+        "Spells": "Magias",
+        "Perks": "Talentos",
+        "Items": "Itens",
+        "Action": "Botão",
+        "PrereqsAll": "ignora pré-requisitos",
+        "PrereqsStats": "ignora mínimos de Atributo",
+        "Effects": "Efeitos",
+        "NoTraits": "Nenhum traço definido."
+      }
     },
     "FeatureAction": {
       "Section": "Botão de Ação",
@@ -1240,6 +1307,15 @@
       }
     },
     "Settings": {
+      "packSync": {
+        "runTitle": "Atualizar as Cópias dos Compêndios Agora",
+        "runHint": "Executa a mesma atualização feita após atualizar o sistema.",
+        "runButton": "Atualizar agora",
+        "runConfirm": "Atualizar todas as cópias dos compêndios deste mundo para os compêndios instalados? Os campos que você editou são mantidos, e um relatório lista cada mudança.",
+        "reportTitle": "Relatório de Atualização dos Compêndios",
+        "reportHint": "Abre o último relatório (até que todos os grupos sejam marcados como conferidos).",
+        "reportButton": "Abrir relatório"
+      },
       "spellCastDialogBlur": {
         "name": "Desfoque do Diálogo de Conjuração",
         "hint": "Raio de desfoque de fundo (em pixels) atrás do diálogo de conjuração de magia. 0 desativa o efeito."
@@ -3776,6 +3852,7 @@
         }
       },
       "Sections": {
+        "packSync": "Atualização dos Compêndios",
         "rolls": "Rolagens e Dano",
         "defense": "Defesa",
         "equipment": "Equipamento",

@@ -466,7 +466,7 @@ export class VagabondDamageHelper {
   /**
    * Apply the target's defenses to an incoming damage amount, with a full breakdown.
    * Order: typeless(armor only) → material weakness(bypass all) → weakness(bypass all)
-   * → immunity(0) → armor → berserk reduction.
+   * → immunity(0) → resistance(half, round down) → armor → berserk reduction.
    *
    * The mutable-context hook `vagabond.calculateFinalDamage` fires after the math with
    * `{ actor, damage, damageType, attackingWeapon, result }` — mutate `result.final`
@@ -481,7 +481,7 @@ export class VagabondDamageHelper {
    * @param {number|null} [opts.rolledDiceCount=null] - Actual dice count of the damage
    *   roll (explosions included) for the berserk reduction; falls back to counting the
    *   weapon's authored damageAmount formula when absent
-   * @returns {{final: number, armorReduction: number, berserkReduction: number,
+   * @returns {{final: number, armorReduction: number, berserkReduction: number, resistReduction?: number,
    *   path: 'typeless'|'material'|'weak'|'immune'|'normal'}}
    */
   static calculateFinalDamageDetailed(actor, damage, damageType, attackingWeapon = null, opts = {}) {
@@ -558,6 +558,13 @@ export class VagabondDamageHelper {
       return { final: 0, armorReduction: 0, berserkReduction: 0, flankedBonus: 0, path: 'immune' };
     }
 
+    // Resistant (`system.damageResistances`, e.g. Draken Draconic Resilience): half damage, round down, before Armor
+    let resistReduction = 0;
+    if (VagabondDamagePipeline.typeListCovers(actor.system.damageResistances ?? [], normalizedType)) {
+      resistReduction = finalDamage - Math.floor(finalDamage / 2);
+      finalDamage -= resistReduction;
+    }
+
     // RAW: Armor - Subtracted from ALL incoming damage
     // Armor always reduces damage unless target is immune or weak
     const armorRating = actor.system.armor || 0;
@@ -585,7 +592,7 @@ export class VagabondDamageHelper {
       }
     }
 
-    return { final: finalDamage, armorReduction, berserkReduction, flankedBonus, path: 'normal' };
+    return { final: finalDamage, armorReduction, berserkReduction, resistReduction, flankedBonus, path: 'normal' };
   }
 
 

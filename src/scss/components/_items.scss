@@ -174,22 +174,10 @@
       font-family: inherit;
     }
 
-    // Textarea in edit mode
-    textarea.trait-desc-textarea {
-      width: 100%;
+    // Rich-text editor in edit mode (closed = enriched text, pencil opens it)
+    prose-mirror {
       min-height: 60px;
-      font-family: $font-text;
-      font-size: 0.95em;
-      line-height: 1.5;
-      color: $c-text-1;
-      background: var(--vagabond-c-input-bg);
-      resize: none;
-      box-sizing: border-box;
-      padding: 4px 6px;
-      border: 1px solid $c-faint;
-      border-radius: 3px;
-      background: var(--vagabond-c-input-bg);
-      overflow: hidden;
+      height: auto;
     }
 
     // Content in non-edit mode
@@ -808,6 +796,110 @@
       margin-bottom: 0;
       border-bottom: 1px solid $c-faint;
     }
+  }
+}
+
+// Locked Ancestry: read view (description, Trait cards with their grants)
+.ancestry-read {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-family: $font-text;
+  color: $c-text-1;
+
+  p { margin: 0 0 6px; &:last-child { margin-bottom: 0; } }
+
+  .ancestry-read-desc {
+    line-height: 1.5;
+  }
+
+  .ancestry-read-title {
+    margin: 4px 0 0;
+    border-bottom: 1px solid $c-tan;
+  }
+
+  .ancestry-trait-card {
+    border: 1px solid $c-tan;
+    border-radius: 4px;
+    padding: 8px 10px;
+    background: $c-surface;
+
+    .trait-title { display: block; margin-bottom: 4px; }
+    .ancestry-trait-text { line-height: 1.5; }
+  }
+
+  .grant-summary {
+    list-style: none;
+    margin: 8px 0 0;
+    padding: 6px 0 0;
+    border-top: 1px dashed $c-faint;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .grant-summary-row {
+    margin: 0;
+    font-size: 0.92em;
+  }
+
+  // "Items  Choose 1:" — icon, label, then the count
+  .grant-summary-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 2px 6px;
+
+    > i { width: 16px; text-align: center; color: $c-red; }
+  }
+
+  .grant-summary-label {
+    font-family: $font-title;
+    color: $c-text-2;
+  }
+
+  // Granted / pickable documents: even tiles, two columns
+  .grant-refs {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 4px;
+    margin: 4px 0 0 22px;
+  }
+
+  a.grant-ref {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+    margin: 0;
+    padding: 2px 6px 2px 2px;
+    background: var(--vagabond-c-input-bg);
+    border: 1px solid $c-faint;
+    border-radius: 3px;
+    color: $c-text-1;
+    white-space: nowrap;
+
+    &:hover { border-color: $c-tan; }
+    > i { display: none; }  // core content-link icon; the art shows the type
+
+    img { flex: 0 0 22px; width: 22px; height: 22px; border: none; border-radius: 2px; object-fit: cover; }
+    span { overflow: hidden; text-overflow: ellipsis; }
+  }
+
+  .grant-summary-note {
+    color: $c-text-2;
+    font-size: 0.9em;
+  }
+
+  // Owned Ancestry with an effect pick still open
+  .grant-summary-choose {
+    flex: 0 0 auto;
+    width: auto;
+    height: auto;
+    line-height: normal;
+    margin-left: auto;
+    padding: 1px 10px;
+    font-size: 0.9em;
   }
 }
 

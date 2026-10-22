@@ -1,4 +1,5 @@
 import { GrantedItems } from '../../../helpers/granted-items.mjs';
+import { EffectChoices } from '../../../helpers/effect-choices.mjs';
 
 /**
  * Item choices in the Character Builder — `itemChoices` grant groups (pick `count` of a `pool`, e.g. Draken's
@@ -11,7 +12,14 @@ import { GrantedItems } from '../../../helpers/granted-items.mjs';
  * Group keys are `<source>-<row>-<group>` (GrantedItems.choiceGroupsFor), so each owner replaces only its own
  * groups / picks. Ancestry groups are set when the Ancestry is picked; a Class step can reuse `setGroups`.
  * Finish turns the picks into grant entries with `GrantedItems.entriesFromPicks`.
+ * Ancestry effect choices (`EffectChoices`, `kind: 'effect'`, pool = the Ancestry's effect uuids) share the picker
+ * and the picks; Finish applies them to the Ancestry data (`EffectChoices.pruneData`).
  */
+
+/** Item + effect choice groups of an owner. */
+function groupsOf(owner, filter) {
+  return [...GrantedItems.choiceGroupsFor(owner, filter), ...EffectChoices.groupsFor(owner)];
+}
 
 /** Every group of `source` (all sources when omitted) has its picks. */
 export function isItemChoiceComplete(state, source) {
@@ -30,7 +38,7 @@ export function isItemChoiceComplete(state, source) {
  */
 export function setGroups(stateManager, owner, source, { randomize = false, ...filter } = {}) {
   const state = stateManager.getCurrentState();
-  const groups = owner ? GrantedItems.choiceGroupsFor(owner, filter) : [];
+  const groups = owner ? groupsOf(owner, filter) : [];
   const picks = Object.fromEntries(
     Object.entries(state.itemChoicePicks ?? {}).filter(([key]) => !key.startsWith(`${source}-`))
   );
@@ -71,9 +79,9 @@ export function togglePick(stateManager, key, uuid) {
 export async function choicesView(owner, state, filter = {}) {
   const picks = state.itemChoicePicks ?? {};
   const out = [];
-  for (const g of GrantedItems.choiceGroupsFor(owner, filter)) {
+  for (const g of groupsOf(owner, filter)) {
     const chosen = picks[g.key] ?? [];
-    const opts = await GrantedItems.choiceOptions(g);
+    const opts = g.kind === 'effect' ? EffectChoices.choiceOptions(owner, g) : await GrantedItems.choiceOptions(g);
     const prefix = sharedPrefix(opts.map(o => o.name));
     const options = opts.map(o => ({
       ...o,

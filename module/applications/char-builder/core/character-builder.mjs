@@ -15,6 +15,7 @@ import { CharacterBuilderUIComponents } from '../ui/ui-components.mjs';
 import { isTrainingComplete } from '../steps/training-manager.mjs';
 import { BuildGuideService } from '../services/build-guide-service.mjs';
 import { GrantedItems } from '../../../helpers/granted-items.mjs';
+import { EffectChoices } from '../../../helpers/effect-choices.mjs';
 import { togglePick } from '../steps/item-choice-manager.mjs';
 import { TokenPortrait } from '../../../helpers/token-portrait.mjs';
 import { isStepUnlocked, canFinishBuild, furthestAfter, applicableSteps, isStepApplicable, isStepDone, DEFAULT_STEP_ORDER } from '../steps/step-gating.mjs';
@@ -958,6 +959,8 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
     if (validItems.length > 0) {
       const itemObjects = await Promise.all(validItems.map(async item => {
         const itemData = item.toObject();
+        // Compendium link: pack sync (PackSync) and source-id lookups find the copy by it
+        if (item.pack) foundry.utils.setProperty(itemData, '_stats.compendiumSource', item.uuid);
 
         // Auto-favorite spells selected in the builder
         if (itemData.type === 'spell') {
@@ -980,6 +983,11 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
             // Auto-equip armor ('worn' = equipped, occupies no hands)
             itemData.system.equipmentState = 'worn';
           }
+        }
+
+        // Ancestry effect choices (Draken Draconic Resilience): picked effects on, unpicked left out
+        if (itemData.type === 'ancestry') {
+          EffectChoices.pruneData(itemData, EffectChoices.groupsFor(item), state.itemChoicePicks);
         }
 
         // Apply choice selections to perks (New Training, Advancement, etc.)
@@ -1110,6 +1118,7 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
               if (itemDoc) {
                 for (let i = 0; i < packItem.quantity; i++) {
                   const itemData = itemDoc.toObject();
+                  if (itemDoc.pack) foundry.utils.setProperty(itemData, '_stats.compendiumSource', itemDoc.uuid);
 
                   // Auto-equip weapons and armor
                   if (itemData.type === 'equipment') {

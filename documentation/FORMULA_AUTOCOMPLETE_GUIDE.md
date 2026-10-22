@@ -693,6 +693,7 @@ These are string arrays — use **Add** mode and supply the relevant ID as the v
 ```txt
 system.immunities                → Add a damage-type ID for immunity
 system.weaknesses                → Add a damage-type ID for weakness
+system.damageResistances         → Add a damage-type ID; that damage is halved (round down) before Armor (character + NPC)
 system.statusImmunities          → Add a status ID for immunity (character + NPC)
 system.statusResistances         → Add a status ID; save vs it is rolled with Favor (character only)
 ```

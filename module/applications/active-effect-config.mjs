@@ -104,6 +104,7 @@ export default class VagabondActiveEffectConfig extends foundry.applications.she
       'system.statusResistances',
       'system.statusImmunities',
     ]);
+    const DAMAGE_TYPE_FIELDS = new Set(['system.immunities', 'system.weaknesses', 'system.damageResistances']);
     const FAVOR_RULE_FIELDS = new Set(['system.attackFavorVs']);
     const FAVOR_CHECK_FIELDS = new Set(['system.favorChecks']);
     const SAVE_KEY_FIELDS = new Set(['system.saveRollsTwice']);
@@ -133,6 +134,16 @@ export default class VagabondActiveEffectConfig extends foundry.applications.she
             const option = document.createElement('option');
             option.value = statusId;
             option.textContent = label;
+            datalist.appendChild(option);
+          });
+        } else if (DAMAGE_TYPE_FIELDS.has(keyValue)) {
+          // Damage type keys (CONFIG.VAGABOND.damageTypes)
+          input.setAttribute('placeholder', 'Damage type (e.g., fire, cold)');
+          Object.entries(CONFIG.VAGABOND.damageTypes ?? {}).forEach(([typeKey, label]) => {
+            if (typeKey === '-') return;
+            const option = document.createElement('option');
+            option.value = typeKey;
+            option.textContent = game.i18n.localize(label);
             datalist.appendChild(option);
           });
         } else if (FAVOR_RULE_FIELDS.has(keyValue)) {

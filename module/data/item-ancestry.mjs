@@ -12,6 +12,9 @@ export default class VagabondAncestry extends VagabondItemBase {
     const requiredString = { required: true, nullable: false };
     const schema = super.defineSchema();
 
+    // Locked = read view (traits + what each grants); unlocked = the editor
+    schema.locked = new fields.BooleanField({ required: true, initial: true });
+
     // Ancestry size - affects character size when equipped
     schema.size = new fields.StringField({
       initial: 'medium',
@@ -58,6 +61,18 @@ export default class VagabondAncestry extends VagabondItemBase {
         // Item choice groups - the player picks `count` items of `pool` (UUIDs), granted like grantedItems,
         // e.g. Draken's Breath Attack element (see helpers/granted-items.mjs choiceGroupsFor)
         itemChoices: new fields.ArrayField(
+          new fields.SchemaField({
+            count: new fields.NumberField({ initial: 1, integer: true, min: 1 }),
+            pool: new fields.ArrayField(new fields.StringField({ initial: '', blank: true }), { initial: [] }),
+            label: new fields.StringField({ initial: '' })
+          }),
+          { initial: [] }
+        ),
+
+        // Effect choice groups - the player picks `count` of this Ancestry's OWN effects (`pool` = effect ids);
+        // picked ones are switched on, the others removed from the character (helpers/effect-choices.mjs),
+        // e.g. Draken's Draconic Resilience element
+        effectChoices: new fields.ArrayField(
           new fields.SchemaField({
             count: new fields.NumberField({ initial: 1, integer: true, min: 1 }),
             pool: new fields.ArrayField(new fields.StringField({ initial: '', blank: true }), { initial: [] }),

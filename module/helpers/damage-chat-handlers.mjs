@@ -693,6 +693,7 @@ export class VagabondDamageChatHandlers {
           : '',
         {
           ward: { amount: wardCut, title: ward.title },
+          resistReduction: damageBreakdown.resistReduction,
           // A Ward rolled after this card recomputes from here (WardHelper.wardOff)
           resultFlags: { damageResult: {
             damageMessageId: VagabondDamageHelper.messageIdOf(button), defenderUuid: targetActor.uuid,
@@ -923,7 +924,7 @@ export class VagabondDamageChatHandlers {
       const message = await this._postDefenseResult(targetActor, {
         title: `${game.i18n.localize('VAGABOND.Chat.DefenseCheck')}: ${weapon.name}`,
         check, shieldRoll, shieldWeapons, incoming: damageAmount, shieldReduction,
-        armorReduction: breakdown.armorReduction, finalDamage, damageType, path: breakdown.path,
+        armorReduction: breakdown.armorReduction, resistReduction: breakdown.resistReduction, finalDamage, damageType, path: breakdown.path,
         flankedBonus: breakdown.flankedBonus, autoApplied: autoApply,
         applyButton: !autoApply && finalDamage > 0
           ? VagabondDamageHelper.createApplySaveDamageButton(targetActor.uuid, targetActor.name, finalDamage, damageType, statusContext)
@@ -1021,6 +1022,7 @@ export class VagabondDamageChatHandlers {
       title: game.i18n.format('VAGABOND.Defense.ProtectTitle', { name: protector.name, target: defender.name }),
       check, shieldRoll, shieldWeapons, incoming, shieldReduction,
       armorReduction: check.isSuccess ? breakdown.armorReduction : 0,
+      resistReduction: check.isSuccess ? breakdown.resistReduction : 0,
       finalDamage, damageType, path: breakdown.path, flankedBonus: breakdown.flankedBonus,
       autoApplied: false, damageActor: defender,
       applyButton: check.isSuccess && !autoApplied && finalDamage > 0
@@ -1060,6 +1062,7 @@ export class VagabondDamageChatHandlers {
       o.incoming, 0, o.armorReduction, o.finalDamage, o.damageType, 'reflex', damageActor,
       o.autoApplied, false, o.path, o.flankedBonus,
       { title: o.calcTitle ?? game.i18n.localize('VAGABOND.Chat.Defense'), shieldReduction: o.shieldReduction, shieldTitle,
+        resistReduction: o.resistReduction,
         ...(o.ward?.amount > 0 ? { wardReduction: o.ward.amount, wardTitle: o.ward.title } : {}) }
     );
     card.setDescription((card.data.description || '') + calc + (o.applyButton || '') + (o.extraHtml || ''));
@@ -1242,6 +1245,7 @@ export class VagabondDamageChatHandlers {
   static async _postSaveResult(actor, saveType, roll, difficulty, isSuccess, isCritical, isHindered, originalDamage, saveReduction, armorReduction, finalDamage, damageType, autoApplied, statusContext = null, defensePath = null, flankedBonus = 0, extraHtml = '', opts = {}) {
     // opts.ward = {amount, title}: Ward upcast taken off before Armor; opts.resultFlags: extra flags.vagabond
     const wardExtra = opts.ward?.amount > 0 ? { wardReduction: opts.ward.amount, wardTitle: opts.ward.title } : {};
+    if (opts.resistReduction > 0) wardExtra.resistReduction = opts.resistReduction;
     const saveLabel = VagabondDamageHelper.getConfiguredSaves().find(s => s.key === saveType)?.label
       || game.i18n.localize(`VAGABOND.Saves.${saveType.charAt(0).toUpperCase() + saveType.slice(1)}.name`);
 
@@ -1461,6 +1465,15 @@ export class VagabondDamageChatHandlers {
         <span class="damage-operator">-</span>
         <span class="damage-component ward-component" title="${foundry.utils.escapeHTML?.(extra.wardTitle ?? '') ?? ''}">
           <i class="fas fa-star-christmas"></i> ${extra.wardReduction}
+        </span>`;
+    }
+
+    // Resistant: half the damage, before Armor
+    if (extra.resistReduction > 0) {
+      calculationHTML += `
+        <span class="damage-operator">-</span>
+        <span class="damage-component" title="${game.i18n.localize('VAGABOND.Damage.Resisted')}">
+          <i class="fa-solid fa-circle-half-stroke"></i> ${extra.resistReduction}
         </span>`;
     }
 
@@ -1709,6 +1722,7 @@ export class VagabondDamageChatHandlers {
         rawAmount: effectiveDamage,
         flankedBonus: directBreakdown.flankedBonus,
         armorReduction: directBreakdown.armorReduction,
+        resistReduction: directBreakdown.resistReduction,
         finalAmount: _directFinal,
         damageType,
         previousValue: currentHP,
