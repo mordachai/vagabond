@@ -1,5 +1,5 @@
 /**
- * One-time world migrations for the Core Rulebook v3 Alpha 3 review (ALPHA3_REVIEW.md §6, Phase 1).
+ * One-time world migrations for the Core Rulebook v3 Alpha 3 review.
  *
  * Same recipe as class-migrations.mjs: active GM only, guarded by a hidden world setting
  * (registered in vagabond.mjs), every document wrapped in try/catch so one bad actor never
@@ -236,7 +236,7 @@ const ALPHA3_CLASSES = {
 };
 
 /**
- * Class items get the Alpha 3 deltas (ALPHA3_REVIEW.md §2): Eureka 15+/14+/13+, Savagery (+1), Fighting Style as
+ * Class items get the Alpha 3 deltas: Eureka 15+/14+/13+, Savagery (+1), Fighting Style as
  * one Perk, Grit paying Deadeye stacks, Overheal once per Action, Spell Parry 15+, Merchant rewrites, Pugilist
  * Haymaker/Moxie/Title Holder, Rogue/Vanguard names, plus the new Sorcerer / Witch / Wizard features. Swaps
  * description / levelFeatures / skillGrant / effects from the compendium doc (the player's per-effect

@@ -262,7 +262,7 @@ VAGABOND.statusConditions = {
  * Full status effect definitions for token HUD
  * Used when "Use Vagabond Status Conditions" setting is enabled
  * Uses Foundry's default icons as placeholders until custom artwork is provided
- * All 17 status conditions from the Vagabond rulebook (see docs/VAGABOND-STATUSES.md)
+ * All 17 status conditions from the Vagabond rulebook (Core Rulebook p. 11)
  *
  * AUTOMATED STATUS CONDITIONS:
  * Status effects with "changes" arrays automatically apply Active Effects when applied to tokens.

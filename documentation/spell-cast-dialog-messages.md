@@ -38,9 +38,9 @@ toggle). Listen with `Hooks.on` and **mutate the `messages` array in place**.
 |-------|------|---------|
 | `actor` | `Actor` | The casting actor. |
 | `spell` | `Item` | The spell being cast. |
-| `state` | `object` | Cloned dialog state: `{ damageDice, deliveryType, deliveryIncrease, useFx, focusOn, previewActive, manaOverrideDelta }`. |
+| `state` | `object` | Shallow copy of the dialog state — e.g. `damageDice`, `deliveryType`, `deliveryIncrease`, `useFx`, `focusOn`, plus placement / Imbue / Target-picker fields. Treat as read-only. |
 | `finalMana` | `number` | Total mana the cast will cost after all modifiers/overrides. |
-| `costs` | `object` | Cost breakdown: `{ damageCost, fxCost, deliveryBaseCost, deliveryIncreaseCost, totalCost }`. |
+| `costs` | `object` | Cost breakdown: `{ damageCost, fxCost, deliveryBaseCost, deliveryIncreaseCost, focusCost, focusTargets, totalCost, deferredMana }`. |
 
 ### Message shape
 
@@ -60,8 +60,10 @@ toggle). Listen with `Hooks.on` and **mutate the `messages` array in place**.
 - `blocking: true` makes `_onCast` refuse to fire and re-render with the message shown.
   Use it for hard rule gates. Non-blocking messages are display-only.
 
-The built-in mana/delivery validation message is always pushed first as
-`{ type: 'error', blocking: true }`.
+System messages are pushed before the hook runs, in this order: capability gates
+(not a caster / no mana skill), cost and delivery validation (blocking errors), area
+placement, range check, then hints (deferred Imbue cost, Focus Mana, Imbue targets
+without a weapon, no Target picked). Don't duplicate them.
 
 ## Examples
 

@@ -6,7 +6,7 @@ This guide covers everything needed to work on the Vagabond system codebase.
 
 - **Node.js** v18 or later — [nodejs.org](https://nodejs.org)
 - **npm** — comes with Node
-- **Foundry VTT** v14 (minimum v13) — required to run the system; not needed for editing CSS or compendium source files
+- **Foundry VTT** v14 — required to run the system; not needed for editing CSS or compendium source files
 
 ## Install dependencies
 
@@ -40,25 +40,22 @@ Compendium data is stored as LevelDB databases (`packs/*/`) at runtime, but the 
 
 ```
 packs/
-  _source/              ← edit these (tracked in git)
+  _source/              ← edit these (tracked in git), one folder per pack name
     ancestries/
       Orc_4b55ZN5hVR3goYRZ.json
-      Human_kYLA215krVXIgmnd.json
       ...
-    classes/
-    weapons/
-    ...
-  ancestries/           ← LevelDB binary (not tracked, rebuilt from _source)
-  classes/
-  items/
-    alchemical-items/
-    armor/
-    ...
-  characters/
-    bestiary/
-    humanlike/
-    active-effects/
+    classes/  perks/  starting-packs/
+    alchemical-items/  armor/  gear/  weapons/  relics/  spells/
+    bestiary/  humanlike/  build-guides/  mounts-vehicles/  stores/
+    active-effects/  macro-scripts/  fx-macros/
+  ancestries/           ← LevelDB binaries (not tracked, rebuilt from _source;
+  classes/                 paths come from system.json "packs")
+  items/<pack>/
+  characters/<pack>/
+  ...
 ```
+
+Some packs are **generated** — edit the generator input, never their JSON by hand: `build-guides` (`scripts/build-guides/generate.mjs`), `mounts-vehicles` (`scripts/mounts-vehicles/generate.mjs`), named Relics in `relics` (`scripts/relics/convert-named.mjs`).
 
 ### Scripts
 

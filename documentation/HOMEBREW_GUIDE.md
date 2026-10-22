@@ -6,7 +6,7 @@ The Homebrew Settings app lets a GM customize almost every mechanical constant i
 
 ## Opening the App
 
-**Game Settings → System Settings → Configure Homebrew**
+**Game Settings → System Settings → Open Vagabond Settings → Content & Homebrew → Configure Homebrew**
 
 GM-only. Opens a resizable dialog with a left sidebar of tabs and a save/reset footer.
 
@@ -145,19 +145,25 @@ Geometry metadata (unit type: foot/target, shape: radius/length/cube/etc.) is fi
 
 ## Tab 5 — Leveling
 
-**XP table and questionnaire: Runtime. Max Level: Requires reload.**
+**Pace, XP table and questionnaire: Runtime. Max Level: Requires reload.**
 
 ### General
 
-- **Max Level** — Maximum level characters can reach. Requires reload. Default: 10.
+- **Max Level** — Highest Level characters can reach. Requires reload. Default: `0` = no maximum (RAW). Past a class's highest listed Level, characters gain a Stat on even Levels and a Perk on odd Levels.
+- **Level Pacing** — XP needed for the next Level:
+  - **Quick** — 5 XP per Level.
+  - **Normal** (default) — 5 × the next Level.
+  - **Epic** — 7 × the next Level.
+  - **Saga** — 10 × the next Level.
+  - **Custom** — uses the XP Per Level Table below.
 
 ### XP Per Level Table
 
-Explicit per-level XP requirements. Edit values directly. The table always covers levels 2 through Max Level.
+Only shown with **Custom** pacing. Explicit per-level XP requirements; edit the values directly.
 
 ### XP Questionnaire
 
-Questions asked at end-of-session to award XP. Each question has:
+Questions asked at the end of a session to award XP (default: the book's 6 questions). Each question has:
 - **Text** — The question displayed to players.
 - **XP** — How much XP is awarded if the player answers yes.
 
@@ -207,13 +213,14 @@ Controls how the stat grid is laid out on the character sheet:
 
 **Runtime.**
 
-Add, remove, or rename damage types. Each row: `key | label | FA icon class`
+Add, remove, or rename damage types. Each row: `key | label | FA icon class | restores`
 
 - **Key** — Internal identifier used on items and chat cards. Do not change keys on existing content.
 - **Label** — Display name.
 - **FA Icon Class** — Font Awesome Free icon class (e.g., `fa-solid fa-fire`). A preview icon is shown live.
+- **Restores** — `HP`, `Fatigue` or `Mana` makes the type restorative: applying it heals that resource instead of dealing damage (defaults: Healing → HP, Recover → Fatigue, Recharge → Mana). `—` = normal damage.
 
-Material weakness types (Cold Iron, Silver) are separate from damage types and are not configurable here.
+Material weakness types (Cold Iron, Silver, Adamant, Axe) are separate from damage types and are not configurable here.
 
 ---
 
@@ -364,8 +371,9 @@ CONFIG.VAGABOND.homebrew = {
     skillFormula,        // '@base - @stat * @mult - @bonus'
   },
   leveling: {
-    maxLevel,            // 10
-    xpTable:    [{ level, xp }],
+    maxLevel,            // 0 = no maximum
+    pace,                // 'quick' | 'normal' | 'epic' | 'saga' | 'custom'
+    xpTable:    [{ level, xp }],   // read only with pace 'custom' (use xpRequiredForLevel())
     xpQuestions:[{ question, xp }],
   },
   derivations: {
@@ -373,7 +381,7 @@ CONFIG.VAGABOND.homebrew = {
     fatiguePCMax, fatigueNPCMax,
     luckStat, statsLayout,
   },
-  damageTypes: [{ key, label, icon }],
+  damageTypes: [{ key, label, icon, restorative? }],   // restorative: 'hp' | 'fatigue' | 'mana'
   statCap,               // 7
   statArrays:  [[...values]],
   magic: {

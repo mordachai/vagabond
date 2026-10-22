@@ -580,7 +580,7 @@ system.skills.<skill>.bonus      → Bonus to that skill (lowers its difficulty)
 
 ```txt
 system.currentLuck               → Current luck pool
-system.bonusLuck                 → Bonus to max luck
+system.bonusLuck                 → Bonus to the Luck the pool resets to on Rest (not a cap)
 system.studiedDice               → Studied-die pool
 system.critNumber                → Global crit threshold (default 20)
 system.favorHinder               → Favor/Hinder state (string: none/favor/hinder)
@@ -651,10 +651,9 @@ system.willCritBonus             → Will save crit
 
 > Per-weapon-skill keys (`system.<skillKey>CritBonus`) and per-save keys (`system.<saveKey>CritBonus`) are both generated dynamically from the homebrew config — custom weapon skills and saves get their own automatically.
 
-### Weapon Property Bonuses
+### Incoming Damage Reduction
 
 ```txt
-system.cleaveTargets             → Extra Cleave targets beyond the base 2
 system.incomingDamageReductionPerDie → Reduce incoming damage by N per incoming die (formula; conditions like Berserk / armor Slots live in the formula)
 ```
 
@@ -752,7 +751,7 @@ This is why you add to `system.health.bonus`, never `system.health.max`.
 | `system.health.max` | derived = base × level + bonus | `system.health.bonus` |
 | `system.mana.max` | recomputed = multiplier × level + bonus | `system.mana.bonus` |
 | `system.mana.castingMax` | recomputed | `system.mana.castingMaxBonus` |
-| `system.focus.max` / `system.focus.current` | recomputed (`5 + bonus` / sustained count) | `system.focus.maxBonus` |
+| `system.focus.max` / `system.focus.current` | recomputed (`1 + bonus` / sustained count) | `system.focus.maxBonus` |
 | `system.speed.base` / `.raw` / `.crawl` / `.travel` | speed object reassigned each prep | `system.speed.bonus` |
 | `system.spellDamageDieSize` | recomputed = base die + bonus | `system.spellDamageDieSizeBonus` |
 | `system.stats.<stat>.total` | derived = value + bonus | `system.stats.<stat>.bonus` |
@@ -761,11 +760,9 @@ This is why you add to `system.health.bonus`, never `system.health.max`.
 | `system.inventory.maxSlots` / `availableSlots` / `occupiedSlots` | derived | `system.inventory.bonusSlots` |
 | `system.inventory.maxBounds` | derived = 3 + bonus | `system.inventory.boundsBonus` |
 | `system.fatigueMax` | derived = config + bonus | `system.fatigueBonus` |
-| `system.maxLuck` | derived from luck stat | `system.bonusLuck` |
+| `system.maxLuck` | derived from luck stat — Rest reset value, NOT a cap | `system.bonusLuck` |
 | `system.armor` (character) | derived = equipped armor + bonus | `system.armorBonus` |
-| `system.cleaveMaxTargets` | derived = base + bonus | `system.cleaveTargets` |
 | `system.attributes.xpRequired` / `xpProgress` / `canLevelUp` | derived display values | — (not editable) |
-| `system.xp` (NPC) | derived = CR² × 100 | — |
 | `system.threatLevelFormatted` (NPC) | derived display string | `system.threatLevel` |
 
 > **Caution — current-resource keys.** `system.health.value`, `system.mana.current`, `system.fatigue`, `system.currentLuck` are *stored* (not derived), so an AE can target them — but doing so pins the live value and fights manual changes. Only do this for effects that intentionally lock a resource.

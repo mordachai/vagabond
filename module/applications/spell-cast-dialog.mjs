@@ -309,7 +309,7 @@ export class SpellCastDialog extends api.HandlebarsApplicationMixin(api.Applicat
    *
    * Each message: `{ text: string, type?: 'error'|'warning'|'info', blocking?: boolean }`.
    * A `blocking: true` message prevents casting (see `_onCast`).
-   * See docs/spell-cast-dialog-messages.md for the full contract.
+   * See documentation/spell-cast-dialog-messages.md for the full contract.
    *
    * The result is cached on `#messages` so `_onCast` can re-check blocking
    * without re-firing the hook.

@@ -430,3 +430,5 @@ Vagabond // Pulp Fantasy RPG © 2025 Land of theBlind, LLC.”
 ## Contributing / Development
 
 See [DEVELOPMENT.md](DEVELOPMENT.md) for the full development setup guide, including SCSS compilation, compendium pack editing, and IDE configuration.
+
+Guides for GMs, macro writers and module authors (homebrew, Active Effect formulas, clocks, countdown dice, Cast dialog hook) live in [documentation/](documentation/README.md).
