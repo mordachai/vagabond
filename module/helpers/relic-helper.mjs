@@ -1,7 +1,6 @@
 import { CurrencyHelper } from './currency-helper.mjs';
 import { craftingConfig } from './crafting/config.mjs';
 import { VagabondChatCard } from './chat-card.mjs';
-import { isActiveGM } from './gm-relay.mjs';
 
 /**
  * Relic model (docs/crafting-plan.md §4.4/§4.5). Every equipment item carries
@@ -217,55 +216,4 @@ export class RelicHelper {
     return { ok: true, result: baseHost };
   }
 
-  /** Relics pack ids of the named Relics converted to real weapons / armor (scripts/relics/convert-named.mjs). */
-  static NAMED_RELIC_IDS = [
-    'MgosRX6hC1yuPgk2', 'qhUZvjK6L4600nPC', 'GIAEgPK6cZ78NpGj', 'RHXLOdGw4z6eFutu', 'Q0SdZ5xpW08UvYbO',
-    'Vr4uoSadN44XJtDC', 'BExW3FHlifV9DyKs', '2AYiSZpv9zgjnxOy', 'PX3TNLD71AFsPMvd', 'v2Xt9X5XHIRTT6EU',
-    'TYdCmq7MqhgtObbH', 'SZ8vnzEgZjDKJPFO', 'YyyuCEq9Jh38PPne', 'yE1P5c3HDzmCBmKH', '2r0PVv2JDxvmFA0f',
-    'BVY2dIGUFzOSEC7z', 'veE33OqrWbIToKU2', 'FAOtcfKozVYLxXVo', 'Q7Ym1DivfmQPID03', 'Y8ogD7RYQqqvt7Iy',
-  ];
-
-  /**
-   * One-time (guard `namedRelicsMigrated2`): world copies of the named Relics (Dyrnwyn, Elven Chain…) that are
-   * still plain `relic` gear (or a pre-release copy with Relic slots) become the pack's weapon / armor with its own
-   * effects, matched by compendium source id. Keeps quantity, Bond and inventory position.
-   */
-  static async migrateNamedRelics() {
-    if (!isActiveGM()) return;
-    if (game.settings.get('vagabond', 'namedRelicsMigrated2')) return;
-    const pack = game.packs.get('vagabond.relics');
-    if (!pack) return;
-    const { sourceDocId } = await import('./source-id.mjs');
-    const actors = [
-      ...game.actors.contents,
-      ...game.scenes.contents.flatMap(s => s.tokens.contents.filter(t => !t.actorLink && t.actor).map(t => t.actor)),
-    ];
-    const items = [
-      ...game.items.contents,
-      ...actors.flatMap(a => { try { return Array.from(a.items); } catch { return []; } }),
-    ].filter(i => i?.type === 'equipment' && (i.system.equipmentType === 'relic' || i.system.relic?.powers?.length)
-      && this.NAMED_RELIC_IDS.includes(sourceDocId(i)));
-
-    const sources = new Map();
-    for (const item of items) {
-      try {
-        const id = sourceDocId(item);
-        if (!sources.has(id)) sources.set(id, (await pack.getDocument(id))?.toObject());
-        const src = sources.get(id);
-        if (!src || src.system.equipmentType === 'relic') continue;
-        const system = foundry.utils.deepClone(src.system);
-        system.quantity = item.system.quantity;
-        system.relic.boundTo = item.system.relic?.boundTo ?? '';
-        if (item.system.gridPosition !== undefined) system.gridPosition = item.system.gridPosition;
-        if (item.system.containerId !== undefined) system.containerId = item.system.containerId;
-        await item.update({ name: src.name, img: src.img, system });
-        const stale = item.effects.map(e => e.id);
-        if (stale.length) await item.deleteEmbeddedDocuments('ActiveEffect', stale);
-        if (src.effects?.length) await item.createEmbeddedDocuments('ActiveEffect', src.effects, { keepId: true });
-      } catch (err) {
-        console.warn(`vagabond | Named Relics migration: skipped ${item?.uuid ?? '(unknown)'}`, err);
-      }
-    }
-    await game.settings.set('vagabond', 'namedRelicsMigrated2', true);
-  }
 }

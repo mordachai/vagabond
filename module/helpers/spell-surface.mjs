@@ -32,19 +32,6 @@ export class SpellSurface {
   static BEHAVIOR = 'spellSurface';
   static QUERIES = { create: 'vagabond.surface.create', dismiss: 'vagabond.surface.dismiss' };
 
-  /** Pack Spells and their rules (world copies matched by source id, see migrateWorldSpells). */
-  static PACK_SPELLS = {
-    '3H1Rh1UMaBZHunID': { name: 'Goop', surface: { difficult: true, clip: 'jb2a.grease.dark_brown.loop', tint: '#9fd05a' } },
-    tDbOfV4nMk1JeTCG: { name: 'Erupt', surface: { difficult: true, enterDamage: 'd6', turnEndDamage: 'd6', clip: 'jb2a.flames.orange.03.2x2' } },
-    oGdK9T2toIepnctx: { name: 'Sprout', surface: { around: 1, difficult: true, clip: 'jb2a.entangle.02.loop.02.green' } },
-    TeYGLxvayzVi3j9X: { name: 'Adhere', surface: { around: 1, difficult: true, clip: 'jb2a.grease.dark_brown.loop', tint: '#c8e06a' } },
-    esyFdjFw1BqejR8X: { name: 'Terraform', surface: { around: 1, difficult: true } },
-    lINJx8x3YGpnFtzS: { name: 'Fog', surface: { obscure: true, clip: 'jb2a.fog_cloud.01.white' } },
-    // Freeze: the frozen water, visual only (its Speed -10' is the Tracker on the Target)
-    toYD8Nm61vMhBbZ7: { name: 'Freeze', surface: { clip: 'jb2a.ice_spikes.radial.loop.white', tint: '#bde9ff' } },
-    '0SVJ6QW8j6i3JkGe': { name: 'Gas', surface: { whileIn: 'sickened', clip: 'jb2a.fog_cloud.01.white', tint: '#8fd14f' } },
-  };
-
   /** Region ids whose loop this client plays. */
   static #looping = new Set();
   /** Sequencer has set up this scene's effects (it tears down every effect while it does, ours too). */
@@ -55,8 +42,6 @@ export class SpellSurface {
   static #L(key, data = {}) {
     return game.i18n.format(`VAGABOND.Surface.${key}`, data);
   }
-
-  static #esc(s) { return foundry.utils.escapeHTML(String(s ?? '')); }
 
   /** One at a time on the GM (the relay handlers share this queue). */
   static #serialize(fn) {
@@ -735,33 +720,6 @@ export class SpellSurface {
   /*  Migration                                   */
   /* -------------------------------------------- */
 
-  /**
-   * One-time (guard `spellSurfaceMigrated3`): world copies of the pack Surface Spells get their `surface` rules and
-   * the `system:spell.surface` hit macro (when they have no hit macro of their own) and Focus on Cast. Active GM only.
-   */
-  static async migrateWorldSpells() {
-    if (!isActiveGM()) return;
-    if (game.settings.get('vagabond', 'spellSurfaceMigrated3')) return;
-    const { isCopyOf } = await import('./source-id.mjs');
-    const actors = [...game.actors.contents, ...game.scenes.contents.flatMap(s => s.tokens.contents.filter(t => !t.actorLink && t.actor).map(t => t.actor))];
-    const spells = [...game.items.contents, ...actors.flatMap(a => Array.from(a.items))].filter(i => i?.type === 'spell');
-    for (const item of spells) {
-      try {
-        const [, def] = Object.entries(this.PACK_SPELLS).find(([id, d]) => isCopyOf(item, id, d.name)) ?? [];
-        if (!def) continue;
-        const update = {};
-        if (!this.rules(item)) update['system.surface'] = { ...item.system.surface, ...def.surface, enabled: true };
-        if (!item.system.focusOnCast) update['system.focusOnCast'] = true;
-        if (!String(item.system.hitMacro?.command ?? '').trim() && !item.system.hitMacro?.uuid) {
-          update['system.hitMacro'] = { enabled: true, uuid: '', command: this.COMMAND, label: item.name, runAsGM: false };
-        }
-        if (Object.keys(update).length) await item.update(update);
-      } catch (err) {
-        console.warn(`vagabond | Spell Surface migration: skipped ${item?.uuid ?? '(unknown)'}`, err);
-      }
-    }
-    await game.settings.set('vagabond', 'spellSurfaceMigrated3', true);
-  }
 }
 
 /**

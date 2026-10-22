@@ -31,8 +31,6 @@ import { isActiveGM } from './gm-relay.mjs';
  */
 export class RaiseHelper {
 
-  /** Pack Spell id (world copies matched by source id, never by name). */
-  static SPELL_ID = 'GaL1pCOL67Vf586b';
   static COMMAND = 'system:spell.raise';
   /** Being types whose corpses never rise ("non-Artificial or Undead"). */
   static BLOCKED_TYPES = ['Artificials', 'Undead'];
@@ -411,30 +409,4 @@ export class RaiseHelper {
   /*  Migration                                   */
   /* -------------------------------------------- */
 
-  /**
-   * One-time (guard `raiseSpellMigrated`): world copies of Raise without a hit macro of their own get
-   * `system:spell.raise`. Active GM only.
-   */
-  static async migrateWorldSpells() {
-    if (!isActiveGM()) return;
-    if (game.settings.get('vagabond', 'raiseSpellMigrated')) return;
-    const { isCopyOf } = await import('./source-id.mjs');
-    const actors = [
-      ...game.actors.contents,
-      ...game.scenes.contents.flatMap(s => s.tokens.contents.filter(t => !t.actorLink && t.actor).map(t => t.actor)),
-    ];
-    const spells = [...game.items.contents, ...actors.flatMap(a => Array.from(a.items))].filter(i => i?.type === 'spell');
-    for (const item of spells) {
-      try {
-        if (!isCopyOf(item, this.SPELL_ID, 'Raise')) continue;
-        if (String(item.system.hitMacro?.command ?? '').trim() || item.system.hitMacro?.uuid) continue;
-        await item.update({
-          'system.hitMacro': { enabled: true, uuid: '', command: this.COMMAND, label: item.name, runAsGM: true },
-        });
-      } catch (err) {
-        console.warn(`vagabond | Raise migration: skipped ${item?.uuid ?? '(unknown)'}`, err);
-      }
-    }
-    await game.settings.set('vagabond', 'raiseSpellMigrated', true);
-  }
 }

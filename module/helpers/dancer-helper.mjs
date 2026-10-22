@@ -1,8 +1,4 @@
-import { isCopyOf } from './source-id.mjs';
 import { classFeatureText } from './feature-text.mjs';
-import { isActiveGM } from './gm-relay.mjs';
-
-const DANCER_CLASS_ID = '8LqHA6iqYBgFmVfJ';
 
 /**
  * Dancer — Step Up (feature action button), plus the one-time class migration.
@@ -54,54 +50,4 @@ export class DancerHelper {
   /*  Migration                                   */
   /* -------------------------------------------- */
 
-  /**
-   * One-time migration: Dancer class items created before the book revision carry the old
-   * features (Fleet of Foot, Choreographer, Flash of Beauty), the old Step Up text and no
-   * effects. Replaces description / levelFeatures / skillGrant / effects with the compendium's
-   * current set. Items without the old "Fleet of Foot" feature (homebrew edits, already
-   * migrated) are left alone. Active GM only; guarded by `dancerClassMigrated`. If the
-   * compendium hasn't been rebuilt yet (no "Footloose" effect) it aborts WITHOUT setting the
-   * guard, so it retries next load.
-   */
-  static async migrateDancerClass() {
-    if (!isActiveGM()) return;
-    if (game.settings.get('vagabond', 'dancerClassMigrated')) return;
-
-    const source = await game.packs.get('vagabond.classes')?.getDocument(DANCER_CLASS_ID);
-    if (!source?.effects.some(e => e.name === 'Footloose')) return;
-
-    const safeItems = (doc) => { try { return Array.from(doc?.items ?? []); } catch { return []; } };
-    const candidates = [
-      ...game.items,
-      ...game.actors.contents.flatMap(safeItems),
-      ...game.scenes.contents.flatMap((s) => s.tokens.contents.filter((t) => !t.actorLink && t.actor)
-        .flatMap((t) => safeItems(t.actor))),
-    ];
-
-    for (const item of candidates) {
-      try {
-        if (item.type !== 'class' || !isCopyOf(item, DANCER_CLASS_ID, 'Dancer')) continue;
-        if (!item.system.levelFeatures?.some(lf => lf.name === 'Fleet of Foot')) continue;
-
-        const effects = source.effects.map(e => {
-          const data = e.toObject();
-          delete data._id;
-          delete data._stats;
-          return data;
-        });
-        const s = source.system.toObject();
-        await item.update({
-          'system.description': s.description,
-          'system.levelFeatures': s.levelFeatures,
-          'system.skillGrant': s.skillGrant,
-        });
-        await item.deleteEmbeddedDocuments('ActiveEffect', item.effects.map(e => e.id));
-        await item.createEmbeddedDocuments('ActiveEffect', effects);
-      } catch (err) {
-        console.warn(`vagabond | migrateDancerClass: skipped ${item?.uuid ?? '(unknown)'}`, err);
-      }
-    }
-
-    await game.settings.set('vagabond', 'dancerClassMigrated', true);
-  }
 }

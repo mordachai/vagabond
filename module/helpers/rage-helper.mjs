@@ -104,60 +104,6 @@ export class RageHelper {
   }
 
   /**
-   * One-time migration: Barbarian class items created before the book revision carry the old
-   * single "Rage feature" effect and old level features. Replaces them with the compendium's
-   * current set (one switchable effect per automated behavior), keeping the player's on/off
-   * choice for Rage. Items without the old "Rage feature" signature (homebrew edits, already
-   * migrated) are left alone. Active GM only; guarded by `barbarianClassMigrated`. If the
-   * compendium hasn't been rebuilt yet (no "Rage: Auto-Berserk" effect) it aborts WITHOUT
-   * setting the guard, so it retries on the next load.
-   */
-  static async migrateBarbarianClass() {
-    if (!isActiveGM()) return;
-    if (game.settings.get('vagabond', 'barbarianClassMigrated')) return;
-
-    const source = await game.packs.get('vagabond.classes')?.getDocument('qONUTXY8GwqSEoDw');
-    if (!source?.effects.some(e => e.name === 'Rage: Auto-Berserk')) return;
-
-    const safeItems = (doc) => { try { return Array.from(doc?.items ?? []); } catch { return []; } };
-    const candidates = [
-      ...game.items,
-      ...game.actors.contents.flatMap(safeItems),
-      ...game.scenes.contents.flatMap((s) => s.tokens.contents.filter((t) => !t.actorLink && t.actor)
-        .flatMap((t) => safeItems(t.actor))),
-    ];
-
-    for (const item of candidates) {
-      try {
-        if (item.type !== 'class' || !isCopyOf(item, 'qONUTXY8GwqSEoDw', 'Barbarian')) continue;
-        const old = item.effects.filter(e => e.name === 'Rage feature');
-        if (!old.length) continue;
-        const rageWasOff = old.some(e => e.disabled);
-
-        const effects = source.effects.map(e => {
-          const data = e.toObject();
-          delete data._id;
-          delete data._stats;
-          if (data.name === 'Rage' && rageWasOff) data.disabled = true;
-          return data;
-        });
-        const s = source.system.toObject();
-        await item.update({
-          'system.description': s.description,
-          'system.levelFeatures': s.levelFeatures,
-          'system.skillGrant': s.skillGrant,
-        });
-        await item.deleteEmbeddedDocuments('ActiveEffect', item.effects.map(e => e.id));
-        await item.createEmbeddedDocuments('ActiveEffect', effects);
-      } catch (err) {
-        console.warn(`vagabond | migrateBarbarianClass: skipped ${item?.uuid ?? '(unknown)'}`, err);
-      }
-    }
-
-    await game.settings.set('vagabond', 'barbarianClassMigrated', true);
-  }
-
-  /**
    * Idempotent sweep: Barbarian class items migrated before the "switchable" flag existed have
    * their hand-switch helper effects (auto/manual twins) filed as plain class features, which
    * have no switch. Flags those three by name. Active GM only; touches only unflagged ones.

@@ -373,6 +373,15 @@
       "NoGM": "É preciso um Mestre conectado para isto.",
       "Failed": "O Mestre não conseguiu fazer isto. Peça para ele recarregar e tente de novo."
     },
+    "Migration": {
+      "Failed": "O Vagabond não conseguiu atualizar os dados deste mundo ({label}). Ele tenta de novo no próximo carregamento; veja o console (F12).",
+      "TooOld": {
+        "Title": "Vagabond: dados do mundo muito antigos",
+        "Content": "Este mundo foi aberto pela última vez com uma versão do Vagabond anterior à {floor}. O Vagabond {current} não converte mais dados tão antigos. Para atualizar: faça um backup do mundo, instale o Vagabond {floor}, abra o mundo uma vez como Mestre e depois atualize para a {current}. Se o mundo é novo, ou se você já fez isso, marque-o como atualizado.",
+        "MarkCurrent": "Está atualizado",
+        "Later": "Lembrar da próxima vez"
+      }
+    },
     "Macro": {
       "NoGM": "Nenhum Mestre conectado para executar isto.",
       "RelayFailed": "O Mestre ({gm}) não respondeu. Peça para ele recarregar e tente de novo.",

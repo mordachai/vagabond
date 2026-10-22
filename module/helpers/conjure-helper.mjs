@@ -33,19 +33,6 @@ export class ConjureHelper {
   static COMMAND = 'system:spell.conjure';
   static QUERIES = { spawn: 'vagabond.conjure.spawn', dismiss: 'vagabond.conjure.dismiss', candidates: 'vagabond.conjure.candidates' };
 
-  /** Pack Spells and their rules (world copies matched by source id, see migrateWorldSpells). */
-  static PACK_SPELLS = {
-    sObsXPGpVI0rIGYu: {
-      name: 'Beast',
-      conjure: { kind: 'beings', beingType: 'Beasts', budget: 'max(1, floor(@lvl / 2))' },
-    },
-    Jo4OZhfZO9Q1ROw6: {
-      name: 'Forge',
-      // "a solid Item made of either copper, iron, glass, stone, or wood": the Item's "Can be Forged" switch
-      conjure: { kind: 'items', maxSlots: 1, maxCost: { gold: 1, silver: 0, copper: 0 }, forgeableOnly: true },
-    },
-  };
-
   static #L(key, data = {}) {
     return game.i18n.format(`VAGABOND.Conjure.${key}`, data);
   }
@@ -879,50 +866,4 @@ export class ConjureHelper {
   /*  Migration                                   */
   /* -------------------------------------------- */
 
-  /**
-   * One-time (guard `conjureSpellsMigrated2`): world copies of the pack Conjure Spells get their `conjure` rules
-   * (missing `forgeableOnly` filled in) and the `system:spell.conjure` hit macro (when they have no hit macro of their
-   * own); world copies of compendium Items switched "Can be Forged" get the switch. Active GM only; waits for a
-   * rebuilt compendium (no gear Item has the switch yet).
-   */
-  static async migrateWorldSpells() {
-    if (!isActiveGM()) return;
-    if (game.settings.get('vagabond', 'conjureSpellsMigrated2')) return;
-    const gear = game.packs.get('vagabond.gear');
-    const gearIndex = gear ? await gear.getIndex({ fields: ['system.forgeable'] }) : null;
-    if (gearIndex && !gearIndex.some(e => e.system?.forgeable)) return;   // compendium not rebuilt yet
-    const { isCopyOf, sourceDocId } = await import('./source-id.mjs');
-    const spells = [...game.items.contents, ...this.#actors().flatMap(a => Array.from(a.items))].filter(i => i?.type === 'spell');
-    for (const item of spells) {
-      try {
-        const [, def] = Object.entries(this.PACK_SPELLS).find(([id, d]) => isCopyOf(item, id, d.name)) ?? [];
-        if (!def) continue;
-        const update = {};
-        if (!this.rules(item)) update['system.conjure'] = { ...item.system.conjure, ...def.conjure };
-        else if (def.conjure.forgeableOnly && !item.system.conjure.forgeableOnly) update['system.conjure.forgeableOnly'] = true;
-        if (!String(item.system.hitMacro?.command ?? '').trim() && !item.system.hitMacro?.uuid) {
-          update['system.hitMacro'] = { enabled: true, uuid: '', command: this.COMMAND, label: item.name, runAsGM: false };
-        }
-        if (Object.keys(update).length) await item.update(update);
-      } catch (err) {
-        console.warn(`vagabond | Conjure migration: skipped ${item?.uuid ?? '(unknown)'}`, err);
-      }
-    }
-    // Item copies (sidebar + inventories) of compendium Items switched "Can be Forged"
-    const forgeable = new Set();
-    for (const pack of game.packs.filter(p => p.documentName === 'Item' && p.metadata.packageName === 'vagabond')) {
-      const index = await pack.getIndex({ fields: ['system.forgeable'] });
-      for (const e of index) if (e.system?.forgeable) forgeable.add(e._id);
-    }
-    const items = [...game.items.contents, ...this.#actors().flatMap(a => Array.from(a.items))]
-      .filter(i => i?.type === 'equipment' && !i.system.forgeable);
-    for (const item of items) {
-      try {
-        if (forgeable.has(sourceDocId(item))) await item.update({ 'system.forgeable': true });
-      } catch (err) {
-        console.warn(`vagabond | Conjure migration: skipped ${item?.uuid ?? '(unknown)'}`, err);
-      }
-    }
-    await game.settings.set('vagabond', 'conjureSpellsMigrated2', true);
-  }
 }

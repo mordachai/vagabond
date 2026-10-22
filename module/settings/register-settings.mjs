@@ -1143,38 +1143,11 @@ export function registerGameSettings({ refreshClockDependents, applyTokenEffectV
     default: []
   });
 
-  /* -------------------------------------------- */
-  /*  One-time migration guards (hidden)          */
-  /* -------------------------------------------- */
-
-  // LightSource.migrateRunAsGM(): older compendium light sources shipped with
-  // macro.runAsGM:true, which relayed the Ignite flow to the GM client.
-  // EquipmentHelper.migrateWeaponPropertyEffects(): Keen/Vicious → On Use Only effects.
-  // CurrencyHelper.migrateCopperScale(): stored raw copper ×10 after the 1s=100c fix.
-  // Class / ancestry guards: class-migrations.mjs, alpha3-migrations.mjs and the
-  // per-class helpers (RageHelper, AlchemyHelper, BardHelper, DancerHelper).
-  const MIGRATION_GUARDS = [
-    'lightSourceRunAsGMFixed', 'weaponPropertyEffectsMigrated', 'copperScaleMigrated',
-    'barbarianClassMigrated', 'alchemistClassMigrated', 'bardClassMigrated', 'dancerClassMigrated',
-    'fighterClassMigrated', 'druidClassMigrated', 'gunslingerClassMigrated', 'hunterClassMigrated',
-    'luminaryClassMigrated', 'magusClassMigrated', 'merchantClassMigrated', 'pugilistClassMigrated',
-    'revelatorClassMigrated', 'rogueClassMigrated', 'sorcererClassMigrated', 'vanguardClassMigrated',
-    'witchClassMigrated', 'wizardClassMigrated', 'wizardSculptSpellMigrated', 'ancestriesMigrated',
-    'alpha3StatusesMigrated', 'alpha3BackpackMigrated', 'alpha3RationsMigrated', 'alpha3DefensePerksMigrated',
-    'alpha3ClassPerksMigrated', 'alpha3PerksMigrated', 'alpha3ClassesMigrated', 'alpha3AncestriesMigrated',
-    'classFeatureScaleKeysMigrated', 'classFeatureActionsMigrated', 'spellTrackerMacrosMigrated', 'classFeatureEffectsMigrated',
-    'lifeNoFreeDieMigrated', 'vehementMagicMigrated', 'partyStashPurged', 'spellStatusRulesMigrated3',
-    'spellEffectEntriesMigrated', 'spellTargetSwitchesMigrated', 'raiseSpellMigrated', 'namedRelicsMigrated2',
-    'spellFocusSwitchesMigrated2', 'spellFocusUpkeepMigrated', 'conjureSpellsMigrated2', 'spellSurfaceMigrated3', 'spellStatusEntriesFixed',
-    'materialsBundlesMerged', 'noScrapMigrated',
-  ];
-  for (const key of MIGRATION_GUARDS) {
-    game.settings.register('vagabond', key, {
-      scope: 'world',
-      config: false,
-      type: Boolean,
-      default: false,
-      requiresReload: false,
-    });
-  }
+  // World migrations: the system version whose migrations this world ran (helpers/system-migration.mjs).
+  game.settings.register('vagabond', 'systemMigrationVersion', {
+    scope: 'world',
+    config: false,
+    type: String,
+    default: '',
+  });
 }

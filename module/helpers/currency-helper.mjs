@@ -1,4 +1,3 @@
-import { isActiveGM } from './gm-relay.mjs';
 
 /**
  * Currency math — the single choke point for all g/s/c arithmetic (shop, party
@@ -152,68 +151,4 @@ export class CurrencyHelper {
     return this.add(wallet, copper);
   }
 
-  /**
-   * One-time migration: copper amounts persisted before the ratio was corrected from
-   * 1s = 10c to the book's 1s = 100c are ×10 too small. Wallets / cost objects are
-   * per-denomination and unaffected; only stored raw-copper numbers need rescaling:
-   * `craftMaterial.value`, craftProject `value/progress/materialsPaid/power.value`,
-   * `relic.powers[].value`, shop `priceOverride`, and the `craftingConfig.valuePerShift`
-   * world setting. Idempotent via the hidden `copperScaleMigrated` world setting.
-   */
-  static async migrateCopperScale() {
-    if (!isActiveGM()) return;
-    if (game.settings.get('vagabond', 'copperScaleMigrated')) return;
-
-    const F = 10;
-    const safeItems = (doc) => { try { return Array.from(doc?.items ?? []); } catch { return []; } };
-    const candidates = [
-      ...game.items,
-      ...game.actors.contents.flatMap(safeItems),
-      ...game.scenes.contents.flatMap((s) => s.tokens.contents.filter((t) => !t.actorLink && t.actor)
-        .flatMap((t) => safeItems(t.actor))),
-    ];
-
-    for (const item of candidates) {
-      try {
-        const update = {};
-        const cm = item.system?.craftMaterial;
-        if (cm?.enabled && cm.value > 0) update['system.craftMaterial.value'] = cm.value * F;
-
-        const powers = item.system?.relic?.powers;
-        if (powers?.some((p) => p?.value > 0)) {
-          update['system.relic.powers'] = powers.map((p) => (p?.value > 0 ? { ...p, value: p.value * F } : p));
-        }
-
-        const proj = item.flags?.vagabond?.craftProject;
-        if (proj) {
-          for (const k of ['value', 'progress', 'materialsPaid']) {
-            if (proj[k] > 0) update[`flags.vagabond.craftProject.${k}`] = proj[k] * F;
-          }
-          if (proj.power?.value > 0) update['flags.vagabond.craftProject.power.value'] = proj.power.value * F;
-        }
-
-        const po = item.flags?.vagabond?.shop?.priceOverride;
-        if (Number.isFinite(po) && po > 0) update['flags.vagabond.shop.priceOverride'] = po * F;
-
-        if (Object.keys(update).length) await item.update(update);
-      } catch (err) {
-        console.warn(`vagabond | migrateCopperScale: skipped ${item?.uuid ?? '(unknown)'}`, err);
-      }
-    }
-
-    // Stored GM overrides of the Value-per-Shift table (defaults already use RATES).
-    try {
-      const stored = game.settings.get('vagabond', 'craftingConfig');
-      const table = stored?.general?.valuePerShift;
-      if (table && Object.keys(table).length) {
-        const scaled = Object.fromEntries(Object.entries(table).map(([k, v]) => [k, (Number(v) || 0) * F]));
-        await game.settings.set('vagabond', 'craftingConfig',
-          foundry.utils.mergeObject(stored, { general: { valuePerShift: scaled } }, { inplace: false }));
-      }
-    } catch (err) {
-      console.warn('vagabond | migrateCopperScale: craftingConfig skipped', err);
-    }
-
-    await game.settings.set('vagabond', 'copperScaleMigrated', true);
-  }
 }

@@ -1,8 +1,5 @@
-import { isCopyOf } from './source-id.mjs';
 import { combatRollData } from './rule-rolldata.mjs';
-import { GMRelay, isActiveGM } from './gm-relay.mjs';
-
-const BARD_CLASS_ID = '3BTEyMIzoyGVTuxz';
+import { GMRelay } from './gm-relay.mjs';
 
 /** d20 check categories each Virtuoso benefit's Favor die applies to (Overtuned reads these). */
 const BOON_CHECKS = { inspiration: [], resolve: ['save'], valor: ['attack', 'cast'] };
@@ -235,55 +232,4 @@ export class BardHelper {
   /*  Migration                                   */
   /* -------------------------------------------- */
 
-  /**
-   * One-time migration: Bard class items created before the book revision carry the old
-   * features (Song of Rest, Starstruck, Bravado, Climax, Starstruck Enhancement), the old
-   * Perk text and no effects. Replaces description / levelFeatures / skillGrant / effects with
-   * the compendium's current set (Overtuned, Audacity, Enjoy the Silence, the Virtuoso
-   * benefits…). Items without the old "Song of Rest" feature (homebrew edits, already migrated)
-   * are left alone. Active GM only; guarded by `bardClassMigrated`. If the compendium hasn't
-   * been rebuilt yet (no "Enjoy the Silence" effect) it aborts WITHOUT setting the guard, so it
-   * retries next load.
-   */
-  static async migrateBardClass() {
-    if (!isActiveGM()) return;
-    if (game.settings.get('vagabond', 'bardClassMigrated')) return;
-
-    const source = await game.packs.get('vagabond.classes')?.getDocument(BARD_CLASS_ID);
-    if (!source?.effects.some(e => e.flags?.vagabond?.virtuosoBoon)) return;
-
-    const safeItems = (doc) => { try { return Array.from(doc?.items ?? []); } catch { return []; } };
-    const candidates = [
-      ...game.items,
-      ...game.actors.contents.flatMap(safeItems),
-      ...game.scenes.contents.flatMap((s) => s.tokens.contents.filter((t) => !t.actorLink && t.actor)
-        .flatMap((t) => safeItems(t.actor))),
-    ];
-
-    for (const item of candidates) {
-      try {
-        if (item.type !== 'class' || !isCopyOf(item, BARD_CLASS_ID, 'Bard')) continue;
-        if (!item.system.levelFeatures?.some(lf => lf.name === 'Song of Rest')) continue;
-
-        const effects = source.effects.map(e => {
-          const data = e.toObject();
-          delete data._id;
-          delete data._stats;
-          return data;
-        });
-        const s = source.system.toObject();
-        await item.update({
-          'system.description': s.description,
-          'system.levelFeatures': s.levelFeatures,
-          'system.skillGrant': s.skillGrant,
-        });
-        await item.deleteEmbeddedDocuments('ActiveEffect', item.effects.map(e => e.id));
-        await item.createEmbeddedDocuments('ActiveEffect', effects);
-      } catch (err) {
-        console.warn(`vagabond | migrateBardClass: skipped ${item?.uuid ?? '(unknown)'}`, err);
-      }
-    }
-
-    await game.settings.set('vagabond', 'bardClassMigrated', true);
-  }
 }

@@ -411,6 +411,15 @@
       "NoGM": "A GM must be connected for this.",
       "Failed": "The GM could not do this. Ask them to reload, then try again."
     },
+    "Migration": {
+      "Failed": "Vagabond could not update this world's data ({label}). It will try again on the next load; see the console (F12).",
+      "TooOld": {
+        "Title": "Vagabond: world data too old",
+        "Content": "This world was last opened with a Vagabond version older than {floor}. Vagabond {current} no longer converts data that old. To upgrade it: back up the world, install Vagabond {floor}, open the world once as GM, then update to {current}. If the world is new, or you already did this, mark it as up to date.",
+        "MarkCurrent": "It's up to date",
+        "Later": "Remind me next time"
+      }
+    },
     "Macro": {
       "NoGM": "No GM is connected to run this.",
       "RelayFailed": "The GM ({gm}) did not answer. Ask them to reload, then try again.",

@@ -1,7 +1,7 @@
 import { CurrencyHelper } from './currency-helper.mjs';
 import { EquipmentHelper } from './equipment-helper.mjs';
 import { ShopTransactions } from './shop-transactions.mjs';
-import { GMRelay, isActiveGM } from './gm-relay.mjs';
+import { GMRelay } from './gm-relay.mjs';
 
 /**
  * Free trade — moving items and coins between inventories (Characters, transport Holds,
@@ -132,20 +132,6 @@ export class TradeHelper {
     });
     const n = Math.floor(Number(value));
     return Number.isFinite(n) && n >= 1 ? Math.min(n, total) : null;
-  }
-
-  /**
-   * One-time purge (active GM, guard `partyStashPurged`): party actors no longer hold items
-   * (leftovers of the old party containers / group buys); embedded items left on them are deleted.
-   */
-  static async purgePartyItems() {
-    if (!isActiveGM() || game.settings.get('vagabond', 'partyStashPurged')) return;
-    for (const party of game.actors.filter((a) => a.type === 'party' && a.items.size)) {
-      console.log(`Vagabond | Purging ${party.items.size} leftover item(s) from party "${party.name}":`,
-        party.items.map((i) => i.name).join(', '));
-      await party.deleteEmbeddedDocuments('Item', party.items.map((i) => i.id));
-    }
-    await game.settings.set('vagabond', 'partyStashPurged', true);
   }
 
   /** Toast a failure reason. */
