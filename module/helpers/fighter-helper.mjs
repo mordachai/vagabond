@@ -1,6 +1,8 @@
 import { classFeatureText } from './feature-text.mjs';
 import { combatRollData } from './rule-rolldata.mjs';
 import { RollExpiry } from './roll-expiry.mjs';
+import { FeatureRules } from './feature-rules.mjs';
+import { VagabondChatCard } from './chat-card.mjs';
 
 /**
  * Fighter — Momentum (optional automation + feature button).
@@ -87,7 +89,6 @@ export class FighterHelper {
       return false;
     }
 
-    const { VagabondChatCard } = await import('./chat-card.mjs');
     const text = classFeatureText(actor, { command: 'fighter.momentum', name: 'Momentum' });
     await VagabondChatCard.featureCard(actor, {
       title,
@@ -105,7 +106,6 @@ export class FighterHelper {
       return;
     }
     if (actor.effects.get(eff.id)) await eff.delete();
-    const { VagabondChatCard } = await import('./chat-card.mjs');
     await VagabondChatCard.featureCard(actor, {
       title: game.i18n.localize('VAGABOND.Momentum.Title'),
       description: `<p>${game.i18n.format('VAGABOND.Momentum.Ended', { name: actor.name })}${reason ? ` ${RollExpiry.reasonText(reason)}` : ''}</p>`,
@@ -124,6 +124,8 @@ export class FighterHelper {
    * reduced (Armor, Immune, Shield…), which is the second Momentum trigger.
    */
   static registerHooks() {
+    // Momentum: passing a Save / Defense Check against an attack
+    FeatureRules.on('defended', (actor) => this.onDefended(actor));
     Hooks.on('vagabond.postDamageApply', (ctx) => {
       if (ctx?.amount === 0) this.onDefended(ctx.actor);
     });

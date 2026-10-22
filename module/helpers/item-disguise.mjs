@@ -11,7 +11,7 @@ import { VagabondChatCard } from './chat-card.mjs';
  * it — and `system.disguise.truth` holds the real ones. Players get a locked sheet and no curse UI; effects read as
  * their disguise (`hidesFromUser`, `showEffect`); everything still works. Only the GM reveals it (`reveal`, chat card optional).
  *
- * The disguise is authored in `ItemDisguiseApp` (applications/item-disguise-app.mjs). A cursed item starts from a
+ * The disguise is authored in `ItemDisguiseApp` (applications/item-disguise-app.mjs, also the GM eye `toggle`). A cursed item starts from a
  * generated one (`generate`: the opposite plus of the curse's penalties); any other item from its own name / art.
  * `system.disguise.shown` keeps the last disguise (GM edits included) for the next time. Cursed Relics attached to
  * the item get their own `power.disguise` (slot name / effect names).
@@ -293,21 +293,6 @@ export class ItemDisguise {
     if (item.actor) card.setActor(item.actor).setSubtitle(item.actor.name);
     await card.send();
     return true;
-  }
-
-  /**
-   * GM quick switch (sheet eye): disguised → reveal; revealed → disguise again with the last disguise (or the generated
-   * one of a cursed item). Never disguised and nothing to generate → opens the editor instead.
-   */
-  static async toggle(item, { announce = true } = {}) {
-    if (!game.user.isGM || !this.canDisguise(item)) return false;
-    if (this.isDisguised(item)) return this.reveal(item, { announce });
-    if (!item.system.disguise?.shown?.name && !this.isCursed(item)) {
-      const { ItemDisguiseApp } = await import('../applications/item-disguise-app.mjs');
-      ItemDisguiseApp.open(item);
-      return false;
-    }
-    return this.disguise(item);
   }
 
   /** GM-only item sheet header model (mask button + banner), or null. */

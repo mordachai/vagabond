@@ -1,6 +1,8 @@
 import { classFeatureText } from './feature-text.mjs';
 import { StatusHelper } from './status-helper.mjs';
 import { RollExpiry } from './roll-expiry.mjs';
+import { VagabondChatCard } from './chat-card.mjs';
+import { buildMacroButtonHTML } from './item-macro.mjs';
 
 /**
  * Gunslinger — Deadeye, Grit, High Noon (optional automation + feature buttons).
@@ -64,7 +66,6 @@ export class GunslingerHelper {
     const eff = this.effect(actor);
     if (!eff) return;
     if (actor.effects.get(eff.id)) await eff.delete();
-    const { VagabondChatCard } = await import('./chat-card.mjs');
     await VagabondChatCard.featureCard(actor, {
       title: this.#L('Title'),
       description: `<p>${this.#L('Ended', { name: actor.name })}${reason ? ` ${RollExpiry.reasonText(reason)}` : ''}</p>`,
@@ -174,7 +175,6 @@ export class GunslingerHelper {
       return;
     }
     await eff.delete();
-    const { VagabondChatCard } = await import('./chat-card.mjs');
     await VagabondChatCard.featureCard(actor, {
       title: this.#L('Title'),
       description: `<p>${this.#L('Reset', { name: actor.name })}</p>`,
@@ -222,7 +222,6 @@ export class GunslingerHelper {
       return;
     }
     const n = await this.setStacks(actor, this.stacks(actor) + 1);
-    const { VagabondChatCard } = await import('./chat-card.mjs');
     await VagabondChatCard.featureCard(actor, {
       title: this.#L('Title'),
       description: `<p>${this.#L('Raised', { name: actor.name, n })}</p>${this.#featureText(actor, 'Deadeye')}`,
@@ -236,7 +235,6 @@ export class GunslingerHelper {
       return;
     }
     await this.setStacks(actor, MAX_STACKS);
-    const { VagabondChatCard } = await import('./chat-card.mjs');
     await VagabondChatCard.featureCard(actor, {
       title: this.#L('HighNoonTitle'),
       description: `<p>${this.#L('HighNoonDone', { name: actor.name })}</p>${auto ? '' : this.#featureText(actor, 'High Noon')}`,
@@ -264,8 +262,6 @@ export class GunslingerHelper {
       return;
     }
 
-    const { VagabondChatCard } = await import('./chat-card.mjs');
-    const { buildMacroButtonHTML } = await import('./item-macro.mjs');
     const card = new VagabondChatCard()
       .setType('generic')
       .setActor(actor)
@@ -312,7 +308,6 @@ export class GunslingerHelper {
     const n = cost > 0 ? await this.setStacks(actor, this.stacks(actor) - cost) : this.stacks(actor);
 
     const def = CONFIG.statusEffects.find(e => e.id === statusId);
-    const { VagabondChatCard } = await import('./chat-card.mjs');
     await VagabondChatCard.featureCard(actor, {
       title: this.#L('GritTitle'),
       description: `<p>${this.#L('GritDone', { name: actor.name, status: game.i18n.localize(def?.name ?? statusId), spent: cost, n })}</p>`

@@ -1,6 +1,6 @@
 import { StatusHelper } from './status-helper.mjs';
 import { VagabondDamagePipeline } from './damage-pipeline.mjs';
-import { macroNotify } from './item-macro.mjs';
+import { macroNotify, runMacroFromButton } from './item-macro.mjs';
 import { GMRelay, isActiveGM } from './gm-relay.mjs';
 
 /**
@@ -150,7 +150,6 @@ export class SpellTrackerHelper {
     const beings = this.#targetActors(scope);
     const weapons = (scope?.targetObjects ?? []).filter(i => i?.uuid);
     if (!beings.length && !weapons.length) return this.#noTarget(scope);
-    const { runMacroFromButton } = await import('./item-macro.mjs');
     return runMacroFromButton({
       itemUuid: scope?.item?.uuid ?? null,
       itemName: scope?.item?.name ?? scope?.itemName ?? null,

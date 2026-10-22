@@ -3,6 +3,8 @@ import { VagabondSpellSequencer } from './spell-sequencer.mjs';
 import { VagabondFXResolver } from './fx-file-resolver.mjs';
 import { RegionTextureOverlay } from '../ui/region-texture-overlay.mjs';
 import { GMRelay, isActiveGM } from './gm-relay.mjs';
+import { StatusHelper } from './status-helper.mjs';
+import { VagabondChatCard } from './chat-card.mjs';
 
 /**
  * Spell Surface — Spells that leave their area on the map, driven by the Spell's `system.surface` rules (no per-Spell
@@ -362,7 +364,6 @@ export class SpellSurface {
     if (!ids.size) return;
     // Already gone again (moved through the area): nothing to add
     if (token.regions && !token.regions.has(region)) return;
-    const { StatusHelper } = await import('./status-helper.mjs');
     const toCreate = [];
     for (const id of ids) {
       // This Surface already gave it, or a non-Surface source holds it (that one keeps it). Another Surface's copy
@@ -404,7 +405,6 @@ export class SpellSurface {
       actorName: token.name,
       actorImg: token.texture?.src,
     }];
-    const { VagabondChatCard } = await import('./chat-card.mjs');
     await VagabondChatCard.createActionCard({
       actor: caster,
       item: spell ?? null,

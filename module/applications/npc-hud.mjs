@@ -6,6 +6,7 @@ import { applyHudDisplayPrefs, bindHudBodyDrag, getHudHealthBar, isItemPile } fr
 import { bindHudTooltips } from '../helpers/hud-tooltip.mjs';
 import { buildEffectMenuItems } from '../helpers/effects.mjs';
 import { NpcRules } from '../helpers/npc-rules.mjs';
+import { ContextMenuHelper } from '../helpers/context-menu-helper.mjs';
 
 const { api } = foundry.applications;
 
@@ -635,7 +636,6 @@ export class VagabondNPCHud extends api.HandlebarsApplicationMixin(api.Applicati
   _openChipMenu(event, chip) {
     event.preventDefault();
     event.stopPropagation();
-    const { ContextMenuHelper } = globalThis.vagabond.utils;
     const L = (k) => game.i18n.localize(k);
     const isAction = chip.classList.contains('vh-chip--action');
     const index = parseInt(chip.dataset.index);
@@ -686,7 +686,6 @@ export class VagabondNPCHud extends api.HandlebarsApplicationMixin(api.Applicati
    */
   _openHudMenu(event) {
     event.preventDefault();
-    const { ContextMenuHelper } = globalThis.vagabond.utils;
     const L = (k) => game.i18n.localize(k);
     ContextMenuHelper.create({
       position: { x: event.clientX, y: event.clientY },

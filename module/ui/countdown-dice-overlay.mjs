@@ -1,6 +1,8 @@
 import { CountdownDice } from '../documents/countdown-dice.mjs';
 import { CountdownDiceConfig } from '../applications/countdown-dice-config.mjs';
 import { GMRelay } from '../helpers/gm-relay.mjs';
+import { StatusHelper } from '../helpers/status-helper.mjs';
+import { VagabondChatCard } from '../helpers/chat-card.mjs';
 
 /**
  * UI Overlay for rendering countdown dice on the canvas
@@ -481,7 +483,6 @@ export class CountdownDiceOverlay {
       try {
         const actor = await fromUuid(flags.linkedActorUuid);
         if (actor) {
-          const { StatusHelper } = await import('../helpers/status-helper.mjs');
           tickData = await StatusHelper.dealTickDamage(
             actor,
             flags.tickDamageFormula ?? '',
@@ -495,7 +496,6 @@ export class CountdownDiceOverlay {
               const currentHP = actor.system.health?.value ?? 0;
               const newHP = Math.max(0, currentHP - tickData.finalDamage);
               await actor.update({ 'system.health.value': newHP });
-              const { VagabondChatCard } = await import('../helpers/chat-card.mjs');
               await VagabondChatCard.applyResult(actor, {
                 type: 'damage',
                 rawAmount: tickData.rawDamage,
@@ -572,7 +572,6 @@ export class CountdownDiceOverlay {
     const currentDiceType = flags.diceType;
 
     // Use unified chat card system
-    const { VagabondChatCard } = await import('../helpers/chat-card.mjs');
     await VagabondChatCard.countdownDiceRoll(
       dice,
       roll,

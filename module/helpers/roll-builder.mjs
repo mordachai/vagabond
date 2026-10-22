@@ -1,3 +1,4 @@
+import { VagabondDiceAppearance } from './dice-appearance.mjs';
 /**
  * Centralized utility for building and evaluating rolls with favor/hinder mechanics
  */
@@ -109,7 +110,6 @@ export class VagabondRollBuilder {
    * @returns {Promise<Roll>} Evaluated roll
    */
   static async evaluateRoll(formula, actor, favorHinder) {
-    const { VagabondDiceAppearance } = await import('./dice-appearance.mjs');
     const roll = new Roll(formula, actor.getRollData());
     await VagabondDiceAppearance.evaluateWithCustomColors(roll, favorHinder);
     return roll;
@@ -153,7 +153,6 @@ export class VagabondRollBuilder {
     }
 
     // Evaluate with custom dice appearance
-    const { VagabondDiceAppearance } = await import('./dice-appearance.mjs');
     const roll = new Roll(formula, rollData);
     await VagabondDiceAppearance.evaluateWithCustomColors(roll, favorHinder);
     return roll;

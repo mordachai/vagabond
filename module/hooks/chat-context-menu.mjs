@@ -1,9 +1,10 @@
 import { VagabondChatCard } from '../helpers/chat-card.mjs';
-import { VagabondDamageHelper } from '../helpers/damage-helper.mjs';
+import { VagabondDamageHelper, VagabondDamageHelper as VDHCrit } from '../helpers/damage-helper.mjs';
 import { HunterHelper } from '../helpers/hunter-helper.mjs';
 import { MacroAutoRun } from '../helpers/macro-autorun.mjs';
 import { VagabondRollBuilder } from '../helpers/roll-builder.mjs';
 import { TargetHelper } from '../helpers/target-helper.mjs';
+import { EquipmentHelper } from '../helpers/equipment-helper.mjs';
 
 /**
  * Chat message context menu: Luck reroll (Fluke) and Force Critical.
@@ -78,7 +79,6 @@ export function registerChatContextMenu() {
         : rerollData.formula.includes('[hindered]') ? 'hinder' : 'none';
 
       // Import helpers
-      const { VagabondRollBuilder } = await import('../helpers/roll-builder.mjs');
 
       // Re-evaluate the roll with the same formula
       const roll = await VagabondRollBuilder.evaluateRoll(rerollData.formula, actor, favorHinder);
@@ -115,12 +115,11 @@ export function registerChatContextMenu() {
         };
 
         // Roll damage if hit
-        const { VagabondDamageHelper } = await import('../helpers/damage-helper.mjs');
         const targetsAtRollTime = flags.targetsAtRollTime || [];
         let damageRoll = null;
         if (VagabondDamageHelper.shouldRollDamage(isSuccess)) {
           const statKey = weaponSkill?.stat || null;
-          const cleaveDie = globalThis.vagabond.utils.EquipmentHelper.cleaveDieFor(weapon, targetsAtRollTime.length);
+          const cleaveDie = EquipmentHelper.cleaveDieFor(weapon, targetsAtRollTime.length);
           damageRoll = await weapon.rollDamage(actor, isCritical, statKey, targetsAtRollTime, cleaveDie, weaponSkillKey);
         }
         await VagabondChatCard.weaponAttack(actor, weapon, attackResult, damageRoll, targetsAtRollTime);
@@ -257,7 +256,6 @@ export function registerChatContextMenu() {
 
         // Spell Damage / Effect split: the original Cast state (when stored) gates the statuses,
         // and an effect-only Cast gets its Apply Effect buttons here too
-        const { VagabondDamageHelper: VDHCrit } = await import('../helpers/damage-helper.mjs');
         const critSpellCast = (spell && rerollData.damageDice !== undefined)
           ? VDHCrit.spellCastContext(spell, { damageDice: rerollData.damageDice, useFx: rerollData.useFx,
               // Forced Crit: held while still Focused, unless the Spell's Crit needs no Focus
@@ -284,7 +282,6 @@ export function registerChatContextMenu() {
         });
         await MacroAutoRun.inherit(message, critCastMessage);
         if (spell && rerollData.deliveryType) {
-          const { VagabondDamageHelper } = await import('../helpers/damage-helper.mjs');
           await VagabondDamageHelper.playFxOrDefer(
             critCastMessage,
             { kind: 'spell', deliveryType: rerollData.deliveryType, deliveryIncrease: rerollData.deliveryIncrease ?? 0,

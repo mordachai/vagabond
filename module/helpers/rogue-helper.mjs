@@ -1,4 +1,5 @@
 import { combatRollData } from './rule-rolldata.mjs';
+import { VagabondChatCard } from './chat-card.mjs';
 
 /**
  * Rogue — Sneak Attack, Lethal Weapon, Knack (optional automation).
@@ -86,7 +87,6 @@ export class RogueHelper {
       const turn = this.#turnKey(actor);
       if (turn) await actor.setFlag('vagabond', 'sneakTurn', turn);
       await actor.setFlag('vagabond', 'sneakIgnore', { itemId: item.id, n: dice });
-      const { VagabondChatCard } = await import('./chat-card.mjs');
       await VagabondChatCard.featureCard(actor, {
         title: game.i18n.localize('VAGABOND.SneakAttack.Title'),
         description: `<p>${this.#L('Spent', { name: actor.name, dice, armor: dice })}</p>`,
@@ -113,7 +113,6 @@ export class RogueHelper {
     const next = cur + bonus;
     if (next <= cur) return;
     await actor.update({ 'system.currentLuck': next });
-    const { VagabondChatCard } = await import('./chat-card.mjs');
     await VagabondChatCard.featureCard(actor, {
       title: game.i18n.localize('VAGABOND.Knack.Title'),
       description: `<p>${game.i18n.format('VAGABOND.Knack.Gained', { name: actor.name, luck: next - cur })}</p>`,

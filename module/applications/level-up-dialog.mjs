@@ -21,6 +21,7 @@ import { effectModeToChangeType } from '../helpers/effects.mjs';
 import { AlchemyHelper } from '../helpers/crafting/alchemy-helper.mjs';
 import { AlchemyLab } from '../helpers/alchemy-lab.mjs';
 import { GrantedItems } from '../helpers/granted-items.mjs';
+import { default as PerkChoiceDialog } from './perk-choice-dialog.mjs';
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
@@ -1779,7 +1780,6 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
       // Check if perk has a choice
       const choiceConfig = item.system.choiceConfig;
       if (choiceConfig && choiceConfig.type && choiceConfig.type !== 'none' && !choiceConfig.selected) {
-        const { default: PerkChoiceDialog } = await import('./perk-choice-dialog.mjs');
         const choice = await PerkChoiceDialog.show(item, this.actor);
 
         if (!choice) {

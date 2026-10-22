@@ -2,6 +2,9 @@ import * as ItemSections from '../../helpers/item-sections.mjs';
 import { buildItemMenuItems } from '../../helpers/item-menu.mjs';
 import { ItemDisguise } from '../../helpers/item-disguise.mjs';
 import { RelicSlots } from '../../helpers/relic-slots.mjs';
+import { EquipmentHelper } from '../../helpers/equipment-helper.mjs';
+import { ContextMenuHelper } from '../../helpers/context-menu-helper.mjs';
+import { VagabondChatCard } from '../../helpers/chat-card.mjs';
 
 /**
  * Handler for inventory-related functionality in the character sheet.
@@ -33,7 +36,6 @@ export class InventoryHandler {
    */
   prepareInventoryGrid(context, gear, weapons, armor, containers) {
     // Import equipment helper
-    const { EquipmentHelper } = globalThis.vagabond.utils;
 
     // Combine all inventory items (exclude items inside containers)
     const allInventoryItems = [...weapons, ...armor, ...gear, ...containers].filter(
@@ -191,7 +193,6 @@ export class InventoryHandler {
       return;
     }
 
-    const { ContextMenuHelper } = globalThis.vagabond.utils;
 
     // Same entries as the HUD slot menu (Attack/Use, Throw + Quantity, grip,
     // Open, Send to Chat, Equip/Unequip, Bind), plus Delete. Works for both the
@@ -245,8 +246,6 @@ export class InventoryHandler {
 
     this.hideInventoryContextMenu();
 
-    const { ContextMenuHelper } = globalThis.vagabond.utils;
-    const { VagabondChatCard } = globalThis.vagabond.utils;
 
     let item = null;
     let sourceItem = null;
@@ -363,7 +362,6 @@ export class InventoryHandler {
    */
   hideInventoryContextMenu() {
     if (this._currentContextMenu) {
-      const { ContextMenuHelper } = globalThis.vagabond.utils;
       ContextMenuHelper.close(this._currentContextMenu);
       this._currentContextMenu = null;
     }

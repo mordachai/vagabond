@@ -1,4 +1,6 @@
 import { classFeatureText } from './feature-text.mjs';
+import { RollHandler } from '../sheets/handlers/roll-handler.mjs';
+import { VagabondChatCard } from './chat-card.mjs';
 
 /**
  * Dancer — Step Up (feature action button), plus the one-time class migration.
@@ -24,13 +26,11 @@ export class DancerHelper {
     }
 
     // The Finesse Check goes through the normal skill roll (favor/hinder, hooks, chat card)
-    const { RollHandler } = await import('../sheets/handlers/roll-handler.mjs');
     const el = document.createElement('div');
     Object.assign(el.dataset, { roll: 'd20', key: 'finesse', type: 'skill', label: game.i18n.localize('VAGABOND.Skills.Finesse') });
     const roll = await new RollHandler({ actor }, {}).roll({ preventDefault() {}, shiftKey: false, ctrlKey: false }, el);
     if (!roll) return;
 
-    const { VagabondChatCard } = await import('./chat-card.mjs');
     const title = game.i18n.localize('VAGABOND.StepUp.Title');
     const difficulty = actor.system.skills?.finesse?.difficulty ?? 10;
     if (roll.total < difficulty) {

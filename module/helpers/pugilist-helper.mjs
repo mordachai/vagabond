@@ -1,4 +1,5 @@
 import { StatusHelper } from './status-helper.mjs';
+import { VagabondChatCard } from './chat-card.mjs';
 
 /**
  * Pugilist — Haymaker (optional automation).
@@ -45,7 +46,6 @@ export class PugilistHelper {
 
   /** Daze `target` and remember it for the end of the Pugilist's next Turn start. */
   static async haymaker(attacker, target) {
-    const { VagabondChatCard } = await import('./chat-card.mjs');
     const tokenName = attacker.token?.name ?? attacker.getActiveTokens(true)[0]?.name ?? attacker.name;
     const result = await StatusHelper.applyStatus(target, { statusId: 'dazed' }, false, game.i18n.localize('VAGABOND.Haymaker.Title'),
       { skipSaveRoll: true, sourceActorName: tokenName });

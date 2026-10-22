@@ -1,5 +1,9 @@
 import { TargetHelper } from './target-helper.mjs';
 import { GMRelay } from './gm-relay.mjs';
+import { FeatureRules } from './feature-rules.mjs';
+import { VagabondChatCard } from './chat-card.mjs';
+import { VagabondRollBuilder } from './roll-builder.mjs';
+import { VagabondDamageHelper } from './damage-helper.mjs';
 
 /**
  * Ward upcast (`system.wardUpcast`) — Ward: "When the Target takes damage from an attack or Cast, you can upcast
@@ -147,7 +151,6 @@ export class WardHelper {
         </div>
       </div>`;
 
-    const { VagabondChatCard } = await import('./chat-card.mjs');
     const card = new VagabondChatCard()
       .setType('generic')
       .setActor(caster)
@@ -182,7 +185,6 @@ export class WardHelper {
     const skillKey = caster.system.classData?.manaSkill;
     const skill = skillKey ? caster.system.skills?.[skillKey] : null;
     if (!skill) return null;
-    const { VagabondRollBuilder } = await import('./roll-builder.mjs');
     const rollData = caster.getRollDataWithItemEffects(spell);
     const favorHinder = VagabondRollBuilder.mergeFavorHinder(
       VagabondRollBuilder.calculateEffectiveFavorHinder(caster.system.favorHinder || 'none', !!event?.shiftKey, !!event?.ctrlKey),
@@ -242,7 +244,6 @@ export class WardHelper {
     const amount = wardRoll?.total ?? 0;
     const formula = `${mana}d6`;
 
-    const { VagabondDamageHelper } = await import('./damage-helper.mjs');
     const lines = [];
     let calcHtml = '';
     let applyButton = '';
@@ -292,7 +293,6 @@ export class WardHelper {
         <span class="ward-result-total"><i class="fa-solid fa-shield-halved"></i> -${amount}</span>
       </div>` : '';
 
-    const { VagabondChatCard } = await import('./chat-card.mjs');
     const card = new VagabondChatCard()
       .setType('save-roll')
       .setActor(caster)
@@ -314,5 +314,12 @@ export class WardHelper {
     });
     if (message.isOwner) await message.delete();
     if (check.isCritical) await VagabondChatCard._grantLuckOnCrit(caster, result, 'Critical');
+  }
+
+  /** Answers FeatureRules points. Synchronous, called once at module load. */
+  static registerHooks() {
+    // Rolled Wards come off before Armor; damage cards get a Ward button per warding caster of each Target
+    FeatureRules.on('damageReduction', (damageMessageId, defenderUuid) => this.reductionFor(damageMessageId, defenderUuid));
+    FeatureRules.on('damageCardRows', (targets, amount, damageType) => this.createRow(targets, amount, damageType));
   }
 }

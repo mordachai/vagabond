@@ -2,6 +2,9 @@ import { SpellTargetPicker } from './spell-target-picker.mjs';
 import { CurrencyHelper } from './currency-helper.mjs';
 import { SystemFolders } from './system-folders.mjs';
 import { GMRelay, isActiveGM } from './gm-relay.mjs';
+import { ConjurePicker } from '../applications/conjure-picker.mjs';
+import { EquipmentHelper } from './equipment-helper.mjs';
+import { VagabondChatCard } from './chat-card.mjs';
 
 /**
  * Conjure — Spells that call things forth, driven by the Spell's `system.conjure` rules (no per-Spell code):
@@ -219,7 +222,6 @@ export class ConjureHelper {
       ui.notifications.warn(this.#L('NoneFit', { budget }));
       return;
     }
-    const { ConjurePicker } = await import('../applications/conjure-picker.mjs');
     const { picks } = await ConjurePicker.prompt({
       title: spell.name,
       hint: this.#L('BeingsHint', { budget }),
@@ -267,7 +269,6 @@ export class ConjureHelper {
       return;
     }
     const selfTarget = slots.some(s => s.actorUuid === caster.uuid);
-    const { ConjurePicker } = await import('../applications/conjure-picker.mjs');
     const { picks, equip } = await ConjurePicker.prompt({
       title: spell.name,
       hint: area ? this.#L('ItemsAreaHint', { n: budget }) : this.#L('ItemsTargetHint', { n: budget }),
@@ -691,7 +692,6 @@ export class ConjureHelper {
 
   /** Forge on yourself: Equip the Item only when that unequips nothing (free hands, no worn Armor replaced). */
   static async #equipFree(actor, item) {
-    const { EquipmentHelper } = await import('./equipment-helper.mjs');
     const state = EquipmentHelper.defaultEquipState(item);
     const need = { oneHand: 1, twoHands: 2 }[state] ?? 0;
     const used = actor.items.reduce((sum, i) => sum + (i.id === item.id ? 0 : EquipmentHelper.handsFor(i)), 0);
@@ -722,7 +722,6 @@ export class ConjureHelper {
     const dismiss = `<div class="protect-buttons-row conjure-buttons">
       <button type="button" class="vagabond-conjure-dismiss" data-caster-uuid="${stamp.casterUuid}" data-cast-id="${stamp.castId}">
         <i class="fa-solid fa-ban"></i> ${this.#L('Dismiss')}</button></div>`;
-    const { VagabondChatCard } = await import('./chat-card.mjs');
     await VagabondChatCard.createActionCard({
       actor: caster,
       item: spell,

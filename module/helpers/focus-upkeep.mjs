@@ -1,5 +1,7 @@
 import { SpellTargetPicker } from './spell-target-picker.mjs';
 import { isActiveGM } from './gm-relay.mjs';
+import { FocusLink } from './focus-link.mjs';
+import { VagabondChatCard } from './chat-card.mjs';
 
 /**
  * Focus Mana — Spells whose Focus costs Mana (`system.focusUpkeep`, book wording):
@@ -94,7 +96,6 @@ export class FocusUpkeep {
     const L = (k, d) => game.i18n.format(`VAGABOND.FocusUpkeep.${k}`, d);
     const data = `data-actor-uuid="${actor.uuid}" data-spell-id="${spell.id}" data-mana="${mana}"`;
     const text = targets ? L('CostTargets', { mana, targets, spell: esc(spell.name) }) : L('Cost', { mana, spell: esc(spell.name) });
-    const { VagabondChatCard } = await import('./chat-card.mjs');
     await new VagabondChatCard()
       .setType('generic')
       .setActor(actor)
@@ -135,8 +136,7 @@ export class FocusUpkeep {
       await actor.update({ 'system.mana.current': have - mana });
       line = L('Paid', { ...names, mana });
     } else {
-      const { SpellHandler } = await import('../sheets/handlers/spell-handler.mjs');
-      await SpellHandler.setFocus(actor, spell.id, false);
+      await FocusLink.setFocus(actor, spell.id, false);
       line = L('Dropped', names);
     }
     button.closest('.focus-upkeep-buttons')?.querySelectorAll('button').forEach(b => { b.disabled = true; });

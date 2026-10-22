@@ -2,15 +2,17 @@ import { VagabondDamagePipeline } from './damage-pipeline.mjs';
 import { TargetHelper } from './target-helper.mjs';
 import { SpellPlacement } from './spell-placement.mjs';
 import { EquipmentHelper } from './equipment-helper.mjs';
-import { DruidHelper } from './druid-helper.mjs';
-import { HunterHelper } from './hunter-helper.mjs';
-import { WitchHelper } from './witch-helper.mjs';
 import { DefenseHelper } from './defense-helper.mjs';
 import { NpcRules } from './npc-rules.mjs';
 import { FocusLink } from './focus-link.mjs';
-import { WardHelper } from './ward-helper.mjs';
+import { FeatureRules } from './feature-rules.mjs';
+import { VagabondSpellSequencer } from './spell-sequencer.mjs';
+import { MacroAutoRun } from './macro-autorun.mjs';
 import { AnimationBridge } from './animation-bridge.mjs';
 import { GMRelay } from './gm-relay.mjs';
+import { StatusHelper } from './status-helper.mjs';
+import { VagabondRollBuilder } from './roll-builder.mjs';
+import { consumeUsedEffects } from './use-effects.mjs';
 
 /**
  * Universal Damage Helper
@@ -200,9 +202,8 @@ export class VagabondDamageHelper {
     const casterToken = actor.token?.object ?? actor.getActiveTokens(true)[0];
     // Remote spaces + a hand-placed area's center (SpellPlacement) ride the payload
     const targets = [...TargetHelper.resolveTargets(storedTargets), ...SpellPlacement.pseudoTargets(fx.spaces)];
-    const played = import('./spell-sequencer.mjs').then(({ VagabondSpellSequencer }) =>
-      VagabondSpellSequencer.play(item, fx.deliveryType, fx.deliveryIncrease ?? 0, casterToken, targets, { deliveryEnabled: isHit, areaCenter: fx.areaCenter ?? null, castArea: fx.castArea ?? null }));
-    if (message && isHit) import('./macro-autorun.mjs').then(({ MacroAutoRun }) => MacroAutoRun.afterFx(message, played));
+    const played = VagabondSpellSequencer.play(item, fx.deliveryType, fx.deliveryIncrease ?? 0, casterToken, targets, { deliveryEnabled: isHit, areaCenter: fx.areaCenter ?? null, castArea: fx.castArea ?? null });
+    if (message && isHit) MacroAutoRun.afterFx(message, played);
   }
 
   /**
@@ -274,7 +275,6 @@ export class VagabondDamageHelper {
     this._playPendingFx(game.messages.get(messageId), actor, item, storedTargetsForWeak);
 
     // Unified damage pipeline (die-size bump is pre-baked into damageFormula upstream)
-    const { VagabondDamagePipeline } = await import('./damage-pipeline.mjs');
     const damageRoll = await VagabondDamagePipeline.rollDamage({
       actor,
       item,
@@ -348,7 +348,7 @@ export class VagabondDamageHelper {
       title: `${game.i18n.localize('VAGABOND.Roll.DamageRoll')}: ${item?.name || 'Attack'}`,
       damageRoll,
       damageType: damageTypeKey || damageType,
-      hasDefenses: !this.isRestorativeDamageType(damageTypeKey || damageType),
+      hasDefenses: !VagabondDamagePipeline.isRestorativeDamageType(damageTypeKey || damageType),
       attackType,
       rollData: isCritical ? { isCritical: true, critStatBonus, critLocked, critBenefitOff } : null,
       weaknessPreRolled,
@@ -452,7 +452,7 @@ export class VagabondDamageHelper {
     const targetsJson = JSON.stringify(targetsAtRollTime).replace(/"/g, '&quot;');
 
     // Check if it's a restorative effect
-    const restorativeResource = this.getRestorativeResource(damageType);
+    const restorativeResource = VagabondDamagePipeline.getRestorativeResource(damageType);
 
     // Determine icon and label
     let icon, label;
@@ -545,7 +545,7 @@ export class VagabondDamageHelper {
     }
 
     // Check if it's restorative or harmful
-    const isRestorative = this.isRestorativeDamageType(damageType);
+    const isRestorative = VagabondDamagePipeline.isRestorativeDamageType(damageType);
 
     if (isRestorative) {
       // Post restorative effect message
@@ -685,7 +685,7 @@ export class VagabondDamageHelper {
       // adds its Savagery bonus, which belongs to the Druid, not the statblock; Frightened still
       // costs its per-die penalty, counted from the action's dice)
       finalDamage = VagabondDamagePipeline.flatDamageAfterDiePenalty(actor,
-        parseInt(damageValue) + DruidHelper.beastDamageBonus(actor), action.rollDamage);
+        parseInt(damageValue) + FeatureRules.sum('npcDamageBonus', actor), action.rollDamage);
       damageRoll = null;
     } else {
       // Rolled damage goes through the unified pipeline: legacy universals +
@@ -751,7 +751,7 @@ export class VagabondDamageHelper {
           damageRoll: rollObj,
           damageType: damageTypeKey || 'physical',
           attackType: attackType,
-          hasDefenses: !this.isRestorativeDamageType(damageTypeKey || 'physical'),
+          hasDefenses: !VagabondDamagePipeline.isRestorativeDamageType(damageTypeKey || 'physical'),
           targetsAtRollTime,
           actionIndex,
           extraFlags: AnimationBridge.FLAGS,
@@ -759,30 +759,6 @@ export class VagabondDamageHelper {
       // NPCs auto-hit: the action's Automated Animation plays with its damage
       AnimationBridge.play({ actor, item: AnimationBridge.npcActionItem(actor, action), targets: targetsAtRollTime, hit: true });
     }
-
-  /**
-   * Check if a damage type is restorative (restores a resource instead of dealing damage).
-   * Config-driven via CONFIG.VAGABOND.restorativeDamageTypes (homebrew `restorative` flag);
-   * the classic healing/recover/recharge triple is the pre-init fallback.
-   * @param {string} damageType - The damage type to check
-   * @returns {boolean}
-   */
-  static isRestorativeDamageType(damageType) {
-    return this.getRestorativeResource(damageType) !== null;
-  }
-
-  /**
-   * Which resource a restorative damage type restores: 'hp' | 'fatigue' | 'mana' | null.
-   * @param {string} damageType
-   * @returns {string|null}
-   */
-  static getRestorativeResource(damageType) {
-    const normalizedType = damageType?.toLowerCase() || '';
-    const configured = CONFIG.VAGABOND?.restorativeDamageTypes;
-    if (configured) return configured[normalizedType] ?? null;
-    // Pre-init fallback: the classic triple
-    return { healing: 'hp', recover: 'fatigue', recharge: 'mana' }[normalizedType] ?? null;
-  }
 
   /**
    * Create an apply button for a RESTORATIVE result (healing/recover/recharge).
@@ -796,7 +772,7 @@ export class VagabondDamageHelper {
    * @returns {string} HTML button string
    */
   static createApplyDamageButton(damageAmount, damageType, actorId, itemId = null, targetsAtRollTime = [], actionIndex = null, dieValues = []) {
-    const resource = this.getRestorativeResource(damageType);
+    const resource = VagabondDamagePipeline.getRestorativeResource(damageType);
     let icon, text, buttonClass;
 
     if (resource === 'fatigue') {
@@ -950,7 +926,7 @@ export class VagabondDamageHelper {
   static calculateFinalDamageDetailed(actor, damage, damageType, attackingWeapon = null, opts = {}) {
     const result = this._computeFinalDamage(actor, damage, damageType, attackingWeapon, opts);
     if (damage > 0 && !opts.skipHexBonus) {
-      result.widdershinsBonus = WitchHelper.widdershinsBonus(opts.attackerActor ?? attackingWeapon?.actor ?? null, actor, attackingWeapon);
+      result.widdershinsBonus = FeatureRules.sum('damageBonusVs', opts.attackerActor ?? attackingWeapon?.actor ?? null, actor, attackingWeapon);
     }
     Hooks.callAll('vagabond.calculateFinalDamage', { actor, damage, damageType, attackingWeapon, attackerActor: opts.attackerActor ?? null, isCrit: !!opts.isCrit, result });
     result.final = Math.max(0, result.final);
@@ -971,7 +947,7 @@ export class VagabondDamageHelper {
     // Soul Link's pass-on damage is not a new Spell effect, so it skips the bonus.
     let widdershinsBonus = 0;
     if (damage > 0 && !opts.skipHexBonus) {
-      widdershinsBonus = WitchHelper.widdershinsBonus(opts.attackerActor ?? attackingWeapon?.actor ?? null, actor, attackingWeapon);
+      widdershinsBonus = FeatureRules.sum('damageBonusVs', opts.attackerActor ?? attackingWeapon?.actor ?? null, actor, attackingWeapon);
       damage += widdershinsBonus;
     }
 
@@ -1011,12 +987,12 @@ export class VagabondDamageHelper {
     // RAW: Weak - Ignores Armor and Immune, and deals an extra damage die
     // (Extra die is handled at roll/apply time, not here — armor/immunity just bypassed.
     //  Weak targets also skip the berserk reduction: weakness bypasses all reductions.)
-    if (VagabondDamagePipeline.typeListCovers(weaknesses, normalizedType) || HunterHelper.isMarkWeak(opts.attackerActor, actor) || WitchHelper.isHexWeak(opts.attackerActor, actor)) {
+    if (VagabondDamagePipeline.typeListCovers(weaknesses, normalizedType) || FeatureRules.any('weakTo', opts.attackerActor, actor)) {
       return { final: finalDamage, armorReduction: 0, berserkReduction: 0, flankedBonus, path: 'weak' };
     }
 
     // RAW: Immune - Unharmed by the damage type (Beast Mode attacks ignore non-Relic Immune)
-    if (VagabondDamagePipeline.typeListCovers(immunities, normalizedType) && !DruidHelper.ignoresNonRelicImmune(opts.attackerActor, normalizedType)
+    if (VagabondDamagePipeline.typeListCovers(immunities, normalizedType) && !FeatureRules.any('ignoresImmune', opts.attackerActor, normalizedType)
       && !NpcRules.relicBypassesImmunity(actor, normalizedType, attackingWeapon)) {
       return { final: 0, armorReduction: 0, berserkReduction: 0, flankedBonus: 0, path: 'immune' };
     }
@@ -1525,7 +1501,6 @@ ${npcOnly ? '' : `
       ui.notifications.warn('No tokens targeted. Please target at least one token.');
       return;
     }
-    const { StatusHelper } = await import('./status-helper.mjs');
     const { VagabondChatCard } = await import('./chat-card.mjs');
     const sourceActorName = canvas.tokens?.placeables?.find(t => t.actor?.id === sourceActor.id)?.document.name || sourceActor.name;
     const sourceKey = StatusHelper.sourceKeyFor(sourceActor, spell);
@@ -1589,7 +1564,6 @@ ${npcOnly ? '' : `
    * @returns {Promise<boolean>}
    */
   static async _hasStatusResistanceForSave(targetActor, saveType, { sourceActor, sourceItem, actionIdx, attackWasCrit = false, spellCast = null }) {
-    const { StatusHelper } = await import('./status-helper.mjs');
     const { entries } = this.resolveIncomingStatusEntries({ sourceActor, sourceItem, actionIdx, attackWasCrit, spellCast });
     return entries.some(e =>
       (e.saveType === saveType || e.saveType === 'any') && StatusHelper.isStatusResisted(targetActor, e.statusId)
@@ -1668,18 +1642,14 @@ ${npcOnly ? '' : `
 
     const difficulty = targetActor.system.saves?.[saveType]?.difficulty || 10;
     const { VagabondChatCard } = await import('./chat-card.mjs');
-    const { VagabondRollBuilder } = await import('./roll-builder.mjs');
     // Statuses that fail this Save outright (Incapacitated → Reflex, Dead → all)
     const autoFail = VagabondRollBuilder.autoFails(targetActor, saveType);
     const isSuccess = !autoFail && saveRoll.total >= difficulty;
     const critNumber = VagabondRollBuilder.calculateCritThreshold(targetActor.getRollData(), saveType);
     const isCritical = !autoFail && VagabondChatCard.isRollCritical(saveRoll, critNumber);
 
-    // Fighter Momentum: passing a Save against an attack (inert unless system.momentumTrigger)
-    if (isSuccess) {
-      const { FighterHelper } = await import('./fighter-helper.mjs');
-      FighterHelper.onDefended(targetActor);
-    }
+    // Passing a Save against an attack (Fighter Momentum)
+    if (isSuccess) FeatureRules.run('defended', targetActor);
 
     return { saveRoll, difficulty, isSuccess, isCritical, isHindered };
   }
@@ -1740,7 +1710,7 @@ ${npcOnly ? '' : `
         saveReduction = effectiveDamageAmount - damageAfterSave;
       }
       // Ward upcast rolled against this damage for this Target (before Armor)
-      const ward = WardHelper.reductionFor(WardHelper.messageIdOf(button), targetActor.uuid);
+      const ward = VagabondDamageHelper.preArmorReduction(button, targetActor.uuid);
       const wardCut = Math.min(ward.amount, damageAfterSave);
       const damageAfterWard = damageAfterSave - wardCut;
 
@@ -1781,7 +1751,6 @@ ${npcOnly ? '' : `
       }
 
       // Collect on-hit status entries (single source of truth: item/action fallback + crit merge + coating + passives)
-      const { StatusHelper } = await import('./status-helper.mjs');
       const { entries: allStatusEntries, coatingEntries } = this.resolveIncomingStatusEntries({
         sourceActor, sourceItem, actionIdx, attackWasCrit, spellCast,
       });
@@ -1829,7 +1798,7 @@ ${npcOnly ? '' : `
           ward: { amount: wardCut, title: ward.title },
           // A Ward rolled after this card recomputes from here (WardHelper.wardOff)
           resultFlags: { damageResult: {
-            damageMessageId: WardHelper.messageIdOf(button), defenderUuid: targetActor.uuid,
+            damageMessageId: VagabondDamageHelper.messageIdOf(button), defenderUuid: targetActor.uuid,
             incoming: damageAfterSave, wardAmount: wardCut, priorFinal: finalDamage,
             weakExtra: finalDamage - baseAfterFinal, autoApplied: autoApply, damageType,
             sourceActorId: actorId, sourceItemId: itemId, attackWasCrit,
@@ -1932,7 +1901,6 @@ ${npcOnly ? '' : `
         sourceActor, sourceItem, actionIdx, spellCast,
       });
       if (allStatusEntries.length > 0) {
-        const { StatusHelper } = await import('./status-helper.mjs');
         const preRolledSave = {
           saveType,
           roll:       saveRoll,
@@ -1988,7 +1956,6 @@ ${npcOnly ? '' : `
     const spellCast = this.spellCastFromButton(button);
 
     const { VagabondChatCard } = await import('./chat-card.mjs');
-    const { StatusHelper } = await import('./status-helper.mjs');
 
     for (const targetActor of actorsToRoll) {
       if (!targetActor || targetActor.type === 'npc') continue;
@@ -2008,7 +1975,6 @@ ${npcOnly ? '' : `
         defenseVote: this._evaluateDefenseRules('reflex', attackType, targetActor, { sourceActor }),
       });
       // The Check stands in for the Reflex Save: a status that fails Reflex (Incapacitated) fails it
-      const { VagabondRollBuilder } = await import('./roll-builder.mjs');
       if (VagabondRollBuilder.autoFails(targetActor, 'reflex')) {
         check.isSuccess = false;
         check.isCritical = false;
@@ -2020,12 +1986,11 @@ ${npcOnly ? '' : `
         shieldWeapons = DefenseHelper.reductionWeapons(targetActor, weapon);
         shieldRoll = await VagabondDamagePipeline.rollDefenseDice(targetActor, shieldWeapons);
         await DefenseHelper.spendPatience(targetActor, shieldWeapons);
-        const { FighterHelper } = await import('./fighter-helper.mjs');
-        FighterHelper.onDefended(targetActor);
+        FeatureRules.run('defended', targetActor);
       }
       const shieldReduction = shieldRoll?.total ?? 0;
       // Ward upcast rolled against this damage for this Target (before Armor, after the Defense dice)
-      const ward = WardHelper.reductionFor(WardHelper.messageIdOf(button), targetActor.uuid);
+      const ward = VagabondDamageHelper.preArmorReduction(button, targetActor.uuid);
       const afterShield = Math.max(0, damageAmount - shieldReduction);
       const wardCut = Math.min(ward.amount, afterShield);
 
@@ -2069,7 +2034,7 @@ ${npcOnly ? '' : `
         extraHtml: protectHtml,
         ward: { amount: wardCut, title: ward.title },
         resultFlags: { damageResult: {
-          damageMessageId: WardHelper.messageIdOf(button), defenderUuid: targetActor.uuid,
+          damageMessageId: VagabondDamageHelper.messageIdOf(button), defenderUuid: targetActor.uuid,
           incoming: afterShield, wardAmount: wardCut, priorFinal: finalDamage, weakExtra, autoApplied: autoApply,
           damageType, sourceActorId: actorId, sourceItemId: itemId, attackWasCrit,
         } },
@@ -2136,12 +2101,29 @@ ${npcOnly ? '' : `
   }
 
   /**
-   * Ward upcast buttons for a damage card (WardHelper.createRow) — never for restorative damage.
+   * Feature buttons under a damage card's Save buttons (FeatureRules `damageCardRows`: Ward upcast) —
+   * never for restorative damage.
    * @returns {string}
    */
-  static createWardRow(targetsAtRollTime, damageAmount, damageType) {
-    if (this.isRestorativeDamageType(damageType)) return '';
-    return WardHelper.createRow(targetsAtRollTime, damageAmount, damageType);
+  static createFeatureRows(targetsAtRollTime, damageAmount, damageType) {
+    if (VagabondDamagePipeline.isRestorativeDamageType(damageType)) return '';
+    return FeatureRules.list('damageCardRows', targetsAtRollTime, damageAmount, damageType).join('');
+  }
+
+  /** Id of the chat message holding `button` (null outside a message). */
+  static messageIdOf(button) {
+    return button?.closest?.('[data-message-id]')?.dataset.messageId ?? null;
+  }
+
+  /**
+   * Damage taken off before Armor for one Target of a damage card, rolled after that card
+   * (FeatureRules `damageReduction`: Ward upcast): `{amount, title}`, amount 0 = none.
+   * @param {HTMLElement} button - a button of the damage card
+   * @param {string} defenderUuid
+   */
+  static preArmorReduction(button, defenderUuid) {
+    const parts = FeatureRules.list('damageReduction', this.messageIdOf(button), defenderUuid).filter(r => r.amount > 0);
+    return { amount: parts.reduce((n, r) => n + r.amount, 0), title: parts.map(r => r.title).join(' + ') };
   }
 
   /**
@@ -2298,7 +2280,6 @@ ${npcOnly ? '' : `
    * @returns {Promise<'favor'|'hinder'|'none'>}
    */
   static async _attackerSaveVote(sourceActor, attackType) {
-    const { VagabondRollBuilder } = await import('./roll-builder.mjs');
     const sys = sourceActor?.system;
     return VagabondRollBuilder.mergeFavorHinder(
       sys?.outgoingSavesModifier || 'none',
@@ -2322,7 +2303,6 @@ ${npcOnly ? '' : `
    */
   static async _rollSave(actor, saveType, defenseVote = 'none', shiftKey = false, ctrlKey = false, attackerModifier = 'none', resistanceFavor = false) {
     // Use centralized roll builder for all favor/hinder logic
-    const { VagabondRollBuilder } = await import('./roll-builder.mjs');
 
     // System state + keyboard collapse into one vote, then attacker modifier and
     // status resistance enter as independent votes (net-count merge).
@@ -2349,9 +2329,7 @@ ${npcOnly ? '' : `
     );
 
     // Bard Overtuned: a Virtuoso Favor die that lifts the d20 past the threshold grants the Bard Luck
-    const { BardHelper } = await import('./bard-helper.mjs');
-    await BardHelper.onCheckRolled(actor, roll, 'save');
-    const { consumeUsedEffects } = await import('./use-effects.mjs');
+    await FeatureRules.run('checkRolled', actor, roll, 'save');
     await consumeUsedEffects(actor, 'save');
 
     return roll;
@@ -2744,7 +2722,7 @@ ${npcOnly ? '' : `
 
       // Apply the appropriate restorative effect (resource comes from the
       // homebrew restorative flag — custom restorative types map to hp/fatigue/mana)
-      const restoredResource = this.getRestorativeResource(damageType);
+      const restoredResource = VagabondDamagePipeline.getRestorativeResource(damageType);
       if (restoredResource === 'hp') {
         // Healing: Increase HP (up to max)
         // Sickened (Alpha 3 p. 11): -N to each healing die received, each die floored at 0;
@@ -2865,7 +2843,7 @@ ${npcOnly ? '' : `
 
       const effectiveDamage = damageAmount;
       // Ward upcast rolled against this damage for this Target (before Armor)
-      const ward = WardHelper.reductionFor(WardHelper.messageIdOf(button), targetActor.uuid);
+      const ward = VagabondDamageHelper.preArmorReduction(button, targetActor.uuid);
       const wardCut = Math.min(ward.amount, effectiveDamage);
 
       // Calculate final damage (armor/immune/weak)
@@ -2910,7 +2888,7 @@ ${npcOnly ? '' : `
         wardTitle: ward.title,
         // A Ward rolled after this card recomputes from here (WardHelper.wardOff)
         extraFlags: { damageResult: {
-          damageMessageId: WardHelper.messageIdOf(button), defenderUuid: targetActor.uuid,
+          damageMessageId: VagabondDamageHelper.messageIdOf(button), defenderUuid: targetActor.uuid,
           incoming: effectiveDamage, wardAmount: wardCut, priorFinal: _directFinal,
           weakExtra: finalDamage - baseAfterFinalDirect, autoApplied: true, damageType,
           sourceActorId: button.dataset.actorId, sourceItemId: button.dataset.itemId,
@@ -2919,7 +2897,6 @@ ${npcOnly ? '' : `
       });
 
       // Process on-hit status effects (single source of truth; crit entries replace same-statusId normals)
-      const { StatusHelper } = await import('./status-helper.mjs');
       const actionIndexRaw = button.dataset.actionIndex;
       const actionIdx = (actionIndexRaw !== '' && actionIndexRaw != null) ? parseInt(actionIndexRaw) : null;
       const isCritical = button.dataset.isCritical === 'true';
@@ -3031,7 +3008,6 @@ ${npcOnly ? '' : `
       });
 
       if (allStatusEntries.length > 0) {
-        const { StatusHelper } = await import('./status-helper.mjs');
         const { VagabondChatCard } = await import('./chat-card.mjs');
         const damageWasBlocked = finalDamage === 0;
         const preRolledSave = { saveType, success: saveSuccess, total: saveTotal, difficulty: saveDifficulty, roll: null };

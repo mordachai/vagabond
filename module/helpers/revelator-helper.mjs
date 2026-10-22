@@ -1,6 +1,7 @@
 import { StatusHelper } from './status-helper.mjs';
 import { FlankingHelper } from './flanking-helper.mjs';
 import { VagabondDamagePipeline } from './damage-pipeline.mjs';
+import { VagabondChatCard } from './chat-card.mjs';
 
 /**
  * Revelator — Lay on Hands (feature button).
@@ -84,7 +85,6 @@ export class RevelatorHelper {
       cured.push(game.i18n.localize(CONFIG.VAGABOND?.statusConditions?.[statusId] ?? statusId));
     }
 
-    const { VagabondChatCard } = await import('./chat-card.mjs');
     await VagabondChatCard.createActionCard({
       actor,
       item: null,

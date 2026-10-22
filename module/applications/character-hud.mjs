@@ -21,6 +21,10 @@ import { AlchemyLab } from '../helpers/alchemy-lab.mjs';
 import { FeatureOrder } from '../helpers/feature-order.mjs';
 import { RelicSlots } from '../helpers/relic-slots.mjs';
 import { ItemDisguise } from '../helpers/item-disguise.mjs';
+import { ItemDisguiseApp } from './item-disguise-app.mjs';
+import { ContextMenuHelper } from '../helpers/context-menu-helper.mjs';
+import { DowntimeApp } from './downtime-app.mjs';
+import { LevelUpDialog } from './level-up-dialog.mjs';
 
 /** Inventory tab groupings, in display order, keyed by equipmentType. */
 const INV_GROUPS = [
@@ -444,7 +448,6 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
 
   /** Split actor items + build the derived quick slots. */
   _categorizeItems(context) {
-    const { EquipmentHelper } = globalThis.vagabond.utils;
     const actor = this.actor;
     const weapons = [];
     const allEquipment = [];   // every equipment item, regardless of equipped state
@@ -626,7 +629,6 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
    * @returns {string}
    */
   _handTip(item) {
-    const { EquipmentHelper } = globalThis.vagabond.utils;
     const esc = Handlebars.escapeExpression;
     const name = `<strong>${esc(item.name)}</strong>`;
     const slots = `${EquipmentHelper.itemSlotCost(item)} ${game.i18n.localize('VAGABOND.Hud.Slots')}`;
@@ -650,13 +652,11 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
     const entry = { filled: true, type, id: item.id, img: item.img, name: item.name, inert: !!item.flags?.vagabond?.mix?.inert };
     if (type === 'spell') entry.focused = (this.actor.system.focus?.spellIds ?? []).includes(item.id);
     if (type === 'weapon') {
-      const { EquipmentHelper } = globalThis.vagabond.utils;
       entry.versatile = EquipmentHelper.isVersatileWeapon(item);
     }
     // Any 2-hand holder (weapon or torch-style item) marks its circle as 2H
     if (item.type === 'equipment') {
       entry.twoHanded = item.system.equipmentState === 'twoHands';
-      const { EquipmentHelper } = globalThis.vagabond.utils;
       if (EquipmentHelper.isThrowable(item)) {
         entry.throwable = true;
         entry.quantity = item.system.quantity ?? 0;
@@ -709,7 +709,7 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
     row.inert = !!item.flags?.vagabond?.mix?.inert;
     const relic = RelicSlots.view(item);
     if (relic) row.relicSlots = { used: relic.used, count: relic.count };
-    // GM-only disguise eye (ItemDisguise.toggle)
+    // GM-only disguise eye (ItemDisguiseApp.toggle)
     row.disguiseEye = ItemDisguise.hasEyeToggle(item) ? { on: ItemDisguise.isDisguised(item) } : null;
     return row;
   }
@@ -741,7 +741,6 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
     bindHudTooltips(this.element, signal);
 
     // Self-heal any weapon hand-limit violation (legacy data, imports, macros)
-    const { EquipmentHelper } = globalThis.vagabond.utils;
     EquipmentHelper.sanitizeHandLimit(this.actor).catch((err) =>
       console.error('Vagabond | Hand-limit sanitize failed:', err)
     );
@@ -825,7 +824,6 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
     FeatureAction.bindDrag(this.element, this.actor);
     FeatureAction.bindBeltDrop(this.element, this.actor, 'vh-drop-active');
     if (beltRow) {
-      const { EquipmentHelper } = globalThis.vagabond.utils;
       const beltReorder = setupDragReorder({
         container: beltRow,
         itemSelector: '.vh-slot.filled:not(.vh-slot-action)',
@@ -1321,10 +1319,10 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
     if (item) RelicSlots.openPopup(event, item);
   }
 
-  /** GM eye: reveal / disguise again (ItemDisguise.toggle; Shift = reveal without a chat card). */
+  /** GM eye: reveal / disguise again (ItemDisguiseApp.toggle; Shift = reveal without a chat card). */
   static _onToggleDisguise(event, target) {
     const item = this.actor.items.get(target.dataset.itemId);
-    if (item) ItemDisguise.toggle(item, { announce: !event.shiftKey });
+    if (item) ItemDisguiseApp.toggle(item, { announce: !event.shiftKey });
   }
 
   /** Open the actor sheet without closing the HUD. */
@@ -1382,7 +1380,6 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
         const { clientX: x, clientY: y } = event;
         return FeatureAction.end(this.actor, id).then((ended) => {
           if (ended) return;
-          const { ContextMenuHelper } = globalThis.vagabond.utils;
           return ContextMenuHelper.create({
             position: { x, y },
             items: FeatureAction.menuItems(this.actor, id),
@@ -1410,7 +1407,6 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
     // Belt weapons with Thrown default to Throw (no equip, spends quantity).
     // Otherwise equips the item first if it occupies hands and isn't already
     // equipped, then performs its action (attack / ignite-toggle / use).
-    const { EquipmentHelper } = globalThis.vagabond.utils;
     const mode = !inHandCircle && EquipmentHelper.isThrowable(item) ? 'throw' : 'use';
     return activateHandItem({ actor: this.actor, item, event, rollHandler: this.rollHandler, mode });
   }
@@ -1434,7 +1430,6 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
    * @param {'spell'|'weapon'|'item'} type
    */
   _openSlotMenu(event, item, type) {
-    const { ContextMenuHelper } = globalThis.vagabond.utils;
 
     // Both builders are shared with the sheet. Slotted items always offer
     // "Use" — they were placed there to be used.
@@ -1464,7 +1459,6 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
    */
   _openHudMenu(event) {
     event.preventDefault();
-    const { ContextMenuHelper } = globalThis.vagabond.utils;
     const L = (k) => game.i18n.localize(k);
 
     // XP entry mirrors the sheet: "XP {current}/{next}" with the level-up
@@ -1485,7 +1479,7 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
         {
           label: L('VAGABOND.Hud.Menu.Downtime'),
           icon: 'fas fa-hourglass-half',
-          action: () => globalThis.vagabond.applications.DowntimeApp.open(this.actor),
+          action: () => DowntimeApp.open(this.actor),
         },
         ...(CraftingHelper.config().general.enabled ? [{
           label: L('VAGABOND.Craft.Workbench.Title'),
@@ -1495,7 +1489,7 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
         {
           label: xpLabel,
           icon: canLevelUp ? 'fas fa-chevron-double-up' : 'fas fa-star',
-          action: () => new globalThis.vagabond.applications.LevelUpDialog(this.actor).render(true),
+          action: () => new LevelUpDialog(this.actor).render(true),
         },
         {
           label: L('VAGABOND.Hud.Menu.Ping'),

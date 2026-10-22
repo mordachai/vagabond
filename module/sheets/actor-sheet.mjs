@@ -20,8 +20,11 @@ import { setupDragReorder } from '../helpers/drag-reorder.mjs';
 import { NpcRules } from '../helpers/npc-rules.mjs';
 import { AlchemyLab } from '../helpers/alchemy-lab.mjs';
 import { FeatureOrder } from '../helpers/feature-order.mjs';
-import { ItemDisguise } from '../helpers/item-disguise.mjs';
+import { ItemDisguiseApp } from '../applications/item-disguise-app.mjs';
 import { GMRelay } from '../helpers/gm-relay.mjs';
+import { CountdownDice } from '../documents/countdown-dice.mjs';
+import { LevelUpDialog } from '../applications/level-up-dialog.mjs';
+import { DowntimeApp } from '../applications/downtime-app.mjs';
 
 const { api, sheets } = foundry.applications;
 
@@ -926,7 +929,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     event.stopPropagation();
     const item = this.actor.items.get(target.dataset.itemId);
     const delta = event.type === 'contextmenu' || event.button === 2 ? -1 : 1;
-    return globalThis.vagabond.utils.EquipmentHelper.adjustQuantity(item, delta);
+    return EquipmentHelper.adjustQuantity(item, delta);
   }
 
   /**
@@ -1156,7 +1159,6 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     // If recharge is a standalone Cdx countdown dice and not yet on cooldown, auto-create one
     const cdRechargePattern = /^Cd\d+$/i;
     if (cdRechargePattern.test(action.recharge?.trim() ?? '') && !action.rechargeCountdownId) {
-      const { CountdownDice } = globalThis.vagabond.documents;
       const diceType = action.recharge.trim().replace(/^C/i, '').toLowerCase(); // "Cd6" → "d6"
       const journal = await CountdownDice.create({
         name: `${this.actor.name}: ${action.name}`,
@@ -1299,7 +1301,6 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
   }
 
   static async _onLevelUp(event, target) {
-    const { LevelUpDialog } = globalThis.vagabond.applications;
     new LevelUpDialog(this.actor).render(true);
   }
 
@@ -1414,7 +1415,6 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     const effect = this.actor.effects.get(effectId);
     if (!effect) return;
 
-    const { VagabondChatCard } = globalThis.vagabond.utils;
     await VagabondChatCard.statusEffect(this.actor, effect);
   }
 
@@ -1640,7 +1640,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
    * @protected
    */
   static async _onOpenDowntime(event, target) {
-    globalThis.vagabond.applications.DowntimeApp.open(this.actor);
+    DowntimeApp.open(this.actor);
   }
 
   /**
@@ -1694,6 +1694,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
    */
   static async _onBecomeHud(event, target) {
     const actor = this.actor;
+    // Late lookup: the compact views import this sheet
     const apps = globalThis.vagabond.applications;
     const view = { character: apps.VagabondCharacterHud, npc: apps.VagabondNPCHud, party: apps.PartyCompactView }[actor.type];
     if (!view) return;
@@ -1822,11 +1823,11 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
    * @param {HTMLElement} target
    * @protected
    */
-  /** GM eye on an inventory card (ItemDisguise.toggle; Shift = reveal without a chat card). */
+  /** GM eye on an inventory card (ItemDisguiseApp.toggle; Shift = reveal without a chat card). */
   static _onToggleItemDisguise(event, target) {
     event.stopPropagation();
     const item = this.actor.items.get(target.dataset.itemId);
-    if (item) ItemDisguise.toggle(item, { announce: !event.shiftKey });
+    if (item) ItemDisguiseApp.toggle(item, { announce: !event.shiftKey });
   }
 
   static async _onToggleEffect(event, target) {
@@ -2440,8 +2441,6 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
         const effect = this.actor.effects.get(effectId);
         if (!effect) return;
 
-        const { ContextMenuHelper } = globalThis.vagabond.utils;
-        const { VagabondChatCard } = globalThis.vagabond.utils;
 
         const menuItems = [
           {

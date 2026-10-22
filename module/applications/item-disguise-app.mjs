@@ -29,6 +29,20 @@ export class ItemDisguiseApp extends api.HandlebarsApplicationMixin(api.Applicat
     this.#draft = ItemDisguise.draft(item);
   }
 
+  /**
+   * GM quick switch (sheet eye): disguised → reveal; revealed → disguise again with the last disguise (or the generated
+   * one of a cursed item). Never disguised and nothing to generate → opens the editor instead.
+   */
+  static async toggle(item, { announce = true } = {}) {
+    if (!game.user.isGM || !ItemDisguise.canDisguise(item)) return false;
+    if (ItemDisguise.isDisguised(item)) return ItemDisguise.reveal(item, { announce });
+    if (!item.system.disguise?.shown?.name && !ItemDisguise.isCursed(item)) {
+      this.open(item);
+      return false;
+    }
+    return ItemDisguise.disguise(item);
+  }
+
   static open(item) {
     if (!game.user.isGM || !ItemDisguise.canDisguise(item)) return null;
     let app = this.#open.get(item.uuid);

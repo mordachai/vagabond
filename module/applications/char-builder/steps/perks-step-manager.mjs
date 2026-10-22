@@ -2,6 +2,7 @@
  * Perks Step Manager - Handles perk selection logic
  */
 import { BaseStepManager } from './base-step-manager.mjs';
+import { default as PerkChoiceDialog } from '../../perk-choice-dialog.mjs';
 
 export class PerksStepManager extends BaseStepManager {
   constructor(stateManager, dataService, configSystem) {
@@ -977,7 +978,6 @@ export class PerksStepManager extends BaseStepManager {
       const choiceConfig = item.system.choiceConfig;
       if (choiceConfig && choiceConfig.type !== 'none' && !choiceConfig.selected) {
         // Import PerkChoiceDialog
-        const { default: PerkChoiceDialog } = await import('../../perk-choice-dialog.mjs');
 
         // Show choice dialog
         const choice = await PerkChoiceDialog.show(item, previewActor);

@@ -1,6 +1,19 @@
 import { VagabondSpellSequencer } from '../../helpers/spell-sequencer.mjs';
 import { FocusLink } from '../../helpers/focus-link.mjs';
 import { MacroAutoRun } from '../../helpers/macro-autorun.mjs';
+import { SpellCastDialog } from '../../applications/spell-cast-dialog.mjs';
+import { SpellTargetPicker } from '../../helpers/spell-target-picker.mjs';
+import { SpellPlacement } from '../../helpers/spell-placement.mjs';
+import { castGateMessage } from '../../helpers/item-macro.mjs';
+import { VagabondRollBuilder as _AutoFailRB, VagabondRollBuilder } from '../../helpers/roll-builder.mjs';
+import { VagabondChatCard } from '../../helpers/chat-card.mjs';
+import { EquipmentHelper } from '../../helpers/equipment-helper.mjs';
+import { VagabondImbueHelper } from '../../helpers/imbue-helper.mjs';
+import { VagabondGlyphHelper } from '../../helpers/glyph-helper.mjs';
+import { FocusUpkeep } from '../../helpers/focus-upkeep.mjs';
+import { VagabondDamageHelper as FxDamageHelper, VagabondDamageHelper } from '../../helpers/damage-helper.mjs';
+import { AccordionHelper } from '../../helpers/accordion-helper.mjs';
+import { EnrichmentHelper } from '../../helpers/enrichment-helper.mjs';
 
 /**
  * Handler for spell-related functionality in the character sheet.
@@ -436,7 +449,6 @@ export class SpellHandler {
     const severity = game.settings.get('vagabond', 'trinketCastRequirement');
     if (severity === 'off') return ok;
 
-    const { EquipmentHelper } = globalThis.vagabond.utils;
     const sys = this.actor.system;
     const equipment = this.actor.items.filter((i) => i.type === 'equipment');
     const countsAsTrinket = (i) =>
@@ -491,7 +503,6 @@ export class SpellHandler {
     }
 
     const initialState = foundry.utils.deepClone(this._getSpellState(spellId));
-    const { SpellCastDialog } = await import('../../applications/spell-cast-dialog.mjs');
 
     const dialog = new SpellCastDialog({
       actor: this.actor,
@@ -543,7 +554,6 @@ export class SpellHandler {
     // Use the dialog-provided state for this cast
     const state = finalState;
     let _spellObjectsMeta = null;
-    const { SpellCastDialog } = await import('../../applications/spell-cast-dialog.mjs');
 
     // Validation: Must select delivery
     if (!state.deliveryType) {
@@ -555,7 +565,6 @@ export class SpellHandler {
     // below with the resolved WEAPONS (the book's actual targets).
     // Target picker (Spells with Target Beings / Objects, see SpellTargetPicker): picked Beings replace
     // the user's targets; picked Objects ride the card to the hit macro (scope.targetObjects).
-    const { SpellTargetPicker } = await import('../../helpers/spell-target-picker.mjs');
     const picked = await SpellTargetPicker.resolve(state.targetPicks ?? null);
     const castTargets = picked.tokens ?? Array.from(game.user.targets);
     state.targetsPicked = !!picked.tokens;
@@ -569,7 +578,6 @@ export class SpellHandler {
 
     // Remote spaces (SpellPlacement): Targets with no token on them — counted, listed on the card, handed to the
     // hit macro (scope.targetSpaces) and aimed at by the FX
-    const { SpellPlacement } = await import('../../helpers/spell-placement.mjs');
     const castSceneId = canvas.scene?.id ?? null;
     state.targetSpaces = SpellPlacement.modeFor(state.deliveryType) === 'spaces'
       ? (state.targetSpaces ?? []).map(p => ({ x: p.x, y: p.y, sceneId: castSceneId }))
@@ -587,7 +595,6 @@ export class SpellHandler {
     }
 
     // Spell-specific cast gate (Raise: corpses, Being types, HD) — before any roll or Mana
-    const { castGateMessage } = await import('../../helpers/item-macro.mjs');
     const gateMessage = castGateMessage({ actor: this.actor, spell, state, tokens: castTargets });
     if (gateMessage) {
       ui.notifications.warn(gateMessage);
@@ -651,10 +658,8 @@ export class SpellHandler {
     }
 
     // Check for auto-fail conditions (Dead, or the casting skill is built on a failed Stat)
-    const { VagabondRollBuilder: _AutoFailRB } = await import('../../helpers/roll-builder.mjs');
     if (_AutoFailRB.autoFails(this.actor, manaSkill)) {
       // Import chat card helper
-      const { VagabondChatCard } = await import('../../helpers/chat-card.mjs');
 
       // Post auto-fail message to chat
       await VagabondChatCard.autoFailRoll(this.actor, 'spell', spell.name);
@@ -689,7 +694,6 @@ export class SpellHandler {
       const rollData = this.actor.getRollDataWithItemEffects(spell);
 
       // Import roll builder and build roll with centralized utility
-      const { VagabondRollBuilder } = await import('../../helpers/roll-builder.mjs');
 
       // Apply favor/hinder with keyboard modifiers
       const systemFavorHinder = this.actor.system.favorHinder || 'none';
@@ -703,7 +707,7 @@ export class SpellHandler {
         VagabondRollBuilder.checkFavorVote(this.actor, 'cast'),
         // Status votes vs the first target (Vulnerable, Invisible; Prone for a Touch Cast)
         ...VagabondRollBuilder.targetingVotes(this.actor, castTargets[0]?.actor ?? null, {
-          melee: (await import('../../helpers/chat-card.mjs')).VagabondChatCard.attackTypeForSpellDelivery(state.deliveryType) === 'melee',
+          melee: VagabondChatCard.attackTypeForSpellDelivery(state.deliveryType) === 'melee',
         })
       );
 
@@ -739,13 +743,11 @@ export class SpellHandler {
     // Imbue: attach the spell to willing targets' equipped weapons before any mana
     // is spent — a cancelled weapon-picker aborts the whole cast at no cost.
     if (isSuccess && state.deliveryType.toUpperCase() === 'IMBUE') {
-      const { VagabondImbueHelper } = await import('../../helpers/imbue-helper.mjs');
       let assignments;
       if (Array.isArray(state.imbueAssignments)) {
         // Resolved in-dialog via the embedded weapon picker — re-fetch fresh
         // docs by uuid (equip state could theoretically change between the
         // dialog's Cast click and this running) instead of popping a dialog.
-        const { EquipmentHelper } = await import('../../helpers/equipment-helper.mjs');
         assignments = [];
         for (const weaponUuid of state.imbueAssignments) {
           const weapon = await fromUuid(weaponUuid);
@@ -799,7 +801,6 @@ export class SpellHandler {
     // via VagabondGlyphHelper (glyph click or chat-card button).
     let placedGlyphRegion = null;
     if (isSuccess && state.deliveryType.toUpperCase() === 'GLYPH') {
-      const { VagabondGlyphHelper } = await import('../../helpers/glyph-helper.mjs');
       placedGlyphRegion = await VagabondGlyphHelper.placeFromCast({
         actor: this.actor,
         spell,
@@ -811,7 +812,7 @@ export class SpellHandler {
 
     // Focus from the Cast dialog: committed here, once the Cast is resolved (a failed Cast never Focuses).
     if (focusOn !== null) {
-      await SpellHandler.commitCastFocus(this.actor, spell, { focusOn, isSuccess, isCritical });
+      await FocusLink.commitCastFocus(this.actor, spell, { focusOn, isSuccess, isCritical });
     }
     // What this Cast applies ends with the Focus (FocusLink) — rides the card as spellCast.held / macro focusHeld
     state.focusHeld = FocusLink.held(spell, { focusOn, isSuccess, isCritical });
@@ -833,7 +834,6 @@ export class SpellHandler {
     const castUpdate = {};
     if (manaCost > 0) castUpdate['system.mana.current'] = this.actor.system.mana.current - manaCost;
     // Per-Target Focus Mana each Round falls back to this count (FocusUpkeep.roundCost)
-    const { FocusUpkeep } = await import('../../helpers/focus-upkeep.mjs');
     if (state.focusHeld && FocusUpkeep.rule(spell)?.perTarget) {
       castUpdate[`flags.vagabond.focusTargets.${spell.id}`] = Math.max(1, costs.focusTargets ?? castTargets.length);
     }
@@ -864,14 +864,12 @@ export class SpellHandler {
     if (placedGlyphRegion) {
       // Glyph: aim the inscription FX at the placed square, not at whatever is
       // targeted. A pseudo-token carries the square's center for the sequencer.
-      const { VagabondGlyphHelper } = await import('../../helpers/glyph-helper.mjs');
       const center = VagabondGlyphHelper._regionCenter(placedGlyphRegion);
       const pseudo = { center, x: center.x, y: center.y, document: { width: 1, height: 1 } };
       VagabondSpellSequencer.play(spell, state.deliveryType, state.deliveryIncrease, casterToken ?? pseudo, [pseudo], { deliveryEnabled: isSuccess });
     } else {
       // With a manual Roll Damage button on the card, the FX waits for that click
       // (lands with the damage); otherwise it plays right after the cast.
-      const { VagabondDamageHelper: FxDamageHelper } = await import('../../helpers/damage-helper.mjs');
       // Remote spaces + a hand-placed area's center ride the FX (SpellPlacement)
       const areaCenter = state.areaAnchor ? SpellPlacement.shapeCenter(state.castArea?.shape) : null;
       const fxDeferred = isSuccess && await FxDamageHelper.deferFxToDamageButton(
@@ -927,12 +925,10 @@ export class SpellHandler {
     placedGlyphRegion = null
   ) {
     // Import damage helper
-    const { VagabondDamageHelper } = await import('../../helpers/damage-helper.mjs');
 
     // Glyph: Trigger/Dismiss row replaces the roll-damage button in the footer.
     let footerActions = [];
     if (placedGlyphRegion) {
-      const { VagabondGlyphHelper } = await import('../../helpers/glyph-helper.mjs');
       footerActions = [VagabondGlyphHelper.buildTriggerDismissButtons(placedGlyphRegion.uuid)];
     }
 
@@ -976,7 +972,6 @@ export class SpellHandler {
     };
 
     // Use universal chat card
-    const { VagabondChatCard } = await import('../../helpers/chat-card.mjs');
     return await VagabondChatCard.spellCast(
       this.actor,
       spell,
@@ -1028,66 +1023,7 @@ export class SpellHandler {
     event.preventDefault();
     const spellId = target.dataset.spellId;
     const focused = (this.actor.system.focus?.spellIds || []).includes(spellId);
-    await SpellHandler.setFocus(this.actor, spellId, !focused);
-  }
-
-  /**
-   * Start or stop Focusing on a Spell — the ONE writer of `system.focus.spellIds` (sheet star, spell context
-   * menu on sheet + HUD, Cast dialog). Keeps the `focusing` status in step. Dropping a Spell clears what its
-   * Casts applied (SpellTrackerHelper hook → `vagabond.focusDropped`: Trackers, Polymorph forms…).
-   * Book: "Focusing lets an effect stay active until you drop it … or Focus on another effect": with every
-   * Focus taken (`focus.max`, 1 + Manifold Mind etc.), starting a new one drops the oldest.
-   * @param {Actor} actor
-   * @param {string} spellId
-   * @param {boolean} on
-   * @param {{restart?: boolean}} [options]  restart: already Focused on it → end that Focus first (a new Cast)
-   * @returns {Promise<boolean>}
-   */
-  static async setFocus(actor, spellId, on, { restart = false } = {}) {
-    const current = actor.system.focus?.spellIds || [];
-    const was = current.includes(spellId);
-    if (on === was && !(on && restart)) return true;
-    let next = current.filter(id => id !== spellId);
-    if (on) {
-      const focusMax = Math.max(1, actor.system.focus?.max ?? 1);
-      if (next.length >= focusMax) next = next.slice(next.length - focusMax + 1);
-      // Ends the earlier Cast (and any dropped Focus) before the new one starts
-      if (next.length !== current.length) await actor.update({ 'system.focus.spellIds': next });
-      next = [...next, spellId];
-    }
-    await actor.update({ 'system.focus.spellIds': next });
-
-    // Sync the "focusing" status effect with focus state
-    const isFocusing = next.length > 0;
-    if (isFocusing !== actor.statuses.has('focusing')) {
-      await actor.toggleStatusEffect('focusing', { active: isFocusing });
-    }
-    ui.combat?.render(false);
-    return true;
-  }
-
-  /**
-   * Stop every Focus (the Focusing status was removed by hand: token HUD, effects list).
-   * @param {Actor} actor
-   */
-  static async clearFocus(actor) {
-    if (actor.system.focus?.spellIds?.length) await actor.update({ 'system.focus.spellIds': [] });
-    if (actor.statuses.has('focusing')) await actor.toggleStatusEffect('focusing', { active: false });
-    ui.combat?.render(false);
-  }
-
-  /**
-   * The Cast dialog's Focus switch, applied when the Cast resolves (`_executeCast`). Off → the Focus on it ends.
-   * On → only a successful Cast Focuses; Focusing on it again ends the earlier Cast first (another Polymorph
-   * reverts the last one); a Crit of a "Crit: No Focus" Spell (`critNoFocus`) needs no Focus and ends none.
-   * @param {Actor} actor
-   * @param {Item} spell
-   * @param {{focusOn: boolean, isSuccess: boolean, isCritical: boolean}} cast
-   */
-  static async commitCastFocus(actor, spell, { focusOn, isSuccess, isCritical }) {
-    if (!focusOn) return this.setFocus(actor, spell.id, false);
-    if (!isSuccess || (isCritical && spell.system.critNoFocus)) return;
-    return this.setFocus(actor, spell.id, true, { restart: true });
+    await FocusLink.setFocus(this.actor, spellId, !focused);
   }
 
   /**
@@ -1119,7 +1055,6 @@ export class SpellHandler {
     event.preventDefault();
     const accordion = target.closest('.favorited-spell.accordion-item');
     if (accordion) {
-      const { AccordionHelper } = await import('../../helpers/accordion-helper.mjs');
       AccordionHelper.toggle(accordion);
     }
   }
@@ -1273,7 +1208,6 @@ export class SpellHandler {
    */
   async enrichSpellsContext(context) {
     // Import enrichment helper
-    const { EnrichmentHelper } = await import('../../helpers/enrichment-helper.mjs');
 
     // Enrich spell descriptions
     await EnrichmentHelper.enrichSpells(context, this.actor);

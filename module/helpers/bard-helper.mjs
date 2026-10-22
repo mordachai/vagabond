@@ -1,5 +1,9 @@
 import { combatRollData } from './rule-rolldata.mjs';
 import { GMRelay } from './gm-relay.mjs';
+import { FeatureRules } from './feature-rules.mjs';
+import { VagabondChatCard } from './chat-card.mjs';
+import { buildMacroButtonHTML } from './item-macro.mjs';
+import { RollHandler } from '../sheets/handlers/roll-handler.mjs';
 
 /** d20 check categories each Virtuoso benefit's Favor die applies to (Overtuned reads these). */
 const BOON_CHECKS = { inspiration: [], resolve: ['save'], valor: ['attack', 'cast'] };
@@ -74,8 +78,6 @@ export class BardHelper {
       ui.notifications.warn(game.i18n.localize('VAGABOND.Virtuoso.NoBoons'));
       return;
     }
-    const { VagabondChatCard } = await import('./chat-card.mjs');
-    const { buildMacroButtonHTML } = await import('./item-macro.mjs');
 
     const card = new VagabondChatCard()
       .setType('generic')
@@ -116,14 +118,12 @@ export class BardHelper {
     if (!template) return;
 
     // The Performance Check goes through the normal skill roll (favor/hinder, hooks, chat card)
-    const { RollHandler } = await import('../sheets/handlers/roll-handler.mjs');
     const el = document.createElement('div');
     Object.assign(el.dataset, { roll: 'd20', key: 'performance', type: 'skill', label: game.i18n.localize('VAGABOND.Skills.Performance') });
     const roll = await new RollHandler({ actor: bard }, {}).roll({ preventDefault() {}, shiftKey: false, ctrlKey: false }, el);
     if (!roll) return;
 
     const difficulty = bard.system.skills?.performance?.difficulty ?? 10;
-    const { VagabondChatCard } = await import('./chat-card.mjs');
     const boonName = template.name.replace(/^Virtuoso:\s*/, '');
     const title = `${game.i18n.localize('VAGABOND.Virtuoso.Title')}: ${boonName}`;
     if (roll.total < difficulty) {
@@ -224,12 +224,12 @@ export class BardHelper {
     const next = current + 1;
     if (bard.isOwner) await bard.update({ 'system.currentLuck': next });
     else GMRelay.send('vagabond.grantLuck', { actorUuid: bard.uuid, amount: 1 });
-    const { VagabondChatCard } = await import('./chat-card.mjs');
     await VagabondChatCard.luckGain(bard, next, game.i18n.localize('VAGABOND.Virtuoso.Overtuned'));
   }
 
-  /* -------------------------------------------- */
-  /*  Migration                                   */
-  /* -------------------------------------------- */
-
+  /** Answers FeatureRules points. Synchronous, called once at module load. */
+  static registerHooks() {
+    // Overtuned on Saves rolled from chat buttons (other d20 rolls: the vagabond.postD20Roll hook)
+    FeatureRules.on('checkRolled', (actor, roll, kind) => this.onCheckRolled(actor, roll, kind));
+  }
 }

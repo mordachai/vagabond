@@ -215,7 +215,6 @@ export function registerOverlayHooks() {
         const actor = await fromUuid(cdFlags.linkedActorUuid);
         // A stacking status (Burning) from several sources has one die per source: the
         // status stays while another source's die is still running.
-        const { StatusHelper } = await import('../helpers/status-helper.mjs');
         const otherSourceDie = actor && StatusHelper.isStackingStatus(cdFlags.linkedStatusId)
           && StatusHelper.linkedStatusDice(actor, cdFlags.linkedStatusId).some(j => j.id !== journal.id);
         // Only toggle off if the status is still present — guards against a double-delete
@@ -226,7 +225,6 @@ export function registerOverlayHooks() {
           const statusLabel = game.i18n.localize(
             CONFIG.VAGABOND?.statusConditions?.[cdFlags.linkedStatusId] ?? cdFlags.linkedStatusId
           );
-          const { VagabondChatCard } = await import('../helpers/chat-card.mjs');
           const card = new VagabondChatCard();
           card.data.title = journal.name;
           card.data.subtitle = statusLabel;

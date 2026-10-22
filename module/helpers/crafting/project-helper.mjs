@@ -1,5 +1,6 @@
 import { CurrencyHelper } from '../currency-helper.mjs';
 import { MaterialsHelper } from '../materials-helper.mjs';
+import { RelicHelper } from '../relic-helper.mjs';
 
 /**
  * A "Project" is an ordinary `equipment` item flagged `flags.vagabond.craftProject`
@@ -96,7 +97,6 @@ export class ProjectHelper {
    * @returns {Promise<{ok: boolean, reason?: string, project?: Item}>}
    */
   static async createRelicPowerProject(actor, hostItem, powerItem) {
-    const { RelicHelper } = await import('../relic-helper.mjs');
     if (!RelicHelper.canAttach(hostItem, powerItem)) return { ok: false, reason: 'relicTargetMismatch' };
 
     const power = RelicHelper.snapshotPower(powerItem);
@@ -167,7 +167,6 @@ export class ProjectHelper {
         const hostItem = actor.items.get(data.hostItemId);
         await actor.deleteEmbeddedDocuments('Item', [projectId]);
         if (!hostItem) return { ok: true, added: add, completedItem: null };
-        const { RelicHelper } = await import('../relic-helper.mjs');
         await RelicHelper.applyPowerSnapshot(hostItem, data.power);
         return { ok: true, added: add, hostItem, completedItem: hostItem };
       }

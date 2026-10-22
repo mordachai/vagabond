@@ -2,6 +2,7 @@ import { CombatTrackerHelper, DEFAULT_FACTION_ORDER } from '../helpers/combat-tr
 import { ContextMenuHelper } from '../helpers/context-menu-helper.mjs';
 import { VagabondChatCard } from '../helpers/chat-card.mjs';
 import { GMRelay } from '../helpers/gm-relay.mjs';
+import { VagabondSettingsHub } from './settings-hub.mjs';
 
 const { api } = foundry.applications;
 
@@ -732,7 +733,7 @@ export class CombatCarousel extends api.HandlebarsApplicationMixin(api.Applicati
   }
 
   static async #onOpenConfig() {
-    return globalThis.vagabond.applications.VagabondSettingsHub.open('combat');
+    return VagabondSettingsHub.open('combat');
   }
 
   static async #onPreviousRound() { return game.combat?.previousRound(); }

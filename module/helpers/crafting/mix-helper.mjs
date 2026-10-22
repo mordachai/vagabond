@@ -1,7 +1,7 @@
 import { craftingConfig } from './config.mjs';
 import { VagabondChatCard } from '../chat-card.mjs';
-import { VagabondDamageHelper } from '../damage-helper.mjs';
 import { VagabondDamagePipeline } from '../damage-pipeline.mjs';
+import { EquipmentHelper } from '../equipment-helper.mjs';
 
 /**
  * Mix (Alchemist L6, RAW §1; docs/crafting-plan.md §4.10). A Mix item is an
@@ -108,7 +108,7 @@ export class MixHelper {
       damage: this.damageView(actor, this.damageOf({ system: payload })),
       companion: this.damageView(actor, companion),
       statuses: payload.causedStatuses.map(s => statusName(s.statusId)),
-      thrown: globalThis.vagabond.utils.EquipmentHelper.isThrownAlchemical(probe),
+      thrown: EquipmentHelper.isThrownAlchemical(probe),
       expiryLabel: game.i18n.localize(this.expiryKeyFor(actor)),
     };
   }
@@ -160,7 +160,7 @@ export class MixHelper {
       if (dmgA.type === dmgB.type) {
         damage = { amount: `${dmgA.amount} + ${dmgB.amount}`, type: dmgA.type };
       } else {
-        const restorative = (d) => VagabondDamageHelper.isRestorativeDamageType(d.type);
+        const restorative = (d) => VagabondDamagePipeline.isRestorativeDamageType(d.type);
         const primaryIsB = restorative(dmgA) && !restorative(dmgB);
         damage = primaryIsB ? dmgB : dmgA;
         companionIndex = primaryIsB ? 0 : 1;
@@ -226,7 +226,7 @@ export class MixHelper {
       damageType: damage.type,
       targets,
     });
-    const restorative = VagabondDamageHelper.isRestorativeDamageType(damage.type);
+    const restorative = VagabondDamagePipeline.isRestorativeDamageType(damage.type);
     return VagabondChatCard.createActionCard({
       actor,
       item: ingredient,

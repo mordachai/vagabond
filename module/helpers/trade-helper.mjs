@@ -226,7 +226,7 @@ export class TradeHelper {
     const copyOnly = !!sourceItem && !fromActor;
     if (fromActor && !this.canTake(user, fromActor)) return fail('notYours');
     // A Bound cursed item never leaves its bearer (GM excepted)
-    if (fromActor && globalThis.vagabond.utils.EquipmentHelper.isCurseLocked(sourceItem, user)) return fail('cursed');
+    if (fromActor && EquipmentHelper.isCurseLocked(sourceItem, user)) return fail('cursed');
 
     // --- Destination ---
     const target = await fromUuid(dest?.actorUuid ?? dest?.containerUuid ?? '');

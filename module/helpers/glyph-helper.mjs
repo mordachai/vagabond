@@ -1,3 +1,8 @@
+import { GlyphActionDialog } from '../applications/glyph-action-dialog.mjs';
+import { VagabondSpellSequencer } from './spell-sequencer.mjs';
+import { VagabondDamageHelper } from './damage-helper.mjs';
+import { VagabondChatCard } from './chat-card.mjs';
+import { MacroAutoRun } from './macro-autorun.mjs';
 /**
  * Automation for the "Glyph" spell delivery: at cast time the caster inscribes
  * a 5' square glyph on a grid square of their choice (click-to-place, no canvas
@@ -333,7 +338,6 @@ export class VagabondGlyphHelper {
     if (!payload) return;
     if (!(await this._canControl(region))) return;
 
-    const { GlyphActionDialog } = await import('../applications/glyph-action-dialog.mjs');
     const action = await GlyphActionDialog.prompt(region);
 
     if (action === 'trigger') await this.trigger(region);
@@ -387,13 +391,10 @@ export class VagabondGlyphHelper {
     // Activation FX at the glyph square. A pseudo-token carries the exact
     // center so the sequencer's glyph case fires on the square, not on
     // whatever the caster happens to target right now.
-    const { VagabondSpellSequencer } = await import('./spell-sequencer.mjs');
     const pseudo = { center, x: center.x, y: center.y, document: { width: 1, height: 1 } };
     const casterToken = sourceActor.token?.object ?? sourceActor.getActiveTokens(true)[0] ?? pseudo;
     const fxPlayed = VagabondSpellSequencer.play(spell, 'glyph', 0, casterToken, [pseudo], { deliveryEnabled: true });
 
-    const { VagabondDamageHelper } = await import('./damage-helper.mjs');
-    const { VagabondChatCard } = await import('./chat-card.mjs');
 
     const manaSkill = payload.manaSkillKey ? sourceActor.system.skills[payload.manaSkillKey] : null;
     const manaSkillStat = manaSkill?.stat || 'reason';
@@ -447,7 +448,6 @@ export class VagabondGlyphHelper {
       },
     });
     // The hit macro presses itself when the glyph FX lands
-    const { MacroAutoRun } = await import('./macro-autorun.mjs');
     MacroAutoRun.afterFx(triggerMessage, fxPlayed);
 
     // "…then the glyph disappears."

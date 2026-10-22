@@ -1,6 +1,9 @@
 import { classFeatureText } from './feature-text.mjs';
 import { combatRollData } from './rule-rolldata.mjs';
 import { GMRelay, isActiveGM } from './gm-relay.mjs';
+import { FeatureRules } from './feature-rules.mjs';
+import { VagabondChatCard } from './chat-card.mjs';
+import { VagabondDamageHelper } from './damage-helper.mjs';
 
 /**
  * Witch — Hex target tracking, Soul Link, Misery Business (optional automation + feature button).
@@ -28,7 +31,6 @@ import { GMRelay, isActiveGM } from './gm-relay.mjs';
  *
  * Hex's "continual (p. 91)" Spell layer, Widdershins and Grudge Bearer are text only (no continual-Spell layer exists).
  *
- * Imported by damage-pipeline / damage-helper: it must not import those statically (no cycles).
  */
 export class WitchHelper {
 
@@ -190,7 +192,6 @@ export class WitchHelper {
 
     await this.#setHexedStatus(target, true, this.#L('HexedBy', { name: witch.name }));
 
-    const { VagabondChatCard } = await import('./chat-card.mjs');
     const text = classFeatureText(witch, { command: 'witch.hex', name: title });
     await VagabondChatCard.featureCard(witch, {
       title,
@@ -209,7 +210,6 @@ export class WitchHelper {
     }
     const name = eff.flags?.vagabond?.hex?.name ?? '';
     if (witch.effects.get(eff.id)) await eff.delete();
-    const { VagabondChatCard } = await import('./chat-card.mjs');
     await VagabondChatCard.featureCard(witch, {
       title: this.#L('Title'),
       description: `<p>${this.#L('Dropped', { name: witch.name, target: foundry.utils.escapeHTML(name) })}</p>`,
@@ -264,7 +264,6 @@ export class WitchHelper {
 
     // "Also takes the damage": the same incoming damage (before the Enemy's Armor / Immune / Weak) runs through the
     // hexed Target's OWN Armor, Immune and Weak. The Misery Business extra die is not rolled again (no new attack).
-    const { VagabondDamageHelper } = await import('./damage-helper.mjs');
     const incoming = ctx.incoming ?? ctx.amount;
     const { final } = VagabondDamageHelper.calculateFinalDamageDetailed(
       hexActor, incoming, ctx.damageType ?? '-', ctx.sourceItem, { attackerActor: witch, rolledDiceCount: ctx.rolledDiceCount ?? null, skipHexBonus: true }
@@ -272,7 +271,6 @@ export class WitchHelper {
     const dealt = await VagabondDamageHelper._applyDamageToActor(hexActor, final, ctx.damageType, ctx.sourceItem, witch);
     if (!(dealt > 0)) return;
 
-    const { VagabondChatCard } = await import('./chat-card.mjs');
     await VagabondChatCard.featureCard(witch, {
       title: game.i18n.localize('VAGABOND.Hex.SoulLinkTitle'),
       description: `<p>${this.#L('SoulLinked', {
@@ -286,6 +284,9 @@ export class WitchHelper {
 
   /** Register the hooks. Synchronous, called once at module load. */
   static registerHooks() {
+    // Misery Business: the hexed Target is Weak to the witch; Widdershins: her Spell damage to it is increased
+    FeatureRules.on('weakTo', (attacker, target) => this.isHexWeak(attacker, target));
+    FeatureRules.on('damageBonusVs', (attacker, target, source) => this.widdershinsBonus(attacker, target, source));
     // Hex effect gone (drop / replace / deleted by hand) → the Target is no longer Hexed. Active GM only.
     Hooks.on('deleteActiveEffect', (effect) => {
       if (!effect?.flags?.vagabond?.hex || !isActiveGM()) return;

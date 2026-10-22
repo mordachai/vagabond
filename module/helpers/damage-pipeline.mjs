@@ -1,8 +1,6 @@
 import { VagabondDiceAppearance } from './dice-appearance.mjs';
 import { consumeUsedEffects } from './use-effects.mjs';
-import { DruidHelper } from './druid-helper.mjs';
-import { HunterHelper } from './hunter-helper.mjs';
-import { WitchHelper } from './witch-helper.mjs';
+import { FeatureRules } from './feature-rules.mjs';
 import { isAxe } from './weapon-rules.mjs';
 
 /**
@@ -145,9 +143,9 @@ export class VagabondDamagePipeline {
       }
       formula = this._appendBonusFields(formula, actor.system.universalDamageBonus, actor.system.universalDamageDice);
 
-      // A Druid's Beast form (Metamorph copy) adds the Druid's Savagery bonus to its attacks
+      // Feature bonus on NPC attacks (a Druid's Beast form adds the Druid's Savagery bonus)
       if (sourceType === 'npc') {
-        const beastBonus = DruidHelper.beastDamageBonus(actor);
+        const beastBonus = FeatureRules.sum('npcDamageBonus', actor);
         if (beastBonus) formula += ` + ${beastBonus}`;
       }
 
@@ -223,7 +221,7 @@ export class VagabondDamagePipeline {
 
     // 10b. Per-die penalty on dealt damage (Frightened, Alpha 3 p. 11: "-2 penalty to each
     // damage die it deals"). Harmful damage only; a die (plus its per-die bonus) floors at 0.
-    if (!this._isRestorative(damageType)) {
+    if (!this.isRestorativeDamageType(damageType)) {
       this.applyDiePenalty(roll, Number(actor.system?.damageDiePenalty) || 0, roll._perDieBonusPerDie || 0);
     }
 
@@ -243,15 +241,26 @@ export class VagabondDamagePipeline {
   /* ------------------------------------------------------------------------ */
 
   /**
-   * Does this damage type restore HP? (Mirrors VagabondDamageHelper.getRestorativeResource —
-   * this module must not import damage-helper.)
+   * Which resource a restorative damage type restores: 'hp' | 'fatigue' | 'mana' | null.
+   * Config-driven via CONFIG.VAGABOND.restorativeDamageTypes (homebrew `restorative` flag);
+   * the classic healing/recover/recharge triple is the pre-init fallback.
+   * @param {string|null} damageType
+   * @returns {string|null}
+   */
+  static getRestorativeResource(damageType) {
+    const type = damageType?.toLowerCase() || '';
+    const configured = CONFIG.VAGABOND?.restorativeDamageTypes;
+    if (configured) return configured[type] ?? null;
+    return { healing: 'hp', recover: 'fatigue', recharge: 'mana' }[type] ?? null;
+  }
+
+  /**
+   * Is this damage type restorative (restores a resource instead of dealing damage)?
    * @param {string|null} damageType
    * @returns {boolean}
    */
-  static _isRestorative(damageType) {
-    const type = damageType?.toLowerCase() || '';
-    const configured = CONFIG.VAGABOND?.restorativeDamageTypes;
-    return !!(configured ? configured[type] : { healing: 'hp', recover: 'fatigue', recharge: 'mana' }[type]);
+  static isRestorativeDamageType(damageType) {
+    return this.getRestorativeResource(damageType) !== null;
   }
 
   /**
@@ -263,14 +272,11 @@ export class VagabondDamagePipeline {
   static _dealsDamage(damageType) {
     const type = damageType?.toLowerCase() || '';
     if (!type || type === '-') return false;
-    const configured = CONFIG.VAGABOND?.restorativeDamageTypes;
-    return !(configured ? configured[type] : { healing: 'hp', recover: 'fatigue', recharge: 'mana' }[type]);
+    return !this.isRestorativeDamageType(type);
   }
 
   static _restoresHp(damageType) {
-    const type = damageType?.toLowerCase() || '';
-    const configured = CONFIG.VAGABOND?.restorativeDamageTypes;
-    return (configured ? configured[type] : { healing: 'hp' }[type]) === 'hp';
+    return this.getRestorativeResource(damageType) === 'hp';
   }
 
   /**
@@ -701,7 +707,7 @@ export class VagabondDamagePipeline {
   static isWeakTo(targetActor, damageType, attackingWeapon = null, attacker = null) {
     const normalizedType = damageType.toLowerCase();
     if (normalizedType === '-') return false;
-    if (HunterHelper.isMarkWeak(attacker, targetActor) || WitchHelper.isHexWeak(attacker, targetActor)) return true;
+    if (FeatureRules.any('weakTo', attacker, targetActor)) return true;
     const weaknesses = targetActor.system.weaknesses || [];
     if (this.weaponTriggersWeakness(attackingWeapon, weaknesses)) return true;
     return this.typeListCovers(weaknesses, normalizedType);

@@ -3,6 +3,14 @@ import { VagabondTextParser } from '../../helpers/text-parser.mjs';
 import { VagabondChatHelper } from '../../helpers/chat-helper.mjs';
 import { RageHelper } from '../../helpers/rage-helper.mjs';
 import { HunterHelper } from '../../helpers/hunter-helper.mjs';
+import { VagabondRollBuilder, VagabondRollBuilder as _AutoFailRB } from '../../helpers/roll-builder.mjs';
+import { MixHelper } from '../../helpers/crafting/mix-helper.mjs';
+import { VagabondDamageHelper } from '../../helpers/damage-helper.mjs';
+import { VagabondDamagePipeline } from '../../helpers/damage-pipeline.mjs';
+import { FlankingHelper } from '../../helpers/flanking-helper.mjs';
+import { RelicSlots } from '../../helpers/relic-slots.mjs';
+import { EquipmentHelper } from '../../helpers/equipment-helper.mjs';
+import { VagabondChatCard } from '../../helpers/chat-card.mjs';
 
 /**
  * Handler for roll-related functionality.
@@ -39,8 +47,6 @@ export class RollHandler {
     // Handle rolls that supply the formula directly
     if (dataset.roll) {
       // Import helpers
-      const { VagabondRollBuilder } = await import('../../helpers/roll-builder.mjs');
-      const { VagabondChatCard } = await import('../../helpers/chat-card.mjs');
 
       // Determine if this is a skill or save roll FIRST (for auto-fail check)
       const rollKey = dataset.key; // e.g., 'awareness', 'might', 'reaction'
@@ -51,7 +57,6 @@ export class RollHandler {
       // Might / Dexterity under Incapacitated) — see VagabondRollBuilder.autoFails
       if (VagabondRollBuilder.autoFails(this.actor, rollKey)) {
         // Import chat card helper
-        const { VagabondChatCard } = await import('../../helpers/chat-card.mjs');
 
         // Post auto-fail message to chat
         await VagabondChatCard.autoFailRoll(this.actor, rollType || 'stat', rollKey);
@@ -164,7 +169,6 @@ export class RollHandler {
   /** A Mix with two damage types posts its second payload as its own card (MixHelper.postCompanion). */
   async _postMixCompanion(item, targetsAtRollTime, attackType) {
     if (item.flags?.vagabond?.mix?.companionIndex == null) return;
-    const { MixHelper } = await import('../../helpers/crafting/mix-helper.mjs');
     await MixHelper.postCompanion(this.actor, item, targetsAtRollTime, { attackType });
   }
 
@@ -194,8 +198,6 @@ export class RollHandler {
     }
 
     // Import helpers
-    const { EquipmentHelper } = globalThis.vagabond.utils;
-    const { VagabondChatCard } = globalThis.vagabond.utils;
 
     // Unidentified item (disguise lock): no attack / use until the GM reveals it
     if (EquipmentHelper.isUseLocked(item)) return EquipmentHelper.warnUseLocked(item);
@@ -242,8 +244,6 @@ export class RollHandler {
 
         // Otherwise, proceed with the Roll logic through the unified damage pipeline
         // (alchemical bucket + legacy universals + per-die bonus + weakness pre-roll + explosion).
-        const { VagabondDamageHelper } = await import('../../helpers/damage-helper.mjs');
-        const { VagabondDamagePipeline } = await import('../../helpers/damage-pipeline.mjs');
 
         const roll = await VagabondDamagePipeline.rollDamage({
           actor: this.actor,
@@ -255,7 +255,7 @@ export class RollHandler {
         });
 
         const damageTypeKey = item.system.damageType || 'physical';
-        const isRestorative = VagabondDamageHelper.isRestorativeDamageType(damageTypeKey);
+        const isRestorative = VagabondDamagePipeline.isRestorativeDamageType(damageTypeKey);
 
         // Build description
         let description = '';
@@ -314,7 +314,6 @@ export class RollHandler {
       // faction tokens), independent of hit/miss. Re-evaluated on every attack so
       // it stays current as combatants move.
       {
-        const { FlankingHelper } = await import('../../helpers/flanking-helper.mjs');
         for (const targetToken of TargetHelper.resolveTargets(targetsAtRollTime)) {
           await FlankingHelper.evaluate(targetToken);
         }
@@ -322,10 +321,8 @@ export class RollHandler {
 
       // Check for auto-fail conditions before rolling weapon attack
       // (Dead, or the attack skill is built on a failed Stat — Incapacitated: Might / Dexterity)
-      const { VagabondRollBuilder: _AutoFailRB } = await import('../../helpers/roll-builder.mjs');
       if (_AutoFailRB.autoFails(this.actor, EquipmentHelper.attackSkillFor(item, { skillKey, thrown }))) {
         // Import chat card helper
-        const { VagabondChatCard } = await import('../../helpers/chat-card.mjs');
 
         // Post auto-fail message to chat
         await VagabondChatCard.autoFailRoll(this.actor, 'weapon', item.name);
@@ -335,8 +332,6 @@ export class RollHandler {
         return;
       }
 
-      const { VagabondDamageHelper } = await import('../../helpers/damage-helper.mjs');
-      const { VagabondRollBuilder } = await import('../../helpers/roll-builder.mjs');
 
       // Cleave ignores this actor's Vulnerable/Flanked-driven Hinder for the attack
       // roll (RAW: "Ignores Flanked for attacks"; user confirmed Vulnerable too —
@@ -357,7 +352,6 @@ export class RollHandler {
       // from the thrower to the first Target. No Target → no automatic vote.
       let throwRangeBand = null;
       if (thrown) {
-        const { FlankingHelper } = await import('../../helpers/flanking-helper.mjs');
         const throwerToken = this.actor.token?.object ?? this.actor.getActiveTokens(true)[0];
         const throwTarget = TargetHelper.resolveTargets(targetsAtRollTime)[0];
         if (throwerToken && throwTarget) throwRangeBand = FlankingHelper.rangeBand(throwerToken, throwTarget);
@@ -424,7 +418,6 @@ export class RollHandler {
       if (!thrown || alchemicalThrow) await item.handleConsumption();
       // A plain weapon throw skips handleConsumption, but its Consumable Relics are still used up
       else if (item.system.relic?.powers?.some(p => p.consumable)) {
-        const { RelicSlots } = await import('../../helpers/relic-slots.mjs');
         await RelicSlots.spendConsumables(item);
       }
       return attackResult.roll;
@@ -483,7 +476,6 @@ export class RollHandler {
       return; // plain text like "A dozen" — not rollable, silent no-op
     }
 
-    const { VagabondChatCard } = await import('../../helpers/chat-card.mjs');
     const card = new VagabondChatCard();
     card
       .setActor(this.actor)
@@ -518,7 +510,6 @@ export class RollHandler {
     const morale = this.actor.system.morale || 7;
     const success = roll.total <= morale; // morale check is roll-under
 
-    const { VagabondChatCard } = await import('../../helpers/chat-card.mjs');
     await VagabondChatCard.createActionCard({
       actor: this.actor,
       title: 'Morale Check',

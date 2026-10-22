@@ -1,4 +1,5 @@
 import { AccordionHelper } from '../../helpers/accordion-helper.mjs';
+import { CountdownDice } from '../../documents/countdown-dice.mjs';
 
 /**
  * Handler for NPC actions and abilities management.
@@ -419,7 +420,6 @@ export class NPCActionHandler {
 
     // If the trigger has a dice size directly (from text parser), use it
     if (diceSize) {
-      const { CountdownDice } = globalThis.vagabond.documents;
       const diceType = `d${diceSize}`;
 
       // Try to get a name from the parent action/ability context
@@ -455,7 +455,6 @@ export class NPCActionHandler {
       return;
     }
 
-    const { CountdownDice } = globalThis.vagabond.documents;
 
     await CountdownDice.create({
       name: action.name,

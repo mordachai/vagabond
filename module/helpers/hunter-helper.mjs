@@ -1,5 +1,7 @@
 import { classFeatureText } from './feature-text.mjs';
 import { GMRelay, isActiveGM } from './gm-relay.mjs';
+import { FeatureRules } from './feature-rules.mjs';
+import { VagabondChatCard } from './chat-card.mjs';
 
 /**
  * Hunter — Hunter’s Mark, Lethal Precision, Apex Predator (optional automation + feature button).
@@ -19,7 +21,8 @@ import { GMRelay, isActiveGM } from './gm-relay.mjs';
  * Tracking / navigation / Forage / sensing (Survivalist, Killer Instinct) and Climb / Swim
  * (Rover) are text only.
  *
- * Imported by damage-pipeline / damage-helper / actor: it must not import those (no cycles).
+ * Imported by the actor / item documents: it must not import them. Reaches the damage math through
+ * FeatureRules `weakTo` (registerHooks).
  */
 export class HunterHelper {
 
@@ -128,7 +131,6 @@ export class HunterHelper {
 
     await this.#setMarkedStatus(target, true, this.#L('MarkedBy', { name: hunter.name }));
 
-    const { VagabondChatCard } = await import('./chat-card.mjs');
     const text = classFeatureText(hunter, { command: 'hunter.mark', name: title });
     await VagabondChatCard.featureCard(hunter, {
       title,
@@ -147,7 +149,6 @@ export class HunterHelper {
     }
     const name = eff.flags?.vagabond?.huntersMark?.name ?? '';
     if (hunter.effects.get(eff.id)) await eff.delete();
-    const { VagabondChatCard } = await import('./chat-card.mjs');
     await VagabondChatCard.featureCard(hunter, {
       title: this.#L('Title'),
       description: `<p>${this.#L('Dropped', { name: hunter.name, target: foundry.utils.escapeHTML(name) })}</p>`,
@@ -258,6 +259,8 @@ export class HunterHelper {
 
   /** Register the hooks. Synchronous, called once at module load. */
   static registerHooks() {
+    // Apex Predator: the Marked Target is Weak to the Hunter's attacks
+    FeatureRules.on('weakTo', (attacker, target) => this.isMarkWeak(attacker, target));
     Hooks.on('vagabond.calculateFinalDamage', (ctx) => this.#onFinalDamage(ctx));
     // Mark effect gone (drop / move / deleted by hand) → the Target is no longer Marked. Active GM only.
     Hooks.on('deleteActiveEffect', (effect) => {

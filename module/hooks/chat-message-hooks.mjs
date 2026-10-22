@@ -9,6 +9,9 @@ import { MacroAutoRun } from '../helpers/macro-autorun.mjs';
 import { SpellSurface } from '../helpers/spell-surface.mjs';
 import { TargetHelper } from '../helpers/target-helper.mjs';
 import { GMRelay } from '../helpers/gm-relay.mjs';
+import { WardHelper } from '../helpers/ward-helper.mjs';
+import { VagabondGlyphHelper } from '../helpers/glyph-helper.mjs';
+import { VagabondImbueHelper } from '../helpers/imbue-helper.mjs';
 
 /**
  * Chat card button wiring: the renderChatMessageHTML hook.
@@ -129,9 +132,7 @@ export function registerChatMessageHooks() {
         // Disable immediately to prevent double-clicks
         button.disabled = true;
 
-        import('../helpers/damage-helper.mjs').then(({ VagabondDamageHelper }) => {
-          VagabondDamageHelper.rollDamageFromButton(button, message.id);
-        });
+        VagabondDamageHelper.rollDamageFromButton(button, message.id);
       });
     });
 
@@ -143,9 +144,7 @@ export function registerChatMessageHooks() {
     saveButtons.forEach(button => {
       button.addEventListener('click', (ev) => {
         ev.preventDefault();
-        import('../helpers/damage-helper.mjs').then(({ VagabondDamageHelper }) => {
-          VagabondDamageHelper.handleSaveRoll(button, ev);
-        });
+        VagabondDamageHelper.handleSaveRoll(button, ev);
       });
     });
 
@@ -157,9 +156,7 @@ export function registerChatMessageHooks() {
     saveReminderButtons.forEach(button => {
       button.addEventListener('click', (ev) => {
         ev.preventDefault();
-        import('../helpers/damage-helper.mjs').then(({ VagabondDamageHelper }) => {
-          VagabondDamageHelper.handleSaveReminderRoll(button, ev);
-        });
+        VagabondDamageHelper.handleSaveReminderRoll(button, ev);
       });
     });
 
@@ -171,9 +168,7 @@ export function registerChatMessageHooks() {
     applyDirectButtons.forEach(button => {
       button.addEventListener('click', (ev) => {
         ev.preventDefault();
-        import('../helpers/damage-helper.mjs').then(({ VagabondDamageHelper }) => {
-          VagabondDamageHelper.handleApplyDirect(button);
-        });
+        VagabondDamageHelper.handleApplyDirect(button);
       });
     });
 
@@ -181,9 +176,7 @@ export function registerChatMessageHooks() {
     html.querySelectorAll('.vagabond-apply-spell-effect-button').forEach(button => {
       button.addEventListener('click', (ev) => {
         ev.preventDefault();
-        import('../helpers/damage-helper.mjs').then(({ VagabondDamageHelper }) => {
-          VagabondDamageHelper.handleApplySpellEffect(button);
-        });
+        VagabondDamageHelper.handleApplySpellEffect(button);
       });
     });
 
@@ -195,9 +188,7 @@ export function registerChatMessageHooks() {
     defenseButtons.forEach(button => {
       button.addEventListener('click', (ev) => {
         ev.preventDefault();
-        import('../helpers/damage-helper.mjs').then(({ VagabondDamageHelper }) => {
-          VagabondDamageHelper.handleDefenseWeapons(button, ev);
-        });
+        VagabondDamageHelper.handleDefenseWeapons(button, ev);
       });
     });
 
@@ -205,9 +196,7 @@ export function registerChatMessageHooks() {
     html.querySelectorAll('.vagabond-protect-button').forEach(button => {
       button.addEventListener('click', (ev) => {
         ev.preventDefault();
-        import('../helpers/damage-helper.mjs').then(({ VagabondDamageHelper }) => {
-          VagabondDamageHelper.handleProtect(button, ev);
-        });
+        VagabondDamageHelper.handleProtect(button, ev);
       });
     });
 
@@ -215,19 +204,19 @@ export function registerChatMessageHooks() {
     html.querySelectorAll('.vagabond-ward-button').forEach(button => {
       button.addEventListener('click', (ev) => {
         ev.preventDefault();
-        import('../helpers/ward-helper.mjs').then(({ WardHelper }) => WardHelper.openPrompt(button));
+        WardHelper.openPrompt(button);
       });
     });
     html.querySelectorAll('.ward-mana-pip').forEach(pip => {
       pip.addEventListener('click', (ev) => {
         ev.preventDefault();
-        import('../helpers/ward-helper.mjs').then(({ WardHelper }) => WardHelper.pickPip(pip));
+        WardHelper.pickPip(pip);
       });
     });
     html.querySelectorAll('.vagabond-ward-off-button').forEach(button => {
       button.addEventListener('click', (ev) => {
         ev.preventDefault();
-        import('../helpers/ward-helper.mjs').then(({ WardHelper }) => WardHelper.wardOff(button, ev));
+        WardHelper.wardOff(button, ev);
       });
     });
 
@@ -251,7 +240,7 @@ export function registerChatMessageHooks() {
     html.querySelectorAll('.vagabond-focus-upkeep-button').forEach(button => {
       button.addEventListener('click', (ev) => {
         ev.preventDefault();
-        import('../helpers/focus-upkeep.mjs').then(({ FocusUpkeep }) => FocusUpkeep.handleButton(button));
+        FocusUpkeep.handleButton(button);
       });
     });
 
@@ -264,9 +253,7 @@ export function registerChatMessageHooks() {
     restorativeButtons.forEach(button => {
       button.addEventListener('click', (ev) => {
         ev.preventDefault();
-        import('../helpers/damage-helper.mjs').then(({ VagabondDamageHelper }) => {
-          VagabondDamageHelper.handleApplyRestorative(button);
-        });
+        VagabondDamageHelper.handleApplyRestorative(button);
       });
     });
 
@@ -313,7 +300,6 @@ export function registerChatMessageHooks() {
         }
 
         // Create countdown dice
-        const { CountdownDice } = globalThis.vagabond.documents;
         await CountdownDice.create({
           name: name,
           diceType: diceType,
@@ -345,7 +331,6 @@ export function registerChatMessageHooks() {
           } else {
             GMRelay.send('vagabond.updateActorField', { actorUuid: actor.uuid, field: 'system.health.value', value: newHP });
           }
-          const { VagabondChatCard } = await import('../helpers/chat-card.mjs');
           await VagabondChatCard.applyResult(actor, {
             type: 'damage',
             rawAmount: amount,
@@ -374,9 +359,7 @@ export function registerChatMessageHooks() {
     npcButtons.forEach(button => {
       button.addEventListener('click', (ev) => {
         ev.preventDefault();
-        import('../helpers/damage-helper.mjs').then(({ VagabondDamageHelper }) => {
-          VagabondDamageHelper.handleNPCDamageButton(button, message.id);
-        });
+        VagabondDamageHelper.handleNPCDamageButton(button, message.id);
       });
     });
 
@@ -388,9 +371,7 @@ export function registerChatMessageHooks() {
     itemButtons.forEach(button => {
       button.addEventListener('click', (ev) => {
         ev.preventDefault();
-        import('../helpers/damage-helper.mjs').then(({ VagabondDamageHelper }) => {
-          VagabondDamageHelper.handleItemDamageButton(button, message.id);
-        });
+        VagabondDamageHelper.handleItemDamageButton(button, message.id);
       });
     });
 
@@ -402,9 +383,7 @@ export function registerChatMessageHooks() {
     applySaveButtons.forEach(button => {
       button.addEventListener('click', (ev) => {
         ev.preventDefault();
-        import('../helpers/damage-helper.mjs').then(({ VagabondDamageHelper }) => {
-          VagabondDamageHelper.handleApplySaveDamage(button);
-        });
+        VagabondDamageHelper.handleApplySaveDamage(button);
       });
     });
 
@@ -436,7 +415,7 @@ export function registerChatMessageHooks() {
         const actorId = container.dataset.actorId;
         const actor = TargetHelper.resolveActorRef(actorId);
         if (actor) {
-          import('../helpers/chat-card.mjs').then(async ({ VagabondChatCard }) => {
+          (async () => {
             if (isNowActive) {
               // Delete the luck gain card that was posted when toggling to luck-kept
               const luckMsgId = container.dataset.luckMessageId;
@@ -450,7 +429,7 @@ export function registerChatMessageHooks() {
               const luckMsg = await VagabondChatCard._grantLuckOnCrit(actor, null, 'Critical Save');
               if (luckMsg?.id) container.dataset.luckMessageId = luckMsg.id;
             }
-          });
+          })();
         }
       });
     });
@@ -486,7 +465,7 @@ export function registerChatMessageHooks() {
         const actorId = container.dataset.actorId;
         const actor = TargetHelper.resolveActorRef(actorId);
         if (actor) {
-          import('../helpers/chat-card.mjs').then(async ({ VagabondChatCard }) => {
+          (async () => {
             if (isNowActive) {
               const luckMsgId = container.dataset.luckMessageId;
               if (luckMsgId) {
@@ -499,7 +478,7 @@ export function registerChatMessageHooks() {
               const luckMsg = await VagabondChatCard._grantLuckOnCrit(actor, null, 'Critical Hit');
               if (luckMsg?.id) container.dataset.luckMessageId = luckMsg.id;
             }
-          });
+          })();
         }
       });
     });
@@ -537,9 +516,7 @@ export function registerChatMessageHooks() {
       button.addEventListener('click', (ev) => {
         ev.preventDefault();
         button.disabled = true;
-        import('../helpers/damage-helper.mjs').then(({ VagabondDamageHelper }) => {
-          VagabondDamageHelper.handleGrapple(button);
-        });
+        VagabondDamageHelper.handleGrapple(button);
       });
     });
 
@@ -552,9 +529,7 @@ export function registerChatMessageHooks() {
       button.addEventListener('click', (ev) => {
         ev.preventDefault();
         const action = button.classList.contains('vagabond-glyph-trigger-button') ? 'trigger' : 'dismiss';
-        import('../helpers/glyph-helper.mjs').then(({ VagabondGlyphHelper }) => {
-          VagabondGlyphHelper.fromChatButton(button.dataset.regionUuid, action);
-        });
+        VagabondGlyphHelper.fromChatButton(button.dataset.regionUuid, action);
       });
     });
 
@@ -568,9 +543,7 @@ export function registerChatMessageHooks() {
         const approve = button.classList.contains('vagabond-craft-approve-button');
         button.closest('.vagabond-craft-approval-buttons')?.querySelectorAll('button')
           .forEach(b => { b.disabled = true; });
-        import('../helpers/crafting-helper.mjs').then(({ CraftingHelper }) => {
-          CraftingHelper.resolveApproval(message.id, approve);
-        });
+        CraftingHelper.resolveApproval(message.id, approve);
       });
     });
 
@@ -582,9 +555,7 @@ export function registerChatMessageHooks() {
       button.addEventListener('click', (ev) => {
         ev.preventDefault();
         button.disabled = true;
-        import('../helpers/imbue-helper.mjs').then(({ VagabondImbueHelper }) => {
-          VagabondImbueHelper.deliverImbue(button);
-        });
+        VagabondImbueHelper.deliverImbue(button);
       });
     });
 
@@ -661,9 +632,7 @@ export function registerChatMessageHooks() {
         confirmBtn.disabled = true;
         const damageDice = parseInt(container.dataset.dice || '0');
         const useFx = container.dataset.effect === 'true';
-        import('../helpers/imbue-helper.mjs').then(({ VagabondImbueHelper }) => {
-          VagabondImbueHelper.deliverImbue(container, { damageDice, useFx });
-        });
+        VagabondImbueHelper.deliverImbue(container, { damageDice, useFx });
       });
     });
 

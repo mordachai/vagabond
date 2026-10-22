@@ -1,6 +1,7 @@
 import { CountdownDice } from '../documents/countdown-dice.mjs';
 import { StatusHelper } from '../helpers/status-helper.mjs';
 import { GMRelay } from '../helpers/gm-relay.mjs';
+import { VagabondChatCard } from '../helpers/chat-card.mjs';
 
 const { api } = foundry.applications;
 
@@ -159,7 +160,6 @@ export class OngoingPanel extends api.HandlebarsApplicationMixin(api.Application
         const actor  = await fromUuid(actorUuid);
         const effect = await fromUuid(effectUuid);
         if (actor && effect) {
-          const { VagabondChatCard } = await import('../helpers/chat-card.mjs');
           VagabondChatCard.statusEffect(actor, effect);
         }
       }, { signal });

@@ -1,4 +1,5 @@
 import { isActiveGM } from '../helpers/gm-relay.mjs';
+import { FlankingHelper } from '../helpers/flanking-helper.mjs';
 
 
 /**
@@ -15,8 +16,7 @@ export function registerFlankingHooks() {
   // updateToken, so relying on updateToken alone left the scene stale until the
   // next unrelated move.
   const _flankingSweep = foundry.utils.debounce(() => {
-    import('../helpers/flanking-helper.mjs')
-      .then(({ FlankingHelper }) => FlankingHelper.evaluateScene())
+    FlankingHelper.evaluateScene()
       .catch(err => console.error('Vagabond | Flanking sweep failed', err));
   }, 200);
 
@@ -72,11 +72,10 @@ export function registerFlankingHooks() {
   // matters: cleanup before sweep, or the sweep's fresh 'flanked' gets wiped.
   Hooks.on('deleteCombat', () => {
     if (!isActiveGM()) return;
-    import('../helpers/flanking-helper.mjs')
-      .then(async ({ FlankingHelper }) => {
-        await FlankingHelper.cleanupOrphans();
-        await FlankingHelper.evaluateScene();
-      })
+    (async () => {
+      await FlankingHelper.cleanupOrphans();
+      await FlankingHelper.evaluateScene();
+    })()
       .catch(err => console.error('Vagabond | Flanking combat-end sweep failed', err));
   });
 }

@@ -5,6 +5,7 @@ import { PartyStatusHelper } from '../helpers/party-status-helper.mjs';
 import { DowntimeHelper, SHIFTS_PER_DAY } from '../helpers/downtime-helper.mjs';
 import { ProgressClock } from '../documents/progress-clock.mjs';
 import { EquipmentHelper } from '../helpers/equipment-helper.mjs';
+import { VagabondChatCard } from '../helpers/chat-card.mjs';
 import { CurrencyHelper } from '../helpers/currency-helper.mjs';
 import { TradeHelper } from '../helpers/trade-helper.mjs';
 import { CoinTransferDialog } from '../applications/coin-transfer-dialog.mjs';
@@ -12,6 +13,8 @@ import { VagabondTextParser } from '../helpers/text-parser.mjs';
 import { buildStatsSection, buildSlotsRow, buildWeaponProperties } from '../helpers/item-sections.mjs';
 import { PartyNotes } from '../helpers/party-notes.mjs';
 import { GMRelay } from '../helpers/gm-relay.mjs';
+import { LevelUpDialog } from '../applications/level-up-dialog.mjs';
+import { DowntimeApp } from '../applications/downtime-app.mjs';
 
 /** Inventory tab sections, in display order (containers and unknown types fall under `gear`). */
 const INVENTORY_GROUPS = ['weapon', 'armor', 'alchemical', 'relic', 'gear'];
@@ -775,7 +778,6 @@ export class VagabondPartySheet extends VagabondActorSheet {
           if (!actor) return;
           const effect = actor.effects.get(effectId);
           if (!effect) return;
-          const { VagabondChatCard } = globalThis.vagabond.utils;
           await VagabondChatCard.statusEffect(actor, effect);
         }, { signal });
       });
@@ -811,7 +813,6 @@ export class VagabondPartySheet extends VagabondActorSheet {
           if (!actor) return;
           const action = actor.system.actions?.[actionIndex];
           if (!action) return;
-          const { VagabondChatCard } = globalThis.vagabond.utils;
           const targetsAtRollTime = TargetHelper.captureCurrentTargets();
           await VagabondChatCard.npcAction(actor, action, actionIndex, targetsAtRollTime);
         }, { signal });
@@ -830,7 +831,6 @@ export class VagabondPartySheet extends VagabondActorSheet {
           if (!actor) return;
           const ability = actor.system.abilities?.[actionIndex];
           if (!ability) return;
-          const { VagabondChatCard } = globalThis.vagabond.utils;
           const targetsAtRollTime = TargetHelper.captureCurrentTargets();
           // VagabondChatCard.npcAction handles abilities too (same card format)
           await VagabondChatCard.npcAction(actor, ability, actionIndex, targetsAtRollTime);
@@ -952,7 +952,6 @@ export class VagabondPartySheet extends VagabondActorSheet {
         ui.notifications.warn(this._controlsText('NoOwnCharacter'));
         return;
       }
-      const { LevelUpDialog } = globalThis.vagabond.applications;
       new LevelUpDialog(actor).render(true);
     });
   }
@@ -1651,7 +1650,6 @@ export class VagabondPartySheet extends VagabondActorSheet {
       : `<p>${t('ComplicationNone')}</p>`;
     if (shift > CONFIG.VAGABOND.travelShiftsPerRest) description += `<p><strong>${t('ComplicationFatigue', { n: shift })}</strong></p>`;
 
-    const { VagabondChatCard } = await import('../helpers/chat-card.mjs');
     const card = new VagabondChatCard()
       .setActor(this.actor)
       .setTitle(t('ComplicationTitle'))
@@ -1701,7 +1699,7 @@ export class VagabondPartySheet extends VagabondActorSheet {
         ui.notifications.warn(this._controlsText('NoOwnCharacter'));
         return;
       }
-      globalThis.vagabond.applications.DowntimeApp.open(own);
+      DowntimeApp.open(own);
       return;
     }
 
@@ -1748,7 +1746,6 @@ export class VagabondPartySheet extends VagabondActorSheet {
     });
     if (!confirmed) return;
 
-    const { LevelUpDialog } = globalThis.vagabond.applications;
     for (const [index, actor] of characters.entries()) {
       ui.notifications.info(this._controlsText('LevelUpAllProgress', {
         i: index + 1, n: characters.length, name: actor.name,

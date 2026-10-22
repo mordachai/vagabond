@@ -1,4 +1,5 @@
 import { GMRelay } from './gm-relay.mjs';
+import { CombatTrackerHelper } from './combat-tracker-helper.mjs';
 /**
  * Flanking/Flanked detection. RAW: "If at least two Allies are Close to a Foe that
  * is no more than one size larger than the Allies, the Foe is Vulnerable and takes
@@ -116,7 +117,6 @@ export class FlankingHelper {
    * @returns {Promise<Token[]>}
    */
   static async findContributors(targetToken) {
-    const { CombatTrackerHelper } = await import('./combat-tracker-helper.mjs');
     const targetFaction = CombatTrackerHelper.factionKeyForToken(targetToken.document);
     const targetSizeIdx = this.sizeIndex(targetToken.actor);
 

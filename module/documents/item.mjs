@@ -7,6 +7,11 @@ import { HunterHelper } from '../helpers/hunter-helper.mjs';
 import { GrantedItems } from '../helpers/granted-items.mjs';
 import { MaterialsHelper } from '../helpers/materials-helper.mjs';
 import { ItemNameTokens } from '../helpers/item-name-tokens.mjs';
+import { VagabondChatCard } from '../helpers/chat-card.mjs';
+import { RelicSlots } from '../helpers/relic-slots.mjs';
+import { default as PerkChoiceDialog } from '../applications/perk-choice-dialog.mjs';
+import { VagabondRollBuilder } from '../helpers/roll-builder.mjs';
+import { VagabondDamagePipeline } from '../helpers/damage-pipeline.mjs';
 
 /**
  * Extend the basic Item with some very simple modifications.
@@ -111,7 +116,6 @@ export class VagabondItem extends Item {
     if (!this.system.formula) {
       // Use VagabondChatCard for equipment items (gear, alchemicals, relics) and spells
       if (item.type === 'equipment' || item.type === 'spell') {
-        const { VagabondChatCard } = await import('../helpers/chat-card.mjs');
         await VagabondChatCard.itemUse(this.actor, item, targetsAtRollTime);
         // Handle consumption after successful use (equipment only). Light-source
         // items are exempt — they are consumed on burn-out (clock expiry) by the
@@ -166,7 +170,6 @@ export class VagabondItem extends Item {
 
       // For equipment items with damage, use VagabondChatCard with targets
       if (item.type === 'equipment' && item.system.damageType && item.system.damageType !== '-') {
-        const { VagabondChatCard } = await import('../helpers/chat-card.mjs');
         const damageTypeKey = item.system.damageType;
         const damageTypeLabel = CONFIG.VAGABOND.damageTypes[damageTypeKey] || damageTypeKey;
 
@@ -292,7 +295,6 @@ export class VagabondItem extends Item {
     }
     // Consumable Relics attached to this item are used up by its use
     if (this.system.relic?.powers?.some(p => p.consumable)) {
-      const { RelicSlots } = await import('../helpers/relic-slots.mjs');
       await RelicSlots.spendConsumables(this);
     }
   }
@@ -364,7 +366,6 @@ export class VagabondItem extends Item {
     // If choice was already made (e.g., from character builder), skip dialog
     if (!choice) {
       // Import dialog class
-      const { default: PerkChoiceDialog } = await import('../applications/perk-choice-dialog.mjs');
 
       // Show choice dialog
       choice = await PerkChoiceDialog.show(this, this.parent);
@@ -854,14 +855,12 @@ export class VagabondItem extends Item {
 
     // Status votes vs the target (Vulnerable, Invisible, Prone) are merged net-count BEFORE rolling.
     // Only the first target is consulted (multi-target attacks ignore targets 2..n).
-    const { VagabondRollBuilder } = await import('../helpers/roll-builder.mjs');
     // Every Favor / Hinder vote is collected first and merged ONCE (net count). Merging a partial
     // result again would collapse e.g. two Favors into one and drop votes added earlier.
     // Unconditional Favor on Attacks (system.favorChecks, e.g. Virtuoso: Valor, Fighter: Momentum)
     const votes = [favorHinder, VagabondRollBuilder.checkFavorVote(actor, 'attack')];
     // Status votes vs the first target (Vulnerable, Invisible, Prone — VagabondRollBuilder.targetingVotes).
     // A throw is never Melee.
-    const { VagabondChatCard } = await import('../helpers/chat-card.mjs');
     const isMeleeAttack = !thrown && VagabondChatCard.attackTypeForWeaponSkill(weaponSkillKey) === 'melee';
     if (targets.length > 0) {
       // Attacker-side situational Favor (CONFIG.VAGABOND.attackFavorRules, e.g. Bloodthirsty)
@@ -924,7 +923,6 @@ export class VagabondItem extends Item {
     // (Potency etc.), plus the crit stat bonus like any attack. One choke point
     // for auto-rolled damage, the card's Roll Damage button and Luck rerolls.
     if (EquipmentHelper.isThrownAlchemical(this)) {
-      const { VagabondDamagePipeline } = await import('../helpers/damage-pipeline.mjs');
       return VagabondDamagePipeline.rollDamage({
         actor,
         item: this,
@@ -959,7 +957,6 @@ export class VagabondItem extends Item {
     const weaponSkillKey = skillKey ?? this.system.weaponSkill;
     const dieSizeBonus = actor.system[`${weaponSkillKey}DamageDieSizeBonus`] || 0;
 
-    const { VagabondDamagePipeline } = await import('../helpers/damage-pipeline.mjs');
     return VagabondDamagePipeline.rollDamage({
       actor,
       item: this,

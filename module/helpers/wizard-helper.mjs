@@ -1,5 +1,6 @@
 import { classFeatureText } from './feature-text.mjs';
 import { buildMacroButtonHTML } from './item-macro.mjs';
+import { VagabondChatCard } from './chat-card.mjs';
 
 /**
  * Wizard — Extracurricular (feature button).
@@ -55,7 +56,6 @@ export class WizardHelper {
       return;
     }
 
-    const { VagabondChatCard } = await import('./chat-card.mjs');
     const card = new VagabondChatCard()
       .setType('generic')
       .setActor(actor)
@@ -95,7 +95,6 @@ export class WizardHelper {
     }
     await actor.update({ 'system.studiedDice': dice - 1 });
 
-    const { VagabondChatCard } = await import('./chat-card.mjs');
     const card = new VagabondChatCard()
       .setType('generic')
       .setActor(actor)
@@ -198,7 +197,6 @@ export class WizardHelper {
     const [copy] = await actor.createEmbeddedDocuments('Item', [data]);
     if (!copy) return;
 
-    const { VagabondChatCard } = await import('./chat-card.mjs');
     const card = new VagabondChatCard()
       .setType('generic')
       .setActor(actor)

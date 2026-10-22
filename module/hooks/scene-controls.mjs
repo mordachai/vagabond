@@ -36,7 +36,6 @@ export function registerSceneControls() {
           button: true,
           onChange: async () => {
             try {
-              const { ProgressClockConfig } = globalThis.vagabond.applications;
               const dialog = new ProgressClockConfig(null);
               await dialog.render(true);
             } catch (error) {
@@ -51,7 +50,6 @@ export function registerSceneControls() {
           button: true,
           onChange: async () => {
             try {
-              const { CountdownDiceConfig } = globalThis.vagabond.applications;
               const dialog = new CountdownDiceConfig(null);
               await dialog.render(true);
             } catch (error) {

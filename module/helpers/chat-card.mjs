@@ -3,9 +3,15 @@ import { VagabondDamagePipeline } from './damage-pipeline.mjs';
 import { VagabondChatHelper } from './chat-helper.mjs';
 import { buildMacroButtonHTML } from './item-macro.mjs';
 import { AnimationBridge } from './animation-bridge.mjs';
-import { DruidHelper } from './druid-helper.mjs';
+import { FeatureRules } from './feature-rules.mjs';
 import { SpellPlacement } from './spell-placement.mjs';
 import { resolveEffectDescription, effectDisplayImg } from './effects.mjs';
+import { TargetHelper } from './target-helper.mjs';
+import { VagabondRollBuilder } from './roll-builder.mjs';
+import { MacroAutoRun } from './macro-autorun.mjs';
+import { CountdownDice } from '../documents/countdown-dice.mjs';
+import { StatusHelper } from './status-helper.mjs';
+import { EquipmentHelper } from './equipment-helper.mjs';
 
 /**
  * Universal chat card builder for Vagabond system
@@ -525,7 +531,7 @@ export class VagabondChatCard {
           if (rollData?.critBenefitOff) card.data.damage.isCritical = false;
 
           // Restorative types (healing/recover/recharge) get an Apply button, never save buttons
-          const isRestorativeCard = VagabondDamageHelper.isRestorativeDamageType(damageType);
+          const isRestorativeCard = VagabondDamagePipeline.isRestorativeDamageType(damageType);
 
           // Flanked bonus — only the first target is consulted (same convention as
           // item.mjs rollAttack's incomingAttacksModifier peek). Folded into the
@@ -535,7 +541,6 @@ export class VagabondChatCard {
           // addition in _computeFinalDamage (damage-helper.mjs) stays the single
           // source of truth for the actual HP math.
           if (!isRestorativeCard && targetsAtRollTime?.length) {
-            const { TargetHelper } = await import('./target-helper.mjs');
             const firstTarget = TargetHelper.resolveTargets(targetsAtRollTime)[0];
             if (firstTarget?.actor?.statuses?.has('flanked')) {
               const bonus = CONFIG.VAGABOND?.homebrew?.derivations?.flankedDamageBonus ?? 2;
@@ -558,7 +563,7 @@ export class VagabondChatCard {
             card.data.damage.defenseHtml = VagabondDamageHelper.createDefenseShields(
               damageRoll.total, damageType, actor.uuid, item?.id, targetsAtRollTime, actionIndex,
               rollData?.isCritical ?? false, critStatBonus, effectiveWeaknessPreRolled, attackType
-            ) + VagabondDamageHelper.createWardRow(targetsAtRollTime, damageRoll.total, damageType);
+            ) + VagabondDamageHelper.createFeatureRows(targetsAtRollTime, damageRoll.total, damageType);
           }
 
       } else if (rollData?.isHit && item && !damageRoll) {
@@ -616,7 +621,7 @@ export class VagabondChatCard {
       // Add defend options if requested (independent of damage; never for restoratives)
       if (hasDefenses) {
         const { VagabondDamageHelper } = await import('./damage-helper.mjs');
-        if (!VagabondDamageHelper.isRestorativeDamageType(damageType) && !VagabondDamageHelper.targetsAreAllNpc(targetsAtRollTime)) {
+        if (!VagabondDamagePipeline.isRestorativeDamageType(damageType) && !VagabondDamageHelper.targetsAreAllNpc(targetsAtRollTime)) {
           card.addFooterAction(VagabondDamageHelper.createDefendOptions());
         }
       }
@@ -732,7 +737,6 @@ export class VagabondChatCard {
     // For weapon skills, pass the key for per-weapon crit bonuses
     // For saves, pass the save key ('reflex', 'endure', 'will') so save crit bonuses apply
     // For spell cast rerolls, pass 'spell' so castCritBonus applies
-    const { VagabondRollBuilder } = await import('./roll-builder.mjs');
     const critType = (type === 'cast') ? 'spell'
       : (type === 'skill' && VagabondRollBuilder.isWeaponSkillKey(key)) ? key
       : (type === 'save') ? key
@@ -892,14 +896,14 @@ export class VagabondChatCard {
       // buttons then appear immediately. isCritical is a boolean and statKey the
       // weapon skill's stat (crit stat bonus only applies on real crits).
       const { VagabondDamageHelper } = await import('./damage-helper.mjs');
-      const cleaveDie = globalThis.vagabond.utils.EquipmentHelper.cleaveDieFor(weapon, targetsAtRollTime.length);
+      const cleaveDie = EquipmentHelper.cleaveDieFor(weapon, targetsAtRollTime.length);
       if (!damageRoll && VagabondDamageHelper.shouldRollDamage(isHit)) {
           damageRoll = await weapon.rollDamage(actor, isCritical, weaponSkill?.stat || null, targetsAtRollTime, cleaveDie, weaponSkillKey);
       }
 
       // Thrown Alchemical Item: no grip/range/weapon damage fields — its own
       // damageAmount/damageType. Any throw gets a "Thrown" range tag.
-      const isAlchemicalThrow = globalThis.vagabond.utils.EquipmentHelper.isThrownAlchemical(weapon);
+      const isAlchemicalThrow = EquipmentHelper.isThrownAlchemical(weapon);
       const isThrow = !!attackResult.thrown || isAlchemicalThrow;
       const baseDamage = isAlchemicalThrow ? weapon.system.damageAmount : weapon.system.currentDamage;
       const baseDamageType = isAlchemicalThrow ? weapon.system.damageType : weapon.system.currentDamageType;
@@ -991,22 +995,11 @@ export class VagabondChatCard {
           );
       }
 
-      // Imbue: weapon carries a pending spell — offer to deliver it on hit.
-      // Rendered as its own section above the damage section (not a footer
-      // action) so it visually pairs with the roll while the weapon's own
+      // Feature section after the attack (FeatureRules `weaponHitSection`: Imbue — the weapon's pending
+      // Spell, delivered on a hit, fizzled by a miss). Rendered as its own section above the damage
+      // section (not a footer action) so it visually pairs with the roll while the weapon's own
       // damage + Apply button stay grouped together below it.
-      let imbueSection = null;
-      if (weapon.system.imbuedSpell?.active) {
-          const { VagabondImbueHelper } = await import('./imbue-helper.mjs');
-          if (attackResult.isHit) {
-              imbueSection = VagabondImbueHelper.createDeliveryButton(weapon, attackResult, targetsAtRollTime);
-          } else {
-              // The attack attempt IS the spell's cast attempt — a miss fizzles
-              // it (mana per spellManaOnCastFail, charged to the caster) and
-              // clears the imbue, same as a resolved hit-delivery.
-              await VagabondImbueHelper.resolveMissedCast(weapon);
-          }
-      }
+      const imbueSection = await FeatureRules.first('weaponHitSection', weapon, attackResult, targetsAtRollTime);
 
       const result = await this.createActionCard({
           actor,
@@ -1210,7 +1203,6 @@ export class VagabondChatCard {
    * @returns {Promise<ChatMessage>}
    */
   static async rerollSpellCast(actor, spell, rerollData, roll, targetsAtRollTime = [], originMessage = null) {
-    const { VagabondRollBuilder } = await import('./roll-builder.mjs');
     const { VagabondDamageHelper } = await import('./damage-helper.mjs');
 
     const difficulty = rerollData.difficulty;
@@ -1262,7 +1254,6 @@ export class VagabondChatCard {
       spellState, costs: { totalCost, manaSpent: owed }, deliveryText, manaOverrideDelta: 0,
     }, damageRoll, targetsAtRollTime);
 
-    const { MacroAutoRun } = await import('./macro-autorun.mjs');
     await MacroAutoRun.inherit(originMessage, message);
     if (spellState.deliveryType) {
       await VagabondDamageHelper.playFxOrDefer(
@@ -1342,16 +1333,13 @@ export class VagabondChatCard {
     // Focuses on the Cast; a miss deals no damage. Not Focusing: no command, the card says so.
     let commandCheck = null;
     if (!(actor.system.abilities ?? []).includes(action)) {
-        const { RaiseHelper } = await import('./raise-helper.mjs');
-        const cmd = RaiseHelper.commander(actor);
-        if (cmd && !cmd.focusing) {
-            tags.push({ label: game.i18n.format('VAGABOND.Raise.NotCommanded', { caster: cmd.caster.name }), cssClass: 'tag-standard' });
-        } else if (cmd) {
-            const first = targetsAtRollTime[0];
-            const target = first ? game.scenes.get(first.sceneId)?.tokens.get(first.tokenId)?.actor ?? null : null;
-            commandCheck = await RaiseHelper.rollCommandCheck(actor, cmd, target, attackType);
-            if (commandCheck) tags.unshift({ label: commandCheck.label, cssClass: 'tag-skill' });
-        }
+        const first = targetsAtRollTime[0];
+        const target = first ? game.scenes.get(first.sceneId)?.tokens.get(first.tokenId)?.actor ?? null : null;
+        // FeatureRules `npcActionCheck` → {check} rolled, or {tag} only (Raise: not commanded)
+        const command = await FeatureRules.first('npcActionCheck', actor, target, attackType);
+        commandCheck = command?.check ?? null;
+        if (commandCheck) tags.unshift({ label: commandCheck.label, cssClass: 'tag-skill' });
+        else if (command?.tag) tags.push(command.tag);
     }
     const commandMissed = !!commandCheck && !commandCheck.isHit;
 
@@ -1408,12 +1396,11 @@ export class VagabondChatCard {
     const rawType = action.damageType || 'physical';
     if (hasDamage && rollWithCheck) {
         let finalDamage;
-        const { VagabondDamagePipeline } = await import('./damage-pipeline.mjs');
         if (preferFlat && action.flatDamage) {
             // Flat damage - authored value stays pure, no bonus fields apply (Frightened still
             // costs its per-die penalty, counted from the action's dice)
             finalDamage = VagabondDamagePipeline.flatDamageAfterDiePenalty(actor,
-                parseInt(action.flatDamage) + DruidHelper.beastDamageBonus(actor), action.rollDamage);
+                parseInt(action.flatDamage) + FeatureRules.sum('npcDamageBonus', actor), action.rollDamage);
         } else if (action.rollDamage) {
             // Rolled damage through the unified pipeline (same as the manual damage button)
             damageRoll = await VagabondDamagePipeline.rollDamage({
@@ -1428,7 +1415,7 @@ export class VagabondChatCard {
             finalDamage = damageRoll?.total ?? 0;
         } else {
             finalDamage = VagabondDamagePipeline.flatDamageAfterDiePenalty(actor,
-                parseInt(action.flatDamage) + DruidHelper.beastDamageBonus(actor), action.rollDamage);
+                parseInt(action.flatDamage) + FeatureRules.sum('npcDamageBonus', actor), action.rollDamage);
         }
 
         // Flat damage has no Roll — the card builder wants one to read total/formula from
@@ -1475,7 +1462,6 @@ export class VagabondChatCard {
       if (!ability || !ability.name) return;
 
       // Use npcAction instead of npcAbility
-      const { VagabondChatCard } = await import('../helpers/chat-card.mjs');
       await VagabondChatCard.npcAction(this.actor, ability, index);
   }
 
@@ -1566,7 +1552,7 @@ export class VagabondChatCard {
       const damageTypeLabel = this._getDamageTypeLabel(damageType);
 
       // Determine if it's restorative (healing/recover/recharge) or harmful
-      const isRestorative = VagabondDamageHelper.isRestorativeDamageType(damageType);
+      const isRestorative = VagabondDamagePipeline.isRestorativeDamageType(damageType);
       const attackType = isRestorative ? 'none' : 'melee'; // Default attack type for non-restorative items
 
       footerActions.push(
@@ -1813,8 +1799,7 @@ export class VagabondChatCard {
     }
 
     // Get dice image path for icon
-    const CountdownDiceClass = (await import('../documents/countdown-dice.mjs')).CountdownDice;
-    const diceImagePath = CountdownDiceClass.getDiceImagePath(currentDiceType);
+    const diceImagePath = CountdownDice.getDiceImagePath(currentDiceType);
 
     // Build tags for dice type and result
     const tags = [
@@ -1877,7 +1862,6 @@ export class VagabondChatCard {
    * @returns {Promise<ChatMessage|null>}
    */
   static async statusResults(results, targetActor, sourceName = '', sourceIcon = null) {
-    const { StatusHelper } = await import('./status-helper.mjs');
     const statusHtml = StatusHelper.buildStatusResultsHtml(results, targetActor.name);
     if (!statusHtml) return null;
 

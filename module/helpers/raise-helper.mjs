@@ -3,6 +3,8 @@ import { NpcSenses } from './npc-senses.mjs';
 import { macroNotify } from './item-macro.mjs';
 import { SystemFolders } from './system-folders.mjs';
 import { isActiveGM } from './gm-relay.mjs';
+import { FeatureRules } from './feature-rules.mjs';
+import { VagabondChatCard } from './chat-card.mjs';
 
 /**
  * Raise Spell — "Corpses in the area of non-Artificial or Undead Beings with cumulative HD no higher than your
@@ -150,7 +152,6 @@ export class RaiseHelper {
     }
 
     // Standard action card: the Raised Undead are its Targets, the outcome lines its description
-    const { VagabondChatCard } = await import('./chat-card.mjs');
     await VagabondChatCard.createActionCard({
       actor: caster,
       item: spell,
@@ -346,6 +347,16 @@ export class RaiseHelper {
 
   /** Register the hooks. Synchronous, called once at module load. */
   static registerHooks() {
+    // A commanded Being's action is a Check with the caster's Cast Skill while the caster Focuses on the Cast;
+    // not Focusing: no command, the card says so
+    FeatureRules.on('npcActionCheck', async (actor, target, attackType) => {
+      const cmd = this.commander(actor);
+      if (!cmd) return null;
+      if (!cmd.focusing) {
+        return { tag: { label: game.i18n.format('VAGABOND.Raise.NotCommanded', { caster: cmd.caster.name }), cssClass: 'tag-standard' } };
+      }
+      return { check: await this.rollCommandCheck(actor, cmd, target, attackType) };
+    });
     // "Raise: Undead" removed (Focus dropped → SpellTrackerHelper clears it, or by hand)
     Hooks.on('deleteActiveEffect', (effect) => {
       if (!effect.flags?.vagabond?.raiseUndead) return;

@@ -8,6 +8,7 @@ import {
 import { bindHudTooltips } from '../helpers/hud-tooltip.mjs';
 import { AlchemyLab } from '../helpers/alchemy-lab.mjs';
 import { FeatureOrder } from '../helpers/feature-order.mjs';
+import { EquipmentHelper } from '../helpers/equipment-helper.mjs';
 
 /**
  * Character-specific actor sheet
@@ -95,7 +96,6 @@ export class VagabondCharacterSheet extends VagabondActorSheet {
     }
 
     // Self-heal any weapon hand-limit violation (legacy data, imports, macros)
-    const { EquipmentHelper } = globalThis.vagabond.utils;
     EquipmentHelper.sanitizeHandLimit(this.actor).catch((err) =>
       console.error('Vagabond | Hand-limit sanitize failed:', err)
     );

@@ -1,4 +1,6 @@
 import { GMRelay } from '../helpers/gm-relay.mjs';
+import { ContextMenuHelper } from '../helpers/context-menu-helper.mjs';
+import { VagabondChatCard } from '../helpers/chat-card.mjs';
 /**
  * Screen-corner panel that displays the selected token's status conditions.
  *
@@ -218,8 +220,6 @@ export class TokenStatusPanel {
         const effect = Array.from(actor.effects).find(e => (e.name || e.label) === statusName);
         if (!effect) return;
 
-        const { ContextMenuHelper } = globalThis.vagabond.utils;
-        const { VagabondChatCard } = globalThis.vagabond.utils;
 
         const menuItems = [
           {

@@ -1,4 +1,8 @@
 import { isActiveGM } from './gm-relay.mjs';
+import { FeatureRules } from './feature-rules.mjs';
+import { FocusLink } from './focus-link.mjs';
+import { ConjurePicker } from '../applications/conjure-picker.mjs';
+import { VagabondChatCard } from './chat-card.mjs';
 
 /**
  * Druid — Polymorph, Savagery, Beast Mode, Force of Nature, on top of the Metamorph module
@@ -112,7 +116,6 @@ export class DruidHelper {
       ui.notifications.warn(this.#L('NoBeasts', { level }));
       return null;
     }
-    const { ConjurePicker } = await import('../applications/conjure-picker.mjs');
     const entry = (await ConjurePicker.prompt({ title, hint, budget: 1, candidates, single: true }))?.picks?.[0]?.entry;
     if (!entry) return null;
     return entry.revert ? { revert: true } : { actorId: entry.actorId, packId: entry.packId };
@@ -152,7 +155,6 @@ export class DruidHelper {
     }
 
     const level = this.effectiveLevel(actor);
-    const { VagabondChatCard } = await import('./chat-card.mjs');
     const kept = [];   // tokens this Focused Cast keeps morphed (revert when the Focus ends)
     const lines = [];  // one chat card for the whole Cast: a line per Target
     // "The Target becomes a Beast of your choice": one pick for the whole Cast, every Target takes that form
@@ -182,8 +184,7 @@ export class DruidHelper {
           description += ` ${this.#L('Continual')}`;
           // Polymorph opens Focused (focusOnCast); a continual self-Polymorph needs no Focus
           if (item?.id && (actor.system.focus?.spellIds ?? []).includes(item.id)) {
-            const { SpellHandler } = await import('../sheets/handlers/spell-handler.mjs');
-            await SpellHandler.setFocus(actor, item.id, false);
+            await FocusLink.setFocus(actor, item.id, false);
           }
         } else {
           kept.push(doc.uuid);
@@ -205,6 +206,9 @@ export class DruidHelper {
 
   /** Register the hooks. Synchronous, called once at module load. */
   static registerHooks() {
+    // Beast form: the Druid's Savagery bonus on NPC action damage; Beast Mode ignores non-Relic Immune
+    FeatureRules.on('npcDamageBonus', (actor) => this.beastDamageBonus(actor));
+    FeatureRules.on('ignoresImmune', (attacker, damageType) => this.ignoresNonRelicImmune(attacker, damageType));
     // Active GM (SpellTrackerHelper fires it): the caster stopped Focusing on these Spells
     Hooks.on('vagabond.focusDropped', (caster, spellIds) => {
       this.#onFocusDropped(caster, spellIds).catch(err => console.error('vagabond | Polymorph: could not revert', err));
@@ -232,7 +236,6 @@ export class DruidHelper {
       if (res?.ok) lines.push(this.#L('Reverted', { name: doc.name }));
     }
     if (!lines.length) return;
-    const { VagabondChatCard } = await import('./chat-card.mjs');
     await VagabondChatCard.featureCard(caster, {
       title: this.#L('PolymorphTitle'),
       description: `<p>${this.#L('FocusEnded')}</p>${this.#lines(lines)}`,
@@ -268,7 +271,6 @@ export class DruidHelper {
     }
     const res = await MM.revert(token, { ignoreOwnership: true });
     if (!res?.ok) return;
-    const { VagabondChatCard } = await import('./chat-card.mjs');
     await VagabondChatCard.featureCard(main, {
       title: this.#L('PolymorphTitle'),
       description: `<p>${this.#L('Reverted', { name: token.document?.name ?? main.name })}</p>`,
@@ -355,7 +357,6 @@ export class DruidHelper {
     }
     await actor.setFlag('vagabond', 'forceOfNatureUsed', true);
 
-    const { VagabondChatCard } = await import('./chat-card.mjs');
     await VagabondChatCard.featureCard(actor, {
       title: game.i18n.localize('VAGABOND.Druid.ForceTitle'),
       description: `<p>${this.#L('ForceDone', { name: actor.name, form: this.formName(choice), hp: regained })}</p>`,

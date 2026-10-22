@@ -5,6 +5,8 @@ import { VagabondDamageHelper } from '../helpers/damage-helper.mjs';
 import { VagabondDiceAppearance } from '../helpers/dice-appearance.mjs';
 import { bindPartHpClickers } from '../helpers/part-hp-clicker.mjs';
 import { TradeHelper } from '../helpers/trade-helper.mjs';
+import { VagabondRollBuilder } from '../helpers/roll-builder.mjs';
+import { VagabondChatCard } from '../helpers/chat-card.mjs';
 
 /**
  * Construct actor sheet.
@@ -306,7 +308,6 @@ export class VagabondConstructSheet extends VagabondActorSheet {
         if (crewActor.type === 'character') {
           const row = btn.closest('.part-crew-member');
           const skillKey = row?.querySelector('.crew-skill-select')?.value ?? 'melee';
-          const { VagabondRollBuilder } = await import('../helpers/roll-builder.mjs');
           const systemFavorHinder = crewActor.system.favorHinder || 'none';
           const favorHinder = VagabondRollBuilder.calculateEffectiveFavorHinder(
             systemFavorHinder,
@@ -452,7 +453,6 @@ export class VagabondConstructSheet extends VagabondActorSheet {
       const part = this.actor.items.get(partId);
       if (!part) return;
 
-      const { VagabondChatCard } = globalThis.vagabond.utils;
       const base = part.system.damageFormula || '1d6';
       const damageRoll = new Roll(base);
       VagabondDiceAppearance.applyDamageColorset(damageRoll, part.system.damageType);
@@ -488,7 +488,6 @@ export class VagabondConstructSheet extends VagabondActorSheet {
       const part = this.actor.items.get(partId);
       if (!part) return;
 
-      const { VagabondChatCard } = globalThis.vagabond.utils;
       const base = part.system.damageFormula || '1d6';
       const damageRoll = new Roll(base);
       VagabondDiceAppearance.applyDamageColorset(damageRoll, part.system.damageType);
@@ -525,7 +524,6 @@ export class VagabondConstructSheet extends VagabondActorSheet {
     const part = this.actor.items.get(partId);
     if (!part) return;
 
-    const { VagabondChatCard } = globalThis.vagabond.utils;
 
     const sys = crewActor.system;
     const skill = sys.skills?.[skillKey] ?? sys.saves?.[skillKey];
@@ -538,7 +536,6 @@ export class VagabondConstructSheet extends VagabondActorSheet {
     const attackModifier = part.system.attackModifier ?? 0;
     const critNumber = crewActor.system.critNumber ?? 20;
 
-    const { VagabondRollBuilder } = await import('../helpers/roll-builder.mjs');
     const baseFormula = attackModifier !== 0 ? `1d20 + ${attackModifier}` : '1d20';
     const roll = await VagabondRollBuilder.buildAndEvaluateD20(crewActor, favorHinder, baseFormula);
 

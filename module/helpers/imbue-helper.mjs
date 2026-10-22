@@ -1,6 +1,10 @@
 import { EquipmentHelper } from './equipment-helper.mjs';
 import { TargetHelper } from './target-helper.mjs';
 import { GMRelay } from './gm-relay.mjs';
+import { FeatureRules } from './feature-rules.mjs';
+import { ImbueWeaponSelectDialog } from '../applications/imbue-weapon-select-dialog.mjs';
+import { VagabondDamageHelper } from './damage-helper.mjs';
+import { VagabondChatCard } from './chat-card.mjs';
 
 /**
  * Automation for the "Imbue" spell delivery: a spell is attached to a willing
@@ -55,7 +59,6 @@ export class VagabondImbueHelper {
       return [{ targetActor: entries[0].targetActor, weapon: entries[0].weapons[0] }];
     }
 
-    const { ImbueWeaponSelectDialog } = await import('../applications/imbue-weapon-select-dialog.mjs');
     return ImbueWeaponSelectDialog.prompt(entries);
   }
 
@@ -345,8 +348,6 @@ export class VagabondImbueHelper {
       hitTargets = [];
     }
 
-    const { VagabondDamageHelper } = await import('./damage-helper.mjs');
-    const { VagabondChatCard } = await import('./chat-card.mjs');
 
     const manaSkill = payload.manaSkillKey ? sourceActor.system.skills[payload.manaSkillKey] : null;
     const manaSkillStat = manaSkill?.stat || 'reason';
@@ -406,5 +407,17 @@ export class VagabondImbueHelper {
 
     await this.clearImbue(weapon);
     this._markDelivered(el, isControls);
+  }
+
+  /** Answers FeatureRules points. Synchronous, called once at module load. */
+  static registerHooks() {
+    // Weapon attack card of an Imbued weapon: a hit offers to deliver the Spell; the attack IS the Cast
+    // attempt, so a miss fizzles it (Mana per spellManaOnCastFail, charged to the caster) and clears the imbue
+    FeatureRules.on('weaponHitSection', async (weapon, attackResult, targets) => {
+      if (!weapon.system.imbuedSpell?.active) return null;
+      if (attackResult.isHit) return this.createDeliveryButton(weapon, attackResult, targets);
+      await this.resolveMissedCast(weapon);
+      return null;
+    });
   }
 }

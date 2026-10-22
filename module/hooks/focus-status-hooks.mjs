@@ -1,4 +1,5 @@
 import { DruidHelper } from '../helpers/druid-helper.mjs';
+import { FocusLink } from '../helpers/focus-link.mjs';
 
 /**
  * Focusing status: mirror onto Metamorph forms; removing it by hand ends the Focus.
@@ -16,16 +17,14 @@ export function registerFocusStatusHooks() {
   Hooks.on('deleteActiveEffect', _syncFormFocus);
 
   // Focusing status removed by hand (token HUD, effects list; on a form it is the original's): the Focus ends,
-  // so what the Focused Casts applied goes too (SpellHandler.clearFocus → Focus-dropped hooks).
+  // so what the Focused Casts applied goes too (FocusLink.clearFocus → Focus-dropped hooks).
   Hooks.on('deleteActiveEffect', (effect, options, userId) => {
     if (userId !== game.user.id || !effect.statuses?.has('focusing')) return;
     const actor = effect.parent;
     if (!(actor instanceof Actor)) return;
     const main = DruidHelper.mainActorOf(actor) ?? actor;
     if (!main.isOwner || !main.system.focus?.spellIds?.length) return;
-    import('../sheets/handlers/spell-handler.mjs')
-      .then(({ SpellHandler }) => SpellHandler.clearFocus(main))
-      .catch(err => console.warn('Vagabond | Ending Focus failed', err));
+    FocusLink.clearFocus(main).catch(err => console.warn('Vagabond | Ending Focus failed', err));
   });
   Hooks.on('metamorph.morph', (tokenDoc, targetActor) => {
     const main = DruidHelper.mainActorOf(targetActor);

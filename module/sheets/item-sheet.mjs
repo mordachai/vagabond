@@ -14,6 +14,9 @@ import { ContextMenuHelper } from '../helpers/context-menu-helper.mjs';
 import { RelicSlots } from '../helpers/relic-slots.mjs';
 import { ItemDisguise } from '../helpers/item-disguise.mjs';
 import { ItemDisguiseApp } from '../applications/item-disguise-app.mjs';
+import { VagabondImbueHelper } from '../helpers/imbue-helper.mjs';
+import { VagabondChatCard } from '../helpers/chat-card.mjs';
+import { CountdownDice } from '../documents/countdown-dice.mjs';
 
 const { api, sheets } = foundry.applications;
 const DragDrop = foundry.applications.ux.DragDrop;
@@ -299,7 +302,6 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
 
     // Weapons: the skill attacks roll with (preferred, else default) and every
     // allowed skill as a comma-separated list — shown on the locked sheet.
-    const { EquipmentHelper } = globalThis.vagabond.utils;
     if (EquipmentHelper.isWeapon(this.item)) {
       const skillLabel = (k) => game.i18n.localize(CONFIG.VAGABOND.weaponSkills?.[k] ?? k);
       const current = EquipmentHelper.attackSkillFor(this.item);
@@ -2467,7 +2469,6 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
   static async _deleteEffect(event, target) {
     const effect = this._getEffect(target);
     // Bound cursed item: players can't strip its effects (same rule as unequip / delete)
-    const { EquipmentHelper } = globalThis.vagabond.utils;
     if (EquipmentHelper.isCurseLocked(this.item)) return EquipmentHelper.warnCurseLocked(this.item);
     await effect.delete();
   }
@@ -2991,7 +2992,6 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
     const name = this.item.name;
 
     // Create countdown dice
-    const { CountdownDice } = globalThis.vagabond.documents;
     await CountdownDice.create({
       name: name,
       diceType: diceType,
@@ -3384,7 +3384,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
 
   /** GM eye: disguised → reveal (chat card, Shift = silent); revealed → disguise again with the last disguise. */
   static _onToggleDisguise(event) {
-    ItemDisguise.toggle(this.document, { announce: !event.shiftKey });
+    ItemDisguiseApp.toggle(this.document, { announce: !event.shiftKey });
   }
 
 
@@ -3400,7 +3400,6 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
       modal: true,
     });
     if (!confirmed) return;
-    const { VagabondImbueHelper } = await import('../helpers/imbue-helper.mjs');
     await VagabondImbueHelper.clearImbue(this.document);
   }
 
@@ -3581,7 +3580,6 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
           icon: 'fas fa-comment',
           enabled: !!actor,
           action: async () => {
-            const { VagabondChatCard } = await import('../helpers/chat-card.mjs');
             await VagabondChatCard.gearUse(actor, doc);
           },
         },

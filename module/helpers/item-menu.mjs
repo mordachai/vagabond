@@ -1,9 +1,12 @@
 import { activateHandItem } from './hand-item-activation.mjs';
 import { isStackableZeroSlot } from './stack-helper.mjs';
-import { SpellHandler } from '../sheets/handlers/spell-handler.mjs';
+import { FocusLink } from './focus-link.mjs';
 import { SpellSurface } from './spell-surface.mjs';
 import { ConjureHelper } from './conjure-helper.mjs';
 import { ItemDisguise } from './item-disguise.mjs';
+import { ItemDisguiseApp } from '../applications/item-disguise-app.mjs';
+import { EquipmentHelper } from './equipment-helper.mjs';
+import { VagabondChatCard } from './chat-card.mjs';
 
 /**
  * Whether an item has a meaningful "Use" action. Weapons always do (Use
@@ -13,7 +16,6 @@ import { ItemDisguise } from './item-disguise.mjs';
  * @returns {boolean}
  */
 export function itemHasUse(item) {
-  const { EquipmentHelper } = globalThis.vagabond.utils;
   if (EquipmentHelper.isWeapon(item)) return true;
   if (EquipmentHelper.isArmor(item)) return false;
   if (EquipmentHelper.isGear(item)) {
@@ -35,7 +37,6 @@ export function itemHasUse(item) {
  * @returns {object[]} ContextMenuHelper item configs
  */
 export function buildSpellMenuItems({ actor, spell, event, spellHandler }) {
-  const { VagabondChatCard } = globalThis.vagabond.utils;
   const L = (k) => game.i18n.localize(k);
   const isFavorite = !!spell.system.favorite;
   const isFocused = (actor.system.focus?.spellIds ?? []).includes(spell.id);
@@ -50,7 +51,7 @@ export function buildSpellMenuItems({ actor, spell, event, spellHandler }) {
       label: L(isFocused ? 'VAGABOND.ContextMenu.StopFocusing' : 'VAGABOND.ContextMenu.Focus'),
       icon: 'fas fa-star-christmas',
       ...(isFocused ? { cssClass: 'is-focus' } : {}),
-      action: () => SpellHandler.setFocus(actor, spell.id, !isFocused),
+      action: () => FocusLink.setFocus(actor, spell.id, !isFocused),
     },
     // Dismiss: only while this Spell has something on the map (Surface areas, Conjured Beings / Items)
     ...((SpellSurface.hasActive(actor, spell.id) || ConjureHelper.hasActive(actor, spell.id)) ? [{
@@ -98,7 +99,6 @@ export function buildSpellMenuItems({ actor, spell, event, spellHandler }) {
  * @returns {object[]} ContextMenuHelper item configs
  */
 export function buildItemMenuItems({ actor, item, event, rollHandler, equipmentHandler, forceUse = false, onChange }) {
-  const { EquipmentHelper, VagabondChatCard } = globalThis.vagabond.utils;
   const L = (k) => game.i18n.localize(k);
   const activate = (opts = {}) => activateHandItem({ actor, item, event, rollHandler, ...opts });
   const items = [];
@@ -247,7 +247,7 @@ export function buildItemMenuItems({ actor, item, event, rollHandler, equipmentH
     items.push({
       label: L(on ? 'VAGABOND.Item.Disguise.Reveal' : 'VAGABOND.Item.Disguise.Disguise'),
       icon: `fa-solid ${on ? 'fa-eye' : 'fa-eye-slash'}`,
-      action: () => ItemDisguise.toggle(item),
+      action: () => ItemDisguiseApp.toggle(item),
     });
   }
 

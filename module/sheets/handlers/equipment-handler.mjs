@@ -1,3 +1,4 @@
+import { EquipmentHelper } from '../../helpers/equipment-helper.mjs';
 /**
  * Handler for equipment state management.
  * Manages equipment/unequipment and grip toggles for weapons and armor.
@@ -33,7 +34,6 @@ export class EquipmentHandler {
     const weapon = this.actor.items.get(itemId);
 
     // Import equipment helper
-    const { EquipmentHelper } = globalThis.vagabond.utils;
 
     // Check if this is a weapon
     if (!EquipmentHelper.isWeapon(weapon)) {
@@ -102,7 +102,6 @@ export class EquipmentHandler {
     const weapon = this.actor.items.get(itemId);
 
     // Import equipment helper
-    const { EquipmentHelper } = globalThis.vagabond.utils;
 
     // Check if this is a versatile weapon
     if (!EquipmentHelper.isVersatileWeapon(weapon)) {
@@ -148,7 +147,6 @@ export class EquipmentHandler {
     const armor = this.actor.items.get(itemId);
 
     // Import equipment helper
-    const { EquipmentHelper } = globalThis.vagabond.utils;
 
     // Check if this is armor
     if (!EquipmentHelper.isArmor(armor)) {
@@ -177,7 +175,6 @@ export class EquipmentHandler {
     }
 
     // Import equipment helper
-    const { EquipmentHelper } = globalThis.vagabond.utils;
 
     const isEquipped = EquipmentHelper.isEquipped(item);
     const newState = isEquipped ? 'unequipped' : EquipmentHelper.defaultEquipState(item);

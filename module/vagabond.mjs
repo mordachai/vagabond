@@ -76,8 +76,11 @@ import { VagabondDamagePipeline } from './helpers/damage-pipeline.mjs';
 import { StatusHelper } from './helpers/status-helper.mjs';
 import { RageHelper } from './helpers/rage-helper.mjs';
 import { NpcRules } from './helpers/npc-rules.mjs';
+import { NpcTurnRules } from './helpers/npc-turn-rules.mjs';
 import { AlchemyHelper } from './helpers/crafting/alchemy-helper.mjs';
 import { BardHelper } from './helpers/bard-helper.mjs';
+import { WardHelper } from './helpers/ward-helper.mjs';
+import { VagabondImbueHelper } from './helpers/imbue-helper.mjs';
 import { DancerHelper } from './helpers/dancer-helper.mjs';
 import { FighterHelper } from './helpers/fighter-helper.mjs';
 import { GunslingerHelper } from './helpers/gunslinger-helper.mjs';
@@ -133,6 +136,7 @@ import { registerSceneControls } from './hooks/scene-controls.mjs';
 import { registerSocketActions } from './hooks/socket-actions.mjs';
 import { registerReadyStartup } from './hooks/ready-startup.mjs';
 import { isActiveGM } from './helpers/gm-relay.mjs';
+import { MixHelper } from './helpers/crafting/mix-helper.mjs';
 
 const collections = foundry.documents.collections;
 const sheets = foundry.applications.sheets;
@@ -772,6 +776,10 @@ SorcererHelper.registerHooks();
 WitchHelper.registerHooks();
 // Wizard Archwizard: the temporary Spell removes itself once its Cast is resolved
 WizardHelper.registerHooks();
+// Bard Overtuned on chat-button Saves, Ward upcast, Imbue delivery (FeatureRules answers, no Foundry hooks)
+BardHelper.registerHooks();
+WardHelper.registerHooks();
+VagabondImbueHelper.registerHooks();
 
 Hooks.on('updateJournalEntry', (journal, changes) => {
   const pc = foundry.utils.getProperty(changes, 'flags.vagabond.progressClock');
@@ -827,21 +835,21 @@ registerFocusStatusHooks();
 
 registerDeadTokenMarker();
 
-// Statblock rules (module/helpers/npc-rules.mjs): HP floor (Zombie / Grace), Sunlight harm (Nightwalker), turn-start regen / burn.
+// Statblock rules (helpers/npc-rules.mjs + npc-turn-rules.mjs): HP floor (Zombie / Grace), Sunlight harm (Nightwalker), turn-start regen / burn.
 Hooks.on('vagabond.calculateFinalDamage', (ctx) => NpcRules.applyHpFloor(ctx));
 for (const hookName of ['createActiveEffect', 'deleteActiveEffect']) {
   Hooks.on(hookName, (effect) => {
-    if (effect.statuses?.has('sunlit')) NpcRules.queueSunlightSync(effect.parent);
+    if (effect.statuses?.has('sunlit')) NpcTurnRules.queueSunlightSync(effect.parent);
   });
 }
 Hooks.on('updateActor', (actor, changes) => {
-  if (foundry.utils.hasProperty(changes, 'system.sunlightHarm')) NpcRules.queueSunlightSync(actor);
+  if (foundry.utils.hasProperty(changes, 'system.sunlightHarm')) NpcTurnRules.queueSunlightSync(actor);
 });
 Hooks.on('updateCombat', (combat, changed) => {
   if (!isActiveGM()) return;
   if (changed.turn === undefined && changed.round === undefined) return;
   const actor = combat.combatant?.actor;
-  if (actor) NpcRules.onTurnStart(actor).catch((err) => console.warn('Vagabond | NPC turn-start rules failed:', err));
+  if (actor) NpcTurnRules.onTurnStart(actor).catch((err) => console.warn('Vagabond | NPC turn-start rules failed:', err));
 });
 
 
@@ -956,7 +964,7 @@ Hooks.on('vagabond.postD20Roll', (ctx) => {
 });
 
 // Overtuned (Bard, L2/6/10): a Virtuoso Favor die that lifts a d20 past the threshold grants the
-// Bard 1 Luck. Chat-button saves call BardHelper.onCheckRolled from `_rollSave` directly.
+// Bard 1 Luck. Chat-button saves reach it through FeatureRules `checkRolled` (`_rollSave`).
 Hooks.on('vagabond.postD20Roll', (ctx) => {
   const kind = { weapon: 'attack', spell: 'cast', save: 'save' }[ctx?.rollType];
   // Overtuned reads the benefit first, then the benefit is spent (consumeOn effects)
@@ -977,7 +985,7 @@ Hooks.on('vagabond.postD20Roll', (ctx) => {
   if ((ctx.roll?.total ?? 0) - (ctx.difficulty ?? 0) < margin) return;
   const newCount = (actor.system.studiedDice || 0) + 1;
   actor.update({ 'system.studiedDice': newCount }).then(() => {
-    import('./helpers/chat-card.mjs').then(({ VagabondChatCard }) => VagabondChatCard.studiedDieGain(actor, newCount));
+    VagabondChatCard.studiedDieGain(actor, newCount);
   });
 });
 
@@ -991,11 +999,11 @@ Hooks.on('updateCombat', (combat, changed) => {
   if (changed.turn === undefined && changed.round === undefined) return;
   const actor = combat.combatant?.actor;
   if (!actor) return;
-  import('./helpers/crafting/mix-helper.mjs').then(({ MixHelper }) => MixHelper.expireForTurnStart(actor, combat));
+  MixHelper.expireForTurnStart(actor, combat);
 });
 Hooks.on('vagabond.actorActed', (actor, { itemId }) => {
   if (!actor) return;
-  import('./helpers/crafting/mix-helper.mjs').then(({ MixHelper }) => MixHelper.expireOnNextAction(actor, itemId));
+  MixHelper.expireOnNextAction(actor, itemId);
 });
 
 // Chat card buttons (renderChatMessageHTML)

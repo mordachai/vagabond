@@ -2,6 +2,10 @@ import { VagabondDamagePipeline } from './damage-pipeline.mjs';
 import { NpcRules } from './npc-rules.mjs';
 import { FocusLink } from './focus-link.mjs';
 import { GMRelay } from './gm-relay.mjs';
+import { FeatureRules } from './feature-rules.mjs';
+import { VagabondRollBuilder } from './roll-builder.mjs';
+import { consumeUsedEffects } from './use-effects.mjs';
+import { CountdownDice } from '../documents/countdown-dice.mjs';
 
 /**
  * StatusHelper — central logic for on-hit status effect application.
@@ -285,7 +289,6 @@ export class StatusHelper {
    * @returns {Promise<{success: boolean, roll: Roll, total: number, difficulty: number}>}
    */
   static async _rollStatusSave(actor, entry, favored) {
-    const { VagabondRollBuilder } = await import('./roll-builder.mjs');
 
     // Determine favor/hinder: actor's system state + resistance as one net-count merge
     const systemState = actor.system.favorHinder || 'none';
@@ -301,9 +304,7 @@ export class StatusHelper {
     if (statusSaveBonus !== 0) formula += ` + ${statusSaveBonus}`;
     const roll = await VagabondRollBuilder.evaluateRoll(formula, actor, effectiveFavorHinder);
 
-    const { BardHelper } = await import('./bard-helper.mjs');
-    await BardHelper.onCheckRolled(actor, roll, 'save');
-    const { consumeUsedEffects } = await import('./use-effects.mjs');
+    await FeatureRules.run('checkRolled', actor, roll, 'save');
     await consumeUsedEffects(actor, 'save');
 
     const difficulty = actor.system.saves?.[entry.saveType]?.difficulty ?? 10;
@@ -337,7 +338,6 @@ export class StatusHelper {
     // 'focusing' duration means the status lasts while the caster is focusing — no countdown die
     if (entry.duration === 'focusing') return;
 
-    const { CountdownDice } = await import('../documents/countdown-dice.mjs');
 
     // 'cd4' → 'd4', 'cd20' → 'd20'
     const diceType = entry.duration.replace(/^c/i, '');

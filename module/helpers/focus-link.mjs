@@ -10,7 +10,8 @@
  * The Cast's `held` rides the Cast card: `spellCast.held` (card flag / Save-card data attrs) for the status
  * path (StatusHelper.applyStatus stamps the status effect of entries carrying `focusLink`) and the macro scope
  * key `focusHeld` for hit macros (`capture` stamps every effect the macro creates; built-in handlers stamp
- * their own with `held`). Dependency-free: item-macro, status-helper and damage-helper import it.
+ * their own with `held`). Also the Focus writer (`setFocus` / `clearFocus` / `commitCastFocus`).
+ * Dependency-free: item-macro, status-helper, damage-helper, spell-handler and the Focus features import it.
  */
 export class FocusLink {
 
@@ -89,5 +90,64 @@ export class FocusLink {
   static async stampStatus(actor, statusId, stamp) {
     const effect = actor?.effects?.find(e => e.statuses?.has(statusId));
     if (effect) await this.stampEffects([effect], stamp);
+  }
+
+  /**
+   * Start or stop Focusing on a Spell — the ONE writer of `system.focus.spellIds` (sheet star, spell context
+   * menu on sheet + HUD, Cast dialog, Focus Mana card, Polymorph). Keeps the `focusing` status in step.
+   * Dropping a Spell clears what its Casts applied (SpellTrackerHelper hook → `vagabond.focusDropped`: Trackers, Polymorph forms…).
+   * Book: "Focusing lets an effect stay active until you drop it … or Focus on another effect": with every
+   * Focus taken (`focus.max`, 1 + Manifold Mind etc.), starting a new one drops the oldest.
+   * @param {Actor} actor
+   * @param {string} spellId
+   * @param {boolean} on
+   * @param {{restart?: boolean}} [options]  restart: already Focused on it → end that Focus first (a new Cast)
+   * @returns {Promise<boolean>}
+   */
+  static async setFocus(actor, spellId, on, { restart = false } = {}) {
+    const current = actor.system.focus?.spellIds || [];
+    const was = current.includes(spellId);
+    if (on === was && !(on && restart)) return true;
+    let next = current.filter(id => id !== spellId);
+    if (on) {
+      const focusMax = Math.max(1, actor.system.focus?.max ?? 1);
+      if (next.length >= focusMax) next = next.slice(next.length - focusMax + 1);
+      // Ends the earlier Cast (and any dropped Focus) before the new one starts
+      if (next.length !== current.length) await actor.update({ 'system.focus.spellIds': next });
+      next = [...next, spellId];
+    }
+    await actor.update({ 'system.focus.spellIds': next });
+
+    // Sync the "focusing" status effect with focus state
+    const isFocusing = next.length > 0;
+    if (isFocusing !== actor.statuses.has('focusing')) {
+      await actor.toggleStatusEffect('focusing', { active: isFocusing });
+    }
+    ui.combat?.render(false);
+    return true;
+  }
+
+  /**
+   * Stop every Focus (the Focusing status was removed by hand: token HUD, effects list).
+   * @param {Actor} actor
+   */
+  static async clearFocus(actor) {
+    if (actor.system.focus?.spellIds?.length) await actor.update({ 'system.focus.spellIds': [] });
+    if (actor.statuses.has('focusing')) await actor.toggleStatusEffect('focusing', { active: false });
+    ui.combat?.render(false);
+  }
+
+  /**
+   * The Cast dialog's Focus switch, applied when the Cast resolves (`_executeCast`). Off → the Focus on it ends.
+   * On → only a successful Cast Focuses; Focusing on it again ends the earlier Cast first (another Polymorph
+   * reverts the last one); a Crit of a "Crit: No Focus" Spell (`critNoFocus`) needs no Focus and ends none.
+   * @param {Actor} actor
+   * @param {Item} spell
+   * @param {{focusOn: boolean, isSuccess: boolean, isCritical: boolean}} cast
+   */
+  static async commitCastFocus(actor, spell, { focusOn, isSuccess, isCritical }) {
+    if (!focusOn) return this.setFocus(actor, spell.id, false);
+    if (!isSuccess || (isCritical && spell.system.critNoFocus)) return;
+    return this.setFocus(actor, spell.id, true, { restart: true });
   }
 }

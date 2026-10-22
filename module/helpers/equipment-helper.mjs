@@ -1,4 +1,4 @@
-import { VagabondDamageHelper } from './damage-helper.mjs';
+import { VagabondDamagePipeline } from './damage-pipeline.mjs';
 import { isStackableZeroSlot } from './stack-helper.mjs';
 import { isActiveGM } from './gm-relay.mjs';
 
@@ -169,7 +169,7 @@ export class EquipmentHelper {
     if (!this.isAlchemical(item)) return false;
     const { damageType, damageAmount } = item.system;
     if (!damageType || damageType === '-' || !damageAmount) return false;
-    return !VagabondDamageHelper.isRestorativeDamageType(damageType);
+    return !VagabondDamagePipeline.isRestorativeDamageType(damageType);
   }
 
   /** Skills a thrown Alchemical Item can attack with (Melee, Finesse or Craft). */

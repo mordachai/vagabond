@@ -1,4 +1,5 @@
 import { runMacroFromButton } from './item-macro.mjs';
+import { EquipmentHelper } from './equipment-helper.mjs';
 
 /**
  * Unified "Use" behavior for hand-occupying equipment: weapons, and any
@@ -27,7 +28,6 @@ import { runMacroFromButton } from './item-macro.mjs';
  *   of the throw attack.
  */
 export async function activateHandItem({ actor, item, event, rollHandler, mode = 'use', skillKey = null, noAttack = false }) {
-  const { EquipmentHelper } = globalThis.vagabond.utils;
 
   if (mode === 'throw' && EquipmentHelper.isThrowable(item)) {
     const qty = item.system.quantity ?? 0;

@@ -2,6 +2,7 @@ import { classFeatureText } from './feature-text.mjs';
 import { combatRollData } from './rule-rolldata.mjs';
 import { VagabondRollBuilder } from './roll-builder.mjs';
 import { CountdownDice } from '../documents/countdown-dice.mjs';
+import { VagabondChatCard } from './chat-card.mjs';
 
 /**
  * Sorcerer — Twinned Spell (optional automation) and Overpowered (feature button).
@@ -129,7 +130,6 @@ export class SorcererHelper {
       ownership: Object.fromEntries([['default', 0], ...game.users.filter(u => actor.testUserPermission(u, 'OWNER')).map(u => [u.id, 3])]),
     });
 
-    const { VagabondChatCard } = await import('./chat-card.mjs');
     const text = classFeatureText(actor, { command: 'sorcerer.overpowered', name: 'Overpowered' });
     await VagabondChatCard.featureCard(actor, {
       title: game.i18n.localize('VAGABOND.Sorcerer.OverpoweredTitle'),
