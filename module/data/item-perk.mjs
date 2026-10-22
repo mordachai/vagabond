@@ -1,6 +1,11 @@
 import VagabondItemBase from './base-item.mjs';
 import { featureActionSchema } from './feature-action.mjs';
 
+/**
+ * Perk item data model: structured prerequisites (Stats, trained Skills, Spells, resources) checked by the
+ * Character Builder / Level-Up dialog, an optional action button, and `choiceConfig` for Perks that ask the player
+ * (perk-choice-dialog).
+ */
 export default class VagabondPerk extends VagabondItemBase {
   static LOCALIZATION_PREFIXES = [
     'VAGABOND.Item.base',

@@ -2,6 +2,11 @@ import VagabondItemBase from './base-item.mjs';
 import { featureActionSchema } from './feature-action.mjs';
 import { levelSchemaMax } from '../helpers/homebrew-config.mjs';
 
+/**
+ * Class item data model: spellcasting (Mana multiplier, casting Stat, Mana Skill — no `choices:`, homebrew-driven),
+ * key Stats, Skill grants, `levelFeatures` (book text + optional action button + grants) and `levelSpells`.
+ * The actor reads it in `actor-character.mjs` `prepareBaseData()`.
+ */
 export default class VagabondClass extends VagabondItemBase {
   static LOCALIZATION_PREFIXES = [
     'VAGABOND.Item.base',

@@ -10,6 +10,10 @@ import { WorkbenchApp } from '../applications/workbench-app.mjs';
 import { FeatureAction } from './feature-action.mjs';
 import { EquipmentHelper } from './equipment-helper.mjs';
 
+/**
+ * Alchemist's Alchemy lab — one shared core (Catalyze / Mix / Library stations) rendered by the character sheet's
+ * Alchemy tab and the Character HUD's Alchemy panel; the hosting-app contract is on `AlchemyLab`.
+ */
 /** Compendium doc id of the Deft Hands perk (`packs/_source/perks/Deft_Hands_*.json`). */
 const DEFT_HANDS_ID = 'vtNfeEdWNUWvaeRM';
 

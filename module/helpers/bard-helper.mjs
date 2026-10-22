@@ -6,6 +6,9 @@ import { NoticeChatCards } from './notice-chat-cards.mjs';
 import { buildMacroButtonHTML } from './item-macro.mjs';
 import { RollHandler } from '../sheets/handlers/roll-handler.mjs';
 
+/**
+ * Bard — Virtuoso, Overtuned, Climax (optional automation + feature button); details on `BardHelper`.
+ */
 /** d20 check categories each Virtuoso benefit's Favor die applies to (Overtuned reads these). */
 const BOON_CHECKS = { inspiration: [], resolve: ['save'], valor: ['attack', 'cast'] };
 

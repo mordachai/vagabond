@@ -4,6 +4,12 @@ import { armorWornRollData, combatRollData } from '../helpers/rule-rolldata.mjs'
 import { AutomationMode } from '../helpers/automation-mode.mjs';
 import { xpRequiredForLevel } from '../helpers/homebrew-config.mjs';
 
+/**
+ * Character data model — Stats, Skills / Saves (from `CONFIG.VAGABOND.homebrew`), combat values, Mana, inventory
+ * Slots and the 56+ formula bonus fields. `prepareBaseData()` resets the bonus arrays and loads Class defaults before
+ * Active Effects apply; `prepareDerivedData()` sums them (`_evaluateFormulaField`, `Roll.safeEval`, no dice) after
+ * `AutomationMode.apply` and the Relic boost.
+ */
 export default class VagabondCharacter extends VagabondActorBase {
   static LOCALIZATION_PREFIXES = [
     ...super.LOCALIZATION_PREFIXES,

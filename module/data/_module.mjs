@@ -1,3 +1,6 @@
+/**
+ * Barrel of every Actor / Item TypeDataModel, registered in `CONFIG.Actor.dataModels` / `CONFIG.Item.dataModels` by vagabond.mjs `init`.
+ */
 // Export Actors
 export { default as VagabondActorBase } from './base-actor.mjs';
 export { default as VagabondCharacter } from './actor-character.mjs';

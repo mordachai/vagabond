@@ -1,3 +1,7 @@
+/**
+ * Base Item data model: `description` for every item type, and `disguiseField()` — the Item Disguise schema
+ * equipment and containers add (see `helpers/item-disguise.mjs`).
+ */
 export default class VagabondItemBase extends foundry.abstract
   .TypeDataModel {
   static defineSchema() {

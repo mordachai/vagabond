@@ -1,5 +1,10 @@
 import VagabondActorBase from './base-actor.mjs';
 
+/**
+ * Party actor data model: member uuids, shared notes, transports with their riders and the active one,
+ * Travel (navigator, Pace, Hazardous, Shifts travelled), downtime Shifts to grant and the party treasury.
+ * The sheet is `sheets/party-sheet.mjs`; coins move through `TradeHelper` / `CurrencyHelper`.
+ */
 export default class VagabondParty extends VagabondActorBase {
   static LOCALIZATION_PREFIXES = [
     ...super.LOCALIZATION_PREFIXES,

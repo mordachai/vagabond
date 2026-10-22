@@ -3,6 +3,10 @@ import { VagabondRollBuilder } from './roll-builder.mjs';
 import { MaterialsHelper } from './materials-helper.mjs';
 import { CurrencyHelper } from './currency-helper.mjs';
 
+/**
+ * Downtime state and rules (book "Downtime") on `flags.vagabond.downtime`: planned Shifts, the Shift log, Rest and
+ * Breather; `DowntimeApp` is only a view over it. Details on `DowntimeHelper`.
+ */
 /** Gear-pack Ration (Alpha 3) — created when an actor gains Rations and holds none. */
 const RATION_ID = 'BhUNyj2nflyVUPIo';
 

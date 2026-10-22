@@ -1,5 +1,10 @@
 import { VAGABOND_HOMEBREW_DEFAULTS } from './homebrew-config.mjs';
 
+/**
+ * `CONFIG.VAGABOND` — the single source of game data (equipment / damage / status / delivery types, sizes, statuses,
+ * weapon properties, NPC and crafting tables…). Stats, Skills, Saves and anything homebrew-driven are rebuilt at
+ * runtime by `applyRuntimeHomebrewOverrides()` (`homebrew-config.mjs`): read them from `CONFIG.VAGABOND.homebrew.*`.
+ */
 export const VAGABOND = {};
 
 /**

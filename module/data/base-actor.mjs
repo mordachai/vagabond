@@ -1,3 +1,7 @@
+/**
+ * Base Actor data model (every actor type): HP with its formula `bonus` array, plus the fields Active Effects modify on characters AND NPCs alike
+ * (`speedModifier`, `saveBonusDice`, `weaponsCountAs`), reset in `prepareBaseData()` so effects never accumulate.
+ */
 export default class VagabondActorBase extends foundry.abstract
   .TypeDataModel {
   static LOCALIZATION_PREFIXES = ["VAGABOND.Actor.base"];

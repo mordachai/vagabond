@@ -9,6 +9,10 @@ import { EquipmentHelper } from './equipment-helper.mjs';
 import { ItemChatCards } from './item-chat-cards.mjs';
 
 /**
+ * Item and Spell context-menu entries shared by the actor sheet and the Character HUD (Use, Throw, Quantity,
+ * Stack, Cast, Focus, Favorite, Send to Chat…).
+ */
+/**
  * Whether an item has a meaningful "Use" action. Weapons always do (Use
  * auto-equips); armor never does; gear only when consumable or hand-occupying
  * (e.g. a torch — Use auto-equips it); alchemicals, relics, etc. always do.

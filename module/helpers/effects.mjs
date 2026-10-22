@@ -1,5 +1,10 @@
 import { StatusHelper } from './status-helper.mjs';
 
+/**
+ * Active Effect helpers for the sheets and HUDs: the effects list view (`prepareEffectsView`), descriptions, on-use
+ * switch semantics (`toggleBlockerOf`), the HUD switch menu and `toggleActorEffect` — the single choke point for
+ * turning an effect on / off (a status is removed, never disabled).
+ */
 /** Legacy numeric perk `choiceConfig.effectMode` (v13 ACTIVE_EFFECT_MODES order) → v14 change type. */
 const LEGACY_MODE_TYPES = ['custom', 'multiply', 'add', 'downgrade', 'upgrade', 'override'];
 

@@ -18,6 +18,10 @@ import { GMRelay } from '../helpers/gm-relay.mjs';
 import { LevelUpDialog } from '../applications/level-up-dialog.mjs';
 import { DowntimeApp } from '../applications/downtime-app.mjs';
 
+/**
+ * Party actor sheet — member cards, transports and Travel, the treasury and members' inventories, Notes and
+ * Effects; coins and items move through `TradeHelper`. Its compact view is `PartyCompactView` (GM).
+ */
 /** Inventory tab sections, in display order (containers and unknown types fall under `gear`). */
 const INVENTORY_GROUPS = ['weapon', 'armor', 'alchemical', 'relic', 'gear'];
 

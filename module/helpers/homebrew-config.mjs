@@ -1,4 +1,9 @@
 /**
+ * Homebrew: the defaults (book rules), loading the `homebrewConfig` world setting at `init`, and
+ * `applyRuntimeHomebrewOverrides()` which rebuilds Stats / Skills / Saves / delivery and damage types in
+ * `CONFIG.VAGABOND`. XP and Level caps go through `xpRequiredForLevel` / `levelTableCap` / `levelSchemaMax`.
+ */
+/**
  * Default homebrew configuration.
  * Replicates current system behavior exactly — nothing changes until a GM customizes.
  */

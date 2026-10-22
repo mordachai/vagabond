@@ -9,6 +9,12 @@ import { PackSync } from '../helpers/pack-sync.mjs';
 import { PackSyncReport } from './pack-sync-report.mjs';
 
 const { api } = foundry.applications;
+
+/**
+ * Settings Hub — the one window for every system setting (Foundry's settings tab only shows its
+ * menu button). Rows come from `settings/settings-layout.mjs`, storage from `register-settings.mjs`;
+ * big config apps (homebrew, crafting, Spell FX, DSN, compendiums) open from launcher rows.
+ */
 const NS = 'vagabond';
 
 /** Big standalone config windows the hub opens from a launcher row. */

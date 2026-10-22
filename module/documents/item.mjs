@@ -16,7 +16,8 @@ import { VagabondRollBuilder } from '../helpers/roll-builder.mjs';
 import { VagabondDamagePipeline } from '../helpers/damage-pipeline.mjs';
 
 /**
- * Extend the basic Item with some very simple modifications.
+ * Item document for every item type: live `{token}` names, "This item" effects applied to the item itself,
+ * roll data (with `clocks`), grants on add / revoke on remove.
  * @extends {Item}
  */
 export class VagabondItem extends Item {

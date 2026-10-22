@@ -27,6 +27,11 @@ import { ContextMenuHelper } from '../helpers/context-menu-helper.mjs';
 import { DowntimeApp } from './downtime-app.mjs';
 import { LevelUpDialog } from './level-up-dialog.mjs';
 
+/**
+ * Character HUD — floating, frameless compact view of a player character that reuses the sheet's roll / cast /
+ * resource handlers (it only exposes `.actor` and `.element`). One per token; swaps with the sheet via `becomeHud` /
+ * `expandSheet`. Details on `VagabondCharacterHud`.
+ */
 /** Inventory tab groupings, in display order, keyed by equipmentType. */
 const INV_GROUPS = [
   { key: 'weapon', label: 'VAGABOND.Hud.InvGroups.weapon' },

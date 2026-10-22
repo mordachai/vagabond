@@ -139,6 +139,11 @@ import { registerReadyStartup } from './hooks/ready-startup.mjs';
 import { isActiveGM } from './helpers/gm-relay.mjs';
 import { MixHelper } from './helpers/crafting/mix-helper.mjs';
 
+/**
+ * System entry point. `init`: document classes, data models, sheets, `CONFIG.VAGABOND`, homebrew, settings, GM relay
+ * queries, keybindings; then every module's `registerHooks()` / `registerX()` in registration order (hook order
+ * matters: add a new call where its hooks belong, not at the end). Hooks are never async.
+ */
 const collections = foundry.documents.collections;
 const sheets = foundry.applications.sheets;
 

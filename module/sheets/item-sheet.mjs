@@ -17,10 +17,16 @@ import { ItemSheetClassEditor } from './item-sheet-class.mjs';
 import { ItemSheetEquipment } from './item-sheet-equipment.mjs';
 
 const { api, sheets } = foundry.applications;
+
+/**
+ * Item sheet (every item type) — render, tabs, drag/drop, effects, lock and the `actions` map; the handlers live
+ * in the `item-sheet-*.mjs` job files. Every update re-renders: `_preRender` / `_onRender` keep scroll and `<details>`
+ * state, trait / feature arrays are rebuilt with `_collectArrayFromDOM` (rules/item-sheet.md).
+ */
 const DragDrop = foundry.applications.ux.DragDrop;
 
 /**
- * Extend the basic ItemSheet with some very simple modifications
+ * Item sheet for every item type.
  * @extends {ItemSheetV2}
  */
 export class VagabondItemSheet extends api.HandlebarsApplicationMixin(

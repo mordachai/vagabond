@@ -3,7 +3,8 @@ import { HunterHelper } from '../helpers/hunter-helper.mjs';
 import { TokenPortrait } from '../helpers/token-portrait.mjs';
 
 /**
- * Extend the base Actor document by defining a custom roll data structure which is ideal for the Simple system.
+ * Actor document for every actor type: creation defaults (prototype token, circle portrait) and roll data
+ * (`getRollData` = the DataModel's data + the `clocks` map; `getRollDataWithItemEffects` adds on-use effects).
  * @extends {Actor}
  */
 export class VagabondActor extends Actor {

@@ -1,6 +1,11 @@
 import VagabondItemBase from './base-item.mjs';
 import { VagabondTextParser } from '../helpers/text-parser.mjs';
 
+/**
+ * Spell item data model: damage type / die, crits, dice scaling, Targets (Beings / Objects), Focus and Focus Mana,
+ * Ward upcast, Conjure and Surface rules, FX school, caused statuses and hit macros — the per-Spell switches the shared
+ * spell helpers read (no per-Spell code). Cast flow: `applications/spell-cast-dialog.mjs`.
+ */
 export default class VagabondSpell extends VagabondItemBase {
   static LOCALIZATION_PREFIXES = [
     'VAGABOND.Item.base',

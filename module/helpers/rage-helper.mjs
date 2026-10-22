@@ -5,6 +5,9 @@ import { RollExpiry } from './roll-expiry.mjs';
 import { isActiveGM } from './gm-relay.mjs';
 import { NoticeChatCards } from './notice-chat-cards.mjs';
 
+/**
+ * Barbarian Rage auto-Berserk (optional, inert without the "Rage: Auto-Berserk" effect) — details on `RageHelper`.
+ */
 const BERSERK = 'berserk';
 
 /**

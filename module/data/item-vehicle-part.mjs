@@ -1,5 +1,9 @@
 import VagabondItemBase from './base-item.mjs';
 
+/**
+ * Vehicle Part item data model — one part of a Construct: own HP and Armor, crew (actor uuid + weapon Skill each)
+ * and the part's attack (modifier, damage formula, type). HP clicker: `helpers/part-hp-clicker.mjs`.
+ */
 export default class VagabondVehiclePart extends VagabondItemBase {
   static LOCALIZATION_PREFIXES = [
     'VAGABOND.Item.VehiclePart',

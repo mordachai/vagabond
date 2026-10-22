@@ -5,6 +5,12 @@ import { NoticeChatCards } from '../helpers/notice-chat-cards.mjs';
 
 const { api } = foundry.applications;
 
+/**
+ * Ongoing panel — one row per Character / NPC on the scene's tokens with its active statuses and
+ * the countdown dice linked to it (the dice's `flags.name` shown as-is). Singleton, toggled via
+ * `Hooks.callAll('vagabond.toggleOngoingPanel')` (scene tool, ui-panel-hooks); re-renders on
+ * Foundry hooks, debounced. Reference implementation for live panels (rules/applications.md).
+ */
 export class OngoingPanel extends api.HandlebarsApplicationMixin(api.ApplicationV2) {
   static #instance = null;
   #hookIds = [];

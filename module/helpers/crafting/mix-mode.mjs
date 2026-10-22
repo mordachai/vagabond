@@ -2,6 +2,10 @@ import { VagabondItem } from '../../documents/item.mjs';
 import { VagabondChatCard } from '../chat-card.mjs';
 import { MixHelper } from './mix-helper.mjs';
 
+/**
+ * Mix craft mode (Alchemist L6): two Alchemical Items + a Studied die → one Mix item, as a
+ * `CONFIG.VAGABOND.craftModes` entry. The rules live in `MixHelper`.
+ */
 /** An owned item usable as a Mix ingredient (see MixHelper.isMixableItem), or null. */
 function mixable(actor, itemId) {
   const item = actor?.items?.get(itemId);

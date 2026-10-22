@@ -1,5 +1,9 @@
 import VagabondActorBase from './base-actor.mjs';
 
+/**
+ * Construct actor data model — Mounts, Vehicles, Vessels and Structures (`kind`, `CONFIG.VAGABOND.constructKinds`)
+ * with their Speeds; parts are `vehiclePart` items. Sheet: `sheets/construct-sheet.mjs`.
+ */
 export default class VagabondConstruct extends VagabondActorBase {
   static LOCALIZATION_PREFIXES = [
     ...super.LOCALIZATION_PREFIXES,

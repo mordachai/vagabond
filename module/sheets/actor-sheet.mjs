@@ -25,11 +25,10 @@ import { ActorSheetListeners } from './actor-sheet-listeners.mjs';
 const { api, sheets } = foundry.applications;
 
 /**
- * Base ActorSheet for Vagabond system
- * Extended by VagabondCharacterSheet and VagabondNPCSheet
- *
- * REFACTORED: Phase 4 - Most action handlers now delegate to specialized handlers
- * initialized in child classes (spellHandler, rollHandler, equipmentHandler, etc.)
+ * Base actor sheet — render, tabs, context, drop dispatch and the `actions` map, extended by the Character,
+ * NPC, Construct and Party sheets (most handlers live in `sheets/handlers/`, set up by each subclass).
+ * Actions shared with the HUDs are `ActorActions`, drops `ActorDrop`, effects `ActorSheetEffects`, DOM listeners
+ * `ActorSheetListeners`; the HUDs import those, never this file (rules/actor-sheet.md).
  *
  * @extends {ActorSheetV2}
  */

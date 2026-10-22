@@ -1,6 +1,10 @@
 import VagabondItemBase from './base-item.mjs';
 import { featureActionSchema } from './feature-action.mjs';
 
+/**
+ * Ancestry item data model: size, being type and `traits` (each may carry an action button, granted items and
+ * Effect Choices — see `helpers/granted-items.mjs`, `helpers/effect-choices.mjs`). `locked` = the read view.
+ */
 export default class VagabondAncestry extends VagabondItemBase {
   static LOCALIZATION_PREFIXES = [
     'VAGABOND.Item.base',

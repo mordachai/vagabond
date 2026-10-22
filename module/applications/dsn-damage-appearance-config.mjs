@@ -2,6 +2,12 @@ import { VagabondDiceAppearance } from '../helpers/dice-appearance.mjs';
 
 const { api } = foundry.applications;
 
+/**
+ * Dice So Nice damage-dice appearance — GM form (Settings Hub launcher) for the per-damage-type
+ * colors, texture, material and colorset, stored as overrides of `CONFIG.VAGABOND.damageTypeDsnAppearance`
+ * in the `dsnDamageAppearance` world setting. `VagabondDiceAppearance` applies them to rolls.
+ */
+
 const DSN_TEXTURES = [
   'none', 'cloudy', 'cloudy_2', 'fire', 'marble', 'water', 'water_2',
   'ice', 'ice_2', 'paper', 'speckles', 'glitter', 'glitter_2', 'stars',

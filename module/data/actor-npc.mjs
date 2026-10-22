@@ -1,6 +1,12 @@
 import VagabondActorBase from './base-actor.mjs';
 import { VagabondTextParser } from '../helpers/text-parser.mjs';
 
+/**
+ * NPC data model — the statblock (HD, Threat, Morale, Armor, speeds, senses, Immune / Weak / resistances,
+ * actions, abilities) plus the statblock rule fields `helpers/npc-rules.mjs` / `npc-turn-rules.mjs` automate (Sunlight harm, regen, HP floor,
+ * auto-fail, vulnerable…). Bonus arrays reset in `prepareBaseData()`, summed in `prepareDerivedData()`;
+ * `migrateData` converts legacy free-text senses.
+ */
 export default class VagabondNPC extends VagabondActorBase {
   static LOCALIZATION_PREFIXES = [
     ...super.LOCALIZATION_PREFIXES,

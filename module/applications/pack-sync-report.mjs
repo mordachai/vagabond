@@ -1,5 +1,7 @@
 const { api } = foundry.applications;
 
+/** Compendium update report (GM) — what `PackSync` changed in the world; details on `PackSyncReport`. */
+
 /** Section id → label key (report "menus", PackSync.SECTIONS order). */
 const SECTION_LABELS = {
   statblock: 'VAGABOND.PackSync.Section.statblock',

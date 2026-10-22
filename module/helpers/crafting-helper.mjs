@@ -10,6 +10,10 @@ import { CRAFTING_DEFAULTS, craftingConfig } from './crafting/config.mjs';
 import { DowntimeHelper } from './downtime-helper.mjs';
 import { GMRelay } from './gm-relay.mjs';
 
+/**
+ * Crafting rules engine (`game.vagabond.craft`): dispatches to the `CONFIG.VAGABOND.craftModes` files in
+ * `helpers/crafting/` and runs the writes on the active GM (`vagabond.craft.execute` query). UI: Workbench / Downtime.
+ */
 export { CRAFTING_DEFAULTS };
 
 /**

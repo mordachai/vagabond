@@ -3,7 +3,7 @@ import { FlankingHelper } from './flanking-helper.mjs';
 import { VagabondRollBuilder } from './roll-builder.mjs';
 
 /**
- * Defense weapon property (Core Rulebook Alpha 3, p. 80):
+ * Defense weapon property (Core Rulebook Alpha 3, p.80):
  * "When you make a Reflex Save, you can make an Attack Check instead. If you pass, you reduce
  *  the damage by each equipped Defense Weapons' damage dice."
  *
