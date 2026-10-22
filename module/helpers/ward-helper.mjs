@@ -4,6 +4,7 @@ import { FeatureRules } from './feature-rules.mjs';
 import { VagabondChatCard } from './chat-card.mjs';
 import { VagabondRollBuilder } from './roll-builder.mjs';
 import { VagabondDamageHelper } from './damage-helper.mjs';
+import { VagabondDamageChatHandlers } from './damage-chat-handlers.mjs';
 
 /**
  * Ward upcast (`system.wardUpcast`) — Ward: "When the Target takes damage from an attack or Cast, you can upcast
@@ -270,7 +271,7 @@ export class WardHelper {
           GMRelay.send('vagabond.applyDamage', { actorUuid: defender.uuid, newHp });
         }
       }
-      calcHtml = VagabondDamageHelper._buildDamageCalculation(
+      calcHtml = VagabondDamageChatHandlers._buildDamageCalculation(
         r.incoming, 0, breakdown.armorReduction, finalDamage, r.damageType, 'reflex', defender,
         false, false, breakdown.path, 0,
         { title: this.#L('Label'), wardReduction: Math.min(wardTotal, r.incoming), wardTitle: `${spell.name}: ${formula} = ${amount}` }

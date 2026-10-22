@@ -1107,7 +1107,7 @@ VAGABOND.weaponGripDescriptions = {
  * ranged-hinder-negation is gone; Defense below is a distinct mechanic, not a
  * rename). Entangle was renamed to 'Grapple' (RAW: "Can Grapple with the Attack
  * Check." — the chat-card Grapple button keys off this string; see
- * `VagabondDamageHelper.handleGrapple`).
+ * `VagabondDamageChatHandlers.handleGrapple`).
  *
  * 'Brutal' was replaced by 'Vicious' (RAW: "Crits with it deal 1 extra damage
  * die." — flat, no scaling).
@@ -1631,7 +1631,7 @@ VAGABOND.attackTypes = {
 
 /**
  * Defense rules registry — data-driven replacement for a hardcoded save-hinder matrix.
- * Evaluated by VagabondDamageHelper._isSaveHindered for every defensive save roll.
+ * Evaluated by VagabondDamageChatHandlers._evaluateDefenseRules for every defensive save roll.
  *
  * Entry shape:
  *   id           - unique string for reference/debugging

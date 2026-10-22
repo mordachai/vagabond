@@ -12,6 +12,7 @@ import { MacroAutoRun } from './macro-autorun.mjs';
 import { CountdownDice } from '../documents/countdown-dice.mjs';
 import { StatusHelper } from './status-helper.mjs';
 import { EquipmentHelper } from './equipment-helper.mjs';
+import { VagabondDamageHelper } from './damage-helper.mjs';
 
 /**
  * Universal chat card builder for Vagabond system
@@ -494,16 +495,14 @@ export class VagabondChatCard {
       // A Spell's statuses are its Effect: gated by what the Cast included (damage-only → no tint).
       let allPreviewEntries = [...(previewEntries ?? []), ...(critPreviewEntries ?? [])];
       if (item?.type === 'spell' && spellCast) {
-        const { VagabondDamageHelper: VDHGate } = await import('./damage-helper.mjs');
-        allPreviewEntries = VDHGate.gateSpellEffectEntries(allPreviewEntries, spellCast);
+        allPreviewEntries = VagabondDamageHelper.gateSpellEffectEntries(allPreviewEntries, spellCast);
       }
       const statusSaveTypes = new Set(
         allPreviewEntries.filter(e => e.saveType && e.saveType !== 'none').map(e => e.saveType)
       );
       // 'any' save means the player can use any save — tint every configured save button
       if (statusSaveTypes.has('any')) {
-        const { VagabondDamageHelper: VDHSaves } = await import('./damage-helper.mjs');
-        for (const save of VDHSaves.getConfiguredSaves()) statusSaveTypes.add(save.key);
+        for (const save of VagabondDamageHelper.getConfiguredSaves()) statusSaveTypes.add(save.key);
       }
 
       // 3. Leading footer actions (e.g. Grapple button — appears above damage buttons)
@@ -514,7 +513,6 @@ export class VagabondChatCard {
 
       // 4. Handle Damage & Buttons
       if (damageRoll) {
-          const { VagabondDamageHelper } = await import('./damage-helper.mjs');
 
           // Fix: Normalize key for icon lookup
           const rawKey = damageType || 'physical';
@@ -567,7 +565,6 @@ export class VagabondChatCard {
           }
 
       } else if (rollData?.isHit && item && !damageRoll) {
-           const { VagabondDamageHelper } = await import('./damage-helper.mjs');
 
            // Use provided damageFormula, or fall back to item's current damage
            // For spells, damageFormula should be passed explicitly with increased dice
@@ -620,7 +617,6 @@ export class VagabondChatCard {
 
       // Add defend options if requested (independent of damage; never for restoratives)
       if (hasDefenses) {
-        const { VagabondDamageHelper } = await import('./damage-helper.mjs');
         if (!VagabondDamagePipeline.isRestorativeDamageType(damageType) && !VagabondDamageHelper.targetsAreAllNpc(targetsAtRollTime)) {
           card.addFooterAction(VagabondDamageHelper.createDefendOptions());
         }
@@ -895,7 +891,6 @@ export class VagabondChatCard {
       // Auto-roll damage if settings allow — the orange damage section and save
       // buttons then appear immediately. isCritical is a boolean and statKey the
       // weapon skill's stat (crit stat bonus only applies on real crits).
-      const { VagabondDamageHelper } = await import('./damage-helper.mjs');
       const cleaveDie = EquipmentHelper.cleaveDieFor(weapon, targetsAtRollTime.length);
       if (!damageRoll && VagabondDamageHelper.shouldRollDamage(isHit)) {
           damageRoll = await weapon.rollDamage(actor, isCritical, weaponSkill?.stat || null, targetsAtRollTime, cleaveDie, weaponSkillKey);
@@ -1044,15 +1039,14 @@ export class VagabondChatCard {
       const { roll, difficulty, isSuccess, isCritical, manaSkill, manaSkillKey, costs, deliveryText, spellState, manaOverrideDelta = 0 } = spellCastResult;
 
       const tags = [];
-      const { VagabondDamageHelper: SpellDmgHelper } = await import('./damage-helper.mjs');
 
       // 1. Skill Tag
       tags.push({ label: manaSkill?.label || 'Magic', cssClass: 'tag-skill' });
       
       // 2. Damage Tag — only when the Cast deals damage (not dice-scaling dice, not a typeless Spell's default die)
-      if (SpellDmgHelper.spellCastContext(spell, spellState)?.damage) {
+      if (VagabondDamageHelper.spellCastContext(spell, spellState)?.damage) {
           const dType = spell.system.damageType;
-          const dieSize = SpellDmgHelper.spellDieSize(actor, spell);
+          const dieSize = VagabondDamageHelper.spellDieSize(actor, spell);
 
           // Show damage dice with icon if type exists, without icon if typeless ("-")
           if (dType && dType !== '-') {
@@ -1091,8 +1085,8 @@ export class VagabondChatCard {
       // Only a Cast that deals damage gets one (spellCastContext.damage): a typeless Spell (Raise, Bless…)
       // would otherwise show a Roll Damage button from its default die, and its FX would wait on that button.
       let spellDamageFormula = null;
-      if (SpellDmgHelper.spellCastContext(spell, spellState)?.damage) {
-          const dieSize = SpellDmgHelper.spellDieSize(actor, spell);
+      if (VagabondDamageHelper.spellCastContext(spell, spellState)?.damage) {
+          const dieSize = VagabondDamageHelper.spellDieSize(actor, spell);
           spellDamageFormula = `${spellState.damageDice}d${dieSize}`;
       }
 
@@ -1118,10 +1112,10 @@ export class VagabondChatCard {
 
       // Spell Damage / Effect split (see VagabondDamageHelper): what this Cast included.
       // An effect-only Cast has no damage card, so its statuses get buttons right here.
-      const spellCast = SpellDmgHelper.spellCastContext(spell, spellState);
+      const spellCast = VagabondDamageHelper.spellCastContext(spell, spellState);
       const attackType = VagabondChatCard.attackTypeForSpellDelivery(spellState.deliveryType);
       const effectButtons = (isSuccess && !isImbue && !isGlyph)
-        ? SpellDmgHelper.createSpellEffectButtons(actor, spell, spellCast, { isCritical, targetsAtRollTime, attackType })
+        ? VagabondDamageHelper.createSpellEffectButtons(actor, spell, spellCast, { isCritical, targetsAtRollTime, attackType })
         : '';
 
       const result = await this.createActionCard({
@@ -1203,7 +1197,6 @@ export class VagabondChatCard {
    * @returns {Promise<ChatMessage>}
    */
   static async rerollSpellCast(actor, spell, rerollData, roll, targetsAtRollTime = [], originMessage = null) {
-    const { VagabondDamageHelper } = await import('./damage-helper.mjs');
 
     const difficulty = rerollData.difficulty;
     const isSuccess = roll.total >= difficulty;
@@ -1324,7 +1317,6 @@ export class VagabondChatCard {
 
     // 8. Damage Buttons & Save Buttons
     const footerActions = [];
-    const { VagabondDamageHelper } = await import('./damage-helper.mjs');
 
     // Normalize attack type for the helpers
     const attackType = VagabondChatCard.normalizeAttackType(action.attackType);
@@ -1546,7 +1538,6 @@ export class VagabondChatCard {
     // Check if item has damage/healing effects that need buttons
     const footerActions = [];
     if (item.type === 'equipment' && item.system?.damageAmount && item.system?.damageType && item.system.damageType !== '-') {
-      const { VagabondDamageHelper } = await import('./damage-helper.mjs');
       const damageType = item.system.damageType;
       const damageAmount = item.system.damageAmount;
       const damageTypeLabel = this._getDamageTypeLabel(damageType);

@@ -2,7 +2,7 @@ import { CountdownDice } from '../documents/countdown-dice.mjs';
 import { VagabondChatCard } from '../helpers/chat-card.mjs';
 import { ConjureHelper } from '../helpers/conjure-helper.mjs';
 import { CraftingHelper } from '../helpers/crafting-helper.mjs';
-import { VagabondDamageHelper } from '../helpers/damage-helper.mjs';
+import { VagabondDamageChatHandlers } from '../helpers/damage-chat-handlers.mjs';
 import { FocusUpkeep } from '../helpers/focus-upkeep.mjs';
 import { runMacroFromButton, macroDescriptorFromButton } from '../helpers/item-macro.mjs';
 import { MacroAutoRun } from '../helpers/macro-autorun.mjs';
@@ -132,7 +132,7 @@ export function registerChatMessageHooks() {
         // Disable immediately to prevent double-clicks
         button.disabled = true;
 
-        VagabondDamageHelper.rollDamageFromButton(button, message.id);
+        VagabondDamageChatHandlers.rollDamageFromButton(button, message.id);
       });
     });
 
@@ -144,7 +144,7 @@ export function registerChatMessageHooks() {
     saveButtons.forEach(button => {
       button.addEventListener('click', (ev) => {
         ev.preventDefault();
-        VagabondDamageHelper.handleSaveRoll(button, ev);
+        VagabondDamageChatHandlers.handleSaveRoll(button, ev);
       });
     });
 
@@ -156,7 +156,7 @@ export function registerChatMessageHooks() {
     saveReminderButtons.forEach(button => {
       button.addEventListener('click', (ev) => {
         ev.preventDefault();
-        VagabondDamageHelper.handleSaveReminderRoll(button, ev);
+        VagabondDamageChatHandlers.handleSaveReminderRoll(button, ev);
       });
     });
 
@@ -168,7 +168,7 @@ export function registerChatMessageHooks() {
     applyDirectButtons.forEach(button => {
       button.addEventListener('click', (ev) => {
         ev.preventDefault();
-        VagabondDamageHelper.handleApplyDirect(button);
+        VagabondDamageChatHandlers.handleApplyDirect(button);
       });
     });
 
@@ -176,7 +176,7 @@ export function registerChatMessageHooks() {
     html.querySelectorAll('.vagabond-apply-spell-effect-button').forEach(button => {
       button.addEventListener('click', (ev) => {
         ev.preventDefault();
-        VagabondDamageHelper.handleApplySpellEffect(button);
+        VagabondDamageChatHandlers.handleApplySpellEffect(button);
       });
     });
 
@@ -188,7 +188,7 @@ export function registerChatMessageHooks() {
     defenseButtons.forEach(button => {
       button.addEventListener('click', (ev) => {
         ev.preventDefault();
-        VagabondDamageHelper.handleDefenseWeapons(button, ev);
+        VagabondDamageChatHandlers.handleDefenseWeapons(button, ev);
       });
     });
 
@@ -196,7 +196,7 @@ export function registerChatMessageHooks() {
     html.querySelectorAll('.vagabond-protect-button').forEach(button => {
       button.addEventListener('click', (ev) => {
         ev.preventDefault();
-        VagabondDamageHelper.handleProtect(button, ev);
+        VagabondDamageChatHandlers.handleProtect(button, ev);
       });
     });
 
@@ -253,7 +253,7 @@ export function registerChatMessageHooks() {
     restorativeButtons.forEach(button => {
       button.addEventListener('click', (ev) => {
         ev.preventDefault();
-        VagabondDamageHelper.handleApplyRestorative(button);
+        VagabondDamageChatHandlers.handleApplyRestorative(button);
       });
     });
 
@@ -359,7 +359,7 @@ export function registerChatMessageHooks() {
     npcButtons.forEach(button => {
       button.addEventListener('click', (ev) => {
         ev.preventDefault();
-        VagabondDamageHelper.handleNPCDamageButton(button, message.id);
+        VagabondDamageChatHandlers.handleNPCDamageButton(button, message.id);
       });
     });
 
@@ -371,7 +371,7 @@ export function registerChatMessageHooks() {
     itemButtons.forEach(button => {
       button.addEventListener('click', (ev) => {
         ev.preventDefault();
-        VagabondDamageHelper.handleItemDamageButton(button, message.id);
+        VagabondDamageChatHandlers.handleItemDamageButton(button, message.id);
       });
     });
 
@@ -383,7 +383,7 @@ export function registerChatMessageHooks() {
     applySaveButtons.forEach(button => {
       button.addEventListener('click', (ev) => {
         ev.preventDefault();
-        VagabondDamageHelper.handleApplySaveDamage(button);
+        VagabondDamageChatHandlers.handleApplySaveDamage(button);
       });
     });
 
@@ -516,7 +516,7 @@ export function registerChatMessageHooks() {
       button.addEventListener('click', (ev) => {
         ev.preventDefault();
         button.disabled = true;
-        VagabondDamageHelper.handleGrapple(button);
+        VagabondDamageChatHandlers.handleGrapple(button);
       });
     });
 
