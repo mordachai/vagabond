@@ -186,26 +186,18 @@ export class GrantsHandlers {
   }
 
   /**
-   * Populate spell and perk dropdowns from compendiums.
+   * Populate spell and perk dropdowns from the compendium indexes (name + uuid only,
+   * no documents loaded, so the lists are filled as soon as the sheet renders).
    */
-  static async populateGrantsDropdowns(sheet) {
+  static populateGrantsDropdowns(sheet) {
     const html = sheet.element;
 
-    const spellPacks = game.packs.filter(p => p.documentName === 'Item' && p.index.some(i => i.type === 'spell'));
-    const spells = [];
-    for (const pack of spellPacks) {
-      const content = await pack.getDocuments();
-      spells.push(...content.filter(i => i.type === 'spell'));
-    }
-    spells.sort((a, b) => a.name.localeCompare(b.name));
-
-    const perkPacks = game.packs.filter(p => p.documentName === 'Item' && p.index.some(i => i.type === 'perk'));
-    const perks = [];
-    for (const pack of perkPacks) {
-      const content = await pack.getDocuments();
-      perks.push(...content.filter(i => i.type === 'perk'));
-    }
-    perks.sort((a, b) => a.name.localeCompare(b.name));
+    const fromIndex = (type) => game.packs
+      .filter(p => p.documentName === 'Item')
+      .flatMap(p => p.index.filter(i => i.type === type).map(i => ({ uuid: i.uuid ?? p.getUuid(i._id), name: i.name })))
+      .sort((a, b) => a.name.localeCompare(b.name));
+    const spells = fromIndex('spell');
+    const perks = fromIndex('perk');
 
     html.querySelectorAll('select[data-grant-type="spell"]').forEach(select => {
       while (select.options.length > 1) select.remove(1);
