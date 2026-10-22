@@ -17,7 +17,7 @@
       {{else}}
         <details class='npc-immunity-dropdown npc-senses-dropdown'>
           <summary class='npc-immunity-toggle'>
-            <i class='fas fa-chevron-down'></i>
+            <i class='fas fa-chevron-right'></i>
             <span>{{localize "VAGABOND.Actor.NPC.FIELDS.senses.short"}}</span>
           </summary>
           <div class='npc-immunity-checkboxes npc-resistance-panel'>
@@ -101,7 +101,7 @@
       {{! UNLOCKED MODE — single dropdown with 3 sections }}
       <details class='npc-immunity-dropdown npc-resistances-dropdown'>
         <summary class='npc-immunity-toggle'>
-          <i class='fas fa-chevron-down'></i>
+          <i class='fas fa-chevron-right'></i>
           <span>{{localize "VAGABOND.Actor.NPC.Sections.Resistances"}}</span>
         </summary>
         <div class='npc-immunity-checkboxes npc-resistance-panel'>
@@ -152,7 +152,7 @@
       {{! Statblock rules the book prints as ability text }}
       <details class='npc-immunity-dropdown npc-rules-dropdown'>
         <summary class='npc-immunity-toggle'>
-          <i class='fas fa-chevron-down'></i>
+          <i class='fas fa-chevron-right'></i>
           <span>{{localize "VAGABOND.Actor.NPC.Rules.Title"}}</span>
         </summary>
         <div class='npc-immunity-checkboxes npc-resistance-panel'>
@@ -179,13 +179,15 @@
               <option value='burnIncapacitated' {{#if (eq system.sunlightHarm 'burnIncapacitated')}}selected{{/if}}>{{localize "VAGABOND.Actor.NPC.Rules.SunlightHarmBurnIncapacitated"}}</option>
             </select>
           </label>
-          <label class='npc-field-label'>{{localize "VAGABOND.Actor.NPC.Rules.RegenPerTurn"}}
-            <input type='text' name='system.regenPerTurn' value='{{system.regenPerTurn}}' placeholder='3, d8, 2d8' />
-          </label>
-          <label class='npc-immunity-checkbox-item'>
-            <input type='checkbox' name='system.regenStopsInSunlight' {{#if system.regenStopsInSunlight}}checked{{/if}} />
-            <span>{{localize "VAGABOND.Actor.NPC.Rules.RegenStopsInSunlight"}}</span>
-          </label>
+          <div class='npc-field-label'>{{localize "VAGABOND.Actor.NPC.Rules.RegenPerTurn"}}
+            <div class='npc-rules-regen-row'>
+              <input type='text' name='system.regenPerTurn' value='{{system.regenPerTurn}}' placeholder='3, d8, 2d8' />
+              <label class='npc-immunity-checkbox-item'>
+                <input type='checkbox' name='system.regenStopsInSunlight' {{#if system.regenStopsInSunlight}}checked{{/if}} />
+                <span>{{localize "VAGABOND.Actor.NPC.Rules.RegenStopsInSunlight"}}</span>
+              </label>
+            </div>
+          </div>
         </div>
       </details>
 

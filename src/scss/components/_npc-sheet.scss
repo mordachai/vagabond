@@ -1569,9 +1569,12 @@ input[type='checkbox'][name='system.flyingByDefault'] { @include vagabond-switch
     transition: transform 0.2s ease;
   }
 
-  details[open] & i {
-    transform: rotate(90deg);
-  }
+}
+
+// Chevron points right when closed, turns down when open
+// (`details[open] &` would compile outside the `.vagabond` wrapper and never match)
+details[open] > .npc-immunity-toggle i {
+  transform: rotate(90deg);
 }
 
 .npc-immunity-checkboxes {
@@ -1610,6 +1613,36 @@ input[type='checkbox'][name='system.flyingByDefault'] { @include vagabond-switch
     padding: 4px 0;
     margin-top: 2px;
     max-height: none;
+  }
+}
+
+// Special Rules panel: selects show a chevron (panel is always light → dark glyph)
+.npc-rules-dropdown {
+  select {
+    display: block;
+    width: 100%;
+    padding-right: 18px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23222' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 4px center;
+    background-size: 10px 6px;
+  }
+
+  // Regen amount + "Not in Sunlight" share one row
+  .npc-rules-regen-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    > input[type='text'] {
+      flex: 1 1 0;
+      min-width: 0;
+    }
+
+    > .npc-immunity-checkbox-item {
+      flex: 0 0 auto;
+      white-space: nowrap;
+    }
   }
 }
 
@@ -1707,6 +1740,17 @@ input[type='checkbox'][name='system.flyingByDefault'] { @include vagabond-switch
   .npc-lock-name-row i { color: $c-white; }
 
   .npc-field-input { color: $c-dark; }
+
+  // HD input sits on the dark plate: light text + underline
+  .npc-stat-field .npc-field-input,
+  .npc-stat-field .npc-number-input {
+    color: $c-white;
+    border-bottom-color: $c-white;
+
+    &::placeholder { color: $c-white; opacity: 0.6; }
+    &:hover,
+    &:focus { border-bottom-color: $c-white; }
+  }
 }
 
 .npc-content .npc-senses-section,

@@ -28742,7 +28742,7 @@ ol#combat-tracker.directory-list {
   font-size: 12px;
   transition: transform 0.2s ease;
 }
-details[open] .vagabond .npc-immunity-toggle i {
+.vagabond details[open] > .npc-immunity-toggle i {
   transform: rotate(90deg);
 }
 .vagabond .npc-immunity-checkboxes {
@@ -28776,6 +28776,28 @@ details[open] .vagabond .npc-immunity-toggle i {
   padding: 4px 0;
   margin-top: 2px;
   max-height: none;
+}
+.vagabond .npc-rules-dropdown select {
+  display: block;
+  width: 100%;
+  padding-right: 18px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23222' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 4px center;
+  background-size: 10px 6px;
+}
+.vagabond .npc-rules-dropdown .npc-rules-regen-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.vagabond .npc-rules-dropdown .npc-rules-regen-row > input[type=text] {
+  flex: 1 1 0;
+  min-width: 0;
+}
+.vagabond .npc-rules-dropdown .npc-rules-regen-row > .npc-immunity-checkbox-item {
+  flex: 0 0 auto;
+  white-space: nowrap;
 }
 .vagabond .npc-resistance-group {
   display: grid;
@@ -28854,6 +28876,21 @@ details[open] .vagabond .npc-immunity-toggle i {
 }
 .vagabond .npc-header .npc-field-input, .vagabond .npc-header .npc-text-input, .vagabond .npc-header .npc-number-input, .vagabond .npc-header .npc-armor-desc-input {
   color: var(--vagabond-c-dark);
+}
+.vagabond .npc-header .npc-stat-field .npc-field-input, .vagabond .npc-header .npc-stat-field .npc-text-input, .vagabond .npc-header .npc-stat-field .npc-armor-desc-input,
+.vagabond .npc-header .npc-stat-field .npc-number-input {
+  color: var(--vagabond-c-white);
+  border-bottom-color: var(--vagabond-c-white);
+}
+.vagabond .npc-header .npc-stat-field .npc-field-input::placeholder, .vagabond .npc-header .npc-stat-field .npc-text-input::placeholder, .vagabond .npc-header .npc-stat-field .npc-armor-desc-input::placeholder,
+.vagabond .npc-header .npc-stat-field .npc-number-input::placeholder {
+  color: var(--vagabond-c-white);
+  opacity: 0.6;
+}
+.vagabond .npc-header .npc-stat-field .npc-field-input:hover, .vagabond .npc-header .npc-stat-field .npc-text-input:hover, .vagabond .npc-header .npc-stat-field .npc-armor-desc-input:hover, .vagabond .npc-header .npc-stat-field .npc-field-input:focus, .vagabond .npc-header .npc-stat-field .npc-text-input:focus, .vagabond .npc-header .npc-stat-field .npc-armor-desc-input:focus,
+.vagabond .npc-header .npc-stat-field .npc-number-input:hover,
+.vagabond .npc-header .npc-stat-field .npc-number-input:focus {
+  border-bottom-color: var(--vagabond-c-white);
 }
 .vagabond .npc-content .npc-senses-section,
 .vagabond .npc-content .npc-resistances-section {
