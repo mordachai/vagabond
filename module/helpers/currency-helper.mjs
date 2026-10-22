@@ -146,9 +146,4 @@ export class CurrencyHelper {
     return this.fromCopper(this.toCopper(wallet));
   }
 
-  /** Alias of {@link add} — receiving money into a wallet. */
-  static receive(wallet, copper) {
-    return this.add(wallet, copper);
-  }
-
 }

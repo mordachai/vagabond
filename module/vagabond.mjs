@@ -49,7 +49,7 @@ import { GlyphOverlay } from './ui/glyph-overlay.mjs';
 import { VagabondCharBuilder } from './applications/char-builder/index.mjs';
 import { VagabondCombatTracker } from './ui/combat-tracker.mjs';
 import { CombatCarousel } from './applications/combat-carousel.mjs';
-import { VagabondSettingsHub, hubMenu } from './applications/settings-hub.mjs';
+import { VagabondSettingsHub } from './applications/settings-hub.mjs';
 import { registerGameSettings } from './settings/register-settings.mjs';
 import { LevelUpDialog } from './applications/level-up-dialog.mjs';
 import { PartyCompactView } from './applications/party-compact-view.mjs';
@@ -302,8 +302,6 @@ globalThis.vagabond = {
     VagabondMeasureTemplates,
     VagabondCharBuilder,
     VagabondSettingsHub,
-    // Back-compat: `new EncounterSettings().render(true)` opens the hub on Combat & Encounters.
-    EncounterSettings: hubMenu('combat'),
     HomebrewSettingsApp,
     LevelUpDialog,
     PartyCompactView,

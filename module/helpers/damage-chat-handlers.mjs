@@ -626,8 +626,8 @@ export class VagabondDamageChatHandlers {
       // RAW: Weak — bypass Armor/Immune + deal an extra damage die
       let finalDamage = baseAfterFinal;
       const weaknessPreRolledSave = button.dataset.weaknessPreRolled === 'true';
-      if (!weaknessPreRolledSave && VagabondDamageHelper._isWeakTo(targetActor, damageType, sourceItem, sourceActor)) {
-        const dieSize = VagabondDamageHelper._getDamageSourceDieSize(sourceItem, actionIdx, sourceActor);
+      if (!weaknessPreRolledSave && VagabondDamagePipeline.isWeakTo(targetActor, damageType, sourceItem, sourceActor)) {
+        const dieSize = VagabondDamagePipeline.getDamageSourceDieSize(sourceItem, actionIdx, sourceActor);
         const weakRoll = new Roll(`1d${dieSize}`);
         await weakRoll.evaluate();
         finalDamage += weakRoll.total;
@@ -895,8 +895,8 @@ export class VagabondDamageChatHandlers {
         targetActor, afterShield - wardCut, damageType, sourceItem, { attackerActor: sourceActor, isCrit: attackWasCrit }
       );
       let finalDamage = breakdown.final;
-      if (!weaknessPreRolled && VagabondDamageHelper._isWeakTo(targetActor, damageType, sourceItem, sourceActor)) {
-        const weakRoll = new Roll(`1d${VagabondDamageHelper._getDamageSourceDieSize(sourceItem, actionIdx, sourceActor)}`);
+      if (!weaknessPreRolled && VagabondDamagePipeline.isWeakTo(targetActor, damageType, sourceItem, sourceActor)) {
+        const weakRoll = new Roll(`1d${VagabondDamagePipeline.getDamageSourceDieSize(sourceItem, actionIdx, sourceActor)}`);
         await weakRoll.evaluate();
         finalDamage += weakRoll.total;
       }
@@ -1684,8 +1684,8 @@ export class VagabondDamageChatHandlers {
       // RAW: Weak — bypass Armor/Immune + deal an extra damage die
       let finalDamage = baseAfterFinalDirect;
       const weaknessPreRolledDirect = button.dataset.weaknessPreRolled === 'true';
-      if (!weaknessPreRolledDirect && VagabondDamageHelper._isWeakTo(targetActor, damageType, sourceItem, sourceActor)) {
-        const dieSize = VagabondDamageHelper._getDamageSourceDieSize(sourceItem, directActionIdx, sourceActor);
+      if (!weaknessPreRolledDirect && VagabondDamagePipeline.isWeakTo(targetActor, damageType, sourceItem, sourceActor)) {
+        const dieSize = VagabondDamagePipeline.getDamageSourceDieSize(sourceItem, directActionIdx, sourceActor);
         const weakRoll = new Roll(`1d${dieSize}`);
         await weakRoll.evaluate();
         finalDamage += weakRoll.total;

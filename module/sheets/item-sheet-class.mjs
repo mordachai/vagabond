@@ -1,4 +1,3 @@
-import { GrantsHandlers } from './item-sheet-grants.mjs';
 
 /**
  * Ancestry / Class editor actions of VagabondItemSheet: traits, level features and their grants,
@@ -190,37 +189,6 @@ export class ItemSheetClassEditor {
     if (!uuid) return;
     const current = this.item.system.suggestedStartingPacks || [];
     await this.item.update({ 'system.suggestedStartingPacks': current.filter(u => u !== uuid) });
-  }
-
-  /**
-   * Generic grant handlers — delegate to GrantsHandlers using data-array-path / data-item-index.
-   */
-  static async _onAddGrantSpell(event, target) {
-    return GrantsHandlers.addGrantSpell(this, event, target);
-  }
-
-  static async _onRemoveGrantSpell(event, target) {
-    return GrantsHandlers.removeGrantSpell(this, event, target);
-  }
-
-  static async _onAddGrantPerk(event, target) {
-    return GrantsHandlers.addGrantPerk(this, event, target);
-  }
-
-  static async _onRemoveGrantPerk(event, target) {
-    return GrantsHandlers.removeGrantPerk(this, event, target);
-  }
-
-  static async _onRemoveGrantItem(event, target) {
-    return GrantsHandlers.removeGrantItem(this, event, target);
-  }
-
-  static async _onAddGrantItemChoiceGroup(event, target) {
-    return GrantsHandlers.addGrantItemChoiceGroup(this, event, target);
-  }
-
-  static async _onRemoveGrantItemChoiceGroup(event, target) {
-    return GrantsHandlers.removeGrantItemChoiceGroup(this, event, target);
   }
 
   /**

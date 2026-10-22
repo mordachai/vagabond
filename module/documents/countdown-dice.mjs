@@ -11,14 +11,6 @@ export class CountdownDice {
   static DICE_PROGRESSION = ['d4', 'd6', 'd8', 'd10', 'd12', 'd20'];
 
   /**
-   * Get or create the "Vagabond Clocks & Dice" folder
-   * @returns {Promise<Folder>} The folder for clocks and countdown dice
-   */
-  static async getOrCreateFolder() {
-    return SystemFolders.clocks();
-  }
-
-  /**
    * Create a new countdown dice as a JournalEntry
    * @param {Object} data - Countdown dice data
    * @param {string} data.name - Name of the countdown dice
@@ -37,7 +29,7 @@ export class CountdownDice {
     const order = this.getNextOrder();
     const size = data.size || 'M';
     const sceneId = canvas.scene?.id;
-    const folder = await this.getOrCreateFolder();
+    const folder = await SystemFolders.clocks();
 
     // Calculate initial position
     const initialPosition = this.defaultPositionCoords(size, order);

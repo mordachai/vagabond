@@ -7,18 +7,6 @@
 
 export class CompendiumLoader {
   constructor() {
-    // Legacy system compendium mappings (for backwards compatibility)
-    this.systemCompendiumMappings = {
-      ancestries: 'vagabond.ancestries',
-      classes: 'vagabond.classes',
-      spells: 'vagabond.spells',
-      perks: 'vagabond.perks',
-      gear: 'vagabond.gear',
-      ancestryFeatures: 'vagabond.ancestry-features',
-      classFeatures: 'vagabond.class-features',
-      startingPacks: 'vagabond.starting-packs'
-    };
-
     // Map data types to item types for filtering
     this.itemTypeMap = {
       ancestries: 'ancestry',

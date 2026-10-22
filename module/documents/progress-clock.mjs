@@ -5,13 +5,6 @@ import { SystemFolders } from '../helpers/system-folders.mjs';
  * Clocks are stored as JournalEntry documents with custom flags
  */
 export class ProgressClock {
-  /**
-   * Get or create the "Vagabond Clocks & Dice" folder
-   * @returns {Promise<Folder>} The folder for clocks and countdown dice
-   */
-  static async getOrCreateFolder() {
-    return SystemFolders.clocks();
-  }
 
   /**
    * Create a new progress clock
@@ -31,7 +24,7 @@ export class ProgressClock {
     }
 
     const defaultPosition = game.settings.get('vagabond', 'defaultClockPosition') || 'top-right';
-    const folder = await this.getOrCreateFolder();
+    const folder = await SystemFolders.clocks();
 
     const journalData = {
       name: data.name || "New Clock",

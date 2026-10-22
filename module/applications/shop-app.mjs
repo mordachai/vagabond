@@ -201,9 +201,6 @@ export class ShopApp extends HandlebarsApplicationMixin(ApplicationV2) {
     for (const shop of game.actors.filter(a => a.type === 'shop')) await this.setOpen(shop, open);
   }
 
-  /** Alias of {@link ShopApp.openShop} — "show to players" and "open" are the same action. */
-  static show(ref) { return this.openShop(ref); }
-
   /** Socket handler (every client): players open the pushed shop. */
   static onShowSocket({ shopUuid }) {
     if (game.user.isGM) return;

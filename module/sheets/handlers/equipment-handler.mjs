@@ -77,7 +77,7 @@ export class EquipmentHandler {
     }
 
     // Update the weapon's equipment state (hand-limit enforced for equip transitions)
-    await EquipmentHelper.equipWeaponWithHandLimit(this.actor, weapon.id, nextState);
+    await EquipmentHelper.equipWithHandLimit(this.actor, weapon.id, nextState);
   }
 
   /**
@@ -122,7 +122,7 @@ export class EquipmentHandler {
       newState = 'oneHand';
     }
 
-    await EquipmentHelper.equipWeaponWithHandLimit(this.actor, weapon.id, newState);
+    await EquipmentHelper.equipWithHandLimit(this.actor, weapon.id, newState);
   }
 
   /**

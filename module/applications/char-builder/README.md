@@ -94,7 +94,7 @@ Rule-based validation system with caching.
 
 **Key Methods:**
 - `validateStepCompletion(stepName, state)` - Check if step is complete
-- `validatePrerequisites(stepName, state)` - Check step prerequisites
+- `validateStepPrerequisites(stepName, state)` - Check step prerequisites
 - `validateState(state)` - Validate entire state
 
 ### 3. Data Services

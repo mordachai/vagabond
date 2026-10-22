@@ -85,7 +85,7 @@ export class BaseStepManager {
    */
   validatePrerequisites() {
     const state = this.stateManager.getCurrentState();
-    return this.stateManager.validationEngine.validatePrerequisites(this.stepName, state);
+    return this.stateManager.validationEngine.validateStepPrerequisites(this.stepName, state);
   }
 
   /**

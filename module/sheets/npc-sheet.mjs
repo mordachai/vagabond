@@ -154,11 +154,6 @@ export class VagabondNPCSheet extends VagabondActorSheet {
       this.immunityHandler.setupListeners();
     }
 
-    // Setup action handler listeners for buffered editing
-    if (this.actionHandler) {
-      this.actionHandler.setupListeners();
-    }
-
     // Toggle padding on npc-content when it has scrollable overflow
     const npcContent = this.element.querySelector('.npc-content');
     if (npcContent) {

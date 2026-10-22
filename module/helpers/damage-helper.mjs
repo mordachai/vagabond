@@ -14,24 +14,9 @@ import { GMRelay } from './gm-relay.mjs';
  * Universal Damage Helper
  * Chat-card button builders, the Save list, spell Cast context and apply-time damage math.
  * Button click handlers + result cards live in VagabondDamageChatHandlers (damage-chat-handlers.mjs).
- * Roll-time primitives live in VagabondDamagePipeline (damage-pipeline.mjs);
- * the private statics below delegate there for backward compatibility.
+ * Roll-time primitives live in VagabondDamagePipeline (damage-pipeline.mjs).
  */
 export class VagabondDamageHelper {
-  /** @see VagabondDamagePipeline.manuallyExplodeDice */
-  static async _manuallyExplodeDice(roll, explodeValues, maxExplosions = 100) {
-    return VagabondDamagePipeline.manuallyExplodeDice(roll, explodeValues, maxExplosions);
-  }
-
-  /** @see VagabondDamagePipeline.markWeaknessDie */
-  static _markWeaknessDie(roll) {
-    return VagabondDamagePipeline.markWeaknessDie(roll);
-  }
-
-  /** @see VagabondDamagePipeline.getTargetActorsFromStored */
-  static _getTargetActorsFromStored(storedTargets) {
-    return VagabondDamagePipeline.getTargetActorsFromStored(storedTargets);
-  }
 
   /**
    * Get targets from button dataset with multi-tier fallback
@@ -210,11 +195,6 @@ export class VagabondDamageHelper {
   static async playFxOrDefer(message, fx, actor, item, storedTargets, isHit) {
     if (isHit && await this.deferFxToDamageButton(message, fx)) return;
     this._playFx(fx, actor, item, storedTargets, isHit, message);
-  }
-
-  /** @see VagabondDamagePipeline.getExplodeValues */
-  static _getExplodeValues(item, actor = null) {
-    return VagabondDamagePipeline.getExplodeValues(item, actor);
   }
 
   /**
@@ -475,21 +455,6 @@ export class VagabondDamageHelper {
     return total;
   }
 
-  /** @see VagabondDamagePipeline.getActorBeingType */
-  static _getActorBeingType(actor) {
-    return VagabondDamagePipeline.getActorBeingType(actor);
-  }
-
-  /** @see VagabondDamagePipeline.shouldDoublePerDieBonus */
-  static _shouldDoublePerDieBonus(attackingActor, storedTargets) {
-    return VagabondDamagePipeline.shouldDoublePerDieBonus(attackingActor, storedTargets);
-  }
-
-  /** @see VagabondDamagePipeline.countRolledDice */
-  static _countRolledDice(roll) {
-    return VagabondDamagePipeline.countRolledDice(roll);
-  }
-
   /**
    * Apply the target's defenses to an incoming damage amount, returning only the number.
    * Back-compat wrapper around calculateFinalDamageDetailed.
@@ -621,21 +586,6 @@ export class VagabondDamageHelper {
     }
 
     return { final: finalDamage, armorReduction, berserkReduction, flankedBonus, path: 'normal' };
-  }
-
-  /** @see VagabondDamagePipeline.extractDieSize */
-  static _extractDieSize(formula) {
-    return VagabondDamagePipeline.extractDieSize(formula);
-  }
-
-  /** @see VagabondDamagePipeline.getDamageSourceDieSize */
-  static _getDamageSourceDieSize(sourceItem, actionIdx, sourceActor) {
-    return VagabondDamagePipeline.getDamageSourceDieSize(sourceItem, actionIdx, sourceActor);
-  }
-
-  /** @see VagabondDamagePipeline.isWeakTo */
-  static _isWeakTo(targetActor, damageType, attackingWeapon = null, attacker = null) {
-    return VagabondDamagePipeline.isWeakTo(targetActor, damageType, attackingWeapon, attacker);
   }
 
 

@@ -795,9 +795,6 @@ export default class VagabondEquipment extends VagabondItemBase {
     this.broken = ratingLost > 0 && ratingBeforeDamage > 0 && this.finalRating === 0;
     this.finalReflexPenalty = Math.max(0, this.reflexPenalty + (this.metalSlotDelta ?? 0));
 
-    // Read-only back-compat aliases (chat cards, module API callers)
-    this.rating = this.armorRating;
-    this.might = this.mightRequirement;
   }
 
   /**

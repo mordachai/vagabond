@@ -749,12 +749,6 @@ export class VagabondChatCard {
     return this._checkRoll(actor, 'skill', skillKey, roll, difficulty, isSuccess, extraMetadata, extraTags);
   }
 
-  //@deprecated
-  //static async statRoll(actor, statKey, roll, difficulty, isSuccess) {
-  //  return this._checkRoll(actor, 'stat', statKey, roll, difficulty, isSuccess);
-  //}
-  //
-
   static async saveRoll(actor, saveKey, roll, difficulty, isSuccess, extraMetadata = [], extraTags = []) {
     return this._checkRoll(actor, 'save', saveKey, roll, difficulty, isSuccess, extraMetadata, extraTags);
   }
@@ -1248,8 +1242,6 @@ export class VagabondChatCard {
    * @returns {Promise<ChatMessage>}
    */
   static async luckGain(actor, newLuck, reason = '') {
-    // Legacy (actor, newLuck, maxLuck, reason) callers — the Luck Pool has no max any more.
-    if (typeof reason === 'number') reason = arguments[3] ?? '';
     const luckTerm = CONFIG.VAGABOND.homebrew?.terms?.luckTerm || 'Luck';
     const poolTerm = CONFIG.VAGABOND.homebrew?.terms?.poolTerm || 'Pool';
     const reasonText = reason ? ` from <strong>${reason}</strong>` : '';

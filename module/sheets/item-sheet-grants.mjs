@@ -1,6 +1,7 @@
 /**
  * Unified grants system handlers for item sheets (ancestry traits and class features).
  * All handlers use data-array-path and data-item-index to work generically for both types.
+ * Click handlers are AppV2 actions of VagabondItemSheet (`this` = the sheet).
  */
 import { GrantedItems } from '../helpers/granted-items.mjs';
 
@@ -8,7 +9,8 @@ export class GrantsHandlers {
   /**
    * Add a spell to a trait or feature.
    */
-  static async addGrantSpell(sheet, event, target) {
+  static async addGrantSpell(event, target) {
+    const sheet = this;
     const { arrayPath, itemIndex } = GrantsHandlers.#attrs(target, ['arrayPath', 'itemIndex']);
     if (!arrayPath || itemIndex === null) return;
 
@@ -31,7 +33,8 @@ export class GrantsHandlers {
   /**
    * Remove a spell from a trait or feature by index.
    */
-  static async removeGrantSpell(sheet, event, target) {
+  static async removeGrantSpell(event, target) {
+    const sheet = this;
     const { arrayPath, itemIndex, spellIndex } = GrantsHandlers.#attrs(target, ['arrayPath', 'itemIndex', 'spellIndex']);
     if (!arrayPath || itemIndex === null || spellIndex === null) return;
 
@@ -46,7 +49,8 @@ export class GrantsHandlers {
   /**
    * Add a perk to a trait or feature.
    */
-  static async addGrantPerk(sheet, event, target) {
+  static async addGrantPerk(event, target) {
+    const sheet = this;
     const { arrayPath, itemIndex } = GrantsHandlers.#attrs(target, ['arrayPath', 'itemIndex']);
     if (!arrayPath || itemIndex === null) return;
 
@@ -68,7 +72,8 @@ export class GrantsHandlers {
   /**
    * Remove a perk from a trait or feature by index.
    */
-  static async removeGrantPerk(sheet, event, target) {
+  static async removeGrantPerk(event, target) {
+    const sheet = this;
     const { arrayPath, itemIndex, perkIndex } = GrantsHandlers.#attrs(target, ['arrayPath', 'itemIndex', 'perkIndex']);
     if (!arrayPath || itemIndex === null || perkIndex === null) return;
 
@@ -117,7 +122,8 @@ export class GrantsHandlers {
   /**
    * Remove a granted item (or, with data-choice-index, a choice group pool item) from a trait or feature by index.
    */
-  static async removeGrantItem(sheet, event, target) {
+  static async removeGrantItem(event, target) {
+    const sheet = this;
     const { arrayPath, itemIndex, grantIndex, choiceIndex } = GrantsHandlers.#attrs(target, ['arrayPath', 'itemIndex', 'grantIndex', 'choiceIndex']);
     if (!arrayPath || itemIndex === null || grantIndex === null) return;
 
@@ -136,7 +142,8 @@ export class GrantsHandlers {
   }
 
   /** Add an empty item choice group to a trait or feature. */
-  static async addGrantItemChoiceGroup(sheet, event, target) {
+  static async addGrantItemChoiceGroup(event, target) {
+    const sheet = this;
     const { arrayPath, itemIndex } = GrantsHandlers.#attrs(target, ['arrayPath', 'itemIndex']);
     if (!arrayPath || itemIndex === null) return;
     const prop = arrayPath.replace(/^system\./, '');
@@ -147,7 +154,8 @@ export class GrantsHandlers {
   }
 
   /** Remove an item choice group from a trait or feature. */
-  static async removeGrantItemChoiceGroup(sheet, event, target) {
+  static async removeGrantItemChoiceGroup(event, target) {
+    const sheet = this;
     const { arrayPath, itemIndex, choiceIndex } = GrantsHandlers.#attrs(target, ['arrayPath', 'itemIndex', 'choiceIndex']);
     if (!arrayPath || itemIndex === null || choiceIndex === null) return;
     const prop = arrayPath.replace(/^system\./, '');

@@ -615,14 +615,4 @@ export class NPCActionHandler {
     return '-';
   }
 
-  /**
-   * Setup event listeners for buffered action and ability editing
-   * NOTE: Input change handling is now managed by the main NPC sheet
-   * to prevent accordion closing issues. This method is kept for compatibility.
-   */
-  setupListeners() {
-    // Action and ability input handling is now managed by the main NPC sheet
-    // via debounced input listeners to prevent accordion closing on every keystroke.
-    // This method is kept for any future non-input event handling.
-  }
 }

@@ -713,16 +713,6 @@ export class EquipmentHelper {
   }
 
   /**
-   * @deprecated Thin alias kept for legacy call sites — use equipWithHandLimit.
-   * @param {Actor} actor
-   * @param {string} weaponId
-   * @param {'unequipped'|'oneHand'|'twoHands'} newState
-   */
-  static async equipWeaponWithHandLimit(actor, weaponId, newState) {
-    return this.equipWithHandLimit(actor, weaponId, newState);
-  }
-
-  /**
    * Self-healing pass: correct an actor's equipment back into a legal
    * hand-limit state (max 2 hands total across ALL hand-occupying items) if
    * it somehow ended up violating it — legacy data, compendium import, a

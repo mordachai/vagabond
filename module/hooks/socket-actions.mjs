@@ -261,13 +261,12 @@ export function registerSocketActions() {
       fx: {
         cone: (opts) => ConeFx.cone(opts),
       },
-      // Shops: game.vagabond.shop.open(ref), .openShop/.closeShop/.toggleOpen(ref) (GM; .show = openShop),
+      // Shops: game.vagabond.shop.open(ref), .openShop/.closeShop/.toggleOpen(ref) (GM),
       // .isOpen(ref), .setAllOpen(bool),
       // .buy({ shop, buyer, itemId, qty }), .buyCart({ shop, buyer, party?, lines }),
       // .sell({ shop, seller, itemId, qty }), .partyTransfer({ party, actor, copper }), .price(item, ctx)
       shop: {
         open: (ref, options) => ShopApp.open(ref, options),
-        show: (ref) => ShopApp.show(ref), // alias of openShop
         // GM open/close (hotbar macros): openShop pushes the store window to players; closing shuts it
         openShop: (ref) => ShopApp.openShop(ref),
         closeShop: (ref) => ShopApp.closeShop(ref),
@@ -312,9 +311,6 @@ export function registerSocketActions() {
         // Combine (GM ritual, decision — docs/crafting-plan.md §4.11): not a
         // craftModes entry (no Shift/Materials, GM judgement only) — call directly.
         combine: (baseHost, otherHost, opts) => RelicHelper.combine(baseHost, otherHost, opts),
-        // Disguised items (GM, ItemDisguise): kept names for macros; see game.vagabond.disguise
-        disguiseRelic: (item, shown) => ItemDisguise.disguise(item, shown),
-        revealRelic: (item, opts) => ItemDisguise.reveal(item, opts),
         // Mana Crystals (variant, off by default): socket mechanics only — see
         // CrystalHelper's own doc comment for what's deferred.
         socketCrystal: (hostItem, crystalItem, slotIndex) => CrystalHelper.socket(hostItem, crystalItem, slotIndex),

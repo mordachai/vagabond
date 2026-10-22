@@ -46,9 +46,8 @@ export class ValidationEngine {
     this.validators.set('single_selection', this._validateSingleSelection.bind(this));
     this.validators.set('valid_equipment', this._validateValidEquipment.bind(this));
     this.validators.set('no_duplicates_unless_allowed', this._validateNoDuplicatesUnlessAllowed.bind(this));
-    // Training (all sources) is assigned on the Stats step; 'skills_assigned' kept as an alias
+    // Training (all sources) is assigned on the Stats step
     this.validators.set('training_assigned', (rule, state) => ({ isValid: isTrainingComplete(state) }));
-    this.validators.set('skills_assigned', (rule, state) => ({ isValid: isTrainingComplete(state) }));
     this.validators.set('perks_selected', this._validatePerksSelected.bind(this));
     this.validators.set('formulas_picked', (rule, state) => ({ isValid: isStepDone('alchemy', state) }));
 
@@ -224,16 +223,6 @@ export class ValidationEngine {
     result.canAccess = result.isValid;
     this._setCachedResult(cacheKey, result);
     return result;
-  }
-
-  /**
-   * Alias for validateStepPrerequisites (used by step managers)
-   * @param {string} stepName - Name of the step
-   * @param {Object} state - Character builder state
-   * @returns {Object} Validation result
-   */
-  validatePrerequisites(stepName, state) {
-    return this.validateStepPrerequisites(stepName, state);
   }
 
   /**

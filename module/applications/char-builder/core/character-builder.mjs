@@ -60,10 +60,7 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
     // Set initial step
     this.stateManager.updateState('currentStep', 'ancestry', { skipValidation: true });
     
-    // Legacy properties for backward compatibility
     this.openCategories = new Set();
-    this.indices = {};
-    this.compendiumTypeCache = {}; // Cache which compendiums contain which types
     this.showAllPerks = false; // Toggle for showing all perks regardless of prerequisites
 
     // Track previous derived stat values for animation
