@@ -2,7 +2,8 @@ import { RollHandler } from '../sheets/handlers/roll-handler.mjs';
 import { SpellHandler } from '../sheets/handlers/spell-handler.mjs';
 import { InventoryHandler } from '../sheets/handlers/inventory-handler.mjs';
 import { EquipmentHandler } from '../sheets/handlers/equipment-handler.mjs';
-import { VagabondActorSheet } from '../sheets/actor-sheet.mjs';
+import { ActorActions } from '../sheets/actor-actions.mjs';
+import { ActorDrop } from '../sheets/actor-drop.mjs';
 import { WorkbenchApp } from './workbench-app.mjs';
 import { CraftingHelper } from '../helpers/crafting-helper.mjs';
 import { AccordionHelper } from '../helpers/accordion-helper.mjs';
@@ -151,7 +152,7 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
     this._spellHandler = new SpellHandler(this);
     this.inventoryHandler = new InventoryHandler(this);
     this._equipmentHandler = new EquipmentHandler(this);
-    // Aliases so reused VagabondActorSheet statics (which read `this.rollHandler`
+    // Aliases so the shared ActorActions handlers (which read `this.rollHandler`
     // / `this.spellHandler`) work when called with the HUD as their sheet.
     this.rollHandler = this._rollHandler;
     this.spellHandler = this._spellHandler;
@@ -176,13 +177,13 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
       castSpellRow: this._onCastSpell,
       toggleItemDetail: this._onToggleAccordion,
       castSpell: this._onCastSpell,
-      // Delegated resource clicks (reuse VagabondActorSheet statics)
-      toggleFavorHinder: this._onToggleFavorHinder,
-      statusClick: this._onStatusClick,
-      spendLuck: this._onSpendLuck,
-      spendStudiedDie: this._onSpendStudiedDie,
-      modifyCheckBonus: { handler: this._onModifyCheckBonus, buttons: [0, 2] },
-      modifyMana: this._onModifyMana,
+      // Delegated resource clicks (shared with the sheet: ActorActions)
+      toggleFavorHinder: ActorActions._onToggleFavorHinder,
+      statusClick: ActorActions._onStatusClick,
+      spendLuck: ActorActions._onSpendLuck,
+      spendStudiedDie: ActorActions._onSpendStudiedDie,
+      modifyCheckBonus: { handler: ActorActions._onModifyCheckBonus, buttons: [0, 2] },
+      modifyMana: ActorActions._onModifyMana,
       // HUD-local UI
       openTab: this._onOpenTab,
       closePanel: this._onClosePanel,
@@ -192,7 +193,7 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
       togglePerk: this._onToggleAccordion,
       openSheet: this._onOpenSheet,
       expandSheet: this._onExpandSheet,
-      consolidateWealth: this._onConsolidateWealth,
+      consolidateWealth: ActorActions._onConsolidateWealth,
       slotUse: { handler: this._onSlotUse, buttons: [0, 2] },
       toggleWeaponGrip: this._onToggleWeaponGrip,
       itemMenu: this._onItemMenu,
@@ -417,7 +418,7 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
     // --- Status condition icons (left-of-portrait column) ---
     // Reuse the sheet's exact prep so the icon set matches the character sheet
     // (only CONFIG.statusEffects conditions, not item-granted effects).
-    context.statusEffects = VagabondActorSheet.prototype._prepareStatusEffects.call(this);
+    context.statusEffects = ActorActions._prepareStatusEffects(this);
 
     // --- Bounds counter (mirrors InventoryHandler.prepareInventoryGrid) ---
     context.currentBounds = sys.inventory?.currentBounds || 0;
@@ -776,7 +777,7 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
 
     // Status icons (left of portrait): right-click → Send to Chat / Remove Status.
     // Reuse the sheet's exact menu — left-click chat is handled by the statusClick action.
-    VagabondActorSheet.prototype._setupStatusIconListeners.call(this);
+    ActorActions._setupStatusIconListeners(this);
 
     // HP — left −1 / right +1 (matches the sheet & ongoing panel).
     const hpEl = this.element.querySelector('.vh-vital--hp');
@@ -795,7 +796,7 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
     const manaEl = this.element.querySelector('[data-action="modifyMana"]');
     if (manaEl) manaEl.addEventListener('contextmenu', (e) => {
       e.preventDefault();
-      VagabondActorSheet._onModifyMana.call(this, e, manaEl);
+      ActorActions._onModifyMana.call(this, e, manaEl);
     }, { signal });
 
     // Drag a row by its name (e.g. onto the hotbar to make a macro). The name
@@ -921,34 +922,27 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
 
   /**
    * Route a drop onto the HUD. Mirrors the sheet's `_onDrop` for the types that
-   * make sense here (Item, ContainerItem, Folder), delegating to the sheet's
-   * own methods so both surfaces create items identically (ancestry/class
+   * make sense here (Item, ContainerItem, Folder), through ActorDrop (shared with
+   * the sheet) so both surfaces create items identically (ancestry/class
    * replacement, gridPosition, transfer-from-other-actor).
    * @param {DragEvent} event
    */
   async _onDrop(event) {
     if (!this.actor.isOwner) return;
     const data = foundry.applications.ux.TextEditor.getDragEventData(event);
-    const sheet = VagabondActorSheet.prototype;
-
     switch (data.type) {
       case 'Item': {
         // Own items dragged from the HUD/sheet: on the sheet this is a re-sort;
         // the HUD has nothing to sort (equip is via the Inventory tab menu).
         const item = await Item.implementation.fromDropData(data);
         if (!item || item.parent?.uuid === this.actor.uuid) return;
-        return sheet._onDropItem.call(this, event, data);
+        return ActorDrop.item(this, event, data);
       }
       case 'ContainerItem':
-        return sheet._onDropContainerItem.call(this, event, data);
+        return ActorDrop.containerItem(this, event, data);
       case 'Folder':
-        return sheet._onDropFolder.call(this, event, data);
+        return ActorDrop.folder(this, event, data);
     }
-  }
-
-  /** Delegated by the sheet's `_onDropItem` (shared creation path). */
-  _onDropItemCreate(itemData, event) {
-    return VagabondActorSheet.prototype._onDropItemCreate.call(this, itemData, event);
   }
 
   /* -------------------------------------------- */
@@ -1252,11 +1246,7 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
   }
   static _onCastSpell(event, target) { return this._spellHandler.castSpell(event, target); }
 
-  /* --- delegated resource clicks (reuse sheet statics verbatim) --- */
-  static _onToggleFavorHinder(event, target) { return VagabondActorSheet._onToggleFavorHinder.call(this, event, target); }
-  static _onStatusClick(event, target) { return VagabondActorSheet._onStatusClick.call(this, event, target); }
-  static _onSpendLuck(event, target) { return VagabondActorSheet._onSpendLuck.call(this, event, target); }
-  static _onSpendStudiedDie(event, target) { return VagabondActorSheet._onSpendStudiedDie.call(this, event, target); }
+  /* --- Feature buttons: Catalyze / Mix open the HUD's own lab --- */
   static _onFeatureAction(event, target) {
     // Catalyze / Mix (left click): open the HUD's own Alchemy panel at that station, not the sheet.
     const isRight = event.type === 'contextmenu' || event.button === 2;
@@ -1265,10 +1255,8 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
       event.stopPropagation();
       return;
     }
-    return VagabondActorSheet._onFeatureAction.call(this, event, target);
+    return ActorActions._onFeatureAction.call(this, event, target);
   }
-  static _onModifyCheckBonus(event, target) { return VagabondActorSheet._onModifyCheckBonus.call(this, event, target); }
-  static _onModifyMana(event, target) { return VagabondActorSheet._onModifyMana.call(this, event, target); }
 
   /* -------------------------------------------- */
   /*  Action handlers — HUD-local UI              */
@@ -1336,7 +1324,6 @@ export class VagabondCharacterHud extends api.HandlebarsApplicationMixin(api.App
   }
 
   /** Wealth trade icon: exchange copper→silver→gold into the largest coins. */
-  static _onConsolidateWealth(event, target) { return VagabondActorSheet._onConsolidateWealth.call(this, event, target); }
 
   /** Inventory row "⋮" button → the exact same context menu the sheet uses. */
   static _onItemMenu(event, target) {

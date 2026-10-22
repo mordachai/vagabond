@@ -1,5 +1,5 @@
 import { RollHandler, NPCActionHandler } from '../sheets/handlers/_module.mjs';
-import { VagabondActorSheet } from '../sheets/actor-sheet.mjs';
+import { ActorActions } from '../sheets/actor-actions.mjs';
 import { EnrichmentHelper } from '../helpers/enrichment-helper.mjs';
 import { VagabondTextParser } from '../helpers/text-parser.mjs';
 import { applyHudDisplayPrefs, bindHudBodyDrag, getHudHealthBar, isItemPile } from '../helpers/hud-display.mjs';
@@ -103,15 +103,15 @@ export class VagabondNPCHud extends api.HandlebarsApplicationMixin(api.Applicati
       height: 'auto',
     },
     actions: {
-      // Delegated NPC rolls / routines (reuse VagabondActorSheet statics verbatim)
-      clickActionName: this._onClickActionName,
-      clickActionDamageRoll: this._onClickActionDamageRoll,
-      clickAbilityName: this._onClickAbilityName,
-      rollMorale: this._onRollMorale,
-      rollAppearing: this._onRollAppearing,
-      statusClick: this._onStatusClick,
-      createCountdownFromRecharge: this._onCreateCountdownFromRecharge,
-      rollRechargeCountdown: this._onRollRechargeCountdown,
+      // Delegated NPC rolls / routines (shared with the sheet: ActorActions)
+      clickActionName: ActorActions._onClickActionName,
+      clickActionDamageRoll: ActorActions._onClickActionDamageRoll,
+      clickAbilityName: ActorActions._onClickAbilityName,
+      rollMorale: ActorActions._onRollMorale,
+      rollAppearing: ActorActions._onRollAppearing,
+      statusClick: ActorActions._onStatusClick,
+      createCountdownFromRecharge: ActorActions._onCreateCountdownFromRecharge,
+      rollRechargeCountdown: ActorActions._onRollRechargeCountdown,
       // HUD-local UI
       openDetail: this._onOpenDetail,
       closeDetail: this._onCloseDetail,
@@ -419,7 +419,7 @@ export class VagabondNPCHud extends api.HandlebarsApplicationMixin(api.Applicati
 
     // Status icons (left of portrait): right-click → Send to Chat / Remove Status.
     // Reuse the sheet's exact menu — left-click chat is handled by the statusClick action.
-    VagabondActorSheet.prototype._setupStatusIconListeners.call(this);
+    ActorActions._setupStatusIconListeners(this);
 
     // HP — left −1 / right +1.
     const hpEl = this.element.querySelector('.vh-vital--hp');
@@ -584,19 +584,6 @@ export class VagabondNPCHud extends api.HandlebarsApplicationMixin(api.Applicati
   }
 
   /* -------------------------------------------- */
-  /*  Action handlers — delegated NPC routines    */
-  /* -------------------------------------------- */
-
-  static _onClickActionName(event, target) { return VagabondActorSheet._onClickActionName.call(this, event, target); }
-  static _onClickActionDamageRoll(event, target) { return VagabondActorSheet._onClickActionDamageRoll.call(this, event, target); }
-  static _onClickAbilityName(event, target) { return VagabondActorSheet._onClickAbilityName.call(this, event, target); }
-  static _onRollMorale(event, target) { return VagabondActorSheet._onRollMorale.call(this, event, target); }
-  static _onRollAppearing(event, target) { return VagabondActorSheet._onRollAppearing.call(this, event, target); }
-  static _onStatusClick(event, target) { return VagabondActorSheet._onStatusClick.call(this, event, target); }
-  static _onCreateCountdownFromRecharge(event, target) { return VagabondActorSheet._onCreateCountdownFromRecharge.call(this, event, target); }
-  static _onRollRechargeCountdown(event, target) { return VagabondActorSheet._onRollRechargeCountdown.call(this, event, target); }
-
-  /* -------------------------------------------- */
   /*  Action handlers — HUD-local UI              */
   /* -------------------------------------------- */
 
@@ -646,15 +633,15 @@ export class VagabondNPCHud extends api.HandlebarsApplicationMixin(api.Applicati
       label: L('VAGABOND.Hud.Menu.SendToChat'),
       icon: 'fas fa-comment',
       action: () => (isAction
-        ? VagabondActorSheet._onClickActionName.call(this, event, ds)
-        : VagabondActorSheet._onClickAbilityName.call(this, event, ds)),
+        ? ActorActions._onClickActionName.call(this, event, ds)
+        : ActorActions._onClickAbilityName.call(this, event, ds)),
     }];
 
     if (isAction && this.actor.system.actions?.[index]?.rollDamage) {
       items.push({
         label: L('VAGABOND.Hud.Menu.RollDamage'),
         icon: 'fas fa-dice-d20',
-        action: () => VagabondActorSheet._onClickActionDamageRoll.call(this, event, ds),
+        action: () => ActorActions._onClickActionDamageRoll.call(this, event, ds),
       });
     }
 

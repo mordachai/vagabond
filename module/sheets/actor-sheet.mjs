@@ -1,30 +1,26 @@
-import { prepareEffectsView, toggleActorEffect, toggleBlockerOf, isStatusEffect } from '../helpers/effects.mjs';
-import { StatusHelper } from '../helpers/status-helper.mjs';
-import { VagabondChatHelper } from '../helpers/chat-helper.mjs';
-import { VagabondChatCard } from '../helpers/chat-card.mjs';
-import { VagabondDiceAppearance } from '../helpers/dice-appearance.mjs';
+import { prepareEffectsView } from '../helpers/effects.mjs';
 import { VagabondCharBuilder } from '../applications/char-builder/index.mjs';
 import { WorkbenchApp } from '../applications/workbench-app.mjs';
 import { VagabondTextParser } from '../helpers/text-parser.mjs';
 import { AccordionHelper } from '../helpers/accordion-helper.mjs';
-import { ContextMenuHelper } from '../helpers/context-menu-helper.mjs';
 import { FeatureAction } from '../helpers/feature-action.mjs';
-import { buildSpellMenuItems } from '../helpers/item-menu.mjs';
 import { EnrichmentHelper } from '../helpers/enrichment-helper.mjs';
 import { EquipmentHelper } from '../helpers/equipment-helper.mjs';
-import { CurrencyHelper } from '../helpers/currency-helper.mjs';
-import { TradeHelper } from '../helpers/trade-helper.mjs';
 import { activateHandItem } from '../helpers/hand-item-activation.mjs';
 import * as ItemSections from '../helpers/item-sections.mjs';
-import { setupDragReorder } from '../helpers/drag-reorder.mjs';
 import { NpcRules } from '../helpers/npc-rules.mjs';
 import { AlchemyLab } from '../helpers/alchemy-lab.mjs';
 import { FeatureOrder } from '../helpers/feature-order.mjs';
 import { ItemDisguiseApp } from '../applications/item-disguise-app.mjs';
-import { GMRelay } from '../helpers/gm-relay.mjs';
-import { CountdownDice } from '../documents/countdown-dice.mjs';
 import { LevelUpDialog } from '../applications/level-up-dialog.mjs';
 import { DowntimeApp } from '../applications/downtime-app.mjs';
+import { ActorActions } from './actor-actions.mjs';
+import { ActorDrop } from './actor-drop.mjs';
+import { VagabondCharacterHud } from '../applications/character-hud.mjs';
+import { VagabondNPCHud } from '../applications/npc-hud.mjs';
+import { PartyCompactView } from '../applications/party-compact-view.mjs';
+import { ActorSheetEffects } from './actor-sheet-effects.mjs';
+import { ActorSheetListeners } from './actor-sheet-listeners.mjs';
 
 const { api, sheets } = foundry.applications;
 
@@ -52,22 +48,22 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       createDoc: this._createDoc,
       deleteDoc: this._deleteDoc,
       // Effects list (Active / Inactive switch rows)
-      toggleEffect: this._onToggleEffect,
+      toggleEffect: ActorSheetEffects._onToggleEffect,
       toggleItemDisguise: this._onToggleItemDisguise,
-      toggleEffectDetails: this._onToggleEffectDetails,
-      createEffect: this._onCreateEffect,
-      editEffect: this._onEditEffect,
-      deleteEffect: this._onDeleteEffect,
-      effectToChat: this._onEffectToChat,
-      effectMenu: this._onEffectMenu,
+      toggleEffectDetails: ActorSheetEffects._onToggleEffectDetails,
+      createEffect: ActorSheetEffects._onCreateEffect,
+      editEffect: ActorSheetEffects._onEditEffect,
+      deleteEffect: ActorSheetEffects._onDeleteEffect,
+      effectToChat: ActorSheetEffects._onEffectToChat,
+      effectMenu: ActorSheetEffects._onEffectMenu,
       // Roll actions - delegated to rollHandler
       roll: this._onRoll,
       rollWeapon: this._onRollWeapon,
       useItem: this._onUseItem,
       throwWeapon: this._onThrowWeapon,
       adjustQuantity: { handler: this._onAdjustQuantity, buttons: [0, 2] },
-      rollMorale: this._onRollMorale,
-      rollAppearing: this._onRollAppearing,
+      rollMorale: ActorActions._onRollMorale,
+      rollAppearing: ActorActions._onRollAppearing,
       // Equipment actions - delegated to equipmentHandler
       toggleWeaponEquipment: this._onToggleWeaponEquipment,
       toggleWeaponGrip: this._onToggleWeaponGrip,
@@ -87,18 +83,18 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       viewAncestry: this._viewAncestry,
       viewClass: this._viewClass,
       levelUp: this._onLevelUp,
-      consolidateWealth: this._onConsolidateWealth,
+      consolidateWealth: ActorActions._onConsolidateWealth,
       toggleFeature: this._onToggleFeature,
-      featureAction: { handler: this._onFeatureAction, buttons: [0, 2] },
+      featureAction: { handler: ActorActions._onFeatureAction, buttons: [0, 2] },
       toggleTrait: this._onToggleTrait,
       togglePerk: this._onTogglePerk,
       togglePanel: this._onTogglePanel,
-      toggleFavorHinder: this._onToggleFavorHinder,
-      statusClick: this._onStatusClick,
-      spendLuck: this._onSpendLuck,
-      spendStudiedDie: this._onSpendStudiedDie,
-      modifyCheckBonus: { handler: this._onModifyCheckBonus, buttons: [0, 2] },
-      modifyMana: this._onModifyMana,
+      toggleFavorHinder: ActorActions._onToggleFavorHinder,
+      statusClick: ActorActions._onStatusClick,
+      spendLuck: ActorActions._onSpendLuck,
+      spendStudiedDie: ActorActions._onSpendStudiedDie,
+      modifyCheckBonus: { handler: ActorActions._onModifyCheckBonus, buttons: [0, 2] },
+      modifyMana: ActorActions._onModifyMana,
       openDowntime: this._onOpenDowntime,
       openWorkbench: this._onOpenWorkbench,
       becomeHud: this._onBecomeHud,
@@ -127,12 +123,12 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       removeAbility: this._onRemoveAbility,
       moveAction: this._onMoveAction,
       moveAbility: this._onMoveAbility,
-      clickAbilityName: this._onClickAbilityName,
+      clickAbilityName: ActorActions._onClickAbilityName,
       toggleAbilityAccordion: this._onToggleAbilityAccordion,
-      clickActionName: this._onClickActionName,
-      clickActionDamageRoll: this._onClickActionDamageRoll,
-      createCountdownFromRecharge: this._onCreateCountdownFromRecharge,
-      rollRechargeCountdown: this._onRollRechargeCountdown,
+      clickActionName: ActorActions._onClickActionName,
+      clickActionDamageRoll: ActorActions._onClickActionDamageRoll,
+      createCountdownFromRecharge: ActorActions._onCreateCountdownFromRecharge,
+      rollRechargeCountdown: ActorActions._onRollRechargeCountdown,
       toggleDescription: this._onToggleDescription,
       addNpcActionStatus: this._onAddNpcActionStatus,
       removeNpcActionStatus: this._onRemoveNpcActionStatus,
@@ -461,7 +457,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       }));
 
       // Prepare status effects for display
-      context.statusEffects = this._prepareStatusEffects();
+      context.statusEffects = ActorActions._prepareStatusEffects(this);
     }
 
     // Prepare the Active / Inactive effects lists (actor effects + item-granted effects)
@@ -667,49 +663,6 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
   }
 
   /**
-   * Prepare items for rendering
-   * @param {Object} context - Render context
-   * @private
-   */
-  /**
-   * Prepare status effects for display
-   * Only includes status conditions from CONFIG.statusEffects (not item effects)
-   * @returns {Array} Array of status effect data
-   * @private
-   */
-  _prepareStatusEffects() {
-    const effects = [];
-
-    // Get valid status IDs from CONFIG.statusEffects
-    const validStatusIds = new Set(
-      CONFIG.statusEffects?.map(s => s.id) || []
-    );
-
-    // Get all active effects
-    for (const effect of this.actor.effects) {
-      if (effect.disabled) continue; // Skip disabled effects
-
-      // Only include effects that have a status matching our defined status conditions
-      const hasValidStatus = Array.from(effect.statuses || []).some(statusId =>
-        validStatusIds.has(statusId)
-      );
-
-      if (!hasValidStatus) continue; // Skip non-status effects (item effects, etc.)
-
-      effects.push({
-        id: effect.id,
-        uuid: effect.uuid,
-        name: effect.name || effect.label || 'Unknown',
-        icon: effect.img || 'icons/svg/aura.svg',
-        description: effect.description || '',
-        statuses: Array.from(effect.statuses || [])
-      });
-    }
-
-    return effects;
-  }
-
-  /**
    * Prepare status effects for NPC portrait display
    * Shows all non-disabled effects on the actor
    * @returns {Array} Array of effect data for display
@@ -835,16 +788,16 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     this.#disableOverrides();
 
     // Setup accordion click-outside handlers
-    this._setupAccordionClickOutside();
+    ActorSheetListeners._setupAccordionClickOutside(this);
 
     // Setup HP and Fatigue click handlers
-    this._setupHealthFatigueListeners();
+    ActorSheetListeners._setupHealthFatigueListeners(this);
 
     // Setup ancestry/class right-click delete handlers
-    this._setupAncestryClassHandlers();
+    ActorSheetListeners._setupAncestryClassHandlers(this);
 
     // Setup mana right-click handlers
-    this._setupManaHandlers();
+    ActorSheetListeners._setupManaHandlers(this);
 
     // Setup inventory grid listeners (if inventory handler exists)
     if (this.inventoryHandler) {
@@ -858,24 +811,24 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
     // Setup feature/trait/perk context menu listeners (if inventory handler exists)
     if (this.inventoryHandler) {
-      this._setupFeatureContextMenuListeners();
+      ActorSheetListeners._setupFeatureContextMenuListeners(this);
     }
 
     // Setup panel favorites context menu listeners
-    this._setupPanelContextMenuListeners();
+    ActorSheetListeners._setupPanelContextMenuListeners(this);
 
     // Belt drag-to-reorder (sliding panel's Equipped > Belt list)
-    this._setupBeltReorderListeners();
+    ActorSheetListeners._setupBeltReorderListeners(this);
 
     // Feature / trait / perk action buttons: drag onto the sliding panel's Equipped section to pin to the Belt
     FeatureAction.bindDrag(this.element, this.actor);
     FeatureAction.bindBeltDrop(this.element.querySelector('.right-column-scrollable'), this.actor);
 
     // Inventory items / spells: drag onto the Equipped section to equip / favorite them
-    this._setupEquipDrop();
+    ActorSheetListeners._setupEquipDrop(this);
 
     // Setup status icon listeners
-    this._setupStatusIconListeners();
+    ActorActions._setupStatusIconListeners(this);
 
     // Show sliding panel tooltip (first time only)
     this._showSlidingPanelTooltip();
@@ -949,14 +902,6 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       return;
     }
     return activateHandItem({ actor: this.actor, item, event, rollHandler: this.rollHandler });
-  }
-
-  static async _onRollMorale(event, target) {
-    return this.rollHandler?.rollMorale(event, target);
-  }
-
-  static async _onRollAppearing(event, target) {
-    return this.rollHandler?.rollAppearing(event);
   }
 
   // --- EQUIPMENT HANDLERS ---
@@ -1110,23 +1055,6 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     return this.actionHandler?.toggleAbilityAccordion(event, target);
   }
 
-  static async _onCreateCountdownFromRecharge(event, target) {
-    return this.actionHandler?.createCountdownFromRecharge(event, target);
-  }
-
-  static async _onRollRechargeCountdown(event, target) {
-    event.preventDefault();
-    event.stopPropagation();
-    const countdownId = target.dataset.countdownId;
-    if (!countdownId) return;
-    const journal = game.journal.get(countdownId);
-    if (!journal) return;
-    const diceOverlay = globalThis.vagabond?.ui?.countdownDiceOverlay;
-    if (diceOverlay) {
-      await diceOverlay._onRollDice(journal);
-    }
-  }
-
   static async _onAddNpcActionStatus(event, target) {
     return this.actionHandler?.addNpcActionStatus(event, target);
   }
@@ -1141,88 +1069,6 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
   static async _onRemoveNpcActionCritStatus(event, target) {
     return this.actionHandler?.removeNpcActionCritStatus(event, target);
-  }
-
-  /**
-   * Handle clicking NPC action name (posts to chat)
-   * @param {PointerEvent} event - The originating click event
-   * @param {HTMLElement} target - The capturing HTML element
-   * @protected
-   */
-  static async _onClickActionName(event, target) {
-    event.preventDefault();
-    const index = parseInt(target.dataset.index);
-    const action = this.actor.system.actions[index];
-
-    if (!action || !action.name) return;
-
-    // If recharge is a standalone Cdx countdown dice and not yet on cooldown, auto-create one
-    const cdRechargePattern = /^Cd\d+$/i;
-    if (cdRechargePattern.test(action.recharge?.trim() ?? '') && !action.rechargeCountdownId) {
-      const diceType = action.recharge.trim().replace(/^C/i, '').toLowerCase(); // "Cd6" → "d6"
-      const journal = await CountdownDice.create({
-        name: `${this.actor.name}: ${action.name}`,
-        diceType,
-        linkedRechargeActorUuid: this.actor.uuid,
-        linkedRechargeActionIndex: index,
-      });
-      const actions = foundry.utils.deepClone(this.actor.system.actions || []);
-      actions[index].rechargeCountdownId = journal.id;
-      await this.actor.update({ 'system.actions': actions });
-    }
-
-    // Capture targeted tokens for NPC action
-    const targetsAtRollTime = Array.from(game.user.targets).map(token => ({
-      tokenId: token.id,
-      sceneId: token.scene.id,
-      actorId: token.actor?.id,
-      actorName: token.name,
-      actorImg: token.document.texture.src
-    }));
-
-    // Use the unified chat card system
-    await VagabondChatCard.npcAction(this.actor, action, index, targetsAtRollTime);
-  }
-
-  /**
-   * Handle clicking NPC action damage roll (rolls damage dice)
-   * @param {PointerEvent} event - The originating click event
-   * @param {HTMLElement} target - The capturing HTML element
-   * @protected
-   */
-  static async _onClickActionDamageRoll(event, target) {
-    event.preventDefault();
-    const index = parseInt(target.dataset.index);
-    const action = this.actor.system.actions[index];
-
-    if (!action || !action.rollDamage) return;
-
-    // Roll the damage dice
-    const roll = new Roll(action.rollDamage, this.actor.getRollData());
-    VagabondDiceAppearance.applyDamageColorset(roll, action.damageType);
-    await roll.evaluate();
-    await VagabondChatHelper.postRoll(
-      this.actor,
-      roll,
-      `<strong>${action.name}</strong> Damage`
-    );
-  }
-
-  /**
-   * Handle clicking NPC ability name (posts to chat)
-   * @param {PointerEvent} event - The originating click event
-   * @param {HTMLElement} target - The capturing HTML element
-   * @protected
-   */
-  static async _onClickAbilityName(event, target) {
-    event.preventDefault();
-    const index = parseInt(target.dataset.index);
-    const ability = this.actor.system.abilities[index];
-
-    if (!ability || !ability.name) return;
-
-    // Use the unified chat card system (handles text-only abilities)
-    await VagabondChatCard.npcAction(this.actor, ability, index);
   }
 
   // ===========================
@@ -1283,23 +1129,6 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     }
   }
 
-  /**
-   * Handle leveling up the character
-   * @param {PointerEvent} event - The originating click event
-   * @param {HTMLElement} target - The capturing HTML element
-   * @protected
-   */
-  /** Wealth trade icon: exchange copper→silver→gold into the largest coins. Shared with the HUD. */
-  static async _onConsolidateWealth() {
-    const current = CurrencyHelper.normalize(this.actor.system.currency);
-    const traded = CurrencyHelper.consolidate(current);
-    if (['gold', 'silver', 'copper'].every((d) => traded[d] === current[d])) {
-      ui.notifications.info(game.i18n.localize('VAGABOND.Hud.WealthAlreadyTrimmed'));
-      return;
-    }
-    await this.actor.update({ 'system.currency': traded });
-  }
-
   static async _onLevelUp(event, target) {
     new LevelUpDialog(this.actor).render(true);
   }
@@ -1313,34 +1142,6 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
   static async _onToggleFeature(event, target) {
     const accordion = target.closest('.feature.accordion-item');
     AccordionHelper.toggle(accordion);
-  }
-
-  /**
-   * Feature / trait / perk action button (see helpers/feature-action.mjs).
-   * Left-click runs it; right-click opens Run / Add to Belt.
-   * @param {PointerEvent} event - The originating click event
-   * @param {HTMLElement} target - The capturing HTML element
-   * @protected
-   */
-  static async _onFeatureAction(event, target) {
-    event.preventDefault();
-    event.stopPropagation();
-    const key = target.dataset.actionKey;
-    if (!key) return;
-    if (event.type === 'contextmenu' || event.button === 2) {
-      // A glowing (active) action: right-click ENDS it. Otherwise the run / pin menu.
-      if (await FeatureAction.end(this.actor, key)) return;
-      ContextMenuHelper.closeAll();
-      return ContextMenuHelper.create({
-        position: { x: event.clientX, y: event.clientY },
-        items: FeatureAction.menuItems(this.actor, key),
-        className: 'inventory-context-menu',
-      });
-    }
-    // Catalyze / Mix: open the Alchemy lab at that station instead of running anything
-    const station = AlchemyLab.stationForAction(this.actor, key);
-    if (station) return AlchemyLab.openInSheet(this, station);
-    return FeatureAction.run(this.actor, key);
   }
 
   /**
@@ -1400,22 +1201,6 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
     // Hide the tooltip after first use
     this._hideSlidingPanelTooltip();
-  }
-
-  /**
-   * Handle status icon click - send to chat
-   * @param {PointerEvent} event - The originating click event
-   * @param {HTMLElement} target - The capturing HTML element
-   * @protected
-   */
-  static async _onStatusClick(event, target) {
-    const effectId = target.dataset.effectId;
-    if (!effectId) return;
-
-    const effect = this.actor.effects.get(effectId);
-    if (!effect) return;
-
-    await VagabondChatCard.statusEffect(this.actor, effect);
   }
 
   /**
@@ -1483,22 +1268,6 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
   }
 
   /**
-   * Toggle favor/hinder state
-   * @param {PointerEvent} event - The originating click event
-   * @param {HTMLElement} target - The capturing HTML element
-   * @protected
-   */
-  static async _onToggleFavorHinder(event, target) {
-    const currentState = this.actor.system.favorHinder || 'none';
-    const states = Object.keys(CONFIG.VAGABOND.favorHinderStates);
-    const currentIndex = states.indexOf(currentState);
-    const nextIndex = (currentIndex + 1) % states.length;
-    const newState = states[nextIndex];
-
-    await this.actor.update({ 'system.favorHinder': newState });
-  }
-
-  /**
    * Toggle NPC effects accordion
    * @param {PointerEvent} event - The originating click event
    * @param {HTMLElement} target - The capturing HTML element
@@ -1531,105 +1300,6 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     if (descRow) {
       descRow.classList.toggle('collapsed');
       descRow.classList.toggle('open');
-    }
-  }
-
-  /**
-   * Spend or recharge luck
-   * @param {PointerEvent} event - The originating click event
-   * @param {HTMLElement} target - The capturing HTML element
-   * @protected
-   */
-  static async _onSpendLuck(event, target) {
-    event.preventDefault();
-    const currentLuck = this.actor.system.currentLuck || 0;
-
-    if (event.shiftKey) {
-      // Shift+Click: Add +1 luck (no cap — the Luck Stat is only the Rest reset value)
-      const newLuck = currentLuck + 1;
-      await this.actor.update({ 'system.currentLuck': newLuck });
-      await VagabondChatCard.luckGain(this.actor, newLuck);
-    } else {
-      // Regular Click: Spend (decrement)
-      if (currentLuck > 0) {
-        const newLuck = currentLuck - 1;
-        await this.actor.update({ 'system.currentLuck': newLuck });
-        await VagabondChatCard.luckSpend(this.actor, newLuck);
-      }
-    }
-  }
-
-  /**
-   * Spend or add studied die
-   * @param {PointerEvent} event - The originating click event
-   * @param {HTMLElement} target - The capturing HTML element
-   * @protected
-   */
-  static async _onSpendStudiedDie(event, target) {
-    event.preventDefault();
-    const currentDice = this.actor.system.studiedDice || 0;
-
-    if (event.shiftKey) {
-      // Shift+Click: Add a studied die
-      const newCount = currentDice + 1;
-      await this.actor.update({ 'system.studiedDice': newCount });
-      await VagabondChatCard.studiedDieGain(this.actor, newCount);
-    } else {
-      // Regular Click: Spend (roll d6 and decrement)
-      if (currentDice > 0) {
-        // Roll the d6
-        const roll = new Roll('1d6');
-        await roll.evaluate();
-
-        const remainingDice = currentDice - 1;
-        await this.actor.update({ 'system.studiedDice': remainingDice });
-        await VagabondChatCard.studiedDieSpend(this.actor, roll, remainingDice);
-      }
-    }
-  }
-
-  /**
-   * Modify universal check bonus
-   * @param {PointerEvent} event - The originating click event
-   * @param {HTMLElement} target - The capturing HTML element
-   * @protected
-   */
-  static async _onModifyCheckBonus(event, target) {
-    event.preventDefault();
-    const currentBonus = this.actor.system.manualCheckBonus || 0;
-
-    // Left click: +1, Right click: -1
-    if (event.button === 2 || event.type === 'contextmenu') {
-      // Right click: decrement
-      const newBonus = currentBonus - 1;
-      await this.actor.update({ 'system.manualCheckBonus': newBonus });
-    } else {
-      // Left click: increment
-      const newBonus = currentBonus + 1;
-      await this.actor.update({ 'system.manualCheckBonus': newBonus });
-    }
-  }
-
-  /**
-   * Modify mana (spend or restore)
-   * @param {PointerEvent} event - The originating click event
-   * @param {HTMLElement} target - The capturing HTML element
-   * @protected
-   */
-  static async _onModifyMana(event, target) {
-    event.preventDefault();
-    const currentMana = this.actor.system.mana.current || 0;
-    const maxMana = this.actor.system.mana.max || 0;
-
-    // Left click: spend mana (decrement), Right click: restore mana (increment)
-    if (event.button === 2 || event.type === 'contextmenu') {
-      // Right click: restore (increment)
-      const newMana = Math.min(currentMana + 1, maxMana);
-      await this.actor.update({ 'system.mana.current': newMana });
-    } else {
-      // Left click: spend (decrement)
-      const newMana = Math.max(currentMana - 1, 0);
-      await this.actor.update({ 'system.mana.current': newMana });
     }
   }
 
@@ -1686,17 +1356,14 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
 
   /**
    * Close this sheet and open the compact view for the same actor (Character
-   * HUD / NPC HUD / Party compact view). Uses the global registry (not static
-   * imports) to avoid circular imports between the sheets and the HUDs.
+   * HUD / NPC HUD / Party compact view).
    * @param {PointerEvent} event
    * @param {HTMLElement} target
    * @protected
    */
   static async _onBecomeHud(event, target) {
     const actor = this.actor;
-    // Late lookup: the compact views import this sheet
-    const apps = globalThis.vagabond.applications;
-    const view = { character: apps.VagabondCharacterHud, npc: apps.VagabondNPCHud, party: apps.PartyCompactView }[actor.type];
+    const view = { character: VagabondCharacterHud, npc: VagabondNPCHud, party: PartyCompactView }[actor.type];
     if (!view) return;
     await this.close();
     view.open(actor);
@@ -1830,168 +1497,6 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     if (item) ItemDisguiseApp.toggle(item, { announce: !event.shiftKey });
   }
 
-  static async _onToggleEffect(event, target) {
-    if (!this.isEditable) return;
-    const effect = this._getEmbeddedDocument(target, this.actor);
-    if (!effect) return;
-
-    await toggleActorEffect(this.actor, effect);
-  }
-
-  /**
-   * Effect name = accordion trigger: expand/collapse the description below the row.
-   * Own lightweight accordion (not AccordionHelper): that one closes on any outside click and its
-   * global .accordion-item styles fight the row layout. Open ids live on the sheet so they survive
-   * re-renders (switching an effect on/off re-renders the part).
-   * @param {PointerEvent} event
-   * @param {HTMLElement} target
-   * @protected
-   */
-  static _onToggleEffectDetails(event, target) {
-    const row = target.closest('.fx-row');
-    if (!row) return;
-    this._fxOpen ??= new Set();
-    const open = row.classList.toggle('is-open');
-    target.setAttribute('aria-expanded', String(open));
-    if (open) this._fxOpen.add(row.dataset.effectId);
-    else this._fxOpen.delete(row.dataset.effectId);
-  }
-
-  /**
-   * Create a new effect on this actor and open its config sheet.
-   * `data-section="inactive"` creates it disabled.
-   * @param {PointerEvent} event
-   * @param {HTMLElement} target
-   * @protected
-   */
-  static async _onCreateEffect(event, target) {
-    if (!this.isEditable) return;
-    const aeCls = getDocumentClass('ActiveEffect');
-    const [effect] = await this.actor.createEmbeddedDocuments('ActiveEffect', [{
-      name: aeCls.defaultName({ parent: this.actor }),
-      img: 'icons/svg/aura.svg',
-      origin: this.actor.uuid,
-      disabled: target.dataset.section === 'inactive',
-    }]);
-    effect?.sheet.render(true);
-  }
-
-  /**
-   * Open the effect's config sheet.
-   * @param {PointerEvent} event
-   * @param {HTMLElement} target
-   * @protected
-   */
-  static _onEditEffect(event, target) {
-    const effect = this._getEmbeddedDocument(target, this.actor);
-    effect?.sheet.render(true);
-  }
-
-  /**
-   * Delete an effect. Statuses go through the status removal path (countdown-die cleanup);
-   * item-owned effects can't be deleted from the sheet (they belong to the item) — the user is told.
-   * @param {PointerEvent} event
-   * @param {HTMLElement} target
-   * @protected
-   */
-  static async _onDeleteEffect(event, target) {
-    if (!this.isEditable) return;
-    const effect = this._getEmbeddedDocument(target, this.actor);
-    if (!effect) return;
-
-    if (isStatusEffect(effect)) {
-      await StatusHelper.removeStatus(this.actor, effect.statuses.first());
-      return;
-    }
-
-    // Item-owned effects are part of the item: they can be disabled here but not deleted
-    if (effect.parent?.documentName === 'Item') {
-      ui.notifications.info(game.i18n.format('VAGABOND.Effect.DeleteLocked', { item: effect.parent.name }));
-      return;
-    }
-
-    const confirmed = await foundry.applications.api.DialogV2.confirm({
-      window: { title: game.i18n.format('VAGABOND.ContextMenu.DeleteItemTitle', { name: effect.name }) },
-      content: game.i18n.format('VAGABOND.ContextMenu.DeleteItemContent', { name: foundry.utils.escapeHTML(effect.name) }),
-    });
-    if (confirmed) await effect.delete();
-  }
-
-  /**
-   * Post the effect (name, icon, description) to chat.
-   * @param {PointerEvent} event
-   * @param {HTMLElement} target
-   * @protected
-   */
-  static async _onEffectToChat(event, target) {
-    const effect = this._getEmbeddedDocument(target, this.actor);
-    if (effect) await VagabondChatCard.statusEffect(this.actor, effect);
-  }
-
-  /**
-   * Kebab button → open the effect context menu below the button.
-   * @param {PointerEvent} event
-   * @param {HTMLElement} target
-   * @protected
-   */
-  static _onEffectMenu(event, target) {
-    const rect = target.getBoundingClientRect();
-    this._openEffectMenu(target, { x: rect.left, y: rect.bottom + 2 });
-  }
-
-  /**
-   * Build and show the effect context menu (Enable/Disable, Edit, Send to Chat, Delete).
-   * @param {HTMLElement} element  Any element inside the effect row
-   * @param {{x: number, y: number}} position  Screen coordinates
-   * @protected
-   */
-  _openEffectMenu(element, position) {
-    const effect = this.constructor._getEmbeddedDocument(element, this.actor);
-    if (!effect) return;
-
-    const editable = this.isEditable;
-    const status = isStatusEffect(effect);
-    // Locked effects (unequipped item / expired) can't be flipped from here; on-use effects can
-    const suppressed = !!toggleBlockerOf(effect);
-    const enabled = !effect.disabled;
-
-    const items = [];
-    items.push({
-      label: status && enabled
-        ? game.i18n.localize('VAGABOND.ContextMenu.RemoveStatus')
-        : game.i18n.localize(enabled ? 'VAGABOND.Effect.Disable' : 'VAGABOND.Effect.Enable'),
-      icon: status && enabled ? 'fas fa-times' : `fas fa-toggle-${enabled ? 'off' : 'on'}`,
-      enabled: editable && !suppressed,
-      action: () => this.constructor._onToggleEffect.call(this, null, element),
-    });
-    items.push({
-      label: game.i18n.localize('VAGABOND.ContextMenu.Edit'),
-      icon: 'fas fa-pen-to-square',
-      action: () => effect.sheet.render(true),
-    });
-    items.push({
-      label: game.i18n.localize('VAGABOND.ContextMenu.SendToChat'),
-      icon: 'fas fa-comment',
-      action: () => VagabondChatCard.statusEffect(this.actor, effect),
-    });
-    items.push({ divider: true });
-    // Item-owned effects: Delete is greyed out and names the owner (disable still works)
-    const owner = effect.parent?.documentName === 'Item' ? effect.parent : null;
-    items.push({
-      label: owner
-        ? game.i18n.format('VAGABOND.Effect.DeleteLockedMenu', { item: owner.name })
-        : game.i18n.localize('VAGABOND.ContextMenu.Delete'),
-      icon: 'fas fa-trash',
-      enabled: editable && !owner,
-      dim: !!owner,
-      action: () => this.constructor._onDeleteEffect.call(this, null, element),
-    });
-
-    ContextMenuHelper.closeAll();
-    // `inventory-context-menu` carries the menu chrome (background, border, z-index)
-    ContextMenuHelper.create({ position, items, className: 'inventory-context-menu' });
-  }
-
   /**
    * Right-click anywhere on an effect row opens the same menu as the kebab button.
    * Bound once on the window root (survives partial part re-renders).
@@ -2004,7 +1509,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
       if (!row || event.target.closest('input, textarea, select, a[href]')) return;
       event.preventDefault();
       event.stopPropagation();
-      this._openEffectMenu(row, { x: event.clientX, y: event.clientY });
+      ActorSheetEffects._openEffectMenu(this, row, { x: event.clientX, y: event.clientY });
     });
   }
 
@@ -2100,406 +1605,6 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
   }
 
   /**
-   * Setup HP and Fatigue click handlers
-   * @private
-   */
-  _setupHealthFatigueListeners() {
-    // Add fatigue skull click handlers
-    const fatigueSkulls = this.element.querySelectorAll('.fatigue-skull');
-    fatigueSkulls.forEach((skull, index) => {
-      skull.addEventListener('click', async (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-
-        const currentFatigue = this.actor.system.fatigue || 0;
-        const fatigueMax = this.actor.system.fatigueMax || 5;
-
-        // If clicking on an active skull, reduce fatigue to that index
-        // If clicking on an inactive skull, increase fatigue to index + 1
-        const newFatigue = Math.min((index + 1 === currentFatigue) ? index : index + 1, fatigueMax);
-
-        // Fatigued status auto-toggle handled centrally by the updateActor hook in vagabond.mjs
-        await this.actor.update({ 'system.fatigue': newFatigue });
-      });
-    });
-
-    // Add HP heart icon click handlers for PC and NPC
-    const hpIcons = this.element.querySelectorAll('.hp-icon, .npc-hp-heart-icon');
-    hpIcons.forEach(hpIcon => {
-      // Left-click: decrement HP
-      hpIcon.addEventListener('click', async (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-
-        const currentHP = this.actor.system.health.value || 0;
-        const newHP = Math.max(currentHP - 1, 0);
-
-        // Trigger heartbeat animation
-        hpIcon.classList.add('heartbeat');
-        setTimeout(() => hpIcon.classList.remove('heartbeat'), 300);
-
-        await this.actor.update({ 'system.health.value': newHP });
-      });
-
-      // Right-click: increment HP
-      hpIcon.addEventListener('contextmenu', async (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-
-        const currentHP = this.actor.system.health.value || 0;
-        const maxHP = this.actor.system.health.max || 10;
-        const newHP = Math.min(currentHP + 1, maxHP);
-
-        // Trigger heartbeat animation
-        hpIcon.classList.add('heartbeat');
-        setTimeout(() => hpIcon.classList.remove('heartbeat'), 300);
-
-        await this.actor.update({ 'system.health.value': newHP });
-      });
-    });
-  }
-
-  /**
-   * Setup ancestry and class right-click delete handlers
-   * @private
-   */
-  _setupAncestryClassHandlers() {
-    // Ancestry right-click to delete
-    const ancestryElement = this.element.querySelector('.ancestry-name');
-    if (ancestryElement) {
-      ancestryElement.addEventListener('contextmenu', async (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-
-        const itemId = ancestryElement.dataset.itemId;
-        if (!itemId) return;
-
-        const item = this.actor.items.get(itemId);
-        if (!item) return;
-
-        const confirmed = await foundry.applications.api.DialogV2.confirm({
-          window: { title: game.i18n.localize('VAGABOND.Dialog.DeleteItem') },
-          content: `<p>Are you sure you want to remove ${item.name}?</p>`,
-        });
-
-        if (confirmed) {
-          await item.delete();
-          ui.notifications.info(`Removed ${item.name}`);
-        }
-      });
-    }
-
-    // Class right-click to delete
-    const classElement = this.element.querySelector('.class-name');
-    if (classElement) {
-      classElement.addEventListener('contextmenu', async (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-
-        const itemId = classElement.dataset.itemId;
-        if (!itemId) return;
-
-        const item = this.actor.items.get(itemId);
-        if (!item) return;
-
-        const confirmed = await foundry.applications.api.DialogV2.confirm({
-          window: { title: game.i18n.localize('VAGABOND.Dialog.DeleteItem') },
-          content: `<p>Are you sure you want to remove ${item.name}?</p>`,
-        });
-
-        if (confirmed) {
-          await item.delete();
-          ui.notifications.info(`Removed ${item.name}`);
-        }
-      });
-    }
-  }
-
-  /**
-   * Setup right-click handlers for mana
-   * @private
-   */
-  _setupManaHandlers() {
-    const manaElement = this.element.querySelector('[data-action="modifyMana"]');
-    if (manaElement) {
-      manaElement.addEventListener('contextmenu', async (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-
-        // Call the static _onModifyMana method with the contextmenu event
-        await this.constructor._onModifyMana.call(this, event, manaElement);
-      });
-    }
-  }
-
-  /**
-   * Setup context menu listeners for features, traits, and perks
-   * @private
-   */
-  _setupFeatureContextMenuListeners() {
-    // Feature headers (from class)
-    const featureHeaders = this.element.querySelectorAll('.feature-header');
-    featureHeaders.forEach(header => {
-      header.addEventListener('contextmenu', async (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-
-        const featureItem = header.closest('[data-feature-index]');
-        if (!featureItem) return;
-
-        const featureIndex = parseInt(featureItem.dataset.featureIndex);
-        if (isNaN(featureIndex)) return;
-
-        await this.inventoryHandler.showFeatureContextMenu(event, {
-          type: 'feature',
-          index: featureIndex
-        });
-      });
-    });
-
-    // Trait headers (from ancestry)
-    const traitHeaders = this.element.querySelectorAll('.trait-header');
-    traitHeaders.forEach(header => {
-      header.addEventListener('contextmenu', async (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-
-        const traitItem = header.closest('[data-trait-index]');
-        if (!traitItem) return;
-
-        const traitIndex = parseInt(traitItem.dataset.traitIndex);
-        if (isNaN(traitIndex)) return;
-
-        await this.inventoryHandler.showFeatureContextMenu(event, {
-          type: 'trait',
-          index: traitIndex
-        });
-      });
-    });
-
-    // Perk headers (real items)
-    const perkHeaders = this.element.querySelectorAll('.perk-header');
-    perkHeaders.forEach(header => {
-      header.addEventListener('contextmenu', async (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-
-        const perkItem = header.closest('[data-item-id]');
-        if (!perkItem) return;
-
-        const itemId = perkItem.dataset.itemId;
-        if (!itemId) return;
-
-        await this.inventoryHandler.showFeatureContextMenu(event, itemId, 'perk');
-      });
-    });
-  }
-
-  /**
-   * Setup context menu listeners for equipped items and favorited spells in the sliding panel.
-   * Equipped rows use the same full item menu as the inventory grid and HUD slots.
-   * @private
-   */
-  _setupPanelContextMenuListeners() {
-    // Equipped items (weapons, relics, alchemicals, gear) — whole row
-    const equippedItems = this.element.querySelectorAll('.equipped-item[data-item-id]');
-    equippedItems.forEach(row => {
-      row.addEventListener('contextmenu', (event) => {
-        event.preventDefault();
-        // Inline controls (uses pips, grip badge, throw) handle their own right-clicks
-        if (event.target.closest('.uses-pip, [data-action="toggleWeaponGrip"], [data-action="throwWeapon"]')) return;
-        this.inventoryHandler?.showInventoryContextMenu(event, row.dataset.itemId);
-      });
-    });
-
-    // Favorited spells — right-click the row header (list) or the card (grid);
-    // the expanded accordion body has real inputs, so it keeps the native menu.
-    const spellRows = this.element.querySelectorAll('.favorited-spell .spell-trigger, .favorited-spell.spell-grid-card');
-    spellRows.forEach(row => {
-      row.addEventListener('contextmenu', (event) => {
-        const spell = this.actor.items.get(row.closest('[data-spell-id]')?.dataset.spellId);
-        if (!spell) return;
-        event.preventDefault();
-        event.stopPropagation();
-
-        ContextMenuHelper.create({
-          position: { x: event.clientX, y: event.clientY },
-          items: buildSpellMenuItems({ actor: this.actor, spell, event, spellHandler: this.spellHandler }),
-          className: 'inventory-context-menu',
-        });
-      });
-    });
-  }
-
-  /**
-   * Drag-to-reorder within the sliding panel's Equipped > Belt list. Persists
-   * `flags.vagabond.beltOrder` — the same flag the Character HUD's Belt row
-   * reads/writes, so reordering in either place updates both.
-   * @private
-   */
-  _setupBeltReorderListeners() {
-    const zone = this.element.querySelector('.equipped-belt-zone');
-    if (!zone) return;
-
-    const reorder = setupDragReorder({
-      container: zone,
-      itemSelector: '.equipped-item',
-      onDrop: (orderedIds) => EquipmentHelper.saveBeltOrder(this.actor, orderedIds),
-    });
-    for (const el of zone.querySelectorAll('.equipped-item')) reorder.bindItem(el);
-  }
-
-  /**
-   * Drag an own inventory item or spell onto the sliding panel's Equipped section: equipment is
-   * equipped to its default state (hand limit enforced by `equipWithHandLimit`), a spell is
-   * favorited. Anything else (external drops, containers, already-equipped items) keeps bubbling
-   * to the sheet's normal `_onDrop`.
-   * @private
-   */
-  _setupEquipDrop() {
-    const root = this.element;
-    const zone = root.querySelector('.right-column-scrollable');
-    if (!zone || !this.actor.isOwner) return;
-
-    // Which own item is being dragged (the payload is unreadable during dragover)
-    if (!root.dataset.equipDragTrack) {
-      root.dataset.equipDragTrack = '1';
-      root.addEventListener('dragstart', (e) => {
-        this._dragEquipId = e.target?.closest?.('[data-item-id]')?.dataset.itemId ?? null;
-      }, true);
-    }
-
-    if (zone.dataset.equipDrop) return;
-    zone.dataset.equipDrop = '1';
-    const HL = 'fx-drop-target';
-
-    /**
-     * What dropping `item` anywhere on the panel would do, or null when it is not ours to handle.
-     * Drops auto-sort: spells → Spells (favorite), hand-occupying equipment → Hands, worn → Belt.
-     */
-    const planFor = (item) => {
-      if (!item || item.parent?.uuid !== this.actor.uuid) return null;
-      if (item.type === 'spell') return item.system.favorite ? null : { kind: 'favorite', zone: '.equipped-spells-zone' };
-      if (item.type === 'equipment' && !EquipmentHelper.isEquipped(item)) {
-        const worn = EquipmentHelper.defaultEquipState(item) === 'worn';
-        return { kind: 'equip', zone: worn ? '.equipped-zone-belt' : '.equipped-zone-hands' };
-      }
-      return null;
-    };
-
-    const clearHighlight = () => {
-      zone.classList.remove(HL);
-      for (const el of zone.querySelectorAll(`.${HL}`)) el.classList.remove(HL);
-    };
-
-    zone.addEventListener('dragover', (e) => {
-      const plan = planFor(this.actor.items.get(this._dragEquipId));
-      if (!plan) return;
-      e.preventDefault();
-      e.stopPropagation();
-      e.dataTransfer.dropEffect = 'move';
-      // Light up the section the item will land in; the whole panel when that section isn't drawn yet
-      const target = zone.querySelector(plan.zone);
-      clearHighlight();
-      (target ?? zone).classList.add(HL);
-    });
-    zone.addEventListener('dragleave', (e) => {
-      if (!zone.contains(e.relatedTarget)) clearHighlight();
-    });
-    zone.addEventListener('drop', (e) => {
-      clearHighlight();
-      const data = foundry.applications.ux.TextEditor.getDragEventData(e);
-      if (data?.type !== 'Item' || !data.uuid) return;
-      const item = fromUuidSync(data.uuid);
-      const plan = planFor(item);
-      if (!plan) return;
-      e.preventDefault();
-      e.stopPropagation();
-      const op = plan.kind === 'favorite'
-        ? item.update({ 'system.favorite': true })
-        : EquipmentHelper.equipWithHandLimit(this.actor, item.id, EquipmentHelper.defaultEquipState(item));
-      Promise.resolve(op).catch((err) => console.error('Vagabond | Equipped drop failed:', err));
-    });
-  }
-
-  /**
-   * Setup status icon context menu listeners
-   * @private
-   */
-  _setupStatusIconListeners() {
-    const statusIcons = this.element.querySelectorAll('.status-icon');
-
-    statusIcons.forEach(icon => {
-      // Right-click: Show context menu
-      icon.addEventListener('contextmenu', async (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-
-        const effectId = icon.dataset.effectId;
-        if (!effectId) return;
-
-        const effect = this.actor.effects.get(effectId);
-        if (!effect) return;
-
-
-        const menuItems = [
-          {
-            label: game.i18n.localize('VAGABOND.ContextMenu.SendToChat'),
-            icon: 'fas fa-comment',
-            enabled: true,
-            action: async () => {
-              await VagabondChatCard.statusEffect(this.actor, effect);
-            }
-          },
-          {
-            label: game.i18n.localize('VAGABOND.ContextMenu.RemoveStatus'),
-            icon: 'fas fa-times',
-            enabled: true,
-            action: async () => {
-              if (this.actor.isOwner || game.user.isGM) {
-                await effect.delete();
-              } else {
-                const statusId = effect.statuses?.first() || effect.flags?.core?.statusId;
-                GMRelay.send('vagabond.applyStatus', { actorUuid: this.actor.uuid, statusId, active: false });
-              }
-            }
-          }
-        ];
-
-        ContextMenuHelper.create({
-          position: { x: event.clientX, y: event.clientY },
-          items: menuItems,
-          onClose: () => {},
-          className: 'status-context-menu'
-        });
-      });
-    });
-  }
-
-  /**
-   * Setup click outside handler for accordions
-   * @private
-   */
-  _setupAccordionClickOutside() {
-    if (this._accordionClickOutsideHandler) {
-      document.removeEventListener('click', this._accordionClickOutsideHandler);
-    }
-
-    this._accordionClickOutsideHandler = async (event) => {
-      // Handle clicks outside accordions
-      const accordions = this.element.querySelectorAll('.accordion-item.expanded');
-
-      for (const accordion of accordions) {
-        if (!accordion.contains(event.target)) {
-          AccordionHelper.close(accordion);
-        }
-      }
-    };
-
-    document.addEventListener('click', this._accordionClickOutsideHandler);
-  }
-
-  /**
    * Disable inputs subject to active effects
    * @private
    */
@@ -2540,111 +1645,18 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     return super._onDrop(event);
   }
 
-  /**
-   * Handle dropping an item
-   * @param {DragEvent} event - The originating drop event
-   * @param {Object} data - The drop data
-   * @private
-   */
+  /** Item drops: see ActorDrop.item (shared with the Character HUD). */
   async _onDropItem(event, data) {
-    if (!this.actor.isOwner) return false;
-
-    const item = await Item.implementation.fromDropData(data);
-    if (!item) return false;
-    const itemData = item.toObject();
-
-    // Handle item from same actor (sorting)
-    if (this.actor.uuid === item.parent?.uuid) {
-      return this._onSortItem(event, itemData);
-    }
-
-    // Inventory items from another actor change hands through free trade: moved (never copied),
-    // only out of inventories the user may take from (TradeHelper guard rails, GM relay).
-    if (item.parent?.documentName === 'Actor' && TradeHelper.TRADE_TYPES.includes(item.type)) {
-      const qty = await TradeHelper.pickQuantity(item, event);
-      if (!qty) return false;
-      return TradeHelper.moveItem({ source: { itemUuid: item.uuid }, dest: { actorUuid: this.actor.uuid }, qty });
-    }
-
-    return this._onDropItemCreate(itemData, event);
+    return ActorDrop.item(this, event, data);
   }
 
-  /**
-   * Handle dropping a ContainerItem (dragged from a container sheet or a party Hold) onto this
-   * actor: moved out of the container into the inventory through free trade.
-   * @param {DragEvent} event
-   * @param {Object} data  - { type, containerUuid, itemIndex, entryId?, itemData }
-   * @private
-   */
+  /** Container entry drops: see ActorDrop.containerItem. */
   async _onDropContainerItem(event, data) {
-    if (!this.actor.isOwner) return false;
-    const { containerUuid, itemIndex, itemData } = data;
-    if (!containerUuid) return false;
-    const qty = await TradeHelper.pickQuantity(itemData, event);
-    if (!qty) return false;
-    return TradeHelper.moveItem({
-      source: { containerUuid, entryId: data.entryId ?? itemData?._id ?? null, index: itemIndex },
-      dest: { actorUuid: this.actor.uuid },
-      qty,
-    });
+    return ActorDrop.containerItem(this, event, data);
   }
 
-  /**
-   * Handle sorting an item
-   * @param {DragEvent} event - The originating drop event
-   * @param {Object} itemData - The item data
-   * @private
-   */
-  async _onSortItem(event, itemData) {
-    // Get all items of the same type
-    const items = this.actor.items.filter(i => i.type === itemData.type);
 
-    // Perform standard sorting
-    const sortUpdates = foundry.utils.performIntegerSort(itemData, {
-      target: event.target,
-      siblings: items,
-    });
 
-    const updateData = sortUpdates.map(u => {
-      const update = u.update;
-      update._id = u.target._id;
-      return update;
-    });
-
-    return this.actor.updateEmbeddedDocuments('Item', updateData);
-  }
-
-  /**
-   * Handle creating an item from drop
-   * @param {Object} itemData - The item data
-   * @param {DragEvent} event - The originating drop event
-   * @private
-   */
-  async _onDropItemCreate(itemData, event) {
-    // Handle ancestry replacement
-    if (itemData.type === 'ancestry') {
-      const existingAncestry = this.actor.items.find(i => i.type === 'ancestry');
-      if (existingAncestry) {
-        await existingAncestry.delete();
-      }
-    }
-
-    // Handle class replacement
-    if (itemData.type === 'class') {
-      const existingClass = this.actor.items.find(i => i.type === 'class');
-      if (existingClass) {
-        await existingClass.delete();
-      }
-    }
-
-    // Assign gridPosition for equipment items if not set
-    if (itemData.type === 'equipment' && itemData.system && !itemData.system.gridPosition) {
-      itemData.system.gridPosition = EquipmentHelper.nextGridPosition(this.actor);
-    }
-
-    // Create the item
-    return this.actor.createEmbeddedDocuments('Item', [itemData]);
-  }
 
   /**
    * Handle dropping an active effect
@@ -2672,7 +1684,7 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
   async _onSortActiveEffect(event, effect) {
     const effects = this.actor.effects.contents;
 
-    const sortUpdates = SortingHelpers.performIntegerSort(effect, {
+    const sortUpdates = foundry.utils.performIntegerSort(effect, {
       target: event.target,
       siblings: effects,
     });
@@ -2697,22 +1709,8 @@ export class VagabondActorSheet extends api.HandlebarsApplicationMixin(
     return false;
   }
 
-  /**
-   * Handle dropping a folder
-   * @param {DragEvent} event - The originating drop event
-   * @param {Object} data - The drop data
-   * @private
-   */
+  /** Folder drops: see ActorDrop.folder. */
   async _onDropFolder(event, data) {
-    if (!this.actor.isOwner) return false;
-
-    const folder = await Folder.implementation.fromDropData(data);
-    if (!folder) return false;
-
-    // Get all items in folder
-    const items = folder.contents.map(item => item.toObject());
-
-    // Create all items
-    return this.actor.createEmbeddedDocuments('Item', items);
+    return ActorDrop.folder(this, event, data);
   }
 }

@@ -1258,7 +1258,7 @@ export class VagabondItemSheet extends api.HandlebarsApplicationMixin(
         siblings.push(effects.get(el.dataset.effectId));
     }
 
-    const sortUpdates = SortingHelpers.performIntegerSort(effect, {
+    const sortUpdates = foundry.utils.performIntegerSort(effect, {
       target,
       siblings,
     });
