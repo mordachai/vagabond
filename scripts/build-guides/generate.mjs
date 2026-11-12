@@ -1,6 +1,6 @@
 /**
  * Generate the "Build Guides" Actor compendium source (packs/_source/build-guides)
- * from scripts/build-guides/build-guides.json (extracted from Appendix C of the Alpha 3 book).
+ * from scripts/build-guides/build-guides.json (extracted from Appendix C of the Alpha 4 book).
  *
  *   node scripts/build-guides/generate.mjs            # write packs/_source/build-guides/*.json
  *   node scripts/build-guides/generate.mjs --report   # dry run, print resolution report only
@@ -277,7 +277,7 @@ for (const g of guides) {
   // --- biography note
   const note = [];
   note.push(`<h2>${esc(g.title)} — Build Guide</h2>`);
-  note.push('<p><em>Core Rulebook v3 Alpha 3, Appendix C. This Hero is built at Level 1 with no Ancestry — pick one, rename the Hero, and adjust anything you like.</em></p>');
+  note.push('<p><em>Core Rulebook v3 Alpha 4, Appendix C. This Hero is built at Level 1 with no Ancestry — pick one, rename the Hero, and adjust anything you like.</em></p>');
   if (buyNote) note.push(`<p><strong>Starting Pack note:</strong> ${esc(g.startingPack)}</p>`);
   if (tradedIn.length) note.push(`<p><strong>Traded in:</strong> the Starting Pack's ${esc(tradedIn.join(', '))} (refunded at cost) for the Armor below.</p>`);
   if (bought.length) note.push(`<p><strong>Bought with the Starting Pack's silver:</strong> ${esc(bought.join(', '))}.</p>`);

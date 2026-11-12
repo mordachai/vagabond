@@ -54,7 +54,7 @@
       "silver": 20,
       "copper": 0
     },
-    "biography": "<h2>Rogue - Assassin — Build Guide</h2>\n<p><em>Core Rulebook v3 Alpha 3, Appendix C. This Hero is built at Level 1 with no Ancestry — pick one, rename the Hero, and adjust anything you like.</em></p>\n<p><strong>Starting Pack note:</strong> Assassin (buy Shortbow)</p>\n<p><strong>Bought with the Starting Pack's silver:</strong> Shortbow (40s).</p>\n<h3>Stats at Level 10</h3>\n<p><strong>MIT</strong> 3 · <strong>DEX</strong> 7 · <strong>AWR</strong> 7 · <strong>RSN</strong> 6 · <strong>PRS</strong> 3 · <strong>LUK</strong> 5</p>\n<h3>Perks by Level</h3><ul>\n<li><strong>1st:</strong> Ambusher, Resourceful <em>(already on this sheet)</em></li>\n<li><strong>3rd:</strong> Quick Draw</li>\n<li><strong>5th:</strong> Knife Juggler</li>\n<li><strong>7th:</strong> Poisoner</li>\n<li><strong>9th:</strong> Bravado</li>\n</ul>",
+    "biography": "<h2>Rogue - Assassin — Build Guide</h2>\n<p><em>Core Rulebook v3 Alpha 4, Appendix C. This Hero is built at Level 1 with no Ancestry — pick one, rename the Hero, and adjust anything you like.</em></p>\n<p><strong>Starting Pack note:</strong> Assassin (buy Shortbow)</p>\n<p><strong>Bought with the Starting Pack's silver:</strong> Shortbow (40s).</p>\n<h3>Stats at Level 10</h3>\n<p><strong>MIT</strong> 3 · <strong>DEX</strong> 7 · <strong>AWR</strong> 7 · <strong>RSN</strong> 6 · <strong>PRS</strong> 3 · <strong>LUK</strong> 5</p>\n<h3>Perks by Level</h3><ul>\n<li><strong>1st:</strong> Ambusher, Resourceful <em>(already on this sheet)</em></li>\n<li><strong>3rd:</strong> Quick Draw</li>\n<li><strong>5th:</strong> Knife Juggler</li>\n<li><strong>7th:</strong> Poisoner</li>\n<li><strong>9th:</strong> Bravado</li>\n</ul>",
     "details": {
       "constructed": true,
       "builderDismissed": false
@@ -106,7 +106,8 @@
         "canExplode": false,
         "explodeValues": "",
         "noSlotsWhenWorn": true,
-        "handsRequired": 0
+        "handsRequired": 0,
+        "forgeable": false
       },
       "effects": [
         {
@@ -184,7 +185,8 @@
         "immunities": [],
         "gearCategory": "Personal Items",
         "alchemicalType": "concoction",
-        "lore": ""
+        "lore": "",
+        "forgeable": false
       },
       "effects": [],
       "flags": {
@@ -227,7 +229,8 @@
         "alchemicalType": "concoction",
         "lore": "",
         "isConsumable": true,
-        "isSupply": true
+        "isSupply": true,
+        "forgeable": false
       },
       "effects": [],
       "flags": {
@@ -277,7 +280,8 @@
           "label": "Ignite",
           "runAsGM": false
         },
-        "handsRequired": 1
+        "handsRequired": 1,
+        "forgeable": true
       },
       "effects": [],
       "flags": {
@@ -327,7 +331,8 @@
           "label": "Ignite",
           "runAsGM": false
         },
-        "handsRequired": 1
+        "handsRequired": 1,
+        "forgeable": true
       },
       "effects": [],
       "flags": {
@@ -369,7 +374,8 @@
         "gearCategory": "Personal Items",
         "alchemicalType": "concoction",
         "lore": "",
-        "isBeverage": true
+        "isBeverage": true,
+        "forgeable": false
       },
       "effects": [],
       "flags": {
@@ -411,7 +417,8 @@
         "gearCategory": "Alchemy & Medicine",
         "alchemicalType": "concoction",
         "lore": "",
-        "toolKind": "alchemy"
+        "toolKind": "alchemy",
+        "forgeable": true
       },
       "effects": [],
       "flags": {
@@ -458,7 +465,8 @@
           "key": "",
           "value": 10000
         },
-        "toolKind": ""
+        "toolKind": "",
+        "forgeable": false
       },
       "effects": [],
       "flags": {
@@ -511,7 +519,8 @@
           "hitOffsetX": 100,
           "auto": false
         },
-        "damageTypeOneHand": "slashing"
+        "damageTypeOneHand": "slashing",
+        "forgeable": true
       },
       "effects": [
         {
@@ -599,7 +608,8 @@
           "hitOffsetX": 100,
           "auto": false
         },
-        "damageTypeOneHand": "slashing"
+        "damageTypeOneHand": "slashing",
+        "forgeable": true
       },
       "effects": [
         {
@@ -686,7 +696,7 @@
       "type": "equipment",
       "img": "icons/equipment/chest/breastplate-quilted-brown.webp",
       "system": {
-        "description": "<p><span class=\"fontstyle0\">Leather, hide, padded.</span></p><h4><span class=\"fontstyle0\">Equipping Armor</span></h4><p><span class=\"fontstyle2\">Equipping or unequipping Armor requires a Scene (10 minutes) to complete.</span> </p>",
+        "description": "<h4><span class=\"fontstyle0\">Equipping Armor</span></h4><p><span class=\"fontstyle2\">Equipping or unequipping Armor requires a Scene (10 minutes) to complete.</span> </p>",
         "equipmentType": "armor",
         "locked": true,
         "equipped": true,
@@ -708,12 +718,13 @@
         "damageTwoHands": "d8",
         "equipmentState": "worn",
         "immunities": [],
-        "gearCategory": "",
+        "gearCategory": "Leather, hide, padded",
         "alchemicalType": "concoction",
         "lore": "",
         "armorRating": 1,
         "mightRequirement": 2,
-        "reflexPenalty": 1
+        "reflexPenalty": 1,
+        "forgeable": false
       },
       "effects": [],
       "flags": {},
@@ -762,7 +773,8 @@
           "auto": false
         },
         "damageTypeOneHand": "piercing",
-        "damageTypeTwoHands": "piercing"
+        "damageTypeTwoHands": "piercing",
+        "forgeable": true
       },
       "effects": [
         {

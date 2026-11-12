@@ -1,4 +1,4 @@
-"""Extract Appendix C (Build Guides) from the Alpha 3 PDF into build-guides.json.
+"""Extract Appendix C (Build Guides) from the Alpha 4 PDF into build-guides.json.
 
 Usage: python -I scripts/build-guides/extract-from-pdf.py
 Writes scripts/build-guides/build-guides.json (reviewed + committed; generate.mjs reads it).
@@ -8,7 +8,7 @@ from pathlib import Path
 import fitz
 
 ROOT = Path(__file__).resolve().parents[2]
-PDF = ROOT / 'docs' / 'Vagabond - Core Rulebook v3 Alpha 3 [Interactive PDF].pdf'
+PDF = ROOT / 'docs' / 'Vagabond - Core Rulebook v3 Alpha 4 [Interactive PDF].pdf'
 OUT = Path(__file__).resolve().parent / 'build-guides.json'
 
 STAT_KEYS = ['might', 'dexterity', 'awareness', 'reason', 'presence', 'luck']

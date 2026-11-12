@@ -18,7 +18,7 @@ export class EnrichmentHelper {
 
   /**
    * Class features to list on the actor sheet / HUD at `level`. Bare "Perk" grants are dropped (listed under
-   * Perks), and a scaling feature (Eureka 15+ / 14+ / 13+) collapses to the copy gained most recently, kept at
+   * Perks), and a scaling feature (Eureka 10+ / 9+ / 8+) collapses to the copy gained most recently, kept at
    * the position of its first copy. Copies are tied by `scaleKey`, else by identical description (homebrew or
    * un-migrated class items) — never by name (translated worlds).
    * @param {Item} classItem

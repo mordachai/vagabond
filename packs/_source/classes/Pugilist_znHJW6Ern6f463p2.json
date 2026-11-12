@@ -3,7 +3,7 @@
   "type": "class",
   "img": "icons/equipment/hand/gauntlet-simple-leather-brown-gold.webp",
   "system": {
-    "description": "<p><strong>I didn’t hear no bell.</strong></p><p><em>—Rocky Balboa, Rocky V</em></p><p>Pugilists are brawlers of swagger. While a monk may dedicate themself to a single focused blow, a pugilist will break their fingers and keep punching with the bloody stump.</p><h3>Iconic Pugilists</h3><ul><li><strong>Carl</strong>, <em>Dungeon Crawler Carl</em></li><li><strong>Rocky Balboa</strong>, <em>Rocky</em></li><li><strong>Hellboy</strong>, <em>Hellboy</em></li><li><strong>Stiffener Medick</strong>, <em>Redwall</em></li></ul><h3>Playing Pugilist</h3><p>Pugilists are frontline bruisers. Stay in the frontline, even while at low HP.</p><p><strong>Action:</strong> Attack (Brawl)<br /><strong>Move:</strong> Frontline<br /><strong>Starting Pack:</strong> Brawler or Monk<br /><strong>Key Stat:</strong> Might<br /><strong>Complexity:</strong> ★★☆☆☆<br /><strong>Training:</strong> Brawl, Influence</p><h3>Class Features</h3><table class=\"NormalTable\"><tbody><tr><td><p><strong>Level</strong></p></td><td><p><strong>Features</strong></p></td></tr><tr><td><p>1st</p></td><td><p>Fisticuffs, Rope-a-Dope</p></td></tr><tr><td><p>2nd</p></td><td><p>Haymaker (15+)</p></td></tr><tr><td><p>3rd</p></td><td><p>Perk</p></td></tr><tr><td><p>4th</p></td><td><p>Moxie (Cd4)</p></td></tr><tr><td><p>5th</p></td><td><p>Perk</p></td></tr><tr><td><p>6th</p></td><td><p>Title Holder (d6), Haymaker (14+)</p></td></tr><tr><td><p>7th</p></td><td><p>Perk</p></td></tr><tr><td><p>8th</p></td><td><p>Moxie (Cd6)</p></td></tr><tr><td><p>9th</p></td><td><p>Perk</p></td></tr><tr><td><p>10th</p></td><td><p>Haymaker (13+), Title Holder (d8)</p></td></tr></tbody></table>",
+    "description": "<p><strong>I didn’t hear no bell.</strong></p><p><em>—Rocky Balboa, Rocky V</em></p><p>Pugilists are brawlers of swagger. While a monk may dedicate themself to a single focused blow, a pugilist will break their fingers and keep punching with the bloody stump.</p><h3>Iconic Pugilists</h3><ul><li><strong>Carl</strong>, <em>Dungeon Crawler Carl</em></li><li><strong>Rocky Balboa</strong>, <em>Rocky</em></li><li><strong>Hellboy</strong>, <em>Hellboy</em></li><li><strong>Stiffener Medick</strong>, <em>Redwall</em></li></ul><h3>Playing Pugilist</h3><p>Pugilists are frontline bruisers. Stay in the frontline, even while at low HP.</p><p><strong>Action:</strong> Attack (Brawl)<br /><strong>Move:</strong> Frontline<br /><strong>Starting Pack:</strong> Brawler or Monk<br /><strong>Key Stat:</strong> Might<br /><strong>Complexity:</strong> ★★☆☆☆<br /><strong>Training:</strong> Brawl, Influence</p><h3>Class Features</h3><table class=\"NormalTable\"><tbody><tr><td><p><strong>Level</strong></p></td><td><p><strong>Features</strong></p></td></tr><tr><td><p>1st</p></td><td><p>Fisticuffs, Rope-a-Dope</p></td></tr><tr><td><p>2nd</p></td><td><p>Haymaker (10+)</p></td></tr><tr><td><p>3rd</p></td><td><p>Perk</p></td></tr><tr><td><p>4th</p></td><td><p>Moxie (Cd4)</p></td></tr><tr><td><p>5th</p></td><td><p>Perk</p></td></tr><tr><td><p>6th</p></td><td><p>Title Holder (d6), Haymaker (9+)</p></td></tr><tr><td><p>7th</p></td><td><p>Perk</p></td></tr><tr><td><p>8th</p></td><td><p>Moxie (Cd6)</p></td></tr><tr><td><p>9th</p></td><td><p>Perk</p></td></tr><tr><td><p>10th</p></td><td><p>Haymaker (8+), Title Holder (d8)</p></td></tr></tbody></table>",
     "isSpellcaster": false,
     "levelFeatures": [
       {
@@ -34,8 +34,8 @@
       },
       {
         "level": 2,
-        "name": "Haymaker (15+)",
-        "description": "<p>If the result of your Brawl Check for an attack exceeds your Difficulty by 15, the Target is Dazed until your next Turn. The number needed to exceed is reduced by 1 every 4 Levels hereafter.</p>",
+        "name": "Haymaker (10+)",
+        "description": "<p>If you pass a Brawl Check for an attack by 10 or more, the Target is Dazed until your next Turn. The number needed to exceed is reduced by 1 every 4 Levels hereafter.</p>",
         "statBonusPoints": 1,
         "extraTraining": 0,
         "requiredSpells": [],
@@ -97,8 +97,8 @@
       },
       {
         "level": 6,
-        "name": "Haymaker (14+)",
-        "description": "<p>If the result of your Brawl Check for an attack exceeds your Difficulty by 15, the Target is Dazed until your next Turn. The number needed to exceed is reduced by 1 every 4 Levels hereafter.</p>",
+        "name": "Haymaker (9+)",
+        "description": "<p>If you pass a Brawl Check for an attack by 10 or more, the Target is Dazed until your next Turn. The number needed to exceed is reduced by 1 every 4 Levels hereafter.</p>",
         "statBonusPoints": 0,
         "extraTraining": 0,
         "requiredSpells": [],
@@ -147,8 +147,8 @@
       },
       {
         "level": 10,
-        "name": "Haymaker (13+)",
-        "description": "<p>If the result of your Brawl Check for an attack exceeds your Difficulty by 15, the Target is Dazed until your next Turn. The number needed to exceed is reduced by 1 every 4 Levels hereafter.</p>",
+        "name": "Haymaker (8+)",
+        "description": "<p>If you pass a Brawl Check for an attack by 10 or more, the Target is Dazed until your next Turn. The number needed to exceed is reduced by 1 every 4 Levels hereafter.</p>",
         "statBonusPoints": 1,
         "extraTraining": 0,
         "requiredSpells": [],
@@ -251,7 +251,7 @@
         "changes": [
           {
             "key": "system.haymakerMargin",
-            "value": "15 - floor((@lvl - 2) / 4)",
+            "value": "10 - floor((@lvl - 2) / 4)",
             "priority": null,
             "type": "add"
           }

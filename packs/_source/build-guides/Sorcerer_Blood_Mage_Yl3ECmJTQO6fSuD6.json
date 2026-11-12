@@ -54,7 +54,7 @@
       "silver": 41,
       "copper": 0
     },
-    "biography": "<h2>Sorcerer - Blood Mage — Build Guide</h2>\n<p><em>Core Rulebook v3 Alpha 3, Appendix C. This Hero is built at Level 1 with no Ancestry — pick one, rename the Hero, and adjust anything you like.</em></p>\n<p><strong>Starting Pack note:</strong> Devout (buy Armor)</p>\n<p><strong>Traded in:</strong> the Starting Pack's Light Armor (refunded at cost) for the Armor below.</p>\n<p><strong>Bought with the Starting Pack's silver:</strong> Medium Armor (1g).</p>\n<h3>Stats at Level 10</h3>\n<p><strong>MIT</strong> 7 · <strong>DEX</strong> 5 · <strong>AWR</strong> 5 · <strong>RSN</strong> 2 · <strong>PRS</strong> 7 · <strong>LUK</strong> 3</p>\n<h3>Perks by Level</h3><ul>\n<li><strong>1st:</strong> Tough, Vehement Magic <em>(already on this sheet)</em></li>\n<li><strong>3rd:</strong> Endless Stamina</li>\n<li><strong>5th:</strong> Mesmer</li>\n<li><strong>7th:</strong> Tough</li>\n<li><strong>9th:</strong> Secret of Mana</li>\n</ul>\n<h3>Spells</h3><p>Control, Enflesh, Leech, Ward; get Fear, Hold, LIfe, and Morph later</p>",
+    "biography": "<h2>Sorcerer - Blood Mage — Build Guide</h2>\n<p><em>Core Rulebook v3 Alpha 4, Appendix C. This Hero is built at Level 1 with no Ancestry — pick one, rename the Hero, and adjust anything you like.</em></p>\n<p><strong>Starting Pack note:</strong> Devout (buy Armor)</p>\n<p><strong>Traded in:</strong> the Starting Pack's Light Armor (refunded at cost) for the Armor below.</p>\n<p><strong>Bought with the Starting Pack's silver:</strong> Medium Armor (1g).</p>\n<h3>Stats at Level 10</h3>\n<p><strong>MIT</strong> 7 · <strong>DEX</strong> 5 · <strong>AWR</strong> 5 · <strong>RSN</strong> 2 · <strong>PRS</strong> 7 · <strong>LUK</strong> 3</p>\n<h3>Perks by Level</h3><ul>\n<li><strong>1st:</strong> Tough, Vehement Magic <em>(already on this sheet)</em></li>\n<li><strong>3rd:</strong> Endless Stamina</li>\n<li><strong>5th:</strong> Mesmer</li>\n<li><strong>7th:</strong> Tough</li>\n<li><strong>9th:</strong> Secret of Mana</li>\n</ul>\n<h3>Spells</h3><p>Control, Enflesh, Leech, Ward; get Fear, Hold, LIfe, and Morph later</p>",
     "details": {
       "constructed": true,
       "builderDismissed": false
@@ -109,7 +109,8 @@
         "canExplode": false,
         "explodeValues": "",
         "noSlotsWhenWorn": true,
-        "handsRequired": 0
+        "handsRequired": 0,
+        "forgeable": false
       },
       "effects": [
         {
@@ -187,7 +188,8 @@
         "immunities": [],
         "gearCategory": "Personal Items",
         "alchemicalType": "concoction",
-        "lore": ""
+        "lore": "",
+        "forgeable": false
       },
       "effects": [],
       "flags": {
@@ -230,7 +232,8 @@
         "alchemicalType": "concoction",
         "lore": "",
         "isConsumable": true,
-        "isSupply": true
+        "isSupply": true,
+        "forgeable": false
       },
       "effects": [],
       "flags": {
@@ -280,7 +283,8 @@
           "label": "Ignite",
           "runAsGM": false
         },
-        "handsRequired": 1
+        "handsRequired": 1,
+        "forgeable": true
       },
       "effects": [],
       "flags": {
@@ -330,7 +334,8 @@
           "label": "Ignite",
           "runAsGM": false
         },
-        "handsRequired": 1
+        "handsRequired": 1,
+        "forgeable": true
       },
       "effects": [],
       "flags": {
@@ -372,7 +377,8 @@
         "gearCategory": "Personal Items",
         "alchemicalType": "concoction",
         "lore": "",
-        "isBeverage": true
+        "isBeverage": true,
+        "forgeable": false
       },
       "effects": [],
       "flags": {
@@ -415,7 +421,8 @@
         "alchemicalType": "concoction",
         "lore": "",
         "handsRequired": 1,
-        "isTrinket": true
+        "isTrinket": true,
+        "forgeable": true
       },
       "effects": [],
       "flags": {
@@ -456,7 +463,8 @@
         "immunities": [],
         "gearCategory": "Books & Magic",
         "alchemicalType": "concoction",
-        "lore": ""
+        "lore": "",
+        "forgeable": false
       },
       "effects": [],
       "flags": {
@@ -497,7 +505,8 @@
         "immunities": [],
         "gearCategory": "Books & Magic",
         "alchemicalType": "concoction",
-        "lore": ""
+        "lore": "",
+        "forgeable": false
       },
       "effects": [],
       "flags": {
@@ -587,7 +596,7 @@
       "type": "equipment",
       "img": "icons/equipment/chest/breastplate-scale-grey.webp",
       "system": {
-        "description": "<p>Chain, scale</p><h4><span class=\"fontstyle0\">Equipping Armor</span></h4><p><span class=\"fontstyle2\">Equipping or unequipping Armor requires a Scene (10 minutes) to complete.</span> </p>",
+        "description": "<h4><span class=\"fontstyle0\">Equipping Armor</span></h4><p><span class=\"fontstyle2\">Equipping or unequipping Armor requires a Scene (10 minutes) to complete.</span> </p>",
         "equipmentType": "armor",
         "locked": true,
         "equipped": true,
@@ -609,12 +618,13 @@
         "damageTwoHands": "d8",
         "equipmentState": "worn",
         "immunities": [],
-        "gearCategory": "",
+        "gearCategory": "Chain, scale",
         "alchemicalType": "concoction",
         "lore": "",
         "armorRating": 2,
         "mightRequirement": 4,
-        "reflexPenalty": 2
+        "reflexPenalty": 2,
+        "forgeable": true
       },
       "effects": [],
       "flags": {},
@@ -1212,7 +1222,9 @@
         "targetBeings": true,
         "targetObjects": true,
         "fxSchool": "necrotic",
-        "locked": true
+        "locked": true,
+        "critNoFocus": true,
+        "focusOnCast": true
       },
       "effects": [],
       "flags": {},
@@ -1277,7 +1289,13 @@
           "runAsGM": true
         },
         "targetBeings": true,
-        "targetObjects": false
+        "targetObjects": false,
+        "focusUpkeep": {
+          "mana": 1,
+          "perTarget": true,
+          "onCast": true
+        },
+        "wardUpcast": true
       },
       "effects": [],
       "flags": {},

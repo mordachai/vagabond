@@ -21,6 +21,8 @@ import { effectModeToChangeType } from '../helpers/effects.mjs';
 import { AlchemyHelper } from '../helpers/crafting/alchemy-helper.mjs';
 import { AlchemyLab } from '../helpers/alchemy-lab.mjs';
 import { GrantedItems } from '../helpers/granted-items.mjs';
+import { AbilityRedundancy } from '../helpers/ability-redundancy.mjs';
+import { sourceDocId } from '../helpers/source-id.mjs';
 import { default as PerkChoiceDialog } from './perk-choice-dialog.mjs';
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
@@ -1815,18 +1817,11 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
     const uuid = target.dataset.uuid || this.selectedSpellUuid;
     if (!uuid) return;
 
-    // Check if already owned by the actor (match by sourceId or name)
-    const ownedSpells = this.actor.items.filter(i => i.type === 'spell');
-    const ownedByUuid = ownedSpells.some(i => i.flags?.core?.sourceId === uuid);
-    let ownedByName = false;
-    try {
-      const item = await fromUuid(uuid);
-      if (item) {
-        ownedByName = ownedSpells.some(i => i.name.toLowerCase() === item.name.toLowerCase());
-      }
-    } catch { /* ignore */ }
+    // Check if already owned by the actor (compendium source id, never name)
+    const srcId = uuid.split('.').pop();
+    const owned = this.actor.items.some(i => i.type === 'spell' && sourceDocId(i) === srcId);
 
-    if (ownedByUuid || ownedByName) {
+    if (owned) {
       ui.notifications.warn('You already know this spell.');
       return;
     }
@@ -2019,7 +2014,9 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
     if (this.chosenSpells.length > 0) {
       try {
         const spellItems = [];
-        for (const uuid of this.chosenSpells) {
+        // Ability Redundancy: a Spell the hero already has is replaced by a pick of the same type
+        const spellUuids = await AbilityRedundancy.resolve(this.actor, this.chosenSpells, 'spell');
+        for (const uuid of spellUuids) {
           const item = await fromUuid(uuid);
           if (item) {
             const data = item.toObject();

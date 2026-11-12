@@ -886,7 +886,9 @@ export class VagabondDamageChatHandlers {
         await DefenseHelper.spendPatience(targetActor, shieldWeapons);
         FeatureRules.run('defended', targetActor);
       }
-      const shieldReduction = shieldRoll?.total ?? 0;
+      // CRIT DEFENSE: a Crit on the passed Check adds the Check Skill's Stat to the reduction
+      const critStatBonus = check.isSuccess && check.critStat?.value > 0 ? check.critStat.value : 0;
+      const shieldReduction = (shieldRoll?.total ?? 0) + critStatBonus;
       // Ward upcast rolled against this damage for this Target (before Armor, after the Defense dice)
       const ward = VagabondDamageHelper.preArmorReduction(button, targetActor.uuid);
       const afterShield = Math.max(0, damageAmount - shieldReduction);
@@ -923,7 +925,7 @@ export class VagabondDamageChatHandlers {
 
       const message = await this._postDefenseResult(targetActor, {
         title: `${game.i18n.localize('VAGABOND.Chat.DefenseCheck')}: ${weapon.name}`,
-        check, shieldRoll, shieldWeapons, incoming: damageAmount, shieldReduction,
+        check, shieldRoll, shieldWeapons, incoming: damageAmount, shieldReduction, critStatBonus,
         armorReduction: breakdown.armorReduction, resistReduction: breakdown.resistReduction, finalDamage, damageType, path: breakdown.path,
         flankedBonus: breakdown.flankedBonus, autoApplied: autoApply,
         applyButton: !autoApply && finalDamage > 0
@@ -995,7 +997,8 @@ export class VagabondDamageChatHandlers {
       shieldRoll = await VagabondDamagePipeline.rollDefenseDice(protector, shieldWeapons);
       await DefenseHelper.spendPatience(protector, shieldWeapons);
     }
-    const shieldReduction = shieldRoll?.total ?? 0;
+    const critStatBonus = check.isSuccess && check.critStat?.value > 0 ? check.critStat.value : 0;
+    const shieldReduction = (shieldRoll?.total ?? 0) + critStatBonus;
     const breakdown = VagabondDamageHelper.calculateFinalDamageDetailed(
       defender, Math.max(0, incoming - shieldReduction), damageType, sourceItem, { attackerActor: sourceActor }
     );
@@ -1020,7 +1023,7 @@ export class VagabondDamageChatHandlers {
         : game.i18n.localize('VAGABOND.Defense.ProtectReplacesApply');
     const message = await this._postDefenseResult(protector, {
       title: game.i18n.format('VAGABOND.Defense.ProtectTitle', { name: protector.name, target: defender.name }),
-      check, shieldRoll, shieldWeapons, incoming, shieldReduction,
+      check, shieldRoll, shieldWeapons, incoming, shieldReduction, critStatBonus,
       armorReduction: check.isSuccess ? breakdown.armorReduction : 0,
       resistReduction: check.isSuccess ? breakdown.resistReduction : 0,
       finalDamage, damageType, path: breakdown.path, flankedBonus: breakdown.flankedBonus,
@@ -1055,8 +1058,11 @@ export class VagabondDamageChatHandlers {
       .setOutcome(o.check.isSuccess ? 'PASS' : 'FAIL', o.check.isCritical);
 
     const names = o.shieldName ?? o.shieldWeapons.map(w => w.name).join(' + ');
+    const critTxt = o.critStatBonus > 0
+      ? ` + ${o.critStatBonus} (${game.i18n.localize(CONFIG.VAGABOND.stats?.[o.check.critStat?.key] ?? '') || o.check.critStat?.key} ${game.i18n.localize('VAGABOND.Chat.DefenseCritStat')})`
+      : '';
     const shieldTitle = o.shieldRoll
-      ? `${names}: ${o.shieldRoll.formula}${o.shieldRoll._perDieBonusTotal ? ` + ${o.shieldRoll._perDieBonusTotal}` : ''} = ${o.shieldReduction}`
+      ? `${names}: ${o.shieldRoll.formula}${o.shieldRoll._perDieBonusTotal ? ` + ${o.shieldRoll._perDieBonusTotal}` : ''}${critTxt} = ${o.shieldReduction}`
       : '';
     const calc = this._buildDamageCalculation(
       o.incoming, 0, o.armorReduction, o.finalDamage, o.damageType, 'reflex', damageActor,

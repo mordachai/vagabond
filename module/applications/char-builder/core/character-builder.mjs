@@ -7,6 +7,7 @@ const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 import { VagabondUIHelper } from '../../../helpers/ui-helper.mjs';
 import { stackZeroSlotItems, wearFirstBackpack } from '../../../helpers/stack-helper.mjs';
 import { effectModeToChangeType } from '../../../helpers/effects.mjs';
+import { AbilityRedundancy } from '../../../helpers/ability-redundancy.mjs';
 import { ConfigurationSystem } from '../config/configuration-system.mjs';
 import { CharacterBuilderStateManager } from '../state/state-manager.mjs';
 import { ValidationEngine } from '../state/validation-engine.mjs';
@@ -929,12 +930,14 @@ export class VagabondCharBuilder extends HandlebarsApplicationMixin(ApplicationV
     // Add items (excluding starting pack since we'll process it separately)
     // Extract selected perks from perkGrants
     const selectedPerks = (state.perkGrants || []).filter(g => g.fulfilled).map(g => g.fulfilled);
-    const allPerks = [...new Set([...(state.classPerks || []), ...selectedPerks])];
+    // Ability Redundancy: a Perk / Spell granted twice (Ancestry + Class) is replaced by a pick of the same type
+    const allPerks = await AbilityRedundancy.resolve(this.actor, [...new Set([...(state.classPerks || []), ...selectedPerks])], 'perk');
+    const allSpells = await AbilityRedundancy.resolve(this.actor, state.spells || [], 'spell');
     const itemUuids = [
       state.selectedAncestry,
       state.selectedClass,
       ...allPerks,
-      ...(state.spells || []),
+      ...allSpells,
       ...(state.gear || [])
     ].filter(uuid => uuid);
 

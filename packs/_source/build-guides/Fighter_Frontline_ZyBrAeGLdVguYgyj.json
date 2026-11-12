@@ -51,7 +51,7 @@
       "silver": 95,
       "copper": 0
     },
-    "biography": "<h2>Fighter - Frontline — Build Guide</h2>\n<p><em>Core Rulebook v3 Alpha 3, Appendix C. This Hero is built at Level 1 with no Ancestry — pick one, rename the Hero, and adjust anything you like.</em></p>\n<h3>Stats at Level 10</h3>\n<p><strong>MIT</strong> 7 · <strong>DEX</strong> 7 · <strong>AWR</strong> 7 · <strong>RSN</strong> 3 · <strong>PRS</strong> 3 · <strong>LUK</strong> 4</p>\n<h3>Perks by Level</h3><ul>\n<li><strong>1st:</strong> Bravado, Heavy Arms, Patience <em>(already on this sheet)</em></li>\n<li><strong>3rd:</strong> Cross Counter</li>\n<li><strong>4th:</strong> Limit Break</li>\n<li><strong>5th:</strong> Sentinel</li>\n<li><strong>7th:</strong> Endless Stamina</li>\n<li><strong>8th:</strong> Tough</li>\n<li><strong>9th:</strong> Second Wind</li>\n</ul>",
+    "biography": "<h2>Fighter - Frontline — Build Guide</h2>\n<p><em>Core Rulebook v3 Alpha 4, Appendix C. This Hero is built at Level 1 with no Ancestry — pick one, rename the Hero, and adjust anything you like.</em></p>\n<h3>Stats at Level 10</h3>\n<p><strong>MIT</strong> 7 · <strong>DEX</strong> 7 · <strong>AWR</strong> 7 · <strong>RSN</strong> 3 · <strong>PRS</strong> 3 · <strong>LUK</strong> 4</p>\n<h3>Perks by Level</h3><ul>\n<li><strong>1st:</strong> Bravado, Heavy Arms, Patience <em>(already on this sheet)</em></li>\n<li><strong>3rd:</strong> Cross Counter</li>\n<li><strong>4th:</strong> Limit Break</li>\n<li><strong>5th:</strong> Sentinel</li>\n<li><strong>7th:</strong> Endless Stamina</li>\n<li><strong>8th:</strong> Tough</li>\n<li><strong>9th:</strong> Second Wind</li>\n</ul>",
     "details": {
       "constructed": true,
       "builderDismissed": false
@@ -103,7 +103,8 @@
         "canExplode": false,
         "explodeValues": "",
         "noSlotsWhenWorn": true,
-        "handsRequired": 0
+        "handsRequired": 0,
+        "forgeable": false
       },
       "effects": [
         {
@@ -181,7 +182,8 @@
         "immunities": [],
         "gearCategory": "Personal Items",
         "alchemicalType": "concoction",
-        "lore": ""
+        "lore": "",
+        "forgeable": false
       },
       "effects": [],
       "flags": {
@@ -224,7 +226,8 @@
         "alchemicalType": "concoction",
         "lore": "",
         "isConsumable": true,
-        "isSupply": true
+        "isSupply": true,
+        "forgeable": false
       },
       "effects": [],
       "flags": {
@@ -274,7 +277,8 @@
           "label": "Ignite",
           "runAsGM": false
         },
-        "handsRequired": 1
+        "handsRequired": 1,
+        "forgeable": true
       },
       "effects": [],
       "flags": {
@@ -324,7 +328,8 @@
           "label": "Ignite",
           "runAsGM": false
         },
-        "handsRequired": 1
+        "handsRequired": 1,
+        "forgeable": true
       },
       "effects": [],
       "flags": {
@@ -366,7 +371,8 @@
         "gearCategory": "Personal Items",
         "alchemicalType": "concoction",
         "lore": "",
-        "isBeverage": true
+        "isBeverage": true,
+        "forgeable": false
       },
       "effects": [],
       "flags": {
@@ -416,7 +422,8 @@
           "auto": false
         },
         "damageTypeOneHand": "slashing",
-        "damageTypeTwoHands": "slashing"
+        "damageTypeTwoHands": "slashing",
+        "forgeable": true
       },
       "effects": [
         {
@@ -567,7 +574,8 @@
           "command": "",
           "label": "",
           "runAsGM": false
-        }
+        },
+        "forgeable": true
       },
       "effects": [],
       "flags": {},
@@ -579,7 +587,7 @@
       "type": "equipment",
       "img": "icons/equipment/chest/breastplate-scale-grey.webp",
       "system": {
-        "description": "<p>Chain, scale</p><h4><span class=\"fontstyle0\">Equipping Armor</span></h4><p><span class=\"fontstyle2\">Equipping or unequipping Armor requires a Scene (10 minutes) to complete.</span> </p>",
+        "description": "<h4><span class=\"fontstyle0\">Equipping Armor</span></h4><p><span class=\"fontstyle2\">Equipping or unequipping Armor requires a Scene (10 minutes) to complete.</span> </p>",
         "equipmentType": "armor",
         "locked": true,
         "equipped": true,
@@ -601,12 +609,13 @@
         "damageTwoHands": "d8",
         "equipmentState": "worn",
         "immunities": [],
-        "gearCategory": "",
+        "gearCategory": "Chain, scale",
         "alchemicalType": "concoction",
         "lore": "",
         "armorRating": 2,
         "mightRequirement": 4,
-        "reflexPenalty": 2
+        "reflexPenalty": 2,
+        "forgeable": true
       },
       "effects": [],
       "flags": {},
@@ -1047,7 +1056,7 @@
       "type": "perk",
       "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
       "system": {
-        "description": "<p><em>The knight has made you vigilant.</em></p><p>If you roll a 1 or 2 on the damage dice of a single Weapon held with both hands, you can reroll it.</p><p>Further, when you make a 2H Melee attack and roll 15 above your Difficulty, you can also Shove the Target as part of the attack.</p>",
+        "description": "<p><em>The knight has made you vigilant.</em></p><p>If you roll a 1 or 2 on the damage dice of a single Weapon held with both hands, you can reroll it.</p><p>Further, when you make a 2H Melee attack and roll 10 above your Difficulty, you can also Shove the Target as part of the attack.</p>",
         "prerequisites": {
           "stats": [
             {

@@ -23,7 +23,57 @@
       "resourceOrGroups": []
     }
   },
-  "effects": [],
+  "effects": [
+    {
+      "name": "Infravision: Darksight",
+      "origin": "Compendium.vagabond.perks.Item.QtU9SmnfbHFmCs6d",
+      "img": "icons/svg/aura.svg",
+      "_id": "InfravDarksight01",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.senses",
+            "value": "darksight",
+            "priority": null,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "vagabond": {
+          "applicationMode": "permanent"
+        }
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.361",
+        "systemId": "vagabond",
+        "systemVersion": "5.42.0",
+        "createdTime": null,
+        "modifiedTime": null,
+        "lastModifiedBy": null
+      },
+      "_key": "!items.effects!QtU9SmnfbHFmCs6d.InfravDarksight01"
+    }
+  ],
   "folder": null,
   "flags": {},
   "_stats": {

@@ -60,7 +60,7 @@
       "silver": 37,
       "copper": 0
     },
-    "biography": "<h2>Alchemist - Apothecary — Build Guide</h2>\n<p><em>Core Rulebook v3 Alpha 3, Appendix C. This Hero is built at Level 1 with no Ancestry — pick one, rename the Hero, and adjust anything you like.</em></p>\n<p><strong>Bought with the Starting Pack's silver:</strong> Alchemist’s Fire (50s).</p>\n<h3>Stats at Level 10</h3>\n<p><strong>MIT</strong> 4 · <strong>DEX</strong> 6 · <strong>AWR</strong> 7 · <strong>RSN</strong> 7 · <strong>PRS</strong> 4 · <strong>LUK</strong> 3</p>\n<h3>Perks by Level</h3><ul>\n<li><strong>1st:</strong> Deft Hands, Medic <em>(already on this sheet)</em></li>\n<li><strong>3rd:</strong> Bookworm</li>\n<li><strong>5th:</strong> Master Artisan</li>\n<li><strong>7th:</strong> Sage</li>\n<li><strong>9th:</strong> Heightened Intellect</li>\n</ul>",
+    "biography": "<h2>Alchemist - Apothecary — Build Guide</h2>\n<p><em>Core Rulebook v3 Alpha 4, Appendix C. This Hero is built at Level 1 with no Ancestry — pick one, rename the Hero, and adjust anything you like.</em></p>\n<p><strong>Bought with the Starting Pack's silver:</strong> Alchemist’s Fire (50s).</p>\n<h3>Stats at Level 10</h3>\n<p><strong>MIT</strong> 4 · <strong>DEX</strong> 6 · <strong>AWR</strong> 7 · <strong>RSN</strong> 7 · <strong>PRS</strong> 4 · <strong>LUK</strong> 3</p>\n<h3>Perks by Level</h3><ul>\n<li><strong>1st:</strong> Deft Hands, Medic <em>(already on this sheet)</em></li>\n<li><strong>3rd:</strong> Bookworm</li>\n<li><strong>5th:</strong> Master Artisan</li>\n<li><strong>7th:</strong> Sage</li>\n<li><strong>9th:</strong> Heightened Intellect</li>\n</ul>",
     "details": {
       "constructed": true,
       "builderDismissed": false
@@ -112,7 +112,8 @@
         "canExplode": false,
         "explodeValues": "",
         "noSlotsWhenWorn": true,
-        "handsRequired": 0
+        "handsRequired": 0,
+        "forgeable": false
       },
       "effects": [
         {
@@ -190,7 +191,8 @@
         "immunities": [],
         "gearCategory": "Personal Items",
         "alchemicalType": "concoction",
-        "lore": ""
+        "lore": "",
+        "forgeable": false
       },
       "effects": [],
       "flags": {
@@ -233,7 +235,8 @@
         "alchemicalType": "concoction",
         "lore": "",
         "isConsumable": true,
-        "isSupply": true
+        "isSupply": true,
+        "forgeable": false
       },
       "effects": [],
       "flags": {
@@ -283,7 +286,8 @@
           "label": "Ignite",
           "runAsGM": false
         },
-        "handsRequired": 1
+        "handsRequired": 1,
+        "forgeable": true
       },
       "effects": [],
       "flags": {
@@ -333,7 +337,8 @@
           "label": "Ignite",
           "runAsGM": false
         },
-        "handsRequired": 1
+        "handsRequired": 1,
+        "forgeable": true
       },
       "effects": [],
       "flags": {
@@ -375,7 +380,8 @@
         "gearCategory": "Personal Items",
         "alchemicalType": "concoction",
         "lore": "",
-        "isBeverage": true
+        "isBeverage": true,
+        "forgeable": false
       },
       "effects": [],
       "flags": {
@@ -417,7 +423,8 @@
         "gearCategory": "Alchemy & Medicine",
         "alchemicalType": "concoction",
         "lore": "",
-        "toolKind": "alchemy"
+        "toolKind": "alchemy",
+        "forgeable": true
       },
       "effects": [],
       "flags": {
@@ -464,7 +471,8 @@
           "key": "",
           "value": 10000
         },
-        "toolKind": ""
+        "toolKind": "",
+        "forgeable": false
       },
       "effects": [],
       "flags": {
@@ -478,7 +486,7 @@
       "type": "equipment",
       "img": "icons/equipment/chest/breastplate-quilted-brown.webp",
       "system": {
-        "description": "<p><span class=\"fontstyle0\">Leather, hide, padded.</span></p><h4><span class=\"fontstyle0\">Equipping Armor</span></h4><p><span class=\"fontstyle2\">Equipping or unequipping Armor requires a Scene (10 minutes) to complete.</span> </p>",
+        "description": "<h4><span class=\"fontstyle0\">Equipping Armor</span></h4><p><span class=\"fontstyle2\">Equipping or unequipping Armor requires a Scene (10 minutes) to complete.</span> </p>",
         "equipmentType": "armor",
         "locked": true,
         "equipped": true,
@@ -500,12 +508,13 @@
         "damageTwoHands": "d8",
         "equipmentState": "worn",
         "immunities": [],
-        "gearCategory": "",
+        "gearCategory": "Leather, hide, padded",
         "alchemicalType": "concoction",
         "lore": "",
         "armorRating": 1,
         "mightRequirement": 2,
-        "reflexPenalty": 1
+        "reflexPenalty": 1,
+        "forgeable": false
       },
       "effects": [],
       "flags": {},
@@ -569,7 +578,7 @@
       "type": "class",
       "img": "icons/consumables/potions/potion-flash-open-blue.webp",
       "system": {
-        "description": "<p><strong>Why respect knights when my potions can do anything that you can?</strong></p><p><em>—Justin Kuritzkes, Potion Seller</em></p><p>Often sequestered in a lab, alchemists study the essence of creation. They are as curious as they are resourceful, and always have “just the thing for this.”</p><h3>Iconic Alchemists</h3><ul><li><strong>The Colorman</strong>, <em>Sacré Bleu</em></li><li><strong>Dr. Jekyll</strong>, <em>Dr. Jekyll and Mr. Hyde</em></li><li><strong>Tessa Cade</strong>, <em>Defy the Night</em></li><li><strong>Walter White</strong>, <em>Breaking Bad</em></li></ul><h3>Playing Alchemist</h3><p>The alchemist is a low-defense, high-damage-and-utility blaster. It’s recommended you stay Far from Enemies to use Alchemical Items.</p><p><strong>Action:</strong> Use (Craft &amp; Attack)<br /><strong>Move:</strong> Backline<br /><strong>Starting Pack:</strong> Alchemist or Assassin<br /><strong>Key Stat:</strong> Reason<br /><strong>Complexity:</strong> ★★★★☆<br /><strong>Training:</strong> Arcana, Craft, Medicine</p><h3>Class Features</h3><table class=\"NormalTable\"><tbody><tr><td rowspan=\"2\"><p><strong>Level</strong></p></td><td rowspan=\"2\"><p><strong>Features</strong></p></td><td colspan=\"2\"><p><strong>Formulae</strong></p></td></tr><tr><td><p><strong>Known</strong></p></td><td><p><strong>Value</strong></p></td></tr><tr><td><p>1st</p></td><td><p>Alchemy, Catalyze</p></td><td><p>4</p></td><td><p>50s</p></td></tr><tr><td><p>2nd</p></td><td><p>Eureka (15+)</p></td><td><p>4</p></td><td><p>1g</p></td></tr><tr><td><p>3rd</p></td><td><p>Perk</p></td><td><p>4</p></td><td><p>1g 50s</p></td></tr><tr><td><p>4th</p></td><td><p>Potency (+1)</p></td><td><p>5</p></td><td><p>2g</p></td></tr><tr><td><p>5th</p></td><td><p>Perk</p></td><td><p>5</p></td><td><p>2g 50s</p></td></tr><tr><td><p>6th</p></td><td><p>Mix, Eureka (14+)</p></td><td><p>5</p></td><td><p>3g</p></td></tr><tr><td><p>7th</p></td><td><p>Perk</p></td><td><p>6</p></td><td><p>3g 50s</p></td></tr><tr><td><p>8th</p></td><td><p>Potency (+2)</p></td><td><p>6</p></td><td><p>4g</p></td></tr><tr><td><p>9th</p></td><td><p>Perk</p></td><td><p>6</p></td><td><p>4g 50s</p></td></tr><tr><td><p>10th</p></td><td><p>Prima Materia, Eureka (13+)</p></td><td><p>7</p></td><td><p>5g</p></td></tr></tbody></table>",
+        "description": "<p><strong>Why respect knights when my potions can do anything that you can?</strong></p><p><em>—Justin Kuritzkes, Potion Seller</em></p><p>Often sequestered in a lab, alchemists study the essence of creation. They are as curious as they are resourceful, and always have “just the thing for this.”</p><h3>Iconic Alchemists</h3><ul><li><strong>The Colorman</strong>, <em>Sacré Bleu</em></li><li><strong>Dr. Jekyll</strong>, <em>Dr. Jekyll and Mr. Hyde</em></li><li><strong>Tessa Cade</strong>, <em>Defy the Night</em></li><li><strong>Walter White</strong>, <em>Breaking Bad</em></li></ul><h3>Playing Alchemist</h3><p>The alchemist is a low-defense, high-damage-and-utility blaster. It’s recommended you stay Far from Enemies to use Alchemical Items.</p><p><strong>Action:</strong> Use (Craft &amp; Attack)<br /><strong>Move:</strong> Backline<br /><strong>Starting Pack:</strong> Alchemist or Assassin<br /><strong>Key Stat:</strong> Reason<br /><strong>Complexity:</strong> ★★★★☆<br /><strong>Training:</strong> Arcana, Craft, Medicine</p><h3>Class Features</h3><table class=\"NormalTable\"><tbody><tr><td rowspan=\"2\"><p><strong>Level</strong></p></td><td rowspan=\"2\"><p><strong>Features</strong></p></td><td colspan=\"2\"><p><strong>Formulae</strong></p></td></tr><tr><td><p><strong>Known</strong></p></td><td><p><strong>Value</strong></p></td></tr><tr><td><p>1st</p></td><td><p>Alchemy, Catalyze</p></td><td><p>4</p></td><td><p>50s</p></td></tr><tr><td><p>2nd</p></td><td><p>Eureka (10+)</p></td><td><p>4</p></td><td><p>1g</p></td></tr><tr><td><p>3rd</p></td><td><p>Perk</p></td><td><p>4</p></td><td><p>1g 50s</p></td></tr><tr><td><p>4th</p></td><td><p>Potency (+1)</p></td><td><p>5</p></td><td><p>2g</p></td></tr><tr><td><p>5th</p></td><td><p>Perk</p></td><td><p>5</p></td><td><p>2g 50s</p></td></tr><tr><td><p>6th</p></td><td><p>Mix, Eureka (9+)</p></td><td><p>5</p></td><td><p>3g</p></td></tr><tr><td><p>7th</p></td><td><p>Perk</p></td><td><p>6</p></td><td><p>3g 50s</p></td></tr><tr><td><p>8th</p></td><td><p>Potency (+2)</p></td><td><p>6</p></td><td><p>4g</p></td></tr><tr><td><p>9th</p></td><td><p>Perk</p></td><td><p>6</p></td><td><p>4g 50s</p></td></tr><tr><td><p>10th</p></td><td><p>Prima Materia, Eureka (8+)</p></td><td><p>7</p></td><td><p>5g</p></td></tr></tbody></table>",
         "isSpellcaster": false,
         "levelFeatures": [
           {
@@ -606,8 +615,8 @@
           },
           {
             "level": 2,
-            "name": "Eureka (15+)",
-            "description": "<p>When you pass a Craft Check by 15 or more, you gain a Studied die (p. 19). The roll required to do so is decreased by 1 every 4 Levels hereafter.</p>",
+            "name": "Eureka (10+)",
+            "description": "<p>When you pass a Craft Check by 10 or more, you gain a Studied die (p. 19). The roll required to do so is decreased by 1 every 4 Levels hereafter.</p>",
             "statBonusPoints": 1,
             "extraTraining": 0,
             "requiredSpells": [],
@@ -668,8 +677,8 @@
           },
           {
             "level": 6,
-            "name": "Eureka (14+)",
-            "description": "<p>When you pass a Craft Check by 15 or more, you gain a Studied die (p. 19). The roll required to do so is decreased by 1 every 4 Levels hereafter.</p>",
+            "name": "Eureka (9+)",
+            "description": "<p>When you pass a Craft Check by 10 or more, you gain a Studied die (p. 19). The roll required to do so is decreased by 1 every 4 Levels hereafter.</p>",
             "statBonusPoints": 0,
             "extraTraining": 0,
             "requiredSpells": [],
@@ -724,8 +733,8 @@
           },
           {
             "level": 10,
-            "name": "Eureka (13+)",
-            "description": "<p>When you pass a Craft Check by 15 or more, you gain a Studied die (p. 19). The roll required to do so is decreased by 1 every 4 Levels hereafter.</p>",
+            "name": "Eureka (8+)",
+            "description": "<p>When you pass a Craft Check by 10 or more, you gain a Studied die (p. 19). The roll required to do so is decreased by 1 every 4 Levels hereafter.</p>",
             "statBonusPoints": 0,
             "extraTraining": 0,
             "requiredSpells": [],
@@ -804,7 +813,7 @@
             "changes": [
               {
                 "key": "system.craft.eurekaMargin",
-                "value": "15 - floor(max(0, @lvl - 2) / 4)",
+                "value": "10 - floor(max(0, @lvl - 2) / 4)",
                 "priority": null,
                 "type": "add"
               }

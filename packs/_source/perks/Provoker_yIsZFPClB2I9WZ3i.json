@@ -3,7 +3,7 @@
   "type": "perk",
   "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
   "system": {
-    "description": "<p>You can use your Action to intimidate or otherwise goad an Enemy that can see or hear you. When you do, your Allies make all Saves provoked by that Enemy’s Attacks with Favor until the start of your Group’s next Turn.</p>",
+    "description": "<p>You can use your Action to intimidate or otherwise goad an Enemy that can see or hear you. When you do, make an Influence Check. If you pass, your Allies make all Saves provoked by that Enemy’s Attacks with Favor until the start of your Group’s next Turn.</p>",
     "prerequisites": {
       "stats": [
         {

@@ -9,31 +9,35 @@
     "traits": [
       {
         "name": "Darksight",
-        "description": "<p>You are not Blinded by Dark.</p>",
+        "description": "<p>You gain the Infravision Perk.</p>",
         "statBonusPoints": 0,
         "extraTraining": 0,
         "requiredSpells": [],
-        "allowedPerks": [],
-        "perkAmount": 0,
-        "ignorePerkPrereqs": "none",
+        "allowedPerks": [
+          "Compendium.vagabond.perks.Item.QtU9SmnfbHFmCs6d"
+        ],
+        "perkAmount": 1,
+        "ignorePerkPrereqs": "stats",
         "spellAmount": 0,
         "skillChoices": []
       },
       {
         "name": "Nimble",
-        "description": "<p>You have a 5’ bonus to Speed and ignore Hinder on Reflex Saves.</p>",
+        "description": "<p>You gain the Skirmisher Perk and ignore Hinder on Reflex Saves.</p>",
         "statBonusPoints": 0,
         "extraTraining": 0,
         "requiredSpells": [],
-        "allowedPerks": [],
-        "perkAmount": 0,
-        "ignorePerkPrereqs": "none",
+        "allowedPerks": [
+          "Compendium.vagabond.perks.Item.hJjjazBCtdV7YIc5"
+        ],
+        "perkAmount": 1,
+        "ignorePerkPrereqs": "stats",
         "spellAmount": 0,
         "skillChoices": []
       },
       {
         "name": "Scavenger",
-        "description": "<p>You have Favor on Endure Saves against being Sickened.</p>",
+        "description": "<p>You have Favor on Saves against being Sickened.</p>",
         "statBonusPoints": 0,
         "extraTraining": 0,
         "requiredSpells": [],
@@ -46,104 +50,6 @@
     ]
   },
   "effects": [
-    {
-      "name": "Darksight",
-      "origin": "Compendium.vagabond.ancestries.Item.vcPfVxMJXWTPteGx",
-      "img": "icons/svg/aura.svg",
-      "_id": "Dk2gGoblinSght02",
-      "type": "base",
-      "system": {
-        "changes": [
-          {
-            "key": "system.senses",
-            "value": "darksight",
-            "priority": null,
-            "type": "add"
-          }
-        ]
-      },
-      "disabled": false,
-      "duration": {
-        "value": null,
-        "units": "seconds",
-        "expiry": null,
-        "expired": false
-      },
-      "description": "",
-      "tint": "#ffffff",
-      "transfer": true,
-      "statuses": [],
-      "sort": 0,
-      "flags": {
-        "vagabond": {
-          "applicationMode": "permanent"
-        }
-      },
-      "start": null,
-      "showIcon": 1,
-      "folder": null,
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null,
-        "coreVersion": "14.361",
-        "systemId": "vagabond",
-        "systemVersion": "5.42.0",
-        "createdTime": null,
-        "modifiedTime": null,
-        "lastModifiedBy": null
-      },
-      "_key": "!items.effects!vcPfVxMJXWTPteGx.Dk2gGoblinSght02"
-    },
-    {
-      "name": "Nimble",
-      "origin": "Compendium.vagabond.ancestries.Item.vcPfVxMJXWTPteGx",
-      "img": "icons/svg/aura.svg",
-      "_id": "sx07MuawyaLixpAt",
-      "type": "base",
-      "system": {
-        "changes": [
-          {
-            "key": "system.speed.bonus",
-            "value": 5,
-            "priority": null,
-            "type": "add"
-          }
-        ]
-      },
-      "disabled": false,
-      "duration": {
-        "value": null,
-        "units": "seconds",
-        "expiry": null,
-        "expired": false
-      },
-      "description": "",
-      "tint": "#ffffff",
-      "transfer": true,
-      "statuses": [],
-      "sort": 0,
-      "flags": {
-        "vagabond": {
-          "applicationMode": "permanent"
-        }
-      },
-      "start": null,
-      "showIcon": 1,
-      "folder": null,
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null,
-        "coreVersion": "14.361",
-        "systemId": "vagabond",
-        "systemVersion": "5.42.0",
-        "createdTime": 1765107430353,
-        "modifiedTime": 1765107475581,
-        "lastModifiedBy": "13p65OEadZSZVLRk"
-      },
-      "_key": "!items.effects!vcPfVxMJXWTPteGx.sx07MuawyaLixpAt"
-    },
     {
       "name": "Scavenger",
       "origin": "Compendium.vagabond.ancestries.Item.vcPfVxMJXWTPteGx",

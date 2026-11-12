@@ -41,7 +41,7 @@
       },
       {
         "name": "Naturally Attuned",
-        "description": "<p>You know a Spell of your choice and can Cast it with a Skill of your choice. Further, once per Round, you can Cast it with a 1 Mana discount on its Delivery.</p>",
+        "description": "<p>You know a Spell and can Cast it with a Skill of your choice. Further, once per Round, you can Cast it with a 1 Mana discount on its Delivery.</p>",
         "statBonusPoints": 0,
         "extraTraining": 0,
         "requiredSpells": [],

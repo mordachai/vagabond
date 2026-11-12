@@ -9,7 +9,7 @@ import { VagabondChatCard } from './chat-card.mjs';
  * "You can spend 1 Mana and use your Action or skip your Move to restore (d4 + your Level) HP to
  * yourself or a Close Being." The die comes from `system.layOnHandsDie` (the class's "Lay on Hands"
  * effect: 4 / 6 / 8 at Levels 2 / 6 / 10); the Statuses Divine Resolve cures from
- * `system.layOnHandsCures`. Everything else (Paragon's Aura, Holy Diver, Enspell) is text.
+ * `system.layOnHandsCures`. Everything else (Paragon's Aura, Holy Diver, Nimbus) is text.
  *
  * The roll goes through the damage pipeline as a healing roll (so Healing bonuses such as Virtuoso's
  * Inspiration die apply) and lands on a standard action card with the Apply button for the Target.

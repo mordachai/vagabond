@@ -51,7 +51,7 @@
       "silver": 0,
       "copper": 0
     },
-    "biography": "<h2>Druid — Build Guide</h2>\n<p><em>Core Rulebook v3 Alpha 3, Appendix C. This Hero is built at Level 1 with no Ancestry — pick one, rename the Hero, and adjust anything you like.</em></p>\n<p><strong>Bought with the Starting Pack's silver:</strong> Trinket (50s), Medium Armor (1g).</p>\n<p><em>The build's gear costs 45s more than the Starting Pack's money; it starts with no coins left.</em></p>\n<h3>Stats at Level 10</h3>\n<p><strong>MIT</strong> 7 · <strong>DEX</strong> 6 · <strong>AWR</strong> 7 · <strong>RSN</strong> 4 · <strong>PRS</strong> 4 · <strong>LUK</strong> 3</p>\n<h3>Perks by Level</h3><ul>\n<li><strong>1st:</strong> Shapechanger, Snareroot Trapper <em>(already on this sheet)</em></li>\n<li><strong>3rd:</strong> Sixth Sense</li>\n<li><strong>5th:</strong> Tough</li>\n<li><strong>7th:</strong> Cross Counter</li>\n<li><strong>9th:</strong> Heightened Cognition</li>\n</ul>\n<h3>Spells</h3><p>Polymorph, Sprout; get Life, Terraform, and Ward later.</p>",
+    "biography": "<h2>Druid — Build Guide</h2>\n<p><em>Core Rulebook v3 Alpha 4, Appendix C. This Hero is built at Level 1 with no Ancestry — pick one, rename the Hero, and adjust anything you like.</em></p>\n<p><strong>Bought with the Starting Pack's silver:</strong> Trinket (50s), Medium Armor (1g).</p>\n<p><em>The build's gear costs 45s more than the Starting Pack's money; it starts with no coins left.</em></p>\n<h3>Stats at Level 10</h3>\n<p><strong>MIT</strong> 7 · <strong>DEX</strong> 6 · <strong>AWR</strong> 7 · <strong>RSN</strong> 4 · <strong>PRS</strong> 4 · <strong>LUK</strong> 3</p>\n<h3>Perks by Level</h3><ul>\n<li><strong>1st:</strong> Shapechanger, Snareroot Trapper <em>(already on this sheet)</em></li>\n<li><strong>3rd:</strong> Sixth Sense</li>\n<li><strong>5th:</strong> Tough</li>\n<li><strong>7th:</strong> Cross Counter</li>\n<li><strong>9th:</strong> Heightened Cognition</li>\n</ul>\n<h3>Spells</h3><p>Polymorph, Sprout; get Life, Terraform, and Ward later.</p>",
     "details": {
       "constructed": true,
       "builderDismissed": false
@@ -106,7 +106,8 @@
         "canExplode": false,
         "explodeValues": "",
         "noSlotsWhenWorn": true,
-        "handsRequired": 0
+        "handsRequired": 0,
+        "forgeable": false
       },
       "effects": [
         {
@@ -184,7 +185,8 @@
         "immunities": [],
         "gearCategory": "Personal Items",
         "alchemicalType": "concoction",
-        "lore": ""
+        "lore": "",
+        "forgeable": false
       },
       "effects": [],
       "flags": {
@@ -227,7 +229,8 @@
         "alchemicalType": "concoction",
         "lore": "",
         "isConsumable": true,
-        "isSupply": true
+        "isSupply": true,
+        "forgeable": false
       },
       "effects": [],
       "flags": {
@@ -277,7 +280,8 @@
           "label": "Ignite",
           "runAsGM": false
         },
-        "handsRequired": 1
+        "handsRequired": 1,
+        "forgeable": true
       },
       "effects": [],
       "flags": {
@@ -327,7 +331,8 @@
           "label": "Ignite",
           "runAsGM": false
         },
-        "handsRequired": 1
+        "handsRequired": 1,
+        "forgeable": true
       },
       "effects": [],
       "flags": {
@@ -369,7 +374,8 @@
         "gearCategory": "Personal Items",
         "alchemicalType": "concoction",
         "lore": "",
-        "isBeverage": true
+        "isBeverage": true,
+        "forgeable": false
       },
       "effects": [],
       "flags": {
@@ -422,7 +428,8 @@
         "damageTypeTwoHands": "blunt",
         "altSkills": [
           "melee"
-        ]
+        ],
+        "forgeable": true
       },
       "effects": [],
       "flags": {
@@ -466,7 +473,8 @@
         "gearCategory": "Outdoors",
         "alchemicalType": "concoction",
         "lore": "",
-        "toolKind": "herbalism"
+        "toolKind": "herbalism",
+        "forgeable": true
       },
       "effects": [],
       "flags": {
@@ -513,7 +521,8 @@
           "key": "",
           "value": 5000
         },
-        "toolKind": ""
+        "toolKind": "",
+        "forgeable": false
       },
       "effects": [],
       "flags": {
@@ -563,7 +572,8 @@
           "runAsGM": false
         },
         "isConsumable": true,
-        "handsRequired": 1
+        "handsRequired": 1,
+        "forgeable": true
       },
       "effects": [],
       "flags": {
@@ -604,7 +614,8 @@
         "immunities": [],
         "gearCategory": "Games & Toys",
         "alchemicalType": "concoction",
-        "lore": ""
+        "lore": "",
+        "forgeable": false
       },
       "effects": [],
       "flags": {
@@ -647,7 +658,8 @@
         "alchemicalType": "concoction",
         "lore": "",
         "handsRequired": 1,
-        "isTrinket": true
+        "isTrinket": true,
+        "forgeable": true
       },
       "effects": [],
       "flags": {
@@ -661,7 +673,7 @@
       "type": "equipment",
       "img": "icons/equipment/chest/breastplate-scale-grey.webp",
       "system": {
-        "description": "<p>Chain, scale</p><h4><span class=\"fontstyle0\">Equipping Armor</span></h4><p><span class=\"fontstyle2\">Equipping or unequipping Armor requires a Scene (10 minutes) to complete.</span> </p>",
+        "description": "<h4><span class=\"fontstyle0\">Equipping Armor</span></h4><p><span class=\"fontstyle2\">Equipping or unequipping Armor requires a Scene (10 minutes) to complete.</span> </p>",
         "equipmentType": "armor",
         "locked": true,
         "equipped": true,
@@ -683,12 +695,13 @@
         "damageTwoHands": "d8",
         "equipmentState": "worn",
         "immunities": [],
-        "gearCategory": "",
+        "gearCategory": "Chain, scale",
         "alchemicalType": "concoction",
         "lore": "",
         "armorRating": 2,
         "mightRequirement": 4,
-        "reflexPenalty": 2
+        "reflexPenalty": 2,
+        "forgeable": true
       },
       "effects": [],
       "flags": {},
@@ -1260,7 +1273,12 @@
         },
         "targetBeings": true,
         "targetObjects": false,
-        "focusOnCast": true
+        "focusOnCast": true,
+        "focusUpkeep": {
+          "mana": 1,
+          "perTarget": false,
+          "onCast": true
+        }
       },
       "effects": [],
       "flags": {},
@@ -1292,7 +1310,26 @@
             "damageOnTick": "",
             "damageType": "-"
           }
-        ]
+        ],
+        "surface": {
+          "enabled": true,
+          "around": 1,
+          "difficult": true,
+          "enterDamage": "",
+          "turnEndDamage": "",
+          "whileIn": "",
+          "obscure": false,
+          "clip": "jb2a.entangle.02.loop.02.green",
+          "tint": ""
+        },
+        "hitMacro": {
+          "enabled": true,
+          "uuid": "",
+          "command": "system:spell.surface",
+          "label": "Sprout",
+          "runAsGM": false
+        },
+        "focusOnCast": true
       },
       "effects": [],
       "flags": {},

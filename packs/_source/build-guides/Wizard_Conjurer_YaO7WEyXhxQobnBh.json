@@ -57,7 +57,7 @@
       "silver": 31,
       "copper": 0
     },
-    "biography": "<h2>Wizard - Conjurer — Build Guide</h2>\n<p><em>Core Rulebook v3 Alpha 3, Appendix C. This Hero is built at Level 1 with no Ancestry — pick one, rename the Hero, and adjust anything you like.</em></p>\n<h3>Stats at Level 10</h3>\n<p><strong>MIT</strong> 4 · <strong>DEX</strong> 5 · <strong>AWR</strong> 7 · <strong>RSN</strong> 7 · <strong>PRS</strong> 5 · <strong>LUK</strong> 3</p>\n<h3>Perks by Level</h3><ul>\n<li><strong>1st:</strong> Bookworm, Conjurer <em>(already on this sheet)</em></li>\n<li><strong>3rd:</strong> Ritualist</li>\n<li><strong>5th:</strong> Familiar</li>\n<li><strong>7th:</strong> Secret of Mana</li>\n<li><strong>9th:</strong> Secret of Mana</li>\n</ul>\n<h3>Spells</h3><p>Beast, Blink, Forge, Portal; get Aqua, Gas, Gust, and Ward later</p>",
+    "biography": "<h2>Wizard - Conjurer — Build Guide</h2>\n<p><em>Core Rulebook v3 Alpha 4, Appendix C. This Hero is built at Level 1 with no Ancestry — pick one, rename the Hero, and adjust anything you like.</em></p>\n<h3>Stats at Level 10</h3>\n<p><strong>MIT</strong> 4 · <strong>DEX</strong> 5 · <strong>AWR</strong> 7 · <strong>RSN</strong> 7 · <strong>PRS</strong> 5 · <strong>LUK</strong> 3</p>\n<h3>Perks by Level</h3><ul>\n<li><strong>1st:</strong> Bookworm, Conjurer <em>(already on this sheet)</em></li>\n<li><strong>3rd:</strong> Ritualist</li>\n<li><strong>5th:</strong> Familiar</li>\n<li><strong>7th:</strong> Secret of Mana</li>\n<li><strong>9th:</strong> Secret of Mana</li>\n</ul>\n<h3>Spells</h3><p>Beast, Blink, Forge, Portal; get Aqua, Gas, Gust, and Ward later</p>",
     "details": {
       "constructed": true,
       "builderDismissed": false
@@ -112,7 +112,8 @@
         "canExplode": false,
         "explodeValues": "",
         "noSlotsWhenWorn": true,
-        "handsRequired": 0
+        "handsRequired": 0,
+        "forgeable": false
       },
       "effects": [
         {
@@ -190,7 +191,8 @@
         "immunities": [],
         "gearCategory": "Personal Items",
         "alchemicalType": "concoction",
-        "lore": ""
+        "lore": "",
+        "forgeable": false
       },
       "effects": [],
       "flags": {
@@ -233,7 +235,8 @@
         "alchemicalType": "concoction",
         "lore": "",
         "isConsumable": true,
-        "isSupply": true
+        "isSupply": true,
+        "forgeable": false
       },
       "effects": [],
       "flags": {
@@ -283,7 +286,8 @@
           "label": "Ignite",
           "runAsGM": false
         },
-        "handsRequired": 1
+        "handsRequired": 1,
+        "forgeable": true
       },
       "effects": [],
       "flags": {
@@ -333,7 +337,8 @@
           "label": "Ignite",
           "runAsGM": false
         },
-        "handsRequired": 1
+        "handsRequired": 1,
+        "forgeable": true
       },
       "effects": [],
       "flags": {
@@ -375,7 +380,8 @@
         "gearCategory": "Personal Items",
         "alchemicalType": "concoction",
         "lore": "",
-        "isBeverage": true
+        "isBeverage": true,
+        "forgeable": false
       },
       "effects": [],
       "flags": {
@@ -418,7 +424,8 @@
         "alchemicalType": "concoction",
         "lore": "",
         "handsRequired": 1,
-        "isTrinket": true
+        "isTrinket": true,
+        "forgeable": true
       },
       "effects": [],
       "flags": {
@@ -461,7 +468,8 @@
         "alchemicalType": "concoction",
         "lore": "",
         "handsRequired": 1,
-        "isTrinket": true
+        "isTrinket": true,
+        "forgeable": true
       },
       "effects": [],
       "flags": {
@@ -502,7 +510,8 @@
         "immunities": [],
         "gearCategory": "Clothing, Hygiene, & Textiles",
         "alchemicalType": "concoction",
-        "lore": ""
+        "lore": "",
+        "forgeable": false
       },
       "effects": [],
       "flags": {
@@ -543,7 +552,8 @@
         "immunities": [],
         "gearCategory": "Personal Items",
         "alchemicalType": "concoction",
-        "lore": ""
+        "lore": "",
+        "forgeable": false
       },
       "effects": [],
       "flags": {
@@ -584,7 +594,8 @@
         "immunities": [],
         "gearCategory": "Books & Magic",
         "alchemicalType": "concoction",
-        "lore": ""
+        "lore": "",
+        "forgeable": true
       },
       "effects": [],
       "flags": {
@@ -1049,7 +1060,32 @@
         "targetBeings": true,
         "targetObjects": false,
         "fxSchool": "arcane",
-        "locked": true
+        "locked": true,
+        "focusOnCast": true,
+        "focusUpkeep": {
+          "mana": 1,
+          "perTarget": false,
+          "onCast": false
+        },
+        "conjure": {
+          "kind": "beings",
+          "beingType": "Beasts",
+          "budget": "max(1, floor(@lvl / 2))",
+          "maxSlots": 1,
+          "maxCost": {
+            "gold": 0,
+            "silver": 0,
+            "copper": 0
+          },
+          "forgeableOnly": false
+        },
+        "hitMacro": {
+          "enabled": true,
+          "uuid": "",
+          "command": "system:spell.conjure",
+          "label": "Beast",
+          "runAsGM": false
+        }
       },
       "effects": [],
       "flags": {},
@@ -1091,7 +1127,27 @@
         "targetBeings": true,
         "targetObjects": false,
         "fxSchool": "shadow",
-        "locked": true
+        "locked": true,
+        "focusOnCast": true,
+        "conjure": {
+          "kind": "items",
+          "beingType": "",
+          "budget": "",
+          "maxSlots": 1,
+          "maxCost": {
+            "gold": 1,
+            "silver": 0,
+            "copper": 0
+          },
+          "forgeableOnly": true
+        },
+        "hitMacro": {
+          "enabled": true,
+          "uuid": "",
+          "command": "system:spell.conjure",
+          "label": "Forge",
+          "runAsGM": false
+        }
       },
       "effects": [],
       "flags": {},

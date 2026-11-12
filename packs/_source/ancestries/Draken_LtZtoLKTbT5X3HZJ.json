@@ -48,7 +48,7 @@
       },
       {
         "name": "Draconic Resilience",
-        "description": "<p>You take half damage from a source of your choice from either Acid, Cold, Fire, or Shock.</p>",
+        "description": "<p>You take half damage from either Acid, Cold, Fire, or Shock.</p>",
         "statBonusPoints": 0,
         "extraTraining": 0,
         "requiredSpells": [],

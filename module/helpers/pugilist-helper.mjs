@@ -4,8 +4,8 @@ import { NoticeChatCards } from './notice-chat-cards.mjs';
 /**
  * Pugilist — Haymaker (optional automation).
  *
- * A Brawl attack whose Check beats the Difficulty by `system.haymakerMargin` or more (15, then 14 at
- * Level 6 and 13 at Level 10 — the class's "Haymaker" effect; 0 when the effect is off or the world
+ * A Brawl attack whose Check beats the Difficulty by `system.haymakerMargin` or more (10, then 9 at
+ * Level 6 and 8 at Level 10 — the class's "Haymaker" effect; 0 when the effect is off or the world
  * Class Automation mode says manual) Dazes its Target "until your next Turn".
  *
  * Duration: the Pugilist's actor remembers who it Dazed (`flags.vagabond.haymakerTargets`, written by

@@ -57,7 +57,7 @@
       "silver": 10,
       "copper": 0
     },
-    "biography": "<h2>Wizard - Transmuter — Build Guide</h2>\n<p><em>Core Rulebook v3 Alpha 3, Appendix C. This Hero is built at Level 1 with no Ancestry — pick one, rename the Hero, and adjust anything you like.</em></p>\n<p><strong>Starting Pack note:</strong> Tinker (buy Trinket)</p>\n<p><strong>Bought with the Starting Pack's silver:</strong> Trinket (50s).</p>\n<h3>Stats at Level 10</h3>\n<p><strong>MIT</strong> 3 · <strong>DEX</strong> 6 · <strong>AWR</strong> 5 · <strong>RSN</strong> 7 · <strong>PRS</strong> 3 · <strong>LUK</strong> 7</p>\n<h3>Perks by Level</h3><ul>\n<li><strong>1st:</strong> Bookworm, Resourceful <em>(already on this sheet)</em></li>\n<li><strong>3rd:</strong> Arcane Artisan</li>\n<li><strong>5th:</strong> Instant Weapon</li>\n<li><strong>7th:</strong> Secret of Mana</li>\n<li><strong>9th:</strong> Heightened Intellect</li>\n</ul>\n<h3>Spells</h3><p>Animate, Forge, Knock, Rust; get Hold, Junk, Polymorph, and Terraform later</p>",
+    "biography": "<h2>Wizard - Transmuter — Build Guide</h2>\n<p><em>Core Rulebook v3 Alpha 4, Appendix C. This Hero is built at Level 1 with no Ancestry — pick one, rename the Hero, and adjust anything you like.</em></p>\n<p><strong>Starting Pack note:</strong> Tinker (buy Trinket)</p>\n<p><strong>Bought with the Starting Pack's silver:</strong> Trinket (50s).</p>\n<h3>Stats at Level 10</h3>\n<p><strong>MIT</strong> 3 · <strong>DEX</strong> 6 · <strong>AWR</strong> 5 · <strong>RSN</strong> 7 · <strong>PRS</strong> 3 · <strong>LUK</strong> 7</p>\n<h3>Perks by Level</h3><ul>\n<li><strong>1st:</strong> Bookworm, Resourceful <em>(already on this sheet)</em></li>\n<li><strong>3rd:</strong> Arcane Artisan</li>\n<li><strong>5th:</strong> Instant Weapon</li>\n<li><strong>7th:</strong> Secret of Mana</li>\n<li><strong>9th:</strong> Heightened Intellect</li>\n</ul>\n<h3>Spells</h3><p>Animate, Forge, Knock, Rust; get Hold, Junk, Polymorph, and Terraform later</p>",
     "details": {
       "constructed": true,
       "builderDismissed": false
@@ -112,7 +112,8 @@
         "canExplode": false,
         "explodeValues": "",
         "noSlotsWhenWorn": true,
-        "handsRequired": 0
+        "handsRequired": 0,
+        "forgeable": false
       },
       "effects": [
         {
@@ -190,7 +191,8 @@
         "immunities": [],
         "gearCategory": "Outdoors",
         "alchemicalType": "concoction",
-        "lore": ""
+        "lore": "",
+        "forgeable": false
       },
       "effects": [],
       "flags": {
@@ -233,7 +235,8 @@
         "alchemicalType": "concoction",
         "lore": "",
         "isConsumable": true,
-        "isSupply": true
+        "isSupply": true,
+        "forgeable": false
       },
       "effects": [],
       "flags": {
@@ -283,7 +286,8 @@
           "label": "Ignite",
           "runAsGM": false
         },
-        "handsRequired": 1
+        "handsRequired": 1,
+        "forgeable": true
       },
       "effects": [],
       "flags": {
@@ -333,7 +337,8 @@
           "label": "Ignite",
           "runAsGM": false
         },
-        "handsRequired": 1
+        "handsRequired": 1,
+        "forgeable": true
       },
       "effects": [],
       "flags": {
@@ -375,7 +380,8 @@
         "gearCategory": "Outdoors",
         "alchemicalType": "concoction",
         "lore": "",
-        "isBeverage": true
+        "isBeverage": true,
+        "forgeable": false
       },
       "effects": [],
       "flags": {
@@ -416,7 +422,8 @@
         "immunities": [],
         "gearCategory": "Hardware",
         "alchemicalType": "concoction",
-        "lore": ""
+        "lore": "",
+        "forgeable": true
       },
       "effects": [],
       "flags": {
@@ -463,7 +470,8 @@
           "key": "",
           "value": 10000
         },
-        "toolKind": ""
+        "toolKind": "",
+        "forgeable": false
       },
       "effects": [],
       "flags": {
@@ -510,7 +518,8 @@
           "auto": false
         },
         "damageTypeOneHand": "piercing",
-        "damageTypeTwoHands": "piercing"
+        "damageTypeTwoHands": "piercing",
+        "forgeable": true
       },
       "effects": [],
       "flags": {},
@@ -573,7 +582,8 @@
           "missDuration": 600,
           "missSound": "",
           "soundVolume": 0.6
-        }
+        },
+        "forgeable": false
       },
       "effects": [],
       "flags": {},
@@ -614,7 +624,8 @@
         "alchemicalType": "concoction",
         "lore": "",
         "handsRequired": 1,
-        "isTrinket": true
+        "isTrinket": true,
+        "forgeable": true
       },
       "effects": [],
       "flags": {
@@ -1101,7 +1112,27 @@
         "targetBeings": true,
         "targetObjects": false,
         "fxSchool": "shadow",
-        "locked": true
+        "locked": true,
+        "focusOnCast": true,
+        "conjure": {
+          "kind": "items",
+          "beingType": "",
+          "budget": "",
+          "maxSlots": 1,
+          "maxCost": {
+            "gold": 1,
+            "silver": 0,
+            "copper": 0
+          },
+          "forgeableOnly": true
+        },
+        "hitMacro": {
+          "enabled": true,
+          "uuid": "",
+          "command": "system:spell.conjure",
+          "label": "Forge",
+          "runAsGM": false
+        }
       },
       "effects": [],
       "flags": {},

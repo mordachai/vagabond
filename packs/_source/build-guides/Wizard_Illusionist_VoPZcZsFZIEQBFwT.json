@@ -57,7 +57,7 @@
       "silver": 15,
       "copper": 0
     },
-    "biography": "<h2>Wizard - Illusionist — Build Guide</h2>\n<p><em>Core Rulebook v3 Alpha 3, Appendix C. This Hero is built at Level 1 with no Ancestry — pick one, rename the Hero, and adjust anything you like.</em></p>\n<h3>Stats at Level 10</h3>\n<p><strong>MIT</strong> 4 · <strong>DEX</strong> 5 · <strong>AWR</strong> 7 · <strong>RSN</strong> 7 · <strong>PRS</strong> 4 · <strong>LUK</strong> 4</p>\n<h3>Perks by Level</h3><ul>\n<li><strong>1st:</strong> Bookworm, Extrovert <em>(already on this sheet)</em></li>\n<li><strong>3rd:</strong> Impersonator</li>\n<li><strong>5th:</strong> Sage</li>\n<li><strong>7th:</strong> Secret of Mana</li>\n<li><strong>9th:</strong> <em>(blank in the book)</em></li>\n</ul>\n<h3>Spells</h3><p>Color, Fear, Mirage, Shade; get Amplify, Blink, Confuse, and Morph later</p>\n<p><em>Book note: one Perk level is blank in the book.</em></p>",
+    "biography": "<h2>Wizard - Illusionist — Build Guide</h2>\n<p><em>Core Rulebook v3 Alpha 4, Appendix C. This Hero is built at Level 1 with no Ancestry — pick one, rename the Hero, and adjust anything you like.</em></p>\n<h3>Stats at Level 10</h3>\n<p><strong>MIT</strong> 4 · <strong>DEX</strong> 5 · <strong>AWR</strong> 7 · <strong>RSN</strong> 7 · <strong>PRS</strong> 4 · <strong>LUK</strong> 4</p>\n<h3>Perks by Level</h3><ul>\n<li><strong>1st:</strong> Bookworm, Extrovert <em>(already on this sheet)</em></li>\n<li><strong>3rd:</strong> Impersonator</li>\n<li><strong>5th:</strong> Sage</li>\n<li><strong>7th:</strong> Secret of Mana</li>\n<li><strong>9th:</strong> <em>(blank in the book)</em></li>\n</ul>\n<h3>Spells</h3><p>Color, Fear, Mirage, Shade; get Amplify, Blink, Confuse, and Morph later</p>\n<p><em>Book note: one Perk level is blank in the book.</em></p>",
     "details": {
       "constructed": true,
       "builderDismissed": false
@@ -112,7 +112,8 @@
         "canExplode": false,
         "explodeValues": "",
         "noSlotsWhenWorn": true,
-        "handsRequired": 0
+        "handsRequired": 0,
+        "forgeable": false
       },
       "effects": [
         {
@@ -190,7 +191,8 @@
         "immunities": [],
         "gearCategory": "Personal Items",
         "alchemicalType": "concoction",
-        "lore": ""
+        "lore": "",
+        "forgeable": false
       },
       "effects": [],
       "flags": {
@@ -233,7 +235,8 @@
         "alchemicalType": "concoction",
         "lore": "",
         "isConsumable": true,
-        "isSupply": true
+        "isSupply": true,
+        "forgeable": false
       },
       "effects": [],
       "flags": {
@@ -283,7 +286,8 @@
           "label": "Ignite",
           "runAsGM": false
         },
-        "handsRequired": 1
+        "handsRequired": 1,
+        "forgeable": true
       },
       "effects": [],
       "flags": {
@@ -333,7 +337,8 @@
           "label": "Ignite",
           "runAsGM": false
         },
-        "handsRequired": 1
+        "handsRequired": 1,
+        "forgeable": true
       },
       "effects": [],
       "flags": {
@@ -375,7 +380,8 @@
         "gearCategory": "Personal Items",
         "alchemicalType": "concoction",
         "lore": "",
-        "isBeverage": true
+        "isBeverage": true,
+        "forgeable": false
       },
       "effects": [],
       "flags": {
@@ -416,7 +422,8 @@
         "immunities": [],
         "gearCategory": "Games & Toys",
         "alchemicalType": "concoction",
-        "lore": ""
+        "lore": "",
+        "forgeable": false
       },
       "effects": [],
       "flags": {
@@ -469,7 +476,8 @@
           "hitOffsetX": 100,
           "auto": false
         },
-        "damageTypeOneHand": "slashing"
+        "damageTypeOneHand": "slashing",
+        "forgeable": true
       },
       "effects": [
         {
@@ -557,7 +565,8 @@
           "hitOffsetX": 100,
           "auto": false
         },
-        "damageTypeOneHand": "slashing"
+        "damageTypeOneHand": "slashing",
+        "forgeable": true
       },
       "effects": [
         {
@@ -606,7 +615,7 @@
       "type": "equipment",
       "img": "icons/equipment/chest/breastplate-quilted-brown.webp",
       "system": {
-        "description": "<p><span class=\"fontstyle0\">Leather, hide, padded.</span></p><h4><span class=\"fontstyle0\">Equipping Armor</span></h4><p><span class=\"fontstyle2\">Equipping or unequipping Armor requires a Scene (10 minutes) to complete.</span> </p>",
+        "description": "<h4><span class=\"fontstyle0\">Equipping Armor</span></h4><p><span class=\"fontstyle2\">Equipping or unequipping Armor requires a Scene (10 minutes) to complete.</span> </p>",
         "equipmentType": "armor",
         "locked": true,
         "equipped": true,
@@ -628,12 +637,13 @@
         "damageTwoHands": "d8",
         "equipmentState": "worn",
         "immunities": [],
-        "gearCategory": "",
+        "gearCategory": "Leather, hide, padded",
         "alchemicalType": "concoction",
         "lore": "",
         "armorRating": 1,
         "mightRequirement": 2,
-        "reflexPenalty": 1
+        "reflexPenalty": 1,
+        "forgeable": false
       },
       "effects": [],
       "flags": {},
@@ -674,7 +684,8 @@
         "alchemicalType": "concoction",
         "lore": "",
         "handsRequired": 1,
-        "isTrinket": true
+        "isTrinket": true,
+        "forgeable": true
       },
       "effects": [],
       "flags": {
@@ -1094,7 +1105,7 @@
       "type": "perk",
       "img": "icons/magic/light/explosion-beam-impact-silhouette.webp",
       "system": {
-        "description": "<p>Once per Shift, if you pass a social Influence Check by 15 or more or meet a new friendly person, you gain a Studied die.</p>",
+        "description": "<p>Once per Shift, if you pass a social Influence Check by 10 or more or meet a new friendly person, you gain a Studied die.</p>",
         "prerequisites": {
           "stats": [
             {
@@ -1169,7 +1180,9 @@
           "command": "const tgts = (typeof targets !== \"undefined\" && targets?.length)\n  ? targets\n  : Array.from(game.user.targets);\nif (!tgts.length) return ui.notifications.warn(\"No token targeted.\");\n\nfor (const t of tgts) {\n  await t.actor.toggleStatusEffect(\"blinded\", { active: true });\n}\n\n//ui.notifications.info(`Color applied to ${tgts.length} target(s).`);",
           "label": "Color",
           "runAsGM": true
-        }
+        },
+        "critNoFocus": true,
+        "focusOnCast": true
       },
       "effects": [],
       "flags": {},
@@ -1218,7 +1231,9 @@
           "runAsGM": true
         },
         "targetBeings": true,
-        "targetObjects": false
+        "targetObjects": false,
+        "critNoFocus": true,
+        "focusOnCast": true
       },
       "effects": [],
       "flags": {},
@@ -1238,7 +1253,8 @@
         "fxSchool": "genericlight",
         "locked": true,
         "targetBeings": true,
-        "targetObjects": false
+        "targetObjects": false,
+        "focusOnCast": true
       },
       "effects": [],
       "flags": {},
@@ -1259,7 +1275,8 @@
         "targetBeings": true,
         "targetObjects": false,
         "fxSchool": "shadow",
-        "locked": true
+        "locked": true,
+        "focusOnCast": true
       },
       "effects": [],
       "flags": {},

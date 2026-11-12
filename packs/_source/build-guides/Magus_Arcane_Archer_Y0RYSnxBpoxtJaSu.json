@@ -45,7 +45,7 @@
       "silver": 0,
       "copper": 0
     },
-    "biography": "<h2>Magus - Arcane Archer — Build Guide</h2>\n<p><em>Core Rulebook v3 Alpha 3, Appendix C. This Hero is built at Level 1 with no Ancestry — pick one, rename the Hero, and adjust anything you like.</em></p>\n<p><strong>Bought with the Starting Pack's silver:</strong> Light Armor (50s).</p>\n<p><em>The build's gear costs 50s more than the Starting Pack's money; it starts with no coins left.</em></p>\n<h3>Stats at Level 10</h3>\n<p><strong>MIT</strong> 3 · <strong>DEX</strong> 6 · <strong>AWR</strong> 7 · <strong>RSN</strong> 6 · <strong>PRS</strong> 6 · <strong>LUK</strong> 3</p>\n<h3>Perks by Level</h3><ul>\n<li><strong>1st:</strong> Assured Healer, Vehement Magic <em>(already on this sheet)</em></li>\n<li><strong>3rd:</strong> Briar Healer</li>\n<li><strong>5th:</strong> Celestial Illuminator</li>\n<li><strong>7th:</strong> Heightened Cognition</li>\n<li><strong>9th:</strong> Secret of Mana</li>\n</ul>\n<h3>Spells</h3><p>Bless, Life; get Guide, and Moon later</p>\n<p><em>Book note: the book leaves Training / Starting Pack / Weapon blank for this build; its Perk list is identical to Magus - Spellblade in the book.</em></p>",
+    "biography": "<h2>Magus - Arcane Archer — Build Guide</h2>\n<p><em>Core Rulebook v3 Alpha 4, Appendix C. This Hero is built at Level 1 with no Ancestry — pick one, rename the Hero, and adjust anything you like.</em></p>\n<p><strong>Bought with the Starting Pack's silver:</strong> Light Armor (50s).</p>\n<p><em>The build's gear costs 50s more than the Starting Pack's money; it starts with no coins left.</em></p>\n<h3>Stats at Level 10</h3>\n<p><strong>MIT</strong> 3 · <strong>DEX</strong> 6 · <strong>AWR</strong> 7 · <strong>RSN</strong> 6 · <strong>PRS</strong> 6 · <strong>LUK</strong> 3</p>\n<h3>Perks by Level</h3><ul>\n<li><strong>1st:</strong> Assured Healer, Vehement Magic <em>(already on this sheet)</em></li>\n<li><strong>3rd:</strong> Briar Healer</li>\n<li><strong>5th:</strong> Celestial Illuminator</li>\n<li><strong>7th:</strong> Heightened Cognition</li>\n<li><strong>9th:</strong> Secret of Mana</li>\n</ul>\n<h3>Spells</h3><p>Bless, Life; get Guide, and Moon later</p>\n<p><em>Book note: the book leaves Training / Starting Pack / Weapon blank for this build.</em></p>",
     "details": {
       "constructed": true,
       "builderDismissed": false
@@ -71,7 +71,7 @@
       "type": "equipment",
       "img": "icons/equipment/chest/breastplate-quilted-brown.webp",
       "system": {
-        "description": "<p><span class=\"fontstyle0\">Leather, hide, padded.</span></p><h4><span class=\"fontstyle0\">Equipping Armor</span></h4><p><span class=\"fontstyle2\">Equipping or unequipping Armor requires a Scene (10 minutes) to complete.</span> </p>",
+        "description": "<h4><span class=\"fontstyle0\">Equipping Armor</span></h4><p><span class=\"fontstyle2\">Equipping or unequipping Armor requires a Scene (10 minutes) to complete.</span> </p>",
         "equipmentType": "armor",
         "locked": true,
         "equipped": true,
@@ -93,12 +93,13 @@
         "damageTwoHands": "d8",
         "equipmentState": "worn",
         "immunities": [],
-        "gearCategory": "",
+        "gearCategory": "Leather, hide, padded",
         "alchemicalType": "concoction",
         "lore": "",
         "armorRating": 1,
         "mightRequirement": 2,
-        "reflexPenalty": 1
+        "reflexPenalty": 1,
+        "forgeable": false
       },
       "effects": [],
       "flags": {},
@@ -110,7 +111,7 @@
       "type": "class",
       "img": "icons/weapons/swords/greatsword-evil-green.webp",
       "system": {
-        "description": "<p><strong>¿Por qué no los dos?</strong></p><p><em>—Mia Agraviador, Old El Paso Taco Commercial</em></p><p>Spellblades, gishes, arcane knights, and eldritch tricksters all. Magi are arcane specialists that blend magic and martial prowess.</p><h3>Iconic Magi</h3><ul><li><strong>Alucard</strong>, <em>Castlevania</em></li><li><strong>Elric of Melniboné</strong>, <em>Stormbringer</em></li><li><strong>Geralt of Rivia</strong>, <em>The Witcher</em></li><li><strong>Twilight Suzuka</strong>, <em>Outlaw Star</em></li></ul><h3>Playing Magus</h3><p>The magus may be a bit more challenging for newer players. Their playstyle is more build-dependent than the other classes, allowing for backline blasters, midline harassers, and frontline strikers.</p><p><strong>Action:</strong> Attack/Cast<br /><strong>Move:</strong> Flexible<br /><strong>Starting Pack:</strong> Knight, Gladiator, or Warrior<br /><strong>Key Stat:</strong> Reason<br /><strong>Complexity:</strong> ★★★★☆<br /><strong>Training:</strong> Arcana, Melee</p><h3>Class Features</h3><table class=\"NormalTable\"><tbody><tr><td><p><strong>Level</strong></p></td><td><p><strong>Features</strong></p></td><td><p><strong>Spells</strong></p></td><td><p><strong>Mana</strong></p></td><td><p><strong>Cast Max</strong></p></td></tr><tr><td><p>1st</p></td><td><p>Arcanum, Enspell</p></td><td><p>2</p></td><td><p>2</p></td><td><p>2</p></td></tr><tr><td><p>2nd</p></td><td><p>Spell Parry (15+)</p></td><td><p>2</p></td><td><p>4</p></td><td><p>2</p></td></tr><tr><td><p>3rd</p></td><td><p>Perk</p></td><td><p>2</p></td><td><p>6</p></td><td><p>3</p></td></tr><tr><td><p>4th</p></td><td><p>Arcane Surge (1 Mana)</p></td><td><p>3</p></td><td><p>8</p></td><td><p>3</p></td></tr><tr><td><p>5th</p></td><td><p>Perk</p></td><td><p>3</p></td><td><p>10</p></td><td><p>4</p></td></tr><tr><td><p>6th</p></td><td><p>Spell Parry (14+), Esoteric Flow</p></td><td><p>3</p></td><td><p>12</p></td><td><p>4</p></td></tr><tr><td><p>7th</p></td><td><p>Perk</p></td><td><p>4</p></td><td><p>14</p></td><td><p>5</p></td></tr><tr><td><p>8th</p></td><td><p>Arcane Surge (2 Mana)</p></td><td><p>4</p></td><td><p>16</p></td><td><p>5</p></td></tr><tr><td><p>9th</p></td><td><p>Perk</p></td><td><p>4</p></td><td><p>18</p></td><td><p>6</p></td></tr><tr><td><p>10th</p></td><td><p>Spell Parry (13+), Sword & Sorcery</p></td><td><p>5</p></td><td><p>20</p></td><td><p>6</p></td></tr></tbody></table>",
+        "description": "<p><strong>¿Por qué no los dos?</strong></p><p><em>—Mia Agraviador, Old El Paso Taco Commercial</em></p><p>Spellblades, gishes, arcane knights, and eldritch tricksters all. Magi are arcane specialists that blend magic and martial prowess.</p><h3>Iconic Magi</h3><ul><li><strong>Alucard</strong>, <em>Castlevania</em></li><li><strong>Elric of Melniboné</strong>, <em>Stormbringer</em></li><li><strong>Geralt of Rivia</strong>, <em>The Witcher</em></li><li><strong>Twilight Suzuka</strong>, <em>Outlaw Star</em></li></ul><h3>Playing Magus</h3><p>The magus may be a bit more challenging for newer players. Their playstyle is more build-dependent than the other classes, allowing for backline blasters, midline harassers, and frontline strikers.</p><p><strong>Action:</strong> Attack/Cast<br /><strong>Move:</strong> Flexible<br /><strong>Starting Pack:</strong> Knight, Gladiator, or Warrior<br /><strong>Key Stat:</strong> Reason<br /><strong>Complexity:</strong> ★★★★☆<br /><strong>Training:</strong> Arcana, Melee</p><h3>Class Features</h3><table class=\"NormalTable\"><tbody><tr><td><p><strong>Level</strong></p></td><td><p><strong>Features</strong></p></td><td><p><strong>Spells</strong></p></td><td><p><strong>Mana</strong></p></td><td><p><strong>Cast Max</strong></p></td></tr><tr><td><p>1st</p></td><td><p>Arcanum, Enspell</p></td><td><p>2</p></td><td><p>2</p></td><td><p>2</p></td></tr><tr><td><p>2nd</p></td><td><p>Spell Parry (10+)</p></td><td><p>2</p></td><td><p>4</p></td><td><p>2</p></td></tr><tr><td><p>3rd</p></td><td><p>Perk</p></td><td><p>2</p></td><td><p>6</p></td><td><p>3</p></td></tr><tr><td><p>4th</p></td><td><p>Arcane Surge (1 Mana)</p></td><td><p>3</p></td><td><p>8</p></td><td><p>3</p></td></tr><tr><td><p>5th</p></td><td><p>Perk</p></td><td><p>3</p></td><td><p>10</p></td><td><p>4</p></td></tr><tr><td><p>6th</p></td><td><p>Spell Parry (9+), Esoteric Flow</p></td><td><p>3</p></td><td><p>12</p></td><td><p>4</p></td></tr><tr><td><p>7th</p></td><td><p>Perk</p></td><td><p>4</p></td><td><p>14</p></td><td><p>5</p></td></tr><tr><td><p>8th</p></td><td><p>Arcane Surge (2 Mana)</p></td><td><p>4</p></td><td><p>16</p></td><td><p>5</p></td></tr><tr><td><p>9th</p></td><td><p>Perk</p></td><td><p>4</p></td><td><p>18</p></td><td><p>6</p></td></tr><tr><td><p>10th</p></td><td><p>Spell Parry (8+), Sword & Sorcery</p></td><td><p>5</p></td><td><p>20</p></td><td><p>6</p></td></tr></tbody></table>",
         "isSpellcaster": true,
         "levelFeatures": [
           {
@@ -141,8 +142,8 @@
           },
           {
             "level": 2,
-            "name": "Spell Parry (15+)",
-            "description": "<p>If the result of your Save against a Cast Action exceeds your Difficulty by 15, you can choose a different Target for it, ignoring Immunity. The number needed to exceed is reduced by 1 every 4 Levels hereafter.</p>",
+            "name": "Spell Parry (10+)",
+            "description": "<p>If you do not take damage from an Enemy’s Cast Action while you have an Imbued Weapon Equipped and exceed your Difficulty on the Save by 10 or more, you can choose a new Target for it, rerolling the damage which now ignores Immune. The roll required to do so is reduced by 1 every 4 Levels hereafter.</p>",
             "statBonusPoints": 1,
             "extraTraining": 0,
             "requiredSpells": [],
@@ -167,7 +168,7 @@
           {
             "level": 4,
             "name": "Arcane Surge (1 Mana)",
-            "description": "<p>It costs 1 less Mana to Cast your Imbued Spell with other Deliveries.</p><p>Further, once per Round when you deliver a Spell with an Imbued Weapon, you can do so against one Target with a 1 Mana discount. This discount increases every 4 Levels hereafter.</p>",
+            "description": "<p>Further, once per Round when you deliver a Spell with an Imbued Weapon, you can do so against one Target with a 1 Mana discount. This discount increases every 4 Levels hereafter.</p>",
             "statBonusPoints": 1,
             "extraTraining": 0,
             "requiredSpells": [],
@@ -191,8 +192,8 @@
           },
           {
             "level": 6,
-            "name": "Spell Parry (14+)",
-            "description": "<p>If the result of your Save against a Cast Action exceeds your Difficulty by 15, you can choose a different Target for it, ignoring Immunity. The number needed to exceed is reduced by 1 every 4 Levels hereafter.</p>",
+            "name": "Spell Parry (9+)",
+            "description": "<p>If you do not take damage from an Enemy’s Cast Action while you have an Imbued Weapon Equipped and exceed your Difficulty on the Save by 10 or more, you can choose a new Target for it, rerolling the damage which now ignores Immune. The roll required to do so is reduced by 1 every 4 Levels hereafter.</p>",
             "statBonusPoints": 1,
             "extraTraining": 0,
             "requiredSpells": [],
@@ -229,7 +230,7 @@
           {
             "level": 8,
             "name": "Arcane Surge (2 Mana)",
-            "description": "<p>It costs 1 less Mana to Cast your Imbued Spell with other Deliveries.</p><p>Further, once per Round when you deliver a Spell with an Imbued Weapon, you can do so against one Target with a 1 Mana discount. This discount increases every 4 Levels hereafter.</p>",
+            "description": "<p>Further, once per Round when you deliver a Spell with an Imbued Weapon, you can do so against one Target with a 1 Mana discount. This discount increases every 4 Levels hereafter.</p>",
             "statBonusPoints": 1,
             "extraTraining": 0,
             "requiredSpells": [],
@@ -253,8 +254,8 @@
           },
           {
             "level": 10,
-            "name": "Spell Parry (13+)",
-            "description": "<p>If the result of your Save against a Cast Action exceeds your Difficulty by 15, you can choose a different Target for it, ignoring Immunity. The number needed to exceed is reduced by 1 every 4 Levels hereafter.</p>",
+            "name": "Spell Parry (8+)",
+            "description": "<p>If you do not take damage from an Enemy’s Cast Action while you have an Imbued Weapon Equipped and exceed your Difficulty on the Save by 10 or more, you can choose a new Target for it, rerolling the damage which now ignores Immune. The roll required to do so is reduced by 1 every 4 Levels hereafter.</p>",
             "statBonusPoints": 1,
             "extraTraining": 0,
             "requiredSpells": [],
@@ -536,7 +537,8 @@
           "command": "system:spell.bless",
           "label": "Bless",
           "runAsGM": false
-        }
+        },
+        "focusOnCast": true
       },
       "effects": [],
       "flags": {},

@@ -93,7 +93,7 @@ export default class VagabondClass extends VagabondItemBase {
         name: new fields.StringField({ ...requiredString, initial: '' }),
         description: new fields.StringField({ initial: '' }),
 
-        // Scaling chain id: copies of one feature at higher Levels (Eureka 15+/14+/13+) share it, so the actor
+        // Scaling chain id: copies of one feature at higher Levels (Eureka 10+/9+/8+) share it, so the actor
         // sheet / HUD list only the newest copy (EnrichmentHelper.classFeatureRows). Not translated.
         scaleKey: new fields.StringField({ initial: '', blank: true }),
 

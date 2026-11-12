@@ -1062,26 +1062,27 @@
       "1": {
         "might": 3,
         "dexterity": 3,
-        "awareness": 7,
-        "reason": 4,
+        "awareness": 4,
+        "reason": 7,
         "presence": 5,
         "luck": 3
       },
       "10": {
         "might": 3,
         "dexterity": 6,
-        "awareness": 7,
-        "reason": 4,
+        "awareness": 4,
+        "reason": 7,
         "presence": 5,
         "luck": 5
       }
     },
     "training": [
+      "Arcana",
       "Craft",
       "Detect",
       "Finesse",
       "Influence",
-      "Mysticism"
+      "Medicine"
     ],
     "startingPack": "Fortune Teller",
     "weapon": "Tarot Cards",
@@ -1125,32 +1126,34 @@
     "title": "Magus - Spellblade",
     "stats": {
       "1": {
-        "might": 3,
+        "might": 5,
         "dexterity": 3,
-        "awareness": 7,
-        "reason": 4,
-        "presence": 5,
+        "awareness": 4,
+        "reason": 7,
+        "presence": 3,
         "luck": 3
       },
       "10": {
-        "might": 3,
+        "might": 6,
         "dexterity": 6,
-        "awareness": 7,
-        "reason": 6,
-        "presence": 6,
+        "awareness": 6,
+        "reason": 7,
+        "presence": 3,
         "luck": 3
       }
     },
     "training": [
-      "Influence",
+      "Arcana",
       "Medicine",
       "Melee",
-      "Mysticism"
+      "Mysticism",
+      "Sneak",
+      "Survival"
     ],
-    "startingPack": "Devout",
-    "weapon": "Mace, Trinket",
-    "armor": "Light Armor",
-    "spells": "Bless, Life, Light, Tempo; get Enchant, Exalt, Guide, and Moon later",
+    "startingPack": "Sellsword",
+    "weapon": "Longsword, Shield",
+    "armor": "Medium Armor",
+    "spells": "Burn, Ward; get Confuse, Kinesis, and Sleep later",
     "perks": [
       {
         "level": 1,
@@ -1174,7 +1177,7 @@
       {
         "level": 7,
         "perks": [
-          "Heightened Cognition"
+          "Heightened Intellect"
         ]
       },
       {

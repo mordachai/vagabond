@@ -3,12 +3,14 @@ import { FlankingHelper } from './flanking-helper.mjs';
 import { VagabondRollBuilder } from './roll-builder.mjs';
 
 /**
- * Defense weapon property (Core Rulebook Alpha 3, p.80):
- * "When you make a Reflex Save, you can make an Attack Check instead. If you pass, you reduce
- *  the damage by each equipped Defense Weapons' damage dice."
+ * Defense weapon property (Core Rulebook Alpha 4, p.80):
+ * "You can make an Attack Check instead of a Reflex Save. If you pass, you reduce the damage you
+ *  take by each equipped Defense Weapons' damage dice." + CRIT DEFENSE: "Crits rolled on an Attack
+ *  Check for the Defense property can add the Stat to damage reduction."
  *
  * Ruling (user, 2026-10-07): a pass ONLY reduces the damage by the Defense dice — no highest-die
- * removal; a fail takes the full damage. A Crit on the Check is an Attack Check Crit (+1 Luck).
+ * removal; a fail takes the full damage. A Crit on the Check is an Attack Check Crit (+1 Luck) and,
+ * on a pass, adds the Stat of the Check's Skill to the reduction (user ruling; `critStat` from rollCheck).
  *
  * - Which weapons count: `defenseWeapons(actor)` — held weapons with the Defense property, plus
  *   Patience weapons (below). Reduction = every one of them (world setting
@@ -97,7 +99,13 @@ export class DefenseHelper {
     const critNumber = VagabondRollBuilder.calculateCritThreshold(rollData, skillKey);
     const d20 = roll.terms.find(t => t.constructor.name === 'Die' && t.faces === 20);
     const isCritical = (d20?.results?.find(r => r.active !== false)?.result ?? 0) >= critNumber;
-    return { roll, difficulty, isSuccess: roll.total >= difficulty, isCritical, skillKey, favorHinder };
+    // CRIT DEFENSE: the Stat attached to the Check's Skill (homebrew-safe via the skill config)
+    let critStat = null;
+    if (isCritical) {
+      const statKey = VagabondRollBuilder._statsOf(actor, skillKey)[0];
+      if (statKey) critStat = { key: statKey, value: rollData.stats?.[statKey]?.value || 0 };
+    }
+    return { roll, difficulty, isSuccess: roll.total >= difficulty, isCritical, skillKey, favorHinder, critStat };
   }
 
   /** A token placeable for an actor (its synthetic token first). */
