@@ -71,7 +71,7 @@
   overflow-y: auto !important;
 }
 
-// Thick yellow frame of item sheets, shared by the party sheet and the Give Coins window
+// Thick yellow frame of item sheets, shared by the party sheet, the shop sheet / store and the Give Coins window
 @mixin vagabond-window-frame {
   border-radius: 1.5em;
   corner-shape: round round scoop scoop;
@@ -88,6 +88,8 @@
 }
 
 .vagabond.actor.party .window-content,
+.vagabond.shop-sheet .window-content,
+.vagabond.shop-app .window-content,
 .vagabond.coin-transfer-dialog .window-content {
   @include vagabond-window-frame;
 }

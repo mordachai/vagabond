@@ -347,9 +347,7 @@ export class ShopTransactions {
     qty = Math.floor(Number(qty));
     if (!(qty >= 1 && qty <= this.quantityOf(item))) return fail('badQty');
 
-    const categories = shop.system.buysCategories ?? [];
-    const category = item.type === 'container' ? 'container' : item.system.equipmentType;
-    if (categories.length && !categories.includes(category)) return fail('notBought');
+    if (!shop.system.buysItem(item)) return fail('notBought');
 
     const stockMatch = this.findStockMatch(shop, item);
     if (ShopPricing.itemFlags(stockMatch).blockSell) return fail('blocked');

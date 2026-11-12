@@ -126,6 +126,43 @@
       </section>
     </div>
 
+    <section class="shop-section shop-buys">
+      <h3 class="shop-section-title">{{localize 'VAGABOND.Shop.Sheet.Buys'}}
+        <span class="shop-help" data-tooltip="{{localize 'VAGABOND.Shop.Sheet.BuysHint'}}">?</span></h3>
+      <div class="shop-buys-list">
+        {{#each buys.entries}}
+        <span class="shop-buy-chip">{{label}}
+          {{#if @root.editable}}<a data-action="removeBuyEntry" data-entry="{{key}}"
+            data-tooltip="{{localize 'VAGABOND.Shop.Sheet.BuysRemove'}}"><i class="fas fa-xmark"></i></a>{{/if}}
+        </span>
+        {{else}}
+        <span class="shop-buys-any">{{localize 'VAGABOND.Shop.Sheet.BuysEverything'}}</span>
+        {{/each}}
+      </div>
+      {{#if editable}}
+      <div class="shop-buys-add">
+        <select class="shop-buy-type">
+          {{#each buys.types}}<option value="{{key}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}
+        </select>
+        {{#if buys.subOptions}}
+        <select class="shop-buy-sub">
+          <option value="">{{localize 'VAGABOND.Shop.Sheet.BuysAnySubtype'}}</option>
+          {{#each buys.subOptions}}<option value="{{value}}">{{label}}</option>{{/each}}
+        </select>
+        {{else if buys.subFree}}
+        <input type="text" class="shop-buy-sub" list="{{buys.listId}}"
+          placeholder="{{localize 'VAGABOND.Shop.Sheet.BuysAnySubtype'}}">
+        <datalist id="{{buys.listId}}">
+          {{#each buys.subSuggestions}}<option value="{{this}}"></option>{{/each}}
+        </datalist>
+        {{/if}}
+        <button type="button" class="shop-show-btn" data-action="addBuyEntry">
+          <i class="fas fa-plus"></i> {{localize 'VAGABOND.Shop.Sheet.BuysAdd'}}
+        </button>
+      </div>
+      {{/if}}
+    </section>
+
     {{else}}
     <section class="shop-section shop-stock">
       <ol class="shop-stock-list {{#if hasCategory}}with-category{{/if}}">

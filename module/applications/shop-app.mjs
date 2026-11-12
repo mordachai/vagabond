@@ -371,6 +371,10 @@ export class ShopApp extends HandlebarsApplicationMixin(ApplicationV2) {
       receipt: this._receipts[this._cartTab],
       sell: {
         pct: Math.round((shop.system.pricing?.buyRatio ?? 0.5) * 100),
+        // What the shop buys (null = everything)
+        buys: shop.system.buysCategories?.length
+          ? shop.system.buysCategories.map(e => shop.system.constructor.buyEntryLabel(e)).join(', ')
+          : null,
       },
     };
   }
@@ -711,6 +715,7 @@ export class ShopApp extends HandlebarsApplicationMixin(ApplicationV2) {
       return ui.notifications.warn(ShopTransactions.reasonLabel('noItem'));
     }
     if (item.system.equipped) return ui.notifications.warn(ShopTransactions.reasonLabel('equipped'));
+    if (!this.shop.system.buysItem(item)) return ui.notifications.warn(ShopTransactions.reasonLabel('notBought'));
 
     const have = ShopTransactions.quantityOf(item);
     const unit = ShopPricing.price(item, { shop: this.shop, buyer: seller, mode: 'sell', qty: 1 });

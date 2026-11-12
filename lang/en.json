@@ -140,12 +140,13 @@
       "ReflexDescription": "Save to avoid an Enemy Action. Pass, and it doesn't affect you.",
       "DefenseDescription": "Make an Attack Check with a Defense weapon instead of the Reflex Save. Pass, and the damage is reduced by each equipped Defense weapon's damage dice.",
       "CritDescription": "You aren't affected by what provoked the Save, and can use an Action.",
-      "CritToggleHint": "Click to toggle: Extra Damage or Gain Luck Point"
+      "CritToggleHint": "Click to toggle: Bonus to the damage roll or Gain Luck Point"
     },
     "Chat": {
       "Defense": "Defense",
       "DefenseBoth": "Both",
       "DefenseCheck": "Defense (Attack Check)",
+      "DefenseCritStat": "(Crit)",
       "DiePenaltyTitle": "{status}: -{penalty} to each damage die ({dice}) = -{total}",
       "HealPenaltyTitle": "{status}: -{penalty} to each healing die ({dice}) = -{total}",
       "OverhealTitle": "Overheal",
@@ -207,6 +208,12 @@
     },
     "AttackFavorRules": {
       "Wounded": "Targets missing any HP (Bloodthirsty)"
+    },
+    "AbilityRedundancy": {
+      "Title": "Ability Redundancy",
+      "Prompt": "You already have {name}. Choose a different {type} instead.",
+      "Skipped": "{name} was skipped: you already have it.",
+      "Type": { "spell": "Spell", "perk": "Perk" }
     },
     "ItemChoice": {
       "Title": "Choose Granted Items",
@@ -981,6 +988,7 @@
         "Purchase": "Purchase",
         "SellZone": "Drop items here to sell",
         "SellRate": "The merchant pays {pct}% of their value",
+        "BuysOnly": "Buys only: {list}",
         "SellTitle": "Sell Item",
         "SellConfirm": "Sell {item} to {shop}?",
         "SellOffer": "Offer: {price} each.",
@@ -1095,7 +1103,13 @@
         "Price": "Price",
         "Remove": "Remove from stock",
         "EmptyStock": "No stock. Drag items, item folders or whole compendiums here.",
-        "OnlyEquipment": "Only equipment and containers can be stocked in a shop."
+        "OnlyEquipment": "Only equipment and containers can be stocked in a shop.",
+        "Buys": "Buys from Players",
+        "BuysHint": "Kinds of items this shop buys. A type alone covers all of its subtypes; pick a subtype to narrow it (e.g. an Apothecary buys only Gear: Alchemy & Medicine). Empty = buys everything.",
+        "BuysEverything": "Buys everything.",
+        "BuysAnySubtype": "Any subtype",
+        "BuysAdd": "Add",
+        "BuysRemove": "Remove"
       }
     },
     "Craft": {
@@ -3006,7 +3020,7 @@
     },
     "PropertyHints": {
       "Cleave": "Ignores Flanked for attacks. You can reduce its die one size to hit another Target within reach per size reduction.",
-      "Defense": "When you make a Reflex Save, you can make an Attack Check instead. If you pass, you reduce the damage by each equipped Defense Weapons' damage dice.",
+      "Defense": "You can make an Attack Check instead of a Reflex Save. If you pass, you reduce the damage you take by each equipped Defense Weapons' damage dice. Crits rolled on this Attack Check can add the Stat to damage reduction.",
       "Grapple": "Can Grapple with the Attack Check.",
       "Keen": "Crits 1 lower on the Attack Check.",
       "Long": "Its Range is doubled.",

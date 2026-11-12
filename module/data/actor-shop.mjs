@@ -50,7 +50,8 @@ export default class VagabondShop extends foundry.abstract.TypeDataModel {
       presencePctPerPoint: pct(2, 0, 100),
     });
 
-    // equipmentType values the shop will buy from players (empty = everything)
+    // What the shop buys from players (empty = everything). Entry = an equipment type
+    // (`alchemical`, `container`…) or `type:subtype` (`gear:Alchemy & Medicine`) — see buysItem.
     schema.buysCategories = new fields.ArrayField(new fields.StringField({ blank: false }), { initial: [] });
 
     // Items sold to the shop go back into its stock
@@ -98,6 +99,62 @@ export default class VagabondShop extends foundry.abstract.TypeDataModel {
     });
 
     return schema;
+  }
+
+  /**
+   * Item field holding the subtype of each equipment type that has one (`buysCategories`
+   * entries `type:subtype`). Other types (armor, relic, container) are bought whole.
+   */
+  static BUY_SUBTYPE_FIELDS = Object.freeze({
+    weapon: 'weaponSkill',
+    gear: 'gearCategory',
+    alchemical: 'alchemicalType',
+  });
+
+  /** Buy type of an item: its equipment type, `container` for containers. */
+  static buyTypeOf(item) {
+    return item?.type === 'container' ? 'container' : (item?.system?.equipmentType ?? '');
+  }
+
+  /** Buy subtype of an item (blank when its type has none). */
+  static buySubtypeOf(item, type = this.buyTypeOf(item)) {
+    const field = this.BUY_SUBTYPE_FIELDS[type];
+    return field ? String(item?.system?.[field] ?? '').trim() : '';
+  }
+
+  /** Split a `buysCategories` entry into `{type, sub}` (sub blank = the whole type). */
+  static parseBuyEntry(entry) {
+    const at = entry.indexOf(':');
+    return at < 0 ? { type: entry, sub: '' } : { type: entry.slice(0, at), sub: entry.slice(at + 1) };
+  }
+
+  /** Display label of a subtype key of a type. */
+  static buySubtypeLabel(type, sub) {
+    const label = type === 'weapon' ? CONFIG.VAGABOND.weaponSkills?.[sub]
+      : type === 'alchemical' ? CONFIG.VAGABOND.alchemicalTypes?.[sub]
+      : null;
+    return label ? game.i18n.localize(label) : sub;
+  }
+
+  /** Display label of a `buysCategories` entry ("Gear: Alchemy & Medicine"). */
+  static buyEntryLabel(entry) {
+    const { type, sub } = this.parseBuyEntry(entry);
+    const typeLabel = game.i18n.localize(CONFIG.VAGABOND.equipmentTypes?.[type] ?? type);
+    return sub ? `${typeLabel}: ${this.buySubtypeLabel(type, sub)}` : typeLabel;
+  }
+
+  /**
+   * Does this shop buy the item from players? Empty list = everything; else its type or
+   * its `type:subtype` must be listed.
+   * @param {Item} item
+   * @returns {boolean}
+   */
+  buysItem(item) {
+    const entries = this.buysCategories ?? [];
+    if (!entries.length) return true;
+    const type = this.constructor.buyTypeOf(item);
+    const sub = this.constructor.buySubtypeOf(item, type);
+    return entries.includes(type) || (!!sub && entries.includes(`${type}:${sub}`));
   }
 
   /**

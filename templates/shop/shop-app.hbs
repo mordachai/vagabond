@@ -275,6 +275,7 @@
         <i class="fas fa-hand-holding-dollar"></i>
         <span class="shop-sell-title">{{localize 'VAGABOND.Shop.App.SellZone'}}</span>
         <span class="shop-sell-hint">{{localize 'VAGABOND.Shop.App.SellRate' pct=sell.pct}}</span>
+        {{#if sell.buys}}<span class="shop-sell-hint shop-sell-buys">{{localize 'VAGABOND.Shop.App.BuysOnly' list=sell.buys}}</span>{{/if}}
       </div>
     </aside>
   </div>

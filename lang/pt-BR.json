@@ -112,12 +112,13 @@
       "ReflexDescription": "Salvaguarda para evitar uma Ação Inimiga. Se passar, não é afetado.",
       "DefenseDescription": "Faça uma Checagem de Ataque com uma arma de Defesa em vez da Salvaguarda de Reflexo. Se passar, o dano é reduzido pelos dados de dano de cada arma de Defesa equipada.",
       "CritDescription": "Você não é afetado pelo que causou a Salvaguarda, e pode usar uma Ação.",
-      "CritToggleHint": "Clique para alternar: Dano Extra ou Ganhar Ponto de Sorte"
+      "CritToggleHint": "Clique para alternar: Bônus na rolagem de dano ou Ganhar Ponto de Sorte"
     },
     "Chat": {
       "Defense": "Defesa",
       "DefenseBoth": "Ambas",
       "DefenseCheck": "Defesa (Checagem de Ataque)",
+      "DefenseCritStat": "(Crítico)",
       "DiePenaltyTitle": "{status}: -{penalty} em cada dado de dano ({dice}) = -{total}",
       "HealPenaltyTitle": "{status}: -{penalty} em cada dado de cura ({dice}) = -{total}",
       "OverhealTitle": "Cura Excedente",
@@ -179,6 +180,12 @@
     },
     "AttackFavorRules": {
       "Wounded": "Alvos com qualquer HP faltando (Sede de Sangue)"
+    },
+    "AbilityRedundancy": {
+      "Title": "Redundância de Habilidade",
+      "Prompt": "Você já possui {name}. Escolha outro(a) {type} no lugar.",
+      "Skipped": "{name} foi ignorado: você já o possui.",
+      "Type": { "spell": "Magia", "perk": "Vantagem" }
     },
     "ItemChoice": {
       "Title": "Escolha os Itens Concedidos",
@@ -981,6 +988,7 @@
         "Purchase": "Comprar",
         "SellZone": "Solte itens aqui para vender",
         "SellRate": "O mercador paga {pct}% do valor",
+        "BuysOnly": "Compra apenas: {list}",
         "SellTitle": "Vender Item",
         "SellConfirm": "Vender {item} para {shop}?",
         "SellOffer": "Oferta: {price} cada.",
@@ -1095,7 +1103,13 @@
         "Price": "Preço",
         "Remove": "Remover do estoque",
         "EmptyStock": "Sem estoque. Arraste itens, pastas de itens ou compêndios inteiros para cá.",
-        "OnlyEquipment": "Apenas equipamentos e recipientes podem ser estocados em uma loja."
+        "OnlyEquipment": "Apenas equipamentos e recipientes podem ser estocados em uma loja.",
+        "Buys": "Compra dos Jogadores",
+        "BuysHint": "Tipos de item que esta loja compra. Um tipo sozinho cobre todos os seus subtipos; escolha um subtipo para restringir (ex.: um Boticário compra só Equipamento: Alquimia & Medicina). Vazio = compra tudo.",
+        "BuysEverything": "Compra tudo.",
+        "BuysAnySubtype": "Qualquer subtipo",
+        "BuysAdd": "Adicionar",
+        "BuysRemove": "Remover"
       }
     },
     "Craft": {
@@ -3020,7 +3034,7 @@
     },
     "PropertyHints": {
       "Cleave": "Ignora Flanqueado nos ataques. Você pode reduzir seu dado um tamanho para acertar outro Alvo ao alcance, por redução de tamanho.",
-      "Defense": "Ao fazer uma Salvaguarda de Reflexo, você pode fazer uma Checagem de Ataque em vez disso. Se passar, reduz o dano pelos dados de dano de cada Arma de Defesa equipada.",
+      "Defense": "Você pode fazer uma Checagem de Ataque em vez de uma Salvaguarda de Reflexo. Se passar, reduz o dano que sofre pelos dados de dano de cada Arma de Defesa equipada. Críticos nessa Checagem de Ataque podem somar o Atributo à redução de dano.",
       "Grapple": "Pode Agarrar com a Checagem de Ataque.",
       "Keen": "Crítico 1 ponto mais baixo na Checagem de Ataque.",
       "Long": "Seu Alcance é dobrado.",

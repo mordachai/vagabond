@@ -28,6 +28,8 @@ export class VagabondShopSheet extends HandlebarsApplicationMixin(ActorSheetV2) 
       createOpenMacro: VagabondShopSheet.#onCreateOpenMacro,
       selectTab: VagabondShopSheet.#onSelectTab,
       selectSubTab: VagabondShopSheet.#onSelectSubTab,
+      addBuyEntry: VagabondShopSheet.#onAddBuyEntry,
+      removeBuyEntry: VagabondShopSheet.#onRemoveBuyEntry,
     },
   };
 
@@ -37,6 +39,9 @@ export class VagabondShopSheet extends HandlebarsApplicationMixin(ActorSheetV2) 
   /** Active tab / gear sub-tab (kept across re-renders). */
   _tab = VagabondShopSheet.SHOP_TAB;
   _sub = null;
+
+  /** Type picked in the "Buys from Players" add row (kept across re-renders). */
+  _buyType = 'gear';
 
   static PARTS = {
     form: {
@@ -117,7 +122,47 @@ export class VagabondShopSheet extends HandlebarsApplicationMixin(ActorSheetV2) 
       ),
       purseTotal: CurrencyHelper.format(system.currency),
       sliders: VagabondShopSheet.#pricingSliders(system.pricing),
+      buys: this._tab === VagabondShopSheet.SHOP_TAB ? await this.#buysContext() : null,
     });
+  }
+
+  /**
+   * "Buys from Players" section: the listed entries + the add row (type select, then the
+   * subtype — a select for config-keyed subtypes, free text with suggestions for gear).
+   */
+  async #buysContext() {
+    const Shop = this.actor.system.constructor;
+    const entries = (this.actor.system.buysCategories ?? [])
+      .map(key => ({ key, label: Shop.buyEntryLabel(key) }));
+    const type = this._buyType;
+    const types = Object.entries(CONFIG.VAGABOND.equipmentTypes ?? {})
+      .map(([key, label]) => ({ key, label: game.i18n.localize(label), selected: key === type }));
+
+    let subOptions = null;
+    let subSuggestions = null;
+    const configMap = { weapon: CONFIG.VAGABOND.weaponSkills, alchemical: CONFIG.VAGABOND.alchemicalTypes }[type];
+    if (configMap) {
+      subOptions = Object.keys(configMap).map(key => ({ value: key, label: Shop.buySubtypeLabel(type, key) }));
+    } else if (type === 'gear') {
+      subSuggestions = await VagabondShopSheet.#gearCategories(this.actor);
+    }
+    return { entries, types, subOptions, subFree: !!subSuggestions, subSuggestions, listId: `${this.id}-buy-sub` };
+  }
+
+  /** Gear categories in use: world items, this shop's stock and every Item compendium. */
+  static async #gearCategories(shop) {
+    const found = new Set();
+    const add = (item) => {
+      const cat = String(item?.system?.gearCategory ?? '').trim();
+      if (cat && (item.system.equipmentType ?? 'gear') === 'gear') found.add(cat);
+    };
+    game.items.forEach(add);
+    shop.items.forEach(add);
+    for (const pack of game.packs.filter(p => p.documentName === 'Item')) {
+      const index = await pack.getIndex({ fields: ['system.gearCategory', 'system.equipmentType'] });
+      index.forEach(add);
+    }
+    return [...found].sort((a, b) => a.localeCompare(b));
   }
 
   /** Slider readouts: markup is signed, buyRatio (a fraction) reads as a percentage. */
@@ -164,6 +209,11 @@ export class VagabondShopSheet extends HandlebarsApplicationMixin(ActorSheetV2) 
         item?.update({ 'system.quantity': qty });
       });
     }
+    // "Buys from Players" type select: swaps the subtype field (no `name` — not saved)
+    this.element.querySelector('select.shop-buy-type')?.addEventListener('change', (ev) => {
+      this._buyType = ev.currentTarget.value;
+      this.render();
+    });
     // Pricing sliders: live readout while dragging (the form saves on release)
     for (const range of this.element.querySelectorAll('input[type="range"][data-format]')) {
       const out = range.parentElement.querySelector('.shop-slider-value');
@@ -210,6 +260,26 @@ export class VagabondShopSheet extends HandlebarsApplicationMixin(ActorSheetV2) 
     if (!key || key === this._sub) return;
     this._sub = key;
     this.render();
+  }
+
+  /** Add the picked type (blank subtype = the whole type, which replaces its subtype entries). */
+  static async #onAddBuyEntry(event, target) {
+    const row = target.closest('.shop-buys-add');
+    const type = row?.querySelector('.shop-buy-type')?.value;
+    if (!type) return;
+    const sub = String(row.querySelector('.shop-buy-sub')?.value ?? '').trim();
+    let entries = [...(this.actor.system.buysCategories ?? [])];
+    if (entries.includes(type)) return;
+    const Shop = this.actor.system.constructor;
+    if (sub) entries.push(`${type}:${sub}`);
+    else entries = [...entries.filter(e => Shop.parseBuyEntry(e).type !== type), type];
+    await this.actor.update({ 'system.buysCategories': [...new Set(entries)] });
+  }
+
+  static async #onRemoveBuyEntry(event, target) {
+    const entry = target.dataset.entry;
+    const entries = (this.actor.system.buysCategories ?? []).filter(e => e !== entry);
+    await this.actor.update({ 'system.buysCategories': entries });
   }
 
   static #onToggleOpen() {
