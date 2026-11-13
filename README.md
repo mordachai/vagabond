@@ -13,17 +13,20 @@ _You need the book (digital or paperback) to have access to the compendia contai
 
 ---
 
-### Print Wave 3 (Alpha 3) — fully updated
+### Alpha 4 — fully updated
 
-All Print Wave 3 / Alpha 3 content is now in the system:
+The system follows the Alpha 4 rulebook:
 
-- **All Classes and their features**
-- Ancestries, Perks and Spells
+- **All Classes and their features**, including the rewritten **Magus** and **Revelator** (Enspell is now **Nimbus**)
+- **Ancestries** updated (Dwarf, Elf, Halfling, Draken, Goblin, Orc), Perks and Spells
 - Weapons, Armor, Alchemical gear, Starting Packs and Relics
 - Bestiary and Humanlike NPCs
-- **Build Guides** (Appendix C) as ready-to-play Level 1 characters
+- **Build Guides** (Appendix C) as ready-to-play Level 1 characters, regenerated for Alpha 4
 - Leveling, Statuses and core rules
-- **New Defense rules**
+- **Defense rules**, now with **Crit Defense**
+- **Ability Redundancy**: the Character Builder and Level Up ask for a replacement when a hero would get a Perk or Spell they already have
+
+Existing worlds update automatically: characters and compendium copies follow the new rules after the update (see the Compendium Update Report).
 
 ---
 
