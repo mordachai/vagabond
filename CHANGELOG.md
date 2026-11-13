@@ -1,5 +1,12 @@
 # Changelog
 
+## v6.10.0
+- **[Changed]** Updated to the Alpha 4 rulebook: ancestries (Dwarf, Elf, Halfling, Draken, Goblin, Orc), perks, Magus, Revelator (Enspell is now Nimbus), Alchemist and Pugilist follow the new text, and the Magus build guides are updated. Compendium copies follow after the update (see the Compendium Update Report).
+- **[Added]** Crit Defense: a Crit on a Defense weapon's Attack Check (rolled instead of Reflex) adds the Stat of the skill used to the damage reduction, shown on the result card. Works for Protect too.
+- **[Added]** Ability Redundancy: when a hero would get a Perk or Spell it already has, the Character Builder asks for a replacement of the same type.
+- **[Changed]** Existing Dwarf, Goblin and Orc characters lose the old Darksight effect and receive the Infravision Perk; Nimble speed and Orc Hulking slots bonuses are removed from existing characters.
+- **[Fixed]** Level Up no longer detects owned Spells by name.
+
 ## v6.9.0
 - **[Added]** Compendium update: after a system update, items, ancestries, classes, perks, spells and statblocks copied into your world follow the new compendiums. Only fields you never edited change; your edits, renamed copies, quantities, equipped state, uses and effect switches stay.
 - **[Added]** Compendium Update Report: everything the update touched, by actor and by section (Weapons, Spells, Perks...), with before / now values, your kept edits next to the compendium's, and a link to each item. Mark each group as checked. Settings > Content & Homebrew > Compendium Update: Update now, Open report.
